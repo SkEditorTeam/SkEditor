@@ -1,0 +1,49 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+        mc:Ignorable="d"
+        x:Class="SkEditor.Views.PublishWindow" Icon="/Assets/SkEditor.ico"
+        Title="{DynamicResource WindowTitlePublish}" Height="400" Width="350" CanResize="False" WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+    </Window.Resources>
+
+	<Grid RowDefinitions="auto,auto,auto,auto,*" Margin="20">
+		<ComboBox Name="WebsiteComboBox" Width="150" SelectedIndex="0" Grid.Row="0" Margin="0,0,0,6">
+			<ComboBoxItem Content="Pastebin"/>
+			<ComboBoxItem Content="code.skript.pl"/>
+			<ComboBoxItem Content="skUnity Parser"/>
+		</ComboBox>
+
+		<StackPanel Grid.Column="0" Spacing="4" Grid.Row="1" Margin="0,6">
+			<TextBox Name="ApiKeyTextBox" Watermark="{DynamicResource PublishWindowPasteApiKey}" PasswordChar="●"/>
+			<TextBlock Name="ApiKeyHint" Text="{DynamicResource PublishWindowApiKeyHint}" TextWrapping="Wrap"/>
+		</StackPanel>
+		
+		<ComboBox Name="LanguageComboBox" Width="150" SelectedIndex="0" Grid.Row="2" Margin="0,6">
+			<ComboBoxItem Content="Skript"/>
+			<ComboBoxItem Content="YAML"/>
+		</ComboBox>
+		
+		<CheckBox Name="AnonymouslyCheckBox" Content="{DynamicResource PublishWindowAnonymously}" Grid.Row="3" Margin="0,6"/>
+		
+		<Grid Grid.Row="4" RowDefinitions="auto,auto" VerticalAlignment="Bottom">
+			<Grid Grid.Row="0" ColumnDefinitions="*,auto" Margin="0,6" VerticalAlignment="Bottom">
+				<TextBox Name="ResultTextBox" IsReadOnly="True" Watermark="{DynamicResource PublishWindowResultLink}" Grid.Column="0" Margin="5,0"/>
+				<Button Name="CopyButton" Width="35" Height="35" HorizontalAlignment="Right" Grid.Column="1" FontSize="18">
+					<Button.Content>
+						<ui:SymbolIcon Symbol="Copy"/>
+					</Button.Content>
+				</Button>
+			</Grid>
+			<Button Name="PublishButton" Content="{DynamicResource PublishWindowPublishButton}" Width="100" HorizontalAlignment="Right" Grid.Row="1" Margin="0,6,0,0"/>
+		</Grid>
+	</Grid>
+</Window>

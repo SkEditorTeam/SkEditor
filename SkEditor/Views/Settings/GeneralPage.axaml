@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:controls="using:SkEditor.Controls"
+			 xmlns:vm="using:SkEditor.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800"
+             x:Class="SkEditor.Views.Settings.GeneralPage">
+
+	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsGeneralTitle}" Grid.Row="0"/>
+		<ScrollViewer Grid.Row="1">
+			<StackPanel Spacing="8">
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralLanguage}" IconSource="{StaticResource LanguageIcon}">
+					<ui:SettingsExpander.Footer>
+						<ComboBox Name="LanguageComboBox"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralWrapping}" IconSource="{StaticResource WrappingIcon}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoIndent}" IconSource="{StaticResource AutoIndentIcon}"
+					Description="{DynamicResource SettingsGeneralAutoIndentDescription}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="AutoIndentToggleSwitch" IsChecked="{Binding IsAutoIndentEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoPairing}" IconSource="{StaticResource AutoPairingIcon}"
+					Description="{DynamicResource SettingsGeneralAutoPairingDescription}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="AutoPairingToggleSwitch" IsChecked="{Binding IsAutoPairingEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoSave}" IconSource="{StaticResource AutoSaveIcon}"
+					Description="{DynamicResource SettingsGeneralAutoSaveDescription}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="AutoSaveToggleSwitch" IsChecked="{Binding IsAutoSaveEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralRpc}" IconSource="{StaticResource DiscordIcon}"
+					Description="{DynamicResource SettingsGeneralRpcDescription}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRpcEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

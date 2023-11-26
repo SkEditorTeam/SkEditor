@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:controls="using:SkEditor.Controls"
+             mc:Ignorable="d" d:DesignWidth="800"
+             x:Class="SkEditor.Views.Settings.ThemePage"
+             x:CompileBindings="True">
+
+	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsThemeTitle}" Grid.Row="0"/>
+		<ScrollViewer Grid.Row="1">
+			<StackPanel Spacing="8">
+
+				<ui:SettingsExpander Header="{DynamicResource SettingsThemeInformation}" IconSource="{StaticResource ImportantIcon}">
+					<ui:SettingsExpander.Footer>
+						<Button Name="OpenThemesFolderButton" Content="{DynamicResource SettingsThemeOpenFolder}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
+				<ui:SettingsExpander Header="{DynamicResource SettingsThemeCurrentTheme}" Description="{DynamicResource SettingsThemeCurrentThemeDescription}" IconSource="{StaticResource BrushIcon}">
+					<ui:SettingsExpander.Footer>
+						<ComboBox Name="ThemeComboBox"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
+				<!--<controls:ColorPickerSettingsExpander Name="WindowBackgroundExpander" ExpanderHeader="Window background" IsAlphaEnabled="False"/>
+				<controls:ColorPickerSettingsExpander Name="SmallWindowBackgroundExpander" ExpanderHeader="Small window background" IsAlphaEnabled="False"/>
+				<controls:ColorPickerSettingsExpander Name="EditorBackgroundExpander" ExpanderHeader="Editor background"/>
+				<controls:ColorPickerSettingsExpander Name="EditorTextColorExpander" ExpanderHeader="Editor text color"/>
+				<controls:ColorPickerSettingsExpander Name="LineNumbersColorExpander" ExpanderHeader="Line numbers color"/>
+				<controls:ColorPickerSettingsExpander Name="SelectionColorExpander" ExpanderHeader="Selection color"/>
+				<controls:ColorPickerSettingsExpander Name="SelectedTabItemBackgroundExpander" ExpanderHeader="Selected tab item background" />
+				<controls:ColorPickerSettingsExpander Name="SelectedTabItemBorderExpander" ExpanderHeader="Selected tab item border"/>
+				<controls:ColorPickerSettingsExpander Name="MenuBackgroundExpander" ExpanderHeader="Menu background" />
+				<controls:ColorPickerSettingsExpander Name="MenuBorderExpander" ExpanderHeader="Menu border"/>
+				<controls:ColorPickerSettingsExpander Name="TextBoxFocusedBackgroundExpander" ExpanderHeader="TextBox focused background"/>
+				<controls:ColorPickerSettingsExpander Name="AccentColorExpander" ExpanderHeader="Accent color" IsAlphaEnabled="False"/>-->
+
+				<!--<ui:SettingsExpander Name="ResetButton" Header="Reset" IconSource="{StaticResource RefreshIcon}"
+									 IsClickEnabled="True" Description="Double click to reset the theme." />-->
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

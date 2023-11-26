@@ -1,0 +1,43 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:sty="using:FluentAvalonia.Styling"
+             x:Class="SkEditor.App"
+             RequestedThemeVariant="Dark">
+
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="avares://SkEditor/Styles/CustomMenuItemStyle.axaml" />
+				<ResourceInclude Source="avares://SkEditor/Styles/ToggleSwitchStyle.axaml" />
+				<ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
+	</Application.Resources>
+
+	<Application.Styles>
+		<sty:FluentAvaloniaTheme />
+		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+	</Application.Styles>
+
+	<Application.Resources>
+		<Brush x:Key="BackgroundColor">#1f1f1f</Brush>
+		<Brush x:Key="SmallWindowBackgroundColor">#1f1f1f</Brush>
+		<Brush x:Key="EditorBackgroundColor">#1b1b1b</Brush>
+		<Brush x:Key="EditorTextColor">#cdcaca</Brush>
+		<Brush x:Key="LineNumbersColor">#8a8a8a</Brush>
+		<Brush x:Key="SelectionColor">#641a6096</Brush>
+		<Brush x:Key="TabViewItemHeaderBackgroundSelected">#282828</Brush>
+		<Brush x:Key="TabViewSelectedItemBorderBrush">#751c1c1c</Brush>
+		
+		<Brush x:Key="MenuFlyoutPresenterBackground">#2c2c2c</Brush>
+		<Brush x:Key="MenuFlyoutPresenterBorderBrush">#75161616</Brush>
+		<Brush x:Key="TextControlBackgroundFocused">#B31E1E1E</Brush>
+		<Brush x:Key="TextControlPlaceholderForeground">#33FFFFFF</Brush>
+		<Brush x:Key="TextControlPlaceholderForegroundPointerOver">#4DFFFFFF</Brush>
+		<Brush x:Key="TextControlPlaceholderForegroundFocused">#26FFFFFF</Brush>
+		
+		
+		<Thickness x:Key="FlyoutContentPadding">10</Thickness>
+	</Application.Resources>
+</Application>

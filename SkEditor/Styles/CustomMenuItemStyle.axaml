@@ -1,0 +1,164 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="using:FluentAvalonia.UI.Controls"
+                    xmlns:sys="clr-namespace:System;assembly=netstandard"
+					xmlns:wnd="using:FluentAvalonia.UI.Windowing"
+                    x:CompileBindings="True">
+
+    <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
+        <Setter Property="Background" Value="{DynamicResource MenuBarItemBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource MenuBarItemBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource MenuBarItemBorderThickness}"/>
+        <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        <Setter Property="Padding" Value="{DynamicResource MenuFlyoutItemThemePaddingNarrow}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border Name="PART_LayoutRoot"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Margin="{StaticResource MenuFlyoutItemMargin}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"
+                                                  SharedSizeGroup="MenuItemIcon" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"
+                                                  SharedSizeGroup="MenuItemIGT" />
+                                <ColumnDefinition Width="Auto"
+                                                  SharedSizeGroup="MenuItemChevron" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Viewbox Name="PART_IconPresenter"
+                                     Margin="{DynamicResource MenuIconPresenterMargin}"
+                                     StretchDirection="DownOnly"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     IsVisible="False">
+                                <ContentPresenter Content="{TemplateBinding Icon}"/>
+                            </Viewbox>
+
+                            <ContentPresenter Name="PART_HeaderPresenter"
+                                              Content="{TemplateBinding Header}"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Stretch"
+                                              Grid.Column="1">
+                                <ContentPresenter.DataTemplates>
+                                    <DataTemplate DataType="sys:String">
+                                        <AccessText Text="{Binding}" />
+                                    </DataTemplate>
+                                </ContentPresenter.DataTemplates>
+                            </ContentPresenter>
+                            <TextBlock x:Name="PART_InputGestureText"
+                                       Grid.Column="2"
+                                       Classes="CaptionTextBlockStyle"
+                                       Margin="{DynamicResource MenuInputGestureTextMargin}"
+                                       Text="{TemplateBinding InputGesture, Converter={StaticResource KeyGestureConverter}}"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center" />
+                            <ui:SymbolIcon Name="PART_ChevronPath"
+                                           Height="16"
+                                           Symbol="ChevronRight"
+                                           Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
+                                           VerticalAlignment="Center"
+                                           Grid.Column="3"
+                                           FontSize="18"
+                                           Foreground="{DynamicResource MenuFlyoutSubItemChevron}"/>
+                        </Grid>
+                    </Border>
+                    <Popup Name="PART_Popup"
+                           WindowManagerAddShadowHint="False"
+                           PlacementMode="RightEdgeAlignedTop"
+                           HorizontalOffset="{DynamicResource MenuFlyoutSubItemPopupHorizontalOffset}"
+                           IsLightDismissEnabled="False"
+                           IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
+                        <ui:FABorder Background="{DynamicResource MenuFlyoutPresenterBackground}"
+                                     BorderBrush="{DynamicResource MenuFlyoutPresenterBorderBrush}"
+                                     BorderThickness="{DynamicResource MenuFlyoutPresenterBorderThemeThickness}"
+                                     MaxWidth="{DynamicResource FlyoutThemeMaxWidth}"
+                                     MinHeight="{DynamicResource MenuFlyoutThemeMinHeight}"
+                                     HorizontalAlignment="Stretch"
+                                     CornerRadius="{DynamicResource OverlayCornerRadius}">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter Name="PART_ItemsPresenter"
+                                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                Margin="{DynamicResource MenuFlyoutPresenterThemePadding}"
+                                                Grid.IsSharedSizeScope="True" />
+                            </ScrollViewer>
+                        </ui:FABorder>
+                    </Popup>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:icon /template/ Viewbox#PART_IconPresenter">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+
+        <Style Selector="^:selected">
+            <Style Selector="^ /template/ Border#PART_LayoutRoot">
+                <Setter Property="Background" Value="{DynamicResource MenuFlyoutItemBackgroundPointerOver}" />
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemForegroundPointerOver}" />
+            </Style>
+            <Style Selector="^ /template/ TextBlock#PART_InputGestureText">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundPointerOver}" />
+            </Style>
+            <Style Selector="^ /template/ ui|SymbolIcon#PART_ChevronPath">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronPointerOver}" />
+            </Style>
+        </Style>
+
+        <!--  Listen for PART_LayoutRoot:pointerover, so it will not be triggered when subitem is pressed  -->
+        <Style Selector="^:pressed /template/ Border#PART_LayoutRoot:pointerover">
+            <Setter Property="Background" Value="{DynamicResource MenuFlyoutItemBackgroundPressed}" />
+            <Style Selector="^ ContentPresenter#PART_HeaderPresenter">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemForegroundPressed}" />
+            </Style>
+            <Style Selector="^ TextBlock#PART_InputGestureText">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundPressed}" />
+            </Style>
+            <Style Selector="^ ui|SymbolIcon#PART_ChevronPath">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronPressed}" />
+            </Style>
+        </Style>
+
+
+        <Style Selector="^:disabled">
+            <Style Selector="^ /template/ Border#PART_LayoutRoot">
+                <Setter Property="Background" Value="{DynamicResource MenuFlyoutItemBackgroundDisabled}" />
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_HeaderPresenter">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemForegroundDisabled}" />
+            </Style>
+            <Style Selector="^ /template/ TextBlock#PART_InputGestureText">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundDisabled}" />
+            </Style>
+            <Style Selector="^ /template/ ui|SymbolIcon#PART_ChevronPath">
+                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronDisabled}" />
+            </Style>
+        </Style>
+        
+        <Style Selector="^:open /template/ ui|SymbolIcon#PART_ChevronPath">
+            <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronSubMenuOpened}" />
+        </Style>
+
+        <Style Selector="^:empty /template/ ui|SymbolIcon#PART_ChevronPath">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <Style Selector="^:separator">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Separator/>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

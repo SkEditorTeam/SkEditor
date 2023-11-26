@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:controls="using:SkEditor.Controls"
+             mc:Ignorable="d" d:DesignWidth="800"
+             x:Class="SkEditor.Views.Settings.HomePage"
+             x:CompileBindings="True">
+	
+	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsHomeTitle}" HasBackButton="False" Grid.Row="0"/>
+		<ScrollViewer Grid.Row="1">
+			<StackPanel Name="ItemStackPanel" Spacing="8">
+				<ui:SettingsExpander Name="GeneralItem" Header="{DynamicResource SettingsHomeGeneral}" IconSource="{StaticResource HomeIcon}"
+					Description="{DynamicResource SettingsHomeGeneralDescription}"
+					IsClickEnabled="True" />
+				
+				<ui:SettingsExpander Name="PersonalizationItem" Header="{DynamicResource SettingsHomePersonalization}" IconSource="{StaticResource PersonalizeIcon}"
+					Description="{DynamicResource SettingsHomePersonalizationDescription}"
+					IsClickEnabled="True" />
+
+				<!--<ui:SettingsExpander Header="{DynamicResource SettingsHomeExperiments}" IconSource="{StaticResource ExperimentsIcon}"
+					Description="{DynamicResource SettingsHomeExperimentsDescription}" />-->
+
+				<ui:SettingsExpander Name="AddonsItem" Header="{DynamicResource SettingsHomeAddons}" IconSource="{StaticResource AddonIcon}"
+					Description="{DynamicResource SettingsHomeAddonsDescription}"
+					IsClickEnabled="True" />
+
+				<ui:SettingsExpander Name="AboutItem" Header="{DynamicResource SettingsHomeAbout}" IconSource="{StaticResource InfoIcon}"
+					IsClickEnabled="True" />
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

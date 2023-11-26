@@ -1,0 +1,193 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+	<!-- Window Titles -->
+	<system:String x:Key="WindowTitlePublish">Publish</system:String>
+	<system:String x:Key="WindowTitleRefactor">Refactor</system:String>
+	<system:String x:Key="WindowTitleSettings">Settings</system:String>
+	<system:String x:Key="WindowTitleFontSelector">Select font</system:String>
+	<system:String x:Key="WindowTitleSaveFilePicker">Save file</system:String>
+	<system:String x:Key="WindowTitleOpenFilePicker">Open file</system:String>
+	<system:String x:Key="WindowTitleGuiGenerator">Generate GUI</system:String>
+	<system:String x:Key="WindowTitleItemSelector">Select item</system:String>
+	<system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
+
+	<!-- Menu Headers -->
+	<system:String x:Key="MenuHeaderFile">File</system:String>
+	<system:String x:Key="MenuHeaderEdit">Edit</system:String>
+	<system:String x:Key="MenuHeaderTools">Tools</system:String>
+	<system:String x:Key="MenuHeaderOther">Other</system:String>
+
+	<!-- File Menu -->
+	<system:String x:Key="MenuHeaderNew">New</system:String>
+	<system:String x:Key="MenuHeaderOpen">Open</system:String>
+	<system:String x:Key="MenuHeaderSave">Save</system:String>
+	<system:String x:Key="MenuHeaderSaveAs">Save as</system:String>
+	<system:String x:Key="MenuHeaderPublish">Publish</system:String>
+	<system:String x:Key="MenuHeaderClose">Close</system:String>
+	<system:String x:Key="MenuHeaderCloseAll">Close all</system:String>
+
+	<!-- Edit Menu -->
+	<system:String x:Key="MenuHeaderCopy">Copy</system:String>
+	<system:String x:Key="MenuHeaderPaste">Paste</system:String>
+	<system:String x:Key="MenuHeaderCut">Cut</system:String>
+	<system:String x:Key="MenuHeaderUndo">Undo</system:String>
+	<system:String x:Key="MenuHeaderRedo">Redo</system:String>
+	<system:String x:Key="MenuHeaderDuplicate">Duplicate</system:String>
+	<system:String x:Key="MenuHeaderComment">Comment</system:String>
+	<system:String x:Key="MenuHeaderDelete">Delete</system:String>
+
+	<!-- Tools Menu -->
+	<system:String x:Key="MenuHeaderDocumentation">Documentation</system:String>
+	<system:String x:Key="MenuHeaderGenerate">Generate</system:String>
+	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
+	<system:String x:Key="MenuHeaderGenerateCommand">Command</system:String>
+	<system:String x:Key="MenuHeaderRefactor">Refactor</system:String>
+
+	<!-- Other Menu -->
+	<system:String x:Key="MenuHeaderMarketplace">Marketplace</system:String>
+	<system:String x:Key="MenuHeaderRefreshSyntax">Refresh syntax</system:String>
+
+	<!-- Buttons -->
+	<system:String x:Key="ApplyButton">Apply</system:String>
+	<system:String x:Key="ConfirmButton">Confirm</system:String>
+	<system:String x:Key="CloseButton">Close</system:String>
+	<system:String x:Key="SelectButton">Select</system:String>
+	<system:String x:Key="CancelButton">Cancel</system:String>
+	<system:String x:Key="ContinueButton">Continue</system:String>
+	<system:String x:Key="Error">Error</system:String>
+	<system:String x:Key="Success">Success</system:String>
+	<system:String x:Key="Attention">Attention!</system:String>
+	<system:String x:Key="Yes">Yes</system:String>
+	<system:String x:Key="No">No</system:String>
+	<system:String x:Key="Okay">Okay</system:String>
+
+	<!-- Messages -->
+	<system:String x:Key="NewFileNameFormat">New file {0}</system:String>
+	<system:String x:Key="FailedToDownloadSyntax">Failed to download the syntax highlighting file! Check your internet connection. Without it, your code will not be highlighted.</system:String>
+	<system:String x:Key="DownloadingMissingFilesTitle">Missing files</system:String>
+	<system:String x:Key="DownloadingMissingFiles">Downloading</system:String>
+	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Files used by the item selector are missing, and are being downloaded now.</system:String>
+	<system:String x:Key="DownloadingMissingFilesDescriptionAnalyzer">File used by the Analyzer is missing and is being downloaded now.</system:String>
+	<system:String x:Key="DownloadMissingFilesFailed">Failed to download missing files. Please try again later.</system:String>
+	<system:String x:Key="ClosingUnsavedFile">You have unsaved changes in this file. Are you sure you want to close it?</system:String>
+	<system:String x:Key="ClosingAllFiles">Are you sure you want to close all the files? Any unsaved changes will be lost.</system:String>
+	<system:String x:Key="ClosingProgramWithUnsavedFiles">You have unsaved changes in at least one file. Are you sure you want to close the application?</system:String>
+
+	<!-- Publish Window -->
+	<system:String x:Key="PublishWindowPasteApiKey">Paste your API key here</system:String>
+	<system:String x:Key="PublishWindowApiKeyHint">Click here to open a website with the API key. Make sure to log in first!</system:String>
+	<system:String x:Key="PublishWindowAnonymously">Anonymously</system:String>
+	<system:String x:Key="PublishWindowResultLink">Link to your code</system:String>
+	<system:String x:Key="PublishWindowPublishButton">Publish</system:String>
+	
+	<!-- Refactor Window -->
+	<system:String x:Key="RefactorWindowRemoveComments">Remove comments</system:String>
+	<system:String x:Key="RefactorWindowTabsToSpaces">Convert tabs to spaces</system:String>
+	<system:String x:Key="RefactorWindowSpacesToTabs">Convert spaces to tabs</system:String>
+
+	<!-- Settings -->
+	<system:String x:Key="SettingsEnabled">Enabled</system:String>
+	<system:String x:Key="SettingsDisabled">Disabled</system:String>
+
+	<!-- Settings Home -->
+	<system:String x:Key="SettingsHomeTitle">Settings</system:String>
+	<system:String x:Key="SettingsHomeGeneral">General</system:String>
+	<system:String x:Key="SettingsHomeGeneralDescription">Language, text editor features</system:String>
+	<system:String x:Key="SettingsHomePersonalization">Personalization</system:String>
+	<system:String x:Key="SettingsHomePersonalizationDescription">Theme, font, syntax highlighting</system:String>
+	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
+	<system:String x:Key="SettingsHomeDiscordDescription">Display SkEditor on your Discord profile!</system:String>
+	<system:String x:Key="SettingsHomeExperiments">Experiments (not available yet)</system:String>
+	<system:String x:Key="SettingsHomeExperimentsDescription">Test upcoming features!</system:String>
+	<system:String x:Key="SettingsHomeAddons">Addons</system:String>
+	<system:String x:Key="SettingsHomeAddonsDescription">Enhance your experience with powerful addons!</system:String>
+	<system:String x:Key="SettingsHomeAbout">About</system:String>
+
+	<!-- General Settings -->
+	<system:String x:Key="SettingsGeneralTitle">General</system:String>
+	<system:String x:Key="SettingsGeneralLanguage">Language</system:String>
+	<system:String x:Key="SettingsGeneralWrapping">Wrapping</system:String>
+	<system:String x:Key="SettingsGeneralAutoIndent">Auto-indent</system:String>
+	<system:String x:Key="SettingsGeneralAutoIndentDescription">Automatically inserts a tab in a new line if the previous line ends with a colon.</system:String>
+	<system:String x:Key="SettingsGeneralAutoPairing">Auto-pairing</system:String>
+	<system:String x:Key="SettingsGeneralAutoPairingDescription">Automatically adds the closing character when you enter the opening character for certain symbols.</system:String>
+	<system:String x:Key="SettingsGeneralAutoSave">Autosave</system:String>
+	<system:String x:Key="SettingsGeneralAutoSaveDescription">Automatically saves your file every time you make a change.</system:String>
+	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
+	<system:String x:Key="SettingsGeneralRpcDescription">Show SkEditor in your Discord status.</system:String>
+
+	<!-- About Settings -->
+	<system:String x:Key="SettingsAboutTitle">About</system:String>
+	<system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
+	<system:String x:Key="SettingsAboutSkEditorDescription">SkEditor is an app for editing Skript files created by Notro.</system:String>
+	<system:String x:Key="SettingsAboutVersion">Version</system:String>
+	<system:String x:Key="SettingsAboutVersionDescription">You are running version: {0}</system:String>
+	<system:String x:Key="SettingsAboutGithub">GitHub</system:String>
+	<system:String x:Key="SettingsAboutGithubDescription">Click to open SkEditor's GitHub repository!</system:String>
+	<system:String x:Key="SettingsAboutDiscord">Discord server</system:String>
+	<system:String x:Key="SettingsAboutDiscordDescription">Click to join SkEditor's Discord server!</system:String>
+
+	<!-- Personalization Settings -->
+	<system:String x:Key="SettingsPersonalizationTitle">Personalization</system:String>
+	<system:String x:Key="SettingsPersonalizationTheme">Theme</system:String>
+	<system:String x:Key="SettingsPersonalizationThemeDescription">Customize colors of the app.</system:String>
+	<system:String x:Key="SettingsPersonalizationSyntax">Syntax highlighting</system:String>
+	<system:String x:Key="SettingsPersonalizationFont">Font</system:String>
+	<system:String x:Key="SettingsPersonalizationFontDescription">Current font: {0}</system:String>
+
+	<!-- Theme Settings -->
+	<system:String x:Key="SettingsThemeTitle">Theme</system:String>
+	<system:String x:Key="SettingsThemeInformation">In the future, you'll be able to edit colors directly from here. For now, create and edit files in Themes folder.</system:String>
+	<system:String x:Key="SettingsThemeOpenFolder">Open folder</system:String>
+	<system:String x:Key="SettingsThemeCurrentTheme">Current theme</system:String>
+	<system:String x:Key="SettingsThemeCurrentThemeDescription">A restart isn't necessary, but it might be needed for a 100% color update.</system:String>
+
+	<!-- Addon Settings -->
+	<system:String x:Key="SettingsAddonsTitle">Addons</system:String>
+
+	<!-- Discord RPC -->
+	<system:String x:Key="DiscordRpcEditing">Editing: {0}</system:String>
+
+	<!-- Bottom bar -->
+	<system:String x:Key="BottomBarLine">Line {0}</system:String>
+	<system:String x:Key="BottomBarColumn">Column {0}</system:String>
+	
+	
+	<!-- GUI Generator -->
+	<system:String x:Key="GuiGeneratorTitle">Title</system:String>
+	<system:String x:Key="GuiGeneratorFunctionName">Function name</system:String>
+	<system:String x:Key="GuiGeneratorRowQuantity">Row quantity</system:String>
+	<system:String x:Key="GuiGeneratorBackgroundItem">Background item</system:String>
+	<system:String x:Key="GuiGeneratorPreviewButton">Preview</system:String>
+	<system:String x:Key="GuiGeneratorGenerateButton">Generate</system:String>
+	<system:String x:Key="GuiGeneratorSkriptGui">Use skript-gui</system:String>
+	<system:String x:Key="GuiGeneratorDisplayName">Display name</system:String>
+	<system:String x:Key="GuiGeneratorLore">Lore</system:String>
+	<system:String x:Key="GuiGeneratorOptional">Optional</system:String>
+	<system:String x:Key="GuiGeneratorCustomModelData">Custom Model Data ID</system:String>
+	<system:String x:Key="GuiGeneratorLoreLineWatermark">Right click to add a new line</system:String>
+	<system:String x:Key="GuiGeneratorAddLoreLine">Add a new lore line</system:String>
+
+	<!-- Marketplace -->
+	<system:String x:Key="MarketplaceSearch">Search</system:String>
+	<system:String x:Key="MarketplaceEnableNow">Enable it now</system:String>
+	<system:String x:Key="MarketplaceInstallSuccess">Successfully downloaded {0}!</system:String>
+	<system:String x:Key="MarketplaceInstallRestart">Please restart the app to load the addon.</system:String>
+	<system:String x:Key="MarketplaceInstallEnableNow">Would you like to enable it now?</system:String>
+	<system:String x:Key="MarketplaceInstallNoNeedToRestart">Addon should work without restarting, but if you encounter errors, restart the app.</system:String>
+	<system:String x:Key="MarketplaceInstallFailed">Failed to download {0}!</system:String>
+	<system:String x:Key="MarketplaceUninstallSuccess">Successfully uninstalled {0}!\nPlease restart the app to unload the addon.</system:String>
+	<system:String x:Key="MarketplaceUpdateSuccess">Successfully updated {0}!\nPlease restart the app to load the addon.</system:String>
+	<system:String x:Key="MarketplaceUpdateFailed">Failed to update {0}!</system:String>
+	<system:String x:Key="MarketplaceLoadFailed">Something went wrong when trying to load Marketplace items. Are you connected to the internet?</system:String>
+	<system:String x:Key="MarketplaceInfo">This is a very simple Marketplace design, just meant to allow users to install official addons. It will be significantly improved in the future.</system:String>
+	<system:String x:Key="MarketplaceButtonInstall">Install</system:String>
+	<system:String x:Key="MarketplaceButtonUpdate">Update</system:String>
+	<system:String x:Key="MarketplaceButtonUninstall">Uninstall</system:String>
+	<system:String x:Key="MarketplaceButtonDisable">Disable</system:String>
+	<system:String x:Key="MarketplaceButtonEnable">Enable</system:String>
+
+
+</ResourceDictionary>
