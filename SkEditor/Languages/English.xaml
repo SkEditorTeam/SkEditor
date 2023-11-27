@@ -69,7 +69,6 @@
 	<system:String x:Key="DownloadingMissingFilesTitle">Missing files</system:String>
 	<system:String x:Key="DownloadingMissingFiles">Downloading</system:String>
 	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Files used by the item selector are missing, and are being downloaded now.</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionAnalyzer">File used by the Analyzer is missing and is being downloaded now.</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Failed to download missing files. Please try again later.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">You have unsaved changes in this file. Are you sure you want to close it?</system:String>
 	<system:String x:Key="ClosingAllFiles">Are you sure you want to close all the files? Any unsaved changes will be lost.</system:String>

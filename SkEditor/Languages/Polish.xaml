@@ -69,7 +69,6 @@
 	<system:String x:Key="DownloadingMissingFilesTitle">Brakujące pliki</system:String>
 	<system:String x:Key="DownloadingMissingFiles">Pobieranie</system:String>
 	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Brakuje plików używanych przez selektor itemów i są one teraz pobierane.</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionAnalyzer">Brakuje pliku używanego przez Analizatora i jest teraz pobierany.</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Nie udało się pobrać brakujących plików. Spróbuj ponownie później.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">Masz niezapisane zmiany w tym pliku. Czy na pewno chcesz go zamknąć?</system:String>
 	<system:String x:Key="ClosingAllFiles">Czy na pewno chcesz zamknąć wszystkie pliki? Wszelkie niezapisane zmiany zostaną utracone.</system:String>

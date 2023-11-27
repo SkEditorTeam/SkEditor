@@ -19,10 +19,11 @@ public class TextEditorEventHandler
 		{ "(", ")" },
 		{ "[", "]" },
 		{ "\"", "\"" },
-		{ "<", ">" }
+		{ "<", ">" },
+		{ "{", "}" },
 	};
 
-	public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = new();
+	public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 
 	public static void OnZoom(object sender, PointerWheelEventArgs e)
 	{

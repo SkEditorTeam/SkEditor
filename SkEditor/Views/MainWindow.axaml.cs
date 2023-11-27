@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using FluentAvalonia.UI.Controls.Primitives;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Controls;
@@ -11,8 +12,10 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace SkEditor.Views;
 
