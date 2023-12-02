@@ -6,21 +6,21 @@
 
 # SkEditor
   
-<a href='https://github.com/SkEditorPlus/SkEditor/releases'>
+<a href='https://github.com/SkEditorTeam/SkEditor/releases'>
   
-<img src='https://img.shields.io/github/v/release/SkEditorPlus/SkEditor?color=%237a34eb&label=version&style=flat-square'>
+<img src='https://img.shields.io/github/v/release/SkEditorTeam/SkEditor?color=%237a34eb&label=version&style=flat-square'>
   
 </a>
   
 <a href='https://github.com//SkEditorPlus/SkEditor/blob/main/LICENSE'>
   
-<img src='https://img.shields.io/github/license/SkEditorPlus/SkEditor?color=%230fa685&label=license&style=flat-square'>
+<img src='https://img.shields.io/github/license/SkEditorTeam/SkEditor?color=%230fa685&label=license&style=flat-square'>
   
 </a>
 
 <a href='https://github.com//SkEditorPlus/SkEditor/releases/latest'>
   
-<img src='https://img.shields.io/github/downloads/SkEditorPlus/SkEditor/total?color=%230fa621&style=flat-square'>
+<img src='https://img.shields.io/github/downloads/SkEditorTeam/SkEditor/total?color=%230fa621&style=flat-square'>
   
 </a>
 
