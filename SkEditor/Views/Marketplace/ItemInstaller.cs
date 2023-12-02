@@ -7,9 +7,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using System;
-using System.Dynamic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -54,7 +52,7 @@ public class ItemInstaller
 				message += "\n" + Translation.Get("MarketplaceInstallNoNeedToRestart");
 			}
 
-			ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon("Success", message, 
+			ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon("Success", message,
 				new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: !isAddon,
 				primaryButtonContent: "MarketplaceEnableNow", closeButtonContent: "Okay");
 
@@ -81,7 +79,7 @@ public class ItemInstaller
 				MarketplaceWindow.Instance.HideAllButtons();
 				_itemView.UninstallButton.IsVisible = true;
 				_itemView.DisableButton.IsVisible = true;
-				await EnableAddon(item);
+				EnableAddon(item);
 			}
 			else if (item.ItemType.Equals("Syntax highlighting") || item.ItemType.Equals("Theme"))
 			{
@@ -96,7 +94,7 @@ public class ItemInstaller
 		}
 	}
 
-	private static async Task EnableAddon(MarketplaceItem item)
+	private static void EnableAddon(MarketplaceItem item)
 	{
 		if (item.ItemRequiresRestart) return;
 
@@ -152,7 +150,9 @@ public class ItemInstaller
 		}
 		else if (item.ItemType.Equals("Theme"))
 		{
-			ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ?? ThemeEditor.GetDefaultTheme());
+			if (fileName.Equals(ThemeEditor.CurrentTheme.FileName)) 
+				ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ?? ThemeEditor.GetDefaultTheme());
+
 			ThemeEditor.Themes.Remove(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName)));
 			ThemeEditor.SaveAllThemes();
 			File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "Themes", fileName));

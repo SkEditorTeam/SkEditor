@@ -190,6 +190,18 @@ public class SkEditor : ISkEditorAPI
 	public event EventHandler<TextEditorEventArgs> FileCreated;
 	public void OnFileCreated(TextEditor textEditor) => FileCreated?.Invoke(this, new TextEditorEventArgs(textEditor));
 
+	/// <summary>
+	/// Returns true if file can be closed
+	/// </summary>
+	/// <returns>False if file closing was cancelled</returns>
+	public event EventHandler<TextEditorCancelEventArgs> FileClosing;
+	public bool OnFileClosing(TextEditor textEditor)
+	{
+		TextEditorCancelEventArgs args = new(textEditor);
+		FileClosing?.Invoke(this, args);
+		return !args.Cancel;
+	}
+
 	public event EventHandler SettingsOpened;
 	public void OnSettingsOpened() => SettingsOpened?.Invoke(this, EventArgs.Empty);
 
@@ -200,4 +212,10 @@ public class SkEditor : ISkEditorAPI
 public class TextEditorEventArgs(TextEditor textEditor) : EventArgs
 {
 	public TextEditor TextEditor { get; } = textEditor;
+}
+
+public class TextEditorCancelEventArgs(TextEditor textEditor) : EventArgs
+{
+	public TextEditor TextEditor { get; } = textEditor;
+	public bool Cancel { get; set; }
 }

@@ -47,6 +47,7 @@ public partial class GeneralPage : UserControl
 		AutoIndentToggleSwitch.Command = new RelayCommand(ToggleAutoIndent);
 		AutoPairingToggleSwitch.Command = new RelayCommand(ToggleAutoPairing);
 		AutoSaveToggleSwitch.Command = new RelayCommand(ToggleAutoSave);
+		CheckForUpdatesToggleSwitch.Command = new RelayCommand(ToggleCheckForUpdates);
 	}
 
 	private void ToggleRpc()
@@ -73,7 +74,7 @@ public partial class GeneralPage : UserControl
 	private void ToggleAutoIndent() => ToggleSetting("IsAutoIndentEnabled");
 	private void ToggleAutoPairing() => ToggleSetting("IsAutoPairingEnabled");
 	private void ToggleAutoSave() => ToggleSetting("IsAutoSaveEnabled");
-	private void ToggleRealtimeAnalyzer() => ToggleSetting("IsRealtimeAnalyzerEnabled");
+	private void ToggleCheckForUpdates() => ToggleSetting("CheckForUpdates");
 
 	private static void ToggleSetting(string propertyName)
 	{

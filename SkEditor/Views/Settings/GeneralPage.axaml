@@ -51,6 +51,12 @@
 						<ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRpcEnabled}"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
+
+				<ui:SettingsExpander Header="Check for updates" IconSource="{StaticResource CheckForUpdatesIcon}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="CheckForUpdatesToggleSwitch" IsChecked="{Binding CheckForUpdates}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

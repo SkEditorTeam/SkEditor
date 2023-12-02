@@ -83,8 +83,13 @@ public class FileBuilder
 		editor.TextChanged += TextEditorEventHandler.OnTextChanged;
 		editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
 		editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-		editor.TextArea.Caret.PositionChanged += (_, _) => ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
+		editor.TextArea.Caret.PositionChanged += (sender, e) =>
+		{
+			ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
+		};
 		editor.TextArea.KeyDown += TextEditorEventHandler.OnKeyDown;
+		editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
+		editor.TextArea.SelectionChanged += SelectionHandler.OnSelectionChanged;
 
 		return editor;
 	}

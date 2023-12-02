@@ -115,18 +115,32 @@ public class TextEditorEventHandler
 		if (!ApiVault.Get().GetAppConfig().IsAutoPairingEnabled) return;
 
 		string symbol = e.Text;
-		if (!_symbolPairs.ContainsKey(symbol)) return;
+		if (!_symbolPairs.TryGetValue(symbol, out string? value)) return;
 
 		TextEditor textEditor = ApiVault.Get().GetTextEditor();
 		if (textEditor.Document.TextLength > textEditor.CaretOffset)
 		{
 			string nextChar = textEditor.Document.GetText(textEditor.CaretOffset, 1);
-			if (nextChar.Equals(_symbolPairs[symbol])) return;
+			if (nextChar.Equals(value)) return;
 		}
 
-		textEditor.Document.Insert(textEditor.CaretOffset, _symbolPairs[symbol]);
+		textEditor.Document.Insert(textEditor.CaretOffset, value);
 		textEditor.CaretOffset--;
 	}
 
+	public static void OnPointerPressed(object? sender, PointerPressedEventArgs e)
+	{
+		if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
+		e.Handled = true;
 
+		TextEditor textEditor = ApiVault.Get().GetTextEditor();
+
+		Point pos = e.GetPosition(textEditor.TextArea.TextView) + textEditor.TextArea.TextView.ScrollOffset;
+		SimpleSegment word = TextEditorUtilities.GetWordAtMousePosition(pos, textEditor.TextArea);
+
+		if (word != SimpleSegment.Invalid)
+		{
+			textEditor.Select(word.Offset, word.Length);
+		}
+	}
 }

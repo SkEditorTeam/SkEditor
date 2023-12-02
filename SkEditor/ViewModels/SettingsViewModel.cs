@@ -10,6 +10,7 @@ public class SettingsViewModel
 	public static bool IsAutoIndentEnabled { get; set; } = ApiVault.Get().GetAppConfig().IsAutoIndentEnabled;
 	public static bool IsAutoPairingEnabled { get; set; } = ApiVault.Get().GetAppConfig().IsAutoPairingEnabled;
 	public static bool IsAutoSaveEnabled { get; set; } = ApiVault.Get().GetAppConfig().IsAutoSaveEnabled;
+	public static bool CheckForUpdates { get; set; } = ApiVault.Get().GetAppConfig().CheckForUpdates;
 
 	public static bool UseSkriptGui { get; set; } = ApiVault.Get().GetAppConfig().UseSkriptGui;
 

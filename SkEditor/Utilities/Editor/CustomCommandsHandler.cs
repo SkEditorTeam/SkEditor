@@ -1,4 +1,5 @@
-﻿using AvaloniaEdit;
+﻿using Avalonia.Threading;
+using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using SkEditor.API;

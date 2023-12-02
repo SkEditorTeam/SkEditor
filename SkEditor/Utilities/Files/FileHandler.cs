@@ -5,7 +5,6 @@ using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Syntax;
@@ -150,6 +149,8 @@ public class FileHandler
 
 	public static async Task CloseFile(TabViewItem item)
 	{
+		if (item.Content is TextEditor editor && !ApiVault.Get().OnFileClosing(editor)) return;
+
 		DisposeEditorData(item);
 
 		string header = item.Header.ToString();

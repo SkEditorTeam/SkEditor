@@ -45,6 +45,9 @@ public interface ISkEditorAPI
 	public event EventHandler<TextEditorEventArgs> FileCreated;
 	public void OnFileCreated(TextEditor textEditor);
 
+	public event EventHandler<TextEditorCancelEventArgs> FileClosing;
+	public bool OnFileClosing(TextEditor textEditor);
+
 	public event EventHandler SettingsOpened;
 	public void OnSettingsOpened();
 
