@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
-public class FileDownloader
+public static class FileDownloader
 {
 	private static readonly string zipUrl = "https://marketplace-skeditor.vercel.app/SkEditorFiles/Items_and_json.zip";
 	private static readonly string appDataFolderPath = AppConfig.AppDataFolderPath;
@@ -39,7 +39,7 @@ public class FileDownloader
 			Title = Translation.Get("DownloadingMissingFilesTitle"),
 			ShowProgressBar = true,
 			IconSource = new SymbolIconSource { Symbol = Symbol.Download },
-			SubHeader = Translation.Get("DownloadingMissingFiles"),
+			SubHeader = Translation.Get("Downloading"),
 			Content = Translation.Get("DownloadingMissingFilesDescriptionItems"),
 		};
 

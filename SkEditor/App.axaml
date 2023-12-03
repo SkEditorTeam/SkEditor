@@ -39,5 +39,8 @@
 		
 		
 		<Thickness x:Key="FlyoutContentPadding">10</Thickness>
+
+		
+		<FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/JetBrainsMono.ttf#JetBrains Mono</FontFamily>
 	</Application.Resources>
 </Application>

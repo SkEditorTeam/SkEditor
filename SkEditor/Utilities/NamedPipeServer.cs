@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
-public class NamedPipeServer
+public static class NamedPipeServer
 {
 	private static bool isRunning = false;
 

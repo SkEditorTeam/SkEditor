@@ -28,28 +28,7 @@ class Program
 		{
 			Log.Fatal(e, "Application crashed!");
 
-			List<TabViewItem> tabs = ApiVault.Get().GetTabView().TabItems
-				.OfType<TabViewItem>()
-				.Where(tab => tab.Content is TextEditor)
-				.ToList();
-
-			tabs.ForEach(tab =>
-			{
-				string path = tab.Tag.ToString();
-				if (string.IsNullOrEmpty(path))
-				{
-					string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
-					Directory.CreateDirectory(tempPath);
-					string header = tab.Header.ToString().TrimEnd('*');
-					path = Path.Combine(tempPath, header);
-				}
-				TextEditor editor = tab.Content as TextEditor;
-				string textToWrite = editor.Text;
-				using StreamWriter writer = new(path, false);
-				writer.Write(textToWrite);
-			});
-
-			ApiVault.Get().GetAppConfig().Save();
+			ApiVault.Get().SaveData();
 
 			Process.Start(Environment.ProcessPath, "--crash");
 		}

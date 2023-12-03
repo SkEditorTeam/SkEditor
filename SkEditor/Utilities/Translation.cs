@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 
 namespace SkEditor.Utilities;
-public class Translation
+public static class Translation
 {
 	public static string LanguagesFolder { get; } = $"{AppContext.BaseDirectory}/Languages";
 
@@ -16,7 +16,7 @@ public class Translation
 	{
 		Application.Current.TryGetResource(key, Avalonia.Styling.ThemeVariant.Default, out object translation);
 		string translationString = translation?.ToString() ?? "?-?";
-		translationString = translationString.Replace("{n}", Environment.NewLine);
+		translationString = translationString.Replace("\\n", Environment.NewLine);
 
 		for (int i = 0; i < parameters.Length; i++)
 		{

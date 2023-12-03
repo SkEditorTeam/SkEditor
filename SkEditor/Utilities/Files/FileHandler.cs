@@ -125,7 +125,7 @@ public class FileHandler
 		item.Tag = absolutePath;
 
 		SyntaxLoader.SetSyntax(ApiVault.Get().GetTextEditor(), absolutePath);
-		IconSetter.SetIcon(item);
+		Icon.SetIcon(item);
 		ToolTip toolTip = new()
 		{
 			Content = absolutePath,

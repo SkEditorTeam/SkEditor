@@ -39,6 +39,8 @@ public interface ISkEditorAPI
 
 	public bool IsAddonEnabled(string addonName);
 
+	public void SaveData();
+
 
 	#region Events
 

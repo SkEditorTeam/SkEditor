@@ -67,12 +67,18 @@
 	<system:String x:Key="NewFileNameFormat">New file {0}</system:String>
 	<system:String x:Key="FailedToDownloadSyntax">Failed to download the syntax highlighting file! Check your internet connection. Without it, your code will not be highlighted.</system:String>
 	<system:String x:Key="DownloadingMissingFilesTitle">Missing files</system:String>
-	<system:String x:Key="DownloadingMissingFiles">Downloading</system:String>
+	<system:String x:Key="Downloading">Downloading</system:String>
 	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Files used by the item selector are missing, and are being downloaded now.</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Failed to download missing files. Please try again later.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">You have unsaved changes in this file. Are you sure you want to close it?</system:String>
 	<system:String x:Key="ClosingAllFiles">Are you sure you want to close all the files? Any unsaved changes will be lost.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">You have unsaved changes in at least one file. Are you sure you want to close the application?</system:String>
+	<system:String x:Key="ChangesDetected">This file was changed externally.\nDo you want to reload it and possibly lose changes made in SkEditor?</system:String>
+	<system:String x:Key="DownloadingUpdateTitle">Downloading update</system:String>
+	<system:String x:Key="UpdateAvailable">Update available</system:String>
+	<system:String x:Key="UpdateAvailableMessage">An update is available.\nWould you like to download it now?</system:String>
+	<system:String x:Key="UpdateFailed">Failed to download the update. Please try again later.</system:String>
+	
 
 	<!-- Publish Window -->
 	<system:String x:Key="PublishWindowPasteApiKey">Paste your API key here</system:String>

@@ -24,7 +24,7 @@ public class AppConfig
 	public bool IsAutoSaveEnabled { get; set; } = false;
 	public string CurrentTheme { get; set; } = "Default.json";
 	public string CurrentSyntax { get; set; } = "Default.xshd";
-	public string Font { get; set; } = "JetBrains Mono";
+	public string Font { get; set; } = "Default";
 	public bool CheckForUpdates { get; set;} = true;
 
 	public HashSet<string> AddonsToDisable { get; set; } = [];

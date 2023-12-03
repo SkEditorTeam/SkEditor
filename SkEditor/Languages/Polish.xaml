@@ -73,6 +73,10 @@
 	<system:String x:Key="ClosingUnsavedFile">Masz niezapisane zmiany w tym pliku. Czy na pewno chcesz go zamknąć?</system:String>
 	<system:String x:Key="ClosingAllFiles">Czy na pewno chcesz zamknąć wszystkie pliki? Wszelkie niezapisane zmiany zostaną utracone.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">Masz niezapisane zmiany w co najmniej jednym pliku. Czy na pewno chcesz zamknąć aplikację?</system:String>
+	<system:String x:Key="ChangesDetected">Ten plik został zmodyfikowany poza SkEditorem.\nCzy chcesz go ponownie załadować i ewentualnie stracić zmiany dokonane w SkEditorze?</system:String>
+	<system:String x:Key="DownloadingUpdateTitle">Pobieranie aktualizacji</system:String>
+	<system:String x:Key="UpdateAvailable">Aktualizacja dostępna</system:String>
+	<system:String x:Key="UpdateAvailableMessage">Dostępna jest aktualizacja.\nCzy chciałbyś ją teraz pobrać?</system:String>
 
 	<!-- Publish Window -->
 	<system:String x:Key="PublishWindowPasteApiKey">Wklej tutaj swój klucz API</system:String>

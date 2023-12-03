@@ -8,6 +8,7 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Views;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -182,6 +183,32 @@ public class SkEditor : ISkEditorAPI
 	}
 
 	public bool IsAddonEnabled(string addonName) => AddonLoader.Addons.Any(x => x.Name.Equals(addonName));
+
+	public void SaveData()
+	{
+		List<TabViewItem> tabs = GetTabView().TabItems
+				.OfType<TabViewItem>()
+				.Where(tab => tab.Content is TextEditor)
+				.ToList();
+
+		tabs.ForEach(tab =>
+		{
+			string path = tab.Tag.ToString();
+			if (string.IsNullOrEmpty(path))
+			{
+				string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
+				Directory.CreateDirectory(tempPath);
+				string header = tab.Header.ToString().TrimEnd('*');
+				path = Path.Combine(tempPath, header);
+			}
+			TextEditor editor = tab.Content as TextEditor;
+			string textToWrite = editor.Text;
+			using StreamWriter writer = new(path, false);
+			writer.Write(textToWrite);
+		});
+
+		GetAppConfig().Save();
+	}
 
 
 

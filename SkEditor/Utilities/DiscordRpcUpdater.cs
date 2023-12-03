@@ -3,7 +3,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 
 namespace SkEditor.Utilities;
-public class DiscordRpcUpdater
+public static class DiscordRpcUpdater
 {
 	private const string ApplicationId = "1152625623777431662";
 	private static DiscordRpcClient? _client;

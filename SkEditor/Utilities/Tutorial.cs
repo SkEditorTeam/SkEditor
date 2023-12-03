@@ -4,7 +4,7 @@ using SkEditor.API;
 using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
-public class Tutorial
+public static class Tutorial
 {
 	public async static void ShowTutorial()
 	{

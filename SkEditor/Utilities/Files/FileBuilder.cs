@@ -38,7 +38,7 @@ public class FileBuilder
 			ToolTip.SetShowDelay(tabViewItem, 1200);
 			ToolTip.SetTip(tabViewItem, toolTip);
 
-			IconSetter.SetIcon(tabViewItem);
+			Icon.SetIcon(tabViewItem);
 		}
 
 		ApiVault.Get().OnFileCreated(editor);
@@ -52,7 +52,6 @@ public class FileBuilder
 
 		TextEditor editor = new()
 		{
-			FontFamily = config.Font,
 			ShowLineNumbers = true,
 			Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
 			Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
@@ -61,6 +60,16 @@ public class FileBuilder
 			WordWrap = config.IsWrappingEnabled,
 		};
 		editor.ContextFlyout = GetContextMenu(editor);
+
+		if (config.Font.Equals("Default"))
+		{
+			Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
+			editor.FontFamily = (FontFamily)font;
+		}
+		else
+		{
+			editor.FontFamily = new FontFamily(config.Font);
+		}
 
 		if (File.Exists(path))
 		{

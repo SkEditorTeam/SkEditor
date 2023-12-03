@@ -1,11 +1,9 @@
 ﻿using Avalonia.Input;
+using System;
 using System.Runtime.InteropServices;
 
 namespace SkEditor.Utilities;
-public class KeyUtility
+public static class KeyUtility
 {
-	public static KeyModifiers GetControlModifier()
-	{
-		return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? KeyModifiers.Meta : KeyModifiers.Control;
-	}
+	public static KeyModifiers GetControlModifier() => OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
 }

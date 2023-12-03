@@ -1,17 +1,24 @@
 ﻿using Avalonia;
 using FluentAvalonia.UI.Controls;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SkEditor.Utilities.Files;
-public class IconSetter
+public class Icon
 {
+	public static Dictionary<string, string> IconDictionary = new()
+	{
+		{ ".sk", "SkriptIcon" },
+	};
+
 	public static void SetIcon(TabViewItem tabViewItem)
 	{
 		string tag = tabViewItem.Tag.ToString();
 
 		IconSource iconSource = null;
 
-		string iconName = GetIconName(Path.GetExtension(tag));
+		string extension = Path.GetExtension(tag);
+		string iconName = IconDictionary.GetValueOrDefault(extension);
 
 		if (iconName is not null)
 		{
@@ -21,10 +28,4 @@ public class IconSetter
 
 		tabViewItem.IconSource = iconSource;
 	}
-
-	private static string GetIconName(string extension) => extension switch
-	{
-		".sk" => "SkriptIcon",
-		_ => null,
-	};
 }
