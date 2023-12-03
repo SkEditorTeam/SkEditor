@@ -187,6 +187,9 @@ public class SkEditor : ISkEditorAPI
 
 	#region Events
 
+	public event EventHandler Closed;
+	public void OnClosed() => Closed?.Invoke(this, EventArgs.Empty);
+
 	public event EventHandler<TextEditorEventArgs> FileCreated;
 	public void OnFileCreated(TextEditor textEditor) => FileCreated?.Invoke(this, new TextEditorEventArgs(textEditor));
 

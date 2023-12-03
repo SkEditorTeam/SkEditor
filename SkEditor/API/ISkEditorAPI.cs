@@ -42,6 +42,9 @@ public interface ISkEditorAPI
 
 	#region Events
 
+	public event EventHandler Closed;
+	public void OnClosed();
+
 	public event EventHandler<TextEditorEventArgs> FileCreated;
 	public void OnFileCreated(TextEditor textEditor);
 
