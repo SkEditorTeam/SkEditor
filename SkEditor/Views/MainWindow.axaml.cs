@@ -38,6 +38,7 @@ public partial class MainWindow : AppWindow
 		TabControl.TabCloseRequested += (sender, e) => FileHandler.CloseFile(e);
 		TemplateApplied += OnWindowLoaded;
 		Closing += OnClosing;
+		Activated += (sender, e) => ChangeChecker.Check();
 		KeyDown += (sender, e) =>
 		{
 			if (e.KeyModifiers == KeyModifiers.Control && e.Key >= Key.D1 && e.Key <= Key.D9)
@@ -56,16 +57,15 @@ public partial class MainWindow : AppWindow
 		ApiVault.Get().GetAppConfig().Save();
 
 		List<TabViewItem> unsavedFiles = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().Where(item => item.Header.ToString().EndsWith('*')).ToList();
-		if (unsavedFiles.Count != 0)
+		if (unsavedFiles.Count == 0) return;
+
+		e.Cancel = true;
+		ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+		if (result == ContentDialogResult.Primary)
 		{
-			e.Cancel = true;
-			ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
-			if (result == ContentDialogResult.Primary)
-			{
-				unsavedFiles.ForEach(item => item.Header = item.Header.ToString().TrimEnd('*'));
-				Close();
-			}
-			return;
+			unsavedFiles.ForEach(item => item.Header = item.Header.ToString().TrimEnd('*'));
+			ApiVault.Get().OnClosed();
+			Close();
 		}
 	}
 
