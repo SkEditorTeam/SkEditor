@@ -1,3 +1,5 @@
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using ExCSS;
@@ -46,6 +48,9 @@ public partial class FontSelectionWindow : AppWindow
 		List<FontInfo> fonts = FontManager.Current.SystemFonts
 			.Select(font => new FontInfo { Name = font.Name, Font = font })
 			.ToList();
+
+		Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
+		fonts.Insert(0, new FontInfo { Name = "Default", Font = (FontFamily)font });
 
 		FontListBox.ItemsSource = fonts;
 

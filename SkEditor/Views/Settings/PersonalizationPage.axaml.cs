@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
@@ -69,6 +70,17 @@ public partial class PersonalizationPage : UserControl
 			.Where(i => i.Content is TextEditor)
 			.Select(i => i.Content as TextEditor).ToList();
 
-		textEditors.ForEach(i => i.FontFamily = new(result));
+		textEditors.ForEach(i =>
+		{
+			if (result.Equals("Default"))
+			{
+				Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
+				i.FontFamily = (Avalonia.Media.FontFamily)font;
+			}
+			else
+			{
+				i.FontFamily = new(result);
+			}
+		});
 	}
 }
