@@ -1,2 +1,5 @@
 ﻿<Project Sdk="WixToolset.Sdk/4.0.3">
+  <ItemGroup>
+    <ProjectReference Include="..\SkEditor\SkEditor.csproj" />
+  </ItemGroup>
 </Project>

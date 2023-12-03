@@ -1,0 +1,23 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<ComponentGroup Id="SkEditorComponents" Directory="INSTALLFOLDER">
+			<Component>
+				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\SkEditor.exe"/>
+				<Shortcut Name="SkEditor" Directory="DesktopFolder" Advertise="yes" Icon="SkEditorIcon.exe" />
+				<Shortcut Name="SkEditor" Directory="ProgramMenuFolder" Advertise="yes" Icon="SkEditorIcon.exe" />
+			</Component>
+			<Component>
+				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\av_libglesv2.dll" />
+			</Component>
+			<Component>
+				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\libHarfBuzzSharp.dll" />
+			</Component>
+			<Component>
+				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\libSkiaSharp.dll" />
+			</Component>
+		</ComponentGroup>
+
+		<Icon Id="SkEditorIcon.exe" SourceFile="SkEditor.ico"/>
+		<Property Id="ARPPRODUCTICON" Value="SkEditorIcon.exe" />
+	</Fragment>
+</Wix>
