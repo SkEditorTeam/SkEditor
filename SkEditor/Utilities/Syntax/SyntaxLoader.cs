@@ -114,6 +114,8 @@ public class SyntaxLoader
 			}
 		}
 
+		if (!File.Exists(syntax)) return;
+
 		try
 		{
 			using var reader = XmlReader.Create(new StreamReader(syntax));

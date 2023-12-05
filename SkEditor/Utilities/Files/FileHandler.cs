@@ -173,7 +173,7 @@ public class FileHandler
 	{
 		if (item.Content is not TextEditor editor) return;
 
-		TextEditorEventHandler.ScrollViewers.Remove(editor);
+		TextEditorHandler.ScrollViewers.Remove(editor);
 	}
 
 	public static void SwitchTab(int index)

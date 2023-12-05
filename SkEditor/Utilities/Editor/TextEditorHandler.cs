@@ -10,9 +10,10 @@ using SkEditor.Utilities.Files;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Editor;
-public class TextEditorEventHandler
+public partial class TextEditorHandler
 {
 	private static readonly Dictionary<string, string> _symbolPairs = new()
 	{
@@ -22,6 +23,10 @@ public class TextEditorEventHandler
 		{ "<", ">" },
 		{ "{", "}" },
 	};
+
+	private const string commentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
+	[GeneratedRegex(commentPattern)]
+	private static partial Regex GetCommentRegex();
 
 	public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 
@@ -105,6 +110,9 @@ public class TextEditorEventHandler
 		DocumentLine previousLine = line.PreviousLine;
 
 		string previousLineText = textEditor.Document.GetText(previousLine);
+		previousLineText = GetCommentRegex().Replace(previousLineText, "");
+		previousLineText = previousLineText.TrimEnd();
+
 		if (!previousLineText.EndsWith(':')) return;
 
 		textEditor.Document.Insert(line.Offset, "\t");

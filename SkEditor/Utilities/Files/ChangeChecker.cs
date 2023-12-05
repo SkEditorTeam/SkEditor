@@ -1,6 +1,8 @@
 ﻿using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
+using Serilog;
 using SkEditor.API;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -22,16 +24,25 @@ public class ChangeChecker
 		TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
 		string path = item.Tag.ToString();
 		if (string.IsNullOrEmpty(path)) return;
+		if (!File.Exists(path)) return;
 
-		string textToWrite = ApiVault.Get().GetTextEditor().Document.Text;
-		using StreamReader reader = new(path);
-		string textToRead = reader.ReadToEnd();
+		try
+		{
+			string textToWrite = ApiVault.Get().GetTextEditor().Document.Text;
+			using StreamReader reader = new(path);
+			string textToRead = reader.ReadToEnd();
 
-		if (textToWrite.Equals(textToRead) || textToRead.Equals(GetLastKnownContent(ApiVault.Get().GetTextEditor()))) return;
+			if (textToWrite.Equals(textToRead) ||
+				textToRead.Equals(GetLastKnownContent(ApiVault.Get().GetTextEditor()))) return;
 
-		if (IsMessageShown) return;
-		IsMessageShown = true;
-		await ShowMessage(item, textToRead);
+			if (IsMessageShown) return;
+			IsMessageShown = true;
+			await ShowMessage(item, textToRead);
+		}
+		catch (Exception e)
+		{
+			Log.Error(e, "Error while checking for changes");
+		}
 
 		IsMessageShown = false;
 	}

@@ -87,17 +87,17 @@ public class FileBuilder
 
 	private static TextEditor AddEventHandlers(TextEditor editor)
 	{
-		editor.TextArea.PointerWheelChanged += TextEditorEventHandler.OnZoom;
+		editor.TextArea.PointerWheelChanged += TextEditorHandler.OnZoom;
 		editor.TextArea.Loaded += (sender, e) => editor.Focus();
-		editor.TextChanged += TextEditorEventHandler.OnTextChanged;
-		editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
-		editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
+		editor.TextChanged += TextEditorHandler.OnTextChanged;
+		editor.TextArea.TextEntered += TextEditorHandler.DoAutoIndent;
+		editor.TextArea.TextEntered += TextEditorHandler.DoAutoPairing;
 		editor.TextArea.Caret.PositionChanged += (sender, e) =>
 		{
 			ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
 		};
-		editor.TextArea.KeyDown += TextEditorEventHandler.OnKeyDown;
-		editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
+		editor.TextArea.KeyDown += TextEditorHandler.OnKeyDown;
+		editor.TextArea.TextView.PointerPressed += TextEditorHandler.OnPointerPressed;
 		editor.TextArea.SelectionChanged += SelectionHandler.OnSelectionChanged;
 
 		return editor;
