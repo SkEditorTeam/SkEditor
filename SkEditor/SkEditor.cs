@@ -116,12 +116,15 @@ public class SkEditor : ISkEditorAPI
 		ShowMessage(title, message, GetTopWindow());
 	}
 
+	private bool isMessageOpened = false;
 
 	/// <summary>
 	/// Shows info box with provided message and title
 	/// </summary>
 	public async Task<ContentDialogResult> ShowMessageWithIcon(string title, string message, IconSource icon, string iconColor = "#ffffff", string primaryButtonContent = "ConfirmButton", string closeButtonContent = "CancelButton", bool primaryButton = true)
 	{
+		if (isMessageOpened) return ContentDialogResult.None;
+
 		var dialog = new ContentDialog()
 		{
 			Title = title,
@@ -129,6 +132,8 @@ public class SkEditor : ISkEditorAPI
 		};
 
 		if (primaryButton) dialog.PrimaryButtonText = Translation.Get(primaryButtonContent);
+
+		dialog.Closed += (_, _) => isMessageOpened = false;
 
 		if (icon is SymbolIconSource symbolIcon) symbolIcon.FontSize = 36;
 
@@ -160,6 +165,7 @@ public class SkEditor : ISkEditorAPI
 
 		dialog.Content = grid;
 
+		isMessageOpened = true;
 		return await dialog.ShowAsync(GetTopWindow());
 	}
 

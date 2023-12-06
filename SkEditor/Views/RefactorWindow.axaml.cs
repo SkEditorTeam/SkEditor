@@ -3,6 +3,7 @@ using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
+using SkEditor.Utilities.Files;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,13 +24,19 @@ public partial class RefactorWindow : AppWindow
 		if (RemoveCommentsCheckBox.IsChecked == true) await RemoveComments();
 		if (TabsToSpacesCheckBox.IsChecked == true) await TabsToSpaces();
 		if (SpacesToTabsCheckBox.IsChecked == true) await SpacesToTabs();
+
+		if (ApiVault.Get().IsFileOpen())
+		{
+			ChangeChecker.ignoreNextChange = true;
+		}
+
 		Close();
 	}
 
 	private static Task RemoveComments()
 	{
 		TextEditor textEditor = ApiVault.Get().GetTextEditor();
-		var linesToStay = textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith("#")).ToList();
+		var linesToStay = textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
 
 		StringBuilder builder = new();
 		linesToStay.ForEach(x => builder.AppendLine(GetText(x)));

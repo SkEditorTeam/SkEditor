@@ -61,7 +61,7 @@ public class OccurenceBackgroundTransformer : DocumentColorizingTransformer
 
 	private void ApplyChanges(VisualLineElement element)
 	{
-		Color color = new(100, 90, 105, 196);
+		Color color = new(100, 50, 211, 240);
 		ImmutableSolidColorBrush brush = new(color);
 		element.TextRunProperties.SetBackgroundBrush(brush);
 	}

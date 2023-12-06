@@ -10,20 +10,29 @@ using System.Threading.Tasks;
 namespace SkEditor.Utilities.Files;
 public class ChangeChecker
 {
-	private static Dictionary<TextEditor, string> LastKnownContentDictionary = [];
+	private static Dictionary<TextEditor, string> lastKnownContentDictionary = [];
 	private static string GetLastKnownContent(TextEditor textEditor) =>
-		LastKnownContentDictionary.TryGetValue(textEditor, out string lastKnownContent) ? lastKnownContent : "";
-	private static void SetLastKnownContent(TextEditor textEditor, string content) => LastKnownContentDictionary[textEditor] = content;
+		lastKnownContentDictionary.TryGetValue(textEditor, out string lastKnownContent) ? lastKnownContent : "";
+	private static void SetLastKnownContent(TextEditor textEditor, string content) => lastKnownContentDictionary[textEditor] = content;
 
-	private static bool IsMessageShown = false;
+	private static bool isMessageShown = false;
+	public static bool ignoreNextChange = false;
 
 	public async static void Check()
 	{
+		if (!ApiVault.Get().GetAppConfig().CheckForChanges) return;
+
+		if (ignoreNextChange)
+		{
+			ignoreNextChange = false;
+			return;
+		}
+
 		if (!ApiVault.Get().IsFileOpen()) return;
 
 		TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
-		string path = item.Tag.ToString();
-		if (string.IsNullOrEmpty(path)) return;
+		if (string.IsNullOrWhiteSpace(item.Tag.ToString())) return;
+		string path = Uri.UnescapeDataString(item.Tag.ToString());
 		if (!File.Exists(path)) return;
 
 		try
@@ -35,8 +44,8 @@ public class ChangeChecker
 			if (textToWrite.Equals(textToRead) ||
 				textToRead.Equals(GetLastKnownContent(ApiVault.Get().GetTextEditor()))) return;
 
-			if (IsMessageShown) return;
-			IsMessageShown = true;
+			if (isMessageShown) return;
+			isMessageShown = true;
 			await ShowMessage(item, textToRead);
 		}
 		catch (Exception e)
@@ -44,7 +53,7 @@ public class ChangeChecker
 			Log.Error(e, "Error while checking for changes");
 		}
 
-		IsMessageShown = false;
+		isMessageShown = false;
 	}
 
 	private static async Task ShowMessage(TabViewItem item, string textToRead)

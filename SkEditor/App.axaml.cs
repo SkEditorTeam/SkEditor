@@ -2,6 +2,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Serilog;
+using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Views;
 using System;
@@ -10,6 +11,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace SkEditor;
 
@@ -19,6 +21,8 @@ public partial class App : Application
 	{
 		AvaloniaXamlLoader.Load(this);
 	}
+
+	static Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
 
 	public override async void OnFrameworkInitializationCompleted()
 	{
@@ -32,9 +36,7 @@ public partial class App : Application
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			bool isFirstInstance = Process.GetProcessesByName("SkEditor").Length == 1;
-
-			if (isFirstInstance)
+			if (mutex.WaitOne(TimeSpan.Zero, true))
 			{
 				try
 				{
@@ -50,6 +52,8 @@ public partial class App : Application
 					Log.Error(ex, "Error creating SkEditor");
 					desktop.Shutdown();
 				}
+
+				mutex.ReleaseMutex();
 			}
 			else
 			{

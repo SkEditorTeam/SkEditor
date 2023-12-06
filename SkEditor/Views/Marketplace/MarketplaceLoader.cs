@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Serilog;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace SkEditor.Views.Marketplace;
 public class MarketplaceLoader
 {
+	private static string[] supportedTypes = ["Syntax highlighting", "Theme", "Addon"];
+
 	public static async IAsyncEnumerable<MarketplaceItem> GetItems()
 	{
 		string url = MarketplaceWindow.MarketplaceUrl + "/items.json";
@@ -19,6 +22,7 @@ public class MarketplaceLoader
 			{
 				MarketplaceItem item = GetItem(itemName);
 				if (item.ItemName == null) continue;
+				if (!supportedTypes.Contains(item.ItemType)) continue;
 				yield return item;
 			}
 		}

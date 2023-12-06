@@ -27,7 +27,7 @@
 	
 	<Border Height="25" Background="#03ffffff" BorderBrush="#25ffffff" BorderThickness="0,1,0,0">
 		<Grid Name="MainGrid" ColumnDefinitions="auto,*,auto">
-			<TextBlock Name="LogsText" Grid.Column="1" Width="750" HorizontalAlignment="Left" Text="" Margin="30,0,0,0"/>
+			<TextBlock Name="LogsText" Grid.Column="1" MaxWidth="750" HorizontalAlignment="Left" Text="" Margin="30,0,0,0"/>
 
 			<StackPanel Grid.Column="2" Margin="0,0,5,0" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
 				<TextBlock x:Name="LineText" Text="{DynamicResource BottomBarLine}"/>

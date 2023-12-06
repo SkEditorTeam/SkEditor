@@ -52,7 +52,7 @@ public static class NamedPipeServer
 
 			await Dispatcher.UIThread.InvokeAsync(() =>
 			{
-				if (bytesRead == 0)
+				if (bytesRead is 0 or 1)
 				{
 					BringMainWindowToFront();
 				}

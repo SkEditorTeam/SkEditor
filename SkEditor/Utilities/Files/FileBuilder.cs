@@ -10,6 +10,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Syntax;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -25,11 +26,13 @@ public class FileBuilder
 			Header = header,
 			IsSelected = true,
 			Content = editor,
-			Tag = path,
+			Tag = string.Empty
 		};
 
-		if (!path.Equals(""))
+		if (!string.IsNullOrWhiteSpace(path))
 		{
+			tabViewItem.Tag = Uri.UnescapeDataString(path);
+
 			ToolTip toolTip = new()
 			{
 				Content = path,
@@ -71,10 +74,13 @@ public class FileBuilder
 			editor.FontFamily = new FontFamily(config.Font);
 		}
 
-		if (File.Exists(path))
+		if (!string.IsNullOrWhiteSpace(path))
 		{
-			using Stream stream = File.OpenRead(path);
-			editor.Load(stream);
+			path = Uri.UnescapeDataString(path);
+			if (File.Exists(path))
+			{
+				editor.Text = File.ReadAllText(path);
+			}
 		}
 
 		SyntaxLoader.SetSyntax(editor, path);
@@ -87,17 +93,17 @@ public class FileBuilder
 
 	private static TextEditor AddEventHandlers(TextEditor editor)
 	{
-		editor.TextArea.PointerWheelChanged += TextEditorHandler.OnZoom;
+		editor.TextArea.PointerWheelChanged += TextEditorEventHandler.OnZoom;
 		editor.TextArea.Loaded += (sender, e) => editor.Focus();
-		editor.TextChanged += TextEditorHandler.OnTextChanged;
-		editor.TextArea.TextEntered += TextEditorHandler.DoAutoIndent;
-		editor.TextArea.TextEntered += TextEditorHandler.DoAutoPairing;
+		editor.TextChanged += TextEditorEventHandler.OnTextChanged;
+		editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
+		editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
 		editor.TextArea.Caret.PositionChanged += (sender, e) =>
 		{
 			ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
 		};
-		editor.TextArea.KeyDown += TextEditorHandler.OnKeyDown;
-		editor.TextArea.TextView.PointerPressed += TextEditorHandler.OnPointerPressed;
+		editor.TextArea.KeyDown += TextEditorEventHandler.OnKeyDown;
+		editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
 		editor.TextArea.SelectionChanged += SelectionHandler.OnSelectionChanged;
 
 		return editor;

@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Editor;
-public partial class TextEditorHandler
+public class TextEditorEventHandler
 {
 	private static readonly Dictionary<string, string> _symbolPairs = new()
 	{
@@ -25,8 +25,7 @@ public partial class TextEditorHandler
 	};
 
 	private const string commentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
-	[GeneratedRegex(commentPattern)]
-	private static partial Regex GetCommentRegex();
+	private static Regex _commentRegex = new(commentPattern, RegexOptions.Compiled);
 
 	public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 
@@ -110,7 +109,7 @@ public partial class TextEditorHandler
 		DocumentLine previousLine = line.PreviousLine;
 
 		string previousLineText = textEditor.Document.GetText(previousLine);
-		previousLineText = GetCommentRegex().Replace(previousLineText, "");
+		previousLineText = _commentRegex.Replace(previousLineText, "");
 		previousLineText = previousLineText.TrimEnd();
 
 		if (!previousLineText.EndsWith(':')) return;

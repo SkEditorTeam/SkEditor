@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using AvaloniaEdit;
@@ -15,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;
 public class FileHandler
@@ -64,6 +66,12 @@ public class FileHandler
 
 	public static void OpenFile(string path)
 	{
+		if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Any(tab => tab.Tag.ToString().Equals(path)))
+		{
+			ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().First(tab => tab.Tag.ToString() == path);
+			return;
+		}
+
 		TabViewItem tabItem = FileBuilder.Build(Path.GetFileName(path), path);
 		(ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
 	}
@@ -122,7 +130,7 @@ public class FileHandler
 		ApiVault.Get().GetTextEditor().Save(stream);
 
 		item.Header = file.Name;
-		item.Tag = absolutePath;
+		item.Tag = Uri.UnescapeDataString(absolutePath);
 
 		SyntaxLoader.SetSyntax(ApiVault.Get().GetTextEditor(), absolutePath);
 		Icon.SetIcon(item);
@@ -143,7 +151,7 @@ public class FileHandler
 
 		List<TabViewItem> tabItems = (ApiVault.Get().GetTabView().TabItems as IList)?.Cast<TabViewItem>().ToList();
 		tabItems.ForEach(DisposeEditorData);
-		tabItems.Clear();
+		tabItems.ForEach(tabItem => (ApiVault.Get().GetTabView().TabItems as IList)?.Remove(tabItem));
 		NewFile();
 	}
 
@@ -173,7 +181,7 @@ public class FileHandler
 	{
 		if (item.Content is not TextEditor editor) return;
 
-		TextEditorHandler.ScrollViewers.Remove(editor);
+		TextEditorEventHandler.ScrollViewers.Remove(editor);
 	}
 
 	public static void SwitchTab(int index)

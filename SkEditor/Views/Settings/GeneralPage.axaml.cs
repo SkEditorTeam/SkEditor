@@ -44,10 +44,11 @@ public partial class GeneralPage : UserControl
 		Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
 		RpcToggleSwitch.Command = new RelayCommand(ToggleRpc);
 		WrappingToggleSwitch.Command = new RelayCommand(ToggleWrapping);
-		AutoIndentToggleSwitch.Command = new RelayCommand(ToggleAutoIndent);
-		AutoPairingToggleSwitch.Command = new RelayCommand(ToggleAutoPairing);
-		AutoSaveToggleSwitch.Command = new RelayCommand(ToggleAutoSave);
-		CheckForUpdatesToggleSwitch.Command = new RelayCommand(ToggleCheckForUpdates);
+		AutoIndentToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsAutoIndentEnabled"));
+		AutoPairingToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsAutoPairingEnabled"));
+		AutoSaveToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsAutoSaveEnabled"));
+		CheckForUpdatesToggleSwitch.Command = new RelayCommand(() => ToggleSetting("CheckForUpdates"));
+		CheckForChangesToggleSwitch.Command = new RelayCommand(() => ToggleSetting("CheckForChanges"));
 	}
 
 	private void ToggleRpc()
@@ -70,11 +71,6 @@ public partial class GeneralPage : UserControl
 
 		textEditors.ForEach(e => e.WordWrap = ApiVault.Get().GetAppConfig().IsWrappingEnabled);
 	}
-
-	private void ToggleAutoIndent() => ToggleSetting("IsAutoIndentEnabled");
-	private void ToggleAutoPairing() => ToggleSetting("IsAutoPairingEnabled");
-	private void ToggleAutoSave() => ToggleSetting("IsAutoSaveEnabled");
-	private void ToggleCheckForUpdates() => ToggleSetting("CheckForUpdates");
 
 	private static void ToggleSetting(string propertyName)
 	{

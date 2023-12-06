@@ -25,7 +25,8 @@ public class AppConfig
 	public string CurrentTheme { get; set; } = "Default.json";
 	public string CurrentSyntax { get; set; } = "Default.xshd";
 	public string Font { get; set; } = "Default";
-	public bool CheckForUpdates { get; set;} = true;
+	public bool CheckForUpdates { get; set; } = true;
+	public bool CheckForChanges { get; set; } = true;
 
 	public HashSet<string> AddonsToDisable { get; set; } = [];
 	public HashSet<string> AddonsToDelete { get; set; } = [];

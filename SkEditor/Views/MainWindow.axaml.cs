@@ -38,7 +38,10 @@ public partial class MainWindow : AppWindow
 		TabControl.TabCloseRequested += (sender, e) => FileHandler.CloseFile(e);
 		TemplateApplied += OnWindowLoaded;
 		Closing += OnClosing;
+
 		Activated += (sender, e) => ChangeChecker.Check();
+		Deactivated += (sender, e) => ChangeChecker.ignoreNextChange = true;
+
 		KeyDown += (sender, e) =>
 		{
 			if (e.KeyModifiers == KeyModifiers.Control && e.Key >= Key.D1 && e.Key <= Key.D9)
