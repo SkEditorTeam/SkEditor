@@ -74,7 +74,13 @@ public class Generation
 		code.Append($"\n\tname of event-inventory is \"{_guiGen.TitleTextBox.Text}\"");
 		code.Append("\n\tcancel event");
 		code.Append("\n\tevent-inventory is not player's inventory");
-
+		bool first = true;
+		foreach (var item in sortedItems.Where(pair => pair.Value.HaveExampleAction))
+		{
+			code.Append($"\n\t{(first ? "" : "else ")}if clicked slot is {item.Key}:");
+			code.Append($"\n\t\tsend \"You clicked on slot {item.Key}\"");
+			first = false;
+		}
 
 		return code.ToString();
 	}
@@ -107,6 +113,11 @@ public class Generation
 			AppendCustomName(code, pair.Value);
 			AppendLore(code, pair.Value);
 			AppendCustomModelData(code, pair.Value);
+			if (pair.Value.HaveExampleAction)
+			{
+				code.Append(':');
+				code.Append($"\n\t\t\tsend \"You clicked on slot {pair.Key}\"");
+			}
 		}
 		code.Append("\n\topen the last gui for {_p}");
 
