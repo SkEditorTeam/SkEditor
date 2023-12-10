@@ -6,6 +6,7 @@ using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
+using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Syntax;
@@ -80,21 +81,28 @@ public class FileHandler
 	{
 		if (!ApiVault.Get().IsFileOpen()) return;
 
-		TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
-		string path = item.Tag.ToString();
-
-		if (string.IsNullOrEmpty(path))
+		try
 		{
-			SaveAsFile();
-			return;
+			TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+			string path = item.Tag.ToString();
+
+			if (string.IsNullOrEmpty(path))
+			{
+				SaveAsFile();
+				return;
+			}
+
+			string textToWrite = ApiVault.Get().GetTextEditor().Text;
+			using StreamWriter writer = new(path, false);
+			await writer.WriteAsync(textToWrite);
+
+			if (!item.Header.ToString().EndsWith('*')) return;
+			item.Header = item.Header.ToString()[..^1];
 		}
-
-		string textToWrite = ApiVault.Get().GetTextEditor().Text;
-		using StreamWriter writer = new(path, false);
-		await writer.WriteAsync(textToWrite);
-
-		if (!item.Header.ToString().EndsWith('*')) return;
-		item.Header = item.Header.ToString()[..^1];
+		catch (Exception e)
+		{
+			Log.Warning(e, "Failed to save file");
+		}
 	}
 
 	public async static void SaveAsFile()

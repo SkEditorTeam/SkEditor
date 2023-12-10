@@ -137,4 +137,6 @@ public class Item
 	public bool HaveCustomModelData { get; set; }
 	[JsonIgnore]
 	public int CustomModelData { get; set; }
+	[JsonIgnore]
+	public bool HaveExampleAction { get; set; }
 }

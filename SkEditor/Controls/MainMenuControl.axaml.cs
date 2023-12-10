@@ -5,6 +5,7 @@ using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
+using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 
 namespace SkEditor.Controls;
@@ -42,6 +43,7 @@ public partial class MainMenuControl : UserControl
 
 		MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
 		MenuItemGenerateGui.Command = new RelayCommand(() => new GuiGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));
+		MenuItemGenerateCommand.Command = new RelayCommand(() => new CommandGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));
 		MenuItemRefactor.Command = new RelayCommand(() => new RefactorWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
 		MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
 	}

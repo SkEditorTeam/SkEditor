@@ -8,9 +8,9 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>SkEditor.ico</ApplicationIcon>
 		<PublishSingleFile>true</PublishSingleFile>
-		<AssemblyVersion>2.0.3</AssemblyVersion>
-		<FileVersion>2.0.3</FileVersion>
-		<Version>2.0.3</Version>
+		<AssemblyVersion>2.0.4</AssemblyVersion>
+		<FileVersion>2.0.4</FileVersion>
+		<Version>2.0.4</Version>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>CS8600;CS8604;CS8622;CS8603;CS8602;CA2211;CS8619;CS8629;CS8601;CS8618;CS8620</NoWarn>
@@ -98,6 +98,9 @@
 		</Compile>
 		<Compile Update="Views\FontSelectionWindow.axaml.cs">
 			<DependentUpon>FontSelectionWindow.axaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Generators\CommandGenerator.axaml.cs">
+		  <DependentUpon>CommandGenerator.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Marketplace\MarketplaceWindow.axaml.cs">
 			<DependentUpon>MarketplaceWindow.axaml</DependentUpon>

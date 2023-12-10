@@ -15,7 +15,7 @@ public static class Translation
 	public static string Get(string key, params string[] parameters)
 	{
 		Application.Current.TryGetResource(key, Avalonia.Styling.ThemeVariant.Default, out object translation);
-		string translationString = translation?.ToString() ?? "?-?";
+		string translationString = translation?.ToString() ?? key;
 		translationString = translationString.Replace("\\n", Environment.NewLine);
 
 		for (int i = 0; i < parameters.Length; i++)

@@ -53,7 +53,6 @@ public class CustomCommandsHandler
 			DocumentLine caretLine = textArea.Document.GetLineByNumber(textArea.Caret.Line);
 			string lineText = textArea.Document.GetText(caretLine.Offset, caretLine.Length);
 			textArea.Document.Insert(caretLine.EndOffset, Environment.NewLine + lineText);
-			textArea.Caret.Line++;
 			textArea.Caret.BringCaretToView();
 			return;
 		}

@@ -30,13 +30,17 @@
 				</StackPanel>
 			</StackPanel>
 
-			<StackPanel Spacing="4" Width="300" HorizontalAlignment="Left">
-				<TextBlock Text="{DynamicResource GuiGeneratorLore}"/>
-				<ScrollViewer Height="165">
-					<StackPanel Name="LoreLineStackPanel" Spacing="10" HorizontalAlignment="Left">
-						<controls:LoreLineEditor Name="FirstLoreLine" IsDeleteButtonVisible="False"/>
-					</StackPanel>
-				</ScrollViewer>
+			<StackPanel Spacing="10" Orientation="Horizontal">
+				<StackPanel Spacing="4" Width="300" HorizontalAlignment="Left">
+					<TextBlock Text="{DynamicResource GuiGeneratorLore}"/>
+					<ScrollViewer Height="165">
+						<StackPanel Name="LoreLineStackPanel" Spacing="10" HorizontalAlignment="Left">
+							<controls:LoreLineEditor Name="FirstLoreLine" IsDeleteButtonVisible="False"/>
+						</StackPanel>
+					</ScrollViewer>
+				</StackPanel>
+				
+				<CheckBox Name="ExampleActionCheckBox" Content="{DynamicResource GuiGeneratorAddExampleAction}" Margin="0,20,0,0" VerticalAlignment="Top"/>
 			</StackPanel>
 		</StackPanel>
 		<Button Name="ContinueButton" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Content="{DynamicResource ContinueButton}"/>

@@ -46,6 +46,7 @@ public partial class ExtendedItemSelector : AppWindow
 					item.CustomModelData = result;
 				}
 			}
+			item.HaveExampleAction = ExampleActionCheckBox.IsChecked == true;
 
 			Close(_item);
 		});

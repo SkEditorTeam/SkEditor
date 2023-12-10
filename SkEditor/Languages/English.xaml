@@ -10,6 +10,7 @@
 	<system:String x:Key="WindowTitleSaveFilePicker">Save file</system:String>
 	<system:String x:Key="WindowTitleOpenFilePicker">Open file</system:String>
 	<system:String x:Key="WindowTitleGuiGenerator">Generate GUI</system:String>
+	<system:String x:Key="WindowTitleCommandGenerator">Generate command</system:String>
 	<system:String x:Key="WindowTitleItemSelector">Select item</system:String>
 	<system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
 
@@ -174,6 +175,28 @@
 	<system:String x:Key="GuiGeneratorCustomModelData">Custom Model Data ID</system:String>
 	<system:String x:Key="GuiGeneratorLoreLineWatermark">Right click to add a new line</system:String>
 	<system:String x:Key="GuiGeneratorAddLoreLine">Add a new lore line</system:String>
+	<system:String x:Key="GuiGeneratorAddExampleAction">Add an example action</system:String>
+	
+	<!-- Command Generator -->
+	<system:String x:Key="CommandGeneratorName">Name</system:String>
+	<system:String x:Key="CommandGeneratorPermission">Permission</system:String>
+	<system:String x:Key="CommandGeneratorNoPermissionMessage">No permission message</system:String>
+	<system:String x:Key="CommandGeneratorAliases">Aliases</system:String>
+	<system:String x:Key="CommandGeneratorInvalidUsageMessage">Invalid usage message</system:String>
+	<system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Who can use the command</system:String>
+	<system:String x:Key="CommandGeneratorPlayer">Player</system:String>
+	<system:String x:Key="CommandGeneratorConsole">Console</system:String>
+	<system:String x:Key="CommandGeneratorCooldown">Cooldown</system:String>
+	<system:String x:Key="CommandGeneratorTicks">Ticks</system:String>
+	<system:String x:Key="CommandGeneratorSeconds">Seconds</system:String>
+	<system:String x:Key="CommandGeneratorMinutes">Minutes</system:String>
+	<system:String x:Key="CommandGeneratorHours">Hours</system:String>
+	<system:String x:Key="CommandGeneratorDays">Days</system:String>
+	<system:String x:Key="CommandGeneratorWeeks">Weeks</system:String>
+	<system:String x:Key="CommandGeneratorMonths">Months</system:String>
+	<system:String x:Key="CommandGeneratorYears">Years</system:String>
+	<system:String x:Key="CommandGeneratorGenerate">Generate</system:String>
+	<system:String x:Key="CommandGeneratorPropertyMissing">The {0} property is required!</system:String>
 
 	<!-- Marketplace -->
 	<system:String x:Key="MarketplaceSearch">Search</system:String>
