@@ -1,5 +1,5 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-	<Package Name="SkEditor" Manufacturer="Notro" Version="2.0.4" UpgradeCode="14564974-da58-4917-8a0d-590043f589c2">
+	<Package Name="SkEditor" Manufacturer="Notro" Version="2.0.5" UpgradeCode="14564974-da58-4917-8a0d-590043f589c2">
 		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
 		<MediaTemplate EmbedCab="yes" />
 
