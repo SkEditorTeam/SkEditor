@@ -36,7 +36,18 @@ public partial class App : Application
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			if (mutex.WaitOne(TimeSpan.Zero, true))
+			bool isFirstInstance;
+			try
+			{
+				isFirstInstance = mutex.WaitOne(TimeSpan.Zero, true);
+			}
+			catch (AbandonedMutexException ex)
+			{
+				ex.Mutex?.Close();
+				isFirstInstance = true;
+			}
+
+			if (isFirstInstance)
 			{
 				try
 				{
@@ -53,7 +64,11 @@ public partial class App : Application
 					desktop.Shutdown();
 				}
 
-				mutex.ReleaseMutex();
+				desktop.Exit += (sender, e) =>
+				{
+					mutex.ReleaseMutex();
+					mutex.Dispose();
+				};
 			}
 			else
 			{

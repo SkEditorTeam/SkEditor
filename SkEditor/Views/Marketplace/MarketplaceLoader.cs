@@ -7,7 +7,7 @@ using System.Net.Http;
 namespace SkEditor.Views.Marketplace;
 public class MarketplaceLoader
 {
-	private static string[] supportedTypes = ["Syntax highlighting", "Theme", "Addon"];
+	private static readonly string[] supportedTypes = [ "Syntax highlighting", "Theme", "Addon" ];
 
 	public static async IAsyncEnumerable<MarketplaceItem> GetItems()
 	{
