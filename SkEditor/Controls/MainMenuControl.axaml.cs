@@ -7,6 +7,7 @@ using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
+using System;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -23,7 +24,14 @@ public partial class MainMenuControl : UserControl
 	{
 		MenuItemNew.Command = new RelayCommand(FileHandler.NewFile);
 		MenuItemOpen.Command = new RelayCommand(FileHandler.OpenFile);
-		MenuItemSave.Command = new RelayCommand(FileHandler.SaveFile);
+		MenuItemSave.Command = new RelayCommand(async () =>
+		{
+			(bool, Exception) success = await FileHandler.SaveFile();
+			if (!success.Item1)
+			{
+				ApiVault.Get().ShowError("For some reason, the file couldn't be saved. If the problem persists, backup the file so you won't lose any changes.\nError: " + success.Item2.Message);
+			}
+		});
 		MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFile);
 		MenuItemPublish.Command = new RelayCommand(() => new PublishWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
 		MenuItemClose.Command = new RelayCommand(FileHandler.CloseCurrentFile);

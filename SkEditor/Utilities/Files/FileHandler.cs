@@ -73,13 +73,14 @@ public class FileHandler
 			return;
 		}
 
-		TabViewItem tabItem = FileBuilder.Build(Path.GetFileName(path), path);
+		string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
+		TabViewItem tabItem = FileBuilder.Build(fileName, path);
 		(ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
 	}
 
-	public async static void SaveFile()
+	public static async Task<(bool, Exception)> SaveFile()
 	{
-		if (!ApiVault.Get().IsFileOpen()) return;
+		if (!ApiVault.Get().IsFileOpen()) return (true, null);
 
 		try
 		{
@@ -89,20 +90,22 @@ public class FileHandler
 			if (string.IsNullOrEmpty(path))
 			{
 				SaveAsFile();
-				return;
+				return (true, null);
 			}
 
 			string textToWrite = ApiVault.Get().GetTextEditor().Text;
 			using StreamWriter writer = new(path, false);
 			await writer.WriteAsync(textToWrite);
 
-			if (!item.Header.ToString().EndsWith('*')) return;
+			if (!item.Header.ToString().EndsWith('*')) return (true, null);
 			item.Header = item.Header.ToString()[..^1];
 		}
 		catch (Exception e)
 		{
 			Log.Warning(e, "Failed to save file");
+			return (false, e);
 		}
+		return (true, null);
 	}
 
 	public async static void SaveAsFile()
