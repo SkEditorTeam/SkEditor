@@ -17,7 +17,7 @@
 			</Component>
 		</ComponentGroup>
 
-		<Icon Id="SkEditorIcon.exe" SourceFile="SkEditor.ico"/>
+		<Icon Id="SkEditorIcon.exe" SourceFile="Assets/SkEditor.ico"/>
 		<Property Id="ARPPRODUCTICON" Value="SkEditorIcon.exe" />
 	</Fragment>
 </Wix>

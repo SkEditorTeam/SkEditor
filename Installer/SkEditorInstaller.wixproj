@@ -1,1 +1,9 @@
-﻿<Project Sdk="WixToolset.Sdk/4.0.3" />
+﻿<Project Sdk="WixToolset.Sdk/4.0.3">
+  <ItemGroup>
+    <Content Include="Assets\Info.ico" />
+    <Content Include="Assets\Warning.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
+  </ItemGroup>
+</Project>

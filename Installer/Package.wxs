@@ -1,5 +1,6 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-	<Package Name="SkEditor" Manufacturer="Notro" Version="2.0.5" UpgradeCode="14564974-da58-4917-8a0d-590043f589c2">
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+	 xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+	<Package Name="SkEditor" Manufacturer="Notro" Version="2.0.6" UpgradeCode="14564974-da58-4917-8a0d-590043f589c2">
 		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
 		<MediaTemplate EmbedCab="yes" />
 
@@ -7,5 +8,27 @@
 			<ComponentGroupRef Id="SkEditorComponents" />
 			<ComponentGroupRef Id="LanguagesComponents" />
 		</Feature>
+
+		<ui:WixUI
+			Id="SkEditorInstaller_InstallDir"
+			InstallDirectory="INSTALLFOLDER"/>
+		
+		<UIRef Id="WixUI_ErrorProgressText" />
+
+		<WixVariable
+			  Id="WixUIDialogBmp"
+			  Value="Assets/background.png"/>
+				  
+		<WixVariable
+			  Id="WixUIBannerBmp"
+			  Value="Assets/top.png"/>
+		
+		<WixVariable
+			  Id="WixUIExclamationIco"
+			  Value="Assets/Warning.ico"/>
+		
+		<WixVariable
+			  Id="WixUIInfoIco"
+			  Value="Assets/Info.ico"/>
 	</Package>
 </Wix>
