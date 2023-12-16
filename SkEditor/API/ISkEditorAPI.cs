@@ -29,13 +29,15 @@ public interface ISkEditorAPI
 	public void ShowMessage(string title, string message, Window window);
 	public void ShowMessage(string title, string message);
 
+	public void ShowError(string message);
+
 	public Task<ContentDialogResult> ShowMessageWithIcon(string title, string message, IconSource icon, string iconColor = "#ffffff", string primaryButtonContent = "ConfirmButton", string closeButtonContent = "CancelButton", bool primaryButton = true);
 
 	public AppConfig GetAppConfig();
 
 	public void Debug(string message);
 
-	public void Log(string message);
+	public void Log(string message, bool bottomBarInfo = false);
 
 	public bool IsAddonEnabled(string addonName);
 

@@ -116,6 +116,12 @@ public class SkEditor : ISkEditorAPI
 		ShowMessage(title, message, GetTopWindow());
 	}
 
+	public async void ShowError(string message)
+	{
+		string error = Translation.Get("Error");
+		await ShowMessageWithIcon(error, message, new SymbolIconSource() { Symbol = Symbol.ImportantFilled }, primaryButton: false, closeButtonContent: "Okay");
+	}
+
 	private bool isMessageOpened = false;
 
 	/// <summary>
@@ -177,15 +183,15 @@ public class SkEditor : ISkEditorAPI
 	private Window GetTopWindow()
 	{
 		var windows = ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).Windows;
-		var dialog = windows.Where(x => !x.OwnedWindows.Any()).FirstOrDefault();
+		var dialog = windows.FirstOrDefault(x => x.IsActive);
 		dialog ??= GetMainWindow();
 		return dialog;
 	}
 
-	public void Log(string message)
+	public void Log(string message, bool bottomBarInfo = false)
 	{
 		Serilog.Log.Information(message);
-		GetMainWindow().BottomBar.UpdateLogs(message);
+		if (bottomBarInfo) GetMainWindow().BottomBar.UpdateLogs(message);
 	}
 
 	public bool IsAddonEnabled(string addonName) => AddonLoader.Addons.Any(x => x.Name.Equals(addonName));
