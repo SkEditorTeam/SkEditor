@@ -38,6 +38,7 @@
 		<None Remove="Languages\French.xaml" />
 		<None Remove="Languages\German.xaml" />
 		<None Remove="Languages\Polish.xaml" />
+		<None Remove="Languages\Spanish.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -134,6 +135,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Update="Languages\Spanish.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Content>
 		<Content Update="Languages\French.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</Content>
