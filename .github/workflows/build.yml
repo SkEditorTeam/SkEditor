@@ -1,0 +1,103 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main
+
+      
+jobs:
+  # build-windows:
+  #   runs-on: windows-latest
+    
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v2
+    
+  #   - name: Set up .NET
+  #     uses: actions/setup-dotnet@v2
+  #     with:
+  #       dotnet-version: '8.0.x'
+        
+  #   - name: Build and publish for Windows
+  #     run: |
+  #       cd SkEditorAvalonia
+  #       dotnet publish -c Release -r win-x64 --no-self-contained /p:PublishSingleFile=true
+  #       mkdir -p SkEditor
+  #       cp bin/Release/net8.0/win-x64/publish/* SkEditor/
+
+  #   - name: Upload artifacts
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: SkEditorWindows
+  #       path: SkEditorAvalonia/SkEditor
+
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Remove old folder
+      uses: JesseTG/rm@v1.0.3
+      with:
+        path: /SkEditorAvalonia/SkEditor
+        
+    - name: Build and publish for Linux
+      run: |
+        cd SkEditorAvalonia
+        dotnet publish -c Release -r linux-x64 --self-contained
+        mkdir -p SkEditor
+        cp -r bin/Release/net8.0/linux-x64/publish/* SkEditor/
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorLinux
+        path: SkEditorAvalonia/SkEditor
+
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Build and publish for macOS
+      run: |
+        cd SkEditorAvalonia
+        dotnet restore
+        dotnet publish -c Release -r osx-arm64 --self-contained /p:PublishSingleFile=true
+    
+    - name: Create .app structure
+      run: |
+        mkdir -p "SkEditor.app/Contents/MacOS"
+        mkdir -p "SkEditor.app/Contents/Resources"
+        cp SkEditorAvalonia/bin/Release/net8.0/osx-arm64/publish/* "SkEditor.app/Contents/MacOS/"
+        cp SkEditorAvalonia/Info.plist "SkEditor.app/Contents/"
+        cp SkEditorAvalonia/SkEditor.icns "SkEditor.app/Contents/Resources/"
+    
+    - name: Set execute permissions
+      run: |
+        find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
+    
+    - name: Zip .app package
+      run: |
+        zip -r SkEditorMac.zip SkEditor.app
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorMac
+        path: SkEditorMac.zip
