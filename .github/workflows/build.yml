@@ -1,0 +1,103 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main
+
+      
+jobs:
+  # build-windows:
+  #   runs-on: windows-latest
+    
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v2
+    
+  #   - name: Set up .NET
+  #     uses: actions/setup-dotnet@v2
+  #     with:
+  #       dotnet-version: '8.0.x'
+        
+  #   - name: Build and publish for Windows
+  #     run: |
+  #       cd SkEditor
+  #       dotnet publish -c Release -r win-x64 --no-self-contained /p:PublishSingleFile=true
+  #       mkdir -p SkEditor
+  #       cp bin/Release/net8.0/win-x64/publish/* SkEditor/
+
+  #   - name: Upload artifacts
+  #     uses: actions/upload-artifact@v2
+  #     with:
+  #       name: SkEditorWindows
+  #       path: SkEditor/SkEditor
+
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Remove old folder
+      uses: JesseTG/rm@v1.0.3
+      with:
+        path: /SkEditor/SkEditor
+        
+    - name: Build and publish for Linux
+      run: |
+        cd SkEditor
+        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        mkdir -p SkEditor
+        cp -r bin/Release/net8.0/linux-x64/publish/* SkEditor/
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorLinux
+        path: SkEditor/SkEditor
+
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Build and publish for macOS
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+    
+    - name: Create .app structure
+      run: |
+        mkdir -p "SkEditor.app/Contents/MacOS"
+        mkdir -p "SkEditor.app/Contents/Resources"
+        cp -r SkEditor/bin/Release/net8.0/osx-arm64/publish/* "SkEditor.app/Contents/MacOS/"
+        cp SkEditor/Info.plist "SkEditor.app/Contents/"
+        cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
+    
+    - name: Set execute permissions
+      run: |
+        find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
+    
+    - name: Zip .app package
+      run: |
+        zip -r SkEditorMac.zip SkEditor.app
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorMac
+        path: SkEditorMac.zip
