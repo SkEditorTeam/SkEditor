@@ -1,44 +1,39 @@
 ﻿using Avalonia;
-using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace SkEditor.Desktop;
 
 class Program
 {
-	// Initialization code. Don't use any Avalonia, third-party APIs or any
-	// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-	// yet and stuff might break.
-	[STAThread]
-	public static void Main(string[] args)
-	{
-		try
-		{
-			BuildAvaloniaApp()
-				.StartWithClassicDesktopLifetime(args);
-		}
-		catch (Exception e)
-		{
-			Log.Fatal(e, "Application crashed!");
+    // Initialization code. Don't use any Avalonia, third-party APIs or any
+    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+    // yet and stuff might break.
+    [STAThread]
+    public static void Main(string[] args)
+    {
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception e)
+        {
+            Log.Fatal(e, "Application crashed!");
 
-			ApiVault.Get().SaveData();
+            ApiVault.Get().SaveData();
 
-			Process.Start(Environment.ProcessPath, "--crash");
-		}
-	}
+            Process.Start(Environment.ProcessPath, "--crash");
+        }
+    }
 
-	// Avalonia configuration, don't remove; also used by visual designer.
-	public static AppBuilder BuildAvaloniaApp()
-		=> AppBuilder.Configure<App>()
-			.UsePlatformDetect()
-			.LogToTrace()
-			.WithInterFont();
+    // Avalonia configuration, don't remove; also used by visual designer.
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .LogToTrace()
+            .WithInterFont();
 
 }

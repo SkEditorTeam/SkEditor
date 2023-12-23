@@ -19,7 +19,7 @@
 							   Theme="{StaticResource FA_SystemCaptionButton}"
 							   Content="&#xE711;"
 							   FontSize="16"
-							   Classes="Close"  />
+							   Classes="Close"  /> 
 				</StackPanel>
 			</ControlTemplate>
 		</Setter>

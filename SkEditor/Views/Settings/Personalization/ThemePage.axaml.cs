@@ -9,49 +9,51 @@ using System.Linq;
 namespace SkEditor.Views.Settings;
 public partial class ThemePage : UserControl
 {
-	public static Dictionary<ColorPickerSettingsExpander, string> colorMappings = new();
+    public static Dictionary<ColorPickerSettingsExpander, string> colorMappings = new();
 
-	public ThemePage()
-	{
-		InitializeComponent();
+    public ThemePage()
+    {
+        InitializeComponent();
 
-		AssignCommands();
+        AssignCommands();
 
-		LoadThemes();
-	}
+        LoadThemes();
+    }
 
-	private void LoadThemes()
-	{
-		foreach (Theme theme in ThemeEditor.Themes)
-		{
-			ComboBoxItem item = new()
-			{
-				Content = theme.Name,
-				Tag = theme.FileName
-			};
+    private void LoadThemes()
+    {
+        foreach (Theme theme in ThemeEditor.Themes)
+        {
+            ComboBoxItem item = new()
+            {
+                Content = theme.Name,
+                Tag = theme.FileName
+            };
 
-			ThemeComboBox.Items.Add(item);
-		}
+            ThemeComboBox.Items.Add(item);
+        }
 
-		ThemeComboBox.SelectedItem = ThemeComboBox.Items.FirstOrDefault(x => ((ComboBoxItem)x).Tag.Equals(ThemeEditor.CurrentTheme.FileName));
+        ThemeComboBox.SelectedItem = ThemeComboBox.Items.FirstOrDefault(x => ((ComboBoxItem)x).Tag.Equals(ThemeEditor.CurrentTheme.FileName));
 
-		ThemeComboBox.SelectionChanged += (s, e) =>
-		{
-			ComboBoxItem item = (ComboBoxItem)ThemeComboBox.SelectedItem;
-			Theme theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(item.Tag));
-			ThemeEditor.SetTheme(theme);
-		};
-	}
+        ThemeComboBox.SelectionChanged += (s, e) =>
+        {
+            ComboBoxItem item = (ComboBoxItem)ThemeComboBox.SelectedItem;
+            Theme theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(item.Tag));
+            ThemeEditor.SetTheme(theme);
+        };
+    }
 
 
-	private void AssignCommands()
-	{
-		Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(PersonalizationPage)));
+    private void AssignCommands()
+    {
+        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(PersonalizationPage)));
 
-		OpenThemesFolderButton.Command = new RelayCommand(() => Process.Start(new ProcessStartInfo()
-		{
-			FileName = ThemeEditor.ThemeFolderPath,
-			UseShellExecute = true
-		}));
-	}
+        OpenThemesFolderButton.Command = new RelayCommand(() => Process.Start(new ProcessStartInfo()
+        {
+            FileName = ThemeEditor.ThemeFolderPath,
+            UseShellExecute = true
+        }));
+
+        EditThemeItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(EditThemePage)));
+    }
 }

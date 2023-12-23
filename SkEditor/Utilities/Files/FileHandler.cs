@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using AvaloniaEdit;
@@ -22,182 +21,182 @@ using Path = System.IO.Path;
 namespace SkEditor.Utilities.Files;
 public class FileHandler
 {
-	public static Regex RegexPattern => new(Translation.Get("NewFileNameFormat").Replace("{0}", @"[0-9]+"));
+    public static Regex RegexPattern => new(Translation.Get("NewFileNameFormat").Replace("{0}", @"[0-9]+"));
 
-	public static Action<AppWindow, DragEventArgs> FileDropAction = (window, e) =>
-	{
-		try
-		{
-			e.Data.GetFiles().Where(f => !Directory.Exists(f.Path.AbsolutePath)).ToList().ForEach(file =>
-			{
-				OpenFile(file.Path.AbsolutePath);
-			});
-		}
-		catch { }
-	};
+    public static Action<AppWindow, DragEventArgs> FileDropAction = (window, e) =>
+    {
+        try
+        {
+            e.Data.GetFiles().Where(f => !Directory.Exists(f.Path.AbsolutePath)).ToList().ForEach(file =>
+            {
+                OpenFile(file.Path.AbsolutePath);
+            });
+        }
+        catch { }
+    };
 
-	private static int GetUntitledNumber() => (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Count(tab => RegexPattern.IsMatch(tab.Header.ToString())) + 1;
+    private static int GetUntitledNumber() => (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Count(tab => RegexPattern.IsMatch(tab.Header.ToString())) + 1;
 
-	public static void NewFile()
-	{
-		string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
-		TabViewItem tabItem = FileBuilder.Build(header);
-		(ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-	}
+    public static void NewFile()
+    {
+        string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
+        TabViewItem tabItem = FileBuilder.Build(header);
+        (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+    }
 
-	public async static void OpenFile()
-	{
-		bool untitledFileOpen = ApiVault.Get().GetTabView().TabItems.Count() == 1 &&
-				ApiVault.Get().GetTextEditor().Text.Length == 0 &&
-				ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
-				item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
-				!item.Header.ToString().EndsWith('*');
+    public async static void OpenFile()
+    {
+        bool untitledFileOpen = ApiVault.Get().GetTabView().TabItems.Count() == 1 &&
+                ApiVault.Get().GetTextEditor().Text.Length == 0 &&
+                ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
+                item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
+                !item.Header.ToString().EndsWith('*');
 
-		var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
+        var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
 
-		var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-		{
-			Title = Translation.Get("WindowTitleOpenFilePicker"),
-			AllowMultiple = true
-		});
+        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = Translation.Get("WindowTitleOpenFilePicker"),
+            AllowMultiple = true
+        });
 
-		files.ToList().ForEach(file => OpenFile(file.Path.AbsolutePath));
-		if (untitledFileOpen) await CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
-	}
+        files.ToList().ForEach(file => OpenFile(file.Path.AbsolutePath));
+        if (untitledFileOpen) await CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
+    }
 
-	public static void OpenFile(string path)
-	{
-		if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Any(tab => tab.Tag.ToString().Equals(path)))
-		{
-			ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().First(tab => tab.Tag.ToString() == path);
-			return;
-		}
+    public static void OpenFile(string path)
+    {
+        if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Any(tab => tab.Tag.ToString().Equals(path)))
+        {
+            ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().First(tab => tab.Tag.ToString() == path);
+            return;
+        }
 
-		string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
-		TabViewItem tabItem = FileBuilder.Build(fileName, path);
-		(ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-	}
+        string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
+        TabViewItem tabItem = FileBuilder.Build(fileName, path);
+        (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+    }
 
-	public static async Task<(bool, Exception)> SaveFile()
-	{
-		if (!ApiVault.Get().IsFileOpen()) return (true, null);
+    public static async Task<(bool, Exception)> SaveFile()
+    {
+        if (!ApiVault.Get().IsFileOpen()) return (true, null);
 
-		try
-		{
-			TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
-			string path = item.Tag.ToString();
+        try
+        {
+            TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+            string path = item.Tag.ToString();
 
-			if (string.IsNullOrEmpty(path))
-			{
-				SaveAsFile();
-				return (true, null);
-			}
+            if (string.IsNullOrEmpty(path))
+            {
+                SaveAsFile();
+                return (true, null);
+            }
 
-			string textToWrite = ApiVault.Get().GetTextEditor().Text;
-			using StreamWriter writer = new(path, false);
-			await writer.WriteAsync(textToWrite);
+            string textToWrite = ApiVault.Get().GetTextEditor().Text;
+            using StreamWriter writer = new(path, false);
+            await writer.WriteAsync(textToWrite);
 
-			if (!item.Header.ToString().EndsWith('*')) return (true, null);
-			item.Header = item.Header.ToString()[..^1];
-		}
-		catch (Exception e)
-		{
-			Log.Warning(e, "Failed to save file");
-			return (false, e);
-		}
-		return (true, null);
-	}
+            if (!item.Header.ToString().EndsWith('*')) return (true, null);
+            item.Header = item.Header.ToString()[..^1];
+        }
+        catch (Exception e)
+        {
+            Log.Warning(e, "Failed to save file");
+            return (false, e);
+        }
+        return (true, null);
+    }
 
-	public async static void SaveAsFile()
-	{
-		if (!ApiVault.Get().IsFileOpen()) return;
+    public async static void SaveAsFile()
+    {
+        if (!ApiVault.Get().IsFileOpen()) return;
 
-		var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
-		var tabView = ApiVault.Get().GetTabView();
+        var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
+        var tabView = ApiVault.Get().GetTabView();
 
-		if (tabView.SelectedItem is not TabViewItem item) return;
+        if (tabView.SelectedItem is not TabViewItem item) return;
 
-		string header = item.Header.ToString().TrimEnd('*');
-		string itemTag = item.Tag.ToString();
-		IStorageFolder suggestedFolder = string.IsNullOrEmpty(itemTag)
-			? await topLevel.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Documents)
-			: await topLevel.StorageProvider.TryGetFolderFromPathAsync(itemTag);
+        string header = item.Header.ToString().TrimEnd('*');
+        string itemTag = item.Tag.ToString();
+        IStorageFolder suggestedFolder = string.IsNullOrEmpty(itemTag)
+            ? await topLevel.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Documents)
+            : await topLevel.StorageProvider.TryGetFolderFromPathAsync(itemTag);
 
-		FilePickerSaveOptions saveOptions = new()
-		{
-			Title = Translation.Get("WindowTitleSaveFilePicker"),
-			SuggestedFileName = header,
-		};
-		if (suggestedFolder is not null) saveOptions.SuggestedStartLocation = suggestedFolder;
+        FilePickerSaveOptions saveOptions = new()
+        {
+            Title = Translation.Get("WindowTitleSaveFilePicker"),
+            SuggestedFileName = header,
+        };
+        if (suggestedFolder is not null) saveOptions.SuggestedStartLocation = suggestedFolder;
 
-		var file = await topLevel.StorageProvider.SaveFilePickerAsync(saveOptions);
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(saveOptions);
 
-		if (file is null) return;
+        if (file is null) return;
 
-		string absolutePath = Uri.UnescapeDataString(file.Path.AbsolutePath);
+        string absolutePath = Uri.UnescapeDataString(file.Path.AbsolutePath);
 
-		Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
-		using var stream = File.OpenWrite(absolutePath);
-		ApiVault.Get().GetTextEditor().Save(stream);
+        Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
+        using var stream = File.OpenWrite(absolutePath);
+        ApiVault.Get().GetTextEditor().Save(stream);
 
-		item.Header = file.Name;
-		item.Tag = Uri.UnescapeDataString(absolutePath);
+        item.Header = file.Name;
+        item.Tag = Uri.UnescapeDataString(absolutePath);
 
-		SyntaxLoader.SetSyntax(ApiVault.Get().GetTextEditor(), absolutePath);
-		Icon.SetIcon(item);
-		ToolTip toolTip = new()
-		{
-			Content = absolutePath,
-		};
-		ToolTip.SetTip(item, toolTip);
-	}
+        SyntaxLoader.SetSyntax(ApiVault.Get().GetTextEditor(), absolutePath);
+        Icon.SetIcon(item);
+        ToolTip toolTip = new()
+        {
+            Content = absolutePath,
+        };
+        ToolTip.SetTip(item, toolTip);
+    }
 
-	public async static void CloseFile(TabViewTabCloseRequestedEventArgs e) => await CloseFile(e.Tab);
-	public async static void CloseCurrentFile() => await CloseFile(ApiVault.Get().GetTabView().SelectedItem as TabViewItem);
+    public async static void CloseFile(TabViewTabCloseRequestedEventArgs e) => await CloseFile(e.Tab);
+    public async static void CloseCurrentFile() => await CloseFile(ApiVault.Get().GetTabView().SelectedItem as TabViewItem);
 
-	public async static void CloseAllFiles()
-	{
-		ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingAllFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
-		if (result != ContentDialogResult.Primary) return;
+    public async static void CloseAllFiles()
+    {
+        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingAllFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+        if (result != ContentDialogResult.Primary) return;
 
-		List<TabViewItem> tabItems = (ApiVault.Get().GetTabView().TabItems as IList)?.Cast<TabViewItem>().ToList();
-		tabItems.ForEach(DisposeEditorData);
-		tabItems.ForEach(tabItem => (ApiVault.Get().GetTabView().TabItems as IList)?.Remove(tabItem));
-		NewFile();
-	}
+        List<TabViewItem> tabItems = (ApiVault.Get().GetTabView().TabItems as IList)?.Cast<TabViewItem>().ToList();
+        tabItems.ForEach(DisposeEditorData);
+        tabItems.ForEach(tabItem => (ApiVault.Get().GetTabView().TabItems as IList)?.Remove(tabItem));
+        NewFile();
+    }
 
-	public static async Task CloseFile(TabViewItem item)
-	{
-		if (item.Content is TextEditor editor && !ApiVault.Get().OnFileClosing(editor)) return;
+    public static async Task CloseFile(TabViewItem item)
+    {
+        if (item.Content is TextEditor editor && !ApiVault.Get().OnFileClosing(editor)) return;
 
-		DisposeEditorData(item);
+        DisposeEditorData(item);
 
-		string header = item.Header.ToString();
+        string header = item.Header.ToString();
 
-		if (header.EndsWith('*'))
-		{
-			ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingUnsavedFile"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
-			if (result != ContentDialogResult.Primary) return;
-		}
+        if (header.EndsWith('*'))
+        {
+            ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingUnsavedFile"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+            if (result != ContentDialogResult.Primary) return;
+        }
 
-		var tabView = ApiVault.Get().GetTabView();
-		var tabItems = tabView.TabItems as IList;
+        var tabView = ApiVault.Get().GetTabView();
+        var tabItems = tabView.TabItems as IList;
 
-		tabItems?.Remove(item);
+        tabItems?.Remove(item);
 
-		if (tabItems.Count == 0) NewFile();
-	}
+        if (tabItems.Count == 0) NewFile();
+    }
 
-	private static void DisposeEditorData(TabViewItem item)
-	{
-		if (item.Content is not TextEditor editor) return;
+    private static void DisposeEditorData(TabViewItem item)
+    {
+        if (item.Content is not TextEditor editor) return;
 
-		TextEditorEventHandler.ScrollViewers.Remove(editor);
-	}
+        TextEditorEventHandler.ScrollViewers.Remove(editor);
+    }
 
-	public static void SwitchTab(int index)
-	{
-		var tabView = ApiVault.Get().GetTabView();
-		if (index < tabView.TabItems.Count()) tabView.SelectedIndex = index;
-	}
+    public static void SwitchTab(int index)
+    {
+        var tabView = ApiVault.Get().GetTabView();
+        if (index < tabView.TabItems.Count()) tabView.SelectedIndex = index;
+    }
 }

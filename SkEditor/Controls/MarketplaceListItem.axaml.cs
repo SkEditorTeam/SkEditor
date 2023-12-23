@@ -6,34 +6,34 @@ using Avalonia.Media.Imaging;
 namespace SkEditor.Controls;
 public partial class MarketplaceListItem : UserControl
 {
-	public static readonly AvaloniaProperty<string> ItemNameProperty = AvaloniaProperty.Register<MarketplaceListItem, string>(nameof(ItemName));
-	public static readonly AvaloniaProperty<string> ItemImageUrlProperty = AvaloniaProperty.Register<MarketplaceListItem, string>(nameof(ItemImageUrl));
-	public static readonly AvaloniaProperty<string> ItemShortDescriptionProperty = AvaloniaProperty.Register<MarketplaceListItem, string>(nameof(ItemShortDescription));
+    public static readonly AvaloniaProperty<string> ItemNameProperty = AvaloniaProperty.Register<MarketplaceListItem, string>(nameof(ItemName));
+    public static readonly AvaloniaProperty<string> ItemImageUrlProperty = AvaloniaProperty.Register<MarketplaceListItem, string>(nameof(ItemImageUrl));
+    public static readonly AvaloniaProperty<string> ItemShortDescriptionProperty = AvaloniaProperty.Register<MarketplaceListItem, string>(nameof(ItemShortDescription));
 
-	public string ItemName
-	{
-		get => GetValue(ItemNameProperty)?.ToString();
-		set => SetValue(ItemNameProperty, value);
-	}
+    public string ItemName
+    {
+        get => GetValue(ItemNameProperty)?.ToString();
+        set => SetValue(ItemNameProperty, value);
+    }
 
-	public string ItemImageUrl
-	{
-		get => GetValue(ItemImageUrlProperty)?.ToString();
-		set => SetValue(ItemImageUrlProperty, value);
-	}
+    public string ItemImageUrl
+    {
+        get => GetValue(ItemImageUrlProperty)?.ToString();
+        set => SetValue(ItemImageUrlProperty, value);
+    }
 
-	public string ItemShortDescription
-	{
-		get => GetValue(ItemShortDescriptionProperty)?.ToString();
-		set => SetValue(ItemShortDescriptionProperty, value);
-	}
+    public string ItemShortDescription
+    {
+        get => GetValue(ItemShortDescriptionProperty)?.ToString();
+        set => SetValue(ItemShortDescriptionProperty, value);
+    }
 
-	public MarketplaceListItem()
-	{
-		InitializeComponent();
+    public MarketplaceListItem()
+    {
+        InitializeComponent();
 
-		DataContext = this;
+        DataContext = this;
 
-		RenderOptions.SetBitmapInterpolationMode(IconImage, BitmapInterpolationMode.HighQuality);
-	}
+        RenderOptions.SetBitmapInterpolationMode(IconImage, BitmapInterpolationMode.HighQuality);
+    }
 }

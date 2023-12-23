@@ -13,7 +13,7 @@
 		<ScrollViewer Grid.Row="1">
 			<StackPanel Spacing="8">
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsThemeInformation}" IconSource="{StaticResource ImportantIcon}">
+				<ui:SettingsExpander Header="If you want to create a new theme, you need to create a file in the Themes folder." IconSource="{StaticResource ImportantIcon}">
 					<ui:SettingsExpander.Footer>
 						<Button Name="OpenThemesFolderButton" Content="{DynamicResource SettingsThemeOpenFolder}"/>
 					</ui:SettingsExpander.Footer>
@@ -24,22 +24,8 @@
 						<ComboBox Name="ThemeComboBox"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
-
-				<!--<controls:ColorPickerSettingsExpander Name="WindowBackgroundExpander" ExpanderHeader="Window background" IsAlphaEnabled="False"/>
-				<controls:ColorPickerSettingsExpander Name="SmallWindowBackgroundExpander" ExpanderHeader="Small window background" IsAlphaEnabled="False"/>
-				<controls:ColorPickerSettingsExpander Name="EditorBackgroundExpander" ExpanderHeader="Editor background"/>
-				<controls:ColorPickerSettingsExpander Name="EditorTextColorExpander" ExpanderHeader="Editor text color"/>
-				<controls:ColorPickerSettingsExpander Name="LineNumbersColorExpander" ExpanderHeader="Line numbers color"/>
-				<controls:ColorPickerSettingsExpander Name="SelectionColorExpander" ExpanderHeader="Selection color"/>
-				<controls:ColorPickerSettingsExpander Name="SelectedTabItemBackgroundExpander" ExpanderHeader="Selected tab item background" />
-				<controls:ColorPickerSettingsExpander Name="SelectedTabItemBorderExpander" ExpanderHeader="Selected tab item border"/>
-				<controls:ColorPickerSettingsExpander Name="MenuBackgroundExpander" ExpanderHeader="Menu background" />
-				<controls:ColorPickerSettingsExpander Name="MenuBorderExpander" ExpanderHeader="Menu border"/>
-				<controls:ColorPickerSettingsExpander Name="TextBoxFocusedBackgroundExpander" ExpanderHeader="TextBox focused background"/>
-				<controls:ColorPickerSettingsExpander Name="AccentColorExpander" ExpanderHeader="Accent color" IsAlphaEnabled="False"/>-->
-
-				<!--<ui:SettingsExpander Name="ResetButton" Header="Reset" IconSource="{StaticResource RefreshIcon}"
-									 IsClickEnabled="True" Description="Double click to reset the theme." />-->
+				
+				<ui:SettingsExpander Name="EditThemeItem" Header="Edit theme" IconSource="{StaticResource EditIcon}" IsClickEnabled="True"/>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

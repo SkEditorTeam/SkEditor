@@ -7,9 +7,9 @@ using System.ComponentModel;
 namespace SkEditor.Data;
 public partial class ItemBindings : ObservableObject, INotifyPropertyChanged
 {
-	[ObservableProperty]
-	private ObservableCollection<Item> items = new();
+    [ObservableProperty]
+    private ObservableCollection<Item> items = [];
 
-	[ObservableProperty]
-	private ObservableCollection<ComboBoxItem> filteredItems = new();
+    [ObservableProperty]
+    private ObservableCollection<ComboBoxItem> filteredItems = [];
 }

@@ -18,81 +18,81 @@ namespace SkEditor.Views;
 
 public partial class MainWindow : AppWindow
 {
-	public BottomBarControl GetBottomBar() => this.FindControl<BottomBarControl>("BottomBar");
+    public BottomBarControl GetBottomBar() => this.FindControl<BottomBarControl>("BottomBar");
 
-	public MainWindow()
-	{
-		InitializeComponent();
+    public MainWindow()
+    {
+        InitializeComponent();
 
-		WindowStyler.Style(this);
-		ThemeEditor.LoadThemes();
-		AddEvents();
+        WindowStyler.Style(this);
+        ThemeEditor.LoadThemes();
+        AddEvents();
 
-		Translation.LoadDefaultLanguage();
-		Translation.ChangeLanguage(ApiVault.Get().GetAppConfig().Language);
-	}
+        Translation.LoadDefaultLanguage();
+        Translation.ChangeLanguage(ApiVault.Get().GetAppConfig().Language);
+    }
 
-	private void AddEvents()
-	{
-		TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
-		TabControl.TabCloseRequested += (sender, e) => FileHandler.CloseFile(e);
-		TemplateApplied += OnWindowLoaded;
-		Closing += OnClosing;
+    private void AddEvents()
+    {
+        TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
+        TabControl.TabCloseRequested += (sender, e) => FileHandler.CloseFile(e);
+        TemplateApplied += OnWindowLoaded;
+        Closing += OnClosing;
 
-		Activated += (sender, e) => ChangeChecker.Check();
-		Deactivated += (sender, e) => ChangeChecker.ignoreNextChange = true;
+        Activated += (sender, e) => ChangeChecker.Check();
+        Deactivated += (sender, e) => ChangeChecker.ignoreNextChange = true;
 
-		KeyDown += (sender, e) =>
-		{
-			if (e.KeyModifiers == KeyModifiers.Control && e.Key >= Key.D1 && e.Key <= Key.D9)
-			{
-				FileHandler.SwitchTab((int)e.Key - 35);
-			}
-		};
+        KeyDown += (sender, e) =>
+        {
+            if (e.KeyModifiers == KeyModifiers.Control && e.Key >= Key.D1 && e.Key <= Key.D9)
+            {
+                FileHandler.SwitchTab((int)e.Key - 35);
+            }
+        };
 
-		DragDrop.SetAllowDrop(this, true);
-		DragDrop.DropEvent.AddClassHandler(FileHandler.FileDropAction);
-	}
+        DragDrop.SetAllowDrop(this, true);
+        DragDrop.DropEvent.AddClassHandler(FileHandler.FileDropAction);
+    }
 
-	private async void OnClosing(object sender, WindowClosingEventArgs e)
-	{
-		ThemeEditor.SaveAllThemes();
-		ApiVault.Get().GetAppConfig().Save();
+    private async void OnClosing(object sender, WindowClosingEventArgs e)
+    {
+        ThemeEditor.SaveAllThemes();
+        ApiVault.Get().GetAppConfig().Save();
 
-		List<TabViewItem> unsavedFiles = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().Where(item => item.Header.ToString().EndsWith('*')).ToList();
-		if (unsavedFiles.Count == 0) return;
+        List<TabViewItem> unsavedFiles = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().Where(item => item.Header.ToString().EndsWith('*')).ToList();
+        if (unsavedFiles.Count == 0) return;
 
-		e.Cancel = true;
-		ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
-		if (result == ContentDialogResult.Primary)
-		{
-			unsavedFiles.ForEach(item => item.Header = item.Header.ToString().TrimEnd('*'));
-			ApiVault.Get().OnClosed();
-			Close();
-		}
-	}
+        e.Cancel = true;
+        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+        if (result == ContentDialogResult.Primary)
+        {
+            unsavedFiles.ForEach(item => item.Header = item.Header.ToString().TrimEnd('*'));
+            ApiVault.Get().OnClosed();
+            Close();
+        }
+    }
 
-	private async void OnWindowLoaded(object sender, RoutedEventArgs e)
-	{
-		AddonLoader.Load();
+    private async void OnWindowLoaded(object sender, RoutedEventArgs e)
+    {
+        AddonLoader.Load();
 
-		ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
+        ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 
-		string[] startupFiles = ApiVault.Get().GetStartupFiles();
-		if (startupFiles.Length == 0) FileHandler.NewFile();
-		startupFiles.ToList().ForEach(FileHandler.OpenFile);
+        string[] startupFiles = ApiVault.Get().GetStartupFiles();
+        if (startupFiles.Length == 0) FileHandler.NewFile();
+        startupFiles.ToList().ForEach(FileHandler.OpenFile);
 
-		await Dispatcher.UIThread.InvokeAsync(() =>
-		{
-			SyntaxLoader.LoadSyntaxes();
-			DiscordRpcUpdater.Initialize();
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            SyntaxLoader.LoadSyntaxes();
+            DiscordRpcUpdater.Initialize();
 
-			CrashChecker.CheckForCrash();
+            CrashChecker.CheckForCrash();
 
-			if (ApiVault.Get().GetAppConfig().CheckForUpdates) UpdateChecker.Check();
-		});
+            if (ApiVault.Get().GetAppConfig().CheckForUpdates) UpdateChecker.Check();
+        });
 
-		Tutorial.ShowTutorial();
-		BottomBar.UpdatePosition();
-	}
+        Tutorial.ShowTutorial();
+        BottomBar.UpdatePosition();
+    }
 }

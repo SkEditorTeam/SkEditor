@@ -9,201 +9,201 @@ using System.Text;
 namespace SkEditor.Views.Generators.Gui;
 public class Generation
 {
-	private static Dictionary<int, Item> _items = [];
-	private static GuiGenerator _guiGen;
+    private static Dictionary<int, Item> _items = [];
+    private static GuiGenerator _guiGen;
 
-	const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-	public static void Generate()
-	{
-		_guiGen = GuiGenerator.Instance;
-		_items = _guiGen.Items;
+    public static void Generate()
+    {
+        _guiGen = GuiGenerator.Instance;
+        _items = _guiGen.Items;
 
-		StringBuilder code = new();
+        StringBuilder code = new();
 
-		string functionName = string.IsNullOrEmpty(_guiGen.FunctionNameTextBox.Text) ? "openGUI" : _guiGen.FunctionNameTextBox.Text.Trim().Replace(" ", "_");
+        string functionName = string.IsNullOrEmpty(_guiGen.FunctionNameTextBox.Text) ? "openGUI" : _guiGen.FunctionNameTextBox.Text.Trim().Replace(" ", "_");
 
-		if (string.IsNullOrWhiteSpace(_guiGen.TitleTextBox.Text)) _guiGen.TitleTextBox.Text = "GUI";
+        if (string.IsNullOrWhiteSpace(_guiGen.TitleTextBox.Text)) _guiGen.TitleTextBox.Text = "GUI";
 
-		TextEditor editor = ApiVault.Get().GetTextEditor();
-		int offset = editor.CaretOffset;
-		DocumentLine line = editor.Document.GetLineByOffset(offset);
+        TextEditor editor = ApiVault.Get().GetTextEditor();
+        int offset = editor.CaretOffset;
+        DocumentLine line = editor.Document.GetLineByOffset(offset);
 
-		if (!string.IsNullOrEmpty(editor.Document.GetText(line.Offset, line.Length)))
-		{
-			code.Append("\n\n");
-		}
+        if (!string.IsNullOrEmpty(editor.Document.GetText(line.Offset, line.Length)))
+        {
+            code.Append("\n\n");
+        }
 
-		code.Append($"function {functionName}(p: player):");
+        code.Append($"function {functionName}(p: player):");
 
-		code.Append(_guiGen.UseSkriptGuiCheckBox.IsChecked == false ? GetSkriptCode() : GetSkriptGuiCode());
+        code.Append(_guiGen.UseSkriptGuiCheckBox.IsChecked == false ? GetSkriptCode() : GetSkriptGuiCode());
 
-		editor.Document.Insert(offset, code.ToString());
-		editor.CaretOffset = offset + code.Length;
-	}
+        editor.Document.Insert(offset, code.ToString());
+        editor.CaretOffset = offset + code.Length;
+    }
 
-	private static string GetSkriptCode()
-	{
-		int rowQuantity = GuiGenerator.Instance.CurrentRows;
+    private static string GetSkriptCode()
+    {
+        int rowQuantity = GuiGenerator.Instance.CurrentRows;
 
-		StringBuilder code = new();
-		code.Append($"\n\tset {{_gui}} to chest inventory with {rowQuantity} rows named \"{_guiGen.TitleTextBox.Text}\"\n");
+        StringBuilder code = new();
+        code.Append($"\n\tset {{_gui}} to chest inventory with {rowQuantity} rows named \"{_guiGen.TitleTextBox.Text}\"\n");
 
-		if (_guiGen.BackgroundItem != null)
-		{
-			code.Append($"\n\tset slot (integers between 0 and {rowQuantity * 9}) of {{_gui}} to ");
-			code.Append(_guiGen.BackgroundItem.Name.Replace("_", " "));
-			AppendCustomName(code, _guiGen.BackgroundItem);
-			AppendLore(code, _guiGen.BackgroundItem);
-			AppendCustomModelData(code, _guiGen.BackgroundItem);
-		}
+        if (_guiGen.BackgroundItem != null)
+        {
+            code.Append($"\n\tset slot (integers between 0 and {rowQuantity * 9}) of {{_gui}} to ");
+            code.Append(_guiGen.BackgroundItem.Name.Replace("_", " "));
+            AppendCustomName(code, _guiGen.BackgroundItem);
+            AppendLore(code, _guiGen.BackgroundItem);
+            AppendCustomModelData(code, _guiGen.BackgroundItem);
+        }
 
-		var sortedItems = _guiGen.Items.ToList();
-		sortedItems.Sort((x, y) => x.Key.CompareTo(y.Key));
+        var sortedItems = _guiGen.Items.ToList();
+        sortedItems.Sort((x, y) => x.Key.CompareTo(y.Key));
 
-		foreach (var item in sortedItems)
-		{
-			code.Append($"\n\tset slot {item.Key} of {{_gui}} to {item.Value.Name.Replace("_", " ")}");
-			AppendCustomName(code, item.Value);
-			AppendLore(code, item.Value);
-			AppendCustomModelData(code, item.Value);
-		}
-		code.Append("\n\topen {_gui} to {_p}");
+        foreach (var item in sortedItems)
+        {
+            code.Append($"\n\tset slot {item.Key} of {{_gui}} to {item.Value.Name.Replace("_", " ")}");
+            AppendCustomName(code, item.Value);
+            AppendLore(code, item.Value);
+            AppendCustomModelData(code, item.Value);
+        }
+        code.Append("\n\topen {_gui} to {_p}");
 
-		code.Append("\n\non inventory click:");
-		code.Append($"\n\tname of event-inventory is \"{_guiGen.TitleTextBox.Text}\"");
-		code.Append("\n\tcancel event");
-		code.Append("\n\tevent-inventory is not player's inventory");
-		bool first = true;
-		foreach (var item in sortedItems.Where(pair => pair.Value.HaveExampleAction))
-		{
-			code.Append($"\n\t{(first ? "" : "else ")}if clicked slot is {item.Key}:");
-			code.Append($"\n\t\tsend \"You clicked on slot {item.Key}\"");
-			first = false;
-		}
+        code.Append("\n\non inventory click:");
+        code.Append($"\n\tname of event-inventory is \"{_guiGen.TitleTextBox.Text}\"");
+        code.Append("\n\tcancel event");
+        code.Append("\n\tevent-inventory is not player's inventory");
+        bool first = true;
+        foreach (var item in sortedItems.Where(pair => pair.Value.HaveExampleAction))
+        {
+            code.Append($"\n\t{(first ? "" : "else ")}if clicked slot is {item.Key}:");
+            code.Append($"\n\t\tsend \"You clicked on slot {item.Key}\"");
+            first = false;
+        }
 
-		return code.ToString();
-	}
+        return code.ToString();
+    }
 
-	private static string GetSkriptGuiCode()
-	{
-		int rowQuantity = _guiGen.CurrentRows;
+    private static string GetSkriptGuiCode()
+    {
+        int rowQuantity = _guiGen.CurrentRows;
 
-		StringBuilder code = new();
-		code.Append($"\n\tcreate a gui with virtual chest inventory with {rowQuantity} rows named \"{_guiGen.TitleTextBox.Text}\"");
+        StringBuilder code = new();
+        code.Append($"\n\tcreate a gui with virtual chest inventory with {rowQuantity} rows named \"{_guiGen.TitleTextBox.Text}\"");
 
-		if (_guiGen.BackgroundItem != null) code.Append(GetBackgroundCode());
+        if (_guiGen.BackgroundItem != null) code.Append(GetBackgroundCode());
 
-		code.Append(':');
+        code.Append(':');
 
-		if (_guiGen.BackgroundItem != null)
-		{
-			code.Append($"\n\t\tmake gui slot \"=\" with {_guiGen.BackgroundItem.Name.Replace("_", " ")}");
-			AppendCustomName(code, _guiGen.BackgroundItem);
-			AppendLore(code, _guiGen.BackgroundItem);
-			AppendCustomModelData(code, _guiGen.BackgroundItem);
-		}
+        if (_guiGen.BackgroundItem != null)
+        {
+            code.Append($"\n\t\tmake gui slot \"=\" with {_guiGen.BackgroundItem.Name.Replace("_", " ")}");
+            AppendCustomName(code, _guiGen.BackgroundItem);
+            AppendLore(code, _guiGen.BackgroundItem);
+            AppendCustomModelData(code, _guiGen.BackgroundItem);
+        }
 
-		var sortedItems = _guiGen.Items.ToList();
-		sortedItems.Sort((x, y) => x.Key.CompareTo(y.Key));
+        var sortedItems = _guiGen.Items.ToList();
+        sortedItems.Sort((x, y) => x.Key.CompareTo(y.Key));
 
-		foreach (var pair in sortedItems)
-		{
-			code.Append($"\n\t\tmake gui slot {pair.Key} with {pair.Value.Name.Replace("_", " ")}");
-			AppendCustomName(code, pair.Value);
-			AppendLore(code, pair.Value);
-			AppendCustomModelData(code, pair.Value);
-			if (pair.Value.HaveExampleAction)
-			{
-				code.Append(':');
-				code.Append($"\n\t\t\tsend \"You clicked on slot {pair.Key}\"");
-			}
-		}
-		code.Append("\n\topen the last gui for {_p}");
+        foreach (var pair in sortedItems)
+        {
+            code.Append($"\n\t\tmake gui slot {pair.Key} with {pair.Value.Name.Replace("_", " ")}");
+            AppendCustomName(code, pair.Value);
+            AppendLore(code, pair.Value);
+            AppendCustomModelData(code, pair.Value);
+            if (pair.Value.HaveExampleAction)
+            {
+                code.Append(':');
+                code.Append($"\n\t\t\tsend \"You clicked on slot {pair.Key}\"");
+            }
+        }
+        code.Append("\n\topen the last gui for {_p}");
 
-		return code.ToString();
-	}
+        return code.ToString();
+    }
 
 
 
-	#region Utils
-	private static void AppendLore(StringBuilder code, Item item)
-	{
-		if (item.Lore.Count <= 0) return;
+    #region Utils
+    private static void AppendLore(StringBuilder code, Item item)
+    {
+        if (item.Lore.Count <= 0) return;
 
-		code.Append(" with lore");
+        code.Append(" with lore");
 
-		if (item.Lore.Count == 1)
-		{
-			code.Append($" \"{item.Lore[0]}\"");
-			return;
-		}
+        if (item.Lore.Count == 1)
+        {
+            code.Append($" \"{item.Lore[0]}\"");
+            return;
+        }
 
-		for (int i = 0; i < item.Lore.Count; i++)
-		{
-			code.Append(i == item.Lore.Count - 1 ? $" and \"{item.Lore[i]}\"" : $" \"{item.Lore[i]}\",");
-		}
-	}
+        for (int i = 0; i < item.Lore.Count; i++)
+        {
+            code.Append(i == item.Lore.Count - 1 ? $" and \"{item.Lore[i]}\"" : $" \"{item.Lore[i]}\",");
+        }
+    }
 
-	private static void AppendCustomName(StringBuilder code, Item item)
-	{
-		if (item.HaveCustomName) code.Append($" named \"{item.CustomName}\"");
-	}
+    private static void AppendCustomName(StringBuilder code, Item item)
+    {
+        if (item.HaveCustomName) code.Append($" named \"{item.CustomName}\"");
+    }
 
-	private static void AppendCustomModelData(StringBuilder code, Item item)
-	{
-		if (item.HaveCustomModelData) code.Append($" with custom model data {item.CustomModelData}");
-	}
+    private static void AppendCustomModelData(StringBuilder code, Item item)
+    {
+        if (item.HaveCustomModelData) code.Append($" with custom model data {item.CustomModelData}");
+    }
 
-	private static string GetBackgroundCode()
-	{
-		int rowQuantity = _guiGen.CurrentRows;
-		int slots = rowQuantity * 9;
+    private static string GetBackgroundCode()
+    {
+        int rowQuantity = _guiGen.CurrentRows;
+        int slots = rowQuantity * 9;
 
-		List<List<char>> rows = Enumerable.Range(0, rowQuantity).Select(_ => new List<char>()).ToList();
-		HashSet<char> usedChars = [];
+        List<List<char>> rows = Enumerable.Range(0, rowQuantity).Select(_ => new List<char>()).ToList();
+        HashSet<char> usedChars = [];
 
-		for (int i = 0; i < slots; i++)
-		{
-			if (!_guiGen.Items.ContainsKey(i))
-			{
-				rows[i / 9].Add('=');
-			}
-			else
-			{
-				char randomChar = !usedChars.Contains(_guiGen.Items.First(pair => pair.Key == i).Value.Name.ElementAt(0))
-					? _guiGen.Items.First(pair => pair.Key == i).Value.Name.ElementAt(0)
-					: GenerateRandomChar(usedChars);
+        for (int i = 0; i < slots; i++)
+        {
+            if (!_guiGen.Items.ContainsKey(i))
+            {
+                rows[i / 9].Add('=');
+            }
+            else
+            {
+                char randomChar = !usedChars.Contains(_guiGen.Items.First(pair => pair.Key == i).Value.Name.ElementAt(0))
+                    ? _guiGen.Items.First(pair => pair.Key == i).Value.Name.ElementAt(0)
+                    : GenerateRandomChar(usedChars);
 
-				usedChars.Add(randomChar);
-				rows[i / 9].Add(randomChar);
-			}
-		}
+                usedChars.Add(randomChar);
+                rows[i / 9].Add(randomChar);
+            }
+        }
 
-		StringBuilder code = new(" and shape");
+        StringBuilder code = new(" and shape");
 
-		if (rowQuantity == 1)
-		{
-			code.Append($" \"{string.Join("", rows[0])}\"");
-			return code.ToString();
-		}
-		else
-		{
-			for (int i = 0; i < rowQuantity; i++)
-			{
-				code.Append(i == rowQuantity - 1 ? $" and \"{string.Join("", rows[i])}\"" : $" \"{string.Join("", rows[i])}\",");
-			}
-		}
+        if (rowQuantity == 1)
+        {
+            code.Append($" \"{string.Join("", rows[0])}\"");
+            return code.ToString();
+        }
+        else
+        {
+            for (int i = 0; i < rowQuantity; i++)
+            {
+                code.Append(i == rowQuantity - 1 ? $" and \"{string.Join("", rows[i])}\"" : $" \"{string.Join("", rows[i])}\",");
+            }
+        }
 
-		return code.ToString();
-	}
+        return code.ToString();
+    }
 
-	static char GenerateRandomChar(HashSet<char> usedChars)
-	{
-		Random random = new();
-		char randomChar;
-		do { randomChar = chars[random.Next(chars.Length)]; } while (usedChars.Contains(randomChar));
-		return randomChar;
-	}
-	#endregion
+    static char GenerateRandomChar(HashSet<char> usedChars)
+    {
+        Random random = new();
+        char randomChar;
+        do { randomChar = chars[random.Next(chars.Length)]; } while (usedChars.Contains(randomChar));
+        return randomChar;
+    }
+    #endregion
 }

@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:sty="using:FluentAvalonia.Styling"
+			 xmlns:avaloniaedit="using:AvaloniaEdit"
              x:Class="SkEditor.App"
              RequestedThemeVariant="Dark">
 
@@ -35,6 +36,10 @@
 		<Brush x:Key="TextControlBackgroundFocused">#B31E1E1E</Brush>
 		<Brush x:Key="TextControlPlaceholderForeground">#33FFFFFF</Brush>
 		<Brush x:Key="TextControlPlaceholderForegroundPointerOver">#4DFFFFFF</Brush>
+		
+		<Brush x:Key="SkEditorBorderBackground">#0affffff</Brush>
+		
+		
 		<Brush x:Key="TextControlPlaceholderForegroundFocused">#26FFFFFF</Brush>
 		
 		

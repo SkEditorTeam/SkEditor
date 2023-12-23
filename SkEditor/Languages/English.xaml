@@ -70,6 +70,7 @@
 	<system:String x:Key="DownloadingMissingFilesTitle">Missing files</system:String>
 	<system:String x:Key="Downloading">Downloading</system:String>
 	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Files used by the item selector are missing, and are being downloaded now.</system:String>
+	<system:String x:Key="DownloadingMissingFiles">Downloading</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Failed to download missing files. Please try again later.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">You have unsaved changes in this file. Are you sure you want to close it?</system:String>
 	<system:String x:Key="ClosingAllFiles">Are you sure you want to close all the files? Any unsaved changes will be lost.</system:String>
@@ -145,7 +146,6 @@
 
 	<!-- Theme Settings -->
 	<system:String x:Key="SettingsThemeTitle">Theme</system:String>
-	<system:String x:Key="SettingsThemeInformation">In the future, you'll be able to edit colors directly from here. For now, create and edit files in Themes folder.</system:String>
 	<system:String x:Key="SettingsThemeOpenFolder">Open folder</system:String>
 	<system:String x:Key="SettingsThemeCurrentTheme">Current theme</system:String>
 	<system:String x:Key="SettingsThemeCurrentThemeDescription">A restart isn't necessary, but it might be needed for a 100% color update.</system:String>

@@ -7,10 +7,10 @@
 
 	<UserControl.Styles>
 		<Style Selector="Button">
-			<Setter Property="Padding" Value="5,0,5,0"/>
+			<Setter Property="Padding" Value="10,0"/>
 			<Setter Property="Background" Value="Transparent"/>
 			<Setter Property="BorderThickness" Value="0"/>
-			<Setter Property="CornerRadius" Value="0"/>
+			<Setter Property="CornerRadius" Value="7"/>
 			<Setter Property="VerticalAlignment" Value="Stretch"/>
 			<Setter Property="Foreground" Value="#ceffffff"/>
 		</Style>
@@ -25,11 +25,11 @@
 		</Style>
 	</UserControl.Styles>
 	
-	<Border Height="25" Background="#03ffffff" BorderBrush="#25ffffff" BorderThickness="0,1,0,0">
+	<Border Height="32" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
 		<Grid Name="MainGrid" ColumnDefinitions="auto,*,auto">
 			<TextBlock Name="LogsText" Grid.Column="1" MaxWidth="750" HorizontalAlignment="Left" Text="" Margin="30,0,0,0"/>
 
-			<StackPanel Grid.Column="2" Margin="0,0,5,0" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<StackPanel Grid.Column="2" Margin="0,0,10,0" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
 				<TextBlock x:Name="LineText" Text="{DynamicResource BottomBarLine}"/>
 				<TextBlock x:Name="ColumnText" Text="{DynamicResource BottomBarColumn}"/>
 			</StackPanel>

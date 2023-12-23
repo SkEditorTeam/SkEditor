@@ -9,24 +9,24 @@ using System;
 namespace SkEditor.Views;
 public partial class SettingsWindow : AppWindow
 {
-	public static SettingsWindow Instance { get; private set; }
+    public static SettingsWindow Instance { get; private set; }
 
-	public Frame GetFrameView() => FrameView;
+    public Frame GetFrameView() => FrameView;
 
-	public SettingsWindow()
-	{
-		InitializeComponent();
+    public SettingsWindow()
+    {
+        InitializeComponent();
 
-		WindowStyler.Style(this);
-		TitleBar.ExtendsContentIntoTitleBar = false;
+        WindowStyler.Style(this);
+        TitleBar.ExtendsContentIntoTitleBar = false;
 
-		Instance = this;
-		ApiVault.Get().OnSettingsOpened();
-	}
+        Instance = this;
+        ApiVault.Get().OnSettingsOpened();
+    }
 
-	public static void NavigateToPage(Type page)
-	{
-		var navOpt = new FrameNavigationOptions() { TransitionInfoOverride = new EntranceNavigationTransitionInfo() };
-		Instance.FrameView.NavigateToType(page, null, navOpt);
-	}
+    public static void NavigateToPage(Type page)
+    {
+        var navOpt = new FrameNavigationOptions() { TransitionInfoOverride = new EntranceNavigationTransitionInfo() };
+        Instance.FrameView.NavigateToType(page, null, navOpt);
+    }
 }

@@ -1,6 +1,6 @@
-﻿
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit;
@@ -8,6 +8,7 @@ using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Syntax;
 using System;
@@ -18,133 +19,141 @@ namespace SkEditor.Utilities.Files;
 
 public class FileBuilder
 {
-	public static TabViewItem Build(string header, string path = "")
-	{
-		TextEditor editor = GetDefaultEditor(path);
-		TabViewItem tabViewItem = new()
-		{
-			Header = header,
-			IsSelected = true,
-			Content = editor,
-			Tag = string.Empty
-		};
+    public static TabViewItem Build(string header, string path = "")
+    {
+        TextEditor editor = GetDefaultEditor(path);
+        TabViewItem tabViewItem = new()
+        {
+            Header = header,
+            IsSelected = true,
+            Content = editor,
+            Tag = string.Empty
+        };
 
-		if (!string.IsNullOrWhiteSpace(path))
-		{
-			tabViewItem.Tag = Uri.UnescapeDataString(path);
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            tabViewItem.Tag = Uri.UnescapeDataString(path);
 
-			ToolTip toolTip = new()
-			{
-				Content = path,
-			};
+            ToolTip toolTip = new()
+            {
+                Content = path,
+            };
 
-			ToolTip.SetShowDelay(tabViewItem, 1200);
-			ToolTip.SetTip(tabViewItem, toolTip);
+            ToolTip.SetShowDelay(tabViewItem, 1200);
+            ToolTip.SetTip(tabViewItem, toolTip);
 
-			Icon.SetIcon(tabViewItem);
-		}
+            Icon.SetIcon(tabViewItem);
+        }
 
-		ApiVault.Get().OnFileCreated(editor);
+        ApiVault.Get().OnFileCreated(editor);
 
-		return tabViewItem;
-	}
+        return tabViewItem;
+    }
 
-	private static TextEditor GetDefaultEditor(string path)
-	{
-		AppConfig config = ApiVault.Get().GetAppConfig();
+    private static TextEditor GetDefaultEditor(string path)
+    {
+        AppConfig config = ApiVault.Get().GetAppConfig();
 
-		TextEditor editor = new()
-		{
-			ShowLineNumbers = true,
-			Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
-			Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
-			LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor"),
-			FontSize = 16,
-			WordWrap = config.IsWrappingEnabled,
-		};
-		editor.ContextFlyout = GetContextMenu(editor);
+        TextEditor editor = new()
+        {
+            ShowLineNumbers = true,
+            Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
+            Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
+            LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor"),
+            FontSize = 16,
+            WordWrap = config.IsWrappingEnabled,
+        };
 
-		if (config.Font.Equals("Default"))
-		{
-			Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
-			editor.FontFamily = (FontFamily)font;
-		}
-		else
-		{
-			editor.FontFamily = new FontFamily(config.Font);
-		}
+        editor.ContextFlyout = GetContextMenu(editor);
 
-		if (!string.IsNullOrWhiteSpace(path))
-		{
-			path = Uri.UnescapeDataString(path);
-			if (File.Exists(path))
-			{
-				editor.Text = File.ReadAllText(path);
-			}
-		}
+        if (config.Font.Equals("Default"))
+        {
+            Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
+            editor.FontFamily = (FontFamily)font;
+        }
+        else
+        {
+            editor.FontFamily = new FontFamily(config.Font);
+        }
 
-		SyntaxLoader.SetSyntax(editor, path);
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            path = Uri.UnescapeDataString(path);
+            if (File.Exists(path))
+            {
+                editor.Text = File.ReadAllText(path);
+            }
+        }
 
-		editor = AddEventHandlers(editor);
-		editor = SetOptions(editor);
+        SyntaxLoader.SetSyntax(editor, path);
 
-		return editor;
-	}
+        editor = AddEventHandlers(editor);
+        editor = SetOptions(editor);
 
-	private static TextEditor AddEventHandlers(TextEditor editor)
-	{
-		editor.TextArea.PointerWheelChanged += TextEditorEventHandler.OnZoom;
-		editor.TextArea.Loaded += (sender, e) => editor.Focus();
-		editor.TextChanged += TextEditorEventHandler.OnTextChanged;
-		editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
-		editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-		editor.TextArea.Caret.PositionChanged += (sender, e) =>
-		{
-			ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
-		};
-		editor.TextArea.KeyDown += TextEditorEventHandler.OnKeyDown;
-		editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
-		editor.TextArea.SelectionChanged += SelectionHandler.OnSelectionChanged;
+        return editor;
+    }
 
-		return editor;
-	}
+    private static TextEditor AddEventHandlers(TextEditor editor)
+    {
+        editor.TextArea.PointerWheelChanged += TextEditorEventHandler.OnZoom;
+        editor.TextArea.Loaded += (sender, e) => editor.Focus();
+        editor.TextChanged += TextEditorEventHandler.OnTextChanged;
+        editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
+        editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
+        editor.Document.TextChanged += TextEditorEventHandler.CheckForHex;
+        editor.TextArea.Caret.PositionChanged += (sender, e) =>
+        {
+            ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
+        };
+        editor.TextArea.KeyDown += TextEditorEventHandler.OnKeyDown;
+        editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
+        editor.TextArea.SelectionChanged += SelectionHandler.OnSelectionChanged;
 
-	private static TextEditor SetOptions(TextEditor editor)
-	{
-		editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));
-		editor.TextArea.TextView.LinkTextUnderline = true;
-		editor.TextArea.SelectionBrush = (ImmutableSolidColorBrush)Application.Current.FindResource("SelectionColor");
+        if (ApiVault.Get().GetAppConfig().EnableAutoCompletionExperiment)
+        {
+            editor.TextChanged += CompletionHandler.OnTextChanged;
+            editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
+        }
 
-		editor.TextArea.LeftMargins.OfType<LineNumberMargin>().FirstOrDefault().Margin = new Thickness(10, 0);
+        return editor;
+    }
 
-		editor.Options.AllowScrollBelowDocument = true;
-		editor.Options.CutCopyWholeLine = true;
+    private static TextEditor SetOptions(TextEditor editor)
+    {
+        editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));
+        editor.TextArea.TextView.LinkTextUnderline = true;
+        editor.TextArea.SelectionBrush = (ImmutableSolidColorBrush)Application.Current.FindResource("SelectionColor");
 
-		return editor;
-	}
+        editor.TextArea.LeftMargins.OfType<LineNumberMargin>().FirstOrDefault().Margin = new Thickness(10, 0);
 
-	private static MenuFlyout GetContextMenu(TextEditor editor)
-	{
-		var commands = new[]
-		{
-			new { Header = "MenuHeaderCopy", Command = new RelayCommand(editor.Copy), Icon = Symbol.Copy },
-			new { Header = "MenuHeaderPaste", Command = new RelayCommand(editor.Paste), Icon = Symbol.Paste },
-			new { Header = "MenuHeaderCut", Command = new RelayCommand(editor.Cut), Icon = Symbol.Cut },
-			new { Header = "MenuHeaderUndo", Command = new RelayCommand(() => editor.Undo()), Icon = Symbol.Undo },
-			new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.Redo },
-			new { Header = "MenuHeaderDuplicate", Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(ApiVault.Get().GetTextEditor().TextArea)), Icon = Symbol.Copy },
-			new { Header = "MenuHeaderComment", Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(ApiVault.Get().GetTextEditor().TextArea)), Icon = Symbol.Comment },
-			new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete }
-		};
+        editor.Options.AllowScrollBelowDocument = true;
+        editor.Options.CutCopyWholeLine = true;
 
-		var contextMenu = new MenuFlyout();
-		commands.Select(item => new MenuItem
-		{
-			Header = Translation.Get(item.Header),
-			Command = item.Command,
-			Icon = new SymbolIcon { Symbol = item.Icon, FontSize = 20 }
-		}).ToList().ForEach(item => contextMenu.Items.Add(item));
+        return editor;
+    }
 
-		return contextMenu;
-	}
+    private static MenuFlyout GetContextMenu(TextEditor editor)
+    {
+        var commands = new[]
+        {
+            new { Header = "MenuHeaderCopy", Command = new RelayCommand(editor.Copy), Icon = Symbol.Copy },
+            new { Header = "MenuHeaderPaste", Command = new RelayCommand(editor.Paste), Icon = Symbol.Paste },
+            new { Header = "MenuHeaderCut", Command = new RelayCommand(editor.Cut), Icon = Symbol.Cut },
+            new { Header = "MenuHeaderUndo", Command = new RelayCommand(() => editor.Undo()), Icon = Symbol.Undo },
+            new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.Redo },
+            new { Header = "MenuHeaderDuplicate", Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Icon = Symbol.Copy },
+            new { Header = "MenuHeaderComment", Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)), Icon = Symbol.Comment },
+            new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete }
+        };
+
+        var contextMenu = new MenuFlyout();
+        commands.Select(item => new MenuItem
+        {
+            Header = Translation.Get(item.Header),
+            Command = item.Command,
+            Icon = new SymbolIcon { Symbol = item.Icon, FontSize = 20 }
+        }).ToList().ForEach(item => contextMenu.Items.Add(item));
+
+        return contextMenu;
+    }
 }

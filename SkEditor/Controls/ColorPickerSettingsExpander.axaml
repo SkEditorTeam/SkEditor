@@ -7,7 +7,7 @@
 
 	<ui:SettingsExpander Header="{Binding ExpanderHeader}" Name="SettingsExpanderObject" IconSource="{StaticResource ColorIcon}">
 		<ui:SettingsExpander.Footer>
-			<ui:ColorPickerButton IsAlphaEnabled="{Binding IsAlphaEnabled}" />
+			<ui:ColorPickerButton Name="ColorPicker" IsAlphaEnabled="{Binding IsAlphaEnabled}" />
 		</ui:SettingsExpander.Footer>
 	</ui:SettingsExpander>
 </UserControl>

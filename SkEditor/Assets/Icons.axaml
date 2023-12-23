@@ -43,5 +43,6 @@
 
 	<ui:SymbolIconSource x:Key="RefreshIcon" Symbol="Refresh"/>
 	<ui:SymbolIconSource x:Key="ImportantIcon" Symbol="Important"/>
+	<ui:SymbolIconSource x:Key="EditIcon" Symbol="Edit"/>
 
 </ResourceDictionary>

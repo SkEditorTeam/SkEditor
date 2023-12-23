@@ -8,110 +8,110 @@ using SkEditor.Utilities.Styling;
 namespace SkEditor.Views;
 public partial class PublishWindow : AppWindow
 {
-	private string CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string;
+    private string CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string;
 
 
-	public PublishWindow()
-	{
-		InitializeComponent();
-		InitializeUI();
-	}
+    public PublishWindow()
+    {
+        InitializeComponent();
+        InitializeUI();
+    }
 
-	private void InitializeUI()
-	{
-		WindowStyler.Style(this);
-		TitleBar.ExtendsContentIntoTitleBar = false;
+    private void InitializeUI()
+    {
+        WindowStyler.Style(this);
+        TitleBar.ExtendsContentIntoTitleBar = false;
 
-		PublishButton.Command = new RelayCommand(Publish);
-		ApiKeyHint.Tapped += (sender, e) => OpenSiteWithApiKey();
-		ApiKeyTextBox.TextChanged += (sender, e) => SaveApiKey();
+        PublishButton.Command = new RelayCommand(Publish);
+        ApiKeyHint.Tapped += (sender, e) => OpenSiteWithApiKey();
+        ApiKeyTextBox.TextChanged += (sender, e) => SaveApiKey();
 
-		CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
+        CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
 
-		WebsiteComboBox.SelectedIndex = ApiVault.Get().GetAppConfig().LastUsedPublishService switch
-		{
-			"Pastebin" => 0,
-			"code.skript.pl" => 1,
-			"skUnity Parser" => 2,
-			_ => 0,
-		};
+        WebsiteComboBox.SelectedIndex = ApiVault.Get().GetAppConfig().LastUsedPublishService switch
+        {
+            "Pastebin" => 0,
+            "code.skript.pl" => 1,
+            "skUnity Parser" => 2,
+            _ => 0,
+        };
 
-		WebsiteComboBox.SelectionChanged += (sender, e) => UpdateServiceInfo();
+        WebsiteComboBox.SelectionChanged += (sender, e) => UpdateServiceInfo();
 
-		UpdateServiceInfo();
-	}
+        UpdateServiceInfo();
+    }
 
-	private void UpdateServiceInfo()
-	{
-		AppConfig appConfig = ApiVault.Get().GetAppConfig();
-		ApiKeyTextBox.Text = CurrentService switch
-		{
-			"Pastebin" => appConfig.PastebinApiKey,
-			"code.skript.pl" => appConfig.CodeSkriptPlApiKey,
-			"skUnity Parser" => appConfig.SkunityApiKey,
-			_ => "",
-		};
+    private void UpdateServiceInfo()
+    {
+        AppConfig appConfig = ApiVault.Get().GetAppConfig();
+        ApiKeyTextBox.Text = CurrentService switch
+        {
+            "Pastebin" => appConfig.PastebinApiKey,
+            "code.skript.pl" => appConfig.CodeSkriptPlApiKey,
+            "skUnity Parser" => appConfig.SkunityApiKey,
+            _ => "",
+        };
 
-		appConfig.LastUsedPublishService = CurrentService;
+        appConfig.LastUsedPublishService = CurrentService;
 
-		AnonymouslyCheckBox.IsEnabled = LanguageComboBox.IsEnabled = CurrentService.Equals("code.skript.pl");
-	}
+        AnonymouslyCheckBox.IsEnabled = LanguageComboBox.IsEnabled = CurrentService.Equals("code.skript.pl");
+    }
 
-	private void SaveApiKey()
-	{
-		switch (CurrentService)
-		{
-			case "Pastebin":
-				ApiVault.Get().GetAppConfig().PastebinApiKey = ApiKeyTextBox.Text;
-				break;
-			case "code.skript.pl":
-				ApiVault.Get().GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
-				break;
-			case "skUnity Parser":
-				ApiVault.Get().GetAppConfig().SkunityApiKey = ApiKeyTextBox.Text;
-				break;
-		}
-	}
+    private void SaveApiKey()
+    {
+        switch (CurrentService)
+        {
+            case "Pastebin":
+                ApiVault.Get().GetAppConfig().PastebinApiKey = ApiKeyTextBox.Text;
+                break;
+            case "code.skript.pl":
+                ApiVault.Get().GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
+                break;
+            case "skUnity Parser":
+                ApiVault.Get().GetAppConfig().SkunityApiKey = ApiKeyTextBox.Text;
+                break;
+        }
+    }
 
-	private void OpenSiteWithApiKey()
-	{
-		string url = CurrentService switch
-		{
-			"code.skript.pl" => "https://code.skript.pl/api-key",
-			"skUnity Parser" => "https://skunity.com/dashboard/skunity-api",
-			_ => "https://pastebin.com/doc_api"
-		};
+    private void OpenSiteWithApiKey()
+    {
+        string url = CurrentService switch
+        {
+            "code.skript.pl" => "https://code.skript.pl/api-key",
+            "skUnity Parser" => "https://skunity.com/dashboard/skunity-api",
+            _ => "https://pastebin.com/doc_api"
+        };
 
-		ApiVault.Get().OpenUrl(url);
-	}
+        ApiVault.Get().OpenUrl(url);
+    }
 
-	private void Publish()
-	{
-		string code = ApiVault.Get().GetTextEditor().Document.Text;
+    private void Publish()
+    {
+        string code = ApiVault.Get().GetTextEditor().Document.Text;
 
-		if (string.IsNullOrWhiteSpace(code))
-		{
-			ApiVault.Get().ShowMessage("Error", "You can't publish empty code!", this);
-			return;
-		}
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            ApiVault.Get().ShowMessage("Error", "You can't publish empty code!", this);
+            return;
+        }
 
-		if (string.IsNullOrWhiteSpace(ApiKeyTextBox.Text))
-		{
-			ApiVault.Get().ShowMessage("Error", "You need to enter the API key!", this);
-			return;
-		}
+        if (string.IsNullOrWhiteSpace(ApiKeyTextBox.Text))
+        {
+            ApiVault.Get().ShowMessage("Error", "You need to enter the API key!", this);
+            return;
+        }
 
-		switch ((WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string)
-		{
-			case "Pastebin":
-				CodePublisher.PublishPastebin(code, this);
-				break;
-			case "code.skript.pl":
-				CodePublisher.PublishCodeSkriptPl(code, this);
-				break;
-			case "skUnity Parser":
-				CodePublisher.PublishSkUnity(code, this);
-				break;
-		}
-	}
+        switch ((WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string)
+        {
+            case "Pastebin":
+                CodePublisher.PublishPastebin(code, this);
+                break;
+            case "code.skript.pl":
+                CodePublisher.PublishCodeSkriptPl(code, this);
+                break;
+            case "skUnity Parser":
+                CodePublisher.PublishSkUnity(code, this);
+                break;
+        }
+    }
 }

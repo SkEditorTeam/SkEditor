@@ -10,104 +10,104 @@ using System.Linq;
 namespace SkEditor.Views.Generators.Gui;
 public partial class ExtendedItemSelector : AppWindow
 {
-	private Item _item;
+    private Item _item;
 
-	public ExtendedItemSelector(Item item)
-	{
-		InitializeComponent();
+    public ExtendedItemSelector(Item item)
+    {
+        InitializeComponent();
 
-		_item = item;
+        _item = item;
 
-		CheckForEditing();
+        CheckForEditing();
 
-		WindowStyler.Style(this);
-		TitleBar.ExtendsContentIntoTitleBar = false;
+        WindowStyler.Style(this);
+        TitleBar.ExtendsContentIntoTitleBar = false;
 
-		ContinueButton.Command = new RelayCommand(() =>
-		{
-			_item.Lore = [];
-			LoreLineStackPanel.Children.Where(x => x is LoreLineEditor)
-				.Select(x => (LoreLineEditor)x)
-				.Where(x => !string.IsNullOrWhiteSpace(x.LineTextBox.Text))
-				.ToList()
-				.ForEach(x => _item.Lore.Add(x.LineTextBox.Text));
+        ContinueButton.Command = new RelayCommand(() =>
+        {
+            _item.Lore = [];
+            LoreLineStackPanel.Children.Where(x => x is LoreLineEditor)
+                .Select(x => (LoreLineEditor)x)
+                .Where(x => !string.IsNullOrWhiteSpace(x.LineTextBox.Text))
+                .ToList()
+                .ForEach(x => _item.Lore.Add(x.LineTextBox.Text));
 
-			if (!string.IsNullOrWhiteSpace(DisplayNameTextBox.Text))
-			{
-				item.HaveCustomName = true;
-				item.CustomName = DisplayNameTextBox.Text;
-			}
-			if (!string.IsNullOrWhiteSpace(CustomModelDataTextBox.Text))
-			{
-				bool isInt = int.TryParse(CustomModelDataTextBox.Text, out int result);
-				if (isInt)
-				{
-					item.HaveCustomModelData = true;
-					item.CustomModelData = result;
-				}
-			}
-			item.HaveExampleAction = ExampleActionCheckBox.IsChecked == true;
+            if (!string.IsNullOrWhiteSpace(DisplayNameTextBox.Text))
+            {
+                item.HaveCustomName = true;
+                item.CustomName = DisplayNameTextBox.Text;
+            }
+            if (!string.IsNullOrWhiteSpace(CustomModelDataTextBox.Text))
+            {
+                bool isInt = int.TryParse(CustomModelDataTextBox.Text, out int result);
+                if (isInt)
+                {
+                    item.HaveCustomModelData = true;
+                    item.CustomModelData = result;
+                }
+            }
+            item.HaveExampleAction = ExampleActionCheckBox.IsChecked == true;
 
-			Close(_item);
-		});
+            Close(_item);
+        });
 
-		SetContextMenu();
-	}
+        SetContextMenu();
+    }
 
-	private void CheckForEditing()
-	{
-		Item editedItem = ItemContextMenu.EditedItem;
-		if (editedItem == null) return;
+    private void CheckForEditing()
+    {
+        Item editedItem = ItemContextMenu.EditedItem;
+        if (editedItem == null) return;
 
-		if (editedItem.HaveCustomName) DisplayNameTextBox.Text = editedItem.CustomName;
-		if (editedItem.HaveCustomModelData) CustomModelDataTextBox.Text = editedItem.CustomModelData.ToString();
+        if (editedItem.HaveCustomName) DisplayNameTextBox.Text = editedItem.CustomName;
+        if (editedItem.HaveCustomModelData) CustomModelDataTextBox.Text = editedItem.CustomModelData.ToString();
 
-		if (editedItem.Lore.Count > 0)
-		{
-			FirstLoreLine.LineTextBox.Text = editedItem.Lore[0];
+        if (editedItem.Lore.Count > 0)
+        {
+            FirstLoreLine.LineTextBox.Text = editedItem.Lore[0];
 
-			for (int i = 1; i < editedItem.Lore.Count; i++)
-			{
-				LoreLineEditor lineEditor = new()
-				{
-					IsDeleteButtonVisible = true
-				};
-				lineEditor.LineTextBox.ContextFlyout = contextFlyout;
-				lineEditor.DeleteButton.Command = new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
-				lineEditor.LineTextBox.Text = editedItem.Lore[i];
-				LoreLineStackPanel.Children.Add(lineEditor);
-			}
-		}
-	}
+            for (int i = 1; i < editedItem.Lore.Count; i++)
+            {
+                LoreLineEditor lineEditor = new()
+                {
+                    IsDeleteButtonVisible = true
+                };
+                lineEditor.LineTextBox.ContextFlyout = contextFlyout;
+                lineEditor.DeleteButton.Command = new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
+                lineEditor.LineTextBox.Text = editedItem.Lore[i];
+                LoreLineStackPanel.Children.Add(lineEditor);
+            }
+        }
+    }
 
-	private MenuFlyout contextFlyout;
+    private MenuFlyout contextFlyout;
 
-	private void SetContextMenu()
-	{
-		MenuItem addMenuItem = new()
-		{
-			Header = Translation.Get("GuiGeneratorAddLoreLine"),
-			Icon = new SymbolIcon() { Symbol = Symbol.Add, FontSize = 20 },
-			Command = new RelayCommand(() =>
-			{
-				LoreLineEditor lineEditor = new()
-				{
-					IsDeleteButtonVisible = true
-				};
-				lineEditor.LineTextBox.ContextFlyout = contextFlyout;
-				lineEditor.DeleteButton.Command = new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
-				LoreLineStackPanel.Children.Add(lineEditor);
-			})
-		};
+    private void SetContextMenu()
+    {
+        MenuItem addMenuItem = new()
+        {
+            Header = Translation.Get("GuiGeneratorAddLoreLine"),
+            Icon = new SymbolIcon() { Symbol = Symbol.Add, FontSize = 20 },
+            Command = new RelayCommand(() =>
+            {
+                LoreLineEditor lineEditor = new()
+                {
+                    IsDeleteButtonVisible = true
+                };
+                lineEditor.LineTextBox.ContextFlyout = contextFlyout;
+                lineEditor.DeleteButton.Command = new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
+                LoreLineStackPanel.Children.Add(lineEditor);
+            })
+        };
 
-		MenuFlyout menuFlyout = new()
-		{
-			Items = { addMenuItem }
-		};
+        MenuFlyout menuFlyout = new()
+        {
+            Items = { addMenuItem }
+        };
 
-		contextFlyout = menuFlyout;
+        contextFlyout = menuFlyout;
 
-		FirstLoreLine.LineTextBox.ContextFlyout = menuFlyout;
-		FirstLoreLine.LineTextBox.Watermark = Translation.Get("GuiGeneratorLoreLineWatermark");
-	}
+        FirstLoreLine.LineTextBox.ContextFlyout = menuFlyout;
+        FirstLoreLine.LineTextBox.Watermark = Translation.Get("GuiGeneratorLoreLineWatermark");
+    }
 }
