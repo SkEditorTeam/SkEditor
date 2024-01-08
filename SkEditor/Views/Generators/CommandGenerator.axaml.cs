@@ -34,8 +34,7 @@ public partial class CommandGenerator : AppWindow
 
         if (!string.IsNullOrEmpty(editor.Document.GetText(line.Offset, line.Length)))
         {
-            code.Append("\n\n");
-            editor.CaretOffset += 2;
+            editor.Document.Insert(offset, "\n\n", AnchorMovementType.AfterInsertion);
         }
 
         code.Append($"command /{NameTextBox.Text}:");
