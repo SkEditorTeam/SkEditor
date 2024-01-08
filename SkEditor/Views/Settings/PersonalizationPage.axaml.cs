@@ -10,6 +10,7 @@ using SkEditor.ViewModels;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SkEditor.Views.Settings.Personalization;
 
 namespace SkEditor.Views.Settings;
 public partial class PersonalizationPage : UserControl
@@ -21,36 +22,12 @@ public partial class PersonalizationPage : UserControl
         DataContext = new SettingsViewModel();
 
         AssignCommands();
-        LoadSyntaxes();
-    }
-
-    private void LoadSyntaxes()
-    {
-        foreach (string syntax in SyntaxLoader.Syntaxes)
-        {
-            ComboBoxItem item = new()
-            {
-                Content = Path.GetFileNameWithoutExtension(syntax).Replace("_", " "),
-                Tag = syntax
-            };
-
-            SyntaxComboBox.Items.Add(item);
-        }
-
-        SyntaxComboBox.SelectedItem = SyntaxComboBox.Items.FirstOrDefault(x =>
-            ((ComboBoxItem)x).Tag.Equals(ApiVault.Get().GetAppConfig().CurrentSyntax));
-
-        SyntaxComboBox.SelectionChanged += (s, e) =>
-        {
-            ComboBoxItem item = (ComboBoxItem)SyntaxComboBox.SelectedItem;
-            ApiVault.Get().GetAppConfig().CurrentSyntax = item.Tag.ToString();
-            SyntaxLoader.UpdateSyntax(SyntaxLoader.SyntaxFilePath);
-        };
     }
 
     private void AssignCommands()
     {
         ThemePageButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(ThemePage)));
+        SyntaxPageButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(FileSyntaxes)));
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
 
         FontButton.Command = new RelayCommand(SelectFont);
