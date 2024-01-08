@@ -15,6 +15,7 @@ namespace SkEditor.Utilities.Syntax;
 public class SyntaxLoader
 {
     private static string SyntaxFolder { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+    private static string FileSyntaxesFolder { get; set; } = Path.Combine(SyntaxFolder, "Other Languages");
 
     public static HashSet<string> Syntaxes { get; set; } = [];
 
@@ -22,15 +23,30 @@ public class SyntaxLoader
     public static Dictionary<string, List<string>> OtherLanguageSyntaxes { get; set; } = [];
 
     public static string SyntaxFilePath => Path.Combine(SyntaxFolder, ApiVault.Get().GetAppConfig().CurrentSyntax);
+    
+    public static List<FileSyntax> FileSyntaxes { get; set; } = [];
+    // Sorted by extensions
+    public static Dictionary<string, List<FileSyntax>> SortedFileSyntaxes { get; set; } = new();
 
     public async static void LoadSyntaxes()
     {
         Directory.CreateDirectory(SyntaxFolder);
-        Directory.CreateDirectory(Path.Combine(SyntaxFolder, "Other Languages"));
+        Directory.CreateDirectory(FileSyntaxesFolder);
 
         Directory.GetFiles(SyntaxFolder).Where(file => Path.GetExtension(file).Equals(".xshd")).ToList().ForEach(file =>
         {
             Syntaxes.Add(Path.GetFileName(file));
+            
+            FileSyntax syntax = FileSyntax.LoadAsSkript(file);
+            FileSyntaxes.Add(syntax);
+            if (SortedFileSyntaxes.ContainsKey("sk"))
+            {
+                SortedFileSyntaxes["sk"].Add(syntax);
+            }
+            else
+            {
+                SortedFileSyntaxes.Add("sk", [syntax]);
+            }
         });
 
         Directory.GetFiles(Path.Combine(SyntaxFolder, "Other Languages")).Where(file => Path.GetExtension(file).Equals(".xshd")).ToList().ForEach(file =>
@@ -47,6 +63,40 @@ public class SyntaxLoader
         }
 
         await UpdateSyntax(SyntaxFilePath);
+    }
+
+    public static void LoadAdvancedSyntaxes()
+    {
+        Directory.CreateDirectory(SyntaxFolder);
+        Directory.CreateDirectory(FileSyntaxesFolder);
+
+        Directory.GetDirectories(FileSyntaxesFolder).ToList().ForEach(file =>
+        {
+            try
+            {
+                FileSyntax syntax = FileSyntax.LoadSyntax(file);
+                if (syntax.Config.Extensions.Length == 0) 
+                    return;
+                
+                FileSyntaxes.Add(syntax);
+                foreach (string extension in syntax.Config.Extensions)
+                {
+                    if (SortedFileSyntaxes.ContainsKey(extension))
+                    {
+                        SortedFileSyntaxes[extension].Add(syntax);
+                    }
+                    else
+                    {
+                        SortedFileSyntaxes.Add(extension, [syntax]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ApiVault.Get().ShowMessageWithIcon("Error", $"Failed to load syntax {file}\n\n{e.Message}\n{e.StackTrace}", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
+                    primaryButton: false);
+            }
+        });
     }
 
     public static async void SetDefaultSyntax()
