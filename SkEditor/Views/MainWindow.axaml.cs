@@ -84,7 +84,6 @@ public partial class MainWindow : AppWindow
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            SyntaxLoader.LoadSyntaxes();
             SyntaxLoader.LoadAdvancedSyntaxes();
             DiscordRpcUpdater.Initialize();
 

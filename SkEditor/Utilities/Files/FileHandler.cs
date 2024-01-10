@@ -66,7 +66,7 @@ public class FileHandler
 
     public static void OpenFile(string path)
     {
-        if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Any(tab => tab.Tag.ToString().Equals(path)))
+        if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Any(tab => tab.Tag != null && tab.Tag.ToString().Equals(path)))
         {
             ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().First(tab => tab.Tag.ToString() == path);
             return;
@@ -75,6 +75,8 @@ public class FileHandler
         string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
         TabViewItem tabItem = FileBuilder.Build(fileName, path);
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+        
+        SyntaxLoader.RefreshSyntax(Path.GetExtension(path));
     }
 
     public static async Task<(bool, Exception)> SaveFile()
@@ -107,7 +109,7 @@ public class FileHandler
         return (true, null);
     }
 
-    public async static void SaveAsFile()
+    public static async void SaveAsFile()
     {
         if (!ApiVault.Get().IsFileOpen()) return;
 
@@ -136,13 +138,13 @@ public class FileHandler
         string absolutePath = Uri.UnescapeDataString(file.Path.AbsolutePath);
 
         Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
-        using var stream = File.OpenWrite(absolutePath);
+        await using var stream = File.OpenWrite(absolutePath);
         ApiVault.Get().GetTextEditor().Save(stream);
 
         item.Header = file.Name;
         item.Tag = Uri.UnescapeDataString(absolutePath);
 
-        SyntaxLoader.SetSyntax(ApiVault.Get().GetTextEditor(), absolutePath);
+        //SyntaxLoader.SetSyntax(ApiVault.Get().GetTextEditor(), absolutePath);
         Icon.SetIcon(item);
         ToolTip toolTip = new()
         {

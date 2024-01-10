@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Microsoft.CodeAnalysis;
@@ -29,32 +32,62 @@ public partial class FileSyntaxes : UserControl
         {
             var selectedSyntax = ApiVault.Get().GetAppConfig().FileSyntaxes.FirstOrDefault(x => x.Key.Equals(langName)).Value ?? null;
             
-            var expander = GenerateExpander(langName,
-                syntaxes.Where(x => x.Config.LanguageName.Equals(langName)).Select(x => x.Config.SyntaxName).ToArray(), selectedSyntax);
+            var expander = GenerateExpander(langName, selectedSyntax);
             SyntaxesStackPanel.Children.Add(expander);
         }
     }
 
-    private SettingsExpander GenerateExpander(string name, string[] values, string? selectedValue)
+    private SettingsExpander GenerateExpander(string language, string selectedSyntaxFullIdName)
     {
-        var comboBox = new ComboBox { Name = name };
+        var comboBox = new ComboBox { Name = language };
         var expander = new SettingsExpander
         {
-            Header = name,
+            Header = language,
             IconSource = new SymbolIconSource { Symbol = Symbol.Code },
             Footer = comboBox
         };
-
-        foreach (string value in values)
+        
+        var fileSyntaxes = SyntaxLoader.FileSyntaxes.Where(x => x.Config.LanguageName.Equals(language)).ToList();
+        
+        foreach (var syntax in fileSyntaxes)
         {
-            comboBox.Items.Add(value);
+            var newItem = new ComboBoxItem
+            {
+                Content = syntax.Config.SyntaxName,
+                Tag = syntax.Config.FullIdName
+            };
+            comboBox.Items.Add(newItem);
+            if (syntax.Config.FullIdName.Equals(selectedSyntaxFullIdName))
+                comboBox.SelectedItem = newItem;
         }
         
-        comboBox.SelectedItem = selectedValue ?? values[0];
+        if (comboBox.SelectedItem == null)
+            comboBox.SelectedIndex = 0;
+        
         comboBox.SelectionChanged += (_, _) =>
         {
             var config = ApiVault.Get().GetAppConfig();
-            config.FileSyntaxes[name] = comboBox.SelectedItem.ToString();
+            var selectedFullIdName = (comboBox.SelectedValue as ComboBoxItem).Tag.ToString();
+            var selectedFileSyntax = SyntaxLoader.FileSyntaxes.FirstOrDefault(x => x.Config.FullIdName.Equals(selectedFullIdName));
+            
+            config.FileSyntaxes[selectedFileSyntax.Config.LanguageName] = selectedFileSyntax.Config.FullIdName;
+            
+            List<TabViewItem> tabs = ApiVault.Get().GetTabView().TabItems
+                .OfType<TabViewItem>()
+                .Where(tab => tab.Content is TextEditor)
+                .Where(tab =>
+                {
+                    var ext = Path.GetExtension(tab.Tag?.ToString()?.ToLower() ?? "");
+                    return tab.Tag is string &&
+                           selectedFileSyntax.Config.Extensions.Contains(ext);
+                })
+                .ToList();
+            
+            foreach (var tab in tabs)
+            {
+                var editor = tab.Content as TextEditor;
+                editor.SyntaxHighlighting = selectedFileSyntax.Highlighting;
+            }
         };
 
         return expander;

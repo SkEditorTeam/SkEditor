@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using System.Xml;
 using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
@@ -13,7 +14,15 @@ namespace SkEditor.Utilities.Syntax;
 /// </summary>
 public class FileSyntax
 {
-    public static FileSyntax LoadSyntax(string folder)
+    public static FileSyntaxConfig DefaultSkriptConfig = new()
+    {
+        SyntaxName = "Default",
+        LanguageName = "Skript",
+        Extensions = [".sk", ".skript"],
+        Version = "1.0"
+    };
+    
+    public static async Task<FileSyntax> LoadSyntax(string folder)
     {
         var configFile = Path.Combine(folder, "config.json");
         var syntaxFile = Path.Combine(folder, "syntax.xshd");
@@ -23,7 +32,7 @@ public class FileSyntax
             throw new FileNotFoundException("The syntax folder must contain a config.json and a syntax.xshd file.");
         }
         
-        var config = JsonConvert.DeserializeObject<FileSyntaxConfig>(File.ReadAllText(configFile));
+        var config = JsonConvert.DeserializeObject<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile));
         
         StreamReader streamReader = new (syntaxFile);
         var reader = XmlReader.Create(streamReader);
@@ -31,38 +40,22 @@ public class FileSyntax
         streamReader.Close();
         reader.Close();
         
-        return new FileSyntax(highlightingDefinition, config);
+        return new FileSyntax(highlightingDefinition, config, folder);
     }
 
-    public static FileSyntax LoadAsSkript(string syntaxFile)
-    {
-        var fileName = Path.GetFileNameWithoutExtension(syntaxFile);
-        var config = new FileSyntaxConfig
-        {
-            SyntaxName = fileName,
-            LanguageName = "Skript",
-            Extensions = new[] {"sk", "skript"},
-            Version = "1.0.0"
-        };
-        
-        StreamReader streamReader = new (syntaxFile);
-        var reader = XmlReader.Create(streamReader);
-        var highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-        streamReader.Close();
-        reader.Close();
-        
-        return new FileSyntax(highlightingDefinition, config);
-    }
-
-    private FileSyntax(IHighlightingDefinition highlighting, FileSyntaxConfig config)
+    private FileSyntax(IHighlightingDefinition highlighting, FileSyntaxConfig config,
+        string folderName)
     {
         Highlighting = highlighting;
         Config = config;
+        FolderName = folderName;
     }
     
     public IHighlightingDefinition Highlighting { get; private set; }
     
     public FileSyntaxConfig Config { get; private set; }
+    
+    public string FolderName { get; set; }
     
     public class FileSyntaxConfig
     {
@@ -73,5 +66,7 @@ public class FileSyntax
         public string[] Extensions { get; set; }
         
         public string Version { get; set; }
+        
+        public string FullIdName => $"{LanguageName}-{SyntaxName}";
     }
 }
