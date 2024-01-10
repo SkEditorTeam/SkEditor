@@ -35,6 +35,9 @@ public class AppConfig
     public Dictionary<string, object> CustomOptions { get; set; } = [];
 
     public bool EnableAutoCompletionExperiment { get; set; } = false;
+    
+    public bool UseSpacesInsteadOfTabs { get; set; } = false;
+    public int TabSize { get; set; } = 4;
 
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");

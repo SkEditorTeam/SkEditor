@@ -23,6 +23,24 @@
 						<ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled}"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
+				
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralTabType}" IconSource="{StaticResource FunctionIcon}"
+				                     Description="{DynamicResource SettingsGeneralTabTypeDescription}">
+					<ui:SettingsExpander.Footer>
+						<StackPanel Orientation="Horizontal">
+							<ComboBox Name="IndentationTypeComboBox">
+								<ComboBoxItem Tag="tabs" Content="{DynamicResource SettingsGeneralTabTypeTabs}"></ComboBoxItem> 
+								<ComboBoxItem Tag="spaces" Content="{DynamicResource SettingsGeneralTabTypeSpaces}"></ComboBoxItem> 
+							</ComboBox>
+							<ComboBox Name="IndentationAmountComboBox">
+								<ComboBoxItem Tag="1">1</ComboBoxItem> 
+								<ComboBoxItem Tag="2">2</ComboBoxItem>
+								<ComboBoxItem Tag="3">3</ComboBoxItem>
+								<ComboBoxItem Tag="4">4</ComboBoxItem>
+							</ComboBox>
+						</StackPanel>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
 
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoIndent}" IconSource="{StaticResource AutoIndentIcon}"
 					Description="{DynamicResource SettingsGeneralAutoIndentDescription}">

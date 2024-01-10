@@ -120,7 +120,13 @@ public partial class TextEditorEventHandler
 
         if (!previousLineText.EndsWith(':')) return;
 
-        textEditor.Document.Insert(line.Offset, "\t");
+        string charToAppend;
+        var useSpaces = ApiVault.Get().GetAppConfig().UseSpacesInsteadOfTabs;
+        var tabSize = ApiVault.Get().GetAppConfig().TabSize;
+        
+        charToAppend = useSpaces ? new string(' ', tabSize) : "\t";
+
+        textEditor.Document.Insert(line.Offset, charToAppend);
     }
 
     public static void DoAutoPairing(object? sender, TextInputEventArgs e)

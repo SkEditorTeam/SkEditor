@@ -225,6 +225,14 @@ public class SkEditor : ISkEditorAPI
         GetAppConfig().Save();
     }
 
+    public List<TextEditor> GetOpenedEditors()
+    {
+        return GetTabView().TabItems
+            .OfType<TabViewItem>()
+            .Select(x => x.Content as TextEditor)
+            .Where(editor => editor != null)
+            .ToList();
+    }
 
 
     #region Events
