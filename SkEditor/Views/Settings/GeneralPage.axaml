@@ -27,7 +27,7 @@
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralTabType}" IconSource="{StaticResource FunctionIcon}"
 				                     Description="{DynamicResource SettingsGeneralTabTypeDescription}">
 					<ui:SettingsExpander.Footer>
-						<StackPanel Orientation="Horizontal">
+						<StackPanel Orientation="Horizontal" Spacing="10">
 							<ComboBox Name="IndentationTypeComboBox">
 								<ComboBoxItem Tag="tabs" Content="{DynamicResource SettingsGeneralTabTypeTabs}"></ComboBoxItem> 
 								<ComboBoxItem Tag="spaces" Content="{DynamicResource SettingsGeneralTabTypeSpaces}"></ComboBoxItem> 
