@@ -27,21 +27,38 @@ public class SyntaxLoader
         Directory.CreateDirectory(SyntaxFolder);
 
         var directories = Directory.GetDirectories(SyntaxFolder).ToList();
-        foreach (var directory in directories)
+        var hasOtherSyntaxDir = directories.Any(x => Path.GetFileName(x) == "Other Languages");
+
+        if (!hasOtherSyntaxDir)
         {
-            try
+            foreach (var directory in directories)
             {
-                FileSyntax syntax = await FileSyntax.LoadSyntax(directory);
-                if (syntax.Config.Extensions.Length == 0) 
-                    return;
+                try
+                {
+                    FileSyntax syntax = await FileSyntax.LoadSyntax(directory);
+                    if (syntax.Config.Extensions.Length == 0) 
+                        return;
                 
-                RegisterSyntax(syntax);
-            }
-            catch (Exception e)
+                    RegisterSyntax(syntax);
+                }
+                catch (Exception e)
+                {
+                    await ApiVault.Get().ShowMessageWithIcon("Error", $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
+                        primaryButton: false);
+                }
+            }   
+        }
+        else
+        {
+            Directory.Delete(Path.Combine(SyntaxFolder, "Other Languages"), true);
+            foreach (var file in Directory.GetFiles(SyntaxFolder))
             {
-                await ApiVault.Get().ShowMessageWithIcon("Error", $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
-                    primaryButton: false);
+                File.Delete(file);
             }
+            
+            await SetupDefaultSyntax();
+            await ApiVault.Get().ShowMessageWithIcon("Data Migration", "We have detected that you had previous syntaxes downloaded. This is no longer needed and will be deleted. We have also added the default syntax highlighting to your syntax folder.", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
+                primaryButton: false);
         }
     }
 
@@ -121,20 +138,21 @@ public class SyntaxLoader
 
             HttpClient client = new();
             string url = "https://marketplace-skeditor.vercel.app/SkEditorFiles/Default.xshd";
-            using var stream = await client.GetStreamAsync(url);
-            using var fileStream = File.Create(Path.Combine(defaultSyntaxPath, "syntax.xshd"));
-            await stream.CopyToAsync(fileStream);
+            var response = await client.GetAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+            await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "syntax.xshd"), content);
 
             var json = JsonConvert.SerializeObject(config);
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "config.json"), json);
 
             FileSyntaxes.Add(await FileSyntax.LoadSyntax(defaultSyntaxPath));
         }
-        catch
+        catch (Exception e)
         {
+            ApiVault.Get().Log(e.Message + "\n" + e.StackTrace, true);
             await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Error"),
                 Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
-                primaryButton: false);
+                primaryButton: false, closeButtonContent: "Ok");
         }
     }
 
