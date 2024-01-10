@@ -55,7 +55,7 @@ public class SyntaxLoader
                 File.Delete(file);
             
             await SetupDefaultSyntax();
-            await ApiVault.Get().ShowMessageWithIcon(Translation.Get("SyntaxMigrationTitle"), Translation.Get("SyntaxMigrationDescription"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
+            await ApiVault.Get().ShowMessageWithIcon("Syntax migration", "We have detected that you had previous syntaxes downloaded. This is no longer needed and will be deleted. We have also added the default syntax highlighting to your syntax folder.\nPlease, re-install your syntaxes from the marketplace!", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
                 primaryButton: false);
         }
     }
