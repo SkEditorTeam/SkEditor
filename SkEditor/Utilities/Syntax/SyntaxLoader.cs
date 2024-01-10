@@ -5,12 +5,14 @@ using Serilog;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using Newtonsoft.Json;
+using SkEditor.Utilities.Styling;
 using Formatting = System.Xml.Formatting;
 
 namespace SkEditor.Utilities.Syntax;
@@ -50,13 +52,25 @@ public class SyntaxLoader
         }
         else
         {
-            Directory.Delete(Path.Combine(SyntaxFolder, "Other Languages"), true);
-            foreach (var file in Directory.GetFiles(SyntaxFolder))
-                File.Delete(file);
+            var response = await ApiVault.Get().ShowMessageWithIcon("Syntax migration", "In this version of SkEditor, a new syntax highlighting file format has been introduced. Files in the old format need to be deleted.\nIf you have created your own highlighting and don't want to lose it, make a backup.\nTo continue (and delete the files) click OK", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
+                primaryButton: true, closeButtonContent: "Open syntax folder");
+
+            if (response == ContentDialogResult.Primary)
+            {
+                Directory.Delete(Path.Combine(SyntaxFolder, "Other Languages"), true);
+                foreach (var file in Directory.GetFiles(SyntaxFolder))
+                    File.Delete(file);
             
-            await SetupDefaultSyntax();
-            await ApiVault.Get().ShowMessageWithIcon("Syntax migration", "We have detected that you had previous syntaxes downloaded. This is no longer needed and will be deleted. We have also added the default syntax highlighting to your syntax folder.\nPlease, re-install your syntaxes from the marketplace!", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
-                primaryButton: false);
+                await SetupDefaultSyntax();
+            }
+            else if (response == ContentDialogResult.Secondary)
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = SyntaxFolder,
+                    UseShellExecute = true
+                });
+            }
         }
     }
 
