@@ -165,7 +165,7 @@ public class SyntaxLoader
             }
 
             extension = Path.GetExtension(currentOpenedFile.Tag.ToString()).ToLower();
-            if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension) || !SortedFileSyntaxes.ContainsKey(extension))
+            if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
             {
                 editor.SyntaxHighlighting = null;
                 return;
