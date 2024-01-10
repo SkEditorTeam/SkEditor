@@ -95,12 +95,10 @@ public class SyntaxLoader
         FileSyntaxes.RemoveAll(x => x.Config.FullIdName.Equals(fileSyntax.Config.FullIdName));
         foreach (string extension in fileSyntax.Config.Extensions)
         {
-            if (SortedFileSyntaxes.ContainsKey(extension)) SortedFileSyntaxes[extension].Remove(fileSyntax);
+            if (SortedFileSyntaxes.ContainsKey(extension)) 
+                SortedFileSyntaxes[extension].Remove(fileSyntax);
 
-            if (ApiVault.Get().GetAppConfig().FileSyntaxes.ContainsKey(fileSyntax.Config.LanguageName))
-            {
-                ApiVault.Get().GetAppConfig().FileSyntaxes.Remove(fileSyntax.Config.LanguageName);
-            }
+            ApiVault.Get().GetAppConfig().FileSyntaxes.Remove(fileSyntax.Config.LanguageName);
         }
 
         return true;
