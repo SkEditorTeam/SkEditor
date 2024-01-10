@@ -52,12 +52,10 @@ public class SyntaxLoader
         {
             Directory.Delete(Path.Combine(SyntaxFolder, "Other Languages"), true);
             foreach (var file in Directory.GetFiles(SyntaxFolder))
-            {
                 File.Delete(file);
-            }
             
             await SetupDefaultSyntax();
-            await ApiVault.Get().ShowMessageWithIcon("Data Migration", "We have detected that you had previous syntaxes downloaded. This is no longer needed and will be deleted. We have also added the default syntax highlighting to your syntax folder.", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
+            await ApiVault.Get().ShowMessageWithIcon(Translation.Get("SyntaxMigrationTitle"), Translation.Get("SyntaxMigrationDescription"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
                 primaryButton: false);
         }
     }
@@ -149,7 +147,6 @@ public class SyntaxLoader
         }
         catch (Exception e)
         {
-            ApiVault.Get().Log(e.Message + "\n" + e.StackTrace, true);
             await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Error"),
                 Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
                 primaryButton: false, closeButtonContent: "Ok");

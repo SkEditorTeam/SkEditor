@@ -158,6 +158,10 @@
 
 	<!-- Discord RPC -->
 	<system:String x:Key="DiscordRpcEditing">Editing: {0}</system:String>
+	
+	<!-- Syntax Migration -->
+	<system:String x:Key="SyntaxMigrationTitle">Syntax migration</system:String>
+	<system:String x:Key="SyntaxMigrationDescription">We have detected that you had previous syntaxes downloaded. This is no longer needed and will be deleted. We have also added the default syntax highlighting to your syntax folder.\nPlease, re-install your syntaxes from the marketplace!</system:String>
 
 	<!-- Bottom bar -->
 	<system:String x:Key="BottomBarLine">Line {0}</system:String>
