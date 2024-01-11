@@ -1,19 +1,14 @@
-﻿using AvaloniaEdit;
-using AvaloniaEdit.Highlighting;
-using FluentAvalonia.UI.Controls;
-using Serilog;
-using SkEditor.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml;
+using AvaloniaEdit;
+using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
-using SkEditor.Utilities.Styling;
-using Formatting = System.Xml.Formatting;
+using SkEditor.API;
 
 namespace SkEditor.Utilities.Syntax;
 public class SyntaxLoader
@@ -72,6 +67,8 @@ public class SyntaxLoader
                 });
             }
         }
+        
+        SyntaxLoader.RefreshSyntax();
     }
 
     private static void RegisterSyntax(FileSyntax syntax)
@@ -135,6 +132,17 @@ public class SyntaxLoader
         ApiVault.Get().GetAppConfig().FileSyntaxes.Clear();
         CheckConfiguredFileSyntaxes();
     }
+    
+    public static FileSyntax GetConfiguredSyntaxForLanguage(string language)
+    {
+        var configuredSyntax = ApiVault.Get().GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
+        if (configuredSyntax == null)
+            return FileSyntaxes.FirstOrDefault(x => x.Config.LanguageName == language) ?? FileSyntaxes[0];
+
+        return FileSyntaxes.FirstOrDefault(x => x.Config.FullIdName == configuredSyntax) ?? FileSyntaxes[0];
+    }
+
+    public static FileSyntax GetDefaultSyntax() => GetConfiguredSyntaxForLanguage("Skript");
 
     public static async Task SetupDefaultSyntax()
     {
@@ -167,6 +175,7 @@ public class SyntaxLoader
 
     public static void RefreshSyntax(string? extension = null)
     {
+        var defaultSyntax = GetDefaultSyntax();
         var editor = ApiVault.Get().GetTextEditor();
 
         if (extension == null)
@@ -181,14 +190,14 @@ public class SyntaxLoader
             extension = Path.GetExtension(currentOpenedFile.Tag.ToString()).ToLower();
             if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
             {
-                editor.SyntaxHighlighting = null;
+                editor.SyntaxHighlighting = defaultSyntax.Highlighting;
                 return;
             }
         }
         
         if (!SortedFileSyntaxes.ContainsKey(extension))
         {
-            editor.SyntaxHighlighting = null;
+            editor.SyntaxHighlighting = defaultSyntax.Highlighting;
             return; // No syntax for this extension
         }
 
@@ -202,7 +211,7 @@ public class SyntaxLoader
         
         if (syntax == null)
         {
-            editor.SyntaxHighlighting = null;
+            editor.SyntaxHighlighting = defaultSyntax.Highlighting;
             return;
         }
         
