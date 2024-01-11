@@ -120,13 +120,7 @@ public partial class TextEditorEventHandler
 
         if (!previousLineText.EndsWith(':')) return;
 
-        string charToAppend;
-        var useSpaces = ApiVault.Get().GetAppConfig().UseSpacesInsteadOfTabs;
-        var tabSize = ApiVault.Get().GetAppConfig().TabSize;
-        
-        charToAppend = useSpaces ? new string(' ', tabSize) : "\t";
-
-        textEditor.Document.Insert(line.Offset, charToAppend);
+        textEditor.Document.Insert(line.Offset, textEditor.Options.IndentationString);
     }
 
     public static void DoAutoPairing(object? sender, TextInputEventArgs e)
