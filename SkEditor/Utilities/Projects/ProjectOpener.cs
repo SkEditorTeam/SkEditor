@@ -54,8 +54,6 @@ public static class ProjectOpener
             //    rootFolder.IsExpanded ^= true;
             //};
 
-            
-
             FileTreeView.Items.Add(rootFolder);
 
             AddChildren(rootFolder, storageFolder);
@@ -76,10 +74,10 @@ public static class ProjectOpener
                     FontWeight = FontWeight.Medium,
                 };
 
-                item.DoubleTapped += (sender, e) =>
-                {
-                    item.IsExpanded ^= true;
-                };
+                //item.DoubleTapped += (sender, e) =>
+                //{
+                //    item.IsExpanded ^= true;
+                //};
 
                 viewItem.Items.Add(item);
 

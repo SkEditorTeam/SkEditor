@@ -51,6 +51,7 @@
 		<PackageReference Include="Octokit" Version="9.1.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="SkAvaloniaEdit" Version="11.0.5" />
+		<PackageReference Include="SkFluentAvalonia" Version="2.0.4.2" />
 		<PackageReference Include="Svg.Skia" Version="1.0.0.10" />
 		<PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
 	</ItemGroup>
@@ -156,11 +157,5 @@
 
 	<ItemGroup>
 		<Folder Include="Assets\GUI\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Reference Include="FluentAvalonia">
-	    <HintPath>..\..\SkFluentAvalonia\src\FluentAvalonia\bin\Debug\net6.0\FluentAvalonia.dll</HintPath>
-	  </Reference>
 	</ItemGroup>
 </Project>
