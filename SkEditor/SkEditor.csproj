@@ -34,24 +34,24 @@
 	<ItemGroup>
 		<PackageReference Include="AsyncImageLoader.Avalonia" Version="3.2.1" />
 		<PackageReference Include="Avalonia" Version="11.0.6" />
+		<PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.6" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
 		<PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.0.6" />
-		<PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.9" />
+		<PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.10" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.6" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.6" />
-		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.0.5" />
-		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.0.5" />
+		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.0.6" />
+		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.0.6" />
 		<PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Octokit" Version="9.0.0" />
+		<PackageReference Include="Octokit" Version="9.1.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="SkAvaloniaEdit" Version="11.0.5" />
-		<PackageReference Include="SkFluentAvalonia" Version="2.0.4.1" />
-		<PackageReference Include="Svg.Skia" Version="1.0.0.9" />
+		<PackageReference Include="Svg.Skia" Version="1.0.0.10" />
 		<PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
 	</ItemGroup>
 
@@ -62,6 +62,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="Controls\SideBarControl.axaml.cs">
+		  <DependentUpon>SideBarControl.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Controls\CompletionMenu.axaml.cs">
 		  <DependentUpon>CompletionMenu.axaml</DependentUpon>
 		</Compile>
@@ -153,5 +156,11 @@
 
 	<ItemGroup>
 		<Folder Include="Assets\GUI\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="FluentAvalonia">
+	    <HintPath>..\..\SkFluentAvalonia\src\FluentAvalonia\bin\Debug\net6.0\FluentAvalonia.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 </Project>
