@@ -78,7 +78,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
     
     - name: Create .app structure
       run: |
