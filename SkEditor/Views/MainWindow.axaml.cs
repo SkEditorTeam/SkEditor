@@ -85,7 +85,7 @@ public partial class MainWindow : AppWindow
 
         Dispatcher.UIThread.Post(() =>
         {
-            SyntaxLoader.LoadSyntaxes();
+            SyntaxLoader.LoadAdvancedSyntaxes();
             DiscordRpcUpdater.Initialize();
 
             if (ApiVault.Get().GetAppConfig().CheckForUpdates) UpdateChecker.Check();

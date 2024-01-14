@@ -144,7 +144,6 @@ public class FileHandler
         item.Header = file.Name;
         item.Tag = Uri.UnescapeDataString(absolutePath);
 
-        SyntaxLoader.SetSyntax(ApiVault.Get().GetTextEditor(), absolutePath);
         Icon.SetIcon(item);
         ToolTip toolTip = new()
         {

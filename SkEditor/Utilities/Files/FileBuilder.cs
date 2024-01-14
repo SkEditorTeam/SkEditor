@@ -10,6 +10,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Syntax;
 using System;
 using System.IO;
 using System.Linq;
@@ -85,7 +86,7 @@ public class FileBuilder
             }
         }
 
-        SyntaxLoader.SetSyntax(editor, path);
+        //SyntaxLoader.SetSyntax(editor, path);
 
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
