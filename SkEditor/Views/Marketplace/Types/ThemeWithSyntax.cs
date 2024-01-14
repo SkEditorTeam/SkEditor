@@ -7,9 +7,11 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SkEditor.Views.Marketplace.Types;
 public class ThemeWithSyntaxItem : MarketplaceItem
@@ -17,18 +19,49 @@ public class ThemeWithSyntaxItem : MarketplaceItem
     [JsonProperty("themeFile")]
     public string ThemeFileUrl { get; set; }
 
-    [JsonProperty("syntaxFile")]
-    public string SyntaxFileUrl { get; set; }
+    [JsonProperty("syntaxFolders")]
+    public string[] SyntaxFolders { get; set; }
 
     public async override void Install()
     {
         string themeFileName = ThemeFileUrl.Split('/').Last();
         string themeFilePath = Path.Combine(AppConfig.AppDataFolderPath, "Themes", themeFileName);
-        string syntaxFileName = SyntaxFileUrl.Split('/').Last();
-        string syntaxFilePath = Path.Combine(AppConfig.AppDataFolderPath, "Syntax highlighting", syntaxFileName);
+        string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+        //string syntaxFilePath = Path.Combine(AppConfig.AppDataFolderPath, "Syntax highlighting", syntaxFileName);
 
-        Install(ThemeFileUrl, themeFilePath);
-        Install(SyntaxFileUrl, syntaxFilePath);
+        List<FileSyntax> installedSyntaxes = new();
+        bool allInstalled = true;
+        allInstalled = allInstalled && await Install(ThemeFileUrl, themeFilePath);
+        foreach (string folder in SyntaxFolders)
+        {
+            var folderName = folder.Split('/').Last();
+            string localSyntaxPath = Path.Combine(baseLocalSyntaxPath,
+                folderName);
+            Directory.CreateDirectory(localSyntaxPath);
+            allInstalled = allInstalled && await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
+            allInstalled = allInstalled && await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
+            
+            if (!allInstalled) 
+                break;
+
+            try
+            {
+                ApiVault.Get().Log("Load syntax called ");
+                installedSyntaxes.Add(await SyntaxLoader.LoadSyntax(localSyntaxPath));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, $"Failed to load syntax {folderName}!");
+                ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+                return;
+            }
+        }
+
+        if (!allInstalled)
+        {
+            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            return;
+        }
 
         string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
         message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
@@ -45,16 +78,17 @@ public class ThemeWithSyntaxItem : MarketplaceItem
                 ThemeEditor.SetTheme(theme);
             });
 
-            SyntaxLoader.Syntaxes.Add(syntaxFileName);
-            ApiVault.Get().GetAppConfig().CurrentSyntax = syntaxFileName;
-            _ = Dispatcher.UIThread.InvokeAsync(() => SyntaxLoader.UpdateSyntax(SyntaxLoader.SyntaxFilePath));
+            foreach (var syntax in installedSyntaxes)
+            {
+                SyntaxLoader.SelectSyntax(syntax);
+            }
         }
 
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
     }
 
-    private async void Install(string url, string filePath)
+    private async Task<bool> Install(string url, string filePath)
     {
         using HttpClient client = new();
         HttpResponseMessage response = await client.GetAsync(url);
@@ -69,10 +103,13 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         {
             Log.Error(e, $"Failed to install {ItemName}!");
             ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            return false;
         }
+
+        return true;
     }
 
-    public async override void Uninstall()
+    public override async void Uninstall()
     {
         UninstallTheme();
         UninstallSyntax();
@@ -98,11 +135,38 @@ public class ThemeWithSyntaxItem : MarketplaceItem
 
     private async void UninstallSyntax()
     {
-        string fileName = SyntaxFileUrl.Split('/').Last();
+        List<string> folders = SyntaxFolders.ToList();
+        var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+        foreach (string folder in folders)
+        {
+            var folderName = folder.Split('/').Last();
+            string localSyntaxPath = Path.Combine(syntaxFolder,
+                folderName);
+            
+            await SyntaxLoader.UnloadSyntax(localSyntaxPath);
+            Directory.Delete(localSyntaxPath, true);
+        }
+        SyntaxLoader.CheckConfiguredFileSyntaxes();
+        SyntaxLoader.RefreshAllOpenedEditors();
+    }
 
-        SyntaxLoader.Syntaxes.Remove(fileName);
-        SyntaxLoader.SetDefaultSyntax();
-        await Dispatcher.UIThread.InvokeAsync(() => SyntaxLoader.UpdateSyntax(SyntaxLoader.SyntaxFilePath));
-        File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting", fileName));
+    public override bool IsInstalled()
+    {
+        var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+        foreach (string folder in SyntaxFolders)
+        {
+            var folderName = folder.Split('/').Last();
+            string localSyntaxPath = Path.Combine(syntaxFolder,
+                folderName);
+            if (!Directory.Exists(localSyntaxPath))
+                return false;
+        }
+        
+        // Also check if theme is installed
+        string themePath = Path.Combine(AppConfig.AppDataFolderPath, ThemeItem.FolderName, Path.GetFileName(ThemeFileUrl));
+        if (!File.Exists(themePath))
+            return false;
+
+        return true;
     }
 }
