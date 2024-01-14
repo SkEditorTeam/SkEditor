@@ -47,7 +47,7 @@ public partial class MainMenuControl : UserControl
         MenuItemDuplicate.Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(ApiVault.Get().GetTextEditor().TextArea));
         MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(ApiVault.Get().GetTextEditor().TextArea));
 
-        MenuItemRefreshSyntax.Command = new RelayCommand(() => SyntaxLoader.RefreshSyntax());
+        MenuItemRefreshSyntax.Command = new RelayCommand(SyntaxLoader.RefreshSyntax);
 
         MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemGenerateGui.Command = new RelayCommand(() => new GuiGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));

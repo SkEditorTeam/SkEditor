@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace SkEditor.Views;
 public partial class MarketplaceWindow : AppWindow
 {
-    public const string MarketplaceUrl = "https://marketplace-8cn1izuya-skeditor.vercel.app/";
+    public const string MarketplaceUrl = "https://marketplace-skeditor.vercel.app";
 
     public static MarketplaceWindow Instance { get; private set; }
 
@@ -90,9 +90,32 @@ public partial class MarketplaceWindow : AppWindow
         }
         else if (item is SyntaxItem || item is ThemeItem || item is ThemeWithSyntaxItem)
         {
-            bool installed = item.IsInstalled();
-            shouldShowUninstallButton = installed;
-            shouldShowInstallButton = !installed;
+            string folderName = item switch
+            {
+                SyntaxItem => SyntaxItem.FolderName,
+                ThemeItem => ThemeItem.FolderName,
+                ThemeWithSyntaxItem => ThemeItem.FolderName,
+                _ => throw new NotSupportedException("Unsupported item type.")
+            };
+
+            string itemFileUrl = item switch
+            {
+                SyntaxItem syntaxItem => syntaxItem.ItemFileUrl,
+                ThemeItem themeItem => themeItem.ItemFileUrl,
+                ThemeWithSyntaxItem themeWithSyntaxItem => themeWithSyntaxItem.ThemeFileUrl,
+                _ => throw new NotSupportedException("Unsupported item type.")
+            };
+
+            string filePath = Path.Combine(AppConfig.AppDataFolderPath, folderName, Path.GetFileName(itemFileUrl));
+
+            if (File.Exists(filePath))
+            {
+                shouldShowUninstallButton = true;
+            }
+            else
+            {
+                shouldShowInstallButton = true;
+            }
         }
 
         ItemView.InstallButton.IsVisible = shouldShowInstallButton;

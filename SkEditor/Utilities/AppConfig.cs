@@ -23,7 +23,7 @@ public class AppConfig
     public bool IsAutoPairingEnabled { get; set; } = false;
     public bool IsAutoSaveEnabled { get; set; } = false;
     public string CurrentTheme { get; set; } = "Default.json";
-    public Dictionary<string, string> FileSyntaxes { get; set; } = new();
+    public string CurrentSyntax { get; set; } = "Default.xshd";
     public string Font { get; set; } = "Default";
     public bool CheckForUpdates { get; set; } = true;
     public bool CheckForChanges { get; set; } = true;

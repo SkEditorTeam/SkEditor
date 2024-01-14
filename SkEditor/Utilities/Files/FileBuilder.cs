@@ -85,7 +85,7 @@ public class FileBuilder
             }
         }
 
-        //SyntaxLoader.SetSyntax(editor, path);
+        SyntaxLoader.SetSyntax(editor, path);
 
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);

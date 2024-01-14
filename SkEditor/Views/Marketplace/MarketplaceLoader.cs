@@ -7,12 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using SkEditor.API;
 
 namespace SkEditor.Views.Marketplace;
 public class MarketplaceLoader
 {
-    private static readonly string[] supportedTypes = ["FileSyntax", "Theme", "Addon", "ThemeWithSyntax", "ZipAddon"];
+    private static readonly string[] supportedTypes = ["Syntax highlighting", "Theme", "Addon", "ThemeWithSyntax", "ZipAddon"];
     private static readonly string[] hiddenItems = ["Shadow", "Analyzer"];
 
     public static async IAsyncEnumerable<MarketplaceItem> GetItems()
@@ -77,12 +76,12 @@ public class MarketplaceLoader
         }
         else if (item is SyntaxItem syntaxItem)
         {
-            syntaxItem.ItemSyntaxFolders = syntaxItem.ItemSyntaxFolders.Select(x => CombineUrls(url, x)).ToArray();
+            syntaxItem.ItemFileUrl = CombineUrls(url, syntaxItem.ItemFileUrl);
         }
         else if (item is ThemeWithSyntaxItem themeWithSyntaxItem)
         {
             themeWithSyntaxItem.ThemeFileUrl = CombineUrls(url, themeWithSyntaxItem.ThemeFileUrl);
-            themeWithSyntaxItem.SyntaxFolders = themeWithSyntaxItem.SyntaxFolders.Select(x => CombineUrls(url, x)).ToArray();
+            themeWithSyntaxItem.SyntaxFileUrl = CombineUrls(url, themeWithSyntaxItem.SyntaxFileUrl);
         }
 
         return item;
@@ -113,11 +112,6 @@ public class MarketplaceItem
 
     public virtual void Install() { }
     public virtual void Uninstall() { }
-
-    public virtual bool IsInstalled()
-    {
-        return false;
-    }
 }
 
 public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
@@ -131,7 +125,7 @@ public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
 
         return itemType switch
         {
-            "FileSyntax" => jsonObject.ToObject<SyntaxItem>(defaultSerializer),
+            "Syntax highlighting" => jsonObject.ToObject<SyntaxItem>(defaultSerializer),
             "Theme" => jsonObject.ToObject<ThemeItem>(defaultSerializer),
             "Addon" => jsonObject.ToObject<AddonItem>(defaultSerializer),
             "ThemeWithSyntax" => jsonObject.ToObject<ThemeWithSyntaxItem>(defaultSerializer),
