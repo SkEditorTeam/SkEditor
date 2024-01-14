@@ -75,6 +75,8 @@ public class FileHandler
         string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
         TabViewItem tabItem = await FileBuilder.Build(fileName, path);
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+
+        SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
     }
 
     public static async Task<(bool, Exception)> SaveFile()

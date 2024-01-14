@@ -11,8 +11,8 @@ using System.Net.Http;
 namespace SkEditor.Views.Marketplace;
 public class MarketplaceLoader
 {
-    private static readonly string[] supportedTypes = ["Syntax highlighting", "Theme", "Addon", "ThemeWithSyntax", "ZipAddon"];
-    private static readonly string[] hiddenItems = ["Shadow", "Analyzer"];
+    private static readonly string[] supportedTypes = ["NewSyntax", "Theme", "Addon", "NewThemeWithSyntax", "ZipAddon"];
+    private static readonly string[] hiddenItems = [];
 
     public static async IAsyncEnumerable<MarketplaceItem> GetItems()
     {
@@ -23,7 +23,7 @@ public class MarketplaceLoader
         {
             string json = await response.Content.ReadAsStringAsync();
             string[] itemNames = JsonConvert.DeserializeObject<string[]>(json);
-            foreach (string itemName in itemNames)
+            foreach (string itemName in itemNames.Order())
             {
                 if (hiddenItems.Contains(itemName)) continue;
 
@@ -125,10 +125,10 @@ public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
 
         return itemType switch
         {
-            "Syntax highlighting" => jsonObject.ToObject<SyntaxItem>(defaultSerializer),
+            "NewSyntax" => jsonObject.ToObject<SyntaxItem>(defaultSerializer),
             "Theme" => jsonObject.ToObject<ThemeItem>(defaultSerializer),
+            "NewThemeWithSyntax" => jsonObject.ToObject<ThemeWithSyntaxItem>(defaultSerializer),
             "Addon" => jsonObject.ToObject<AddonItem>(defaultSerializer),
-            "ThemeWithSyntax" => jsonObject.ToObject<ThemeWithSyntaxItem>(defaultSerializer),
             "ZipAddon" => jsonObject.ToObject<ZipAddonItem>(defaultSerializer),
             _ => new MarketplaceItem(),
         };

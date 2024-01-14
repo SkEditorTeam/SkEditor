@@ -10,7 +10,6 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
-using SkEditor.Utilities.Syntax;
 using System;
 using System.IO;
 using System.Linq;
