@@ -129,6 +129,10 @@
 		<Compile Update="Views\Settings\Personalization\ThemePage.axaml.cs">
 			<DependentUpon>ThemePage.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\FileTypes\Images\ImageViewer.axaml.cs">
+		  <DependentUpon>ImageViewer.axaml</DependentUpon>
+		  <SubType>Code</SubType>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
