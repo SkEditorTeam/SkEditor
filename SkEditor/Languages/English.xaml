@@ -19,6 +19,7 @@
 	<system:String x:Key="MenuHeaderEdit">Edit</system:String>
 	<system:String x:Key="MenuHeaderTools">Tools</system:String>
 	<system:String x:Key="MenuHeaderOther">Other</system:String>
+	<system:String x:Key="MenuHeaderAddons">Addons</system:String>
 
 	<!-- File Menu -->
 	<system:String x:Key="MenuHeaderNew">New</system:String>
@@ -152,6 +153,9 @@
 
 	<!-- Addon Settings -->
 	<system:String x:Key="SettingsAddonsTitle">Addons</system:String>
+	
+	<!-- File Views -->
+	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>
 
 	<!-- Discord RPC -->
 	<system:String x:Key="DiscordRpcEditing">Editing: {0}</system:String>

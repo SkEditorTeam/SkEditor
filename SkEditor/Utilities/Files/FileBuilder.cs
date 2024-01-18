@@ -12,23 +12,29 @@ using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Syntax;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SkEditor.Views;
 
 namespace SkEditor.Utilities.Files;
 
 public class FileBuilder
 {
+    public static readonly Dictionary<string, FileTypes.FileType> OpenedFiles = new();
+    
     public static TabViewItem Build(string header, string path = "")
     {
-        TextEditor editor = GetDefaultEditor(path);
+        var fileType = GetFileDisplay(path);
         TabViewItem tabViewItem = new()
         {
             Header = header,
             IsSelected = true,
-            Content = editor,
+            Content = fileType.Display,
             Tag = string.Empty
         };
+
+        MainWindow.Instance.BottomBar.IsVisible = fileType.NeedsBottomBar;
 
         if (!string.IsNullOrWhiteSpace(path))
         {
@@ -45,12 +51,40 @@ public class FileBuilder
             Icon.SetIcon(tabViewItem);
         }
 
-        ApiVault.Get().OnFileCreated(editor);
+        if (fileType.IsEditor) 
+            ApiVault.Get().OnFileCreated(fileType.Display as TextEditor);
 
+        OpenedFiles.Add(header, fileType);
         return tabViewItem;
     }
 
-    private static TextEditor GetDefaultEditor(string path)
+    private static FileTypes.FileType GetFileDisplay(string path)
+    {
+        FileTypes.FileType? fileType = null;
+        if (FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
+        {
+            var handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
+            if (handlers.Count == 1)
+            {
+                fileType = handlers[0].Handle(path);
+            }
+            else
+            {
+                foreach (var handler in handlers)
+                {
+                    fileType = handler.Handle(path);
+                    if (fileType != null)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return fileType ?? GetDefaultEditor(path);
+    }
+
+    private static FileTypes.FileType GetDefaultEditor(string path)
     {
         AppConfig config = ApiVault.Get().GetAppConfig();
 
@@ -90,7 +124,7 @@ public class FileBuilder
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
 
-        return editor;
+        return new FileTypes.FileType(editor, path, true);
     }
 
     private static TextEditor AddEventHandlers(TextEditor editor)

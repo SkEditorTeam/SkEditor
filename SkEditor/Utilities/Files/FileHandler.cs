@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SkEditor.Views;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;
@@ -34,6 +35,15 @@ public class FileHandler
         }
         catch { }
     };
+    
+    public static readonly Action TabSwitchAction = () =>
+    {
+        var item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+        if (item is null) 
+            return;
+        var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(item.Header.ToString());
+        MainWindow.Instance.BottomBar.IsVisible = fileType.NeedsBottomBar;
+    };
 
     private static int GetUntitledNumber() => (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Count(tab => RegexPattern.IsMatch(tab.Header.ToString())) + 1;
 
@@ -47,10 +57,11 @@ public class FileHandler
     public async static void OpenFile()
     {
         bool untitledFileOpen = ApiVault.Get().GetTabView().TabItems.Count() == 1 &&
-                ApiVault.Get().GetTextEditor().Text.Length == 0 &&
-                ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
-                item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
-                !item.Header.ToString().EndsWith('*');
+                                ApiVault.Get().GetTextEditor() != null &&
+                                ApiVault.Get().GetTextEditor().Text.Length == 0 &&
+                                ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
+                                item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
+                                !item.Header.ToString().EndsWith('*');
 
         var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
 
@@ -185,6 +196,7 @@ public class FileHandler
         tabItems?.Remove(item);
 
         if (tabItems.Count == 0) NewFile();
+        FileBuilder.OpenedFiles.Remove(header);
     }
 
     private static void DisposeEditorData(TabViewItem item)

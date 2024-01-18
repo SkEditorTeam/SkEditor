@@ -1,12 +1,12 @@
-﻿using Avalonia.Controls;
-using Serilog;
-using SkEditor.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using Serilog;
+using SkEditor.Utilities;
+using SkEditor.Views;
 
 namespace SkEditor.API;
 public class AddonLoader
@@ -69,6 +69,8 @@ public class AddonLoader
         {
             Log.Error(ex, "Failed to load addons");
         }
+        
+        MainWindow.Instance.MainMenu.LoadAddonsMenus();
     }
 
     public static List<Assembly> LoadAddonsFromFolder(string folder)
