@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SkEditor.Utilities.Files;
 
 namespace SkEditor;
 
@@ -66,6 +67,11 @@ public class SkEditor : ISkEditorAPI
     public TextEditor GetTextEditor()
     {
         return GetMainWindow().TabControl.SelectedItem is TabViewItem tabItem && IsFile(tabItem) ? tabItem.Content as TextEditor : null;
+    }
+    
+    public OpenedFile? GetOpenedFile()
+    {
+        return FileHandler.OpenedFiles.FirstOrDefault(file => file.TabViewItem == GetMainWindow().TabControl.SelectedItem);
     }
 
     /// <returns>App's tabcontrol</returns>

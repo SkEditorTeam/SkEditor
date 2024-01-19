@@ -93,6 +93,7 @@
 	<system:String x:Key="RefactorWindowRemoveComments">Remove comments</system:String>
 	<system:String x:Key="RefactorWindowTabsToSpaces">Convert tabs to spaces</system:String>
 	<system:String x:Key="RefactorWindowSpacesToTabs">Convert spaces to tabs</system:String>
+	<system:String x:Key="RefactorWindowRefactorBoxName">Renaming '{0}' into ...</system:String>
 
 	<!-- Settings -->
 	<system:String x:Key="SettingsEnabled">Enabled</system:String>

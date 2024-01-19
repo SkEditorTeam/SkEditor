@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SkEditor.Utilities.Parser;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;
@@ -34,6 +35,8 @@ public class FileHandler
         }
         catch { }
     };
+    
+    public static List<OpenedFile> OpenedFiles { get; } = new();
 
     private static int GetUntitledNumber() => (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Count(tab => RegexPattern.IsMatch(tab.Header.ToString())) + 1;
 
@@ -75,6 +78,15 @@ public class FileHandler
         string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
         TabViewItem tabItem = FileBuilder.Build(fileName, path);
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+        OpenedFiles.Add(new OpenedFile()
+        {
+            Editor = tabItem.Content as TextEditor,
+            Path = path,
+            TabViewItem = tabItem,
+            Parser = tabItem.Content is TextEditor editor 
+                ? new CodeParser(editor)
+                : null
+        });
     }
 
     public static async Task<(bool, Exception)> SaveFile()
@@ -182,8 +194,9 @@ public class FileHandler
         var tabView = ApiVault.Get().GetTabView();
         var tabItems = tabView.TabItems as IList;
 
+        OpenedFiles.RemoveAll(openedFile => openedFile.TabViewItem == item);
         tabItems?.Remove(item);
-
+        
         if (tabItems.Count == 0) NewFile();
     }
 
