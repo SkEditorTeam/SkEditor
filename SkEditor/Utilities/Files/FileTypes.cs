@@ -24,6 +24,12 @@ public static class FileTypes
     public static void RegisterExternalAssociation(FileAssociation association)
     {
         association.IsFromAddon = true;
+        if (association.Addon == null)
+        {
+            ApiVault.Get().ShowError($"Unable to register file association for {association.GetType().Name}:\n\nAddon is null");
+            return;
+        }
+        
         RegisterAssociation(association);
     }
 
@@ -53,6 +59,8 @@ public static class FileTypes
         
         public List<string> SupportedExtensions { get; set; }
         public bool IsFromAddon { get; set; } = false;
+        
+        public IAddon? Addon { get; set; } = null;
 
         public abstract FileType? Handle(string path);
     }
@@ -72,7 +80,7 @@ public static class FileTypes
         {
             try
             {
-                var fileStream = File.OpenRead(path);
+                var fileStream = File.OpenRead(Uri.UnescapeDataString(path));
                 var bitmap = new Bitmap(fileStream);
                 fileStream.Close();
 
