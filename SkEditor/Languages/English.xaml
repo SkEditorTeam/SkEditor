@@ -94,6 +94,14 @@
 	<system:String x:Key="RefactorWindowRemoveComments">Remove comments</system:String>
 	<system:String x:Key="RefactorWindowTabsToSpaces">Convert tabs to spaces</system:String>
 	<system:String x:Key="RefactorWindowSpacesToTabs">Convert spaces to tabs</system:String>
+	
+	<!-- File Association Selection Window -->
+	<system:String x:Key="FileAssociationSelectionWindowTitle">Select file association</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowInfo">There's multiple provider for this file type. Please select one.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowOfficialItem">This is an official file type from SkEditor.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">This is an unofficial file type from an addon, {0}.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Remember my choice</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowConfirm">Confirm</system:String>
 
 	<!-- Settings -->
 	<system:String x:Key="SettingsEnabled">Enabled</system:String>

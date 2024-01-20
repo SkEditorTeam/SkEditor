@@ -39,11 +39,10 @@ public class FileHandler
     public static void TabSwitchAction()
     {
         var item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
-        if (item is null) 
+        if (item is null)
             return;
         var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(item.Header.ToString());
-        if (fileType != null) 
-            MainWindow.Instance.BottomBar.IsVisible = fileType.NeedsBottomBar;
+        MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
 
     private static int GetUntitledNumber() => (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Count(tab => RegexPattern.IsMatch(tab.Header.ToString())) + 1;

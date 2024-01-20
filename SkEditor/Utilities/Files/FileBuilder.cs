@@ -53,8 +53,11 @@ public class FileBuilder
             Icon.SetIcon(tabViewItem);
         }
 
-        if (fileType.IsEditor) {
-            ApiVault.Get().OnFileCreated(fileType.Display as TextEditor);
+        if (fileType.IsEditor)
+        {
+            var editor = fileType.Display as TextEditor;
+            
+            ApiVault.Get().OnFileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
         }
 
@@ -105,8 +108,6 @@ public class FileBuilder
                     var window = new AssociationSelectionWindow(path, handlers);
                     await window.ShowDialog(MainWindow.Instance);
                     var selected = window.SelectedAssociation;
-                    ApiVault.Get().Log("Selected: " + (selected == null ? "null" : (
-                        selected.IsFromAddon ? selected.Addon.Name : "SkEditor")));
                     if (selected != null)
                     {
                         fileType = selected.Handle(path);
@@ -124,11 +125,10 @@ public class FileBuilder
             }
         }
         
-        ApiVault.Get().Log($"FileBuilder.GetFileDisplay: {path} => {fileType?.Display.GetType().Name ?? "null"}");
-        return fileType ?? GetDefaultEditor(path);
+        return fileType ?? await GetDefaultEditor(path);
     }
 
-    private static FileTypes.FileType GetDefaultEditor(string path)
+    private static async Task<FileTypes.FileType> GetDefaultEditor(string path)
     {
         AppConfig config = ApiVault.Get().GetAppConfig();
 

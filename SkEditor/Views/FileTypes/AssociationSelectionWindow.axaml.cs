@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.FileTypes;
@@ -24,7 +25,9 @@ public partial class AssociationSelectionWindow : AppWindow
             var item = new AssociationItemView
             {
                 Source = association.IsFromAddon ? association.Addon.Name : "SkEditor",
-                Description = association.IsFromAddon ? "This is an unofficial file type from an addon." : "This is an official file type from SkEditor.",
+                Description = association.IsFromAddon 
+                    ? Translation.Get("FileAssociationSelectionWindowAddonItem", association.Addon.Name) 
+                    : Translation.Get("FileAssociationSelectionWindowOfficialItem"),
                 Tag = association.IsFromAddon ? association.Addon.Name : "SkEditor"
             };
             item.UpdateIcon(association.IsFromAddon ? Symbol.Edit : Symbol.Checkmark);

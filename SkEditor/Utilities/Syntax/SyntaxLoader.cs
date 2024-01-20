@@ -179,6 +179,8 @@ public class SyntaxLoader
     {
         var defaultSyntax = await GetDefaultSyntax();
         var editor = ApiVault.Get().GetTextEditor();
+        if (editor == null)
+            return;
 
         if (extension == null)
         {
