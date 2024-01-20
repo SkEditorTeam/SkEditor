@@ -143,9 +143,8 @@ public partial class TextEditorEventHandler
         textEditor.CaretOffset--;
     }
 
-    public static void CheckForHex(object? sender, EventArgs e)
+    public static void CheckForHex(TextEditor textEditor)
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
         TextDocument document = textEditor.Document;
 
         Regex regex = HexRegex();
@@ -154,16 +153,21 @@ public partial class TextEditorEventHandler
         {
             MatchCollection matches = regex.Matches(textEditor.Text);
 
+            if (textEditor.SyntaxHighlighting == null) return;
+            HighlightingRuleSet ruleSet = textEditor.SyntaxHighlighting.GetNamedRuleSet("BracedExpressionAndColorsRuleSet");
+            if (ruleSet == null) return;
+
             foreach (Match match in matches.Cast<Match>())
             {
                 string hex = match.Value[2..^1];
                 bool parsed = Color.TryParse(hex, out Color color);
                 if (!parsed) continue;
 
-                HighlightingRuleSet ruleSet = textEditor.SyntaxHighlighting.GetNamedRuleSet("BracedExpressionAndColorsRuleSet");
-                if (ruleSet == null) continue;
-
-                if (ruleSet.Spans.Any(s => s is HighlightingSpan span && span.StartExpression.ToString().Contains(hex))) continue;
+                if (ruleSet.Spans.Any(s => s is HighlightingSpan span && span.StartExpression.ToString().Contains(hex)))
+                {
+                    textEditor.TextArea.TextView.Redraw(match.Index, match.Length);
+                    continue;
+                }
 
                 HighlightingSpan span = new()
                 {

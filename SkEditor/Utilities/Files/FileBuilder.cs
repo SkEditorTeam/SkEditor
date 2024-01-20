@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.Input;
@@ -47,6 +48,7 @@ public class FileBuilder
         }
 
         ApiVault.Get().OnFileCreated(editor);
+        Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
 
         return tabViewItem;
     }
@@ -86,8 +88,6 @@ public class FileBuilder
             }
         }
 
-        //SyntaxLoader.SetSyntax(editor, path);
-
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
 
@@ -103,7 +103,7 @@ public class FileBuilder
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
         if (ApiVault.Get().GetAppConfig().EnableHexPreview)
         {
-            editor.Document.TextChanged += TextEditorEventHandler.CheckForHex;
+            editor.Document.TextChanged += (_, _) => TextEditorEventHandler.CheckForHex(editor);
         }
         editor.TextArea.Caret.PositionChanged += (sender, e) =>
         {
