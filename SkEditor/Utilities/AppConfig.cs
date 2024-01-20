@@ -36,6 +36,7 @@ public class AppConfig
 
     public bool EnableAutoCompletionExperiment { get; set; } = false;
     public bool EnableProjectsExperiment { get; set; } = false;
+    public bool EnableHexPreview { get; set; } = false;
 
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");

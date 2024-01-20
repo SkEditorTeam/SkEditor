@@ -27,7 +27,7 @@ public static class ProjectOpener
             AllowMultiple = false
         });
 
-        if (folder is null) return;
+        if (folder.Count == 0) return;
 
         FileTreeView.Items.Clear();
 
@@ -40,19 +40,6 @@ public static class ProjectOpener
                 IsExpanded = true,
                 FontWeight = FontWeight.SemiBold
             };
-
-            //rootFolder.DoubleTapped += (sender, e) =>
-            //{
-            //    rootFolder.IsExpanded ^= true;
-            //};
-
-            // rootFolder.DoubleTapped will work also if you click on child items
-            // So we need to add DoubleTapped event to this element: Avalonia.Controls.TreeViewItem /template/ Avalonia.Controls.Border#PART_LayoutRoot.TreeViewItemLayoutRoot
-
-            //rootFolder.GetTemplateChildren("PART_LayoutRoot")!.DoubleTapped += (sender, e) =>
-            //{
-            //    rootFolder.IsExpanded ^= true;
-            //};
 
             FileTreeView.Items.Add(rootFolder);
 
@@ -67,38 +54,32 @@ public static class ProjectOpener
             string path = Uri.UnescapeDataString(storageItem.Path.AbsolutePath);
             if (storageItem is IStorageFolder storageFolder)
             {
-                TreeViewItem item = new()
+                TreeViewItem folderItem = new()
                 {
                     Header = Path.GetFileName(path),
                     Tag = path,
                     FontWeight = FontWeight.Medium,
                 };
 
-                //item.DoubleTapped += (sender, e) =>
-                //{
-                //    item.IsExpanded ^= true;
-                //};
+                viewItem.Items.Add(folderItem);
 
-                viewItem.Items.Add(item);
-
-                AddChildren(item, storageFolder);
+                AddChildren(folderItem, storageFolder);
+                return;
             }
-            else
+
+            TreeViewItem item = new()
             {
-                TreeViewItem item = new()
-                {
-                    Header = Path.GetFileName(path),
-                    Tag = path,
-                    FontWeight = FontWeight.Normal
-                };
+                Header = Path.GetFileName(path),
+                Tag = path,
+                FontWeight = FontWeight.Normal
+            };
 
-                item.DoubleTapped += (sender, e) =>
-                {
-                    FileHandler.OpenFile(path);
-                };
+            item.DoubleTapped += (sender, e) =>
+            {
+                FileHandler.OpenFile(path);
+            };
 
-                viewItem.Items.Add(item);
-            }
+            viewItem.Items.Add(item);
         }
     }
 }

@@ -55,7 +55,11 @@ public class AddonLoader
         {
             string nameWithoutPrefix = Path.GetFileName(updatedAddon)["updated-".Length..];
             string folderWithoutPrefixPath = Path.Combine(addonFolder, Path.GetFileNameWithoutExtension(nameWithoutPrefix));
-            if (Directory.Exists(folderWithoutPrefixPath)) continue;
+            if (Directory.Exists(folderWithoutPrefixPath))
+            {
+                File.Delete(updatedAddon);
+                continue;
+            }
 
             Directory.Delete(folderWithoutPrefixPath, true);
             ZipFile.ExtractToDirectory(updatedAddon, addonFolder);

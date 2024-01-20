@@ -76,7 +76,7 @@ public class FileHandler
         TabViewItem tabItem = await FileBuilder.Build(fileName, path);
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
 
-        SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
+        await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
     }
 
     public static async Task<(bool, Exception)> SaveFile()
@@ -124,12 +124,17 @@ public class FileHandler
             ? await topLevel.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Documents)
             : await topLevel.StorageProvider.TryGetFolderFromPathAsync(itemTag);
 
+        FilePickerFileType skriptFileType = new("Skript") { Patterns = ["*.sk"] };
+        FilePickerFileType allFilesType = new("All Files") { Patterns = ["*"] };
+
         FilePickerSaveOptions saveOptions = new()
         {
             Title = Translation.Get("WindowTitleSaveFilePicker"),
             SuggestedFileName = header,
+            DefaultExtension = Path.GetExtension(itemTag) ?? ".sk",
+            FileTypeChoices = [skriptFileType, allFilesType],
+            SuggestedStartLocation = suggestedFolder
         };
-        if (suggestedFolder is not null) saveOptions.SuggestedStartLocation = suggestedFolder;
 
         var file = await topLevel.StorageProvider.SaveFilePickerAsync(saveOptions);
 

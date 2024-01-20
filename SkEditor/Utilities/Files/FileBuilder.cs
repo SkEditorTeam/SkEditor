@@ -101,7 +101,10 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-        editor.Document.TextChanged += TextEditorEventHandler.CheckForHex;
+        if (ApiVault.Get().GetAppConfig().EnableHexPreview)
+        {
+            editor.Document.TextChanged += TextEditorEventHandler.CheckForHex;
+        }
         editor.TextArea.Caret.PositionChanged += (sender, e) =>
         {
             ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
@@ -115,6 +118,8 @@ public class FileBuilder
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
         }
+        
+        editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
 
         return editor;
     }
