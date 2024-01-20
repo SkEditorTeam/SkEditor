@@ -14,14 +14,15 @@ using SkEditor.Utilities.Syntax;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Files;
 
 public class FileBuilder
 {
-    public static TabViewItem Build(string header, string path = "")
+    public async static Task<TabViewItem> Build(string header, string path = "")
     {
-        TextEditor editor = GetDefaultEditor(path);
+        TextEditor editor = await GetDefaultEditor(path);
         TabViewItem tabViewItem = new()
         {
             Header = header,
@@ -50,7 +51,7 @@ public class FileBuilder
         return tabViewItem;
     }
 
-    private static TextEditor GetDefaultEditor(string path)
+    private async static Task<TextEditor> GetDefaultEditor(string path)
     {
         AppConfig config = ApiVault.Get().GetAppConfig();
 
@@ -81,11 +82,11 @@ public class FileBuilder
             path = Uri.UnescapeDataString(path);
             if (File.Exists(path))
             {
-                editor.Text = File.ReadAllText(path);
+                editor.Text = await File.ReadAllTextAsync(path);
             }
         }
 
-        SyntaxLoader.SetSyntax(editor, path);
+        //SyntaxLoader.SetSyntax(editor, path);
 
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
@@ -100,7 +101,10 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-        editor.Document.TextChanged += TextEditorEventHandler.CheckForHex;
+        if (ApiVault.Get().GetAppConfig().EnableHexPreview)
+        {
+            editor.Document.TextChanged += TextEditorEventHandler.CheckForHex;
+        }
         editor.TextArea.Caret.PositionChanged += (sender, e) =>
         {
             ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
@@ -114,6 +118,8 @@ public class FileBuilder
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
         }
+        
+        editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
 
         return editor;
     }

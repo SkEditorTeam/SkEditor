@@ -13,6 +13,7 @@ using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Views;
 
@@ -79,20 +80,20 @@ public partial class MainWindow : AppWindow
         ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 
         string[] startupFiles = ApiVault.Get().GetStartupFiles();
-        if (startupFiles.Length == 0) FileHandler.NewFile();
+        if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash()) FileHandler.NewFile();
         startupFiles.ToList().ForEach(FileHandler.OpenFile);
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
+        Dispatcher.UIThread.Post(() =>
         {
-            SyntaxLoader.LoadSyntaxes();
+            SyntaxLoader.LoadAdvancedSyntaxes();
             DiscordRpcUpdater.Initialize();
 
-            CrashChecker.CheckForCrash();
-
             if (ApiVault.Get().GetAppConfig().CheckForUpdates) UpdateChecker.Check();
-        });
 
-        Tutorial.ShowTutorial();
-        BottomBar.UpdatePosition();
+            SideBar.IsVisible = MainMenu.MenuItemOpenFolder.IsVisible = ApiVault.Get().GetAppConfig().EnableProjectsExperiment;
+
+            Tutorial.ShowTutorial();
+            BottomBar.UpdatePosition();
+        });
     }
 }

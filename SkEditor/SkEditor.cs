@@ -184,7 +184,7 @@ public class SkEditor : ISkEditorAPI
         ShowMessage("Debug", message, GetTopWindow());
     }
 
-    private Window GetTopWindow()
+    private static Window GetTopWindow()
     {
         var windows = ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).Windows;
         var dialog = windows.FirstOrDefault(x => x.IsActive);

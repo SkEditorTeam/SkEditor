@@ -8,7 +8,6 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using System;
@@ -16,18 +15,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Editor;
 public partial class TextEditorEventHandler
 {
-    private static readonly Dictionary<string, string> _symbolPairs = new()
+    private static readonly Dictionary<char, char> _symbolPairs = new()
     {
-        { "(", ")" },
-        { "[", "]" },
-        { "\"", "\"" },
-        { "<", ">" },
-        { "{", "}" },
+        { '(', ')' },
+        { '[', ']' },
+        { '"', '"' },
+        { '<', '>' },
+        { '{', '}' },
     };
 
     private const string commentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
@@ -127,8 +125,8 @@ public partial class TextEditorEventHandler
     {
         if (!ApiVault.Get().GetAppConfig().IsAutoPairingEnabled) return;
 
-        string symbol = e.Text;
-        if (!_symbolPairs.TryGetValue(symbol, out string? value)) return;
+        char symbol = e.Text[0];
+        if (!_symbolPairs.TryGetValue(symbol, out char value)) return;
 
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
         if (textEditor.Document.TextLength > textEditor.CaretOffset)
@@ -137,11 +135,15 @@ public partial class TextEditorEventHandler
             if (nextChar.Equals(value)) return;
         }
 
-        textEditor.Document.Insert(textEditor.CaretOffset, value);
+        string textBefore = textEditor.Document.GetText(0, textEditor.CaretOffset);
+        int count = textBefore.Count(c => c == symbol);
+        if (count % 2 == 0) return;
+
+        textEditor.Document.Insert(textEditor.CaretOffset, value.ToString());
         textEditor.CaretOffset--;
     }
 
-    public static async void CheckForHex(object? sender, EventArgs e)
+    public static void CheckForHex(object? sender, EventArgs e)
     {
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
         TextDocument document = textEditor.Document;
@@ -161,7 +163,7 @@ public partial class TextEditorEventHandler
                 HighlightingRuleSet ruleSet = textEditor.SyntaxHighlighting.GetNamedRuleSet("BracedExpressionAndColorsRuleSet");
                 if (ruleSet == null) continue;
 
-                if (ruleSet.Rules.Any(r => r is HighlightingRule rule && rule.Regex.ToString().Contains(hex))) continue;
+                if (ruleSet.Spans.Any(s => s is HighlightingSpan span && span.StartExpression.ToString().Contains(hex))) continue;
 
                 HighlightingSpan span = new()
                 {
@@ -195,6 +197,32 @@ public partial class TextEditorEventHandler
             textEditor.Select(word.Offset, word.Length);
         }
     }
+
+    public static void OnTextPasting(object? sender, TextEventArgs e)
+    {
+        // TODO: Add auto-indentation for pasted text
+        return;
+
+        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
+        string lineText = textEditor.Document.GetText(line);
+
+        int indentationSize = lineText.TakeWhile(char.IsWhiteSpace).Count();
+        string indentationType = lineText[..indentationSize];
+
+        string textToPaste = e.Text;
+        string[] lines = textToPaste.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            
+        }
+
+        string adjustedTextToPaste = string.Join(Environment.NewLine, lines);
+
+        e.Text = adjustedTextToPaste;
+    }
+
 
     [GeneratedRegex(@"<##(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();

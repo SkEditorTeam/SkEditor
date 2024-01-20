@@ -16,8 +16,11 @@ class Program
     {
         try
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);
+            stopwatch.Stop();
+            Log.Information("Application started in {0}ms", stopwatch.ElapsedMilliseconds);
         }
         catch (Exception e)
         {

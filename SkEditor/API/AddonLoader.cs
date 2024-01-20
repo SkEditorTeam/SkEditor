@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Serilog;
+﻿using Serilog;
 using SkEditor.Utilities;
 using System;
 using System.Collections.Generic;
@@ -16,21 +15,18 @@ public class AddonLoader
     public static void Load()
     {
         var addonFolder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
-
         Directory.CreateDirectory(addonFolder);
 
+        UpdateAddons(addonFolder);
+        DeleteDisableAddons(addonFolder);
+
+        LoadAddonsFromFolder(addonFolder);
+        EnableAddons();
+    }
+
+    private static void DeleteDisableAddons(string addonFolder)
+    {
         IEnumerable<string> addonFolders = Directory.EnumerateDirectories(addonFolder, "*", SearchOption.TopDirectoryOnly);
-        IEnumerable<string> updatedFolderAddons = Directory.EnumerateFiles(addonFolder, "*.zip", SearchOption.TopDirectoryOnly);
-
-        foreach (string updatedAddon in updatedFolderAddons)
-        {
-            string nameWithoutPrefix = Path.GetFileName(updatedAddon)["updated-".Length..];
-            string folderWithoutPrefixPath = Path.Combine(addonFolder, Path.GetFileNameWithoutExtension(nameWithoutPrefix));
-            Directory.Delete(folderWithoutPrefixPath, true);
-            ZipFile.ExtractToDirectory(updatedAddon, addonFolder);
-            File.Delete(updatedAddon);
-        }
-
         foreach (string folder in addonFolders)
         {
             if (ApiVault.Get().GetAppConfig().AddonsToDelete.Contains(Path.GetFileName(folder)))
@@ -49,9 +45,30 @@ public class AddonLoader
             }
             LoadAddonsFromFolder(folder);
         }
+    }
 
-        LoadAddonsFromFolder(addonFolder);
+    private static void UpdateAddons(string addonFolder)
+    {
+        IEnumerable<string> updatedFolderAddons = Directory.EnumerateFiles(addonFolder, "*.zip", SearchOption.TopDirectoryOnly);
 
+        foreach (string updatedAddon in updatedFolderAddons)
+        {
+            string nameWithoutPrefix = Path.GetFileName(updatedAddon)["updated-".Length..];
+            string folderWithoutPrefixPath = Path.Combine(addonFolder, Path.GetFileNameWithoutExtension(nameWithoutPrefix));
+            if (Directory.Exists(folderWithoutPrefixPath))
+            {
+                File.Delete(updatedAddon);
+                continue;
+            }
+
+            Directory.Delete(folderWithoutPrefixPath, true);
+            ZipFile.ExtractToDirectory(updatedAddon, addonFolder);
+            File.Delete(updatedAddon);
+        }
+    }
+
+    private static void EnableAddons()
+    {
         try
         {
             AppDomain.CurrentDomain.GetAssemblies()
@@ -64,6 +81,9 @@ public class AddonLoader
                     Addons.Add(addon);
                     addon.OnEnable();
                 });
+
+            ApiVault.Get().GetAppConfig().AddonsToDelete.Clear();
+            ApiVault.Get().GetAppConfig().AddonsToUpdate.Clear();
         }
         catch (Exception ex)
         {
