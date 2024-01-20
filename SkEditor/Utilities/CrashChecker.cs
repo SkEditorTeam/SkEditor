@@ -19,9 +19,9 @@ public class CrashChecker
 
         string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
         if (!Directory.Exists(tempPath)) return;
-        Directory.GetFiles(tempPath).ToList().ForEach(file =>
+        Directory.GetFiles(tempPath).ToList().ForEach(async file =>
         {
-            TabViewItem tabItem = FileBuilder.Build(Path.GetFileName(file), file);
+            TabViewItem tabItem = await FileBuilder.Build(Path.GetFileName(file), file);
             tabItem.Tag = null;
             (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
         });

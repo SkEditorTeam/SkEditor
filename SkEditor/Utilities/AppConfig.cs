@@ -33,6 +33,7 @@ public class AppConfig
     public HashSet<string> AddonsToUpdate { get; set; } = [];
 
     public Dictionary<string, object> CustomOptions { get; set; } = [];
+    public Dictionary<string, string> PreferredFileAssociations { get; set; } = [];
 
     public bool EnableAutoCompletionExperiment { get; set; } = false;
 
