@@ -175,7 +175,7 @@ public class FileHandler
     {
         if (item.Content is TextEditor editor && !ApiVault.Get().OnFileClosing(editor)) return;
 
-        
+
 
         DisposeEditorData(item);
 

@@ -26,10 +26,7 @@ public class FileSyntax
         var configFile = Path.Combine(folder, "config.json");
         var syntaxFile = Path.Combine(folder, "syntax.xshd");
 
-        if (!File.Exists(configFile) || !File.Exists(syntaxFile))
-        {
-            throw new FileNotFoundException("The syntax folder must contain a config.json and a syntax.xshd file.");
-        }
+        if (!File.Exists(configFile) || !File.Exists(syntaxFile)) return new FileSyntax(null, null, folder);
 
         var config = JsonConvert.DeserializeObject<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile));
 

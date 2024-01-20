@@ -1,16 +1,11 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Controls.Templates;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Avalonia.VisualTree;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener

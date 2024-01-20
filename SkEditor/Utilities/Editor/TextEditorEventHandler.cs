@@ -219,7 +219,7 @@ public partial class TextEditorEventHandler
 
         for (int i = 0; i < lines.Length; i++)
         {
-            
+
         }
 
         string adjustedTextToPaste = string.Join(Environment.NewLine, lines);

@@ -11,7 +11,6 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
-using SkEditor.Utilities.Syntax;
 using System;
 using System.IO;
 using System.Linq;
@@ -118,7 +117,7 @@ public class FileBuilder
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
         }
-        
+
         editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
 
         return editor;

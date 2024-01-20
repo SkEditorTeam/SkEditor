@@ -7,12 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using SkEditor.API;
 
 namespace SkEditor.Views.Marketplace;
 public class MarketplaceLoader
 {
-    private static readonly string[] supportedTypes = ["FileSyntax", "Theme", "Addon", "ThemeWithSyntax", "ZipAddon"];
+    private static readonly string[] supportedTypes = ["NewSyntax", "Theme", "Addon", "NewThemeWithSyntax", "ZipAddon"];
     private static readonly string[] hiddenItems = ["Shadow", "Analyzer"];
 
     public static async IAsyncEnumerable<MarketplaceItem> GetItems()
@@ -131,10 +130,10 @@ public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
 
         return itemType switch
         {
-            "FileSyntax" => jsonObject.ToObject<SyntaxItem>(defaultSerializer),
+            "NewSyntax" => jsonObject.ToObject<SyntaxItem>(defaultSerializer),
             "Theme" => jsonObject.ToObject<ThemeItem>(defaultSerializer),
             "Addon" => jsonObject.ToObject<AddonItem>(defaultSerializer),
-            "ThemeWithSyntax" => jsonObject.ToObject<ThemeWithSyntaxItem>(defaultSerializer),
+            "NewThemeWithSyntax" => jsonObject.ToObject<ThemeWithSyntaxItem>(defaultSerializer),
             "ZipAddon" => jsonObject.ToObject<ZipAddonItem>(defaultSerializer),
             _ => new MarketplaceItem(),
         };
