@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.Input;
@@ -10,7 +11,6 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
-using SkEditor.Utilities.Syntax;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,8 +53,10 @@ public class FileBuilder
             Icon.SetIcon(tabViewItem);
         }
 
-        if (fileType.IsEditor) 
+        if (fileType.IsEditor) {
             ApiVault.Get().OnFileCreated(fileType.Display as TextEditor);
+            Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
+        }
 
         if (OpenedFiles.ContainsKey(header))
             OpenedFiles.Remove(header);
@@ -157,11 +159,9 @@ public class FileBuilder
             path = Uri.UnescapeDataString(path);
             if (File.Exists(path))
             {
-                editor.Text = File.ReadAllText(path);
+                editor.Text = await File.ReadAllTextAsync(path);
             }
         }
-
-        SyntaxLoader.SetSyntax(editor, path);
 
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
@@ -176,7 +176,10 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-        editor.Document.TextChanged += TextEditorEventHandler.CheckForHex;
+        if (ApiVault.Get().GetAppConfig().EnableHexPreview)
+        {
+            editor.Document.TextChanged += (_, _) => TextEditorEventHandler.CheckForHex(editor);
+        }
         editor.TextArea.Caret.PositionChanged += (sender, e) =>
         {
             ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
@@ -190,6 +193,8 @@ public class FileBuilder
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
         }
+
+        editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
 
         return editor;
     }

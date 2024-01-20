@@ -12,14 +12,11 @@
 		<ScrollViewer Grid.Row="1">
 			<StackPanel Spacing="8">
 				<ui:SettingsExpander Name="ThemePageButton" Header="{DynamicResource SettingsPersonalizationTheme}" IconSource="{StaticResource PaintIcon}"
-					Description="{DynamicResource SettingsPersonalizationThemeDescription}"
-					IsClickEnabled="True" />
+				                     Description="{DynamicResource SettingsPersonalizationThemeDescription}"
+				                     IsClickEnabled="True" />
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationSyntax}" IconSource="{StaticResource CodeIcon}">
-					<ui:SettingsExpander.Footer>
-						<ComboBox Name="SyntaxComboBox"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+				<ui:SettingsExpander Name="SyntaxPageButton" Header="{DynamicResource SettingsPersonalizationSyntax}" IconSource="{StaticResource CodeIcon}"
+				                     IsClickEnabled="True"/>
 
 				<ui:SettingsExpander Name="CurrentFont" Header="{DynamicResource SettingsPersonalizationFont}" Description="{Binding CurrentFont}" IconSource="{StaticResource TextFontIcon}">
 					<ui:SettingsExpander.Footer>

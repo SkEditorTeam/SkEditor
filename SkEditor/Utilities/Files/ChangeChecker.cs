@@ -28,15 +28,15 @@ public class ChangeChecker
             return;
         }
 
-        if (!ApiVault.Get().IsFileOpen()) return;
-
-        TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
-        if (string.IsNullOrWhiteSpace(item.Tag.ToString())) return;
-        string path = Uri.UnescapeDataString(item.Tag.ToString());
-        if (!File.Exists(path)) return;
-
         try
         {
+            if (!ApiVault.Get().IsFileOpen()) return;
+
+            TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+            if (string.IsNullOrWhiteSpace(item.Tag.ToString())) return;
+            string path = Uri.UnescapeDataString(item.Tag.ToString());
+            if (!File.Exists(path)) return;
+
             string textToWrite = ApiVault.Get().GetTextEditor().Document.Text;
             using StreamReader reader = new(path);
             string textToRead = reader.ReadToEnd();
