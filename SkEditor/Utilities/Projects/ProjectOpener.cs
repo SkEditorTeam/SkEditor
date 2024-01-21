@@ -59,22 +59,23 @@ public static class ProjectOpener
                 viewItem.Items.Add(folderItem);
 
                 AddChildren(folderItem, storageFolder);
-                return;
             }
-
-            TreeViewItem item = new()
+            else
             {
-                Header = Path.GetFileName(path),
-                Tag = path,
-                FontWeight = FontWeight.Normal
-            };
+                TreeViewItem item = new()
+                {
+                    Header = Path.GetFileName(path),
+                    Tag = path,
+                    FontWeight = FontWeight.Normal
+                };
 
-            item.DoubleTapped += (sender, e) =>
-            {
-                FileHandler.OpenFile(path);
-            };
+                item.DoubleTapped += (sender, e) =>
+                {
+                    FileHandler.OpenFile(path);
+                };
 
-            viewItem.Items.Add(item);
+                viewItem.Items.Add(item);
+            }
         }
     }
 }

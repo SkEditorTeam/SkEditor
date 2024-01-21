@@ -29,7 +29,7 @@ public partial class TextEditorEventHandler
     };
 
     private const string commentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
-    private static Regex _commentRegex = new(commentPattern, RegexOptions.Compiled);
+    private static Regex _commentRegex = CommentRegex();
 
     public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 
@@ -135,9 +135,12 @@ public partial class TextEditorEventHandler
             if (nextChar.Equals(value)) return;
         }
 
-        string textBefore = textEditor.Document.GetText(0, textEditor.CaretOffset);
-        int count = textBefore.Count(c => c == symbol);
-        if (count % 2 == 0) return;
+        int lineOffset = textEditor.Document.GetLineByOffset(textEditor.CaretOffset).Offset;
+        string textBefore = textEditor.Document.GetText(lineOffset, textEditor.CaretOffset - lineOffset - 1);
+        int count1 = textBefore.Count(c => c == symbol);
+        int count2 = textBefore.Count(c => c == value);
+        if (symbol == value && count1 % 2 == 1) return;
+        if (count1 > count2) return;
 
         textEditor.Document.Insert(textEditor.CaretOffset, value.ToString());
         textEditor.CaretOffset--;
@@ -232,4 +235,6 @@ public partial class TextEditorEventHandler
     private static partial Regex HexRegex();
     [GeneratedRegex("")]
     private static partial Regex EmptyRegex();
+    [GeneratedRegex(commentPattern, RegexOptions.Compiled)]
+    private static partial Regex CommentRegex();
 }

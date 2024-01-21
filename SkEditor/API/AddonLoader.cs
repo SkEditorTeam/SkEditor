@@ -11,6 +11,7 @@ namespace SkEditor.API;
 public class AddonLoader
 {
     public static List<IAddon> Addons { get; } = [];
+    public static HashSet<string> DllNames { get; } = [];
 
     public static void Load()
     {
@@ -55,8 +56,9 @@ public class AddonLoader
         {
             string nameWithoutPrefix = Path.GetFileName(updatedAddon)["updated-".Length..];
             string folderWithoutPrefixPath = Path.Combine(addonFolder, Path.GetFileNameWithoutExtension(nameWithoutPrefix));
-            if (Directory.Exists(folderWithoutPrefixPath))
+            if (!Directory.Exists(folderWithoutPrefixPath))
             {
+                Log.Warning($"Found \"{updatedAddon}\" in addons folder, but its folder \"{folderWithoutPrefixPath}\" doesn't exist. Deleting it.");
                 File.Delete(updatedAddon);
                 continue;
             }
@@ -121,6 +123,7 @@ public class AddonLoader
             if (AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == Path.GetFileNameWithoutExtension(dllFile))) continue;
 
             assemblies.Add(Assembly.LoadFrom(dllFile));
+            DllNames.Add(fileName);
         }
 
         return assemblies;
