@@ -184,7 +184,8 @@ public class SyntaxLoader
 
         if (extension == null)
         {
-            extension = Path.GetExtension((ApiVault.Get().GetTabView().SelectedItem as TabViewItem).Tag.ToString());
+
+            extension = Path.GetExtension((ApiVault.Get().GetTabView().SelectedItem as TabViewItem).Tag?.ToString());
             if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
             {
                 editor.SyntaxHighlighting = defaultSyntax.Highlighting;
