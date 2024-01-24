@@ -45,10 +45,18 @@
 	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
 	<system:String x:Key="MenuHeaderGenerateCommand">Command</system:String>
 	<system:String x:Key="MenuHeaderRefactor">Refactor</system:String>
-
+	
 	<!-- Other Menu -->
 	<system:String x:Key="MenuHeaderMarketplace">Marketplace</system:String>
 	<system:String x:Key="MenuHeaderRefreshSyntax">Refresh syntax</system:String>
+
+	<!-- Project Menu -->
+	<system:String x:Key="MenuHeaderOpenInExplorer">Open in explorer</system:String>
+	<system:String x:Key="MenuHeaderCopyPath">Copy relative path</system:String>
+	<system:String x:Key="MenuHeaderCopyAbsolutePath">Copy absolute path</system:String>
+	<system:String x:Key="MenuHeaderRename">Rename</system:String>
+	<system:String x:Key="MenuHeaderNewFile">New file</system:String>
+	<system:String x:Key="MenuHeaderNewFolder">New folder</system:String>
 
 	<!-- Buttons -->
 	<system:String x:Key="ApplyButton">Apply</system:String>

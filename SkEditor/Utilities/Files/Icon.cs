@@ -28,4 +28,17 @@ public class Icon
 
         tabViewItem.IconSource = iconSource;
     }
+    
+    public static IconSource? GetIcon(string extension)
+    {
+        string iconName = IconDictionary.GetValueOrDefault(extension);
+
+        if (iconName is not null)
+        {
+            Application.Current.TryGetResource(iconName, Avalonia.Styling.ThemeVariant.Default, out object icon);
+            return icon as PathIconSource;
+        }
+
+        return null;
+    }
 }
