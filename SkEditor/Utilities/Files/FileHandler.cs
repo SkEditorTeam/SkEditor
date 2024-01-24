@@ -51,6 +51,9 @@ public class FileHandler
     {
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
         TabViewItem tabItem = await FileBuilder.Build(header);
+        if (tabItem == null)
+            return;
+        
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
     }
 
@@ -85,6 +88,9 @@ public class FileHandler
 
         string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
         TabViewItem tabItem = await FileBuilder.Build(fileName, path);
+        if (tabItem == null)
+            return;
+        
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
 
         await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));

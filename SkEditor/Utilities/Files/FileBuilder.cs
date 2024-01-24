@@ -25,9 +25,12 @@ public class FileBuilder
 {
     public static readonly Dictionary<string, FileTypes.FileType> OpenedFiles = new();
     
-    public static async Task<TabViewItem> Build(string header, string path = "")
+    public static async Task<TabViewItem?> Build(string header, string path = "")
     {
         var fileType = await GetFileDisplay(path);
+        if (fileType == null)
+            return null;
+        
         TabViewItem tabViewItem = new()
         {
             Header = header,
@@ -68,7 +71,7 @@ public class FileBuilder
         return tabViewItem;
     }
 
-    private static async Task<FileTypes.FileType> GetFileDisplay(string path)
+    private static async Task<FileTypes.FileType?> GetFileDisplay(string path)
     {
         FileTypes.FileType? fileType = null;
         if (FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
@@ -128,9 +131,26 @@ public class FileBuilder
         return fileType ?? await GetDefaultEditor(path);
     }
 
-    private static async Task<FileTypes.FileType> GetDefaultEditor(string path)
+    private static async Task<FileTypes.FileType?> GetDefaultEditor(string path)
     {
         AppConfig config = ApiVault.Get().GetAppConfig();
+
+        string fileContent = null;
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            path = Uri.UnescapeDataString(path);
+            if (File.Exists(path))
+                fileContent = await File.ReadAllTextAsync(path);
+        }
+        
+        if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))
+        {
+            var response = await ApiVault.Get().ShowMessageWithIcon(
+                Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
+                new SymbolIconSource() { Symbol = Symbol.Alert });
+            if (response != ContentDialogResult.Primary)
+                return null;
+        }
 
         TextEditor editor = new()
         {
@@ -159,7 +179,7 @@ public class FileBuilder
             path = Uri.UnescapeDataString(path);
             if (File.Exists(path))
             {
-                editor.Text = await File.ReadAllTextAsync(path);
+                editor.Text = fileContent;
             }
         }
 

@@ -81,6 +81,8 @@
 	<system:String x:Key="UpdateAvailable">Update available</system:String>
 	<system:String x:Key="UpdateAvailableMessage">An update is available.\nWould you like to download it now?</system:String>
 	<system:String x:Key="UpdateFailed">Failed to download the update. Please try again later.</system:String>
+	<system:String x:Key="BinaryFileFound">It seems you're trying to open a binary file (or a non text-based file).\n\nDo you want to open it anyway? SkEditor may not handle it correctly.</system:String>
+	<system:String x:Key="BinaryFileTitle">Binary File Found</system:String>
 	
 
 	<!-- Publish Window -->
