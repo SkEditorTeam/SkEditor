@@ -118,7 +118,7 @@ public partial class TextEditorEventHandler
 
         if (!previousLineText.EndsWith(':')) return;
 
-        textEditor.Document.Insert(line.Offset, "\t");
+        textEditor.Document.Insert(line.Offset, textEditor.Options.IndentationString);
     }
 
     public static void DoAutoPairing(object? sender, TextInputEventArgs e)
