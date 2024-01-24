@@ -1,5 +1,4 @@
-﻿using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
+﻿using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
@@ -24,8 +23,8 @@ public class SyntaxItem : MarketplaceItem
     public async override void Install()
     {
         string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
-        
-        List<FileSyntax> installedSyntaxes = new();
+
+        List<FileSyntax> installedSyntaxes = [];
         bool allInstalled = true;
         foreach (string folder in ItemSyntaxFolders)
         {
@@ -35,8 +34,8 @@ public class SyntaxItem : MarketplaceItem
             Directory.CreateDirectory(localSyntaxPath);
             allInstalled = allInstalled && await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
             allInstalled = allInstalled && await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
-            
-            if (!allInstalled) 
+
+            if (!allInstalled)
                 break;
 
             try
@@ -57,7 +56,7 @@ public class SyntaxItem : MarketplaceItem
             ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
             return;
         }
-        
+
         string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
         message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
 
@@ -71,14 +70,14 @@ public class SyntaxItem : MarketplaceItem
             {
                 SyntaxLoader.SelectSyntax(syntax);
             }
-            
+
             SyntaxLoader.RefreshAllOpenedEditors();
         }
 
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
     }
-    
+
     private async Task<bool> Install(string url, string filePath)
     {
         using HttpClient client = new();
@@ -109,7 +108,7 @@ public class SyntaxItem : MarketplaceItem
             var folderName = folder.Split('/').Last();
             string localSyntaxPath = Path.Combine(syntaxFolder,
                 folderName);
-            
+
             await SyntaxLoader.UnloadSyntax(localSyntaxPath);
             Directory.Delete(localSyntaxPath, true);
         }

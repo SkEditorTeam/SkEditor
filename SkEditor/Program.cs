@@ -3,6 +3,7 @@ using Serilog;
 using SkEditor.API;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace SkEditor.Desktop;
 
@@ -21,7 +22,13 @@ class Program
         }
         catch (Exception e)
         {
-            Log.Fatal(e, "Application crashed!");
+            string message = "Application crashed!";
+            string? source = e.Source;
+            if (AddonLoader.DllNames.Contains(source + ".dll"))
+            {
+                message += $" It's fault of {source} addon.";
+            }
+            Log.Fatal(e, message);
 
             ApiVault.Get().SaveData();
 

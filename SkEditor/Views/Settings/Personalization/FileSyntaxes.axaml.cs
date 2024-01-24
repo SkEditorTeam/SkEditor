@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Microsoft.CodeAnalysis;
 using SkEditor.API;
 using SkEditor.Utilities.Syntax;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace SkEditor.Views.Settings.Personalization;
 
@@ -18,7 +16,7 @@ public partial class FileSyntaxes : UserControl
     public FileSyntaxes()
     {
         InitializeComponent();
-        
+
         AssignCommands();
         LoadSyntaxes();
     }
@@ -27,11 +25,11 @@ public partial class FileSyntaxes : UserControl
     {
         var syntaxes = SyntaxLoader.FileSyntaxes;
         var availableLangNames = syntaxes.Select(x => x.Config.LanguageName).Distinct().ToList();
-        
+
         foreach (string langName in availableLangNames)
         {
             var selectedSyntax = ApiVault.Get().GetAppConfig().FileSyntaxes.FirstOrDefault(x => x.Key.Equals(langName)).Value ?? null;
-            
+
             var expander = GenerateExpander(langName, selectedSyntax);
             SyntaxesStackPanel.Children.Add(expander);
         }
@@ -46,9 +44,9 @@ public partial class FileSyntaxes : UserControl
             IconSource = new SymbolIconSource { Symbol = Symbol.Code },
             Footer = comboBox
         };
-        
+
         var fileSyntaxes = SyntaxLoader.FileSyntaxes.Where(x => x.Config.LanguageName.Equals(language)).ToList();
-        
+
         foreach (var syntax in fileSyntaxes)
         {
             var newItem = new ComboBoxItem
@@ -60,18 +58,18 @@ public partial class FileSyntaxes : UserControl
             if (syntax.Config.FullIdName.Equals(selectedSyntaxFullIdName))
                 comboBox.SelectedItem = newItem;
         }
-        
+
         if (comboBox.SelectedItem == null)
             comboBox.SelectedIndex = 0;
-        
+
         comboBox.SelectionChanged += (_, _) =>
         {
             var config = ApiVault.Get().GetAppConfig();
             var selectedFullIdName = (comboBox.SelectedValue as ComboBoxItem).Tag.ToString();
             var selectedFileSyntax = SyntaxLoader.FileSyntaxes.FirstOrDefault(x => x.Config.FullIdName.Equals(selectedFullIdName));
-            
+
             config.FileSyntaxes[selectedFileSyntax.Config.LanguageName] = selectedFileSyntax.Config.FullIdName;
-            
+
             List<TabViewItem> tabs = ApiVault.Get().GetTabView().TabItems
                 .OfType<TabViewItem>()
                 .Where(tab => tab.Content is TextEditor)
@@ -82,7 +80,7 @@ public partial class FileSyntaxes : UserControl
                            selectedFileSyntax.Config.Extensions.Contains(ext);
                 })
                 .ToList();
-            
+
             foreach (var tab in tabs)
             {
                 var editor = tab.Content as TextEditor;

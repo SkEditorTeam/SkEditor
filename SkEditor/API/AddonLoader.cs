@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Serilog;
+﻿using Serilog;
 using SkEditor.Utilities;
 using System;
 using System.Collections.Generic;
@@ -12,25 +11,23 @@ namespace SkEditor.API;
 public class AddonLoader
 {
     public static List<IAddon> Addons { get; } = [];
+    public static HashSet<string> DllNames { get; } = [];
 
     public static void Load()
     {
         var addonFolder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
-
         Directory.CreateDirectory(addonFolder);
 
+        UpdateAddons(addonFolder);
+        DeleteDisableAddons(addonFolder);
+
+        LoadAddonsFromFolder(addonFolder);
+        EnableAddons();
+    }
+
+    private static void DeleteDisableAddons(string addonFolder)
+    {
         IEnumerable<string> addonFolders = Directory.EnumerateDirectories(addonFolder, "*", SearchOption.TopDirectoryOnly);
-        IEnumerable<string> updatedFolderAddons = Directory.EnumerateFiles(addonFolder, "*.zip", SearchOption.TopDirectoryOnly);
-
-        foreach (string updatedAddon in updatedFolderAddons)
-        {
-            string nameWithoutPrefix = Path.GetFileName(updatedAddon)["updated-".Length..];
-            string folderWithoutPrefixPath = Path.Combine(addonFolder, Path.GetFileNameWithoutExtension(nameWithoutPrefix));
-            Directory.Delete(folderWithoutPrefixPath, true);
-            ZipFile.ExtractToDirectory(updatedAddon, addonFolder);
-            File.Delete(updatedAddon);
-        }
-
         foreach (string folder in addonFolders)
         {
             if (ApiVault.Get().GetAppConfig().AddonsToDelete.Contains(Path.GetFileName(folder)))
@@ -49,9 +46,31 @@ public class AddonLoader
             }
             LoadAddonsFromFolder(folder);
         }
+    }
 
-        LoadAddonsFromFolder(addonFolder);
+    private static void UpdateAddons(string addonFolder)
+    {
+        IEnumerable<string> updatedFolderAddons = Directory.EnumerateFiles(addonFolder, "*.zip", SearchOption.TopDirectoryOnly);
 
+        foreach (string updatedAddon in updatedFolderAddons)
+        {
+            string nameWithoutPrefix = Path.GetFileName(updatedAddon)["updated-".Length..];
+            string folderWithoutPrefixPath = Path.Combine(addonFolder, Path.GetFileNameWithoutExtension(nameWithoutPrefix));
+            if (!Directory.Exists(folderWithoutPrefixPath))
+            {
+                Log.Warning($"Found \"{updatedAddon}\" in addons folder, but its folder \"{folderWithoutPrefixPath}\" doesn't exist. Deleting it.");
+                File.Delete(updatedAddon);
+                continue;
+            }
+
+            Directory.Delete(folderWithoutPrefixPath, true);
+            ZipFile.ExtractToDirectory(updatedAddon, addonFolder);
+            File.Delete(updatedAddon);
+        }
+    }
+
+    private static void EnableAddons()
+    {
         try
         {
             AppDomain.CurrentDomain.GetAssemblies()
@@ -64,6 +83,9 @@ public class AddonLoader
                     Addons.Add(addon);
                     addon.OnEnable();
                 });
+
+            ApiVault.Get().GetAppConfig().AddonsToDelete.Clear();
+            ApiVault.Get().GetAppConfig().AddonsToUpdate.Clear();
         }
         catch (Exception ex)
         {
@@ -101,6 +123,7 @@ public class AddonLoader
             if (AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == Path.GetFileNameWithoutExtension(dllFile))) continue;
 
             assemblies.Add(Assembly.LoadFrom(dllFile));
+            DllNames.Add(fileName);
         }
 
         return assemblies;

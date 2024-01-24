@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using SkEditor.Views.Generators;
@@ -24,6 +25,7 @@ public partial class MainMenuControl : UserControl
     {
         MenuItemNew.Command = new RelayCommand(FileHandler.NewFile);
         MenuItemOpen.Command = new RelayCommand(FileHandler.OpenFile);
+        MenuItemOpenFolder.Command = new RelayCommand(ProjectOpener.OpenProject);
         MenuItemSave.Command = new RelayCommand(async () =>
         {
             (bool, Exception) success = await FileHandler.SaveFile();
@@ -47,7 +49,7 @@ public partial class MainMenuControl : UserControl
         MenuItemDuplicate.Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(ApiVault.Get().GetTextEditor().TextArea));
         MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(ApiVault.Get().GetTextEditor().TextArea));
 
-        MenuItemRefreshSyntax.Command = new RelayCommand(() => SyntaxLoader.RefreshSyntax());
+        MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
 
         MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemGenerateGui.Command = new RelayCommand(() => new GuiGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));

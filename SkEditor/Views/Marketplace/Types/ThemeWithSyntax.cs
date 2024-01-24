@@ -40,8 +40,8 @@ public class ThemeWithSyntaxItem : MarketplaceItem
             Directory.CreateDirectory(localSyntaxPath);
             allInstalled = allInstalled && await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
             allInstalled = allInstalled && await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
-            
-            if (!allInstalled) 
+
+            if (!allInstalled)
                 break;
 
             try
@@ -142,7 +142,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
             var folderName = folder.Split('/').Last();
             string localSyntaxPath = Path.Combine(syntaxFolder,
                 folderName);
-            
+
             await SyntaxLoader.UnloadSyntax(localSyntaxPath);
             Directory.Delete(localSyntaxPath, true);
         }
@@ -161,7 +161,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
             if (!Directory.Exists(localSyntaxPath))
                 return false;
         }
-        
+
         // Also check if theme is installed
         string themePath = Path.Combine(AppConfig.AppDataFolderPath, ThemeItem.FolderName, Path.GetFileName(ThemeFileUrl));
         if (!File.Exists(themePath))

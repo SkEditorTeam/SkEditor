@@ -78,13 +78,13 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
     
     - name: Create .app structure
       run: |
         mkdir -p "SkEditor.app/Contents/MacOS"
         mkdir -p "SkEditor.app/Contents/Resources"
-        cp -r SkEditor/bin/Release/net8.0/osx-arm64/publish/* "SkEditor.app/Contents/MacOS/"
+        cp -r SkEditor/bin/Release/net8.0/osx-x64/publish/* "SkEditor.app/Contents/MacOS/"
         cp SkEditor/Info.plist "SkEditor.app/Contents/"
         cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
     

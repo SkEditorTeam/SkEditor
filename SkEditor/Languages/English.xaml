@@ -147,9 +147,6 @@
 	<system:String x:Key="SettingsPersonalizationSyntax">Syntax highlighting</system:String>
 	<system:String x:Key="SettingsPersonalizationFont">Font</system:String>
 	<system:String x:Key="SettingsPersonalizationFontDescription">Current font: {0}</system:String>
-	
-	<!-- File Syntaxes -->
-	<system:String x:Key="SettingsSyntaxesTitle">Syntax Highlighting</system:String>
 
 	<!-- Theme Settings -->
 	<system:String x:Key="SettingsThemeTitle">Theme</system:String>

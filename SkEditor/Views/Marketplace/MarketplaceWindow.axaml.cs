@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace SkEditor.Views;
 public partial class MarketplaceWindow : AppWindow
 {
-    public const string MarketplaceUrl = "https://marketplace-8cn1izuya-skeditor.vercel.app/";
+    public const string MarketplaceUrl = "https://marketplace-skeditor.vercel.app/";
 
     public static MarketplaceWindow Instance { get; private set; }
 
@@ -129,7 +129,7 @@ public partial class MarketplaceWindow : AppWindow
     public void HideAllButtons()
     {
         Button[] buttons = [ItemView.InstallButton, ItemView.UninstallButton, ItemView.DisableButton, ItemView.EnableButton, ItemView.UpdateButton];
-       
+
         foreach (Button button in buttons)
         {
             button.IsVisible = false;
