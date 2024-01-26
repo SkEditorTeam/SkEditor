@@ -74,6 +74,36 @@ public class CodeVariable : INameableCodeElement
             Section.Lines = newLines;
             Section.RefreshCode();
             Section.Parse();
+        } 
+        else // rename all within the file
+        {
+            foreach (var section in Section.Parser.Sections)
+            {
+                var current = section.Lines;
+                var newLines = new List<string>();
+                foreach (var line in current)
+                {
+                    bool lineAdded = false;
+                    var matches = Regex.Matches(line, @"(?<=\{)_?(.*?)(?=\})");
+                    foreach (var m in matches)
+                    {
+                        var variable = new CodeVariable(Section, m.ToString(), Line, Column);
+                        if (variable.IsSimilar(this))
+                        {
+                            var newLine = line.Replace(variable.ToString(), $"{{{newName}}}");
+                            newLines.Add(newLine);
+                            lineAdded = true;
+                        }
+                    }
+                
+                    if (!lineAdded) 
+                        newLines.Add(line);
+                }
+
+                section.Lines = newLines;
+                section.RefreshCode();
+                section.Parse();
+            }
         }
     }
 
