@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using Serilog;

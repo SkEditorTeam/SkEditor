@@ -40,10 +40,10 @@ public class FileHandler
 
     private static int GetUntitledNumber() => (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Count(tab => RegexPattern.IsMatch(tab.Header.ToString())) + 1;
 
-    public static void NewFile()
+    public async static void NewFile()
     {
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
-        TabViewItem tabItem = FileBuilder.Build(header);
+        TabViewItem tabItem = await FileBuilder.Build(header);
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
     }
 
@@ -67,7 +67,7 @@ public class FileHandler
         if (untitledFileOpen) await CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
     }
 
-    public static void OpenFile(string path)
+    public async static void OpenFile(string path)
     {
         if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Any(tab => tab.Tag.ToString().Equals(path)))
         {
@@ -76,7 +76,7 @@ public class FileHandler
         }
 
         string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
-        TabViewItem tabItem = FileBuilder.Build(fileName, path);
+        TabViewItem tabItem = await FileBuilder.Build(fileName, path);
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
         OpenedFiles.Add(new OpenedFile()
         {
@@ -87,6 +87,8 @@ public class FileHandler
                 ? new CodeParser(editor)
                 : null
         });
+
+        await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
     }
 
     public static async Task<(bool, Exception)> SaveFile()
@@ -134,12 +136,17 @@ public class FileHandler
             ? await topLevel.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Documents)
             : await topLevel.StorageProvider.TryGetFolderFromPathAsync(itemTag);
 
+        FilePickerFileType skriptFileType = new("Skript") { Patterns = ["*.sk"] };
+        FilePickerFileType allFilesType = new("All Files") { Patterns = ["*"] };
+
         FilePickerSaveOptions saveOptions = new()
         {
             Title = Translation.Get("WindowTitleSaveFilePicker"),
             SuggestedFileName = header,
+            DefaultExtension = Path.GetExtension(itemTag) ?? ".sk",
+            FileTypeChoices = [skriptFileType, allFilesType],
+            SuggestedStartLocation = suggestedFolder
         };
-        if (suggestedFolder is not null) saveOptions.SuggestedStartLocation = suggestedFolder;
 
         var file = await topLevel.StorageProvider.SaveFilePickerAsync(saveOptions);
 
@@ -154,7 +161,6 @@ public class FileHandler
         item.Header = file.Name;
         item.Tag = Uri.UnescapeDataString(absolutePath);
 
-        SyntaxLoader.SetSyntax(ApiVault.Get().GetTextEditor(), absolutePath);
         Icon.SetIcon(item);
         ToolTip toolTip = new()
         {
@@ -180,6 +186,8 @@ public class FileHandler
     public static async Task CloseFile(TabViewItem item)
     {
         if (item.Content is TextEditor editor && !ApiVault.Get().OnFileClosing(editor)) return;
+
+
 
         DisposeEditorData(item);
 

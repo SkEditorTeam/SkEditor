@@ -23,7 +23,7 @@ public class AppConfig
     public bool IsAutoPairingEnabled { get; set; } = false;
     public bool IsAutoSaveEnabled { get; set; } = false;
     public string CurrentTheme { get; set; } = "Default.json";
-    public string CurrentSyntax { get; set; } = "Default.xshd";
+    public Dictionary<string, string> FileSyntaxes { get; set; } = new();
     public string Font { get; set; } = "Default";
     public bool CheckForUpdates { get; set; } = true;
     public bool CheckForChanges { get; set; } = true;
@@ -35,6 +35,11 @@ public class AppConfig
     public Dictionary<string, object> CustomOptions { get; set; } = [];
 
     public bool EnableAutoCompletionExperiment { get; set; } = false;
+
+    public bool UseSpacesInsteadOfTabs { get; set; } = false;
+    public int TabSize { get; set; } = 4;
+    public bool EnableProjectsExperiment { get; set; } = false;
+    public bool EnableHexPreview { get; set; } = false;
 
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");

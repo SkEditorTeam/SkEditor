@@ -4,6 +4,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
 using SkEditor.Views;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SkEditor.Utilities.Files;
 
@@ -45,6 +46,8 @@ public interface ISkEditorAPI
     public bool IsAddonEnabled(string addonName);
 
     public void SaveData();
+    
+    public List<TextEditor> GetOpenedEditors();
 
 
     #region Events

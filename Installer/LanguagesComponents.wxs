@@ -23,6 +23,9 @@
 			<Component>
 				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\Spanish.xaml" />
 			</Component>
+			<Component>
+				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\Hungarian.xaml" />
+			</Component>
 		</ComponentGroup>
 	</Fragment>
 </Wix>

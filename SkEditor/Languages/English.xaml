@@ -117,6 +117,10 @@
 	<system:String x:Key="SettingsGeneralTitle">General</system:String>
 	<system:String x:Key="SettingsGeneralLanguage">Language</system:String>
 	<system:String x:Key="SettingsGeneralWrapping">Wrapping</system:String>
+	<system:String x:Key="SettingsGeneralTabType">Indentation Type</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeDescription">Choose between tabs and spaces, and set the size of the tab.</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeTabs">Tabs</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeSpaces">Spaces</system:String>
 	<system:String x:Key="SettingsGeneralAutoIndent">Auto-indent</system:String>
 	<system:String x:Key="SettingsGeneralAutoIndentDescription">Automatically inserts a tab in a new line if the previous line ends with a colon.</system:String>
 	<system:String x:Key="SettingsGeneralAutoPairing">Auto-pairing</system:String>
