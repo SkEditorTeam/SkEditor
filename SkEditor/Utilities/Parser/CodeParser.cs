@@ -81,13 +81,15 @@ public class CodeParser
                     lastSectionLine = lineIndex;
                 }
             }
-            
-            if (lineIndex == lines.Count - 1) // Ending
-            {
-                var linesToParse = lines.GetRange(lastSectionLine, lineIndex - lastSectionLine + 1);
-                Sections.Add(new CodeSection(this, lastSectionLine, linesToParse));
-            }
-            
         }
+        
+        // Parse the last section
+        if (lastSectionLine != -1)
+        {
+            var linesToParse = lines.GetRange(lastSectionLine, lines.Count - lastSectionLine);
+            Sections.Add(new CodeSection(this, lastSectionLine, linesToParse));
+        }
+
+        ApiVault.Get().Log($"Parsed a total of {Sections.Count} sections.", true);
     }
 }
