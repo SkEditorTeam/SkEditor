@@ -229,6 +229,9 @@ public class FileBuilder
 
         editor.Options.AllowScrollBelowDocument = true;
         editor.Options.CutCopyWholeLine = true;
+        
+        editor.Options.ConvertTabsToSpaces = ApiVault.Get().GetAppConfig().UseSpacesInsteadOfTabs;
+        editor.Options.IndentationSize = ApiVault.Get().GetAppConfig().TabSize;
 
         return editor;
     }

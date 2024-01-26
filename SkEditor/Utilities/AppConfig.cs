@@ -36,6 +36,9 @@ public class AppConfig
     public Dictionary<string, string> PreferredFileAssociations { get; set; } = [];
 
     public bool EnableAutoCompletionExperiment { get; set; } = false;
+
+    public bool UseSpacesInsteadOfTabs { get; set; } = false;
+    public int TabSize { get; set; } = 4;
     public bool EnableProjectsExperiment { get; set; } = false;
     public bool EnableHexPreview { get; set; } = false;
 

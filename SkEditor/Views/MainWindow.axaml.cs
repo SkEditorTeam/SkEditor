@@ -81,6 +81,7 @@ public partial class MainWindow : AppWindow
     {
         AddonLoader.Load(); 
         Utilities.Files.FileTypes.RegisterDefaultAssociations();
+        SideBar.LoadPanels();
 
         ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 

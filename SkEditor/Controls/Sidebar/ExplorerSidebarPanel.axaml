@@ -1,0 +1,37 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel">
+    
+    <UserControl.Styles>
+        <Style Selector="Button.barButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="Separator">
+            <Setter Property="Margin" Value="0,1"/>
+        </Style>
+        <Style Selector="TreeViewItem">
+            <Setter Property="FontWeight" Value="Regular"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <Border Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Margin="10,0,0,0">
+        <Border.Transitions>
+            <Transitions>
+                <DoubleTransition Property="Width" Duration="0:0:0.05" Easing="QuadraticEaseIn"/>
+            </Transitions>
+        </Border.Transitions>
+
+        <Grid RowDefinitions="auto,auto,*">
+            <TextBlock Grid.Row="0" Text="Explorer" FontWeight="DemiBold" Margin="20,10,20,10"/>
+            <Separator Grid.Row="1" Margin="0,0,0,10"/>
+            <TreeView Grid.Row="2" Name="FileTreeView">
+					
+            </TreeView>
+        </Grid>
+    </Border>
+</UserControl>

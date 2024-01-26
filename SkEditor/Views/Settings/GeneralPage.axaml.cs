@@ -21,6 +21,7 @@ public partial class GeneralPage : UserControl
 
         AssignCommands();
         LoadLanguages();
+        LoadIndentation();
     }
 
     private void LoadLanguages()
@@ -38,6 +39,31 @@ public partial class GeneralPage : UserControl
             Dispatcher.UIThread.InvokeAsync(() => Translation.ChangeLanguage(language));
         };
     }
+    
+    private void LoadIndentation()
+    {
+        var appConfig = ApiVault.Get().GetAppConfig();
+        var tag = appConfig.UseSpacesInsteadOfTabs ? "spaces" : "tabs";
+        var amount = appConfig.TabSize;
+
+        foreach (var item in IndentationTypeComboBox.Items)
+        {
+            if ((item as ComboBoxItem).Tag.ToString() == tag)
+            {
+                IndentationTypeComboBox.SelectedItem = item;
+                break;
+            }
+        }
+        
+        foreach (var item in IndentationAmountComboBox.Items)
+        {
+            if ((item as ComboBoxItem).Tag.ToString() == amount.ToString())
+            {
+                IndentationAmountComboBox.SelectedItem = item;
+                break;
+            }
+        }
+    }
 
     private void AssignCommands()
     {
@@ -49,6 +75,18 @@ public partial class GeneralPage : UserControl
         AutoSaveToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsAutoSaveEnabled"));
         CheckForUpdatesToggleSwitch.Command = new RelayCommand(() => ToggleSetting("CheckForUpdates"));
         CheckForChangesToggleSwitch.Command = new RelayCommand(() => ToggleSetting("CheckForChanges"));
+        IndentationAmountComboBox.SelectionChanged += (s, e) =>
+        {
+            var appConfig = ApiVault.Get().GetAppConfig();
+            appConfig.TabSize = int.Parse((IndentationAmountComboBox.SelectedItem as ComboBoxItem).Tag.ToString());
+            ApiVault.Get().GetOpenedEditors().ForEach(e => e.Options.IndentationSize = appConfig.TabSize);
+        };
+        IndentationTypeComboBox.SelectionChanged += (s, e) =>
+        {
+            var appConfig = ApiVault.Get().GetAppConfig();
+            appConfig.UseSpacesInsteadOfTabs = (IndentationTypeComboBox.SelectedItem as ComboBoxItem).Tag.ToString() == "spaces";
+            ApiVault.Get().GetOpenedEditors().ForEach(e => e.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
+        };
     }
 
     private void ToggleRpc()
