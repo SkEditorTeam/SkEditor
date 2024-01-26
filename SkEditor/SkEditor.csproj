@@ -137,6 +137,10 @@
 		<Compile Update="Views\Settings\Personalization\ThemePage.axaml.cs">
 			<DependentUpon>ThemePage.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Controls\Sidebar\CodeParser\ParserSidebarPanel.axaml.cs">
+		  <DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
+		  <SubType>Code</SubType>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>

@@ -19,31 +19,11 @@
 		</Style>
 	</UserControl.Styles>
 
-	<Grid ColumnDefinitions="auto,auto" RowDefinitions="*">
+	<Grid Name="GridPanels" ColumnDefinitions="auto,auto" RowDefinitions="*">
 		<Border Grid.Column="0" Width="36" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
-			<StackPanel Spacing="10" HorizontalAlignment="Center">
-				<Button Name="ProjectsButton" Height="36" Width="36" Classes="barButton">
-					<Button.Content>
-						<ui:SymbolIcon Symbol="Folder" FontSize="24" Foreground="#bfffffff" />
-					</Button.Content>
-				</Button>
+			<StackPanel Name="Buttons" Spacing="10" HorizontalAlignment="Center">
+				
 			</StackPanel>
-		</Border>
-
-		<Border Name="ExtendedSideBar" Grid.Column="1" Width="0" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Margin="10,0,0,0">
-			<Border.Transitions>
-				<Transitions>
-					<DoubleTransition Property="Width" Duration="0:0:0.05" Easing="QuadraticEaseIn"/>
-				</Transitions>
-			</Border.Transitions>
-
-			<Grid RowDefinitions="auto,auto,*">
-				<TextBlock Grid.Row="0" Text="Explorer" FontWeight="DemiBold" Margin="20,10,20,10"/>
-				<Separator Grid.Row="1" Margin="0,0,0,10"/>
-				<TreeView Grid.Row="2" Name="FileTreeView">
-					
-				</TreeView>
-			</Grid>
 		</Border>
 	</Grid>
 </UserControl>
