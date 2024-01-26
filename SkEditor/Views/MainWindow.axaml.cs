@@ -75,6 +75,7 @@ public partial class MainWindow : AppWindow
     private async void OnWindowLoaded(object sender, RoutedEventArgs e)
     {
         AddonLoader.Load();
+        SideBar.LoadPanels();
 
         ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 

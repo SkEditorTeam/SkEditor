@@ -10,7 +10,7 @@ using System.IO;
 namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
 {
-    private static TreeView FileTreeView => ApiVault.Get().GetMainWindow().SideBar.FileTreeView;
+    private static TreeView FileTreeView => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel.FileTreeView;
 
     public async static void OpenProject()
     {
