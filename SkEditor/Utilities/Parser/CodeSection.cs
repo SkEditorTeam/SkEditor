@@ -128,9 +128,9 @@ public class CodeSection
         var editor = Parser.Editor;
         var document = editor.Document;
         var startOffset = document.GetOffset(StartingLineIndex+1, 0);
-        var endOffset = document.GetOffset(
-            document.Lines.Count > EndingLineIndex+1 ? EndingLineIndex+1 : EndingLineIndex, 0
-        );
-        document.Replace(startOffset, endOffset - startOffset, sectionCode + "\n");
+        var endOffset = document.GetOffset(EndingLineIndex, 0);
+        if (EndingLineIndex == document.LineCount)
+            endOffset = document.TextLength;
+        document.Replace(startOffset, endOffset - startOffset, sectionCode);
     }
 }
