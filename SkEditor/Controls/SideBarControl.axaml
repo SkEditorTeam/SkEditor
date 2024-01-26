@@ -38,10 +38,17 @@
 			</Border.Transitions>
 
 			<Grid RowDefinitions="auto,auto,*">
-				<TextBlock Grid.Row="0" Text="Explorer" FontWeight="DemiBold" Margin="20,10,20,10"/>
+				<TextBlock Grid.Row="0" Text="{DynamicResource ProjectExplorerTitle}" FontWeight="DemiBold" Margin="20,10,20,10"/>
 				<Separator Grid.Row="1" Margin="0,0,0,10"/>
-				<TreeView Grid.Row="2" Name="FileTreeView">
-					
+				<Grid Name="ProjectInformation" Grid.Row="2" RowDefinitions="*" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10 0">
+					<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
+						<!-- <ui:IconSourceElement IconSource="" Width="36" Height="36" HorizontalAlignment="Center"></ui:IconSourceElement>-->
+						<ui:SymbolIcon Symbol="Remote" FontSize="36" HorizontalAlignment="Center"></ui:SymbolIcon>
+						<TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="{DynamicResource ProjectExplorerInfoText}"></TextBlock>
+						<Button HorizontalAlignment="Center" Name="OpenProjectButton" Content="{DynamicResource ProjectExplorerInfoButton}"></Button>
+					</StackPanel>
+				</Grid>
+				<TreeView IsVisible="False" Grid.Row="2" Name="FileTreeView">
 				</TreeView>
 			</Grid>
 		</Border>
