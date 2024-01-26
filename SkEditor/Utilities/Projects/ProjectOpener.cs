@@ -230,8 +230,13 @@ public static class ProjectOpener
         {
             if (args.Key == Key.Enter)
             {
-                string text = (treeViewItem.Header as TextBox).Text; 
-                // TODO: Check if the input is valid
+                string text = (treeViewItem.Header as TextBox).Text;
+                var newPath = item.Path.AbsolutePath.Replace(item.Name, text);
+                if (File.Exists(newPath) || Directory.Exists(newPath))
+                {
+                    await ApiVault.Get().ShowMessageWithIcon("Error", "A file/folder with this name already exists.", new SymbolIconSource() { Symbol = Symbol.Alert});
+                    return;
+                }
 
                 var parent = treeViewItem.Parent as TreeViewItem;
                 var storageParent = await item.GetParentAsync();
