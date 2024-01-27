@@ -1,0 +1,78 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:parser="clr-namespace:SkEditor.Utilities.Parser"
+             x:Class="SkEditor.Controls.Sidebar.ParserSidebarPanel">
+    
+    <UserControl.Styles>
+        <Style Selector="Button.barButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="Separator">
+            <Setter Property="Margin" Value="0,1"/>
+        </Style>
+        <Style Selector="TreeViewItem">
+            <Setter Property="FontWeight" Value="Regular"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <Border Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Margin="10,0,0,0">
+        <Border.Transitions>
+            <Transitions>
+                <DoubleTransition Property="Width" Duration="0:0:0.05" Easing="QuadraticEaseIn"/>
+            </Transitions>
+        </Border.Transitions>
+
+        <Grid RowDefinitions="auto,auto,auto,*,auto">
+            <TextBlock Grid.Row="0" Text="Code Parsing" FontWeight="DemiBold" Margin="20,10,20,10"/>
+            <Separator Grid.Row="1" Margin="0,0,0,10"/>
+            <ui:InfoBar Margin="5 0" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Warning" Message="The code parser is still in beta! Report any bugs found in the Discord server."/>
+            <ScrollViewer Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Top" HorizontalContentAlignment="Center">
+                <ItemsRepeater Name="ItemsRepeater">
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate DataType="parser:CodeSection">
+                            <Expander CornerRadius="0" Margin="0 5">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:IconSourceElement Width="18" Height="18" IconSource="{Binding Icon}"></ui:IconSourceElement>
+                                        <TextBlock Text="{Binding Name}" Margin="10 0 0 0" FontWeight="DemiBold"/>
+                                    </StackPanel>
+                                </Expander.Header>
+                                <StackPanel Spacing="10">
+                                    <Button HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
+                                            Content="Navigate to the section" IsEnabled="{Binding Parser.IsParsed}"
+                                            Name="NavigateToButton" Command="{Binding NavigateToCommand}" />
+                                    <Separator Margin="0 3"/>
+                                    <TextBlock TextAlignment="Left" HorizontalAlignment="Center" FontWeight="DemiBold" Text="{Binding VariableTitle}"/>
+                                    <!-- {Binding VariableContent} -->
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5 8">
+                                        <ItemsControl ItemsSource="{Binding UniqueVariables}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid ColumnDefinitions="*,Auto" Margin="0 2">
+                                                        <TextBlock TextAlignment="Left" FontStyle="{Binding Style}" Text="{Binding Name}"/>
+                                                        <Button IsEnabled="{Binding Section.Parser.IsParsed}" Grid.Column="1" Command="{Binding Rename}" Content="Rename"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </StackPanel >
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </ScrollViewer>
+            <StackPanel Margin="10" Name="CannotParseInfo" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" IsVisible="False">
+                <TextBlock Name="CannotParseInfoText" TextAlignment="Center" TextWrapping="Wrap"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="4" HorizontalAlignment="Stretch" Margin="10">
+                <Button Name="ParseButton" Classes="accent" HorizontalAlignment="Center">Parse Code</Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

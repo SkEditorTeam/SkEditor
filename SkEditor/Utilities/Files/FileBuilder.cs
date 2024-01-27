@@ -100,7 +100,7 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-        editor.TextChanged += (sender, args) => ApiVault.Get().GetOpenedFile().Parser.IsParsed = false;
+        editor.TextChanged += (_, _) => ApiVault.Get().GetOpenedFile()?.Parser?.SetUnparsed();
         if (ApiVault.Get().GetAppConfig().EnableHexPreview)
         {
             editor.Document.TextChanged += (_, _) => TextEditorEventHandler.CheckForHex(editor);

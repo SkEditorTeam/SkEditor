@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using AvaloniaEdit.Editing;
+using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 
 namespace SkEditor.Utilities.Parser;
@@ -16,8 +21,19 @@ public class CodeSection
     
     public HashSet<CodeVariable> GetGlobalVariables() => [..Variables.Where(variable => !variable.IsLocal)];
     public HashSet<CodeVariable> Variables { get; private set; } // Case of any section other than options
+
+    public HashSet<CodeVariable> UniqueVariables => GetUniqueVariables();
     
     public HashSet<CodeOption> Options { get; private set; } // Case of options section
+    
+    public string Name => GetSectionName();
+    public IconSource Icon => Type switch
+    {
+        SectionType.Command => GetIconFromName("MagicWandIcon"),
+        SectionType.Event => GetIconFromName("LightingIcon"),
+        SectionType.Function => GetIconFromName("FunctionIcon"),
+        SectionType.Options => new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 24 },
+    };
     
     public bool ContainsLineIndex(int line) => line >= StartingLineIndex && line <= EndingLineIndex;
     
@@ -55,7 +71,7 @@ public class CodeSection
         var firstLine = Lines[0];
         if (firstLine.StartsWith("command") || firstLine.StartsWith("discord command")) 
             Type = SectionType.Command;
-        else if (firstLine.Equals("options:"))
+        else if (firstLine.StartsWith("options:"))
             Type = SectionType.Options;
         else if (firstLine.StartsWith("function"))
             Type = SectionType.Function;
@@ -109,6 +125,21 @@ public class CodeSection
         }
     }
 
+    private string GetSectionName()
+    {
+        string sectionName = Type switch
+        {
+            SectionType.Command => Lines[0].Split(' ')[1].Split(':')[0].Trim(),
+            SectionType.Event => Lines[0].Split(':')[0].Trim(),
+            SectionType.Options => "Options",
+            SectionType.Function => Lines[0].Split(' ')[1].Split('(')[0].Trim(),
+            _ => "Unknown"
+        };
+        if (sectionName.Length > 20) sectionName = sectionName.Substring(0, 20) + "...";
+        
+        return sectionName;
+    }
+
     public enum SectionType
     {
         Command,
@@ -132,5 +163,35 @@ public class CodeSection
         if (EndingLineIndex == document.LineCount)
             endOffset = document.TextLength;
         document.Replace(startOffset, endOffset - startOffset, sectionCode);
+    }
+
+    private static IconSource GetIconFromName(string iconName)
+    {
+        Application.Current.TryGetResource(iconName, Avalonia.Styling.ThemeVariant.Default, out object icon);
+        return icon as IconSource;
+    }
+    
+    public string VariableTitle => $"Variables ({UniqueVariables.Count})";
+    public RelayCommand NavigateToCommand => new(NavigateTo);
+    public object[] VariableContent => [ new TextBlock() { Text = $"Total: {Variables.Count}" } ];
+    
+    public void NavigateTo()
+    {
+        var editor = Parser.Editor;
+        editor.ScrollTo(StartingLineIndex+1, 0);
+        editor.CaretOffset = editor.Document.GetOffset(StartingLineIndex+1, 0);
+        editor.Focus();
+    }
+
+    private HashSet<CodeVariable> GetUniqueVariables()
+    {
+        var uniqueVariables = new HashSet<CodeVariable>();
+        foreach (var variable in Variables)
+        {
+            if (uniqueVariables.Any(v => v.IsSimilar(variable)))
+                continue;
+            uniqueVariables.Add(variable);
+        }
+        return uniqueVariables;
     }
 }

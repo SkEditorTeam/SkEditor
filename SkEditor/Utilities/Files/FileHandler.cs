@@ -44,6 +44,16 @@ public class FileHandler
     {
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
         TabViewItem tabItem = await FileBuilder.Build(header);
+        OpenedFiles.Add(new OpenedFile()
+        {
+            Editor = tabItem.Content as TextEditor,
+            Path = "",
+            TabViewItem = tabItem,
+            Parser = tabItem.Content is TextEditor editor 
+                ? new CodeParser(editor)
+                : null
+        });
+        
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
     }
 

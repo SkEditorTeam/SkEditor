@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Avalonia.Media;
 using AvaloniaEdit.Editing;
 using SkEditor.API;
+using SkEditor.Views;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -41,6 +43,14 @@ public class CodeVariable : INameableCodeElement
     public bool ContainsCaret(Caret caret)
     {
         return caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
+    }
+    
+    public FontStyle Style => IsLocal ? FontStyle.Italic : FontStyle.Normal;
+
+    public async void Rename()
+    {
+        var renameWindow = new SymbolRefactorWindow(this);
+        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
     }
     
     public void Rename(string newName)

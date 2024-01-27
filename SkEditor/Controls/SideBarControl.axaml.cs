@@ -12,6 +12,7 @@ public partial class SideBarControl : UserControl
     private static readonly List<SidebarPanel> Panels = new();
     
     public readonly ExplorerSidebarPanel.ExplorerPanel ProjectPanel = new();
+    public readonly ParserSidebarPanel.ParserPanel ParserPanel = new();
     
     public static void RegisterPanel(SidebarPanel panel)
     {
@@ -24,6 +25,7 @@ public partial class SideBarControl : UserControl
         InitializeComponent();
         
         RegisterPanel(ProjectPanel);
+        RegisterPanel(ParserPanel);
     }
 
     public void LoadPanels()
