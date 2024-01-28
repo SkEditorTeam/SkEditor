@@ -27,8 +27,6 @@ public class CodeParser : INotifyPropertyChanged
     /// </summary>
     public TextEditor Editor { get; private set; }
     
-    private bool _isParsed = false;
-    
     /// <summary>
     /// Get the parsed code sections. This will be empty if the code is not parsed yet.
     /// </summary>
@@ -45,8 +43,10 @@ public class CodeParser : INotifyPropertyChanged
     /// Get the options section, if any is defined.
     /// </summary>
     /// <returns></returns>
-    public CodeSection GetOptionsSection() => Sections.Find(section => section.Type == CodeSection.SectionType.Options);
-    
+    public CodeSection? GetOptionsSection() => Sections.Find(section => section.Type == CodeSection.SectionType.Options);
+
+    public bool IsParsed { get; private set; } = false;
+
     /// <summary>
     /// Get section from a line.
     /// </summary>
@@ -56,8 +56,14 @@ public class CodeParser : INotifyPropertyChanged
 
     public void Parse()
     {
-        IsParsed = true;
         Sections.Clear();
+        if (!IsValid())
+        {
+            SetUnparsed();
+            return;
+        }
+
+        IsParsed = true;
         
         // Split the code into lines
         List<string> lines = Editor.Text.Split('\n').ToList();
@@ -103,21 +109,12 @@ public class CodeParser : INotifyPropertyChanged
         IsParsed = false;
         ParserPanel.ParseButton.IsEnabled = true;
         ParserPanel.ParseButton.Content = "Parse code";
+        ParserPanel.UpdateInformationBox(true);
     }
 
     public bool IsValid()
     {
-        return !Editor.Text.ToList().Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'); 
-    }
-    
-    public bool IsParsed
-    {
-        get => _isParsed;
-        set
-        {
-            _isParsed = value;
-            OnPropertyChanged(nameof(_isParsed));
-        }
+        return !Editor.Text.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'); 
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;

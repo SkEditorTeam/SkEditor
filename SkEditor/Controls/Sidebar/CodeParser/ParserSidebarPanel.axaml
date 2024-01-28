@@ -38,29 +38,62 @@
                             <Expander CornerRadius="0" Margin="0 5">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <ui:IconSourceElement Width="18" Height="18" IconSource="{Binding Icon}"></ui:IconSourceElement>
+                                        <ui:IconSourceElement Width="20" Height="20" IconSource="{Binding Icon}"></ui:IconSourceElement>
                                         <TextBlock Text="{Binding Name}" Margin="10 0 0 0" FontWeight="DemiBold"/>
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel Spacing="10">
-                                    <Button HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
-                                            Content="Navigate to the section" IsEnabled="{Binding Parser.IsParsed}"
-                                            Name="NavigateToButton" Command="{Binding NavigateToCommand}" />
+                                    <Grid ColumnDefinitions="*,*">
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding LinesDisplay}" />
+                                        <Button Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
+                                                Content="Navigate"
+                                                Name="NavigateToButton" Command="{Binding NavigateToCommand}" />
+                                    </Grid>
                                     <Separator Margin="0 3"/>
-                                    <TextBlock TextAlignment="Left" HorizontalAlignment="Center" FontWeight="DemiBold" Text="{Binding VariableTitle}"/>
-                                    <!-- {Binding VariableContent} -->
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5 8">
-                                        <ItemsControl ItemsSource="{Binding UniqueVariables}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Grid ColumnDefinitions="*,Auto" Margin="0 2">
-                                                        <TextBlock TextAlignment="Left" FontStyle="{Binding Style}" Text="{Binding Name}"/>
-                                                        <Button IsEnabled="{Binding Section.Parser.IsParsed}" Grid.Column="1" Command="{Binding Rename}" Content="Rename"/>
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                    
+                                    <!-- Variables -->
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                                                Spacing="10" IsVisible="{Binding HasAnyVariables}">
+                                        <TextBlock FontSize="18" TextAlignment="Left" HorizontalAlignment="Center" FontWeight="DemiBold" Text="{Binding VariableTitle}"/>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5 8">
+                                            <ItemsControl ItemsSource="{Binding UniqueVariables}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid ColumnDefinitions="*,Auto" Margin="0 2">
+                                                            <TextBlock TextAlignment="Left" FontStyle="{Binding Style}" Text="{Binding Name}"/>
+                                                            <Button Height="28" Width="28" Grid.Column="1" Command="{Binding Rename}" Padding="0" ToolTip.Tip="Rename">
+                                                                <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0"></ui:SymbolIcon>
+                                                            </Button>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
                                     </StackPanel>
+                                    
+                                    <!-- Options Reference -->
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                                                Spacing="10" IsVisible="{Binding HasAnyOptionReferences}">
+                                        <TextBlock FontSize="18" TextAlignment="Left" HorizontalAlignment="Center" FontWeight="DemiBold" Text="{Binding OptionReferenceTitle}"/>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5 8">
+                                            <ItemsControl ItemsSource="{Binding UniqueOptionReferences}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 2">
+                                                            <TextBlock TextAlignment="Left" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Name}"/>
+                                                            <Button Height="28" Width="28" Grid.Column="1" Command="{Binding NavigateToDefinition}" Padding="0" ToolTip.Tip="Navigate to definition">
+                                                                <ui:SymbolIcon Symbol="Go" FontSize="20" Margin="0"></ui:SymbolIcon>
+                                                            </Button>
+                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" Margin="4 0 0 0" ToolTip.Tip="Rename">
+                                                                <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0"></ui:SymbolIcon>
+                                                            </Button>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
                                 </StackPanel >
                             </Expander>
                         </DataTemplate>

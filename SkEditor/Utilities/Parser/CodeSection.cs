@@ -21,10 +21,16 @@ public class CodeSection
     
     public HashSet<CodeVariable> GetGlobalVariables() => [..Variables.Where(variable => !variable.IsLocal)];
     public HashSet<CodeVariable> Variables { get; private set; } // Case of any section other than options
+    public HashSet<CodeOptionReference> OptionReferences { get; private set; } // Case of any section other than options
+    public HashSet<CodeOption> Options { get; private set; } // Case of options section
 
     public HashSet<CodeVariable> UniqueVariables => GetUniqueVariables();
+    public HashSet<CodeOptionReference> UniqueOptionReferences => GetUniqueOptionReferences();
     
-    public HashSet<CodeOption> Options { get; private set; } // Case of options section
+    public string LinesDisplay => $"From {StartingLineIndex+1} to {EndingLineIndex}";
+    
+    public bool HasAnyVariables => UniqueVariables.Count > 0;
+    public bool HasAnyOptionReferences => OptionReferences.Count > 0;
     
     public string Name => GetSectionName();
     public IconSource Icon => Type switch
@@ -32,7 +38,7 @@ public class CodeSection
         SectionType.Command => GetIconFromName("MagicWandIcon"),
         SectionType.Event => GetIconFromName("LightingIcon"),
         SectionType.Function => GetIconFromName("FunctionIcon"),
-        SectionType.Options => new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 24 },
+        SectionType.Options => new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 20 },
     };
     
     public bool ContainsLineIndex(int line) => line >= StartingLineIndex && line <= EndingLineIndex;
@@ -82,6 +88,7 @@ public class CodeSection
         
         Options = new HashSet<CodeOption>();
         Variables = new HashSet<CodeVariable>();
+        OptionReferences = new HashSet<CodeOptionReference>();
         
         if (Type == SectionType.Options)
         {
@@ -106,12 +113,14 @@ public class CodeSection
         }
         else
         {
-            // Parse variables
             int lineIndex = StartingLineIndex;
             foreach (var line in Lines)
             {
-                var matches = Regex.Matches(line, @"(?<=\{)_?(.*?)(?=\})");
-                foreach (var m in matches)
+                var variableMatches = Regex.Matches(line, @"(?<=\{)(?!@)_?(.*?)(?=\})");
+                var optionReferenceMatches = Regex.Matches(line, CodeOptionReference.OptionReferencePattern);
+                
+                // Parse variables
+                foreach (var m in variableMatches)
                 {
                     var match = m as Match;
                     if (!match.Success)
@@ -120,6 +129,18 @@ public class CodeSection
                     var raw = match.Value;
                     Variables.Add(new CodeVariable(this, raw, lineIndex + 1, column));
                 }
+                
+                // Parse option references
+                foreach (var m in optionReferenceMatches)
+                {
+                    var match = m as Match;
+                    if (!match.Success)
+                        continue;
+                    var column = match.Index + 1;
+                    var raw = match.Value;
+                    OptionReferences.Add(new CodeOptionReference(this, raw, lineIndex + 1, column));
+                }
+                
                 lineIndex++;
             }   
         }
@@ -155,14 +176,21 @@ public class CodeSection
     /// </summary>
     public void RefreshCode()
     {
-        var sectionCode = string.Join("\n", Lines);
+        var lines = Lines;
+        var lastLine = lines[^1];
+        if (lastLine.EndsWith("\n"))
+            lines.RemoveAt(lines.Count-1);
+        
+        var sectionCode = string.Join("\n", lines);
         var editor = Parser.Editor;
         var document = editor.Document;
+        
         var startOffset = document.GetOffset(StartingLineIndex+1, 0);
-        var endOffset = document.GetOffset(EndingLineIndex, 0);
-        if (EndingLineIndex == document.LineCount)
-            endOffset = document.TextLength;
-        document.Replace(startOffset, endOffset - startOffset, sectionCode);
+        var endOffset = document.GetOffset(EndingLineIndex, 
+            document.GetLineByNumber(EndingLineIndex).Length+1);
+        
+        document.Replace(startOffset, endOffset - startOffset + (
+            EndingLineIndex == document.LineCount ? 0 : 1), sectionCode);
     }
 
     private static IconSource GetIconFromName(string iconName)
@@ -172,6 +200,7 @@ public class CodeSection
     }
     
     public string VariableTitle => $"Variables ({UniqueVariables.Count})";
+    public string OptionReferenceTitle => $"Option References ({UniqueOptionReferences.Count})";
     public RelayCommand NavigateToCommand => new(NavigateTo);
     public object[] VariableContent => [ new TextBlock() { Text = $"Total: {Variables.Count}" } ];
     
@@ -193,5 +222,17 @@ public class CodeSection
             uniqueVariables.Add(variable);
         }
         return uniqueVariables;
+    }
+    
+    private HashSet<CodeOptionReference> GetUniqueOptionReferences()
+    {
+        var uniqueOptionReferences = new HashSet<CodeOptionReference>();
+        foreach (var optionReference in OptionReferences)
+        {
+            if (uniqueOptionReferences.Any(o => o.IsSimilar(optionReference)))
+                continue;
+            uniqueOptionReferences.Add(optionReference);
+        }
+        return uniqueOptionReferences;
     }
 }
