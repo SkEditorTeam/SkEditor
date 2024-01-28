@@ -59,7 +59,7 @@ public partial class SideBarControl : UserControl
                 }
                 
                 _currentPanel = panel;
-                _currentPanel.Content.Width = 250;
+                _currentPanel.Content.Width = _currentPanel.DesiredWidth;
                 _currentPanel.OnOpen();
             });
             
