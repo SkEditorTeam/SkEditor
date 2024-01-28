@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using AvaloniaEdit.Editing;
 using SkEditor.API;
+using SkEditor.Views;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -28,6 +29,13 @@ public class CodeOption : INameableCodeElement
     public bool ContainsCaret(Caret caret)
     {
         return caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
+    }
+
+    public async void Rename()
+    {
+        var renameWindow = new SymbolRefactorWindow(this);
+        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
+        Section.Parser.Parse();
     }
     
     public void Rename(string newName)

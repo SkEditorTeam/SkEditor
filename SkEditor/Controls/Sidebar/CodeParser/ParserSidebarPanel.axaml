@@ -51,6 +51,27 @@
                                     </Grid>
                                     <Separator Margin="0 3"/>
                                     
+                                    <!-- Function Argument -->
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                                                Spacing="10" IsVisible="{Binding HasFunctionArguments}">
+                                        <TextBlock FontSize="18" TextAlignment="Left" HorizontalAlignment="Center" FontWeight="DemiBold" Text="{Binding FunctionArgumentTitle}"/>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5 8">
+                                            <ItemsControl ItemsSource="{Binding FunctionArguments}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid ColumnDefinitions="*,*,Auto" Margin="0 2">
+                                                            <TextBlock TextAlignment="Left" FontWeight="DemiBold" Text="{Binding Name}"/>
+                                                            <TextBlock Grid.Column="1" TextAlignment="Left" Text="{Binding Type}"/>
+                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" ToolTip.Tip="Rename">
+                                                                <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0"></ui:SymbolIcon>
+                                                            </Button>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
                                     <!-- Variables -->
                                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                                 Spacing="10" IsVisible="{Binding HasAnyVariables}">
@@ -85,6 +106,26 @@
                                                                 <ui:SymbolIcon Symbol="Go" FontSize="20" Margin="0"></ui:SymbolIcon>
                                                             </Button>
                                                             <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" Margin="4 0 0 0" ToolTip.Tip="Rename">
+                                                                <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0"></ui:SymbolIcon>
+                                                            </Button>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
+                                    <!-- Options Definition -->
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                                                Spacing="10" IsVisible="{Binding HasOptionDefinition}">
+                                        <TextBlock FontSize="18" TextAlignment="Left" HorizontalAlignment="Center" FontWeight="DemiBold" Text="{Binding OptionTitle}"/>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5 8">
+                                            <ItemsControl ItemsSource="{Binding Options}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid ColumnDefinitions="*,Auto" Margin="0 2">
+                                                            <TextBlock TextAlignment="Left" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Name}"/>
+                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" ToolTip.Tip="Rename">
                                                                 <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0"></ui:SymbolIcon>
                                                             </Button>
                                                         </Grid>

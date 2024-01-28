@@ -31,6 +31,16 @@ public class CodeVariable : ObservableObject, INameableCodeElement
         Column = column;
         Length = raw.Length;
     }
+    
+    public CodeVariable(CodeFunctionArgument argument)
+    {
+        Section = argument.Function;
+        IsLocal = true;
+        Name = argument.Name;
+        Line = argument.Line;
+        Column = argument.Column;
+        Length = argument.Length;
+    }
 
     public override string ToString()
     {
@@ -48,11 +58,23 @@ public class CodeVariable : ObservableObject, INameableCodeElement
     }
     
     public FontStyle Style => IsLocal ? FontStyle.Italic : FontStyle.Normal;
-    
+
     public void Rename(string newName)
+    {
+        Rename(newName, false);
+    }
+
+    public void Rename(string newName, bool callingFromFunction = false)
     {
         if (newName.StartsWith("{") && newName.EndsWith("}")) newName = newName[1..^1];
         if (newName.StartsWith("_")) newName = newName[1..];
+
+        var definition = Section.GetVariableDefinition(this);
+        if (definition != null && !callingFromFunction)
+        {
+            definition.Rename(newName);
+            return;
+        }
         
         if (IsLocal) // rename all within the section
         {

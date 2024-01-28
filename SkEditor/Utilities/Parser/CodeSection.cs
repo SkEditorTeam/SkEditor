@@ -19,7 +19,6 @@ public class CodeSection
     public int StartingLineIndex { get; private set; }
     public int EndingLineIndex => StartingLineIndex + Lines.Count;
     
-    public HashSet<CodeVariable> GetGlobalVariables() => [..Variables.Where(variable => !variable.IsLocal)];
     public HashSet<CodeVariable> Variables { get; private set; } // Case of any section other than options
     public HashSet<CodeOptionReference> OptionReferences { get; private set; } // Case of any section other than options
     public HashSet<CodeOption> Options { get; private set; } // Case of options section
@@ -27,10 +26,14 @@ public class CodeSection
     public HashSet<CodeVariable> UniqueVariables => GetUniqueVariables();
     public HashSet<CodeOptionReference> UniqueOptionReferences => GetUniqueOptionReferences();
     
+    public HashSet<CodeFunctionArgument> FunctionArguments { get; set; } = new(); // Case of function section
+    
     public string LinesDisplay => $"From {StartingLineIndex+1} to {EndingLineIndex}";
     
     public bool HasAnyVariables => UniqueVariables.Count > 0;
     public bool HasAnyOptionReferences => OptionReferences.Count > 0;
+    public bool HasOptionDefinition => Options.Count > 0;
+    public bool HasFunctionArguments => FunctionArguments.Count > 0;
     
     public string Name => GetSectionName();
     public IconSource Icon => Type switch
@@ -142,7 +145,22 @@ public class CodeSection
                 }
                 
                 lineIndex++;
-            }   
+            }
+            
+            if (Type == SectionType.Function)
+            {
+                // Parse function arguments
+                var functionArguments = Regex.Matches(Lines[0], CodeFunctionArgument.FunctionArgumentPattern);
+                foreach (var m in functionArguments)
+                {
+                    var match = m as Match;
+                    if (!match.Success)
+                        continue;
+                    var raw = match.Value;
+                    var column = match.Index + 1;
+                    FunctionArguments.Add(new CodeFunctionArgument(this, raw, StartingLineIndex + 1, column));
+                }
+            }
         }
     }
 
@@ -201,8 +219,15 @@ public class CodeSection
     
     public string VariableTitle => $"Variables ({UniqueVariables.Count})";
     public string OptionReferenceTitle => $"Option References ({UniqueOptionReferences.Count})";
+    public string OptionTitle => $"Defined Options ({Options.Count})";
+    public string FunctionArgumentTitle => $"Function Arguments ({FunctionArguments.Count})";
     public RelayCommand NavigateToCommand => new(NavigateTo);
     public object[] VariableContent => [ new TextBlock() { Text = $"Total: {Variables.Count}" } ];
+
+    public CodeFunctionArgument? GetVariableDefinition(CodeVariable variable)
+    {
+        return FunctionArguments.FirstOrDefault(a => a.IsDefinitionOf(variable));
+    }
     
     public void NavigateTo()
     {
