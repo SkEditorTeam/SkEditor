@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using AvaloniaEdit.Editing;
 using SkEditor.API;
 
@@ -32,23 +33,22 @@ public class CodeOption : INameableCodeElement
     public void Rename(string newName)
     {
         // First rename the option declaration
-        var line = Section.Lines[Line - Section.StartingLineIndex - 1];
+        var currentLine = Section.Lines[Line - Section.StartingLineIndex - 1];
         var regex = new Regex(Regex.Escape(Name));
-        var newLine = regex.Replace(line, newName, 1);
-        Section.Lines[Line - Section.StartingLineIndex -1] = newLine;
+        var newCurrentLine = regex.Replace(currentLine, newName, 1);
+        Section.Lines[Line - Section.StartingLineIndex - 1] = newCurrentLine;
         Length = newName.Length;
         Section.RefreshCode();
         
-        // Then rename the option usage everywhere (form is '{@optionName}')
-        var regex2 = new Regex($"{{@{Regex.Escape(Name)}}}");
+        // Then rename all references
         foreach (var section in Section.Parser.Sections)
         {
-            for (var index = section.StartingLineIndex; index < section.StartingLineIndex + section.Lines.Count; index++)
+            foreach (var reference in section.OptionReferences)
             {
-                var line2 = section.Lines[index - section.StartingLineIndex];
-                var newLine2 = regex2.Replace(line2, $"{{@{newName}}}");
-                section.Lines[index - section.StartingLineIndex] = newLine2;
-                section.RefreshCode();
+                if (reference.IsSimilar(this))
+                {
+                    reference.Replace(newName);
+                }
             }
         }
     }

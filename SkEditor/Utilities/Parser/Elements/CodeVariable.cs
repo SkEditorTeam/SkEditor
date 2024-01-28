@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Avalonia.Media;
 using AvaloniaEdit.Editing;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
 using SkEditor.Views;
 
 namespace SkEditor.Utilities.Parser;
 
-public class CodeVariable : INameableCodeElement
+public class CodeVariable : ObservableObject, INameableCodeElement
 {
     public CodeSection Section { get; private set; }
     
@@ -46,12 +48,6 @@ public class CodeVariable : INameableCodeElement
     }
     
     public FontStyle Style => IsLocal ? FontStyle.Italic : FontStyle.Normal;
-
-    public async void Rename()
-    {
-        var renameWindow = new SymbolRefactorWindow(this);
-        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
-    }
     
     public void Rename(string newName)
     {
@@ -115,6 +111,13 @@ public class CodeVariable : INameableCodeElement
                 section.Parse();
             }
         }
+    }
+    
+    public async void Rename()
+    {
+        var renameWindow = new SymbolRefactorWindow(this);
+        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
+        Section.Parser.Parse();
     }
 
     public string GetNameDisplay()
