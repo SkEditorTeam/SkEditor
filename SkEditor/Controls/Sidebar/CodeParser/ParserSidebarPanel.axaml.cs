@@ -16,8 +16,7 @@ public partial class ParserSidebarPanel : UserControl
     public void Refresh(List<CodeSection> sections)
     {
         Sections.Clear();
-        foreach (var section in sections)
-            Sections.Add(section);
+        sections.ForEach(section => Sections.Add(section));
         ItemsRepeater.ItemsSource = Sections;
         UpdateInformationBox();
     }
@@ -42,8 +41,16 @@ public partial class ParserSidebarPanel : UserControl
         parser.Parse();
     }
 
-    private void UpdateInformationBox()
+    public void UpdateInformationBox(bool isToNotifyUnParsing = false)
     {
+        if (isToNotifyUnParsing)
+        {
+            Sections.Clear();
+            CannotParseInfo.IsVisible = true;
+            CannotParseInfoText.Text = "File changed, you need to parse it again.";
+            return;
+        }
+        
         if (Sections.Count == 0)
         {
             CannotParseInfo.IsVisible = true;
@@ -70,5 +77,7 @@ public partial class ParserSidebarPanel : UserControl
         public override bool IsDisabled => false;
         
         public readonly ParserSidebarPanel Panel = new ();
+        
+        public override int DesiredWidth { get; } = 350;
     }
 }
