@@ -11,6 +11,7 @@ namespace SkEditor.Controls.Sidebar;
 
 public partial class ParserSidebarPanel : UserControl
 {
+    public bool CodeParserEnabled => ApiVault.Get().GetAppConfig().EnableCodeParser;
     public ObservableCollection<CodeSection> Sections { get; set; } = new ();
     
     public void Refresh(List<CodeSection> sections)
@@ -24,8 +25,26 @@ public partial class ParserSidebarPanel : UserControl
     public ParserSidebarPanel()
     {
         InitializeComponent();
+
+        ParserDisabled.IsVisible = !CodeParserEnabled;
+        ScrollViewer.IsVisible = CodeParserEnabled;
+        ParseButton.IsEnabled = CodeParserEnabled;
         
         ParseButton.Click += (_, _) => ParseCurrentFile();
+        EnableParser.Click += async (_, _) =>
+        {
+            var response = await ApiVault.Get().ShowMessageWithIcon("Enable Code Parser?", "The code parser let you navigate easily in your code and rename variables, options, and more.\n\nKeep in mind it is still in beta and may BREAK your scripts, so make sure to make a backup before that.", 
+                new SymbolIconSource() { Symbol = Symbol.Alert });
+            if (response == ContentDialogResult.Primary)
+            {
+                ApiVault.Get().GetAppConfig().EnableCodeParser = true;
+                ApiVault.Get().GetAppConfig().Save();
+                
+                ParserDisabled.IsVisible = false;
+                ScrollViewer.IsVisible = true;
+                ParseButton.IsEnabled = true;
+            }
+        };
     }
 
     public void ParseCurrentFile()
@@ -43,6 +62,13 @@ public partial class ParserSidebarPanel : UserControl
 
     public void UpdateInformationBox(bool isToNotifyUnParsing = false)
     {
+        if (!CodeParserEnabled)
+        {
+            Sections.Clear();
+            CannotParseInfoText.IsVisible = false;
+            return;
+        }
+        
         if (isToNotifyUnParsing)
         {
             Sections.Clear();

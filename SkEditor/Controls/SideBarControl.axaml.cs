@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
@@ -28,19 +31,35 @@ public partial class SideBarControl : UserControl
         RegisterPanel(ParserPanel);
     }
 
-    public void LoadPanels()
+    public static long TransitionDuration = 100L;
+    public async void LoadPanels()
     {
         foreach (SidebarPanel panel in Panels)
         {
             var btn = CreatePanelButton(panel);
             var content = panel.Content;
             content.Width = 0;
+            content.Opacity = 0;
+
+            content.Transitions = new Transitions() { 
+                new DoubleTransition()
+                {
+                    Property = WidthProperty, 
+                    Duration = TimeSpan.FromMilliseconds(TransitionDuration)
+                }, 
+                new DoubleTransition()
+                {
+                    Property = OpacityProperty, 
+                    Duration = TimeSpan.FromMilliseconds(150)
+                }
+            };
             
-            btn.Command = new RelayCommand(() =>
+            btn.Command = new RelayCommand(async () =>
             {
                 if (_currentPanel == panel)
                 {
                     _currentPanel.Content.Width = 0; // Close current panel
+                    _currentPanel.Content.Opacity = 0;
                     
                     _currentPanel.OnClose();
                     _currentPanel = null;
@@ -55,11 +74,15 @@ public partial class SideBarControl : UserControl
                 {
                     _currentPanel.OnClose();
                     _currentPanel.Content.Width = 0; // Close current panel
+                    _currentPanel.Content.Opacity = 0;
                     _currentPanel = null;
+                    
+                    await Task.Delay((int) TransitionDuration);
                 }
                 
                 _currentPanel = panel;
                 _currentPanel.Content.Width = _currentPanel.DesiredWidth;
+                _currentPanel.Content.Opacity = 1;
                 _currentPanel.OnOpen();
             });
             

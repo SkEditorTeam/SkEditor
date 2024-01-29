@@ -20,18 +20,18 @@
         </Style>
     </UserControl.Styles>
     
-    <Border Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Margin="10,0,0,0">
-        <Border.Transitions>
-            <Transitions>
-                <DoubleTransition Property="Width" Duration="0:0:0.05" Easing="QuadraticEaseIn"/>
-            </Transitions>
-        </Border.Transitions>
+    <Border MinWidth="350" Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Margin="10,0,0,0">
+        
 
         <Grid RowDefinitions="auto,auto,auto,*,auto">
             <TextBlock Grid.Row="0" Text="Code Parsing" FontWeight="DemiBold" Margin="20,10,20,10"/>
             <Separator Grid.Row="1" Margin="0,0,0,10"/>
             <ui:InfoBar Margin="5 0" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Warning" Message="The code parser is still in beta! Report any bugs found in the Discord server."/>
-            <ScrollViewer Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Top" HorizontalContentAlignment="Center">
+            <StackPanel Margin="10" Name="ParserDisabled" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" IsVisible="False" Spacing="10">
+                <TextBlock TextAlignment="Center" TextWrapping="Wrap">The code parser is still in beta and bugs may occur. It is disabled by default but you can enable it using the button below.</TextBlock>
+                <Button Name="EnableParser" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="accent">Enable</Button>
+            </StackPanel>
+            <ScrollViewer Name="ScrollViewer" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Top" HorizontalContentAlignment="Center">
                 <ItemsRepeater Name="ItemsRepeater">
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate DataType="parser:CodeSection">

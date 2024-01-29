@@ -40,6 +40,7 @@ public class AppConfig
     public int TabSize { get; set; } = 4;
     public bool EnableProjectsExperiment { get; set; } = false;
     public bool EnableHexPreview { get; set; } = false;
+    public bool EnableCodeParser { get; set; } = false;
 
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
