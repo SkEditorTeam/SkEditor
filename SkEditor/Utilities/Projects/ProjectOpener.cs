@@ -15,8 +15,8 @@ using SkEditor.Utilities.Files;
 namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
 {
-    private static TreeView FileTreeView => ApiVault.Get().GetMainWindow().SideBar.FileTreeView;
     private static IStorageFolder ProjectRootFolder;
+    private static TreeView FileTreeView => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel.FileTreeView;
 
     public async static void OpenProject()
     {
