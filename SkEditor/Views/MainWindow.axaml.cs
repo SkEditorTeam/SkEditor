@@ -19,6 +19,9 @@ namespace SkEditor.Views;
 
 public partial class MainWindow : AppWindow
 {
+    
+    public static MainWindow Instance { get; private set; }
+    
     public BottomBarControl GetBottomBar() => this.FindControl<BottomBarControl>("BottomBar");
 
     public MainWindow()
@@ -31,6 +34,8 @@ public partial class MainWindow : AppWindow
 
         Translation.LoadDefaultLanguage();
         Translation.ChangeLanguage(ApiVault.Get().GetAppConfig().Language);
+        
+        Instance = this;
     }
 
     private void AddEvents()
@@ -76,7 +81,8 @@ public partial class MainWindow : AppWindow
 
     private async void OnWindowLoaded(object sender, RoutedEventArgs e)
     {
-        AddonLoader.Load();
+        AddonLoader.Load(); 
+        Utilities.Files.FileTypes.RegisterDefaultAssociations();
         SideBar.LoadPanels();
 
         ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);

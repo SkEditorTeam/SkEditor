@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SkEditor.Utilities.Parser;
+using SkEditor.Views;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;
@@ -36,14 +37,29 @@ public class FileHandler
         catch { }
     };
     
+
     public static List<OpenedFile> OpenedFiles { get; } = new();
+
+    public static void TabSwitchAction()
+    {
+        var item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+        if (item is null)
+            return;
+        var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(item.Header.ToString());
+        MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
+    }
+
 
     private static int GetUntitledNumber() => (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Count(tab => RegexPattern.IsMatch(tab.Header.ToString())) + 1;
 
-    public async static void NewFile()
+    public static async void NewFile()
     {
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
         TabViewItem tabItem = await FileBuilder.Build(header);
+      
+        if (tabItem == null)
+            return;
+
         OpenedFiles.Add(new OpenedFile()
         {
             Editor = tabItem.Content as TextEditor,
@@ -60,10 +76,11 @@ public class FileHandler
     public async static void OpenFile()
     {
         bool untitledFileOpen = ApiVault.Get().GetTabView().TabItems.Count() == 1 &&
-                ApiVault.Get().GetTextEditor().Text.Length == 0 &&
-                ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
-                item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
-                !item.Header.ToString().EndsWith('*');
+                                ApiVault.Get().GetTextEditor() != null &&
+                                ApiVault.Get().GetTextEditor().Text.Length == 0 &&
+                                ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
+                                item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
+                                !item.Header.ToString().EndsWith('*');
 
         var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
 
@@ -77,7 +94,7 @@ public class FileHandler
         if (untitledFileOpen) await CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
     }
 
-    public async static void OpenFile(string path)
+    public static async void OpenFile(string path)
     {
         if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Any(tab => tab.Tag.ToString().Equals(path)))
         {
@@ -87,6 +104,9 @@ public class FileHandler
 
         string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
         TabViewItem tabItem = await FileBuilder.Build(fileName, path);
+        if (tabItem == null)
+            return;
+        
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
         OpenedFiles.Add(new OpenedFile()
         {
@@ -216,6 +236,8 @@ public class FileHandler
         tabItems?.Remove(item);
         
         if (tabItems.Count == 0) NewFile();
+        FileBuilder.OpenedFiles.Remove(header);
+        TabSwitchAction();
     }
 
     private static void DisposeEditorData(TabViewItem item)

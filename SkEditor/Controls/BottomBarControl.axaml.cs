@@ -5,6 +5,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Files;
 
 namespace SkEditor.Controls;
 public partial class BottomBarControl : UserControl
@@ -17,6 +18,7 @@ public partial class BottomBarControl : UserControl
         {
             Application.Current.ResourcesChanged += (sender, e) => UpdatePosition();
             ApiVault.Get().GetTabView().SelectionChanged += (sender, e) => UpdatePosition();
+            ApiVault.Get().GetTabView().SelectionChanged += (sender, e) => FileHandler.TabSwitchAction();
         };
     }
 

@@ -23,6 +23,8 @@ public class CrashChecker
         Directory.GetFiles(tempPath).ToList().ForEach(async file =>
         {
             TabViewItem tabItem = await FileBuilder.Build(Path.GetFileName(file), file);
+            if (tabItem == null)
+                return;
             tabItem.Tag = null;
             (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
         });
