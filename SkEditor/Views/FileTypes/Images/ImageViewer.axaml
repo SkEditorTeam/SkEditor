@@ -1,0 +1,27 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:images="clr-namespace:SkEditor.Views.FileTypes.Images"
+             x:Class="SkEditor.Views.FileTypes.ImageViewer">
+    <Grid RowDefinitions="Auto,*" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid ColumnDefinitions="*,*,*" Height="48" Margin="10">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock FontSize="24" Name="InformationText" TextAlignment="Left"></TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <CheckBox Name="AntialiasingModeToggle" 
+                          Content="{DynamicResource FileViewImageAA}" Margin="10"
+                          IsChecked="True"/>
+            </StackPanel>
+        </Grid>
+        <ScrollViewer Grid.Row="1"
+                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                      VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+            <images:AdvancedImageBox SizeMode="Fit" RenderOptions.BitmapInterpolationMode="HighQuality"
+                   Name="Image" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></images:AdvancedImageBox>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

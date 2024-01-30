@@ -12,24 +12,34 @@ using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SkEditor.Views;
+using SkEditor.Views.FileTypes;
 
 namespace SkEditor.Utilities.Files;
 
 public class FileBuilder
 {
-    public async static Task<TabViewItem> Build(string header, string path = "")
+    public static readonly Dictionary<string, FileTypes.FileType> OpenedFiles = new();
+    
+    public static async Task<TabViewItem?> Build(string header, string path = "")
     {
-        TextEditor editor = await GetDefaultEditor(path);
+        var fileType = await GetFileDisplay(path);
+        if (fileType == null)
+            return null;
+        
         TabViewItem tabViewItem = new()
         {
             Header = header,
             IsSelected = true,
-            Content = editor,
+            Content = fileType.Display,
             Tag = string.Empty
         };
+
+        MainWindow.Instance.BottomBar.IsVisible = fileType.NeedsBottomBar;
 
         if (!string.IsNullOrWhiteSpace(path))
         {
@@ -46,15 +56,101 @@ public class FileBuilder
             Icon.SetIcon(tabViewItem);
         }
 
-        ApiVault.Get().OnFileCreated(editor);
-        Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
+        if (fileType.IsEditor)
+        {
+            var editor = fileType.Display as TextEditor;
+            
+            ApiVault.Get().OnFileCreated(editor);
+            Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
+        }
 
+        if (OpenedFiles.ContainsKey(header))
+            OpenedFiles.Remove(header);
+        
+        OpenedFiles.Add(header, fileType);
         return tabViewItem;
     }
 
-    private async static Task<TextEditor> GetDefaultEditor(string path)
+    private static async Task<FileTypes.FileType?> GetFileDisplay(string path)
+    {
+        FileTypes.FileType? fileType = null;
+        if (FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
+        {
+            var handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
+            if (handlers.Count == 1)
+            {
+                fileType = handlers[0].Handle(path);
+            }
+            else
+            {
+                var ext = Path.GetExtension(path);
+                if (ApiVault.Get().GetAppConfig().PreferredFileAssociations.ContainsKey(ext))
+                {
+                    var pref = ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext];
+                    if (pref == "SkEditor")
+                    {
+                        fileType = handlers.Find(association => !association.IsFromAddon).Handle(path);
+                    }
+                    else
+                    {
+                        var preferred = handlers.Find(association => association.IsFromAddon &&
+                            association.Addon.Name == ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext]);
+                        if (preferred != null)
+                        {
+                            fileType = preferred.Handle(path);
+                        }
+                        else
+                        {
+                            ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
+                        }
+                    }
+                }
+
+                if (fileType == null)
+                {
+                    var window = new AssociationSelectionWindow(path, handlers);
+                    await window.ShowDialog(MainWindow.Instance);
+                    var selected = window.SelectedAssociation;
+                    if (selected != null)
+                    {
+                        fileType = selected.Handle(path);
+                        if (window.RememberCheck.IsChecked == true)
+                        {
+                            ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext] = selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
+                        }
+                        else
+                        {
+                            ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
+                        }
+                        ApiVault.Get().GetAppConfig().Save();
+                    }
+                }
+            }
+        }
+        
+        return fileType ?? await GetDefaultEditor(path);
+    }
+
+    private static async Task<FileTypes.FileType?> GetDefaultEditor(string path)
     {
         AppConfig config = ApiVault.Get().GetAppConfig();
+
+        string fileContent = null;
+        if (!string.IsNullOrWhiteSpace(path))
+        {
+            path = Uri.UnescapeDataString(path);
+            if (File.Exists(path))
+                fileContent = await File.ReadAllTextAsync(path);
+        }
+        
+        if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))
+        {
+            var response = await ApiVault.Get().ShowMessageWithIcon(
+                Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
+                new SymbolIconSource() { Symbol = Symbol.Alert });
+            if (response != ContentDialogResult.Primary)
+                return null;
+        }
 
         TextEditor editor = new()
         {
@@ -83,14 +179,14 @@ public class FileBuilder
             path = Uri.UnescapeDataString(path);
             if (File.Exists(path))
             {
-                editor.Text = await File.ReadAllTextAsync(path);
+                editor.Text = fileContent;
             }
         }
 
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
 
-        return editor;
+        return new FileTypes.FileType(editor, path, true);
     }
 
     private static TextEditor AddEventHandlers(TextEditor editor)

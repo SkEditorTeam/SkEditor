@@ -1,4 +1,6 @@
-﻿namespace SkEditor.API;
+﻿using SkEditor.Utilities.Files;
+
+namespace SkEditor.API;
 
 public static class ApiVault
 {
@@ -12,5 +14,10 @@ public static class ApiVault
     public static ISkEditorAPI Get()
     {
         return instance;
+    }
+
+    public static void RegisterFileAssociation(FileTypes.FileAssociation association)
+    {
+        FileTypes.RegisterExternalAssociation(association);
     }
 }
