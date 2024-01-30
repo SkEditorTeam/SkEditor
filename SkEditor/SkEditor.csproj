@@ -140,6 +140,7 @@
 		</Compile>
 		<Compile Update="Views\FileTypes\Images\ImageViewer.axaml.cs">
 		  <DependentUpon>ImageViewer.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Controls\Sidebar\CodeParser\ParserSidebarPanel.axaml.cs">
 		  <DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
 		  <SubType>Code</SubType>
