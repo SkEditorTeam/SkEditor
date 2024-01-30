@@ -1,22 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.Files;
 
 namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
 {
     private static IStorageFolder ProjectRootFolder;
-    private static TreeView FileTreeView => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel.FileTreeView;
+    private static ExplorerSidebarPanel Panel => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel;
+    private static TreeView FileTreeView => Panel.FileTreeView;
+    private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
 
     public async static void OpenProject()
     {
@@ -38,7 +44,7 @@ public static class ProjectOpener
             TreeViewItem rootFolder = CreateTreeViewItem(storageFolder, true);
             rootFolder.IsExpanded = true;
 
-            FileTreeView.Items.Add(rootFolder);
+                FileTreeView.Items.Add(rootFolder);
 
             AddChildren(rootFolder, storageFolder);
         }
@@ -80,17 +86,25 @@ public static class ProjectOpener
         bool isFolder = storageItem is IStorageFolder;
         TreeViewItem item = new TreeViewItem { IsExpanded = false };
 
-        StackPanel stackPanel = new StackPanel() { Orientation = Orientation.Horizontal };
-        Label label = new Label() { Content = storageItem.Name };
+        if (isFolder)
+        {
+            item.Header = storageItem.Name;
+        }
+        else
+        {
+            StackPanel stackPanel = new StackPanel() { Orientation = Orientation.Horizontal };
+            Label label = new Label() { Content = storageItem.Name };
 
-        Control icon = root
-            ? new SymbolIcon() { Symbol = Symbol.Home, FontSize = 16 } 
-            : GetFileIcon(isFolder, Path.GetExtension(storageItem.Name)) as Control;
+            Control icon = root
+                ? new SymbolIcon() { Symbol = Symbol.Home, FontSize = 16 } 
+                : GetFileIcon(isFolder, Path.GetExtension(storageItem.Name)) as Control;
         
-        stackPanel.Children.Add(icon);
-        stackPanel.Children.Add(label);
+            stackPanel.Children.Add(icon);
+            stackPanel.Children.Add(label);
+            
+            item.Header = stackPanel;
+        }
         
-        item.Header = stackPanel;
         item.Tag = storageItem.Path.AbsolutePath;
         item.FontWeight = isFolder ? FontWeight.Medium : FontWeight.Normal;
         
@@ -120,7 +134,8 @@ public static class ProjectOpener
             {
                 Watermark = "File/folder name ...", 
                 IsReadOnly = false, 
-                Width = 150
+                Width = 150,
+                HorizontalAlignment = HorizontalAlignment.Left
             },
             FontWeight = FontWeight.Medium
         };
@@ -151,7 +166,7 @@ public static class ProjectOpener
         {
             new { Header = "MenuHeaderNewFile", Command = new RelayCommand(() => CreateElement(treeViewItem, storageItem)), Icon = Symbol.New },
             new { Header = "MenuHeaderNewFolder", Command = new RelayCommand(() => CreateElement(treeViewItem, storageItem, true)), Icon = Symbol.NewFolder },
-            new { Header = "MenuHeaderOpenInExplorer", Command = new RelayCommand(() => DeleteItem(storageItem)), Icon = Symbol.OpenLocal },
+            new { Header = "MenuHeaderOpenInExplorer", Command = new RelayCommand(() => OpenInExplorer(storageItem)), Icon = Symbol.OpenLocal },
             null,
             new { Header = "MenuHeaderCopyPath", Command = new RelayCommand(() => CopyPath(storageItem)), Icon = Symbol.Copy },
             new { Header = "MenuHeaderCopyAbsolutePath", Command = new RelayCommand(() => CopyPath(storageItem, true)), Icon = Symbol.Copy },
@@ -208,15 +223,20 @@ public static class ProjectOpener
             
             TreeViewItem item = CreateInputItem(treeViewItem, async (name) =>
             {
-                if (isFolder) 
-                    await storageFolder.CreateFolderAsync(name);
-                else 
-                    await storageFolder.CreateFileAsync(name);
+                await Task.Delay(10).ContinueWith(_ => Dispatcher.UIThread.InvokeAsync(() => treeViewItem.IsExpanded = true));
 
-                TreeViewItem createdViewItem = CreateTreeViewItem(storageItem);
+                IStorageItem newStorageItem;
+                if (isFolder) 
+                    newStorageItem = await storageFolder.CreateFolderAsync(name);
+                else 
+                    newStorageItem = await storageFolder.CreateFileAsync(name);
+
+                TreeViewItem createdViewItem = CreateTreeViewItem(newStorageItem);
                 treeViewItem.IsExpanded = true;
-                
                 treeViewItem.Items.Add(createdViewItem);
+                
+                if (newStorageItem is IStorageFile)
+                    FileHandler.OpenFile(newStorageItem.Path.AbsolutePath);
             });
             
             treeViewItem.Items.Insert(0, item);
@@ -241,6 +261,19 @@ public static class ProjectOpener
         
         string path = storageItem.Path.AbsolutePath.Replace(folder.Path.AbsolutePath, "");
         await ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path);
+    }
+    
+    private static void OpenInExplorer(IStorageItem storageItem)
+    {
+        if (storageItem is IStorageFolder storageFolder)
+        {
+            var path = storageFolder.Path.AbsolutePath;
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = true
+            });
+        }
     }
 
     #endregion
