@@ -9,6 +9,7 @@ using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using System;
+using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -56,5 +57,30 @@ public partial class MainMenuControl : UserControl
         MenuItemGenerateCommand.Command = new RelayCommand(() => new CommandGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemRefactor.Command = new RelayCommand(() => new RefactorWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
+    }
+    
+    public void LoadAddonsMenus()
+    {
+        bool hasAnyMenu = false;
+        foreach (IAddon addon in AddonLoader.Addons)
+        {
+            var items = addon.GetMenuItems();
+            if (items.Count <= 0)
+                continue;
+
+            hasAnyMenu = true;
+            var menuItem = new MenuItem()
+            {
+                Header = addon.Name,
+                Icon = new SymbolIcon() { Symbol = addon.GetMenuIcon() }
+            };
+            
+            foreach (MenuItem sub in items)
+                menuItem.Items.Add(sub);
+            
+            AddonsMenuItem.Items.Add(menuItem);
+        }
+        
+        AddonsMenuItem.IsVisible = hasAnyMenu;
     }
 }

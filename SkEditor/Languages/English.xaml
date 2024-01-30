@@ -19,6 +19,7 @@
 	<system:String x:Key="MenuHeaderEdit">Edit</system:String>
 	<system:String x:Key="MenuHeaderTools">Tools</system:String>
 	<system:String x:Key="MenuHeaderOther">Other</system:String>
+	<system:String x:Key="MenuHeaderAddons">Addons</system:String>
 
 	<!-- File Menu -->
 	<system:String x:Key="MenuHeaderNew">New</system:String>
@@ -80,6 +81,8 @@
 	<system:String x:Key="UpdateAvailable">Update available</system:String>
 	<system:String x:Key="UpdateAvailableMessage">An update is available.\nWould you like to download it now?</system:String>
 	<system:String x:Key="UpdateFailed">Failed to download the update. Please try again later.</system:String>
+	<system:String x:Key="BinaryFileFound">It seems you're trying to open a binary file (or a non text-based file).\n\nDo you want to open it anyway? SkEditor may not handle it correctly.</system:String>
+	<system:String x:Key="BinaryFileTitle">Binary File Found</system:String>
 	
 
 	<!-- Publish Window -->
@@ -93,6 +96,14 @@
 	<system:String x:Key="RefactorWindowRemoveComments">Remove comments</system:String>
 	<system:String x:Key="RefactorWindowTabsToSpaces">Convert tabs to spaces</system:String>
 	<system:String x:Key="RefactorWindowSpacesToTabs">Convert spaces to tabs</system:String>
+	
+	<!-- File Association Selection Window -->
+	<system:String x:Key="FileAssociationSelectionWindowTitle">Select file association</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowInfo">There's multiple provider for this file type. Please select one.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowOfficialItem">This is an official file type from SkEditor.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">This is an unofficial file type from an addon, {0}.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Remember my choice</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowConfirm">Confirm</system:String>
 
 	<!-- Settings -->
 	<system:String x:Key="SettingsEnabled">Enabled</system:String>
@@ -156,6 +167,9 @@
 
 	<!-- Addon Settings -->
 	<system:String x:Key="SettingsAddonsTitle">Addons</system:String>
+	
+	<!-- File Views -->
+	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>
 
 	<!-- Discord RPC -->
 	<system:String x:Key="DiscordRpcEditing">Editing: {0}</system:String>

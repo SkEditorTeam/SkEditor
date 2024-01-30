@@ -21,7 +21,7 @@ public interface ISkEditorAPI
 
     public bool IsFile(TabViewItem tabItem);
 
-    public TextEditor GetTextEditor();
+    public TextEditor? GetTextEditor();
 
     public TabView GetTabView();
 
