@@ -32,6 +32,15 @@
             <TreeView Grid.Row="2" Name="FileTreeView">
 					
             </TreeView>
+            <StackPanel Name="NoFolderMessage" VerticalAlignment="Center" Grid.Row="2" Margin="5" Spacing="10">
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap">You don't have any folders opened yet. Keep in mind they are in beta!</TextBlock>
+                <Button Click="OpenFolder" Classes="accent" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                        <ui:SymbolIcon Symbol="OpenFolder" FontSize="18"></ui:SymbolIcon>
+                        <TextBlock>Open Folder</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
         </Grid>
     </Border>
 </UserControl>

@@ -1,8 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Projects;
 
 namespace SkEditor.Controls.Sidebar;
 
@@ -20,5 +22,10 @@ public partial class ExplorerSidebarPanel : UserControl
         public override bool IsDisabled => false;
         
         public readonly ExplorerSidebarPanel Panel = new ();
+    }
+
+    private void OpenFolder(object? sender, RoutedEventArgs e)
+    {
+        ProjectOpener.OpenProject();
     }
 }
