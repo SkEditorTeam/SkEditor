@@ -1,7 +1,5 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Projects;

@@ -44,5 +44,10 @@
 	<ui:SymbolIconSource x:Key="RefreshIcon" Symbol="Refresh"/>
 	<ui:SymbolIconSource x:Key="ImportantIcon" Symbol="Important"/>
 	<ui:SymbolIconSource x:Key="EditIcon" Symbol="Edit"/>
+	<ui:SymbolIconSource x:Key="NewFile" Symbol="New"/>
+	<ui:SymbolIconSource x:Key="NewFolder" Symbol="NewFolder"/>
+	<ui:SymbolIconSource x:Key="OpenFolder" Symbol="OpenLocal"/>
+	<ui:SymbolIconSource x:Key="Delete" Symbol="Delete"/>
+	<ui:SymbolIconSource x:Key="Rename" Symbol="Rename"/>
 
 </ResourceDictionary>

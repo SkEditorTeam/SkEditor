@@ -4,6 +4,7 @@
     <Content Include="Assets\Warning.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.6" />
     <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
   </ItemGroup>
 </Project>

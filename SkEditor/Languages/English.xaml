@@ -13,6 +13,8 @@
 	<system:String x:Key="WindowTitleCommandGenerator">Generate command</system:String>
 	<system:String x:Key="WindowTitleItemSelector">Select item</system:String>
 	<system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
+	<system:String x:Key="WindowTitleElementRename">Rename</system:String>
+	<system:String x:Key="WindowTitleElementCreate">Create</system:String>
 
 	<!-- Menu Headers -->
 	<system:String x:Key="MenuHeaderFile">File</system:String>
@@ -110,6 +112,11 @@
 	<system:String x:Key="ProjectExplorerTitle">Explorer</system:String>
 	<system:String x:Key="ProjectExplorerInfoText">Projects are still in beta and bugs may occur!</system:String>
 	<system:String x:Key="ProjectExplorerInfoButton">Open Folder</system:String>
+	<system:String x:Key="ProjectRenameText">Renaming into ...</system:String>
+	<system:String x:Key="ProjectRenameErrorNameEmpty">Name cannot be empty.</system:String>
+	<system:String x:Key="ProjectRenameErrorParentNull">Parent cannot be null.</system:String>
+	<system:String x:Key="ProjectRenameErrorNameExists">A file or folder with this name already exists.</system:String>
+	<system:String x:Key="ProjectRenameErrorSameName">The new name is the same as the old name.</system:String>
 
 	<!-- File Association Selection Window -->
 	<system:String x:Key="FileAssociationSelectionWindowTitle">Select file association</system:String>
