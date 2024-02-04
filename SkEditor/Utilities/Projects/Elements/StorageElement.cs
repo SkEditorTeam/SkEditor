@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Views;
@@ -43,5 +45,16 @@ public abstract class StorageElement
     public void RefreshSelf()
     {
         Parent.Children[Parent.Children.IndexOf(this)] = this;
+        Sort(Parent);
+    }
+
+    public void Sort(StorageElement element)
+    {
+        if (element.Children != null)
+        {
+            var temp = element.Children.ToList();
+            element.Children.Clear();
+            element.Children.AddRange(temp.OrderBy(x => x.IsFile).ThenBy(x => x.Name));
+        }
     }
 }

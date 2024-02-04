@@ -117,6 +117,10 @@
 	<system:String x:Key="ProjectRenameErrorParentNull">Parent cannot be null.</system:String>
 	<system:String x:Key="ProjectRenameErrorNameExists">A file or folder with this name already exists.</system:String>
 	<system:String x:Key="ProjectRenameErrorSameName">The new name is the same as the old name.</system:String>
+	<system:String x:Key="ProjectCreateErrorNameExists">A file or folder with this name already exists.</system:String>
+	<system:String x:Key="ProjectCreateFileName">File Name</system:String>
+	<system:String x:Key="ProjectCreateFolderName">Folder Name</system:String>
+	<system:String x:Key="ProjectCreateTemplate">Template</system:String>
 
 	<!-- File Association Selection Window -->
 	<system:String x:Key="FileAssociationSelectionWindowTitle">Select file association</system:String>

@@ -47,7 +47,7 @@
                 </TreeView.Styles>
                 <TreeView.ItemTemplate>
                     <TreeDataTemplate x:DataType="elements:StorageElement" ItemsSource="{Binding Children}">
-                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
                             <Interaction.Behaviors>
                                 <EventTriggerBehavior EventName="DoubleTapped">
                                     <EventTriggerBehavior.Actions>

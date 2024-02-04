@@ -5,6 +5,7 @@ using System.Linq;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
+using SkEditor.Utilities.Files;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
 
@@ -79,6 +80,17 @@ public class Folder : StorageElement
         return null;
     }
 
+    public string? ValidateCreationName(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return Translation.Get("ProjectCreateErrorNameEmpty");
+        
+        if (Children.Any(x => x.Name == input))
+            return Translation.Get("ProjectCreateErrorNameExists");
+        
+        return null;
+    }
+
     public override void HandleDoubleClick()
     {
         if (Children.Count == 0)
@@ -102,5 +114,28 @@ public class Folder : StorageElement
     {
         var window = new CreateStorageElementWindow(this, file);
         await window.ShowDialog(MainWindow.Instance);
+    }
+
+    public async void CreateFile(string name)
+    {
+        var path = Path.Combine(StorageFolderPath, name);
+        
+        System.IO.File.Create(path).Close();
+        FileHandler.OpenFile(path);
+
+        var element = new File(path, this);
+        Children.Add(element);
+        Sort(this);
+    }
+    
+    public void CreateFolder(string name)
+    {
+        var path = Path.Combine(StorageFolderPath, name);
+        
+        Directory.CreateDirectory(path);
+        
+        var element = new Folder(path, this);
+        Children.Add(element);
+        Sort(this);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Projects.Elements;
 using SkEditor.Utilities.Styling;
 
@@ -19,5 +21,32 @@ public partial class CreateStorageElementWindow : AppWindow
         
         InitializeComponent();
         WindowStyler.Style(this);
+        
+        FileNameTextBlock.Text = Translation.Get(isFile ? "ProjectCreateFileName" : "ProjectCreateFolderName");
+        FileTemplateTextBlock.Text = Translation.Get("ProjectCreateTemplate");
+        
+        CreateButton.Command = new RelayCommand(Create);
+    }
+    
+    private void Create()
+    {
+        var input = NameTextBox.Text;
+        string? error = Folder.ValidateCreationName(input);
+        if (error != null)
+        {
+            ErrorBox.Text = error;
+            return;
+        }
+        
+        if (IsFile)
+        {
+            Folder.CreateFile(input);
+        }
+        else
+        {
+            Folder.CreateFolder(input);
+        }
+        
+        Close();
     }
 }
