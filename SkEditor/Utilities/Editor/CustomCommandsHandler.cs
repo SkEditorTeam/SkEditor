@@ -18,23 +18,39 @@ public class CustomCommandsHandler
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;
         var selectionLength = editor.SelectionLength;
+        var indentation = editor.Options.IndentationString;
 
         var selectedLines = document.Lines
             .Where(line => selectionStart <= line.EndOffset && selectionStart + selectionLength >= line.Offset)
             .ToList();
 
-        bool allLinesCommented = selectedLines.All(line => document.GetText(line).StartsWith("#"));
-
         var modifiedLines = selectedLines.Select(line =>
         {
             var text = document.GetText(line);
-            if (allLinesCommented)
+            if (string.IsNullOrWhiteSpace(text))
+                return text;
+            
+            // Find the first non-tabulator character
+            var strippedLine = text.TrimStart();
+            var isCommented = text.TrimStart().StartsWith("#");
+            var indentationAmount = 0;
+            while (text.StartsWith(indentation))
             {
-                return text.StartsWith('#') ? text[1..] : text;
+                text = text[indentation.Length..];
+                indentationAmount++;
             }
-            else
+
+            string indentationToInsert = "";
+            for (int i = 0; i < indentationAmount; i++)
+                indentationToInsert += indentation;
+            
+            ApiVault.Get().Log("Indentation 2 insert: " + indentationToInsert + " | Line: '" + text + "'", true);
+            if (isCommented)
             {
-                return text.StartsWith('#') ? "##" + text[1..] : "#" + text;
+                return indentationToInsert + strippedLine[1..];
+            } else
+            {
+                return indentationToInsert + "#" + strippedLine;
             }
         }).ToList();
 

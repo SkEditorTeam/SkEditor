@@ -1,18 +1,24 @@
-﻿using Avalonia.Controls;
-using Avalonia.Media;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities.Files;
-using System;
-using System.Collections.Generic;
-using System.IO;
+using SkEditor.Controls.Sidebar;
+using SkEditor.Utilities.Projects.Elements;
 
 namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
 {
-    private static TreeView FileTreeView => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel.FileTreeView;
+    public static Folder? ProjectRootFolder = null;
+    private static ExplorerSidebarPanel Panel => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel;
+    private static TreeView FileTreeView => Panel.FileTreeView;
+    private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
 
-    public async static void OpenProject()
+    public static async void OpenProject()
     {
         TopLevel topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
 
@@ -22,60 +28,150 @@ public static class ProjectOpener
             AllowMultiple = false
         });
 
-        if (folder.Count == 0) return;
-
-        FileTreeView.Items.Clear();
-
-        foreach (IStorageFolder storageFolder in folder)
+        if (folder.Count == 0)
         {
-            TreeViewItem rootFolder = new()
-            {
-                Header = storageFolder.Name,
-                Tag = storageFolder.Path,
-                IsExpanded = true,
-                FontWeight = FontWeight.SemiBold
-            };
-
-            FileTreeView.Items.Add(rootFolder);
-
-            AddChildren(rootFolder, storageFolder);
+            NoFolderMessage.IsVisible = true;
+            return;
         }
+        
+        NoFolderMessage.IsVisible = false;
+        
+        ProjectRootFolder = new Folder(folder[0].Path.AbsolutePath) 
+            { IsExpanded = true };
+        FileTreeView.ItemsSource = new ObservableCollection<StorageElement> { ProjectRootFolder };
     }
-
-    public async static void AddChildren(TreeViewItem viewItem, IStorageFolder folder)
+    
+    #region ContextMenu Creation
+    
+    private static MenuFlyout CreateContextMenu(TreeViewItem treeViewItem, IStorageItem storageItem)
     {
-        await foreach (IStorageItem storageItem in folder.GetItemsAsync())
+        var commands = new[]
         {
-            string path = Uri.UnescapeDataString(storageItem.Path.AbsolutePath);
-            if (storageItem is IStorageFolder storageFolder)
-            {
-                TreeViewItem folderItem = new()
-                {
-                    Header = Path.GetFileName(path),
-                    Tag = path,
-                    FontWeight = FontWeight.Medium,
-                };
+            new { Header = "MenuHeaderNewFile", Command = new RelayCommand(() => CreateElement(treeViewItem, storageItem)), Icon = Symbol.New },
+            new { Header = "MenuHeaderNewFolder", Command = new RelayCommand(() => CreateElement(treeViewItem, storageItem, true)), Icon = Symbol.NewFolder },
+            new { Header = "MenuHeaderOpenInExplorer", Command = new RelayCommand(() => OpenInExplorer(storageItem)), Icon = Symbol.OpenLocal },
+            null,
+            new { Header = "MenuHeaderCopyPath", Command = new RelayCommand(() => CopyPath(storageItem)), Icon = Symbol.Copy },
+            new { Header = "MenuHeaderCopyAbsolutePath", Command = new RelayCommand(() => CopyPath(storageItem, true)), Icon = Symbol.Copy },
+            null,
+            new { Header = "MenuHeaderRename", Command = new RelayCommand(() => DeleteItem(storageItem)), Icon = Symbol.Rename },
+            new { Header = "MenuHeaderDelete", Command = new RelayCommand(() => DeleteItem(storageItem)), Icon = Symbol.Delete }
+        };
 
-                viewItem.Items.Add(folderItem);
+        var contextMenu = new MenuFlyout();
+        List<Control> list = new List<Control>();
+        foreach (var item in commands)
+        {
+            if (item == null)
+                list.Add(new Separator());
+            else 
+                list.Add(new MenuItem { Header = Translation.Get(item.Header), Command = item.Command, Icon = new SymbolIcon { Symbol = item.Icon, FontSize = 20 } });
+        }
 
-                AddChildren(folderItem, storageFolder);
-            }
-            else
-            {
-                TreeViewItem item = new()
-                {
-                    Header = Path.GetFileName(path),
-                    Tag = path,
-                    FontWeight = FontWeight.Normal
-                };
+        list.ForEach(item => contextMenu.Items.Add(item));
 
-                item.DoubleTapped += (sender, e) =>
-                {
-                    FileHandler.OpenFile(path);
-                };
-
-                viewItem.Items.Add(item);
-            }
+        return contextMenu;
+    }
+    
+    private static async void DeleteItem(IStorageItem storageItem)
+    {
+        if (storageItem is IStorageFolder storageFolder)
+        {
+            await storageFolder.DeleteAsync();
+            
+            var parent = FileTreeView.SelectedItem as TreeViewItem;
+            parent.Items.Remove(parent);
+            
+            SortTabItem(parent);
+        }
+        else
+        {
+            await storageItem.DeleteAsync();
+            
+            var parent = FileTreeView.SelectedItem as TreeViewItem;
+            parent.Items.Remove(parent);
+            
+            SortTabItem(parent);
         }
     }
+    
+    private static void CreateElement(TreeViewItem treeViewItem, 
+        IStorageItem storageItem, bool isFolder = false)
+    {
+        if (storageItem is IStorageFolder storageFolder)
+        {
+            if (!treeViewItem.IsExpanded)
+                treeViewItem.IsExpanded = true;
+            
+            /*
+            TreeViewItem item = CreateInputItem(treeViewItem, async (name) =>
+            {
+                await Task.Delay(10).ContinueWith(_ => Dispatcher.UIThread.InvokeAsync(() => treeViewItem.IsExpanded = true));
+
+                IStorageItem newStorageItem;
+                if (isFolder) 
+                    newStorageItem = await storageFolder.CreateFolderAsync(name);
+                else 
+                    newStorageItem = await storageFolder.CreateFileAsync(name);
+
+                TreeViewItem createdViewItem = CreateTreeViewItem(newStorageItem);
+                treeViewItem.IsExpanded = true;
+                treeViewItem.Items.Add(createdViewItem);
+                
+                if (newStorageItem is IStorageFile)
+                    FileHandler.OpenFile(newStorageItem.Path.AbsolutePath);
+            });
+            
+            treeViewItem.Items.Insert(0, item);
+            item.Focus(NavigationMethod.Pointer); */
+        }
+    }
+    
+    private static async void CopyPath(IStorageItem storageItem, bool absolutePath = false)
+    {
+        if (absolutePath)
+        {
+            await  ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(storageItem.Path.AbsolutePath);
+            return;
+        }
+        
+        IStorageFolder folder = storageItem as IStorageFolder;
+        while (folder != null && folder.Path.AbsolutePath != ProjectRootFolder?.StorageFolderPath)
+            folder = await folder.GetParentAsync();
+        
+        if (folder == null) 
+            return;
+        
+        string path = storageItem.Path.AbsolutePath.Replace(folder.Path.AbsolutePath, "");
+        await ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path);
+    }
+    
+    private static void OpenInExplorer(IStorageItem storageItem)
+    {
+        if (storageItem is IStorageFolder storageFolder)
+        {
+            var path = storageFolder.Path.AbsolutePath;
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = true
+            });
+        }
+    }
+
+    #endregion
+
+    #region Sorting
+
+    private static void SortTabItem(TreeViewItem parent)
+    {
+        var folders = parent.Items.OfType<TabViewItem>().Where(item => item.Tag is IStorageFolder).OrderBy(item => item.Header);
+        var files = parent.Items.OfType<TabViewItem>().Where(item => item.Tag is IStorageFile).OrderBy(item => item.Header);
+        
+        parent.Items.Clear();
+        foreach (var folder in folders) parent.Items.Add(folder);
+        foreach (var file in files) parent.Items.Add(file);
+    }
+
+    #endregion
 }

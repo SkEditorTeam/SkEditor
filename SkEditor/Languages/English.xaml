@@ -13,6 +13,8 @@
 	<system:String x:Key="WindowTitleCommandGenerator">Generate command</system:String>
 	<system:String x:Key="WindowTitleItemSelector">Select item</system:String>
 	<system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
+	<system:String x:Key="WindowTitleElementRename">Rename</system:String>
+	<system:String x:Key="WindowTitleElementCreate">Create</system:String>
 
 	<!-- Menu Headers -->
 	<system:String x:Key="MenuHeaderFile">File</system:String>
@@ -46,10 +48,18 @@
 	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
 	<system:String x:Key="MenuHeaderGenerateCommand">Command</system:String>
 	<system:String x:Key="MenuHeaderRefactor">Refactor</system:String>
-
+	
 	<!-- Other Menu -->
 	<system:String x:Key="MenuHeaderMarketplace">Marketplace</system:String>
 	<system:String x:Key="MenuHeaderRefreshSyntax">Refresh syntax</system:String>
+
+	<!-- Project Menu -->
+	<system:String x:Key="MenuHeaderOpenInExplorer">Open in explorer</system:String>
+	<system:String x:Key="MenuHeaderCopyPath">Copy relative path</system:String>
+	<system:String x:Key="MenuHeaderCopyAbsolutePath">Copy absolute path</system:String>
+	<system:String x:Key="MenuHeaderRename">Rename</system:String>
+	<system:String x:Key="MenuHeaderNewFile">New file</system:String>
+	<system:String x:Key="MenuHeaderNewFolder">New folder</system:String>
 
 	<!-- Buttons -->
 	<system:String x:Key="ApplyButton">Apply</system:String>
@@ -98,6 +108,21 @@
 	<system:String x:Key="RefactorWindowSpacesToTabs">Convert spaces to tabs</system:String>
 	<system:String x:Key="RefactorWindowRefactorBoxName">Renaming '{0}' into ...</system:String>
 	
+
+	<!-- Projects -->
+	<system:String x:Key="ProjectExplorerTitle">Explorer</system:String>
+	<system:String x:Key="ProjectExplorerInfoText">Projects are still in beta and bugs may occur!</system:String>
+	<system:String x:Key="ProjectExplorerInfoButton">Open Folder</system:String>
+	<system:String x:Key="ProjectRenameText">Renaming into ...</system:String>
+	<system:String x:Key="ProjectRenameErrorNameEmpty">Name cannot be empty.</system:String>
+	<system:String x:Key="ProjectRenameErrorParentNull">Parent cannot be null.</system:String>
+	<system:String x:Key="ProjectRenameErrorNameExists">A file or folder with this name already exists.</system:String>
+	<system:String x:Key="ProjectRenameErrorSameName">The new name is the same as the old name.</system:String>
+	<system:String x:Key="ProjectCreateErrorNameExists">A file or folder with this name already exists.</system:String>
+	<system:String x:Key="ProjectCreateFileName">File Name</system:String>
+	<system:String x:Key="ProjectCreateFolderName">Folder Name</system:String>
+	<system:String x:Key="ProjectCreateTemplate">Template</system:String>
+
 	<!-- File Association Selection Window -->
 	<system:String x:Key="FileAssociationSelectionWindowTitle">Select file association</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowInfo">There's multiple provider for this file type. Please select one.</system:String>
@@ -105,6 +130,7 @@
 	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">This is an unofficial file type from an addon, {0}.</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Remember my choice</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowConfirm">Confirm</system:String>
+
 
 	<!-- Settings -->
 	<system:String x:Key="SettingsEnabled">Enabled</system:String>

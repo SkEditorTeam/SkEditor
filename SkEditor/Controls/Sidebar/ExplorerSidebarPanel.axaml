@@ -3,6 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:ar="clr-namespace:SkEditor.Utilities.Projects"
+             xmlns:elements="clr-namespace:SkEditor.Utilities.Projects.Elements"
+             xmlns:visualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
              x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel">
     
     <UserControl.Styles>
@@ -26,12 +29,81 @@
             </Transitions>
         </Border.Transitions>
 
-        <Grid RowDefinitions="auto,auto,*">
+        <Grid RowDefinitions="auto,auto,auto,*">
             <TextBlock Grid.Row="0" Text="Explorer" FontWeight="DemiBold" Margin="20,10,20,10"/>
             <Separator Grid.Row="1" Margin="0,0,0,10"/>
-            <TreeView Grid.Row="2" Name="FileTreeView">
-					
+            <Border Name="LoadingPanel" Grid.Row="2" IsVisible="False" Margin="10">
+                <StackPanel Spacing="10">
+                    <TextBlock Name="LoadingText" TextAlignment="Center">Loading XX files ...</TextBlock>
+                    <ProgressBar Name="LoadingBar" Margin="5 0"></ProgressBar>
+                    <Separator />
+                </StackPanel>
+            </Border>
+            <TreeView Grid.Row="3" Name="FileTreeView">
+                <TreeView.Styles>
+                    <Style Selector="TreeViewItem">
+                        <Setter Property="IsExpanded" x:DataType="elements:StorageElement" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                    </Style>
+                </TreeView.Styles>
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate x:DataType="elements:StorageElement" ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="DoubleTapped">
+                                    <EventTriggerBehavior.Actions>
+                                        <InvokeCommandAction Command="{Binding DoubleClickCommand}" />
+                                    </EventTriggerBehavior.Actions>
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
+                            
+                            <ui:IconSourceElement HorizontalAlignment="Left" VerticalAlignment="Center" IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="24" Height="24" />
+                            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding Name}"/>
+                            
+                            <StackPanel.ContextFlyout>
+                                <MenuFlyout>
+                                    <MenuItem IsVisible="{Binding !IsFile}" Header="New File" Command="{Binding CreateNewFileCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="New" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem IsVisible="{Binding !IsFile}" Header="New Folder" Command="{Binding CreateNewFolderCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="NewFolder" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
+                                    
+                                    <Separator IsVisible="{Binding !IsFile}" />
+                                    
+                                    <MenuItem Header="Copy Path" Command="{Binding CopyPathCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Copy" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
+                                    
+                                    <MenuItem Header="Copy Absolute Path" Command="{Binding CopyAbsolutePathCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Copy" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
+                                    
+                                    <Separator />
+
+                                    <MenuItem Header="Open in Explorer" Command="{Binding OpenInExplorerCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="OpenFolder" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Rename" Command="{Binding RenameCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Rename" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Delete" Command="{Binding DeleteCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Delete" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuFlyout>
+                            </StackPanel.ContextFlyout>
+                        </StackPanel>
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
             </TreeView>
+            <StackPanel Name="NoFolderMessage" VerticalAlignment="Center" Grid.Row="3" Margin="5" Spacing="10">
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap">You don't have any folders opened yet. Keep in mind they are in beta!</TextBlock>
+                <Button Click="OpenFolder" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                        <ui:SymbolIcon Symbol="OpenFolder" FontSize="18"></ui:SymbolIcon>
+                        <TextBlock>Open Folder</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
         </Grid>
     </Border>
 </UserControl>
