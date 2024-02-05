@@ -4,6 +4,9 @@ using AvaloniaEdit.Editing;
 using SkEditor.API;
 using System;
 using System.Linq;
+using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Parser;
+using SkEditor.Views;
 
 namespace SkEditor.Utilities.Editor;
 public class CustomCommandsHandler
@@ -84,5 +87,26 @@ public class CustomCommandsHandler
         int newCaretOffset = usedOffset + Environment.NewLine.Length + selectedText.Length;
         textArea.Caret.Offset = newCaretOffset;
         textArea.Caret.BringCaretToView();
+    }
+    
+    public static async void OnRefactorCommandExecuted(TextEditor editor)
+    {
+        var parser = FileHandler.OpenedFiles.Find(file => file.Editor == editor).Parser;
+        if (parser == null)
+            return;
+        if (!parser.IsParsed)
+            parser.Parse();
+        
+        var section = parser.GetSectionFromLine(editor.TextArea.Caret.Line);
+        if (section == null)
+            return;
+        
+        var variable = section.GetVariableFromCaret(editor.TextArea.Caret);
+        var option = section.GetOptionFromCaret(editor.TextArea.Caret);
+        if (variable == null && option == null)
+            return;
+        
+        var renameWindow = new SymbolRefactorWindow((INameableCodeElement) variable ?? option);
+        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
     }
 }

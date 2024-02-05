@@ -12,6 +12,8 @@ public abstract class SidebarPanel
     public abstract UserControl Content { get; }
     public abstract IconSource Icon { get; }
     public abstract bool IsDisabled { get; }
+
+    public virtual int DesiredWidth { get; } = 250;
     
     public virtual void OnOpen()
     {

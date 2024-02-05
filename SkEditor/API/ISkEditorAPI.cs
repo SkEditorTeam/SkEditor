@@ -6,6 +6,7 @@ using SkEditor.Views;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SkEditor.Utilities.Files;
 
 namespace SkEditor.API;
 
@@ -22,6 +23,8 @@ public interface ISkEditorAPI
     public bool IsFile(TabViewItem tabItem);
 
     public TextEditor? GetTextEditor();
+
+    public OpenedFile? GetOpenedFile();
 
     public TabView GetTabView();
 
