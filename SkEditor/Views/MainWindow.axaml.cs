@@ -13,6 +13,7 @@ using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using System.Collections.Generic;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel.__Internals;
 
 namespace SkEditor.Views;
 
@@ -41,6 +42,7 @@ public partial class MainWindow : AppWindow
     {
         TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
         TabControl.TabCloseRequested += (sender, e) => FileHandler.CloseFile(e);
+        TabControl.SelectionChanged += (_, _) => SideBar.ParserPanel.Panel.ParseCurrentFile();
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;
 

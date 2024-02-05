@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SkEditor.Utilities.Parser;
 using SkEditor.Views;
 using Path = System.IO.Path;
 
@@ -36,6 +37,9 @@ public class FileHandler
         catch { }
     };
     
+
+    public static List<OpenedFile> OpenedFiles { get; } = new();
+
     public static void TabSwitchAction()
     {
         var item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
@@ -45,14 +49,26 @@ public class FileHandler
         MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
 
+
     private static int GetUntitledNumber() => (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Count(tab => RegexPattern.IsMatch(tab.Header.ToString())) + 1;
 
     public static async void NewFile()
     {
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
         TabViewItem tabItem = await FileBuilder.Build(header);
+      
         if (tabItem == null)
             return;
+
+        OpenedFiles.Add(new OpenedFile()
+        {
+            Editor = tabItem.Content as TextEditor,
+            Path = "",
+            TabViewItem = tabItem,
+            Parser = tabItem.Content is TextEditor editor 
+                ? new CodeParser(editor)
+                : null
+        });
         
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
     }
@@ -92,6 +108,15 @@ public class FileHandler
             return;
         
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+        OpenedFiles.Add(new OpenedFile()
+        {
+            Editor = tabItem.Content as TextEditor,
+            Path = path,
+            TabViewItem = tabItem,
+            Parser = tabItem.Content is TextEditor editor 
+                ? new CodeParser(editor)
+                : null
+        });
 
         await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
     }
@@ -207,8 +232,9 @@ public class FileHandler
         var tabView = ApiVault.Get().GetTabView();
         var tabItems = tabView.TabItems as IList;
 
+        OpenedFiles.RemoveAll(openedFile => openedFile.TabViewItem == item);
         tabItems?.Remove(item);
-
+        
         if (tabItems.Count == 0) NewFile();
         FileBuilder.OpenedFiles.Remove(header);
         TabSwitchAction();
