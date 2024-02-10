@@ -1,11 +1,12 @@
 ﻿using AvaloniaEdit;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Completion;
 public partial class CompletionProvider
 {
-    private static HashSet<CompletionItem> CompletionItems =
+    public static HashSet<CompletionItem> CompletionItems { get; set; } =
     [
         new CompletionItem("command", "command /{c}:\n\ttrigger:\n\t\t"),
         new CompletionItem("send", "send \"{c}\""),
@@ -13,6 +14,7 @@ public partial class CompletionProvider
         new CompletionItem("else", "else:\n\t"),
         new CompletionItem("ifelse", "if {c}:\n\t\nelse:\n\t"),
     ];
+
 
     public static IEnumerable<CompletionItem> GetCompletions(string word, TextEditor textEditor)
     {
@@ -26,11 +28,11 @@ public partial class CompletionProvider
         //string text = textEditor.Text;
         //foreach (Match match in WordRegex().Matches(text).Cast<Match>())
         //{
-        //	string matchValue = match.Value;
-        //	if (matchValue == word) continue;
-        //	if (!matchValue.StartsWith(word)) continue;
-        //	if (CompletionItems.Any(x => x.Name == matchValue)) continue;
-        //	yield return new CompletionItem(matchValue, matchValue);
+        //    string matchValue = match.Value;
+        //    if (matchValue == word) continue;
+        //    if (!matchValue.StartsWith(word)) continue;
+        //    if (CompletionItems.Any(x => x.Name == matchValue)) continue;
+        //    yield return new CompletionItem(matchValue, matchValue);
         //}
     }
 
