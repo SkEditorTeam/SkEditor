@@ -1,4 +1,5 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
 
 namespace SkEditor.Utilities.Styling;
@@ -11,5 +12,7 @@ public class WindowStyler
         window.TitleBar.ButtonHoverBackgroundColor = Color.Parse("#25ffffff");
         window.TitleBar.ButtonPressedBackgroundColor = Color.Parse("#20ffffff");
         window.TitleBar.ButtonInactiveForegroundColor = Color.Parse("#99ffffff");
+
+        if (ThemeEditor.CurrentTheme.UseMicaEffect) window.TransparencyLevelHint = [WindowTransparencyLevel.Mica];
     }
 }

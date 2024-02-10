@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit;
@@ -136,6 +137,11 @@ public class ThemeEditor
             FluentAvaloniaTheme styles = Application.Current.Styles.OfType<FluentAvaloniaTheme>().First();
             styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
             styles.PreferUserAccentColor = true;
+
+            if (CurrentTheme.UseMicaEffect)
+            {
+                ApiVault.Get().GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.Mica];
+            }
 
             UpdateFont();
         }

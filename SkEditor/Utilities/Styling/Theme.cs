@@ -26,6 +26,7 @@ public class Theme
     public ImmutableSolidColorBrush TextBoxFocusedBackground { get; set; } = new(Color.Parse("#ff191919"));
     public ImmutableSolidColorBrush AccentColor { get; set; } = new(Colors.White);
     public string? CustomFont { get; set; }
+    public bool UseMicaEffect { get; set; } = false;
 
     public Dictionary<string, ImmutableSolidColorBrush> CustomColorChanges { get; set; } = new()
     {
