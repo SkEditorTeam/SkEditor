@@ -8,7 +8,9 @@ using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Syntax;
+using SkEditor.Views;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,8 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SkEditor.Utilities.Parser;
-using SkEditor.Views;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;
@@ -36,9 +36,9 @@ public class FileHandler
         }
         catch { }
     };
-    
 
-    public static List<OpenedFile> OpenedFiles { get; } = new();
+
+    public static List<OpenedFile> OpenedFiles { get; } = [];
 
     public static void TabSwitchAction()
     {
@@ -56,7 +56,7 @@ public class FileHandler
     {
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
         TabViewItem tabItem = await FileBuilder.Build(header);
-      
+
         if (tabItem == null)
             return;
 
@@ -65,22 +65,22 @@ public class FileHandler
             Editor = tabItem.Content as TextEditor,
             Path = "",
             TabViewItem = tabItem,
-            Parser = tabItem.Content is TextEditor editor 
+            Parser = tabItem.Content is TextEditor editor
                 ? new CodeParser(editor)
                 : null
         });
-        
+
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
     }
 
     public async static void OpenFile()
     {
         bool untitledFileOpen = ApiVault.Get().GetTabView().TabItems.Count() == 1 &&
-                                ApiVault.Get().GetTextEditor() != null &&
-                                ApiVault.Get().GetTextEditor().Text.Length == 0 &&
-                                ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
-                                item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
-                                !item.Header.ToString().EndsWith('*');
+            ApiVault.Get().GetTextEditor() != null &&
+            ApiVault.Get().GetTextEditor().Text.Length == 0 &&
+            ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
+            item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
+            !item.Header.ToString().EndsWith('*');
 
         var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
 
@@ -96,24 +96,28 @@ public class FileHandler
 
     public static async void OpenFile(string path)
     {
-        if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Any(tab => tab.Tag.ToString().Equals(path)))
+        if ((ApiVault.Get().GetTabView().TabItems as IList)
+            .Cast<TabViewItem>()
+            .Where(tab => tab.Tag != null)
+            .Any(tab => tab.Tag.ToString().Equals(path)))
         {
-            ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().First(tab => tab.Tag.ToString() == path);
+            ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList)
+                .Cast<TabViewItem>()
+                .First(tab => tab.Tag.ToString() == path);
             return;
         }
 
         string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
         TabViewItem tabItem = await FileBuilder.Build(fileName, path);
-        if (tabItem == null)
-            return;
-        
+        if (tabItem == null) return;
+
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
         OpenedFiles.Add(new OpenedFile()
         {
             Editor = tabItem.Content as TextEditor,
             Path = path,
             TabViewItem = tabItem,
-            Parser = tabItem.Content is TextEditor editor 
+            Parser = tabItem.Content is TextEditor editor
                 ? new CodeParser(editor)
                 : null
         });
@@ -234,7 +238,7 @@ public class FileHandler
 
         OpenedFiles.RemoveAll(openedFile => openedFile.TabViewItem == item);
         tabItems?.Remove(item);
-        
+
         if (tabItems.Count == 0) NewFile();
         FileBuilder.OpenedFiles.Remove(header);
         TabSwitchAction();

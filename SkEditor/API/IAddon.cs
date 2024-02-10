@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities.Files;
+using System.Collections.Generic;
 
 namespace SkEditor.API;
 public interface IAddon
@@ -13,11 +12,11 @@ public interface IAddon
     {
         return [];
     }
-    
+
     public virtual Symbol GetMenuIcon()
     {
         return Symbol.Document;
     }
-    
+
     public void OnEnable();
 }

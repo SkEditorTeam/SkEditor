@@ -9,14 +9,14 @@ namespace SkEditor.Views.Projects;
 public partial class RenameElementWindow : AppWindow
 {
     public StorageElement Element { get; }
-    
+
     public RenameElementWindow(StorageElement element)
     {
         InitializeComponent();
 
         Element = element;
         NameBox.Text = element.Name;
-        
+
         WindowStyler.Style(this);
     }
 
@@ -35,7 +35,7 @@ public partial class RenameElementWindow : AppWindow
             ErrorBox.Text = error;
             return;
         }
-        
+
         Element.RenameElement(NameBox.Text);
         Close();
     }

@@ -12,14 +12,14 @@ public partial class ExplorerSidebarPanel : UserControl
     {
         InitializeComponent();
     }
-    
+
     public class ExplorerPanel : SidebarPanel
     {
         public override UserControl Content => Panel;
         public override IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Folder };
         public override bool IsDisabled => false;
-        
-        public readonly ExplorerSidebarPanel Panel = new ();
+
+        public readonly ExplorerSidebarPanel Panel = new();
     }
 
     private void OpenFolder(object? sender, RoutedEventArgs e)

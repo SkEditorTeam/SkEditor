@@ -3,7 +3,6 @@ using Serilog;
 using SkEditor.API;
 using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace SkEditor.Desktop;
 

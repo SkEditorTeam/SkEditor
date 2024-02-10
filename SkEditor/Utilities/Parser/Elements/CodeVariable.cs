@@ -1,37 +1,36 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text.RegularExpressions;
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
 using SkEditor.Views;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Parser;
 
-public class CodeVariable : ObservableObject, INameableCodeElement
+public partial class CodeVariable : ObservableObject, INameableCodeElement
 {
     public CodeSection Section { get; private set; }
-    
+
     public string Name { get; private set; }
 
     public bool IsLocal { get; private set; }
-    
+
     public int Line { get; set; }
     public int Column { get; set; }
     public int Length { get; set; }
-    
-    public CodeVariable(CodeSection section, string raw, 
+
+    public CodeVariable(CodeSection section, string raw,
         int line = -1, int column = -1)
     {
         Section = section;
-        IsLocal = raw.StartsWith("_");
+        IsLocal = raw.StartsWith('_');
         Name = raw.TrimStart('_');
         Line = line;
         Column = column;
         Length = raw.Length;
     }
-    
+
     public CodeVariable(CodeFunctionArgument argument)
     {
         Section = argument.Function;
@@ -42,32 +41,20 @@ public class CodeVariable : ObservableObject, INameableCodeElement
         Length = argument.Length;
     }
 
-    public override string ToString()
-    {
-        return $"{{{(IsLocal ? "_" : "")}{Name}}}";
-    }
-    
-    public bool IsSimilar(CodeVariable other)
-    {
-        return Name == other.Name && IsLocal == other.IsLocal;
-    }
+    public override string ToString() => $"{{{(IsLocal ? "_" : "")}{Name}}}";
 
-    public bool ContainsCaret(Caret caret)
-    {
-        return caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
-    }
-    
+    public bool IsSimilar(CodeVariable other) => Name == other.Name && IsLocal == other.IsLocal;
+
+    public bool ContainsCaret(Caret caret) => caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
+
     public FontStyle Style => IsLocal ? FontStyle.Italic : FontStyle.Normal;
 
-    public void Rename(string newName)
-    {
-        Rename(newName, false);
-    }
+    public void Rename(string newName) => Rename(newName, false);
 
     public void Rename(string newName, bool callingFromFunction = false)
     {
-        if (newName.StartsWith("{") && newName.EndsWith("}")) newName = newName[1..^1];
-        if (newName.StartsWith("_")) newName = newName[1..];
+        if (newName.StartsWith('{') && newName.EndsWith('}')) newName = newName[1..^1];
+        if (newName.StartsWith('_')) newName = newName[1..];
 
         var definition = Section.GetVariableDefinition(this);
         if (definition != null && !callingFromFunction)
@@ -75,7 +62,7 @@ public class CodeVariable : ObservableObject, INameableCodeElement
             definition.Rename(newName);
             return;
         }
-        
+
         if (IsLocal) // rename all within the section
         {
             var current = Section.Lines;
@@ -83,7 +70,7 @@ public class CodeVariable : ObservableObject, INameableCodeElement
             foreach (var line in current)
             {
                 bool lineAdded = false;
-                var matches = Regex.Matches(line, @"(?<=\{)_?(.*?)(?=\})");
+                var matches = VariableRegex().Matches(line);
                 foreach (var m in matches)
                 {
                     var variable = new CodeVariable(Section, m.ToString(), Line, Column);
@@ -94,15 +81,15 @@ public class CodeVariable : ObservableObject, INameableCodeElement
                         lineAdded = true;
                     }
                 }
-                
-                if (!lineAdded) 
+
+                if (!lineAdded)
                     newLines.Add(line);
             }
 
             Section.Lines = newLines;
             Section.RefreshCode();
             Section.Parse();
-        } 
+        }
         else // rename all within the file
         {
             foreach (var section in Section.Parser.Sections)
@@ -112,7 +99,7 @@ public class CodeVariable : ObservableObject, INameableCodeElement
                 foreach (var line in current)
                 {
                     bool lineAdded = false;
-                    var matches = Regex.Matches(line, @"(?<=\{)_?(.*?)(?=\})");
+                    var matches = VariableRegex().Matches(line);
                     foreach (var m in matches)
                     {
                         var variable = new CodeVariable(Section, m.ToString(), Line, Column);
@@ -123,8 +110,8 @@ public class CodeVariable : ObservableObject, INameableCodeElement
                             lineAdded = true;
                         }
                     }
-                
-                    if (!lineAdded) 
+
+                    if (!lineAdded)
                         newLines.Add(line);
                 }
 
@@ -134,7 +121,7 @@ public class CodeVariable : ObservableObject, INameableCodeElement
             }
         }
     }
-    
+
     public async void Rename()
     {
         var renameWindow = new SymbolRefactorWindow(this);
@@ -146,4 +133,7 @@ public class CodeVariable : ObservableObject, INameableCodeElement
     {
         return $"{{{(IsLocal ? "_" : "")}{Name}}}";
     }
+
+    [GeneratedRegex(@"(?<=\{)_?(.*?)(?=\})")]
+    private static partial Regex VariableRegex();
 }

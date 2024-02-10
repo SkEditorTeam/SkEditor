@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using AvaloniaEdit;
+using SkEditor.API;
+using SkEditor.Controls.Sidebar;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AvaloniaEdit;
-using SkEditor.API;
-using SkEditor.Controls.Sidebar;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -13,32 +13,32 @@ public class CodeParser : INotifyPropertyChanged
 
     public static ParserSidebarPanel ParserPanel =>
         ApiVault.Get().GetMainWindow().SideBar.ParserPanel.Panel;
-    
+
     public CodeParser(TextEditor textEditor, bool parse = true)
     {
         Editor = textEditor;
         Sections = new List<CodeSection>();
-        if (parse) 
+        if (parse)
             Parse();
     }
-    
+
     /// <summary>
     /// Get the editor that is being parsed.
     /// </summary>
     public TextEditor Editor { get; private set; }
-    
+
     /// <summary>
     /// Get the parsed code sections. This will be empty if the code is not parsed yet.
     /// </summary>
     public List<CodeSection> Sections { get; private set; }
-    
+
     /// <summary>
     /// Get sections with the specified type.
     /// </summary>
     /// <param name="sectionType"></param>
     /// <returns></returns>
     public List<CodeSection> GetSectionFromType(CodeSection.SectionType sectionType) => Sections.FindAll(section => section.Type == sectionType);
-    
+
     /// <summary>
     /// Get the options section, if any is defined.
     /// </summary>
@@ -64,7 +64,7 @@ public class CodeParser : INotifyPropertyChanged
         }
 
         IsParsed = true;
-        
+
         // Split the code into lines
         List<string> lines = Editor.Text.Split('\n').ToList();
         int lastSectionLine = -1;
@@ -90,7 +90,7 @@ public class CodeParser : INotifyPropertyChanged
                 }
             }
         }
-        
+
         // Parse the last section
         if (lastSectionLine != -1)
         {
@@ -99,7 +99,7 @@ public class CodeParser : INotifyPropertyChanged
         }
 
         ParserPanel.Refresh(Sections);
-        
+
         ParserPanel.ParseButton.IsEnabled = false;
         ParserPanel.ParseButton.Content = "Current code parsed";
     }
@@ -114,9 +114,9 @@ public class CodeParser : INotifyPropertyChanged
 
     public bool IsValid()
     {
-        return !Editor.Text.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'); 
+        return !Editor.Text.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t');
     }
-    
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName)

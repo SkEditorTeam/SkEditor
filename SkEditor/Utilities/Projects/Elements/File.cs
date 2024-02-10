@@ -1,18 +1,16 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using Avalonia.Platform.Storage;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
 public class File : StorageElement
 {
-    
     public string StorageFilePath { get; set; }
-    
+
     public File(string file, Folder? parent = null)
     {
         Parent = parent;
@@ -20,18 +18,16 @@ public class File : StorageElement
 
         Name = Path.GetFileName(file);
         IsFile = true;
-        
+
         var icon = Files.Icon.GetIcon(Path.GetExtension(file));
-        if (icon is not null)
-            Icon = icon;
-        
-        // Commands
+        if (icon is not null) Icon = icon;
+
         OpenInExplorerCommand = new RelayCommand(OpenInExplorer);
         DeleteCommand = new RelayCommand(DeleteFile);
         CopyAbsolutePathCommand = new RelayCommand(CopyAbsolutePath);
         CopyPathCommand = new RelayCommand(CopyPath);
     }
-    
+
     public void OpenInExplorer()
     {
         Process.Start(new ProcessStartInfo(Parent.StorageFolderPath) { UseShellExecute = true });
@@ -45,41 +41,33 @@ public class File : StorageElement
 
     public override string? ValidateName(string input)
     {
-        if (input == Name)
-            return Translation.Get("ProjectRenameErrorSameName");
-        
-        if (Parent is null)
-            return Translation.Get("ProjectRenameErrorParentNull");
-        
+        if (input == Name) return Translation.Get("ProjectRenameErrorSameName");
+        if (Parent is null) return Translation.Get("ProjectRenameErrorParentNull");
+
         var file = Parent.Children.FirstOrDefault(x => x.Name == input);
-        if (file is not null)
-            return Translation.Get("ProjectRenameErrorNameExists");
-        
+        if (file is not null) return Translation.Get("ProjectRenameErrorNameExists");
+
         return null;
     }
 
     public override void RenameElement(string newName)
     {
         var newPath = Path.Combine(Parent.StorageFolderPath, newName);
-        
-        System.IO.File.Move(StorageFilePath, newPath); 
+        System.IO.File.Move(StorageFilePath, newPath);
+
         StorageFilePath = newPath;
-        
         Name = newName;
 
         RefreshSelf();
     }
 
-    public override void HandleDoubleClick()
-    {
-        FileHandler.OpenFile(StorageFilePath);
-    }
-    
+    public override void HandleDoubleClick() => FileHandler.OpenFile(StorageFilePath);
+
     public void CopyAbsolutePath()
     {
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(StorageFilePath.Replace("\\", "/"));
+        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFilePath));
     }
-    
+
     public void CopyPath()
     {
         var path = StorageFilePath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");

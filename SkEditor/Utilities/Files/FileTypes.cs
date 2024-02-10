@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
 using AvaloniaEdit;
 using SkEditor.API;
 using SkEditor.Views.FileTypes;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SkEditor.Utilities.Files;
 
@@ -13,7 +13,7 @@ namespace SkEditor.Utilities.Files;
 /// </summary>
 public static class FileTypes
 {
-    
+
     public static readonly Dictionary<string, List<FileAssociation>> RegisteredFileTypes = new();
 
     public static void RegisterDefaultAssociations()
@@ -29,7 +29,7 @@ public static class FileTypes
             ApiVault.Get().ShowError($"Unable to register file association for {association.GetType().Name}:\n\nAddon is null");
             return;
         }
-        
+
         RegisterAssociation(association);
     }
 
@@ -39,11 +39,11 @@ public static class FileTypes
         {
             if (!RegisteredFileTypes.ContainsKey(extension))
                 RegisteredFileTypes.Add(extension, new List<FileAssociation>());
-        
+
             RegisteredFileTypes[extension].Add(association);
         }
     }
-    
+
     #region Classes
 
     public class FileType(object display, string path, bool needsBottomBar = false)
@@ -53,13 +53,13 @@ public static class FileTypes
         public bool NeedsBottomBar { get; set; } = needsBottomBar;
         public bool IsEditor => Display is TextEditor;
     }
-    
+
     public abstract class FileAssociation
     {
-        
+
         public List<string> SupportedExtensions { get; set; }
         public bool IsFromAddon { get; set; } = false;
-        
+
         public IAddon? Addon { get; set; } = null;
 
         public abstract FileType? Handle(string path);

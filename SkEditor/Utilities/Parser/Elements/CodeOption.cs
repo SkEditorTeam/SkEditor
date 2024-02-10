@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using AvaloniaEdit.Editing;
+﻿using AvaloniaEdit.Editing;
 using SkEditor.API;
 using SkEditor.Views;
+using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -10,7 +9,7 @@ public class CodeOption : INameableCodeElement
 {
     public string Name { get; }
     public CodeSection Section { get; }
-    
+
     public int Line { get; set; }
     public int Column { get; set; }
     public int Length { get; set; }
@@ -25,7 +24,7 @@ public class CodeOption : INameableCodeElement
         Column = column;
         Length = Name.Length;
     }
-    
+
     public bool ContainsCaret(Caret caret)
     {
         return caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
@@ -37,7 +36,7 @@ public class CodeOption : INameableCodeElement
         await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
         Section.Parser.Parse();
     }
-    
+
     public void Rename(string newName)
     {
         // First rename the option declaration
@@ -47,7 +46,7 @@ public class CodeOption : INameableCodeElement
         Section.Lines[Line - Section.StartingLineIndex - 1] = newCurrentLine;
         Length = newName.Length;
         Section.RefreshCode();
-        
+
         // Then rename all references
         foreach (var section in Section.Parser.Sections)
         {

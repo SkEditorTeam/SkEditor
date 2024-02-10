@@ -18,12 +18,12 @@ public partial class SymbolRefactorWindow : AppWindow
         NameBox.Text = element.Name;
         RefactorButton.Command = new RelayCommand(Refactor);
     }
-    
+
     private void Refactor()
     {
         Element.Rename(NameBox.Text);
         Close();
-        
+
         ApiVault.Get().GetMainWindow().SideBar.ParserPanel.Panel.ParseCurrentFile();
     }
 }

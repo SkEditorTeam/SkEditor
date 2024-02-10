@@ -13,15 +13,13 @@ using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using System.Collections.Generic;
 using System.Linq;
-using CommunityToolkit.Mvvm.ComponentModel.__Internals;
 
 namespace SkEditor.Views;
 
 public partial class MainWindow : AppWindow
 {
-    
     public static MainWindow Instance { get; private set; }
-    
+
     public BottomBarControl GetBottomBar() => this.FindControl<BottomBarControl>("BottomBar");
 
     public MainWindow()
@@ -34,7 +32,7 @@ public partial class MainWindow : AppWindow
 
         Translation.LoadDefaultLanguage();
         Translation.ChangeLanguage(ApiVault.Get().GetAppConfig().Language);
-        
+
         Instance = this;
     }
 
@@ -81,7 +79,7 @@ public partial class MainWindow : AppWindow
 
     private async void OnWindowLoaded(object sender, RoutedEventArgs e)
     {
-        AddonLoader.Load(); 
+        AddonLoader.Load();
         Utilities.Files.FileTypes.RegisterDefaultAssociations();
         SideBar.LoadPanels();
 
@@ -102,6 +100,7 @@ public partial class MainWindow : AppWindow
 
             Tutorial.ShowTutorial();
             BottomBar.UpdatePosition();
+            ChangelogChecker.Check();
         });
     }
 }

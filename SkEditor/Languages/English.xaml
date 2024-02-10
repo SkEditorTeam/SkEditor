@@ -192,6 +192,9 @@
 	<system:String x:Key="SettingsThemeCurrentTheme">Current theme</system:String>
 	<system:String x:Key="SettingsThemeCurrentThemeDescription">A restart isn't necessary, but it might be needed for a 100% color update.</system:String>
 
+	<!-- Syntax Highlighting Settings -->
+	<system:String x:Key="SettingsSyntaxesTitle">Syntax highlighting</system:String>
+
 	<!-- Addon Settings -->
 	<system:String x:Key="SettingsAddonsTitle">Addons</system:String>
 	

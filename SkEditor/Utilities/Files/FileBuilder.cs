@@ -11,26 +11,26 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
+using SkEditor.Views;
+using SkEditor.Views.FileTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using SkEditor.Views;
-using SkEditor.Views.FileTypes;
 
 namespace SkEditor.Utilities.Files;
 
 public class FileBuilder
 {
-    public static readonly Dictionary<string, FileTypes.FileType> OpenedFiles = new();
-    
+    public static readonly Dictionary<string, FileTypes.FileType> OpenedFiles = [];
+
     public static async Task<TabViewItem?> Build(string header, string path = "")
     {
         var fileType = await GetFileDisplay(path);
         if (fileType == null)
             return null;
-        
+
         TabViewItem tabViewItem = new()
         {
             Header = header,
@@ -59,14 +59,12 @@ public class FileBuilder
         if (fileType.IsEditor)
         {
             var editor = fileType.Display as TextEditor;
-            
+
             ApiVault.Get().OnFileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
         }
 
-        if (OpenedFiles.ContainsKey(header))
-            OpenedFiles.Remove(header);
-        
+        OpenedFiles.Remove(header);
         OpenedFiles.Add(header, fileType);
         return tabViewItem;
     }
@@ -84,9 +82,9 @@ public class FileBuilder
             else
             {
                 var ext = Path.GetExtension(path);
-                if (ApiVault.Get().GetAppConfig().PreferredFileAssociations.ContainsKey(ext))
+                if (ApiVault.Get().GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
                 {
-                    var pref = ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext];
+                    var pref = value;
                     if (pref == "SkEditor")
                     {
                         fileType = handlers.Find(association => !association.IsFromAddon).Handle(path);
@@ -94,7 +92,7 @@ public class FileBuilder
                     else
                     {
                         var preferred = handlers.Find(association => association.IsFromAddon &&
-                            association.Addon.Name == ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext]);
+                            association.Addon.Name == value);
                         if (preferred != null)
                         {
                             fileType = preferred.Handle(path);
@@ -127,7 +125,7 @@ public class FileBuilder
                 }
             }
         }
-        
+
         return fileType ?? await GetDefaultEditor(path);
     }
 
@@ -142,7 +140,7 @@ public class FileBuilder
             if (File.Exists(path))
                 fileContent = await File.ReadAllTextAsync(path);
         }
-        
+
         if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))
         {
             var response = await ApiVault.Get().ShowMessageWithIcon(
@@ -216,6 +214,7 @@ public class FileBuilder
         }
 
         editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
+        editor.TextArea.TextPasting += TextEditorEventHandler.CheckForSpecialPaste;
 
         return editor;
     }
@@ -231,7 +230,7 @@ public class FileBuilder
 
         editor.Options.AllowScrollBelowDocument = true;
         editor.Options.CutCopyWholeLine = true;
-        
+
         editor.Options.ConvertTabsToSpaces = ApiVault.Get().GetAppConfig().UseSpacesInsteadOfTabs;
         editor.Options.IndentationSize = ApiVault.Get().GetAppConfig().TabSize;
 

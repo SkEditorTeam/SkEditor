@@ -5,8 +5,8 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:ar="clr-namespace:SkEditor.Utilities.Projects"
              xmlns:elements="clr-namespace:SkEditor.Utilities.Projects.Elements"
-             xmlns:visualBasic="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
-             x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel">
+             x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel"
+			 Margin="10,0,0,0">
     
     <UserControl.Styles>
         <Style Selector="Button.barButton">
@@ -22,12 +22,7 @@
         </Style>
     </UserControl.Styles>
     
-    <Border Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Margin="10,0,0,0">
-        <Border.Transitions>
-            <Transitions>
-                <DoubleTransition Property="Width" Duration="0:0:0.05" Easing="QuadraticEaseIn"/>
-            </Transitions>
-        </Border.Transitions>
+    <Border MinWidth="250" Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
 
         <Grid RowDefinitions="auto,auto,auto,*">
             <TextBlock Grid.Row="0" Text="Explorer" FontWeight="DemiBold" Margin="20,10,20,10"/>
@@ -46,17 +41,16 @@
                     </Style>
                 </TreeView.Styles>
                 <TreeView.ItemTemplate>
-                    <TreeDataTemplate x:DataType="elements:StorageElement" ItemsSource="{Binding Children}">
-                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
-                            <Interaction.Behaviors>
-                                <EventTriggerBehavior EventName="DoubleTapped">
-                                    <EventTriggerBehavior.Actions>
-                                        <InvokeCommandAction Command="{Binding DoubleClickCommand}" />
-                                    </EventTriggerBehavior.Actions>
-                                </EventTriggerBehavior>
-                            </Interaction.Behaviors>
-                            
-                            <ui:IconSourceElement HorizontalAlignment="Left" VerticalAlignment="Center" IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="24" Height="24" />
+					<TreeDataTemplate x:DataType="elements:StorageElement" ItemsSource="{Binding Children}">
+						<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
+							<Interaction.Behaviors>
+								<EventTriggerBehavior EventName="DoubleTapped">
+									<EventTriggerBehavior.Actions>
+										<InvokeCommandAction Command="{Binding DoubleClickCommand}" />
+									</EventTriggerBehavior.Actions>
+								</EventTriggerBehavior>
+							</Interaction.Behaviors>
+                            <ui:IconSourceElement HorizontalAlignment="Left" VerticalAlignment="Center" IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="18" Height="18" />
                             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding Name}"/>
                             
                             <StackPanel.ContextFlyout>
@@ -96,7 +90,7 @@
                 </TreeView.ItemTemplate>
             </TreeView>
             <StackPanel Name="NoFolderMessage" VerticalAlignment="Center" Grid.Row="3" Margin="5" Spacing="10">
-                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap">You don't have any folders opened yet. Keep in mind they are in beta!</TextBlock>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center">You don't have any folders opened yet.</TextBlock>
                 <Button Click="OpenFolder" HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
                         <ui:SymbolIcon Symbol="OpenFolder" FontSize="18"></ui:SymbolIcon>

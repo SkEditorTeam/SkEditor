@@ -2,11 +2,11 @@
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using SkEditor.API;
-using System;
-using System.Linq;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Views;
+using System;
+using System.Linq;
 
 namespace SkEditor.Utilities.Editor;
 public class CustomCommandsHandler
@@ -29,7 +29,7 @@ public class CustomCommandsHandler
             var text = document.GetText(line);
             if (string.IsNullOrWhiteSpace(text))
                 return text;
-            
+
             // Find the first non-tabulator character
             var strippedLine = text.TrimStart();
             var isCommented = text.TrimStart().StartsWith("#");
@@ -43,12 +43,13 @@ public class CustomCommandsHandler
             string indentationToInsert = "";
             for (int i = 0; i < indentationAmount; i++)
                 indentationToInsert += indentation;
-            
+
             ApiVault.Get().Log("Indentation 2 insert: " + indentationToInsert + " | Line: '" + text + "'", true);
             if (isCommented)
             {
                 return indentationToInsert + strippedLine[1..];
-            } else
+            }
+            else
             {
                 return indentationToInsert + "#" + strippedLine;
             }
@@ -88,7 +89,7 @@ public class CustomCommandsHandler
         textArea.Caret.Offset = newCaretOffset;
         textArea.Caret.BringCaretToView();
     }
-    
+
     public static async void OnRefactorCommandExecuted(TextEditor editor)
     {
         var parser = FileHandler.OpenedFiles.Find(file => file.Editor == editor).Parser;
@@ -96,17 +97,17 @@ public class CustomCommandsHandler
             return;
         if (!parser.IsParsed)
             parser.Parse();
-        
+
         var section = parser.GetSectionFromLine(editor.TextArea.Caret.Line);
         if (section == null)
             return;
-        
+
         var variable = section.GetVariableFromCaret(editor.TextArea.Caret);
         var option = section.GetOptionFromCaret(editor.TextArea.Caret);
         if (variable == null && option == null)
             return;
-        
-        var renameWindow = new SymbolRefactorWindow((INameableCodeElement) variable ?? option);
+
+        var renameWindow = new SymbolRefactorWindow((INameableCodeElement)variable ?? option);
         await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
     }
 }

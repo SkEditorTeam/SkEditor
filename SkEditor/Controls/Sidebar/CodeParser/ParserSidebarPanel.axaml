@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:parser="clr-namespace:SkEditor.Utilities.Parser"
-             x:Class="SkEditor.Controls.Sidebar.ParserSidebarPanel">
+             x:Class="SkEditor.Controls.Sidebar.ParserSidebarPanel"
+			 Margin="10,0,0,0">
     
     <UserControl.Styles>
         <Style Selector="Button.barButton">
@@ -20,26 +21,27 @@
         </Style>
     </UserControl.Styles>
     
-    <Border MinWidth="350" Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Margin="10,0,0,0">
-        
+    <Border MinWidth="350" Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
 
         <Grid RowDefinitions="auto,auto,auto,*,auto">
             <TextBlock Grid.Row="0" Text="Code Parsing" FontWeight="DemiBold" Margin="20,10,20,10"/>
             <Separator Grid.Row="1" Margin="0,0,0,10"/>
-            <ui:InfoBar Margin="5 0" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Warning" Message="The code parser is still in beta! Report any bugs found in the Discord server."/>
+            <ui:InfoBar Margin="5,0" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Warning" Message="The code parser is still in beta! Report any bugs found in the Discord server."/>
             <StackPanel Margin="10" Name="ParserDisabled" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" IsVisible="False" Spacing="10">
                 <TextBlock TextAlignment="Center" TextWrapping="Wrap">The code parser is still in beta and bugs may occur. It is disabled by default but you can enable it using the button below.</TextBlock>
                 <Button Name="EnableParser" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="accent">Enable</Button>
             </StackPanel>
-            <ScrollViewer Name="ScrollViewer" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Top" HorizontalContentAlignment="Center">
+            <ScrollViewer Name="ScrollViewer" Grid.Row="3" HorizontalAlignment="Stretch"
+						  VerticalAlignment="Stretch" VerticalContentAlignment="Top"
+						  HorizontalContentAlignment="Center" Margin="5,0">
                 <ItemsRepeater Name="ItemsRepeater">
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate DataType="parser:CodeSection">
-                            <Expander CornerRadius="0" Margin="0 5">
+                            <Expander Margin="0,5">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal">
                                         <ui:IconSourceElement Width="20" Height="20" IconSource="{Binding Icon}"></ui:IconSourceElement>
-                                        <TextBlock Text="{Binding Name}" Margin="10 0 0 0" FontWeight="DemiBold"/>
+                                        <TextBlock Text="{Binding Name}" Margin="10,0,0,0" FontWeight="DemiBold"/>
                                     </StackPanel>
                                 </Expander.Header>
                                 <StackPanel Spacing="10">
@@ -49,17 +51,17 @@
                                                 Content="Navigate"
                                                 Name="NavigateToButton" Command="{Binding NavigateToCommand}" />
                                     </Grid>
-                                    <Separator Margin="0 3"/>
+                                    <Separator Margin="0,3"/>
                                     
                                     <!-- Function Argument -->
                                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                                 Spacing="10" IsVisible="{Binding HasFunctionArguments}">
                                         <TextBlock FontSize="18" TextAlignment="Left" HorizontalAlignment="Center" FontWeight="DemiBold" Text="{Binding FunctionArgumentTitle}"/>
-                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5 8">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,8">
                                             <ItemsControl ItemsSource="{Binding FunctionArguments}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid ColumnDefinitions="*,*,Auto" Margin="0 2">
+                                                        <Grid ColumnDefinitions="*,*,Auto" Margin="0,2">
                                                             <TextBlock TextAlignment="Left" FontWeight="DemiBold" Text="{Binding Name}"/>
                                                             <TextBlock Grid.Column="1" TextAlignment="Left" Text="{Binding Type}"/>
                                                             <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" ToolTip.Tip="Rename">
@@ -76,11 +78,11 @@
                                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                                 Spacing="10" IsVisible="{Binding HasAnyVariables}">
                                         <TextBlock FontSize="18" TextAlignment="Left" HorizontalAlignment="Center" FontWeight="DemiBold" Text="{Binding VariableTitle}"/>
-                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5 8">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Margin="5,8">
                                             <ItemsControl ItemsSource="{Binding UniqueVariables}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid ColumnDefinitions="*,Auto" Margin="0 2">
+                                                        <Grid ColumnDefinitions="*,Auto" Margin="0,2">
                                                             <TextBlock TextAlignment="Left" FontStyle="{Binding Style}" Text="{Binding Name}"/>
                                                             <Button Height="28" Width="28" Grid.Column="1" Command="{Binding Rename}" Padding="0" ToolTip.Tip="Rename">
                                                                 <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0"></ui:SymbolIcon>
@@ -145,7 +147,7 @@
                 <TextBlock Name="CannotParseInfoText" TextAlignment="Center" TextWrapping="Wrap"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Row="4" HorizontalAlignment="Stretch" Margin="10">
-                <Button Name="ParseButton" Classes="accent" HorizontalAlignment="Center">Parse Code</Button>
+                <Button Name="ParseButton" HorizontalAlignment="Center">Parse Code</Button>
             </StackPanel>
         </Grid>
     </Border>

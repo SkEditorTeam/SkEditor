@@ -28,7 +28,7 @@ public class Icon
 
         tabViewItem.IconSource = iconSource;
     }
-    
+
     public static IconSource? GetIcon(string extension)
     {
         string iconName = IconDictionary.GetValueOrDefault(extension);

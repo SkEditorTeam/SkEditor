@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
@@ -9,7 +10,6 @@ using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using System;
-using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -58,7 +58,7 @@ public partial class MainMenuControl : UserControl
         MenuItemRefactor.Command = new RelayCommand(() => new RefactorWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
     }
-    
+
     public void LoadAddonsMenus()
     {
         bool hasAnyMenu = false;
@@ -74,13 +74,13 @@ public partial class MainMenuControl : UserControl
                 Header = addon.Name,
                 Icon = new SymbolIcon() { Symbol = addon.GetMenuIcon() }
             };
-            
+
             foreach (MenuItem sub in items)
                 menuItem.Items.Add(sub);
-            
+
             AddonsMenuItem.Items.Add(menuItem);
         }
-        
+
         AddonsMenuItem.IsVisible = hasAnyMenu;
     }
 }

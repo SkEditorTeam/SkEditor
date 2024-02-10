@@ -11,15 +11,6 @@
 // Port from: https://github.com/cyotek/Cyotek.Windows.Forms.ImageBox to AvaloniaUI
 // Modified from: https://github.com/sn4k3/UVtools/blob/master/UVtools.AvaloniaControls/AdvancedImageBox.axaml.cs
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.IO;
-using System.Runtime.CompilerServices;
 using AsyncImageLoader;
 using Avalonia;
 using Avalonia.Controls;
@@ -31,6 +22,15 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.IO;
+using System.Runtime.CompilerServices;
 using Bitmap = Avalonia.Media.Imaging.Bitmap;
 using Brushes = Avalonia.Media.Brushes;
 using Color = Avalonia.Media.Color;

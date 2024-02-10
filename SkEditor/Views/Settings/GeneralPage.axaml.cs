@@ -39,7 +39,7 @@ public partial class GeneralPage : UserControl
             Dispatcher.UIThread.InvokeAsync(() => Translation.ChangeLanguage(language));
         };
     }
-    
+
     private void LoadIndentation()
     {
         var appConfig = ApiVault.Get().GetAppConfig();
@@ -54,7 +54,7 @@ public partial class GeneralPage : UserControl
                 break;
             }
         }
-        
+
         foreach (var item in IndentationAmountComboBox.Items)
         {
             if ((item as ComboBoxItem).Tag.ToString() == amount.ToString())
