@@ -2,11 +2,11 @@
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Files;
 using SkEditor.Views;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SkEditor.Utilities.Files;
 
 namespace SkEditor.API;
 
@@ -42,11 +42,12 @@ public interface ISkEditorAPI
     public void Debug(string message);
 
     public void Log(string message, bool bottomBarInfo = false);
+    public void SendToBottomBar(object message);
 
     public bool IsAddonEnabled(string addonName);
 
     public void SaveData();
-    
+
     public List<TextEditor> GetOpenedEditors();
 
 

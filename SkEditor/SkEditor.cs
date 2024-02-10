@@ -7,6 +7,7 @@ using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Files;
 using SkEditor.Views;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using SkEditor.Utilities.Files;
 
 namespace SkEditor;
 
@@ -68,7 +68,7 @@ public class SkEditor : ISkEditorAPI
     {
         return GetMainWindow().TabControl.SelectedItem is TabViewItem tabItem && IsFile(tabItem) ? tabItem.Content as TextEditor : null;
     }
-    
+
     public OpenedFile? GetOpenedFile()
     {
         return FileHandler.OpenedFiles.FirstOrDefault(file => file.TabViewItem == GetMainWindow().TabControl.SelectedItem);
@@ -113,7 +113,7 @@ public class SkEditor : ISkEditorAPI
             {
                 Title = title,
                 Content = message,
-                CloseButtonText = Translation.Get("CloseButton")
+                CloseButtonText = Translation.Get("CloseButton"),
             };
             await dialog.ShowAsync(window);
         });
@@ -200,7 +200,11 @@ public class SkEditor : ISkEditorAPI
     public void Log(string message, bool bottomBarInfo = false)
     {
         Serilog.Log.Information(message);
-        if (bottomBarInfo) GetMainWindow().BottomBar.UpdateLogs(message);
+        if (bottomBarInfo) SendToBottomBar(message);
+    }
+    public void SendToBottomBar(object message)
+    {
+        GetMainWindow().BottomBar.UpdateLogs(message.ToString());
     }
 
     public bool IsAddonEnabled(string addonName) => AddonLoader.Addons.Any(x => x.Name.Equals(addonName));
