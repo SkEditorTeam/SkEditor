@@ -8,12 +8,16 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
+using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using SkEditor.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Editor;
@@ -86,7 +90,8 @@ public partial class TextEditorEventHandler
 
     public async static void OnTextChanged(object sender, EventArgs e)
     {
-        TabViewItem tab = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+        if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem tab) return;
+        if (tab.Tag == null) return;
 
         if (ApiVault.Get().GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(tab.Tag.ToString()))
         {
@@ -228,6 +233,43 @@ public partial class TextEditorEventHandler
         string adjustedTextToPaste = string.Join(Environment.NewLine, lines);
 
         e.Text = adjustedTextToPaste;
+    }
+
+    public static void CheckForSpecialPaste(object? sender, TextEventArgs e)
+    {
+        string[] pastes = e.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.TrimEntries);
+
+        StringBuilder sb = new("You used a special code to do something:");
+        sb.AppendLine();
+
+        foreach (string paste in pastes)
+        {
+            if (paste.StartsWith("-enableSkEditorOption:"))
+            {
+                string option = paste.Split(':')[1].Trim();
+                PropertyInfo? prop = ApiVault.Get().GetAppConfig().GetType().GetProperty(option);
+                if (prop.PropertyType != typeof(bool)) continue;
+                prop?.SetValue(ApiVault.Get().GetAppConfig(), true);
+
+                sb.AppendLine($"- Enabled {option}");
+            }
+            else if (paste.StartsWith("-openSkEditorAppdata"))
+            {
+                string path = AppConfig.AppDataFolderPath;
+                sb.AppendLine($"- Opened SkEditor's appdata folder");
+                Process.Start(new ProcessStartInfo("explorer.exe", path));
+            }
+            else if (paste.StartsWith("-printSkEditorVersion"))
+            {
+                sb.AppendLine($"- {SettingsViewModel.Version}");
+            }
+        }
+
+        if (Regex.Matches(sb.ToString(), Environment.NewLine).Count > 1)
+        {
+            e.Text = sb.ToString().Trim();
+            return;
+        }
     }
 
 
