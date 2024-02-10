@@ -9,6 +9,7 @@ namespace SkEditor.Utilities;
 
 public class AppConfig
 {
+    public string Version { get; set; } = string.Empty;
     public bool FirstTime { get; set; } = true;
     public string Language { get; set; } = "English";
     public string LastUsedPublishService { get; set; } = "Pastebin";
@@ -23,8 +24,10 @@ public class AppConfig
     public bool IsAutoPairingEnabled { get; set; } = false;
     public bool IsAutoSaveEnabled { get; set; } = false;
     public string CurrentTheme { get; set; } = "Default.json";
-    public Dictionary<string, string> FileSyntaxes { get; set; } = new();
+    public Dictionary<string, string> FileSyntaxes { get; set; } = [];
     public string Font { get; set; } = "Default";
+    public bool UseSpacesInsteadOfTabs { get; set; } = false;
+    public int TabSize { get; set; } = 4;
     public bool CheckForUpdates { get; set; } = true;
     public bool CheckForChanges { get; set; } = true;
 
@@ -36,9 +39,6 @@ public class AppConfig
     public Dictionary<string, string> PreferredFileAssociations { get; set; } = [];
 
     public bool EnableAutoCompletionExperiment { get; set; } = false;
-
-    public bool UseSpacesInsteadOfTabs { get; set; } = false;
-    public int TabSize { get; set; } = 4;
     public bool EnableProjectsExperiment { get; set; } = false;
     public bool EnableHexPreview { get; set; } = false;
     public bool EnableCodeParser { get; set; } = false;
