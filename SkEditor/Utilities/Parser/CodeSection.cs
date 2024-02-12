@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Parser;
 
-public class CodeSection
+public partial class CodeSection
 {
     public CodeParser Parser { get; private set; }
     public SectionType Type { get; private set; }
@@ -24,7 +24,7 @@ public class CodeSection
     public HashSet<CodeVariable> UniqueVariables => GetUniqueVariables();
     public HashSet<CodeOptionReference> UniqueOptionReferences => GetUniqueOptionReferences();
 
-    public HashSet<CodeFunctionArgument> FunctionArguments { get; set; } = new(); // Case of function section
+    public HashSet<CodeFunctionArgument> FunctionArguments { get; set; } = []; // Case of function section
 
     public string LinesDisplay => $"From {StartingLineIndex + 1} to {EndingLineIndex}";
 
@@ -40,29 +40,16 @@ public class CodeSection
         SectionType.Event => GetIconFromName("LightingIcon"),
         SectionType.Function => GetIconFromName("FunctionIcon"),
         SectionType.Options => new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 20 },
+        _ => throw new System.NotImplementedException(),
     };
 
     public bool ContainsLineIndex(int line) => line >= StartingLineIndex && line <= EndingLineIndex;
 
     public CodeVariable? GetVariableFromCaret(Caret caret)
-    {
-        foreach (var variable in Variables)
-        {
-            if (variable.ContainsCaret(caret))
-                return variable;
-        }
-        return null;
-    }
+        => Variables.FirstOrDefault(v => v.ContainsCaret(caret));
 
     public CodeOption? GetOptionFromCaret(Caret caret)
-    {
-        foreach (var option in Options)
-        {
-            if (option.ContainsCaret(caret))
-                return option;
-        }
-        return null;
-    }
+        => Options.FirstOrDefault(o => o.ContainsCaret(caret));
 
     public CodeSection(CodeParser parser, int currentLineIndex, List<string> lines)
     {
@@ -74,22 +61,18 @@ public class CodeSection
 
     public void Parse()
     {
-        // Parse section type
         var firstLine = Lines[0];
-        if (firstLine.StartsWith("command") || firstLine.StartsWith("discord command"))
-            Type = SectionType.Command;
-        else if (firstLine.StartsWith("options:"))
-            Type = SectionType.Options;
-        else if (firstLine.StartsWith("function"))
-            Type = SectionType.Function;
-        else
-            Type = SectionType.Event;
+        Type = firstLine switch
+        {
+            string s when s.StartsWith("command") || s.StartsWith("discord command") => SectionType.Command,
+            string s when s.StartsWith("options:") => SectionType.Options,
+            string s when s.StartsWith("function") => SectionType.Function,
+            _ => SectionType.Event,
+        };
 
-
-
-        Options = new HashSet<CodeOption>();
-        Variables = new HashSet<CodeVariable>();
-        OptionReferences = new HashSet<CodeOptionReference>();
+        Options = [];
+        Variables = [];
+        OptionReferences = [];
 
         if (Type == SectionType.Options)
         {
@@ -100,7 +83,7 @@ public class CodeSection
                 if (line.TrimStart(' ', '\t').StartsWith('#'))
                     continue;
 
-                var matches = Regex.Matches(line, @"(.*): (.*)");
+                var matches = OptionRegex().Matches(line);
                 foreach (var m in matches)
                 {
                     var match = m as Match;
@@ -117,15 +100,14 @@ public class CodeSection
             int lineIndex = StartingLineIndex;
             foreach (var line in Lines)
             {
-                var variableMatches = Regex.Matches(line, @"(?<=\{)(?!@)_?(.*?)(?=\})");
+                var variableMatches = VariableRegex().Matches(line);
                 var optionReferenceMatches = Regex.Matches(line, CodeOptionReference.OptionReferencePattern);
 
                 // Parse variables
                 foreach (var m in variableMatches)
                 {
                     var match = m as Match;
-                    if (!match.Success)
-                        continue;
+                    if (!match.Success) continue;
                     var column = match.Index + 1;
                     var raw = match.Value;
                     Variables.Add(new CodeVariable(this, raw, lineIndex + 1, column));
@@ -135,8 +117,7 @@ public class CodeSection
                 foreach (var m in optionReferenceMatches)
                 {
                     var match = m as Match;
-                    if (!match.Success)
-                        continue;
+                    if (!match.Success) continue;
                     var column = match.Index + 1;
                     var raw = match.Value;
                     OptionReferences.Add(new CodeOptionReference(this, raw, lineIndex + 1, column));
@@ -152,8 +133,7 @@ public class CodeSection
                 foreach (var m in functionArguments)
                 {
                     var match = m as Match;
-                    if (!match.Success)
-                        continue;
+                    if (!match.Success) continue;
                     var raw = match.Value;
                     var column = match.Index + 1;
                     FunctionArguments.Add(new CodeFunctionArgument(this, raw, StartingLineIndex + 1, column));
@@ -172,7 +152,7 @@ public class CodeSection
             SectionType.Function => Lines[0].Split(' ')[1].Split('(')[0].Trim(),
             _ => "Unknown"
         };
-        if (sectionName.Length > 20) sectionName = sectionName.Substring(0, 20) + "...";
+        if (sectionName.Length > 20) sectionName = sectionName[..20] + "...";
 
         return sectionName;
     }
@@ -194,7 +174,7 @@ public class CodeSection
     {
         var lines = Lines;
         var lastLine = lines[^1];
-        if (lastLine.EndsWith("\n"))
+        if (lastLine.EndsWith('\n'))
             lines.RemoveAt(lines.Count - 1);
 
         var sectionCode = string.Join("\n", lines);
@@ -258,4 +238,9 @@ public class CodeSection
         }
         return uniqueOptionReferences;
     }
+
+    [GeneratedRegex(@"(.*): (.*)")]
+    private static partial Regex OptionRegex();
+    [GeneratedRegex(@"(?<=\{)(?!@)_?(.*?)(?=\})")]
+    private static partial Regex VariableRegex();
 }

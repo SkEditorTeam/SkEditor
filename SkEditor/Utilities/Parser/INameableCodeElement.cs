@@ -5,7 +5,6 @@
 /// </summary>
 public interface INameableCodeElement
 {
-
     public string Name { get; }
 
     public void Rename(string newName);
@@ -14,5 +13,4 @@ public interface INameableCodeElement
     {
         return Name;
     }
-
 }

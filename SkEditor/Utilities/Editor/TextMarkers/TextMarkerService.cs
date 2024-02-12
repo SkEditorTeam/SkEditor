@@ -61,7 +61,7 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
                     {
                         var offset = 2.5;
 
-                        var count = Math.Max((int) ((endPoint.X - startPoint.X) / offset) + 1, 0);
+                        var count = Math.Max((int)((endPoint.X - startPoint.X) / offset) + 1, 0);
 
                         var geometry = new StreamGeometry();
 
@@ -78,7 +78,7 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
                         }
 
                         var fontSize = ApiVault.Get().GetTextEditor().FontSize;
-                        var strokeThickness = (float) Math.Max(fontSize / 15, 1);
+                        var strokeThickness = (float)Math.Max(fontSize / 15, 1);
 
                         Pen usedPen = new(usedBrush, strokeThickness);
                         drawingContext.DrawGeometry(Brushes.Transparent, usedPen, geometry);

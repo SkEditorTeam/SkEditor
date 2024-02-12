@@ -8,7 +8,6 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.ViewModels;

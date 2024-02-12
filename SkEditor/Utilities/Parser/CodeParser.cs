@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Parser;
 
-public class CodeParser : INotifyPropertyChanged
+public partial class CodeParser : INotifyPropertyChanged
 {
 
     public static ParserSidebarPanel ParserPanel =>
@@ -17,7 +17,7 @@ public class CodeParser : INotifyPropertyChanged
     public CodeParser(TextEditor textEditor, bool parse = true)
     {
         Editor = textEditor;
-        Sections = new List<CodeSection>();
+        Sections = [];
         if (parse)
             Parse();
     }
@@ -35,14 +35,11 @@ public class CodeParser : INotifyPropertyChanged
     /// <summary>
     /// Get sections with the specified type.
     /// </summary>
-    /// <param name="sectionType"></param>
-    /// <returns></returns>
     public List<CodeSection> GetSectionFromType(CodeSection.SectionType sectionType) => Sections.FindAll(section => section.Type == sectionType);
 
     /// <summary>
     /// Get the options section, if any is defined.
     /// </summary>
-    /// <returns></returns>
     public CodeSection? GetOptionsSection() => Sections.Find(section => section.Type == CodeSection.SectionType.Options);
 
     public bool IsParsed { get; private set; } = false;
@@ -50,8 +47,6 @@ public class CodeParser : INotifyPropertyChanged
     /// <summary>
     /// Get section from a line.
     /// </summary>
-    /// <param name="line"></param>
-    /// <returns></returns>
     public CodeSection? GetSectionFromLine(int line) => Sections.Find(section => section.ContainsLineIndex(line));
 
     public void Parse()
@@ -66,7 +61,7 @@ public class CodeParser : INotifyPropertyChanged
         IsParsed = true;
 
         // Split the code into lines
-        List<string> lines = Editor.Text.Split('\n').ToList();
+        List<string> lines = [.. Editor.Text.Split('\n')];
         int lastSectionLine = -1;
 
         // Parse sections
@@ -76,7 +71,7 @@ public class CodeParser : INotifyPropertyChanged
             if (line.Trim().Length == 0)
                 continue;
 
-            if (Regex.IsMatch(line, @"(.*):") && !line.StartsWith(" ") && !line.StartsWith("\t") && !line.StartsWith("#"))
+            if (SectionRegex().IsMatch(line) && !line.StartsWith(' ') && !line.StartsWith('\t') && !line.StartsWith('#'))
             {
                 if (lastSectionLine == -1) // Starting
                 {
@@ -123,4 +118,7 @@ public class CodeParser : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    [GeneratedRegex(@"(.*):")]
+    private static partial Regex SectionRegex();
 }

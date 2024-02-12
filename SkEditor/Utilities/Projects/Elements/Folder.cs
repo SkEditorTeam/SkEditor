@@ -1,10 +1,8 @@
-﻿using Avalonia.Controls;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;

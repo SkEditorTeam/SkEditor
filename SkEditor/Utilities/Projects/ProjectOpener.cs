@@ -3,7 +3,6 @@ using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.Projects.Elements;

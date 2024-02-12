@@ -60,7 +60,7 @@ public class CodeOptionReference : INameableCodeElement
 
     public void Replace(string newName)
     {
-        if (newName.StartsWith("{") && newName.EndsWith("}"))
+        if (newName.StartsWith('{') && newName.EndsWith('}'))
             newName = newName[1..^1];
 
         Section.Lines[Line - Section.StartingLineIndex - 1] = Section.Lines[Line - Section.StartingLineIndex - 1].Replace(ToString(),
