@@ -1,14 +1,18 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using Avalonia.Styling;
 using AvaloniaEdit;
 using ExCSS;
 using FluentAvalonia.Interop;
 using FluentAvalonia.Styling;
 using FluentAvalonia.UI.Controls;
+using FluentAvalonia.UI.Windowing;
 using Newtonsoft.Json;
 using SkEditor.API;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -138,12 +142,36 @@ public class ThemeEditor
             styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
             styles.PreferUserAccentColor = true;
 
-            if (CurrentTheme.UseMicaEffect)
-            {
-                ApiVault.Get().GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.Mica];
-            }
+            ApplyMica();
 
             UpdateFont();
+        }
+    }
+
+    public static ControlTheme SmallWindowTheme { get; private set; }
+    private static void ApplyMica()
+    {
+        Uri uri = new("avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml");
+        var style = new ResourceInclude(uri) { Source = uri };
+
+        if (style.TryGetResource("SmallWindowTheme", ThemeVariant.Default, out var smallWindowTheme))
+        {
+            WindowTransparencyLevel[] levels = [WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur];
+
+            ControlTheme smallWindow = (ControlTheme)smallWindowTheme;
+            if (CurrentTheme.UseMicaEffect)
+            {
+                smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
+                ApiVault.Get().GetMainWindow().TransparencyLevelHint = levels;
+            }
+            else
+            {
+                smallWindow.Setters.Remove(smallWindow.Setters.OfType<Setter>().FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint"));
+                ApiVault.Get().GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
+            }
+
+            Application.Current.Resources.MergedDictionaries.Add(style);
+            SmallWindowTheme = smallWindow;
         }
     }
 

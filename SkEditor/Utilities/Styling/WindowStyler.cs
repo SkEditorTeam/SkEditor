@@ -12,7 +12,5 @@ public class WindowStyler
         window.TitleBar.ButtonHoverBackgroundColor = Color.Parse("#25ffffff");
         window.TitleBar.ButtonPressedBackgroundColor = Color.Parse("#20ffffff");
         window.TitleBar.ButtonInactiveForegroundColor = Color.Parse("#99ffffff");
-
-        if (ThemeEditor.CurrentTheme.UseMicaEffect) window.TransparencyLevelHint = [WindowTransparencyLevel.Mica];
     }
 }
