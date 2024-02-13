@@ -1,29 +1,32 @@
-﻿using SkEditor.API;
+﻿using Avalonia;
+using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
 public static class ChangelogChecker
 {
     private static string GetVersion() => $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}";
 
-    private static string GetChangelog()
-    {
-        return "Welcome to the new version of SkEditor!\n" +
-            "This version includes the following changes:\n" +
-            "✨ Added a Code Parser utility to the sidebar - you can enable it in the settings.json file!\n";
-    }
+    private static readonly string[] changelog =
+    [
+        "Welcome to the new version of SkEditor!",
+        "This version includes the following changes:",
+        "✨ Added a Code Parser to the sidebar (you need to set EnableProjectsExperiment to true in the settings.json file).",
+        "🔨 Significantly improved folder explorer.",
+        "🔧 Added an indentation configuration in the settings.",
+        "🖼️ Added image support.",
+        "🎨 Added the ability to enable the Mica effect in the theme.",
+        "🐛 Fixed various bugs and crashes."
+    ];
 
-    public static void Check()
+    public async static void Check()
     {
         string version = ApiVault.Get().GetAppConfig().Version;
         if (version == GetVersion()) return;
 
-        ApiVault.Get().ShowMessage($"v{GetVersion()} 🚀", GetChangelog());
+        await ApiVault.Get().ShowAdvancedMessage($"v{GetVersion()} 🚀", string.Join('\n', changelog), primaryButton: false, closeButtonContent: "OK");
 
         ApiVault.Get().GetAppConfig().Version = GetVersion();
     }
