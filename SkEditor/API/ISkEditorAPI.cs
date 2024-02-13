@@ -36,6 +36,7 @@ public interface ISkEditorAPI
     public void ShowError(string message);
 
     public Task<ContentDialogResult> ShowMessageWithIcon(string title, string message, IconSource icon, string iconColor = "#ffffff", string primaryButtonContent = "ConfirmButton", string closeButtonContent = "CancelButton", bool primaryButton = true);
+    public Task<ContentDialogResult> ShowAdvancedMessage(string title, string message, string primaryButtonContent = "ConfirmButton", string closeButtonContent = "CancelButton", bool primaryButton = true);
 
     public AppConfig GetAppConfig();
 

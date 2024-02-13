@@ -2,12 +2,14 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Styling;
 using SkEditor.Views;
 using System;
 using System.Collections.Generic;
@@ -109,11 +111,13 @@ public class SkEditor : ISkEditorAPI
     {
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
+            Application.Current.TryGetResource("MessageBoxBackground", out var background);
             var dialog = new ContentDialog()
             {
                 Title = title,
                 Content = message,
                 CloseButtonText = Translation.Get("CloseButton"),
+                Background = background as ImmutableSolidColorBrush
             };
             await dialog.ShowAsync(window);
         });
@@ -126,6 +130,9 @@ public class SkEditor : ISkEditorAPI
         ShowMessage(title, message, GetTopWindow());
     }
 
+    /// <summary>
+    /// Shows error message box with provided message
+    /// </summary>
     public async void ShowError(string message)
     {
         string error = Translation.Get("Error");
@@ -135,16 +142,18 @@ public class SkEditor : ISkEditorAPI
     private bool isMessageOpened = false;
 
     /// <summary>
-    /// Shows info box with provided message and title
+    /// Shows info box with provided message, title and icon
     /// </summary>
     public async Task<ContentDialogResult> ShowMessageWithIcon(string title, string message, IconSource icon, string iconColor = "#ffffff", string primaryButtonContent = "ConfirmButton", string closeButtonContent = "CancelButton", bool primaryButton = true)
     {
         if (isMessageOpened) return ContentDialogResult.None;
 
+        Application.Current.TryGetResource("MessageBoxBackground", out var background);
         var dialog = new ContentDialog()
         {
             Title = title,
             CloseButtonText = Translation.Get(closeButtonContent),
+            Background = background as ImmutableSolidColorBrush
         };
 
         if (primaryButton) dialog.PrimaryButtonText = Translation.Get(primaryButtonContent);
@@ -180,6 +189,41 @@ public class SkEditor : ISkEditorAPI
         grid.Children.Add(textBlock);
 
         dialog.Content = grid;
+
+        isMessageOpened = true;
+        return await dialog.ShowAsync(GetTopWindow());
+    }
+
+    /// <summary>
+    /// Shows advanced message box with provided message, title and buttons
+    /// </summary>
+    public async Task<ContentDialogResult> ShowAdvancedMessage(string title, string message, string primaryButtonContent = "ConfirmButton", string closeButtonContent = "CancelButton", bool primaryButton = true)
+    {
+        if (isMessageOpened) return ContentDialogResult.None;
+
+        Application.Current.TryGetResource("MessageBoxBackground", out var background);
+        var dialog = new ContentDialog()
+        {
+            Title = title,
+            CloseButtonText = Translation.Get(closeButtonContent),
+            Background = background as ImmutableSolidColorBrush
+        };
+
+        if (primaryButton) dialog.PrimaryButtonText = Translation.Get(primaryButtonContent);
+
+        dialog.Closed += (_, _) => isMessageOpened = false;
+
+        var textBlock = new TextBlock()
+        {
+            Text = message,
+            FontSize = 16,
+            Margin = new Thickness(10, 10, 0, 0),
+            TextWrapping = TextWrapping.Wrap,
+            MaxWidth = 500,
+            LineSpacing = 2
+        };
+
+        dialog.Content = textBlock;
 
         isMessageOpened = true;
         return await dialog.ShowAsync(GetTopWindow());
