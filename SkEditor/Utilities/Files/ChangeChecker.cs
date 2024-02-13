@@ -33,6 +33,7 @@ public class ChangeChecker
             if (!ApiVault.Get().IsFileOpen()) return;
 
             TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+            if (item.Tag == null) return;
             if (string.IsNullOrWhiteSpace(item.Tag.ToString())) return;
             string path = Uri.UnescapeDataString(item.Tag.ToString());
             if (!File.Exists(path)) return;
