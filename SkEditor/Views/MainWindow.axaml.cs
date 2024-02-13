@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -13,6 +15,8 @@ using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 
 namespace SkEditor.Views;
 
@@ -81,6 +85,7 @@ public partial class MainWindow : AppWindow
     {
         AddonLoader.Load();
         Utilities.Files.FileTypes.RegisterDefaultAssociations();
+        SideBar.IsVisible = MainMenu.MenuItemOpenFolder.IsVisible = ApiVault.Get().GetAppConfig().EnableProjectsExperiment;
         SideBar.LoadPanels();
 
         ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
@@ -95,8 +100,6 @@ public partial class MainWindow : AppWindow
             DiscordRpcUpdater.Initialize();
 
             if (ApiVault.Get().GetAppConfig().CheckForUpdates) UpdateChecker.Check();
-
-            SideBar.IsVisible = MainMenu.MenuItemOpenFolder.IsVisible = ApiVault.Get().GetAppConfig().EnableProjectsExperiment;
 
             Tutorial.ShowTutorial();
             BottomBar.UpdatePosition();
