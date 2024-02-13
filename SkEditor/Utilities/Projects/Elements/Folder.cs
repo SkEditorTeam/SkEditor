@@ -3,6 +3,7 @@ using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,8 @@ public class Folder : StorageElement
 
     public Folder(string folder, Folder? parent = null)
     {
+        folder = Uri.UnescapeDataString(folder);
+
         Parent = parent;
         StorageFolderPath = folder;
         Name = Path.GetFileName(folder);
