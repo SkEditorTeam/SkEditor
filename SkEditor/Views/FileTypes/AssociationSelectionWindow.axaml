@@ -6,15 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400"
         Width="600" Height="400"
         x:Class="SkEditor.Views.FileTypes.AssociationSelectionWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource FileAssociationSelectionWindowTitle}" CanResize="False" WindowStartupLocation="CenterOwner">
-    
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        Title="{DynamicResource FileAssociationSelectionWindowTitle}" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
     
     <Grid RowDefinitions="auto,*,auto" Margin="20, 30, 20, 20">
         <ui:InfoBar IsOpen="True" IsClosable="False" Severity="Informational" 

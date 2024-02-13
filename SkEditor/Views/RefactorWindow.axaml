@@ -5,15 +5,7 @@
 		xmlns:ui="using:FluentAvalonia.UI.Controls"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.RefactorWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleRefactor}" Height="400" Width="350" CanResize="False" WindowStartupLocation="CenterOwner">
-
-    <Window.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-    </Window.Resources>
+        Title="{DynamicResource WindowTitleRefactor}" Height="400" Width="350" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
 	<Grid RowDefinitions="auto,*" Margin="20">
 		<StackPanel Spacing="0">

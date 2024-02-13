@@ -6,14 +6,7 @@
         Width="300" Height="150" MinWidth="300" MinHeight="150"
         x:Class="SkEditor.Views.SymbolRefactorWindow"
         Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleRefactor}" CanResize="False" WindowStartupLocation="CenterOwner">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        Title="{DynamicResource WindowTitleRefactor}" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
     
     <Grid RowDefinitions="Auto,*" Margin="10">
         <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Spacing="5">

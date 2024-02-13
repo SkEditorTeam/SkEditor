@@ -5,15 +5,7 @@
 		xmlns:ui="using:FluentAvalonia.UI.Controls"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.FontSelectionWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleFontSelector}" Height="400" Width="350" CanResize="False" WindowStartupLocation="CenterOwner">
-
-	<Window.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</Window.Resources>
+        Title="{DynamicResource WindowTitleFontSelector}" Height="400" Width="350" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
 	<Grid ColumnDefinitions="auto,*" Margin="20">
 		<Grid Grid.Column="0" RowDefinitions="auto,*">

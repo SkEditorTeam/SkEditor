@@ -5,14 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
         x:Class="SkEditor.Views.Projects.RenameElementWindow"
         Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleElementRename}" Height="200" Width="300" CanResize="False" WindowStartupLocation="CenterOwner">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        Title="{DynamicResource WindowTitleElementRename}" Height="200" Width="300" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
     
     <Grid Margin="10 30 10 10" RowDefinitions="*,*,Auto" ColumnDefinitions="*,*">
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Spacing="10">

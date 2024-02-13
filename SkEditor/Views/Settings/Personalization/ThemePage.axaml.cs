@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Controls;
 using SkEditor.Utilities.Styling;
@@ -37,9 +38,13 @@ public partial class ThemePage : UserControl
 
         ThemeComboBox.SelectionChanged += (s, e) =>
         {
-            ComboBoxItem item = (ComboBoxItem)ThemeComboBox.SelectedItem;
-            Theme theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(item.Tag));
-            ThemeEditor.SetTheme(theme);
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                ComboBoxItem item = (ComboBoxItem)ThemeComboBox.SelectedItem;
+                Theme theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(item.Tag));
+                ThemeEditor.SetTheme(theme);
+                SettingsWindow.Instance.Theme = ThemeEditor.SmallWindowTheme;
+            });
         };
     }
 

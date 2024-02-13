@@ -5,7 +5,7 @@
 					xmlns:wnd="using:FluentAvalonia.UI.Windowing"
                     x:CompileBindings="True">
 
-	<ControlTheme TargetType="wnd:MinMaxCloseControl" x:Key="{x:Type wnd:MinMaxCloseControl}">
+	<ControlTheme x:Key="OnlyCloseButtonTheme" TargetType="wnd:MinMaxCloseControl">
 		<Setter Property="Template">
 			<ControlTemplate>
 				<StackPanel Orientation="Horizontal">
@@ -43,7 +43,7 @@
                            VerticalAlignment="Top">
 
 						<Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="20" Width="20" HorizontalAlignment="Left" Margin="8"/>
-						
+
 						<TextBlock Name="TitleText"
                              Text="{TemplateBinding Title}"
                              Padding="5,0,0,0"
@@ -60,10 +60,11 @@
                                       VerticalAlignment="Stretch"
                                       Content="{TemplateBinding Content}"
                                       ContentTemplate="{TemplateBinding ContentTemplate}" />
-					
+
 					<wnd:MinMaxCloseControl HorizontalAlignment="Right"
                                             VerticalAlignment="Top"
                                             Name="SystemCaptionButtons"
+											Theme="{StaticResource OnlyCloseButtonTheme}"
                                             Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}"/>
 
 				</Panel>
@@ -71,7 +72,7 @@
 		</VisualLayerManager>
 	</ControlTemplate>
 
-	<ControlTheme TargetType="wnd:AppWindow" x:Key="{x:Type wnd:AppWindow}">
+	<ControlTheme x:Key="SmallWindowTheme" TargetType="wnd:AppWindow">
 		<Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource ApplicationPageBackgroundThemeBrush}" />
 		<Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
 		<Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}"/>

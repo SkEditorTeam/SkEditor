@@ -40,7 +40,7 @@
 		<Brush x:Key="TextControlPlaceholderForegroundPointerOver">#4DFFFFFF</Brush>
 		
 		<Brush x:Key="SkEditorBorderBackground">#0affffff</Brush>
-		
+		<Brush x:Key="MessageBoxBackground">#0d0d0d</Brush>
 		
 		<Brush x:Key="TextControlPlaceholderForegroundFocused">#26FFFFFF</Brush>
 		

@@ -5,14 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="250"
         x:Class="SkEditor.Views.Projects.CreateStorageElementWindow"
         Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleElementCreate}" Height="250" Width="300" CanResize="False" WindowStartupLocation="CenterOwner">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        Title="{DynamicResource WindowTitleElementCreate}" Height="250" Width="300" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
     
     <Grid Margin="10 30 10 10" RowDefinitions="*,Auto,Auto">
         <Grid Grid.Row="0" RowDefinitions="Auto,*">
