@@ -96,10 +96,11 @@ public class FileHandler
 
     public static async void OpenFile(string path)
     {
+        path = Path.GetFullPath(path);
         if ((ApiVault.Get().GetTabView().TabItems as IList)
             .Cast<TabViewItem>()
             .Where(tab => tab.Tag != null)
-            .Any(tab => tab.Tag.ToString().Equals(path)))
+            .Any(tab => tab.Tag.ToString() == path))
         {
             ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList)
                 .Cast<TabViewItem>()
