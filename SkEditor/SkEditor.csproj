@@ -156,5 +156,8 @@
 	  <None Update="Languages\Hungarian.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </None>
+	  <None Update="Languages\Korean.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </None>
 	</ItemGroup>
 </Project>
