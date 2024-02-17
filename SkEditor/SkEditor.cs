@@ -9,7 +9,6 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
-using SkEditor.Utilities.Styling;
 using SkEditor.Views;
 using System;
 using System.Collections.Generic;
