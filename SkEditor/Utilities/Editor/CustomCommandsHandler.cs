@@ -32,7 +32,7 @@ public class CustomCommandsHandler
 
             // Find the first non-tabulator character
             var strippedLine = text.TrimStart();
-            var isCommented = text.TrimStart().StartsWith("#");
+            var isCommented = text.TrimStart().StartsWith('#');
             var indentationAmount = 0;
             while (text.StartsWith(indentation))
             {
@@ -44,7 +44,6 @@ public class CustomCommandsHandler
             for (int i = 0; i < indentationAmount; i++)
                 indentationToInsert += indentation;
 
-            ApiVault.Get().Log("Indentation 2 insert: " + indentationToInsert + " | Line: '" + text + "'", true);
             if (isCommented)
             {
                 return indentationToInsert + strippedLine[1..];
