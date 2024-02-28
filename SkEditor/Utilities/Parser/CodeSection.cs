@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.Input;
@@ -6,6 +7,11 @@ using FluentAvalonia.UI.Controls;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Avalonia.Input;
+using Avalonia.Media;
+using AvaloniaEdit.Document;
+using AvaloniaEdit.Rendering;
+using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -23,6 +29,7 @@ public partial class CodeSection
 
     public HashSet<CodeVariable> UniqueVariables => GetUniqueVariables();
     public HashSet<CodeOptionReference> UniqueOptionReferences => GetUniqueOptionReferences();
+    public bool IsLocalFunction => Type == SectionType.Function && Lines[0].StartsWith("local ");
 
     public HashSet<CodeFunctionArgument> FunctionArguments { get; set; } = []; // Case of function section
 
@@ -51,12 +58,18 @@ public partial class CodeSection
     public CodeOption? GetOptionFromCaret(Caret caret)
         => Options.FirstOrDefault(o => o.ContainsCaret(caret));
 
+    public LineColorizer Colorizer;
+    public RelayCommand OnSectionPointerEntered => new(HighlightSection);
+    public RelayCommand OnSectionPointerExited => new(RemoveHighlight);
+
     public CodeSection(CodeParser parser, int currentLineIndex, List<string> lines)
     {
         Parser = parser;
         Lines = lines;
         StartingLineIndex = currentLineIndex;
         Parse();
+
+        Colorizer = new(StartingLineIndex, EndingLineIndex);
     }
 
     public void Parse()
@@ -64,9 +77,9 @@ public partial class CodeSection
         var firstLine = Lines[0];
         Type = firstLine switch
         {
-            string s when s.StartsWith("command") || s.StartsWith("discord command") => SectionType.Command,
-            string s when s.StartsWith("options:") => SectionType.Options,
-            string s when s.StartsWith("function") => SectionType.Function,
+            { } s when s.StartsWith("command") || s.StartsWith("discord command") => SectionType.Command,
+            { } s when s.StartsWith("options:") => SectionType.Options,
+            { } s when s.StartsWith("function") => SectionType.Function,
             _ => SectionType.Event,
         };
 
@@ -239,8 +252,50 @@ public partial class CodeSection
         return uniqueOptionReferences;
     }
 
+    public void HighlightSection()
+    {
+        // TextEditor.TextArea.TextView
+        var editor = Parser.Editor;
+        editor.TextArea.TextView.LineTransformers.Add(Colorizer);
+    }
+    
+    public void RemoveHighlight()
+    {
+        var editor = Parser.Editor;
+        // Remove every LineColorizer
+        editor.TextArea.TextView.LineTransformers.Remove(Colorizer);
+    }
+
     [GeneratedRegex(@"(.*): (.*)")]
     private static partial Regex OptionRegex();
-    [GeneratedRegex(@"(?<=\{)(?!@)_?(.*?)(?=\})")]
+    [GeneratedRegex(@"(?<=\{)(?!@)_?([A-Za-z.\s_-]+)(?=\})")]
     private static partial Regex VariableRegex();
+    
+    /// <summary>
+    /// Author: Sky
+    /// </summary>
+    public class LineColorizer : DocumentColorizingTransformer
+    {
+        int from;
+        int to;
+
+        public LineColorizer(int from, int to)
+        {
+            this.from = from;
+            this.to = to;
+        }
+
+        protected override void ColorizeLine(DocumentLine line)
+        {
+            if (!line.IsDeleted && line.LineNumber >= from && line.LineNumber <= to)
+            {
+                ChangeLinePart(line.Offset, line.EndOffset, ApplyChanges);
+            }
+        }
+
+        void ApplyChanges(VisualLineElement element)
+        {
+            element.TextRunProperties.SetBackgroundBrush(ThemeEditor.CurrentTheme.SelectionColor);
+        }
+    }
 }

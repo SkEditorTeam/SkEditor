@@ -79,5 +79,9 @@ public class CodeOptionReference : INameableCodeElement
             editor.CaretOffset = editor.Document.GetOffset(option.Line, option.Column);
             editor.Focus();
         }
+        else
+        {
+            ApiVault.Get().ShowError("The desired option has no definition.");
+        }
     }
 }
