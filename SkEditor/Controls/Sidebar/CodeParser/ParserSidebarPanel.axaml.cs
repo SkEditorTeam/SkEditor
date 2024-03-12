@@ -6,6 +6,9 @@ using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Avalonia.Input;
+using SkEditor.Utilities.Parser.ViewModels;
 
 namespace SkEditor.Controls.Sidebar;
 
@@ -18,13 +21,33 @@ public partial class ParserSidebarPanel : UserControl
     {
         Sections.Clear();
         sections.ForEach(Sections.Add);
-        ItemsRepeater.ItemsSource = Sections;
+        
+        var viewModel = (ParserFilterViewModel) DataContext;
+        var filteredSections = Sections
+            .Where(section => string.IsNullOrWhiteSpace(viewModel.SearchText) || section.Name.Contains(viewModel.SearchText))
+            .ToList();
+        if (viewModel.SelectedFilterIndex != 0)
+        {
+            var type = viewModel.SelectedFilterIndex switch
+            {
+                1 => CodeSection.SectionType.Function,
+                2 => CodeSection.SectionType.Event,
+                3 => CodeSection.SectionType.Options,
+                4 => CodeSection.SectionType.Command,
+                _ => throw new System.NotImplementedException()
+            };
+            filteredSections = filteredSections.Where(section => section.Type == type).ToList();
+        }
+        ItemsRepeater.ItemsSource = filteredSections;
+        
         UpdateInformationBox();
     }
 
     public ParserSidebarPanel()
     {
         InitializeComponent();
+
+        DataContext = new ParserFilterViewModel();
 
         ParserDisabled.IsVisible = !CodeParserEnabled;
         ScrollViewer.IsVisible = CodeParserEnabled;
@@ -46,6 +69,9 @@ public partial class ParserSidebarPanel : UserControl
                 ParseButton.IsEnabled = true;
             }
         };
+        ClearSearch.Click += (_, _) => ClearSearchFilter();
+        SearchBox.KeyUp += (_, _) => UpdateSearchFilter();
+        TypeFilterBox.SelectionChanged += (_, _) => UpdateSearchFilter();
     }
 
     public void ParseCurrentFile()
@@ -57,6 +83,19 @@ public partial class ParserSidebarPanel : UserControl
 
         ParseButton.IsEnabled = false;
         parser.Parse();
+    }
+
+    public void UpdateSearchFilter()
+    {
+        Refresh(Sections.ToList());
+    }
+
+    public void ClearSearchFilter()
+    {
+        var viewModel = (ParserFilterViewModel) DataContext;
+        viewModel.SearchText = "";
+        viewModel.SelectedFilterIndex = 0;
+        Refresh(Sections.ToList());
     }
 
     public void UpdateInformationBox(bool isToNotifyUnParsing = false)
