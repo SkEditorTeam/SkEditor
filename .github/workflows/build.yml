@@ -104,6 +104,7 @@ jobs:
         cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
         mkdir -p "SkEditorFiles/DEBIAN"
         cd SkEditorFiles/DEBIAN
+        pwd
         wget -O control -r 'https://www.dropbox.com/scl/fi/pvrvfsvii2kmk5p3n2x2z/control-arm64?rlkey=muh97r76prbyme6rce5dqa85s&dl=1'
         wget -O preinst -r 'https://www.dropbox.com/scl/fi/87jfui5e6jgsl122ozwh1/preinst?rlkey=qfo8wfciqq2u88947ublos12c&dl=1'
     
