@@ -112,16 +112,12 @@ jobs:
         echo "Version: 1.0" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
-        echo "command_exists update-menus && update-menus" > postinst
-        echo "command_exists update-desktop-database && update-desktop-database" >> postinst
-        echo "command_exists xdg-desktop-menu && xdg-desktop-menu forceupdate" >> postinst
 
     - name: Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
-        chmod 0755 postinst
     
     - name: Create .deb package
       run: |
@@ -171,16 +167,12 @@ jobs:
         echo "Version: 1.0" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
-        echo "command_exists update-menus && update-menus" > postinst
-        echo "command_exists update-desktop-database && update-desktop-database" >> postinst
-        echo "command_exists xdg-desktop-menu && xdg-desktop-menu forceupdate" >> postinst
 
     - name: Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
-        chmod 0755 postinst
     
     - name: Create .deb package
       run: |
