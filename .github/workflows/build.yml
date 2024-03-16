@@ -104,19 +104,25 @@ jobs:
         cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
         mkdir -p "SkEditorFiles/usr/share/applications"
         cd SkEditorFiles/usr/share/applications
-        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/y2qfm6vkuil4ug0ab8r4q/SkEditor.desktop?rlkey=0rn2iumf6dp3vmhxoaaqb1f3t&dl=1'
+        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         pwd 
         wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
         echo "Version: 1.0" >> control
+        echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
+        echo "command_exists update-menus && update-menus" > postinst
+        echo "command_exists update-desktop-database && update-desktop-database" >> postinst
+        echo "command_exists xdg-desktop-menu && xdg-desktop-menu forceupdate" >> postinst
+        echo "fi" >> postinst
 
     - name: Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
+        chmod 0755 postinst
     
     - name: Create .deb package
       run: |
@@ -158,19 +164,24 @@ jobs:
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
         mkdir -p "SkEditorFilesx/usr/share/applications"
         cd SkEditorFilesx/usr/share/applications
-        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/y2qfm6vkuil4ug0ab8r4q/SkEditor.desktop?rlkey=0rn2iumf6dp3vmhxoaaqb1f3t&dl=1'
+        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
         wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
         echo "Version: 1.0" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
+        echo "command_exists update-menus && update-menus" > postinst
+        echo "command_exists update-desktop-database && update-desktop-database" >> postinst
+        echo "command_exists xdg-desktop-menu && xdg-desktop-menu forceupdate" >> postinst
+        echo "fi" >> postinst
 
     - name: Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
+        chmod 0755 postinst
     
     - name: Create .deb package
       run: |
