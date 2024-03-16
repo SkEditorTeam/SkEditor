@@ -91,7 +91,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r any -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r unix -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
 
     - name: Create .deb structure
       run: |
