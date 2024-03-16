@@ -110,6 +110,7 @@ jobs:
 
     - name: Fix Permissions
       run: |
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         chmod 0755 preinst
         chmod 0755 control
     
@@ -159,6 +160,7 @@ jobs:
 
     - name: Fix Permissions
       run: |
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         chmod 0755 preinst
         chmod 0755 control
     
