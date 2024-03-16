@@ -107,6 +107,11 @@ jobs:
         pwd
         wget -O control -r 'https://www.dropbox.com/scl/fi/pvrvfsvii2kmk5p3n2x2z/control-arm64?rlkey=muh97r76prbyme6rce5dqa85s&dl=1'
         wget -O preinst -r 'https://www.dropbox.com/scl/fi/87jfui5e6jgsl122ozwh1/preinst?rlkey=qfo8wfciqq2u88947ublos12c&dl=1'
+
+    - name: Fix Permissions
+      run: |
+        chmod 0755 preinst
+        chmod 0755 control
     
     - name: Create .deb package
       run: |
@@ -151,6 +156,11 @@ jobs:
         pwd
         wget -O control -r 'https://www.dropbox.com/scl/fi/xmt84gdbn9qxbjscbx86h/control-x64?rlkey=205ebw4qhgvgpkwe4u761dkta&dl=1'
         wget -O preinst -r 'https://www.dropbox.com/scl/fi/87jfui5e6jgsl122ozwh1/preinst?rlkey=qfo8wfciqq2u88947ublos12c&dl=1'
+
+    - name: Fix Permissions
+      run: |
+        chmod 0755 preinst
+        chmod 0755 control
     
     - name: Create .deb package
       run: |
