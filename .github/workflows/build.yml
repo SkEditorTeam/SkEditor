@@ -105,9 +105,6 @@ jobs:
         mkdir -p "SkEditorFiles/usr/share/applications"
         cd SkEditorFiles/usr/share/applications
         wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/y2qfm6vkuil4ug0ab8r4q/SkEditor.desktop?rlkey=0rn2iumf6dp3vmhxoaaqb1f3t&dl=1'
-        mkdir -p "icons/hicolor/scalable"
-        cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/usr/share/icons/hicolor/scalable
-        cp /home/runner/work/SkEditor/SkEditor.png ./skeditor.png
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         pwd 
@@ -162,9 +159,6 @@ jobs:
         mkdir -p "SkEditorFilesx/usr/share/applications"
         cd SkEditorFilesx/usr/share/applications
         wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/y2qfm6vkuil4ug0ab8r4q/SkEditor.desktop?rlkey=0rn2iumf6dp3vmhxoaaqb1f3t&dl=1'
-        mkdir -p "icons/hicolor/scalable"
-        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/usr/share/icons/hicolor/scalable
-        cp /home/runner/work/SkEditor/SkEditor.png ./skeditor.png
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
