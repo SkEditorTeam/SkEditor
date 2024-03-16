@@ -76,7 +76,7 @@ jobs:
         name: SkEditorMac-arm64
         path: SkEditorMac-arm64.zip
 
-  build-linux-debian:
+  build-linux-debian-arm64:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -91,18 +91,18 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r unix -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
 
     - name: Create .deb structure
       run: |
         mkdir -p "SkEditorFiles/opt/SkEditor"
-        cp -r SkEditor/bin/Release/net8.0/any/publish/* "SkEditor.deb/opt/SkEditor/"
+        cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
         mkdir -p "SkEditorFiles/DEBIAN"
         cd SkEditorFiles/DEBIAN
         echo "Package: SkEditor" > control
         echo "Version: 1.0" >> control
         echo "Section: editors" >> control
-        echo "Architecture: all" >> control
+        echo "Architecture: arm64" >> control
         echo "Depends: dotnet-runtime-8.0" >> control
         echo "Description: App for editing Skript files." >> control
         echo "set -e
@@ -131,10 +131,73 @@ jobs:
     - name: Create .deb package
       run: |
         cd ../..
-        dpkg-deb -b SkEditorFiles SkEditor.deb
+        dpkg-deb -b SkEditorFiles SkEditor-arm64.deb
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: SkEditorLinuxDebian
-        path: SkEditor.deb
+        name: SkEditorLinuxDebian (arm64)
+        path: SkEditor-arm64.deb
+
+  build-linux-debian-x64:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Build and publish for Debian
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Create .deb structure
+      run: |
+        mkdir -p "SkEditorFiles/opt/SkEditor"
+        cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
+        mkdir -p "SkEditorFiles/DEBIAN"
+        cd SkEditorFilesx/DEBIAN
+        echo "Package: SkEditor" > control
+        echo "Version: 1.0" >> control
+        echo "Section: editors" >> control
+        echo "Architecture: amd64" >> control
+        echo "Depends: dotnet-runtime-8.0" >> control
+        echo "Description: App for editing Skript files." >> control
+        echo "set -e
+        desktop_file=\"/usr/share/applications/skeditor.desktop\"
+        desktop_link=\"\$HOME/Desktop/skeditor.desktop\"
+        echo \"[Desktop Entry]
+        Name=SkEditor
+        Comment=App for editing Skript files.
+        Exec=/opt/SkEditor/SkEditor
+        Icon=/opt/SkEditor/SkEditor.png
+        Terminal=false
+        StartupWMClass=SkEditor
+        Type=Application\" > \"\$desktop_link\"
+        echo \"[Desktop Entry]
+        Name=SkEditor
+        Comment=App for editing Skript files.
+        Exec=/opt/SkEditor/SkEditor
+        Icon=/opt/SkEditor/SkEditor.png
+        Terminal=false
+        StartupWMClass=SkEditor
+        Type=Application\" > \"\$desktop_file\"
+        chmod +x \"\$desktop_link\"
+        chmod +x \"\$desktop_file\"
+        " > preinst
+    
+    - name: Create .deb package
+      run: |
+        cd ../..
+        dpkg-deb -b SkEditorFilesx SkEditor-x64.deb
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorLinuxDebian (x64)
+        path: SkEditor-x64.deb
