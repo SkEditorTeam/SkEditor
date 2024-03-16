@@ -111,6 +111,7 @@ jobs:
     - name: Create .deb package
       run: |
         cd ../..
+        pwd
         dpkg-deb -b SkEditorFiles SkEditor-arm64.deb
 
     - name: Upload artifacts
@@ -147,12 +148,14 @@ jobs:
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
         mkdir -p "SkEditorFilesx/DEBIAN"
         cd SkEditorFilesx/DEBIAN
+        pwd
         wget -O control -r 'https://www.dropbox.com/scl/fi/xmt84gdbn9qxbjscbx86h/control-x64?rlkey=205ebw4qhgvgpkwe4u761dkta&dl=1'
         wget -O preinst -r 'https://www.dropbox.com/scl/fi/87jfui5e6jgsl122ozwh1/preinst?rlkey=qfo8wfciqq2u88947ublos12c&dl=1'
     
     - name: Create .deb package
       run: |
         cd ../..
+        pwd
         dpkg-deb -b SkEditorFilesx SkEditor-x64.deb
 
     - name: Upload artifacts
