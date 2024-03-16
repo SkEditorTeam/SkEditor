@@ -93,40 +93,19 @@ jobs:
         dotnet restore
         dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
 
+    - name: Install wget
+      run: |
+        sudo apt update
+        sudo apt install wget -y
+
     - name: Create .deb structure
       run: |
         mkdir -p "SkEditorFiles/opt/SkEditor"
         cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
         mkdir -p "SkEditorFiles/DEBIAN"
         cd SkEditorFiles/DEBIAN
-        echo "Package: SkEditor" > control
-        echo "Version: 1.0" >> control
-        echo "Section: editors" >> control
-        echo "Architecture: arm64" >> control
-        echo "Depends: dotnet-runtime-8.0" >> control
-        echo "Description: App for editing Skript files." >> control
-        echo "set -e
-        desktop_file=\"/usr/share/applications/skeditor.desktop\"
-        desktop_link=\"\$HOME/Desktop/skeditor.desktop\"
-        echo \"[Desktop Entry]
-        Name=SkEditor
-        Comment=App for editing Skript files.
-        Exec=/opt/SkEditor/SkEditor
-        Icon=/opt/SkEditor/SkEditor.png
-        Terminal=false
-        StartupWMClass=SkEditor
-        Type=Application\" > \"\$desktop_link\"
-        echo \"[Desktop Entry]
-        Name=SkEditor
-        Comment=App for editing Skript files.
-        Exec=/opt/SkEditor/SkEditor
-        Icon=/opt/SkEditor/SkEditor.png
-        Terminal=false
-        StartupWMClass=SkEditor
-        Type=Application\" > \"\$desktop_file\"
-        chmod +x \"\$desktop_link\"
-        chmod +x \"\$desktop_file\"
-        " > preinst
+        wget -O control -r 'https://www.dropbox.com/scl/fi/pvrvfsvii2kmk5p3n2x2z/control-arm64?rlkey=muh97r76prbyme6rce5dqa85s&dl=1'
+        wget -O preinst -r 'https://www.dropbox.com/scl/fi/87jfui5e6jgsl122ozwh1/preinst?rlkey=qfo8wfciqq2u88947ublos12c&dl=1'
     
     - name: Create .deb package
       run: |
@@ -156,40 +135,19 @@ jobs:
         dotnet restore
         dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
 
+    - name: Install wget
+      run: |
+        sudo apt update
+        sudo apt install wget -y
+
     - name: Create .deb structure
       run: |
-        mkdir -p "SkEditorFiles/opt/SkEditor"
+        mkdir -p "SkEditorFilesx/opt/SkEditor"
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
-        mkdir -p "SkEditorFiles/DEBIAN"
+        mkdir -p "SkEditorFilesx/DEBIAN"
         cd SkEditorFilesx/DEBIAN
-        echo "Package: SkEditor" > control
-        echo "Version: 1.0" >> control
-        echo "Section: editors" >> control
-        echo "Architecture: amd64" >> control
-        echo "Depends: dotnet-runtime-8.0" >> control
-        echo "Description: App for editing Skript files." >> control
-        echo "set -e
-        desktop_file=\"/usr/share/applications/skeditor.desktop\"
-        desktop_link=\"\$HOME/Desktop/skeditor.desktop\"
-        echo \"[Desktop Entry]
-        Name=SkEditor
-        Comment=App for editing Skript files.
-        Exec=/opt/SkEditor/SkEditor
-        Icon=/opt/SkEditor/SkEditor.png
-        Terminal=false
-        StartupWMClass=SkEditor
-        Type=Application\" > \"\$desktop_link\"
-        echo \"[Desktop Entry]
-        Name=SkEditor
-        Comment=App for editing Skript files.
-        Exec=/opt/SkEditor/SkEditor
-        Icon=/opt/SkEditor/SkEditor.png
-        Terminal=false
-        StartupWMClass=SkEditor
-        Type=Application\" > \"\$desktop_file\"
-        chmod +x \"\$desktop_link\"
-        chmod +x \"\$desktop_file\"
-        " > preinst
+        wget -O control -r 'https://www.dropbox.com/scl/fi/xmt84gdbn9qxbjscbx86h/control-x64?rlkey=205ebw4qhgvgpkwe4u761dkta&dl=1'
+        wget -O preinst -r 'https://www.dropbox.com/scl/fi/87jfui5e6jgsl122ozwh1/preinst?rlkey=qfo8wfciqq2u88947ublos12c&dl=1'
     
     - name: Create .deb package
       run: |
