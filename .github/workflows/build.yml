@@ -102,11 +102,18 @@ jobs:
       run: |
         mkdir -p "SkEditorFiles/opt/SkEditor"
         cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
-        mkdir -p "SkEditorFiles/DEBIAN"
-        cd SkEditorFiles/DEBIAN
-        pwd
-        wget -O control -r 'https://www.dropbox.com/scl/fi/pvrvfsvii2kmk5p3n2x2z/control-arm64?rlkey=muh97r76prbyme6rce5dqa85s&dl=1'
-        wget -O preinst -r 'https://www.dropbox.com/scl/fi/87jfui5e6jgsl122ozwh1/preinst?rlkey=qfo8wfciqq2u88947ublos12c&dl=1'
+        mkdir -p "SkEditorFiles/usr/share/applications"
+        cd SkEditorFiles/usr/share/applications
+        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/y2qfm6vkuil4ug0ab8r4q/SkEditor.desktop?rlkey=0rn2iumf6dp3vmhxoaaqb1f3t&dl=1'
+        mkdir -p "icons/hicolor/scalable"
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/usr/share/icons/hicolor/scalable
+        cp /home/runner/work/SkEditor/SkEditor.png ./skeditor.png
+        mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN"
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
+        pwd 
+        wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
+        echo "Version: 1.0" >> control
+        wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
 
     - name: Fix Permissions
       run: |
@@ -152,11 +159,18 @@ jobs:
       run: |
         mkdir -p "SkEditorFilesx/opt/SkEditor"
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
-        mkdir -p "SkEditorFilesx/DEBIAN"
-        cd SkEditorFilesx/DEBIAN
-        pwd
-        wget -O control -r 'https://www.dropbox.com/scl/fi/xmt84gdbn9qxbjscbx86h/control-x64?rlkey=205ebw4qhgvgpkwe4u761dkta&dl=1'
-        wget -O preinst -r 'https://www.dropbox.com/scl/fi/87jfui5e6jgsl122ozwh1/preinst?rlkey=qfo8wfciqq2u88947ublos12c&dl=1'
+        mkdir -p "SkEditorFilesx/usr/share/applications"
+        cd SkEditorFilesx/usr/share/applications
+        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/y2qfm6vkuil4ug0ab8r4q/SkEditor.desktop?rlkey=0rn2iumf6dp3vmhxoaaqb1f3t&dl=1'
+        mkdir -p "icons/hicolor/scalable"
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/usr/share/icons/hicolor/scalable
+        cp /home/runner/work/SkEditor/SkEditor.png ./skeditor.png
+        mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
+        pwd 
+        wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
+        echo "Version: 1.0" >> control
+        wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
 
     - name: Fix Permissions
       run: |
