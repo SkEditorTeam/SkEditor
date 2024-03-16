@@ -110,7 +110,7 @@ jobs:
     
     - name: Create .deb package
       run: |
-        cd ../..
+        cd /home/runner/work/SkEditor/SkEditor/
         pwd
         dpkg-deb -b SkEditorFiles SkEditor-arm64.deb
 
@@ -154,7 +154,7 @@ jobs:
     
     - name: Create .deb package
       run: |
-        cd ../..
+        cd /home/runner/work/SkEditor/SkEditor/
         pwd
         dpkg-deb -b SkEditorFilesx SkEditor-x64.deb
 
