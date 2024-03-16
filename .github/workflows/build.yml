@@ -75,3 +75,66 @@ jobs:
       with:
         name: SkEditorMac-arm64
         path: SkEditorMac-arm64.zip
+
+  build-linux-debian:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Build and publish for Debian
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r any -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Create .deb structure
+      run: |
+        mkdir -p "SkEditorFiles/opt/SkEditor"
+        cp -r SkEditor/bin/Release/net8.0/any/publish/* "SkEditor.deb/opt/SkEditor/"
+        mkdir -p "SkEditorFiles/DEBIAN"
+        cd SkEditorFiles/DEBIAN
+        echo "Package: SkEditor" > control
+        echo "Version: 1.0" >> control
+        echo "Section: editors" >> control
+        echo "Architecture: all" >> control
+        echo "Depends: dotnet-runtime-8.0" >> control
+        echo "Description: App for editing Skript files." >> control
+        echo "set -e
+        desktop_file=\"/usr/share/applications/skeditor.desktop\"
+        desktop_link=\"\$HOME/Desktop/skeditor.desktop\"
+        echo \"[Desktop Entry]
+        Name=SkEditor
+        Comment=App for editing Skript files.
+        Exec=/opt/SkEditor/SkEditor
+        Icon=/opt/SkEditor/SkEditor.png
+        Terminal=false
+        StartupWMClass=SkEditor
+        Type=Application\" > \"\$desktop_link\"
+        echo \"[Desktop Entry]
+        Name=SkEditor
+        Comment=App for editing Skript files.
+        Exec=/opt/SkEditor/SkEditor
+        Icon=/opt/SkEditor/SkEditor.png
+        Terminal=false
+        StartupWMClass=SkEditor
+        Type=Application\" > \"\$desktop_file\"
+        chmod +x \"\$desktop_link\"
+        chmod +x \"\$desktop_file\"
+        " > preinst
+    
+    - name: Create .deb package
+      run: |
+        cd ../..
+        dpkg-deb -b SkEditorFiles SkEditor.deb
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorLinuxDebian
+        path: SkEditor.deb
