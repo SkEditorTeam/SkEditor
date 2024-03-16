@@ -1,0 +1,140 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main
+
+      
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Build and publish for macOS (x64)
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+    
+    - name: Create .app structure
+      run: |
+        mkdir -p "SkEditor.app/Contents/MacOS"
+        mkdir -p "SkEditor.app/Contents/Resources"
+        cp -r SkEditor/bin/Release/net8.0/osx-x64/publish/* "SkEditor.app/Contents/MacOS/"
+        cp SkEditor/Info.plist "SkEditor.app/Contents/"
+        cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
+    
+    - name: Set execute permissions
+      run: |
+        find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
+    
+    - name: Zip .app package
+      run: |
+        zip -r SkEditorMac.zip SkEditor.app
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorMac
+        path: SkEditorMac.zip
+
+    # now build osx-arm64
+    - name: Build and publish for macOS (arm64)
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Create .app structure (arm64)
+      run: |
+        mkdir -p "SkEditor.app/Contents/MacOS"
+        mkdir -p "SkEditor.app/Contents/Resources"
+        cp -r SkEditor/bin/Release/net8.0/osx-arm64/publish/* "SkEditor.app/Contents/MacOS/"
+        cp SkEditor/Info.plist "SkEditor.app/Contents/"
+        cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
+
+    - name: Set execute permissions (arm64)
+      run: |
+        find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
+
+    - name: Zip .app package (arm64)
+      run: |
+        zip -r SkEditorMac-arm64.zip SkEditor.app
+
+    - name: Upload artifacts (arm64)
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorMac-arm64
+        path: SkEditorMac-arm64.zip
+
+  build-linux-debian:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Build and publish for Debian
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r any -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Create .deb structure
+      run: |
+        mkdir -p "SkEditorFiles/opt/SkEditor"
+        cp -r SkEditor/bin/Release/net8.0/any/publish/* "SkEditor.deb/opt/SkEditor/"
+        mkdir -p "SkEditorFiles/DEBIAN"
+        cd SkEditorFiles/DEBIAN
+        echo "Package: SkEditor" > control
+        echo "Version: 1.0" >> control
+        echo "Section: editors" >> control
+        echo "Architecture: all" >> control
+        echo "Depends: dotnet-runtime-8.0" >> control
+        echo "Description: App for editing Skript files." >> control
+        echo "set -e
+        desktop_file=\"/usr/share/applications/skeditor.desktop\"
+        desktop_link=\"\$HOME/Desktop/skeditor.desktop\"
+        echo \"[Desktop Entry]
+        Name=SkEditor
+        Comment=App for editing Skript files.
+        Exec=/opt/SkEditor/SkEditor
+        Icon=/opt/SkEditor/SkEditor.png
+        Terminal=false
+        StartupWMClass=SkEditor
+        Type=Application\" > \"\$desktop_link\"
+        echo \"[Desktop Entry]
+        Name=SkEditor
+        Comment=App for editing Skript files.
+        Exec=/opt/SkEditor/SkEditor
+        Icon=/opt/SkEditor/SkEditor.png
+        Terminal=false
+        StartupWMClass=SkEditor
+        Type=Application\" > \"\$desktop_file\"
+        chmod +x \"\$desktop_link\"
+        chmod +x \"\$desktop_file\"
+        " > preinst
+    
+    - name: Create .deb package
+      run: |
+        cd ../..
+        dpkg-deb -b SkEditorFiles SkEditor.deb
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorLinuxDebian
+        path: SkEditor.deb
