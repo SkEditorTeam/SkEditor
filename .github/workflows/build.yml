@@ -75,3 +75,113 @@ jobs:
       with:
         name: SkEditorMac-arm64
         path: SkEditorMac-arm64.zip
+
+  build-linux-debian-arm64:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Build and publish for Debian
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Install wget
+      run: |
+        sudo apt update
+        sudo apt install wget -y
+
+    - name: Create .deb structure
+      run: |
+        mkdir -p "SkEditorFiles/opt/SkEditor"
+        cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
+        mkdir -p "SkEditorFiles/usr/share/applications"
+        cd SkEditorFiles/usr/share/applications
+        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
+        mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN"
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
+        pwd 
+        wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
+        echo "Version: 2.2.0" >> control
+        echo "Maintainer: Notro" >> control
+        wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
+
+    - name: Fix Permissions
+      run: |
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
+        chmod 0755 postrm
+        chmod 0755 control
+    
+    - name: Create .deb package
+      run: |
+        cd /home/runner/work/SkEditor/SkEditor/
+        pwd
+        dpkg-deb -b SkEditorFiles SkEditor-arm64.deb
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorLinuxDebian (arm64)
+        path: SkEditor-arm64.deb
+
+  build-linux-debian-x64:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Build and publish for Debian
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Install wget
+      run: |
+        sudo apt update
+        sudo apt install wget -y
+
+    - name: Create .deb structure
+      run: |
+        mkdir -p "SkEditorFilesx/opt/SkEditor"
+        cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
+        mkdir -p "SkEditorFilesx/usr/share/applications"
+        cd SkEditorFilesx/usr/share/applications
+        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
+        mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
+        pwd 
+        wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
+        echo "Version: 2.2.0" >> control
+        echo "Maintainer: Notro" >> control
+        wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
+
+    - name: Fix Permissions
+      run: |
+        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
+        chmod 0755 postrm
+        chmod 0755 control
+    
+    - name: Create .deb package
+      run: |
+        cd /home/runner/work/SkEditor/SkEditor/
+        pwd
+        dpkg-deb -b SkEditorFilesx SkEditor-x64.deb
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: SkEditorLinuxDebian (x64)
+        path: SkEditor-x64.deb
