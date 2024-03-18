@@ -162,6 +162,7 @@ jobs:
         mkdir -p "SkEditorFilesx/usr/share/applications"
         cd SkEditorFilesx/usr/share/applications
         wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
+        cp /home/runner/work/SkEditor/SkEditor.png /home/runner/work/SkEditor/SkEditor/SkEditorFiles/opt/SkEditor/SkEditor.png
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
