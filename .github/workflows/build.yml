@@ -18,7 +18,6 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.0.x'
-        annotations: false
     
     - name: 🏗️ | Build and publish for macOS (x64)
       run: |
@@ -47,6 +46,7 @@ jobs:
       with:
         name: SkEditorMac
         path: SkEditorMac.zip
+        annotations: false
 
     # now build osx-arm64
     - name: 🏗️ | Build and publish for macOS (arm64)
@@ -88,7 +88,6 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.0.x'
-        annotations: false
     
     - name: 🏗️ | Build and publish for Debian
       run: |
@@ -147,7 +146,6 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.0.x'
-        annotations: false
     
     - name: 🏗️ | Build and publish for Debian
       run: |
