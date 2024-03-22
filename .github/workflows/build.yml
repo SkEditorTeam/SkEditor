@@ -11,21 +11,21 @@ jobs:
     runs-on: macos-latest
     
     steps:
-    - name: Checkout repository
+    - name: 📝 | Checkout repository
       uses: actions/checkout@v2
     
-    - name: Setup .NET
+    - name: 📝 | Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.0.x'
     
-    - name: Build and publish for macOS (x64)
+    - name: 🏗️ | Build and publish for macOS (x64)
       run: |
         cd SkEditor
         dotnet restore
         dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
     
-    - name: Create .app structure
+    - name: 🛠️ | Create .app structure
       run: |
         mkdir -p "SkEditor.app/Contents/MacOS"
         mkdir -p "SkEditor.app/Contents/Resources"
@@ -33,28 +33,28 @@ jobs:
         cp SkEditor/Info.plist "SkEditor.app/Contents/"
         cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
     
-    - name: Set execute permissions
+    - name: 🔑 | Set execute permissions
       run: |
         find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
     
-    - name: Zip .app package
+    - name: 📦 | Zip .app package
       run: |
         zip -r SkEditorMac.zip SkEditor.app
     
-    - name: Upload artifacts
+    - name: 📤 | Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: SkEditorMac
         path: SkEditorMac.zip
 
     # now build osx-arm64
-    - name: Build and publish for macOS (arm64)
+    - name: 🏗️ | Build and publish for macOS (arm64)
       run: |
         cd SkEditor
         dotnet restore
         dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
 
-    - name: Create .app structure (arm64)
+    - name: 🛠️ | Create .app structure (arm64)
       run: |
         mkdir -p "SkEditor.app/Contents/MacOS"
         mkdir -p "SkEditor.app/Contents/Resources"
@@ -62,15 +62,15 @@ jobs:
         cp SkEditor/Info.plist "SkEditor.app/Contents/"
         cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
 
-    - name: Set execute permissions (arm64)
+    - name: 🔑 | Set execute permissions (arm64)
       run: |
         find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
 
-    - name: Zip .app package (arm64)
+    - name: 📦 | Zip .app package (arm64)
       run: |
         zip -r SkEditorMac-arm64.zip SkEditor.app
 
-    - name: Upload artifacts (arm64)
+    - name: 📤 | Upload artifacts (arm64)
       uses: actions/upload-artifact@v2
       with:
         name: SkEditorMac-arm64
@@ -79,26 +79,26 @@ jobs:
   build-linux-debian-arm64:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
+    - name: 📝 | Checkout repository
       uses: actions/checkout@v2
     
-    - name: Setup .NET
+    - name: 📝 | Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.0.x'
     
-    - name: Build and publish for Debian
+    - name: 🏗️ | Build and publish for Debian
       run: |
         cd SkEditor
         dotnet restore
         dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
 
-    - name: Install wget
+    - name: 📌 | Install Dependencies
       run: |
         sudo apt update
         sudo apt install wget -y
 
-    - name: Create .deb structure
+    - name: 🛠️ | Create .deb structure
       run: |
         mkdir -p "SkEditorFiles/opt/SkEditor"
         cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
@@ -115,19 +115,19 @@ jobs:
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
         
 
-    - name: Fix Permissions
+    - name: 🔑 | Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
     
-    - name: Create .deb package
+    - name: 📦 | Create .deb package
       run: |
         cd /home/runner/work/SkEditor/SkEditor/
         pwd
         dpkg-deb -b SkEditorFiles SkEditor-arm64.deb
 
-    - name: Upload artifacts
+    - name: 📤 | Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: SkEditorLinuxDebian (arm64)
@@ -136,33 +136,33 @@ jobs:
   build-linux-debian-x64:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
+    - name: 📝 | Checkout repository
       uses: actions/checkout@v2
     
-    - name: Setup .NET
+    - name: 📝 | Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.0.x'
     
-    - name: Build and publish for Debian
+    - name: 🏗️ | Build and publish for Debian
       run: |
         cd SkEditor
         dotnet restore
         dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
 
-    - name: Install wget
+    - name: 📌 | Install Dependencies
       run: |
         sudo apt update
         sudo apt install wget -y
 
-    - name: Create .deb structure
+    - name: 🛠️ | Create .deb structure
       run: |
         mkdir -p "SkEditorFilesx/opt/SkEditor"
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
         mkdir -p "SkEditorFilesx/usr/share/applications"
         cd SkEditorFilesx/usr/share/applications
         wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
-        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFiles/opt/SkEditor/SkEditor.png https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png
+        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/opt/SkEditor/SkEditor.png https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
@@ -171,19 +171,19 @@ jobs:
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
 
-    - name: Fix Permissions
+    - name: 🔑 | Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
     
-    - name: Create .deb package
+    - name: 📦 | Create .deb package
       run: |
         cd /home/runner/work/SkEditor/SkEditor/
         pwd
         dpkg-deb -b SkEditorFilesx SkEditor-x64.deb
 
-    - name: Upload artifacts
+    - name: 📤 | Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: SkEditorLinuxDebian (x64)
