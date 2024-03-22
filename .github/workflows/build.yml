@@ -23,7 +23,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained --property WarningLevel=0 /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
     
     - name: 🛠️ | Create .app structure
       run: |
@@ -52,7 +52,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained --property WarningLevel=0 /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
 
     - name: 🛠️ | Create .app structure (arm64)
       run: |
@@ -91,7 +91,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained --property WarningLevel=0 /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
 
     - name: 📌 | Install Dependencies
       run: |
