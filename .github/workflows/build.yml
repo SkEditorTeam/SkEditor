@@ -46,7 +46,6 @@ jobs:
       with:
         name: SkEditorMac
         path: SkEditorMac.zip
-        annotations: false
 
     # now build osx-arm64
     - name: 🏗️ | Build and publish for macOS (arm64)
@@ -76,7 +75,6 @@ jobs:
       with:
         name: SkEditorMac-arm64
         path: SkEditorMac-arm64.zip
-        annotations: false
 
   build-linux-debian-arm64:
     runs-on: ubuntu-latest
@@ -115,6 +113,7 @@ jobs:
         echo "Version: 2.2.0" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
+        echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
         
 
     - name: 🔑 | Fix Permissions
@@ -122,6 +121,7 @@ jobs:
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
+        chmod 0755 postinst
     
     - name: 📦 | Create .deb package
       run: |
@@ -134,7 +134,6 @@ jobs:
       with:
         name: SkEditorLinuxDebian (arm64)
         path: SkEditor-arm64.deb
-        annotations: false
 
   build-linux-debian-x64:
     runs-on: ubuntu-latest
@@ -173,12 +172,14 @@ jobs:
         echo "Version: 2.2.0" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
+        echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
 
     - name: 🔑 | Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
+        chmod 0755 postinst
     
     - name: 📦 | Create .deb package
       run: |
@@ -191,4 +192,3 @@ jobs:
       with:
         name: SkEditorLinuxDebian (x64)
         path: SkEditor-x64.deb
-        annotations: false
