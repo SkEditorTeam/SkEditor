@@ -10,12 +10,8 @@ public static class ChangelogChecker
     [
         "Welcome to the new version of SkEditor!",
         "This version includes the following changes:",
-        "✨ Added a Code Parser to the sidebar (you need to set EnableProjectsExperiment to true in the settings.json file).",
-        "🔨 Significantly improved folder explorer.",
-        "🔧 Added an indentation configuration in the settings.",
-        "🖼️ Added image support.",
-        "🎨 Added the ability to enable the Mica effect in the theme.",
-        "🐛 Fixed various bugs and crashes."
+        "🔬 You can enable experimental features in the settings now!",
+        "✨ You can now fold code blocks! Enable as experiment in the settings.",
     ];
 
     public async static void Check()
