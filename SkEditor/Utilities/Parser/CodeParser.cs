@@ -10,7 +10,6 @@ namespace SkEditor.Utilities.Parser;
 
 public partial class CodeParser : INotifyPropertyChanged
 {
-
     public static ParserSidebarPanel ParserPanel =>
         ApiVault.Get().GetMainWindow().SideBar.ParserPanel.Panel;
 
@@ -18,8 +17,7 @@ public partial class CodeParser : INotifyPropertyChanged
     {
         Editor = textEditor;
         Sections = [];
-        if (parse)
-            Parse();
+        if (parse) Parse();
     }
 
     /// <summary>
@@ -86,12 +84,13 @@ public partial class CodeParser : INotifyPropertyChanged
             }
         }
 
-        // Parse the last section
         if (lastSectionLine != -1)
         {
             var linesToParse = lines.GetRange(lastSectionLine, lines.Count - lastSectionLine);
             Sections.Add(new CodeSection(this, lastSectionLine, linesToParse));
         }
+
+        if (ApiVault.Get().GetAppConfig().EnableFolding) FoldingCreator.CreateFoldings(Editor, Sections);
 
         ParserPanel.Refresh(Sections);
 
