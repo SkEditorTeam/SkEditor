@@ -3,31 +3,31 @@
 		<ComponentGroup Id="LanguagesComponents" Directory="LanguagesFolder">
 			<Component>
 				<CreateFolder Directory="INSTALLFOLDER" Subdirectory="Languages"/>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\English.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\English.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\Polish.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Polish.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\French.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\French.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\Russian.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Russian.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\German.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\German.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\Chinese.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Chinese.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\Spanish.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Spanish.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\Hungarian.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Hungarian.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\Languages\Korean.xaml" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Korean.xaml" />
 			</Component>
 		</ComponentGroup>
 	</Fragment>

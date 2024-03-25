@@ -2,18 +2,18 @@
 	<Fragment>
 		<ComponentGroup Id="SkEditorComponents" Directory="INSTALLFOLDER">
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\SkEditor.exe"/>
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\SkEditor.exe"/>
 				<Shortcut Name="SkEditor" Directory="DesktopFolder" Advertise="yes" Icon="SkEditorIcon.exe" />
 				<Shortcut Name="SkEditor" Directory="ProgramMenuFolder" Advertise="yes" Icon="SkEditorIcon.exe" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\av_libglesv2.dll" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\av_libglesv2.dll" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\libHarfBuzzSharp.dll" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\libHarfBuzzSharp.dll" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\win-x64\publish\libSkiaSharp.dll" />
+				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\libSkiaSharp.dll" />
 			</Component>
 		</ComponentGroup>
 
