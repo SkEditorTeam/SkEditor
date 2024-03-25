@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
@@ -57,8 +58,7 @@ public class FileHandler
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", GetUntitledNumber().ToString());
         TabViewItem tabItem = await FileBuilder.Build(header);
 
-        if (tabItem == null)
-            return;
+        if (tabItem == null) return;
 
         OpenedFiles.Add(new OpenedFile()
         {
@@ -71,6 +71,8 @@ public class FileHandler
         });
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+
+        await SyntaxLoader.RefreshSyntaxAsync();
     }
 
     public async static void OpenFile()
@@ -122,6 +124,19 @@ public class FileHandler
                 ? new CodeParser(editor)
                 : null
         });
+
+        if (ApiVault.Get().GetAppConfig().CheckForChanges)
+        {
+            FileSystemWatcher watcher = new(Path.GetDirectoryName(path), Path.GetFileName(path));
+            watcher.Changed += (sender, e) => ChangeChecker.HasChangedDictionary[path] = true;
+            (tabItem.Content as TextEditor).Unloaded += (sender, e) =>
+            {
+                if (OpenedFiles.FirstOrDefault(openedFile => openedFile.TabViewItem == tabItem) is not OpenedFile openedFile)
+                {
+                    watcher.Dispose();
+                }
+            };
+        }
 
         await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
     }

@@ -25,11 +25,6 @@ public partial class RefactorWindow : AppWindow
         if (TabsToSpacesCheckBox.IsChecked == true) await TabsToSpaces();
         if (SpacesToTabsCheckBox.IsChecked == true) await SpacesToTabs();
 
-        if (ApiVault.Get().IsFileOpen())
-        {
-            ChangeChecker.ignoreNextChange = true;
-        }
-
         Close();
     }
 

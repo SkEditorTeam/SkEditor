@@ -16,17 +16,11 @@ public class ChangeChecker
     private static void SetLastKnownContent(TextEditor textEditor, string content) => lastKnownContentDictionary[textEditor] = content;
 
     private static bool isMessageShown = false;
-    public static bool ignoreNextChange = false;
+    public static Dictionary<string, bool> HasChangedDictionary { get; } = [];
 
     public async static void Check()
     {
         if (!ApiVault.Get().GetAppConfig().CheckForChanges) return;
-
-        if (ignoreNextChange)
-        {
-            ignoreNextChange = false;
-            return;
-        }
 
         try
         {
@@ -37,6 +31,13 @@ public class ChangeChecker
             if (string.IsNullOrWhiteSpace(item.Tag.ToString())) return;
             string path = Uri.UnescapeDataString(item.Tag.ToString());
             if (!File.Exists(path)) return;
+
+            if (!HasChangedDictionary.TryGetValue(path, out bool hasChanged))
+            {
+                HasChangedDictionary[path] = false;
+                hasChanged = false;
+            }
+            if (hasChanged) return;
 
             string textToWrite = ApiVault.Get().GetTextEditor().Document.Text;
             using StreamReader reader = new(path);
