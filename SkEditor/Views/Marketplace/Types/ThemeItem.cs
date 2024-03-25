@@ -43,10 +43,10 @@ public class ThemeItem : MarketplaceItem
 
             if (result == ContentDialogResult.Primary)
             {
-                _ = Dispatcher.UIThread.InvokeAsync(() =>
+                _ = Dispatcher.UIThread.InvokeAsync(async () =>
                 {
                     Theme theme = ThemeEditor.LoadTheme(filePath);
-                    ThemeEditor.SetTheme(theme);
+                    await ThemeEditor.SetTheme(theme);
                 });
             }
 
@@ -65,7 +65,7 @@ public class ThemeItem : MarketplaceItem
         string fileName = ItemFileUrl.Split('/').Last();
 
         if (fileName.Equals(ThemeEditor.CurrentTheme.FileName))
-            ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ?? ThemeEditor.GetDefaultTheme());
+            await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ?? ThemeEditor.GetDefaultTheme());
 
         ThemeEditor.Themes.Remove(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName)));
         ThemeEditor.SaveAllThemes();

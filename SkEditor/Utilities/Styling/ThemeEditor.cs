@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Styling;
 
@@ -112,39 +113,47 @@ public class ThemeEditor
 
     public static void SaveAllThemes() => Themes.ForEach(SaveTheme);
 
-    public static void SetTheme(Theme theme)
+    public static async Task SetTheme(Theme theme)
     {
-        CurrentTheme.CustomColorChanges
-            .Where(colorChange => DefaultColors.ContainsKey(colorChange.Key))
-            .ToList()
-            .ForEach(colorChange => Application.Current.Resources[colorChange.Key] = DefaultColors[colorChange.Key]);
-
         CurrentTheme = theme;
         ApiVault.Get().GetAppConfig().CurrentTheme = theme.FileName;
-        ApplyTheme();
+
+        await ApplyTheme();
     }
 
-    public static void ApplyTheme()
+    public static async Task ApplyTheme()
     {
         SaveDefaultColors();
+
+        var tasks = new List<Task>();
 
         foreach (var item in themeToResourceDictionary)
         {
             ImmutableSolidColorBrush brush = (ImmutableSolidColorBrush)CurrentTheme.GetType().GetProperty(item.Key).GetValue(CurrentTheme);
-            item.Value.ToList().ForEach(resource => Application.Current.Resources[resource] = brush);
+
+            tasks.AddRange(item.Value.Select(resource =>
+            {
+                Application.Current.Resources[resource] = brush;
+                return Task.CompletedTask;
+            }));
 
             UpdateTextEditorColors();
 
-            CurrentTheme.CustomColorChanges.ToList().ForEach(colorChange => Application.Current.Resources[colorChange.Key] = colorChange.Value);
-
-            FluentAvaloniaTheme styles = Application.Current.Styles.OfType<FluentAvaloniaTheme>().First();
-            styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
-            styles.PreferUserAccentColor = true;
-
-            ApplyMica();
-
-            UpdateFont();
+            tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
+            {
+                Application.Current.Resources[colorChange.Key] = colorChange.Value;
+                return Task.CompletedTask;
+            }));
         }
+
+        FluentAvaloniaTheme styles = Application.Current.Styles.OfType<FluentAvaloniaTheme>().First();
+        styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
+        styles.PreferUserAccentColor = true;
+
+        ApplyMica();
+        UpdateFont();
+
+        await Task.WhenAll(tasks);
     }
 
     public static ControlTheme SmallWindowTheme { get; private set; }

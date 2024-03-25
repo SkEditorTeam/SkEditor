@@ -17,7 +17,6 @@ public partial class ThemePage : UserControl
         InitializeComponent();
 
         AssignCommands();
-
         LoadThemes();
     }
 
@@ -38,11 +37,11 @@ public partial class ThemePage : UserControl
 
         ThemeComboBox.SelectionChanged += (s, e) =>
         {
-            Dispatcher.UIThread.InvokeAsync(() =>
+            Dispatcher.UIThread.Post(async () =>
             {
                 ComboBoxItem item = (ComboBoxItem)ThemeComboBox.SelectedItem;
                 Theme theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(item.Tag));
-                ThemeEditor.SetTheme(theme);
+                await ThemeEditor.SetTheme(theme);
                 SettingsWindow.Instance.Theme = ThemeEditor.SmallWindowTheme;
             });
         };

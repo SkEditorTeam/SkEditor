@@ -72,10 +72,10 @@ public class ThemeWithSyntaxItem : MarketplaceItem
 
         if (result == ContentDialogResult.Primary)
         {
-            _ = Dispatcher.UIThread.InvokeAsync(() =>
+            _ = Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 Theme theme = ThemeEditor.LoadTheme(themeFilePath);
-                ThemeEditor.SetTheme(theme);
+                await ThemeEditor.SetTheme(theme);
             });
 
             foreach (var syntax in installedSyntaxes)
@@ -111,7 +111,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
 
     public override async void Uninstall()
     {
-        UninstallTheme();
+        await UninstallTheme();
         UninstallSyntax();
 
         MarketplaceWindow.Instance.HideAllButtons();
@@ -121,12 +121,12 @@ public class ThemeWithSyntaxItem : MarketplaceItem
             new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
     }
 
-    private void UninstallTheme()
+    private async Task UninstallTheme()
     {
         string fileName = ThemeFileUrl.Split('/').Last();
 
         if (fileName.Equals(ThemeEditor.CurrentTheme.FileName))
-            ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ?? ThemeEditor.GetDefaultTheme());
+            await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ?? ThemeEditor.GetDefaultTheme());
 
         ThemeEditor.Themes.Remove(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName)));
         ThemeEditor.SaveAllThemes();
