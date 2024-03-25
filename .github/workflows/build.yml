@@ -23,7 +23,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
     
     - name: 🛠️ | Create .app structure
       run: |
@@ -52,7 +52,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
 
     - name: 🛠️ | Create .app structure (arm64)
       run: |
@@ -91,7 +91,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
 
     - name: 📌 | Install Dependencies
       run: |
@@ -113,6 +113,7 @@ jobs:
         echo "Version: 2.2.0" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
+        echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
         
 
     - name: 🔑 | Fix Permissions
@@ -120,6 +121,7 @@ jobs:
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
+        chmod 0755 postinst
     
     - name: 📦 | Create .deb package
       run: |
@@ -170,12 +172,14 @@ jobs:
         echo "Version: 2.2.0" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
+        echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
 
     - name: 🔑 | Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         chmod 0755 postrm
         chmod 0755 control
+        chmod 0755 postinst
     
     - name: 📦 | Create .deb package
       run: |
