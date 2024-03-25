@@ -54,7 +54,7 @@ public partial class PublishWindow : AppWindow
 
         appConfig.LastUsedPublishService = CurrentService;
 
-        AnonymouslyCheckBox.IsEnabled = LanguageComboBox.IsEnabled = CurrentService.Equals("code.skript.pl");
+        AnonymouslyCheckBox.IsVisible = LanguageComboBox.IsVisible = CurrentService.Equals("code.skript.pl");
     }
 
     private void SaveApiKey()
