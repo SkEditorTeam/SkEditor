@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:controls="using:SkEditor.Controls"
+			 xmlns:vm="using:SkEditor.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800"
+             x:Class="SkEditor.Views.Settings.ExperimentsPage">
+
+	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+		<controls:SettingsTitle Name="Title" Title="Experiments" Grid.Row="0"/>
+		
+		<ScrollViewer Grid.Row="1">
+			<StackPanel Name="ExperimentsStackPanel" Spacing="8">
+				<ui:InfoBar IsOpen="True" IsClosable="False" Severity="Warning" Message="Most of the experiments require a restart to take effect."/>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

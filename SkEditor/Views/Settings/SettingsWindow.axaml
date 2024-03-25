@@ -6,7 +6,7 @@
 		xmlns:sv="using:SkEditor.Views.Settings"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.SettingsWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleSettings}" Height="550" Width="1000"
+        Title="{DynamicResource WindowTitleSettings}" Height="560" Width="1000"
 		CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
 	<ui:Frame Name="FrameView">

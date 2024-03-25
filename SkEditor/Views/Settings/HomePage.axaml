@@ -20,8 +20,9 @@
 					Description="{DynamicResource SettingsHomePersonalizationDescription}"
 					IsClickEnabled="True" />
 
-				<!--<ui:SettingsExpander Header="{DynamicResource SettingsHomeExperiments}" IconSource="{StaticResource ExperimentsIcon}"
-					Description="{DynamicResource SettingsHomeExperimentsDescription}" />-->
+				<ui:SettingsExpander Name="ExperimentsItem" Header="{DynamicResource SettingsHomeExperiments}" IconSource="{StaticResource ExperimentsIcon}"
+					Description="{DynamicResource SettingsHomeExperimentsDescription}"
+					IsClickEnabled="True" />
 
 				<ui:SettingsExpander Name="AddonsItem" Header="{DynamicResource SettingsHomeAddons}" IconSource="{StaticResource AddonIcon}"
 					Description="{DynamicResource SettingsHomeAddonsDescription}"
