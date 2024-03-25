@@ -105,7 +105,8 @@ public static class UpdateChecker
                 await client.DownloadDataAsync(url, file, progress);
             }
 
-            Process.Start(new ProcessStartInfo(_tempInstallerFile) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("msiexec", $"/i \"{_tempInstallerFile}\" /quiet") { UseShellExecute = true });
+
             (Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime).Shutdown();
         }
         catch
