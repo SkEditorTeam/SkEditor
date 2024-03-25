@@ -144,7 +144,7 @@
 	<system:String x:Key="SettingsHomePersonalizationDescription">테마, 폰트 및 구문 강조</system:String>
 	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
 	<system:String x:Key="SettingsHomeDiscordDescription">Discord 프로필에 SkEditor 상태를 표시해 보세요!</system:String>
-	<system:String x:Key="SettingsHomeExperiments">실험실 (준비중)</system:String>
+	<system:String x:Key="SettingsHomeExperiments">실험실</system:String>
 	<system:String x:Key="SettingsHomeExperimentsDescription">곧 추가될 기능을 미리 사용해보세요!</system:String>
 	<system:String x:Key="SettingsHomeAddons">애드온</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">애드온을 추가하여 더 나은 경험을 해보세요!</system:String>

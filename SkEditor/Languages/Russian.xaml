@@ -105,7 +105,7 @@
 	<system:String x:Key="SettingsHomePersonalizationDescription">Тема, шрифт, подсветка синтаксиса</system:String>
 	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
 	<system:String x:Key="SettingsHomeDiscordDescription">Отобразите SkEditor в своем профиле Discord!</system:String>
-	<system:String x:Key="SettingsHomeExperiments">Эксперименты (пока недоступны)</system:String>
+	<system:String x:Key="SettingsHomeExperiments">Эксперименты</system:String>
 	<system:String x:Key="SettingsHomeExperimentsDescription">Протестируйте будущие функции!</system:String>
 	<system:String x:Key="SettingsHomeAddons">Дополнения</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Расширьте свои возможности с помощью мощных дополнений!</system:String>

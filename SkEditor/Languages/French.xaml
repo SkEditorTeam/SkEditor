@@ -93,7 +93,7 @@
 	<system:String x:Key="SettingsHomePersonalizationDescription">Thème, police, mise en surbrillance de la syntaxe</system:String>
 	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
 	<system:String x:Key="SettingsHomeDiscordDescription">Affichez SkEditor sur votre profil Discord !</system:String>
-	<system:String x:Key="SettingsHomeExperiments">Expériences (non disponibles pour le moment)</system:String>
+	<system:String x:Key="SettingsHomeExperiments">Expériences</system:String>
 	<system:String x:Key="SettingsHomeExperimentsDescription">Testez les fonctionnalités à venir !</system:String>
 	<system:String x:Key="SettingsHomeAddons">Addons</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Améliorez votre expérience avec des addons puissants !</system:String>

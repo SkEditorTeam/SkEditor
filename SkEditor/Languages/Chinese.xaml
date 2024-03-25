@@ -105,7 +105,7 @@
 	<system:String x:Key="SettingsHomePersonalizationDescription">主题，字体，语法高亮</system:String>
 	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
 	<system:String x:Key="SettingsHomeDiscordDescription">在Discord配置文件中显示SkEditor！</system:String>
-	<system:String x:Key="SettingsHomeExperiments">实验（暂不可用）</system:String>
+	<system:String x:Key="SettingsHomeExperiments">实验</system:String>
 	<system:String x:Key="SettingsHomeExperimentsDescription">测试即将推出的功能！</system:String>
 	<system:String x:Key="SettingsHomeAddons">插件</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">通过强大的插件增强您的体验！</system:String>
