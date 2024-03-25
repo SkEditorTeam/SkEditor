@@ -25,6 +25,9 @@
 				
 				<ui:SettingsExpander Name="DiscordItem" Header="{DynamicResource SettingsAboutDiscord}" IconSource="{StaticResource DiscordIcon}"
 					Description="{DynamicResource SettingsAboutDiscordDescription}" IsClickEnabled="True"/>
+
+				<ui:SettingsExpander Name="AppDataItem" Header="{DynamicResource SettingsAboutAppdata}" IconSource="{StaticResource Folder}"
+					IsClickEnabled="True"/>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>
