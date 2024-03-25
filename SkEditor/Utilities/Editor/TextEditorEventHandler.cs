@@ -29,6 +29,7 @@ public partial class TextEditorEventHandler
         { '"', '"' },
         { '<', '>' },
         { '{', '}' },
+        { '%', '%' },
     };
 
     private const string commentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
