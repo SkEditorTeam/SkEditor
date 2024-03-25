@@ -29,6 +29,7 @@ public interface ISkEditorAPI
     public TabView GetTabView();
 
     public void OpenUrl(string url);
+    public void OpenFolder(string path);
 
     public void ShowMessage(string title, string message, Window window);
     public void ShowMessage(string title, string message);

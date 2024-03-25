@@ -102,6 +102,19 @@ public class SkEditor : ISkEditorAPI
         }
     }
 
+    /// <summary>
+    /// Opens provided folder in file explorer
+    /// </summary>
+    public void OpenFolder(string path)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = path,
+            UseShellExecute = true,
+            Verb = "open"
+        });
+    }
+
 
     /// <summary>
     /// Shows message box with provided message and title on provided window
