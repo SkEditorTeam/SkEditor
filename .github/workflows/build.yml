@@ -110,7 +110,7 @@ jobs:
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         pwd 
         wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
-        echo "Version: 2.2.0" >> control
+        echo "Version: 2.3.0" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
         echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
@@ -169,7 +169,7 @@ jobs:
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
         wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
-        echo "Version: 2.2.0" >> control
+        echo "Version: 2.3.0" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
         echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
