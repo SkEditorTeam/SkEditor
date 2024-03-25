@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.ObjectiveC;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SkEditor.Utilities.Parser.ViewModels;
 

@@ -42,6 +42,7 @@ public class AppConfig
     public bool EnableProjectsExperiment { get; set; } = false;
     public bool EnableHexPreview { get; set; } = false;
     public bool EnableCodeParser { get; set; } = false;
+    public bool EnableFolding { get; set; } = false;
 
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
@@ -85,6 +86,9 @@ public class AppConfig
         return defaultSettings;
     }
 
+    /// <summary>
+    /// Set up a new custom option.
+    /// </summary>
     public void SetUpNewOption(string optionName, object defaultValue)
     {
         if (!CustomOptions.ContainsKey(optionName))
@@ -93,6 +97,9 @@ public class AppConfig
         }
     }
 
+    /// <summary>
+    /// Set value of a custom option.
+    /// </summary>
     public void SetOption(string optionName, object value)
     {
         if (CustomOptions.ContainsKey(optionName))
@@ -101,6 +108,9 @@ public class AppConfig
         }
     }
 
+    /// <summary>
+    /// Get value of a custom option.
+    /// </summary>
     public object GetOption(string optionName)
     {
         if (CustomOptions.TryGetValue(optionName, out object? value))
@@ -111,5 +121,21 @@ public class AppConfig
         {
             return null;
         }
+    }
+
+    /// <summary>
+    /// Get value of an option by name.
+    /// </summary>
+    public T GetOptionValue<T>(string optionName)
+    {
+        return (T)GetType().GetProperty(optionName).GetValue(this);
+    }
+
+    /// <summary>
+    /// Set value of an option by name.
+    /// </summary> 
+    public void SetOptionValue<T>(string optionName, T value)
+    {
+        GetType().GetProperty(optionName).SetValue(this, value);
     }
 }

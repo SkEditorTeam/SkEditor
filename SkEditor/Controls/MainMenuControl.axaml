@@ -112,7 +112,7 @@
 					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
-			<MenuItem Header="{DynamicResource MenuHeaderDocumentation}" Name="MenuItemDocs" IsEnabled="False">
+			<MenuItem Header="{DynamicResource MenuHeaderDocumentation}" Name="MenuItemDocs" IsVisible="False">
 				<MenuItem.Icon>
 					<ui:SymbolIcon Symbol="Library"/>
 				</MenuItem.Icon>

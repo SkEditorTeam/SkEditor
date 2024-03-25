@@ -46,7 +46,6 @@ public partial class MainWindow : AppWindow
         Closing += OnClosing;
 
         Activated += (sender, e) => ChangeChecker.Check();
-        Deactivated += (sender, e) => ChangeChecker.ignoreNextChange = true;
 
         KeyDown += (sender, e) =>
         {
@@ -85,7 +84,7 @@ public partial class MainWindow : AppWindow
         SideBar.IsVisible = MainMenu.MenuItemOpenFolder.IsVisible = ApiVault.Get().GetAppConfig().EnableProjectsExperiment;
         SideBar.LoadPanels();
 
-        ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
+        await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 
         string[] startupFiles = ApiVault.Get().GetStartupFiles();
         if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash()) FileHandler.NewFile();

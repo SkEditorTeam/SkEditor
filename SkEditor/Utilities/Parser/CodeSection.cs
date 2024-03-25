@@ -1,17 +1,14 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
+using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
+using AvaloniaEdit.Rendering;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using SkEditor.Utilities.Styling;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Avalonia.Input;
-using Avalonia.Media;
-using AvaloniaEdit.Document;
-using AvaloniaEdit.Rendering;
-using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -228,62 +225,29 @@ public partial class CodeSection
         editor.Focus();
     }
 
-    private HashSet<CodeVariable> GetUniqueVariables()
-    {
-        var uniqueVariables = new HashSet<CodeVariable>();
-        foreach (var variable in Variables)
-        {
-            if (uniqueVariables.Any(v => v.IsSimilar(variable)))
-                continue;
-            uniqueVariables.Add(variable);
-        }
-        return uniqueVariables;
-    }
+    private HashSet<CodeVariable> GetUniqueVariables() =>
+        new(Variables.Where(v => !Variables.Any(x => x != v && x.IsSimilar(v))));
 
-    private HashSet<CodeOptionReference> GetUniqueOptionReferences()
-    {
-        var uniqueOptionReferences = new HashSet<CodeOptionReference>();
-        foreach (var optionReference in OptionReferences)
-        {
-            if (uniqueOptionReferences.Any(o => o.IsSimilar(optionReference)))
-                continue;
-            uniqueOptionReferences.Add(optionReference);
-        }
-        return uniqueOptionReferences;
-    }
+    private HashSet<CodeOptionReference> GetUniqueOptionReferences() =>
+        new(OptionReferences.Where(o => !OptionReferences.Any(x => x != o && x.IsSimilar(o))));
 
-    public void HighlightSection()
-    {
-        // TextEditor.TextArea.TextView
-        var editor = Parser.Editor;
-        editor.TextArea.TextView.LineTransformers.Add(Colorizer);
-    }
-    
-    public void RemoveHighlight()
-    {
-        var editor = Parser.Editor;
-        // Remove every LineColorizer
-        editor.TextArea.TextView.LineTransformers.Remove(Colorizer);
-    }
+
+    public void HighlightSection() => Parser.Editor.TextArea.TextView.LineTransformers.Add(Colorizer);
+
+    public void RemoveHighlight() => Parser.Editor.TextArea.TextView.LineTransformers.Remove(Colorizer);
 
     [GeneratedRegex(@"(.*): (.*)")]
     private static partial Regex OptionRegex();
     [GeneratedRegex(@"(?<=\{)(?!@)_?([A-Za-z.\s_-]+)(?=\})")]
     private static partial Regex VariableRegex();
-    
+
     /// <summary>
     /// Author: Sky
     /// </summary>
-    public class LineColorizer : DocumentColorizingTransformer
+    public class LineColorizer(int from, int to) : DocumentColorizingTransformer
     {
-        int from;
-        int to;
-
-        public LineColorizer(int from, int to)
-        {
-            this.from = from;
-            this.to = to;
-        }
+        private readonly int from = from;
+        private readonly int to = to;
 
         protected override void ColorizeLine(DocumentLine line)
         {
@@ -293,9 +257,9 @@ public partial class CodeSection
             }
         }
 
-        void ApplyChanges(VisualLineElement element)
+        private void ApplyChanges(VisualLineElement element)
         {
-            element.TextRunProperties.SetBackgroundBrush(ThemeEditor.CurrentTheme.SelectionColor);
+            element.BackgroundBrush = ThemeEditor.CurrentTheme.SelectionColor;
         }
     }
 }

@@ -4,11 +4,10 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
+using SkEditor.Utilities.Parser.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Avalonia.Input;
-using SkEditor.Utilities.Parser.ViewModels;
 
 namespace SkEditor.Controls.Sidebar;
 
@@ -21,8 +20,8 @@ public partial class ParserSidebarPanel : UserControl
     {
         Sections.Clear();
         sections.ForEach(Sections.Add);
-        
-        var viewModel = (ParserFilterViewModel) DataContext;
+
+        var viewModel = (ParserFilterViewModel)DataContext;
         var filteredSections = Sections
             .Where(section => string.IsNullOrWhiteSpace(viewModel.SearchText) || section.Name.Contains(viewModel.SearchText))
             .ToList();
@@ -39,7 +38,7 @@ public partial class ParserSidebarPanel : UserControl
             filteredSections = filteredSections.Where(section => section.Type == type).ToList();
         }
         ItemsRepeater.ItemsSource = filteredSections;
-        
+
         UpdateInformationBox();
     }
 
@@ -92,7 +91,7 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ClearSearchFilter()
     {
-        var viewModel = (ParserFilterViewModel) DataContext;
+        var viewModel = (ParserFilterViewModel)DataContext;
         viewModel.SearchText = "";
         viewModel.SelectedFilterIndex = 0;
         Refresh(Sections.ToList());
