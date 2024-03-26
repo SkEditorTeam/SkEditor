@@ -110,7 +110,7 @@ jobs:
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         pwd 
         wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
-        echo "Version: 2.2.0" >> control
+        echo "exported_ver=\$(curl -s \"https://camo.githubusercontent.com/024e74589d307c8cbe664b87c58cf65e2b62587aec02459d998719874ea7b5eb/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f762f72656c656173652f536b456469746f725465616d2f536b456469746f723f636f6c6f723d253233376133346562266c6162656c3d76657273696f6e267374796c653d666c61742d737175617265\" | grep -oP '(?<=<title>).*?(?=</title>)' | sed 's/v\([0-9]\)/\1/') && exported_ver=\"\${exported_ver^}\"" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
         echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
@@ -169,7 +169,7 @@ jobs:
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
         wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
-        echo "Version: 2.2.0" >> control
+        echo "exported_ver=\$(curl -s \"https://camo.githubusercontent.com/024e74589d307c8cbe664b87c58cf65e2b62587aec02459d998719874ea7b5eb/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f762f72656c656173652f536b456469746f725465616d2f536b456469746f723f636f6c6f723d253233376133346562266c6162656c3d76657273696f6e267374796c653d666c61742d737175617265\" | grep -oP '(?<=<title>).*?(?=</title>)' | sed 's/v\([0-9]\)/\1/') && exported_ver=\"\${exported_ver^}\"" >> control
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
         echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
