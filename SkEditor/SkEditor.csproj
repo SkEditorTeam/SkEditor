@@ -8,9 +8,9 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>SkEditor.ico</ApplicationIcon>
 		<PublishSingleFile>true</PublishSingleFile>
-		<AssemblyVersion>2.3.0</AssemblyVersion>
-		<FileVersion>2.3.0</FileVersion>
-		<Version>2.3.0</Version>
+		<AssemblyVersion>2.3.1</AssemblyVersion>
+		<FileVersion>2.3.1</FileVersion>
+		<Version>2.3.1</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

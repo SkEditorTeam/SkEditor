@@ -77,13 +77,6 @@ public class FileHandler
 
     public async static void OpenFile()
     {
-        bool untitledFileOpen = ApiVault.Get().GetTabView().TabItems.Count() == 1 &&
-            ApiVault.Get().GetTextEditor() != null &&
-            ApiVault.Get().GetTextEditor().Text.Length == 0 &&
-            ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
-            item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
-            !item.Header.ToString().EndsWith('*');
-
         var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
 
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -93,28 +86,22 @@ public class FileHandler
         });
 
         files.ToList().ForEach(file => OpenFile(file.Path.AbsolutePath));
-        if (untitledFileOpen) await CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
     }
 
     public static async void OpenFile(string path)
     {
-        path = Path.GetFullPath(path);
-        if ((ApiVault.Get().GetTabView().TabItems as IList)
-            .Cast<TabViewItem>()
-            .Where(tab => tab.Tag != null)
-            .Any(tab => tab.Tag.ToString() == path))
-        {
-            ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList)
-                .Cast<TabViewItem>()
-                .First(tab => tab.Tag.ToString() == path);
-            return;
-        }
+        bool untitledFileOpen = IsOnlyEmptyFileOpen();
 
-        string fileName = Uri.UnescapeDataString(Path.GetFileName(path));
+        path = Uri.UnescapeDataString(Path.GetFullPath(path));
+        if (CheckAlreadyOpen(path)) return;
+
+        string fileName = Path.GetFileName(path);
         TabViewItem tabItem = await FileBuilder.Build(fileName, path);
         if (tabItem == null) return;
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+        if (untitledFileOpen) await CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
+
         OpenedFiles.Add(new OpenedFile()
         {
             Editor = tabItem.Content as TextEditor,
@@ -125,20 +112,46 @@ public class FileHandler
                 : null
         });
 
-        if (ApiVault.Get().GetAppConfig().CheckForChanges)
-        {
-            FileSystemWatcher watcher = new(Path.GetDirectoryName(path), Path.GetFileName(path));
-            watcher.Changed += (sender, e) => ChangeChecker.HasChangedDictionary[path] = true;
-            (tabItem.Content as TextEditor).Unloaded += (sender, e) =>
-            {
-                if (OpenedFiles.FirstOrDefault(openedFile => openedFile.TabViewItem == tabItem) is not OpenedFile openedFile)
-                {
-                    watcher.Dispose();
-                }
-            };
-        }
+        AddChangeChecker(path, tabItem);
 
         await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
+    }
+
+    private static void AddChangeChecker(string path, TabViewItem tabItem)
+    {
+        if (!ApiVault.Get().GetAppConfig().CheckForChanges || tabItem.Content is not TextEditor) return;
+
+        FileSystemWatcher watcher = new(Path.GetDirectoryName(path), Path.GetFileName(path));
+        watcher.Changed += (sender, e) => ChangeChecker.HasChangedDictionary[path] = true;
+        (tabItem.Content as TextEditor).Unloaded += (sender, e) =>
+        {
+            if (OpenedFiles.FirstOrDefault(openedFile => openedFile.TabViewItem == tabItem) is not OpenedFile openedFile)
+            {
+                watcher.Dispose();
+            }
+        };
+    }
+
+    private static bool CheckAlreadyOpen(string path)
+    {
+        if ((ApiVault.Get().GetTabView().TabItems as IList).Cast<TabViewItem>().Where(tab => tab.Tag != null).Any(tab => tab.Tag.ToString() == path))
+        {
+            ApiVault.Get().GetTabView().SelectedItem = (ApiVault.Get().GetTabView().TabItems as IList)
+                .Cast<TabViewItem>()
+                .First(tab => tab.Tag.ToString() == path);
+            return true;
+        }
+        return false;
+    }
+
+    private static bool IsOnlyEmptyFileOpen()
+    {
+        return ApiVault.Get().GetTabView().TabItems.Count() == 1 &&
+            ApiVault.Get().GetTextEditor() != null &&
+            ApiVault.Get().GetTextEditor().Text.Length == 0 &&
+            ApiVault.Get().GetTabView().SelectedItem is TabViewItem item &&
+            item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
+            !item.Header.ToString().EndsWith('*');
     }
 
     public static async Task<(bool, Exception)> SaveFile()
