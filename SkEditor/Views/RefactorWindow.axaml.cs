@@ -3,7 +3,6 @@ using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
-using SkEditor.Utilities.Files;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;

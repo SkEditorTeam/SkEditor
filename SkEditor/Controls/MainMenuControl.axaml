@@ -43,15 +43,46 @@
 					<ui:SymbolIcon Symbol="Share"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="{DynamicResource MenuHeaderClose}" Name="MenuItemClose" HotKey="Ctrl+W" InputGesture="Ctrl+W">
+
+			<MenuItem Header="{DynamicResource MenuHeaderClose}">
 				<MenuItem.Icon>
 					<ui:SymbolIcon Symbol="Clear"/>
 				</MenuItem.Icon>
-			</MenuItem>
-			<MenuItem Header="{DynamicResource MenuHeaderCloseAll}" Name="MenuItemCloseAll" HotKey="Ctrl+Shift+W" InputGesture="Ctrl+Shift+W">
-				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Clear"/>
-				</MenuItem.Icon>
+
+				<MenuItem Header="{DynamicResource MenuHeaderCloseCurrentFile}" Name="MenuItemClose" HotKey="Ctrl+W" InputGesture="Ctrl+W">
+					<MenuItem.Icon>
+						<ui:SymbolIcon Symbol="Document"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="{DynamicResource MenuHeaderCloseAll}" Name="MenuItemCloseAll" HotKey="Ctrl+Shift+W" InputGesture="Ctrl+Shift+W">
+					<MenuItem.Icon>
+						<ui:IconSourceElement IconSource="{StaticResource DocumentMultipleIcon}" />
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<MenuItem Header="{DynamicResource MenuHeaderCloseAllButCurrent}" Name="MenuItemCloseAllExceptCurrent">
+					<MenuItem.Icon>
+						<ui:IconSourceElement IconSource="{StaticResource DocumentMultipleIcon}" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="{DynamicResource MenuHeaderCloseUnsaved}" Name="MenuItemCloseAllUnsaved">
+					<MenuItem.Icon>
+						<ui:IconSourceElement IconSource="{StaticResource DocumentMultipleIcon}" />
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<MenuItem Header="{DynamicResource MenuHeaderCloseLeft}" Name="MenuItemCloseAllLeft">
+					<MenuItem.Icon>
+						<ui:IconSourceElement IconSource="{StaticResource LeftIcon}" />
+					</MenuItem.Icon>
+				</MenuItem>
+
+				<MenuItem Header="{DynamicResource MenuHeaderCloseRight}" Name="MenuItemCloseAllRight">
+					<MenuItem.Icon>
+						<ui:IconSourceElement IconSource="{StaticResource RightIcon}" />
+					</MenuItem.Icon>
+				</MenuItem>
+
 			</MenuItem>
 		</MenuItem>
 		<MenuItem Header="{DynamicResource MenuHeaderEdit}">
@@ -124,7 +155,7 @@
 			</MenuItem>
 		</MenuItem>
 		<MenuItem Name="AddonsMenuItem" Header="{DynamicResource MenuHeaderAddons}">
-			
+
 		</MenuItem>
 		<MenuItem Header="{DynamicResource MenuHeaderOther}">
 			<MenuItem Header="{DynamicResource MenuHeaderMarketplace}" Name="MenuItemMarketplace">

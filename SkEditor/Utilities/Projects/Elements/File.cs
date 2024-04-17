@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,8 @@ public class File : StorageElement
 
     public File(string file, Folder? parent = null)
     {
+        file = Uri.UnescapeDataString(file).Replace("/", "\\");
+
         Parent = parent;
         StorageFilePath = file;
 
@@ -45,15 +48,15 @@ public class File : StorageElement
         if (Parent is null) return Translation.Get("ProjectRenameErrorParentNull");
 
         var file = Parent.Children.FirstOrDefault(x => x.Name == input);
-        if (file is not null) return Translation.Get("ProjectRenameErrorNameExists");
+        if (file is not null) return Translation.Get("ProjectErrorNameExists");
 
         return null;
     }
 
-    public override void RenameElement(string newName)
+    public override void RenameElement(string newName, bool move = true)
     {
         var newPath = Path.Combine(Parent.StorageFolderPath, newName);
-        System.IO.File.Move(StorageFilePath, newPath);
+        if (move) System.IO.File.Move(StorageFilePath, newPath);
 
         StorageFilePath = newPath;
         Name = newName;
@@ -71,6 +74,6 @@ public class File : StorageElement
     public void CopyPath()
     {
         var path = StorageFilePath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path.Replace("\\", "/"));
+        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path);
     }
 }

@@ -25,15 +25,8 @@
     <Border MinWidth="250" Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
 
         <Grid RowDefinitions="auto,auto,auto,*">
-            <TextBlock Grid.Row="0" Text="Explorer" FontWeight="DemiBold" Margin="20,10,20,10"/>
+            <TextBlock Grid.Row="0" Text="{DynamicResource ProjectExplorerTitle}" FontWeight="DemiBold" Margin="20,10,20,10"/>
             <Separator Grid.Row="1" Margin="0,0,0,10"/>
-            <Border Name="LoadingPanel" Grid.Row="2" IsVisible="False" Margin="10">
-                <StackPanel Spacing="10">
-                    <TextBlock Name="LoadingText" TextAlignment="Center">Loading XX files ...</TextBlock>
-                    <ProgressBar Name="LoadingBar" Margin="5 0"></ProgressBar>
-                    <Separator />
-                </StackPanel>
-            </Border>
             <TreeView Grid.Row="3" Name="FileTreeView">
                 <TreeView.Styles>
                     <Style Selector="TreeViewItem">
@@ -90,11 +83,11 @@
                 </TreeView.ItemTemplate>
             </TreeView>
             <StackPanel Name="NoFolderMessage" VerticalAlignment="Center" Grid.Row="3" Margin="5" Spacing="10">
-                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center">You don't have any folders opened yet.</TextBlock>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Text="{DynamicResource ProjectExplorerInfoText}"/>
                 <Button Click="OpenFolder" HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
                         <ui:SymbolIcon Symbol="OpenFolder" FontSize="18"></ui:SymbolIcon>
-                        <TextBlock>Open Folder</TextBlock>
+                        <TextBlock Text="{DynamicResource ProjectExplorerInfoButton}"/>
                     </StackPanel>
                 </Button>
             </StackPanel>

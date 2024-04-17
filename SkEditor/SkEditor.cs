@@ -21,13 +21,17 @@ namespace SkEditor;
 
 public class SkEditor : ISkEditorAPI
 {
-    private string[] startupFiles = null;
+    private readonly string[] startupFiles = [];
     public MainWindow mainWindow;
     private AppConfig appConfig;
 
     public SkEditor(string[] args)
     {
-        startupFiles = args.Where(File.Exists).ToArray();
+        if (args.Length > 0)
+        {
+            Serilog.Log.Debug("Starting SkEditor with args: " + string.Join(", ", args));
+            startupFiles = args.Where(File.Exists).ToArray();
+        }
 
         ApiVault.Set(this);
     }

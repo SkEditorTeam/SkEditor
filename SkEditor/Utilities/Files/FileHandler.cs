@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
@@ -10,6 +9,7 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Parser;
+using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using System;
@@ -30,6 +30,13 @@ public class FileHandler
     {
         try
         {
+            string? folder = e.Data.GetFiles().FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path.AbsolutePath;
+            if (folder != null)
+            {
+                ProjectOpener.OpenProject(folder);
+                return;
+            }
+
             e.Data.GetFiles().Where(f => !Directory.Exists(f.Path.AbsolutePath)).ToList().ForEach(file =>
             {
                 OpenFile(file.Path.AbsolutePath);
@@ -230,6 +237,8 @@ public class FileHandler
             Content = absolutePath,
         };
         ToolTip.SetTip(item, toolTip);
+
+        AddChangeChecker(absolutePath, item);
     }
 
     public async static void CloseFile(TabViewTabCloseRequestedEventArgs e) => await CloseFile(e.Tab);
@@ -249,8 +258,6 @@ public class FileHandler
     public static async Task CloseFile(TabViewItem item)
     {
         if (item.Content is TextEditor editor && !ApiVault.Get().OnFileClosing(editor)) return;
-
-
 
         DisposeEditorData(item);
 

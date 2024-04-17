@@ -27,7 +27,6 @@
 	<system:String x:Key="MenuHeaderSaveAs">另存为</system:String>
 	<system:String x:Key="MenuHeaderPublish">发布</system:String>
 	<system:String x:Key="MenuHeaderClose">关闭</system:String>
-	<system:String x:Key="MenuHeaderCloseAll">关闭所有</system:String>
 
 	<!-- 编辑菜单 -->
 	<system:String x:Key="MenuHeaderCopy">复制</system:String>

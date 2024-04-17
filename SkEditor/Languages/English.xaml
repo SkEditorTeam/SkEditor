@@ -30,7 +30,12 @@
 	<system:String x:Key="MenuHeaderSaveAs">Save as</system:String>
 	<system:String x:Key="MenuHeaderPublish">Publish</system:String>
 	<system:String x:Key="MenuHeaderClose">Close</system:String>
-	<system:String x:Key="MenuHeaderCloseAll">Close all</system:String>
+	<system:String x:Key="MenuHeaderCloseCurrentFile">Current file</system:String>
+	<system:String x:Key="MenuHeaderCloseAll">All</system:String>
+	<system:String x:Key="MenuHeaderCloseAllButCurrent">All except current</system:String>
+	<system:String x:Key="MenuHeaderCloseUnsaved">All unsaved</system:String>
+	<system:String x:Key="MenuHeaderCloseLeft">All to the left</system:String>
+	<system:String x:Key="MenuHeaderCloseRight">All to the right</system:String>
 
 	<!-- Edit Menu -->
 	<system:String x:Key="MenuHeaderCopy">Copy</system:String>
@@ -111,25 +116,45 @@
 
 	<!-- Projects -->
 	<system:String x:Key="ProjectExplorerTitle">Explorer</system:String>
-	<system:String x:Key="ProjectExplorerInfoText">Projects are still in beta and bugs may occur!</system:String>
+	<system:String x:Key="ProjectExplorerInfoText">You don't have any folders opened yet.</system:String>
 	<system:String x:Key="ProjectExplorerInfoButton">Open Folder</system:String>
 	<system:String x:Key="ProjectRenameText">Renaming into...</system:String>
 	<system:String x:Key="ProjectRenameErrorNameEmpty">Name cannot be empty.</system:String>
 	<system:String x:Key="ProjectRenameErrorParentNull">Parent cannot be null.</system:String>
-	<system:String x:Key="ProjectRenameErrorNameExists">A file or folder with this name already exists.</system:String>
+	<system:String x:Key="ProjectErrorNameExists">A file or folder with this name already exists.</system:String>
 	<system:String x:Key="ProjectRenameErrorSameName">The new name is the same as the old name.</system:String>
-	<system:String x:Key="ProjectCreateErrorNameExists">A file or folder with this name already exists.</system:String>
 	<system:String x:Key="ProjectCreateFileName">File Name</system:String>
 	<system:String x:Key="ProjectCreateFolderName">Folder Name</system:String>
 	<system:String x:Key="ProjectCreateTemplate">Template</system:String>
+	
+	<!-- Code Parser -->
+	<system:String x:Key="CodeParserTitle">Code Parsing</system:String>
+	<system:String x:Key="CodeParserWarning">The code parser is still in the beta! Please report any bugs you find in the Discord server.</system:String>
+	<system:String x:Key="CodeParserEnableInfo">The code parser is still in beta, and bugs may occur. It is disabled by default, but you can enable it using the button below.</system:String>
+	<system:String x:Key="CodeParserSearch">Search...</system:String>
+	<system:String x:Key="CodeParserFilterName">Filter by name</system:String>
+	<system:String x:Key="CodeParserFilterType">Filter by type</system:String>
+	<system:String x:Key="CodeParserFilterTypeAny">Any</system:String>
+	<system:String x:Key="CodeParserFilterTypeFunctions">Functions</system:String>
+	<system:String x:Key="CodeParserFilterTypeEvents">Events</system:String>
+	<system:String x:Key="CodeParserFilterTypeOptions">Options</system:String>
+	<system:String x:Key="CodeParserFilterTypeCommands">Commands</system:String>
+	<system:String x:Key="CodeParserClearFilters">Clear current filters</system:String>
+	<system:String x:Key="CodeParserNavigate">Navigate</system:String>
+	<system:String x:Key="CodeParserNavigateToDefinition">Navigate to definition</system:String>
+	<system:String x:Key="CodeParserRename">Rename</system:String>
+	<system:String x:Key="CodeParserFileChanged">The file has changed, you need to parse it again.</system:String>
+	<system:String x:Key="CodeParserNoSections">No sections were found in the code. Maybe you should write something? :)</system:String>
+	<system:String x:Key="CodeParserBadFormat">This file cannot be parsed, as it does not look like a Skript file.</system:String>
+	<system:String x:Key="CodeParserParseCode">Parse code</system:String>
+	<system:String x:Key="CodeParserParsed">Current code parsed</system:String>
 
-	<!-- File Association Selection Window -->
+		<!-- File Association Selection Window -->
 	<system:String x:Key="FileAssociationSelectionWindowTitle">Select file association</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowInfo">There's multiple provider for this file type. Please select one.</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowOfficialItem">This is an official file type from SkEditor.</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">This is an unofficial file type from an addon, {0}.</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Remember my choice</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowConfirm">Confirm</system:String>
 
 
 	<!-- Settings -->
@@ -164,8 +189,10 @@
 	<system:String x:Key="SettingsGeneralAutoPairingDescription">Automatically adds the closing character when you enter the opening character for certain symbols.</system:String>
 	<system:String x:Key="SettingsGeneralAutoSave">Autosave</system:String>
 	<system:String x:Key="SettingsGeneralAutoSaveDescription">Automatically saves your file every time you make a change.</system:String>
+	<system:String x:Key="SettingsGeneralChangeChecker">Check for external file changes</system:String>
 	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
 	<system:String x:Key="SettingsGeneralRpcDescription">Show SkEditor in your Discord status.</system:String>
+	<system:String x:Key="SettingsGeneralCheckForUpdates">Check for updates</system:String>
 
 	<!-- About Settings -->
 	<system:String x:Key="SettingsAboutTitle">About</system:String>

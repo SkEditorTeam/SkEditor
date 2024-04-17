@@ -27,6 +27,7 @@
 	<system:String x:Key="MenuHeaderSaveAs">Mentés másként</system:String>
 	<system:String x:Key="MenuHeaderPublish">Közzététel</system:String>
 	<system:String x:Key="MenuHeaderClose">Bezárás</system:String>
+	<system:String x:Key="MenuHeaderCloseAll">Összes bezárása</system:String>
 
 	<!-- Szerkesztés menü -->
 	<system:String x:Key="MenuHeaderCopy">Másolás</system:String>
@@ -105,7 +106,7 @@
 	<system:String x:Key="SettingsHomePersonalizationDescription">Téma, betűtípus, szintaxis kiemelés</system:String>
 	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
 	<system:String x:Key="SettingsHomeDiscordDescription">Mutassa be a SkEditor-t a Discord profilján!</system:String>
-	<system:String x:Key="SettingsHomeExperiments">Kísérletek</system:String>
+	<system:String x:Key="SettingsHomeExperiments">Kísérletek (még nem elérhető)</system:String>
 	<system:String x:Key="SettingsHomeExperimentsDescription">Próbálja ki a közelgő funkciókat!</system:String>
 	<system:String x:Key="SettingsHomeAddons">Bővítmények</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Fokozza élményét erőteljes bővítményekkel!</system:String>

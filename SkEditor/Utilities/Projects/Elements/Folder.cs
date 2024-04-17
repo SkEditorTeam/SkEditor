@@ -12,12 +12,11 @@ namespace SkEditor.Utilities.Projects.Elements;
 
 public class Folder : StorageElement
 {
-
     public string StorageFolderPath { get; set; }
 
     public Folder(string folder, Folder? parent = null)
     {
-        folder = Uri.UnescapeDataString(folder);
+        folder = Uri.UnescapeDataString(folder).Replace("/", "\\");
 
         Parent = parent;
         StorageFolderPath = folder;
@@ -52,10 +51,11 @@ public class Folder : StorageElement
         Parent.Children.Remove(this);
     }
 
-    public override void RenameElement(string newName)
+    public override void RenameElement(string newName, bool move = true)
     {
         var newPath = Path.Combine(Parent.StorageFolderPath, newName);
-        Directory.Move(StorageFolderPath, newPath);
+        if (move) Directory.Move(StorageFolderPath, newPath);
+
         StorageFolderPath = newPath;
         Name = newName;
 
@@ -68,7 +68,7 @@ public class Folder : StorageElement
         if (Parent is null) return Translation.Get("ProjectRenameErrorParentNull");
 
         var folder = Parent.Children.FirstOrDefault(x => x.Name == input);
-        if (folder is not null) return Translation.Get("ProjectRenameErrorNameExists");
+        if (folder is not null) return Translation.Get("ProjectErrorNameExists");
 
         return null;
     }
@@ -77,7 +77,7 @@ public class Folder : StorageElement
     {
         if (string.IsNullOrWhiteSpace(input)) return Translation.Get("ProjectCreateErrorNameEmpty");
 
-        if (Children.Any(x => x.Name == input)) return Translation.Get("ProjectCreateErrorNameExists");
+        if (Children.Any(x => x.Name == input)) return Translation.Get("ProjectErrorNameExists");
 
         return null;
     }
@@ -95,7 +95,7 @@ public class Folder : StorageElement
     public void CopyPath()
     {
         var path = StorageFolderPath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path.Replace("\\", "/"));
+        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path);
     }
 
     public async void CreateNewElement(bool file)
@@ -125,5 +125,25 @@ public class Folder : StorageElement
         var element = new Folder(path, this);
         Children.Add(element);
         Sort(this);
+    }
+
+    public StorageElement? GetItemByPath(string path)
+    {
+        if (StorageFolderPath == path) return this;
+
+        foreach (var child in Children)
+        {
+            if (child is Folder folder)
+            {
+                var item = folder.GetItemByPath(path);
+                if (item is not null) return item;
+            }
+            else if (child is File file && Path.GetFullPath(file.StorageFilePath) == Path.GetFullPath(path))
+            {
+                return file;
+            }
+        }
+
+        return null;
     }
 }

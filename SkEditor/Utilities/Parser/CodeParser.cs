@@ -95,14 +95,14 @@ public partial class CodeParser : INotifyPropertyChanged
         ParserPanel.Refresh(Sections);
 
         ParserPanel.ParseButton.IsEnabled = false;
-        ParserPanel.ParseButton.Content = "Current code parsed";
+        ParserPanel.ParseButton.Content = Translation.Get("CodeParserParsed");
     }
 
     public void SetUnparsed()
     {
         IsParsed = false;
         ParserPanel.ParseButton.IsEnabled = true;
-        ParserPanel.ParseButton.Content = "Parse code";
+        ParserPanel.ParseButton.Content = Translation.Get("CodeParserParseCode");
         ParserPanel.UpdateInformationBox(true);
     }
 

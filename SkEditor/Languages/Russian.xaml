@@ -27,7 +27,6 @@
 	<system:String x:Key="MenuHeaderSaveAs">Сохранить как</system:String>
 	<system:String x:Key="MenuHeaderPublish">Опубликовать</system:String>
 	<system:String x:Key="MenuHeaderClose">Закрыть</system:String>
-	<system:String x:Key="MenuHeaderCloseAll">Закрыть все</system:String>
 
 	<!-- Меню редактирования -->
 	<system:String x:Key="MenuHeaderCopy">Копировать</system:String>

@@ -1,11 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.Styling;
 using SkEditor.API;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace SkEditor.Utilities;
 public static class Translation
@@ -26,21 +25,24 @@ public static class Translation
         return translationString;
     }
 
-    public static void LoadDefaultLanguage()
+    public async static void LoadDefaultLanguage()
     {
         Uri languageXaml = new(Path.Combine(LanguagesFolder, $"English.xaml"));
-        using Stream languageStream = File.OpenRead(languageXaml.OriginalString);
-        if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
+        await using var stream = new FileStream(languageXaml.OriginalString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
+        if (AvaloniaRuntimeXamlLoader.Load(stream) is ResourceDictionary dictionary)
         {
             Application.Current.Resources.MergedDictionaries.Add(dictionary);
         }
     }
 
+    private static HashSet<ResourceDictionary> _translations = [];
+
     public async static void ChangeLanguage(string language)
     {
-        var translations = Application.Current.Resources.MergedDictionaries.OfType<ResourceInclude>().FirstOrDefault(x => x.Source?.OriginalString?.Contains("/Languages/") ?? false);
-
-        if (translations != null) Application.Current.Resources.MergedDictionaries.Remove(translations);
+        foreach (ResourceDictionary translation in _translations)
+        {
+            Application.Current.Resources.MergedDictionaries.Remove(translation);
+        }
 
         Uri languageXaml = new(Path.Combine(LanguagesFolder, $"{language}.xaml"));
 
@@ -52,11 +54,12 @@ public static class Translation
             return;
         }
 
-        using Stream languageStream = File.OpenRead(languageXaml.OriginalString);
+        await using var languageStream = new FileStream(languageXaml.OriginalString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
 
         if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
         {
             Application.Current.Resources.MergedDictionaries.Add(dictionary);
+            _translations.Add(dictionary);
         }
     }
 }

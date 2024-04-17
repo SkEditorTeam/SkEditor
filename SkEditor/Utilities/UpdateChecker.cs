@@ -105,7 +105,15 @@ public static class UpdateChecker
                 await client.DownloadDataAsync(url, file, progress);
             }
 
-            Process.Start(new ProcessStartInfo("msiexec", $"/i \"{_tempInstallerFile}\" /quiet") { UseShellExecute = true });
+            ProcessStartInfo startInfo = new()
+            {
+                FileName = "msiexec",
+                Arguments = $"/i \"{_tempInstallerFile}\" /quiet",
+                UseShellExecute = true,
+                Verb = "runas"
+            };
+
+            Process.Start(startInfo);
 
             (Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime).Shutdown();
         }

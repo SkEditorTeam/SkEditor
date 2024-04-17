@@ -31,7 +31,7 @@ public abstract class StorageElement
 
     public abstract string? ValidateName(string input);
 
-    public abstract void RenameElement(string newName);
+    public abstract void RenameElement(string newName, bool move = true);
 
     public abstract void HandleDoubleClick();
 

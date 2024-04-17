@@ -1,7 +1,6 @@
 ﻿using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
-using Serilog;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;

@@ -26,7 +26,6 @@
 	<system:String x:Key="MenuHeaderSaveAs">Speichern unter</system:String>
 	<system:String x:Key="MenuHeaderPublish">Veröffentlichen</system:String>
 	<system:String x:Key="MenuHeaderClose">Schließen</system:String>
-	<system:String x:Key="MenuHeaderCloseAll">Alle schließen</system:String>
 
 	<!-- Edit Menu -->
 	<system:String x:Key="MenuHeaderCopy">Kopieren</system:String>

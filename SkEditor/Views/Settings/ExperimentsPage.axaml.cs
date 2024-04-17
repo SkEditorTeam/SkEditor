@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SkEditor.Views.Settings;
 public partial class ExperimentsPage : UserControl
@@ -13,8 +14,9 @@ public partial class ExperimentsPage : UserControl
         new Experiment("Auto Completion", "Early prototype of auto completion, not very helpful.", "EnableAutoCompletionExperiment", "MagicWandIcon"),
         new Experiment("Projects", "Adds a sidebar for managing projects.", "EnableProjectsExperiment", "Folder"),
         new Experiment("Hex Preview", "Preview hex colors in the editor.", "EnableHexPreview", "ColorIcon"),
-        new Experiment("Code Parser", "Parse code for informations. Doesn't contain error checking, see Analyzer addon instead. Requires Projects experiment.", "EnableCodeParser", "SearchIcon"),
-        new Experiment("Folding", "Folding code blocks. Requires Code Parser experiment.", "EnableFolding", "FoldingIcon"),
+        new Experiment("Code Parser", "Parse code for informations. Doesn't contain error checking, see Analyzer addon instead. Requires Projects experiment.", "EnableCodeParser", "SearchIcon", Dependency: "EnableProjectsExperiment"),
+        new Experiment("Folding", "Folding code blocks. Requires Code Parser experiment.", "EnableFolding", "FoldingIcon", Dependency: "EnableCodeParser"),
+        new Experiment("Better pairing", "Experimental better version of auto pairing.", "EnableBetterPairing", "AutoPairingIcon"),
     ];
 
     public ExperimentsPage()
@@ -36,11 +38,7 @@ public partial class ExperimentsPage : UserControl
                 IsChecked = ApiVault.Get().GetAppConfig().GetOptionValue<bool>(experiment.Option),
             };
 
-            toggleSwitch.IsCheckedChanged += (sender, e) =>
-            {
-                ApiVault.Get().GetAppConfig().SetOptionValue(experiment.Option, toggleSwitch.IsChecked.Value);
-                ApiVault.Get().GetAppConfig().Save();
-            };
+            toggleSwitch.IsCheckedChanged += (sender, e) => Switch(experiment, toggleSwitch);
 
             SettingsExpander expander = new()
             {
@@ -53,6 +51,25 @@ public partial class ExperimentsPage : UserControl
             ExperimentsStackPanel.Children.Add(expander);
         }
     }
+
+    private void Switch(Experiment experiment, ToggleSwitch toggleSwitch)
+    {
+        if (toggleSwitch.IsChecked.Value && experiment.Dependency is not null)
+        {
+            var dependency = experiments.Find(e => e.Option == experiment.Dependency);
+            if (dependency is not null)
+            {
+                var dependencySwitch = ExperimentsStackPanel.Children.OfType<SettingsExpander>().FirstOrDefault(e => e.Header.ToString() == dependency.Name)?.Footer as ToggleSwitch;
+                if (dependencySwitch is not null)
+                {
+                    dependencySwitch.IsChecked = true;
+                }
+            }
+        }
+
+        ApiVault.Get().GetAppConfig().SetOptionValue(experiment.Option, toggleSwitch.IsChecked.Value);
+        ApiVault.Get().GetAppConfig().Save();
+    }
 }
 
-public record Experiment(string Name, string Description, string Option, string Icon = "Settings");
+public record Experiment(string Name, string Description, string Option, string Icon = "Settings", string? Dependency = null);
