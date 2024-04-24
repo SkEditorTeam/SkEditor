@@ -116,8 +116,8 @@ jobs:
         rm -f getver
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
-        echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
-        echo "update-desktop-database /usr/share/applications || true" >> postinst
+        wget -O preinst -r 'https://www.dropbox.com/scl/fi/d3v6523n16ndetbg7x5yh/preinst?rlkey=xfrk7go1gxl8zhwt0cswrihjo&st=rwyq4bpo&dl=1'
+        wget -O postinst -r 'https://www.dropbox.com/scl/fi/te4220qfq44j6c5fjmeyy/postinst?rlkey=xak7s9tp0xzj0xw9bfrnxgdif&st=3tmm9z9b&dl=1'
         
 
     - name: 🔑 | Fix Permissions
@@ -179,8 +179,8 @@ jobs:
         rm -f getver
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
-        echo "ln -s /opt/SkEditor/SkEditor /bin/SkEditor" > postinst
-        echo "update-desktop-database /usr/share/applications || true" >> postinst
+        wget -O preinst -r 'https://www.dropbox.com/scl/fi/d3v6523n16ndetbg7x5yh/preinst?rlkey=xfrk7go1gxl8zhwt0cswrihjo&st=rwyq4bpo&dl=1'
+        wget -O postinst -r 'https://www.dropbox.com/scl/fi/te4220qfq44j6c5fjmeyy/postinst?rlkey=xak7s9tp0xzj0xw9bfrnxgdif&st=3tmm9z9b&dl=1'
 
     - name: 🔑 | Fix Permissions
       run: |
