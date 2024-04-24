@@ -123,9 +123,7 @@ jobs:
     - name: 🔑 | Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
-        chmod 0755 postrm
-        chmod 0755 control
-        chmod 0755 postinst
+        chmod 0755 *
     
     - name: 📦 | Create .deb package
       run: |
@@ -185,9 +183,7 @@ jobs:
     - name: 🔑 | Fix Permissions
       run: |
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
-        chmod 0755 postrm
-        chmod 0755 control
-        chmod 0755 postinst
+        chmod 0755 *
     
     - name: 📦 | Create .deb package
       run: |
