@@ -78,7 +78,6 @@ public class FileHandler
         });
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-
         await SyntaxLoader.RefreshSyntaxAsync();
     }
 

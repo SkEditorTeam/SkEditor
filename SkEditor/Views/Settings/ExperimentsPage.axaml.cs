@@ -16,7 +16,8 @@ public partial class ExperimentsPage : UserControl
         new Experiment("Hex Preview", "Preview hex colors in the editor.", "EnableHexPreview", "ColorIcon"),
         new Experiment("Code Parser", "Parse code for informations. Doesn't contain error checking, see Analyzer addon instead. Requires Projects experiment.", "EnableCodeParser", "SearchIcon", Dependency: "EnableProjectsExperiment"),
         new Experiment("Folding", "Folding code blocks. Requires Code Parser experiment.", "EnableFolding", "FoldingIcon", Dependency: "EnableCodeParser"),
-        new Experiment("Better pairing", "Experimental better version of auto pairing.", "EnableBetterPairing", "AutoPairingIcon"),
+        //new Experiment("Better pairing", "Experimental better version of auto pairing.", "EnableBetterPairing", "AutoPairingIcon"),
+        new Experiment("Session restoring", "Automatically saves your files and reopens it next time you start the app.", "EnableSessionRestoring", "SessionRestoringIcon")
     ];
 
     public ExperimentsPage()

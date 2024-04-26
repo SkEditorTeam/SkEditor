@@ -25,9 +25,9 @@ public class FileBuilder
 {
     public static readonly Dictionary<string, FileTypes.FileType> OpenedFiles = [];
 
-    public static async Task<TabViewItem?> Build(string header, string path = "")
+    public static async Task<TabViewItem?> Build(string header, string path = "", string? content = null)
     {
-        var fileType = await GetFileDisplay(path);
+        var fileType = await GetFileDisplay(path, content);
         if (fileType == null)
             return null;
 
@@ -69,7 +69,7 @@ public class FileBuilder
         return tabViewItem;
     }
 
-    private static async Task<FileTypes.FileType?> GetFileDisplay(string path)
+    private static async Task<FileTypes.FileType?> GetFileDisplay(string path, string? content)
     {
         FileTypes.FileType? fileType = null;
         if (FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
@@ -126,10 +126,10 @@ public class FileBuilder
             }
         }
 
-        return fileType ?? await GetDefaultEditor(path);
+        return fileType ?? await GetDefaultEditor(path, content);
     }
 
-    private static async Task<FileTypes.FileType?> GetDefaultEditor(string path)
+    private static async Task<FileTypes.FileType?> GetDefaultEditor(string path, string? content)
     {
         AppConfig config = ApiVault.Get().GetAppConfig();
 
@@ -138,7 +138,7 @@ public class FileBuilder
         {
             path = Uri.UnescapeDataString(path);
             if (File.Exists(path))
-                fileContent = await File.ReadAllTextAsync(path);
+                fileContent = content ?? await File.ReadAllTextAsync(path);
         }
 
         if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))

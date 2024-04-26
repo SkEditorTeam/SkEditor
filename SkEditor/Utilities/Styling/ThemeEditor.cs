@@ -69,6 +69,11 @@ public class ThemeEditor
         try
         {
             theme = JsonConvert.DeserializeObject<Theme>(File.ReadAllText(path));
+            if (theme == null)
+            {
+                File.Delete(path);
+                theme = GetDefaultTheme();
+            }
             theme.FileName = Path.GetFileName(path);
             Themes.Add(theme);
         }

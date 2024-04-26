@@ -1,6 +1,7 @@
 ﻿using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
+using Serilog;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
@@ -68,7 +69,7 @@ public class SyntaxLoader
             }
         }
 
-        await RefreshSyntaxAsync();
+        RefreshAllOpenedEditors();
     }
 
     private static void RegisterSyntax(FileSyntax syntax)
@@ -185,7 +186,7 @@ public class SyntaxLoader
         if (extension == null)
         {
 
-            extension = Path.GetExtension((ApiVault.Get().GetTabView().SelectedItem as TabViewItem).Tag?.ToString());
+            extension = Path.GetExtension((ApiVault.Get().GetTabView().SelectedItem as TabViewItem).Tag?.ToString().TrimEnd('*'));
             if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
             {
                 editor.SyntaxHighlighting = defaultSyntax.Highlighting;
@@ -226,7 +227,7 @@ public class SyntaxLoader
 
         foreach (var tab in tabs)
         {
-            var ext = Path.GetExtension(tab.Tag?.ToString()?.ToLower() ?? "");
+            var ext = Path.GetExtension(tab.Tag?.ToString()?.TrimEnd('*').ToLower() ?? "");
             if (string.IsNullOrWhiteSpace(ext) || !SortedFileSyntaxes.ContainsKey(ext))
             {
                 continue;

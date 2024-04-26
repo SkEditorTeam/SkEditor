@@ -59,21 +59,31 @@ public partial class MainWindow : AppWindow
         DragDrop.DropEvent.AddClassHandler(FileHandler.FileDropAction);
     }
 
+    public bool AlreadyClosed { get; set; } = false;
     private async void OnClosing(object sender, WindowClosingEventArgs e)
     {
+        if (AlreadyClosed) return;
+
         ThemeEditor.SaveAllThemes();
         ApiVault.Get().GetAppConfig().Save();
 
-        List<TabViewItem> unsavedFiles = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().Where(item => item.Header.ToString().EndsWith('*')).ToList();
-        if (unsavedFiles.Count == 0) return;
-
         e.Cancel = true;
-        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
-        if (result == ContentDialogResult.Primary)
+        if (!ApiVault.Get().GetAppConfig().EnableSessionRestoring)
         {
-            unsavedFiles.ForEach(item => item.Header = item.Header.ToString().TrimEnd('*'));
-            ApiVault.Get().OnClosed();
-            Close();
+            List<TabViewItem> unsavedFiles = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().Where(item => item.Header.ToString().EndsWith('*')).ToList();
+            if (unsavedFiles.Count == 0) return;
+
+            ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+            if (result == ContentDialogResult.Primary)
+            {
+                unsavedFiles.ForEach(item => item.Header = item.Header.ToString().TrimEnd('*'));
+                ApiVault.Get().OnClosed();
+                Close();
+            }
+        }
+        else
+        {
+            SessionRestorer.SaveSession();
         }
     }
 
@@ -86,8 +96,11 @@ public partial class MainWindow : AppWindow
 
         await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 
+        bool sessionFilesAdded = false;
+        if (ApiVault.Get().GetAppConfig().EnableSessionRestoring) sessionFilesAdded = await SessionRestorer.RestoreSession();
+
         string[] startupFiles = ApiVault.Get().GetStartupFiles();
-        if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash()) FileHandler.NewFile();
+        if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash() && !sessionFilesAdded) FileHandler.NewFile();
         startupFiles.ToList().ForEach(FileHandler.OpenFile);
 
         Dispatcher.UIThread.Post(() =>
