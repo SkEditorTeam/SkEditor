@@ -72,7 +72,6 @@
 	<system:String x:Key="DownloadingMissingFiles">Letöltés</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Nem sikerült letölteni a hiányzó fájlokat. Kérjük, próbálja meg később újra.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">Nincsenek mentett változtatásai ebben a fájlban. Biztosan be akarja zárni?</system:String>
-	<system:String x:Key="ClosingAllFiles">Biztosan be akarja zárni az összes fájlt? Minden mentetlen változtatás elveszik.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">Legalább egy fájlban vannak mentetlen változtatásai. Biztosan be akarja zárni az alkalmazást?</system:String>
 	<system:String x:Key="ChangesDetected">Ezt a fájlt külsőleg megváltoztatták.\nSzeretné újratölteni, és esetleg elveszíteni a SkEditorben végzett változtatásokat?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Frissítés letöltése</system:String>

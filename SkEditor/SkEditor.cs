@@ -29,7 +29,7 @@ public class SkEditor : ISkEditorAPI
     {
         if (args.Length > 0)
         {
-            Serilog.Log.Debug("Starting SkEditor with args: " + string.Join(", ", args));
+            //Serilog.Log.Debug("Starting SkEditor with args: " + string.Join(", ", args));
             startupFiles = args.Where(File.Exists).ToArray();
         }
 

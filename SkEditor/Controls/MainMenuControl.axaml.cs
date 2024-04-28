@@ -37,8 +37,13 @@ public partial class MainMenuControl : UserControl
         });
         MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFile);
         MenuItemPublish.Command = new RelayCommand(() => new PublishWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
-        MenuItemClose.Command = new RelayCommand(FileHandler.CloseCurrentFile);
-        MenuItemCloseAll.Command = new RelayCommand(FileHandler.CloseAllFiles);
+
+        MenuItemClose.Command = new RelayCommand(FileCloser.CloseCurrentFile);
+        MenuItemCloseAll.Command = new RelayCommand(FileCloser.CloseAllFiles);
+        MenuItemCloseAllExceptCurrent.Command = new RelayCommand(FileCloser.CloseAllExceptCurrent);
+        MenuItemCloseAllUnsaved.Command = new RelayCommand(FileCloser.CloseUnsaved);
+        MenuItemCloseAllLeft.Command = new RelayCommand(FileCloser.CloseAllToTheLeft);
+        MenuItemCloseAllRight.Command = new RelayCommand(FileCloser.CloseAllToTheRight);
 
         MenuItemCopy.Command = new RelayCommand(() => ApiVault.Get().GetTextEditor().Copy());
         MenuItemPaste.Command = new RelayCommand(() => ApiVault.Get().GetTextEditor().Paste());

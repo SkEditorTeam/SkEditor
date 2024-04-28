@@ -71,7 +71,6 @@
 	<system:String x:Key="DownloadingMissingFilesDescriptionItems">项目选择器使用的文件丢失，正在下载中。</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">无法下载缺失的文件。请稍后重试。</system:String>
 	<system:String x:Key="ClosingUnsavedFile">此文件有未保存的更改。确定要关闭吗？</system:String>
-	<system:String x:Key="ClosingAllFiles">确定要关闭所有文件吗？任何未保存的更改将丢失。</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">至少有一个文件有未保存的更改。确定要关闭应用程序吗？</system:String>
 	<system:String x:Key="ChangesDetected">此文件已在外部更改。\n是否要重新加载它，可能会丢失在SkEditor中进行的更改？</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">正在下载更新</system:String>

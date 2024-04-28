@@ -71,7 +71,6 @@
 	<system:String x:Key="DownloadingMissingFilesDescriptionAnalyzer">Die vom Analysetool verwendete Datei fehlt und wird jetzt heruntergeladen.</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Das Herunterladen fehlender Dateien ist fehlgeschlagen. Bitte versuchen Sie es später erneut.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">Sie haben ungespeicherte Änderungen in dieser Datei. Möchten Sie sie wirklich schließen?</system:String>
-	<system:String x:Key="ClosingAllFiles">Möchten Sie wirklich alle Dateien schließen? Alle ungespeicherten Änderungen gehen verloren.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">Sie haben in mindestens einer Datei ungespeicherte Änderungen. Möchten Sie die Anwendung wirklich schließen?</system:String>
 
 	<!-- Publish Window -->

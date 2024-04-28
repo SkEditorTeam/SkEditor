@@ -89,7 +89,7 @@
 	<system:String x:Key="DownloadingMissingFiles">Pobieranie</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Pobieranie brakujących plików nie powiodło się. Spróbuj ponownie.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">Masz w tym pliku niezapisane zmiany. Jesteś pewny, że chcesz go zamknąć?</system:String>
-	<system:String x:Key="ClosingAllFiles">Jesteś pewny, że chcesz zamknąć wszystkie pliki? Wszelkie niezapisane zmiany zostaną utracone.</system:String>
+	<system:String x:Key="ClosingFiles">Jesteś pewny, że chcesz zamknąć te pliki? Wszelkie niezapisane zmiany zostaną utracone.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">Masz niezapisane zmiany w przynajmniej jednym pliku. Jesteś pewny, że chcesz zamknąć aplikację?</system:String>
 	<system:String x:Key="ChangesDetected">Ten plik został zmodyfikowany poza programem.\nCzy chcesz go przeładować i ewentualnie stracić zmiany dokonane w SkEditorze?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Pobieranie aktualizacji</system:String>

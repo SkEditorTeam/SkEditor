@@ -102,7 +102,6 @@ public partial class TextEditorEventHandler
 
         if (tab.Header.ToString().EndsWith('*')) return;
 
-        Log.Debug("Adding asterisk to tab header");
         tab.Header += "*";
     }
 

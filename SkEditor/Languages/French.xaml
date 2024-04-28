@@ -83,7 +83,6 @@
 	<system:String x:Key="DownloadingMissingFiles">Téléchargement</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Échec du téléchargement des fichiers manquants. Veuillez réessayer ultérieurement.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">Vous avez des modifications non enregistrées dans ce fichier. Êtes-vous sûr de vouloir le fermer ?</system:String>
-	<system:String x:Key="ClosingAllFiles">Êtes-vous sûr de vouloir fermer tous les fichiers ? Toutes les modifications non enregistrées seront perdues.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">Vous avez des modifications non enregistrées dans au moins un fichier. Êtes-vous sûr de vouloir fermer l'application ?</system:String>
 	<system:String x:Key="ChangesDetected">Ce fichier a été modifié de manière externe.\nVoulez-vous le recharger et risquer de perdre les modifications apportées dans SkEditor ?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Téléchargement de la mise à jour</system:String>

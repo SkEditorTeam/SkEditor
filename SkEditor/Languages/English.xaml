@@ -89,7 +89,7 @@
 	<system:String x:Key="DownloadingMissingFiles">Downloading</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Failed to download missing files. Please try again later.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">You have unsaved changes in this file. Are you sure you want to close it?</system:String>
-	<system:String x:Key="ClosingAllFiles">Are you sure you want to close all the files? Any unsaved changes will be lost.</system:String>
+	<system:String x:Key="ClosingFiles">Are you sure you want to close the files? Any unsaved changes will be lost.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">You have unsaved changes in at least one file. Are you sure you want to close the application?</system:String>
 	<system:String x:Key="ChangesDetected">This file was changed externally.\nDo you want to reload it and possibly lose changes made in SkEditor?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Downloading update</system:String>

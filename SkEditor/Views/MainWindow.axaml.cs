@@ -40,7 +40,7 @@ public partial class MainWindow : AppWindow
     private void AddEvents()
     {
         TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
-        TabControl.TabCloseRequested += (sender, e) => FileHandler.CloseFile(e);
+        TabControl.TabCloseRequested += (sender, e) => FileCloser.CloseFile(e);
         TabControl.SelectionChanged += (_, _) => SideBar.ParserPanel.Panel.ParseCurrentFile();
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;

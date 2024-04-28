@@ -71,7 +71,6 @@
 	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Los archivos utilizados por el selector de elementos faltan y se están descargando ahora.</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Error al descargar archivos faltantes. Por favor, inténtalo de nuevo más tarde.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">Tienes cambios sin guardar en este archivo. ¿Estás seguro de que quieres cerrarlo?</system:String>
-	<system:String x:Key="ClosingAllFiles">¿Estás seguro de que quieres cerrar todos los archivos? Se perderán los cambios no guardados.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">Tienes cambios sin guardar en al menos un archivo. ¿Estás seguro de que quieres cerrar la aplicación?</system:String>
 	<system:String x:Key="ChangesDetected">Este archivo ha sido modificado externamente.\n¿Quieres recargarlo y posiblemente perder cambios realizados en SkEditor?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Descargando actualización</system:String>
