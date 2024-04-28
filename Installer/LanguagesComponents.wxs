@@ -3,31 +3,31 @@
 		<ComponentGroup Id="LanguagesComponents" Directory="LanguagesFolder">
 			<Component>
 				<CreateFolder Directory="INSTALLFOLDER" Subdirectory="Languages"/>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\English.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\English.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Polish.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\Polish.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\French.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\French.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Russian.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\Russian.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\German.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\German.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Chinese.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\Chinese.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Spanish.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\Spanish.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Hungarian.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\Hungarian.xaml" />
 			</Component>
 			<Component>
-				<File Source="..\SkEditor\bin\Release\net8.0\publish\win-x64-r2r\Languages\Korean.xaml" />
+				<File Source="..\SkEditor\bin\Release\publish\win\Languages\Korean.xaml" />
 			</Component>
 		</ComponentGroup>
 	</Fragment>
