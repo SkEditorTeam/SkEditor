@@ -48,16 +48,16 @@ public static class ProjectOpener
         ProjectRootFolder = new Folder(folder) { IsExpanded = true };
         FileTreeView.ItemsSource = new ObservableCollection<StorageElement> { ProjectRootFolder };
 
-        FileSystemWatcher watcher = new(folder)
-        {
-            EnableRaisingEvents = true
-        };
+        //FileSystemWatcher watcher = new(folder)
+        //{
+        //    EnableRaisingEvents = true
+        //};
 
-        watcher.Renamed += (sender, e) =>
-        {
-            string path = Uri.UnescapeDataString(e.OldFullPath).Replace("/", "\\");
-            ProjectRootFolder.GetItemByPath(path)?.RenameElement(e.Name, false);
-        };
+        //watcher.Renamed += (sender, e) =>
+        //{
+        //    string path = Uri.UnescapeDataString(e.OldFullPath).Replace("/", "\\");
+        //    ProjectRootFolder.GetItemByPath(path)?.RenameElement(e.Name, false);
+        //};
 
         FileTreeView.DoubleTapped += (sender, e) =>
         {
