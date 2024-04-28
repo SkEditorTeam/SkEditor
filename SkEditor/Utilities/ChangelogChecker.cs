@@ -10,8 +10,9 @@ public static class ChangelogChecker
     [
         "Welcome to the new version of SkEditor!",
         "This version includes the following changes:",
-        "🔬 You can enable experimental features in the settings now!",
-        "✨ You can now fold code blocks! Enable as experiment in the settings.",
+        "🔬 Added Session Restoring: SkEditor now remembers your last opened files! Enable as experiment in the settings.",
+        "🗑️ Added more closing options to the menu.",
+        "🅰️ The default font now supports bold and italic styles.",
     ];
 
     public async static void Check()
