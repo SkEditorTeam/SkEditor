@@ -23,36 +23,34 @@
     <Border MinWidth="350" Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
 
         <Grid RowDefinitions="auto,auto,auto,auto,*,auto">
-            <TextBlock Grid.Row="0" Text="Code Parsing" FontWeight="DemiBold" Margin="20,10,20,10"/>
+            <TextBlock Grid.Row="0" Text="{DynamicResource CodeParserTitle}" FontWeight="DemiBold" Margin="20,10,20,10"/>
             <Separator Grid.Row="1" Margin="0,0,0,10"/>
-            <ui:InfoBar Margin="5,0" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Warning" Message="The code parser is still in beta! Report any bugs found in the Discord server."/>
+            <ui:InfoBar Margin="5,0" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Warning" Message="{DynamicResource CodeParserWarning}"/>
             <StackPanel Margin="10" Name="ParserDisabled" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Stretch" IsVisible="False" Spacing="10">
-                <TextBlock TextAlignment="Center" TextWrapping="Wrap">The code parser is still in beta and bugs may occur. It is disabled by default but you can enable it using the button below.</TextBlock>
-                <Button Name="EnableParser" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="accent">Enable</Button>
+                <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{DynamicResource CodeParserEnableInfo}"/>
+                <Button Name="EnableParser" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="accent" Content="{DynamicResource ConfirmButton}"/>
             </StackPanel>
             <Grid Grid.Row="3" ColumnDefinitions="*,*,auto" Margin="5">
                 <TextBox Grid.Column="0" x:DataType="viewModels:ParserFilterViewModel" 
-                         Watermark="Search ..." Margin="0 0 0 0"
+                         Watermark="{DynamicResource CodeParserSearch}" Margin="0 0 0 0"
                          Text="{Binding SearchText}"
                          Name="SearchBox"
-                         ToolTip.Tip="Filter by section's name"
-                         />
+                         ToolTip.Tip="{DynamicResource CodeParserFilterName}"/>
+				
                 <ComboBox Margin="5 0" Grid.Column="1" x:DataType="viewModels:ParserFilterViewModel" 
                           SelectedIndex="{Binding SelectedFilterIndex}"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch"
                           Name="TypeFilterBox"
-                          ToolTip.Tip="Filter the search by type"
-                          >
-                    <ComboBoxItem Content="Any" Tag="-" />
-                    
-                    <ComboBoxItem Content="Functions" Tag="functions" />
-                    <ComboBoxItem Content="Events" Tag="events" />
-                    <ComboBoxItem Content="Options" Tag="options" />
-                    <ComboBoxItem Content="Commands" Tag="commands" />
+                          ToolTip.Tip="{DynamicResource CodeParserFilterType}">
+                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeAny}" Tag="-" />
+                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeFunctions}" Tag="functions" />
+                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeEvents}" Tag="events" />
+                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeOptions}" Tag="options" />
+                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeCommands}" Tag="commands" />
                 </ComboBox>
                 <Button Grid.Column="2" Height="30" Width="30" Padding="0" Name="ClearSearch"
-                        ToolTip.Tip="Clear current filters">
+                        ToolTip.Tip="{DynamicResource CodeParserClearFilters}">
                     <ui:SymbolIcon Symbol="Clear" FontSize="20" Margin="0" />
                 </Button>
             </Grid>
@@ -85,7 +83,7 @@
                                     <Grid ColumnDefinitions="*,*">
                                         <TextBlock VerticalAlignment="Center" Text="{Binding LinesDisplay}" />
                                         <Button Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
-                                                Content="Navigate"
+                                                Content="{DynamicResource CodeParserNavigate}"
                                                 Name="NavigateToButton" Command="{Binding NavigateToCommand}" />
                                     </Grid>
                                     <Separator Margin="0,3"/>
@@ -101,7 +99,7 @@
                                                         <Grid ColumnDefinitions="*,*,Auto" Margin="0,2">
                                                             <TextBlock TextAlignment="Left" FontWeight="DemiBold" Text="{Binding Name}"/>
                                                             <TextBlock Grid.Column="1" TextAlignment="Left" Text="{Binding Type}"/>
-                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" ToolTip.Tip="Rename">
+                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" ToolTip.Tip="{DynamicResource CodeParserRename}">
                                                                 <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0" />
                                                             </Button>
                                                         </Grid>
@@ -121,7 +119,7 @@
                                                     <DataTemplate>
                                                         <Grid ColumnDefinitions="*,Auto" Margin="0,2">
                                                             <TextBlock TextAlignment="Left" FontStyle="{Binding Style}" Text="{Binding Name}"/>
-                                                            <Button Height="28" Width="28" Grid.Column="1" Command="{Binding Rename}" Padding="0" ToolTip.Tip="Rename">
+                                                            <Button Height="28" Width="28" Grid.Column="1" Command="{Binding Rename}" Padding="0" ToolTip.Tip="{DynamicResource CodeParserRename}">
                                                                 <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0" />
                                                             </Button>
                                                         </Grid>
@@ -141,10 +139,10 @@
                                                     <DataTemplate>
                                                         <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 2">
                                                             <TextBlock TextAlignment="Left" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Name}"/>
-                                                            <Button Height="28" Width="28" Grid.Column="1" Command="{Binding NavigateToDefinition}" Padding="0" ToolTip.Tip="Navigate to definition">
+                                                            <Button Height="28" Width="28" Grid.Column="1" Command="{Binding NavigateToDefinition}" Padding="0" ToolTip.Tip="{DynamicResource CodeParserNavigateToDefinition}">
                                                                 <ui:SymbolIcon Symbol="Go" FontSize="20" Margin="0" />
                                                             </Button>
-                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" Margin="4 0 0 0" ToolTip.Tip="Rename">
+                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" Margin="4 0 0 0" ToolTip.Tip="{DynamicResource CodeParserRename}">
                                                                 <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0" />
                                                             </Button>
                                                         </Grid>
@@ -164,7 +162,7 @@
                                                     <DataTemplate>
                                                         <Grid ColumnDefinitions="*,Auto" Margin="0 2">
                                                             <TextBlock TextAlignment="Left" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Name}"/>
-                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" ToolTip.Tip="Rename">
+                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" ToolTip.Tip="{DynamicResource CodeParserRename}">
                                                                 <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0" />
                                                             </Button>
                                                         </Grid>
@@ -184,7 +182,7 @@
                 <TextBlock Name="CannotParseInfoText" TextAlignment="Center" TextWrapping="Wrap" />
             </StackPanel>
             <StackPanel Grid.Row="5" HorizontalAlignment="Stretch" Margin="10">
-                <Button Name="ParseButton" HorizontalAlignment="Center">Parse Code</Button>
+                <Button Name="ParseButton" HorizontalAlignment="Center" Content="{DynamicResource CodeParserParseCode}"/>
             </StackPanel>
         </Grid>
     </Border>

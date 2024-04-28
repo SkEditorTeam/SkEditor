@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
@@ -10,6 +9,7 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Parser;
+using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using System;
@@ -30,6 +30,13 @@ public class FileHandler
     {
         try
         {
+            string? folder = e.Data.GetFiles().FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path.AbsolutePath;
+            if (folder != null)
+            {
+                ProjectOpener.OpenProject(folder);
+                return;
+            }
+
             e.Data.GetFiles().Where(f => !Directory.Exists(f.Path.AbsolutePath)).ToList().ForEach(file =>
             {
                 OpenFile(file.Path.AbsolutePath);
@@ -43,9 +50,8 @@ public class FileHandler
 
     public static void TabSwitchAction()
     {
-        var item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
-        if (item is null)
-            return;
+        if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem item) return;
+
         var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(item.Header.ToString());
         MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
@@ -71,7 +77,6 @@ public class FileHandler
         });
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-
         await SyntaxLoader.RefreshSyntaxAsync();
     }
 
@@ -100,7 +105,7 @@ public class FileHandler
         if (tabItem == null) return;
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-        if (untitledFileOpen) await CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
+        if (untitledFileOpen) await FileCloser.CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
 
         OpenedFiles.Add(new OpenedFile()
         {
@@ -230,54 +235,8 @@ public class FileHandler
             Content = absolutePath,
         };
         ToolTip.SetTip(item, toolTip);
-    }
 
-    public async static void CloseFile(TabViewTabCloseRequestedEventArgs e) => await CloseFile(e.Tab);
-    public async static void CloseCurrentFile() => await CloseFile(ApiVault.Get().GetTabView().SelectedItem as TabViewItem);
-
-    public async static void CloseAllFiles()
-    {
-        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingAllFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
-        if (result != ContentDialogResult.Primary) return;
-
-        List<TabViewItem> tabItems = (ApiVault.Get().GetTabView().TabItems as IList)?.Cast<TabViewItem>().ToList();
-        tabItems.ForEach(DisposeEditorData);
-        tabItems.ForEach(tabItem => (ApiVault.Get().GetTabView().TabItems as IList)?.Remove(tabItem));
-        NewFile();
-    }
-
-    public static async Task CloseFile(TabViewItem item)
-    {
-        if (item.Content is TextEditor editor && !ApiVault.Get().OnFileClosing(editor)) return;
-
-
-
-        DisposeEditorData(item);
-
-        string header = item.Header.ToString();
-
-        if (header.EndsWith('*'))
-        {
-            ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingUnsavedFile"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
-            if (result != ContentDialogResult.Primary) return;
-        }
-
-        var tabView = ApiVault.Get().GetTabView();
-        var tabItems = tabView.TabItems as IList;
-
-        OpenedFiles.RemoveAll(openedFile => openedFile.TabViewItem == item);
-        tabItems?.Remove(item);
-
-        if (tabItems.Count == 0) NewFile();
-        FileBuilder.OpenedFiles.Remove(header);
-        TabSwitchAction();
-    }
-
-    private static void DisposeEditorData(TabViewItem item)
-    {
-        if (item.Content is not TextEditor editor) return;
-
-        TextEditorEventHandler.ScrollViewers.Remove(editor);
+        AddChangeChecker(absolutePath, item);
     }
 
     public static void SwitchTab(int index)

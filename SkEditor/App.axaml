@@ -46,8 +46,7 @@
 		<Brush x:Key="SearchPanelBackgroundBrush">#161616</Brush>
 		
 		<Thickness x:Key="FlyoutContentPadding">10</Thickness>
-
 		
-		<FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/JetBrainsMono.ttf#JetBrains Mono</FontFamily>
+		<FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/JetBrainsMono#JetBrains Mono</FontFamily>
 	</Application.Resources>
 </Application>

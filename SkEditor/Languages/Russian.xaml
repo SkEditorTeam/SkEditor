@@ -27,7 +27,6 @@
 	<system:String x:Key="MenuHeaderSaveAs">Сохранить как</system:String>
 	<system:String x:Key="MenuHeaderPublish">Опубликовать</system:String>
 	<system:String x:Key="MenuHeaderClose">Закрыть</system:String>
-	<system:String x:Key="MenuHeaderCloseAll">Закрыть все</system:String>
 
 	<!-- Меню редактирования -->
 	<system:String x:Key="MenuHeaderCopy">Копировать</system:String>
@@ -72,7 +71,6 @@
 	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Файлы, используемые селектором элементов, отсутствуют и сейчас загружаются.</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Не удалось загрузить отсутствующие файлы. Пожалуйста, повторите попытку позже.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">В этом файле есть несохраненные изменения. Вы уверены, что хотите закрыть его?</system:String>
-	<system:String x:Key="ClosingAllFiles">Вы уверены, что хотите закрыть все файлы? Все несохраненные изменения будут потеряны.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">У вас есть несохраненные изменения хотя бы в одном файле. Вы уверены, что хотите закрыть приложение?</system:String>
 	<system:String x:Key="ChangesDetected">Этот файл был изменен извне.\nХотите перезагрузить его и, возможно, потерять изменения, внесенные в SkEditor?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Загрузка обновления</system:String>

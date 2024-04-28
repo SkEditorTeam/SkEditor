@@ -53,20 +53,14 @@ public partial class ParserSidebarPanel : UserControl
         ParseButton.IsEnabled = CodeParserEnabled;
 
         ParseButton.Click += (_, _) => ParseCurrentFile();
-        EnableParser.Click += async (_, _) =>
+        EnableParser.Click += (_, _) =>
         {
-            var response = await ApiVault.Get().ShowMessageWithIcon("Enable Code Parser?", "The code parser let you navigate easily in your code and rename variables, options, and more.\n\nKeep in mind it is still in beta and may BREAK your scripts, so make sure to make a backup before that.",
-                new SymbolIconSource() { Symbol = Symbol.Alert });
+            ApiVault.Get().GetAppConfig().EnableCodeParser = true;
+            ApiVault.Get().GetAppConfig().Save();
 
-            if (response == ContentDialogResult.Primary)
-            {
-                ApiVault.Get().GetAppConfig().EnableCodeParser = true;
-                ApiVault.Get().GetAppConfig().Save();
-
-                ParserDisabled.IsVisible = false;
-                ScrollViewer.IsVisible = true;
-                ParseButton.IsEnabled = true;
-            }
+            ParserDisabled.IsVisible = false;
+            ScrollViewer.IsVisible = true;
+            ParseButton.IsEnabled = true;
         };
         ClearSearch.Click += (_, _) => ClearSearchFilter();
         SearchBox.KeyUp += (_, _) => UpdateSearchFilter();
@@ -86,7 +80,7 @@ public partial class ParserSidebarPanel : UserControl
 
     public void UpdateSearchFilter()
     {
-        Refresh(Sections.ToList());
+        Refresh([.. Sections]);
     }
 
     public void ClearSearchFilter()
@@ -94,7 +88,7 @@ public partial class ParserSidebarPanel : UserControl
         var viewModel = (ParserFilterViewModel)DataContext;
         viewModel.SearchText = "";
         viewModel.SelectedFilterIndex = 0;
-        Refresh(Sections.ToList());
+        Refresh([.. Sections]);
     }
 
     public void UpdateInformationBox(bool isToNotifyUnParsing = false)
@@ -110,14 +104,14 @@ public partial class ParserSidebarPanel : UserControl
         {
             Sections.Clear();
             CannotParseInfo.IsVisible = true;
-            CannotParseInfoText.Text = "File changed, you need to parse it again.";
+            CannotParseInfoText.Text = Translation.Get("CodeParserFileChanged");
             return;
         }
 
         if (Sections.Count == 0)
         {
             CannotParseInfo.IsVisible = true;
-            CannotParseInfoText.Text = "No sections found in the code. Maybe you should write something? :)";
+            CannotParseInfoText.Text = Translation.Get("CodeParserNoSections");
             return;
         }
 
@@ -126,7 +120,7 @@ public partial class ParserSidebarPanel : UserControl
         {
             Sections.Clear();
             CannotParseInfo.IsVisible = true;
-            CannotParseInfoText.Text = "This file cannot be parsed, as it do not look likes a script file.";
+            CannotParseInfoText.Text = Translation.Get("CodeParserBadFormat");
             return;
         }
 

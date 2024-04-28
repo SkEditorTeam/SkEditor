@@ -65,7 +65,8 @@
                                            Symbol="ChevronRight"
                                            Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
                                            VerticalAlignment="Center"
-                                           Grid.Column="3"
+										   HorizontalAlignment="Right"
+                                           Grid.Column="2"
                                            FontSize="18"
                                            Foreground="{DynamicResource MenuFlyoutSubItemChevron}"/>
                         </Grid>

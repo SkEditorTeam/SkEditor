@@ -5,7 +5,7 @@ using System;
 namespace SkEditor.Utilities.Styling;
 public class FontFamilyConverter : JsonConverter<FontFamily?>
 {
-    public override FontFamily ReadJson(JsonReader reader, Type objectType, FontFamily existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override FontFamily ReadJson(JsonReader reader, Type objectType, FontFamily? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType != JsonToken.String) return null;
 
@@ -13,7 +13,7 @@ public class FontFamilyConverter : JsonConverter<FontFamily?>
         return new FontFamily(fontFamilyName);
     }
 
-    public override void WriteJson(JsonWriter writer, FontFamily value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, FontFamily? value, JsonSerializer serializer)
     {
         if (value == null) return;
         writer.WriteValue(value.Name);

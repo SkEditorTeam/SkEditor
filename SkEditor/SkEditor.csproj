@@ -8,9 +8,9 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>SkEditor.ico</ApplicationIcon>
 		<PublishSingleFile>true</PublishSingleFile>
-		<AssemblyVersion>2.3.1</AssemblyVersion>
-		<FileVersion>2.3.1</FileVersion>
-		<Version>2.3.1</Version>
+		<AssemblyVersion>2.4.0</AssemblyVersion>
+		<FileVersion>2.4.0</FileVersion>
+		<Version>2.4.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -31,6 +31,13 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf" />
+	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf" />
+	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf" />
+	  <None Remove="Languages\English.xaml" />
+	</ItemGroup>
 	<ItemGroup>
 		<Content Update="Languages\*">
 			<Generator>MSBuild:Compile</Generator>
@@ -43,10 +50,10 @@
 		<PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.10" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
 		<PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.0.10" />
-		<PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.16" />
+		<PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.17" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
-		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.10.1" />
+		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.10.4" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -59,7 +66,7 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="SkAvaloniaEdit" Version="11.0.6.6" />
 		<PackageReference Include="SkFluentAvalonia" Version="2.0.5.1" />
-		<PackageReference Include="Svg.Skia" Version="1.0.0.16" />
+		<PackageReference Include="Svg.Skia" Version="1.0.0.17" />
 		<PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
 	</ItemGroup>
 
@@ -145,7 +152,7 @@
 		<Compile Update="Views\FileTypes\Images\ImageViewer.axaml.cs">
 		  <DependentUpon>ImageViewer.axaml</DependentUpon>
 		</Compile>
-		<Compile Update="Controls\Sidebar\CodeParser\ParserSidebarPanel.axaml.cs">
+		<Compile Update="Controls\Sidebar\ParserSidebarPanel.axaml.cs">
 		  <DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
 		  <SubType>Code</SubType>
 		</Compile>

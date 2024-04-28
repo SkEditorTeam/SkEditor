@@ -63,7 +63,7 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="Check for external file changes" IconSource="{StaticResource CheckForChangesIcon}">
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralChangeChecker}" IconSource="{StaticResource CheckForChangesIcon}">
 					<ui:SettingsExpander.Footer>
 						<ToggleSwitch Name="CheckForChangesToggleSwitch" IsChecked="{Binding CheckForChanges}"/>
 					</ui:SettingsExpander.Footer>
@@ -76,7 +76,7 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="Check for updates" IconSource="{StaticResource CheckForUpdatesIcon}">
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralCheckForUpdates}" IconSource="{StaticResource CheckForUpdatesIcon}">
 					<ui:SettingsExpander.Footer>
 						<ToggleSwitch Name="CheckForUpdatesToggleSwitch" IsChecked="{Binding CheckForUpdates}"/>
 					</ui:SettingsExpander.Footer>

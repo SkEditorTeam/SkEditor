@@ -30,7 +30,6 @@
 	<system:String x:Key="MenuHeaderSaveAs">Enregistrer sous</system:String>
 	<system:String x:Key="MenuHeaderPublish">Publier</system:String>
 	<system:String x:Key="MenuHeaderClose">Fermer</system:String>
-	<system:String x:Key="MenuHeaderCloseAll">Tout fermer</system:String>
 
 	<!-- Menu Édition -->
 	<system:String x:Key="MenuHeaderCopy">Copier</system:String>
@@ -84,7 +83,6 @@
 	<system:String x:Key="DownloadingMissingFiles">Téléchargement</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Échec du téléchargement des fichiers manquants. Veuillez réessayer ultérieurement.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">Vous avez des modifications non enregistrées dans ce fichier. Êtes-vous sûr de vouloir le fermer ?</system:String>
-	<system:String x:Key="ClosingAllFiles">Êtes-vous sûr de vouloir fermer tous les fichiers ? Toutes les modifications non enregistrées seront perdues.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">Vous avez des modifications non enregistrées dans au moins un fichier. Êtes-vous sûr de vouloir fermer l'application ?</system:String>
 	<system:String x:Key="ChangesDetected">Ce fichier a été modifié de manière externe.\nVoulez-vous le recharger et risquer de perdre les modifications apportées dans SkEditor ?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Téléchargement de la mise à jour</system:String>
@@ -109,14 +107,12 @@
 	
 	<!-- Projets -->
 	<system:String x:Key="ProjectExplorerTitle">Explorateur</system:String>
-	<system:String x:Key="ProjectExplorerInfoText">Les projets sont encore en version bêta et des bugs peuvent survenir !</system:String>
 	<system:String x:Key="ProjectExplorerInfoButton">Ouvrir le dossier</system:String>
 	<system:String x:Key="ProjectRenameText">Renommer en...</system:String>
 	<system:String x:Key="ProjectRenameErrorNameEmpty">Le nom ne peut pas être vide.</system:String>
 	<system:String x:Key="ProjectRenameErrorParentNull">Le parent ne peut pas être nul.</system:String>
-	<system:String x:Key="ProjectRenameErrorNameExists">Un fichier ou un dossier portant ce nom existe déjà.</system:String>
+	<system:String x:Key="ProjectErrorNameExists">Un fichier ou un dossier portant ce nom existe déjà.</system:String>
 	<system:String x:Key="ProjectRenameErrorSameName">Le nouveau nom est le même que l'ancien nom.</system:String>
-	<system:String x:Key="ProjectCreateErrorNameExists">Un fichier ou un dossier portant ce nom existe déjà.</system:String>
 	<system:String x:Key="ProjectCreateFileName">Nom du fichier</system:String>
 	<system:String x:Key="ProjectCreateFolderName">Nom du dossier</system:String>
 	<system:String x:Key="ProjectCreateTemplate">Modèle</system:String>
@@ -127,7 +123,6 @@
 	<system:String x:Key="FileAssociationSelectionWindowOfficialItem">Il s'agit d'un type de fichier officiel de SkEditor.</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">Il s'agit d'un type de fichier non officiel provenant d'une extension, {0}.</system:String>
 	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Se souvenir de mon choix</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowConfirm">Confirmer</system:String>
 
 	<!-- Paramètres -->
 	<system:String x:Key="SettingsEnabled">Activé</system:String>

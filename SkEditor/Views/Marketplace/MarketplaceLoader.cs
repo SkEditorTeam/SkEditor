@@ -121,7 +121,7 @@ public class MarketplaceItem
 
 public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
 {
-    public override MarketplaceItem ReadJson(JsonReader reader, Type objectType, MarketplaceItem existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override MarketplaceItem ReadJson(JsonReader reader, Type objectType, MarketplaceItem? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         JObject jsonObject = JObject.Load(reader);
         string itemType = jsonObject["type"]?.Value<string>();
@@ -139,7 +139,7 @@ public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
         };
     }
 
-    public override void WriteJson(JsonWriter writer, MarketplaceItem value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, MarketplaceItem? value, JsonSerializer serializer)
     {
         throw new NotImplementedException();
     }
