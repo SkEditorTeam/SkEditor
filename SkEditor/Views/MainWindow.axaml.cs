@@ -71,18 +71,22 @@ public partial class MainWindow : AppWindow
         if (!ApiVault.Get().GetAppConfig().EnableSessionRestoring)
         {
             List<TabViewItem> unsavedFiles = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().Where(item => item.Header.ToString().EndsWith('*')).ToList();
-            if (unsavedFiles.Count == 0) return;
+            if (unsavedFiles.Count == 0)
+            {
+                e.Cancel = false;
+                return;
+            }
 
             ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
             if (result == ContentDialogResult.Primary)
             {
                 unsavedFiles.ForEach(item => item.Header = item.Header.ToString().TrimEnd('*'));
-                ApiVault.Get().OnClosed();
-                Close();
+                e.Cancel = false;
             }
         }
         else
         {
+            e.Cancel = false;
             SessionRestorer.SaveSession();
         }
     }
