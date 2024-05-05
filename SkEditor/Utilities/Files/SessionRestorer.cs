@@ -55,6 +55,9 @@ public static class SessionRestorer
     public static async Task<bool> RestoreSession()
     {
         bool filesAdded = false;
+
+        if (!Directory.Exists(sessionFolder)) return filesAdded;
+
         foreach (string file in Directory.GetFiles(sessionFolder))
         {
             string path = file;
