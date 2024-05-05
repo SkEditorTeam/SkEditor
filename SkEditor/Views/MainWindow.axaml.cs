@@ -80,8 +80,8 @@ public partial class MainWindow : AppWindow
             ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
             if (result == ContentDialogResult.Primary)
             {
-                unsavedFiles.ForEach(item => item.Header = item.Header.ToString().TrimEnd('*'));
-                e.Cancel = false;
+                AlreadyClosed = true;
+                Close();
             }
         }
         else
