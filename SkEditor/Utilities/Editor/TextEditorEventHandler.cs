@@ -19,6 +19,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Editor;
 public partial class TextEditorEventHandler
@@ -98,6 +99,17 @@ public partial class TextEditorEventHandler
         {
             await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
             return;
+        }
+
+        if (ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        {
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                var parser = FileHandler.OpenedFiles.Find(file => file.TabViewItem == tab)?.Parser;
+                if (parser == null) return;
+
+                parser.Parse();
+            });
         }
 
         if (tab.Header.ToString().EndsWith('*')) return;

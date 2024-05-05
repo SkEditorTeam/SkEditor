@@ -50,9 +50,17 @@ public partial class ParserSidebarPanel : UserControl
 
         ParserDisabled.IsVisible = !CodeParserEnabled;
         ScrollViewer.IsVisible = CodeParserEnabled;
-        ParseButton.IsEnabled = CodeParserEnabled;
+        
+        if (ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        {
+            ParseButton.IsVisible = false;
+        }
+        else
+        {
+            ParseButton.IsEnabled = CodeParserEnabled;
+            ParseButton.Click += (_, _) => ParseCurrentFile();
+        }
 
-        ParseButton.Click += (_, _) => ParseCurrentFile();
         EnableParser.Click += (_, _) =>
         {
             ApiVault.Get().GetAppConfig().EnableCodeParser = true;
