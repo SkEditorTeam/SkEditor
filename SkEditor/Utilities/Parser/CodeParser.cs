@@ -1,4 +1,5 @@
 ﻿using AvaloniaEdit;
+using Serilog;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using System.Collections.Generic;
@@ -66,7 +67,7 @@ public partial class CodeParser : INotifyPropertyChanged
         for (var lineIndex = 0; lineIndex < lines.Count; lineIndex++)
         {
             var line = lines[lineIndex];
-            if (line.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(line))
                 continue;
 
             if (SectionRegex().IsMatch(line) && !line.StartsWith(' ') && !line.StartsWith('\t') && !line.StartsWith('#'))
