@@ -194,6 +194,7 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
+        editor.TextArea.TextEntered += TextEditorEventHandler.CheckForSkDoc;
         if (!ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
         {
             editor.TextChanged += (_, _) => ApiVault.Get().GetOpenedFile()?.Parser?.SetUnparsed();

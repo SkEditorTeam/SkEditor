@@ -110,9 +110,29 @@ public partial class TextEditorEventHandler
             });
         }
 
+        
+
         if (tab.Header.ToString().EndsWith('*')) return;
 
         tab.Header += "*";
+    }
+
+    public static void CheckForSkDoc(object? sender, TextInputEventArgs e)
+    {
+        string text = e.Text;
+        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        if (textEditor == null) return;
+
+        int offset = textEditor.CaretOffset;
+        SimpleSegment segment = TextEditorUtilities.GetSegmentBeforeOffset(offset, textEditor.Document);
+        if (segment == SimpleSegment.Invalid) return;
+
+        string segmentText = textEditor.Document.GetText(segment);
+
+        if (segmentText == "###")
+        {
+            //textEditor.Document.Insert(offset, "
+        }
     }
 
     public static void DoAutoIndent(object? sender, TextInputEventArgs e)

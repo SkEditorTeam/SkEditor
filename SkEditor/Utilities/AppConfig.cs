@@ -46,6 +46,7 @@ public class AppConfig
     public bool EnableBetterPairing { get; set; } = false;
     public bool EnableSessionRestoring { get; set; } = false;
     public bool EnableRealtimeCodeParser { get; set; } = false;
+    public bool EnableSkDoc { get; set; } = false;
 
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
