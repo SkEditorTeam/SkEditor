@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
@@ -55,7 +56,11 @@ public partial class MainMenuControl : UserControl
         MenuItemDuplicate.Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(ApiVault.Get().GetTextEditor().TextArea));
         MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(ApiVault.Get().GetTextEditor().TextArea));
 
-        MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
+        MenuItemRefreshSyntax.Command = new RelayCommand(() =>
+        {
+            TextEditor editor = ApiVault.Get().GetTextEditor();
+            if (editor != null) SyntaxLoader.Load(editor);
+        });
 
         MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemGenerateGui.Command = new RelayCommand(() => new GuiGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));

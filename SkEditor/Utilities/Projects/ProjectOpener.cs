@@ -5,7 +5,6 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.Projects.Elements;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;

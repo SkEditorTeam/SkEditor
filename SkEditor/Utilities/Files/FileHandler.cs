@@ -7,10 +7,8 @@ using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Projects;
-using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using System;
 using System.Collections;
@@ -77,7 +75,6 @@ public class FileHandler
         });
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-        await SyntaxLoader.RefreshSyntaxAsync();
     }
 
     public async static void OpenFile()
@@ -118,8 +115,6 @@ public class FileHandler
         });
 
         AddChangeChecker(path, tabItem);
-
-        await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
     }
 
     private static void AddChangeChecker(string path, TabViewItem tabItem)

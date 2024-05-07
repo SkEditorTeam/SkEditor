@@ -1,5 +1,4 @@
 ﻿using AvaloniaEdit;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using System.Collections.Generic;

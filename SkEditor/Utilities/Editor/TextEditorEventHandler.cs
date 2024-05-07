@@ -8,7 +8,6 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.ViewModels;
@@ -19,7 +18,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Editor;
 public partial class TextEditorEventHandler

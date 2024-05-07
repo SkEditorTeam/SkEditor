@@ -1,8 +1,7 @@
 ﻿using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities.Syntax;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +39,7 @@ public static class SessionRestorer
             else
             {
                 string name = Path.GetFileName(path);
-                textToWrite = $"##SKEDITOR RESTORE:{path}##\n" + editor.Text; 
+                textToWrite = $"##SKEDITOR RESTORE:{path}##\n" + editor.Text;
                 path = Path.Combine(sessionFolder, name);
             }
 

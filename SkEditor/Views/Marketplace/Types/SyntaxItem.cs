@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
-using SkEditor.Utilities.Syntax;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,60 +22,60 @@ public class SyntaxItem : MarketplaceItem
 
     public async override void Install()
     {
-        string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        //string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
 
-        List<FileSyntax> installedSyntaxes = [];
-        bool allInstalled = true;
-        foreach (string folder in ItemSyntaxFolders)
-        {
-            var folderName = folder.Split('/').Last();
-            string localSyntaxPath = Path.Combine(baseLocalSyntaxPath,
-                folderName);
-            Directory.CreateDirectory(localSyntaxPath);
-            allInstalled = allInstalled && await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
-            allInstalled = allInstalled && await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
+        //List<FileSyntax> installedSyntaxes = [];
+        //bool allInstalled = true;
+        //foreach (string folder in ItemSyntaxFolders)
+        //{
+        //    var folderName = folder.Split('/').Last();
+        //    string localSyntaxPath = Path.Combine(baseLocalSyntaxPath,
+        //        folderName);
+        //    Directory.CreateDirectory(localSyntaxPath);
+        //    allInstalled = allInstalled && await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
+        //    allInstalled = allInstalled && await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
 
-            if (!allInstalled)
-                break;
+        //    if (!allInstalled)
+        //        break;
 
-            try
-            {
-                ApiVault.Get().Log("Load syntax called ");
-                installedSyntaxes.Add(await SyntaxLoader.LoadSyntax(localSyntaxPath));
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, $"Failed to load syntax {folderName}!");
-                ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
-                return;
-            }
-        }
+        //    try
+        //    {
+        //        ApiVault.Get().Log("Load syntax called ");
+        //        installedSyntaxes.Add(await SyntaxLoader.LoadSyntax(localSyntaxPath));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Log.Error(e, $"Failed to load syntax {folderName}!");
+        //        ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+        //        return;
+        //    }
+        //}
 
-        if (!allInstalled)
-        {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
-            return;
-        }
+        //if (!allInstalled)
+        //{
+        //    ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+        //    return;
+        //}
 
-        string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
-        message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
+        //string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
+        //message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
 
-        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon("Success", message,
-            new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonContent: "MarketplaceEnableNow",
-            closeButtonContent: "Okay");
+        //ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon("Success", message,
+        //    new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonContent: "MarketplaceEnableNow",
+        //    closeButtonContent: "Okay");
 
-        if (result == ContentDialogResult.Primary)
-        {
-            foreach (var syntax in installedSyntaxes)
-            {
-                SyntaxLoader.SelectSyntax(syntax);
-            }
+        //if (result == ContentDialogResult.Primary)
+        //{
+        //    foreach (var syntax in installedSyntaxes)
+        //    {
+        //        SyntaxLoader.SelectSyntax(syntax);
+        //    }
 
-            SyntaxLoader.RefreshAllOpenedEditors();
-        }
+        //    SyntaxLoader.RefreshAllOpenedEditors();
+        //}
 
-        MarketplaceWindow.Instance.HideAllButtons();
-        MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
+        //MarketplaceWindow.Instance.HideAllButtons();
+        //MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
     }
 
     private async Task<bool> Install(string url, string filePath)
@@ -101,25 +101,25 @@ public class SyntaxItem : MarketplaceItem
 
     public override async void Uninstall()
     {
-        List<string> folders = ItemSyntaxFolders.ToList();
-        var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
-        foreach (string folder in folders)
-        {
-            var folderName = folder.Split('/').Last();
-            string localSyntaxPath = Path.Combine(syntaxFolder,
-                folderName);
+        //List<string> folders = ItemSyntaxFolders.ToList();
+        //var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        //foreach (string folder in folders)
+        //{
+        //    var folderName = folder.Split('/').Last();
+        //    string localSyntaxPath = Path.Combine(syntaxFolder,
+        //        folderName);
 
-            await SyntaxLoader.UnloadSyntax(localSyntaxPath);
-            Directory.Delete(localSyntaxPath, true);
-        }
-        SyntaxLoader.CheckConfiguredFileSyntaxes();
-        SyntaxLoader.RefreshAllOpenedEditors();
+        //    await SyntaxLoader.UnloadSyntax(localSyntaxPath);
+        //    Directory.Delete(localSyntaxPath, true);
+        //}
+        //SyntaxLoader.CheckConfiguredFileSyntaxes();
+        //SyntaxLoader.RefreshAllOpenedEditors();
 
-        MarketplaceWindow.Instance.HideAllButtons();
-        MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
+        //MarketplaceWindow.Instance.HideAllButtons();
+        //MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
+        //await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
+        //    new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
     }
 
     public override bool IsInstalled()
