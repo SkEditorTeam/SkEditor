@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextMateSharp.Grammars;
+using TextMateSharp.Internal.Grammars.Reader;
 using TextMateSharp.Internal.Themes.Reader;
 using TextMateSharp.Internal.Types;
 using TextMateSharp.Registry;
@@ -20,6 +21,7 @@ public static class SyntaxLoader
         var _registryOptions = new LocalRegistryOptions();
         var _textMateInstallation = editor.InstallTextMate(_registryOptions);
 
+        _textMateInstallation.SetGrammar("source.sk");
         _textMateInstallation.SetTheme(_registryOptions.GetDefaultTheme());
     }
 
@@ -32,18 +34,26 @@ public static class SyntaxLoader
 
         public IRawGrammar GetGrammar(string scopeName)
         {
-            return null;
+            string grammarPath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting",
+                "skript/syntaxes/skript.tmLanguage.json");
+
+            using StreamReader reader = new(grammarPath);
+            return GrammarReader.ReadGrammarSync(reader);
         }
 
         public IRawTheme GetTheme(string scopeName)
         {
-            return null;
+            string themePath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting",
+                "skript/themes/dark_skript.json");
+
+            using StreamReader reader = new(themePath);
+            return ThemeReader.ReadThemeSync(reader);
         }
 
         public IRawTheme GetDefaultTheme()
         {
-            string themePath = Path.GetFullPath(
-                @"C:\Users\Notro\Desktop\Projekty\SkEditor\SkEditor\Assets\dark_sk.json");
+            string themePath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting",
+                "skript/themes/dark_skript.json");
 
             using StreamReader reader = new(themePath);
             return ThemeReader.ReadThemeSync(reader);

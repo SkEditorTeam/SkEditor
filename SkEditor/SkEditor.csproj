@@ -33,7 +33,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Assets\dark_sk.json" />
 	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf" />
 	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf" />
 	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf" />
