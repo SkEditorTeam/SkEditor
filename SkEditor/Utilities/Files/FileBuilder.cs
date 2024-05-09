@@ -11,6 +11,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using SkEditor.Views.FileTypes;
 using System;
@@ -72,56 +73,58 @@ public class FileBuilder
     private static async Task<FileTypes.FileType?> GetFileDisplay(string path, string? content)
     {
         FileTypes.FileType? fileType = null;
-        if (FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
+        if (!FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
         {
-            var handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
-            if (handlers.Count == 1)
+            return fileType ?? await GetDefaultEditor(path, content);
+        }
+
+        var handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
+        if (handlers.Count == 1)
+        {
+            fileType = handlers[0].Handle(path);
+        }
+        else
+        {
+            var ext = Path.GetExtension(path);
+            if (ApiVault.Get().GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
             {
-                fileType = handlers[0].Handle(path);
-            }
-            else
-            {
-                var ext = Path.GetExtension(path);
-                if (ApiVault.Get().GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
+                var pref = value;
+                if (pref == "SkEditor")
                 {
-                    var pref = value;
-                    if (pref == "SkEditor")
+                    fileType = handlers.Find(association => !association.IsFromAddon).Handle(path);
+                }
+                else
+                {
+                    var preferred = handlers.Find(association => association.IsFromAddon &&
+                        association.Addon.Name == value);
+                    if (preferred != null)
                     {
-                        fileType = handlers.Find(association => !association.IsFromAddon).Handle(path);
+                        fileType = preferred.Handle(path);
                     }
                     else
                     {
-                        var preferred = handlers.Find(association => association.IsFromAddon &&
-                            association.Addon.Name == value);
-                        if (preferred != null)
-                        {
-                            fileType = preferred.Handle(path);
-                        }
-                        else
-                        {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
-                        }
+                        ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
                     }
                 }
+            }
 
-                if (fileType == null)
+            if (fileType == null)
+            {
+                var window = new AssociationSelectionWindow(path, handlers);
+                await window.ShowDialog(MainWindow.Instance);
+                var selected = window.SelectedAssociation;
+                if (selected != null)
                 {
-                    var window = new AssociationSelectionWindow(path, handlers);
-                    await window.ShowDialog(MainWindow.Instance);
-                    var selected = window.SelectedAssociation;
-                    if (selected != null)
+                    fileType = selected.Handle(path);
+                    if (window.RememberCheck.IsChecked == true)
                     {
-                        fileType = selected.Handle(path);
-                        if (window.RememberCheck.IsChecked == true)
-                        {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext] = selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
-                        }
-                        else
-                        {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
-                        }
-                        ApiVault.Get().GetAppConfig().Save();
+                        ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext] = selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
                     }
+                    else
+                    {
+                        ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
+                    }
+                    ApiVault.Get().GetAppConfig().Save();
                 }
             }
         }
@@ -195,6 +198,7 @@ public class FileBuilder
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
         editor.TextArea.TextEntered += TextEditorEventHandler.CheckForSkDoc;
+        editor.PointerHover += TooltipHandler.OnPointerHover;
         if (!ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
         {
             editor.TextChanged += (_, _) => ApiVault.Get().GetOpenedFile()?.Parser?.SetUnparsed();

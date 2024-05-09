@@ -1,6 +1,8 @@
-﻿using FluentAvalonia.UI.Controls;
+﻿using AvaloniaEdit;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Syntax;
 using System;
 using System.Collections;
 using System.IO;
@@ -27,6 +29,7 @@ public class CrashChecker
                 return;
             tabItem.Tag = null;
             (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+            SyntaxLoader.Load(tabItem.Content as TextEditor);
         });
         Directory.Delete(tempPath, true);
         return true;

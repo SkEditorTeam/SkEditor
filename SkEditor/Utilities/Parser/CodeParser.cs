@@ -91,6 +91,7 @@ public partial class CodeParser : INotifyPropertyChanged
         }
 
         if (ApiVault.Get().GetAppConfig().EnableFolding) FoldingCreator.CreateFoldings(Editor, Sections);
+        if (ApiVault.Get().GetAppConfig().EnableSkDoc) SkDocParser.Parse(this, Sections);
 
         ParserPanel.Refresh(Sections);
 

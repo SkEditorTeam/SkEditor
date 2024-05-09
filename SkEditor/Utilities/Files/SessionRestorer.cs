@@ -1,7 +1,7 @@
 ﻿using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-
+using SkEditor.Utilities.Syntax;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -78,6 +78,7 @@ public static class SessionRestorer
             TextEditor editor = tabItem.Content as TextEditor;
 
             (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+            SyntaxLoader.Load(editor);
 
             File.Delete(file);
             filesAdded = true;

@@ -1,11 +1,11 @@
 ﻿using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
-using System;
+using FluentAvalonia.UI.Controls;
+using SkEditor.API;
+using SkEditor.Utilities.Files;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;
 using TextMateSharp.Internal.Themes.Reader;
@@ -18,45 +18,46 @@ public static class SyntaxLoader
 {
     public static void Load(TextEditor editor)
     {
-        var _registryOptions = new LocalRegistryOptions();
+        int currentTheme = (int)ThemeName.DarkPlus;
+        var _registryOptions = new RegistryOptions((ThemeName)currentTheme);
         var _textMateInstallation = editor.InstallTextMate(_registryOptions);
 
-        _textMateInstallation.SetGrammar("source.sk");
-        _textMateInstallation.SetTheme(_registryOptions.GetDefaultTheme());
+        var tab = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().FirstOrDefault(t => t.Content == editor);
+        if (tab == null || string.IsNullOrEmpty(tab.Tag.ToString())) return;
+
+        var extension = Path.GetExtension(tab.Tag.ToString());
+        Language language = _registryOptions.GetLanguageByExtension(extension);
+
+        if (language == null)
+        {
+            var localRegistryOptions = new LocalRegistryOptions();
+            var localTextMateInstallation = editor.InstallTextMate(localRegistryOptions);
+            localTextMateInstallation.SetGrammar("source.sk");
+            localTextMateInstallation.SetTheme(localRegistryOptions.GetDefaultTheme());
+            return;
+        }
+
+        _textMateInstallation.SetGrammar(_registryOptions.GetScopeByLanguageId(language.Id));
+    }
+}
+
+class LocalRegistryOptions : IRegistryOptions
+{
+    public ICollection<string> GetInjections(string scopeName) => null;
+
+    public IRawGrammar GetGrammar(string scopeName)
+    {
+        string grammarPath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting", "skript/syntaxes/skript.tmLanguage.json");
+        using StreamReader reader = new(grammarPath);
+        return GrammarReader.ReadGrammarSync(reader);
     }
 
-    class LocalRegistryOptions : IRegistryOptions
+    public IRawTheme GetTheme(string scopeName) => GetDefaultTheme();
+
+    public IRawTheme GetDefaultTheme()
     {
-        public ICollection<string> GetInjections(string scopeName)
-        {
-            return null;
-        }
-
-        public IRawGrammar GetGrammar(string scopeName)
-        {
-            string grammarPath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting",
-                "skript/syntaxes/skript.tmLanguage.json");
-
-            using StreamReader reader = new(grammarPath);
-            return GrammarReader.ReadGrammarSync(reader);
-        }
-
-        public IRawTheme GetTheme(string scopeName)
-        {
-            string themePath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting",
-                "skript/themes/dark_skript.json");
-
-            using StreamReader reader = new(themePath);
-            return ThemeReader.ReadThemeSync(reader);
-        }
-
-        public IRawTheme GetDefaultTheme()
-        {
-            string themePath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting",
-                "skript/themes/dark_skript.json");
-
-            using StreamReader reader = new(themePath);
-            return ThemeReader.ReadThemeSync(reader);
-        }
+        string themePath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting", "skript/themes/dark_skript.json");
+        using StreamReader reader = new(themePath);
+        return ThemeReader.ReadThemeSync(reader);
     }
 }

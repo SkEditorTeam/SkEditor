@@ -9,6 +9,7 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Projects;
+using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using System;
 using System.Collections;
@@ -75,6 +76,7 @@ public class FileHandler
         });
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+        SyntaxLoader.Load(tabItem.Content as TextEditor);
     }
 
     public async static void OpenFile()
@@ -102,6 +104,7 @@ public class FileHandler
         if (tabItem == null) return;
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+        SyntaxLoader.Load(tabItem.Content as TextEditor);
         if (untitledFileOpen) await FileCloser.CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
 
         OpenedFiles.Add(new OpenedFile()

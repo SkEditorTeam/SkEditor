@@ -69,6 +69,7 @@
 		<PackageReference Include="SkFluentAvalonia" Version="2.0.5.1" />
 		<PackageReference Include="Svg.Skia" Version="1.0.0.18" />
 		<PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
+		<PackageReference Include="TextMateSharp.Grammars" Version="1.0.56" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -78,6 +79,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="Controls\FunctionTooltip.axaml.cs">
+		  <DependentUpon>FunctionTooltip.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Controls\SideBarControl.axaml.cs">
 		  <DependentUpon>SideBarControl.axaml</DependentUpon>
 		</Compile>

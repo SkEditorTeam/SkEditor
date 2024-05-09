@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             x:Class="SkEditor.Controls.FunctionTooltip">
+
+	<UserControl.Styles>
+
+	</UserControl.Styles>
+
+	<StackPanel Spacing="10" Margin="5">
+		<StackPanel Orientation="Horizontal">
+			<ui:IconSourceElement Name="Icon" IconSource="{StaticResource FunctionIcon}"
+								  Height="16" Foreground="#ff6542" Margin="0,0,7,0" VerticalAlignment="Top" />
+
+			<StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#ff6542" FontWeight="Bold"
+						MaxWidth="300" Text="function"/>
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#90dbf5" FontWeight="Bold"
+						MaxWidth="300" Text=" adminChat"/>
+				<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#cdcaca" FontWeight="Bold"
+						MaxWidth="300" Text="("/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#d9ad69" FontWeight="Bold"
+						MaxWidth="300" Text="    msg:"/>
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#54d7a9" FontWeight="Bold"
+						MaxWidth="300" Text=" string"/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#d9ad69" FontWeight="Bold"
+						MaxWidth="300" Text="    p:"/>
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#54d7a9" FontWeight="Bold"
+						MaxWidth="300" Text="   executor"/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#cdcaca" FontWeight="Bold"
+						MaxWidth="300" Text=")"/>
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#cdcaca" FontWeight="Bold"
+						MaxWidth="300" Text=" ::"/>
+					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
+						Foreground="#54d7a9" FontWeight="Bold"
+						MaxWidth="300" Text=" boolean"/>
+				</StackPanel>
+			</StackPanel>
+		</StackPanel>
+
+		<Separator Margin="0,5,0,5"></Separator>
+
+		<SelectableTextBlock Name="DescriptionTextBlock" FontFamily="JetBrains Mono" FontSize="12"
+			Foreground="#adbcc3" TextWrapping="Wrap" Margin="-10,0,0,0"
+			MaxWidth="300" Text="Sends a message to the admin chat"/>
+
+		<StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+			<TextBlock FontFamily="JetBrains Mono" FontSize="12" Foreground="#7d7d7d">Params:</TextBlock>
+			<StackPanel Margin="10,0,0,0" Spacing="3">
+				<StackPanel Orientation="Horizontal">
+					<SelectableTextBlock FontFamily="JetBrains Mono" FontSize="12" Foreground="#fdc272" FontStyle="Italic">msg</SelectableTextBlock>
+					<SelectableTextBlock FontFamily="JetBrains Mono" FontSize="12" Foreground="#adbcc3" Margin="10,0,0,0">- message that will be sent</SelectableTextBlock>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<SelectableTextBlock FontFamily="JetBrains Mono" FontSize="12" Foreground="#fdc272" FontStyle="Italic">p</SelectableTextBlock>
+					<SelectableTextBlock FontFamily="JetBrains Mono" FontSize="12" Foreground="#adbcc3" Margin="10,0,0,0">- executor that sent the message</SelectableTextBlock>
+				</StackPanel>
+			</StackPanel>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+			<TextBlock FontFamily="JetBrains Mono" FontSize="12" Foreground="#7d7d7d">Returns:</TextBlock>
+			<SelectableTextBlock FontFamily="JetBrains Mono" FontSize="12" Foreground="#adbcc3" Margin="5,0,0,0">true if success</SelectableTextBlock>
+		</StackPanel>
+	</StackPanel>
+</UserControl>
