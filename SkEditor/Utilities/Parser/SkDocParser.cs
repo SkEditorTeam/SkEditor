@@ -1,7 +1,10 @@
 ﻿using AvaloniaEdit;
 using AvaloniaEdit.Document;
+using Serilog;
+using SkEditor.API;
 using SkEditor.Utilities.Files;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -58,24 +61,22 @@ public partial class SkDocParser
             .FirstOrDefault(x => x.Editor == editor)
             .Parser;
 
+        ApiVault.Get().SendToBottomBar($"is null: {SkDocFunctions.FirstOrDefault(x => x.Key == parser && x.Value.Line == line).Value == null}");
         return SkDocFunctions.FirstOrDefault(x => x.Key == parser && x.Value.Line == line).Value;
     }
 
-    public static bool IsFunctionCall(TextEditor editor, SimpleSegment segment)
+    public static SkDocFunction GetFunctionFromCall(TextEditor editor, SimpleSegment segment)
     {
         int line = editor.Document.GetLineByOffset(segment.Offset).LineNumber;
         DocumentLine documentLine = editor.Document.GetLineByNumber(line);
         string text = editor.Document.GetText(documentLine);
 
-        if (FunctionCallRegex().IsMatch(text))
-        {
-            string name = FunctionCallRegex().Match(text).Groups["name"].Value;
-            if (!editor.Document.GetText(segment).Equals(name)) return false;
+        if (!FunctionCallRegex().IsMatch(text)) return null;
 
-            return SkDocFunctions.Any(x => x.Value.Name == name);
-        }
+        string name = FunctionCallRegex().Match(text).Groups["name"].Value;
+        if (!editor.Document.GetText(segment).Equals(name)) return null;
 
-        return false;
+        return SkDocFunctions.FirstOrDefault(x => x.Value.Name == name).Value;
     }
 
     [GeneratedRegex(@"(^function|^local function) (?<name>\w+)\((?<parameters>[^)]*)\)(?: :: (?<returnType>\w+))?:")]

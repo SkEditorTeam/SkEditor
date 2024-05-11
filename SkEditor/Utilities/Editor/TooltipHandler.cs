@@ -35,8 +35,9 @@ public class TooltipHandler
         SimpleSegment segment = TextEditorUtilities.GetWordAtMousePosition(pos, editor.TextArea);
         if (segment == SimpleSegment.Invalid) return;
 
-        if (SkDocParser.GetFunction(editor, line) is null 
-            && !SkDocParser.IsFunctionCall(editor, segment)) return;
+        SkDocParser.SkDocFunction skDocFunction = SkDocParser.GetFunction(editor, line) ??
+            SkDocParser.GetFunctionFromCall(editor, segment);
+        if (skDocFunction == null) return;
 
         FunctionTooltip tooltip = new();
         Flyout.Content = tooltip;

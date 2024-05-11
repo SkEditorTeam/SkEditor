@@ -223,6 +223,7 @@ public class FileBuilder
 
         editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
         editor.TextArea.TextPasting += TextEditorEventHandler.CheckForSpecialPaste;
+        
 
         return editor;
     }
