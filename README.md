@@ -27,7 +27,7 @@
 <br />
 <br />
 
-<a href='https://discord.gg/kJUKX3ePj6'>
+<a href='https://discord.gg/meFfPGYvr5'>
   
 <img src='https://img.shields.io/badge/Discord-%235562ea?style=for-the-badge'>
   
