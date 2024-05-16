@@ -225,6 +225,7 @@ public partial class TextEditorEventHandler
 
     public static void OnTextPasting(object? sender, TextEventArgs e)
     {
+        if (!ApiVault.Get().GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
         
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
