@@ -191,6 +191,8 @@
 	<system:String x:Key="SettingsGeneralChangeChecker">Wykrywaj modyfikacje plików poza programem</system:String>
 	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
 	<system:String x:Key="SettingsGeneralRpcDescription">Wyświetlaj SkEditor w swoim statusie na Discordzie.</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndent">Autowcięcie wklejania</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatycznie dostosowuje wcięcie wklejonego tekstu, aby pasowało do poprzedniej linii.</system:String>
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Sprawdzaj aktualizacje</system:String>
 
 	<!-- About Settings -->

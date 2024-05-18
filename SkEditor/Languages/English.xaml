@@ -192,8 +192,8 @@
 	<system:String x:Key="SettingsGeneralChangeChecker">Check for external file changes</system:String>
 	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
 	<system:String x:Key="SettingsGeneralRpcDescription">Show SkEditor in your Discord status.</system:String>
-	<system:String x:Key="SettingsGeneralPasteIndent">Paste Auto-Indent</system:String>
-	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatically indents pasted text according to the previous line.</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndent">Auto-indent Paste</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatically adjusts the indentation of pasted text to match the previous line's format.</system:String>
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Check for updates</system:String>
 
 	<!-- About Settings -->
