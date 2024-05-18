@@ -10,6 +10,9 @@ using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using SkEditor.Controls.Docs;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -62,6 +65,21 @@ public partial class MainMenuControl : UserControl
         MenuItemGenerateCommand.Command = new RelayCommand(() => new CommandGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemRefactor.Command = new RelayCommand(() => new RefactorWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
+        
+        MenuItemDocs.Command = new RelayCommand(AddDocsTab);
+    }
+    
+    public void AddDocsTab()
+    {
+        var tabView = ApiVault.Get().GetTabView();
+        var tabItem = new TabViewItem()
+        {
+            Header = "Documentation",
+            Content = new DocElementControl()
+        };
+
+        (tabView.TabItems as IList)?.Add(tabItem);
+        tabView.SelectedItem = tabItem;
     }
 
     public void LoadAddonsMenus()
