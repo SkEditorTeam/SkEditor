@@ -57,6 +57,16 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralPasteIndent}"
+				                     Description="{DynamicResource SettingsGeneralPasteIndentDescription}">
+					<ui:SettingsExpander.IconSource>
+						<ui:SymbolIconSource Symbol="Paste" />
+					</ui:SettingsExpander.IconSource>
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="PasteIndentToggleSwitch" IsChecked="{Binding IsPasteIndentationEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoSave}" IconSource="{StaticResource AutoSaveIcon}"
 					Description="{DynamicResource SettingsGeneralAutoSaveDescription}">
 					<ui:SettingsExpander.Footer>
@@ -74,16 +84,6 @@
 				                     Description="{DynamicResource SettingsGeneralRpcDescription}">
 					<ui:SettingsExpander.Footer>
 						<ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRpcEnabled}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
-				
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralPasteIndent}"
-				                     Description="{DynamicResource SettingsGeneralPasteIndentDescription}">
-					<ui:SettingsExpander.IconSource>
-						<ui:SymbolIconSource Symbol="Paste" />
-					</ui:SettingsExpander.IconSource>
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="PasteIndentToggleSwitch" IsChecked="{Binding IsPasteIndentationEnabled}"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
