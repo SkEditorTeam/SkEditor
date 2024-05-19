@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkEditor.API;
+using SkEditor.Utilities.Docs.Local;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 
 public class SkriptHubProvider : IDocProvider
 {
-    public static IDocProvider Get() => new SkriptHubProvider();
+    public static IDocProvider Get() => IDocProvider.Providers[DocProvider.SkriptHub];
     
     private const string BaseUri = "https://skripthub.net/api/v1/";
 

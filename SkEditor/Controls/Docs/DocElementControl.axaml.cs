@@ -3,25 +3,32 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using AvaloniaEdit;
 using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Docs;
+using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Syntax;
 
 namespace SkEditor.Controls.Docs;
 
 public partial class DocElementControl : UserControl
 {
-    private bool _hasLoadedExamples = false;
+    private bool _hasLoadedExamples;
+    private DocumentationControl _documentationControl;
+    private IDocumentationEntry _entry;
     
-    public DocElementControl(IDocumentationEntry entry)
+    public DocElementControl(IDocumentationEntry entry, DocumentationControl documentationControl)
     {
         InitializeComponent();
+        
+        _documentationControl = documentationControl;
+        _entry = entry;
         
         NameText.Text = entry.Name;
         Expander.Description = entry.DocType + " from " + entry.Addon;
@@ -37,7 +44,7 @@ public partial class DocElementControl : UserControl
         // Editor setup
         if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
         {
-            Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out var font);
+            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
             PatternsEditor.FontFamily = (FontFamily) font;
         }
         else
@@ -66,6 +73,56 @@ public partial class DocElementControl : UserControl
         else
         {
             LoadExamples(entry);
+        }
+        
+        // Download element setup
+        LoadDownloadButton();
+    }
+
+    public async void LoadDownloadButton()
+    {
+        var localProvider = LocalProvider.Get();
+        if (_entry.Provider == DocProvider.Local)
+        {
+            DownloadElementButton.Content = new TextBlock() { Text = "Delete from local cache" };
+            DownloadElementButton.Click += (_, _) =>
+            {
+                localProvider.RemoveElement(_entry);
+                _documentationControl.RemoveElement(this);
+            };
+        }
+        else
+        {
+            if (await localProvider.IsElementDownloaded(_entry))
+            {
+                DownloadElementButton.Content = new TextBlock() { Text = "Delete from local cache" };
+                DownloadElementButton.Click += (_, _) =>
+                {
+                    DownloadElementButton.Content = "Removed successfully";
+                    DownloadElementButton.IsEnabled = false;
+                };
+            }
+            else
+            {
+                DownloadElementButton.Content = new TextBlock() { Text = "Download" };
+                DownloadElementButton.Click += async (_, _) =>
+                {
+                    List<IDocumentationExample> examples;
+                    try
+                    {
+                        examples = await IDocProvider.Providers[_entry.Provider].FetchExamples(_entry.Id);
+                    }
+                    catch (Exception e)
+                    {
+                        examples = new List<IDocumentationExample>();
+                        ApiVault.Get().ShowError("We were unable to download the examples, but the rest is here!\n\nError message: " + e.Message);
+                    }
+                    
+                    localProvider.DownloadElement(_entry, examples);
+                    DownloadElementButton.IsEnabled = false;
+                    DownloadElementButton.Content = "Downloaded successfully!";
+                };
+            }
         }
     }
 
@@ -117,7 +174,7 @@ public partial class DocElementControl : UserControl
 
                 object GetAppResource(string key)
                 {
-                    Application.Current.TryGetResource(key, Avalonia.Styling.ThemeVariant.Default, out var resource);
+                    Application.Current.TryGetResource(key, ThemeVariant.Default, out var resource);
                     return resource;
                 }
 
@@ -133,7 +190,7 @@ public partial class DocElementControl : UserControl
                 
                 if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
                 {
-                    Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out var font);
+                    Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
                     textEditor.FontFamily = (FontFamily) font;
                 }
                 else
@@ -235,5 +292,35 @@ public partial class DocElementControl : UserControl
         public HighlightingColor GetNamedColor(string name) => new();
         public IEnumerable<HighlightingColor> NamedHighlightingColors => new List<HighlightingColor>();
         public IDictionary<string, string> Properties => new Dictionary<string, string>();
+    }
+
+    #region Actions
+
+    private void FilterByThisType(object? sender, RoutedEventArgs e)
+    {
+        _documentationControl.FilterByType(_entry.DocType);
+    }
+    
+    private void FilterByThisAddon(object? sender, RoutedEventArgs e)
+    {
+        _documentationControl.FilterByAddon(_entry.Addon);
+    }
+
+    #endregion
+
+    static string GenerateUsablePattern(string pattern)
+    {
+        // Step 1: Remove everything within []
+        pattern = Regex.Replace(pattern, @"\[.*?\]", "");
+
+        // Step 2: Select the first option within ()
+        pattern = Regex.Replace(pattern, @"\(([^|]+)\|.*?\)", "$1");
+
+        // Step 3: Leave everything within %% untouched (already handled by not modifying it)
+
+        // Trim any extra whitespace
+        pattern = Regex.Replace(pattern, @"\s+", " ").Trim();
+
+        return pattern;
     }
 }

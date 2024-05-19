@@ -169,7 +169,7 @@ public partial class DocumentationControl : UserControl
             
             foreach (var element in elements)
             {
-                EntriesContainer.Children.Add(new DocElementControl(element));
+                EntriesContainer.Children.Add(new DocElementControl(element, this));
             }
             
             if (elements.Count == 0) 
@@ -184,5 +184,20 @@ public partial class DocumentationControl : UserControl
         {
             LoadingInformation.IsVisible = false;
         }
+    }
+
+    public void FilterByType(IDocumentationEntry.Type type)
+    {
+        FilteredTypesBox.SelectedIndex = (int) type;
+    }
+    
+    public void FilterByAddon(string addon)
+    {
+        FilteredAddonBox.Text = addon;
+    }
+
+    public void RemoveElement(DocElementControl children)
+    {
+        EntriesContainer.Children.Remove(children);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkriptHub;
 using SkEditor.Utilities.Docs.SkUnity;
 
@@ -11,7 +12,8 @@ public interface IDocProvider
     public static readonly Dictionary<DocProvider, IDocProvider> Providers = new()
     {
         { DocProvider.SkUnity, new SkUnityProvider()},
-        { DocProvider.SkriptHub, new SkriptHubProvider()}
+        { DocProvider.SkriptHub, new SkriptHubProvider()},
+        { DocProvider.Local, new LocalProvider()}
     };
     
     public DocProvider Provider { get; }
