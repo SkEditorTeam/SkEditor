@@ -90,8 +90,9 @@ public class SkriptHubProvider : IDocProvider
 
     public bool NeedsToLoadExamples => true;
 
-    public async Task<List<IDocumentationExample>> FetchExamples(string elementId)
+    public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
+        var elementId = entry.Id;
         var uri = BaseUri + "syntaxexample/" + "?syntax=" + elementId;
         
         _client.DefaultRequestHeaders.Clear();

@@ -27,13 +27,13 @@ public class LocalProvider : IDocProvider
         return _localDocs.FindAll(x => x.DoMatch(searchData)).Cast<IDocumentationEntry>().ToList();
     }
     
-    public async Task<List<IDocumentationExample>> FetchExamples(string elementId)
+    public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
         if (!IsLoaded)
             await LoadLocalDocs();
+        var localEntry = entry as LocalDocEntry;
         
-        var entry = _localDocs.Find(x => x.Id == elementId);
-        return (entry?.Examples ?? new()).Cast<IDocumentationExample>().ToList();
+        return (localEntry?.Examples ?? []).Cast<IDocumentationExample>().ToList();
     }
 
     #region Local File Management

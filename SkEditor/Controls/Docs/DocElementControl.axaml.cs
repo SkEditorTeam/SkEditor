@@ -110,7 +110,7 @@ public partial class DocElementControl : UserControl
                     List<IDocumentationExample> examples;
                     try
                     {
-                        examples = await IDocProvider.Providers[_entry.Provider].FetchExamples(_entry.Id);
+                        examples = await IDocProvider.Providers[_entry.Provider].FetchExamples(_entry);
                     }
                     catch (Exception e)
                     {
@@ -141,7 +141,7 @@ public partial class DocElementControl : UserControl
         // Then we load the examples
         try
         {
-            var examples = await provider.FetchExamples(entry.Id);
+            var examples = await provider.FetchExamples(entry);
             ExamplesEntry.Content = new StackPanel()
             {
                 Orientation = Orientation.Vertical,
