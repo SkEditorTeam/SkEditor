@@ -103,9 +103,12 @@ public partial class DocumentationControl : UserControl
     private async void SearchButtonClick(object? sender, RoutedEventArgs e)
     {
         LoadingInformation.IsVisible = false;
+        OtherInformation.Text = "";
+        
         if (ViewModel.Provider == null)
         {
             ApiVault.Get().ShowError("No documentation provider selected.\n\nYou may need to connect your API keys from settings to use those.");
+            OtherInformation.Text = "No provider selected.";
             return;
         }
         var provider = IDocProvider.Providers[ViewModel.Provider.Value];
@@ -115,6 +118,7 @@ public partial class DocumentationControl : UserControl
         if (errors.Count > 0)
         {
             ApiVault.Get().ShowError(string.Join("\n", errors));
+            OtherInformation.Text = "Invalid search data.";
             return;
         }
         
@@ -131,6 +135,7 @@ public partial class DocumentationControl : UserControl
                 if (result != ContentDialogResult.Primary)
                 {
                     LoadingInformation.IsVisible = false;
+                    OtherInformation.Text = "Too many results.";
                     return;
                 }
             }
@@ -140,12 +145,14 @@ public partial class DocumentationControl : UserControl
                 EntriesContainer.Children.Add(new DocElementControl(element));
             }
             
-            LoadingInformation.IsVisible = false;
+            if (elements.Count == 0) 
+                OtherInformation.Text = "No results found.";
         }
         catch (Exception exception)
         {
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{exception.Message}");
             Serilog.Log.Error(exception, "An error occurred while fetching the documentation.");
+            OtherInformation.Text = "An error occurred. Try again later.";
         } finally
         {
             LoadingInformation.IsVisible = false;

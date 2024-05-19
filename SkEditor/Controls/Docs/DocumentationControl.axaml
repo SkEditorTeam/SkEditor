@@ -68,6 +68,9 @@
                 <ProgressBar Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" IsIndeterminate="True"/>
                 
             </StackPanel>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <TextBlock Name="OtherInformation" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold"></TextBlock>
+            </StackPanel>
         </Grid>
         
     </Grid>

@@ -24,6 +24,9 @@ public class SkUnityDocEntry : IDocumentationEntry
     {
         get
         {
+            if (RawDoc.Equals("classes"))
+                return IDocumentationEntry.Type.Type; // This is a type now
+            
             try
             {
                 return Enum.Parse<IDocumentationEntry.Type>(RawDoc, true);
