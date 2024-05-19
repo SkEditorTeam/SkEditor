@@ -17,8 +17,7 @@ public class SkriptHubProvider : IDocProvider
     private const string BaseUri
         = "https://skripthub.net/api/v1/syntax/";// ?search=member&addons=Skript
 
-    private readonly HttpClient _client = new HttpClient()
-        .WithAuthorization("8dff16836adb304f0b8b92a68eb6722b5395954d");
+    private readonly HttpClient _client = new();
     
     public DocProvider Provider => DocProvider.SkriptHub;
     public Task<IDocumentationEntry> FetchElement(string id)
@@ -44,10 +43,12 @@ public class SkriptHubProvider : IDocProvider
         if (searchData.FilteredType != IDocumentationEntry.Type.All)
             parameters.Add("type=" + searchData.FilteredType.ToString().ToLower());
         if (!string.IsNullOrEmpty(searchData.FilteredAddon))
-            parameters.Add("addons=" + searchData.FilteredAddon);
+            parameters.Add("addon=" + searchData.FilteredAddon);
         
         uri += "?" + string.Join("&", parameters);
-        ApiVault.Get().Log(uri, true);
+        
+        _client.DefaultRequestHeaders.Clear();
+        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
             
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -80,5 +81,10 @@ public class SkriptHubProvider : IDocProvider
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var elements = JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content);
         return elements.Cast<IDocumentationEntry>().ToList();
+    }
+
+    public bool IsAvailable()
+    {
+        return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
     }
 }

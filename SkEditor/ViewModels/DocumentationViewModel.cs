@@ -8,5 +8,6 @@ public partial class DocumentationViewModel : ObservableObject
 {
 
     [ObservableProperty] private SearchData _searchData = new();
+    [ObservableProperty] private DocProvider? _provider;
 
 }

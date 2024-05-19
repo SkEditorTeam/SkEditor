@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -14,11 +15,17 @@ namespace SkEditor.Controls.Docs;
 
 public partial class DocumentationControl : UserControl
 {
+    
     public DocumentationControl()
     {
         InitializeComponent();
         DataContext = new DocumentationViewModel();
-        
+
+        AssignCommands();
+    }
+
+    public void AssignCommands()
+    {
         foreach (IDocumentationEntry.Type type in IDocumentationEntry.AllTypes)
         {
             FilteredTypesBox.Items.Add(new ComboBoxItem()
@@ -32,13 +39,73 @@ public partial class DocumentationControl : UserControl
         {
             ViewModel.SearchData.FilteredType = (IDocumentationEntry.Type)((ComboBoxItem)FilteredTypesBox.SelectedItem!).Tag!;
         };
+
+
+        var availableProviders = new List<DocProvider>();
+        foreach (KeyValuePair<DocProvider, IDocProvider> providerEntry in IDocProvider.Providers)
+        {
+            var provider = providerEntry.Value;
+            if (!provider.IsAvailable())
+                continue;
+            
+            availableProviders.Add(providerEntry.Key);
+        }
+        
+        if (availableProviders.Count == 0)
+        {
+            ApiVault.Get().ShowError("No documentation providers are available.\n\nYou may need to connect your API keys from settings to use those.");
+            ProviderBox.IsEnabled = false;
+            ProviderBox.Items.Clear();
+            ProviderBox.Items.Add(new ComboBoxItem()
+            {
+                Content = "No providers available",
+                Tag = null
+            });
+            ProviderBox.SelectedIndex = 0;
+        }
+        else
+        {
+            ProviderBox.Items.Clear();
+            foreach (var provider in availableProviders)
+            {
+                ProviderBox.Items.Add(new ComboBoxItem()
+                {
+                    Content = provider.ToString(),
+                    Tag = provider
+                });
+            }
+            foreach (var provider in Enum.GetValues<DocProvider>())
+            {
+                if (!availableProviders.Contains(provider))
+                {
+                    ProviderBox.Items.Add(new ComboBoxItem()
+                    {
+                        Content = provider.ToString() + " (Unavailable)",
+                        Tag = provider,
+                        IsEnabled = false
+                    });
+                }
+            }
+            
+            ProviderBox.SelectedIndex = 0;
+            ViewModel.Provider = availableProviders[0];
+            ProviderBox.SelectionChanged += (sender, args) =>
+            {
+                ViewModel.Provider = (DocProvider)((ComboBoxItem)ProviderBox.SelectedItem!).Tag!;
+            };
+        }
     }
     
     public DocumentationViewModel ViewModel => (DocumentationViewModel)DataContext!;
 
     private async void SearchButtonClick(object? sender, RoutedEventArgs e)
     {
-        var provider = SkriptHubProvider.Get();
+        if (ViewModel.Provider == null)
+        {
+            ApiVault.Get().ShowError("No documentation provider selected.\n\nYou may need to connect your API keys from settings to use those.");
+            return;
+        }
+        var provider = IDocProvider.Providers[ViewModel.Provider.Value];
         var searchData = ViewModel.SearchData;
         
         var errors = provider.CanSearch(searchData);

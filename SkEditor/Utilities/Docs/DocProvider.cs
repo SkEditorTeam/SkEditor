@@ -3,6 +3,5 @@
 public enum DocProvider
 {
     SkUnity,
-    SkriptHub,
-    Local
+    SkriptHub
 }

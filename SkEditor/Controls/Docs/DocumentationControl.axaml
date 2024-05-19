@@ -13,7 +13,7 @@
         
         <Grid Grid.Row="0"
               RowDefinitions="Auto,Auto,Auto"
-              ColumnDefinitions="*,*,*"
+              ColumnDefinitions="*,*,*,*"
               Margin="5"
               >
             <TextBlock
@@ -40,7 +40,15 @@
                 <TextBox Text="{Binding SearchData.FilteredAddon, Mode=TwoWay}"/>
             </StackPanel>
             
-            <Button Classes="accent" Grid.Row="2" Grid.Column="1"
+            <StackPanel Grid.Row="1" Grid.Column="3" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
+                <TextBlock>Provider</TextBlock>
+                <ComboBox
+                    Name="ProviderBox"
+                    HorizontalAlignment="Stretch"
+                    />
+            </StackPanel>
+            
+            <Button Classes="accent" Grid.Row="2" Grid.Column="0"
                     Click="SearchButtonClick"
                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 Search

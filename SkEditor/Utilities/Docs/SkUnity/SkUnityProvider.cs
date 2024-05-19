@@ -12,7 +12,7 @@ namespace SkEditor.Utilities.Docs.SkUnity;
 public class SkUnityProvider : IDocProvider
 {
     private const string BaseUri 
-        = "https://api.skunity.com/v1/ad6a92611abf3c9c34ae0737b0c38b5a/docs/search/";
+        = "https://api.skunity.com/v1/%s/docs/search/";
 
     private readonly HttpClient _client = new HttpClient()
         .WithUserAgent("C# App");
@@ -34,7 +34,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
         // First build the URI
-        var uri = BaseUri;
+        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey);
         var queryElements = new List<string>();
 
         if (!string.IsNullOrEmpty(searchData.Query))
@@ -76,6 +76,11 @@ public class SkUnityProvider : IDocProvider
         var entries = responseObject["result"].ToObject<List<SkUnityDocEntry>>();
         return entries.ToList<IDocumentationEntry>();
     }
-    
+
+    public bool IsAvailable()
+    {
+        return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkUnityAPIKey);
+    }
+
     public static IDocProvider Get() => (SkUnityProvider) IDocProvider.Providers[DocProvider.SkUnity];
 }
