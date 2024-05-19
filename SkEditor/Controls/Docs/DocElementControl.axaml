@@ -5,6 +5,7 @@
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:docs="clr-namespace:SkEditor.Controls.Docs"
              xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
+             xmlns:docs1="clr-namespace:SkEditor.Utilities.Docs"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="600"
              x:Class="SkEditor.Controls.Docs.DocElementControl">
     
@@ -13,44 +14,45 @@
             <Setter Property="CornerRadius" Value="4"/>
             <Setter Property="ClipToBounds" Value="True"/>
         </Style>
+        <Style Selector="controls|InfoBadge.transparent">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Transparent"/>
+        </Style>
     </UserControl.Styles>
     
     <controls:SettingsExpander
-        Margin="10"
-        IconSource="Calendar"
-        Description="Event from Skript"
-        Padding="0"
-        >
+                               Margin="10,3"
+                               IconSource="Calendar"
+                               Name="Expander"
+                               Padding="0">
         <controls:SettingsExpander.Header>
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <TextBlock FontSize="20">On Join</TextBlock>
-                <controls:InfoBadge>
-                    <controls:InfoBadge.IconSource>
-                        <controls:FontIconSource FontSize="12" Glyph="Since v1.0" />
-                    </controls:InfoBadge.IconSource>
-                </controls:InfoBadge>
+                <TextBlock FontSize="20" Name="NameText"/>
+                <controls:InfoBadge Name="VersionBadge" />
+                <controls:InfoBadge Name="SourceBadge" />
             </StackPanel>
         </controls:SettingsExpander.Header>
         <Grid Margin="-50,0,0,0" RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*,*">
             
             <TextBlock 
                 FontSize="16" TextWrapping="Wrap"
-                Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
-                Called when the player joins the server. The player is already in a world when this event is called, so if you want to prevent players from joining you should prefer on connect over this event.
-            </TextBlock>
+                Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Margin="5"
+                Name="DescriptionText"
+                />
             
             <avaloniaEdit:TextEditor
                 Margin="5" FontSize="16"
+                Name="PatternsEditor"
                 Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                 Foreground="{DynamicResource EditorTextColor}"
                 Background="{DynamicResource EditorBackgroundColor}"
-                Text="[on] [player] (login|logging in|join[ing])"
                 Padding="10"
                 HorizontalScrollBarVisibility="Visible"
                 FontFamily="{DynamicResource JetBrainsFont}"
+                IsReadOnly="True"
             />
             
-            <docs:DocEntryControl
+            <!--<docs:DocEntryControl
                 Grid.Row="2"
                 Grid.Column="0"
                 EntryTitle="Examples"
@@ -66,15 +68,7 @@
                     />
                     
                 </docs:DocEntryControl.EntryContent>
-            </docs:DocEntryControl>
-            
-            <docs:DocEntryControl
-                Grid.Row="2"
-                Grid.Column="1"
-                EntryTitle="Event Values"
-            >
-                
-            </docs:DocEntryControl>
+            </docs:DocEntryControl> -->
             
         </Grid>
     </controls:SettingsExpander>

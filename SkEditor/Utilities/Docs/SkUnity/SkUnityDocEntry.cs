@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
@@ -25,30 +26,38 @@ namespace SkEditor.Utilities.Docs.SkUnity;
             "keywords": null
         },
  */
+[Serializable]
 public class SkUnityDocEntry : IDocumentationEntry
 {
     
     [JsonProperty("name")]
-    public string Name { get; }
+    public string Name { set; get; }
     [JsonProperty("desc")]
-    public string Description { get; }
+    public string Description { set; get; }
     [JsonProperty("pattern")]
-    public string Patterns { get; }
+    public string Patterns { set; get; }
     [JsonProperty("id")]
-    public string Id { get; }
+    public string Id { set; get; }
     [JsonProperty("addon")]
-    public string Addon { get; }
+    public string Addon { set; get; }
     [JsonProperty("version")]
-    public string Version { get; }
+    public string Version { set; get; }
+    
+    public IDocumentationEntry.Type DocType
+    {
+        get => Enum.Parse<IDocumentationEntry.Type>(RawDoc[..^1], true);
+        set => RawDoc = value.ToString();
+    }
+        
     [JsonProperty("doc")]
-    public IDocumentationEntry.Type DocType { get; }
+    public string RawDoc { set; get; }
     
     [JsonProperty("returntype")]
-    public string? ReturnType { get; }
+    public string? ReturnType { set; get; }
     [JsonProperty("changers")]
-    public string? Changers { get; }
+    public string? Changers { set; get; }
     [JsonProperty("eventvalues")]
-    public string? EventValues { get; }
+    public string? EventValues { set; get; }
     
     public DocProvider Provider => DocProvider.SkUnity;
 }

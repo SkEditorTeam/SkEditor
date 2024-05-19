@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkEditor.API;
 
@@ -11,14 +12,14 @@ namespace SkEditor.Utilities.Docs.SkUnity;
 public class SkUnityProvider : IDocProvider
 {
     private const string BaseUri 
-        = "https://api.skunity.com/v1/90ca3ceffde58bc4258e2c3d011748d1/docs/search/";
+        = "https://api.skunity.com/v1/ad6a92611abf3c9c34ae0737b0c38b5a/docs/search/";
 
     private readonly HttpClient _client = new ();
     
     public DocProvider Provider => DocProvider.SkUnity;
     public List<string> CanSearch(SearchData searchData)
     {
-        if (searchData.Query.Length < 3 && searchData.FilteredAddons.Count == 0 && searchData.FilteredTypes.Count == 0)
+        if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
             return ["Query must be at least 3 characters long"];
         
         return [];
@@ -26,7 +27,7 @@ public class SkUnityProvider : IDocProvider
 
     public Task<IDocumentationEntry> FetchElement(string id)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
@@ -34,25 +35,38 @@ public class SkUnityProvider : IDocProvider
         // First build the URI
         var uri = BaseUri;
         var queryElements = new List<string>();
-        
+        _client.DefaultRequestHeaders.Add("User-Agent", "C# App");
+
         if (!string.IsNullOrEmpty(searchData.Query))
             queryElements.Add(searchData.Query);
-        if (searchData.FilteredAddons.Count > 0)
-            searchData.FilteredAddons.ToList().ForEach(a => queryElements.Add("addon:" + a));
-        if (searchData.FilteredTypes.Count > 0)
-            searchData.FilteredTypes.Select(t => t.ToString().ToLower() + "s").ToList().ForEach(t => queryElements.Add("doc:" + t));
+        if (searchData.FilteredType != IDocumentationEntry.Type.All)
+            queryElements.Add("type:" + searchData.FilteredType.ToString().ToLower() + "s");
+        if (!string.IsNullOrEmpty(searchData.FilteredAddon))
+            queryElements.Add("addon:" + searchData.FilteredAddon);
         
-        uri += string.Join("+", queryElements);
+        uri += string.Join("%20", queryElements);
         
-        // Now fetch the data
-        var response = await _client.GetAsync(uri);
+        var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
+        HttpResponseMessage response;
+        try
+        {
+            response = await _client.GetAsync(uri, cancellationToken.Token);
+        }
+        catch (Exception e)
+        {
+            ApiVault.Get().ShowError(e is TaskCanceledException
+                ? "The request to the documentation server timed out. Are the docs down?"
+                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+            return [];
+        }
+
         if (!response.IsSuccessStatusCode)
         {
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\nReceived status code: {response.StatusCode}");
             return new List<IDocumentationEntry>();
         }
-        
-        var content = await response.Content.ReadAsStringAsync();
+
+        var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var responseObject = JObject.Parse(content);
         if (responseObject["response"].ToString() != "success")
         {

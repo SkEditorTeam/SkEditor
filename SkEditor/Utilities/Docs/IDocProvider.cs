@@ -8,7 +8,7 @@ public interface IDocProvider
 {
     public static readonly Dictionary<DocProvider, IDocProvider> Providers = new()
     {
-        { DocProvider.SkriptHub, new SkUnityProvider()}
+        { DocProvider.SkUnity, new SkUnityProvider()}
     };
     
     public DocProvider Provider { get; }

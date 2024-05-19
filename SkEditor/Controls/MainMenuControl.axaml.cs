@@ -75,7 +75,7 @@ public partial class MainMenuControl : UserControl
         var tabItem = new TabViewItem()
         {
             Header = "Documentation",
-            Content = new DocElementControl()
+            Content = new DocumentationControl()
         };
 
         (tabView.TabItems as IList)?.Add(tabItem);

@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
+using Avalonia.Controls;
 
 namespace SkEditor.Utilities.Docs;
 
@@ -8,9 +12,13 @@ namespace SkEditor.Utilities.Docs;
 /// </summary>
 public interface IDocumentationEntry
 {
+
+    public static ItemsSourceView<Type> AllTypes => ItemsSourceView.GetOrCreate(
+        Enum.GetValues<Type>().ToList());
     
     public enum Type
     {
+        All,
         Event,
         Expression,
         Effect,
@@ -23,27 +31,33 @@ public interface IDocumentationEntry
 
     #region Common Properties
 
-    public string Name { get; }
-    public string Description { get; }
-    public string Patterns { get; }
-    public string Id { get; }
-    public string Addon { get; }
-    public string Version { get; }
-    public Type DocType { get; }
+    public string Name { set; get; }
+    public string Description { set; get; }
+    public string Patterns { set; get; }
+    public string Id { set; get; }
+    public string Addon { set; get; }
+    public string Version { set; get; }
+    public Type DocType { set; get; }
     public DocProvider Provider { get; }
 
     #endregion
 
     #region Expressions Properties
 
-    public string? ReturnType { get; }
-    public string? Changers { get; }
+    public string? ReturnType { set; get; }
+    public string? Changers { set; get; }
 
     #endregion
 
     #region Events Properties
 
-    public string? EventValues { get; }
+    public string? EventValues { set; get; }
+
+    #endregion
+
+    #region Visual Utilities
+
+    [JsonIgnore] public string Since => $"Since v{Version}";
 
     #endregion
     

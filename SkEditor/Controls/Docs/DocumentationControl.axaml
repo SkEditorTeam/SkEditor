@@ -1,0 +1,58 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
+             xmlns:docs="clr-namespace:SkEditor.Utilities.Docs"
+             xmlns:docs1="clr-namespace:SkEditor.Controls.Docs"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:DocumentationViewModel"
+             x:Class="SkEditor.Controls.Docs.DocumentationControl">
+    <Grid Margin="10"
+          RowDefinitions="Auto,*">
+        
+        <Grid Grid.Row="0"
+              RowDefinitions="Auto,Auto,Auto"
+              ColumnDefinitions="*,*,*"
+              Margin="5"
+              >
+            <TextBlock
+                FontSize="24"
+                Text="Documentation"
+                FontWeight="SemiBold"
+                Grid.Row="0"
+                Grid.Column="0" Grid.ColumnSpan="3"
+            />
+            
+            <StackPanel Grid.Row="1" Grid.Column="0" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
+                <TextBlock>Search Query</TextBlock>
+                <TextBox Text="{Binding SearchData.Query, Mode=TwoWay}"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Grid.Column="1" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
+                <TextBlock>Filtered Type</TextBlock>
+                <ComboBox HorizontalAlignment="Stretch"
+                          Name="FilteredTypesBox"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Grid.Column="2" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
+                <TextBlock>Filtered Addon</TextBlock>
+                <TextBox Text="{Binding SearchData.FilteredAddon, Mode=TwoWay}"/>
+            </StackPanel>
+            
+            <Button Classes="accent" Grid.Row="2" Grid.Column="1"
+                    Click="SearchButtonClick"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                Search
+            </Button>
+            
+        </Grid>
+        
+        <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch">
+            <StackPanel Spacing="5" Name="EntriesContainer">
+                
+            </StackPanel>
+        </ScrollViewer>
+        
+    </Grid>
+</UserControl>
