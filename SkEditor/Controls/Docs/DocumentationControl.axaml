@@ -56,11 +56,19 @@
             
         </Grid>
         
-        <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch">
-            <StackPanel Spacing="5" Name="EntriesContainer">
+        <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <ScrollViewer VerticalAlignment="Stretch">
+                <StackPanel Spacing="5" Name="EntriesContainer">
+                
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel Name="LoadingInformation" VerticalAlignment="Center" HorizontalAlignment="Stretch" Spacing="10">
+                
+                <TextBlock FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold">Loading ...</TextBlock>
+                <ProgressBar Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" IsIndeterminate="True"/>
                 
             </StackPanel>
-        </ScrollViewer>
+        </Grid>
         
     </Grid>
 </UserControl>

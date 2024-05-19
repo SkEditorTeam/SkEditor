@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using AvaloniaEdit.Utils;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.SkriptHub;
@@ -22,6 +23,7 @@ public partial class DocumentationControl : UserControl
         DataContext = new DocumentationViewModel();
 
         AssignCommands();
+        LoadingInformation.IsVisible = false;
     }
 
     public void AssignCommands()
@@ -100,6 +102,7 @@ public partial class DocumentationControl : UserControl
 
     private async void SearchButtonClick(object? sender, RoutedEventArgs e)
     {
+        LoadingInformation.IsVisible = false;
         if (ViewModel.Provider == null)
         {
             ApiVault.Get().ShowError("No documentation provider selected.\n\nYou may need to connect your API keys from settings to use those.");
@@ -117,17 +120,34 @@ public partial class DocumentationControl : UserControl
         
         try
         {
-            var elements = await provider.Search(searchData);
-
+            LoadingInformation.IsVisible = true;
             EntriesContainer.Children.Clear();
+            
+            var elements = await provider.Search(searchData);
+            if (elements.Count > 100)
+            {
+                var result = await ApiVault.Get().ShowAdvancedMessage("Too Many Results",
+                    "The search returned more than 100 results. Are you sure you want to display all of them?\n\nIt may slow down SkEditor!");
+                if (result != ContentDialogResult.Primary)
+                {
+                    LoadingInformation.IsVisible = false;
+                    return;
+                }
+            }
+            
             foreach (var element in elements)
             {
                 EntriesContainer.Children.Add(new DocElementControl(element));
             }
+            
+            LoadingInformation.IsVisible = false;
         }
         catch (Exception exception)
         {
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{exception.Message}");
+        } finally
+        {
+            LoadingInformation.IsVisible = false;
         }
     }
 }
