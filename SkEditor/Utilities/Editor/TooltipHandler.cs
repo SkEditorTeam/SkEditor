@@ -35,7 +35,7 @@ public class TooltipHandler
         SimpleSegment segment = TextEditorUtilities.GetWordAtMousePosition(pos, editor.TextArea);
         if (segment == SimpleSegment.Invalid) return;
 
-        SkDocParser.SkDocFunction skDocFunction = SkDocParser.GetFunction(editor, line) ??
+        SkDocParser.Function skDocFunction = SkDocParser.GetFunction(editor, line) ??
             SkDocParser.GetFunctionFromCall(editor, segment);
         if (skDocFunction == null) return;
 
@@ -55,6 +55,7 @@ public class TooltipHandler
 
         ApiVault.Get().GetMainWindow().PointerMoved += pointerMoved;
 
+        editor.ContextFlyout.Hide();
         FlyoutBase.SetAttachedFlyout(editor, Flyout);
         Flyout.ShowAt(editor);
     }
