@@ -198,7 +198,6 @@ public class FileBuilder
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
         editor.TextArea.TextEntered += TextEditorEventHandler.CheckForSkDoc;
-        editor.PointerHover += TooltipHandler.OnPointerHover;
         if (!ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
         {
             editor.TextChanged += (_, _) => ApiVault.Get().GetOpenedFile()?.Parser?.SetUnparsed();
@@ -219,6 +218,10 @@ public class FileBuilder
         {
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
+        }
+        if (ApiVault.Get().GetAppConfig().EnableSkDoc)
+        {
+            editor.PointerHover += TooltipHandler.OnPointerHover;
         }
 
         editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;

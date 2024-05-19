@@ -61,7 +61,6 @@ public partial class SkDocParser
             .FirstOrDefault(x => x.Editor == editor)
             .Parser;
 
-        ApiVault.Get().SendToBottomBar($"is null: {SkDocFunctions.FirstOrDefault(x => x.Key == parser && x.Value.Line == line).Value == null}");
         return SkDocFunctions.FirstOrDefault(x => x.Key == parser && x.Value.Line == line).Value;
     }
 
