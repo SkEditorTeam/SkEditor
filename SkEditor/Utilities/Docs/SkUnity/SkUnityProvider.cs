@@ -14,7 +14,8 @@ public class SkUnityProvider : IDocProvider
     private const string BaseUri 
         = "https://api.skunity.com/v1/ad6a92611abf3c9c34ae0737b0c38b5a/docs/search/";
 
-    private readonly HttpClient _client = new ();
+    private readonly HttpClient _client = new HttpClient()
+        .WithUserAgent("C# App");
     
     public DocProvider Provider => DocProvider.SkUnity;
     public List<string> CanSearch(SearchData searchData)
@@ -35,7 +36,6 @@ public class SkUnityProvider : IDocProvider
         // First build the URI
         var uri = BaseUri;
         var queryElements = new List<string>();
-        _client.DefaultRequestHeaders.Add("User-Agent", "C# App");
 
         if (!string.IsNullOrEmpty(searchData.Query))
             queryElements.Add(searchData.Query);
@@ -43,7 +43,7 @@ public class SkUnityProvider : IDocProvider
             queryElements.Add("type:" + searchData.FilteredType.ToString().ToLower() + "s");
         if (!string.IsNullOrEmpty(searchData.FilteredAddon))
             queryElements.Add("addon:" + searchData.FilteredAddon);
-        
+
         uri += string.Join("%20", queryElements);
         
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));

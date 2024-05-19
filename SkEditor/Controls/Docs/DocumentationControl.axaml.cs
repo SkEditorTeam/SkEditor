@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using AvaloniaEdit.Utils;
 using SkEditor.API;
 using SkEditor.Utilities.Docs;
+using SkEditor.Utilities.Docs.SkriptHub;
 using SkEditor.Utilities.Docs.SkUnity;
 using SkEditor.ViewModels;
 
@@ -37,8 +38,7 @@ public partial class DocumentationControl : UserControl
 
     private async void SearchButtonClick(object? sender, RoutedEventArgs e)
     {
-        // TODO: docs provider switcher
-        var provider = SkUnityProvider.Get();
+        var provider = SkriptHubProvider.Get();
         var searchData = ViewModel.SearchData;
         
         var errors = provider.CanSearch(searchData);
