@@ -48,7 +48,7 @@ public partial class PublishWindow : AppWindow
         {
             "Pastebin" => appConfig.PastebinApiKey,
             "code.skript.pl" => appConfig.CodeSkriptPlApiKey,
-            "skUnity Parser" => appConfig.SkunityApiKey,
+            "skUnity Parser" => appConfig.SkUnityAPIKey,
             _ => "",
         };
 
@@ -68,7 +68,7 @@ public partial class PublishWindow : AppWindow
                 ApiVault.Get().GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
                 break;
             case "skUnity Parser":
-                ApiVault.Get().GetAppConfig().SkunityApiKey = ApiKeyTextBox.Text;
+                ApiVault.Get().GetAppConfig().SkUnityAPIKey = ApiKeyTextBox.Text;
                 break;
         }
     }

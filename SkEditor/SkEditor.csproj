@@ -140,6 +140,9 @@
 		<Compile Update="Views\Settings\PersonalizationPage.axaml.cs">
 			<DependentUpon>PersonalizationPage.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\Settings\ConnectionsPage.axaml.cs">
+			<DependentUpon>ConnectionsPage.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\Generators\Gui\GuiGenerator.axaml.cs">
 			<DependentUpon>GuiGenerator.axaml</DependentUpon>
 		</Compile>

@@ -16,7 +16,6 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private string _lastUsedPublishService = "Pastebin";
     [ObservableProperty] private string _pastebinApiKey = "";
     [ObservableProperty] private string _codeSkriptPlApiKey = "";
-    [ObservableProperty] private string _skunityApiKey = "";
     [ObservableProperty] private bool _useSkriptGui = false;
 
     [ObservableProperty] private bool _isDiscordRpcEnabled = true;
@@ -49,6 +48,8 @@ public partial class AppConfig : ObservableObject
     public bool EnableSessionRestoring { get; set; } = false;
     public bool EnableRealtimeCodeParser { get; set; } = false;
 
+    public string SkUnityAPIKey { get; set; } = "";
+    public string SkriptHubAPIKey { get; set; } = "";
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
 
