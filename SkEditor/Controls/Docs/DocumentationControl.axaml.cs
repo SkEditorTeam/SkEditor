@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using AvaloniaEdit.Utils;
 using FluentAvalonia.UI.Controls;
+using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Docs;
-using SkEditor.Utilities.Docs.SkriptHub;
-using SkEditor.Utilities.Docs.SkUnity;
 using SkEditor.ViewModels;
 
 namespace SkEditor.Controls.Docs;
@@ -40,6 +36,37 @@ public partial class DocumentationControl : UserControl
         FilteredTypesBox.SelectionChanged += (sender, args) =>
         {
             ViewModel.SearchData.FilteredType = (IDocumentationEntry.Type)((ComboBoxItem)FilteredTypesBox.SelectedItem!).Tag!;
+        };
+        
+        FilteredAddonBox.FilterMode = AutoCompleteFilterMode.Contains;
+        FilteredAddonBox.AsyncPopulator = async (text, ct) =>
+        {
+            var provider = IDocProvider.Providers[ViewModel.Provider!.Value];
+            if (provider.HasAddons)
+            {
+                List<string> addons;
+                try
+                {
+                    addons = await provider.GetAddons();
+                    if (addons.Count > 10)
+                        addons = addons.GetRange(0, 10);
+                    addons.Add("Skript");
+                }
+                catch (Exception e)
+                {
+                    ApiVault.Get().ShowError($"An error occurred while fetching the addons.\n\n{e.Message}");
+                    Log.Error(e, "An error occurred while fetching the addons.");
+                    return new List<string>();
+                }
+                
+                return addons;
+            }
+            
+            return new List<string>();
+        };
+        FilteredAddonBox.SelectionChanged += (sender, args) =>
+        {
+            ViewModel.SearchData.FilteredAddon = FilteredAddonBox.Text;
         };
 
 
@@ -151,7 +178,7 @@ public partial class DocumentationControl : UserControl
         catch (Exception exception)
         {
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{exception.Message}");
-            Serilog.Log.Error(exception, "An error occurred while fetching the documentation.");
+            Log.Error(exception, "An error occurred while fetching the documentation.");
             OtherInformation.Text = "An error occurred. Try again later.";
         } finally
         {

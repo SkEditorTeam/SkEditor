@@ -14,8 +14,7 @@ public class SkriptHubProvider : IDocProvider
 {
     public static IDocProvider Get() => new SkriptHubProvider();
     
-    private const string BaseUri = "https://skripthub.net/api/v1/syntax/";
-    private const string ExampleUri = "https://skripthub.net/api/v1/syntaxexample/";
+    private const string BaseUri = "https://skripthub.net/api/v1/";
 
     private readonly HttpClient _client = new();
     
@@ -35,7 +34,7 @@ public class SkriptHubProvider : IDocProvider
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
-        var uri = BaseUri;
+        var uri = BaseUri + "syntax/";
         var parameters = new List<string>();
         
         if (!string.IsNullOrEmpty(searchData.Query))
@@ -92,7 +91,7 @@ public class SkriptHubProvider : IDocProvider
 
     public async Task<List<IDocumentationExample>> FetchExamples(string elementId)
     {
-        var uri = ExampleUri + "?syntax=" + elementId;
+        var uri = BaseUri + "syntaxexample/" + "?syntax=" + elementId;
         
         _client.DefaultRequestHeaders.Clear();
         _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
@@ -128,5 +127,46 @@ public class SkriptHubProvider : IDocProvider
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var elements = JsonConvert.DeserializeObject<List<SkriptHubDocExample>>(content);
         return elements.Cast<IDocumentationExample>().ToList();
+    }
+
+    public bool HasAddons => true;
+    public async Task<List<string>> GetAddons()
+    { 
+        var uri = BaseUri + "addon/";
+        
+        _client.DefaultRequestHeaders.Clear();
+        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
+        
+        var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
+        HttpResponseMessage response;
+        try
+        {
+            response = await _client.GetAsync(uri, cancellationToken.Token);
+        }
+        catch (Exception e)
+        {
+            ApiVault.Get().ShowError(e is TaskCanceledException
+                ? "The request to the documentation server timed out. Are the docs down?"
+                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+            return [];
+        }
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            try
+            {
+                ApiVault.Get().Log(await response.Content.ReadAsStringAsync(cancellationToken.Token));
+            }
+            catch (Exception e)
+            {
+                ApiVault.Get().Log(e.Message);
+            }
+            ApiVault.Get().ShowError($"The documentation server returned an error: {response.StatusCode}");
+            return [];
+        }
+        
+        var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
+        var elements = JsonConvert.DeserializeObject<List<JObject>>(content);
+        return elements.Select(e => e["name"].ToString()).ToList();
     }
 }

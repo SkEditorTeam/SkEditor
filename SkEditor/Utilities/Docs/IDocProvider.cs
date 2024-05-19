@@ -25,4 +25,7 @@ public interface IDocProvider
     
     public bool NeedsToLoadExamples { get; }
     public Task<List<IDocumentationExample>> FetchExamples(string elementId);
+    
+    public bool HasAddons { get; }
+    public Task<List<string>> GetAddons();
 }

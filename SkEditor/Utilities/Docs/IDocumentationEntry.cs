@@ -13,8 +13,7 @@ namespace SkEditor.Utilities.Docs;
 public interface IDocumentationEntry
 {
 
-    public static ItemsSourceView<Type> AllTypes => ItemsSourceView.GetOrCreate(
-        Enum.GetValues<Type>().ToList());
+    public static List<Type> AllTypes => Enum.GetValues<Type>().ToList();
     
     public enum Type
     {
@@ -26,8 +25,7 @@ public interface IDocumentationEntry
         Type,
         Section,
         Structure,
-        Function,
-        Classe // Not sure why it's here, but SkUnity use both so -shrug-
+        Function
     }
 
     #region Common Properties

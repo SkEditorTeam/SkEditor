@@ -168,11 +168,10 @@ public partial class DocElementControl : UserControl
             IDocumentationEntry.Type.Expression => Symbol.Calculator,
             IDocumentationEntry.Type.Effect => Symbol.Highlight,
             IDocumentationEntry.Type.Condition => Symbol.Filter,
-            IDocumentationEntry.Type.Type => Symbol.Document,
+            IDocumentationEntry.Type.Type => Symbol.Library,
             IDocumentationEntry.Type.Section => Symbol.Bookmark,
             IDocumentationEntry.Type.Structure => Symbol.Code,
             IDocumentationEntry.Type.Function => Symbol.Find,
-            IDocumentationEntry.Type.Classe => Symbol.Library,
             _ => throw new ArgumentOutOfRangeException()
         };
     }

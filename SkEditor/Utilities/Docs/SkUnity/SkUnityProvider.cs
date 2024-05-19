@@ -11,8 +11,7 @@ namespace SkEditor.Utilities.Docs.SkUnity;
 
 public class SkUnityProvider : IDocProvider
 {
-    private const string BaseUri = "https://api.skunity.com/v1/%s/docs/search/";
-    private const string ExampleUri = "https://api.skunity.com/v1/%s/docs/getExamplesByID/";
+    private const string BaseUri = "https://api.skunity.com/v1/%s/docs/";
 
     private readonly HttpClient _client = new HttpClient()
         .WithUserAgent("C# App");
@@ -34,7 +33,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
         // First build the URI
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey);
+        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "search/";
         var queryElements = new List<string>();
 
         if (!string.IsNullOrEmpty(searchData.Query))
@@ -88,7 +87,7 @@ public class SkUnityProvider : IDocProvider
 
     public async Task<List<IDocumentationExample>> FetchExamples(string elementId)
     {
-        var uri = ExampleUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + elementId;
+        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getExamplesByID/" + elementId;
         
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -122,5 +121,43 @@ public class SkUnityProvider : IDocProvider
         }
         
         return keys.Select(key => resultObject[key].ToObject<SkUnityDocExample>()).ToList<IDocumentationExample>();
+    }
+
+    private readonly List<string> _addonCache = new();
+    public bool HasAddons => true;
+    public async Task<List<string>> GetAddons()
+    {
+        if (_addonCache.Count > 0)
+            return _addonCache;
+        
+        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getAllAddons/";
+        
+        var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
+        HttpResponseMessage response;
+        try
+        {
+            response = await _client.GetAsync(uri, cancellationToken.Token);
+        }
+        catch (Exception e)
+        {
+            ApiVault.Get().ShowError(e is TaskCanceledException
+                ? "The request to the documentation server timed out. Are the docs down?"
+                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+            return new List<string>();
+        }
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\nReceived status code: {response.StatusCode}");
+            return new List<string>();
+        }
+        
+        var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
+        var responseObject = JObject.Parse(content);
+        var addonsObj = responseObject["result"].ToObject<JObject>();
+        var addons = addonsObj.Properties().Select(prop => prop.Name).ToList();
+        
+        _addonCache.AddRange(addons);
+        return addons;
     }
 }
