@@ -22,5 +22,7 @@ public interface IDocProvider
     
     public List<string> CanSearch(SearchData searchData);
     public bool IsAvailable();
-
+    
+    public bool NeedsToLoadExamples { get; }
+    public Task<List<IDocumentationExample>> FetchExamples(string elementId);
 }

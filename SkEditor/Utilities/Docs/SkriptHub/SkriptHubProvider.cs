@@ -14,8 +14,8 @@ public class SkriptHubProvider : IDocProvider
 {
     public static IDocProvider Get() => new SkriptHubProvider();
     
-    private const string BaseUri
-        = "https://skripthub.net/api/v1/syntax/";// ?search=member&addons=Skript
+    private const string BaseUri = "https://skripthub.net/api/v1/syntax/";
+    private const string ExampleUri = "https://skripthub.net/api/v1/syntaxexample/";
 
     private readonly HttpClient _client = new();
     
@@ -86,5 +86,47 @@ public class SkriptHubProvider : IDocProvider
     public bool IsAvailable()
     {
         return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
+    }
+
+    public bool NeedsToLoadExamples => true;
+
+    public async Task<List<IDocumentationExample>> FetchExamples(string elementId)
+    {
+        var uri = ExampleUri + "?syntax=" + elementId;
+        
+        _client.DefaultRequestHeaders.Clear();
+        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
+        
+        var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
+        HttpResponseMessage response;
+        try
+        {
+            response = await _client.GetAsync(uri, cancellationToken.Token);
+        }
+        catch (Exception e)
+        {
+            ApiVault.Get().ShowError(e is TaskCanceledException
+                ? "The request to the documentation server timed out. Are the docs down?"
+                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+            return [];
+        }
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            try
+            {
+                ApiVault.Get().Log(await response.Content.ReadAsStringAsync(cancellationToken.Token));
+            }
+            catch (Exception e)
+            {
+                ApiVault.Get().Log(e.Message);
+            }
+            ApiVault.Get().ShowError($"The documentation server returned an error: {response.StatusCode}");
+            return [];
+        }
+        
+        var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
+        var elements = JsonConvert.DeserializeObject<List<SkriptHubDocExample>>(content);
+        return elements.Cast<IDocumentationExample>().ToList();
     }
 }
