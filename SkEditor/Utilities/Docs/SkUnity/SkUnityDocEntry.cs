@@ -3,29 +3,6 @@ using Newtonsoft.Json;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
-/*
- * {
-            "id": "4842",
-            "name": "On Join",
-            "doc": "events",
-            "desc": "Called when the player joins the server. The player is already in a world when this event is called, so if you want to prevent players from joining you should prefer on connect over this event.",
-            "addon": "Skript",
-            "version": "1.0",
-            "pattern": "[on] [player] (login|logging in|join[ing])",
-            "plugin": "",
-            "eventvalues": "event-player\nevent-world",
-            "changers": "",
-            "returntype": "",
-            "is_array": "0",
-            "tags": "",
-            "reviewed": "true",
-            "versions": "",
-            "checkout_json_id": "",
-            "docs_score": "7.000",
-            "has_snippet": "0",
-            "keywords": null
-        },
- */
 [Serializable]
 public class SkUnityDocEntry : IDocumentationEntry
 {
@@ -45,10 +22,20 @@ public class SkUnityDocEntry : IDocumentationEntry
     
     public IDocumentationEntry.Type DocType
     {
-        get => Enum.Parse<IDocumentationEntry.Type>(RawDoc[..^1], true);
+        get
+        {
+            try
+            {
+                return Enum.Parse<IDocumentationEntry.Type>(RawDoc, true);
+            }
+            catch (Exception e)
+            {
+                return Enum.Parse<IDocumentationEntry.Type>(RawDoc[..^1], true);
+            }
+        }
         set => RawDoc = value.ToString();
     }
-        
+
     [JsonProperty("doc")]
     public string RawDoc { set; get; }
     

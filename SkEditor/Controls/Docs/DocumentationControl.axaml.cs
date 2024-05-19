@@ -145,6 +145,7 @@ public partial class DocumentationControl : UserControl
         catch (Exception exception)
         {
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{exception.Message}");
+            Serilog.Log.Error(exception, "An error occurred while fetching the documentation.");
         } finally
         {
             LoadingInformation.IsVisible = false;

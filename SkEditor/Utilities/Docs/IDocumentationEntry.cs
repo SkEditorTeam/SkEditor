@@ -26,7 +26,8 @@ public interface IDocumentationEntry
         Type,
         Section,
         Structure,
-        Function
+        Function,
+        Classe // Not sure why it's here, but SkUnity use both so -shrug-
     }
 
     #region Common Properties

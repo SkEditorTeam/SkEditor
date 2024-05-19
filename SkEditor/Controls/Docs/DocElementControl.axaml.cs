@@ -126,7 +126,9 @@ public partial class DocElementControl : UserControl
                     Foreground = (IBrush)GetAppResource("EditorTextColor"),
                     Background = (IBrush)GetAppResource("EditorBackgroundColor"),
                     Padding = new Thickness(10),
-                    Text = Format(example.Example)
+                    Text = Format(example.Example),
+                    IsReadOnly = true,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
                 };
                 
                 if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
@@ -150,7 +152,9 @@ public partial class DocElementControl : UserControl
             ExamplesEntry.Content = new TextBlock()
             {
                 Text = "An error occurred while loading examples: " + e.Message,
-                Foreground = Brushes.Red
+                Foreground = Brushes.Red,
+                FontWeight = FontWeight.SemiLight,
+                TextWrapping = TextWrapping.Wrap
             };
         }
     }
@@ -168,6 +172,7 @@ public partial class DocElementControl : UserControl
             IDocumentationEntry.Type.Section => Symbol.Bookmark,
             IDocumentationEntry.Type.Structure => Symbol.Code,
             IDocumentationEntry.Type.Function => Symbol.Find,
+            IDocumentationEntry.Type.Classe => Symbol.Library,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
