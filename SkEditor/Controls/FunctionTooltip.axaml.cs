@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
@@ -11,7 +12,7 @@ namespace SkEditor.Controls;
 
 public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
 {
-    public FunctionTooltip(SkDocParser.SkDocFunction skDocFunction)
+    public FunctionTooltip(SkDocParser.Function skDocFunction)
     {
         InitializeComponent();
         DataContext = this;
@@ -24,14 +25,99 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
             selectableTextBlock.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
             selectableTextBlock.ContextFlyout = null;
         }
+
+        var comment = skDocFunction.Comment;
+        if (comment == null)
+        {
+            return;
+        }
+        BuildFromComment(comment);
     }
 
-    private static TextBlock CreateTextBlock(string text, string color)
+    private void BuildFromComment(SkDocParser.SkDocComment? comment)
+    {
+        Separator separator = new()
+        {
+            Margin = new Thickness(0, 5, 0, 5)
+        };
+        TooltipPanel.Children.Add(separator);
+
+        if (comment.Description != null)
+        {
+            SelectableTextBlock descriptionTextBlock = CreateSelectableTextBlock(comment.Description, "#adbcc3", 12);
+            descriptionTextBlock.MaxWidth = 300;
+            descriptionTextBlock.TextWrapping = TextWrapping.Wrap;
+            descriptionTextBlock.Margin = new Thickness(-10, 0, 0, 0);
+            TooltipPanel.Children.Add(descriptionTextBlock);
+        }
+
+        if (comment.Parameters.Count > 0)
+        {
+            StackPanel paramsPanel = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 5, 0, 0)
+            };
+
+            TextBlock textBlock = CreateTextBlock("Params:", "#7d7d7d", 12);
+            paramsPanel.Children.Add(textBlock);
+
+            StackPanel parametersPanel = new()
+            {
+                Orientation = Orientation.Vertical,
+                Margin = new Thickness(10, 0, 0, 0),
+                Spacing = 3
+            };
+
+            foreach (var parameter in comment.Parameters)
+            {
+                StackPanel parameterPanel = new()
+                {
+                    Orientation = Orientation.Horizontal
+                };
+
+                SelectableTextBlock parameterName = CreateSelectableTextBlock(parameter.Name, "#fdc272", 12, fontStyle: FontStyle.Italic);
+                SelectableTextBlock parameterDescription = CreateSelectableTextBlock(" - " + parameter.Description, "#adbcc3", 12);
+
+                parameterPanel.Children.Add(parameterName);
+                parameterPanel.Children.Add(parameterDescription);
+                parametersPanel.Children.Add(parameterPanel);
+            }
+
+            paramsPanel.Children.Add(parametersPanel);
+            TooltipPanel.Children.Add(paramsPanel);
+        }
+
+        if (comment.Return != null)
+        {
+            StackPanel returnsPanel = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 5, 0, 0)
+            };
+
+            TextBlock textBlock = CreateTextBlock("Returns:", "#7d7d7d", 12);
+            SelectableTextBlock selectableTextBlock = new()
+            {
+                FontFamily = new FontFamily("JetBrains Mono"),
+                FontSize = 12,
+                Foreground = new SolidColorBrush(Color.Parse("#adbcc3")),
+                Margin = new Thickness(5, 0, 0, 0),
+                Text = comment.Return
+            };
+
+            returnsPanel.Children.Add(textBlock);
+            returnsPanel.Children.Add(selectableTextBlock);
+            TooltipPanel.Children.Add(returnsPanel);
+        }
+    }
+
+    private static TextBlock CreateTextBlock(string text, string color, double fontSize = 13)
     {
         return new TextBlock
         {
             FontFamily = new FontFamily("JetBrains Mono"),
-            FontSize = 13,
+            FontSize = fontSize,
             Foreground = new SolidColorBrush(Color.Parse(color)),
             FontWeight = FontWeight.Bold,
             MaxWidth = 300,
@@ -39,7 +125,22 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
         };
     }
 
-    public static StackPanel BuildFunctionContent(SkDocParser.SkDocFunction skDocFunction)
+    private static SelectableTextBlock CreateSelectableTextBlock(string text, string color, double fontSize = 12, 
+        FontWeight fontWeight = FontWeight.Normal, FontStyle fontStyle = FontStyle.Normal)
+    {
+        return new SelectableTextBlock
+        {
+            FontFamily = new FontFamily("JetBrains Mono"),
+            FontSize = fontSize,
+            Foreground = new SolidColorBrush(Color.Parse(color)),
+            FontWeight = fontWeight,
+            FontStyle = fontStyle,
+            MaxWidth = 300,
+            Text = text
+        };
+    }
+
+    public static StackPanel BuildFunctionContent(SkDocParser.Function skDocFunction)
     {
         var functionContentPanel = new StackPanel { Orientation = Orientation.Vertical };
 
