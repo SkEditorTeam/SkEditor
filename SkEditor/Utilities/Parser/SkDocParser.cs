@@ -14,14 +14,13 @@ public partial class SkDocParser
     public record SkDocFunction(int Line, string Name, string? ReturnType, List<SkDocParameter> Parameters);
     public record SkDocParameter(string Name, string Type);
 
-    public static Dictionary<CodeParser, SkDocFunction> SkDocFunctions { get; } = [];
+    public static Dictionary<CodeParser, List<SkDocFunction>> SkDocFunctions { get; } = [];
 
     private static readonly Regex _functionRegex = FunctionRegex();
 
     public static void Parse(CodeParser parser, List<CodeSection> sections)
     {
         SkDocFunctions.Clear();
-
         sections = sections.Where(x => x.Type == CodeSection.SectionType.Function).ToList();
 
         foreach (var section in sections)
@@ -36,46 +35,69 @@ public partial class SkDocParser
             string name = match.Groups["name"].Value;
             string parameters = match.Groups["parameters"].Value;
             string returnType = match.Groups["returnType"].Value;
-
             List<SkDocParameter> parametersList = [];
+
             if (!string.IsNullOrEmpty(parameters))
             {
                 string[] parametersArray = parameters.Split(',');
+
                 foreach (var parameter in parametersArray)
                 {
                     string[] parameterParts = parameter.Trim().Split(' ');
-                    string parameterName = parameterParts[^1];
-                    string parameterType = parameterParts[^2];
+                    string parameterType = parameterParts[^1];
+                    string parameterName = parameterParts[^2];
                     parametersList.Add(new(parameterName, parameterType));
                 }
             }
 
             SkDocFunction function = new(line, name, returnType, parametersList);
-            SkDocFunctions.Add(parser, function);
+
+            if (!SkDocFunctions.TryGetValue(parser, out List<SkDocFunction>? value))
+            {
+                value = [];
+                SkDocFunctions[parser] = value;
+            }
+
+            value.Add(function);
         }
     }
 
     public static SkDocFunction? GetFunction(TextEditor editor, int line)
     {
-        CodeParser parser = FileHandler.OpenedFiles
-            .FirstOrDefault(x => x.Editor == editor)
-            .Parser;
+        var file = FileHandler.OpenedFiles.FirstOrDefault(x => x.Editor == editor);
+        if (file == null)
+            return null;
 
-        return SkDocFunctions.FirstOrDefault(x => x.Key == parser && x.Value.Line == line).Value;
+        CodeParser parser = file.Parser;
+
+        if (!SkDocFunctions.TryGetValue(parser, out var functions))
+            return null;
+
+        return functions.FirstOrDefault(f => f.Line == line);
     }
 
-    public static SkDocFunction GetFunctionFromCall(TextEditor editor, SimpleSegment segment)
+    public static SkDocFunction? GetFunctionFromCall(TextEditor editor, SimpleSegment segment)
     {
         int line = editor.Document.GetLineByOffset(segment.Offset).LineNumber;
         DocumentLine documentLine = editor.Document.GetLineByNumber(line);
         string text = editor.Document.GetText(documentLine);
 
-        if (!FunctionCallRegex().IsMatch(text)) return null;
+        var match = FunctionCallRegex().Match(text);
+        if (!match.Success) return null;
 
-        string name = FunctionCallRegex().Match(text).Groups["name"].Value;
+        string name = match.Groups["name"].Value;
         if (!editor.Document.GetText(segment).Equals(name)) return null;
 
-        return SkDocFunctions.FirstOrDefault(x => x.Value.Name == name).Value;
+        var file = FileHandler.OpenedFiles.FirstOrDefault(x => x.Editor == editor);
+        if (file == null)
+            return null;
+
+        CodeParser parser = file.Parser;
+
+        if (!SkDocFunctions.TryGetValue(parser, out var functions))
+            return null;
+
+        return functions.FirstOrDefault(f => f.Name == name);
     }
 
     [GeneratedRegex(@"(^function|^local function) (?<name>\w+)\((?<parameters>[^)]*)\)(?: :: (?<returnType>\w+))?:")]

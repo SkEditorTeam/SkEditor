@@ -39,7 +39,7 @@ public class TooltipHandler
             SkDocParser.GetFunctionFromCall(editor, segment);
         if (skDocFunction == null) return;
 
-        FunctionTooltip tooltip = new();
+        FunctionTooltip tooltip = new(skDocFunction);
         Flyout.Content = tooltip;
 
         void pointerMoved(object? _, PointerEventArgs e2)

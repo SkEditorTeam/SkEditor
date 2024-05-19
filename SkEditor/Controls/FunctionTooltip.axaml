@@ -12,46 +12,7 @@
 			<ui:IconSourceElement Name="Icon" IconSource="{StaticResource FunctionIcon}"
 								  Height="16" Foreground="#ff6542" Margin="0,0,7,0" VerticalAlignment="Top" />
 
-			<StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#ff6542" FontWeight="Bold"
-						MaxWidth="300" Text="function"/>
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#90dbf5" FontWeight="Bold"
-						MaxWidth="300" Text=" adminChat"/>
-				<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#cdcaca" FontWeight="Bold"
-						MaxWidth="300" Text="("/>
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#d9ad69" FontWeight="Bold"
-						MaxWidth="300" Text="    msg:"/>
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#54d7a9" FontWeight="Bold"
-						MaxWidth="300" Text=" string"/>
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#d9ad69" FontWeight="Bold"
-						MaxWidth="300" Text="    p:"/>
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#54d7a9" FontWeight="Bold"
-						MaxWidth="300" Text="   executor"/>
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#cdcaca" FontWeight="Bold"
-						MaxWidth="300" Text=")"/>
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#cdcaca" FontWeight="Bold"
-						MaxWidth="300" Text=" ::"/>
-					<TextBlock FontFamily="JetBrains Mono" FontSize="13"
-						Foreground="#54d7a9" FontWeight="Bold"
-						MaxWidth="300" Text=" boolean"/>
-				</StackPanel>
-			</StackPanel>
+			<StackPanel Name="FunctionContentPanel"></StackPanel>
 		</StackPanel>
 
 		<Separator Margin="0,5,0,5"></Separator>
