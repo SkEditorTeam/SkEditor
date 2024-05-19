@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AvaloniaEdit.Highlighting;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Syntax;
@@ -228,4 +229,9 @@ public class SyntaxLoader
         }
     }
 
+    public static IHighlightingDefinition GetCurrentSkirptHighlighting()
+    {
+        var syntax = GetConfiguredSyntaxForLanguage("Skript");
+        return syntax.Highlighting;
+    }
 }

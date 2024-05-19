@@ -3,9 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-             xmlns:docs="clr-namespace:SkEditor.Controls.Docs"
              xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
-             xmlns:docs1="clr-namespace:SkEditor.Utilities.Docs"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="600"
              x:Class="SkEditor.Controls.Docs.DocElementControl">
     
@@ -52,24 +50,15 @@
                 IsReadOnly="True"
             />
             
-            <!--<docs:DocEntryControl
+            <Expander
                 Grid.Row="2"
                 Grid.Column="0"
-                EntryTitle="Examples"
-            >
-                <docs:DocEntryControl.EntryContent>
-                    <avaloniaEdit:TextEditor
-                        Foreground="{DynamicResource EditorTextColor}"
-                        Background="{DynamicResource EditorBackgroundColor}"
-                        Padding="10"
-                        HorizontalScrollBarVisibility="Auto"
-                        Text="on join:"
-                        FontFamily="{DynamicResource JetBrainsFont}"
-                    />
-                    
-                </docs:DocEntryControl.EntryContent>
-            </docs:DocEntryControl> -->
-            
+                Header="Examples"
+                IsExpanded="False"
+                Name="ExamplesEntry">
+                
+            </Expander>
+
         </Grid>
     </controls:SettingsExpander>
 </UserControl>

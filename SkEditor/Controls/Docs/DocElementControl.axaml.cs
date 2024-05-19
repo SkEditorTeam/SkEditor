@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using Avalonia.Media;
+using AvaloniaEdit;
 using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
@@ -14,6 +17,8 @@ namespace SkEditor.Controls.Docs;
 
 public partial class DocElementControl : UserControl
 {
+    private bool _hasLoadedExamples = false;
+    
     public DocElementControl(IDocumentationEntry entry)
     {
         InitializeComponent();
@@ -42,6 +47,112 @@ public partial class DocElementControl : UserControl
         PatternsEditor.Text = Format(entry.Patterns);
         PatternsEditor.SyntaxHighlighting = CreatePatternHighlighting();
         PatternsEditor.TextArea.TextView.Redraw();
+        
+        // Examples setup
+        if (IDocProvider.Providers[entry.Provider].NeedsToLoadExamples)
+        {
+            _hasLoadedExamples = false;
+            ExamplesEntry.IsExpanded = false;
+            
+            ExamplesEntry.Expanded += (_, _) =>
+            {
+                if (_hasLoadedExamples) 
+                    return;
+                _hasLoadedExamples = true;
+
+                LoadExamples(entry);
+            };
+        }
+        else
+        {
+            LoadExamples(entry);
+        }
+    }
+
+    public async void LoadExamples(IDocumentationEntry entry)
+    {
+        var provider = IDocProvider.Providers[entry.Provider];
+        
+        // First we setup a small loading bar
+        ExamplesEntry.Content = new ProgressBar()
+        {
+            IsIndeterminate = true,
+            Height = 5, HorizontalAlignment = HorizontalAlignment.Stretch,
+            Margin = new Thickness(5)
+        };
+        
+        // Then we load the examples
+        try
+        {
+            var examples = await provider.FetchExamples(entry.Id);
+            ExamplesEntry.Content = new StackPanel()
+            {
+                Orientation = Orientation.Vertical,
+                Margin = new Thickness(5)
+            };
+
+            foreach (IDocumentationExample example in examples)
+            {
+                var stackPanel = new StackPanel()
+                {
+                    Orientation = Orientation.Vertical,
+                    Margin = new Thickness(0, 2)
+                };
+                
+                stackPanel.Children.Add(new StackPanel()
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 10,
+                    Children =
+                    {
+                        new TextBlock()
+                        {
+                            Text = "By " + example.Author,
+                            FontWeight = FontWeight.Regular,
+                            FontSize = 16
+                        },
+                        new InfoBadge() { IconSource = new FontIconSource() { Glyph = example.Votes } }
+                    }
+                });
+
+                object GetAppResource(string key)
+                {
+                    Application.Current.TryGetResource(key, Avalonia.Styling.ThemeVariant.Default, out var resource);
+                    return resource;
+                }
+
+                var textEditor = new TextEditor()
+                {
+                    Foreground = (IBrush)GetAppResource("EditorTextColor"),
+                    Background = (IBrush)GetAppResource("EditorBackgroundColor"),
+                    Padding = new Thickness(10),
+                    Text = Format(example.Example)
+                };
+                
+                if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+                {
+                    Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out var font);
+                    textEditor.FontFamily = (FontFamily) font;
+                }
+                else
+                {
+                    textEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+                }
+                
+                textEditor.SyntaxHighlighting = SyntaxLoader.GetCurrentSkirptHighlighting();
+                stackPanel.Children.Add(textEditor);
+                
+                ((StackPanel) ExamplesEntry.Content).Children.Add(stackPanel);
+            }
+        }
+        catch (Exception e)
+        {
+            ExamplesEntry.Content = new TextBlock()
+            {
+                Text = "An error occurred while loading examples: " + e.Message,
+                Foreground = Brushes.Red
+            };
+        }
     }
     
     private Symbol GetSymbol(IDocumentationEntry entry)
