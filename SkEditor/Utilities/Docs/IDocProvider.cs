@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkriptHub;
+using SkEditor.Utilities.Docs.SkriptMC;
 using SkEditor.Utilities.Docs.SkUnity;
 
 namespace SkEditor.Utilities.Docs;
@@ -13,6 +14,7 @@ public interface IDocProvider
     {
         { DocProvider.SkUnity, new SkUnityProvider()},
         { DocProvider.SkriptHub, new SkriptHubProvider()},
+        { DocProvider.SkriptMC, new SkriptMCProvider()},
         { DocProvider.Local, new LocalProvider()}
     };
     

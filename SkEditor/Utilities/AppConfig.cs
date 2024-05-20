@@ -50,6 +50,7 @@ public partial class AppConfig : ObservableObject
 
     public string SkUnityAPIKey { get; set; } = "";
     public string SkriptHubAPIKey { get; set; } = "";
+    public string SkriptMCAPIKey { get; set; } = "";
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
 

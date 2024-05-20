@@ -109,7 +109,7 @@ public partial class DocumentationControl : UserControl
                 {
                     ProviderBox.Items.Add(new ComboBoxItem()
                     {
-                        Content = provider.ToString() + " (Unavailable)",
+                        Content = provider + " (Unavailable)",
                         Tag = provider,
                         IsEnabled = false
                     });

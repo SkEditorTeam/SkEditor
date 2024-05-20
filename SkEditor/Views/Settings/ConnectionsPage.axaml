@@ -26,7 +26,7 @@
                                 </StackPanel>
                             </Button>
                             <TextBox
-                                PasswordChar="*"
+                                PasswordChar="●"
                                 Watermark="API Key"
                                 Width="200"
                             />
@@ -49,7 +49,30 @@
                                 </StackPanel>
                             </Button>
                             <TextBox
-                                PasswordChar="*"
+                                PasswordChar="●"
+                                Watermark="API Key"
+                                Width="200"
+                            />
+                        </StackPanel>
+                    </fluent:SettingsExpander.Footer>
+                </fluent:SettingsExpander>
+                
+                <fluent:SettingsExpander Header="SkriptMC">
+                    <fluent:SettingsExpander.IconSource>
+                        <fluent:BitmapIconSource UriSource="avares://SkEditor/Assets/Brands/SkriptMC.png"/>
+                    </fluent:SettingsExpander.IconSource>
+                    <fluent:SettingsExpander.Footer>
+                        <StackPanel Name="SkriptMCEntry" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                                    Spacing="5"
+                                    Width="200">
+                            <Button Width="200">
+                                <StackPanel Spacing="5" Orientation="Horizontal">
+                                    <TextBlock Text="Open Dashboard" />
+                                    <fluent:IconSourceElement IconSource="Open" />
+                                </StackPanel>
+                            </Button>
+                            <TextBox
+                                PasswordChar="●"
                                 Watermark="API Key"
                                 Width="200"
                             />

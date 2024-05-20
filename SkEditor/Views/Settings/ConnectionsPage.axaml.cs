@@ -20,6 +20,7 @@ public partial class ConnectionsPage : UserControl
         
         SetupEntry(SkUnityEntry, "https://skunity.com/dashboard/skunity-api", "SkUnityAPIKey");
         SetupEntry(SkriptHubEntry, "https://skripthub.net/dashboard/api/", "SkriptHubAPIKey");
+        SetupEntry(SkriptMCEntry, "https://skript-mc.fr/developer/", "SkriptMCAPIKey");
     }
     
     public void SetupEntry(StackPanel entry, string url, string key)
