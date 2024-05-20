@@ -85,7 +85,7 @@ public partial class DocElementControl : UserControl
             OtherElementPanel.Children.Add(CreateExpander("Event Values", Format(string.IsNullOrEmpty(entry.EventValues) ? "No event values." : entry.EventValues)));
         
         // Changers (expressions)
-        if (entry.DocType == IDocumentationEntry.Type.Expression)
+        if (entry.DocType == IDocumentationEntry.Type.Expression && !string.IsNullOrEmpty(entry.Changers))
         {
             var expander = CreateExpander("Changers",
                 Format(string.IsNullOrEmpty(entry.Changers) ? "No changers." : entry.Changers));
