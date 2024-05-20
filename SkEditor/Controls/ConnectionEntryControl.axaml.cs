@@ -18,7 +18,7 @@ public partial class ConnectionEntryControl : UserControl
         Expander.Header = name;
         Expander.Description = description ?? "";
         
-        OpenDashboardButton.Click += async (sender, e) =>
+        OpenDashboardButton.Click += (_, _) =>
         {
             Process.Start(new ProcessStartInfo(url)
             {

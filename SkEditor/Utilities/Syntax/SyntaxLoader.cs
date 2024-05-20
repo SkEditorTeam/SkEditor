@@ -229,7 +229,7 @@ public class SyntaxLoader
         }
     }
 
-    public static IHighlightingDefinition GetCurrentSkirptHighlighting()
+    public static IHighlightingDefinition GetCurrentSkriptHighlighting()
     {
         var syntax = GetConfiguredSyntaxForLanguage("Skript");
         return syntax.Highlighting;

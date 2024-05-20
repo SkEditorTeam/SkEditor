@@ -316,7 +316,7 @@ public partial class DocElementControl : UserControl
                     textEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
                 }
                 
-                textEditor.SyntaxHighlighting = SyntaxLoader.GetCurrentSkirptHighlighting();
+                textEditor.SyntaxHighlighting = SyntaxLoader.GetCurrentSkriptHighlighting();
                 stackPanel.Children.Add(textEditor);
                 
                 ((StackPanel) ExamplesEntry.Content).Children.Add(stackPanel);

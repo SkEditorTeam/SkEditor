@@ -14,7 +14,7 @@ public class SkUnityProvider : IDocProvider
     private const string BaseUri = "https://api.skunity.com/v1/%s/docs/";
 
     private readonly HttpClient _client = new HttpClient()
-        .WithUserAgent("C# App");
+        .WithUserAgent("SkEditor App");
     
     public DocProvider Provider => DocProvider.SkUnity;
     public List<string> CanSearch(SearchData searchData)
