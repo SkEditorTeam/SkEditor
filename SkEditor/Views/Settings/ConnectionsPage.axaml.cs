@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
+using SkEditor.Controls;
 
 namespace SkEditor.Views.Settings;
 
@@ -18,30 +19,20 @@ public partial class ConnectionsPage : UserControl
     {
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
         
-        SetupEntry(SkUnityEntry, "https://skunity.com/dashboard/skunity-api", "SkUnityAPIKey");
-        SetupEntry(SkriptHubEntry, "https://skripthub.net/dashboard/api/", "SkriptHubAPIKey");
-        SetupEntry(SkriptMCEntry, "https://skript-mc.fr/developer/", "SkriptMCAPIKey");
-        SetupEntry(SkriptPLEntry, "https://code.skript.pl/api-key", "CodeSkriptPlApiKey");
-        SetupEntry(PastebinEntry, "https://pastebin.com/doc_api", "PastebinApiKey");
+        SetupEntry("skUnity", "https://skunity.com/dashboard/skunity-api", "SkUnityAPIKey",
+            "Used as documentation provider and script host (via skUnity Parser)");
+        SetupEntry("SkriptHub", "https://skripthub.net/dashboard/api/", "SkriptHubAPIKey",
+            "Used as documentation provider");
+        SetupEntry("SkriptMC", "https://skript-mc.fr/developer/", "SkriptMCAPIKey",
+            "Used as documentation provider");
+        SetupEntry("SkriptPL", "https://code.skript.pl/api-key", "CodeSkriptPlApiKey",
+            "Used as script host");
+        SetupEntry("Pastebin", "https://pastebin.com/doc_api", "PastebinApiKey",
+            "Used as script host");
     }
     
-    public void SetupEntry(StackPanel entry, string url, string key)
+    public void SetupEntry(string name, string url, string key, string description)
     {
-        var button = entry.Children[0] as Button;
-        var textBox = entry.Children[1] as TextBox;
-        
-        button.Click += async (sender, e) =>
-        {
-            Process.Start(new ProcessStartInfo(url)
-            {
-                UseShellExecute = true
-            });
-        };
-        
-        textBox.Text = ApiVault.Get().GetAppConfig().GetOptionValue<string>(key);
-        textBox.TextChanged += (_, _) =>
-        {
-            ApiVault.Get().GetAppConfig().SetOptionValue(key, textBox.Text);
-        };
+        ElementsPanel.Children.Add(new ConnectionEntryControl(name, url, key, description));
     }
 }
