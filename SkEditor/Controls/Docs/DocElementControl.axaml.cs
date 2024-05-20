@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -14,6 +15,7 @@ using SkEditor.API;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Syntax;
+using SkEditor.Views;
 
 namespace SkEditor.Controls.Docs;
 
@@ -77,6 +79,110 @@ public partial class DocElementControl : UserControl
         
         // Download element setup
         LoadDownloadButton();
+        
+        // Event Values (events)
+        if (entry.DocType == IDocumentationEntry.Type.Event) 
+            OtherElementPanel.Children.Add(CreateExpander("Event Values", Format(string.IsNullOrEmpty(entry.EventValues) ? "No event values." : entry.EventValues)));
+        
+        // Changers (expressions)
+        if (entry.DocType == IDocumentationEntry.Type.Expression)
+        {
+            var expander = CreateExpander("Changers",
+                Format(string.IsNullOrEmpty(entry.Changers) ? "No changers." : entry.Changers));
+
+            var buttons = new StackPanel()
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(2),
+                Spacing = 2
+            };
+            expander.Content = new StackPanel()
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 3,
+                Children =
+                {
+                    new TextBlock() { Text = "Click on the desired changer to copy its generated code." },
+                    buttons
+                }
+            };
+
+            foreach (string raw in entry.Changers.Split("\n"))
+            {
+                if (!Enum.TryParse(typeof(IDocumentationEntry.Changer), raw, true, out var change))
+                {
+                    buttons.Children.Add(new Button()
+                    {
+                        Content = raw,
+                        IsEnabled = false
+                    });
+                    continue;
+                }
+                var changer = (IDocumentationEntry.Changer) change;
+                var button = new Button() { Content = raw };
+                button.Click += async (_, _) =>
+                {
+                    var firstPattern = GenerateUsablePattern(PatternsEditor.Text.Split("\n")[0]);
+                    var value = "<value>";
+                    var format = changer switch
+                    {
+                        IDocumentationEntry.Changer.Set => $"set %s to {value}",
+                        IDocumentationEntry.Changer.Add => $"add {value} to %s",
+                        IDocumentationEntry.Changer.Remove => $"remove {value} from %s",
+                        IDocumentationEntry.Changer.Reset => $"reset %s",
+                        IDocumentationEntry.Changer.Clear => $"clear %s",
+                        IDocumentationEntry.Changer.Delete => $"delete %s",
+                        IDocumentationEntry.Changer.RemoveAll => $"remove all %s",
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+
+                    await MainWindow.Instance.Clipboard.SetTextAsync(format.Replace("%s", firstPattern));
+                };
+                
+                buttons.Children.Add(button);
+            }
+            
+            OtherElementPanel.Children.Add(expander);
+        }
+    }
+
+    public Expander CreateExpander(string name, 
+        string content)
+    {
+        var editor = new TextEditor()
+        {
+            Margin = new Thickness(5),
+            FontSize = 16,
+            Foreground = (IBrush) GetResource("EditorTextColor"),
+            Background = (IBrush) GetResource("EditorBackgroundColor"),
+            Padding = new Thickness(10),
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Visible,
+            IsReadOnly = true,
+            Text = content
+        };
+        
+        if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+        {
+            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
+            editor.FontFamily = (FontFamily) font;
+        }
+        else
+        {
+            editor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+        }
+        
+        return new Expander()
+        {
+            Header = name,
+            Content = editor
+        };
+    }
+    
+    private object GetResource(string key)
+    {
+        Application.Current.TryGetResource(key, ThemeVariant.Default, out var resource);
+        return resource;
     }
 
     public async void LoadDownloadButton()
@@ -310,8 +416,10 @@ public partial class DocElementControl : UserControl
 
     static string GenerateUsablePattern(string pattern)
     {
-        // Step 1: Remove everything within []
-        pattern = Regex.Replace(pattern, @"\[.*?\]", "");
+        var optionalPattern = @"\[([^[\]])*?\]";
+        while (Regex.IsMatch(pattern, optionalPattern))
+            pattern = Regex.Replace(pattern, optionalPattern, "");
+        
 
         // Step 2: Select the first option within ()
         pattern = Regex.Replace(pattern, @"\(([^|]+)\|.*?\)", "$1");

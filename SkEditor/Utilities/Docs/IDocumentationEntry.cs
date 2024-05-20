@@ -28,6 +28,17 @@ public interface IDocumentationEntry
         Function
     }
 
+    public enum Changer
+    {
+        Set,
+        Add,
+        Remove,
+        RemoveAll,
+        Reset,
+        Clear,
+        Delete
+    }
+
     #region Common Properties
 
     public string Name { set; get; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,6 @@ public class SkriptMCProvider : IDocProvider
         uri += "&categorySlug=" + searchData.FilteredType.ToString().ToLower() + "s";
         uri += "&addonSlug=" + (string.IsNullOrEmpty(searchData.FilteredAddon) ? "Skript" : searchData.FilteredAddon);
         
-        ApiVault.Get().ShowMessage("hello", "URI: "+uri);
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
         try
@@ -47,6 +47,12 @@ public class SkriptMCProvider : IDocProvider
         
         if (!response.IsSuccessStatusCode)
         {
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                ApiVault.Get().ShowError("SkriptMC is currently not available for documentation. Please try again later.");
+                return [];
+            }
+            
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{response.ReasonPhrase}");
             return [];
         }
