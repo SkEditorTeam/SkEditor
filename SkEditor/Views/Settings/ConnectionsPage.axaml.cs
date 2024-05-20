@@ -21,6 +21,8 @@ public partial class ConnectionsPage : UserControl
         SetupEntry(SkUnityEntry, "https://skunity.com/dashboard/skunity-api", "SkUnityAPIKey");
         SetupEntry(SkriptHubEntry, "https://skripthub.net/dashboard/api/", "SkriptHubAPIKey");
         SetupEntry(SkriptMCEntry, "https://skript-mc.fr/developer/", "SkriptMCAPIKey");
+        SetupEntry(SkriptPLEntry, "https://code.skript.pl/api-key", "CodeSkriptPlApiKey");
+        SetupEntry(PastebinEntry, "https://pastebin.com/doc_api", "PastebinApiKey");
     }
     
     public void SetupEntry(StackPanel entry, string url, string key)

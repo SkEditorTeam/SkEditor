@@ -23,8 +23,6 @@ public partial class PublishWindow : AppWindow
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         PublishButton.Command = new RelayCommand(Publish);
-        ApiKeyHint.Tapped += (sender, e) => OpenSiteWithApiKey();
-        ApiKeyTextBox.TextChanged += (sender, e) => SaveApiKey();
 
         CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
 
