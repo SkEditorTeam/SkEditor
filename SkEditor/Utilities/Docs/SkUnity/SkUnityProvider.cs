@@ -112,6 +112,11 @@ public class SkUnityProvider : IDocProvider
         
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var responseObject = JObject.Parse(content);
+        var result = responseObject["result"];
+        // if result is a JArray, it means there are no examples
+        if (result is JArray)
+            return new List<IDocumentationExample>();
+        
         var resultObject = responseObject["result"].ToObject<JObject>();
 
         var keys = new List<string>();

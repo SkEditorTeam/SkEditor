@@ -254,6 +254,18 @@ public partial class DocElementControl : UserControl
                 Margin = new Thickness(5)
             };
 
+            if (examples.Count == 0)
+            {
+                ExamplesEntry.Content = new TextBlock()
+                {
+                    Text = "No examples available.",
+                    Foreground = Brushes.Gray,
+                    TextWrapping = TextWrapping.Wrap,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    FontStyle = FontStyle.Italic
+                };
+            }
+
             foreach (IDocumentationExample example in examples)
             {
                 var stackPanel = new StackPanel()
