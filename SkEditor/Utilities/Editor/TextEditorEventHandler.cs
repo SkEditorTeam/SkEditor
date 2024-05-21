@@ -243,27 +243,35 @@ public partial class TextEditorEventHandler
 
     public static void OnTextPasting(object? sender, TextEventArgs e)
     {
-        // TODO: Add auto-indentation for pasted text
-        return;
-
+        if (!ApiVault.Get().GetAppConfig().IsPasteIndentationEnabled) return;
+        string properText = e.Text; // TODO: Handle bad indented copied code
+        
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
+        
         string lineText = textEditor.Document.GetText(line);
-
-        int indentationSize = lineText.TakeWhile(char.IsWhiteSpace).Count();
-        string indentationType = lineText[..indentationSize];
-
-        string textToPaste = e.Text;
-        string[] lines = textToPaste.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-
-        for (int i = 0; i < lines.Length; i++)
+        string indentation = "";
+        foreach (char c in lineText)
         {
-
+            if (char.IsWhiteSpace(c)) indentation += c;
+            else break;
         }
-
-        string adjustedTextToPaste = string.Join(Environment.NewLine, lines);
-
-        e.Text = adjustedTextToPaste;
+        
+        string[] pastes = properText.Split([Environment.NewLine], StringSplitOptions.None);
+        
+        if (pastes.Length == 1)
+        {
+            e.Text = indentation + properText;
+            return;
+        }
+        
+        StringBuilder sb = new();
+        foreach (string paste in pastes)
+        {
+            sb.AppendLine(indentation + paste);
+        }
+        
+        e.Text = sb.ToString().Trim();
     }
 
     public static void CheckForSpecialPaste(object? sender, TextEventArgs e)
@@ -302,7 +310,6 @@ public partial class TextEditorEventHandler
             return;
         }
     }
-
 
     [GeneratedRegex(@"<##(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();

@@ -17,7 +17,7 @@ public partial class GeneralPage : UserControl
     {
         InitializeComponent();
 
-        DataContext = new SettingsViewModel();
+        DataContext = ApiVault.Get().GetAppConfig();
 
         AssignCommands();
         LoadLanguages();
@@ -70,11 +70,7 @@ public partial class GeneralPage : UserControl
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
         RpcToggleSwitch.Command = new RelayCommand(ToggleRpc);
         WrappingToggleSwitch.Command = new RelayCommand(ToggleWrapping);
-        AutoIndentToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsAutoIndentEnabled"));
-        AutoPairingToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsAutoPairingEnabled"));
-        AutoSaveToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsAutoSaveEnabled"));
-        CheckForUpdatesToggleSwitch.Command = new RelayCommand(() => ToggleSetting("CheckForUpdates"));
-        CheckForChangesToggleSwitch.Command = new RelayCommand(() => ToggleSetting("CheckForChanges"));
+        
         IndentationAmountComboBox.SelectionChanged += (s, e) =>
         {
             var appConfig = ApiVault.Get().GetAppConfig();
