@@ -32,56 +32,22 @@ public partial class DocElementControl : UserControl
         _documentationControl = documentationControl;
         _entry = entry;
 
-        NameText.Text = entry.Name;
-        Expander.Description = entry.DocType + " from " + entry.Addon;
-        Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
-
-        DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? "No description provided." : entry.Description);
-        VersionBadge.IconSource = new FontIconSource() { Glyph = "Since v" + (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version), };
-        SourceBadge.IconSource = new FontIconSource() { Glyph = entry.Addon, };
-
-        // Editor setup
-        if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
-        {
-            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
-            PatternsEditor.FontFamily = (FontFamily)font;
-        }
-        else
-        {
-            PatternsEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
-        }
-        PatternsEditor.Text = Format(entry.Patterns);
-        PatternsEditor.SyntaxHighlighting = CreatePatternHighlighting();
-        PatternsEditor.TextArea.TextView.Redraw();
-
-        // Examples setup
-        if (IDocProvider.Providers[entry.Provider].NeedsToLoadExamples)
-        {
-            _hasLoadedExamples = false;
-            ExamplesEntry.IsExpanded = false;
-
-            ExamplesEntry.Expanded += (_, _) =>
-            {
-                if (_hasLoadedExamples)
-                    return;
-                _hasLoadedExamples = true;
-
-                LoadExamples(entry);
-            };
-        }
-        else
-        {
-            LoadExamples(entry);
-        }
-
-        // Download element setup
+        
+        LoadVisuals(entry);
+        LoadPatternsEditor(entry);
+        SetupExamples(entry);
         LoadDownloadButton();
-
+        
+        
+        LoadExpressionChangers(entry);
+        
         // Event Values (events)
         if (entry.DocType == IDocumentationEntry.Type.Event)
             OtherElementPanel.Children.Add(CreateExpander("Event Values", Format(string.IsNullOrEmpty(entry.EventValues) ? "No event values." : entry.EventValues)));
+    }
 
-        // Changers (expressions)
+    private void LoadExpressionChangers(IDocumentationEntry entry)
+    {
         if (entry.DocType == IDocumentationEntry.Type.Expression && !string.IsNullOrEmpty(entry.Changers))
         {
             var expander = CreateExpander("Changers",
@@ -142,6 +108,54 @@ public partial class DocElementControl : UserControl
 
             OtherElementPanel.Children.Add(expander);
         }
+    }
+
+    private void SetupExamples(IDocumentationEntry entry)
+    {
+        if (IDocProvider.Providers[entry.Provider].NeedsToLoadExamples)
+        {
+            _hasLoadedExamples = false;
+            ExamplesEntry.IsExpanded = false;
+
+            ExamplesEntry.Expanded += (_, _) =>
+            {
+                if (_hasLoadedExamples)
+                    return;
+                _hasLoadedExamples = true;
+
+                LoadExamples(entry);
+            };
+        }
+        else
+        {
+            LoadExamples(entry);
+        }
+    }
+
+    private void LoadPatternsEditor(IDocumentationEntry entry)
+    {
+        if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+        {
+            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
+            PatternsEditor.FontFamily = (FontFamily)font;
+        }
+        else
+        {
+            PatternsEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+        }
+        PatternsEditor.Text = Format(entry.Patterns);
+        PatternsEditor.SyntaxHighlighting = CreatePatternHighlighting();
+        PatternsEditor.TextArea.TextView.Redraw();
+    }
+
+    protected void LoadVisuals(IDocumentationEntry entry)
+    {
+        NameText.Text = entry.Name;
+        Expander.Description = entry.DocType + " from " + entry.Addon;
+        Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
+        DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? "No description provided." : entry.Description);
+        VersionBadge.IconSource = new FontIconSource { Glyph = "Since v" + (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version), };
+        SourceBadge.IconSource = new FontIconSource { Glyph = entry.Addon, };
     }
 
     public Expander CreateExpander(string name,
