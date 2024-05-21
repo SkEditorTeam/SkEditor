@@ -23,7 +23,7 @@ public partial class DocManagementEntry : UserControl
     public void LoadVisuals()
     {
         NameBlock.Text = _entry.Name;
-        Description.Text = $"{_entry.DocType.ToString()} provided by {_entry.Provider.ToString()}";
+        Description.Text = $"{_entry.DocType.ToString()} provided by {_entry.OriginalProvider.ToString()}";
     }
 
     public void AssignCommands()
