@@ -1,0 +1,145 @@
+﻿using System.Linq;
+using Avalonia.Controls;
+using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
+using FluentAvalonia.UI.Windowing;
+using SkEditor.Controls.Docs;
+using SkEditor.Utilities.Docs;
+using SkEditor.Utilities.Docs.Local;
+using SkEditor.Utilities.Styling;
+
+namespace SkEditor.Views;
+
+public partial class LocalDocsManagerWindow : AppWindow
+{
+    public enum GroupBy
+    {
+        Provider,
+        Type,
+        Addon
+    }
+    
+    public LocalDocsManagerWindow()
+    {
+        InitializeComponent();
+
+        AssignCommands();
+        LoadCategories(GroupBy.Provider);
+    }
+
+    public void AssignCommands()
+    {
+        GroupByComboBox.SelectionChanged += (sender, args) =>
+        {
+            var groupBy = (GroupBy) GroupByComboBox.SelectedIndex;
+            LoadCategories(groupBy);
+        };
+        DeleteEverythingButton.Command = new RelayCommand(async () =>
+        {
+            await LocalProvider.Get().DeleteAll();
+            LoadCategories(GroupBy.Provider);
+        });
+    }
+
+    public void LoadCategories(GroupBy groupBy)
+    {
+        GroupByComboBox.SelectedIndex = (int) groupBy;
+        switch (groupBy)
+        {
+            case GroupBy.Provider:
+                LoadByProviders();
+                break;
+            case GroupBy.Type:
+                LoadByTypes();
+                break;
+            case GroupBy.Addon:
+                LoadByAddons();
+                break;
+        }
+    }
+
+    #region Loaders
+
+    public async void LoadByProviders()
+    {
+        var elements = await LocalProvider.Get().GetElements();
+        var providers = elements.Select(x => x.OriginalProvider).Distinct().ToList();
+        var providerGroups = providers.Select(x => elements.FindAll(y => y.OriginalProvider == x)).ToList();
+        
+        CategoriesPanel.Children.Clear();
+        
+        foreach (var providerGroup in providerGroups)
+        {
+            var provider = providerGroup.First().OriginalProvider;
+            var expander = new SettingsExpander()
+            {
+                Header = provider.ToString(),
+                IconSource = IDocProvider.Providers[provider].Icon
+            };
+            
+            foreach (var element in providerGroup)
+            {
+                var entry = new DocManagementEntry(element);
+                expander.Items.Add(entry);
+            }
+            
+            CategoriesPanel.Children.Add(expander);
+        }
+    }
+    
+    public async void LoadByTypes()
+    {
+        var elements = await LocalProvider.Get().GetElements();
+        var types = elements.Select(x => x.DocType).Distinct().ToList();
+        var typeGroups = types.Select(x => elements.FindAll(y => y.DocType == x)).ToList();
+        
+        CategoriesPanel.Children.Clear();
+        
+        foreach (var typeGroup in typeGroups)
+        {
+            var type = typeGroup.First().DocType;
+            var expander = new SettingsExpander()
+            {
+                Header = type.ToString(),
+                IconSource = IDocumentationEntry.GetTypeIcon(type)
+            };
+            
+            foreach (var element in typeGroup)
+            {
+                var entry = new DocManagementEntry(element);
+                expander.Items.Add(entry);
+            }
+            
+            CategoriesPanel.Children.Add(expander);
+        }
+    }
+    
+    public async void LoadByAddons()
+    {
+        var elements = await LocalProvider.Get().GetElements();
+        var addons = elements.Select(x => x.Addon).Distinct().ToList();
+        var addonGroups = addons.Select(x => elements.FindAll(y => y.Addon == x)).ToList();
+        
+        CategoriesPanel.Children.Clear();
+        
+        foreach (var addonGroup in addonGroups)
+        {
+            var addon = addonGroup.First().Addon;
+            var expander = new SettingsExpander()
+            {
+                Header = addon
+            };
+            
+            foreach (var element in addonGroup)
+            {
+                var entry = new DocManagementEntry(element);
+                expander.Items.Add(entry);
+            }
+            
+            CategoriesPanel.Children.Add(expander);
+        }
+    }
+    
+
+    #endregion
+}

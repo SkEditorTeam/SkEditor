@@ -4,6 +4,7 @@ using SkEditor.Utilities.Docs.SkriptMC;
 using SkEditor.Utilities.Docs.SkUnity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs;
 
@@ -31,4 +32,6 @@ public interface IDocProvider
 
     public bool HasAddons { get; }
     public Task<List<string>> GetAddons();
+    
+    public IconSource Icon { get; }
 }

@@ -7,6 +7,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Platform;
+using Avalonia.Svg.Skia;
+using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 
@@ -170,4 +173,12 @@ public class SkriptHubProvider : IDocProvider
         var elements = JsonConvert.DeserializeObject<List<JObject>>(content);
         return elements.Select(e => e["name"].ToString()).ToList();
     }
+
+    public IconSource Icon => new ImageIconSource()
+    {
+        Source = new SvgImage
+        {
+            Source = SvgSource.LoadFromStream(AssetLoader.Open(new Uri("avares://SkEditor/Assets/Brands/SkriptHub.svg")))
+        }
+    };
 }

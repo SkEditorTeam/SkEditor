@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
+using FluentAvalonia.UI.Controls;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Docs;
 
@@ -26,6 +29,20 @@ public interface IDocumentationEntry
         Structure,
         Function
     }
+    
+    public static IconSource GetTypeIcon(Type type) => type switch
+    {
+        Type.All => new SymbolIconSource() { Symbol = Symbol.BorderAll },
+        Type.Event => new SymbolIconSource() { Symbol = Symbol.Call },
+        Type.Expression => new SymbolIconSource() { Symbol = Symbol.DocumentPageNumber },
+        Type.Effect => new SymbolIconSource() { Symbol = Symbol.LightbulbFilament },
+        Type.Condition => new SymbolIconSource() { Symbol = Symbol.Filter },
+        Type.Type => new SymbolIconSource() { Symbol = Symbol.Library },
+        Type.Section => new SymbolIconSource() { Symbol = Symbol.NotebookSubsection },
+        Type.Structure => new SymbolIconSource() { Symbol = Symbol.Code },
+        Type.Function => new SymbolIconSource() { Symbol = Symbol.MathFormula },
+        _ => throw new ArgumentOutOfRangeException()
+    };
 
     public enum Changer
     {

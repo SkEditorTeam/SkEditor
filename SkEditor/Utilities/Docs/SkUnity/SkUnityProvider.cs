@@ -6,6 +6,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Platform;
+using Avalonia.Svg.Skia;
+using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
@@ -166,4 +169,12 @@ public class SkUnityProvider : IDocProvider
         _addonCache.AddRange(addons);
         return addons;
     }
+    
+    public IconSource Icon => new ImageIconSource()
+    {
+        Source = new SvgImage
+        {
+            Source = SvgSource.LoadFromStream(AssetLoader.Open(new Uri("avares://SkEditor/Assets/Brands/skUnity.svg")))
+        }
+    };
 }

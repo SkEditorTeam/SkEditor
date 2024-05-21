@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAvalonia.UI.Controls;
+using SkEditor.Utilities.Files;
 
 namespace SkEditor.Utilities.Docs.Local;
 
@@ -121,4 +123,20 @@ public class LocalProvider : IDocProvider
     #endregion
 
     public static LocalProvider Get() => IDocProvider.Providers[DocProvider.Local] as LocalProvider;
+
+    public async Task<List<LocalDocEntry>> GetElements()
+    {
+        if (!IsLoaded)
+            await LoadLocalDocs();
+
+        return _localDocs;
+    }
+
+    public async Task DeleteAll()
+    {
+        _localDocs.Clear();
+        await SaveLocalDocs();
+    }
+
+    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.SaveLocal };
 }

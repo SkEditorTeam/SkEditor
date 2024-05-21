@@ -68,7 +68,7 @@ public partial class MainMenuControl : UserControl
         MenuItemDocs.Command = new RelayCommand(AddDocsTab);
     }
 
-    public void AddDocsTab()
+    public async void AddDocsTab()
     {
         var tabView = ApiVault.Get().GetTabView();
         var tabItem = new TabViewItem()

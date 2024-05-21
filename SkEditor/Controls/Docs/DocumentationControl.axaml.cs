@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
+using SkEditor.Views;
 
 namespace SkEditor.Controls.Docs;
 
@@ -19,8 +21,19 @@ public partial class DocumentationControl : UserControl
         InitializeComponent();
         DataContext = new DocumentationViewModel();
 
+        AssignCommands();
         AddItems();
         LoadingInformation.IsVisible = false;
+    }
+
+    public void AssignCommands()
+    {
+        OpenLocalManagementButton.Command = new RelayCommand(async () => await new LocalDocsManagerWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
+        RefreshProviderButton.Command = new RelayCommand(() =>
+        {
+            ProviderBox.SelectionChanged -= HandleProviderBoxSelection;
+            InitializeProviderBox();
+        });
     }
 
     public void AddItems()
@@ -130,10 +143,13 @@ public partial class DocumentationControl : UserControl
 
         ProviderBox.SelectedIndex = 0;
         ViewModel.Provider = availableProviders[0];
-        ProviderBox.SelectionChanged += (sender, args) =>
-        {
-            ViewModel.Provider = (DocProvider)((ComboBoxItem)ProviderBox.SelectedItem!).Tag!;
-        };
+        ProviderBox.SelectionChanged += HandleProviderBoxSelection;
+    }
+
+    public void HandleProviderBoxSelection(object? sender, SelectionChangedEventArgs selectionChangedEventArgs)
+    {
+        ViewModel.Provider = (DocProvider)((ComboBoxItem)ProviderBox.SelectedItem!).Tag!;
+        OpenLocalManagementButton.IsVisible = ViewModel.Provider == DocProvider.Local;
     }
 
     public DocumentationViewModel ViewModel => (DocumentationViewModel)DataContext!;

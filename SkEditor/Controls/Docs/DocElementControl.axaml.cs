@@ -34,10 +34,7 @@ public partial class DocElementControl : UserControl
 
         NameText.Text = entry.Name;
         Expander.Description = entry.DocType + " from " + entry.Addon;
-        Expander.IconSource = new SymbolIconSource()
-        {
-            Symbol = GetSymbol(entry)
-        };
+        Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
 
         DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? "No description provided." : entry.Description);
         VersionBadge.IconSource = new FontIconSource() { Glyph = "Since v" + (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version), };
@@ -333,23 +330,6 @@ public partial class DocElementControl : UserControl
                 TextWrapping = TextWrapping.Wrap
             };
         }
-    }
-
-    private Symbol GetSymbol(IDocumentationEntry entry)
-    {
-        return entry.DocType switch
-        {
-            IDocumentationEntry.Type.All => Symbol.WeatherRain,
-            IDocumentationEntry.Type.Event => Symbol.Calendar,
-            IDocumentationEntry.Type.Expression => Symbol.Calculator,
-            IDocumentationEntry.Type.Effect => Symbol.Highlight,
-            IDocumentationEntry.Type.Condition => Symbol.Filter,
-            IDocumentationEntry.Type.Type => Symbol.Library,
-            IDocumentationEntry.Type.Section => Symbol.Bookmark,
-            IDocumentationEntry.Type.Structure => Symbol.Code,
-            IDocumentationEntry.Type.Function => Symbol.Find,
-            _ => throw new ArgumentOutOfRangeException()
-        };
     }
 
     private string Format(string input)

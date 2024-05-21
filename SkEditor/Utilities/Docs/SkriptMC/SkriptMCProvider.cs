@@ -7,6 +7,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Platform;
+using Avalonia.Svg.Skia;
+using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 
@@ -89,4 +92,6 @@ public class SkriptMCProvider : IDocProvider
     {
         return [];
     }
+    
+    public IconSource Icon => new BitmapIconSource() { UriSource = new ("avares://SkEditor/Assets/Brands/SkriptMC.png") };
 }
