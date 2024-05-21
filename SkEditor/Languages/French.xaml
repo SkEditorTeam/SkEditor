@@ -141,7 +141,6 @@
     <system:String x:Key="CodeParserNavigate">Naviguer</system:String>
     <system:String x:Key="CodeParserNavigateToDefinition">Naviguer vers la définition</system:String>
     <system:String x:Key="CodeParserRename">Renommer</system:String>
-    <system:String x:Key="CodeParserFileChanged">Le fichier a été modifié, vous devez le repasser à l'analyse.</system:String>
     <system:String x:Key="CodeParserNoSections">Aucune section n'a été trouvée dans le code. Peut-être devriez-vous écrire quelque chose ? :)</system:String>
     <system:String x:Key="CodeParserBadFormat">Ce fichier ne peut pas être analysé, car il ne semble pas être un fichier Skript.</system:String>
     <system:String x:Key="CodeParserParseCode">Analyser le code</system:String>

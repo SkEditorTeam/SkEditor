@@ -143,7 +143,6 @@
 	<system:String x:Key="CodeParserNavigate">Przejdź</system:String>
 	<system:String x:Key="CodeParserNavigateToDefinition">Przejdź do definicji</system:String>
 	<system:String x:Key="CodeParserRename">Zmień nazwę</system:String>
-	<system:String x:Key="CodeParserFileChanged">Plik został zmodyfikowany, musisz go przeanalizować ponownie</system:String>
 	<system:String x:Key="CodeParserNoSections">Nie znaleziono żadnych sekcji w kodzie. Może powinieneś coś napisać? :)</system:String>
 	<system:String x:Key="CodeParserBadFormat">Nie można przeanalizować tego pliku, ponieważ nie wygląda on jak plik Skript.</system:String>
 	<system:String x:Key="CodeParserParseCode">Analizuj</system:String>
