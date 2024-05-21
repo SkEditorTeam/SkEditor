@@ -19,13 +19,6 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
 
         FunctionContentPanel.Children.Add(BuildFunctionContent(skDocFunction));
 
-        SelectableTextBlock[] selectableTextBlocks = this.GetLogicalDescendants().OfType<SelectableTextBlock>().ToArray();
-        foreach (var selectableTextBlock in selectableTextBlocks)
-        {
-            selectableTextBlock.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
-            selectableTextBlock.ContextFlyout = null;
-        }
-
         var comment = skDocFunction.Comment;
         if (comment == null)
         {
@@ -48,6 +41,8 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
             descriptionTextBlock.MaxWidth = 300;
             descriptionTextBlock.TextWrapping = TextWrapping.Wrap;
             descriptionTextBlock.Margin = new Thickness(-10, 0, 0, 0);
+            descriptionTextBlock.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
+            descriptionTextBlock.ContextFlyout = null;
             TooltipPanel.Children.Add(descriptionTextBlock);
         }
 
@@ -103,7 +98,9 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
                 FontSize = 12,
                 Foreground = new SolidColorBrush(Color.Parse("#adbcc3")),
                 Margin = new Thickness(5, 0, 0, 0),
-                Text = comment.Return
+                Text = comment.Return,
+                SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor,
+                ContextFlyout = null
             };
 
             returnsPanel.Children.Add(textBlock);
@@ -125,7 +122,7 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
         };
     }
 
-    private static SelectableTextBlock CreateSelectableTextBlock(string text, string color, double fontSize = 12, 
+    private static SelectableTextBlock CreateSelectableTextBlock(string text, string color, double fontSize = 12,
         FontWeight fontWeight = FontWeight.Normal, FontStyle fontStyle = FontStyle.Normal)
     {
         return new SelectableTextBlock
@@ -136,7 +133,9 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
             FontWeight = fontWeight,
             FontStyle = fontStyle,
             MaxWidth = 300,
-            Text = text
+            Text = text,
+            SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor,
+            ContextFlyout = null
         };
     }
 
