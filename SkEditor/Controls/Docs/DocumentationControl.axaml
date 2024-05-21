@@ -6,6 +6,7 @@
              xmlns:docs="clr-namespace:SkEditor.Utilities.Docs"
              xmlns:docs1="clr-namespace:SkEditor.Controls.Docs"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:DocumentationViewModel"
              x:Class="SkEditor.Controls.Docs.DocumentationControl">
@@ -51,12 +52,8 @@
                         Name="ProviderBox"
                         HorizontalAlignment="Stretch"
                     />
-                    <Button Margin="5,0,0,0" Width="20" Height="20" Grid.Column="1" Name="RefreshProviderButton">
-                        <controls:IconSourceElement>
-                            <controls:IconSourceElement.IconSource>
-                                <controls:SymbolIconSource Symbol="Refresh" FontSize="18" />
-                            </controls:IconSourceElement.IconSource>
-                        </controls:IconSourceElement>
+                    <Button Margin="5,0,0,0" Grid.Column="1" Name="RefreshProviderButton">
+                        <fluent:SymbolIcon Symbol="ArrowCounterclockwise" Width="18" Height="18"/>
                     </Button>
                 </Grid>
             </StackPanel>
