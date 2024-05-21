@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 
@@ -28,7 +28,7 @@ namespace SkEditor.Utilities.Docs.SkriptHub;
 [Serializable]
 public class SkriptHubDocEntry : IDocumentationEntry
 {
-    
+
     [JsonProperty("title")]
     public string Name { get; set; }
     [JsonProperty("description")]
@@ -41,23 +41,24 @@ public class SkriptHubDocEntry : IDocumentationEntry
     public string Addon { get; set; }
     [JsonProperty("compatible_addon_version")]
     public string Version { get; set; }
-    
+
     [JsonIgnore]
-    public IDocumentationEntry.Type DocType { 
+    public IDocumentationEntry.Type DocType
+    {
         get => Enum.Parse<IDocumentationEntry.Type>(RawDocType, true);
         set => RawDocType = value.ToString().ToLower();
     }
-    
+
     [JsonProperty("syntax_type")]
     public string RawDocType { get; set; }
-    
+
     [JsonProperty("return_type")]
     public string? ReturnType { get; set; }
     [JsonProperty("type_usage")]
     public string? Changers { get; set; }
     [JsonProperty("event_values")]
     public string? EventValues { get; set; }
-    
+
     public DocProvider Provider => DocProvider.SkriptHub;
-    
+
 }

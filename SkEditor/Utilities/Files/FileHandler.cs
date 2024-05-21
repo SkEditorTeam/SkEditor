@@ -7,7 +7,6 @@ using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Syntax;

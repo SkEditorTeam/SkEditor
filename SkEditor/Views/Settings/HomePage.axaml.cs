@@ -1,8 +1,5 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Media.Animation;
-using FluentAvalonia.UI.Navigation;
-using SkEditor.API;
 
 namespace SkEditor.Views.Settings;
 public partial class HomePage : UserControl

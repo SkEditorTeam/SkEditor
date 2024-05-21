@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Controls.Docs;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects;
@@ -11,8 +12,6 @@ using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using SkEditor.Controls.Docs;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -65,10 +64,10 @@ public partial class MainMenuControl : UserControl
         MenuItemGenerateCommand.Command = new RelayCommand(() => new CommandGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemRefactor.Command = new RelayCommand(() => new RefactorWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
         MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
-        
+
         MenuItemDocs.Command = new RelayCommand(AddDocsTab);
     }
-    
+
     public void AddDocsTab()
     {
         var tabView = ApiVault.Get().GetTabView();

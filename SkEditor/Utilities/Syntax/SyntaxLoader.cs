@@ -1,16 +1,14 @@
 ﻿using AvaloniaEdit;
+using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
-using Serilog;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using AvaloniaEdit.Highlighting;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Syntax;

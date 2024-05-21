@@ -1,12 +1,12 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
 [Serializable]
 public class SkUnityDocEntry : IDocumentationEntry
 {
-    
+
     [JsonProperty("name")]
     public string Name { set; get; }
     [JsonProperty("desc")]
@@ -19,14 +19,14 @@ public class SkUnityDocEntry : IDocumentationEntry
     public string Addon { set; get; }
     [JsonProperty("version")]
     public string Version { set; get; }
-    
+
     public IDocumentationEntry.Type DocType
     {
         get
         {
             if (RawDoc.Equals("classes"))
                 return IDocumentationEntry.Type.Type; // This is a type now
-            
+
             try
             {
                 return Enum.Parse<IDocumentationEntry.Type>(RawDoc, true);
@@ -41,13 +41,13 @@ public class SkUnityDocEntry : IDocumentationEntry
 
     [JsonProperty("doc")]
     public string RawDoc { set; get; }
-    
+
     [JsonProperty("returntype")]
     public string? ReturnType { set; get; }
     [JsonProperty("changers")]
     public string? Changers { set; get; }
     [JsonProperty("eventvalues")]
     public string? EventValues { set; get; }
-    
+
     public DocProvider Provider => DocProvider.SkUnity;
 }

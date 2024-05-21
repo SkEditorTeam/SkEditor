@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using SkEditor.API;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 
@@ -16,9 +15,9 @@ public class SkriptMCProvider : IDocProvider
     private const string BaseUri = "https://skript-mc.fr/api/documentation/search?api_key=%s";
 
     private readonly HttpClient _client = new();
-    
+
     public DocProvider Provider => DocProvider.SkriptMC;
-    
+
     public Task<IDocumentationEntry> FetchElement(string id)
     {
         return null;
@@ -27,10 +26,10 @@ public class SkriptMCProvider : IDocProvider
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
         var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkriptMCAPIKey) + "&articleName=" + searchData.Query;
-        
+
         uri += "&categorySlug=" + searchData.FilteredType.ToString().ToLower() + "s";
         uri += "&addonSlug=" + (string.IsNullOrEmpty(searchData.FilteredAddon) ? "Skript" : searchData.FilteredAddon);
-        
+
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
         try
@@ -44,7 +43,7 @@ public class SkriptMCProvider : IDocProvider
                 : $"An error occurred while fetching the documentation.\n\n{e.Message}");
             return [];
         }
-        
+
         if (!response.IsSuccessStatusCode)
         {
             if (response.StatusCode == HttpStatusCode.InternalServerError)
@@ -52,11 +51,11 @@ public class SkriptMCProvider : IDocProvider
                 ApiVault.Get().ShowError("SkriptMC is currently not available for documentation. Please try again later.");
                 return [];
             }
-            
+
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{response.ReasonPhrase}");
             return [];
         }
-        
+
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var entries = JsonConvert.DeserializeObject<List<SkriptMCDocEntry>>(content);
         return entries.Cast<IDocumentationEntry>().ToList();
@@ -66,10 +65,10 @@ public class SkriptMCProvider : IDocProvider
     {
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
             return ["Query must be at least 3 characters long"];
-        
+
         if (searchData.FilteredType == IDocumentationEntry.Type.All)
             return ["SkriptMC does not support searching for all types"];
-        
+
         return [];
     }
 

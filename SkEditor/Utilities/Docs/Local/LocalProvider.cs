@@ -1,21 +1,21 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace SkEditor.Utilities.Docs.Local;
 
 public class LocalProvider : IDocProvider
 {
     public DocProvider Provider => DocProvider.Local;
-    
+
     public async Task<IDocumentationEntry> FetchElement(string id)
     {
         if (!IsLoaded)
             await LoadLocalDocs();
-        
+
         return _localDocs.Find(x => x.Id == id);
     }
 
@@ -23,21 +23,21 @@ public class LocalProvider : IDocProvider
     {
         if (!IsLoaded)
             await LoadLocalDocs();
-        
+
         return _localDocs.FindAll(x => x.DoMatch(searchData)).Cast<IDocumentationEntry>().ToList();
     }
-    
+
     public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
         if (!IsLoaded)
             await LoadLocalDocs();
         var localEntry = entry as LocalDocEntry;
-        
+
         return (localEntry?.Examples ?? []).Cast<IDocumentationExample>().ToList();
     }
 
     #region Local File Management
-    
+
     private List<LocalDocEntry> _localDocs = null!;
 
     private string GetLocalCachePath()
@@ -54,11 +54,11 @@ public class LocalProvider : IDocProvider
     {
         var file = GetLocalCachePath();
         var content = await File.ReadAllTextAsync(file);
-        
+
         _localDocs = new();
         _localDocs.AddRange(JsonConvert.DeserializeObject<List<LocalDocEntry>>(content));
     }
-    
+
     private async Task SaveLocalDocs()
     {
         var file = GetLocalCachePath();
@@ -70,7 +70,7 @@ public class LocalProvider : IDocProvider
     {
         if (!IsLoaded)
             await LoadLocalDocs();
-        
+
         return _localDocs.Any(x => x.Id == entry.Id);
     }
 
@@ -90,11 +90,11 @@ public class LocalProvider : IDocProvider
     {
         if (!IsLoaded)
             await LoadLocalDocs();
-        
+
         _localDocs.RemoveAll(x => x.Id == entry.Id);
         await SaveLocalDocs();
     }
-    
+
     public bool IsLoaded => _localDocs != null!;
 
     #endregion
@@ -119,6 +119,6 @@ public class LocalProvider : IDocProvider
     }
 
     #endregion
-    
+
     public static LocalProvider Get() => IDocProvider.Providers[DocProvider.Local] as LocalProvider;
 }

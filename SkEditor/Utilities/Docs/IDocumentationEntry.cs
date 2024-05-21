@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using Avalonia.Controls;
 
 namespace SkEditor.Utilities.Docs;
 
@@ -14,7 +13,7 @@ public interface IDocumentationEntry
 {
 
     public static List<Type> AllTypes => Enum.GetValues<Type>().ToList();
-    
+
     public enum Type
     {
         All,
@@ -70,5 +69,5 @@ public interface IDocumentationEntry
     [JsonIgnore] public string Since => $"Since v{Version}";
 
     #endregion
-    
+
 }

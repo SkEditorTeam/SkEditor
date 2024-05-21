@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 
@@ -34,19 +34,20 @@ public class SkriptMCDocEntry : IDocumentationEntry
     public string Version { get; set; }
 
     [JsonProperty("example")] public string RawExample;
-    
+
     public IDocumentationExample Example => new SkriptMCDocExample { Example = RawExample };
-    
-    public IDocumentationEntry.Type DocType { 
-        get => Enum.Parse<IDocumentationEntry.Type>(RawType[..^1], true); 
+
+    public IDocumentationEntry.Type DocType
+    {
+        get => Enum.Parse<IDocumentationEntry.Type>(RawType[..^1], true);
         set => RawType = value.ToString().ToLower() + "s";
     }
-    
+
     [JsonProperty("category")]
     public string RawType { get; set; }
-    
+
     public DocProvider Provider => DocProvider.SkriptMC;
-    
+
     public string? ReturnType { get; set; }
     public string? Changers { get; set; }
     public string? EventValues { get; set; }

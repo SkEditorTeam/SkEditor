@@ -8,7 +8,6 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.ViewModels;
@@ -19,7 +18,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Editor;
 public partial class TextEditorEventHandler
@@ -227,10 +225,10 @@ public partial class TextEditorEventHandler
     {
         if (!ApiVault.Get().GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
-        
+
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
-        
+
         string lineText = textEditor.Document.GetText(line);
         string indentation = "";
         foreach (char c in lineText)
@@ -238,21 +236,21 @@ public partial class TextEditorEventHandler
             if (char.IsWhiteSpace(c)) indentation += c;
             else break;
         }
-        
+
         string[] pastes = properText.Split([Environment.NewLine], StringSplitOptions.None);
-        
+
         if (pastes.Length == 1)
         {
             e.Text = indentation + properText;
             return;
         }
-        
+
         StringBuilder sb = new();
         foreach (string paste in pastes)
         {
             sb.AppendLine(indentation + paste);
         }
-        
+
         e.Text = sb.ToString().Trim();
     }
 

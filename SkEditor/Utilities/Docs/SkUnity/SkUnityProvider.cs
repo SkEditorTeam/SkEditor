@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using SkEditor.API;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
@@ -15,13 +15,13 @@ public class SkUnityProvider : IDocProvider
 
     private readonly HttpClient _client = new HttpClient()
         .WithUserAgent("SkEditor App");
-    
+
     public DocProvider Provider => DocProvider.SkUnity;
     public List<string> CanSearch(SearchData searchData)
     {
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
             return ["Query must be at least 3 characters long"];
-        
+
         return [];
     }
 
@@ -44,7 +44,7 @@ public class SkUnityProvider : IDocProvider
             queryElements.Add("addon:" + searchData.FilteredAddon);
 
         uri += string.Join("%20", queryElements);
-        
+
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
         try
@@ -80,8 +80,8 @@ public class SkUnityProvider : IDocProvider
     {
         return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkUnityAPIKey);
     }
-    
-    public static IDocProvider Get() => (SkUnityProvider) IDocProvider.Providers[DocProvider.SkUnity];
+
+    public static IDocProvider Get() => (SkUnityProvider)IDocProvider.Providers[DocProvider.SkUnity];
 
     public bool NeedsToLoadExamples => true;
 
@@ -89,7 +89,7 @@ public class SkUnityProvider : IDocProvider
     {
         var elementId = entry.Id;
         var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getExamplesByID/" + elementId;
-        
+
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
         try
@@ -103,20 +103,20 @@ public class SkUnityProvider : IDocProvider
                 : $"An error occurred while fetching the documentation.\n\n{e.Message}");
             return [];
         }
-        
+
         if (!response.IsSuccessStatusCode)
         {
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\nReceived status code: {response.StatusCode}");
             return new List<IDocumentationExample>();
         }
-        
+
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var responseObject = JObject.Parse(content);
         var result = responseObject["result"];
         // if result is a JArray, it means there are no examples
         if (result is JArray)
             return new List<IDocumentationExample>();
-        
+
         var resultObject = responseObject["result"].ToObject<JObject>();
 
         var keys = new List<string>();
@@ -125,7 +125,7 @@ public class SkUnityProvider : IDocProvider
             if (int.TryParse(key.Name, out _))
                 keys.Add(key.Name);
         }
-        
+
         return keys.Select(key => resultObject[key].ToObject<SkUnityDocExample>()).ToList<IDocumentationExample>();
     }
 
@@ -135,9 +135,9 @@ public class SkUnityProvider : IDocProvider
     {
         if (_addonCache.Count > 0)
             return _addonCache;
-        
+
         var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getAllAddons/";
-        
+
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
         try
@@ -151,18 +151,18 @@ public class SkUnityProvider : IDocProvider
                 : $"An error occurred while fetching the documentation.\n\n{e.Message}");
             return new List<string>();
         }
-        
+
         if (!response.IsSuccessStatusCode)
         {
             ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\nReceived status code: {response.StatusCode}");
             return new List<string>();
         }
-        
+
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var responseObject = JObject.Parse(content);
         var addonsObj = responseObject["result"].ToObject<JObject>();
         var addons = addonsObj.Properties().Select(prop => prop.Name).ToList();
-        
+
         _addonCache.AddRange(addons);
         return addons;
     }
