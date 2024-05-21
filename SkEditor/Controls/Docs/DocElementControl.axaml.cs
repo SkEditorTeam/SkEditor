@@ -195,50 +195,85 @@ public partial class DocElementControl : UserControl
         Application.Current.TryGetResource(key, ThemeVariant.Default, out var resource);
         return resource;
     }
+    
+    public void DeleteElementFromCache(bool removeFromParent = false)
+    {
+        var localProvider = LocalProvider.Get();
+        localProvider.RemoveElement(_entry);
+        if (removeFromParent) 
+            _documentationControl.RemoveElement(this);
+    }
+
+    public async void DownloadElementToCache()
+    {
+        List<IDocumentationExample> examples;
+        try
+        {
+            examples = await IDocProvider.Providers[_entry.Provider].FetchExamples(_entry);
+        }
+        catch (Exception e)
+        {
+            examples = new List<IDocumentationExample>();
+            ApiVault.Get().ShowError("We were unable to download the examples, but the rest is here!\n\nError message: " + e.Message);
+        }
+
+        var localProvider = LocalProvider.Get();
+        localProvider.DownloadElement(_entry, examples);
+    }
+
+    public async void DownloadButtonClicked(object? sender, RoutedEventArgs args)
+    {
+        if (_entry.Provider == DocProvider.Local)
+        {
+            DeleteElementFromCache(true);
+            EnableDownloadButton();
+        }
+        else
+        {
+            if (await LocalProvider.Get().IsElementDownloaded(_entry))
+            {
+                DeleteElementFromCache();
+                EnableDownloadButton();
+            }
+            else
+            {
+                DownloadElementToCache();
+                DisableDownloadButton();
+            }
+        }
+    }
+    
+    public void EnableDownloadButton()
+    {
+        DownloadElementButton.Content = new TextBlock { Text = "Download" };
+        DownloadElementButton.Classes.Add("accent");
+    }
+    
+    public void DisableDownloadButton()
+    {
+        DownloadElementButton.Content = new TextBlock { Text = "Remove" };
+        DownloadElementButton.Classes.Remove("accent");
+    }
 
     public async void LoadDownloadButton()
     {
         var localProvider = LocalProvider.Get();
+        DownloadElementButton.Click += DownloadButtonClicked;
+        DownloadElementButton.Classes.Clear();
+        
         if (_entry.Provider == DocProvider.Local)
         {
-            DownloadElementButton.Content = new TextBlock() { Text = "Delete from local cache" };
-            DownloadElementButton.Click += (_, _) =>
-            {
-                localProvider.RemoveElement(_entry);
-                _documentationControl.RemoveElement(this);
-            };
+            DisableDownloadButton();
         }
         else
         {
             if (await localProvider.IsElementDownloaded(_entry))
             {
-                DownloadElementButton.Content = new TextBlock() { Text = "Delete from local cache" };
-                DownloadElementButton.Click += (_, _) =>
-                {
-                    DownloadElementButton.Content = "Removed successfully";
-                    DownloadElementButton.IsEnabled = false;
-                };
+                DisableDownloadButton();
             }
             else
             {
-                DownloadElementButton.Content = new TextBlock() { Text = "Download" };
-                DownloadElementButton.Click += async (_, _) =>
-                {
-                    List<IDocumentationExample> examples;
-                    try
-                    {
-                        examples = await IDocProvider.Providers[_entry.Provider].FetchExamples(_entry);
-                    }
-                    catch (Exception e)
-                    {
-                        examples = new List<IDocumentationExample>();
-                        ApiVault.Get().ShowError("We were unable to download the examples, but the rest is here!\n\nError message: " + e.Message);
-                    }
-
-                    localProvider.DownloadElement(_entry, examples);
-                    DownloadElementButton.IsEnabled = false;
-                    DownloadElementButton.Content = "Downloaded successfully!";
-                };
+                EnableDownloadButton();
             }
         }
     }
