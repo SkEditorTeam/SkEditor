@@ -143,7 +143,6 @@
 	<system:String x:Key="CodeParserNavigate">Navigate</system:String>
 	<system:String x:Key="CodeParserNavigateToDefinition">Navigate to definition</system:String>
 	<system:String x:Key="CodeParserRename">Rename</system:String>
-	<system:String x:Key="CodeParserFileChanged">The file has changed, you need to parse it again.</system:String>
 	<system:String x:Key="CodeParserNoSections">No sections were found in the code. Maybe you should write something? :)</system:String>
 	<system:String x:Key="CodeParserBadFormat">This file cannot be parsed, as it does not look like a Skript file.</system:String>
 	<system:String x:Key="CodeParserParseCode">Parse code</system:String>
