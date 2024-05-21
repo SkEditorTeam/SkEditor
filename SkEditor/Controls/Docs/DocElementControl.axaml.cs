@@ -16,6 +16,7 @@ using SkEditor.Views;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SkEditor.Controls.Docs;
 
@@ -204,7 +205,7 @@ public partial class DocElementControl : UserControl
             _documentationControl.RemoveElement(this);
     }
 
-    public async void DownloadElementToCache()
+    public async Task DownloadElementToCache()
     {
         List<IDocumentationExample> examples;
         try
@@ -237,7 +238,7 @@ public partial class DocElementControl : UserControl
             }
             else
             {
-                DownloadElementToCache();
+                await DownloadElementToCache();
                 DisableDownloadButton();
             }
         }
@@ -253,6 +254,15 @@ public partial class DocElementControl : UserControl
     {
         DownloadElementButton.Content = new TextBlock { Text = "Remove" };
         DownloadElementButton.Classes.Remove("accent");
+    }
+
+    public async Task ForceDownloadElement() 
+    {
+        if (!await LocalProvider.Get().IsElementDownloaded(_entry))
+        {
+            await DownloadElementToCache();
+            DisableDownloadButton();
+        }
     }
 
     public async void LoadDownloadButton()

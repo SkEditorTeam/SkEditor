@@ -72,6 +72,13 @@
                 Manage Cached Elements
             </Button>
             
+            <Button Grid.Row="2" Grid.Column="3"
+                    Margin="5"
+                    Name="DownloadAllButton" IsVisible="True"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                Download All Found
+            </Button>
+            
         </Grid>
         
         <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">

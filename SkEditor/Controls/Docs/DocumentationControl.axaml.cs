@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Utilities;
 using SkEditor.Views;
 
 namespace SkEditor.Controls.Docs;
@@ -34,6 +35,7 @@ public partial class DocumentationControl : UserControl
             ProviderBox.SelectionChanged -= HandleProviderBoxSelection;
             InitializeProviderBox();
         });
+        DownloadAllButton.Command = new RelayCommand(DownloadAllEntries);
     }
 
     public void AddItems()
@@ -149,7 +151,9 @@ public partial class DocumentationControl : UserControl
     public void HandleProviderBoxSelection(object? sender, SelectionChangedEventArgs selectionChangedEventArgs)
     {
         ViewModel.Provider = (DocProvider)((ComboBoxItem)ProviderBox.SelectedItem!).Tag!;
+        
         OpenLocalManagementButton.IsVisible = ViewModel.Provider == DocProvider.Local;
+        DownloadAllButton.IsVisible = ViewModel.Provider != DocProvider.Local;
     }
 
     public DocumentationViewModel ViewModel => (DocumentationViewModel)DataContext!;
@@ -217,6 +221,51 @@ public partial class DocumentationControl : UserControl
         {
             LoadingInformation.IsVisible = false;
         }
+    }
+
+    private async void DownloadAllEntries()
+    {
+        if (EntriesContainer.Children.Count == 0)
+        {
+            ApiVault.Get().ShowError("No documentation entries found. Why not search for some first?");
+            return;
+        }
+            
+        if (EntriesContainer.Children.Count > 0)
+        {
+            var result = await ApiVault.Get().ShowAdvancedMessage("Download all",
+                "Are you sure you want to download all the documentation entries found? (total: " + EntriesContainer.Children.Count + ")");
+            if (result != ContentDialogResult.Primary) 
+                return;
+        }
+        
+        var taskDialog = new TaskDialog
+        {
+            Title = "Downloading elements ...",
+            ShowProgressBar = true,
+            IconSource = new SymbolIconSource { Symbol = Symbol.Download },
+            SubHeader = "Downloading",
+            Content = "We're downloading the documentation entries for you. Please wait ...",
+        };
+        var chidren = EntriesContainer.Children;
+        taskDialog.SetProgressBarState(0, TaskDialogProgressState.Normal);
+        
+        taskDialog.Opened += async (sender, args) =>
+        {
+            for (var index = 0; index < EntriesContainer.Children.Count; index++)
+            {
+                var element = EntriesContainer.Children[index];
+                if (element is DocElementControl docElement)
+                    await docElement.ForceDownloadElement();
+                taskDialog.SetProgressBarState((index + 1) * 100 / EntriesContainer.Children.Count,
+                    TaskDialogProgressState.Normal);
+            }
+            
+            taskDialog.Hide(TaskDialogStandardResult.OK);
+        };
+        
+        taskDialog.XamlRoot = ApiVault.Get().GetMainWindow();
+        await taskDialog.ShowAsync();
     }
 
     private static async Task<bool> ConfirmLargeResults()

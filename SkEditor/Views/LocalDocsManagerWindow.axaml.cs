@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Layout;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
@@ -71,11 +72,8 @@ public partial class LocalDocsManagerWindow : AppWindow
         foreach (var providerGroup in providerGroups)
         {
             var provider = providerGroup.First().OriginalProvider;
-            var expander = new SettingsExpander()
-            {
-                Header = provider.ToString(),
-                IconSource = IDocProvider.Providers[provider].Icon
-            };
+            var expander = CreateExpander(provider.ToString(), 
+                IDocProvider.Providers[provider].Icon, providerGroup.Count);
             
             foreach (var element in providerGroup)
             {
@@ -98,11 +96,8 @@ public partial class LocalDocsManagerWindow : AppWindow
         foreach (var typeGroup in typeGroups)
         {
             var type = typeGroup.First().DocType;
-            var expander = new SettingsExpander()
-            {
-                Header = type.ToString(),
-                IconSource = IDocumentationEntry.GetTypeIcon(type)
-            };
+            var expander = CreateExpander(type.ToString(), 
+                IDocumentationEntry.GetTypeIcon(type), typeGroup.Count);
             
             foreach (var element in typeGroup)
             {
@@ -125,10 +120,8 @@ public partial class LocalDocsManagerWindow : AppWindow
         foreach (var addonGroup in addonGroups)
         {
             var addon = addonGroup.First().Addon;
-            var expander = new SettingsExpander()
-            {
-                Header = addon
-            };
+            var expander = CreateExpander(addon, 
+                null, addonGroup.Count);
             
             foreach (var element in addonGroup)
             {
@@ -138,6 +131,24 @@ public partial class LocalDocsManagerWindow : AppWindow
             
             CategoriesPanel.Children.Add(expander);
         }
+    }
+
+    public SettingsExpander CreateExpander(string categoryName, IconSource? icon, int elementAmount)
+    {
+        return new SettingsExpander()
+        {
+            Header = new StackPanel()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Children =
+                {
+                    new TextBlock { Text = categoryName },
+                    new InfoBadge { Value = elementAmount }
+                }
+            },
+            IconSource = icon
+        };
     }
     
 
