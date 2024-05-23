@@ -79,7 +79,6 @@
 	<system:String x:Key="UpdateFailed">Error al descargar la actualización. Por favor, inténtalo de nuevo más tarde.</system:String>
 
 	<!-- Ventana de Publicación -->
-	<system:String x:Key="PublishWindowPasteApiKey">Pega tu clave API aquí</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Haz clic aquí para abrir un sitio web con la clave API. ¡Asegúrate de iniciar sesión primero!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Anónimamente</system:String>
 	<system:String x:Key="PublishWindowResultLink">Enlace a tu código</system:String>

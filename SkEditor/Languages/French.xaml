@@ -100,7 +100,6 @@
     <system:String x:Key="BinaryFileTitle">Fichier binaire trouvé</system:String>
 
     <!-- Fenêtre de publication -->
-    <system:String x:Key="PublishWindowPasteApiKey">Collez votre clé API ici</system:String>
     <system:String x:Key="PublishWindowApiKeyHint">Cliquez ici pour ouvrir un site Web avec la clé API. Assurez-vous de vous connecter d'abord !</system:String>
     <system:String x:Key="PublishWindowAnonymously">Anonymement</system:String>
     <system:String x:Key="PublishWindowResultLink">Lien vers votre code</system:String>

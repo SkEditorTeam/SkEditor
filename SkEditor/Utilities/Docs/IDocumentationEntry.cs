@@ -9,7 +9,7 @@ using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 namespace SkEditor.Utilities.Docs;
 
 /// <summary>
-/// Represent a documentation entry. Can be an expression, event, effect ...
+/// Represent a documentation entry. Can be an expression, event, effect...
 /// It is mainly used to have a common format for all documentation providers.
 /// </summary>
 public interface IDocumentationEntry

@@ -16,15 +16,13 @@
         <Grid Grid.Row="0"
               RowDefinitions="Auto,Auto,Auto"
               ColumnDefinitions="*,*,*,*"
-              Margin="5"
-              >
+              Margin="5">
             <TextBlock
                 FontSize="24"
                 Text="{DynamicResource DocumentationWindowTitle}"
                 FontWeight="SemiBold"
                 Grid.Row="0"
-                Grid.Column="0" Grid.ColumnSpan="3"
-            />
+                Grid.Column="0" Grid.ColumnSpan="3"/>
             
             <StackPanel Grid.Row="1" Grid.Column="0" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
                 <TextBlock Text="{DynamicResource DocumentationWindowSearchQuery}" />
@@ -62,7 +60,7 @@
                     Margin="5"
                     Click="SearchButtonClick"
                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                    Content="{DynamicResource DocumentationWindowSearchButton}" />
+                    Content="{DynamicResource DocumentationWindowSearch}" />
             
             <Button Grid.Row="2" Grid.Column="3"
                     Margin="5"

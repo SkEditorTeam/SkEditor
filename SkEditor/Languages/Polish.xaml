@@ -101,7 +101,7 @@
 	
 
 	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowPasteApiKey">Wklej tu swój klucz API</system:String>
+	<system:String x:Key="PublishWindowNoApiKey">Ustaw swój klucz API w ustawieniach</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Kliknij tutaj by przejść na stronę z kluczem API. Nie zapomnij się zalogować!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Anonimowo</system:String>
 	<system:String x:Key="PublishWindowResultLink">Link do kodu</system:String>

@@ -40,8 +40,7 @@
             <TextBlock 
                 FontSize="16" TextWrapping="Wrap"
                 Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Margin="5"
-                Name="DescriptionText"
-                />
+                Name="DescriptionText"/>
             
             <avaloniaEdit:TextEditor
                 Margin="5" FontSize="16"
@@ -52,8 +51,7 @@
                 Padding="10"
                 HorizontalScrollBarVisibility="Visible"
                 FontFamily="{DynamicResource JetBrainsFont}"
-                IsReadOnly="True"
-            />
+                IsReadOnly="True"/>
             
             <Expander
                 Margin="0,0,4,0"

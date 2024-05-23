@@ -101,7 +101,7 @@
 	
 
 	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowPasteApiKey">Paste your API key here</system:String>
+	<system:String x:Key="PublishWindowNoApiKey">Set your API key in the settings</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Click here to open a website with the API key. Make sure to log in first!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Anonymously</system:String>
 	<system:String x:Key="PublishWindowResultLink">Link to your code</system:String>
@@ -124,7 +124,7 @@
 	<system:String x:Key="DocumentationControlEventValues">Event Values</system:String>
 	<system:String x:Key="DocumentationControlChangers">Changers</system:String>
 	
-	<system:String x:Key="DocumentationControlActionsFilter">Filter via this element's ...</system:String>
+	<system:String x:Key="DocumentationControlActionsFilter">Filter via this element'...</system:String>
 	<system:String x:Key="DocumentationControlType">Type</system:String>
 	<system:String x:Key="DocumentationControlAddon">Addon</system:String>
 	
@@ -171,7 +171,7 @@
 	<system:String x:Key="DocumentationWindowDownloadAllMessage">Are you sure you want to download all the documentation entries found? (total: {0})</system:String>
 	<system:String x:Key="DocumentationWindowDownloadingElements">Downloading elements...</system:String>
 	<system:String x:Key="DocumentationWindowDownloading">Downloading</system:String>
-	<system:String x:Key="DocumentationWindowDownloadingMessage">We're downloading the documentation entries for you. Please wait ...</system:String>
+	<system:String x:Key="DocumentationWindowDownloadingMessage">We're downloading the documentation entries for you. Please wait...</system:String>
 
 	<!-- Refactor Window -->
 	<system:String x:Key="RefactorWindowRemoveComments">Remove comments</system:String>

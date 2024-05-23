@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SkEditor.Utilities;
+using Avalonia.Media.Immutable;
+using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Controls.Docs;
 
@@ -136,6 +138,7 @@ public partial class DocElementControl : UserControl
 
     private void LoadPatternsEditor(IDocumentationEntry entry)
     {
+        PatternsEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
         if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
         {
             Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
@@ -174,6 +177,8 @@ public partial class DocElementControl : UserControl
             IsReadOnly = true,
             Text = content
         };
+
+        editor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
 
         if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
         {
@@ -335,16 +340,17 @@ public partial class DocElementControl : UserControl
                 stackPanel.Children.Add(new StackPanel()
                 {
                     Orientation = Orientation.Horizontal,
-                    Spacing = 10,
+                    Spacing = 5,
                     Children =
                     {
                         new TextBlock()
                         {
                             Text = Translation.Get("DocumentationControlExampleAuthor", example.Author),
                             FontWeight = FontWeight.Regular,
-                            FontSize = 16
+                            FontSize = 16,
+                            Margin = new Thickness(0, 0, 0, 5)
                         },
-                        new InfoBadge() { IconSource = new FontIconSource() { Glyph = example.Votes } }
+                        new InfoBadge() { IconSource = new FontIconSource() { Glyph = example.Votes }, VerticalAlignment = VerticalAlignment.Top }
                     }
                 });
 
@@ -362,7 +368,10 @@ public partial class DocElementControl : UserControl
                     Text = Format(example.Example),
                     IsReadOnly = true,
                     HorizontalAlignment = HorizontalAlignment.Stretch,
+                    Margin = new Thickness(0, 0, 0, 10)
                 };
+
+                textEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
 
                 if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
                 {
