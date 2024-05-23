@@ -42,8 +42,8 @@ public class SkriptMCProvider : IDocProvider
         catch (Exception e)
         {
             ApiVault.Get().ShowError(e is TaskCanceledException
-                ? "The request to the documentation server timed out. Are the docs down?"
-                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+                ? Translation.Get("DocumentationWindowErrorOffline")
+                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
         }
 
@@ -51,11 +51,12 @@ public class SkriptMCProvider : IDocProvider
         {
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
-                ApiVault.Get().ShowError("SkriptMC is currently not available for documentation. Please try again later.");
+                ApiVault.Get().ShowError(Translation.Get("DocumentationWindowSkriptMCBad2"));
                 return [];
             }
 
-            ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{response.ReasonPhrase}");
+            //ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{response.ReasonPhrase}");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
         }
 
@@ -67,10 +68,10 @@ public class SkriptMCProvider : IDocProvider
     public List<string> CanSearch(SearchData searchData)
     {
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
-            return ["Query must be at least 3 characters long"];
+            return [Translation.Get("DocumentationWindowInvalidDataQuery")];
 
         if (searchData.FilteredType == IDocumentationEntry.Type.All)
-            return ["SkriptMC does not support searching for all types"];
+            return [Translation.Get("DocumentationWindowSkriptMCBad")];
 
         return [];
     }

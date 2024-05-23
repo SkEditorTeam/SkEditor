@@ -23,7 +23,7 @@ public class SkUnityProvider : IDocProvider
     public List<string> CanSearch(SearchData searchData)
     {
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
-            return ["Query must be at least 3 characters long"];
+            return [Translation.Get("DocumentationWindowInvalidDataQuery")];
 
         return [];
     }
@@ -57,14 +57,14 @@ public class SkUnityProvider : IDocProvider
         catch (Exception e)
         {
             ApiVault.Get().ShowError(e is TaskCanceledException
-                ? "The request to the documentation server timed out. Are the docs down?"
-                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+                ? Translation.Get("DocumentationWindowErrorOffline")
+                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\nReceived status code: {response.StatusCode}");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return new List<IDocumentationEntry>();
         }
 
@@ -72,7 +72,7 @@ public class SkUnityProvider : IDocProvider
         var responseObject = JObject.Parse(content);
         if (responseObject["response"].ToString() != "success")
         {
-            ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\nReceived response: {responseObject["response"]}");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", responseObject["response"].ToString()));
             return new List<IDocumentationEntry>();
         }
         var entries = responseObject["result"].ToObject<List<SkUnityDocEntry>>();
@@ -102,14 +102,14 @@ public class SkUnityProvider : IDocProvider
         catch (Exception e)
         {
             ApiVault.Get().ShowError(e is TaskCanceledException
-                ? "The request to the documentation server timed out. Are the docs down?"
-                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+                ? Translation.Get("DocumentationWindowErrorOffline")
+                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\nReceived status code: {response.StatusCode}");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return new List<IDocumentationExample>();
         }
 
@@ -150,14 +150,14 @@ public class SkUnityProvider : IDocProvider
         catch (Exception e)
         {
             ApiVault.Get().ShowError(e is TaskCanceledException
-                ? "The request to the documentation server timed out. Are the docs down?"
-                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+                ? Translation.Get("DocumentationWindowErrorOffline")
+                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return new List<string>();
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\nReceived status code: {response.StatusCode}");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return new List<string>();
         }
 

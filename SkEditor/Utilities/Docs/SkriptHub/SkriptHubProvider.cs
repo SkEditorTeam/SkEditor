@@ -29,8 +29,9 @@ public class SkriptHubProvider : IDocProvider
 
     public List<string> CanSearch(SearchData searchData)
     {
-        if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
-            return ["Query must be at least 3 characters long"];
+        if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) &&
+            searchData.FilteredType == IDocumentationEntry.Type.All)
+            return [Translation.Get("DocumentationWindowInvalidDataQuery")];
 
         return [];
     }
@@ -61,8 +62,8 @@ public class SkriptHubProvider : IDocProvider
         catch (Exception e)
         {
             ApiVault.Get().ShowError(e is TaskCanceledException
-                ? "The request to the documentation server timed out. Are the docs down?"
-                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+                ? Translation.Get("DocumentationWindowErrorOffline")
+                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
         }
 
@@ -76,7 +77,7 @@ public class SkriptHubProvider : IDocProvider
             {
                 ApiVault.Get().Log(e.Message);
             }
-            ApiVault.Get().ShowError($"The documentation server returned an error: {response.StatusCode}");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
         }
 
@@ -109,8 +110,8 @@ public class SkriptHubProvider : IDocProvider
         catch (Exception e)
         {
             ApiVault.Get().ShowError(e is TaskCanceledException
-                ? "The request to the documentation server timed out. Are the docs down?"
-                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+                ? Translation.Get("DocumentationWindowErrorOffline")
+                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
         }
 
@@ -124,7 +125,7 @@ public class SkriptHubProvider : IDocProvider
             {
                 ApiVault.Get().Log(e.Message);
             }
-            ApiVault.Get().ShowError($"The documentation server returned an error: {response.StatusCode}");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
         }
 
@@ -150,8 +151,8 @@ public class SkriptHubProvider : IDocProvider
         catch (Exception e)
         {
             ApiVault.Get().ShowError(e is TaskCanceledException
-                ? "The request to the documentation server timed out. Are the docs down?"
-                : $"An error occurred while fetching the documentation.\n\n{e.Message}");
+                ? Translation.Get("DocumentationWindowErrorOffline")
+                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
         }
 
@@ -165,7 +166,7 @@ public class SkriptHubProvider : IDocProvider
             {
                 ApiVault.Get().Log(e.Message);
             }
-            ApiVault.Get().ShowError($"The documentation server returned an error: {response.StatusCode}");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
         }
 

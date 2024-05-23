@@ -6,13 +6,13 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.LocalDocsManagerWindow"
         Icon="/Assets/SkEditor.ico" Width="800" Height="450"
-        Title="Local Documentation Manager"
+        Title="{DynamicResource LocalDocsManagerWindowTitle}"
         CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
     <Grid RowDefinitions="Auto,*" Margin="10">
         
         <controls:InfoBar
             Grid.Row="0"
-            Message="From here you can manage the documentation elements you have downloaded."
+            Message="{DynamicResource LocalDocsManagerWindowInfo}"
             Severity="Informational"
             IsOpen="True"
             IsClosable="False"
@@ -22,16 +22,16 @@
               Margin="5,10"
               RowDefinitions="Auto,*" ColumnDefinitions="Auto,*,Auto">
             
-            <TextBlock VerticalAlignment="Center" Grid.Row="0" Margin="0,0,5,0" Grid.Column="0">Group by</TextBlock>
+            <TextBlock VerticalAlignment="Center" Grid.Row="0" Margin="0,0,5,0" Grid.Column="0" Text="{DynamicResource LocalDocsManagerWindowGroupBy}"/>
             <ComboBox Grid.Row="0" Grid.Column="1" Width="150" Name="GroupByComboBox" SelectedIndex="0">
-                <ComboBoxItem Tag="0">Provider</ComboBoxItem>
-                <ComboBoxItem Tag="1">Type</ComboBoxItem>
-                <ComboBoxItem Tag="2">Addon</ComboBoxItem>
+                <ComboBoxItem Tag="0" Content="{DynamicResource LocalDocsManagerWindowGroupByProvider}"/>
+                <ComboBoxItem Tag="1" Content="{DynamicResource LocalDocsManagerWindowGroupByType}"/>
+                <ComboBoxItem Tag="2" Content="{DynamicResource LocalDocsManagerWindowGroupByAddon}"/>
             </ComboBox>
             
             <Button Width="200" Grid.Row="0" Grid.Column="2" Name="DeleteEverythingButton">
                 <StackPanel Spacing="5" Orientation="Horizontal">
-                    <TextBlock>Delete Everything</TextBlock>
+                    <TextBlock Text="{DynamicResource LocalDocsManagerWindowDeleteEverything}"/>
                 </StackPanel>
             </Button>
             

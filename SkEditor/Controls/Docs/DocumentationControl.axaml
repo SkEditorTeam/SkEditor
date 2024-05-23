@@ -20,25 +20,25 @@
               >
             <TextBlock
                 FontSize="24"
-                Text="Documentation"
+                Text="{DynamicResource DocumentationWindowTitle}"
                 FontWeight="SemiBold"
                 Grid.Row="0"
                 Grid.Column="0" Grid.ColumnSpan="3"
             />
             
             <StackPanel Grid.Row="1" Grid.Column="0" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
-                <TextBlock>Search Query</TextBlock>
+                <TextBlock Text="{DynamicResource DocumentationWindowSearchQuery}" />
                 <TextBox Text="{Binding SearchData.Query, Mode=TwoWay}"/>
             </StackPanel>
             
             <StackPanel Grid.Row="1" Grid.Column="1" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
-                <TextBlock>Filtered Type</TextBlock>
+                <TextBlock Text="{DynamicResource DocumentationWindowFilteredType}" />
                <ComboBox HorizontalAlignment="Stretch"
                           Name="FilteredTypesBox"/>
             </StackPanel>
             
             <StackPanel Grid.Row="1" Grid.Column="2" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
-                <TextBlock>Filtered Addon</TextBlock>
+                <TextBlock Text="{DynamicResource DocumentationWindowFilteredAddon}" />
                 <AutoCompleteBox
                     Name="FilteredAddonBox"
                     HorizontalAlignment="Stretch"
@@ -46,7 +46,7 @@
             </StackPanel>
             
             <StackPanel Grid.Row="1" Grid.Column="3" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
-                <TextBlock>Provider</TextBlock>
+                <TextBlock Text="{DynamicResource DocumentationWindowProvider}" />
                 <Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
                     <ComboBox
                         Name="ProviderBox"
@@ -61,23 +61,20 @@
             <Button Classes="accent" Grid.Row="2" Grid.Column="0"
                     Margin="5"
                     Click="SearchButtonClick"
-                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                Search
-            </Button>
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                    Content="{DynamicResource DocumentationWindowSearchButton}" />
             
             <Button Grid.Row="2" Grid.Column="3"
                     Margin="5"
                     Name="OpenLocalManagementButton" IsVisible="False"
-                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                Manage Cached Elements
-            </Button>
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                    Content="{DynamicResource DocumentationWindowManageCached}" />
             
             <Button Grid.Row="2" Grid.Column="3"
                     Margin="5"
                     Name="DownloadAllButton" IsVisible="True"
-                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                Download All Found
-            </Button>
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                    Content="{DynamicResource DocumentationWindowDownloadAll}" />
             
         </Grid>
         
@@ -89,7 +86,7 @@
             </ScrollViewer>
             <StackPanel Name="LoadingInformation" VerticalAlignment="Center" HorizontalAlignment="Stretch" Spacing="10">
                 
-                <TextBlock FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold">Loading ...</TextBlock>
+                <TextBlock FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold" Text="{DynamicResource DocumentationWindowLoading}" />
                 <ProgressBar Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" IsIndeterminate="True"/>
                 
             </StackPanel>

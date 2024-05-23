@@ -176,8 +176,8 @@ public partial class DocumentationControl : UserControl
         provider = null;
         if (ViewModel.Provider == null)
         {
-            ApiVault.Get().ShowError("No documentation provider selected.\n\nYou may need to connect your API keys from settings to use those.");
-            OtherInformation.Text = "No provider selected.";
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowNoProvidersMessage"));
+            OtherInformation.Text = Translation.Get("DocumentationWindowNoProviders");
             return false;
         }
         provider = IDocProvider.Providers[ViewModel.Provider.Value];
@@ -190,7 +190,7 @@ public partial class DocumentationControl : UserControl
         if (errors.Count > 0)
         {
             ApiVault.Get().ShowError(string.Join("\n", errors));
-            OtherInformation.Text = "Invalid search data.";
+            OtherInformation.Text = Translation.Get("DocumentationWindowInvalidData");
             return false;
         }
         return true;
@@ -207,7 +207,7 @@ public partial class DocumentationControl : UserControl
             if (elements.Count > 100 && !await ConfirmLargeResults())
             {
                 LoadingInformation.IsVisible = false;
-                OtherInformation.Text = "Too many results.";
+                OtherInformation.Text = Translation.Get("DocumentationWindowTooManyResults");
                 return;
             }
 
@@ -227,25 +227,25 @@ public partial class DocumentationControl : UserControl
     {
         if (EntriesContainer.Children.Count == 0)
         {
-            ApiVault.Get().ShowError("No documentation entries found. Why not search for some first?");
+            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowNoEntries"));
             return;
         }
             
         if (EntriesContainer.Children.Count > 0)
         {
             var result = await ApiVault.Get().ShowAdvancedMessage("Download all",
-                "Are you sure you want to download all the documentation entries found? (total: " + EntriesContainer.Children.Count + ")");
+                Translation.Get("DocumentationWindowDownloadAllMessage", EntriesContainer.Children.Count.ToString()));
             if (result != ContentDialogResult.Primary) 
                 return;
         }
         
         var taskDialog = new TaskDialog
         {
-            Title = "Downloading elements ...",
+            Title = Translation.Get("DocumentationWindowDownloadingElements"),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.Download },
-            SubHeader = "Downloading",
-            Content = "We're downloading the documentation entries for you. Please wait ...",
+            SubHeader = Translation.Get("DocumentationWindowDownloading"),
+            Content = Translation.Get("DocumentationWindowDownloadingMessage")
         };
         var chidren = EntriesContainer.Children;
         taskDialog.SetProgressBarState(0, TaskDialogProgressState.Normal);
@@ -270,8 +270,8 @@ public partial class DocumentationControl : UserControl
 
     private static async Task<bool> ConfirmLargeResults()
     {
-        var result = await ApiVault.Get().ShowAdvancedMessage("Too many results",
-            "The search returned more than 100 results. Are you sure you want to display all of them?\n\nIt may slow down the app!");
+        var result = await ApiVault.Get().ShowAdvancedMessage(Translation.Get("DocumentationWindowTooManyResults"),
+            Translation.Get("DocumentationWindowTooManyResultsMessage"));
         return result == ContentDialogResult.Primary;
     }
 
@@ -284,15 +284,15 @@ public partial class DocumentationControl : UserControl
 
         if (elements.Count == 0)
         {
-            OtherInformation.Text = "No results found.";
+            OtherInformation.Text = Translation.Get("DocumentationWindowNoResults");
         }
     }
 
     private void HandleError(Exception exception)
     {
-        ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{exception.Message}");
+        ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", exception.Message));
         Log.Error(exception, "An error occurred while fetching the documentation.");
-        OtherInformation.Text = "An error occurred. Try again later.";
+        OtherInformation.Text = Translation.Get("DocumentationWindowAnErrorOccured");
     }
 
     public void FilterByType(IDocumentationEntry.Type type)

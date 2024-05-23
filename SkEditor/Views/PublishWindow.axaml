@@ -19,7 +19,7 @@
 				IsOpen="True"
 				IsClosable="False"
 				Severity="Warning"
-				Message="Your API Keys can now be managed in Settings -> Connections."
+				Message="{DynamicResource PublishWindowWarning}"
 				/>
 			<TextBox IsEnabled="False" Name="ApiKeyTextBox" Watermark="{DynamicResource PublishWindowPasteApiKey}" PasswordChar="●"/>
 		</StackPanel>

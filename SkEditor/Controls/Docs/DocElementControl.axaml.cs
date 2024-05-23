@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SkEditor.Utilities;
 
 namespace SkEditor.Controls.Docs;
 
@@ -44,15 +45,15 @@ public partial class DocElementControl : UserControl
         
         // Event Values (events)
         if (entry.DocType == IDocumentationEntry.Type.Event)
-            OtherElementPanel.Children.Add(CreateExpander("Event Values", Format(string.IsNullOrEmpty(entry.EventValues) ? "No event values." : entry.EventValues)));
+            OtherElementPanel.Children.Add(CreateExpander(Translation.Get("DocumentationControlEventValues"), Format(string.IsNullOrEmpty(entry.EventValues) ? Translation.Get("DocumentationControlNoEventValues") : entry.EventValues)));
     }
 
     private void LoadExpressionChangers(IDocumentationEntry entry)
     {
         if (entry.DocType == IDocumentationEntry.Type.Expression && !string.IsNullOrEmpty(entry.Changers))
         {
-            var expander = CreateExpander("Changers",
-                Format(string.IsNullOrEmpty(entry.Changers) ? "No changers." : entry.Changers));
+            var expander = CreateExpander(Translation.Get("DocumentationControlChangers"),
+                Format(string.IsNullOrEmpty(entry.Changers) ? Translation.Get("DocumentationControlNoChangers") : entry.Changers));
 
             var buttons = new StackPanel()
             {
@@ -67,7 +68,7 @@ public partial class DocElementControl : UserControl
                 Spacing = 3,
                 Children =
                 {
-                    new TextBlock() { Text = "Click on the desired changer to copy its generated code." },
+                    new TextBlock() { Text = Translation.Get("DocumentationControlChangerHelp") },
                     buttons
                 }
             };
@@ -154,8 +155,8 @@ public partial class DocElementControl : UserControl
         NameText.Text = entry.Name;
         Expander.Description = entry.DocType + " from " + entry.Addon;
         Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
-        DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? "No description provided." : entry.Description);
-        VersionBadge.IconSource = new FontIconSource { Glyph = "Since v" + (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version), };
+        DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? Translation.Get("DocumentationControlNoDescription") : entry.Description);
+        VersionBadge.IconSource = new FontIconSource { Glyph = Translation.Get("DocumentationControlSince", (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version)), };
         SourceBadge.IconSource = new FontIconSource { Glyph = entry.Addon, };
     }
 
@@ -215,7 +216,7 @@ public partial class DocElementControl : UserControl
         catch (Exception e)
         {
             examples = new List<IDocumentationExample>();
-            ApiVault.Get().ShowError("We were unable to download the examples, but the rest is here!\n\nError message: " + e.Message);
+            ApiVault.Get().ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
         }
 
         var localProvider = LocalProvider.Get();
@@ -246,13 +247,13 @@ public partial class DocElementControl : UserControl
     
     public void EnableDownloadButton()
     {
-        DownloadElementButton.Content = new TextBlock { Text = "Download" };
+        DownloadElementButton.Content = new TextBlock { Text = Translation.Get("DocumentationControlDownload") };
         DownloadElementButton.Classes.Add("accent");
     }
     
     public void DisableDownloadButton()
     {
-        DownloadElementButton.Content = new TextBlock { Text = "Remove" };
+        DownloadElementButton.Content = new TextBlock { Text = Translation.Get("DocumentationControlRemove") };
         DownloadElementButton.Classes.Remove("accent");
     }
 
@@ -315,7 +316,7 @@ public partial class DocElementControl : UserControl
             {
                 ExamplesEntry.Content = new TextBlock()
                 {
-                    Text = "No examples available.",
+                    Text = Translation.Get("DocumentationControlNoExamples"),
                     Foreground = Brushes.Gray,
                     TextWrapping = TextWrapping.Wrap,
                     HorizontalAlignment = HorizontalAlignment.Center,
@@ -339,7 +340,7 @@ public partial class DocElementControl : UserControl
                     {
                         new TextBlock()
                         {
-                            Text = "By " + example.Author,
+                            Text = Translation.Get("DocumentationControlExampleAuthor", example.Author),
                             FontWeight = FontWeight.Regular,
                             FontSize = 16
                         },
@@ -383,7 +384,7 @@ public partial class DocElementControl : UserControl
         {
             ExamplesEntry.Content = new TextBlock()
             {
-                Text = "An error occurred while loading examples: " + e.Message,
+                Text = Translation.Get("DocumentationControlErrorExamples", e.Message),
                 Foreground = Brushes.Red,
                 FontWeight = FontWeight.SemiLight,
                 TextWrapping = TextWrapping.Wrap
