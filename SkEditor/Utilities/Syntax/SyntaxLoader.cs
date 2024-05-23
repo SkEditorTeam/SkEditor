@@ -1,11 +1,10 @@
 ﻿using AvaloniaEdit;
+using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
-using Serilog;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -228,4 +227,9 @@ public class SyntaxLoader
         }
     }
 
+    public static IHighlightingDefinition GetCurrentSkriptHighlighting()
+    {
+        var syntax = GetConfiguredSyntaxForLanguage("Skript");
+        return syntax.Highlighting;
+    }
 }

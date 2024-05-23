@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
-using SkEditor.ViewModels;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -70,7 +69,7 @@ public partial class GeneralPage : UserControl
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
         RpcToggleSwitch.Command = new RelayCommand(ToggleRpc);
         WrappingToggleSwitch.Command = new RelayCommand(ToggleWrapping);
-        
+
         IndentationAmountComboBox.SelectionChanged += (s, e) =>
         {
             var appConfig = ApiVault.Get().GetAppConfig();

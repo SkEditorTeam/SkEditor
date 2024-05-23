@@ -170,6 +170,8 @@
 	<system:String x:Key="SettingsHomeDiscordDescription">Display SkEditor on your Discord profile!</system:String>
 	<system:String x:Key="SettingsHomeExperiments">Experiments</system:String>
 	<system:String x:Key="SettingsHomeExperimentsDescription">Test upcoming features!</system:String>
+	<system:String x:Key="SettingsHomeConnections">Connections</system:String>
+	<system:String x:Key="SettingsHomeConnectionsDescription">Manage your third-party connections.</system:String>
 	<system:String x:Key="SettingsHomeAddons">Addons</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Enhance your experience with powerful addons!</system:String>
 	<system:String x:Key="SettingsHomeAbout">About</system:String>
@@ -226,6 +228,9 @@
 
 	<!-- Addon Settings -->
 	<system:String x:Key="SettingsAddonsTitle">Addons</system:String>
+	
+	<!-- Connections Settings -->
+	<system:String x:Key="SettingsConnectionsTitle">Connections</system:String>
 	
 	<!-- File Views -->
 	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>

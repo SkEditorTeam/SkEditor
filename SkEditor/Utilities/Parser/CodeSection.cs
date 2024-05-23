@@ -5,7 +5,6 @@ using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using SkEditor.API;
 using SkEditor.Utilities.Styling;
 using System.Collections.Generic;
 using System.Linq;
