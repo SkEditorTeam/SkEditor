@@ -23,6 +23,10 @@
 				<ui:SettingsExpander Name="ExperimentsItem" Header="{DynamicResource SettingsHomeExperiments}" IconSource="{StaticResource ExperimentsIcon}"
 					Description="{DynamicResource SettingsHomeExperimentsDescription}"
 					IsClickEnabled="True" />
+				
+				<ui:SettingsExpander Name="ConnectionsItem" Header="{DynamicResource SettingsHomeConnections}" IconSource="{StaticResource ConnectionsIcon}"
+				    Description="{DynamicResource SettingsHomeConnectionsDescription}"
+				    IsClickEnabled="True" />
 
 				<ui:SettingsExpander Name="AddonsItem" Header="{DynamicResource SettingsHomeAddons}" IconSource="{StaticResource AddonIcon}"
 					Description="{DynamicResource SettingsHomeAddonsDescription}"

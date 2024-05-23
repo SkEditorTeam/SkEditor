@@ -15,8 +15,13 @@
 		</ComboBox>
 
 		<StackPanel Grid.Column="0" Spacing="4" Grid.Row="1" Margin="0,6">
-			<TextBox Name="ApiKeyTextBox" Watermark="{DynamicResource PublishWindowPasteApiKey}" PasswordChar="●"/>
-			<TextBlock Name="ApiKeyHint" Text="{DynamicResource PublishWindowApiKeyHint}" TextWrapping="Wrap"/>
+			<ui:InfoBar
+				IsOpen="True"
+				IsClosable="False"
+				Severity="Warning"
+				Message="{DynamicResource PublishWindowWarning}"
+				/>
+			<TextBox IsEnabled="False" Name="ApiKeyTextBox" Watermark="{DynamicResource PublishWindowPasteApiKey}" PasswordChar="●"/>
 		</StackPanel>
 		
 		<ComboBox Name="LanguageComboBox" Width="150" SelectedIndex="0" Grid.Row="2" Margin="0,6">

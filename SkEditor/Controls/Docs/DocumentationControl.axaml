@@ -1,0 +1,99 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
+             xmlns:docs="clr-namespace:SkEditor.Utilities.Docs"
+             xmlns:docs1="clr-namespace:SkEditor.Controls.Docs"
+             xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:DocumentationViewModel"
+             x:Class="SkEditor.Controls.Docs.DocumentationControl">
+    <Grid Margin="10"
+          RowDefinitions="Auto,*">
+        
+        <Grid Grid.Row="0"
+              RowDefinitions="Auto,Auto,Auto"
+              ColumnDefinitions="*,*,*,*"
+              Margin="5"
+              >
+            <TextBlock
+                FontSize="24"
+                Text="{DynamicResource DocumentationWindowTitle}"
+                FontWeight="SemiBold"
+                Grid.Row="0"
+                Grid.Column="0" Grid.ColumnSpan="3"
+            />
+            
+            <StackPanel Grid.Row="1" Grid.Column="0" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
+                <TextBlock Text="{DynamicResource DocumentationWindowSearchQuery}" />
+                <TextBox Text="{Binding SearchData.Query, Mode=TwoWay}"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Grid.Column="1" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
+                <TextBlock Text="{DynamicResource DocumentationWindowFilteredType}" />
+               <ComboBox HorizontalAlignment="Stretch"
+                          Name="FilteredTypesBox"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Grid.Column="2" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
+                <TextBlock Text="{DynamicResource DocumentationWindowFilteredAddon}" />
+                <AutoCompleteBox
+                    Name="FilteredAddonBox"
+                    HorizontalAlignment="Stretch"
+                    />
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Grid.Column="3" Spacing="5" Margin="5" HorizontalAlignment="Stretch">
+                <TextBlock Text="{DynamicResource DocumentationWindowProvider}" />
+                <Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
+                    <ComboBox
+                        Name="ProviderBox"
+                        HorizontalAlignment="Stretch"
+                    />
+                    <Button Margin="5,0,0,0" Grid.Column="1" Name="RefreshProviderButton">
+                        <fluent:SymbolIcon Symbol="ArrowCounterclockwise" Width="18" Height="18"/>
+                    </Button>
+                </Grid>
+            </StackPanel>
+            
+            <Button Classes="accent" Grid.Row="2" Grid.Column="0"
+                    Margin="5"
+                    Click="SearchButtonClick"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                    Content="{DynamicResource DocumentationWindowSearchButton}" />
+            
+            <Button Grid.Row="2" Grid.Column="3"
+                    Margin="5"
+                    Name="OpenLocalManagementButton" IsVisible="False"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                    Content="{DynamicResource DocumentationWindowManageCached}" />
+            
+            <Button Grid.Row="2" Grid.Column="3"
+                    Margin="5"
+                    Name="DownloadAllButton" IsVisible="True"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                    Content="{DynamicResource DocumentationWindowDownloadAll}" />
+            
+        </Grid>
+        
+        <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <ScrollViewer VerticalAlignment="Stretch">
+                <StackPanel Spacing="5" Name="EntriesContainer">
+                
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel Name="LoadingInformation" VerticalAlignment="Center" HorizontalAlignment="Stretch" Spacing="10">
+                
+                <TextBlock FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold" Text="{DynamicResource DocumentationWindowLoading}" />
+                <ProgressBar Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" IsIndeterminate="True"/>
+                
+            </StackPanel>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <TextBlock Name="OtherInformation" FontSize="28" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="SemiBold"></TextBlock>
+            </StackPanel>
+        </Grid>
+        
+    </Grid>
+</UserControl>

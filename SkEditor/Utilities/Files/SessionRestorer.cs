@@ -1,7 +1,6 @@
 ﻿using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities.Syntax;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;

@@ -23,8 +23,6 @@ public partial class PublishWindow : AppWindow
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         PublishButton.Command = new RelayCommand(Publish);
-        ApiKeyHint.Tapped += (sender, e) => OpenSiteWithApiKey();
-        ApiKeyTextBox.TextChanged += (sender, e) => SaveApiKey();
 
         CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
 
@@ -48,7 +46,7 @@ public partial class PublishWindow : AppWindow
         {
             "Pastebin" => appConfig.PastebinApiKey,
             "code.skript.pl" => appConfig.CodeSkriptPlApiKey,
-            "skUnity Parser" => appConfig.SkunityApiKey,
+            "skUnity Parser" => appConfig.SkUnityAPIKey,
             _ => "",
         };
 
@@ -68,7 +66,7 @@ public partial class PublishWindow : AppWindow
                 ApiVault.Get().GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
                 break;
             case "skUnity Parser":
-                ApiVault.Get().GetAppConfig().SkunityApiKey = ApiKeyTextBox.Text;
+                ApiVault.Get().GetAppConfig().SkUnityAPIKey = ApiKeyTextBox.Text;
                 break;
         }
     }

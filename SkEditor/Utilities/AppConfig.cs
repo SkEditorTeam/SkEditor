@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SkEditor.Utilities;
 
@@ -16,7 +16,6 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private string _lastUsedPublishService = "Pastebin";
     [ObservableProperty] private string _pastebinApiKey = "";
     [ObservableProperty] private string _codeSkriptPlApiKey = "";
-    [ObservableProperty] private string _skunityApiKey = "";
     [ObservableProperty] private bool _useSkriptGui = false;
 
     [ObservableProperty] private bool _isDiscordRpcEnabled = true;
@@ -50,6 +49,9 @@ public partial class AppConfig : ObservableObject
     public bool EnableRealtimeCodeParser { get; set; } = false;
     public bool EnableSkDoc { get; set; } = false;
 
+    public string SkUnityAPIKey { get; set; } = "";
+    public string SkriptHubAPIKey { get; set; } = "";
+    public string SkriptMCAPIKey { get; set; } = "";
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
 
