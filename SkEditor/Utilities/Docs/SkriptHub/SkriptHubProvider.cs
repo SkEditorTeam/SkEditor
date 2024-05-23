@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
@@ -173,6 +174,11 @@ public class SkriptHubProvider : IDocProvider
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var elements = JsonConvert.DeserializeObject<List<JObject>>(content);
         return elements.Select(e => e["name"].ToString()).ToList();
+    }
+
+    public async Task<Color?> GetAddonColor(string addonName)
+    {
+        return null;
     }
 
     public IconSource Icon => new ImageIconSource()

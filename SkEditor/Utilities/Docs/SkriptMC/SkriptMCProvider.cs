@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
@@ -93,6 +94,11 @@ public class SkriptMCProvider : IDocProvider
     {
         return [];
     }
-    
+
+    public async Task<Color?> GetAddonColor(string addonName)
+    {
+        return null;
+    }
+
     public IconSource Icon => new BitmapIconSource() { UriSource = new ("avares://SkEditor/Assets/Brands/SkriptMC.png") };
 }

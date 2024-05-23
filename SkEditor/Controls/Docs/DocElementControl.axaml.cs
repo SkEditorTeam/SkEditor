@@ -15,10 +15,12 @@ using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SkEditor.Utilities;
 using Avalonia.Media.Immutable;
+using SkEditor.Utilities.Docs.SkUnity;
 using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Controls.Docs;
@@ -160,7 +162,30 @@ public partial class DocElementControl : UserControl
         Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
         DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? Translation.Get("DocumentationControlNoDescription") : entry.Description);
         VersionBadge.IconSource = new FontIconSource { Glyph = Translation.Get("DocumentationControlSince", (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version)), };
+        
+        LoadAddonBadge(entry);
+    }
+
+    private async void LoadAddonBadge(IDocumentationEntry entry)
+    { 
         SourceBadge.IconSource = new FontIconSource { Glyph = entry.Addon, };
+
+        var color = await IDocProvider.Providers[entry.Provider].GetAddonColor(entry.Addon);
+        if (color != null)
+        {
+            SourceBadge.Background = new SolidColorBrush(color.Value);
+            SourceBadge.Foreground = color.Value.ToHsl().L < 0.2 ? Brushes.White : Brushes.Black;
+            
+            if (entry.Provider == DocProvider.SkUnity) // only those supports URLs
+            {
+                var skUnityProvider = IDocProvider.Providers[DocProvider.SkUnity] as SkUnityProvider;
+                SourceBadge.Tapped += (_, _) =>
+                {
+                    var uri = skUnityProvider.GetAddonLink(entry.Addon);
+                    Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
+                };
+            }
+        }
     }
 
     public Expander CreateExpander(string name,

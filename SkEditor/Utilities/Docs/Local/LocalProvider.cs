@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.Files;
 
@@ -130,6 +131,11 @@ public class LocalProvider : IDocProvider
             await LoadLocalDocs();
 
         return _localDocs;
+    }
+
+    public async Task<Color?> GetAddonColor(string addonName)
+    {
+        return null;
     }
 
     public async Task DeleteAll()

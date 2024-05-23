@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
@@ -132,12 +133,11 @@ public class SkUnityProvider : IDocProvider
         return keys.Select(key => resultObject[key].ToObject<SkUnityDocExample>()).ToList<IDocumentationExample>();
     }
 
-    private readonly List<string> _addonCache = new();
     public bool HasAddons => true;
     public async Task<List<string>> GetAddons()
     {
-        if (_addonCache.Count > 0)
-            return _addonCache;
+        if (CachedAddons.Count > 0)
+            return CachedAddons.Keys.ToList();
 
         var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getAllAddons/";
 
@@ -165,8 +165,15 @@ public class SkUnityProvider : IDocProvider
         var responseObject = JObject.Parse(content);
         var addonsObj = responseObject["result"].ToObject<JObject>();
         var addons = addonsObj.Properties().Select(prop => prop.Name).ToList();
-
-        _addonCache.AddRange(addons);
+        
+        foreach (string key in addons)
+        {
+            var obj = addonsObj[key];
+            var color = Color.Parse("#" + obj["colour"].ToObject<string>());
+            var forumResourceId = obj["forums_resource_id"].ToObject<string>();
+            CachedAddons[key] = new AddonData(key, color, forumResourceId);
+        }
+        
         return addons;
     }
     
@@ -177,4 +184,33 @@ public class SkUnityProvider : IDocProvider
             Source = SvgSource.LoadFromStream(AssetLoader.Open(new Uri("avares://SkEditor/Assets/Brands/skUnity.svg")))
         }
     };
+
+    public string GetAddonLink(string addonName)
+    {
+        return "https://forums.skunity.com/resources/" + CachedAddons[addonName].ForumResourceId + "/";
+    }
+
+    public async Task<Color?> GetAddonColor(string addonName)
+    {
+        if (CachedAddons.Count == 0)
+        {
+            try
+            {
+                await GetAddons();
+            }
+            catch (Exception e)
+            {
+                ApiVault.Get().ShowError(e is TaskCanceledException
+                    ? Translation.Get("DocumentationWindowErrorOffline")
+                    : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                Serilog.Log.Error(e, "Failed to fetch addons");
+                return null;
+            }
+        }
+        
+        return CachedAddons.TryGetValue(addonName, out var addon) ? addon.Color : null;
+    }
+
+    private record AddonData(string Name, Color Color, string ForumResourceId);
+    private static readonly Dictionary<string, AddonData> CachedAddons = new();
 }
