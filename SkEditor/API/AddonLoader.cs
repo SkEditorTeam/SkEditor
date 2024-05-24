@@ -145,4 +145,14 @@ public class AddonLoader
 
         return assemblies;
     }
+    
+    public static void LoadAddonFromClass(Type addonType)
+    {
+        if (typeof(IAddon).IsAssignableFrom(addonType) && addonType.IsClass && !addonType.IsAbstract)
+        {
+            IAddon addon = (IAddon)Activator.CreateInstance(addonType);
+            Addons.Add(addon);
+            addon.OnEnable();
+        }
+    }
 }
