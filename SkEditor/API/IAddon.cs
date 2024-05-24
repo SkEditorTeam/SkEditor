@@ -11,13 +11,14 @@ public interface IAddon
 {
     public string Name { get; }
     public string Version { get; }
+    public string? Description { get; }
 
     public virtual List<MenuItem> GetMenuItems()
     {
         return [];
     }
 
-    public virtual IconSource GetMenuIcon()
+    public virtual IconSource GetAddonIcon()
     {
         return new SymbolIconSource() { Symbol = Symbol.AppsAddIn };
     }

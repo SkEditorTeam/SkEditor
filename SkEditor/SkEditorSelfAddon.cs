@@ -17,6 +17,18 @@ public class SkEditorSelfAddon : IAddon
 {
     public string Name => "SkEditorCore";
     public string Version => SettingsViewModel.Version;
+    public string Description => "The core of SkEditor, providing the base functionalities.";
+
+    private ImageIconSource _iconSource = null!;
+    public IconSource GetAddonIcon()
+    {
+        if (_iconSource is not null)
+            return _iconSource;
+        
+        Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/SkEditor.svg"));
+        return _iconSource = new ImageIconSource() { Source = new SvgImage { Source = SvgSource.LoadFromStream(stream) } };
+    }
+
     public void OnEnable()
     {
         #region Registries - Connections
