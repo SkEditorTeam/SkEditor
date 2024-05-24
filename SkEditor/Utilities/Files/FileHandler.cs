@@ -76,7 +76,7 @@ public class FileHandler
         });
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-        await SyntaxLoader.RefreshSyntaxAsync();
+        SyntaxLoader.Load(tabItem.Content as TextEditor);
     }
 
     public async static void OpenFile()
@@ -104,6 +104,7 @@ public class FileHandler
         if (tabItem == null) return;
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+        SyntaxLoader.Load(tabItem.Content as TextEditor);
         if (untitledFileOpen) await FileCloser.CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
 
         OpenedFiles.Add(new OpenedFile()
@@ -117,8 +118,6 @@ public class FileHandler
         });
 
         AddChangeChecker(path, tabItem);
-
-        await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
     }
 
     private static void AddChangeChecker(string path, TabViewItem tabItem)

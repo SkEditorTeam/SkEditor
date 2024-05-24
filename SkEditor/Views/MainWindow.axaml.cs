@@ -10,7 +10,7 @@ using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Styling;
-using SkEditor.Utilities.Syntax;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -109,7 +109,6 @@ public partial class MainWindow : AppWindow
 
         Dispatcher.UIThread.Post(() =>
         {
-            SyntaxLoader.LoadAdvancedSyntaxes();
             DiscordRpcUpdater.Initialize();
 
             if (ApiVault.Get().GetAppConfig().CheckForUpdates) UpdateChecker.Check();

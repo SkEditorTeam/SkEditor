@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SkEditor.Utilities.Syntax;
 
 namespace SkEditor.Utilities.Files;
 public static class SessionRestorer
@@ -77,6 +78,7 @@ public static class SessionRestorer
             TextEditor editor = tabItem.Content as TextEditor;
 
             (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+            SyntaxLoader.Load(editor);
 
             File.Delete(file);
             filesAdded = true;

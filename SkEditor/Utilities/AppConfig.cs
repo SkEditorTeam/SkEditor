@@ -47,6 +47,7 @@ public partial class AppConfig : ObservableObject
     public bool EnableBetterPairing { get; set; } = false;
     public bool EnableSessionRestoring { get; set; } = false;
     public bool EnableRealtimeCodeParser { get; set; } = false;
+    public bool EnableSkDoc { get; set; } = false;
 
     public string SkUnityAPIKey { get; set; } = "";
     public string SkriptHubAPIKey { get; set; } = "";
