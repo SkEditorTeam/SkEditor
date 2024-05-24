@@ -1,6 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
-using System.Collections.Generic;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.API;
 public interface IAddon
@@ -13,9 +16,9 @@ public interface IAddon
         return [];
     }
 
-    public virtual Symbol GetMenuIcon()
+    public virtual IconSource GetMenuIcon()
     {
-        return Symbol.Document;
+        return new SymbolIconSource() { Symbol = Symbol.AppsAddIn };
     }
 
     public void OnEnable();

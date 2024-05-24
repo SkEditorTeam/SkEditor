@@ -94,7 +94,7 @@ public partial class MainMenuControl : UserControl
             var menuItem = new MenuItem()
             {
                 Header = addon.Name,
-                Icon = new SymbolIcon() { Symbol = addon.GetMenuIcon() }
+                Icon = addon.GetMenuIcon()
             };
 
             foreach (MenuItem sub in items)
