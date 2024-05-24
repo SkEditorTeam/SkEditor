@@ -1,20 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
-namespace SkEditor.API;
+namespace SkEditor.API.Registry;
 
 /// <summary>
 /// Represent a registry, which is a collection of key-value pairs,
 /// each being linked with a registry key (= the IAddon instance).
 /// </summary>
-public class Registry<TValue>
+public class Registry<TValue> : IEnumerable<TValue>
 {
-    
-    /// <summary>
-    /// Object representing a registry key, based on an IAddon instance and a string key.
-    /// </summary>
-    /// <param name="Addon">The IAddon instance linked to the key.</param>
-    /// <param name="Key">The string key.</param>
-    public record RegistryKey(IAddon Addon, string Key);
     
     private readonly Dictionary<RegistryKey, TValue> _registry = new();
     
@@ -57,5 +51,14 @@ public class Registry<TValue>
     {
         return _registry.Values;
     }
-    
+
+    public IEnumerator<TValue> GetEnumerator()
+    {
+        return _registry.Values.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }
