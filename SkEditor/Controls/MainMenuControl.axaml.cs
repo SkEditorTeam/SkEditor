@@ -84,7 +84,8 @@ public partial class MainMenuControl : UserControl
     public void LoadAddonsMenus()
     {
         bool hasAnyMenu = false;
-        foreach (IAddon addon in AddonLoader.Addons)
+        AddonsMenuItem.Items.Clear();
+        foreach (IAddon addon in AddonLoader.EnabledAddons)
         {
             var items = addon.GetMenuItems();
             if (items.Count <= 0)

@@ -72,7 +72,7 @@ public partial class MarketplaceWindow : AppWindow
 
         if (item is AddonItem addonItem)
         {
-            IAddon addon = AddonLoader.Addons.FirstOrDefault(x => x.Name.Equals(item.ItemName));
+            IAddon addon = AddonLoader.EnabledAddons.FirstOrDefault(x => x.Name.Equals(item.ItemName));
             string name = Path.GetFileNameWithoutExtension(addonItem.ItemFileUrl);
 
             if (addon != null || ApiVault.Get().GetAppConfig().AddonsToDisable.Contains(name))

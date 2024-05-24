@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -10,6 +11,8 @@ using SkEditor.API;
 using SkEditor.API.Model;
 using SkEditor.API.Registry;
 using SkEditor.ViewModels;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor;
 
@@ -80,5 +83,18 @@ public class SkEditorSelfAddon : IAddon
                 "https://pastebin.com/doc_api"));
 
         #endregion
+    }
+
+    public List<MenuItem> GetMenuItems()
+    {
+        return [
+        new MenuItem()
+        {
+            Header = "SkEditor Test",
+            Icon = new SymbolIconSource()
+            {
+                Symbol = Symbol.Accessibility
+            }
+        }];
     }
 }

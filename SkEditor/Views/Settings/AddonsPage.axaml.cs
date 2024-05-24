@@ -1,8 +1,11 @@
+using System;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.ViewModels;
 using System.Collections.Generic;
+using FluentAvalonia.UI.Controls;
+using SkEditor.Controls.Addons;
 
 namespace SkEditor.Views.Settings;
 public partial class AddonsPage : UserControl
@@ -19,15 +22,10 @@ public partial class AddonsPage : UserControl
 
     private void LoadAddons()
     {
-        List<IAddon> addons = AddonLoader.Addons;
+        List<IAddon> addons = AddonLoader.AllAddons;
         addons.ForEach(addon =>
         {
-            ListBoxItem item = new()
-            {
-                Content = addon.Name,
-                Tag = addon
-            };
-            AddonListBox.Items.Add(item);
+            AddonsStackPanel.Children.Add(new AddonEntryControl(addon));
         });
     }
 

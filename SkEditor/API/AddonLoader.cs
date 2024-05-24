@@ -7,11 +7,15 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using SkEditor.API.Registry;
 
 namespace SkEditor.API;
 public class AddonLoader
 {
-    public static List<IAddon> Addons { get; } = [];
+    public static List<IAddon> EnabledAddons { get; } = [];
+    public static List<IAddon> DisabledAddons { get; } = [];
+    public static List<IAddon> AllAddons => EnabledAddons.Concat(DisabledAddons).ToList();
+    
     public static HashSet<string> DllNames { get; } = [];
 
     public static void Load()
@@ -94,7 +98,7 @@ public class AddonLoader
                 .ToList()
                 .ForEach(addon =>
                 {
-                    Addons.Add(addon);
+                    EnabledAddons.Add(addon);
                     addon.OnEnable();
                 });
 
@@ -145,14 +149,32 @@ public class AddonLoader
 
         return assemblies;
     }
-    
-    public static void LoadAddonFromClass(Type addonType)
+
+    public static void EnableAddon(IAddon addon)
     {
-        if (typeof(IAddon).IsAssignableFrom(addonType) && addonType.IsClass && !addonType.IsAbstract)
-        {
-            IAddon addon = (IAddon)Activator.CreateInstance(addonType);
-            Addons.Add(addon);
-            addon.OnEnable();
-        }
+        if (EnabledAddons.Contains(addon)) 
+            return;
+        
+        DisabledAddons.Remove(addon);
+        EnabledAddons.Add(addon);
+        addon.OnEnable();
+        MainWindow.Instance.MainMenu.LoadAddonsMenus();
+    }
+    
+    public static void DisableAddon(IAddon addon)
+    {
+        if (!EnabledAddons.Contains(addon)) 
+            return;
+        
+        DisabledAddons.Add(addon);
+        EnabledAddons.Remove(addon);
+        addon.OnDisable();
+        MainWindow.Instance.MainMenu.LoadAddonsMenus();
+        Registries.Unload(addon);
+    }
+    
+    public static bool IsAddonEnabled(IAddon addon)
+    {
+        return EnabledAddons.Contains(addon);
     }
 }

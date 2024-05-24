@@ -80,7 +80,7 @@ public class AddonItem : MarketplaceItem
 
             if (addon != null)
             {
-                AddonLoader.Addons.Add(addon);
+                AddonLoader.EnabledAddons.Add(addon);
                 addon.OnEnable();
             }
             else

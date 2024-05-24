@@ -267,7 +267,7 @@ public class SkEditor : ISkEditorAPI
         GetMainWindow().BottomBar.UpdateLogs(message.ToString());
     }
 
-    public bool IsAddonEnabled(string addonName) => AddonLoader.Addons.Any(x => x.Name.Equals(addonName));
+    public bool IsAddonEnabled(string addonName) => AddonLoader.EnabledAddons.Any(x => x.Name.Equals(addonName));
 
     public void SaveData()
     {

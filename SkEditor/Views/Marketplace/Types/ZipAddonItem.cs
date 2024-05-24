@@ -88,7 +88,7 @@ public class ZipAddonItem : AddonItem
                 if (assembly.GetTypes().FirstOrDefault(p => typeof(IAddon).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract) is Type addonType)
                 {
                     IAddon addon = (IAddon)Activator.CreateInstance(addonType);
-                    AddonLoader.Addons.Add(addon);
+                    AddonLoader.EnabledAddons.Add(addon);
                     addon.OnEnable();
                 }
                 else

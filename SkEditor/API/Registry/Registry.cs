@@ -52,6 +52,17 @@ public class Registry<TValue> : IEnumerable<TValue>
         return _registry.Values;
     }
 
+    public void Unload(IAddon addon)
+    {
+        foreach (RegistryKey key in _registry.Keys)
+        {
+            if (key.Addon == addon)
+            {
+                _registry.Remove(key);
+            }
+        }
+    }
+
     public IEnumerator<TValue> GetEnumerator()
     {
         return _registry.Values.GetEnumerator();
