@@ -3,6 +3,7 @@ using SkEditor.Utilities;
 using SkEditor.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
