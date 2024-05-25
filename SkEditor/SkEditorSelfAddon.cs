@@ -8,8 +8,6 @@ using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.ViewModels;
-using Symbol = FluentIcons.Common.Symbol;
-using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor;
 
@@ -85,13 +83,13 @@ public class SkEditorSelfAddon : IAddon
     public List<MenuItem> GetMenuItems()
     {
         return [
-        new MenuItem()
-        {
-            Header = "SkEditor Test",
-            Icon = new SymbolIconSource()
+            new MenuItem
             {
-                Symbol = Symbol.Accessibility
-            }
-        }];
+                Header = "SkEditor Test",
+                Icon = new SymbolIconSource()
+                {
+                    Symbol = Symbol.Audio
+                }
+            }];
     }
 }

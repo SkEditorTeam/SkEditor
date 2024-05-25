@@ -109,6 +109,8 @@ public class AddonLoader
             Log.Error(ex, "Failed to load addons");
         }
 
+        SkEditorAPI.Logs.Debug("Second");
+        (SkEditorAPI.Events as Events).PostEnable();
         MainWindow.Instance.MainMenu.ReloadAddonsMenus();
     }
 

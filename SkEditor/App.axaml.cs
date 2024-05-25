@@ -10,6 +10,7 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using SkEditor.API;
 
 namespace SkEditor;
 
@@ -50,10 +51,11 @@ public partial class App : Application
             {
                 try
                 {
-                    SkEditor SkEditor = new(desktop.Args);
+                    (SkEditorAPI.Core as Core).SetStartupArguments(desktop.Args ?? []);
+                    new SkEditor();
+                    
                     MainWindow mainWindow = new();
                     desktop.MainWindow = mainWindow;
-                    SkEditor.mainWindow = mainWindow;
 
                     NamedPipeServer.Start();
                 }

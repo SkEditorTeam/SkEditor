@@ -50,22 +50,16 @@ public interface IAddon
 
     /// <summary>
     /// Called when the addon is enabled. Some stuff might not be available
-    /// yet, but mainly <see cref="Registry.Registries"/> will be available,
+    /// yet, but mainly <see cref="Registries"/> will be available,
     /// so you can register your own stuff there.
     /// </summary>
     public void OnEnable();
     
     /// <summary>
-    /// Called when every addons has been enabled, and the
-    /// first lifecycle event has been called. This is when you
-    /// can do UI-related things for instance.
-    /// </summary>
-    public virtual void OnPostEnable() { }
-    
-    /// <summary>
     /// Called when the addon is disabled. You <b>do not need</b> to
-    /// unregister your stuff from <see cref="Registry.Registries"/>, as
+    /// unregister your stuff from <see cref="Registries"/>, as
     /// SkEditor will do that for you!
     /// </summary>
     public virtual void OnDisable() { }
+    
 }

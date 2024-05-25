@@ -16,4 +16,14 @@ public static class SkEditorAPI
     /// </summary>
     public static IWindows Windows => new Windows();
     
+    /// <summary>
+    /// Get the Core API.
+    /// </summary>
+    public static ICore Core => new Core();
+    
+    /// <summary>
+    /// Get the Events API.
+    /// </summary>
+    public static IEvents Events => new Events();
+    
 }

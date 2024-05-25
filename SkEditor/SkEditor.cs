@@ -21,31 +21,22 @@ namespace SkEditor;
 
 public class SkEditor : ISkEditorAPI
 {
-    private readonly string[] startupFiles = [];
-    public MainWindow mainWindow;
-    private AppConfig appConfig;
 
-    public SkEditor(string[] args)
+    public SkEditor()
     {
-        if (args.Length > 0)
-        {
-            //Serilog.Log.Debug("Starting SkEditor with args: " + string.Join(", ", args));
-            startupFiles = args.Where(File.Exists).ToArray();
-        }
-
         ApiVault.Set(this);
     }
 
     /// <returns>Main window</returns>
     public MainWindow GetMainWindow()
     {
-        return mainWindow;
+        return SkEditorAPI.Windows.GetMainWindow();
     }
 
     /// <returns>Startup files</returns>
     public string[] GetStartupFiles()
     {
-        return startupFiles;
+        return SkEditorAPI.Core.GetStartupArguments();
     }
 
 
@@ -85,7 +76,7 @@ public class SkEditor : ISkEditorAPI
         return GetMainWindow().TabControl;
     }
 
-    public AppConfig GetAppConfig() => appConfig ??= AppConfig.Load().Result;
+    public AppConfig GetAppConfig() => SkEditorAPI.Core.GetAppConfig();
 
     /// <summary>
     /// Opens provided URL in default browser
