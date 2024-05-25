@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SkEditor.API.Registry;
 
@@ -20,6 +21,16 @@ public class Registry<TValue> : IEnumerable<TValue>
     public TValue GetValue(RegistryKey key)
     {
         return _registry.GetValueOrDefault(key);
+    }
+    
+    /// <summary>
+    /// Get all values registered by the specified <see cref="IAddon"/>.
+    /// </summary>
+    /// <param name="addon">The addon to get the values for.</param>
+    /// <returns>An IEnumerable of all values registered by the addon.</returns>
+    public IEnumerable<TValue> GetValues(IAddon addon)
+    {
+        return _registry.Where(pair => pair.Key.Addon == addon).Select(pair => pair.Value);
     }
     
     /// <summary>
