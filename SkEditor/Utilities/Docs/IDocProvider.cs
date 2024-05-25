@@ -1,11 +1,11 @@
-﻿using SkEditor.Utilities.Docs.Local;
+﻿using Avalonia.Media;
+using FluentAvalonia.UI.Controls;
+using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkriptHub;
 using SkEditor.Utilities.Docs.SkriptMC;
 using SkEditor.Utilities.Docs.SkUnity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Avalonia.Media;
-using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs;
 
@@ -35,6 +35,6 @@ public interface IDocProvider
     public Task<List<string>> GetAddons();
 
     public Task<Color?> GetAddonColor(string addonName);
-    
+
     public IconSource Icon { get; }
 }

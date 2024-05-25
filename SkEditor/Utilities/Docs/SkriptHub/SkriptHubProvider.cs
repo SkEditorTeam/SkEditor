@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Avalonia.Media;
+using Avalonia.Platform;
+using Avalonia.Svg.Skia;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using System;
@@ -7,10 +11,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Media;
-using Avalonia.Platform;
-using Avalonia.Svg.Skia;
-using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 

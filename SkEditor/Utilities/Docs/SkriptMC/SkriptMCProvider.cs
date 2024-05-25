@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Avalonia.Media;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
@@ -7,10 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Media;
-using Avalonia.Platform;
-using Avalonia.Svg.Skia;
-using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 
@@ -100,5 +98,5 @@ public class SkriptMCProvider : IDocProvider
         return null;
     }
 
-    public IconSource Icon => new BitmapIconSource() { UriSource = new ("avares://SkEditor/Assets/Brands/SkriptMC.png") };
+    public IconSource Icon => new BitmapIconSource() { UriSource = new("avares://SkEditor/Assets/Brands/SkriptMC.png") };
 }

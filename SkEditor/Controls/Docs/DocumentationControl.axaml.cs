@@ -1,17 +1,17 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Docs;
 using SkEditor.ViewModels;
+using SkEditor.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
-using SkEditor.Utilities;
-using SkEditor.Views;
 
 namespace SkEditor.Controls.Docs;
 
@@ -151,7 +151,7 @@ public partial class DocumentationControl : UserControl
     public void HandleProviderBoxSelection(object? sender, SelectionChangedEventArgs selectionChangedEventArgs)
     {
         ViewModel.Provider = (DocProvider)((ComboBoxItem)ProviderBox.SelectedItem!).Tag!;
-        
+
         OpenLocalManagementButton.IsVisible = ViewModel.Provider == DocProvider.Local;
         DownloadAllButton.IsVisible = ViewModel.Provider != DocProvider.Local;
     }
@@ -230,15 +230,15 @@ public partial class DocumentationControl : UserControl
             ApiVault.Get().ShowError(Translation.Get("DocumentationWindowNoEntries"));
             return;
         }
-            
+
         if (EntriesContainer.Children.Count > 0)
         {
             var result = await ApiVault.Get().ShowAdvancedMessage("Download all",
                 Translation.Get("DocumentationWindowDownloadAllMessage", EntriesContainer.Children.Count.ToString()));
-            if (result != ContentDialogResult.Primary) 
+            if (result != ContentDialogResult.Primary)
                 return;
         }
-        
+
         var taskDialog = new TaskDialog
         {
             Title = Translation.Get("DocumentationWindowDownloadingElements"),
@@ -249,7 +249,7 @@ public partial class DocumentationControl : UserControl
         };
         var chidren = EntriesContainer.Children;
         taskDialog.SetProgressBarState(0, TaskDialogProgressState.Normal);
-        
+
         taskDialog.Opened += async (sender, args) =>
         {
             for (var index = 0; index < EntriesContainer.Children.Count; index++)
@@ -260,10 +260,10 @@ public partial class DocumentationControl : UserControl
                 taskDialog.SetProgressBarState((index + 1) * 100 / EntriesContainer.Children.Count,
                     TaskDialogProgressState.Normal);
             }
-            
+
             taskDialog.Hide(TaskDialogStandardResult.OK);
         };
-        
+
         taskDialog.XamlRoot = ApiVault.Get().GetMainWindow();
         await taskDialog.ShowAsync();
     }
@@ -295,18 +295,9 @@ public partial class DocumentationControl : UserControl
         OtherInformation.Text = Translation.Get("DocumentationWindowAnErrorOccured");
     }
 
-    public void FilterByType(IDocumentationEntry.Type type)
-    {
-        FilteredTypesBox.SelectedIndex = (int)type;
-    }
+    public void FilterByType(IDocumentationEntry.Type type) => FilteredTypesBox.SelectedIndex = (int)type;
 
-    public void FilterByAddon(string addon)
-    {
-        FilteredAddonBox.Text = addon;
-    }
+    public void FilterByAddon(string addon) => FilteredAddonBox.Text = addon;
 
-    public void RemoveElement(DocElementControl children)
-    {
-        EntriesContainer.Children.Remove(children);
-    }
+    public void RemoveElement(DocElementControl children) => EntriesContainer.Children.Remove(children);
 }

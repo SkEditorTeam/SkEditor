@@ -31,7 +31,7 @@ public class SkUnityDocEntry : IDocumentationEntry
             {
                 return Enum.Parse<IDocumentationEntry.Type>(RawDoc, true);
             }
-            catch (Exception e)
+            catch
             {
                 return Enum.Parse<IDocumentationEntry.Type>(RawDoc[..^1], true);
             }

@@ -39,7 +39,7 @@ public class LocalDocEntry : IDocumentationEntry
     public string? ReturnType { get; set; }
     public string? Changers { get; set; }
     public string? EventValues { get; set; }
-    
+
     public DocProvider OriginalProvider { get; set; }
 
     public List<LocalDocExample> Examples { get; set; } = new();
