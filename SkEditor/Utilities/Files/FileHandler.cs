@@ -101,7 +101,8 @@ public class FileHandler
 
         string fileName = Path.GetFileName(path);
         TabViewItem tabItem = await FileBuilder.Build(fileName, path);
-        if (tabItem == null) return;
+        if (tabItem == null)
+            return;
 
         (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
         if (untitledFileOpen) await FileCloser.CloseFile((ApiVault.Get().GetTabView().TabItems as IList)[0] as TabViewItem);
@@ -119,6 +120,7 @@ public class FileHandler
         AddChangeChecker(path, tabItem);
 
         await SyntaxLoader.RefreshSyntaxAsync(Path.GetExtension(path));
+        (SkEditorAPI.Events as Events).FileOpened(tabItem.Content, path, tabItem, false);
     }
 
     private static void AddChangeChecker(string path, TabViewItem tabItem)

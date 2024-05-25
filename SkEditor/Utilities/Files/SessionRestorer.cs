@@ -80,6 +80,7 @@ public static class SessionRestorer
 
             File.Delete(file);
             filesAdded = true;
+            (SkEditorAPI.Events as Events).FileOpened(editor, path, tabItem, true);
         }
 
         return filesAdded;

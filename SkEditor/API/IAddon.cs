@@ -45,8 +45,6 @@ public interface IAddon
     {
         return [];
     }
-    
-    // ------------------- Events
 
     /// <summary>
     /// Called when the addon is enabled. Some stuff might not be available

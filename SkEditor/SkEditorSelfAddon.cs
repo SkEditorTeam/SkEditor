@@ -105,6 +105,15 @@ public class SkEditorSelfAddon : IAddon
         Registries.BottomIcons.Register(new RegistryKey(this, "AnotherIcon"), noIcon);
 
         #endregion
+
+        #region Event Handlers
+
+        SkEditorAPI.Events.OnFileOpened += (_, args) =>
+        {
+            SkEditorAPI.Logs.Debug($"File opened: {args.FilePath}, content: {args.Content}, restore? {args.CausedByRestore}");
+        };
+
+        #endregion
     }
 
     public List<MenuItem> GetMenuItems()
