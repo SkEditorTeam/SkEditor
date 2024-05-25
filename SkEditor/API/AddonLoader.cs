@@ -183,7 +183,6 @@ public class AddonLoader
     {
         if (addon is SkEditorSelfAddon)
         {
-            SkEditorAPI.Logs.Debug("hello there");
             SkEditorAPI.Logs.Error("You can't delete the SkEditor Core.", true);
             return;
         }

@@ -26,7 +26,7 @@
 	</UserControl.Styles>
 	
 	<Border Height="32" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
-		<Grid Name="MainGrid" ColumnDefinitions="auto,*,auto">
+		<Grid Name="MainGrid" ColumnDefinitions="auto,*,auto,auto">
 			<TextBlock Name="LogsText" Grid.Column="1" MaxWidth="750" HorizontalAlignment="Left" Text="" Margin="30,0,0,0"/>
 
 			<StackPanel Grid.Column="2" Margin="0,0,10,0" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
