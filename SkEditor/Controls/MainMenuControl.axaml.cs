@@ -81,7 +81,7 @@ public partial class MainMenuControl : UserControl
         tabView.SelectedItem = tabItem;
     }
 
-    public void LoadAddonsMenus()
+    public void ReloadAddonsMenus()
     {
         bool hasAnyMenu = false;
         AddonsMenuItem.Items.Clear();

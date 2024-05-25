@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using SkEditor.API.Model;
 
-namespace SkEditor.API.Registry;
+namespace SkEditor.API;
 
 /// <summary>
 /// Holds every registry used by the application.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SkEditor.API.Registry;
+namespace SkEditor.API;
 
 /// <summary>
 /// Represent a registry, which is a collection of key-value pairs,

@@ -1,4 +1,4 @@
-﻿namespace SkEditor.API.Registry;
+﻿namespace SkEditor.API;
 
 /// <summary>
 /// Object representing a registry key, based on an IAddon instance and a string key.

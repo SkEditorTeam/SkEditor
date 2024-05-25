@@ -1,13 +1,12 @@
-using Serilog;
-using SkEditor.Utilities;
-using SkEditor.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using SkEditor.API.Registry;
+using Serilog;
+using SkEditor.Utilities;
+using SkEditor.Views;
 
 namespace SkEditor.API;
 public class AddonLoader
@@ -110,7 +109,7 @@ public class AddonLoader
             Log.Error(ex, "Failed to load addons");
         }
 
-        MainWindow.Instance.MainMenu.LoadAddonsMenus();
+        MainWindow.Instance.MainMenu.ReloadAddonsMenus();
     }
 
     public static List<Assembly> LoadAddonsFromFolder(string folder)
@@ -158,7 +157,7 @@ public class AddonLoader
         DisabledAddons.Remove(addon);
         EnabledAddons.Add(addon);
         addon.OnEnable();
-        MainWindow.Instance.MainMenu.LoadAddonsMenus();
+        MainWindow.Instance.MainMenu.ReloadAddonsMenus();
     }
     
     public static void DisableAddon(IAddon addon)
@@ -169,12 +168,56 @@ public class AddonLoader
         DisabledAddons.Add(addon);
         EnabledAddons.Remove(addon);
         addon.OnDisable();
-        MainWindow.Instance.MainMenu.LoadAddonsMenus();
+        MainWindow.Instance.MainMenu.ReloadAddonsMenus();
         Registries.Unload(addon);
     }
     
     public static bool IsAddonEnabled(IAddon addon)
     {
         return EnabledAddons.Contains(addon);
+    }
+
+    public static void DeleteAddon(IAddon addon)
+    {
+        if (addon is SkEditorSelfAddon)
+        {
+            SkEditorAPI.Logs.Debug("hello there");
+            SkEditorAPI.Logs.Error("You can't delete the SkEditor Core.", true);
+            return;
+        }
+        
+        if (EnabledAddons.Contains(addon))
+        {
+            EnabledAddons.Remove(addon);
+            addon.OnDisable();
+            Registries.Unload(addon);
+        }
+        else if (DisabledAddons.Contains(addon))
+        {
+            DisabledAddons.Remove(addon);
+        }
+
+        var addonFolder = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Name);
+        if (Directory.Exists(addonFolder))
+        {
+            Directory.Delete(addonFolder, true);
+        }
+
+        var dllName = DllNames.FirstOrDefault(dll => dll.StartsWith(addon.Name));
+        if (dllName != null)
+        {
+            string dllPath = Path.Combine(AppConfig.AppDataFolderPath, "Addons", dllName);
+            if (File.Exists(dllPath))
+            {
+                File.Delete(dllPath);
+            }
+        }
+
+        MainWindow.Instance.MainMenu.ReloadAddonsMenus();
+    }
+
+    public static IAddon? GetAddonByNamespace(string? addonNamespace)
+    {
+        return AllAddons.FirstOrDefault(addon => addon.GetType().Namespace == addonNamespace);
     }
 }

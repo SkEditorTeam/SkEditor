@@ -30,6 +30,7 @@ public partial class App : Application
             .MinimumLevel.Debug()
             .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "SkEditor/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
+            .WriteTo.Sink(new LogsHandler())
             .CreateLogger();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

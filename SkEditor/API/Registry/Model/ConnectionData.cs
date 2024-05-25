@@ -1,6 +1,6 @@
 ﻿using FluentAvalonia.UI.Controls;
 
-namespace SkEditor.API.Model;
+namespace SkEditor.API;
 
 /// <summary>
 /// Represent datas about a possible third-party connection, displayed

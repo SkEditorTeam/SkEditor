@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 
 namespace SkEditor.Controls.Addons;
@@ -18,6 +19,8 @@ public partial class AddonEntryControl : UserControl
 
     public void AssignCommands(IAddon addon)
     {
+        DeleteButton.Command = new RelayCommand(() => AddonLoader.DeleteAddon(addon));
+        
         var enabled = AddonLoader.IsAddonEnabled(addon);
         SetStateButton(enabled);
         

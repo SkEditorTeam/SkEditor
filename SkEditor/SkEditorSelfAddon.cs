@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.API.Model;
-using SkEditor.API.Registry;
 using SkEditor.ViewModels;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;

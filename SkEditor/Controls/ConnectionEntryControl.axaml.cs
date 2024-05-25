@@ -1,19 +1,11 @@
-﻿using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using Avalonia.Svg.Skia;
-using FluentAvalonia.UI.Controls;
+﻿using System.Diagnostics;
+using Avalonia.Controls;
 using SkEditor.API;
-using System;
-using System.Diagnostics;
-using System.IO;
-using SkEditor.API.Model;
 
 namespace SkEditor.Controls;
 
 public partial class ConnectionEntryControl : UserControl
 {
-
     public ConnectionEntryControl(ConnectionData connectionData)
     {
         InitializeComponent();
@@ -43,7 +35,7 @@ public partial class ConnectionEntryControl : UserControl
         {
             ApiVault.Get().GetAppConfig().SetOptionValue(key, ApiKeyTextBox.Text);
         };
-        
+
         Expander.IconSource = connectionData.IconSource;
     }
 }
