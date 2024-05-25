@@ -16,4 +16,8 @@ public interface IEvents
     /// </summary>
     public event EventHandler OnPostEnable;
     
+    // --------------------------- Editors
+    
+    public event EventHandler<FileOpenedEventArgs> OnFileOpened;
+    
 }
