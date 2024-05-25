@@ -13,8 +13,8 @@ public interface IDocProvider
 {
     public static readonly Dictionary<DocProvider, IDocProvider> Providers = new()
     {
-        { DocProvider.SkUnity, new SkUnityProvider()},
         { DocProvider.SkriptHub, new SkriptHubProvider()},
+        { DocProvider.skUnity, new SkUnityProvider()},
         { DocProvider.SkriptMC, new SkriptMCProvider()},
         { DocProvider.Local, new LocalProvider()}
     };
@@ -37,4 +37,5 @@ public interface IDocProvider
     public Task<Color?> GetAddonColor(string addonName);
 
     public IconSource Icon { get; }
+    public string? GetLink(IDocumentationEntry entry);
 }

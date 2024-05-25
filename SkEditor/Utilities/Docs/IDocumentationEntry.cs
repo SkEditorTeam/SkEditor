@@ -43,7 +43,7 @@ public interface IDocumentationEntry
 
         return type switch
         {
-            Type.All => CreateIcon(Symbol.BorderAll),
+            Type.All => CreateIcon(Symbol.SelectAllOn, "ThemeGreyColor"),
             Type.Event => CreateIcon(Symbol.Call, "ThemeDeepPurpleColor"),
             Type.Expression => CreateIcon(Symbol.DocumentPageNumber, "ThemeMediumSeaGreenColor"),
             Type.Effect => CreateIcon(Symbol.LightbulbFilament, "ThemeLightBlueColorTransparent"),

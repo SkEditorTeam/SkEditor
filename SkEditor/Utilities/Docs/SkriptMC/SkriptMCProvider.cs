@@ -99,4 +99,9 @@ public class SkriptMCProvider : IDocProvider
     }
 
     public IconSource Icon => new BitmapIconSource() { UriSource = new("avares://SkEditor/Assets/Brands/SkriptMC.png") };
+    
+    public string? GetLink(IDocumentationEntry entry)
+    {
+        return null;
+    }
 }

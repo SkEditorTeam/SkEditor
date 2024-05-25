@@ -1,17 +1,21 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Docs;
+using SkEditor.Utilities.Docs.SkriptHub;
 using SkEditor.ViewModels;
 using SkEditor.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Controls.Docs;
 
@@ -36,6 +40,19 @@ public partial class DocumentationControl : UserControl
             InitializeProviderBox();
         });
         DownloadAllButton.Command = new RelayCommand(DownloadAllEntries);
+        RetrieveSkriptHubDocsButton.Command = new RelayCommand(async () =>
+        {
+            var response = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"),
+                Translation.Get("DocumentationWindowFetchWarning"), 
+                new SymbolIconSource { Symbol = Symbol.ImportantFilled });
+            if (response == ContentDialogResult.Primary)
+            {
+                var provider = IDocProvider.Providers[DocProvider.SkriptHub] as SkriptHubProvider;
+                provider.DeleteEverything();
+                ApiVault.Get().ShowMessage(Translation.Get("Success"),
+                    Translation.Get("DocumentationWindowFetchSuccessMessage"));
+            }
+        });
     }
 
     public void AddItems()
@@ -51,7 +68,7 @@ public partial class DocumentationControl : UserControl
         {
             FilteredTypesBox.Items.Add(new ComboBoxItem()
             {
-                Content = type.ToString(),
+                Content = CreateEntryWithIcon(IDocumentationEntry.GetTypeIcon(type), type.ToString()),
                 Tag = type
             });
         }
@@ -64,7 +81,7 @@ public partial class DocumentationControl : UserControl
 
     private void InitializeFilteredAddonBox()
     {
-        FilteredAddonBox.FilterMode = AutoCompleteFilterMode.Contains;
+        FilteredAddonBox.FilterMode = AutoCompleteFilterMode.None;
         FilteredAddonBox.AsyncPopulator = async (text, ct) =>
         {
             var provider = IDocProvider.Providers[ViewModel.Provider!.Value];
@@ -87,7 +104,7 @@ public partial class DocumentationControl : UserControl
 
             return addons;
         };
-        FilteredAddonBox.SelectionChanged += (sender, args) =>
+        FilteredAddonBox.TextChanged += (sender, args) =>
         {
             ViewModel.SearchData.FilteredAddon = FilteredAddonBox.Text;
         };
@@ -119,16 +136,48 @@ public partial class DocumentationControl : UserControl
         return IDocProvider.Providers.Where(pair => pair.Value.IsAvailable()).Select(pair => pair.Key).ToList();
     }
 
+    private StackPanel CreateEntryWithIcon(IconSource icon, string content, FontWeight fontWeight = FontWeight.Normal)
+    {
+        return new StackPanel()
+        {
+            Orientation = Orientation.Horizontal,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Spacing = 6,
+            Children =
+            {
+                new IconSourceElement()
+                {
+                    IconSource = icon,
+                    Width = 16,
+                    Height = 16
+                },
+                new TextBlock()
+                {
+                    Text = content,
+                    FontWeight = fontWeight
+                }
+            }
+        };
+    }
+
     private void PopulateProviderBox(List<DocProvider> availableProviders)
     {
+        StackPanel CreatePanel(DocProvider provider, string content)
+        {
+            return CreateEntryWithIcon(IDocProvider.Providers[provider].Icon, content, 
+                provider == DocProvider.SkriptHub ? FontWeight.SemiBold : FontWeight.Normal);
+        }
+        
         ProviderBox.Items.Clear();
         foreach (var provider in availableProviders)
         {
-            ProviderBox.Items.Add(new ComboBoxItem()
+            var comboBox = new ComboBoxItem()
             {
-                Content = provider.ToString(),
+                Content = CreatePanel(provider, provider.ToString()),
                 Tag = provider
-            });
+            };
+
+            ProviderBox.Items.Add(comboBox);
         }
         foreach (var provider in Enum.GetValues<DocProvider>())
         {
@@ -136,7 +185,7 @@ public partial class DocumentationControl : UserControl
             {
                 ProviderBox.Items.Add(new ComboBoxItem()
                 {
-                    Content = provider + " (Unavailable)",
+                    Content = CreatePanel(provider, provider.ToString() + " (Unavailable)"),
                     Tag = provider,
                     IsEnabled = false
                 });
@@ -154,6 +203,7 @@ public partial class DocumentationControl : UserControl
 
         OpenLocalManagementButton.IsVisible = ViewModel.Provider == DocProvider.Local;
         DownloadAllButton.IsVisible = ViewModel.Provider != DocProvider.Local;
+        RetrieveSkriptHubDocsButton.IsVisible = ViewModel.Provider == DocProvider.SkriptHub;
     }
 
     public DocumentationViewModel ViewModel => (DocumentationViewModel)DataContext!;

@@ -172,6 +172,14 @@
 	<system:String x:Key="DocumentationWindowDownloadingElements">Downloading elements...</system:String>
 	<system:String x:Key="DocumentationWindowDownloading">Downloading</system:String>
 	<system:String x:Key="DocumentationWindowDownloadingMessage">We're downloading the documentation entries for you. Please wait...</system:String>
+	
+	<system:String x:Key="DocumentationWindowCacheSkriptHub">Caching SkriptHub's elements...</system:String>
+	<system:String x:Key="DocumentationWindowCacheSkriptHubMessage">We're caching SkriptHub's elements for you. Please wait...</system:String>
+	<system:String x:Key="DocumentationWindowSorting">Sorting downloaded elements...</system:String>
+	
+	<system:String x:Key="DocumentationWindowFetchAgain">Re-fetch Documentation</system:String>
+	<system:String x:Key="DocumentationWindowFetchWarning">This will re-fetch the documentation entries from SkriptHub. You probably don't need to do this unless you want to see everything updated. Are you sure?</system:String>
+	<system:String x:Key="DocumentationWindowFetchSuccessMessage">Cache deleted. You'll have to search for the elements again to re-download SkriptHub's documentation.</system:String>
 
 	<!-- Refactor Window -->
 	<system:String x:Key="RefactorWindowRemoveComments">Remove comments</system:String>

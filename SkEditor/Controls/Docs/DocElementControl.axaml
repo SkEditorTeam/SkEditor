@@ -31,9 +31,10 @@
             </StackPanel>
         </controls:SettingsExpander.Header>
         <controls:SettingsExpander.Footer>
-            <Button Name="DownloadElementButton">
-                
-            </Button>
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <Button Name="OutsideButton" />
+                <Button Name="DownloadElementButton" />
+            </StackPanel>
         </controls:SettingsExpander.Footer>
         <Grid Margin="-50,0,0,0" RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*">
             
