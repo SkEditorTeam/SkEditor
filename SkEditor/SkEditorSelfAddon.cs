@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -8,6 +9,9 @@ using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.ViewModels;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor;
 
@@ -78,6 +82,29 @@ public class SkEditorSelfAddon : IAddon
                 "https://pastebin.com/doc_api"));
 
         #endregion
+
+        #region Registries - BottomBar
+
+        var errors = new BottomIconData(new SymbolIconSource { Symbol = Symbol.ErrorCircle }, "errors", "0");
+        var warnings = new BottomIconData(new SymbolIconSource { Symbol = Symbol.Warning }, "warnings", "0");
+        var group = new BottomIconGroupData([errors, warnings], (_, args) =>
+        {
+            var random = new Random();
+            (args.Icon as BottomIconGroupData).GetById("errors")?.UpdateText(random.Next(0, 100).ToString());
+            (args.Icon as BottomIconGroupData).GetById("warnings")?.UpdateText(random.Next(0, 100).ToString());
+        });
+        
+        var noIcon = new BottomIconData(new SymbolIconSource { Symbol = Symbol.AppFolder }, "another", null, async (_, args) =>
+        {
+            ((args.Icon as BottomIconData).GetIconElement().IconSource as SymbolIconSource).IsFilled = true;
+            await Task.Delay(2000);
+            ((args.Icon as BottomIconData).GetIconElement().IconSource as SymbolIconSource).IsFilled = false;
+        });
+        
+        Registries.BottomIcons.Register(new RegistryKey(this, "TestIcon"), group);
+        Registries.BottomIcons.Register(new RegistryKey(this, "AnotherIcon"), noIcon);
+
+        #endregion
     }
 
     public List<MenuItem> GetMenuItems()
@@ -86,9 +113,9 @@ public class SkEditorSelfAddon : IAddon
             new MenuItem
             {
                 Header = "SkEditor Test",
-                Icon = new SymbolIconSource()
+                Icon = new SymbolIcon()
                 {
-                    Symbol = Symbol.Audio
+                    Symbol = Symbol.Attach
                 }
             }];
     }

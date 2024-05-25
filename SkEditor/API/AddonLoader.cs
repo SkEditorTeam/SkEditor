@@ -109,9 +109,8 @@ public class AddonLoader
             Log.Error(ex, "Failed to load addons");
         }
 
-        SkEditorAPI.Logs.Debug("Second");
         (SkEditorAPI.Events as Events).PostEnable();
-        MainWindow.Instance.MainMenu.ReloadAddonsMenus();
+        MainWindow.Instance.ReloadUiOfAddons();
     }
 
     public static List<Assembly> LoadAddonsFromFolder(string folder)
@@ -159,7 +158,7 @@ public class AddonLoader
         DisabledAddons.Remove(addon);
         EnabledAddons.Add(addon);
         addon.OnEnable();
-        MainWindow.Instance.MainMenu.ReloadAddonsMenus();
+        MainWindow.Instance.ReloadUiOfAddons();
     }
     
     public static void DisableAddon(IAddon addon)
@@ -170,8 +169,8 @@ public class AddonLoader
         DisabledAddons.Add(addon);
         EnabledAddons.Remove(addon);
         addon.OnDisable();
-        MainWindow.Instance.MainMenu.ReloadAddonsMenus();
         Registries.Unload(addon);
+        MainWindow.Instance.ReloadUiOfAddons();
     }
     
     public static bool IsAddonEnabled(IAddon addon)
@@ -214,7 +213,7 @@ public class AddonLoader
             }
         }
 
-        MainWindow.Instance.MainMenu.ReloadAddonsMenus();
+        MainWindow.Instance.ReloadUiOfAddons();
     }
 
     public static IAddon? GetAddonByNamespace(string? addonNamespace)

@@ -21,8 +21,6 @@ public partial class MainWindow : AppWindow
 {
     public static MainWindow Instance { get; private set; }
 
-    public BottomBarControl GetBottomBar() => this.FindControl<BottomBarControl>("BottomBar");
-
     public MainWindow()
     {
         InitializeComponent();
@@ -57,6 +55,12 @@ public partial class MainWindow : AppWindow
 
         DragDrop.SetAllowDrop(this, true);
         DragDrop.DropEvent.AddClassHandler(FileHandler.FileDropAction);
+    }
+
+    public void ReloadUiOfAddons()
+    {
+        MainMenu.ReloadAddonsMenus();
+        BottomBar.ReloadBottomIcons();
     }
 
     public bool AlreadyClosed { get; set; } = false;

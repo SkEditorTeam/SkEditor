@@ -9,21 +9,21 @@ public static class SkEditorAPI
     /// <summary>
     /// Get the Logs API.
     /// </summary>
-    public static ILogs Logs => new Logs();
+    public static ILogs Logs = new Logs();
     
     /// <summary>
     /// Get the Windows API.
     /// </summary>
-    public static IWindows Windows => new Windows();
+    public static IWindows Windows = new Windows();
     
     /// <summary>
     /// Get the Core API.
     /// </summary>
-    public static ICore Core => new Core();
+    public static ICore Core = new Core();
     
     /// <summary>
     /// Get the Events API.
     /// </summary>
-    public static IEvents Events => new Events();
+    public static IEvents Events = new Events();
     
 }
