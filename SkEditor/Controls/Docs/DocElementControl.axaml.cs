@@ -20,6 +20,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Controls.Docs;
 
@@ -160,6 +163,32 @@ public partial class DocElementControl : UserControl
         DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? Translation.Get("DocumentationControlNoDescription") : entry.Description);
         VersionBadge.IconSource = new FontIconSource { Glyph = Translation.Get("DocumentationControlSince", (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version)), };
 
+        var uri = IDocProvider.Providers[entry.Provider].GetLink(entry);
+        OutsideButton.Content = new StackPanel()
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 2,
+            Children =
+            {
+                new TextBlock()
+                {
+                    Text = "See on " + entry.Provider,
+                    VerticalAlignment = VerticalAlignment.Center
+                },
+                new SymbolIcon()
+                {
+                    Symbol = Symbol.Open,
+                    FontSize = 18,
+                    VerticalAlignment = VerticalAlignment.Center
+                }
+            }
+        };
+        OutsideButton.Click += (_, _) => Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
+        if (uri == null)
+        {
+            OutsideButton.IsVisible = false;
+        }
+
         LoadAddonBadge(entry);
     }
 
@@ -173,9 +202,9 @@ public partial class DocElementControl : UserControl
         SourceBadge.Background = new SolidColorBrush(color.Value);
         SourceBadge.Foreground = color.Value.ToHsl().L < 0.2 ? Brushes.White : Brushes.Black;
 
-        if (entry.Provider == DocProvider.SkUnity)
+        if (entry.Provider == DocProvider.skUnity)
         {
-            var skUnityProvider = IDocProvider.Providers[DocProvider.SkUnity] as SkUnityProvider;
+            var skUnityProvider = IDocProvider.Providers[DocProvider.skUnity] as SkUnityProvider;
             SourceBadge.Tapped += (_, _) =>
             {
                 var uri = skUnityProvider.GetAddonLink(entry.Addon);

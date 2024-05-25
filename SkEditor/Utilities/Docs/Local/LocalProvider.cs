@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Docs.Local;
 
@@ -143,5 +145,10 @@ public class LocalProvider : IDocProvider
         await SaveLocalDocs();
     }
 
-    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.SaveLocal };
+    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Folder, IsFilled = true };
+
+    public string? GetLink(IDocumentationEntry entry)
+    {
+        return null;
+    }
 }

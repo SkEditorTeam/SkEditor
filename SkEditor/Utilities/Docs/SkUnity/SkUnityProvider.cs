@@ -20,7 +20,7 @@ public class SkUnityProvider : IDocProvider
     private readonly HttpClient _client = new HttpClient()
         .WithUserAgent("SkEditor App");
 
-    public DocProvider Provider => DocProvider.SkUnity;
+    public DocProvider Provider => DocProvider.skUnity;
     public List<string> CanSearch(SearchData searchData)
     {
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
@@ -85,7 +85,7 @@ public class SkUnityProvider : IDocProvider
         return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkUnityAPIKey);
     }
 
-    public static IDocProvider Get() => (SkUnityProvider)IDocProvider.Providers[DocProvider.SkUnity];
+    public static IDocProvider Get() => (SkUnityProvider)IDocProvider.Providers[DocProvider.skUnity];
 
     public bool NeedsToLoadExamples => true;
 
@@ -213,4 +213,9 @@ public class SkUnityProvider : IDocProvider
 
     private record AddonData(string Name, Color Color, string ForumResourceId);
     private static readonly Dictionary<string, AddonData> CachedAddons = new();
+    
+    public string? GetLink(IDocumentationEntry entry)
+    {
+        return "https://docs.skunity.com/syntax/search/id:" + entry.Id;
+    }
 }
