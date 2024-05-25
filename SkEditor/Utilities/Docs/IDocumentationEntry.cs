@@ -17,7 +17,6 @@ namespace SkEditor.Utilities.Docs;
 /// </summary>
 public interface IDocumentationEntry
 {
-
     public static List<Type> AllTypes => Enum.GetValues<Type>().ToList();
 
     public enum Type
@@ -35,25 +34,36 @@ public interface IDocumentationEntry
 
     public static IconSource GetTypeIcon(Type type)
     {
-        IBrush GetColor(string key)
+        static IBrush GetColor(string key)
         {
-            Application.Current.TryGetResource(key, out var color);
-            return new SolidColorBrush(color is Color parsedColor ? parsedColor : Colors.Black);
+            return Application.Current.TryGetResource(key, out var color) && color is Color parsedColor
+                ? new SolidColorBrush(parsedColor)
+                : new SolidColorBrush(Colors.Black);
         }
 
         return type switch
         {
-            Type.All => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.BorderAll },
-            Type.Event => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.Call, Foreground = GetColor("ThemeDeepPurpleColor") },
-            Type.Expression => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.DocumentPageNumber, Foreground = GetColor("ThemeMediumSeaGreenColor") },
-            Type.Effect => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.LightbulbFilament, Foreground = GetColor("ThemeLightBlueColorTransparent") },
-            Type.Condition => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.Filter, Foreground = GetColor("ThemeRedColor") },
-            Type.Type => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.Library, Foreground = GetColor("ThemeOrangeColor") },
-            Type.Section => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.NotebookSubsection, Foreground = GetColor("ThemeTealColor") },
-            Type.Structure => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.Code, Foreground = GetColor("ThemeBrownColor") },
-            Type.Function => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.MathFormula, Foreground = GetColor("ThemeBlueGreyColor") },
-            _ => throw new ArgumentOutOfRangeException()
+            Type.All => CreateIcon(Symbol.BorderAll),
+            Type.Event => CreateIcon(Symbol.Call, "ThemeDeepPurpleColor"),
+            Type.Expression => CreateIcon(Symbol.DocumentPageNumber, "ThemeMediumSeaGreenColor"),
+            Type.Effect => CreateIcon(Symbol.LightbulbFilament, "ThemeLightBlueColorTransparent"),
+            Type.Condition => CreateIcon(Symbol.Filter, "ThemeRedColor"),
+            Type.Type => CreateIcon(Symbol.Library, "ThemeOrangeColor"),
+            Type.Section => CreateIcon(Symbol.NotebookSubsection, "ThemeTealColor"),
+            Type.Structure => CreateIcon(Symbol.Code, "ThemeBrownColor"),
+            Type.Function => CreateIcon(Symbol.MathFormula, "ThemeBlueGreyColor"),
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
+
+        static SymbolIconSource CreateIcon(Symbol symbol, string? colorKey = null)
+        {
+            return new SymbolIconSource
+            {
+                IsFilled = true,
+                Symbol = symbol,
+                Foreground = colorKey != null ? GetColor(colorKey) : null
+            };
+        }
     }
 
     public enum Changer
