@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -32,7 +32,7 @@ public interface IDocumentationEntry
         Structure,
         Function
     }
-    
+
     public static IconSource GetTypeIcon(Type type)
     {
         IBrush GetColor(string key)
@@ -40,18 +40,18 @@ public interface IDocumentationEntry
             Application.Current.TryGetResource(key, out var color);
             return new SolidColorBrush(color is Color parsedColor ? parsedColor : Colors.Black);
         }
-        
+
         return type switch
         {
-            Type.All => new SymbolIconSource() {            IsFilled = true, Symbol = Symbol.BorderAll },
-            Type.Event => new SymbolIconSource() {          IsFilled = true, Symbol = Symbol.Call,                   Foreground = GetColor("ThemeDeepPurpleColor") },
-            Type.Expression => new SymbolIconSource() {     IsFilled = true, Symbol = Symbol.DocumentPageNumber,     Foreground = GetColor("ThemeMediumSeaGreenColor") },
-            Type.Effect => new SymbolIconSource() {         IsFilled = true, Symbol = Symbol.LightbulbFilament,      Foreground = GetColor("ThemeLightBlueColorTransparent") },
-            Type.Condition => new SymbolIconSource() {      IsFilled = true, Symbol = Symbol.Filter,                 Foreground = GetColor("ThemeRedColor") },
-            Type.Type => new SymbolIconSource() {           IsFilled = true, Symbol = Symbol.Library,                Foreground = GetColor("ThemeOrangeColor") },
-            Type.Section => new SymbolIconSource() {        IsFilled = true, Symbol = Symbol.NotebookSubsection,     Foreground = GetColor("ThemeTealColor") },
-            Type.Structure => new SymbolIconSource() {      IsFilled = true, Symbol = Symbol.Code,                   Foreground = GetColor("ThemeBrownColor") },
-            Type.Function => new SymbolIconSource() {       IsFilled = true, Symbol = Symbol.MathFormula,            Foreground = GetColor("ThemeBlueGreyColor") },
+            Type.All => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.BorderAll },
+            Type.Event => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.Call, Foreground = GetColor("ThemeDeepPurpleColor") },
+            Type.Expression => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.DocumentPageNumber, Foreground = GetColor("ThemeMediumSeaGreenColor") },
+            Type.Effect => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.LightbulbFilament, Foreground = GetColor("ThemeLightBlueColorTransparent") },
+            Type.Condition => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.Filter, Foreground = GetColor("ThemeRedColor") },
+            Type.Type => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.Library, Foreground = GetColor("ThemeOrangeColor") },
+            Type.Section => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.NotebookSubsection, Foreground = GetColor("ThemeTealColor") },
+            Type.Structure => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.Code, Foreground = GetColor("ThemeBrownColor") },
+            Type.Function => new SymbolIconSource() { IsFilled = true, Symbol = Symbol.MathFormula, Foreground = GetColor("ThemeBlueGreyColor") },
             _ => throw new ArgumentOutOfRangeException()
         };
     }

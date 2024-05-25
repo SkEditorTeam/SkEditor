@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Avalonia.Media;
+using Avalonia.Platform;
+using Avalonia.Svg.Skia;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
@@ -6,10 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Media;
-using Avalonia.Platform;
-using Avalonia.Svg.Skia;
-using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
@@ -165,7 +165,7 @@ public class SkUnityProvider : IDocProvider
         var responseObject = JObject.Parse(content);
         var addonsObj = responseObject["result"].ToObject<JObject>();
         var addons = addonsObj.Properties().Select(prop => prop.Name).ToList();
-        
+
         foreach (string key in addons)
         {
             var obj = addonsObj[key];
@@ -173,10 +173,10 @@ public class SkUnityProvider : IDocProvider
             var forumResourceId = obj["forums_resource_id"].ToObject<string>();
             CachedAddons[key] = new AddonData(key, color, forumResourceId);
         }
-        
+
         return addons;
     }
-    
+
     public IconSource Icon => new ImageIconSource()
     {
         Source = new SvgImage
@@ -207,7 +207,7 @@ public class SkUnityProvider : IDocProvider
                 return null;
             }
         }
-        
+
         return CachedAddons.TryGetValue(addonName, out var addon) ? addon.Color : null;
     }
 

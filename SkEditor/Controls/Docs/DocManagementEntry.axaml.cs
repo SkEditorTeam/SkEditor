@@ -1,6 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
@@ -10,8 +8,8 @@ namespace SkEditor.Controls.Docs;
 
 public partial class DocManagementEntry : UserControl
 {
-    
-    private LocalDocEntry _entry;
+
+    private readonly LocalDocEntry _entry;
     public DocManagementEntry(LocalDocEntry entry)
     {
         InitializeComponent();
@@ -32,7 +30,7 @@ public partial class DocManagementEntry : UserControl
         DeleteButton.Command = new RelayCommand(() =>
         {
             LocalProvider.Get().RemoveElement(_entry);
-            var parent = this.Parent as SettingsExpander;
+            var parent = Parent as SettingsExpander;
             parent.Items.Remove(this);
             if (parent.Items.Count != 0)
                 return;

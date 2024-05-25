@@ -33,7 +33,7 @@ public partial class TextEditorEventHandler
     };
 
     private const string commentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
-    private static Regex _commentRegex = CommentRegex();
+    private readonly static Regex _commentRegex = CommentRegex();
 
     public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 

@@ -6,11 +6,13 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using AvaloniaEdit;
-using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
+using SkEditor.Utilities.Docs.SkUnity;
+using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using System;
@@ -18,10 +20,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SkEditor.Utilities;
-using Avalonia.Media.Immutable;
-using SkEditor.Utilities.Docs.SkUnity;
-using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Controls.Docs;
 
@@ -37,14 +35,14 @@ public partial class DocElementControl : UserControl
 
         _documentationControl = documentationControl;
         _entry = entry;
-        
+
         LoadVisuals(entry);
         LoadPatternsEditor(entry);
         SetupExamples(entry);
         LoadDownloadButton();
-        
+
         LoadExpressionChangers(entry);
-        
+
         if (entry.DocType == IDocumentationEntry.Type.Event)
         {
             OtherElementPanel.Children.Add(CreateExpander(Translation.Get("DocumentationControlEventValues"),
@@ -161,7 +159,7 @@ public partial class DocElementControl : UserControl
         Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
         DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? Translation.Get("DocumentationControlNoDescription") : entry.Description);
         VersionBadge.IconSource = new FontIconSource { Glyph = Translation.Get("DocumentationControlSince", (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version)), };
-        
+
         LoadAddonBadge(entry);
     }
 
@@ -224,12 +222,12 @@ public partial class DocElementControl : UserControl
         Application.Current.TryGetResource(key, ThemeVariant.Default, out var resource);
         return resource;
     }
-    
+
     public void DeleteElementFromCache(bool removeFromParent = false)
     {
         var localProvider = LocalProvider.Get();
         localProvider.RemoveElement(_entry);
-        if (removeFromParent) 
+        if (removeFromParent)
             _documentationControl.RemoveElement(this);
     }
 
@@ -271,13 +269,13 @@ public partial class DocElementControl : UserControl
             }
         }
     }
-    
+
     public void EnableDownloadButton()
     {
         DownloadElementButton.Content = new TextBlock { Text = Translation.Get("DocumentationControlDownload") };
         DownloadElementButton.Classes.Add("accent");
     }
-    
+
     public void DisableDownloadButton()
     {
         DownloadElementButton.Content = new TextBlock { Text = Translation.Get("DocumentationControlRemove") };
@@ -297,7 +295,7 @@ public partial class DocElementControl : UserControl
         var localProvider = LocalProvider.Get();
         DownloadElementButton.Click += DownloadButtonClicked;
         DownloadElementButton.Classes.Clear();
-        
+
         if (_entry.Provider == DocProvider.Local)
         {
             DisableDownloadButton();
