@@ -28,8 +28,8 @@ namespace SkEditor.Controls.Docs;
 public partial class DocElementControl : UserControl
 {
     private bool _hasLoadedExamples;
-    private DocumentationControl _documentationControl;
-    private IDocumentationEntry _entry;
+    private readonly DocumentationControl _documentationControl;
+    private readonly IDocumentationEntry _entry;
 
     public DocElementControl(IDocumentationEntry entry, DocumentationControl documentationControl)
     {
@@ -37,105 +37,104 @@ public partial class DocElementControl : UserControl
 
         _documentationControl = documentationControl;
         _entry = entry;
-
         
         LoadVisuals(entry);
         LoadPatternsEditor(entry);
         SetupExamples(entry);
         LoadDownloadButton();
         
-        
         LoadExpressionChangers(entry);
         
-        // Event Values (events)
         if (entry.DocType == IDocumentationEntry.Type.Event)
-            OtherElementPanel.Children.Add(CreateExpander(Translation.Get("DocumentationControlEventValues"), Format(string.IsNullOrEmpty(entry.EventValues) ? Translation.Get("DocumentationControlNoEventValues") : entry.EventValues)));
+        {
+            OtherElementPanel.Children.Add(CreateExpander(Translation.Get("DocumentationControlEventValues"),
+                Format(string.IsNullOrEmpty(entry.EventValues) ? Translation.Get("DocumentationControlNoEventValues") : entry.EventValues)));
+        }
     }
 
     private void LoadExpressionChangers(IDocumentationEntry entry)
     {
-        if (entry.DocType == IDocumentationEntry.Type.Expression && !string.IsNullOrEmpty(entry.Changers))
+        if (entry.DocType != IDocumentationEntry.Type.Expression || string.IsNullOrEmpty(entry.Changers)) return;
+
+
+        var expander = CreateExpander(Translation.Get("DocumentationControlChangers"),
+            Format(string.IsNullOrEmpty(entry.Changers) ? Translation.Get("DocumentationControlNoChangers") : entry.Changers));
+
+        var buttons = new StackPanel()
         {
-            var expander = CreateExpander(Translation.Get("DocumentationControlChangers"),
-                Format(string.IsNullOrEmpty(entry.Changers) ? Translation.Get("DocumentationControlNoChangers") : entry.Changers));
-
-            var buttons = new StackPanel()
+            Orientation = Orientation.Horizontal,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Margin = new Thickness(2),
+            Spacing = 2
+        };
+        expander.Content = new StackPanel()
+        {
+            Orientation = Orientation.Vertical,
+            Spacing = 3,
+            Children =
             {
-                Orientation = Orientation.Horizontal,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(2),
-                Spacing = 2
-            };
-            expander.Content = new StackPanel()
-            {
-                Orientation = Orientation.Vertical,
-                Spacing = 3,
-                Children =
-                {
-                    new TextBlock() { Text = Translation.Get("DocumentationControlChangerHelp") },
-                    buttons
-                }
-            };
+                new TextBlock() { Text = Translation.Get("DocumentationControlChangerHelp") },
+                buttons
+            }
+        };
 
-            foreach (string raw in entry.Changers.Split("\n"))
+        foreach (string raw in entry.Changers.Split("\n"))
+        {
+            if (!Enum.TryParse(typeof(IDocumentationEntry.Changer), raw, true, out var change))
             {
-                if (!Enum.TryParse(typeof(IDocumentationEntry.Changer), raw, true, out var change))
+                buttons.Children.Add(new Button()
                 {
-                    buttons.Children.Add(new Button()
-                    {
-                        Content = raw,
-                        IsEnabled = false
-                    });
-                    continue;
-                }
-                var changer = (IDocumentationEntry.Changer)change;
-                var button = new Button() { Content = raw };
-                button.Click += async (_, _) =>
+                    Content = raw,
+                    IsEnabled = false
+                });
+                continue;
+            }
+            var changer = (IDocumentationEntry.Changer)change;
+            var button = new Button() { Content = raw };
+            button.Click += async (_, _) =>
+            {
+                var firstPattern = GenerateUsablePattern(PatternsEditor.Text.Split("\n")[0]);
+                var value = "<value>";
+                var format = changer switch
                 {
-                    var firstPattern = GenerateUsablePattern(PatternsEditor.Text.Split("\n")[0]);
-                    var value = "<value>";
-                    var format = changer switch
-                    {
-                        IDocumentationEntry.Changer.Set => $"set %s to {value}",
-                        IDocumentationEntry.Changer.Add => $"add {value} to %s",
-                        IDocumentationEntry.Changer.Remove => $"remove {value} from %s",
-                        IDocumentationEntry.Changer.Reset => $"reset %s",
-                        IDocumentationEntry.Changer.Clear => $"clear %s",
-                        IDocumentationEntry.Changer.Delete => $"delete %s",
-                        IDocumentationEntry.Changer.RemoveAll => $"remove all %s",
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
-
-                    await MainWindow.Instance.Clipboard.SetTextAsync(format.Replace("%s", firstPattern));
+                    IDocumentationEntry.Changer.Set => $"set %s to {value}",
+                    IDocumentationEntry.Changer.Add => $"add {value} to %s",
+                    IDocumentationEntry.Changer.Remove => $"remove {value} from %s",
+                    IDocumentationEntry.Changer.Reset => $"reset %s",
+                    IDocumentationEntry.Changer.Clear => $"clear %s",
+                    IDocumentationEntry.Changer.Delete => $"delete %s",
+                    IDocumentationEntry.Changer.RemoveAll => $"remove all %s",
+                    _ => throw new NotImplementedException("Changer not implemented")
                 };
 
-                buttons.Children.Add(button);
-            }
+                await MainWindow.Instance.Clipboard.SetTextAsync(format.Replace("%s", firstPattern));
+            };
 
-            OtherElementPanel.Children.Add(expander);
+            buttons.Children.Add(button);
         }
+
+        OtherElementPanel.Children.Add(expander);
     }
 
     private void SetupExamples(IDocumentationEntry entry)
     {
-        if (IDocProvider.Providers[entry.Provider].NeedsToLoadExamples)
-        {
-            _hasLoadedExamples = false;
-            ExamplesEntry.IsExpanded = false;
-
-            ExamplesEntry.Expanded += (_, _) =>
-            {
-                if (_hasLoadedExamples)
-                    return;
-                _hasLoadedExamples = true;
-
-                LoadExamples(entry);
-            };
-        }
-        else
+        if (!IDocProvider.Providers[entry.Provider].NeedsToLoadExamples)
         {
             LoadExamples(entry);
+            return;
         }
+
+        _hasLoadedExamples = false;
+        ExamplesEntry.IsExpanded = false;
+
+        ExamplesEntry.Expanded += (_, _) =>
+        {
+            if (_hasLoadedExamples)
+                return;
+            _hasLoadedExamples = true;
+
+            LoadExamples(entry);
+        };
     }
 
     private void LoadPatternsEditor(IDocumentationEntry entry)
@@ -151,7 +150,7 @@ public partial class DocElementControl : UserControl
             PatternsEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
         }
         PatternsEditor.Text = Format(entry.Patterns);
-        PatternsEditor.SyntaxHighlighting = CreatePatternHighlighting();
+        PatternsEditor.SyntaxHighlighting = DocSyntaxColorizer.CreatePatternHighlighting();
         PatternsEditor.TextArea.TextView.Redraw();
     }
 
@@ -167,29 +166,27 @@ public partial class DocElementControl : UserControl
     }
 
     private async void LoadAddonBadge(IDocumentationEntry entry)
-    { 
+    {
         SourceBadge.IconSource = new FontIconSource { Glyph = entry.Addon, };
 
         var color = await IDocProvider.Providers[entry.Provider].GetAddonColor(entry.Addon);
-        if (color != null)
+        if (color == null) return;
+
+        SourceBadge.Background = new SolidColorBrush(color.Value);
+        SourceBadge.Foreground = color.Value.ToHsl().L < 0.2 ? Brushes.White : Brushes.Black;
+
+        if (entry.Provider == DocProvider.SkUnity)
         {
-            SourceBadge.Background = new SolidColorBrush(color.Value);
-            SourceBadge.Foreground = color.Value.ToHsl().L < 0.2 ? Brushes.White : Brushes.Black;
-            
-            if (entry.Provider == DocProvider.SkUnity) // only those supports URLs
+            var skUnityProvider = IDocProvider.Providers[DocProvider.SkUnity] as SkUnityProvider;
+            SourceBadge.Tapped += (_, _) =>
             {
-                var skUnityProvider = IDocProvider.Providers[DocProvider.SkUnity] as SkUnityProvider;
-                SourceBadge.Tapped += (_, _) =>
-                {
-                    var uri = skUnityProvider.GetAddonLink(entry.Addon);
-                    Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
-                };
-            }
+                var uri = skUnityProvider.GetAddonLink(entry.Addon);
+                Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
+            };
         }
     }
 
-    public Expander CreateExpander(string name,
-        string content)
+    public static Expander CreateExpander(string name, string content)
     {
         var editor = new TextEditor()
         {
@@ -222,7 +219,7 @@ public partial class DocElementControl : UserControl
         };
     }
 
-    private object GetResource(string key)
+    private static object GetResource(string key)
     {
         Application.Current.TryGetResource(key, ThemeVariant.Default, out var resource);
         return resource;
@@ -245,7 +242,7 @@ public partial class DocElementControl : UserControl
         }
         catch (Exception e)
         {
-            examples = new List<IDocumentationExample>();
+            examples = [];
             ApiVault.Get().ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
         }
 
@@ -287,13 +284,12 @@ public partial class DocElementControl : UserControl
         DownloadElementButton.Classes.Remove("accent");
     }
 
-    public async Task ForceDownloadElement() 
+    public async Task ForceDownloadElement()
     {
-        if (!await LocalProvider.Get().IsElementDownloaded(_entry))
-        {
-            await DownloadElementToCache();
-            DisableDownloadButton();
-        }
+        if (await LocalProvider.Get().IsElementDownloaded(_entry)) return;
+
+        await DownloadElementToCache();
+        DisableDownloadButton();
     }
 
     public async void LoadDownloadButton()
@@ -379,7 +375,7 @@ public partial class DocElementControl : UserControl
                     }
                 });
 
-                object GetAppResource(string key)
+                static object GetAppResource(string key)
                 {
                     Application.Current.TryGetResource(key, ThemeVariant.Default, out var resource);
                     return resource;
@@ -426,65 +422,11 @@ public partial class DocElementControl : UserControl
         }
     }
 
-    private string Format(string input)
+    private static string Format(string input)
     {
         return input.Replace("&gt;", ">").Replace("&lt;", "<").Replace("&amp;", "&")
             .Replace("&quot;", "\"").Replace("&apos;", "'")
             .Replace("&#039;", "'").Replace("&#034;", "\"");
-    }
-
-    public IHighlightingDefinition CreatePatternHighlighting()
-    {
-        var highlighting = new EmptyHighlighting();
-        var ruleSet = new HighlightingRuleSet();
-
-        HighlightingSpan CreateSimpleCharRule(Regex pattern, Color color)
-        {
-            return new HighlightingSpan()
-            {
-                StartExpression = pattern,
-                EndExpression = new Regex(""),
-                RuleSet = ruleSet,
-                StartColor = new HighlightingColor()
-                {
-                    Foreground = new SimpleHighlightingBrush(color)
-                }
-            };
-        }
-
-        HighlightingSpan CreateSurroundingRule(Regex start, Regex end,
-            Color delimiterColor, Color contentColor)
-        {
-            return new HighlightingSpan()
-            {
-                StartExpression = start,
-                EndExpression = end,
-                RuleSet = ruleSet,
-                StartColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(delimiterColor) },
-                EndColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(delimiterColor) },
-                SpanColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(contentColor) }
-            };
-        }
-
-        ruleSet.Spans.Add(CreateSimpleCharRule(new Regex(@"\|"), Colors.Orange));
-        ruleSet.Spans.Add(CreateSimpleCharRule(new Regex(@"\:"), Colors.Fuchsia));
-
-        ruleSet.Spans.Add(CreateSurroundingRule(new Regex(@"\%"), new Regex(@"\%"), Colors.LimeGreen, Colors.Green));
-        ruleSet.Spans.Add(CreateSurroundingRule(new Regex(@"\("), new Regex(@"\)"), Colors.Orange, Colors.OrangeRed));
-        ruleSet.Spans.Add(CreateSurroundingRule(new Regex(@"\["), new Regex(@"\]"), Colors.Aqua, Colors.Teal));
-
-        highlighting.MainRuleSet = ruleSet;
-        return highlighting;
-    }
-
-    public class EmptyHighlighting : IHighlightingDefinition
-    {
-        public string Name => "Empty";
-        public HighlightingRuleSet MainRuleSet { get; set; }
-        public HighlightingRuleSet GetNamedRuleSet(string name) => new();
-        public HighlightingColor GetNamedColor(string name) => new();
-        public IEnumerable<HighlightingColor> NamedHighlightingColors => new List<HighlightingColor>();
-        public IDictionary<string, string> Properties => new Dictionary<string, string>();
     }
 
     #region Actions
@@ -507,15 +449,19 @@ public partial class DocElementControl : UserControl
         while (Regex.IsMatch(pattern, optionalPattern))
             pattern = Regex.Replace(pattern, optionalPattern, "");
 
-
         // Step 2: Select the first option within ()
-        pattern = Regex.Replace(pattern, @"\(([^|]+)\|.*?\)", "$1");
+        pattern = FirstOptionInParenthesesRegex().Replace(pattern, "$1");
 
         // Step 3: Leave everything within %% untouched (already handled by not modifying it)
 
         // Trim any extra whitespace
-        pattern = Regex.Replace(pattern, @"\s+", " ").Trim();
+        pattern = WhitespaceRegex().Replace(pattern, " ").Trim();
 
         return pattern;
     }
+
+    [GeneratedRegex(@"\(([^|]+)\|.*?\)")]
+    private static partial Regex FirstOptionInParenthesesRegex();
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex WhitespaceRegex();
 }
