@@ -101,12 +101,78 @@
 	
 
 	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowPasteApiKey">Paste your API key here</system:String>
+	<system:String x:Key="PublishWindowNoApiKey">Set your API key in the settings</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Click here to open a website with the API key. Make sure to log in first!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Anonymously</system:String>
 	<system:String x:Key="PublishWindowResultLink">Link to your code</system:String>
 	<system:String x:Key="PublishWindowPublishButton">Publish</system:String>
+	<system:String x:Key="PublishWindowWarning">Your API Keys can now be managed in Settings -> Connections.</system:String>
 	
+	<!-- Local Docs Manager Window -->
+	<system:String x:Key="LocalDocsManagerWindowTitle">Local Documentation Manager</system:String>
+	<system:String x:Key="LocalDocsManagerWindowInfo">Fom here you can manage the documentation elements you have downloaded.</system:String>
+	<system:String x:Key="LocalDocsManagerWindowDeleteEverything">Delete Everything</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupBy">Group by</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByProvider">Provider</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByType">Type</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByAddon">Addon</system:String>
+	<system:String x:Key="LocalDocsManagerWindowEntryDescription">{0} provided by {1}</system:String>
+	
+	<!-- (Element) Documentation Control -->
+	<system:String x:Key="DocumentationControlExamples">Examples</system:String>
+	<system:String x:Key="DocumentationControlActions">Actions</system:String>
+	<system:String x:Key="DocumentationControlEventValues">Event Values</system:String>
+	<system:String x:Key="DocumentationControlChangers">Changers</system:String>
+	
+	<system:String x:Key="DocumentationControlActionsFilter">Filter via this element'...</system:String>
+	<system:String x:Key="DocumentationControlType">Type</system:String>
+	<system:String x:Key="DocumentationControlAddon">Addon</system:String>
+	
+	<system:String x:Key="DocumentationControlChangerHelp">click on the desired changer to copy its generated code.</system:String>
+	<system:String x:Key="DocumentationControlSince">Since v{0}</system:String>
+	<system:String x:Key="DocumentationControlDownload">Download</system:String>
+	<system:String x:Key="DocumentationControlRemove">Remove</system:String>
+	<system:String x:Key="DocumentationControlExampleAuthor">By {0}</system:String>
+
+	<system:String x:Key="DocumentationControlNoExamples">No examples were found for this element.</system:String>
+	<system:String x:Key="DocumentationControlNoEventValues">No event values were found for this element.</system:String>
+	<system:String x:Key="DocumentationControlNoChangers">No changers were found for this element.</system:String>
+	<system:String x:Key="DocumentationControlNoDescription">No description provided.</system:String>
+
+	<system:String x:Key="DocumentationControlErrorExamples">An error occurred while loading examples: {0}</system:String>
+
+	<!-- Documentation Window -->
+	<system:String x:Key="DocumentationWindowTitle">Documentation</system:String>
+	<system:String x:Key="DocumentationWindowSearchQuery">Search Query</system:String>
+	<system:String x:Key="DocumentationWindowSearch">Search</system:String>
+	<system:String x:Key="DocumentationWindowFilteredType">Filtered Type</system:String>
+	<system:String x:Key="DocumentationWindowFilteredAddon">Filtered Addon</system:String>
+	<system:String x:Key="DocumentationWindowProvider">Provider</system:String>
+	<system:String x:Key="DocumentationWindowManageCached">Manage Cached Elements</system:String>
+	<system:String x:Key="DocumentationWindowDownloadAll">Download All Found</system:String>
+	<system:String x:Key="DocumentationWindowLoading">Loading...</system:String>
+
+	<system:String x:Key="DocumentationWindowErrorGlobal">An error occurred while fetching the documentation.\n\n{0}</system:String>
+	<system:String x:Key="DocumentationWindowErrorOffline">The request to the documentation server timed out. Are the docs down?</system:String>
+
+	<system:String x:Key="DocumentationWindowNoProvidersMessage">No documentation provider selected.\n\nYou may need to connect your API keys from settings to use those.</system:String>
+	
+	<system:String x:Key="DocumentationWindowNoResults">No results found.</system:String>
+	<system:String x:Key="DocumentationWindowNoProviders">No providers were found.</system:String>
+	<system:String x:Key="DocumentationWindowInvalidData">Invalid search data.</system:String>
+	<system:String x:Key="DocumentationWindowAnErrorOccured">An error occurred.</system:String>
+	<system:String x:Key="DocumentationWindowTooManyResults">Too many results.</system:String>
+	<system:String x:Key="DocumentationWindowTooManyResultsMessage">The search returned more than 100 results. Are you sure you want to display all of them?\n\nIt may slow down the app!</system:String>
+	<system:String x:Key="DocumentationWindowInvalidDataQuery">Query must be at least 3 characters long</system:String>
+	<system:String x:Key="DocumentationWindowSkriptMCBad">SkriptMC does not support searching for all types.</system:String>
+	<system:String x:Key="DocumentationWindowSkriptMCBad2">SkriptMC is currently not available for documentation. Please try again later.</system:String>
+
+	<system:String x:Key="DocumentationWindowNoEntries">No documentation entries found. Why not search for some first?</system:String>
+	<system:String x:Key="DocumentationWindowDownloadAllMessage">Are you sure you want to download all the documentation entries found? (total: {0})</system:String>
+	<system:String x:Key="DocumentationWindowDownloadingElements">Downloading elements...</system:String>
+	<system:String x:Key="DocumentationWindowDownloading">Downloading</system:String>
+	<system:String x:Key="DocumentationWindowDownloadingMessage">We're downloading the documentation entries for you. Please wait...</system:String>
+
 	<!-- Refactor Window -->
 	<system:String x:Key="RefactorWindowRemoveComments">Remove comments</system:String>
 	<system:String x:Key="RefactorWindowTabsToSpaces">Convert tabs to spaces</system:String>
@@ -143,7 +209,6 @@
 	<system:String x:Key="CodeParserNavigate">Navigate</system:String>
 	<system:String x:Key="CodeParserNavigateToDefinition">Navigate to definition</system:String>
 	<system:String x:Key="CodeParserRename">Rename</system:String>
-	<system:String x:Key="CodeParserFileChanged">The file has changed, you need to parse it again.</system:String>
 	<system:String x:Key="CodeParserNoSections">No sections were found in the code. Maybe you should write something? :)</system:String>
 	<system:String x:Key="CodeParserBadFormat">This file cannot be parsed, as it does not look like a Skript file.</system:String>
 	<system:String x:Key="CodeParserParseCode">Parse code</system:String>
@@ -171,6 +236,8 @@
 	<system:String x:Key="SettingsHomeDiscordDescription">Display SkEditor on your Discord profile!</system:String>
 	<system:String x:Key="SettingsHomeExperiments">Experiments</system:String>
 	<system:String x:Key="SettingsHomeExperimentsDescription">Test upcoming features!</system:String>
+	<system:String x:Key="SettingsHomeConnections">Connections</system:String>
+	<system:String x:Key="SettingsHomeConnectionsDescription">Manage your third-party connections.</system:String>
 	<system:String x:Key="SettingsHomeAddons">Addons</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Enhance your experience with powerful addons!</system:String>
 	<system:String x:Key="SettingsHomeAbout">About</system:String>
@@ -192,6 +259,8 @@
 	<system:String x:Key="SettingsGeneralChangeChecker">Check for external file changes</system:String>
 	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
 	<system:String x:Key="SettingsGeneralRpcDescription">Show SkEditor in your Discord status.</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndent">Auto-indent Paste</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatically adjusts the indentation of pasted text to match the previous line's format.</system:String>
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Check for updates</system:String>
 
 	<!-- About Settings -->
@@ -225,6 +294,9 @@
 
 	<!-- Addon Settings -->
 	<system:String x:Key="SettingsAddonsTitle">Addons</system:String>
+	
+	<!-- Connections Settings -->
+	<system:String x:Key="SettingsConnectionsTitle">Connections</system:String>
 	
 	<!-- File Views -->
 	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>

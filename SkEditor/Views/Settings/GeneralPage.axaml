@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 xmlns:controls="using:SkEditor.Controls"
-			 xmlns:vm="using:SkEditor.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800"
+             xmlns:utilities="clr-namespace:SkEditor.Utilities"
+			 mc:Ignorable="d" d:DesignWidth="800"
+             x:DataType="utilities:AppConfig"
              x:Class="SkEditor.Views.Settings.GeneralPage">
 
 	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
@@ -29,8 +30,8 @@
 					<ui:SettingsExpander.Footer>
 						<StackPanel Orientation="Horizontal" Spacing="10">
 							<ComboBox Name="IndentationTypeComboBox">
-								<ComboBoxItem Tag="tabs" Content="{DynamicResource SettingsGeneralTabTypeTabs}"></ComboBoxItem> 
-								<ComboBoxItem Tag="spaces" Content="{DynamicResource SettingsGeneralTabTypeSpaces}"></ComboBoxItem> 
+								<ComboBoxItem Tag="tabs" Content="{DynamicResource SettingsGeneralTabTypeTabs}" />
+								<ComboBoxItem Tag="spaces" Content="{DynamicResource SettingsGeneralTabTypeSpaces}" />
 							</ComboBox>
 							<ComboBox Name="IndentationAmountComboBox">
 								<ComboBoxItem Tag="1">1</ComboBoxItem> 
@@ -56,6 +57,16 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralPasteIndent}"
+				                     Description="{DynamicResource SettingsGeneralPasteIndentDescription}">
+					<ui:SettingsExpander.IconSource>
+						<ui:SymbolIconSource Symbol="Paste" />
+					</ui:SettingsExpander.IconSource>
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="PasteIndentToggleSwitch" IsChecked="{Binding IsPasteIndentationEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
+
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoSave}" IconSource="{StaticResource AutoSaveIcon}"
 					Description="{DynamicResource SettingsGeneralAutoSaveDescription}">
 					<ui:SettingsExpander.Footer>
@@ -70,7 +81,7 @@
 				</ui:SettingsExpander>
 
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralRpc}" IconSource="{StaticResource DiscordIcon}"
-					Description="{DynamicResource SettingsGeneralRpcDescription}">
+				                     Description="{DynamicResource SettingsGeneralRpcDescription}">
 					<ui:SettingsExpander.Footer>
 						<ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRpcEnabled}"/>
 					</ui:SettingsExpander.Footer>

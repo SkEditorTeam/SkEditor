@@ -1,12 +1,15 @@
+using Avalonia.Threading;
 using Serilog;
 using SkEditor.Utilities;
 using SkEditor.Views;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 public class AddonLoader
@@ -87,19 +90,32 @@ public class AddonLoader
     {
         try
         {
-            AppDomain.CurrentDomain.GetAssemblies()
+            var addonTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => typeof(IAddon).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
-                .Select(addonType => (IAddon)Activator.CreateInstance(addonType))
-                .ToList()
-                .ForEach(addon =>
-                {
-                    Addons.Add(addon);
-                    addon.OnEnable();
-                });
+                .ToList();
 
-            ApiVault.Get().GetAppConfig().AddonsToDelete.Clear();
-            ApiVault.Get().GetAppConfig().AddonsToUpdate.Clear();
+            var addons = new ConcurrentBag<IAddon>();
+
+            Parallel.ForEach(addonTypes, addonType =>
+            {
+                try
+                {
+                    var addon = (IAddon)Activator.CreateInstance(addonType);
+                    addons.Add(addon);
+                    Dispatcher.UIThread.InvokeAsync(() => addon.OnEnable());
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, $"Failed to initialize addon {addonType.Name}");
+                }
+            });
+
+            Addons.AddRange(addons);
+
+            var apiVault = ApiVault.Get();
+            apiVault.GetAppConfig().AddonsToDelete.Clear();
+            apiVault.GetAppConfig().AddonsToUpdate.Clear();
         }
         catch (Exception ex)
         {

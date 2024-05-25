@@ -2,7 +2,6 @@
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using Microsoft.CodeAnalysis;
 using SkEditor.API;
 using SkEditor.Utilities.Syntax;
 using System.Collections.Generic;

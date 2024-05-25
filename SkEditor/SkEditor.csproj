@@ -8,9 +8,9 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>SkEditor.ico</ApplicationIcon>
 		<PublishSingleFile>true</PublishSingleFile>
-		<AssemblyVersion>2.4.1</AssemblyVersion>
-		<FileVersion>2.4.1</FileVersion>
-		<Version>2.4.1</Version>
+		<AssemblyVersion>2.5.0</AssemblyVersion>
+		<FileVersion>2.5.0</FileVersion>
+		<Version>2.5.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -50,23 +50,24 @@
 		<PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.10" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.0.10" />
 		<PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.0.10" />
-		<PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.17" />
+		<PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.18" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
 		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
-		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.10.4" />
+		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.10.9" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
-		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.0.6" />
-		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.0.6" />
+		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.0.10" />
+		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.0.10" />
 		<PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
+		<PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.240" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Octokit" Version="10.0.0" />
+		<PackageReference Include="Octokit" Version="11.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="SkAvaloniaEdit" Version="11.0.6.6" />
 		<PackageReference Include="SkFluentAvalonia" Version="2.0.5.1" />
-		<PackageReference Include="Svg.Skia" Version="1.0.0.17" />
+		<PackageReference Include="Svg.Skia" Version="1.0.0.18" />
 		<PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
 	</ItemGroup>
 
@@ -139,6 +140,9 @@
 		</Compile>
 		<Compile Update="Views\Settings\PersonalizationPage.axaml.cs">
 			<DependentUpon>PersonalizationPage.axaml</DependentUpon>
+		</Compile>
+		<Compile Update="Views\Settings\ConnectionsPage.axaml.cs">
+			<DependentUpon>ConnectionsPage.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\Generators\Gui\GuiGenerator.axaml.cs">
 			<DependentUpon>GuiGenerator.axaml</DependentUpon>

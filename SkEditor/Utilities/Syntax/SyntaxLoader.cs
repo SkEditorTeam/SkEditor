@@ -1,11 +1,10 @@
 ﻿using AvaloniaEdit;
+using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
-using Serilog;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -44,28 +43,6 @@ public class SyntaxLoader
                     await ApiVault.Get().ShowMessageWithIcon("Error", $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
                         primaryButton: false);
                 }
-            }
-        }
-        else
-        {
-            var response = await ApiVault.Get().ShowMessageWithIcon("Syntax migration", "In this version of SkEditor, a new syntax highlighting file format has been introduced. Files in the old format need to be deleted.\nIf you have created your own highlighting and don't want to lose it, make a backup.\nTo continue (and delete the files) click Confirm.", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
-                primaryButton: true, closeButtonContent: "Open syntax folder");
-
-            if (response == ContentDialogResult.Primary)
-            {
-                Directory.Delete(Path.Combine(SyntaxFolder, "Other Languages"), true);
-                Directory.GetFiles(SyntaxFolder).ToList().ForEach(File.Delete);
-
-                await SetupDefaultSyntax();
-            }
-            else if (response == ContentDialogResult.None)
-            {
-                Process.Start(new ProcessStartInfo()
-                {
-                    FileName = SyntaxFolder,
-                    UseShellExecute = true
-                });
-                Environment.Exit(0);
             }
         }
 
@@ -131,6 +108,8 @@ public class SyntaxLoader
 
     public static FileSyntax GetConfiguredSyntaxForLanguage(string language)
     {
+        if (FileSyntaxes.Count == 0) _ = SetupDefaultSyntax();
+
         var configuredSyntax = ApiVault.Get().GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
         return FileSyntaxes.FirstOrDefault(x => configuredSyntax == null
             ? x.Config.LanguageName == language
@@ -248,4 +227,9 @@ public class SyntaxLoader
         }
     }
 
+    public static IHighlightingDefinition GetCurrentSkriptHighlighting()
+    {
+        var syntax = GetConfiguredSyntaxForLanguage("Skript");
+        return syntax.Highlighting;
+    }
 }

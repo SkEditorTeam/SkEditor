@@ -8,7 +8,6 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.ViewModels;
@@ -34,7 +33,7 @@ public partial class TextEditorEventHandler
     };
 
     private const string commentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
-    private static Regex _commentRegex = CommentRegex();
+    private readonly static Regex _commentRegex = CommentRegex();
 
     public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 
@@ -98,6 +97,17 @@ public partial class TextEditorEventHandler
         {
             await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
             return;
+        }
+
+        if (ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        {
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                var parser = FileHandler.OpenedFiles.Find(file => file.TabViewItem == tab)?.Parser;
+                if (parser == null) return;
+
+                parser.Parse();
+            });
         }
 
         if (tab.Header.ToString().EndsWith('*')) return;
@@ -213,27 +223,35 @@ public partial class TextEditorEventHandler
 
     public static void OnTextPasting(object? sender, TextEventArgs e)
     {
-        // TODO: Add auto-indentation for pasted text
-        return;
+        if (!ApiVault.Get().GetAppConfig().IsPasteIndentationEnabled) return;
+        string properText = e.Text; // TODO: Handle bad indented copied code
 
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
+
         string lineText = textEditor.Document.GetText(line);
-
-        int indentationSize = lineText.TakeWhile(char.IsWhiteSpace).Count();
-        string indentationType = lineText[..indentationSize];
-
-        string textToPaste = e.Text;
-        string[] lines = textToPaste.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-
-        for (int i = 0; i < lines.Length; i++)
+        string indentation = "";
+        foreach (char c in lineText)
         {
-
+            if (char.IsWhiteSpace(c)) indentation += c;
+            else break;
         }
 
-        string adjustedTextToPaste = string.Join(Environment.NewLine, lines);
+        string[] pastes = properText.Split([Environment.NewLine], StringSplitOptions.None);
 
-        e.Text = adjustedTextToPaste;
+        if (pastes.Length == 1)
+        {
+            e.Text = indentation + properText;
+            return;
+        }
+
+        StringBuilder sb = new();
+        foreach (string paste in pastes)
+        {
+            sb.AppendLine(indentation + paste);
+        }
+
+        e.Text = sb.ToString().Trim();
     }
 
     public static void CheckForSpecialPaste(object? sender, TextEventArgs e)
@@ -272,7 +290,6 @@ public partial class TextEditorEventHandler
             return;
         }
     }
-
 
     [GeneratedRegex(@"<##(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,29 +8,29 @@ using System.Threading.Tasks;
 namespace SkEditor.Utilities;
 
 
-public class AppConfig
+public partial class AppConfig : ObservableObject
 {
-    public string Version { get; set; } = string.Empty;
-    public bool FirstTime { get; set; } = true;
-    public string Language { get; set; } = "English";
-    public string LastUsedPublishService { get; set; } = "Pastebin";
-    public string PastebinApiKey { get; set; } = "";
-    public string CodeSkriptPlApiKey { get; set; } = "";
-    public string SkunityApiKey { get; set; } = "";
-    public bool UseSkriptGui { get; set; } = false;
+    [ObservableProperty] private string _version = string.Empty;
+    [ObservableProperty] private bool _firstTime = true;
+    [ObservableProperty] private string _language = "English";
+    [ObservableProperty] private string _lastUsedPublishService = "Pastebin";
+    [ObservableProperty] private string _pastebinApiKey = "";
+    [ObservableProperty] private string _codeSkriptPlApiKey = "";
+    [ObservableProperty] private bool _useSkriptGui = false;
 
-    public bool IsDiscordRpcEnabled { get; set; } = true;
-    public bool IsWrappingEnabled { get; set; } = false;
-    public bool IsAutoIndentEnabled { get; set; } = false;
-    public bool IsAutoPairingEnabled { get; set; } = false;
-    public bool IsAutoSaveEnabled { get; set; } = false;
-    public string CurrentTheme { get; set; } = "Default.json";
-    public Dictionary<string, string> FileSyntaxes { get; set; } = [];
-    public string Font { get; set; } = "Default";
-    public bool UseSpacesInsteadOfTabs { get; set; } = false;
-    public int TabSize { get; set; } = 4;
-    public bool CheckForUpdates { get; set; } = true;
-    public bool CheckForChanges { get; set; } = true;
+    [ObservableProperty] private bool _isDiscordRpcEnabled = true;
+    [ObservableProperty] private bool _isWrappingEnabled = false;
+    [ObservableProperty] private bool _isAutoIndentEnabled = false;
+    [ObservableProperty] private bool _isPasteIndentationEnabled = false;
+    [ObservableProperty] private bool _isAutoPairingEnabled = false;
+    [ObservableProperty] private bool _isAutoSaveEnabled = false;
+    [ObservableProperty] private string _currentTheme = "Default.json";
+    [ObservableProperty] private Dictionary<string, string> _fileSyntaxes = [];
+    [ObservableProperty] private string _font = "Default";
+    [ObservableProperty] private bool _useSpacesInsteadOfTabs = false;
+    [ObservableProperty] private int _tabSize = 4;
+    [ObservableProperty] private bool _checkForUpdates = true;
+    [ObservableProperty] private bool _checkForChanges = true;
 
     public HashSet<string> AddonsToDisable { get; set; } = [];
     public HashSet<string> AddonsToDelete { get; set; } = [];
@@ -45,7 +46,11 @@ public class AppConfig
     public bool EnableFolding { get; set; } = false;
     public bool EnableBetterPairing { get; set; } = false;
     public bool EnableSessionRestoring { get; set; } = false;
+    public bool EnableRealtimeCodeParser { get; set; } = false;
 
+    public string SkUnityAPIKey { get; set; } = "";
+    public string SkriptHubAPIKey { get; set; } = "";
+    public string SkriptMCAPIKey { get; set; } = "";
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
 

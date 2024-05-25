@@ -101,7 +101,7 @@
 	
 
 	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowPasteApiKey">Wklej tu swój klucz API</system:String>
+	<system:String x:Key="PublishWindowNoApiKey">Ustaw swój klucz API w ustawieniach</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Kliknij tutaj by przejść na stronę z kluczem API. Nie zapomnij się zalogować!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Anonimowo</system:String>
 	<system:String x:Key="PublishWindowResultLink">Link do kodu</system:String>
@@ -143,7 +143,6 @@
 	<system:String x:Key="CodeParserNavigate">Przejdź</system:String>
 	<system:String x:Key="CodeParserNavigateToDefinition">Przejdź do definicji</system:String>
 	<system:String x:Key="CodeParserRename">Zmień nazwę</system:String>
-	<system:String x:Key="CodeParserFileChanged">Plik został zmodyfikowany, musisz go przeanalizować ponownie</system:String>
 	<system:String x:Key="CodeParserNoSections">Nie znaleziono żadnych sekcji w kodzie. Może powinieneś coś napisać? :)</system:String>
 	<system:String x:Key="CodeParserBadFormat">Nie można przeanalizować tego pliku, ponieważ nie wygląda on jak plik Skript.</system:String>
 	<system:String x:Key="CodeParserParseCode">Analizuj</system:String>
@@ -191,6 +190,8 @@
 	<system:String x:Key="SettingsGeneralChangeChecker">Wykrywaj modyfikacje plików poza programem</system:String>
 	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
 	<system:String x:Key="SettingsGeneralRpcDescription">Wyświetlaj SkEditor w swoim statusie na Discordzie.</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndent">Autowcięcie wklejania</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatycznie dostosowuje wcięcie wklejonego tekstu, aby pasowało do poprzedniej linii.</system:String>
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Sprawdzaj aktualizacje</system:String>
 
 	<!-- About Settings -->

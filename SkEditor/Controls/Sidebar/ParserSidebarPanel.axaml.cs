@@ -50,9 +50,17 @@ public partial class ParserSidebarPanel : UserControl
 
         ParserDisabled.IsVisible = !CodeParserEnabled;
         ScrollViewer.IsVisible = CodeParserEnabled;
-        ParseButton.IsEnabled = CodeParserEnabled;
 
-        ParseButton.Click += (_, _) => ParseCurrentFile();
+        if (ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        {
+            ParseButton.IsVisible = false;
+        }
+        else
+        {
+            ParseButton.IsEnabled = CodeParserEnabled;
+            ParseButton.Click += (_, _) => ParseCurrentFile();
+        }
+
         EnableParser.Click += (_, _) =>
         {
             ApiVault.Get().GetAppConfig().EnableCodeParser = true;
@@ -91,7 +99,7 @@ public partial class ParserSidebarPanel : UserControl
         Refresh([.. Sections]);
     }
 
-    public void UpdateInformationBox(bool isToNotifyUnParsing = false)
+    public void UpdateInformationBox(bool notifyUnparsing = false)
     {
         if (!CodeParserEnabled)
         {
@@ -100,11 +108,9 @@ public partial class ParserSidebarPanel : UserControl
             return;
         }
 
-        if (isToNotifyUnParsing)
+        if (notifyUnparsing)
         {
             Sections.Clear();
-            CannotParseInfo.IsVisible = true;
-            CannotParseInfoText.Text = Translation.Get("CodeParserFileChanged");
             return;
         }
 

@@ -1,6 +1,7 @@
 ﻿using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
 using Newtonsoft.Json;
+using Serilog;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
@@ -23,20 +24,28 @@ public class FileSyntax
 
     public static async Task<FileSyntax> LoadSyntax(string folder)
     {
-        var configFile = Path.Combine(folder, "config.json");
-        var syntaxFile = Path.Combine(folder, "syntax.xshd");
+        try
+        {
+            var configFile = Path.Combine(folder, "config.json");
+            var syntaxFile = Path.Combine(folder, "syntax.xshd");
 
-        if (!File.Exists(configFile) || !File.Exists(syntaxFile)) return new FileSyntax(null, null, folder);
+            if (!File.Exists(configFile) || !File.Exists(syntaxFile)) return new FileSyntax(null, null, folder);
 
-        var config = JsonConvert.DeserializeObject<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile));
+            var config = JsonConvert.DeserializeObject<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile));
 
-        StreamReader streamReader = new(syntaxFile);
-        var reader = XmlReader.Create(streamReader);
-        var highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-        streamReader.Close();
-        reader.Close();
+            StreamReader streamReader = new(syntaxFile);
+            var reader = XmlReader.Create(streamReader);
+            var highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            streamReader.Close();
+            reader.Close();
 
-        return new FileSyntax(highlightingDefinition, config, folder);
+            return new FileSyntax(highlightingDefinition, config, folder);
+        }
+        catch (IOException e)
+        {
+            Log.Error(e, "Failed to load syntax from {Folder}", folder);
+            return new FileSyntax(null, null, folder);
+        }
     }
 
     private FileSyntax(IHighlightingDefinition highlighting, FileSyntaxConfig config,

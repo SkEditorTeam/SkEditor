@@ -80,7 +80,6 @@
 	
 
 	<!-- Окно публикации -->
-	<system:String x:Key="PublishWindowPasteApiKey">Вставьте сюда свой ключ API</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Нажмите здесь, чтобы открыть веб-сайт с ключом API. Обязательно сначала войдите в систему!</system:String>
 	<system:String x:Key="PublishWindowAnonymous">Анонимно</system:String>
 	<system:String x:Key="PublishWindowResultLink">Ссылка на ваш код</system:String>

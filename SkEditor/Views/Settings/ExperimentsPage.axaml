@@ -9,11 +9,11 @@
              x:Class="SkEditor.Views.Settings.ExperimentsPage">
 
 	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-		<controls:SettingsTitle Name="Title" Title="Experiments" Grid.Row="0"/>
-		
+		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsHomeExperiments}" Grid.Row="0"/>
+
 		<ScrollViewer Grid.Row="1">
 			<StackPanel Name="ExperimentsStackPanel" Spacing="8">
-				<ui:InfoBar IsOpen="True" IsClosable="False" Severity="Warning" Message="Most of the experiments require a restart to take effect."/>
+				<ui:InfoBar IsOpen="True" IsClosable="False" Severity="Warning" Message="Some experiments may be really unstable. Disable them if the app starts crashing."/>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

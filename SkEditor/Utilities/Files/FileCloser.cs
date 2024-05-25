@@ -1,6 +1,5 @@
 ﻿using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Editor;
 using System.Collections;
@@ -99,10 +98,10 @@ internal class FileCloser
         tabItems?.Remove(item);
     }
 
-    private static List<TabViewItem> GetTabItems() => 
+    private static List<TabViewItem> GetTabItems() =>
         (ApiVault.Get().GetTabView().TabItems as IList)?.Cast<TabViewItem>().ToList();
 
-    private static async Task<ContentDialogResult> ShowConfirmationDialog() => 
+    private static async Task<ContentDialogResult> ShowConfirmationDialog() =>
         await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"),
             Translation.Get("ClosingFiles"), new SymbolIconSource { Symbol = Symbol.ImportantFilled });
 }

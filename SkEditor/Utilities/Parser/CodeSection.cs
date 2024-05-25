@@ -18,7 +18,17 @@ public partial class CodeSection
     public SectionType Type { get; private set; }
     public List<string> Lines { get; set; }
     public int StartingLineIndex { get; private set; }
-    public int EndingLineIndex => StartingLineIndex + Lines.Count;
+    public int EndingLineIndex
+    {
+        get
+        {
+            int line = StartingLineIndex + Lines.Count;
+            DocumentLine documentLine = Parser.Editor.Document.GetLineByNumber(line);
+            if (string.IsNullOrWhiteSpace(Parser.Editor.Document.GetText(documentLine)))
+                return line - 1;
+            return line;
+        }
+    }
 
     public HashSet<CodeVariable> Variables { get; private set; } // Case of any section other than options
     public HashSet<CodeOptionReference> OptionReferences { get; private set; } // Case of any section other than options
@@ -66,7 +76,7 @@ public partial class CodeSection
         StartingLineIndex = currentLineIndex;
         Parse();
 
-        Colorizer = new(StartingLineIndex, EndingLineIndex);
+        Colorizer = new(StartingLineIndex + 1, EndingLineIndex);
     }
 
     public void Parse()
@@ -154,15 +164,23 @@ public partial class CodeSection
 
     private string GetSectionName()
     {
-        string sectionName = Type switch
+        string sectionName;
+        try
         {
-            SectionType.Command => Lines[0].Split(' ')[1].Split(':')[0].Trim(),
-            SectionType.Event => Lines[0].Split(':')[0].Trim(),
-            SectionType.Options => "Options",
-            SectionType.Function => Lines[0].Split(' ')[1].Split('(')[0].Trim(),
-            _ => "Unknown"
-        };
-        if (sectionName.Length > 20) sectionName = sectionName[..20] + "...";
+            sectionName = Type switch
+            {
+                SectionType.Command => Lines[0].Split(' ')[1].Split(':')[0].Trim(),
+                SectionType.Event => Lines[0].Split(':')[0].Trim(),
+                SectionType.Options => "Options",
+                SectionType.Function => Lines[0].Split(' ')[1].Split('(')[0].Trim(),
+                _ => "Unknown"
+            };
+            if (sectionName.Length > 20) sectionName = sectionName[..20] + "...";
+        }
+        catch
+        {
+            sectionName = "Unknown";
+        }
 
         return sectionName;
     }
@@ -241,14 +259,8 @@ public partial class CodeSection
     [GeneratedRegex(@"(?<=\{)(?!@)_?([A-Za-z.\s_-]+)(?=\})")]
     private static partial Regex VariableRegex();
 
-    /// <summary>
-    /// Author: Sky
-    /// </summary>
     public class LineColorizer(int from, int to) : DocumentColorizingTransformer
     {
-        private readonly int from = from;
-        private readonly int to = to;
-
         protected override void ColorizeLine(DocumentLine line)
         {
             if (!line.IsDeleted && line.LineNumber >= from && line.LineNumber <= to)
