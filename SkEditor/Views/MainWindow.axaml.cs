@@ -14,6 +14,7 @@ using SkEditor.Utilities.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views;
 

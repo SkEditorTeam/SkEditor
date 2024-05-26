@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Avalonia.Threading;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.API;
 

@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views.Marketplace.Types;
 
@@ -80,7 +81,7 @@ public class AddonItem : MarketplaceItem
 
             if (addon != null)
             {
-                AddonLoader.EnabledAddons.Add(addon);
+                //AddonLoader.EnabledAddons.Add(addon);
                 addon.OnEnable();
             }
             else

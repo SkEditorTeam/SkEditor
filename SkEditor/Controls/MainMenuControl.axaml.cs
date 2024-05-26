@@ -12,6 +12,7 @@ using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using System;
 using System.Collections;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -85,7 +86,7 @@ public partial class MainMenuControl : UserControl
     {
         bool hasAnyMenu = false;
         AddonsMenuItem.Items.Clear();
-        foreach (IAddon addon in AddonLoader.EnabledAddons)
+        foreach (IAddon addon in SkEditorAPI.Addons.GetAddons(IAddons.AddonState.Enabled))
         {
             var items = addon.GetMenuItems();
             if (items.Count <= 0)

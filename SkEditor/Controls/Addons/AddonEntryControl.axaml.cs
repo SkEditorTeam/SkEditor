@@ -1,42 +1,59 @@
 ﻿using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
+using FluentIcons.Avalonia.Fluent;
+using FluentIcons.Common;
 using SkEditor.API;
+using SkEditor.Utilities.InternalAPI;
+using SkEditor.Views.Settings;
 
 namespace SkEditor.Controls.Addons;
 
 public partial class AddonEntryControl : UserControl
 {
-    public AddonEntryControl(IAddon addon)
+    private AddonsPage _addonsPage = null!;
+    public AddonEntryControl(AddonMeta addonMeta, AddonsPage addonsPage)
     {
         InitializeComponent();
+        _addonsPage = addonsPage;
+        addonMeta = AddonLoader.Addons.First(x => x.Addon.Identifier == addonMeta.Addon.Identifier);
 
-        AssignCommands(addon);
-        LoadVisuals(addon);
+        LoadVisuals(addonMeta);
+        AssignCommands(addonMeta);
     }
 
-    public void AssignCommands(IAddon addon)
+    public void AssignCommands(AddonMeta addonMeta)
     {
-        DeleteButton.Command = new RelayCommand(() => AddonLoader.DeleteAddon(addon));
-        
-        var enabled = AddonLoader.IsAddonEnabled(addon);
+        DeleteButton.Command = new RelayCommand(() =>
+        {
+            AddonLoader.DeleteAddon(addonMeta.Addon);
+            _addonsPage.LoadAddons();
+        });
+
+        var enabled = addonMeta.State == IAddons.AddonState.Enabled;
         SetStateButton(enabled);
         
+        StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
         StateButton.Click += (_, _) =>
         {
-            var enabled = AddonLoader.IsAddonEnabled(addon);
+            var enabled = addonMeta.State == IAddons.AddonState.Enabled;
             if (enabled)
             {
-                AddonLoader.DisableAddon(addon);
+                SkEditorAPI.Addons.DisableAddon(addonMeta.Addon);
                 SetStateButton(false);
             }
             else
             {
-                AddonLoader.EnableAddon(addon);
-                SetStateButton(true);
+                var success = SkEditorAPI.Addons.EnableAddon(addonMeta.Addon);
+                SetStateButton(success);
             }
+            
+            StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
+            LoadVisuals(addonMeta);
         };
     }
     
@@ -53,17 +70,50 @@ public partial class AddonEntryControl : UserControl
             StateButton.Classes.Add("accent");
         }
     }
+    
+    private static readonly Color ErrorColor = Colors.OrangeRed;
+    private static readonly Color WarningColor = Colors.Orange;
 
-    public void LoadVisuals(IAddon addon)
+    public void LoadVisuals(AddonMeta addonMeta)
     {
+        var addon = addonMeta.Addon;
         Expander.Header = addon.Name;
         Expander.Description = addon.Description;
         Expander.IconSource = addon.GetAddonIcon();
         
-        // TODO: Invert the condition so it not does show SkEditorCor's buttons
-        if (!addon.GetType().Namespace.StartsWith("SkEditor"))
+        if (addonMeta.HasErrors)
         {
-            ControlsPanel.IsVisible = false;
+            Expander.IconSource = new SymbolIconSource()
+            {
+                Symbol = Symbol.Warning,
+                Foreground = new SolidColorBrush(addonMeta.HasCriticalErrors ? ErrorColor : WarningColor),
+                FontSize = 36,
+                IsFilled = true
+            };
+            Expander.Header = new TextBlock()
+            {
+                Text = addon.Name,
+                Foreground = new SolidColorBrush(addonMeta.HasCriticalErrors ? ErrorColor : WarningColor),
+                TextDecorations = TextDecorations.Strikethrough,
+            };
+            
+            var panels = new StackPanel()
+            {
+                Spacing = 2,
+            };
+            foreach (var error in addonMeta.Errors)
+            {
+                var textBlock = new TextBlock()
+                {
+                    Text = "• " + error.Message,
+                    Foreground = new SolidColorBrush(error.IsCritical ? ErrorColor : WarningColor)
+                };
+                panels.Children.Add(textBlock);
+            }
+            Expander.Items.Add(panels);
         }
+        
+        if (addonMeta.DllFilePath == null)
+            ControlsPanel.IsVisible = false;
     }
 }

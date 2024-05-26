@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor;
 
@@ -257,8 +258,6 @@ public class SkEditor : ISkEditorAPI
     {
         GetMainWindow().BottomBar.UpdateLogs(message.ToString());
     }
-
-    public bool IsAddonEnabled(string addonName) => AddonLoader.EnabledAddons.Any(x => x.Name.Equals(addonName));
 
     public void SaveData()
     {

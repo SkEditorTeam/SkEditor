@@ -3,6 +3,7 @@ using Serilog;
 using SkEditor.API;
 using System;
 using System.Diagnostics;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Desktop;
 
@@ -30,6 +31,7 @@ class Program
             Log.Fatal(e, message);
 
             ApiVault.Get().SaveData();
+            AddonLoader.SaveMeta();
 
             Process.Start(Environment.ProcessPath, "--crash");
         }

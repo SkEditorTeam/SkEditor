@@ -19,9 +19,10 @@ namespace SkEditor;
 
 public class SkEditorSelfAddon : IAddon
 {
-    public string Name => "SkEditorCore";
+    public string Name => "SkEditor Core";
     public string Version => SettingsViewModel.Version;
     public string Description => "The core of SkEditor, providing the base functionalities.";
+    public string Identifier => "SkEditorCore";
     
     public readonly ExplorerSidebarPanel.ExplorerPanel ProjectPanel = new();
     public readonly ParserSidebarPanel.ParserPanel ParserPanel = new();
@@ -89,29 +90,6 @@ public class SkEditorSelfAddon : IAddon
 
         #endregion
 
-        #region Registries - BottomBar
-
-        var errors = new BottomIconData(new SymbolIconSource { Symbol = Symbol.ErrorCircle }, "errors", "0");
-        var warnings = new BottomIconData(new SymbolIconSource { Symbol = Symbol.Warning }, "warnings", "0");
-        var group = new BottomIconGroupData([errors, warnings], (_, args) =>
-        {
-            var random = new Random();
-            (args.Icon as BottomIconGroupData).GetById("errors")?.UpdateText(random.Next(0, 100).ToString());
-            (args.Icon as BottomIconGroupData).GetById("warnings")?.UpdateText(random.Next(0, 100).ToString());
-        });
-        
-        var noIcon = new BottomIconData(new SymbolIconSource { Symbol = Symbol.AppFolder }, "another", null, async (_, args) =>
-        {
-            ((args.Icon as BottomIconData).GetIconElement().IconSource as SymbolIconSource).IsFilled = true;
-            await Task.Delay(2000);
-            ((args.Icon as BottomIconData).GetIconElement().IconSource as SymbolIconSource).IsFilled = false;
-        });
-        
-        Registries.BottomIcons.Register(new RegistryKey(this, "TestIcon"), group);
-        Registries.BottomIcons.Register(new RegistryKey(this, "AnotherIcon"), noIcon);
-
-        #endregion
-
         #region Registries - Sidebar Panels
         
         Registries.SidebarPanels.Register(new RegistryKey(this, "ProjectPanel"), ProjectPanel);
@@ -126,20 +104,31 @@ public class SkEditorSelfAddon : IAddon
             SkEditorAPI.Logs.Debug($"File opened: {args.FilePath}, content: {args.Content}, restore? {args.CausedByRestore}");
         };
 
+        SkEditorAPI.Events.OnPostEnable += (_, args) =>
+        {
+            SkEditorAPI.Logs.Debug("Finished enabling addons:");
+            foreach (var addon in SkEditorAPI.Addons.GetAddons())
+                SkEditorAPI.Logs.Debug($" - {addon.Name} ({addon.Version}) [{addon.Identifier}], state: {SkEditorAPI.Addons.GetAddonState(addon)}");
+        };
+
         #endregion
     }
 
     public List<MenuItem> GetMenuItems()
     {
-        return [
-            new MenuItem
+        return [new MenuItem
+        {
+            Header = "SkEditor Test",
+            Icon = new SymbolIcon()
             {
-                Header = "SkEditor Test",
-                Icon = new SymbolIcon()
-                {
-                    Symbol = Symbol.Attach
-                },
-                Command = new RelayCommand(() => SkEditorAPI.Addons.DisableAddon(this))
-            }];
+                Symbol = Symbol.Attach
+            },
+            Command = new RelayCommand(() => SkEditorAPI.Addons.DisableAddon(this))
+        }];
+    }
+
+    public Version GetMinimalSkEditorVersion()
+    {
+        return new Version(2, 5, 0);
     }
 }

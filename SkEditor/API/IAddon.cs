@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using Symbol = FluentIcons.Common.Symbol;
@@ -15,6 +16,11 @@ public interface IAddon
     /// The name of the addon.
     /// </summary>
     public string Name { get; }
+    
+    /// <summary>
+    /// Get the unique identifier of the addon. Must be alphanumeric!
+    /// </summary>
+    public string Identifier { get; }
     
     /// <summary>
     /// The version of the addon. Should follow <see href="https://semver.org/">Semantic Versioning,</see>
@@ -59,4 +65,17 @@ public interface IAddon
     /// SkEditor will do that for you!
     /// </summary>
     public virtual void OnDisable() { }
+    
+    /// <summary>
+    /// Get the minimal version of SkEditor that is required for this addon.
+    /// </summary>
+    /// <returns>The minimal version of SkEditor that is required for this addon.</returns>
+    public Version GetMinimalSkEditorVersion();
+    
+    /// <summary>
+    /// Get the maximal version of SkEditor that is required for this addon.
+    /// If null, there is no maximal version.
+    /// </summary>
+    /// <returns>The maximal version of SkEditor that is required for this addon, or null if there is no maximal version.</returns>
+    public virtual Version? GetMaximalSkEditorVersion() => null;
 }

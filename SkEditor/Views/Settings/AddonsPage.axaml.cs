@@ -6,6 +6,7 @@ using SkEditor.ViewModels;
 using System.Collections.Generic;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Controls.Addons;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views.Settings;
 public partial class AddonsPage : UserControl
@@ -20,13 +21,13 @@ public partial class AddonsPage : UserControl
         DataContext = new SettingsViewModel();
     }
 
-    private void LoadAddons()
+    public void LoadAddons()
     {
-        List<IAddon> addons = AddonLoader.AllAddons;
-        addons.ForEach(addon =>
-        {
-            AddonsStackPanel.Children.Add(new AddonEntryControl(addon));
-        });
+        AddonsStackPanel.Children.Clear();
+        foreach (var metadata in AddonLoader.Addons)
+        { 
+            AddonsStackPanel.Children.Add(new AddonEntryControl(metadata, this));
+        }
     }
 
     private void AssignCommands()

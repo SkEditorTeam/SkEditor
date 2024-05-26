@@ -12,6 +12,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views;
 public partial class MarketplaceWindow : AppWindow
@@ -72,7 +73,7 @@ public partial class MarketplaceWindow : AppWindow
 
         if (item is AddonItem addonItem)
         {
-            IAddon addon = AddonLoader.EnabledAddons.FirstOrDefault(x => x.Name.Equals(item.ItemName));
+            IAddon addon = SkEditorAPI.Addons.GetAddon(addonItem.ItemFileUrl);
             string name = Path.GetFileNameWithoutExtension(addonItem.ItemFileUrl);
 
             if (addon != null || ApiVault.Get().GetAppConfig().AddonsToDisable.Contains(name))

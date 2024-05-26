@@ -46,8 +46,6 @@ public interface ISkEditorAPI
     public void Log(string message, bool bottomBarInfo = false);
     public void SendToBottomBar(object message);
 
-    public bool IsAddonEnabled(string addonName);
-
     public void SaveData();
 
     public List<TextEditor> GetOpenedEditors();

@@ -19,7 +19,8 @@ public interface IAddons
     /// Enables the specified addon.
     /// </summary>
     /// <param name="addon">The addon to enable.</param>
-    public void EnableAddon(IAddon addon);
+    /// <returns>True if the addon was enabled successfully, false otherwise.</returns>
+    public bool EnableAddon(IAddon addon);
 
     /// <summary>
     /// Disables the specified addon.

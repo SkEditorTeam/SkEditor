@@ -11,6 +11,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views.Marketplace.Types;
 
@@ -79,9 +80,9 @@ public class ZipAddonItem : AddonItem
             var packagesFolder = Path.Combine(addonDirectory, "Packages");
             if (Directory.Exists(packagesFolder))
             {
-                AddonLoader.LoadAddonsFromFolder(packagesFolder);
+                //AddonLoader.LoadAddonsFromFolder(packagesFolder);
             }
-            List<Assembly> assemblies = AddonLoader.LoadAddonsFromFolder(addonDirectory);
+            /*List<Assembly> assemblies = AddonLoader.LoadAddonsFromFolder(addonDirectory);
 
             assemblies.ForEach(assembly =>
             {
@@ -95,7 +96,7 @@ public class ZipAddonItem : AddonItem
                 {
                     Log.Error($"Failed to enable addon '{ItemName}'!");
                 }
-            });
+            });*/
         });
     }
 

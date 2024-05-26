@@ -15,15 +15,8 @@ public static class Registries
     
     public static void Unload(IAddon addon)
     {
-        var fields = typeof(Registries).GetFields();
-        foreach (var field in fields)
-        {
-            if (field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(Registry<>))
-            {
-                var registry = field.GetValue(null);
-                var method = registry.GetType().GetMethod("Unload");
-                method.Invoke(registry, [addon]);
-            }
-        }
+        Connections.Unload(addon);
+        BottomIcons.Unload(addon);
+        SidebarPanels.Unload(addon);
     }
 }

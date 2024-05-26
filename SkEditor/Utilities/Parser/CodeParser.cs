@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Parser;
 
