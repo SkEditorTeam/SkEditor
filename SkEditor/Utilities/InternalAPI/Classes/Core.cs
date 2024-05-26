@@ -16,7 +16,8 @@ public class Core : ICore
 
     public Version GetAppVersion()
     {
-        return Assembly.GetExecutingAssembly().GetName().Version;
+        var version = Assembly.GetExecutingAssembly().GetName().Version;
+        return new Version(version.Major, version.Minor, version.Build);
     }
 
     public string[] GetStartupArguments()
