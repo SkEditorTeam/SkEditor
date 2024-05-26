@@ -22,6 +22,7 @@
 	<system:String x:Key="MenuHeaderTools">Tools</system:String>
 	<system:String x:Key="MenuHeaderOther">Other</system:String>
 	<system:String x:Key="MenuHeaderAddons">Addons</system:String>
+	<system:String x:Key="MenuHeaderManageAddons">Manage Addons</system:String>
 
 	<!-- File Menu -->
 	<system:String x:Key="MenuHeaderNew">New</system:String>

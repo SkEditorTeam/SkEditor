@@ -12,7 +12,9 @@ using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using System;
 using System.Collections;
+using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Views.Settings;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -109,6 +111,26 @@ public partial class MainMenuControl : UserControl
 
             AddonsMenuItem.Items.Add(menuItem);
         }
+
+        AddonsMenuItem.Items.Add(new Separator());
+        AddonsMenuItem.Items.Add(new MenuItem()
+        {
+            Header = Translation.Get("MenuHeaderManageAddons"),
+            Command = new RelayCommand(() =>
+            {
+                new SettingsWindow().ShowDialog(MainWindow.Instance);
+                SettingsWindow.NavigateToPage(typeof(AddonsPage));
+            }),
+            Icon = new IconSourceElement()
+            {
+                IconSource = new SymbolIconSource()
+                {
+                    Symbol = Symbol.Manage, FontSize = 20
+                },
+                Width = 20,
+                Height = 20
+            }
+        });
 
         AddonsMenuItem.IsVisible = hasAnyMenu;
     }
