@@ -106,9 +106,7 @@ public class SkEditorSelfAddon : IAddon
 
         SkEditorAPI.Events.OnPostEnable += (_, args) =>
         {
-            SkEditorAPI.Logs.Debug("Finished enabling addons:");
-            foreach (var addon in SkEditorAPI.Addons.GetAddons())
-                SkEditorAPI.Logs.Debug($" - {addon.Name} ({addon.Version}) [{addon.Identifier}], state: {SkEditorAPI.Addons.GetAddonState(addon)}");
+            
         };
 
         #endregion

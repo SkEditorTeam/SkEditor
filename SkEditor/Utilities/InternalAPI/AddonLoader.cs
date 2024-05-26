@@ -212,7 +212,6 @@ public static class AddonLoader
     public static void DisableAddon(IAddon addon)
     {
         var meta = Addons.First(m => m.Addon == addon);
-        SkEditorAPI.Logs.Debug("Disabling addon: " + addon.Name + " (state: " + meta.State + ")");
         if (meta.State == IAddons.AddonState.Disabled) 
             return;
 
