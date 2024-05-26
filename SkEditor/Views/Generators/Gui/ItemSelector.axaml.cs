@@ -123,7 +123,7 @@ public partial class ItemSelector : AppWindow
             Content = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
-                Spacing = 5,
+                Spacing = 10,
                 Children =
                 {
                     new Image
