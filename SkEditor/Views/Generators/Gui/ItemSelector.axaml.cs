@@ -95,10 +95,7 @@ public partial class ItemSelector : AppWindow
         }
 
         _itemBindings.FilteredItems = new ObservableCollection<ComboBoxItem>(
-            filteredItems.Select(x => new ComboBoxItem { 
-                Content = x.DisplayName, 
-                Tag = x.Name 
-            })
+            filteredItems.Select(CreateItem)
         );
 
         ItemListBox.SelectedIndex = 0;
@@ -115,30 +112,36 @@ public partial class ItemSelector : AppWindow
         foreach (Item item in items)
         {
             _itemBindings.Items.Add(item);
-            ComboBoxItem comboBoxItem = new()
-            {
-                Content = new StackPanel()
-                {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 5,
-                    Children =
-                    {
-                        new Image
-                        {
-                            Source = await item.GetIcon(),
-                            Width = 16,
-                            Height = 16,
-                        },
-                        new TextBlock
-                        {
-                            Text = item.DisplayName,
-                        }
-                    }
-                },
-                Tag = item.Name,
-            };
-            _itemBindings.FilteredItems.Add(comboBoxItem);
+            _itemBindings.FilteredItems.Add(CreateItem(item));
         }
+    }
+
+    private ComboBoxItem CreateItem(Item item)
+    {
+        return new ComboBoxItem
+        {
+            Content = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Children =
+                {
+                    new Image
+                    {
+                        Source = item.Icon,
+                        Width = 24,
+                        Height = 24,
+                    },
+                    new TextBlock
+                    {
+                        Text = item.DisplayName,
+                        VerticalAlignment = VerticalAlignment.Center,
+                    }
+                }
+            },
+            Tag = item.Name,
+        };
+    
     }
 }
 
