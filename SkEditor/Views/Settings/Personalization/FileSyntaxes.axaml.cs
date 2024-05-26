@@ -27,7 +27,7 @@ public partial class FileSyntaxes : UserControl
 
         foreach (string langName in availableLangNames)
         {
-            var selectedSyntax = ApiVault.Get().GetAppConfig().FileSyntaxes.FirstOrDefault(x => x.Key.Equals(langName)).Value ?? null;
+            var selectedSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes.FirstOrDefault(x => x.Key.Equals(langName)).Value ?? null;
 
             var expander = GenerateExpander(langName, selectedSyntax);
             SyntaxesStackPanel.Children.Add(expander);
@@ -63,7 +63,7 @@ public partial class FileSyntaxes : UserControl
 
         comboBox.SelectionChanged += (_, _) =>
         {
-            var config = ApiVault.Get().GetAppConfig();
+            var config = SkEditorAPI.Core.GetAppConfig();
             var selectedFullIdName = (comboBox.SelectedValue as ComboBoxItem).Tag.ToString();
             var selectedFileSyntax = SyntaxLoader.FileSyntaxes.FirstOrDefault(x => x.Config.FullIdName.Equals(selectedFullIdName));
 

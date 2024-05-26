@@ -125,7 +125,7 @@ public class FileHandler
 
     private static void AddChangeChecker(string path, TabViewItem tabItem)
     {
-        if (!ApiVault.Get().GetAppConfig().CheckForChanges || tabItem.Content is not TextEditor) return;
+        if (!SkEditorAPI.Core.GetAppConfig().CheckForChanges || tabItem.Content is not TextEditor) return;
 
         FileSystemWatcher watcher = new(Path.GetDirectoryName(path), Path.GetFileName(path));
         watcher.Changed += (sender, e) => ChangeChecker.HasChangedDictionary[path] = true;

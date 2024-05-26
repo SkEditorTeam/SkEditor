@@ -37,7 +37,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
         // First build the URI
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "search/";
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "search/";
         var queryElements = new List<string>();
 
         if (!string.IsNullOrEmpty(searchData.Query))
@@ -82,7 +82,7 @@ public class SkUnityProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkUnityAPIKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey);
     }
 
     public static IDocProvider Get() => (SkUnityProvider)IDocProvider.Providers[DocProvider.skUnity];
@@ -92,7 +92,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
         var elementId = entry.Id;
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getExamplesByID/" + elementId;
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "getExamplesByID/" + elementId;
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -139,7 +139,7 @@ public class SkUnityProvider : IDocProvider
         if (CachedAddons.Count > 0)
             return CachedAddons.Keys.ToList();
 
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getAllAddons/";
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "getAllAddons/";
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;

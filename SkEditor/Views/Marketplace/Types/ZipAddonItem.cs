@@ -104,8 +104,8 @@ public class ZipAddonItem : AddonItem
     {
         string fileName = Path.GetFileNameWithoutExtension(ItemFileUrl.Split('/').Last());
 
-        ApiVault.Get().GetAppConfig().AddonsToDelete.Add(Path.GetFileNameWithoutExtension(fileName));
-        ApiVault.Get().GetAppConfig().Save();
+        SkEditorAPI.Core.GetAppConfig().AddonsToDelete.Add(Path.GetFileNameWithoutExtension(fileName));
+        SkEditorAPI.Core.GetAppConfig().Save();
 
         MarketplaceWindow.Instance.ItemView.UninstallButton.IsEnabled = false;
 
@@ -116,8 +116,8 @@ public class ZipAddonItem : AddonItem
     public new async void Update()
     {
         string fileName = "updated-" + ItemFileUrl.Split('/').Last();
-        ApiVault.Get().GetAppConfig().AddonsToUpdate.Add(fileName);
-        ApiVault.Get().GetAppConfig().Save();
+        SkEditorAPI.Core.GetAppConfig().AddonsToUpdate.Add(fileName);
+        SkEditorAPI.Core.GetAppConfig().Save();
         MarketplaceWindow.Instance.ItemView.UpdateButton.IsEnabled = false;
 
         string filePath = Path.Combine(AppConfig.AppDataFolderPath, "Addons", fileName);
@@ -143,8 +143,8 @@ public class ZipAddonItem : AddonItem
     public new void Disable()
     {
         string fileName = ItemFileUrl.Split('/').Last().Replace(".zip", "");
-        ApiVault.Get().GetAppConfig().AddonsToDisable.Add(fileName);
-        ApiVault.Get().GetAppConfig().Save();
+        SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Add(fileName);
+        SkEditorAPI.Core.GetAppConfig().Save();
         MarketplaceWindow.Instance.ItemView.DisableButton.IsVisible = false;
         MarketplaceWindow.Instance.ItemView.EnableButton.IsVisible = true;
     }
@@ -152,8 +152,8 @@ public class ZipAddonItem : AddonItem
     public new void Enable()
     {
         string fileName = ItemFileUrl.Split('/').Last().Replace(".zip", "");
-        ApiVault.Get().GetAppConfig().AddonsToDisable.Remove(fileName);
-        ApiVault.Get().GetAppConfig().Save();
+        SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Remove(fileName);
+        SkEditorAPI.Core.GetAppConfig().Save();
         MarketplaceWindow.Instance.ItemView.DisableButton.IsVisible = true;
         MarketplaceWindow.Instance.ItemView.EnableButton.IsVisible = false;
 

@@ -54,7 +54,7 @@ public class ThemeEditor
         if (!File.Exists(Path.Combine(ThemeFolderPath, "Default.json"))) SaveTheme(GetDefaultTheme());
 
         string[] files = Directory.GetFiles(ThemeFolderPath);
-        string currentTheme = ApiVault.Get().GetAppConfig().CurrentTheme;
+        string currentTheme = SkEditorAPI.Core.GetAppConfig().CurrentTheme;
 
         files.Where(x => Path.GetExtension(x) == ".json").ToList().ForEach(x => LoadTheme(x));
 
@@ -121,7 +121,7 @@ public class ThemeEditor
     public static async Task SetTheme(Theme theme)
     {
         CurrentTheme = theme;
-        ApiVault.Get().GetAppConfig().CurrentTheme = theme.FileName;
+        SkEditorAPI.Core.GetAppConfig().CurrentTheme = theme.FileName;
 
         await ApplyTheme();
     }

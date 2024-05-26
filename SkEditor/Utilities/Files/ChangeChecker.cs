@@ -20,7 +20,7 @@ public class ChangeChecker
 
     public async static void Check()
     {
-        if (!ApiVault.Get().GetAppConfig().CheckForChanges) return;
+        if (!SkEditorAPI.Core.GetAppConfig().CheckForChanges) return;
 
         try
         {

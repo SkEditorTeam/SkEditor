@@ -90,7 +90,7 @@ public partial class CodeParser : INotifyPropertyChanged
             Sections.Add(new CodeSection(this, lastSectionLine, linesToParse));
         }
 
-        if (ApiVault.Get().GetAppConfig().EnableFolding) FoldingCreator.CreateFoldings(Editor, Sections);
+        if (SkEditorAPI.Core.GetAppConfig().EnableFolding) FoldingCreator.CreateFoldings(Editor, Sections);
 
         ParserPanel.Refresh(Sections);
 

@@ -8,10 +8,10 @@ public static class Tutorial
 {
     public async static void ShowTutorial()
     {
-        if (!ApiVault.Get().GetAppConfig().FirstTime) return;
+        if (!SkEditorAPI.Core.GetAppConfig().FirstTime) return;
 
-        ApiVault.Get().GetAppConfig().FirstTime = false;
-        ApiVault.Get().GetAppConfig().Save();
+        SkEditorAPI.Core.GetAppConfig().FirstTime = false;
+        SkEditorAPI.Core.GetAppConfig().Save();
 
         Application.Current.TryGetResource("SkEditorIcon", Avalonia.Styling.ThemeVariant.Default, out object icon);
         PathIconSource iconSource = icon as PathIconSource;

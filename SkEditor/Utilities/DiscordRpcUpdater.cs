@@ -10,7 +10,7 @@ public static class DiscordRpcUpdater
 
     public static void Initialize()
     {
-        if (!ApiVault.Get().GetAppConfig().IsDiscordRpcEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled) return;
 
         _client = new DiscordRpcClient(ApplicationId);
         _client.Initialize();

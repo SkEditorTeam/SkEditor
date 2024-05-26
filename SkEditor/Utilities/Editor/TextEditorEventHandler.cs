@@ -93,13 +93,13 @@ public partial class TextEditorEventHandler
         if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem tab) return;
         if (tab.Tag == null) return;
 
-        if (ApiVault.Get().GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(tab.Tag.ToString()))
+        if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(tab.Tag.ToString()))
         {
             await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
             return;
         }
 
-        if (ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
@@ -117,7 +117,7 @@ public partial class TextEditorEventHandler
 
     public static void DoAutoIndent(object? sender, TextInputEventArgs e)
     {
-        if (!ApiVault.Get().GetAppConfig().IsAutoIndentEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsAutoIndentEnabled) return;
         if (!string.IsNullOrWhiteSpace(e.Text)) return;
 
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
@@ -139,7 +139,7 @@ public partial class TextEditorEventHandler
 
     public static void DoAutoPairing(object? sender, TextInputEventArgs e)
     {
-        if (!ApiVault.Get().GetAppConfig().IsAutoPairingEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsAutoPairingEnabled) return;
 
         char symbol = e.Text[0];
         if (!_symbolPairs.TryGetValue(symbol, out char value)) return;
@@ -223,7 +223,7 @@ public partial class TextEditorEventHandler
 
     public static void OnTextPasting(object? sender, TextEventArgs e)
     {
-        if (!ApiVault.Get().GetAppConfig().IsPasteIndentationEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
 
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
@@ -266,9 +266,9 @@ public partial class TextEditorEventHandler
             if (paste.StartsWith("-enableSkEditorOption:"))
             {
                 string option = paste.Split(':')[1].Trim();
-                PropertyInfo? prop = ApiVault.Get().GetAppConfig().GetType().GetProperty(option);
+                PropertyInfo? prop = SkEditorAPI.Core.GetAppConfig().GetType().GetProperty(option);
                 if (prop.PropertyType != typeof(bool)) continue;
-                prop?.SetValue(ApiVault.Get().GetAppConfig(), true);
+                prop?.SetValue(SkEditorAPI.Core.GetAppConfig(), true);
 
                 sb.AppendLine($"- Enabled {option}");
             }

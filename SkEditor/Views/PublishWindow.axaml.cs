@@ -26,7 +26,7 @@ public partial class PublishWindow : AppWindow
 
         CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
 
-        WebsiteComboBox.SelectedIndex = ApiVault.Get().GetAppConfig().LastUsedPublishService switch
+        WebsiteComboBox.SelectedIndex = SkEditorAPI.Core.GetAppConfig().LastUsedPublishService switch
         {
             "Pastebin" => 0,
             "code.skript.pl" => 1,
@@ -41,7 +41,7 @@ public partial class PublishWindow : AppWindow
 
     private void UpdateServiceInfo()
     {
-        AppConfig appConfig = ApiVault.Get().GetAppConfig();
+        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
         ApiKeyTextBox.Text = CurrentService switch
         {
             "Pastebin" => appConfig.PastebinApiKey,
@@ -60,13 +60,13 @@ public partial class PublishWindow : AppWindow
         switch (CurrentService)
         {
             case "Pastebin":
-                ApiVault.Get().GetAppConfig().PastebinApiKey = ApiKeyTextBox.Text;
+                SkEditorAPI.Core.GetAppConfig().PastebinApiKey = ApiKeyTextBox.Text;
                 break;
             case "code.skript.pl":
-                ApiVault.Get().GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
+                SkEditorAPI.Core.GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
                 break;
             case "skUnity Parser":
-                ApiVault.Get().GetAppConfig().SkUnityAPIKey = ApiKeyTextBox.Text;
+                SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey = ApiKeyTextBox.Text;
                 break;
         }
     }

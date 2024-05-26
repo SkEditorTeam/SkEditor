@@ -31,7 +31,7 @@ public partial class MainWindow : AppWindow
         AddEvents();
 
         Translation.LoadDefaultLanguage();
-        Translation.ChangeLanguage(ApiVault.Get().GetAppConfig().Language);
+        Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language);
 
         Instance = this;
     }
@@ -71,10 +71,10 @@ public partial class MainWindow : AppWindow
         if (AlreadyClosed) return;
 
         ThemeEditor.SaveAllThemes();
-        ApiVault.Get().GetAppConfig().Save();
+        SkEditorAPI.Core.GetAppConfig().Save();
 
         e.Cancel = true;
-        if (!ApiVault.Get().GetAppConfig().EnableSessionRestoring)
+        if (!SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
         {
             List<TabViewItem> unsavedFiles = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().Where(item => item.Header.ToString().EndsWith('*')).ToList();
             if (unsavedFiles.Count == 0)
@@ -106,7 +106,7 @@ public partial class MainWindow : AppWindow
         await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 
         bool sessionFilesAdded = false;
-        if (ApiVault.Get().GetAppConfig().EnableSessionRestoring) sessionFilesAdded = await SessionRestorer.RestoreSession();
+        if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring) sessionFilesAdded = await SessionRestorer.RestoreSession();
 
         string[] startupFiles = ApiVault.Get().GetStartupFiles();
         if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash() && !sessionFilesAdded) FileHandler.NewFile();
@@ -117,7 +117,7 @@ public partial class MainWindow : AppWindow
             SyntaxLoader.LoadAdvancedSyntaxes();
             DiscordRpcUpdater.Initialize();
 
-            if (ApiVault.Get().GetAppConfig().CheckForUpdates) UpdateChecker.Check();
+            if (SkEditorAPI.Core.GetAppConfig().CheckForUpdates) UpdateChecker.Check();
 
             Tutorial.ShowTutorial();
             BottomBar.UpdatePosition();

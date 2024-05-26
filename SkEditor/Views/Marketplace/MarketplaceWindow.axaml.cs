@@ -76,12 +76,12 @@ public partial class MarketplaceWindow : AppWindow
             IAddon addon = SkEditorAPI.Addons.GetAddon(addonItem.ItemFileUrl);
             string name = Path.GetFileNameWithoutExtension(addonItem.ItemFileUrl);
 
-            if (addon != null || ApiVault.Get().GetAppConfig().AddonsToDisable.Contains(name))
+            if (addon != null || SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Contains(name))
             {
                 shouldShowUninstallButton = true;
                 if (addon != null) ItemView.UpdateButton.IsVisible = !addon.Version.Equals(item.ItemVersion);
-                ItemView.UninstallButton.IsEnabled = !ApiVault.Get().GetAppConfig().AddonsToDelete.Contains(name);
-                ItemView.DisableButton.IsVisible = !ApiVault.Get().GetAppConfig().AddonsToDisable.Contains(name);
+                ItemView.UninstallButton.IsEnabled = !SkEditorAPI.Core.GetAppConfig().AddonsToDelete.Contains(name);
+                ItemView.DisableButton.IsVisible = !SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Contains(name);
                 ItemView.EnableButton.IsVisible = !ItemView.DisableButton.IsVisible;
             }
             else

@@ -16,7 +16,7 @@ public partial class GeneralPage : UserControl
     {
         InitializeComponent();
 
-        DataContext = ApiVault.Get().GetAppConfig();
+        DataContext = SkEditorAPI.Core.GetAppConfig();
 
         AssignCommands();
         LoadLanguages();
@@ -30,18 +30,18 @@ public partial class GeneralPage : UserControl
         {
             LanguageComboBox.Items.Add(Path.GetFileNameWithoutExtension(file));
         }
-        LanguageComboBox.SelectedItem = ApiVault.Get().GetAppConfig().Language;
+        LanguageComboBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Language;
         LanguageComboBox.SelectionChanged += (s, e) =>
         {
             string language = LanguageComboBox.SelectedItem.ToString();
-            ApiVault.Get().GetAppConfig().Language = language;
+            SkEditorAPI.Core.GetAppConfig().Language = language;
             Dispatcher.UIThread.InvokeAsync(() => Translation.ChangeLanguage(language));
         };
     }
 
     private void LoadIndentation()
     {
-        var appConfig = ApiVault.Get().GetAppConfig();
+        var appConfig = SkEditorAPI.Core.GetAppConfig();
         var tag = appConfig.UseSpacesInsteadOfTabs ? "spaces" : "tabs";
         var amount = appConfig.TabSize;
 
@@ -72,13 +72,13 @@ public partial class GeneralPage : UserControl
 
         IndentationAmountComboBox.SelectionChanged += (s, e) =>
         {
-            var appConfig = ApiVault.Get().GetAppConfig();
+            var appConfig = SkEditorAPI.Core.GetAppConfig();
             appConfig.TabSize = int.Parse((IndentationAmountComboBox.SelectedItem as ComboBoxItem).Tag.ToString());
             ApiVault.Get().GetOpenedEditors().ForEach(e => e.Options.IndentationSize = appConfig.TabSize);
         };
         IndentationTypeComboBox.SelectionChanged += (s, e) =>
         {
-            var appConfig = ApiVault.Get().GetAppConfig();
+            var appConfig = SkEditorAPI.Core.GetAppConfig();
             appConfig.UseSpacesInsteadOfTabs = (IndentationTypeComboBox.SelectedItem as ComboBoxItem).Tag.ToString() == "spaces";
             ApiVault.Get().GetOpenedEditors().ForEach(e => e.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
         };
@@ -88,7 +88,7 @@ public partial class GeneralPage : UserControl
     {
         ToggleSetting("IsDiscordRpcEnabled");
 
-        if (ApiVault.Get().GetAppConfig().IsDiscordRpcEnabled) DiscordRpcUpdater.Initialize();
+        if (SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled) DiscordRpcUpdater.Initialize();
         else DiscordRpcUpdater.Uninitialize();
     }
 
@@ -102,12 +102,12 @@ public partial class GeneralPage : UserControl
             .Where(editor => editor != null)
             .ToList();
 
-        textEditors.ForEach(e => e.WordWrap = ApiVault.Get().GetAppConfig().IsWrappingEnabled);
+        textEditors.ForEach(e => e.WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled);
     }
 
     private static void ToggleSetting(string propertyName)
     {
-        var appConfig = ApiVault.Get().GetAppConfig();
+        var appConfig = SkEditorAPI.Core.GetAppConfig();
         var property = appConfig.GetType().GetProperty(propertyName);
 
         if (property == null || property.PropertyType != typeof(bool)) return;

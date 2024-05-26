@@ -38,7 +38,7 @@ public partial class PersonalizationPage : UserControl
         if (result is null)
             return;
 
-        ApiVault.Get().GetAppConfig().Font = result;
+        SkEditorAPI.Core.GetAppConfig().Font = result;
         CurrentFont.Description = Translation.Get("SettingsPersonalizationFontDescription").Replace("{0}", result);
 
         List<TextEditor> textEditors = ApiVault.Get().GetTabView().TabItems

@@ -82,7 +82,7 @@ public class FileBuilder
             else
             {
                 var ext = Path.GetExtension(path);
-                if (ApiVault.Get().GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
+                if (SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
                 {
                     var pref = value;
                     if (pref == "SkEditor")
@@ -99,7 +99,7 @@ public class FileBuilder
                         }
                         else
                         {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
+                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
                         }
                     }
                 }
@@ -114,13 +114,13 @@ public class FileBuilder
                         fileType = selected.Handle(path);
                         if (window.RememberCheck.IsChecked == true)
                         {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext] = selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
+                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations[ext] = selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
                         }
                         else
                         {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
+                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
                         }
-                        ApiVault.Get().GetAppConfig().Save();
+                        SkEditorAPI.Core.GetAppConfig().Save();
                     }
                 }
             }
@@ -131,7 +131,7 @@ public class FileBuilder
 
     private static async Task<FileTypes.FileType?> GetDefaultEditor(string path, string? content)
     {
-        AppConfig config = ApiVault.Get().GetAppConfig();
+        AppConfig config = SkEditorAPI.Core.GetAppConfig();
 
         string fileContent = null;
         if (!string.IsNullOrWhiteSpace(path))
@@ -194,11 +194,11 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-        if (!ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        if (!SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
             editor.TextChanged += (_, _) => ApiVault.Get().GetOpenedFile()?.Parser?.SetUnparsed();
         }
-        if (ApiVault.Get().GetAppConfig().EnableHexPreview)
+        if (SkEditorAPI.Core.GetAppConfig().EnableHexPreview)
         {
             editor.Document.TextChanged += (_, _) => TextEditorEventHandler.CheckForHex(editor);
         }
@@ -210,7 +210,7 @@ public class FileBuilder
         editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
         editor.TextArea.SelectionChanged += SelectionHandler.OnSelectionChanged;
 
-        if (ApiVault.Get().GetAppConfig().EnableAutoCompletionExperiment)
+        if (SkEditorAPI.Core.GetAppConfig().EnableAutoCompletionExperiment)
         {
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
@@ -234,8 +234,8 @@ public class FileBuilder
         editor.Options.AllowScrollBelowDocument = true;
         editor.Options.CutCopyWholeLine = true;
 
-        editor.Options.ConvertTabsToSpaces = ApiVault.Get().GetAppConfig().UseSpacesInsteadOfTabs;
-        editor.Options.IndentationSize = ApiVault.Get().GetAppConfig().TabSize;
+        editor.Options.ConvertTabsToSpaces = SkEditorAPI.Core.GetAppConfig().UseSpacesInsteadOfTabs;
+        editor.Options.IndentationSize = SkEditorAPI.Core.GetAppConfig().TabSize;
 
         return editor;
     }

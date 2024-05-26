@@ -17,11 +17,11 @@ public static class ChangelogChecker
 
     public async static void Check()
     {
-        string version = ApiVault.Get().GetAppConfig().Version;
+        string version = SkEditorAPI.Core.GetAppConfig().Version;
         if (version == GetVersion()) return;
 
         await ApiVault.Get().ShowAdvancedMessage($"v{GetVersion()} 🚀", string.Join('\n', changelog), primaryButton: false, closeButtonContent: "OK");
 
-        ApiVault.Get().GetAppConfig().Version = GetVersion();
+        SkEditorAPI.Core.GetAppConfig().Version = GetVersion();
     }
 }

@@ -62,9 +62,9 @@ public class SyntaxLoader
     public static void CheckConfiguredFileSyntaxes()
     {
         FileSyntaxes
-            .Where(s => !ApiVault.Get().GetAppConfig().FileSyntaxes.ContainsKey(s.Config.LanguageName))
+            .Where(s => !SkEditorAPI.Core.GetAppConfig().FileSyntaxes.ContainsKey(s.Config.LanguageName))
             .ToList()
-            .ForEach(s => ApiVault.Get().GetAppConfig().FileSyntaxes.Add(s.Config.LanguageName, s.Config.FullIdName));
+            .ForEach(s => SkEditorAPI.Core.GetAppConfig().FileSyntaxes.Add(s.Config.LanguageName, s.Config.FullIdName));
     }
 
     public static async Task<FileSyntax> LoadSyntax(string folder)
@@ -83,7 +83,7 @@ public class SyntaxLoader
             if (SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? value))
                 value.Remove(fileSyntax);
 
-            ApiVault.Get().GetAppConfig().FileSyntaxes.Remove(fileSyntax.Config.LanguageName);
+            SkEditorAPI.Core.GetAppConfig().FileSyntaxes.Remove(fileSyntax.Config.LanguageName);
         }
 
         return true;
@@ -91,7 +91,7 @@ public class SyntaxLoader
 
     public static void SelectSyntax(FileSyntax syntax, bool refresh = true)
     {
-        ApiVault.Get().GetAppConfig().FileSyntaxes[syntax.Config.LanguageName] = syntax.Config.FullIdName;
+        SkEditorAPI.Core.GetAppConfig().FileSyntaxes[syntax.Config.LanguageName] = syntax.Config.FullIdName;
         if (refresh) RefreshSyntaxAsync();
     }
 
@@ -102,7 +102,7 @@ public class SyntaxLoader
             await SetupDefaultSyntax();
         }
 
-        ApiVault.Get().GetAppConfig().FileSyntaxes.Clear();
+        SkEditorAPI.Core.GetAppConfig().FileSyntaxes.Clear();
         CheckConfiguredFileSyntaxes();
     }
 
@@ -110,7 +110,7 @@ public class SyntaxLoader
     {
         if (FileSyntaxes.Count == 0) _ = SetupDefaultSyntax();
 
-        var configuredSyntax = ApiVault.Get().GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
+        var configuredSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
         return FileSyntaxes.FirstOrDefault(x => configuredSyntax == null
             ? x.Config.LanguageName == language
             : x.Config.FullIdName == configuredSyntax) ?? FileSyntaxes[0];
@@ -149,9 +149,9 @@ public class SyntaxLoader
         }
         catch
         {
-            await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Error"),
+            await SkEditorAPI.Windows.ShowDialog(Translation.Get("Error"),
                 Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
-                primaryButton: false, closeButtonContent: "Ok");
+                primaryButtonText: "Ok");
         }
     }
 
@@ -180,7 +180,7 @@ public class SyntaxLoader
         }
 
         var syntax = fileSyntax.FirstOrDefault(x =>
-            x.Config.FullIdName == ApiVault.Get().GetAppConfig().FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
+            x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
             && x.Config.Extensions.Contains(extension));
         if (syntax == null && fileSyntax.Count > 0)
         {
@@ -213,7 +213,7 @@ public class SyntaxLoader
             }
 
             var syntax = SortedFileSyntaxes[ext].FirstOrDefault(x =>
-                x.Config.FullIdName == ApiVault.Get().GetAppConfig().FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
+                x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
                 && x.Config.Extensions.Contains(ext));
             if (syntax == null && SortedFileSyntaxes[ext].Count > 0)
             {

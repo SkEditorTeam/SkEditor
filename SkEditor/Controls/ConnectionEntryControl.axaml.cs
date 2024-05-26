@@ -30,10 +30,10 @@ public partial class ConnectionEntryControl : UserControl
         }
 
         var key = connectionData.OptionKey;
-        ApiKeyTextBox.Text = ApiVault.Get().GetAppConfig().GetOptionValue<string>(key);
+        ApiKeyTextBox.Text = SkEditorAPI.Core.GetAppConfig().GetOptionValue<string>(key);
         ApiKeyTextBox.TextChanged += (_, _) =>
         {
-            ApiVault.Get().GetAppConfig().SetOptionValue(key, ApiKeyTextBox.Text);
+            SkEditorAPI.Core.GetAppConfig().SetOptionValue(key, ApiKeyTextBox.Text);
         };
 
         Expander.IconSource = connectionData.IconSource;

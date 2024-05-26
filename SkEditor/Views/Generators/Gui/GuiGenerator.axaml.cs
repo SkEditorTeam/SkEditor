@@ -87,7 +87,7 @@ public partial class GuiGenerator : AppWindow
 
         PreviewButton.Command = new RelayCommand(Preview.Show);
         GenerateButton.Command = new RelayCommand(Generation.Generate);
-        UseSkriptGuiCheckBox.IsCheckedChanged += (_, _) => ApiVault.Get().GetAppConfig().UseSkriptGui = UseSkriptGuiCheckBox.IsChecked == true;
+        UseSkriptGuiCheckBox.IsCheckedChanged += (_, _) => SkEditorAPI.Core.GetAppConfig().UseSkriptGui = UseSkriptGuiCheckBox.IsChecked == true;
     }
 
     private void UpdateRows()

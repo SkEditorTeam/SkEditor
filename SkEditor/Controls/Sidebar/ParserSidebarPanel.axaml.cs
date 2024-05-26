@@ -13,7 +13,7 @@ namespace SkEditor.Controls.Sidebar;
 
 public partial class ParserSidebarPanel : UserControl
 {
-    public static bool CodeParserEnabled => ApiVault.Get().GetAppConfig().EnableCodeParser;
+    public static bool CodeParserEnabled => SkEditorAPI.Core.GetAppConfig().EnableCodeParser;
     public ObservableCollection<CodeSection> Sections { get; set; } = [];
 
     public void Refresh(List<CodeSection> sections)
@@ -51,7 +51,7 @@ public partial class ParserSidebarPanel : UserControl
         ParserDisabled.IsVisible = !CodeParserEnabled;
         ScrollViewer.IsVisible = CodeParserEnabled;
 
-        if (ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
             ParseButton.IsVisible = false;
         }
@@ -63,8 +63,8 @@ public partial class ParserSidebarPanel : UserControl
 
         EnableParser.Click += (_, _) =>
         {
-            ApiVault.Get().GetAppConfig().EnableCodeParser = true;
-            ApiVault.Get().GetAppConfig().Save();
+            SkEditorAPI.Core.GetAppConfig().EnableCodeParser = true;
+            SkEditorAPI.Core.GetAppConfig().Save();
 
             ParserDisabled.IsVisible = false;
             ScrollViewer.IsVisible = true;

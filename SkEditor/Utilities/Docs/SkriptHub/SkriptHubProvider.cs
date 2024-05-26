@@ -119,7 +119,7 @@ public class SkriptHubProvider : IDocProvider
         var uri = BaseUri + "syntaxexample/" + "?syntax=" + elementId;
 
         _client.DefaultRequestHeaders.Clear();
-        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
+        _client.DefaultRequestHeaders.Add("Authorization", "Token " + SkEditorAPI.Core.GetAppConfig().SkriptHubAPIKey);
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -164,7 +164,7 @@ public class SkriptHubProvider : IDocProvider
         var uri = BaseUri + "addon/";
 
         _client.DefaultRequestHeaders.Clear();
-        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
+        _client.DefaultRequestHeaders.Add("Authorization", "Token " + SkEditorAPI.Core.GetAppConfig().SkriptHubAPIKey);
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;

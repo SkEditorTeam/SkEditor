@@ -27,7 +27,7 @@ public class SkriptMCProvider : IDocProvider
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkriptMCAPIKey) + "&articleName=" + searchData.Query;
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMCAPIKey) + "&articleName=" + searchData.Query;
 
         uri += "&categorySlug=" + searchData.FilteredType.ToString().ToLower() + "s";
         uri += "&addonSlug=" + (string.IsNullOrEmpty(searchData.FilteredAddon) ? "Skript" : searchData.FilteredAddon);
@@ -77,7 +77,7 @@ public class SkriptMCProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkriptMCAPIKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkriptMCAPIKey);
     }
 
     public bool NeedsToLoadExamples => false;
