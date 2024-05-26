@@ -26,5 +26,4 @@ public interface ICore
     /// </summary>
     /// <returns>An array of the startup arguments.</returns>
     public string[] GetStartupArguments();
-
 }

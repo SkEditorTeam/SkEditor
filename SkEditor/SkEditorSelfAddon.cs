@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
@@ -137,7 +138,8 @@ public class SkEditorSelfAddon : IAddon
                 Icon = new SymbolIcon()
                 {
                     Symbol = Symbol.Attach
-                }
+                },
+                Command = new RelayCommand(() => SkEditorAPI.Addons.DisableAddon(this))
             }];
     }
 }

@@ -26,4 +26,9 @@ public static class SkEditorAPI
     /// </summary>
     public static readonly IEvents Events = new Events();
     
+    /// <summary>
+    /// Get the Addons API.
+    /// </summary>
+    public static readonly IAddons Addons = new Addons();
+    
 }

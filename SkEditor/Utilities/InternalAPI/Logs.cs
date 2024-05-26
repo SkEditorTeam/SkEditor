@@ -47,4 +47,28 @@ public class Logs : ILogs
     {
         Serilog.Log.Fatal(exception, FormatMessage(exception.Message));
     }
+    
+    public void AddonError(string message, bool informUser = false, IAddon? addon = null)
+    {
+        if (addon == null)
+        {
+            var frames = new StackTrace().GetFrames();
+            string? addonNamespace = null;
+            foreach (var frame in frames)
+            {
+                var method = frame.GetMethod();
+                if (method.ReflectedType?.Namespace?.StartsWith("SkEditor") != false)
+                    continue;
+
+                addonNamespace = method.ReflectedType?.Namespace;
+                break;
+            }
+            
+            addon = AddonLoader.GetAddonByNamespace(addonNamespace);
+        }
+        
+        Serilog.Log.Error(FormatMessage($"[{addon?.Name ?? "Addon not Found"}] {message}"));
+        if (informUser)
+            Dispatcher.UIThread.InvokeAsync(async () => await SkEditorAPI.Windows.ShowError(message));
+    }
 }

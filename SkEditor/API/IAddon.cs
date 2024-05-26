@@ -59,5 +59,4 @@ public interface IAddon
     /// SkEditor will do that for you!
     /// </summary>
     public virtual void OnDisable() { }
-    
 }
