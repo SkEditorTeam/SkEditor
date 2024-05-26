@@ -212,6 +212,7 @@ public partial class DocumentationControl : UserControl
     {
         LoadingInformation.IsVisible = false;
         OtherInformation.Text = "";
+        EntriesContainer.Children.Clear();
 
         if (!ValidateProvider(out var provider)) return;
 
@@ -251,7 +252,6 @@ public partial class DocumentationControl : UserControl
         try
         {
             LoadingInformation.IsVisible = true;
-            EntriesContainer.Children.Clear();
 
             var elements = await provider.Search(searchData);
             if (elements.Count > 100 && !await ConfirmLargeResults())
