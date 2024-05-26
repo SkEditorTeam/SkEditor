@@ -1,17 +1,23 @@
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
+using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
+using Microsoft.CodeAnalysis.Text;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
-using System.Linq;
 
 namespace SkEditor.Views.Generators.Gui;
 public partial class ExtendedItemSelector : AppWindow
 {
     private Item _item;
-
+ 
     public ExtendedItemSelector(Item item)
     {
         InitializeComponent();
@@ -23,11 +29,17 @@ public partial class ExtendedItemSelector : AppWindow
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;
 
+        AssignCommands(item);
+        SetContextMenu();
+    }
+
+    private void AssignCommands(Item item)
+    {
         ContinueButton.Command = new RelayCommand(() =>
         {
             _item.Lore = [];
-            LoreLineStackPanel.Children.Where(x => x is LoreLineEditor)
-                .Select(x => (LoreLineEditor)x)
+            LoreLineStackPanel.Children
+                .OfType<LoreLineEditor>()
                 .Where(x => !string.IsNullOrWhiteSpace(x.LineTextBox.Text))
                 .ToList()
                 .ForEach(x => _item.Lore.Add(x.LineTextBox.Text));
@@ -51,7 +63,7 @@ public partial class ExtendedItemSelector : AppWindow
             Close(_item);
         });
 
-        SetContextMenu();
+        ColoredTextHandler.SetupBox(DisplayNameTextBox);
     }
 
     private void CheckForEditing()
