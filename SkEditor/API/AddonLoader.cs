@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using Serilog;
+using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities;
 using SkEditor.Views;
 
@@ -219,5 +220,10 @@ public class AddonLoader
     public static IAddon? GetAddonByNamespace(string? addonNamespace)
     {
         return AllAddons.FirstOrDefault(addon => addon.GetType().Namespace == addonNamespace);
+    }
+
+    public static SkEditorSelfAddon GetCoreAddon()
+    {
+        return (SkEditorSelfAddon) EnabledAddons.First(addon => addon is SkEditorSelfAddon);
     }
 }

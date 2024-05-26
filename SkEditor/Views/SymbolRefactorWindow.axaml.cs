@@ -24,6 +24,6 @@ public partial class SymbolRefactorWindow : AppWindow
         Element.Rename(NameBox.Text);
         Close();
 
-        ApiVault.Get().GetMainWindow().SideBar.ParserPanel.Panel.ParseCurrentFile();
+        AddonLoader.GetCoreAddon().ParserPanel.Panel.ParseCurrentFile();
     }
 }

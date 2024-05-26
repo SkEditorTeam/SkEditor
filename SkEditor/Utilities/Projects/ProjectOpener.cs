@@ -14,7 +14,7 @@ namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
 {
     public static Folder? ProjectRootFolder = null;
-    private static ExplorerSidebarPanel Panel => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel;
+    private static ExplorerSidebarPanel Panel => AddonLoader.GetCoreAddon().ProjectPanel.Panel;
     public static TreeView FileTreeView => Panel.FileTreeView;
     private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
 

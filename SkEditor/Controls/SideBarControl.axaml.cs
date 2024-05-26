@@ -7,35 +7,36 @@ using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using SkEditor.API;
 
 namespace SkEditor.Controls;
 public partial class SideBarControl : UserControl
 {
-    private static readonly List<SidebarPanel> Panels = [];
     private SidebarPanel? _currentPanel;
 
-    public readonly ExplorerSidebarPanel.ExplorerPanel ProjectPanel = new();
-    public readonly ParserSidebarPanel.ParserPanel ParserPanel = new();
-
     public static long TransitionDuration = 100L;
-
-    public static void RegisterPanel(SidebarPanel panel)
-    {
-        Panels.Add(panel);
-    }
 
     public SideBarControl()
     {
         InitializeComponent();
-
-        RegisterPanel(ProjectPanel);
-        RegisterPanel(ParserPanel);
     }
 
-    public void LoadPanels()
+    public void ReloadPanels()
     {
-        foreach (SidebarPanel panel in Panels)
+        var panels = Registries.SidebarPanels;
+        if (!panels.Any())
+        {
+            IsVisible = false;
+            return;
+        }
+        
+        IsVisible = true;
+        Buttons.Children.Clear(); 
+        GridPanels.Children.RemoveRange(1, GridPanels.Children.Count - 1);
+        
+        foreach (var panel in panels)
         {
             var btn = CreatePanelButton(panel);
             var content = panel.Content;
@@ -77,7 +78,7 @@ public partial class SideBarControl : UserControl
                     _currentPanel.Content.Opacity = 0;
                     _currentPanel = null;
 
-                    await Task.Delay((int)TransitionDuration);
+                    await Task.Delay((int) TransitionDuration);
                 }
 
                 _currentPanel = panel;
@@ -86,8 +87,8 @@ public partial class SideBarControl : UserControl
                 _currentPanel.OnOpen();
             });
 
-            GridPanels.Children.Add(content);
             Grid.SetColumn(content, 1);
+            GridPanels.Children.Add(content);
 
             Buttons.Children.Add(btn);
         }
@@ -100,15 +101,15 @@ public partial class SideBarControl : UserControl
         IconSourceElement iconElement = new()
         {
             IconSource = icon,
-            Width = 24,
-            Height = 24,
+            Width = 36,
+            Height = 36,
             Foreground = new SolidColorBrush(Color.Parse("#bfffffff")),
         };
 
         Button button = new()
         {
-            Height = 36,
-            Width = 36,
+            Height = 42,
+            Width = 42,
             Classes = { "barButton" },
             Content = iconElement,
             IsEnabled = !panel.IsDisabled,

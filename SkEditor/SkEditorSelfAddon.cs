@@ -8,6 +8,7 @@ using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Controls.Sidebar;
 using SkEditor.ViewModels;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
@@ -20,6 +21,10 @@ public class SkEditorSelfAddon : IAddon
     public string Name => "SkEditorCore";
     public string Version => SettingsViewModel.Version;
     public string Description => "The core of SkEditor, providing the base functionalities.";
+    
+    public readonly ExplorerSidebarPanel.ExplorerPanel ProjectPanel = new();
+    public readonly ParserSidebarPanel.ParserPanel ParserPanel = new();
+    
 
     private ImageIconSource _iconSource = null!;
     public IconSource GetAddonIcon()
@@ -103,6 +108,13 @@ public class SkEditorSelfAddon : IAddon
         
         Registries.BottomIcons.Register(new RegistryKey(this, "TestIcon"), group);
         Registries.BottomIcons.Register(new RegistryKey(this, "AnotherIcon"), noIcon);
+
+        #endregion
+
+        #region Registries - Sidebar Panels
+        
+        Registries.SidebarPanels.Register(new RegistryKey(this, "ProjectPanel"), ProjectPanel);
+        Registries.SidebarPanels.Register(new RegistryKey(this, "ParserPanel"), ParserPanel);
 
         #endregion
 

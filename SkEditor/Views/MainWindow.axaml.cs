@@ -39,7 +39,7 @@ public partial class MainWindow : AppWindow
     {
         TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
         TabControl.TabCloseRequested += (sender, e) => FileCloser.CloseFile(e);
-        TabControl.SelectionChanged += (_, _) => SideBar.ParserPanel.Panel.ParseCurrentFile();
+        TabControl.SelectionChanged += (_, _) => AddonLoader.GetCoreAddon().ParserPanel.Panel.ParseCurrentFile();
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;
 
@@ -61,6 +61,7 @@ public partial class MainWindow : AppWindow
     {
         MainMenu.ReloadAddonsMenus();
         BottomBar.ReloadBottomIcons();
+        SideBar.ReloadPanels();
     }
 
     public bool AlreadyClosed { get; set; } = false;
@@ -99,8 +100,7 @@ public partial class MainWindow : AppWindow
     {
         AddonLoader.Load();
         Utilities.Files.FileTypes.RegisterDefaultAssociations();
-        SideBar.IsVisible = MainMenu.MenuItemOpenFolder.IsVisible = ApiVault.Get().GetAppConfig().EnableProjectsExperiment;
-        SideBar.LoadPanels();
+        SideBar.ReloadPanels();
 
         await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 

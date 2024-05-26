@@ -10,8 +10,7 @@ namespace SkEditor.Utilities.Parser;
 
 public partial class CodeParser : INotifyPropertyChanged
 {
-    public static ParserSidebarPanel ParserPanel =>
-        ApiVault.Get().GetMainWindow().SideBar.ParserPanel.Panel;
+    public static ParserSidebarPanel ParserPanel => AddonLoader.GetCoreAddon().ParserPanel.Panel;
 
     public CodeParser(TextEditor textEditor, bool parse = true)
     {
