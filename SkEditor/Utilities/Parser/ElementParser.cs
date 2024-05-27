@@ -15,6 +15,7 @@ public static class ElementParser
 
         var registeredElements = Registries.ParserElements.ToList();
         registeredElements.Sort((a, b) => a.Priority.CompareTo(b.Priority));
+        registeredElements.Reverse();
         var elements = registeredElements.Select(x => x.Type).ToList();
         
         foreach (var elementType in elements)
