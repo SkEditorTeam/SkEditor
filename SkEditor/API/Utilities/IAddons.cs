@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 
@@ -20,7 +21,7 @@ public interface IAddons
     /// </summary>
     /// <param name="addon">The addon to enable.</param>
     /// <returns>True if the addon was enabled successfully, false otherwise.</returns>
-    public bool EnableAddon(IAddon addon);
+    public Task<bool> EnableAddon(IAddon addon);
 
     /// <summary>
     /// Disables the specified addon.

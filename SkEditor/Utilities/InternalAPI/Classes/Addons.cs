@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.API;
@@ -11,7 +12,7 @@ public class Addons : IAddons
         return AddonLoader.GetAddonState(addon);
     }
 
-    public bool EnableAddon(IAddon addon)
+    public async Task<bool> EnableAddon(IAddon addon)
     {
         var state = GetAddonState(addon);
         if (state == IAddons.AddonState.Enabled)
@@ -23,7 +24,7 @@ public class Addons : IAddons
             return false;
         }
         
-        return AddonLoader.EnableAddon(addon);
+        return await AddonLoader.EnableAddon(addon);
     }
 
     public void DisableAddon(IAddon addon)

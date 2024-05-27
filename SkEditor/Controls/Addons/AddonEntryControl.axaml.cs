@@ -38,8 +38,9 @@ public partial class AddonEntryControl : UserControl
         SetStateButton(enabled);
         
         StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
-        StateButton.Click += (_, _) =>
+        StateButton.Click += async (_, _) =>
         {
+            StateButton.IsEnabled = false;
             var enabled = addonMeta.State == IAddons.AddonState.Enabled;
             if (enabled)
             {
@@ -48,7 +49,7 @@ public partial class AddonEntryControl : UserControl
             }
             else
             {
-                var success = SkEditorAPI.Addons.EnableAddon(addonMeta.Addon);
+                var success = await SkEditorAPI.Addons.EnableAddon(addonMeta.Addon);
                 SetStateButton(success);
             }
             
@@ -69,6 +70,7 @@ public partial class AddonEntryControl : UserControl
             StateButton.Content = "Enable";
             StateButton.Classes.Add("accent");
         }
+        StateButton.IsEnabled = true;
     }
     
     private static readonly Color ErrorColor = Colors.OrangeRed;
@@ -106,7 +108,8 @@ public partial class AddonEntryControl : UserControl
                 var textBlock = new TextBlock()
                 {
                     Text = "• " + error.Message,
-                    Foreground = new SolidColorBrush(error.IsCritical ? ErrorColor : WarningColor)
+                    Foreground = new SolidColorBrush(error.IsCritical ? ErrorColor : WarningColor),
+                    TextWrapping = TextWrapping.Wrap
                 };
                 panels.Children.Add(textBlock);
             }

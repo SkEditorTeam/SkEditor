@@ -78,4 +78,12 @@ public interface IAddon
     /// </summary>
     /// <returns>The maximal version of SkEditor that is required for this addon, or null if there is no maximal version.</returns>
     public virtual Version? GetMaximalSkEditorVersion() => null;
+    
+    /// <summary>
+    /// Get all the dependencies of this addon. Those can either be
+    /// <see cref="AddonDependency"/>s or <see cref="NuGetDependency"/>s.
+    /// </summary>
+    /// <returns>All the dependencies of this addon.</returns>
+    public virtual List<IDependency> GetDependencies() => [];
+    
 }

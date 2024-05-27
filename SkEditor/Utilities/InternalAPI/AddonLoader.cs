@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json.Linq;
 using SkEditor.API;
@@ -25,6 +26,7 @@ public static class AddonLoader
     public static void Load()
     {
         Directory.CreateDirectory(Path.Combine(AppConfig.AppDataFolderPath, "Addons"));
+        LocalDependencyManager.IndexDependencies();
         
         Addons.Clear();
         LoadMeta();
@@ -61,18 +63,27 @@ public static class AddonLoader
         RawMeta = JObject.Parse(File.ReadAllText(metaFile));
     }
 
-    private static void LoadAddonsFromFiles()
+    private static async void LoadAddonsFromFiles()
     {
         var folder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
             var dllFiles = Directory.GetFiles(folder, "*.dll", SearchOption.AllDirectories);
             
         foreach (var addonDllFile in dllFiles)
         {
-            var addon = Assembly.Load(File.ReadAllBytes(addonDllFile))
-                .GetTypes()
-                .Where(p => typeof(IAddon).IsAssignableFrom(p) && p is { IsClass: true, IsAbstract: false })
-                .Select(addonType => (IAddon) Activator.CreateInstance(addonType))
-                .ToList();
+            List<IAddon?> addon;
+            try
+            {
+                addon = Assembly.Load(await File.ReadAllBytesAsync(addonDllFile))
+                    .GetTypes()
+                    .Where(p => typeof(IAddon).IsAssignableFrom(p) && p is { IsClass: true, IsAbstract: false })
+                    .Select(addonType => (IAddon)Activator.CreateInstance(addonType))
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                SkEditorAPI.Logs.Warning($"Failed to load addon from \"{addonDllFile}\": {e.Message}, maybe it's the wrong architecture?");
+                continue;
+            }
 
             if (addon.Count == 0)
             {
@@ -117,7 +128,7 @@ public static class AddonLoader
             // Load the addon
             if (enabled)
             {
-                if (!CanEnable(addonMeta))
+                if (!await PreLoad(addonMeta))
                 {
                     SkEditorAPI.Logs.Debug("Can't enable addon: " + addon.Name + " (errors: " + addonMeta.Errors.Count + ")");
                     continue;
@@ -143,7 +154,7 @@ public static class AddonLoader
         (SkEditorAPI.Events as Events).PostEnable();
     }
 
-    public static void LoadAddon(Type addonClass)
+    public static async void LoadAddon(Type addonClass)
     {
         var addon = (IAddon) Activator.CreateInstance(addonClass);
         Addons.Add(new AddonMeta()
@@ -152,7 +163,7 @@ public static class AddonLoader
             Errors = []
         });
 
-        EnableAddon(addon);
+        await EnableAddon(addon);
     }
 
     private static bool CanEnable(AddonMeta addonMeta)
@@ -179,13 +190,30 @@ public static class AddonLoader
         return true;
     }
 
-    public static bool EnableAddon(IAddon addon)
+    /// <summary>
+    /// Preload an addon. This will make the desired addon ready to be enabled,
+    /// by checking if it can actually be enabled, and its dependencies.
+    /// </summary>
+    /// <param name="addonMeta">The addon to preload.</param>
+    /// <returns>True if the addon can be enabled, false otherwise.</returns>
+    public static async Task<bool> PreLoad(AddonMeta addonMeta)
+    {
+        if (!CanEnable(addonMeta))
+            return false;
+
+        if (!await LocalDependencyManager.CheckAddonDependencies(addonMeta))
+            return false;
+        
+        return true;
+    }
+
+    public static async Task<bool> EnableAddon(IAddon addon)
     {
         var meta = Addons.First(m => m.Addon == addon);
         if (meta.State == IAddons.AddonState.Enabled) 
             return true;
         
-        if (!CanEnable(meta))
+        if (!await PreLoad(meta))
             return false;
         
         try

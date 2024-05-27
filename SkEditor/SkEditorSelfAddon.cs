@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
@@ -8,6 +9,10 @@ using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using NuGet.Common;
+using NuGet.Protocol;
+using NuGet.Protocol.Core.Types;
+using NuGet.Versioning;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using SkEditor.ViewModels;
@@ -38,7 +43,7 @@ public class SkEditorSelfAddon : IAddon
         return _iconSource = new ImageIconSource() { Source = new SvgImage { Source = SvgSource.LoadFromStream(stream) } };
     }
 
-    public void OnEnable()
+    public async void OnEnable()
     {
         #region Registries - Connections
 
