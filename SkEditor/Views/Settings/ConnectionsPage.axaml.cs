@@ -19,8 +19,6 @@ public partial class ConnectionsPage : UserControl
 
         SetupEntry("skUnity", "https://skunity.com/dashboard/skunity-api", "SkUnityAPIKey",
             "Used as a documentation provider and a script host (via skUnity Parser)", "skUnity.svg");
-        SetupEntry("SkriptHub", "https://skripthub.net/dashboard/api/", "SkriptHubAPIKey",
-            "Used as a documentation provider", "SkriptHub.svg");
         SetupEntry("SkriptMC", "https://skript-mc.fr/developer/", "SkriptMCAPIKey",
             "Used as a documentation provider");
         SetupEntry("skript.pl", "https://code.skript.pl/api-key", "CodeSkriptPlApiKey",
