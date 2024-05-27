@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Serilog;
@@ -329,7 +330,10 @@ public partial class DocumentationControl : UserControl
     {
         foreach (var element in elements)
         {
-            EntriesContainer.Children.Add(new DocElementControl(element, this));
+            Task.Run(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                EntriesContainer.Children.Add(new DocElementControl(element, this));
+            }));
         }
 
         if (elements.Count == 0)
