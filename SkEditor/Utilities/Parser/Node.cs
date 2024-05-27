@@ -1,4 +1,7 @@
-﻿namespace SkEditor.Parser;
+﻿using System.Text.RegularExpressions;
+using SkEditor.Parser.Elements;
+
+namespace SkEditor.Parser;
 
 using System;
 using System.Collections.Generic;
@@ -9,6 +12,8 @@ public abstract class Node
     public string Key { get; set; }
     
     public int Indent { get; set; }
+    
+    public Element? Element { get; set; }
 
     protected Node(string key, int line)
     {
@@ -36,6 +41,13 @@ public class SimpleNode(string key, int line, string value) : Node(key, line)
     {
         Console.WriteLine($"{new string(' ', indent)}{Key}: {Value} [Simple, Line #{Line}]");
     }
+
+    public string[] GetAsArray()
+    {
+        var regex = new Regex(@"\s*,\s*|\s+(and|or)\s+");
+        return regex.Split(Value);
+    }
+
 }
 
 /// <summary>
@@ -58,6 +70,21 @@ public class SectionNode(string key, int line) : Node(key, line)
         {
             child.Print(indent + 2);
         }
+    }
+    
+    public Node? GetChild(string key)
+    {
+        return Children.Find(node => node.Key == key);
+    }
+    
+    public SimpleNode? GetSimpleChild(string key)
+    {
+        return GetChild(key) as SimpleNode;
+    }
+    
+    public SectionNode? GetSectionChild(string key)
+    {
+        return GetChild(key) as SectionNode;
     }
 }
 
