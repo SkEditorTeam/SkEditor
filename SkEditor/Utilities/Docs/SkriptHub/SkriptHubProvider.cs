@@ -118,9 +118,6 @@ public class SkriptHubProvider : IDocProvider
         var elementId = entry.Id;
         var uri = BaseUri + "syntaxexample/" + "?syntax=" + elementId;
 
-        _client.DefaultRequestHeaders.Clear();
-        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
-
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
         try
@@ -161,42 +158,18 @@ public class SkriptHubProvider : IDocProvider
     public bool HasAddons => false;
     public async Task<List<string>> GetAddons()
     {
-        var uri = BaseUri + "addon/";
-
-        _client.DefaultRequestHeaders.Clear();
-        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
-
-        var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
-        HttpResponseMessage response;
-        try
-        {
-            response = await _client.GetAsync(uri, cancellationToken.Token);
-        }
-        catch (Exception e)
-        {
-            ApiVault.Get().ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+        if (_cachedElements.Count > 0)
+            return _cachedElements.Select(e => e.Addon).Distinct().ToList();
+        
+        var cacheFile = Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json");
+        if (!File.Exists(cacheFile))
             return [];
-        }
-
-        if (!response.IsSuccessStatusCode)
-        {
-            try
-            {
-                ApiVault.Get().Log(await response.Content.ReadAsStringAsync(cancellationToken.Token));
-            }
-            catch (Exception e)
-            {
-                ApiVault.Get().Log(e.Message);
-            }
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
-            return [];
-        }
-
-        var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        var elements = JsonConvert.DeserializeObject<List<JObject>>(content);
-        return elements.Select(e => e["name"].ToString()).ToList();
+        
+        var content = await File.ReadAllTextAsync(cacheFile);
+        _cachedElements.AddRange(JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content));
+        SaveCache();
+        
+        return _cachedElements.Select(e => e.Addon).Distinct().ToList();
     }
 
     public async Task<Color?> GetAddonColor(string addonName)
