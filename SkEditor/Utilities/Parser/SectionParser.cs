@@ -64,6 +64,9 @@ public static class SectionParser
                 IndentChildren((SectionNode) node, 0);
             }
         }
+        
+        // And we set up parents of each node
+        SetupParents(nodes);
 
         return nodes;
     }
@@ -95,6 +98,24 @@ public static class SectionParser
             if (child.IsSection)
             {
                 IndentChildren((SectionNode) child, indent + 1);
+            }
+        }
+    }
+    
+    private static void SetupParents(IEnumerable<Node> nodes)
+    {
+        foreach (var node in nodes)
+        {
+            if (node is not SectionNode section)
+                continue;
+
+            foreach (var child in section.Children)
+            {
+                child.Parent = section;
+                if (child.IsSection)
+                {
+                    SetupParents(child as SectionNode);
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections;
+using System.Text.RegularExpressions;
 using SkEditor.Parser.Elements;
 
 namespace SkEditor.Parser;
@@ -14,12 +15,14 @@ public abstract class Node
     public int Indent { get; set; }
     
     public Element? Element { get; set; }
+    public SectionNode? Parent { get; set; }
 
     protected Node(string key, int line)
     {
         Key = key;
         Line = line;
         Indent = -1; // not yet parsed
+        Parent = null; // not yet parsed
     }
     
     public bool IsSimple => this is SimpleNode;
@@ -27,6 +30,15 @@ public abstract class Node
     public bool IsEffect => this is EffectNode;
     
     public abstract void Print(int indent = 0);
+
+    public SectionNode GetParentStructure()
+    {
+        var parent = Parent;
+        while (parent != null)
+            parent = parent.Parent;
+
+        return parent;
+    }
 }
 
 /// <summary>
@@ -54,7 +66,7 @@ public class SimpleNode(string key, int line, string value) : Node(key, line)
 /// Represent a section node, which contains a list of children nodes
 /// </summary>
 /// <param name="key">The key of the section</param>
-public class SectionNode(string key, int line) : Node(key, line)
+public class SectionNode(string key, int line) : Node(key, line), IEnumerable<Node>
 {
     public List<Node> Children { get; set; } = new();
 
@@ -85,6 +97,16 @@ public class SectionNode(string key, int line) : Node(key, line)
     public SectionNode? GetSectionChild(string key)
     {
         return GetChild(key) as SectionNode;
+    }
+
+    public IEnumerator<Node> GetEnumerator()
+    {
+        return Children.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
 
