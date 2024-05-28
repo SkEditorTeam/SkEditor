@@ -1,4 +1,6 @@
-﻿namespace SkEditor.Parser.Elements;
+﻿using SkEditor.Utilities.Parser;
+
+namespace SkEditor.Parser.Elements;
 
 /// <summary>
 /// Represent an element that can be parsed
@@ -11,12 +13,12 @@
 /// </summary>
 public abstract class Element
 {
-    
     /// <summary>
     /// Load the element's data from a <see cref="Node"/>.
     /// Type of node should be checked in the Parse method instead.
     /// </summary>
     /// <param name="node">The node to load the data from.</param>
-    public abstract void Load(Node node);
+    /// <param name="context">The parsing context.</param>
+    public abstract void Load(Node node, ParsingContext context);
     
 }

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using SkEditor.API;
+using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Parser.Elements;
 
 public static class ElementParser
 {
 
-    public static void ParseNode(Node node)
+    public static void ParseNode(Node node, ParsingContext context)
     {
         if (node.Element != null) // Has been already parsed, maybe by an element.
             return;
@@ -38,8 +40,24 @@ public static class ElementParser
                 var result = method.Invoke(null, [node]) as bool?;
                 if (result == true)
                 {
-                    instance.Load(node);
+                    try
+                    {
+                        int errors = context.Errors.Count;
+                        instance.Load(node, context);
+                        if (errors != context.Errors.Count)
+                            throw new UnreachableException();
+                    }
+                    catch (ParsingException e)
+                    {
+                        context.Errors.Add((node, e.Message));
+                        return;
+                    } catch (UnreachableException e)
+                    { 
+                        return;
+                    }
+                    
                     node.Element = instance;
+                    context.ParsedNodes.Add(node);
                 }
             }
             catch (Exception e)
@@ -49,18 +67,18 @@ public static class ElementParser
         }
     }
 
-    public static void ParseNodes(Node parent)
+    public static void ParseNodes(Node parent, ParsingContext context)
     {
-        ParseNode(parent);
+        ParseNode(parent, context);
         if (parent is SectionNode section)
             foreach (var child in section.Children)
-                ParseNodes(child);
+                ParseNodes(child, context);
     }
     
-    public static void ParseNodes(IEnumerable<Node> nodes)
+    public static void ParseNodes(IEnumerable<Node> nodes, ParsingContext context)
     {
         foreach (var node in nodes)
-            ParseNodes(node);
+            ParseNodes(node, context);
     }
     
 }

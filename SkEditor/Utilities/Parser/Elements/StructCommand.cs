@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using SkEditor.API;
 using SkEditor.Parser;
 using SkEditor.Parser.Elements;
 
@@ -25,14 +24,16 @@ public partial class StructCommand : Element
     
     public string? Usage { get; set; }
     
-    public override void Load(Node node)
+    public override void Load(Node node, ParsingContext context)
     {
         var section = (SectionNode) node;
 
         // Parse the name
         var match = CommandRegex().Match(node.Key);
-        if (!match.Success)
-            throw new ParserException("Invalid command name format.", node);
+        if (!match.Success) {
+            context.Error(node, "Invalid command definition.");
+            return;
+        }
         
         Name = match.Groups[1].Value;
         
@@ -49,7 +50,7 @@ public partial class StructCommand : Element
         Usage = section.GetSimpleChild("usage")?.Value;
         
         // Parse trigger
-        ElementParser.ParseNode(section.GetSectionChild("trigger"));
+        ElementParser.ParseNode(section.GetSectionChild("trigger"), context);
     }
 
     public static bool Parse(Node node)

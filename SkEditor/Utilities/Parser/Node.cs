@@ -39,6 +39,8 @@ public abstract class Node
 
         return parent;
     }
+    
+    public bool IsTopLevel => Indent == 0;
 }
 
 /// <summary>
