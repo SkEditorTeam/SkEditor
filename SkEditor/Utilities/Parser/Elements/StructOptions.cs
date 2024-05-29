@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SkEditor.API;
 using SkEditor.Parser;
 using SkEditor.Parser.Elements;
 
@@ -13,7 +14,10 @@ public class StructOptions : Element
     public override void Load(Node node, ParsingContext context)
     {
         if (context.ParsedNodes.Any(x => x.Element is StructOptions))
+        {
+            SkEditorAPI.Logs.Debug("Found multiple options sections.");
             context.Warning(node, "Only one options section is allowed.");
+        }
         
         foreach (var optionNode in node as SectionNode)
         {

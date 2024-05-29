@@ -1,5 +1,6 @@
 ﻿using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Utilities.Files;
@@ -11,5 +12,7 @@ public class OpenedFile
     public string Path { get; set; }
     public TabViewItem TabViewItem { get; set; }
     public CodeParser? Parser { get; set; }
+    
+    public FileParser? FileParser { get; set; }
 
 }

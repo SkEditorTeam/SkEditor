@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SkEditor.Utilities.InternalAPI;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;
@@ -72,6 +73,9 @@ public class FileHandler
             TabViewItem = tabItem,
             Parser = tabItem.Content is TextEditor editor
                 ? new CodeParser(editor)
+                : null,
+            FileParser = tabItem.Content is TextEditor editor2
+                ? new FileParser(editor2)
                 : null
         });
 
@@ -114,7 +118,10 @@ public class FileHandler
             TabViewItem = tabItem,
             Parser = tabItem.Content is TextEditor editor
                 ? new CodeParser(editor)
-                : null
+                : null,
+            FileParser = tabItem.Content is TextEditor editor2
+                ? new FileParser(editor2)
+                : null,
         });
 
         AddChangeChecker(path, tabItem);

@@ -42,17 +42,11 @@ public static class ElementParser
                 {
                     try
                     {
-                        int errors = context.Errors.Count;
                         instance.Load(node, context);
-                        if (errors != context.Errors.Count)
-                            throw new UnreachableException();
                     }
                     catch (ParsingException e)
                     {
                         context.Errors.Add((node, e.Message));
-                        return;
-                    } catch (UnreachableException e)
-                    { 
                         return;
                     }
                     

@@ -79,7 +79,7 @@ public partial class ParserSidebarPanel : UserControl
     {
         if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem selectedItem) return;
 
-        var parser = FileHandler.OpenedFiles.Find(file => file.TabViewItem == selectedItem)?.Parser;
+        var parser = FileHandler.OpenedFiles.Find(file => file.TabViewItem == selectedItem)?.FileParser;
         if (parser == null) return;
 
         ParseButton.IsEnabled = false;
