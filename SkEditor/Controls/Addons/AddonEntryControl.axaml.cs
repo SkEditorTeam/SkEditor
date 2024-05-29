@@ -56,6 +56,11 @@ public partial class AddonEntryControl : UserControl
             StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
             LoadVisuals(addonMeta);
         };
+
+        if (addonMeta.NeedsRestart) {
+            StateButton.IsEnabled = false;
+            StateButton.Content = "Restart Required";
+        }
     }
     
     public void SetStateButton(bool enabled)
@@ -118,5 +123,16 @@ public partial class AddonEntryControl : UserControl
         
         if (addonMeta.DllFilePath == null)
             ControlsPanel.IsVisible = false;
+        
+        if (addonMeta.NeedsRestart)
+        {
+            var restartText = new TextBlock()
+            {
+                Text = "This addon requires a restart to take effect.",
+                Foreground = new SolidColorBrush(Colors.Gray),
+                TextWrapping = TextWrapping.Wrap
+            };
+            Expander.Items.Add(restartText);
+        }
     }
 }

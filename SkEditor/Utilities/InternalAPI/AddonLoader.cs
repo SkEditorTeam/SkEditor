@@ -26,7 +26,6 @@ public static class AddonLoader
     public static void Load()
     {
         Directory.CreateDirectory(Path.Combine(AppConfig.AppDataFolderPath, "Addons"));
-        LocalDependencyManager.IndexDependencies();
         
         Addons.Clear();
         LoadMeta();
@@ -66,14 +65,20 @@ public static class AddonLoader
     private static async void LoadAddonsFromFiles()
     {
         var folder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
-            var dllFiles = Directory.GetFiles(folder, "*.dll", SearchOption.AllDirectories);
+        var folders = Directory.GetDirectories(folder);
+        var dllFiles = new List<string>();
+        foreach (string sub in folders)
+            dllFiles.Add(Path.Combine(sub, Path.GetFileName(sub) + ".dll"));
+        SkEditorAPI.Logs.Debug($"Found {dllFiles.Count} addon dll files.");
             
         foreach (var addonDllFile in dllFiles)
         {
             List<IAddon?> addon;
             try
             {
-                addon = Assembly.Load(await File.ReadAllBytesAsync(addonDllFile))
+                AddonLoadContext loadContext = new AddonLoadContext(Path.GetFullPath(addonDllFile));
+                
+                addon = loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(addonDllFile)))
                     .GetTypes()
                     .Where(p => typeof(IAddon).IsAssignableFrom(p) && p is { IsClass: true, IsAbstract: false })
                     .Select(addonType => (IAddon)Activator.CreateInstance(addonType))
@@ -87,7 +92,7 @@ public static class AddonLoader
 
             if (addon.Count == 0)
             {
-                SkEditorAPI.Logs.Warning($"Failed to load addon from \"{addonDllFile}\": No addon class found.");
+                SkEditorAPI.Logs.Warning($"Failed to load addon from \"{addonDllFile}\": No addon class found. No worries if it's a library.");
                 continue;
             }
             
@@ -203,6 +208,13 @@ public static class AddonLoader
 
         if (!await LocalDependencyManager.CheckAddonDependencies(addonMeta))
             return false;
+
+        if (addonMeta.NeedsRestart)
+        {
+            await SkEditorAPI.Windows.ShowMessage("Addon needs restart", $"The addon \"{addonMeta.Addon.Name}\" needs a restart to be enabled correctly.");
+            addonMeta.State = IAddons.AddonState.Disabled;
+            return false;
+        }
         
         return true;
     }

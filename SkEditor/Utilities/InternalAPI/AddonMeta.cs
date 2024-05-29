@@ -11,6 +11,7 @@ public class AddonMeta
     public IAddons.AddonState State { get; set; } = IAddons.AddonState.Installed;
     public List<IAddonLoadingError> Errors { get; set; }
     public string? DllFilePath { get; set; } = null;
+    public bool NeedsRestart { get; set; } = false;
     
     public bool HasErrors => Errors.Count > 0;
     public bool HasCriticalErrors => Errors.Any(x => x.IsCritical);
