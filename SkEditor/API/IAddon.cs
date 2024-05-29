@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
+using SkEditor.API.Settings;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -85,5 +86,12 @@ public interface IAddon
     /// </summary>
     /// <returns>All the dependencies of this addon.</returns>
     public virtual List<IDependency> GetDependencies() => [];
+    
+    /// <summary>
+    /// Get all the settings of this addon.
+    /// </summary>
+    /// <typeparam name="T">The type of the setting.</typeparam>
+    /// <returns>All the settings of this addon.</returns>
+    public virtual List<Setting> GetSettings() => [];
     
 }

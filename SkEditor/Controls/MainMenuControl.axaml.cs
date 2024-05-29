@@ -106,6 +106,27 @@ public partial class MainMenuControl : UserControl
                 }
             };
 
+            if (addon.GetSettings().Count > 0)
+            {
+                menuItem.Items.Add(new MenuItem()
+                {
+                    Header = Translation.Get("WindowTitleSettings"),
+                    Command = new RelayCommand(() =>
+                    {
+                        new SettingsWindow().ShowDialog(MainWindow.Instance);
+                        SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
+                        CustomAddonSettingsPage.Load(addon);
+                    }),
+                    Icon = new IconSourceElement()
+                    {
+                        IconSource = new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 20 },
+                        Width = 20,
+                        Height = 20
+                    }
+                });
+                menuItem.Items.Add(new Separator());
+            }
+
             foreach (MenuItem sub in items)
                 menuItem.Items.Add(sub);
 
