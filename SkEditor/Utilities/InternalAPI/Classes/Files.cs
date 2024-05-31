@@ -32,7 +32,7 @@ public class Files : IFiles
 
     public bool IsEditorOpen()
     {
-        return GetCurrentOpenedFile().IsEditor;
+        return GetCurrentOpenedFile()?.IsEditor ?? false;
     }
 
     public List<OpenedFile> GetOpenedFiles()

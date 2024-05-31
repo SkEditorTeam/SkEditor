@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -51,6 +52,19 @@ public partial class MainWindow : AppWindow
             {
                 FileHandler.SwitchTab((int)e.Key - 35);
             }
+            
+            if (e is { Key: Key.F6 })
+            {
+                try
+                {
+                    SessionRestorer.SaveSession();
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    throw;
+                }
+            }
         };
 
         DragDrop.SetAllowDrop(this, true);
@@ -91,8 +105,10 @@ public partial class MainWindow : AppWindow
         }
         else
         {
-            e.Cancel = false;
-            SessionRestorer.SaveSession();
+            await SessionRestorer.SaveSession();
+            SkEditorAPI.Logs.Debug("Session saved.");
+            AlreadyClosed = true;
+            Close();
         }
     }
 

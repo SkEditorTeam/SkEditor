@@ -23,7 +23,8 @@ public class OpenedFile
         set
         {
             _saved = value;
-            TabViewItem.Header = Header;
+            if (TabViewItem != null)
+                TabViewItem.Header = Header;
         }
     }
 

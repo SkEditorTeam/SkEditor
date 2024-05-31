@@ -150,28 +150,7 @@ public class FileBuilder
                 return null;
         }
 
-        TextEditor editor = new()
-        {
-            ShowLineNumbers = true,
-            Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
-            Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
-            LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor"),
-            FontSize = 16,
-            WordWrap = config.IsWrappingEnabled,
-        };
-
-        editor.ContextFlyout = GetContextMenu(editor);
-
-        if (config.Font.Equals("Default"))
-        {
-            Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
-            editor.FontFamily = (FontFamily)font;
-        }
-        else
-        {
-            editor.FontFamily = new FontFamily(config.Font);
-        }
-
+        var editor = CreateEditor();
         if (!string.IsNullOrWhiteSpace(path))
         {
             path = Uri.UnescapeDataString(path);
@@ -181,10 +160,38 @@ public class FileBuilder
             }
         }
 
+        return new FileTypes.FileType(editor, path, true);
+    }
+
+    public static TextEditor CreateEditor(string content = "")
+    {
+        var editor = new TextEditor
+        {
+            ShowLineNumbers = true,
+            Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
+            Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
+            LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor"),
+            FontSize = 16,
+            WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled,
+        };
+        
+        editor.ContextFlyout = GetContextMenu(editor);
+        
+        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
+        {
+            Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
+            editor.FontFamily = (FontFamily)font;
+        }
+        else
+        {
+            editor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
+        }
+        
+        editor.Text = content;
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
-
-        return new FileTypes.FileType(editor, path, true);
+        
+        return editor;
     }
 
     private static TextEditor AddEventHandlers(TextEditor editor)
@@ -196,7 +203,7 @@ public class FileBuilder
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
         if (!SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
-            editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile().Parser?.SetUnparsed();
+            editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser?.SetUnparsed();
         }
         if (SkEditorAPI.Core.GetAppConfig().EnableHexPreview)
         {
