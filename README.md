@@ -27,7 +27,7 @@
 <br />
 <br />
 
-<a href='https://discord.gg/meFfPGYvr5'>
+<a href='https://skeditordc.notro.me'>
   
 <img src='https://img.shields.io/badge/Discord-%235562ea?style=for-the-badge'>
   
