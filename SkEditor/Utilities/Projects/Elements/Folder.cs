@@ -36,8 +36,15 @@ public class Folder : StorageElement
 
     private void LoadChildren()
     {
-        Directory.GetDirectories(StorageFolderPath).ToList().ForEach(x => Children.Add(new Folder(x, this)));
-        Directory.GetFiles(StorageFolderPath).ToList().ForEach(x => Children.Add(new File(x, this)));
+        try
+        {
+            Directory.GetDirectories(StorageFolderPath).ToList().ForEach(x => Children.Add(new Folder(x, this)));
+            Directory.GetFiles(StorageFolderPath).ToList().ForEach(x => Children.Add(new File(x, this)));
+        }
+        catch (Exception e)
+        {
+            // TODO: Correctly handle this error (usually access denied)
+        }
     }
 
     public void OpenInExplorer()
@@ -89,13 +96,13 @@ public class Folder : StorageElement
 
     public void CopyAbsolutePath()
     {
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFolderPath));
+        SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFolderPath));
     }
 
     public void CopyPath()
     {
         var path = StorageFolderPath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path);
+        SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(path);
     }
 
     public async void CreateNewElement(bool file)

@@ -20,4 +20,10 @@ public interface IEvents
     
     public event EventHandler<FileOpenedEventArgs> OnFileOpened;
     
+    /// <summary>
+    /// Called when a tab view item is closed. You can
+    /// cancel the close if needed.
+    /// </summary>
+    public event EventHandler<TabClosedEventArgs> OnTabClosed;
+
 }

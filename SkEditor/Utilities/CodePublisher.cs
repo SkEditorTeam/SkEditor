@@ -72,7 +72,7 @@ public class CodePublisher
         {
             string apiKey = window.ApiKeyTextBox.Text;
             string json = JsonSerializer.Serialize(new { content = code });
-            string fileName = (ApiVault.Get().GetTabView().SelectedItem as TabViewItem).Header.ToString().TrimEnd('*');
+            string fileName = SkEditorAPI.Files.GetCurrentOpenedFile().Name;
 
             HttpClient client = new();
             HttpRequestMessage request = new(HttpMethod.Post, $"https://api.skunity.com/v1/{apiKey}/parser/savenewfile/{fileName}");

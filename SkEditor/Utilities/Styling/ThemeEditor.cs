@@ -175,12 +175,12 @@ public class ThemeEditor
             if (CurrentTheme.UseMicaEffect)
             {
                 smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
-                ApiVault.Get().GetMainWindow().TransparencyLevelHint = levels;
+                SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = levels;
             }
             else
             {
                 smallWindow.Setters.Remove(smallWindow.Setters.OfType<Setter>().FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint"));
-                ApiVault.Get().GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
+                SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
             }
 
             Application.Current.Resources.MergedDictionaries.Add(style);

@@ -54,7 +54,7 @@ public class CodeOptionReference : INameableCodeElement
     public async void Rename()
     {
         var renameWindow = new SymbolRefactorWindow(this);
-        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
+        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
         Section.Parser.Parse();
     }
 

@@ -32,16 +32,9 @@ public partial class MainMenuControl : UserControl
         MenuItemNew.Command = new RelayCommand(FileHandler.NewFile);
         MenuItemOpen.Command = new RelayCommand(FileHandler.OpenFile);
         MenuItemOpenFolder.Command = new RelayCommand(() => ProjectOpener.OpenProject());
-        MenuItemSave.Command = new RelayCommand(async () =>
-        {
-            (bool, Exception) success = await FileHandler.SaveFile();
-            if (!success.Item1)
-            {
-                ApiVault.Get().ShowError("For some reason, the file couldn't be saved. If the problem persists, backup the file so you won't lose any changes.\nError: " + success.Item2.Message);
-            }
-        });
+        MenuItemSave.Command = new RelayCommand(FileHandler.SaveFile);
         MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFile);
-        MenuItemPublish.Command = new RelayCommand(() => new PublishWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
+        MenuItemPublish.Command = new RelayCommand(() => new PublishWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
         MenuItemClose.Command = new RelayCommand(FileCloser.CloseCurrentFile);
         MenuItemCloseAll.Command = new RelayCommand(FileCloser.CloseAllFiles);
@@ -62,26 +55,18 @@ public partial class MainMenuControl : UserControl
 
         MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
 
-        MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
-        MenuItemGenerateGui.Command = new RelayCommand(() => new GuiGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));
-        MenuItemGenerateCommand.Command = new RelayCommand(() => new CommandGenerator().ShowDialog(ApiVault.Get().GetMainWindow()));
-        MenuItemRefactor.Command = new RelayCommand(() => new RefactorWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
-        MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
+        MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemGenerateGui.Command = new RelayCommand(() => new GuiGenerator().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemGenerateCommand.Command = new RelayCommand(() => new CommandGenerator().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemRefactor.Command = new RelayCommand(() => new RefactorWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
         MenuItemDocs.Command = new RelayCommand(AddDocsTab);
     }
 
-    public async void AddDocsTab()
+    public void AddDocsTab()
     {
-        var tabView = ApiVault.Get().GetTabView();
-        var tabItem = new TabViewItem()
-        {
-            Header = "Documentation",
-            Content = new DocumentationControl()
-        };
-
-        (tabView.TabItems as IList)?.Add(tabItem);
-        tabView.SelectedItem = tabItem;
+        SkEditorAPI.Files.AddCustomTab("Documentation", new DocumentationControl());
     }
 
     public void ReloadAddonsMenus()
@@ -105,6 +90,27 @@ public partial class MainMenuControl : UserControl
                     Height = 20
                 }
             };
+
+            if (addon.GetSettings().Count > 0)
+            {
+                menuItem.Items.Add(new MenuItem()
+                {
+                    Header = Translation.Get("WindowTitleSettings"),
+                    Command = new RelayCommand(() =>
+                    {
+                        new SettingsWindow().ShowDialog(MainWindow.Instance);
+                        SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
+                        CustomAddonSettingsPage.Load(addon);
+                    }),
+                    Icon = new IconSourceElement()
+                    {
+                        IconSource = new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 20 },
+                        Width = 20,
+                        Height = 20
+                    }
+                });
+                menuItem.Items.Add(new Separator());
+            }
 
             foreach (MenuItem sub in items)
                 menuItem.Items.Add(sub);

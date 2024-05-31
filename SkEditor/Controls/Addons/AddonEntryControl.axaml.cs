@@ -9,6 +9,7 @@ using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Views;
 using SkEditor.Views.Settings;
 
 namespace SkEditor.Controls.Addons;
@@ -56,6 +57,11 @@ public partial class AddonEntryControl : UserControl
             StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
             LoadVisuals(addonMeta);
         };
+
+        if (addonMeta.NeedsRestart) {
+            StateButton.IsEnabled = false;
+            StateButton.Content = "Restart Required";
+        }
     }
     
     public void SetStateButton(bool enabled)
@@ -78,6 +84,7 @@ public partial class AddonEntryControl : UserControl
 
     public void LoadVisuals(AddonMeta addonMeta)
     {
+        bool isValid = true;
         var addon = addonMeta.Addon;
         Expander.Header = addon.Name;
         Expander.Description = addon.Description;
@@ -85,6 +92,7 @@ public partial class AddonEntryControl : UserControl
         
         if (addonMeta.HasErrors)
         {
+            isValid = false;
             Expander.IconSource = new SymbolIconSource()
             {
                 Symbol = Symbol.Warning,
@@ -118,5 +126,31 @@ public partial class AddonEntryControl : UserControl
         
         if (addonMeta.DllFilePath == null)
             ControlsPanel.IsVisible = false;
+        
+        if (addonMeta.NeedsRestart)
+        {
+            isValid = false;
+            var restartText = new TextBlock()
+            {
+                Text = "This addon requires a restart to take effect.",
+                Foreground = new SolidColorBrush(Colors.Gray),
+                TextWrapping = TextWrapping.Wrap
+            };
+            Expander.Items.Add(restartText);
+        }
+
+        if (isValid && addon.GetSettings().Count > 0)
+        {
+            Expander.IsClickEnabled = true;
+            Expander.Click += (sender, args) =>
+            {
+                SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
+                CustomAddonSettingsPage.Load(addon);
+            };
+            Expander.ActionIconSource = new SymbolIconSource()
+            {
+                Symbol = Symbol.Settings
+            };
+        }
     }
 }

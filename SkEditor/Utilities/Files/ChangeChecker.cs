@@ -18,7 +18,7 @@ public class ChangeChecker
     private static bool isMessageShown = false;
     public static Dictionary<string, bool> HasChangedDictionary { get; } = [];
 
-    public async static void Check()
+    public static async void Check()
     {
         if (!SkEditorAPI.Core.GetAppConfig().CheckForChanges) return;
 
@@ -60,25 +60,25 @@ public class ChangeChecker
 
     private static async Task ShowMessage(TabViewItem item, string textToRead)
     {
-        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(
+        var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.TabViewItem == item);
+        var result = await SkEditorAPI.Windows.ShowDialog(
             Translation.Get("Attention"),
             Translation.Get("ChangesDetected"),
-            new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
-            primaryButtonContent: "Yes",
-            closeButtonContent: "No"
-        );
+            new SymbolIconSource { Symbol = Symbol.ImportantFilled },
+            primaryButtonText: "Yes",
+            cancelButtonText: "No");
 
 
         if (result == ContentDialogResult.Primary)
         {
-            ApiVault.Get().GetTextEditor().Document.Text = textToRead;
+            openedFile.Editor.Document.Text = textToRead;
             SetLastKnownContent(ApiVault.Get().GetTextEditor(), textToRead);
-            item.Header = item.Header.ToString().TrimEnd('*');
+            openedFile.IsSaved = true;
         }
         else
         {
-            SetLastKnownContent(ApiVault.Get().GetTextEditor(), textToRead);
-            item.Header = item.Header.ToString().TrimEnd('*') + "*";
+            SetLastKnownContent(openedFile.Editor, textToRead);
+            openedFile.IsSaved = false;
         }
     }
 }

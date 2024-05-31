@@ -85,17 +85,22 @@ public partial class PublishWindow : AppWindow
 
     private void Publish()
     {
-        string code = ApiVault.Get().GetTextEditor().Document.Text;
+        if (!SkEditorAPI.Files.IsEditorOpen())
+        {
+            SkEditorAPI.Windows.ShowError("The current opened tab is not a code editor.");
+            return;
+        }
 
+        var code = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Text;
         if (string.IsNullOrWhiteSpace(code))
         {
-            ApiVault.Get().ShowMessage("Error", "You can't publish empty code!", this);
+            SkEditorAPI.Windows.ShowError("You can't publish empty code!");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(ApiKeyTextBox.Text))
         {
-            ApiVault.Get().ShowMessage("Error", "You need to enter the API key!", this);
+            SkEditorAPI.Windows.ShowError("You need to enter the API key!");
             return;
         }
 

@@ -14,9 +14,11 @@ public static class SessionRestorer
 
     public static async void SaveSession()
     {
-        List<TabViewItem> tabs = ApiVault.Get().GetTabView().TabItems
-            .OfType<TabViewItem>()
-            .Where(tab => tab.Content is TextEditor)
+        if (true)
+            return;
+        var tabs = SkEditorAPI.Files.GetOpenedFiles()
+            .Where(tab => tab.IsEditor)
+            .Select(tab => tab.TabViewItem)
             .ToList();
 
         Directory.CreateDirectory(sessionFolder);
@@ -27,7 +29,8 @@ public static class SessionRestorer
             string textToWrite = string.Empty;
             TextEditor editor = tab.Content as TextEditor;
 
-            if (editor.Document.TextLength == 0) continue;
+            if (editor.Document.TextLength == 0) 
+                continue;
 
             if (string.IsNullOrEmpty(path))
             {
@@ -46,12 +49,14 @@ public static class SessionRestorer
         }
 
         ApiVault.Get().OnClosed();
-        ApiVault.Get().GetMainWindow().AlreadyClosed = true;
-        ApiVault.Get().GetMainWindow().Close();
+        SkEditorAPI.Windows.GetMainWindow().AlreadyClosed = true;
+        SkEditorAPI.Windows.GetMainWindow().Close();
     }
 
     public static async Task<bool> RestoreSession()
     {
+        if (true)
+            return false;
         bool filesAdded = false;
 
         if (!Directory.Exists(sessionFolder)) return filesAdded;

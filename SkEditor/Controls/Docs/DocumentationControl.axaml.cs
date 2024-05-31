@@ -34,7 +34,7 @@ public partial class DocumentationControl : UserControl
 
     public void AssignCommands()
     {
-        OpenLocalManagementButton.Command = new RelayCommand(async () => await new LocalDocsManagerWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
+        OpenLocalManagementButton.Command = new RelayCommand(async () => await new LocalDocsManagerWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
         RefreshProviderButton.Command = new RelayCommand(() =>
         {
             ProviderBox.SelectionChanged -= HandleProviderBoxSelection;
@@ -315,7 +315,7 @@ public partial class DocumentationControl : UserControl
             taskDialog.Hide(TaskDialogStandardResult.OK);
         };
 
-        taskDialog.XamlRoot = ApiVault.Get().GetMainWindow();
+        taskDialog.XamlRoot = SkEditorAPI.Windows.GetMainWindow();
         await taskDialog.ShowAsync();
     }
 

@@ -63,7 +63,7 @@ public static class UpdateChecker
 
     private async static void DownloadMsi(string url)
     {
-        TaskDialog td = CreateTaskDialog(ApiVault.Get().GetMainWindow(), url);
+        TaskDialog td = CreateTaskDialog(SkEditorAPI.Windows.GetMainWindow(), url);
         var result = await td.ShowAsync();
 
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;

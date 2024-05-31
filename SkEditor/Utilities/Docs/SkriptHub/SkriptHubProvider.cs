@@ -86,7 +86,7 @@ public class SkriptHubProvider : IDocProvider
                 }
             };
 
-            taskDialog.XamlRoot = ApiVault.Get().GetMainWindow();
+            taskDialog.XamlRoot = SkEditorAPI.Windows.GetMainWindow();
             var result = (TaskDialogStandardResult) await taskDialog.ShowAsync();
             if (result == TaskDialogStandardResult.Cancel) 
                 return [];

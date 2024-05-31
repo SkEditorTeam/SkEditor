@@ -30,5 +30,10 @@ public static class SkEditorAPI
     /// Get the Addons API.
     /// </summary>
     public static readonly IAddons Addons = new Addons();
-    
+
+    /// <summary>
+    /// Get the Files API.
+    /// </summary>
+    public static readonly IFiles Files = new Files();
+
 }
