@@ -111,6 +111,7 @@ public partial class TextEditorEventHandler
         }
 
         openedFile.IsSaved = false;
+        openedFile.IsNewFile = false;
     }
 
     public static void DoAutoIndent(object? sender, TextInputEventArgs e)

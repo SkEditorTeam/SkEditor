@@ -108,7 +108,8 @@ public partial class MainWindow : AppWindow
         if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring) sessionFilesAdded = await SessionRestorer.RestoreSession();
 
         string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
-        if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash() && !sessionFilesAdded) FileHandler.NewFile();
+        if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash() && !sessionFilesAdded) 
+            (SkEditorAPI.Files as Files).AddWelcomeTab();
         startupFiles.ToList().ForEach(FileHandler.OpenFile);
 
         Dispatcher.UIThread.Post(() =>

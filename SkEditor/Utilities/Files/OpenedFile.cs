@@ -15,6 +15,7 @@ public class OpenedFile
     public TextEditor? Editor { get; set; }
     public CodeParser? Parser { get; set; }
     public string? Path { get; set; }
+    public bool IsNewFile { get; set; } = false;
 
     private bool _saved;
     public bool IsSaved {
@@ -31,6 +32,7 @@ public class OpenedFile
     #region Custom Tabs Properties
 
     public bool IsCustomTab { get; set; } = false;
+    public string? CustomName = null;
 
     #endregion
 
@@ -40,7 +42,7 @@ public class OpenedFile
     #region Accessors
 
     public bool IsEditor => Editor != null;
-    public string? Name => Path == null ? null : System.IO.Path.GetFileNameWithoutExtension(Path);
+    public string? Name => Path == null ? CustomName : System.IO.Path.GetFileName(Path);
     public string? Header => Name + (IsSaved ? "" : " •");
 
     #endregion

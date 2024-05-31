@@ -9,6 +9,7 @@ using Avalonia.Platform.Storage;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
+using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
@@ -160,7 +161,9 @@ public class Files : IFiles
             Path = path,
             TabViewItem = tabItem,
             Parser = tabItem.Content is TextEditor editor ? new CodeParser(editor) : null,
+            CustomName = header,
             IsSaved = path != null,
+            IsNewFile = path == null,
         };
 
         GetOpenedFiles().Add(openedFile);
@@ -204,7 +207,7 @@ public class Files : IFiles
         var tabViewItem = GetItem(entity);
         var file = GetOpenedFiles().Find(source => source.TabViewItem == tabViewItem);
 
-        if (!file.IsSaved)
+        if (!file.IsSaved && file is { IsEditor: true, IsNewFile: false })
         {
             var response = await SkEditorAPI.Windows.ShowDialog(
                 "Unsaved File",
@@ -277,8 +280,7 @@ public class Files : IFiles
 
     public void AddWelcomeTab()
     {
-        // TODO: Add the actual welcome tab
-        FileHandler.NewFile();
+        AddCustomTab("Welcome", new WelcomeTabControl());
     }
 
     private OpenedFile GetFromTabViewItem(TabViewItem tabViewItem)

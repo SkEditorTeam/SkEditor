@@ -20,8 +20,7 @@
 	<Application.Styles>
 		<sty:FluentAvaloniaTheme />
 		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
-		<StyleInclude Source="/Views/FileTypes/Images/AdvancedImageBox.axaml"/>
-		<StyleInclude Source="/Styles/ButtonStyles.axaml"></StyleInclude>
+		<StyleInclude Source="/Styles/ButtonStyles.axaml" />
 	</Application.Styles>
 
 	<Application.Resources>

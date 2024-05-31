@@ -68,6 +68,7 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 		<PackageReference Include="SkAvaloniaEdit" Version="11.0.6.6" />
 		<PackageReference Include="SkFluentAvalonia" Version="2.0.5.1" />
+		<PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0" />
 		<PackageReference Include="Svg.Skia" Version="1.0.0.18" />
 		<PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
 	</ItemGroup>
