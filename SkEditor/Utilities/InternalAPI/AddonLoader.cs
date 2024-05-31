@@ -49,7 +49,7 @@ public static class AddonLoader
         {
             var window = new SettingsWindow();
             SettingsWindow.NavigateToPage(typeof(AddonsPage));
-            await window.ShowDialog(ApiVault.Get().GetMainWindow());
+            await window.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
         }
     }
 

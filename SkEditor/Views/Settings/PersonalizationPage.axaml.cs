@@ -34,7 +34,7 @@ public partial class PersonalizationPage : UserControl
     private async void SelectFont()
     {
         FontSelectionWindow window = new();
-        string result = await window.ShowDialog<string>(ApiVault.Get().GetMainWindow());
+        string result = await window.ShowDialog<string>(SkEditorAPI.Windows.GetMainWindow());
         if (result is null)
             return;
 

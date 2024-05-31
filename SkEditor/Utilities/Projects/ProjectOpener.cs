@@ -24,7 +24,7 @@ public static class ProjectOpener
         string folder = string.Empty;
         if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
         {
-            TopLevel topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
+            TopLevel topLevel = TopLevel.GetTopLevel(SkEditorAPI.Windows.GetMainWindow());
 
             IReadOnlyList<IStorageFolder> folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {

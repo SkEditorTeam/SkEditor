@@ -40,7 +40,6 @@ public partial class MainWindow : AppWindow
     {
         TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
         TabControl.TabCloseRequested += (sender, e) => FileCloser.CloseFile(e);
-        TabControl.SelectionChanged += (_, _) => AddonLoader.GetCoreAddon().ParserPanel.Panel.ParseCurrentFile();
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;
 
@@ -108,7 +107,7 @@ public partial class MainWindow : AppWindow
         bool sessionFilesAdded = false;
         if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring) sessionFilesAdded = await SessionRestorer.RestoreSession();
 
-        string[] startupFiles = ApiVault.Get().GetStartupFiles();
+        string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
         if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash() && !sessionFilesAdded) FileHandler.NewFile();
         startupFiles.ToList().ForEach(FileHandler.OpenFile);
 

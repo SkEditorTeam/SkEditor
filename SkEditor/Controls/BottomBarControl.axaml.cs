@@ -21,6 +21,7 @@ public partial class BottomBarControl : UserControl
         Loaded += (sender, e) =>
         {
             Application.Current.ResourcesChanged += (sender, e) => UpdatePosition();
+            
             ApiVault.Get().GetTabView().SelectionChanged += (sender, e) => UpdatePosition();
             ApiVault.Get().GetTabView().SelectionChanged += (sender, e) => FileHandler.TabSwitchAction();
         };

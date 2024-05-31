@@ -3,14 +3,8 @@
 /// <summary>
 /// Represents a dependency to another addon.
 /// </summary>
-public class AddonDependency : IDependency
+public class AddonDependency(string addonIdentifier, bool isRequired = true) : IDependency
 {
-    public AddonDependency(string addonIdentifier, bool isRequired = true)
-    {
-        AddonIdentifier = addonIdentifier;
-        IsRequired = isRequired;
-    }
-    
-    public string AddonIdentifier { get; }
-    public bool IsRequired { get; }
+    public string AddonIdentifier { get; } = addonIdentifier;
+    public bool IsRequired { get; } = isRequired;
 }

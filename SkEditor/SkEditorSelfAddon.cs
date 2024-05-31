@@ -96,20 +96,6 @@ public class SkEditorSelfAddon : IAddon
         Registries.SidebarPanels.Register(new RegistryKey(this, "ParserPanel"), ParserPanel);
 
         #endregion
-
-        #region Event Handlers
-
-        SkEditorAPI.Events.OnFileOpened += (_, args) =>
-        {
-            SkEditorAPI.Logs.Debug($"File opened: {args.FilePath}, content: {args.Content}, restore? {args.CausedByRestore}");
-        };
-
-        SkEditorAPI.Events.OnPostEnable += (_, args) =>
-        {
-            SkEditorAPI.Logs.Debug(GetSettings().ToString());
-        };
-
-        #endregion
     }
 
     public List<MenuItem> GetMenuItems()

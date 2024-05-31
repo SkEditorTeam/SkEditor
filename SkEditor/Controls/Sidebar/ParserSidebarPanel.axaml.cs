@@ -77,10 +77,9 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ParseCurrentFile()
     {
-        if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem selectedItem) return;
-
-        var parser = FileHandler.OpenedFiles.Find(file => file.TabViewItem == selectedItem)?.Parser;
-        if (parser == null) return;
+        var parser = SkEditorAPI.Files.GetCurrentOpenedFile().Parser;
+        if (parser == null)
+            return;
 
         ParseButton.IsEnabled = false;
         parser.Parse();

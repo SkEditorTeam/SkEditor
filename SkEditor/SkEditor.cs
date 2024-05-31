@@ -68,7 +68,7 @@ public class SkEditor : ISkEditorAPI
 
     public OpenedFile? GetOpenedFile()
     {
-        return FileHandler.OpenedFiles.FirstOrDefault(file => file.TabViewItem == GetMainWindow().TabControl.SelectedItem);
+        return SkEditorAPI.Files.GetOpenedFiles().FirstOrDefault(file => file.TabViewItem == GetMainWindow().TabControl.SelectedItem);
     }
 
     /// <returns>App's tabcontrol</returns>

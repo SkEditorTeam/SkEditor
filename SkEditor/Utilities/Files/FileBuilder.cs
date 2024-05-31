@@ -196,7 +196,7 @@ public class FileBuilder
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
         if (!SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
-            editor.TextChanged += (_, _) => ApiVault.Get().GetOpenedFile()?.Parser?.SetUnparsed();
+            editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile().Parser?.SetUnparsed();
         }
         if (SkEditorAPI.Core.GetAppConfig().EnableHexPreview)
         {
@@ -204,7 +204,7 @@ public class FileBuilder
         }
         editor.TextArea.Caret.PositionChanged += (sender, e) =>
         {
-            ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
+            SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdatePosition();
         };
         editor.TextArea.KeyDown += TextEditorEventHandler.OnKeyDown;
         editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;

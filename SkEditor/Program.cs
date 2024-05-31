@@ -29,6 +29,8 @@ class Program
                 message += $" It's fault of {source} addon.";
             }
             Log.Fatal(e, message);
+            Console.Error.WriteLine(e);
+            Console.Error.WriteLine(message);
 
             ApiVault.Get().SaveData();
             AddonLoader.SaveMeta();

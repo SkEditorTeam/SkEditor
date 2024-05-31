@@ -50,7 +50,6 @@ public interface ISkEditorAPI
 
     public List<TextEditor> GetOpenedEditors();
 
-
     #region Events
 
     public event EventHandler Closed;

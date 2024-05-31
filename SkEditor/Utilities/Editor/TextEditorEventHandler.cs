@@ -88,31 +88,29 @@ public partial class TextEditorEventHandler
         return scrollViewer;
     }
 
-    public async static void OnTextChanged(object sender, EventArgs e)
+    public static async void OnTextChanged(object sender, EventArgs e)
     {
-        if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem tab) return;
-        if (tab.Tag == null) return;
-
-        if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(tab.Tag.ToString()))
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+        var editor = sender as TextEditor;
+        var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.Editor == editor);
+        if (openedFile == null)
+            return;
+        
+        SkEditorAPI.Logs.Debug("Text changed for file '" + openedFile.Path + "';");
+        if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
         {
+            openedFile.IsSaved = false;
             await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
             return;
         }
 
         if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                var parser = FileHandler.OpenedFiles.Find(file => file.TabViewItem == tab)?.Parser;
-                if (parser == null) return;
-
-                parser.Parse();
-            });
+            await Dispatcher.UIThread.InvokeAsync(() => openedFile?.Parser.Parse());
         }
 
-        if (tab.Header.ToString().EndsWith('*')) return;
-
-        tab.Header += "*";
+        openedFile.IsSaved = false;
     }
 
     public static void DoAutoIndent(object? sender, TextInputEventArgs e)
