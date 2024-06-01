@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API.Settings;
@@ -59,6 +60,18 @@ public interface IAddon
     /// so you can register your own stuff there.
     /// </summary>
     public void OnEnable();
+    
+    /// <summary>
+    /// Called when the addon is enabled. Some stuff might not be available
+    /// yet, but mainly <see cref="Registries"/> will be available,
+    /// so you can register your own stuff there.
+    ///
+    /// Use this method if you need to do async stuff when enabling the addon.
+    /// </summary>
+    public virtual Task OnEnableAsync()
+    {
+        return Task.CompletedTask;
+    }
     
     /// <summary>
     /// Called when the addon is disabled. You <b>do not need</b> to

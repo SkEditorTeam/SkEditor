@@ -22,6 +22,8 @@ namespace SkEditor.Views;
 public partial class MainWindow : AppWindow
 {
     public static MainWindow Instance { get; private set; }
+    
+    public BottomBarControl GetBottomBar() => BottomBar;
 
     public MainWindow()
     {

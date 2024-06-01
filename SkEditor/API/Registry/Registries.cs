@@ -19,5 +19,6 @@ public static class Registries
         Connections.Unload(addon);
         BottomIcons.Unload(addon);
         SidebarPanels.Unload(addon);
+        WelcomeEntries.Unload(addon);
     }
 }

@@ -139,7 +139,7 @@ public partial class AddonEntryControl : UserControl
             Expander.Items.Add(restartText);
         }
 
-        if (isValid && addon.GetSettings().Count > 0)
+        if (isValid && addon.GetSettings().Count > 0 && AddonLoader.IsAddonEnabled(addon))
         {
             Expander.IsClickEnabled = true;
             Expander.Click += (sender, args) =>

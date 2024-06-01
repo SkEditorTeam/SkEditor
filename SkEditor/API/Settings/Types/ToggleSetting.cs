@@ -23,4 +23,6 @@ public class ToggleSetting : ISettingType
         toggle.IsCheckedChanged += (_, _) => onChanged(toggle.IsChecked ?? false);
         return toggle;
     }
+    
+    public bool IsSelfManaged => false;
 }

@@ -15,7 +15,7 @@ public static class AddonSettingsManager
     
     private static readonly Dictionary<IAddon, JObject> LoadedAddonSettings = new();
     
-    private static void LoadSettings(IAddon addon)
+    public static void LoadSettings(IAddon addon)
     {
         if (LoadedAddonSettings.ContainsKey(addon))
             return;
@@ -79,6 +79,30 @@ public static class AddonSettingsManager
         LoadSettings(setting.Addon);
         LoadedAddonSettings[setting.Addon][setting.Key] = setting.Type.Serialize(value);
         SaveSettings(setting.Addon);
+    }
+
+    public static void SetAddonValue(IAddon addon, string key, object value)
+    {
+        var setting = addon.GetSettings().Find(s => s.Key == key);
+        if (setting == null)
+        {
+            SkEditorAPI.Logs.Error($"Setting {key} not found in settings for addon {addon.Identifier}");
+            return;
+        }
+        
+        SetValue(setting, value);
+    }
+    
+    public static object GetAddonValue(IAddon addon, string key)
+    {
+        var setting = addon.GetSettings().Find(s => s.Key == key);
+        if (setting == null)
+        {
+            SkEditorAPI.Logs.Error($"Setting {key} not found in settings for addon {addon.Identifier}");
+            return null;
+        }
+        
+        return GetValue(setting);
     }
     
 }

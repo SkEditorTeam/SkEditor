@@ -26,9 +26,6 @@ public class BottomIconGroupData : IBottomIconElement
     
     public void Setup(Button? button)
     {
-        if (_initialized)
-            throw new InvalidOperationException("This BottomIconGroupData has already been initialized.");
-        
         _initialized = true;
         _attachedButton = button;
         
@@ -36,4 +33,7 @@ public class BottomIconGroupData : IBottomIconElement
     }
     
     public BottomIconData? GetById(string id) => Children.Find(x => x.Id == id);
+    
+    public Button? GetButton() => _attachedButton;
+    public bool IsInitialized() => _initialized;
 }

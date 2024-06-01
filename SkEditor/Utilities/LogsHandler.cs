@@ -11,7 +11,29 @@ public class LogsHandler : ILogEventSink
     {
         if (logEvent.Level == LogEventLevel.Debug)
             SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdateLogs(logEvent.RenderMessage());
-        
-        Console.WriteLine(logEvent.RenderMessage());
+
+        var color = GetColor(logEvent.Level);
+        if (logEvent.Level == LogEventLevel.Fatal)
+        {
+            Console.WriteLine(color + logEvent.Level + " | " + logEvent.RenderMessage());
+            Console.WriteLine(color + logEvent.Exception);
+        }
+        else
+        {
+            Console.WriteLine(color + logEvent.Level + " | " + logEvent.RenderMessage());
+        }
+    }
+    
+    private static string GetColor(LogEventLevel level)
+    {
+        return level switch
+        {
+            LogEventLevel.Debug => "\u001b[37m",
+            LogEventLevel.Information => "\u001b[32m",
+            LogEventLevel.Warning => "\u001b[33m",
+            LogEventLevel.Error => "\u001b[31m",
+            LogEventLevel.Fatal => "\u001b[31m",
+            _ => "\u001b[37m"
+        };
     }
 }

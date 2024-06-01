@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
 using SkEditor.Views;
@@ -101,4 +103,10 @@ public class Windows : IWindows
         await ShowDialog("Error", error, Symbol.AlertFilled);
     }
 
+    public async Task<string?> AskForFile(FilePickerOpenOptions options)
+    {
+        var topLevel = GetCurrentWindow();
+        var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
+        return files.FirstOrDefault()?.Path.AbsolutePath;
+    }
 }

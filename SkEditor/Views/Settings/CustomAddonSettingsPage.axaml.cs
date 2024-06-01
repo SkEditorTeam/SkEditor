@@ -45,6 +45,12 @@ public partial class CustomAddonSettingsPage : UserControl
             var control = setting.Type.CreateControl(value, 
                 newValue =>
                 {
+                    if (setting.Type.IsSelfManaged)
+                    {
+                        setting.OnChanged?.Invoke(newValue);
+                        return;
+                    }
+                    
                     (SkEditorAPI.Events as Events).AddonSettingChanged(setting, value);
                     
                     value = newValue;

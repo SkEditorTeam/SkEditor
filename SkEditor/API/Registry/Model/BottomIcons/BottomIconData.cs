@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using FluentAvalonia.UI.Controls;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.API;
 
@@ -16,6 +17,7 @@ public class BottomIconData : IBottomIconElement {
     public string? Text { get; set; }
     public EventHandler<BottomIconElementClickedEventArgs>? Clicked { get; set; }
     public string Id { get; set; }
+    public bool IsEnabled { get; set; } = true;
 
     /// <summary>
     /// Initializes a new instance of the BottomIconData class.
@@ -26,13 +28,14 @@ public class BottomIconData : IBottomIconElement {
     /// <param name="clicked">The event handler for the click event. Can be null.</param>
     /// <param name="order">The order of the icon in the bottom bar, or in the group if part of a group.</param>
     public BottomIconData(IconSource iconSource, string id, string? text, EventHandler<BottomIconElementClickedEventArgs>? clicked = null,
-        int order = 0)
+        int order = 0, bool isEnabled = true)
     {
         IconSource = iconSource;
         Id = id;
         Order = order;
         Text = text;
         Clicked = clicked;
+        IsEnabled = isEnabled;
     }
     
     private bool _initialized;
@@ -49,7 +52,7 @@ public class BottomIconData : IBottomIconElement {
         _attachedIconElement = iconElement;
         
         if (_attachedButton != null) 
-            _attachedButton.Click += (sender, _) => Clicked?.Invoke(sender, new BottomIconElementClickedEventArgs(this));
+            _attachedButton.Click += (sender, _) => AddonLoader.HandleAddonMethod(() => Clicked?.Invoke(sender, new BottomIconElementClickedEventArgs(this)));
         _attachedTextBlock.Text = Text;
         _attachedTextBlock.IsVisible = Text != null;
         _attachedIconElement.IconSource = IconSource;
@@ -82,8 +85,17 @@ public class BottomIconData : IBottomIconElement {
         _attachedIconElement.IconSource = icon;
     }
     
+    public void UpdateEnabled(bool enabled)
+    {
+        if (!_initialized)
+            throw new InvalidOperationException("This BottomIconData has not been initialized yet.");
+        
+        _attachedButton.IsEnabled = enabled;
+    }
+    
     public Button? GetButton() => _attachedButton;
     public TextBlock GetTextBlock() => _attachedTextBlock;
     public IconSourceElement GetIconElement() => _attachedIconElement;
-    
+    public bool IsInitialized() => _initialized;
+
 }
