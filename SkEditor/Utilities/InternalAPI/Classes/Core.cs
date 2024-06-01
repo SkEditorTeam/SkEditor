@@ -43,4 +43,13 @@ public class Core : ICore
     {
         Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
+
+    public bool IsDeveloperMode()
+    {
+        #if DEBUG
+        return true;
+        #endif
+        
+        return GetAppConfig().IsDevModeEnabled;
+    }
 }

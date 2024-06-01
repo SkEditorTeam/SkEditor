@@ -39,4 +39,10 @@ public interface ICore
     /// </summary>
     /// <param name="url">The URL to open.</param>
     public void OpenLink(string url);
+    
+    /// <summary>
+    /// Check if the developer mode is enabled or not.
+    /// </summary>
+    /// <returns>True if the developer mode is enabled, false otherwise.</returns>
+    public bool IsDeveloperMode();
 }
