@@ -30,11 +30,11 @@ public interface IAddons
     public void DisableAddon(IAddon addon);
 
     /// <summary>
-    /// Retrieves the addon with the specified name.
+    /// Retrieves the addon with the specified identifier.
     /// </summary>
-    /// <param name="addonName">The name of the addon to retrieve.</param>
-    /// <returns>The addon with the specified name, or null if no such addon exists.</returns>
-    public IAddon? GetAddon(string addonName);
+    /// <param name="addonIdentifier">The identifier of the addon to retrieve.</param>
+    /// <returns>The addon with the specified identifier, or null if no such addon exists.</returns>
+    public IAddon? GetAddon(string addonIdentifier);
 
     /// <summary>
     /// Retrieves all addons with the specified state.

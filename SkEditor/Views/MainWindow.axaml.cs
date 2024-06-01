@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -21,6 +22,8 @@ namespace SkEditor.Views;
 public partial class MainWindow : AppWindow
 {
     public static MainWindow Instance { get; private set; }
+    
+    public BottomBarControl GetBottomBar() => BottomBar;
 
     public MainWindow()
     {
@@ -91,8 +94,10 @@ public partial class MainWindow : AppWindow
         }
         else
         {
-            e.Cancel = false;
-            SessionRestorer.SaveSession();
+            await SessionRestorer.SaveSession();
+            SkEditorAPI.Logs.Debug("Session saved.");
+            AlreadyClosed = true;
+            Close();
         }
     }
 

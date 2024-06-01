@@ -33,68 +33,15 @@ public partial class SideBarControl : UserControl
         }
         
         IsVisible = true;
-        Buttons.Children.Clear(); 
-        GridPanels.Children.RemoveRange(1, GridPanels.Children.Count - 1);
+        Buttons.Children.Clear();
+        SkEditorAPI.Windows.GetMainWindow().SidebarContentBorder.Child = null;
+        _currentPanel = null;
         
         foreach (var panel in panels)
-        {
-            var btn = CreatePanelButton(panel);
-            var content = panel.Content;
-            content.Width = 0;
-            content.Opacity = 0;
-
-            content.Transitions = [
-                new DoubleTransition()
-                {
-                    Property = WidthProperty,
-                    Duration = TimeSpan.FromMilliseconds(TransitionDuration)
-                },
-                new DoubleTransition()
-                {
-                    Property = OpacityProperty,
-                    Duration = TimeSpan.FromMilliseconds(TransitionDuration * 1.5f)
-                }
-            ];
-
-            btn.Command = new RelayCommand(async () =>
-            {
-                if (_currentPanel == panel)
-                {
-                    _currentPanel.Content.Width = 0;
-                    _currentPanel.Content.Opacity = 0;
-
-                    _currentPanel.OnClose();
-                    _currentPanel = null;
-
-                    return;
-                }
-
-                if (panel.IsDisabled) return;
-
-                if (_currentPanel != null)
-                {
-                    _currentPanel.OnClose();
-                    _currentPanel.Content.Width = 0;
-                    _currentPanel.Content.Opacity = 0;
-                    _currentPanel = null;
-
-                    await Task.Delay((int) TransitionDuration);
-                }
-
-                _currentPanel = panel;
-                _currentPanel.Content.Width = _currentPanel.DesiredWidth;
-                _currentPanel.Content.Opacity = 1;
-                _currentPanel.OnOpen();
-            });
-
-            Grid.SetColumn(content, 1);
-            GridPanels.Children.Add(content);
-
-            Buttons.Children.Add(btn);
-        }
+            Buttons.Children.Add(CreatePanelButton(panel));
     }
 
-    private static Button CreatePanelButton(SidebarPanel panel)
+    private Button CreatePanelButton(SidebarPanel panel)
     {
         var icon = panel.Icon;
         if (icon is SymbolIconSource symbolIcon) symbolIcon.FontSize = 24;
@@ -113,6 +60,36 @@ public partial class SideBarControl : UserControl
             Classes = { "barButton" },
             Content = iconElement,
             IsEnabled = !panel.IsDisabled,
+            Command = new RelayCommand(() =>
+            {
+                if (_currentPanel == panel)
+                {
+                    _currentPanel.OnClose();
+                    _currentPanel = null;
+                    SkEditorAPI.Windows.GetMainWindow().SidebarContentBorder.Child = null;
+                    
+                    SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MaxWidth = 0;
+                    SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MinWidth = 0;
+                    
+                    return;
+                }
+
+                if (panel.IsDisabled) 
+                    return;
+
+                if (_currentPanel != null)
+                {
+                    _currentPanel.OnClose(); 
+                    _currentPanel = null;
+                }
+
+                _currentPanel = panel;
+                _currentPanel.OnOpen();
+                SkEditorAPI.Windows.GetMainWindow().SidebarContentBorder.Child = _currentPanel.Content;
+            
+                SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MinWidth = _currentPanel.DesiredWidth;
+                SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MaxWidth = int.MaxValue;
+            })
         };
 
         return button;

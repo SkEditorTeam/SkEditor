@@ -36,4 +36,10 @@ public interface ISettingType
     /// <returns>The created control.</returns>
     public Control CreateControl(object value, Action<object> onChanged);
     
+    /// <summary>
+    /// Check if this type is self-managed, meaning SkEditor
+    /// will not handle setting save and change events.
+    /// </summary>
+    public bool IsSelfManaged { get; }
+    
 }

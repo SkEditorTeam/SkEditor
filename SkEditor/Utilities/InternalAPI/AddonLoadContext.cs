@@ -4,15 +4,9 @@ using System.Runtime.Loader;
 
 namespace SkEditor.Utilities.InternalAPI;
 
-public class AddonLoadContext : AssemblyLoadContext
+public class AddonLoadContext(string pluginPath) : AssemblyLoadContext(true)
 {
-    
-    private readonly AssemblyDependencyResolver _resolver;
-
-    public AddonLoadContext(string pluginPath)
-    {
-        _resolver = new AssemblyDependencyResolver(pluginPath);
-    }
+    private readonly AssemblyDependencyResolver _resolver = new(pluginPath);
 
     protected override Assembly Load(AssemblyName assemblyName)
     {

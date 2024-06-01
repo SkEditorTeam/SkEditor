@@ -43,48 +43,11 @@
         <avalonia:SpacedGrid
             VerticalAlignment="Center" HorizontalAlignment="Center"
             Margin="50"
+            Name="WelcomeGrid"
             ColumnSpacing="30"
             RowSpacing="15"
             RowDefinitions="*,*"
             ColumnDefinitions="*,*">
-            
-            <StackPanel Grid.Row="0" Grid.Column="0" Spacing="5">
-                <TextBlock FontSize="28" FontWeight="SemiBold" Margin="0, 0, 0, 5">
-                    Getting Started
-                </TextBlock>
-                <Button><StackPanel Orientation="Horizontal" Spacing="5">
-                    <fluent:SymbolIcon Symbol="DocumentAdd" />
-                    <TextBlock>New File</TextBlock>
-                </StackPanel></Button>
-                <Button><StackPanel Orientation="Horizontal" Spacing="5">
-                    <fluent:SymbolIcon Symbol="Open" />
-                    <TextBlock>Open File</TextBlock>
-                </StackPanel></Button>
-                <Button><StackPanel Orientation="Horizontal" Spacing="5">
-                    <fluent:SymbolIcon Symbol="Folder" />
-                    <TextBlock>Open Folder</TextBlock>
-                </StackPanel></Button>
-                <Button><StackPanel Orientation="Horizontal" Spacing="5">
-                    <fluent:SymbolIcon Symbol="Settings" />
-                    <TextBlock>Settings</TextBlock>
-                </StackPanel></Button>
-            </StackPanel>
-            
-            <StackPanel Grid.Row="1" Grid.Column="0" Spacing="5">
-                <TextBlock FontSize="28" FontWeight="SemiBold" Margin="0, 0, 0, 5">
-                    Help
-                </TextBlock>
-                <Button>GitHub</Button>
-                <Button>Discord Server</Button>
-                <Button>About</Button>
-            </StackPanel>
-            
-            <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Spacing="5">
-                <TextBlock FontSize="28" FontWeight="SemiBold" Margin="0, 0, 0, 5">
-                    Recent Files
-                </TextBlock>
-                <Button>bot.sk</Button>
-            </StackPanel>
         
         </avalonia:SpacedGrid>
     </StackPanel>

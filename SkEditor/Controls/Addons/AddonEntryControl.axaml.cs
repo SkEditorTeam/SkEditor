@@ -139,7 +139,7 @@ public partial class AddonEntryControl : UserControl
             Expander.Items.Add(restartText);
         }
 
-        if (isValid && addon.GetSettings().Count > 0)
+        if (isValid && addon.GetSettings().Count > 0 && AddonLoader.IsAddonEnabled(addon))
         {
             Expander.IsClickEnabled = true;
             Expander.Click += (sender, args) =>
@@ -151,6 +151,7 @@ public partial class AddonEntryControl : UserControl
             {
                 Symbol = Symbol.Settings
             };
+            (Expander.Footer as StackPanel).Margin = new Thickness(0, 0, 5, 0);
         }
     }
 }

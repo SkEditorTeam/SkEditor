@@ -35,5 +35,6 @@ public class TextSetting(string placeholder, int maxLength = -1, char? passwordC
         textBox.TextChanged += (_, _) => onChanged(textBox.Text);
         return textBox;
     }
-    
+
+    public bool IsSelfManaged => false;
 }

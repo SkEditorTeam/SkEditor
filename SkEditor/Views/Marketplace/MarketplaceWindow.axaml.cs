@@ -111,6 +111,7 @@ public partial class MarketplaceWindow : AppWindow
         ItemView.InstallButton.CommandParameter = ItemView.DisableButton.CommandParameter = ItemView.UninstallButton.CommandParameter
                 = ItemView.EnableButton.CommandParameter = ItemView.UpdateButton.CommandParameter = item;
 
+        ItemView.ManageButton.IsVisible = false;
         ItemView.InstallButton.Command = new RelayCommand(item.Install);
         ItemView.UninstallButton.Command = new RelayCommand(item.Uninstall);
         if (item is ZipAddonItem zipAddonItem)
@@ -121,9 +122,17 @@ public partial class MarketplaceWindow : AppWindow
         }
         else if (item is AddonItem addonItem2)
         {
-            ItemView.DisableButton.Command = new RelayCommand(addonItem2.Disable);
-            ItemView.EnableButton.Command = new RelayCommand(addonItem2.Enable);
-            ItemView.UpdateButton.Command = new RelayCommand(addonItem2.Update);
+            ItemView.DisableButton.IsVisible = false;
+            ItemView.EnableButton.IsVisible = false;
+            ItemView.UpdateButton.IsVisible = false;
+            ItemView.UninstallButton.IsVisible = false;
+            
+            ItemView.ManageButton.IsVisible = addonItem2.IsInstalled();
+            ItemView.ManageButton.Command = new RelayCommand(() =>
+            {
+                Close();
+                addonItem2.Manage();
+            });
         }
     }
 

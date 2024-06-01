@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -10,6 +11,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
+using SkEditor.Views;
 
 namespace SkEditor.Controls;
 public partial class BottomBarControl : UserControl
@@ -33,7 +35,11 @@ public partial class BottomBarControl : UserControl
     {
         StackPanel CreatePanel(BottomIconData iconData, Button? button)
         {
-            var iconElement = new IconSourceElement();
+            var iconElement = new IconSourceElement()
+            {
+                Width = 20,
+                Height = 20
+            };
             var textElement = new TextBlock();
             iconData.Setup(button, textElement, iconElement);
 
@@ -88,8 +94,13 @@ public partial class BottomBarControl : UserControl
 
     public void UpdatePosition()
     {
-        if (!ApiVault.Get().IsFileOpen()) return;
+        if (!SkEditorAPI.Files.IsEditorOpen())
+        {
+            PositionInfo.IsVisible = false;
+            return;
+        }
 
+        PositionInfo.IsVisible = true;
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
         TextLocation location = textEditor.Document.GetLocation(textEditor.CaretOffset);
 
@@ -106,4 +117,9 @@ public partial class BottomBarControl : UserControl
     }
 
     public Grid GetMainGrid() => MainGrid;
+
+    private async void OpenLogsWindow(object? sender, TappedEventArgs e)
+    {
+        await new LogsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+    }
 }

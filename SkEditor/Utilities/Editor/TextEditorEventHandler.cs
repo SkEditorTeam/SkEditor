@@ -97,7 +97,6 @@ public partial class TextEditorEventHandler
         if (openedFile == null)
             return;
         
-        SkEditorAPI.Logs.Debug("Text changed for file '" + openedFile.Path + "';");
         if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
         {
             openedFile.IsSaved = false;

@@ -1,4 +1,5 @@
-﻿using SkEditor.Views;
+﻿using Avalonia.Platform.Storage;
+using SkEditor.Views;
 
 namespace SkEditor.API;
 
@@ -52,4 +53,12 @@ public interface IWindows
     /// </summary>
     /// <param name="error">The error message.</param>
     Task ShowError(string error);
+    
+    /// <summary>
+    /// Ask the user to select a file with the given options.
+    /// </summary>
+    /// <param name="options">The options for the file picker.</param>
+    /// <returns>The path of the selected file, or null if the user cancelled the dialog.</returns>
+    Task<string?> AskForFile(FilePickerOpenOptions options);
+    
 }

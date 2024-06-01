@@ -60,13 +60,6 @@ public class SkEditorSelfAddon : IAddon
                 GetIcon("skUnity.svg", true),
                 "https://skunity.com/dashboard/skunity-api"));
         
-        Registries.Connections.Register(new RegistryKey(this, "SkriptHubConnection"),
-            new ConnectionData("SkriptHub", 
-                "Used as a documentation provider", 
-                "SkriptHubAPIKey",
-                GetIcon("SkriptHub.svg", true),
-                "https://skripthub.net/dashboard/api/"));
-        
         Registries.Connections.Register(new RegistryKey(this, "SkriptMCConnection"),
             new ConnectionData("SkriptMC", 
                 "Used as a documentation provider", 
@@ -96,6 +89,28 @@ public class SkEditorSelfAddon : IAddon
         Registries.SidebarPanels.Register(new RegistryKey(this, "ParserPanel"), ParserPanel);
 
         #endregion
+
+        #region Registries
+
+        Registries.WelcomeEntries.Register(new RegistryKey(this, "Test1"),
+            new WelcomeEntryData("Test 1", new RelayCommand(() => SkEditorAPI.Logs.Debug("Test 1 clicked")), GetAddonIcon()));
+
+        #endregion
+        
+        Registries.BottomIcons.Register(new RegistryKey(this, "test1"),
+            new BottomIconData()
+            {
+                Text = "Hello there",
+                Clicked = ((sender, args) =>
+                {
+                    SkEditorAPI.Logs.Debug("Hello there!");
+                    
+                    (args.Icon as BottomIconData).IsEnabled = false;
+                    (args.Icon as BottomIconData).Text = "General Kenobi!";
+                    (args.Icon as BottomIconData).IconSource = GetIcon("skUnity.svg", true);
+                }),
+                IconSource = GetAddonIcon()
+            });
     }
 
     public List<MenuItem> GetMenuItems()

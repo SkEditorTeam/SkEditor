@@ -283,6 +283,8 @@
 	<system:String x:Key="SettingsAboutDiscord">Discord server</system:String>
 	<system:String x:Key="SettingsAboutDiscordDescription">Click to join SkEditor's Discord server!</system:String>
 	<system:String x:Key="SettingsAboutAppdata">Open AppData folder</system:String>
+	<system:String x:Key="SettingsAboutDevMode">Developer mode</system:String>
+	<system:String x:Key="SettingsAboutDevModeDescription">Enable developer mode to access developer features.</system:String>
 
 	<!-- Personalization Settings -->
 	<system:String x:Key="SettingsPersonalizationTitle">Personalization</system:String>
