@@ -35,7 +35,11 @@ public partial class BottomBarControl : UserControl
     {
         StackPanel CreatePanel(BottomIconData iconData, Button? button)
         {
-            var iconElement = new IconSourceElement();
+            var iconElement = new IconSourceElement()
+            {
+                Width = 20,
+                Height = 20
+            };
             var textElement = new TextBlock();
             iconData.Setup(button, textElement, iconElement);
 

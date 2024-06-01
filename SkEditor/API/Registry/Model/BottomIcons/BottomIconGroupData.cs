@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.API;
 
@@ -29,11 +30,27 @@ public class BottomIconGroupData : IBottomIconElement
         _initialized = true;
         _attachedButton = button;
         
-        _attachedButton.Click += (sender, _) => Clicked?.Invoke(sender, new BottomIconElementClickedEventArgs(this));
+        _attachedButton.Click += (sender, _) => AddonLoader.HandleAddonMethod(() => Clicked?.Invoke(sender, new BottomIconElementClickedEventArgs(this)));
+        _attachedButton.IsEnabled = IsEnabled;
     }
     
     public BottomIconData? GetById(string id) => Children.Find(x => x.Id == id);
     
     public Button? GetButton() => _attachedButton;
     public bool IsInitialized() => _initialized;
+    
+    private bool _isEnabled;
+    public bool IsEnabled
+    {
+        get => _isEnabled;
+        set
+        {
+            _isEnabled = value;
+            
+            if (_attachedButton != null)
+                _attachedButton.IsEnabled = value;
+        }
+    }
+
+    public BottomIconData? this[string id] => GetById(id);
 }
