@@ -2,6 +2,7 @@
 using Serilog.Core;
 using Serilog.Events;
 using SkEditor.API;
+using SkEditor.Views;
 
 namespace SkEditor.Utilities;
 
@@ -9,6 +10,8 @@ public class LogsHandler : ILogEventSink
 {
     public void Emit(LogEvent logEvent)
     {
+        LogsWindow.Logs.Add(logEvent);
+        
         if (logEvent.Level == LogEventLevel.Debug)
             SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdateLogs(logEvent.RenderMessage());
 

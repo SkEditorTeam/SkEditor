@@ -47,6 +47,7 @@ public class Logs : ILogs
     public void Fatal(Exception exception)
     {
         Serilog.Log.Fatal(exception, FormatMessage(exception.Message));
+        Serilog.Log.Fatal(exception.StackTrace);
     }
     
     public void AddonError(string message, bool informUser = false, IAddon? addon = null)
