@@ -18,12 +18,10 @@
 			<Setter Property="FontWeight" Value="Regular"/>
 		</Style>
 	</UserControl.Styles>
-
-	<Grid Name="GridPanels" ColumnDefinitions="auto,auto" RowDefinitions="*">
-		<Border Grid.Column="0" Width="42" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
-			<StackPanel Name="Buttons" Spacing="5" HorizontalAlignment="Center">
-				
-			</StackPanel>
-		</Border>
-	</Grid>
+	
+	<Border Width="42" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
+		<StackPanel Name="Buttons" Spacing="5" HorizontalAlignment="Center">
+			
+		</StackPanel>
+	</Border>
 </UserControl>
