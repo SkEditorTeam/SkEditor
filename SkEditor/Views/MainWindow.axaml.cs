@@ -52,19 +52,6 @@ public partial class MainWindow : AppWindow
             {
                 FileHandler.SwitchTab((int)e.Key - 35);
             }
-            
-            if (e is { Key: Key.F6 })
-            {
-                try
-                {
-                    SessionRestorer.SaveSession();
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception);
-                    throw;
-                }
-            }
         };
 
         DragDrop.SetAllowDrop(this, true);
