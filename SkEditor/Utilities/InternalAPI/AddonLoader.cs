@@ -68,9 +68,15 @@ public static class AddonLoader
         var folders = Directory.GetDirectories(folder);
         var dllFiles = new List<string>();
         foreach (string sub in folders)
-            dllFiles.Add(Path.Combine(sub, Path.GetFileName(sub) + ".dll"));
-        SkEditorAPI.Logs.Debug($"Found {dllFiles.Count} addon dll files.");
+        {
+            var dllFile = Path.Combine(sub, Path.GetFileName(sub) + ".dll");
+            if (!File.Exists(dllFile))
+                continue;
             
+            dllFiles.Add(dllFile);
+        }
+        SkEditorAPI.Logs.Debug($"Found {dllFiles.Count} addon dll files.");
+
         foreach (var addonDllFile in dllFiles)
         {
             List<IAddon?> addon;
