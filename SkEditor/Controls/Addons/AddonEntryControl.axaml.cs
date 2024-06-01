@@ -151,6 +151,7 @@ public partial class AddonEntryControl : UserControl
             {
                 Symbol = Symbol.Settings
             };
+            (Expander.Footer as StackPanel).Margin = new Thickness(0, 0, 5, 0);
         }
     }
 }
