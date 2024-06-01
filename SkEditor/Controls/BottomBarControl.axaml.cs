@@ -94,8 +94,13 @@ public partial class BottomBarControl : UserControl
 
     public void UpdatePosition()
     {
-        if (!ApiVault.Get().IsFileOpen()) return;
+        if (!SkEditorAPI.Files.IsEditorOpen())
+        {
+            PositionInfo.IsVisible = false;
+            return;
+        }
 
+        PositionInfo.IsVisible = true;
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
         TextLocation location = textEditor.Document.GetLocation(textEditor.CaretOffset);
 

@@ -31,14 +31,14 @@
 	</UserControl.Styles>
 	
 	<Border Height="32" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
-		<Grid Name="MainGrid" ColumnDefinitions="auto,*,auto,auto">
-			<TextBlock Name="LogsText" Tapped="OpenLogsWindow" Grid.Column="1" MaxWidth="750" HorizontalAlignment="Left" Text="" Margin="30,0,0,0"/>
-			
-			<StackPanel Grid.Column="2" Name="IconsStackPanel" Orientation="Horizontal" Spacing="5">
+		<Grid Name="MainGrid" ColumnDefinitions="Auto,*,Auto">
+			<StackPanel Grid.Column="0" Name="IconsStackPanel" HorizontalAlignment="Left" Orientation="Horizontal" Spacing="5">
 				
 			</StackPanel>
+			
+			<TextBlock Name="LogsText" Tapped="OpenLogsWindow" Grid.Column="1" HorizontalAlignment="Stretch" TextAlignment="Center" Text="" Margin="5,0"/>
 
-			<StackPanel Grid.Column="3" Margin="5,0,10,0" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<StackPanel Grid.Column="2" Name="PositionInfo" Margin="5,0,10,0" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
 				<TextBlock x:Name="LineText" Text="{DynamicResource BottomBarLine}"/>
 				<TextBlock x:Name="ColumnText" Text="{DynamicResource BottomBarColumn}"/>
 			</StackPanel>
