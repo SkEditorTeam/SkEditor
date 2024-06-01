@@ -60,13 +60,6 @@ public class SkEditorSelfAddon : IAddon
                 GetIcon("skUnity.svg", true),
                 "https://skunity.com/dashboard/skunity-api"));
         
-        Registries.Connections.Register(new RegistryKey(this, "SkriptHubConnection"),
-            new ConnectionData("SkriptHub", 
-                "Used as a documentation provider", 
-                "SkriptHubAPIKey",
-                GetIcon("SkriptHub.svg", true),
-                "https://skripthub.net/dashboard/api/"));
-        
         Registries.Connections.Register(new RegistryKey(this, "SkriptMCConnection"),
             new ConnectionData("SkriptMC", 
                 "Used as a documentation provider", 
