@@ -26,4 +26,17 @@ public interface ICore
     /// </summary>
     /// <returns>An array of the startup arguments.</returns>
     public string[] GetStartupArguments();
+
+    /// <summary>
+    /// Get an SkEditor's resource by key.
+    /// </summary>
+    /// <param name="key">The key of the resource.</param>
+    /// <returns>The resource.</returns>
+    public object? GetApplicationResource(string key);
+
+    /// <summary>
+    /// Open the desired web URL into the default browser.
+    /// </summary>
+    /// <param name="url">The URL to open.</param>
+    public void OpenLink(string url);
 }

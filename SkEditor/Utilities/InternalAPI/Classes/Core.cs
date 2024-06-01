@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
+using Avalonia;
+using Avalonia.Styling;
 using SkEditor.Utilities;
 
 namespace SkEditor.API;
@@ -28,5 +31,16 @@ public class Core : ICore
     public void SetStartupArguments(string[]? args)
     {
         _startupArguments = args ?? [];
+    }
+
+    public object? GetApplicationResource(string key)
+    {
+        Application.Current.TryGetResource(key, ThemeVariant.Dark, out var resource);
+        return resource;
+    }
+
+    public void OpenLink(string url)
+    {
+        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 }

@@ -96,6 +96,13 @@ public class SkEditorSelfAddon : IAddon
         Registries.SidebarPanels.Register(new RegistryKey(this, "ParserPanel"), ParserPanel);
 
         #endregion
+
+        #region Registries
+
+        Registries.WelcomeEntries.Register(new RegistryKey(this, "Test1"),
+            new WelcomeEntryData("Test 1", new RelayCommand(() => SkEditorAPI.Logs.Debug("Test 1 clicked")), GetAddonIcon()));
+
+        #endregion
     }
 
     public List<MenuItem> GetMenuItems()
