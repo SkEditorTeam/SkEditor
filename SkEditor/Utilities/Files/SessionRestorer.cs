@@ -37,7 +37,6 @@ public static class SessionRestorer
     {
         if (!Directory.Exists(SessionFolder)) 
             return false;
-        SkEditorAPI.Logs.Warning(SessionFolder);
         
         var files = Directory.GetFiles(SessionFolder);
         if (files.Length == 0) 
