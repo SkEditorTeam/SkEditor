@@ -39,7 +39,7 @@ public class BottomIconGroupData : IBottomIconElement
     public Button? GetButton() => _attachedButton;
     public bool IsInitialized() => _initialized;
     
-    private bool _isEnabled;
+    private bool _isEnabled = true;
     public bool IsEnabled
     {
         get => _isEnabled;

@@ -28,14 +28,17 @@ public class BottomIconData : IBottomIconElement
         
         if (_attachedButton != null) 
             _attachedButton.Click += (sender, _) => AddonLoader.HandleAddonMethod(() => Clicked?.Invoke(sender, new BottomIconElementClickedEventArgs(this)));
+
         _attachedTextBlock.Text = Text;
         _attachedTextBlock.IsVisible = Text != null;
+
         _attachedIconElement.IconSource = IconSource;
+        _attachedIconElement.IsVisible = IconSource != null;
     }
     
     public Button? GetButton() => _attachedButton;
     public TextBlock GetTextBlock() => _attachedTextBlock;
-    public IconSourceElement GetIconElement() => _attachedIconElement;
+    public IconSourceElement? GetIconElement() => _attachedIconElement;
     public bool IsInitialized() => _initialized;
 
     #region Properties
@@ -52,15 +55,18 @@ public class BottomIconData : IBottomIconElement
         }
     }
 
-    private IconSource _iconSource;
-    public IconSource IconSource
+    private IconSource? _iconSource;
+    public IconSource? IconSource
     {
         get => _iconSource;
         set
         {
             _iconSource = value;
             if (_attachedIconElement != null)
+            {
                 _attachedIconElement.IconSource = value;
+                _attachedIconElement.IsVisible = value != null;
+            }
         }
     }
     
