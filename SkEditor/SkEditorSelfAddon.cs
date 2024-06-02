@@ -11,6 +11,7 @@ using SkEditor.API;
 using SkEditor.API.Settings;
 using SkEditor.API.Settings.Types;
 using SkEditor.Controls.Sidebar;
+using SkEditor.Parser.Elements;
 using SkEditor.Utilities.Parser.Elements;
 using SkEditor.ViewModels;
 using Symbol = FluentIcons.Common.Symbol;
@@ -49,6 +50,9 @@ public class SkEditorSelfAddon : IAddon
             new ParserElementData(typeof(StructCommand), 500));
         Registries.ParserElements.Register(new RegistryKey(this, "StructOptions"),
             new ParserElementData(typeof(StructOptions), 250));
+        
+        Registries.ParserElements.Register(new RegistryKey(this, "SecConditional"),
+            new ParserElementData(typeof(SecCondition), 100));
 
         #endregion
         

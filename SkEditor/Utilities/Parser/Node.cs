@@ -110,6 +110,12 @@ public class SectionNode(string key, int line) : Node(key, line), IEnumerable<No
     {
         return GetEnumerator();
     }
+
+    public Node FindLastNode()
+    {
+        var lastNode = Children[^1];
+        return lastNode.IsSection ? ((SectionNode) lastNode).FindLastNode() : lastNode;
+    }
 }
 
 /// <summary>

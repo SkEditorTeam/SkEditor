@@ -1,7 +1,7 @@
 ﻿using SkEditor.Parser;
 using SkEditor.Parser.Elements;
 
-namespace SkEditor.Utilities.Parser.Elements;
+namespace SkEditor.Parser.Elements;
 
 public class StructEvent : Element
 {

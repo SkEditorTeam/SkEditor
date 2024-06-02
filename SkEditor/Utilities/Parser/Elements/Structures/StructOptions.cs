@@ -4,12 +4,12 @@ using SkEditor.API;
 using SkEditor.Parser;
 using SkEditor.Parser.Elements;
 
-namespace SkEditor.Utilities.Parser.Elements;
+namespace SkEditor.Parser.Elements;
 
 public class StructOptions : Element
 {   
     
-    public readonly Dictionary<string, string> Options = new();
+    public readonly List<OptionDefinition> Options = new();
     
     public override void Load(Node node, ParsingContext context)
     {
@@ -25,9 +25,10 @@ public class StructOptions : Element
             if (optionNode.IsSimple)
             {
                 var simpleNode = optionNode as SimpleNode;
-                simpleNode.Element = new OptionDefinition(simpleNode.Key, simpleNode.Value);
+                var option = new OptionDefinition(simpleNode.Key, simpleNode.Value);
                 
-                Options[simpleNode.Key] = simpleNode.Value;
+                Options.Add(option);
+                simpleNode.Element = option;
             }
             else
             {
@@ -45,20 +46,20 @@ public class StructOptions : Element
         };
     }
 
-    public class OptionDefinition : Element
+    public class OptionDefinition(string key, string value) : Element
     {
-        public string Key { get; private set; }
-        public string Value { get; private set; }
-        
-        public OptionDefinition(string key, string value)
-        {
-            Key = key;
-            Value = value;
-        }
+        public string Key { get; private set; } = key;
+        public string Value { get; private set; } = value;
 
         public override void Load(Node node, ParsingContext context)
         {
             throw new System.NotImplementedException("Cannot load option definition."); 
         }
+    }
+
+    public override string Debug()
+    {
+        return "Options[" + Options.Count + "]:" +
+               string.Join("\n  - ", Options.Select(x => x.Key + ": " + x.Value));
     }
 }

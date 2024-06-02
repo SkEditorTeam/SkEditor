@@ -1,22 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 using AvaloniaEdit;
-using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using AvaloniaEdit.Utils;
-using Octokit;
 using SkEditor.API;
 using SkEditor.Parser;
 using SkEditor.Parser.Elements;
 using SkEditor.TextMarkers;
-using SkEditor.Views.Settings;
-using Application = Avalonia.Application;
+using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Utilities.InternalAPI;
 
@@ -29,22 +24,21 @@ public class FileParser
 {
     
     public readonly TextMarkerService TextMarkerService;
+    public readonly HintGenerator HintGenerator;
     public FileParser(TextEditor editor)
     {
         Editor = editor;
         
-        /*
-         * var textMarkerService = new TextMarkerService(textEditor.Document);
-        textEditor.TextArea.TextView.BackgroundRenderers.Add(textMarkerService);
-        textEditor.TextArea.TextView.LineTransformers.Add(textMarkerService);
-
-        var services = textEditor.Document.GetService<IServiceContainer>();
-        services?.AddService(typeof(ITextMarkerService), textMarkerService);
-
-        TextMarkerServices[textEditor] = textMarkerService;
-        return textMarkerService;
-         */
         TextMarkerService = new TextMarkerService(Editor);
+        Editor.TextArea.TextView.ElementGenerators.Add(HintGenerator = new HintGenerator());
+        Editor.TextChanged += (sender, args) =>
+        {
+            if (HintGenerator.Controls.Count > 0)
+            {
+                HintGenerator.Controls.Clear();
+                Editor.TextArea.TextView.Redraw();   
+            }
+        };
     }
     
     public TextEditor Editor { get; private set; }
@@ -76,11 +70,25 @@ public class FileParser
             marker.ToolTip = () => ParseContent(warning);
             SkEditorAPI.Logs.Debug("Adding marker to line " + node.Line);
         }
-        SkEditorAPI.Logs.Debug("TextMarkerService.TextMarkers: " + TextMarkerService.TextMarkers.Count());
+        
+        if (SkEditorAPI.Core.GetAppConfig().EnableFolding) 
+            FoldingCreator.CreateFoldings(Editor, ParsedNodes);
 
-        /*void VisitNode(Node node, int indent = 0)
+        void VisitNode(Node node, int indent = 0)
         {
-            SkEditorAPI.Logs.Debug($"{new string(' ', indent)}- {node.Key} [{node.Element?.GetType().Name ?? "null"}]");
+            var docLine = Editor.Document.GetLineByNumber(node.Line);
+            var offset = docLine.Offset + docLine.Length;
+            HintGenerator.Controls.Add((offset, new TextBlock()
+            {
+                Text = node.Element?.Debug(),
+                Foreground = Brushes.DarkSlateGray,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(15, 0, 0, 0),
+                FontStyle = FontStyle.Italic
+            }));
+            Editor.TextArea.TextView.Redraw();
+            
             if (node is SectionNode sectionNode)
             {
                 foreach (var child in sectionNode.Children)
@@ -90,21 +98,24 @@ public class FileParser
             }
         }
         
+        HintGenerator.Controls.Clear();
+        Editor.TextArea.TextView.Redraw();
+        
         foreach (var node in ParsedNodes)
         {
             VisitNode(node);
-        }*/
+        }
     }
 
     public StackPanel ParseContent(string input)
     {
         var panel = new StackPanel { Orientation = Orientation.Horizontal };
         
-        var regex = new System.Text.RegularExpressions.Regex(@"<line:(\d+)>");
+        var regex = new Regex(@"<line:(\d+)>");
         var matches = regex.Matches(input);
         
         var lastMatch = 0;
-        foreach (System.Text.RegularExpressions.Match match in matches)
+        foreach (Match match in matches)
         {
             var index = match.Index;
             var length = match.Length;
@@ -132,30 +143,37 @@ public class FileParser
     }
 }
 
-public class ParserLineFormatter(int lineNumber, int length) : DocumentColorizingTransformer
+public class HintGenerator : VisualLineElementGenerator, IComparer<(int, Control)>
 {
-    
-    protected override void ColorizeLine(DocumentLine line)
+    public readonly List<(int, Control)> Controls = [];
+
+    /// <summary>
+    /// Gets the first interested offset using binary search
+    /// </summary>
+    /// <returns>The first interested offset.</returns>
+    /// <param name="startOffset">Start offset.</param>
+    public override int GetFirstInterestedOffset(int startOffset)
     {
-        if (!line.IsDeleted && line.LineNumber == lineNumber)
-        {
-            ChangeLinePart(line.Offset, line.EndOffset, ApplyChanges);
-        }
+        int pos = Controls.BinarySearch((startOffset, null), this);
+        if (pos < 0)
+            pos = ~pos;
+        if (pos < Controls.Count)
+            return Controls[pos].Item1;
+        else
+            return -1;
     }
 
-    private void ApplyChanges(VisualLineElement element)
+    public override VisualLineElement ConstructElement(int offset)
     {
-        Application.Current.TryGetResource("ThemeOrangeColor", ThemeVariant.Default, out var color);
-        element. TextRunProperties. SetTextDecorations(new TextDecorationCollection(new[ ] {
-            new TextDecoration {
-                Location = TextDecorationLocation.Underline,
-                StrokeDashArray = new AvaloniaList<double>(2, 2),
-                Stroke = new SolidColorBrush((Color) color!),
-                StrokeThickness = 2,
-                StrokeThicknessUnit = TextDecorationUnit.Pixel,
+        int pos = Controls.BinarySearch((offset, null), this);
+        if (pos >= 0)
+            return new InlineObjectElement(0, Controls[pos].Item2);
+        else
+            return null;
+    }
 
-                StrokeOffset = 3,
-                StrokeOffsetUnit = TextDecorationUnit.Pixel }
-        }));
+    public int Compare((int, Control) x, (int, Control) y)
+    {
+        return x.Item1.CompareTo(y.Item1);
     }
 }

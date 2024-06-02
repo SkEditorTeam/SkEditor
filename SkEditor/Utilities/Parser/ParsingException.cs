@@ -1,7 +1,7 @@
 ﻿using System;
 using SkEditor.Parser;
 
-namespace SkEditor.Utilities.Parser;
+namespace SkEditor.Parser;
 
 public class ParsingException : Exception
 {

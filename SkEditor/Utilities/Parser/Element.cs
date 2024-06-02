@@ -21,4 +21,16 @@ public abstract class Element
     /// <param name="context">The parsing context.</param>
     public abstract void Load(Node node, ParsingContext context);
     
+    /// <summary>
+    /// Debug this element for logging purposes.
+    /// </summary>
+    /// <returns>The debug string, that should contains information about the element.</returns>
+    public virtual string Debug() => GetType().Name;
+    
+    /// <summary>
+    /// Create a display string for this section, mainly used
+    /// in code folding.
+    /// </summary>
+    /// <returns>The display string for this section.</returns>
+    public virtual string? SectionDisplay() => null;
 }
