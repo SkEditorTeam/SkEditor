@@ -19,6 +19,7 @@ public static class ElementParser
         registeredElements.Sort((a, b) => a.Priority.CompareTo(b.Priority));
         registeredElements.Reverse();
         var elements = registeredElements.Select(x => x.Type).ToList();
+        SkEditorAPI.Logs.Debug($"    - Parsing node '{node.Key}' with {elements.Count} elements.");
         
         foreach (var elementType in elements)
         {

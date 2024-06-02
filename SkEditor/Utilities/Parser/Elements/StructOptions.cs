@@ -13,10 +13,11 @@ public class StructOptions : Element
     
     public override void Load(Node node, ParsingContext context)
     {
-        if (context.ParsedNodes.Any(x => x.Element is StructOptions))
+        var anotherOptions = context.ParsedNodes.FirstOrDefault(x => x.Element is StructOptions);
+        if (anotherOptions != null && anotherOptions != node)
         {
             SkEditorAPI.Logs.Debug("Found multiple options sections.");
-            context.Warning(node, "Only one options section is allowed.");
+            context.Warning(node, "Only one options section is allowed. Found another one at <line:" + anotherOptions.Line + ">.");
         }
         
         foreach (var optionNode in node as SectionNode)

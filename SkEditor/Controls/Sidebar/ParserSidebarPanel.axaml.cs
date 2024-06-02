@@ -77,7 +77,7 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ParseCurrentFile()
     {
-        var parser = SkEditorAPI.Files.GetCurrentOpenedFile().Parser;
+        var parser = SkEditorAPI.Files.GetCurrentOpenedFile().FileParser;
         if (parser == null)
             return;
 

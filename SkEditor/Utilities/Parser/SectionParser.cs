@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SkEditor.API;
 
 namespace SkEditor.Parser;
 
@@ -21,11 +22,11 @@ public static class SectionParser
             var trimmedLine = line.Trim();
             if (string.IsNullOrEmpty(trimmedLine))
             {
-                if (debug) Console.WriteLine($"--- Skipping empty line {i + 1}");
+                if (debug) SkEditorAPI.Logs.Debug($"--- Skipping empty line {i + 1}");
                 continue;
             }
 
-            if (debug) Console.WriteLine($"--- Processing line {i + 1}: {line}");
+            if (debug) SkEditorAPI.Logs.Debug($"--- Processing line {i + 1}: {line}");
 
             var simpleMatch = simpleNodeRegex.Match(line);
             if (simpleMatch.Success)
@@ -81,12 +82,12 @@ public static class SectionParser
         if (sectionStack.Count > 0)
         {
             sectionStack.Peek().node.AddChild(newNode);
-            if (debug) Console.WriteLine($"Added {newNode.GetType().Name}: {newNode.Key} with indent {indent} (Line {lineNumber}) to parent {sectionStack.Peek().node.Key}");
+            if (debug) SkEditorAPI.Logs.Debug($"Added {newNode.GetType().Name}: {newNode.Key} with indent {indent} (Line {lineNumber}) to parent {sectionStack.Peek().node.Key}");
         }
         else
         {
             nodes.Add(newNode);
-            if (debug) Console.WriteLine($"Added {newNode.GetType().Name}: {newNode.Key} with indent {indent} (Line {lineNumber}) to root");
+            if (debug) SkEditorAPI.Logs.Debug($"Added {newNode.GetType().Name}: {newNode.Key} with indent {indent} (Line {lineNumber}) to root");
         }
     }
     

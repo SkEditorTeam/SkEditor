@@ -13,6 +13,7 @@ using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Syntax;
 using File = System.IO.File;
@@ -161,6 +162,7 @@ public class Files : IFiles
             Path = path,
             TabViewItem = tabItem,
             Parser = tabItem.Content is TextEditor editor ? new CodeParser(editor) : null,
+            FileParser = tabItem.Content is TextEditor editor2 ? new FileParser(editor2) : null,
             CustomName = header,
             IsSaved = path != null,
             IsNewFile = path == null,

@@ -11,6 +11,7 @@ using SkEditor.API;
 using SkEditor.API.Settings;
 using SkEditor.API.Settings.Types;
 using SkEditor.Controls.Sidebar;
+using SkEditor.Utilities.Parser.Elements;
 using SkEditor.ViewModels;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
@@ -40,6 +41,17 @@ public class SkEditorSelfAddon : IAddon
 
     public async void OnEnable()
     {
+        #region Registries - Parser Elements 
+        
+        Registries.ParserElements.Register(new RegistryKey(this, "StructEvent"),
+            new ParserElementData(typeof(StructEvent), 1000));
+        Registries.ParserElements.Register(new RegistryKey(this, "StructCommand"),
+            new ParserElementData(typeof(StructCommand), 500));
+        Registries.ParserElements.Register(new RegistryKey(this, "StructOptions"),
+            new ParserElementData(typeof(StructOptions), 250));
+
+        #endregion
+        
         #region Registries - Connections
 
         IconSource GetIcon(string fileName, bool svg)
