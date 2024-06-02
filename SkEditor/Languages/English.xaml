@@ -46,6 +46,7 @@
 	<system:String x:Key="MenuHeaderDuplicate">Duplicate</system:String>
 	<system:String x:Key="MenuHeaderComment">Comment</system:String>
 	<system:String x:Key="MenuHeaderDelete">Delete</system:String>
+	<system:String x:Key="MenuHeaderGoToLine">Go to line</system:String>
 
 	<!-- Tools Menu -->
 	<system:String x:Key="MenuHeaderDocumentation">Documentation</system:String>
@@ -364,6 +365,10 @@
 	<system:String x:Key="MarketplaceButtonUninstall">Uninstall</system:String>
 	<system:String x:Key="MarketplaceButtonDisable">Disable</system:String>
 	<system:String x:Key="MarketplaceButtonEnable">Enable</system:String>
+
+	<!-- Go to line -->
+	<system:String x:Key="GoToLine">Go to line</system:String>
+	<system:String x:Key="GoToLineButton">Go</system:String>
 
 
 </ResourceDictionary>

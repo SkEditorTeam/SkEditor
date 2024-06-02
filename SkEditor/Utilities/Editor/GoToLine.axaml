@@ -1,0 +1,14 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="SkEditor.Utilities.Editor.GoToLine" Icon="/Assets/SkEditor.ico"
+		Title="{DynamicResource GoToLine}" Height="80" Width="160" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+
+	<Grid>
+		<TextBox Name="GoToLineInput" HorizontalAlignment="Left" Margin="20"/>
+		<Button Name="GoToLineButton" Content="{DynamicResource GoToLineButton}" HorizontalAlignment="Right" Margin="0, 0, 10, 0"/>
+	</Grid>
+</Window>

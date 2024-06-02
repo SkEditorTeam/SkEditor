@@ -46,6 +46,7 @@
 	<system:String x:Key="MenuHeaderDuplicate">Duplikuj</system:String>
 	<system:String x:Key="MenuHeaderComment">Zakomentuj</system:String>
 	<system:String x:Key="MenuHeaderDelete">Usuń</system:String>
+	<system:String x:Key="MenuHeaderGoToLine">Przejdź do linii</system:String>
 
 	<!-- Tools Menu -->
 	<system:String x:Key="MenuHeaderDocumentation">Dokumentacja</system:String>
@@ -292,6 +293,10 @@
 	<system:String x:Key="MarketplaceButtonUninstall">Odinstaluj</system:String>
 	<system:String x:Key="MarketplaceButtonDisable">Wyłącz</system:String>
 	<system:String x:Key="MarketplaceButtonEnable">Włącz</system:String>
+
+	<!-- Go to line -->
+	<system:String x:Key="GoToLine">Przejdź do linii</system:String>
+	<system:String x:Key="GoToLineButton">Idź</system:String>
 
 
 </ResourceDictionary>
