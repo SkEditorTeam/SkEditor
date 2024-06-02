@@ -56,19 +56,27 @@ public class FileParser
         var context = new ParsingContext();
         ElementParser.ParseNodes(ParsedNodes, context);
         SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} nodes, with {context.Warnings.Count} warnings! [{context.ParsedNodes.Count}]");
-        
+
+        HintGenerator.Controls.Clear();
         TextMarkerService.RemoveAll(marker => true);
+        Editor.TextArea.TextView.Redraw();
+        
         foreach (var pair in context.Warnings)
         {
             var node = pair.Item1;
             var warning = pair.Item2;
+            SkEditorAPI.Logs.Debug("Warning: " + warning + " at line " + node.Line);
             var line = Editor.Document.GetLineByNumber(node.Line);
             
             var marker = TextMarkerService.Create(line.Offset, line.Length);
             marker.MarkerTypes = TextMarkerTypes.SquigglyUnderline;
             marker.MarkerColor = Colors.Orange;
-            marker.ToolTip = () => ParseContent(warning);
-            SkEditorAPI.Logs.Debug("Adding marker to line " + node.Line);
+            
+            var offset = line.Offset + line.Length;
+            var panel = ParseContent(warning);
+            panel.Margin = new Thickness(5, 0, 0, 0);
+            HintGenerator.Controls.Add((offset, panel));
+            Editor.TextArea.TextView.Redraw();
         }
         
         if (SkEditorAPI.Core.GetAppConfig().EnableFolding) 
@@ -76,19 +84,6 @@ public class FileParser
 
         void VisitNode(Node node, int indent = 0)
         {
-            var docLine = Editor.Document.GetLineByNumber(node.Line);
-            var offset = docLine.Offset + docLine.Length;
-            HintGenerator.Controls.Add((offset, new TextBlock()
-            {
-                Text = node.Element?.Debug(),
-                Foreground = Brushes.DarkSlateGray,
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(15, 0, 0, 0),
-                FontStyle = FontStyle.Italic
-            }));
-            Editor.TextArea.TextView.Redraw();
-            
             if (node is SectionNode sectionNode)
             {
                 foreach (var child in sectionNode.Children)
@@ -97,13 +92,13 @@ public class FileParser
                 }
             }
         }
-        
-        HintGenerator.Controls.Clear();
-        Editor.TextArea.TextView.Redraw();
-        
-        foreach (var node in ParsedNodes)
+
+        if (false)
         {
-            VisitNode(node);
+            foreach (var node in ParsedNodes)
+            {
+                VisitNode(node);
+            }
         }
     }
 
@@ -122,11 +117,26 @@ public class FileParser
             var line = int.Parse(match.Groups[1].Value);
             
             var text = input.Substring(lastMatch, index - lastMatch);
-            var textBlock = new TextBlock { Text = text };
+            var textBlock = new TextBlock { Text = text, 
+                Foreground = Brushes.Orange,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(15, 0, 0, 0),
+                FontStyle = FontStyle.Italic,
+                Opacity = 0.6
+            };
             panel.Children.Add(textBlock);
             
-            var link = new TextBlock { Text = $"line {line}", Foreground = Brushes.CornflowerBlue };
-            link.Tapped += (sender, args) =>
+            var button = new Button()
+            {
+                Content = $"line {line}",
+                Background = Brushes.Transparent,
+                BorderBrush = Brushes.Transparent,
+                Padding = new Thickness(1),
+                Foreground = Brushes.CornflowerBlue,
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+            button.Click += (sender, args) =>
             {
                 SkEditorAPI.Logs.Debug("Tapped on line " + line);
                 Editor.ScrollToLine(line);
@@ -134,9 +144,23 @@ public class FileParser
                 Editor.CaretOffset = Editor.Document.GetLineByNumber(line).Offset;
                 Editor.Focus();
             };
-            panel.Children.Add(link);
+            panel.Children.Add(button);
             
             lastMatch = index + length;
+        }
+        
+        if (!string.IsNullOrEmpty(input.Substring(lastMatch)))
+        {
+            var text = input.Substring(lastMatch);
+            var textBlock = new TextBlock { Text = text, 
+                Foreground = Brushes.Orange,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(15, 0, 0, 0),
+                FontStyle = FontStyle.Italic,
+                Opacity = 0.6
+            };
+            panel.Children.Add(textBlock);
         }
         
         return panel;
