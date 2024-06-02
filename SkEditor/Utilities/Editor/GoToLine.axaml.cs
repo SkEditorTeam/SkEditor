@@ -1,4 +1,5 @@
 using System;
+using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
@@ -16,11 +17,20 @@ public partial class GoToLine : AppWindow
         GoToLineInput.TextChanged += (_, _) => UpdateInput();
         GoToLineButton.Command = new RelayCommand(Execute);
         
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Enter) Execute();
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private void Execute()
     {
-        if (string.IsNullOrWhiteSpace(GoToLineInput.Text)) return;
+        if (string.IsNullOrWhiteSpace(GoToLineInput.Text))
+        {
+            Close();
+            return;
+        }
 
         TextEditor editor = ApiVault.Get().GetTextEditor();
         if (!int.TryParse(GoToLineInput.Text, out int lineNumber)) return;

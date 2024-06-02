@@ -3,12 +3,12 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:ui="using:FluentAvalonia.UI.Controls"
-		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		mc:Ignorable="d" d:DesignWidth="180" d:DesignHeight="100"
 		x:Class="SkEditor.Utilities.Editor.GoToLine" Icon="/Assets/SkEditor.ico"
-		Title="{DynamicResource GoToLine}" Height="80" Width="160" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+		Title="{DynamicResource GoToLine}" Height="100" Width="180" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
-	<Grid>
-		<TextBox Name="GoToLineInput" HorizontalAlignment="Left" Margin="20"/>
-		<Button Name="GoToLineButton" Content="{DynamicResource GoToLineButton}" HorizontalAlignment="Right" Margin="0, 0, 10, 0"/>
+	<Grid Margin="15,0,15,10" ColumnDefinitions="*,auto">
+		<TextBox Grid.Column="0" Name="GoToLineInput" Height="20" Margin="0,0,15,0"/>
+		<Button Grid.Column="1" Name="GoToLineButton" Content="Go"/>
 	</Grid>
 </Window>
