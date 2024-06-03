@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
@@ -25,6 +26,13 @@ public partial class DocumentationControl : UserControl
         AssignCommands();
         AddItems();
         LoadingInformation.IsVisible = false;
+        SearchQueryInput.Loaded += (sender, e) => SearchQueryInput.Focus();
+
+        KeyDown += (sender, e) =>
+        {
+            if (e.Key == Key.Enter) SearchButtonClick(sender, e);
+        };
+
     }
 
     public void AssignCommands()
