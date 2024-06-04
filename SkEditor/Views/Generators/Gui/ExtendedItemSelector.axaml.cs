@@ -1,14 +1,8 @@
-using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
-using Avalonia.Controls.Documents;
-using Avalonia.Controls.Primitives;
-using Avalonia.Layout;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
-using Microsoft.CodeAnalysis.Text;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
