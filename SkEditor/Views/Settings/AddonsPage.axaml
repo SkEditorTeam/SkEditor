@@ -13,7 +13,7 @@
 		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsAddonsTitle}" Grid.Row="0"/>
 		<ScrollViewer Grid.Row="1">
 			<StackPanel Spacing="8">
-				<ui:SettingsExpander Header="{DynamicResource SettingsAddonsListTitle}" IconSource="{StaticResource AddonIcon}">
+				<ui:SettingsExpander Header="List of addons" IconSource="{StaticResource AddonIcon}">
 					<ui:SettingsExpander.Footer>
 						<Border Grid.Row="1" Width="175" BorderBrush="#25ffffff" BorderThickness="1" CornerRadius="5">
 							<ListBox Name="AddonListBox" Height="100" ScrollViewer.VerticalScrollBarVisibility="Auto"/>

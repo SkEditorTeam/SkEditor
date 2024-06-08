@@ -12,7 +12,7 @@
                         Width="200">
                 <Button Name="OpenDashboardButton" Width="200">
                     <StackPanel Spacing="5" Orientation="Horizontal">
-                        <TextBlock Text="{DynamicResource SettingsConnectionsDashboardButton}" />
+                        <TextBlock Text="Open Dashboard" />
                         <controls:IconSourceElement IconSource="Open" />
                     </StackPanel>
                 </Button>

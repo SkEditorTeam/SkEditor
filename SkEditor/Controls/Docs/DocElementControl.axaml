@@ -70,7 +70,7 @@
                         Grid.Column="1">
                 
                 <Expander
-                    Header="{DynamicResource DocumentationControlActions}"
+                    Header="Actions"
                     IsExpanded="False">
                 
                     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*"

@@ -13,7 +13,7 @@
 		<ScrollViewer Grid.Row="1">
 			<StackPanel Spacing="8">
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsThemeNewThemeInfo}" IconSource="{StaticResource ImportantIcon}">
+				<ui:SettingsExpander Header="If you want to create a new theme, you need to create a file in the Themes folder." IconSource="{StaticResource ImportantIcon}">
 					<ui:SettingsExpander.Footer>
 						<Button Name="OpenThemesFolderButton" Content="{DynamicResource SettingsThemeOpenFolder}"/>
 					</ui:SettingsExpander.Footer>
@@ -25,7 +25,7 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 				
-				<ui:SettingsExpander Name="EditThemeItem" Header="{DynamicResource SettingsThemeEditTheme}" Description="{DynamicResource SettingsThemeEditThemeDescription}" IconSource="{StaticResource EditIcon}" IsClickEnabled="True"/>
+				<ui:SettingsExpander Name="EditThemeItem" Header="Edit theme" IconSource="{StaticResource EditIcon}" IsClickEnabled="True"/>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>
