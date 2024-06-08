@@ -271,6 +271,8 @@
 	<system:String x:Key="SettingsGeneralPasteIndent">Auto-indent Paste</system:String>
 	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatically adjusts the indentation of pasted text to match the previous line's format.</system:String>
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Check for updates</system:String>
+	<system:String x:Key="SettingsGeneralProjectSingleFolderClick">Open project folder on single click</system:String>
+	<system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">When enabled, opens a folder with a single click instead of a double click.</system:String>
 
 	<!-- About Settings -->
 	<system:String x:Key="SettingsAboutTitle">About</system:String>

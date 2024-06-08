@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Avalonia.Input;
 using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Projects;
@@ -59,13 +60,27 @@ public static class ProjectOpener
         //    ProjectRootFolder.GetItemByPath(path)?.RenameElement(e.Name, false);
         //};
 
-        FileTreeView.DoubleTapped += (sender, e) =>
+        void HandleTapped(TappedEventArgs e)
         {
             if (e.Source is not Border border) return;
             var treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
             if (treeViewItem is null) return;
             var storageElement = treeViewItem.DataContext as StorageElement;
             storageElement?.HandleDoubleClick();
+        }
+        
+        FileTreeView.DoubleTapped += (sender, e) =>
+        {
+            if (ApiVault.Get().GetAppConfig().IsProjectSingleClickEnabled)
+                return;
+            HandleTapped(e);
+        };
+        
+        FileTreeView.Tapped += (sender, e) =>
+        {
+            if (!ApiVault.Get().GetAppConfig().IsProjectSingleClickEnabled)
+                return;
+            HandleTapped(e);
         };
     }
 

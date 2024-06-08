@@ -69,6 +69,7 @@ public partial class GeneralPage : UserControl
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
         RpcToggleSwitch.Command = new RelayCommand(ToggleRpc);
         WrappingToggleSwitch.Command = new RelayCommand(ToggleWrapping);
+        ProjectSingleClickToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsProjectSingleClickEnabled"));
 
         IndentationAmountComboBox.SelectionChanged += (s, e) =>
         {
