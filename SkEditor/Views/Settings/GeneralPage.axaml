@@ -92,6 +92,13 @@
 						<ToggleSwitch Name="CheckForUpdatesToggleSwitch" IsChecked="{Binding CheckForUpdates}"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
+				
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralProjectSingleFolderClick}" IconSource="{StaticResource Folder}"
+				                     Description="{DynamicResource SettingsGeneralProjectSingleFolderClickDescription}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="ProjectSingleClickToggleSwitch" IsChecked="{Binding IsProjectSingleClickEnabled, Mode=OneTime}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>
