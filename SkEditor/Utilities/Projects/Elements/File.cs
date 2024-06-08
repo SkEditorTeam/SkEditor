@@ -14,7 +14,7 @@ public class File : StorageElement
 
     public File(string file, Folder? parent = null)
     {
-        file = Uri.UnescapeDataString(file).Replace("/", "\\");
+        file = Uri.UnescapeDataString(file);
 
         Parent = parent;
         StorageFilePath = file;
