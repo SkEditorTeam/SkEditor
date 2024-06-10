@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
@@ -289,15 +289,19 @@
 	<system:String x:Key="SettingsThemeOpenFolder">Open folder</system:String>
 	<system:String x:Key="SettingsThemeCurrentTheme">Current theme</system:String>
 	<system:String x:Key="SettingsThemeCurrentThemeDescription">A restart isn't necessary, but it might be needed for a 100% color update.</system:String>
+	<system:String x:Key="SettingsThemeNewThemeInfo">If you want to create a new theme, you need to create a file in the Themes folder.</system:String>
+	<system:String x:Key="SettingsThemeEditTheme">Edit theme</system:String>
 
 	<!-- Syntax Highlighting Settings -->
 	<system:String x:Key="SettingsSyntaxesTitle">Syntax highlighting</system:String>
 
 	<!-- Addon Settings -->
 	<system:String x:Key="SettingsAddonsTitle">Addons</system:String>
+	<system:String x:Key="SettingsAddonsListTitle">List of addons</system:String>
 	
 	<!-- Connections Settings -->
 	<system:String x:Key="SettingsConnectionsTitle">Connections</system:String>
+	<system:String x:Key="SettingsConnectionsDashboardButton">Open dashboard</system:String>
 	
 	<!-- File Views -->
 	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>
@@ -370,5 +374,18 @@
 	<system:String x:Key="GoToLine">Go to line</system:String>
 	<system:String x:Key="GoToLineButton">Go</system:String>
 
+	<!-- Theme editor -->
+	<system:String x:Key="ThemeEditorWindowBackground">Window background</system:String>
+	<system:String x:Key="ThemeEditorSmallWindowBackground">Small window background</system:String>
+	<system:String x:Key="ThemeEditorEditorBackground">Editor background</system:String>
+	<system:String x:Key="ThemeEditorEditorText">Editor text</system:String>
+	<system:String x:Key="ThemeEditorLineNumber">Line number</system:String>
+	<system:String x:Key="ThemeEditorSelection">Selection</system:String>
+	<system:String x:Key="ThemeEditorSelectedTabBackground">Selected tab background</system:String>
+	<system:String x:Key="ThemeEditorSelectedTabBorder">Selected tab border</system:String>
+	<system:String x:Key="ThemeEditorMenuBackground">Menu background</system:String>
+	<system:String x:Key="ThemeEditorMenuBorder">Menu border</system:String>
+	<system:String x:Key="ThemeEditorFocusedTextBoxBackground">Focused text box background</system:String>
+	<system:String x:Key="ThemeEditorAccentColor">Accent color</system:String>
 
 </ResourceDictionary>

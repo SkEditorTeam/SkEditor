@@ -23,7 +23,7 @@
 					<ui:SymbolIcon Symbol="OpenFile"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Open folder" Name="MenuItemOpenFolder" IsVisible="False" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
+			<MenuItem Header="{DynamicResource MenuHeaderOpenFolder}" Name="MenuItemOpenFolder" IsVisible="False" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
 				<MenuItem.Icon>
 					<ui:SymbolIcon Symbol="Folder"/>
 				</MenuItem.Icon>
