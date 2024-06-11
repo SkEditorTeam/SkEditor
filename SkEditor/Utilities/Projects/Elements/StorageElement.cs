@@ -17,6 +17,7 @@ public abstract class StorageElement
     public bool IsExpanded { get; set; } = false;
 
     public bool IsFile { get; set; }
+    public bool IsRootFolder { get; set; }
 
     public IconSource Icon { get; set; } = new SymbolIconSource() { Symbol = Symbol.Document, FontSize = 18 };
 

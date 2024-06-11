@@ -24,6 +24,7 @@ public class Folder : StorageElement
         StorageFolderPath = folder;
         Name = Path.GetFileName(folder);
         IsFile = false;
+        IsRootFolder = Parent == null;
 
         Children = [];
         LoadChildren();
@@ -50,9 +51,17 @@ public class Folder : StorageElement
 
     public void DeleteFolder()
     {
-        Directory.Delete(StorageFolderPath, true);
-        // TODO: Deleting root folder crashes the program at line below
-        Parent.Children.Remove(this);
+        if (IsRootFolder) 
+        {
+            Directory.Delete(StorageFolderPath, true);
+            CloseProject();
+        } 
+        else
+        {
+            Directory.Delete(StorageFolderPath, true);
+            Parent.Children.Remove(this);
+        }
+        
     }
 
     private static void CloseProject()
