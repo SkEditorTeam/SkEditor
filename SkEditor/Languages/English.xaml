@@ -68,6 +68,7 @@
 	<system:String x:Key="MenuHeaderRename">Rename</system:String>
 	<system:String x:Key="MenuHeaderNewFile">New file</system:String>
 	<system:String x:Key="MenuHeaderNewFolder">New folder</system:String>
+	<system:String x:Key="MenuHeaderCloseProject">Close project</system:String>
 
 	<!-- Buttons -->
 	<system:String x:Key="ApplyButton">Apply</system:String>
