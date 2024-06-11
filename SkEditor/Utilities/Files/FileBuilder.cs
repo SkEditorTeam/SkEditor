@@ -240,7 +240,7 @@ public class FileBuilder
         return editor;
     }
 
-    private static MenuFlyout GetContextMenu(TextEditor editor)
+    public static MenuFlyout GetContextMenu(TextEditor editor)
     {
         var commands = new[]
         {

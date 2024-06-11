@@ -31,13 +31,14 @@ public partial class MainMenuControl : UserControl
         MenuItemOpenFolder.Command = new RelayCommand(() => ProjectOpener.OpenProject());
         MenuItemSave.Command = new RelayCommand(async () =>
         {
-            (bool, Exception) success = await FileHandler.SaveFile();
+            (bool, Exception) success = await FileHandler.SaveFile(null);
             if (!success.Item1)
             {
                 ApiVault.Get().ShowError("For some reason, the file couldn't be saved. If the problem persists, backup the file so you won't lose any changes.\nError: " + success.Item2.Message);
             }
         });
-        MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFile);
+        MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFileSingle);
+        MenuItemSaveAll.Command = new RelayCommand(FileHandler.SaveAllFiles);
         MenuItemPublish.Command = new RelayCommand(() => new PublishWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
 
         MenuItemClose.Command = new RelayCommand(FileCloser.CloseCurrentFile);
