@@ -25,7 +25,7 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 				
-				<ui:SettingsExpander Name="EditThemeItem" Header="Edit theme" IconSource="{StaticResource EditIcon}" IsClickEnabled="True"/>
+				<ui:SettingsExpander Name="EditThemeItem" Header="Edit theme" Description="{DynamicResource SettingsThemeEditThemeDescription}" IconSource="{StaticResource EditIcon}" IsClickEnabled="True"/>
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>
