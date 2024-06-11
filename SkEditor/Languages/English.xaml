@@ -248,6 +248,7 @@
 	<system:String x:Key="SettingsGeneralTitle">General</system:String>
 	<system:String x:Key="SettingsGeneralLanguage">Language</system:String>
 	<system:String x:Key="SettingsGeneralWrapping">Wrapping</system:String>
+	<system:String x:Key="SettingsGeneralWrappingDescription">Choose whether lines should wrap at the viewport width.</system:String>
 	<system:String x:Key="SettingsGeneralTabType">Indentation Type</system:String>
 	<system:String x:Key="SettingsGeneralTabTypeDescription">Choose between tabs and spaces, and set the size of the tab.</system:String>
 	<system:String x:Key="SettingsGeneralTabTypeTabs">Tabs</system:String>
@@ -259,11 +260,13 @@
 	<system:String x:Key="SettingsGeneralAutoSave">Autosave</system:String>
 	<system:String x:Key="SettingsGeneralAutoSaveDescription">Automatically saves your file every time you make a change.</system:String>
 	<system:String x:Key="SettingsGeneralChangeChecker">Check for external file changes</system:String>
+	<system:String x:Key="SettingsGeneralChangeCheckerDescription">If any change of a file's content occurs, you will be prompted to reload the file.</system:String>
 	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
 	<system:String x:Key="SettingsGeneralRpcDescription">Show SkEditor in your Discord status.</system:String>
 	<system:String x:Key="SettingsGeneralPasteIndent">Auto-indent Paste</system:String>
 	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatically adjusts the indentation of pasted text to match the previous line's format.</system:String>
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Check for updates</system:String>
+	<system:String x:Key="SettingsGeneralCheckForUpdatesDescription">You will be prompted to update SkEditor if a new version is released.</system:String>
 
 	<!-- About Settings -->
 	<system:String x:Key="SettingsAboutTitle">About</system:String>
@@ -282,6 +285,7 @@
 	<system:String x:Key="SettingsPersonalizationTheme">Theme</system:String>
 	<system:String x:Key="SettingsPersonalizationThemeDescription">Customize colors of the app.</system:String>
 	<system:String x:Key="SettingsPersonalizationSyntax">Syntax highlighting</system:String>
+	<system:String x:Key="SettingsPersonalizationSyntaxDescription">Set how specific text is displayed with syntax highlightings.</system:String>
 	<system:String x:Key="SettingsPersonalizationFont">Font</system:String>
 	<system:String x:Key="SettingsPersonalizationFontDescription">Current font: {0}</system:String>
 
@@ -290,6 +294,7 @@
 	<system:String x:Key="SettingsThemeOpenFolder">Open folder</system:String>
 	<system:String x:Key="SettingsThemeCurrentTheme">Current theme</system:String>
 	<system:String x:Key="SettingsThemeCurrentThemeDescription">A restart isn't necessary, but it might be needed for a 100% color update.</system:String>
+	<system:String x:Key="SettingsThemeEditThemeDescription">Edit current theme and preview changes in real time.</system:String>
 	<system:String x:Key="SettingsThemeNewThemeInfo">If you want to create a new theme, you need to create a file in the Themes folder.</system:String>
 	<system:String x:Key="SettingsThemeEditTheme">Edit theme</system:String>
 

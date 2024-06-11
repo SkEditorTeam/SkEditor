@@ -24,7 +24,6 @@
 						<ComboBox Name="ThemeComboBox"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
-				
 				<ui:SettingsExpander Name="EditThemeItem" Header="{DynamicResource SettingsThemeEditTheme}" Description="{DynamicResource SettingsThemeEditThemeDescription}" IconSource="{StaticResource EditIcon}" IsClickEnabled="True"/>
 			</StackPanel>
 		</ScrollViewer>
