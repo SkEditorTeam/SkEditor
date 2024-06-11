@@ -252,6 +252,7 @@ public class FileBuilder
             new { Header = "MenuHeaderDuplicate", Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Icon = Symbol.Copy },
             new { Header = "MenuHeaderComment", Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)), Icon = Symbol.Comment },
             new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => new GoToLine().ShowDialog(ApiVault.Get().GetMainWindow())), Icon = Symbol.Find },
+            new { Header = "MenuHeaderTrimWhitespaces", Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)), Icon = Symbol.Remove },
             new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
             new { Header = "MenuHeaderRefactor", Command = new RelayCommand(() => CustomCommandsHandler.OnRefactorCommandExecuted(editor)), Icon = Symbol.Rename },
         };

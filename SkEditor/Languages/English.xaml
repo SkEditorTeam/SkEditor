@@ -48,6 +48,7 @@
 	<system:String x:Key="MenuHeaderComment">Comment</system:String>
 	<system:String x:Key="MenuHeaderDelete">Delete</system:String>
 	<system:String x:Key="MenuHeaderGoToLine">Go to line</system:String>
+	<system:String x:Key="MenuHeaderTrimWhitespaces">Trim whitespaces</system:String>
 
 	<!-- Tools Menu -->
 	<system:String x:Key="MenuHeaderDocumentation">Documentation</system:String>
