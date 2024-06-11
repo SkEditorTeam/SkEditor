@@ -31,6 +31,7 @@ public partial class BottomBarControl : UserControl
 
         LineText.Text = Translation.Get("BottomBarLine").Replace("{0}", location.Line.ToString());
         ColumnText.Text = Translation.Get("BottomBarColumn").Replace("{0}", location.Column.ToString());
+        DocumentSizeText.Text = Translation.Get("BottomBarDocumentSize").Replace("{0}", textEditor.Document.TextLength.ToString());
     }
 
     public void UpdateLogs(string logs)
