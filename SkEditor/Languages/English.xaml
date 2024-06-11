@@ -26,6 +26,7 @@
 	<!-- File Menu -->
 	<system:String x:Key="MenuHeaderNew">New</system:String>
 	<system:String x:Key="MenuHeaderOpen">Open</system:String>
+	<system:String x:Key="MenuHeaderOpenFolder">Open folder</system:String>
 	<system:String x:Key="MenuHeaderSave">Save</system:String>
 	<system:String x:Key="MenuHeaderSaveAs">Save as</system:String>
 	<system:String x:Key="MenuHeaderSaveAll">Save all</system:String>
