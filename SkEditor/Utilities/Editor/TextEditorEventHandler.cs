@@ -95,7 +95,7 @@ public partial class TextEditorEventHandler
 
         if (ApiVault.Get().GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(tab.Tag.ToString()))
         {
-            await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
+            await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFileSingle);
             return;
         }
 
