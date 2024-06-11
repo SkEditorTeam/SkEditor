@@ -76,4 +76,11 @@ public class ThemeItem : MarketplaceItem
 
         await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName), new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
     }
+
+    public override bool IsInstalled()
+    {
+        string themePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, Path.GetFileName(ItemFileUrl));
+        if (!File.Exists(themePath)) return false;
+        else return true;
+    }
 }

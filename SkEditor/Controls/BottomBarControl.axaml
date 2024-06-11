@@ -32,6 +32,7 @@
 			<StackPanel Grid.Column="2" Margin="0,0,10,0" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
 				<TextBlock x:Name="LineText" Text="{DynamicResource BottomBarLine}"/>
 				<TextBlock x:Name="ColumnText" Text="{DynamicResource BottomBarColumn}"/>
+				<TextBlock x:Name="DocumentSizeText" Text="{DynamicResource BottomBarDocumentSize}"/>
 			</StackPanel>
 		</Grid>
 	</Border>
