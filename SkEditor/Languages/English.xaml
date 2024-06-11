@@ -28,6 +28,7 @@
 	<system:String x:Key="MenuHeaderOpen">Open</system:String>
 	<system:String x:Key="MenuHeaderSave">Save</system:String>
 	<system:String x:Key="MenuHeaderSaveAs">Save as</system:String>
+	<system:String x:Key="MenuHeaderSaveAll">Save all</system:String>
 	<system:String x:Key="MenuHeaderPublish">Publish</system:String>
 	<system:String x:Key="MenuHeaderClose">Close</system:String>
 	<system:String x:Key="MenuHeaderCloseCurrentFile">Current file</system:String>
