@@ -54,6 +54,10 @@
                                     <MenuItem IsVisible="{Binding !IsFile}" Header="New Folder" Command="{Binding CreateNewFolderCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="NewFolder" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
+                                    <!-- TODO: Make it visible only if it's root folder -->
+                                    <MenuItem IsVisible="{Binding !IsFile}" Header="{DynamicResource MenuHeaderCloseProject}" Command="{Binding CloseProjectCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Back" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
                                     
                                     <Separator IsVisible="{Binding !IsFile}" />
                                     

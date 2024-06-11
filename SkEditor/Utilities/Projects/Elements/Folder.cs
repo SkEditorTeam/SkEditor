@@ -3,10 +3,12 @@ using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
+using SkEditor.Controls.Sidebar;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Avalonia.Controls;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
@@ -32,6 +34,7 @@ public class Folder : StorageElement
         CopyAbsolutePathCommand = new RelayCommand(CopyAbsolutePath);
         CreateNewFileCommand = new RelayCommand(() => CreateNewElement(true));
         CreateNewFolderCommand = new RelayCommand(() => CreateNewElement(false));
+        CloseProjectCommand = new RelayCommand(() => CloseProject());
     }
 
     private void LoadChildren()
@@ -48,7 +51,18 @@ public class Folder : StorageElement
     public void DeleteFolder()
     {
         Directory.Delete(StorageFolderPath, true);
+        // TODO: Deleting root folder crashes the program at line below
         Parent.Children.Remove(this);
+    }
+
+    private static void CloseProject()
+    {
+        // TODO: Make it compatible with several projects opened (when it's added)
+        ProjectOpener.FileTreeView.ItemsSource = null;
+        Folder? ProjectRootFolder = null;
+        ExplorerSidebarPanel Panel = ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel;
+        StackPanel NoFolderMessage = Panel.NoFolderMessage;
+        NoFolderMessage.IsVisible = ProjectRootFolder == null;
     }
 
     public override void RenameElement(string newName, bool move = true)
