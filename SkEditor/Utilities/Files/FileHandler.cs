@@ -157,19 +157,18 @@ public class FileHandler
             item.Header.ToString().Contains(Translation.Get("NewFileNameFormat").Replace("{0}", "")) &&
             !item.Header.ToString().EndsWith('*');
     }
-
-    public static async Task<(bool, Exception)> SaveFile()
+    public static async Task<(bool, Exception)> SaveFile(TabViewItem? tab)
     {
         if (!ApiVault.Get().IsFileOpen()) return (true, null);
 
         try
         {
-            TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+            TabViewItem item = GetPreferredTabView(tab);
             string path = item.Tag.ToString();
 
             if (string.IsNullOrEmpty(path))
             {
-                SaveAsFile();
+                SaveAsFile(tab);
                 return (true, null);
             }
 
@@ -188,14 +187,12 @@ public class FileHandler
         return (true, null);
     }
 
-    public async static void SaveAsFile()
+    public async static void SaveAsFile(TabViewItem? tab = null)
     {
         if (!ApiVault.Get().IsFileOpen()) return;
 
         var topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
-        var tabView = ApiVault.Get().GetTabView();
-
-        if (tabView.SelectedItem is not TabViewItem item) return;
+        TabViewItem item = GetPreferredTabView(tab);
 
         string header = item.Header.ToString().TrimEnd('*');
         string itemTag = item.Tag.ToString();
@@ -236,6 +233,40 @@ public class FileHandler
         ToolTip.SetTip(item, toolTip);
 
         AddChangeChecker(absolutePath, item);
+    }
+
+    public async static void SaveAllFiles()
+    {
+        if (!ApiVault.Get().IsFileOpen()) return;
+
+        var tabView = ApiVault.Get().GetTabView();
+        var tabs = tabView.TabItems;
+
+        foreach (TabViewItem tab in tabs) await SaveFile(tab);
+    }
+
+    private static TabViewItem GetPreferredTabView(TabViewItem? tab)
+    {
+        if (tab == null) 
+        {
+            var tabView = ApiVault.Get().GetTabView();
+            if (tabView.SelectedItem is not TabViewItem) return null;
+            return tabView.SelectedItem as TabViewItem;
+        } 
+        else 
+        {
+            return tab;
+        }
+    }
+
+    public static void SaveAsFileSingle()
+    {
+        SaveAsFile(null);   
+    }
+
+    public async static void SaveFileSingle()
+    {
+        await SaveFile(null);   
     }
 
     public static void SwitchTab(int index)
