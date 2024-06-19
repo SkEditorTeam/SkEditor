@@ -1,8 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ui="using:FluentAvalonia.UI.Controls"
-                    xmlns:sys="clr-namespace:System;assembly=netstandard"
-					xmlns:wnd="using:FluentAvalonia.UI.Windowing"
+                    xmlns:wnd="using:FluentAvalonia.UI.Windowing"
                     x:CompileBindings="True">
 
 	<ControlTheme x:Key="OnlyCloseButtonTheme" TargetType="wnd:MinMaxCloseControl">
