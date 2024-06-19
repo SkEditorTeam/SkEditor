@@ -12,9 +12,6 @@ public class LogsHandler : ILogEventSink
     {
         LogsWindow.Logs.Add(logEvent);
         
-        //if (logEvent.Level == LogEventLevel.Debug && SkEditorAPI.Core.IsDeveloperMode())
-        //    SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdateLogs(logEvent.RenderMessage());
-
         var color = GetColor(logEvent.Level);
         if (logEvent.Level == LogEventLevel.Fatal)
         {
@@ -25,6 +22,9 @@ public class LogsHandler : ILogEventSink
         {
             Console.WriteLine(color + logEvent.Level + " | " + logEvent.RenderMessage());
         }
+        
+        if (logEvent.Level == LogEventLevel.Debug && SkEditorAPI.Core.IsDeveloperMode())
+            SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdateLogs(logEvent.RenderMessage());
     }
     
     private static string GetColor(LogEventLevel level)

@@ -5,6 +5,11 @@ using Newtonsoft.Json.Linq;
 
 namespace SkEditor.API.Settings.Types;
 
+/// <summary>
+/// ComboBox setting type, basically a choice between multiple items.
+/// </summary>
+/// <param name="items">The items, the user can choose from.</param>
+/// <param name="minWidth">The minimum width of the ComboBox, defaulting to 100</param>
 public class ComboBoxSetting(string[] items, int minWidth = 100) : ISettingType
 {
     
