@@ -12,8 +12,8 @@ public class LogsHandler : ILogEventSink
     {
         LogsWindow.Logs.Add(logEvent);
         
-        if (logEvent.Level == LogEventLevel.Debug && SkEditorAPI.Core.IsDeveloperMode())
-            SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdateLogs(logEvent.RenderMessage());
+        //if (logEvent.Level == LogEventLevel.Debug && SkEditorAPI.Core.IsDeveloperMode())
+        //    SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdateLogs(logEvent.RenderMessage());
 
         var color = GetColor(logEvent.Level);
         if (logEvent.Level == LogEventLevel.Fatal)

@@ -29,7 +29,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
         //string syntaxFilePath = Path.Combine(AppConfig.AppDataFolderPath, "Syntax highlighting", syntaxFileName);
 
-        List<FileSyntax> installedSyntaxes = new();
+        List<FileSyntax> installedSyntaxes = [];
         bool allInstalled = true;
         allInstalled = allInstalled && await Install(ThemeFileUrl, themeFilePath);
         foreach (string folder in SyntaxFolders)
@@ -46,29 +46,26 @@ public class ThemeWithSyntaxItem : MarketplaceItem
 
             try
             {
-                ApiVault.Get().Log("Load syntax called ");
                 installedSyntaxes.Add(await SyntaxLoader.LoadSyntax(localSyntaxPath));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Log.Error(e, $"Failed to load syntax {folderName}!");
-                ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+                SkEditorAPI.Logs.Error($"Failed to load syntax {folderName}!", true);
                 return;
             }
         }
 
         if (!allInstalled)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceInstallFailed", ItemName));
             return;
         }
 
         string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
         message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
 
-        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon("Success", message,
-            new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonContent: "MarketplaceEnableNow",
-            closeButtonContent: "Okay");
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message, 
+            primaryButtonText: "MarketplaceEnableNow", cancelButtonText: "Okay");
 
         if (result == ContentDialogResult.Primary)
         {
@@ -102,7 +99,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         catch (Exception e)
         {
             Log.Error(e, $"Failed to install {ItemName}!");
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceInstallFailed", ItemName));
             return false;
         }
 
@@ -117,8 +114,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
+        await SkEditorAPI.Windows.ShowDialog("Success", Translation.Get("MarketplaceUninstallSuccess", ItemName), primaryButtonText: "Okay");
     }
 
     private async Task UninstallTheme()

@@ -33,7 +33,7 @@ public class CodePublisher
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message, window);
+            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
         }
     }
 
@@ -62,7 +62,7 @@ public class CodePublisher
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message, window);
+            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
         }
     }
 
@@ -88,7 +88,7 @@ public class CodePublisher
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message, window);
+            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
         }
     }
 }

@@ -36,6 +36,11 @@ public interface IFiles
     public List<TabViewItem> GetOpenedTabs();
 
     /// <summary>
+    /// Get all current opened files with text editors
+    /// </summary>
+    public List<OpenedFile> GetOpenedEditors();
+
+    /// <summary>
     /// Get the current opened file.
     /// </summary>
     public OpenedFile GetCurrentOpenedFile();

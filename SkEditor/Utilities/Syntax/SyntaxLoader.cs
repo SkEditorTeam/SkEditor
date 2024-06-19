@@ -3,6 +3,7 @@ using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using SkEditor.API;
+using SkEditor.Utilities.Files;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,8 +41,9 @@ public class SyntaxLoader
                 }
                 catch (Exception e)
                 {
-                    await ApiVault.Get().ShowMessageWithIcon("Error", $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}", new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
-                        primaryButton: false);
+                    await SkEditorAPI.Windows.ShowDialog("Error",
+                        $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}", 
+                        new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
                 }
             }
         }
@@ -89,10 +91,10 @@ public class SyntaxLoader
         return true;
     }
 
-    public static void SelectSyntax(FileSyntax syntax, bool refresh = true)
+    public static async void SelectSyntax(FileSyntax syntax, bool refresh = true)
     {
         SkEditorAPI.Core.GetAppConfig().FileSyntaxes[syntax.Config.LanguageName] = syntax.Config.FullIdName;
-        if (refresh) RefreshSyntaxAsync();
+        if (refresh) await RefreshSyntaxAsync();
     }
 
     public static async void SetDefaultSyntax()
@@ -157,25 +159,23 @@ public class SyntaxLoader
 
     public static async Task RefreshSyntaxAsync(string? extension = null)
     {
-        var defaultSyntax = await GetDefaultSyntax();
-        var editor = ApiVault.Get().GetTextEditor();
-        if (editor == null)
-            return;
+        FileSyntax defaultSyntax = await GetDefaultSyntax();
+        OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        if (!file.IsEditor) return;
 
         if (extension == null)
         {
-
-            extension = Path.GetExtension((ApiVault.Get().GetTabView().SelectedItem as TabViewItem).Tag?.ToString().TrimEnd('*'));
+            extension = Path.GetExtension(file.Path);
             if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
             {
-                editor.SyntaxHighlighting = defaultSyntax.Highlighting;
+                file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
                 return;
             }
         }
 
         if (!SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? fileSyntax))
         {
-            editor.SyntaxHighlighting = defaultSyntax.Highlighting;
+            file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
             return;
         }
 
@@ -189,24 +189,21 @@ public class SyntaxLoader
 
         if (syntax == null)
         {
-            editor.SyntaxHighlighting = defaultSyntax.Highlighting;
+            file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
             return;
         }
 
         syntax = await FileSyntax.LoadSyntax(syntax.FolderName);
-        editor.SyntaxHighlighting = syntax.Highlighting;
+        file.Editor.SyntaxHighlighting = syntax.Highlighting;
     }
 
     public static void RefreshAllOpenedEditors()
     {
-        var tabs = ApiVault.Get().GetTabView().TabItems
-            .OfType<TabViewItem>()
-            .Where(tab => tab.Content is TextEditor)
-            .ToList();
+        List<OpenedFile> openedFiles = SkEditorAPI.Files.GetOpenedEditors();
 
-        foreach (var tab in tabs)
+        foreach (var file in openedFiles)
         {
-            var ext = Path.GetExtension(tab.Tag?.ToString()?.TrimEnd('*').ToLower() ?? "");
+            var ext = Path.GetExtension(file.Path?.ToString()?.TrimEnd('*').ToLower() ?? "");
             if (string.IsNullOrWhiteSpace(ext) || !SortedFileSyntaxes.ContainsKey(ext))
             {
                 continue;
@@ -222,8 +219,7 @@ public class SyntaxLoader
 
             if (syntax == null) continue;
 
-            var editor = tab.Content as TextEditor;
-            editor.SyntaxHighlighting = syntax.Highlighting;
+            file.Editor.SyntaxHighlighting = syntax.Highlighting;
         }
     }
 

@@ -16,16 +16,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor;
 
 public class SkEditor : ISkEditorAPI
 {
-
     public SkEditor()
     {
+#pragma warning disable 0618
         ApiVault.Set(this);
+#pragma warning restore 0618
     }
 
     /// <returns>Main window</returns>

@@ -60,7 +60,7 @@ public class FileBuilder
         {
             var editor = fileType.Display as TextEditor;
 
-            ApiVault.Get().OnFileCreated(editor);
+            (SkEditorAPI.Events as Events).FileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
         }
 
@@ -143,7 +143,7 @@ public class FileBuilder
 
         if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))
         {
-            var response = await ApiVault.Get().ShowMessageWithIcon(
+            var response = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
                 new SymbolIconSource() { Symbol = Symbol.Alert });
             if (response != ContentDialogResult.Primary)

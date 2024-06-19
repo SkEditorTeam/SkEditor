@@ -43,7 +43,7 @@ public partial class TextEditorEventHandler
 
         e.Handled = true;
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         int zoom = (e.Delta.Y > 0 && editor.FontSize < 200) ? 1 : -1;
 
@@ -54,7 +54,7 @@ public partial class TextEditorEventHandler
     {
         if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         if (e.Key == Key.OemPlus) Zoom(editor, 5);
         else if (e.Key == Key.OemMinus) Zoom(editor, -5);
@@ -118,7 +118,7 @@ public partial class TextEditorEventHandler
         if (!SkEditorAPI.Core.GetAppConfig().IsAutoIndentEnabled) return;
         if (!string.IsNullOrWhiteSpace(e.Text)) return;
 
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
         if (!string.IsNullOrWhiteSpace(textEditor.Document.GetText(line))) return;
@@ -142,7 +142,7 @@ public partial class TextEditorEventHandler
         char symbol = e.Text[0];
         if (!_symbolPairs.TryGetValue(symbol, out char value)) return;
 
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         if (textEditor.Document.TextLength > textEditor.CaretOffset)
         {
             string nextChar = textEditor.Document.GetText(textEditor.CaretOffset, 1);
@@ -208,7 +208,7 @@ public partial class TextEditorEventHandler
         if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
         e.Handled = true;
 
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         Point pos = e.GetPosition(textEditor.TextArea.TextView) + textEditor.TextArea.TextView.ScrollOffset;
         SimpleSegment word = TextEditorUtilities.GetWordAtMousePosition(pos, textEditor.TextArea);
@@ -224,7 +224,7 @@ public partial class TextEditorEventHandler
         if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
 
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
 
         string lineText = textEditor.Document.GetText(line);

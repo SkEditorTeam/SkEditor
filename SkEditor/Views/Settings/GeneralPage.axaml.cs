@@ -75,13 +75,13 @@ public partial class GeneralPage : UserControl
         {
             var appConfig = SkEditorAPI.Core.GetAppConfig();
             appConfig.TabSize = int.Parse((IndentationAmountComboBox.SelectedItem as ComboBoxItem).Tag.ToString());
-            ApiVault.Get().GetOpenedEditors().ForEach(e => e.Options.IndentationSize = appConfig.TabSize);
+            SkEditorAPI.Files.GetOpenedEditors().ForEach(e => e.Editor.Options.IndentationSize = appConfig.TabSize);
         };
         IndentationTypeComboBox.SelectionChanged += (s, e) =>
         {
             var appConfig = SkEditorAPI.Core.GetAppConfig();
             appConfig.UseSpacesInsteadOfTabs = (IndentationTypeComboBox.SelectedItem as ComboBoxItem).Tag.ToString() == "spaces";
-            ApiVault.Get().GetOpenedEditors().ForEach(e => e.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
+            SkEditorAPI.Files.GetOpenedEditors().ForEach(e => e.Editor.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
         };
     }
 
@@ -97,11 +97,7 @@ public partial class GeneralPage : UserControl
     {
         ToggleSetting("IsWrappingEnabled");
 
-        List<TextEditor> textEditors = ApiVault.Get().GetTabView().TabItems
-            .OfType<TabViewItem>()
-            .Select(x => x.Content as TextEditor)
-            .Where(editor => editor != null)
-            .ToList();
+        List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList();
 
         textEditors.ForEach(e => e.WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled);
     }
@@ -112,7 +108,7 @@ public partial class GeneralPage : UserControl
         var property = appConfig.GetType().GetProperty(propertyName);
 
         if (property == null || property.PropertyType != typeof(bool)) return;
-        var currentValue = (bool)property.GetValue(appConfig);
+        var currentValue = (bool?)property.GetValue(appConfig);
         property.SetValue(appConfig, !currentValue);
     }
 }

@@ -270,7 +270,7 @@ public partial class DocElementControl : UserControl
         catch (Exception e)
         {
             examples = [];
-            ApiVault.Get().ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
         }
 
         var localProvider = LocalProvider.Get();

@@ -9,31 +9,30 @@ public static class SkEditorAPI
     /// <summary>
     /// Get the Logs API.
     /// </summary>
-    public static readonly ILogs Logs = new Logs();
+    public static ILogs Logs { get; } = new Logs();
     
     /// <summary>
     /// Get the Windows API.
     /// </summary>
-    public static readonly IWindows Windows = new Windows();
+    public static IWindows Windows { get; } = new Windows();
     
     /// <summary>
     /// Get the Core API.
     /// </summary>
-    public static readonly ICore Core = new Core();
+    public static ICore Core { get; } = new Core();
     
     /// <summary>
     /// Get the Events API.
     /// </summary>
-    public static readonly IEvents Events = new Events();
+    public static IEvents Events { get; } = new Events();
     
     /// <summary>
     /// Get the Addons API.
     /// </summary>
-    public static readonly IAddons Addons = new Addons();
+    public static IAddons Addons { get; } = new Addons();
 
     /// <summary>
     /// Get the Files API.
     /// </summary>
-    public static readonly IFiles Files = new Files();
-
+    public static IFiles Files { get; } = new Files();
 }

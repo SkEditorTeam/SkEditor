@@ -43,15 +43,15 @@ public partial class MainMenuControl : UserControl
         MenuItemCloseAllLeft.Command = new RelayCommand(FileCloser.CloseAllToTheLeft);
         MenuItemCloseAllRight.Command = new RelayCommand(FileCloser.CloseAllToTheRight);
 
-        MenuItemCopy.Command = new RelayCommand(() => ApiVault.Get().GetTextEditor().Copy());
-        MenuItemPaste.Command = new RelayCommand(() => ApiVault.Get().GetTextEditor().Paste());
-        MenuItemCut.Command = new RelayCommand(() => ApiVault.Get().GetTextEditor().Cut());
-        MenuItemUndo.Command = new RelayCommand(() => ApiVault.Get().GetTextEditor().Undo());
-        MenuItemRedo.Command = new RelayCommand(() => ApiVault.Get().GetTextEditor().Redo());
-        MenuItemDelete.Command = new RelayCommand(() => ApiVault.Get().GetTextEditor().Delete());
+        MenuItemCopy.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor.Copy());
+        MenuItemPaste.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor.Paste());
+        MenuItemCut.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor.Cut());
+        MenuItemUndo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor.Undo());
+        MenuItemRedo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor.Redo());
+        MenuItemDelete.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor.Delete());
 
-        MenuItemDuplicate.Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(ApiVault.Get().GetTextEditor().TextArea));
-        MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(ApiVault.Get().GetTextEditor().TextArea));
+        MenuItemDuplicate.Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea));
+        MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea));
 
         MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
 

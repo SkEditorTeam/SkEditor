@@ -44,9 +44,9 @@ public class FileHandler
 
     public static void TabSwitchAction()
     {
-        if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem item) return;
+        OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
 
-        var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(item.Header.ToString());
+        var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header.ToString());
         MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
     

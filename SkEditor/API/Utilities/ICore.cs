@@ -28,21 +28,32 @@ public interface ICore
     public string[] GetStartupArguments();
 
     /// <summary>
-    /// Get an SkEditor's resource by key.
+    /// Gets a SkEditor's resource by key.
     /// </summary>
     /// <param name="key">The key of the resource.</param>
     /// <returns>The resource.</returns>
     public object? GetApplicationResource(string key);
 
     /// <summary>
-    /// Open the desired web URL into the default browser.
+    /// Open the desired web URL in the default browser.
     /// </summary>
     /// <param name="url">The URL to open.</param>
     public void OpenLink(string url);
+
+    /// <summary>
+    /// Open the desired folder in the file explorer.
+    /// </summary>
+    public void OpenFolder(string path);
     
     /// <summary>
     /// Check if the developer mode is enabled or not.
     /// </summary>
     /// <returns>True if the developer mode is enabled, false otherwise.</returns>
     public bool IsDeveloperMode();
+
+    /// <summary>
+    /// Saves all the files to the temporary directory and saves the settings.
+    /// This method is called when the application crashes.
+    /// </summary>
+    public void SaveData();
 }

@@ -20,8 +20,8 @@ public partial class AboutPage : UserControl
     {
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
 
-        GitHubItem.Command = new RelayCommand(() => ApiVault.Get().OpenUrl("https://github.com/SkEditorTeam/SkEditor"));
-        DiscordItem.Command = new RelayCommand(() => ApiVault.Get().OpenUrl("https://discord.gg/kJUKX3ePj6"));
-        AppDataItem.Command = new RelayCommand(() => ApiVault.Get().OpenFolder(AppConfig.AppDataFolderPath));
+        GitHubItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor"));
+        DiscordItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/"));
+        AppDataItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenFolder(AppConfig.AppDataFolderPath));
     }
 }

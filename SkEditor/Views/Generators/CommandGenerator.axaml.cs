@@ -22,13 +22,13 @@ public partial class CommandGenerator : AppWindow
     {
         if (string.IsNullOrWhiteSpace(NameTextBox.Text))
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("CommandGeneratorPropertyMissing", "Name"));
+            SkEditorAPI.Windows.ShowError(Translation.Get("CommandGeneratorPropertyMissing", "Name"));
             return;
         }
 
         StringBuilder code = new();
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int offset = editor.CaretOffset;
         DocumentLine line = editor.Document.GetLineByOffset(offset);
 

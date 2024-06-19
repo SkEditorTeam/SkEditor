@@ -71,14 +71,14 @@ public static class ProjectOpener
         
         FileTreeView.DoubleTapped += (sender, e) =>
         {
-            if (ApiVault.Get().GetAppConfig().IsProjectSingleClickEnabled)
+            if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
                 return;
             HandleTapped(e);
         };
         
         FileTreeView.Tapped += (sender, e) =>
         {
-            if (!ApiVault.Get().GetAppConfig().IsProjectSingleClickEnabled)
+            if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
                 return;
             HandleTapped(e);
         };

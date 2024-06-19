@@ -32,7 +32,7 @@ class Program
             Console.Error.WriteLine(e);
             Console.Error.WriteLine(message);
 
-            ApiVault.Get().SaveData();
+            SkEditorAPI.Core.SaveData();
             AddonLoader.SaveMeta();
 
             Process.Start(Environment.ProcessPath, "--crash");

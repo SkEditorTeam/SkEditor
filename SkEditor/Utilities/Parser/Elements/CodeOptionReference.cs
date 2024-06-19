@@ -81,7 +81,7 @@ public class CodeOptionReference : INameableCodeElement
         }
         else
         {
-            ApiVault.Get().ShowError("The desired option has no definition.");
+            SkEditorAPI.Windows.ShowError("The desired option has no definition.");
         }
     }
 }

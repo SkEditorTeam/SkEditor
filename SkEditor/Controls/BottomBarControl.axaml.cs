@@ -23,9 +23,9 @@ public partial class BottomBarControl : UserControl
         Loaded += (sender, e) =>
         {
             Application.Current.ResourcesChanged += (sender, e) => UpdatePosition();
-            
-            ApiVault.Get().GetTabView().SelectionChanged += (sender, e) => UpdatePosition();
-            ApiVault.Get().GetTabView().SelectionChanged += (sender, e) => FileHandler.TabSwitchAction();
+
+            SkEditorAPI.Files.GetTabView().SelectionChanged += (sender, e) => UpdatePosition();
+            SkEditorAPI.Files.GetTabView().SelectionChanged += (sender, e) => FileHandler.TabSwitchAction();
         };
 
         ReloadBottomIcons();
@@ -101,7 +101,7 @@ public partial class BottomBarControl : UserControl
         }
 
         PositionInfo.IsVisible = true;
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         TextLocation location = textEditor.Document.GetLocation(textEditor.CaretOffset);
 
         LineText.Text = Translation.Get("BottomBarLine").Replace("{0}", location.Line.ToString());

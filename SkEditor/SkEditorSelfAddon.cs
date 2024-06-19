@@ -38,11 +38,11 @@ public class SkEditorSelfAddon : IAddon
         return _iconSource = new ImageIconSource() { Source = new SvgImage { Source = SvgSource.LoadFromStream(stream) } };
     }
 
-    public async void OnEnable()
+    public void OnEnable()
     {
         #region Registries - Connections
 
-        IconSource GetIcon(string fileName, bool svg)
+        static IconSource GetIcon(string fileName, bool svg)
         {
             Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Brands/" + fileName));
             return new ImageIconSource()
@@ -101,14 +101,14 @@ public class SkEditorSelfAddon : IAddon
             new BottomIconData()
             {
                 Text = "Hello there",
-                Clicked = ((sender, args) =>
+                Clicked = (sender, args) =>
                 {
                     SkEditorAPI.Logs.Debug("Hello there!");
                     
                     (args.Icon as BottomIconData).IsEnabled = false;
                     (args.Icon as BottomIconData).Text = "General Kenobi!";
                     (args.Icon as BottomIconData).IconSource = GetIcon("skUnity.svg", true);
-                }),
+                },
                 IconSource = GetAddonIcon()
             });
     }

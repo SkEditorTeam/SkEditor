@@ -57,7 +57,7 @@ public partial class AppConfig : ObservableObject
 
     public static string SettingsFilePath { get; set; } = Path.Combine(AppDataFolderPath, "settings.json");
 
-    public static async Task<AppConfig> Load()
+    public static AppConfig Load()
     {
         string settingsFilePath = SettingsFilePath;
 
