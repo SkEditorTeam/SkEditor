@@ -49,7 +49,7 @@ public class FileHandler
         var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header.ToString());
         MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
-    
+
     public static void NewFile()
     {
         SkEditorAPI.Files.NewFile();
@@ -100,40 +100,6 @@ public class FileHandler
             return;
 
         await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile(), true);
-    }
-
-    public async static void SaveAllFiles()
-    {
-        if (!ApiVault.Get().IsFileOpen()) return;
-
-        var tabView = ApiVault.Get().GetTabView();
-        var tabs = tabView.TabItems;
-
-        foreach (TabViewItem tab in tabs) await SaveFile(tab);
-    }
-
-    private static TabViewItem GetPreferredTabView(TabViewItem? tab)
-    {
-        if (tab == null) 
-        {
-            var tabView = ApiVault.Get().GetTabView();
-            if (tabView.SelectedItem is not TabViewItem) return null;
-            return tabView.SelectedItem as TabViewItem;
-        } 
-        else 
-        {
-            return tab;
-        }
-    }
-
-    public static void SaveAsFileSingle()
-    {
-        SaveAsFile(null);   
-    }
-
-    public async static void SaveFileSingle()
-    {
-        await SaveFile(null);   
     }
 
     public static void SwitchTab(int index)
