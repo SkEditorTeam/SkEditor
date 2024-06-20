@@ -321,9 +321,6 @@
 	<system:String x:Key="SettingsConnectionsTitle">Connections</system:String>
 	<system:String x:Key="SettingsConnectionsDashboardButton">Open dashboard</system:String>
 	
-	<!-- Connections Settings -->
-	<system:String x:Key="SettingsConnectionsTitle">Connections</system:String>
-	
 	<!-- File Views -->
 	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>
 

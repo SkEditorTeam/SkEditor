@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using Avalonia.Controls;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
