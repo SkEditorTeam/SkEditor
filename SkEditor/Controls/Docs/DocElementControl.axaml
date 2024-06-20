@@ -31,10 +31,7 @@
             </StackPanel>
         </controls:SettingsExpander.Header>
         <controls:SettingsExpander.Footer>
-            <StackPanel Orientation="Horizontal" Spacing="5">
-                <Button Name="OutsideButton" />
-                <Button Name="DownloadElementButton" />
-            </StackPanel>
+            <Button Name="DownloadElementButton"/>
         </controls:SettingsExpander.Footer>
         <Grid Margin="-50,0,0,0" RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*">
             
@@ -71,7 +68,7 @@
                         Grid.Column="1">
                 
                 <Expander
-                    Header="Actions"
+                    Header="{DynamicResource DocumentationControlActions}"
                     IsExpanded="False">
                 
                     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*"

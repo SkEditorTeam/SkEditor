@@ -8,6 +8,7 @@ using SkEditor.Utilities;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SkEditor.Utilities.Files;
 
 namespace SkEditor.Views.Settings;
 public partial class GeneralPage : UserControl
@@ -35,7 +36,16 @@ public partial class GeneralPage : UserControl
         {
             string language = LanguageComboBox.SelectedItem.ToString();
             ApiVault.Get().GetAppConfig().Language = language;
-            Dispatcher.UIThread.InvokeAsync(() => Translation.ChangeLanguage(language));
+            Dispatcher.UIThread.InvokeAsync(() => 
+            {
+                Translation.ChangeLanguage(language);
+
+                // Regenerate the text editor context menu
+                // TODO: Context menu language doesn't change, when user has documentation tab opened.
+                if (!ApiVault.Get().IsFileOpen()) return;
+                TextEditor editor = ApiVault.Get().GetTextEditor();
+                editor.ContextFlyout = FileBuilder.GetContextMenu(editor);
+            });
         };
     }
 

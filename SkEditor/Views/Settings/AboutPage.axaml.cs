@@ -21,7 +21,7 @@ public partial class AboutPage : UserControl
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
 
         GitHubItem.Command = new RelayCommand(() => ApiVault.Get().OpenUrl("https://github.com/SkEditorTeam/SkEditor"));
-        DiscordItem.Command = new RelayCommand(() => ApiVault.Get().OpenUrl("https://discord.gg/kJUKX3ePj6"));
+        DiscordItem.Command = new RelayCommand(() => ApiVault.Get().OpenUrl("https://discord.gg/meFfPGYvr5"));
         AppDataItem.Command = new RelayCommand(() => ApiVault.Get().OpenFolder(AppConfig.AppDataFolderPath));
     }
 }
