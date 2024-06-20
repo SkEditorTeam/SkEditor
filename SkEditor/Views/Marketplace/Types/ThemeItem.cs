@@ -77,4 +77,11 @@ public class ThemeItem : MarketplaceItem
         await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
             icon: new SymbolIconSource() { Symbol = Symbol.Accept });
     }
+
+    public override bool IsInstalled()
+    {
+        string themePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, Path.GetFileName(ItemFileUrl));
+        if (!File.Exists(themePath)) return false;
+        else return true;
+    }
 }

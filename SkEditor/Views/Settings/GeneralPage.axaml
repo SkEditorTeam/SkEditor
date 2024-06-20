@@ -19,7 +19,8 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralWrapping}" IconSource="{StaticResource WrappingIcon}">
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralWrapping}" IconSource="{StaticResource WrappingIcon}"
+									Description="{DynamicResource SettingsGeneralWrappingDescription}">
 					<ui:SettingsExpander.Footer>
 						<ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled}"/>
 					</ui:SettingsExpander.Footer>
@@ -74,7 +75,8 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralChangeChecker}" IconSource="{StaticResource CheckForChangesIcon}">
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralChangeChecker}" IconSource="{StaticResource CheckForChangesIcon}"
+									Description="{DynamicResource SettingsGeneralChangeCheckerDescription}">
 					<ui:SettingsExpander.Footer>
 						<ToggleSwitch Name="CheckForChangesToggleSwitch" IsChecked="{Binding CheckForChanges}"/>
 					</ui:SettingsExpander.Footer>
@@ -87,7 +89,8 @@
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralCheckForUpdates}" IconSource="{StaticResource CheckForUpdatesIcon}">
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralCheckForUpdates}" IconSource="{StaticResource CheckForUpdatesIcon}"
+									Description="{DynamicResource SettingsGeneralCheckForUpdatesDescription}">
 					<ui:SettingsExpander.Footer>
 						<ToggleSwitch Name="CheckForUpdatesToggleSwitch" IsChecked="{Binding CheckForUpdates}"/>
 					</ui:SettingsExpander.Footer>

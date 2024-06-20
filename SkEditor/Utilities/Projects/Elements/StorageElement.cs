@@ -17,6 +17,7 @@ public abstract class StorageElement
     public bool IsExpanded { get; set; } = false;
 
     public bool IsFile { get; set; }
+    public bool IsRootFolder { get; set; }
 
     public IconSource Icon { get; set; } = new SymbolIconSource() { Symbol = Symbol.Document, FontSize = 18 };
 
@@ -28,6 +29,7 @@ public abstract class StorageElement
     public RelayCommand CopyAbsolutePathCommand { get; set; }
     public RelayCommand CreateNewFileCommand { get; set; }
     public RelayCommand CreateNewFolderCommand { get; set; }
+    public RelayCommand CloseProjectCommand { get; set; }
 
     public abstract string? ValidateName(string input);
 
