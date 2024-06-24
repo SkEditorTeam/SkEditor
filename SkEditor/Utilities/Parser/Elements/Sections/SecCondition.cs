@@ -45,7 +45,7 @@ public class SecCondition : ExprProviderElement
         }
         
         if (Condition != null)
-            ParseExpressions(Condition, context);
+            ParseExpressions(node.Key, context);
     }
 
     public static bool Parse(Node node)

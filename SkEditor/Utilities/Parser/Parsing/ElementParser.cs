@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using SkEditor.API;
-using SkEditor.Utilities.Parser;
+using SkEditor.Parser.Elements;
 
-namespace SkEditor.Parser.Elements;
+namespace SkEditor.Parser;
 
 public static class ElementParser
 {
@@ -42,6 +41,7 @@ public static class ElementParser
                 {
                     try
                     {
+                        context.CurrentNode = node;
                         instance.Load(node, context);
                     }
                     catch (ParsingException e)

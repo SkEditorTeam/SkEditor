@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Files;
 
@@ -203,7 +204,7 @@ public class FileBuilder
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
         if (!SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
-            editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser?.SetUnparsed();
+            editor.TextChanged += (_, _) => (SkEditorAPI.Files.GetCurrentOpenedFile()?["Parser"] as FileParser)?.Parse();
         }
         if (SkEditorAPI.Core.GetAppConfig().EnableHexPreview)
         {

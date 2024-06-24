@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -21,6 +22,15 @@ public abstract partial class ExprProviderElement : Element
     public List<Variable> Variables { get; } = new();
     public List<Option> Options { get; } = new();
     public List<SkriptColor> Colors { get; } = new();
+    
+    public List<NameableReference> GetReferences()
+    {
+        var references = new List<NameableReference>();
+        references.AddRange(Variables);
+        //references.AddRange(Options);
+        // references.AddRange(Colors); they cannot be refactored
+        return references;
+    }
 
     /// <summary>
     /// Parse a given input string to extract expressions.
@@ -47,38 +57,47 @@ public abstract partial class ExprProviderElement : Element
                 '-' => VariableType.Memory,
                 _ => VariableType.Global
             };
-            Variables.Add(new Variable(name.TrimStart('_', '-'), type));
+            Variables.Add(new Variable(name.TrimStart('_', '-'), type, RenameVariable, context.CurrentNode, match.Index, match.Length));
         }
         
         // Parse options
         foreach (Match match in OptionRegex().Matches(input))
         {
             var key = match.Groups["key"].Value;
-            Options.Add(new Option(key.TrimStart('@')));
+            Options.Add(new Option(key.TrimStart('@'), context.CurrentNode, match.Index, match.Length));
         }
         
         // Parse colors
-        ParseColors(ref input);
+        ParseColors(ref input, context);
 
         if (context.Debug)
         {
-            SkEditorAPI.Logs.Debug($"Parsed colors: {string.Join(", ", Colors.Select(c => c.color + " as " + c.type))}");
+            SkEditorAPI.Logs.Debug($"Parsed colors: {string.Join(", ", Colors.Select(c => c.Color + " as " + c.Type))}");
         }
+    }
+
+    public void RenameVariable((NameableReference, string) pair)
+    {
+        var (reference, newName) = pair;
+        if (reference is not Variable variable)
+            return;
+        
+        // TODO: Implement renaming of variables
     }
     
     /// <summary>
     /// Parse colors in the input string.
     /// </summary>
     /// <param name="input">The input string to parse.</param>
-    private void ParseColors(ref string input)
+    private void ParseColors(ref string input, ParsingContext context)
     {
         // Parse hex colors
         foreach (Match match in HexColorRegex().Matches(input))
         {
             var hex = match.Groups["hex"].Value;
             var color = ColorTranslator.FromHtml($"#{hex}");
-            Colors.Add(new SkriptColor(ColorType.Hex, color));
-            input = input.Replace(match.Value, "");
+            Colors.Add(new SkriptColor(ColorType.Hex, color, context.CurrentNode, 
+                match.Index, match.Length));
         }
         
         // Parse tag colors
@@ -86,8 +105,8 @@ public abstract partial class ExprProviderElement : Element
         {
             var tag = match.Groups["tag"].Value;
             var color = GetColor(tag);
-            Colors.Add(new SkriptColor(ColorType.Tag, color));
-            input = input.Replace(match.Value, "");
+            Colors.Add(new SkriptColor(ColorType.Tag, color, context.CurrentNode, 
+                match.Index, match.Length));
         }
         
         // Parse code colors
@@ -97,8 +116,21 @@ public abstract partial class ExprProviderElement : Element
             var color = ColoredTextHandler.TextFormats[code[1].ToString()];
             if (color is not Avalonia.Media.Color avaloniaColor)
                 continue;
-            Colors.Add(new SkriptColor(ColorType.Code, Color.FromArgb(avaloniaColor.A, avaloniaColor.R, avaloniaColor.G, avaloniaColor.B)));
-            input = input.Replace(match.Value, "");
+            
+            Colors.Add(new SkriptColor(ColorType.Code, 
+                Color.FromArgb(avaloniaColor.A, avaloniaColor.R, avaloniaColor.G, avaloniaColor.B), 
+                context.CurrentNode, 
+                match.Index, match.Length));
+        }
+        
+        // Sort colors by position
+        Colors.Sort((a, b) => a.Position.CompareTo(b.Position));
+        if (context.Debug)
+        {
+            foreach (var color in Colors)
+            {
+                SkEditorAPI.Logs.Debug($"    - Found color {color.Color} at {color.Position} size {color.Length}");
+            }
         }
     }
     
@@ -135,17 +167,24 @@ public abstract partial class ExprProviderElement : Element
     ///     * {hello} is a global variable named "hello".
     ///     * {-hello} is a memory variable named "hello".
     /// </summary>
-    /// <param name="name">The name of the variable.</param>
-    /// <param name="type">The type of the variable.</param>
-    public record Variable(string name, VariableType type);
+    /// <param name="Name">The name of the variable.</param>
+    /// <param name="Type">The type of the variable.</param>
+    public record Variable(
+        string Name,
+        VariableType Type, 
+        Action<(NameableReference, string)> RenameAction,
+        Node Node, int Position, int Length) : NameableReference(Name, RenameAction, Node, Position, Length);
+    
+    public delegate void RenameVariableDelegate(string newName);
     
     /// <summary>
     /// Represent an option in an expression.
     /// Example:
     ///     * {@hello} is an option named "hello".
     /// </summary>
-    /// <param name="key">The key of the option.</param>
-    public record Option(string key);
+    /// <param name="Key">The key of the option.</param>
+    public record Option(string Key,
+        Node Node, int Position, int Length) : CodeReference(Node, Position, Length);
     
     /// <summary>
     /// The type of variable in an expression.
@@ -171,9 +210,11 @@ public abstract partial class ExprProviderElement : Element
     /// <summary>
     /// Represent a color in an expression.
     /// </summary>
-    /// <param name="type">How the color was defined.</param>
-    /// <param name="color">The color value itself (what it represents).</param>
-    public record SkriptColor(ColorType type, Color color);
+    /// <param name="Type">How the color was defined.</param>
+    /// <param name="Color">The color value itself (what it represents).</param>
+    /// <param name="position">The position of the color in the expression.</param>
+    public record SkriptColor(ColorType Type, Color Color, 
+        Node Node, int Position, int Length) : CodeReference(Node, Position, Length);
     
     #endregion
 
@@ -190,14 +231,14 @@ public abstract partial class ExprProviderElement : Element
 
     public override string Debug()
     {
-        var variables = string.Join(", ", Variables.Select(v => v.type switch
+        var variables = string.Join(", ", Variables.Select(v => v.Type switch
         {
-            VariableType.Local => $"_{v.name}",
-            VariableType.Memory => $"-{v.name}",
-            _ => v.name
+            VariableType.Local => $"_{v.Name}",
+            VariableType.Memory => $"-{v.Name}",
+            _ => v.Name
         }));
         
-        var options = string.Join(", ", Options.Select(o => $"@{o.key}"));
+        var options = string.Join(", ", Options.Select(o => $"@{o.Key}"));
         return $"Variables: {variables}, Options: {options}";
     }
 }

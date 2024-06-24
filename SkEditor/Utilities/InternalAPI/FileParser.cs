@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Avalonia;
@@ -11,6 +12,7 @@ using SkEditor.API;
 using SkEditor.Parser;
 using SkEditor.Parser.Elements;
 using SkEditor.TextMarkers;
+using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Utilities.InternalAPI;
@@ -25,7 +27,7 @@ public class FileParser
     
     public readonly TextMarkerService TextMarkerService;
     public readonly HintGenerator HintGenerator;
-    public FileParser(TextEditor editor)
+    public FileParser(TextEditor editor, OpenedFile file)
     {
         Editor = editor;
         
@@ -38,13 +40,19 @@ public class FileParser
                 HintGenerator.Controls.Clear();
                 Editor.TextArea.TextView.Redraw();   
             }
+            
+            IsParsed = false;
         };
+        
+        file["ColorMargin"] = new ColorMargin(this);
+        editor.TextArea.LeftMargins.Insert(0, file["ColorMargin"] as ColorMargin);
     }
     
+    public EventHandler OnParsed;
     public TextEditor Editor { get; private set; }
     public bool IsParsed { get; private set; } = false;
     
-    public List<Node> ParsedNodes { get; private set; }
+    public List<Node> ParsedNodes { get; private set; } = new();
 
     public void Parse()
     {
@@ -58,6 +66,8 @@ public class FileParser
             context.Debug = true;
         
         ElementParser.ParseNodes(ParsedNodes, context);
+        IsParsed = true;
+        OnParsed?.Invoke(this, EventArgs.Empty);
         SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} nodes, with {context.Warnings.Count} warnings! [{context.ParsedNodes.Count}]");
 
         HintGenerator.Controls.Clear();
@@ -167,6 +177,54 @@ public class FileParser
         }
         
         return panel;
+    }
+
+    public Node? FindNodeAtLine(int line, bool deep = false)
+    {
+        if (line < 0)
+            return null;
+        if (!deep)
+        {
+            return ParsedNodes.FirstOrDefault(node => node.Line == line);
+        }
+        else
+        {
+            Node? result = null;
+            void VisitNode(Node node)
+            {
+                if (node.Line == line)
+                {
+                    result = node;
+                    return;
+                }
+                if (node is SectionNode sectionNode)
+                {
+                    foreach (var child in sectionNode.Children)
+                    {
+                        VisitNode(child);
+                    }
+                }
+            }
+
+            foreach (var node in ParsedNodes)
+            {
+                VisitNode(node);
+            }
+
+            return result;
+        }
+    }
+
+    public void ReplaceReference(CodeReference reference, string content)
+    {
+        var line = reference.Node.Line;
+        var lineObj = Editor.Document.GetLineByNumber(line);
+        var offset = lineObj.Offset + reference.Position + reference.Node.Indent;
+        var length = reference.Length;
+        
+        Editor.Document.Replace(offset, length, content);
+        
+        Parse();
     }
 }
 

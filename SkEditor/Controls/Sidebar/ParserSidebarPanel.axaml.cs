@@ -8,6 +8,7 @@ using SkEditor.Utilities.Parser.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Controls.Sidebar;
 
@@ -77,7 +78,7 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ParseCurrentFile()
     {
-        var parser = SkEditorAPI.Files.GetCurrentOpenedFile().FileParser;
+        var parser = SkEditorAPI.Files.GetCurrentOpenedFile()["Parser"] as FileParser;
         SkEditorAPI.Logs.Debug("Parsing file " + SkEditorAPI.Files.GetCurrentOpenedFile().Name);
         if (parser == null)
             return;

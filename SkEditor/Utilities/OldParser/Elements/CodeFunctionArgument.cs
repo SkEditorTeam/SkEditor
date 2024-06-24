@@ -32,9 +32,7 @@ public class CodeFunctionArgument : INameableCodeElement
 
     public async void Rename()
     {
-        var renameWindow = new SymbolRefactorWindow(this);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
-        Function.Parser.Parse();
+        
     }
 
     public void Rename(string newName)

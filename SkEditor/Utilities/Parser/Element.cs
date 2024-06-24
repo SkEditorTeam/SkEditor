@@ -1,6 +1,6 @@
 ﻿using SkEditor.Utilities.Parser;
 
-namespace SkEditor.Parser.Elements;
+namespace SkEditor.Parser;
 
 /// <summary>
 /// Represent an element that can be parsed

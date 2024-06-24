@@ -15,6 +15,7 @@
 	<system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
 	<system:String x:Key="WindowTitleElementRename">Rename</system:String>
 	<system:String x:Key="WindowTitleElementCreate">Create</system:String>
+	<system:String x:Key="WindowTitleEditColor">Edit color</system:String>
 
 	<!-- Menu Headers -->
 	<system:String x:Key="MenuHeaderFile">File</system:String>

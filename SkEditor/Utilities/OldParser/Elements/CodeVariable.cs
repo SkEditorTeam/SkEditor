@@ -124,9 +124,7 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
 
     public async void Rename()
     {
-        var renameWindow = new SymbolRefactorWindow(this);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
-        Section.Parser.Parse();
+        
     }
 
     public string GetNameDisplay()
