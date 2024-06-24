@@ -114,12 +114,17 @@ public class ColorMargin : AbstractMargin
         Cursor = new Cursor(StandardCursorType.Arrow);
     }
 
-    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    protected override async void OnPointerPressed(PointerPressedEventArgs e)
     {
         if (HoveredNode is { Element: ExprProviderElement { Colors.Count: > 0 } } node)
         {
             var stack = new StackPanel() { Orientation = Orientation.Vertical, Spacing = 2 };
             var element = node.Element as ExprProviderElement;
+            if (element.Colors.Count == 1)
+            {
+                await SkEditorAPI.Windows.ShowWindowAsDialog(new EditColorWindow(Parser, element.Colors[0]));
+                return;
+            }
             
             stack.Children.Add(new TextBlock() { Text = "Edit Color", FontSize = 16, FontWeight = FontWeight.SemiBold });
             
