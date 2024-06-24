@@ -42,8 +42,10 @@ public partial class GeneralPage : UserControl
 
                 // Regenerate the text editor context menu
                 // TODO: Context menu language doesn't change, when user has documentation tab opened.
-                if (!ApiVault.Get().IsFileOpen()) return;
-                TextEditor editor = ApiVault.Get().GetTextEditor();
+                if (!SkEditorAPI.Files.IsEditorOpen())
+                    return;
+
+                TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
                 editor.ContextFlyout = FileBuilder.GetContextMenu(editor);
             });
         };

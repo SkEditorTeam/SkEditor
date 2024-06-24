@@ -64,8 +64,10 @@ public class CustomCommandsHandler
 
     public static void OnTrimWhitespacesCommandExecuted(object target)
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
 
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;
         var selectionLength = editor.SelectionLength;
