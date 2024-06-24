@@ -120,4 +120,16 @@ public class Windows : IWindows
         
         return files.FirstOrDefault()?.Path.AbsolutePath;
     }
+
+    public void ShowWindow(Window window)
+    {
+        SkEditorAPI.Logs.Debug($"Showing window {window.GetType().Name}");
+        window.Show(GetCurrentWindow());
+    }
+
+    public Task ShowWindowAsDialog(Window window)
+    {
+        SkEditorAPI.Logs.Debug($"Showing window {window.GetType().Name}");
+        return window.ShowDialog(GetCurrentWindow());
+    }
 }
