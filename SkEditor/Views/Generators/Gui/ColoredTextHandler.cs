@@ -14,7 +14,7 @@ namespace SkEditor.Views.Generators.Gui;
 /// </summary>
 public static class ColoredTextHandler
 {
-    private static readonly Dictionary<string, object> TextFormats = new()
+    public static readonly Dictionary<string, object> TextFormats = new()
     {
         { "0", Color.FromRgb(0, 0, 0) },
         { "1", Color.FromRgb(0, 0, 170) },

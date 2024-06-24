@@ -13,6 +13,7 @@ using SkEditor.API.Settings.Types;
 using SkEditor.Controls.Sidebar;
 using SkEditor.Parser.Elements;
 using SkEditor.Utilities.Parser.Elements;
+using SkEditor.Utilities.Parser.Elements.Effects;
 using SkEditor.ViewModels;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
@@ -53,6 +54,9 @@ public class SkEditorSelfAddon : IAddon
         
         Registries.ParserElements.Register(new RegistryKey(this, "SecConditional"),
             new ParserElementData(typeof(SecCondition), 100));
+        
+        Registries.ParserElements.Register(new RegistryKey(this, "UnknownEffect"),
+            new ParserElementData(typeof(UnknownEffect), 5000));
 
         #endregion
         

@@ -25,24 +25,21 @@ public class SecCondition : ExprProviderElement
     };
     
     public ConditionalType Type { get; private set; }
-    public string? Condition { get; private set; } 
+    public string? Condition { get; private set; }
 
     public override void Load(Node node, ParsingContext context) // imagine this is the hint (not selectable and all)
     {
         var key = node.Key;
 
         int i = -1;
-        foreach (var (pattern, pair) in ConditionalTypes)
+        foreach (var (pattern, (type, hasInlineCondition)) in ConditionalTypes)
         {
             i++;
-            var type = pair.Item1;
-            var hasInlineCondition = pair.Item2;
             if (Regex.IsMatch(key, pattern))
             {
                 Type = type;
                 if (hasInlineCondition)// we can get the last parsed group
                     Condition = node.Key.Split("if ")[1];
-                SkEditorAPI.Logs.Debug($"Condition type: {Type} - '{Condition}' ({hasInlineCondition}) [{i} - {pattern}]");
                 break;
             }
         }

@@ -5,7 +5,8 @@ namespace SkEditor.Parser;
 
 public class ParsingContext
 {
-    
+    public bool Debug { get; set; }
+
     public List<(Node, string)> Errors { get; } = new();
     public List<(Node, string)> Warnings { get; } = new();
     

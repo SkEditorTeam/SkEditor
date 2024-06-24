@@ -132,9 +132,6 @@ public sealed class TextMarkerService : DocumentColorizingTransformer, IBackgrou
     /// </summary>
     internal void Redraw(ISegment segment)
     {
-        foreach (var view in textViews) {
-            view.Redraw(segment);
-        }
         if (RedrawRequested != null)
             RedrawRequested(this, EventArgs.Empty);
     }
@@ -263,42 +260,6 @@ public sealed class TextMarkerService : DocumentColorizingTransformer, IBackgrou
     {
         for (int i = 0; i < count; i++)
             yield return new Point(start.X + i * offset, start.Y - ((i + 1) % 2 == 0 ? offset : 0));
-    }
-    #endregion
-		
-    #region ITextViewConnect
-    readonly List<TextView> textViews = new List<TextView>();
-		
-    void ITextViewConnect.AddToTextView(TextView textView)
-    {
-        RedrawRequested?.Invoke(this, EventArgs.Empty);
-        SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea.TextView.Redraw(segment);
-    }
-
-    public event EventHandler RedrawRequested;
-
-    protected override void ColorizeLine(DocumentLine line)
-    {
-    }
-
-    private static IEnumerable<Point> CreatePoints(Point start, Point end, double offset, int count)
-    {
-        var fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
-        var multiplier = fontSize * 0.075;
-
-
-        for (var i = 0; i < count; i++)
-        {
-            var yOffset = (i + 1) % 2 == 0 ? offset : 0;
-            yOffset -= 2.5;
-            if (start.X + i * offset * multiplier > end.X)
-            {
-                yield return end;
-                yield break;
-            }
-
-            yield return new Point(start.X + i * offset * multiplier, start.Y + yOffset * multiplier);
-        }
     }
     #endregion
 }

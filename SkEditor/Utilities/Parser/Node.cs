@@ -113,6 +113,9 @@ public class SectionNode(string key, int line) : Node(key, line), IEnumerable<No
 
     public Node FindLastNode()
     {
+        if (Children.Count == 0)
+            return this;
+        
         var lastNode = Children[^1];
         return lastNode.IsSection ? ((SectionNode) lastNode).FindLastNode() : lastNode;
     }

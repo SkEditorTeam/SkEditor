@@ -54,6 +54,9 @@ public class FileParser
         SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} pure nodes, now parsing elements ...");
 
         var context = new ParsingContext();
+        if (SkEditorAPI.Core.IsDeveloperMode())
+            context.Debug = true;
+        
         ElementParser.ParseNodes(ParsedNodes, context);
         SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} nodes, with {context.Warnings.Count} warnings! [{context.ParsedNodes.Count}]");
 
