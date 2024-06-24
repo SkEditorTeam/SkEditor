@@ -44,6 +44,8 @@ public class FileHandler
 
     public static void TabSwitchAction()
     {
+        if (SkEditorAPI.Files.GetOpenedTabs().Count == 0 || !SkEditorAPI.Files.IsEditorOpen())
+            return;
         OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
 
         var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header.ToString());

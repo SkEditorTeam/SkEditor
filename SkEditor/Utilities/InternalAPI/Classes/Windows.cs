@@ -117,6 +117,7 @@ public class Windows : IWindows
     {
         var topLevel = GetCurrentWindow();
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
-        return files[0]?.Path.AbsolutePath;
+        
+        return files.FirstOrDefault()?.Path.AbsolutePath;
     }
 }
