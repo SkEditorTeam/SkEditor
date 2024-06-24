@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -48,32 +48,35 @@
                             
                             <StackPanel.ContextFlyout>
                                 <MenuFlyout>
-                                    <MenuItem IsVisible="{Binding !IsFile}" Header="New File" Command="{Binding CreateNewFileCommand}">
+                                    <MenuItem IsVisible="{Binding !IsFile}" Header="{DynamicResource MenuHeaderNewFile}" Command="{Binding CreateNewFileCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="New" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem IsVisible="{Binding !IsFile}" Header="New Folder" Command="{Binding CreateNewFolderCommand}">
+                                    <MenuItem IsVisible="{Binding !IsFile}" Header="{DynamicResource MenuHeaderNewFolder}" Command="{Binding CreateNewFolderCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="NewFolder" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem IsVisible="{Binding IsRootFolder}" Header="{DynamicResource MenuHeaderCloseProject}" Command="{Binding CloseProjectCommand}">
+                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Back" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
                                     
                                     <Separator IsVisible="{Binding !IsFile}" />
                                     
-                                    <MenuItem Header="Copy Path" Command="{Binding CopyPathCommand}">
+                                    <MenuItem Header="{DynamicResource MenuHeaderCopyPath}" Command="{Binding CopyPathCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="Copy" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
                                     
-                                    <MenuItem Header="Copy Absolute Path" Command="{Binding CopyAbsolutePathCommand}">
+                                    <MenuItem Header="{DynamicResource MenuHeaderCopyAbsolutePath}" Command="{Binding CopyAbsolutePathCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="Copy" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
                                     
                                     <Separator />
 
-                                    <MenuItem Header="Open in Explorer" Command="{Binding OpenInExplorerCommand}">
+                                    <MenuItem Header="{DynamicResource MenuHeaderOpenInExplorer}" Command="{Binding OpenInExplorerCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="OpenFolder" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Rename" Command="{Binding RenameCommand}">
+                                    <MenuItem Header="{DynamicResource MenuHeaderRename}" Command="{Binding RenameCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="Rename" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Delete" Command="{Binding DeleteCommand}">
+                                    <MenuItem Header="{DynamicResource MenuHeaderDelete}" Command="{Binding DeleteCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="Delete" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
                                 </MenuFlyout>

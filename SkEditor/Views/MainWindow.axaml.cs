@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using SkEditor.Utilities.InternalAPI;
+using Serilog;
 
 namespace SkEditor.Views;
 
@@ -30,7 +31,9 @@ public partial class MainWindow : AppWindow
         InitializeComponent();
 
         WindowStyler.Style(this);
+
         ThemeEditor.LoadThemes();
+        Log.Debug("themes loaded");
         AddEvents();
 
         Translation.LoadDefaultLanguage();
@@ -78,14 +81,16 @@ public partial class MainWindow : AppWindow
         e.Cancel = true;
         if (!SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
         {
-            List<TabViewItem> unsavedFiles = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().Where(item => item.Header.ToString().EndsWith('*')).ToList();
-            if (unsavedFiles.Count == 0)
+            bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
+            if (!anyUnsaved)
             {
                 e.Cancel = false;
                 return;
             }
 
-            ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"), Translation.Get("ClosingProgramWithUnsavedFiles"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+            ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
+                Translation.Get("ClosingProgramWithUnsavedFiles"), icon: new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+
             if (result == ContentDialogResult.Primary)
             {
                 AlreadyClosed = true;

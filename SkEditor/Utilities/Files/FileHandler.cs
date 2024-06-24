@@ -43,12 +43,14 @@ public class FileHandler
 
     public static void TabSwitchAction()
     {
-        if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem item) return;
+        if (SkEditorAPI.Files.GetOpenedTabs().Count == 0 || !SkEditorAPI.Files.IsEditorOpen())
+            return;
+        OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
 
-        var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(item.Header.ToString());
+        var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header.ToString());
         MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
-    
+
     public static void NewFile()
     {
         SkEditorAPI.Files.NewFile();

@@ -10,7 +10,9 @@ using FluentAvalonia.Interop;
 using FluentAvalonia.Styling;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
+using Serilog;
 using SkEditor.API;
+using SkEditor.Utilities.Files;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,6 +56,7 @@ public class ThemeEditor
         if (!File.Exists(Path.Combine(ThemeFolderPath, "Default.json"))) SaveTheme(GetDefaultTheme());
 
         string[] files = Directory.GetFiles(ThemeFolderPath);
+
         string currentTheme = SkEditorAPI.Core.GetAppConfig().CurrentTheme;
 
         files.Where(x => Path.GetExtension(x) == ".json").ToList().ForEach(x => LoadTheme(x));
@@ -86,7 +89,7 @@ public class ThemeEditor
 
     private static Theme GetUsedTheme()
     {
-        string currentTheme = ApiVault.Get()?.GetAppConfig()?.CurrentTheme;
+        string currentTheme = SkEditorAPI.Core.GetAppConfig().CurrentTheme;
 
         if (currentTheme != null && File.Exists(Path.Combine(ThemeFolderPath, currentTheme)))
         {
@@ -209,10 +212,8 @@ public class ThemeEditor
 
     private static void UpdateTextEditorColors()
     {
-        List<TextEditor> textEditors = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>()
-            .Where(i => i.Content is TextEditor)
-            .Select(i => i.Content as TextEditor).ToList();
-        foreach (TextEditor textEditor in textEditors)
+        List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
+        foreach (TextEditor textEditor in files.Select(x => x.Editor))
         {
             textEditor.Background = CurrentTheme.EditorBackgroundColor;
             textEditor.Foreground = CurrentTheme.EditorTextColor;

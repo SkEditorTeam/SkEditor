@@ -55,6 +55,11 @@ public class Files : IFiles
     {
         return GetOpenedFiles().Select(source => source.TabViewItem).ToList();
     }
+
+    public List<OpenedFile> GetOpenedEditors()
+    {
+        return GetOpenedFiles().Where(source => source.IsEditor).ToList();
+    }
     
     public TabViewItem GetCurrentTabViewItem()
     {

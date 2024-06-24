@@ -4,6 +4,9 @@ using Newtonsoft.Json.Linq;
 
 namespace SkEditor.API.Settings.Types;
 
+/// <summary>
+/// Represent a setting that can be toggled on or off.
+/// </summary>
 public class ToggleSetting : ISettingType
 {
     public object Deserialize(JToken value)

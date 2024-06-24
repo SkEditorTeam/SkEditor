@@ -238,8 +238,11 @@ public sealed class TextMarkerService : DocumentColorizingTransformer, IBackgrou
                                 }
                             }
                         }
-							
-                        Pen usedPen = new Pen(usedBrush, 1);
+
+                        var fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
+                        var strokeThickness = (float)Math.Max(fontSize / 15, 1);
+
+                        Pen usedPen = new(usedBrush, strokeThickness);
                         drawingContext.DrawGeometry(Brushes.Transparent, usedPen, geometry);
                     }
                     if ((marker.MarkerTypes & TextMarkerTypes.NormalUnderline) != 0) {
@@ -268,17 +271,33 @@ public sealed class TextMarkerService : DocumentColorizingTransformer, IBackgrou
 		
     void ITextViewConnect.AddToTextView(TextView textView)
     {
-        if (textView != null && !textViews.Contains(textView)) {
-            Debug.Assert(textView.Document == document);
-            textViews.Add(textView);
-        }
+        RedrawRequested?.Invoke(this, EventArgs.Empty);
+        SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea.TextView.Redraw(segment);
     }
-		
-    void ITextViewConnect.RemoveFromTextView(TextView textView)
+
+    public event EventHandler RedrawRequested;
+
+    protected override void ColorizeLine(DocumentLine line)
     {
-        if (textView != null) {
-            Debug.Assert(textView.Document == document);
-            textViews.Remove(textView);
+    }
+
+    private static IEnumerable<Point> CreatePoints(Point start, Point end, double offset, int count)
+    {
+        var fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
+        var multiplier = fontSize * 0.075;
+
+
+        for (var i = 0; i < count; i++)
+        {
+            var yOffset = (i + 1) % 2 == 0 ? offset : 0;
+            yOffset -= 2.5;
+            if (start.X + i * offset * multiplier > end.X)
+            {
+                yield return end;
+                yield break;
+            }
+
+            yield return new Point(start.X + i * offset * multiplier, start.Y + yOffset * multiplier);
         }
     }
     #endregion

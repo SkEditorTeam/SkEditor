@@ -23,13 +23,12 @@ public partial class GuiGenerator : AppWindow
 
     public HashSet<Button> Buttons { get; } = [];
     public Dictionary<int, Item> Items { get; set; } = [];
-    public Item BackgroundItem { get; set; }
+    public Item? BackgroundItem { get; set; }
     public int CurrentRows { get; set; } = 6;
 
 
     public string _itemPath = Path.Combine(AppConfig.AppDataFolderPath, "Items");
     public static GuiGenerator Instance { get; private set; }
-
 
 
     public GuiGenerator()
@@ -122,7 +121,7 @@ public partial class GuiGenerator : AppWindow
 
     public void UpdateItem(int slotId, Item item)
     {
-        Button button = Buttons.FirstOrDefault(x => (int)x.Tag == slotId);
+        Button button = Buttons.FirstOrDefault(x => (int?)x.Tag == slotId);
 
         string itemImagePath = Path.Combine(_itemPath, item.Name + ".png");
 

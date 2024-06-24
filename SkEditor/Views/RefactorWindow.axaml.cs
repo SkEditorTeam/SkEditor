@@ -29,7 +29,7 @@ public partial class RefactorWindow : AppWindow
 
     private static Task RemoveComments()
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var linesToStay = textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
 
         StringBuilder builder = new();
@@ -41,7 +41,7 @@ public partial class RefactorWindow : AppWindow
 
     private static Task TabsToSpaces()
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var lines = textEditor.Document.Lines;
 
         lines.Where(line => GetText(line).StartsWith("\t")).ToList().ForEach(line =>
@@ -54,7 +54,7 @@ public partial class RefactorWindow : AppWindow
 
     private static Task SpacesToTabs()
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int tabSize = GetTabSize();
         var lines = textEditor.Document.Lines;
         lines.Where(line => GetText(line).StartsWith(" ")).ToList().ForEach(line =>
@@ -71,7 +71,7 @@ public partial class RefactorWindow : AppWindow
 
     private static int GetTabSize()
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var lines = textEditor.Document.Lines;
         int tabSize = 4;
 
@@ -84,7 +84,7 @@ public partial class RefactorWindow : AppWindow
 
     private static string GetText(DocumentLine line)
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         return textEditor.Document.GetText(line.Offset, line.Length);
     }
 }

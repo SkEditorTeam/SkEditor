@@ -53,7 +53,7 @@ public partial class MarketplaceWindow : AppWindow
         catch (Exception e)
         {
             Log.Error(e, "Failed to load Marketplace items");
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceLoadFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceLoadFailed"));
         }
     }
 
@@ -126,7 +126,7 @@ public partial class MarketplaceWindow : AppWindow
             ItemView.EnableButton.IsVisible = false;
             ItemView.UpdateButton.IsVisible = false;
             ItemView.UninstallButton.IsVisible = false;
-            
+
             ItemView.ManageButton.IsVisible = addonItem2.IsInstalled();
             ItemView.ManageButton.Command = new RelayCommand(() =>
             {

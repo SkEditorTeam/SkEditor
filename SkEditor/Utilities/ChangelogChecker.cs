@@ -1,4 +1,5 @@
-﻿using SkEditor.API;
+﻿using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 using System.Reflection;
 
 namespace SkEditor.Utilities;
@@ -20,7 +21,7 @@ public static class ChangelogChecker
         string version = SkEditorAPI.Core.GetAppConfig().Version;
         if (version == GetVersion()) return;
 
-        await ApiVault.Get().ShowAdvancedMessage($"v{GetVersion()} 🚀", string.Join('\n', changelog), primaryButton: false, closeButtonContent: "OK");
+        await SkEditorAPI.Windows.ShowDialog($"v{GetVersion()} 🚀", string.Join('\n', changelog), icon: null);
 
         SkEditorAPI.Core.GetAppConfig().Version = GetVersion();
     }

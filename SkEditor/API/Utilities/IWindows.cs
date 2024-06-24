@@ -60,5 +60,21 @@ public interface IWindows
     /// <param name="options">The options for the file picker.</param>
     /// <returns>The path of the selected file, or null if the user cancelled the dialog.</returns>
     Task<string?> AskForFile(FilePickerOpenOptions options);
-    
+
+    /// <summary>
+    /// Show the specific window at the most top level possible (so not always on top the main window!)
+    /// </summary>
+    /// <param name="window">The window to show</param>
+    void ShowWindow(Window window);
+
+    /// <summary>
+    /// Show the specific window at the most top level possible (so not always on top the main window!)
+    /// This will wait for the window to be closed before continuing.
+    /// </summary>
+    /// <param name="window">The window to show</param>
+    /// <returns>The task that will be completed when the window is closed.</returns>
+    Task ShowWindowAsDialog(Window window);
+
+
+
 }

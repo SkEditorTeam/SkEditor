@@ -47,15 +47,15 @@ public class AddonItem : MarketplaceItem
                 message += "\n" + Translation.Get("MarketplaceInstallNoNeedToRestart");
             }
 
-            await ApiVault.Get().ShowMessageWithIcon("Success", message,
-                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
-            
+            await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
+                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
+
             RunAddon(addonIdentifier);
         }
         catch (Exception e)
         {
             Log.Error(e, "Failed to install addon!");
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
         }
     }
 

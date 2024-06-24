@@ -160,7 +160,6 @@
 		</Compile>
 		<Compile Update="Controls\Sidebar\ParserSidebarPanel.axaml.cs">
 		  <DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
-		  <SubType>Code</SubType>
 		</Compile>
 	</ItemGroup>
 

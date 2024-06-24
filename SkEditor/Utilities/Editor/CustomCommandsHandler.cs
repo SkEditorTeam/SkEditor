@@ -13,7 +13,7 @@ public class CustomCommandsHandler
 {
     public static void OnCommentCommandExecuted(object target)
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;
@@ -52,6 +52,36 @@ public class CustomCommandsHandler
             {
                 return indentationToInsert + "#" + strippedLine;
             }
+        }).ToList();
+
+        var replacement = string.Join("\n", modifiedLines);
+        var startOffset = selectedLines.First().Offset;
+        var endOffset = selectedLines.Last().EndOffset - startOffset;
+
+        document.Replace(startOffset, endOffset, replacement);
+        editor.Select(startOffset, replacement.Length);
+    }
+
+    public static void OnTrimWhitespacesCommandExecuted(object target)
+    {
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        var document = editor.Document;
+        var selectionStart = editor.SelectionStart;
+        var selectionLength = editor.SelectionLength;
+
+        var selectedLines = document.Lines
+            .Where(line => selectionStart <= line.EndOffset && selectionStart + selectionLength >= line.Offset)
+            .ToList();
+
+        var modifiedLines = selectedLines.Select(line =>
+        {
+            var text = document.GetText(line);
+            if (string.IsNullOrWhiteSpace(text))
+                return "";
+            return text;
         }).ToList();
 
         var replacement = string.Join("\n", modifiedLines);

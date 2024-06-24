@@ -45,13 +45,13 @@
 
         <Style Selector="^:disabled">
             <Style Selector="^ /template/ ui|FABorder#Root">
-                <Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
+                <Setter Property="Background" Value="Purple" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
             </Style>
-            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
-            </Style>
-        </Style>
+			<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+			</Style>
+		</Style>
     </Style>
     
     <!-- Danger -->

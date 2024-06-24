@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using Avalonia;
 using Avalonia.Styling;
+using AvaloniaEdit;
+using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Files;
 
 namespace SkEditor.API;
 
@@ -14,7 +19,7 @@ public class Core : ICore
     
     public AppConfig GetAppConfig()
     {
-        return _appConfig ??= AppConfig.Load().Result;
+        return _appConfig ??= AppConfig.Load();
     }
 
     public Version GetAppVersion()
@@ -44,12 +49,46 @@ public class Core : ICore
         Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 
+    public void OpenFolder(string path)
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = path,
+            UseShellExecute = true,
+            Verb = "open"
+        });
+    }
+
     public bool IsDeveloperMode()
     {
-        #if DEBUG
+#pragma warning disable 162
+#if DEBUG
         return true;
-        #endif
-        
+#endif
+
         return GetAppConfig().IsDevModeEnabled;
+        #pragma warning restore 162
+    }
+
+    public void SaveData()
+    {
+        List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
+
+        files.ForEach(file =>
+        {
+            string path = file.Path;
+            if (string.IsNullOrEmpty(path))
+            {
+                string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
+                Directory.CreateDirectory(tempPath);
+                string header = file.Header;
+                path = Path.Combine(tempPath, header);
+            }
+            string textToWrite = file.Editor.Text;
+            using StreamWriter writer = new(path, false);
+            writer.Write(textToWrite);
+        });
+
+        GetAppConfig().Save();
     }
 }

@@ -80,7 +80,7 @@ public partial class PublishWindow : AppWindow
             _ => "https://pastebin.com/doc_api"
         };
 
-        ApiVault.Get().OpenUrl(url);
+        SkEditorAPI.Core.OpenLink(url);
     }
 
     private void Publish()

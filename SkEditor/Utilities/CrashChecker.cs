@@ -16,7 +16,7 @@ public class CrashChecker
         bool crash = Environment.GetCommandLineArgs().Any(arg => arg.Equals("--crash"));
         if (!crash) return false;
 
-        ApiVault.Get().ShowMessage("Oops!", "Sorry!\nIt looks that the app crashed, but don't worry, your files were saved.\nYou can check the logs for more details.\nIf you can, please report this on the Discord server.");
+        await SkEditorAPI.Windows.ShowMessage("Oops!", "Sorry!\nIt looks that the app crashed, but don't worry, your files were saved.\nYou can check the logs for more details.\nIf you can, please report this on the Discord server.");
 
         string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
         if (!Directory.Exists(tempPath)) return false;
@@ -26,7 +26,7 @@ public class CrashChecker
             if (tabItem == null)
                 return;
             tabItem.Tag = null;
-            (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
+            (SkEditorAPI.Files.GetTabView().TabItems as IList)?.Add(tabItem);
         });
         Directory.Delete(tempPath, true);
         return true;

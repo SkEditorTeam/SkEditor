@@ -1,7 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.API.Settings;
 using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views.Settings;
@@ -10,10 +12,13 @@ public partial class CustomAddonSettingsPage : UserControl
 {
     private static CustomAddonSettingsPage _instance = null!;
 
-    public static void Load(IAddon addon)
+    private SubSettings? _parent;
+    public static void Load(IAddon addon, List<Setting>? settings = null, SubSettings? parent = null)
     {
+        _instance._parent = parent;
+        
         _instance.LoadBasics(addon);
-        _instance.PopulateSettings(addon);
+        _instance.PopulateSettings(settings ?? addon.GetSettings());
     }
     
     public CustomAddonSettingsPage()
@@ -24,15 +29,25 @@ public partial class CustomAddonSettingsPage : UserControl
 
     public void LoadBasics(IAddon addon)
     {
-        Title.Title = addon.Name;
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(AddonsPage)));
+        Title.Title = _parent == null ? addon.Name : $"{addon.Name} - {_parent.Name}";
+        Title.BackButton.Command = new RelayCommand(() =>
+        {
+            if (_parent == null)
+            {
+                SettingsWindow.NavigateToPage(typeof(AddonsPage));
+                return;
+            }
+            
+            SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
+            Load(addon, _parent.Settings, null);
+        });
     }
     
-    public void PopulateSettings(IAddon addon)
+    public void PopulateSettings(List<Setting> settings)
     {
         
         ItemStackPanel.Children.Clear();
-        foreach (var setting in addon.GetSettings())
+        foreach (var setting in settings)
         {
             var expander = new SettingsExpander()
             {
@@ -63,4 +78,6 @@ public partial class CustomAddonSettingsPage : UserControl
         }
         
     }
+
+    public record SubSettings(string Name, List<Setting> Settings);
 }

@@ -21,8 +21,6 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    static Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
-
     public override async void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
@@ -34,6 +32,8 @@ public partial class App : Application
             .WriteTo.Sink(new LogsHandler())
             .CreateLogger();
 
+        Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             bool isFirstInstance;
@@ -43,7 +43,7 @@ public partial class App : Application
             }
             catch (AbandonedMutexException ex)
             {
-                ex.Mutex?.Close();
+                Log.Debug(ex, "Abandoned mutex");
                 isFirstInstance = true;
             }
 
@@ -52,8 +52,8 @@ public partial class App : Application
                 try
                 {
                     (SkEditorAPI.Core as Core).SetStartupArguments(desktop.Args ?? []);
-                    new SkEditor();
-                    
+                    _ = new SkEditor();
+
                     MainWindow mainWindow = new();
                     desktop.MainWindow = mainWindow;
 
@@ -97,5 +97,4 @@ public partial class App : Application
             }
         }
     }
-
 }

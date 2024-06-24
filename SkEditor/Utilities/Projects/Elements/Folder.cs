@@ -7,6 +7,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Avalonia.Threading;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
@@ -16,7 +18,7 @@ public class Folder : StorageElement
 
     public Folder(string folder, Folder? parent = null)
     {
-        folder = Uri.UnescapeDataString(folder).Replace("/", "\\");
+        folder = Uri.UnescapeDataString(folder);
 
         Parent = parent;
         StorageFolderPath = folder;
@@ -34,17 +36,13 @@ public class Folder : StorageElement
         CreateNewFolderCommand = new RelayCommand(() => CreateNewElement(false));
     }
 
-    private void LoadChildren()
+    private async void LoadChildren()
     {
-        try
+        await Task.Run(() => Dispatcher.UIThread.Invoke(() =>
         {
             Directory.GetDirectories(StorageFolderPath).ToList().ForEach(x => Children.Add(new Folder(x, this)));
             Directory.GetFiles(StorageFolderPath).ToList().ForEach(x => Children.Add(new File(x, this)));
-        }
-        catch (Exception e)
-        {
-            // TODO: Correctly handle this error (usually access denied)
-        }
+        }));
     }
 
     public void OpenInExplorer()

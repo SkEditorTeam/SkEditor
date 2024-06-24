@@ -5,13 +5,10 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
-using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views.Marketplace.Types;
 
@@ -49,8 +46,8 @@ public class ZipAddonItem : AddonItem
                 message += "\n" + Translation.Get("MarketplaceInstallNoNeedToRestart");
             }
 
-            await ApiVault.Get().ShowMessageWithIcon("Success", message,
-                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
+            await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
+                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
 
             MarketplaceWindow.Instance.HideAllButtons();
             MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
@@ -60,7 +57,7 @@ public class ZipAddonItem : AddonItem
         catch (Exception e)
         {
             Log.Error(e, "Failed to install addon!");
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
         }
     }
 
@@ -109,11 +106,11 @@ public class ZipAddonItem : AddonItem
 
         MarketplaceWindow.Instance.ItemView.UninstallButton.IsEnabled = false;
 
-        await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess",
-            ItemName), new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
+        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
+            new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
     }
 
-    public new async void Update()
+    public async void Update()
     {
         string fileName = "updated-" + ItemFileUrl.Split('/').Last();
         SkEditorAPI.Core.GetAppConfig().AddonsToUpdate.Add(fileName);
@@ -131,16 +128,16 @@ public class ZipAddonItem : AddonItem
             using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
 
-            ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Success"), Translation.Get("MarketplaceUpdateSuccess", ItemName),
-                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
+            await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUpdateSuccess", ItemName),
+                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
         }
         catch
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceUpdateFailed", ItemName));
+            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceUpdateFailed", ItemName));
         }
     }
 
-    public new void Disable()
+    public void Disable()
     {
         string fileName = ItemFileUrl.Split('/').Last().Replace(".zip", "");
         SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Add(fileName);
@@ -149,7 +146,7 @@ public class ZipAddonItem : AddonItem
         MarketplaceWindow.Instance.ItemView.EnableButton.IsVisible = true;
     }
 
-    public new void Enable()
+    public void Enable()
     {
         string fileName = ItemFileUrl.Split('/').Last().Replace(".zip", "");
         SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Remove(fileName);

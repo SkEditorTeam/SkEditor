@@ -69,15 +69,14 @@ public partial class FileSyntaxes : UserControl
 
             config.FileSyntaxes[selectedFileSyntax.Config.LanguageName] = selectedFileSyntax.Config.FullIdName;
 
-            List<TabViewItem> tabs = ApiVault.Get().GetTabView().TabItems
-                .OfType<TabViewItem>()
-                .Where(tab => tab.Content is TextEditor)
-                .Where(tab =>
+            List<TabViewItem> tabs = SkEditorAPI.Files.GetOpenedFiles()
+                .Where(o => o.IsEditor)
+                .Where(o =>
                 {
-                    var ext = Path.GetExtension(tab.Tag?.ToString()?.ToLower() ?? "");
-                    return tab.Tag is string &&
-                           selectedFileSyntax.Config.Extensions.Contains(ext);
+                    var ext = Path.GetExtension(o.Path?.ToLower() ?? "");
+                    return selectedFileSyntax.Config.Extensions.Contains(ext);
                 })
+                .Select(o => o.TabViewItem)
                 .ToList();
 
             foreach (var tab in tabs)

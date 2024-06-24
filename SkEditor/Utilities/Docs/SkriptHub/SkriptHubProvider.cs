@@ -36,7 +36,7 @@ public class SkriptHubProvider : IDocProvider
         return [];
     }
     
-    private readonly List<SkriptHubDocEntry> _cachedElements = new();
+    private readonly List<SkriptHubDocEntry> _cachedElements = [];
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
@@ -77,7 +77,7 @@ public class SkriptHubProvider : IDocProvider
                 }
                 catch (Exception e)
                 {
-                    ApiVault.Get().ShowError(e is TaskCanceledException
+                    await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
                         ? Translation.Get("DocumentationWindowErrorOffline")
                         : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
                     _cachedElements.Clear();
@@ -126,7 +126,7 @@ public class SkriptHubProvider : IDocProvider
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowError(e is TaskCanceledException
+            await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
                 ? Translation.Get("DocumentationWindowErrorOffline")
                 : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
@@ -136,13 +136,13 @@ public class SkriptHubProvider : IDocProvider
         {
             try
             {
-                ApiVault.Get().Log(await response.Content.ReadAsStringAsync(cancellationToken.Token));
+                SkEditorAPI.Logs.Info(await response.Content.ReadAsStringAsync(cancellationToken.Token));
             }
             catch (Exception e)
             {
-                ApiVault.Get().Log(e.Message);
+                SkEditorAPI.Logs.Error(e.Message);
             }
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
         }
 
@@ -172,10 +172,7 @@ public class SkriptHubProvider : IDocProvider
         return _cachedElements.Select(e => e.Addon).Distinct().ToList();
     }
 
-    public async Task<Color?> GetAddonColor(string addonName)
-    {
-        return null;
-    }
+    public Task<Color?> GetAddonColor(string addonName) => null;
 
     public IconSource Icon => new ImageIconSource()
     {

@@ -31,6 +31,7 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private int _tabSize = 4;
     [ObservableProperty] private bool _checkForUpdates = true;
     [ObservableProperty] private bool _checkForChanges = true;
+    [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
     [ObservableProperty] private bool _isDevModeEnabled = false;
 
     public HashSet<string> AddonsToDisable { get; set; } = [];
@@ -56,7 +57,7 @@ public partial class AppConfig : ObservableObject
 
     public static string SettingsFilePath { get; set; } = Path.Combine(AppDataFolderPath, "settings.json");
 
-    public static async Task<AppConfig> Load()
+    public static AppConfig Load()
     {
         string settingsFilePath = SettingsFilePath;
 

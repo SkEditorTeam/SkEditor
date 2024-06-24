@@ -23,7 +23,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
     
     - name: 🛠️ | Create .app structure
       run: |
@@ -52,7 +52,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
 
     - name: 🛠️ | Create .app structure (arm64)
       run: |
@@ -91,7 +91,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
 
     - name: 📌 | Install Dependencies
       run: |
@@ -104,8 +104,11 @@ jobs:
         cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
         mkdir -p "SkEditorFiles/usr/share/applications"
         cd SkEditorFiles/usr/share/applications
-        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
+        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/v178sdzprbasul0xatg1y/SkEditor.desktop?rlkey=fq2nsuf9dyvlm7jhg9e5jugqu&st=6vlpjwjg&dl=1'
         wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFiles/opt/SkEditor/SkEditor.png https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png
+        mkdir -p mime/packages
+        cd mime/packages
+        wget -O skript.xml -r 'https://www.dropbox.com/scl/fi/5fh65lwl5n352tik2hl5p/skript.xml?rlkey=kikicagf306vd1b2lcaenyjyu&st=i6abr09z&dl=1'
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
         pwd 
@@ -117,7 +120,7 @@ jobs:
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
         wget -O preinst -r 'https://www.dropbox.com/scl/fi/d3v6523n16ndetbg7x5yh/preinst?rlkey=xfrk7go1gxl8zhwt0cswrihjo&st=rwyq4bpo&dl=1'
-        wget -O postinst -r 'https://www.dropbox.com/scl/fi/9g1zkrut89cnxr0628g7t/postinst?rlkey=puohu1xktrub2txj9l0t1q9dc&st=q5ykofhe&dl=1'
+        wget -O postinst -r 'https://www.dropbox.com/scl/fi/2l1dx0vx3yelfllw7wclk/postinst?rlkey=wx815p6ribc06752t3k6m73qr&st=yvsopgtj&dl=1'
         
 
     - name: 🔑 | Fix Permissions
@@ -152,7 +155,7 @@ jobs:
       run: |
         cd SkEditor
         dotnet restore
-        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
 
     - name: 📌 | Install Dependencies
       run: |
@@ -165,8 +168,11 @@ jobs:
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
         mkdir -p "SkEditorFilesx/usr/share/applications"
         cd SkEditorFilesx/usr/share/applications
-        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
+        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/v178sdzprbasul0xatg1y/SkEditor.desktop?rlkey=fq2nsuf9dyvlm7jhg9e5jugqu&st=6vlpjwjg&dl=1'
         wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/opt/SkEditor/SkEditor.png https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png
+        mkdir -p mime/packages
+        cd mime/packages
+        wget -O skript.xml -r 'https://www.dropbox.com/scl/fi/5fh65lwl5n352tik2hl5p/skript.xml?rlkey=kikicagf306vd1b2lcaenyjyu&st=i6abr09z&dl=1'
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
@@ -178,7 +184,7 @@ jobs:
         echo "Maintainer: Notro" >> control
         wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
         wget -O preinst -r 'https://www.dropbox.com/scl/fi/d3v6523n16ndetbg7x5yh/preinst?rlkey=xfrk7go1gxl8zhwt0cswrihjo&st=rwyq4bpo&dl=1'
-        wget -O postinst -r 'https://www.dropbox.com/scl/fi/9g1zkrut89cnxr0628g7t/postinst?rlkey=puohu1xktrub2txj9l0t1q9dc&st=q5ykofhe&dl=1'
+        wget -O postinst -r 'https://www.dropbox.com/scl/fi/2l1dx0vx3yelfllw7wclk/postinst?rlkey=wx815p6ribc06752t3k6m73qr&st=yvsopgtj&dl=1'
 
     - name: 🔑 | Fix Permissions
       run: |

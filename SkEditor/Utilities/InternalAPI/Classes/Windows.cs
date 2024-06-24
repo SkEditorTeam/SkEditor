@@ -34,7 +34,7 @@ public class Windows : IWindows
         string? cancelButtonText = null,
         string primaryButtonText = "Okay")
     {
-        string? TryGetTranslation(string? input)
+        static string? TryGetTranslation(string? input)
         {
             if (input == null) 
                 return null;
@@ -60,7 +60,16 @@ public class Windows : IWindows
         };
 
         if (icon is not IconSource source)
-            throw new ArgumentException("Icon must be of type IconSource, Symbol or SymbolIconSource.");
+        {
+            if (icon is null)
+            {
+                source = null;
+            }
+            else
+            {
+                throw new ArgumentException("Icon must be of type IconSource, Symbol or SymbolIconSource.");
+            }
+        }
         if (source is FontIconSource fontIconSource)
             fontIconSource.FontSize = 36;
         
@@ -85,7 +94,8 @@ public class Windows : IWindows
         Grid.SetColumn(iconElement, 0);
         Grid.SetColumn(textBlock, 1);
 
-        grid.Children.Add(iconElement);
+        if (iconElement.IconSource is not null)
+            grid.Children.Add(iconElement);
         grid.Children.Add(textBlock);
 
         dialog.Content = grid;
@@ -100,13 +110,26 @@ public class Windows : IWindows
 
     public async Task ShowError(string error)
     {
-        await ShowDialog("Error", error, Symbol.AlertFilled);
+        await ShowDialog(Translation.Get("Error"), error, Symbol.AlertFilled);
     }
 
     public async Task<string?> AskForFile(FilePickerOpenOptions options)
     {
         var topLevel = GetCurrentWindow();
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
+        
         return files.FirstOrDefault()?.Path.AbsolutePath;
+    }
+
+    public void ShowWindow(Window window)
+    {
+        SkEditorAPI.Logs.Debug($"Showing window {window.GetType().Name}");
+        window.Show(GetCurrentWindow());
+    }
+
+    public Task ShowWindowAsDialog(Window window)
+    {
+        SkEditorAPI.Logs.Debug($"Showing window {window.GetType().Name}");
+        return window.ShowDialog(GetCurrentWindow());
     }
 }

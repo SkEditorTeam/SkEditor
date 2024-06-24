@@ -60,7 +60,7 @@ public class FileBuilder
         {
             var editor = fileType.Display as TextEditor;
 
-            ApiVault.Get().OnFileCreated(editor);
+            (SkEditorAPI.Events as Events).FileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
         }
 
@@ -143,7 +143,7 @@ public class FileBuilder
 
         if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))
         {
-            var response = await ApiVault.Get().ShowMessageWithIcon(
+            var response = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
                 new SymbolIconSource() { Symbol = Symbol.Alert });
             if (response != ContentDialogResult.Primary)
@@ -247,7 +247,7 @@ public class FileBuilder
         return editor;
     }
 
-    private static MenuFlyout GetContextMenu(TextEditor editor)
+    public static MenuFlyout GetContextMenu(TextEditor editor)
     {
         var commands = new[]
         {
@@ -258,6 +258,8 @@ public class FileBuilder
             new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.Redo },
             new { Header = "MenuHeaderDuplicate", Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Icon = Symbol.Copy },
             new { Header = "MenuHeaderComment", Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)), Icon = Symbol.Comment },
+            new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLine())), Icon = Symbol.Find },
+            new { Header = "MenuHeaderTrimWhitespaces", Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)), Icon = Symbol.Remove },
             new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
             new { Header = "MenuHeaderRefactor", Command = new RelayCommand(() => CustomCommandsHandler.OnRefactorCommandExecuted(editor)), Icon = Symbol.Rename },
         };

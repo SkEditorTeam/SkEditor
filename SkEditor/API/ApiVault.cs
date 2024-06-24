@@ -1,7 +1,9 @@
 ﻿using SkEditor.Utilities.Files;
+using System;
 
 namespace SkEditor.API;
 
+[Obsolete("Use SkEditorAPI interfaces instead")]
 public static class ApiVault
 {
     private static ISkEditorAPI instance;
