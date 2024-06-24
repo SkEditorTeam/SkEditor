@@ -65,9 +65,14 @@ public class FileParser
         if (SkEditorAPI.Core.IsDeveloperMode())
             context.Debug = true;
         
+        
         ElementParser.ParseNodes(ParsedNodes, context);
+        
         IsParsed = true;
         OnParsed?.Invoke(this, EventArgs.Empty);
+        SkEditorAPI.Addons.GetSelfAddon().ParserPanel.Panel.Refresh(ParsedNodes.OfType<SectionNode>().ToList());
+        
+        
         SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} nodes, with {context.Warnings.Count} warnings! [{context.ParsedNodes.Count}]");
 
         HintGenerator.Controls.Clear();
