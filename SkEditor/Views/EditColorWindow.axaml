@@ -17,8 +17,8 @@
         <ComboBox Grid.Row="1" Grid.Column="1" Name="ColorTypeComboBox" SelectedIndex="0" HorizontalAlignment="Stretch">
             <ComboBoxItem Tag="hex">Hex Code</ComboBoxItem>
                 
-            <ComboBoxItem Tag="minecraft">Minecraft Code</ComboBoxItem>
             <ComboBoxItem Tag="tag">Tag</ComboBoxItem>
+            <ComboBoxItem Tag="minecraft">Minecraft Code</ComboBoxItem>
         </ComboBox>
         
         <Button Grid.Row="2" Grid.Column="0" Name="ChangeButton" HorizontalAlignment="Stretch" Classes="accent">Change</Button>

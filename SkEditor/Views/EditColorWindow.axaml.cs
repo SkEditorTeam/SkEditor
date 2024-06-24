@@ -26,8 +26,11 @@ public partial class EditColorWindow : AppWindow
         Color = color;
         
         Picker.Color = new Color(Color.Color.A, Color.Color.R, Color.Color.G, Color.Color.B);
+        Picker.IsAlphaVisible = false;
         Picker.Palette = new MinecraftColorPalette();
         Picker.ColorChanged += (sender, args) => UpdateColorData(args);
+
+        ColorTypeComboBox.SelectedIndex = (int) color.Type;
         
         AssignCommands();
     }
@@ -42,8 +45,8 @@ public partial class EditColorWindow : AppWindow
             
             if (tag == "hex")
             {
-                toReplace = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
-            } else if (tag == "minecraft" || tag == "tag")
+                toReplace = $"<##{color.R:X2}{color.G:X2}{color.B:X2}>";
+            } else if (tag is "minecraft" or "tag")
             {
                 var code = ColoredTextHandler.TextFormats.FirstOrDefault(x => x.Value is Color c && c == color).Key;
                 if (tag == "minecraft")
