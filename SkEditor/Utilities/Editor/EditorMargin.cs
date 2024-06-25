@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -7,6 +8,7 @@ using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Utilities.Editor;
 
@@ -18,7 +20,7 @@ namespace SkEditor.Utilities.Editor;
 /// </summary>
 public class EditorMargin : AbstractMargin
 {
-    public Dictionary<int, MarginIconData> RenderedIcons { get; } = new();
+    public Dictionary<(int, int), MarginIconData> RenderedIcons { get; } = new();
     public MarginIconData? HoveredIcon { get; set; }
     
     public OpenedFile File { get; }
@@ -45,6 +47,7 @@ public class EditorMargin : AbstractMargin
     public void Reload()
     {
         InvalidateVisual();
+        InvalidateMeasure();
     }
 
     private void OnVisualLinesChanged(object? sender, EventArgs eventArgs)
@@ -54,13 +57,17 @@ public class EditorMargin : AbstractMargin
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        return new Size(16, 0);
+        var requiredColumns = Registries.MarginIcons.Select(i => i.ColumnKey).Distinct().Count();
+        var scale = File.Editor.FontSize / 12;
+        
+        return new Size(16 * requiredColumns * scale, 0);
     }
 
     public override void Render(DrawingContext context)
     {
         context.DrawRectangle(SkEditorAPI.Core.GetApplicationResource("EditorBackgroundColor") as IBrush, null, Bounds);
 
+        var hidden = FoldingCreator.GetHiddenLines(File);
         var lineHeight = File.Editor.FontSize;
         var lineSpacing = lineHeight * 0.345;
         var scrollViewer = TextEditorEventHandler.GetScrollViewer(File.Editor);
@@ -68,14 +75,21 @@ public class EditorMargin : AbstractMargin
         
         for (var line = 1; line <= File.Editor.LineCount; line++)
         {
-            var y = (lineSpacing + (line - 1) * lineHeight + (line - 1) * lineSpacing - 1) - scrollViewer.Offset.Y;
-            var args = new DrawingArgs(context, File, (float) scale, line, (int) y);
+            if (hidden.Contains(line))
+                continue;
+            
+            var separator = hidden.Count(h => h < line);
+            var y = (lineSpacing + (line - 1) * lineHeight + (line - 1) * lineSpacing - 1) - scrollViewer.Offset.Y
+                    - (separator) * (lineSpacing + lineHeight);
             foreach (var icon in Registries.MarginIcons)
             {
-                if (icon.DrawingFunc(args))
-                    RenderedIcons[line] = icon;
+                var key = (line, icon.ColumnKey == null ? 0 : Registries.MarginIcons.Select(i => i.ColumnKey).Distinct().ToList().IndexOf(icon.ColumnKey));
+                var x = key.Item2 * 16 * scale;
+                
+                if (icon.DrawingFunc(new DrawingArgs(context, File, (float) scale, line, (int) y, (int) x)))
+                    RenderedIcons[key] = icon;
                 else 
-                    RenderedIcons.Remove(line);
+                    RenderedIcons.Remove(key);
             }
         }
 
@@ -85,19 +99,26 @@ public class EditorMargin : AbstractMargin
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         var position = e.GetPosition(this);
-        var viewer = TextEditorEventHandler.GetScrollViewer(File.Editor);
-        var line = (int) (position.Y / (File.Editor.FontSize + File.Editor.FontSize * 0.345) + viewer.Offset.Y / File.Editor.FontSize) + 1;
-        
-        if (RenderedIcons.ContainsKey(line))
+        var point = File.Editor.GetPositionFromPoint(position);
+        if (point == null)
+            return;
+        var line = point.Value.Line;
+        var x = (int) position.X / 16;
+
+        foreach (var icon in RenderedIcons)
         {
+            var l = icon.Key.Item1;
+            var c = icon.Key.Item2;
+            if (line != l || x != c)
+                continue;
+            
             Cursor = new Cursor(StandardCursorType.Hand);
-            HoveredIcon = RenderedIcons[line];
+            HoveredIcon = icon.Value;
+            return;
         }
-        else
-        {
-            Cursor = new Cursor(StandardCursorType.Arrow);
-            HoveredIcon = null;
-        }
+        
+        Cursor = new Cursor(StandardCursorType.Arrow);
+        HoveredIcon = null;
     }
 
     protected override void OnPointerExited(PointerEventArgs e)
@@ -112,8 +133,10 @@ public class EditorMargin : AbstractMargin
             return;
         
         var position = e.GetPosition(this);
-        var viewer = TextEditorEventHandler.GetScrollViewer(File.Editor);
-        var line = (int) (position.Y / (File.Editor.FontSize + File.Editor.FontSize * 0.345) + viewer.Offset.Y / File.Editor.FontSize) + 1;
+        var point = File.Editor.GetPositionFromPoint(position);
+        if (point == null)
+            return;
+        var line = point.Value.Line;
         
         var args = new ClickedArgs(File, line);
         HoveredIcon.MouseClickFunc(args);
