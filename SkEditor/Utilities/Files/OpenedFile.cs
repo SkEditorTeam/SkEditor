@@ -12,7 +12,6 @@ public class OpenedFile
 
     #region Text Files Properties
 
-    public CodeParser? Parser => this["Parser"] as CodeParser;
     public TextEditor? Editor { get; set; }
     public string? Path { get; set; }
     public bool IsNewFile { get; set; } = false;
