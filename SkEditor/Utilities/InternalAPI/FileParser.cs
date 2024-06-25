@@ -27,7 +27,7 @@ public class FileParser
     
     public readonly TextMarkerService TextMarkerService;
     public readonly HintGenerator HintGenerator;
-    public FileParser(TextEditor editor, OpenedFile file)
+    public FileParser(TextEditor editor)
     {
         Editor = editor;
         
@@ -43,9 +43,6 @@ public class FileParser
             
             IsParsed = false;
         };
-        
-        file["ColorMargin"] = new ColorMargin(this);
-        editor.TextArea.LeftMargins.Insert(0, file["ColorMargin"] as ColorMargin);
     }
     
     public EventHandler OnParsed;

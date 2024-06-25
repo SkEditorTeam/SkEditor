@@ -174,7 +174,7 @@ public class Files : IFiles
         
         openedFile["Margin"] = new EditorMargin(openedFile);
         if (tabItem.Content is TextEditor textEditor)
-            openedFile["Parser"] = new FileParser(textEditor, openedFile);
+            openedFile["Parser"] = new FileParser(textEditor);
 
         GetOpenedFiles().Add(openedFile);
         (GetTabView().TabItems as IList)?.Add(tabItem);

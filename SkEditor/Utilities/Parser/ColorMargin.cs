@@ -118,37 +118,7 @@ public class ColorMargin : AbstractMargin
     {
         if (HoveredNode is { Element: ExprProviderElement { Colors.Count: > 0 } } node)
         {
-            var stack = new StackPanel() { Orientation = Orientation.Vertical, Spacing = 2 };
-            var element = node.Element as ExprProviderElement;
-            if (element.Colors.Count == 1)
-            {
-                await SkEditorAPI.Windows.ShowWindowAsDialog(new EditColorWindow(Parser, element.Colors[0]));
-                return;
-            }
             
-            stack.Children.Add(new TextBlock() { Text = "Edit Color", FontSize = 16, FontWeight = FontWeight.SemiBold });
-            
-            var index = 1;
-            foreach (var color in element.Colors)
-            {
-                var panel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 5, VerticalAlignment = VerticalAlignment.Center};
-                
-                var avaloniaColor = new Avalonia.Media.Color(color.Color.A, color.Color.R, color.Color.G, color.Color.B);
-                panel.Children.Add(new Rectangle { Width = 18, Height = 18, Fill = new SolidColorBrush(avaloniaColor) });
-                panel.Children.Add(new TextBlock { Text = $"Color #{index++} (as {color.Type})" });
-                
-                stack.Children.Add(new Button
-                {
-                    Content = panel,
-                    Background = Brushes.Transparent,
-                    BorderBrush = Brushes.Transparent,
-                    Command = new AsyncRelayCommand(async () => 
-                        await SkEditorAPI.Windows.ShowWindowAsDialog(new EditColorWindow(Parser, color)))
-                });
-            }
-            
-            var flyout = new Flyout { Content = stack };
-            flyout.ShowAt(this, true);
         }
     }
 
