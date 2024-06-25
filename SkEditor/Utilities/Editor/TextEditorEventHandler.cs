@@ -75,7 +75,7 @@ public partial class TextEditorEventHandler
         scrollViewer.SetCurrentValue(ScrollViewer.OffsetProperty, new Vector(scrollViewer.Offset.X, newOffset));
     }
 
-    private static ScrollViewer GetScrollViewer(TextEditor editor)
+    public static ScrollViewer GetScrollViewer(TextEditor editor)
     {
         if (ScrollViewers.TryGetValue(editor, out ScrollViewer? value)) return value;
 

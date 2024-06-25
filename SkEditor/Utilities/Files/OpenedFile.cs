@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO.Compression;
-using Avalonia.Controls;
+﻿using System;
+using System.Collections.Generic;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Utilities.Files;
@@ -12,8 +12,8 @@ public class OpenedFile
 
     #region Text Files Properties
 
+    public CodeParser? Parser => this["Parser"] as CodeParser;
     public TextEditor? Editor { get; set; }
-    public CodeParser? Parser { get; set; }
     public string? Path { get; set; }
     public bool IsNewFile { get; set; } = false;
 
@@ -38,13 +38,33 @@ public class OpenedFile
     #endregion
 
     public TabViewItem TabViewItem { get; set; }
-    public Dictionary<string, object> CustomData { get; } = new();
 
     #region Accessors
 
     public bool IsEditor => Editor != null;
     public string? Name => Path == null ? CustomName : System.IO.Path.GetFileName(Path);
     public string? Header => Name + (IsSaved ? "" : " •");
+
+    #endregion
+
+    #region Custom Data
+
+    public List<CustomFileData> CustomData { get; } = new();
+    public object? this[string key]
+    {
+        get
+        {
+            var data = CustomData.Find(d => d.Key == key);
+            return data?.Value;
+        }
+        set
+        {
+            var data = CustomData.Find(d => d.Key == key);
+            if (data != null)
+                CustomData.Remove(data);
+            CustomData.Add(new CustomFileData(key, value));
+        }
+    }
 
     #endregion
 }

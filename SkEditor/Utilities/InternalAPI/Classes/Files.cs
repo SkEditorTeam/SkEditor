@@ -165,11 +165,17 @@ public class Files : IFiles
             IsCustomTab = false,
             Path = path,
             TabViewItem = tabItem,
-            Parser = tabItem.Content is TextEditor editor ? new CodeParser(editor) : null,
             CustomName = header,
             IsSaved = path != null,
             IsNewFile = path == null,
         };
+        
+        // Custom Data
+        if (tabItem.Content is TextEditor editor)
+        {
+            openedFile["Parser"] = new CodeParser(editor);
+        }
+        openedFile["Margin"] = new EditorMargin(openedFile);
 
         GetOpenedFiles().Add(openedFile);
         (GetTabView().TabItems as IList)?.Add(tabItem);
