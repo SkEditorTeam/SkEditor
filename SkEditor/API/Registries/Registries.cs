@@ -15,6 +15,7 @@ public static class Registries
     public static readonly Registry<IBottomIconElement> BottomIcons = new();
     public static readonly Registry<SidebarPanel> SidebarPanels = new();
     public static readonly Registry<WelcomeEntryData> WelcomeEntries = new();
+    public static readonly Registry<MarginIconData> MarginIcons = new();
     
     public static readonly Registry<ParserElementData> ParserElements = new(); 
     
@@ -24,6 +25,7 @@ public static class Registries
         BottomIcons.Unload(addon);
         SidebarPanels.Unload(addon);
         WelcomeEntries.Unload(addon);
+        MarginIcons.Unload(addon);
         
         ParserElements.Unload(addon);
     }

@@ -14,6 +14,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Syntax;
 using File = System.IO.File;
@@ -170,6 +171,8 @@ public class Files : IFiles
             IsSaved = path != null,
             IsNewFile = path == null,
         };
+        
+        openedFile["Margin"] = new EditorMargin(openedFile);
         if (tabItem.Content is TextEditor textEditor)
             openedFile["Parser"] = new FileParser(textEditor, openedFile);
 
