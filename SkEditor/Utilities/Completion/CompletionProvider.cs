@@ -7,11 +7,14 @@ public partial class CompletionProvider
 {
     public static HashSet<CompletionItem> CompletionItems { get; set; } =
     [
-        new CompletionItem("command", "command /{c}:\n\ttrigger:\n\t\t"),
-        new CompletionItem("send", "send \"{c}\""),
-        new CompletionItem("if", "if {c}:\n\t"),
+        new CompletionItem("send", "send \"[cursor]\""),
+        new CompletionItem("if", "if [cursor]:\n\t"),
         new CompletionItem("else", "else:\n\t"),
-        new CompletionItem("ifelse", "if {c}:\n\t\nelse:\n\t"),
+        new CompletionItem("ifelse", "if [cursor]:\n\t\nelse:\n\t"),
+        
+        new CompletionItem("command", "command /[replace:Name]:\n\ttrigger:\n\t\t"),
+        new CompletionItem("function", "function [replace:Name]([replace:Arguments]):\n\t[cursor]"),
+        new CompletionItem("function (with return)", "function [replace:Name]([replace:Arguments]) :: [replace:Return_Type]:\n\t[cursor]\n\treturn"),
     ];
 
 

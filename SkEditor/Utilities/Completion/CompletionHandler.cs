@@ -129,45 +129,16 @@ public static partial class CompletionHandler
 
     private static void OnCompletion(CompletionItem completionItem)
     {
-        int offset = _currentTextEditor.TextArea.Caret.Offset;
-        var segment = TextEditorUtilities.GetSegmentBeforeOffset(offset, _currentTextEditor.Document);
-        if (segment == SimpleSegment.Invalid)
-        {
-            return;
-        }
-
-        string content = completionItem.Content;
-        if (content.Contains('\t'))
-        {
-            var line = _currentTextEditor.Document.GetLineByOffset(segment.Offset);
-            var lineText = _currentTextEditor.Document.GetText(line.Offset, line.Length);
-            int tabs = lineText.Count(c => c == '\t');
-
-            content = string.Join("", content.Split('\t').Select((part, index) => index > 0 ? new string('\t', tabs + 1) + part : part));
-        }
-
-        if (content.Contains('\n'))
-        {
-            var line = _currentTextEditor.Document.GetLineByOffset(segment.Offset);
-            var lineText = _currentTextEditor.Document.GetText(line.Offset, line.Length);
-            int tabs = lineText.Count(c => c == '\t');
-
-            content = NewLineWithoutTabRegex().Replace(content, "\n" + new string('\t', tabs));
-        }
-
-
-        int caretOffset = completionItem.Content.IndexOf("{c}");
-        if (caretOffset != -1)
-        {
-            content = content.Remove(caretOffset, 3);
-            _currentTextEditor.Document.Replace(segment.Offset, segment.Length, content);
-            _currentTextEditor.TextArea.Caret.Offset = segment.Offset + caretOffset;
-        }
-        else
-        {
-            _currentTextEditor.Document.Replace(segment.Offset, segment.Length, completionItem.Content);
-            _currentTextEditor.TextArea.Caret.Offset = segment.Offset + completionItem.Content.Length;
-        }
+        
+        var caretLineOffset = _currentTextEditor.Document.GetLineByNumber(_currentTextEditor.TextArea.Caret.Line).Offset;
+        while (char.IsControl(Convert.ToChar(_currentTextEditor.Document.GetText(caretLineOffset, 1))))
+            caretLineOffset++;
+        
+        //_currentTextEditor.CaretOffset = caretLineOffset;
+        _currentTextEditor.Document.Remove(caretLineOffset, _currentTextEditor.TextArea.Caret.Offset - caretLineOffset);
+        
+        var snippet = CompletionParser.Parse(completionItem.Content);
+        snippet.Insert(_currentTextEditor.TextArea);
     }
 
     [GeneratedRegex("\n(?!\\t)")]
