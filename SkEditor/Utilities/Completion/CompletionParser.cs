@@ -4,7 +4,7 @@ using AvaloniaEdit.Snippets;
 
 namespace SkEditor.Utilities.Completion;
 
-public class CompletionParser
+public static class CompletionParser
 {
     private static readonly Regex ReplaceRegex = new(@"\[replace:(\w+)\]");
     private static readonly Regex BoundRegex = new(@"\[bound:(\w+)\]");

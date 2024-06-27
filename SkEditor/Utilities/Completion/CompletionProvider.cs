@@ -12,9 +12,9 @@ public partial class CompletionProvider
         new CompletionItem("else", "else:\n\t"),
         new CompletionItem("ifelse", "if [cursor]:\n\t\nelse:\n\t"),
         
-        new CompletionItem("command", "command /[replace:Name]:\n\ttrigger:\n\t\t"),
-        new CompletionItem("function", "function [replace:Name]([replace:Arguments]):\n\t[cursor]"),
-        new CompletionItem("function (with return)", "function [replace:Name]([replace:Arguments]) :: [replace:Return_Type]:\n\t[cursor]\n\treturn"),
+        new CompletionItem("command", "command /[replace:Name]:\n\ttrigger:\n\t\t", "Basic command template"),
+        new CompletionItem("function", "function [replace:Name]([replace:Arguments]):\n\t[cursor]", "Basic function template that takes arguments"),
+        new CompletionItem("function (with return)", "function [replace:Name]([replace:Arguments]) :: [replace:Return_Type]:\n\t[cursor]\n\treturn", "Function template that takes arguments and returns a value"),
     ];
 
 
@@ -42,4 +42,4 @@ public partial class CompletionProvider
     private static partial Regex WordRegex();
 }
 
-public record CompletionItem(string Name, string Content);
+public record CompletionItem(string Name, string Content, string? Description = null);
