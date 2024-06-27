@@ -225,6 +225,11 @@ public partial class TextEditorEventHandler
     {
         if (!ApiVault.Get().GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
+        if (!properText.Contains(Environment.NewLine) || properText.Contains("\n") || properText.Contains("\r"))
+        {
+            e.Text = properText;
+            return;
+        }
 
         TextEditor textEditor = ApiVault.Get().GetTextEditor();
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
