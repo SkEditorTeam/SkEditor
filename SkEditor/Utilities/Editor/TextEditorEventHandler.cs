@@ -223,6 +223,11 @@ public partial class TextEditorEventHandler
     {
         if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
+        if (!properText.Contains(Environment.NewLine) || properText.Contains("\n") || properText.Contains("\r"))
+        {
+            e.Text = properText;
+            return;
+        }
 
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
