@@ -121,7 +121,10 @@ public class SkEditorSelfAddon : IAddon
 
         
         Registries.MarginIcons.Register(new RegistryKey(this, "Colors"),
-            new MarginIconData(ColorIconDrawing, ColorIconClicked));
+            new MarginIconData(ColorIconDrawing, ColorIconClicked, "colors"));
+        
+        Registries.MarginIcons.Register(new RegistryKey(this, "NodeInfos"),
+            new MarginIconData(NodeInfoDrawing, NodeInfoClicked, "nodes"));
 
         #endregion
 
@@ -210,7 +213,7 @@ public class SkEditorSelfAddon : IAddon
         {
             var panel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 5, VerticalAlignment = VerticalAlignment.Center};
                 
-            var avaloniaColor = new Avalonia.Media.Color(color.Color.A, color.Color.R, color.Color.G, color.Color.B);
+            var avaloniaColor = new Color(color.Color.A, color.Color.R, color.Color.G, color.Color.B);
             panel.Children.Add(new Rectangle { Width = 18, Height = 18, Fill = new SolidColorBrush(avaloniaColor) });
             panel.Children.Add(new TextBlock { Text = $"Color #{index++} (as {color.Type})" });
                 
@@ -342,6 +345,44 @@ public class SkEditorSelfAddon : IAddon
         }
         
         return true;
+    }
+
+    #endregion
+
+    #region Node Info Icons
+    
+    public static void NodeInfoClicked(ClickedArgs clickedArgs)
+    {
+        
+    }
+    
+    public static bool NodeInfoDrawing(DrawingArgs args)
+    {
+        var parser = args.File["Parser"] as FileParser;
+        var context = parser.LastContext;
+        var drContext = args.Context;
+        
+        // Warnings
+        foreach (var pair in context.Warnings)
+        {
+            var node = pair.Item1;
+            var warning = pair.Item2;
+            if (node.Line == args.Line)
+            {
+                var size = 12 * args.Scale;
+                drContext.DrawImage(GetIcon("warning"), 
+                    new Rect(args.X + 2, args.Y + 2, size, size));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static IImage GetIcon(string name)
+    {
+        var uri = new Uri("avares://SkEditor/Assets/Icons/" + name + ".png");
+        return new Bitmap(AssetLoader.Open(uri));
     }
 
     #endregion

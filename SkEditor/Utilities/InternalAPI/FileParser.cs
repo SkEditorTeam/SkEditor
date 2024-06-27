@@ -27,6 +27,8 @@ public class FileParser
     
     public readonly TextMarkerService TextMarkerService;
     public readonly HintGenerator HintGenerator;
+    public ParsingContext LastContext = new() { Debug = SkEditorAPI.Core.IsDeveloperMode() };
+   
     public FileParser(TextEditor editor)
     {
         Editor = editor;
@@ -58,25 +60,21 @@ public class FileParser
         ParsedNodes = SectionParser.Parse(lines.ToArray());
         SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} pure nodes, now parsing elements ...");
 
-        var context = new ParsingContext();
-        if (SkEditorAPI.Core.IsDeveloperMode())
-            context.Debug = true;
-        
-        
-        ElementParser.ParseNodes(ParsedNodes, context);
+        LastContext = new ParsingContext { Debug = SkEditorAPI.Core.IsDeveloperMode() };
+        ElementParser.ParseNodes(ParsedNodes, LastContext);
         
         IsParsed = true;
         OnParsed?.Invoke(this, EventArgs.Empty);
         SkEditorAPI.Addons.GetSelfAddon().ParserPanel.Panel.Refresh(ParsedNodes.OfType<SectionNode>().ToList());
         
         
-        SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} nodes, with {context.Warnings.Count} warnings! [{context.ParsedNodes.Count}]");
+        SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} nodes, with {LastContext.Warnings.Count} warnings! [{LastContext.ParsedNodes.Count}]");
 
         HintGenerator.Controls.Clear();
         TextMarkerService.RemoveAll(marker => true);
         Editor.TextArea.TextView.Redraw();
         
-        foreach (var pair in context.Warnings)
+        foreach (var pair in LastContext.Warnings)
         {
             var node = pair.Item1;
             var warning = pair.Item2;

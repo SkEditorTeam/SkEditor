@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SkEditor.Parser.Elements;
@@ -46,6 +47,9 @@ public partial class StructCommand : Element
             context.Warning(node, "Invalid command definition.");
             return;
         }
+        
+        if (context.ParsedNodes.Any(n => n.Element is StructCommand c && c.Name == match.Groups[1].Value))
+            context.Warning(node, "Another command with the same name already exists.");
         
         Name = match.Groups[1].Value;
         
