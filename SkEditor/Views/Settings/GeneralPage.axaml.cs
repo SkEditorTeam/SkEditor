@@ -35,7 +35,7 @@ public partial class GeneralPage : UserControl
         LanguageComboBox.SelectionChanged += (s, e) =>
         {
             string language = LanguageComboBox.SelectedItem.ToString();
-            ApiVault.Get().GetAppConfig().Language = language;
+            SkEditorAPI.Core.GetAppConfig().Language = language;
             Dispatcher.UIThread.InvokeAsync(() => 
             {
                 Translation.ChangeLanguage(language);
