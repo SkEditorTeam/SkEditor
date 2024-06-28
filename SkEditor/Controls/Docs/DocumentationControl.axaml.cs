@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -54,6 +55,12 @@ public partial class DocumentationControl : UserControl
                     Translation.Get("DocumentationWindowFetchSuccessMessage"));
             }
         });
+        
+        KeyDown += (sender, args) =>
+        {
+            if (args is { Key: Key.Enter, KeyModifiers: KeyModifiers.None } && QueryBox.IsFocused)
+                SearchButtonClick(sender, args);
+        };
     }
 
     public void AddItems()
