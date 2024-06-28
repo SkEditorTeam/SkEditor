@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace SkEditor.Views.Generators.Gui;
 internal class ItemContextMenu
 {
-    private static Item copiedItem = null;
-    public static Item EditedItem { get; set; }
+    private static Item? _copiedItem = null;
+    public static Item? EditedItem { get; set; }
 
     public static MenuFlyout Get(int slot)
     {
@@ -58,21 +58,21 @@ internal class ItemContextMenu
 
     private static void CopyItem(int slot)
     {
-        copiedItem = (slot == -1) ? GuiGenerator.Instance.BackgroundItem : GuiGenerator.Instance.Items.TryGetValue(slot, out Item? value) ? value : null;
+        _copiedItem = (slot == -1) ? GuiGenerator.Instance.BackgroundItem : GuiGenerator.Instance.Items.TryGetValue(slot, out Item? value) ? value : null;
     }
 
     private static void PasteItem(int slot)
     {
-        if (copiedItem == null) return;
+        if (_copiedItem == null) return;
         if (slot == -1)
         {
-            GuiGenerator.Instance.BackgroundItem = copiedItem;
-            GuiGenerator.Instance.BackgroundItemButton.Content = copiedItem.DisplayName;
+            GuiGenerator.Instance.BackgroundItem = _copiedItem;
+            GuiGenerator.Instance.BackgroundItemButton.Content = _copiedItem.DisplayName;
         }
         else
         {
-            GuiGenerator.Instance.Items[slot] = copiedItem;
-            GuiGenerator.Instance.UpdateItem(slot, copiedItem);
+            GuiGenerator.Instance.Items[slot] = _copiedItem;
+            GuiGenerator.Instance.UpdateItem(slot, _copiedItem);
         }
     }
 
@@ -86,7 +86,7 @@ internal class ItemContextMenu
         else
         {
             GuiGenerator.Instance.Items.Remove(slot);
-            Button? button = GuiGenerator.Instance.Buttons.FirstOrDefault(x => (int)x.Tag == slot);
+            Button? button = GuiGenerator.Instance.Buttons.FirstOrDefault(x => (int?)x.Tag == slot);
             if (button != null) button.Content = "";
         }
     }

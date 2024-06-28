@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SkEditor.Utilities.Parser.ViewModels;
+namespace SkEditor.Controls.Sidebar;
 
 public partial class ParserFilterViewModel : ObservableObject
 {

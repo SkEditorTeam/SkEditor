@@ -1,48 +1,54 @@
-﻿using Avalonia.Media;
+﻿using System;
+using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Folding;
 using AvaloniaEdit.Utils;
 using System.Collections.Generic;
 using System.Linq;
-using static SkEditor.Utilities.Parser.CodeSection;
+using SkEditor.API;
+using SkEditor.Utilities.Files;
+using SkEditor.Parser;
 
 namespace SkEditor.Utilities.Parser;
 public static class FoldingCreator
 {
-    public static void CreateFoldings(TextEditor editor, List<CodeSection> sections)
+    public static void CreateFoldings(TextEditor editor, List<Node> structures)
     {
         List<FoldingSection> foldedSections = GetOldFoldedSections(editor);
 
         FoldingManager foldingManager = FoldingManager.Install(editor.TextArea);
         StyleMarkers(editor);
 
-        foreach (var section in sections)
+        void AddFoldings(List<Node> nodes)
         {
-            var start = editor.Document.GetLineByNumber(section.StartingLineIndex + 1);
-            var end = editor.Document.GetLineByNumber(section.EndingLineIndex);
-
-            while (string.IsNullOrWhiteSpace(editor.Document.GetText(end).Trim()))
+            foreach (Node node in nodes)
             {
-                end = editor.Document.GetLineByNumber(end.LineNumber - 1);
+                if (!node.IsSection)
+                    continue;
+                
+                var section = (SectionNode) node;
+                var endingNodeLine = section.FindLastNode().Line;
+                
+                var start = editor.Document.GetLineByNumber(section.Line);
+                var end = editor.Document.GetLineByNumber(endingNodeLine);
+
+                while (string.IsNullOrWhiteSpace(editor.Document.GetText(end).Trim()))
+                    end = editor.Document.GetLineByNumber(end.LineNumber - 1);
+
+                FoldingSection foldingSection = foldingManager.CreateFolding(start.Offset, end.EndOffset);
+
+                foldingSection.IsFolded = foldedSections.Any(fs => fs.StartOffset == foldingSection.StartOffset
+                                                                   && fs.EndOffset == foldingSection.EndOffset);
+
+                var indentString = editor.Document.GetText(start).TakeWhile(char.IsWhiteSpace).ToArray();
+                foldingSection.Title = new string(indentString) + (section.Element?.SectionDisplay() ?? node.Key);
+                
+                AddFoldings(section.Children);
             }
-
-            FoldingSection foldingSection = foldingManager.CreateFolding(start.Offset, end.EndOffset);
-
-            foldingSection.IsFolded = foldedSections.Any(fs => fs.StartOffset == foldingSection.StartOffset
-                && fs.EndOffset == foldingSection.EndOffset);
-
-            foldingSection.Title = GetTitle(section);
         }
+        
+        AddFoldings(structures);
     }
-
-    private static string GetTitle(CodeSection section) => section.Type switch
-    {
-        SectionType.Command => $"Command {section.Name}",
-        SectionType.Event => $"Event '{section.Name}'",
-        SectionType.Function => $"Function '{section.Name}'",
-        SectionType.Options => "Options",
-        _ => "..."
-    };
 
     private static void StyleMarkers(TextEditor editor)
     {
@@ -65,5 +71,36 @@ public static class FoldingCreator
         }
 
         return foldedSections;
+    }
+
+    public static List<int> GetHiddenLines(OpenedFile file)
+    {
+        if (file.Editor == null)
+            return [];
+        
+        List<int> hiddenLines = [];
+        FoldingManager? foldingManager = file.Editor.GetService<FoldingManager>();
+        
+        if (foldingManager != null)
+        {
+            foreach (FoldingSection folding in foldingManager.AllFoldings)
+            {
+                if (folding.IsFolded)
+                {
+                    var ls = new List<int>();
+                    for (var i = folding.StartOffset; i < folding.EndOffset; i++)
+                    {
+                        var l = file.Editor.Document.GetLineByOffset(i).LineNumber;
+                        if (!ls.Contains(l))
+                            ls.Add(l);
+                    }
+
+                    ls.RemoveAt(0); // Remove the first line of the section
+                    hiddenLines.AddRange(ls);
+                }
+            }
+        }
+
+        return hiddenLines.Distinct().ToList();
     }
 }

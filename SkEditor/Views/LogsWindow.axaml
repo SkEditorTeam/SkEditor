@@ -1,0 +1,23 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+        xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SkEditor.Views.LogsWindow"
+        Icon="/Assets/SkEditor.ico"
+        Title="Logs" 
+        Height="600" Width="800" 
+        CanResize="True" 
+        WindowStartupLocation="CenterOwner" 
+        Theme="{StaticResource SmallWindowTheme}">
+    <avalonia:SpacedGrid Margin="10" RowDefinitions="Auto,*" RowSpacing="10">
+        <TextBlock Text="Logs" FontSize="28" FontWeight="SemiBold"/>
+        <Border Grid.Row="1" CornerRadius="10" ClipToBounds="True" Background="#64000000">
+            <avaloniaEdit:TextEditor Name="LogsEditor" 
+                                     FontSize="14" 
+                                     IsReadOnly="True"/>
+        </Border>
+    </avalonia:SpacedGrid>
+</Window>

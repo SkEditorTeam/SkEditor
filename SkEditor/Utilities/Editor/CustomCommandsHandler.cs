@@ -7,13 +7,15 @@ using SkEditor.Utilities.Parser;
 using SkEditor.Views;
 using System;
 using System.Linq;
+using SkEditor.Utilities.InternalAPI;
+using SkEditor.Utilities.Parser.Elements;
 
 namespace SkEditor.Utilities.Editor;
 public class CustomCommandsHandler
 {
     public static void OnCommentCommandExecuted(object target)
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;
@@ -64,8 +66,10 @@ public class CustomCommandsHandler
 
     public static void OnTrimWhitespacesCommandExecuted(object target)
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
 
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;
         var selectionLength = editor.SelectionLength;
@@ -119,22 +123,22 @@ public class CustomCommandsHandler
 
     public static async void OnRefactorCommandExecuted(TextEditor editor)
     {
-        var parser = FileHandler.OpenedFiles.Find(file => file.Editor == editor).Parser;
-        if (parser == null)
+        if (SkEditorAPI.Files.GetOpenedFiles().Find(file => file.Editor == editor)["Parser"] is not FileParser parser)
             return;
         if (!parser.IsParsed)
             parser.Parse();
 
-        var section = parser.GetSectionFromLine(editor.TextArea.Caret.Line);
-        if (section == null)
+        var node = parser.FindNodeAtLine(editor.TextArea.Caret.Line);
+        if (node?.Element is not ExprProviderElement element)
+            return;
+        
+        var reference = element.GetReferences().Find(r => 
+            r.Position + node.Indent <= editor.CaretOffset &&
+            r.Length + r.Position + node.Indent >= editor.CaretOffset);
+        if (reference == null)
             return;
 
-        var variable = section.GetVariableFromCaret(editor.TextArea.Caret);
-        var option = section.GetOptionFromCaret(editor.TextArea.Caret);
-        if (variable == null && option == null)
-            return;
-
-        var renameWindow = new SymbolRefactorWindow((INameableCodeElement)variable ?? option);
-        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
+        var renameWindow = new SymbolRefactorWindow(reference);
+        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
     }
 }

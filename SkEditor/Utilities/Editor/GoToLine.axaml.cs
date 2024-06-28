@@ -32,7 +32,10 @@ public partial class GoToLine : AppWindow
             return;
         }
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         if (!int.TryParse(GoToLineInput.Text, out int lineNumber)) return;
         DocumentLine line = editor.Document.GetLineByNumber(lineNumber);
         editor.ScrollTo(line.LineNumber, 0);
@@ -43,7 +46,10 @@ public partial class GoToLine : AppWindow
 
     private void UpdateInput()
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int documentLines = editor.Document.LineCount;
         if (!int.TryParse(GoToLineInput.Text, out int line)) {
             GoToLineInput.Text = "";

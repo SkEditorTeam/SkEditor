@@ -35,25 +35,26 @@ public static class UpdateChecker
             if (!IsNewerVersion(version)) return;
 
             SymbolIconSource icon = new() { Symbol = Symbol.ImportantFilled };
-            ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(
+
+            ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("UpdateAvailable"),
                 Translation.Get("UpdateAvailableMessage"),
                 icon,
-                primaryButtonContent: Translation.Get("Yes"),
-                closeButtonContent: Translation.Get("No")
+                primaryButtonText: Translation.Get("Yes"),
+                cancelButtonText: Translation.Get("No")
             );
 
             if (result != ContentDialogResult.Primary) return;
 
             if (!OperatingSystem.IsWindows())
             {
-                ApiVault.Get().ShowMessage(Translation.Get("Error"), "Automatic updates are only available on Windows for now.\nContact Notro for an updated version.");
+                await SkEditorAPI.Windows.ShowError("Automatic updates are only available on Windows for now.");
             }
 
             ReleaseAsset msi = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorInstaller.msi"));
             if (msi is null)
             {
-                ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("UpdateFailed"));
+                await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
                 return;
             }
             DownloadMsi(msi.BrowserDownloadUrl);
@@ -63,13 +64,13 @@ public static class UpdateChecker
 
     private async static void DownloadMsi(string url)
     {
-        TaskDialog td = CreateTaskDialog(ApiVault.Get().GetMainWindow(), url);
+        TaskDialog td = CreateTaskDialog(SkEditorAPI.Windows.GetMainWindow(), url);
         var result = await td.ShowAsync();
 
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
         if (standardResult == TaskDialogStandardResult.Cancel)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("UpdateFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
         }
     }
 

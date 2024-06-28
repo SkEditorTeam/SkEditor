@@ -21,7 +21,7 @@ public partial class SettingsWindow : AppWindow
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         Instance = this;
-        ApiVault.Get().OnSettingsOpened();
+        (SkEditorAPI.Events as Events).SettingsOpened();
     }
 
     public static void NavigateToPage(Type page)

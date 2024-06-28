@@ -1,89 +1,103 @@
-﻿using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
-using SkEditor.API;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
+using System.IO.Compression;
+using System.Text;
 using System.Threading.Tasks;
-using SkEditor.Utilities.Syntax;
+using Newtonsoft.Json.Linq;
+using SkEditor.API;
 
 namespace SkEditor.Utilities.Files;
 public static class SessionRestorer
 {
-    private static string sessionFolder = Path.Combine(Path.GetTempPath(), "SkEditor", "Session");
+    private static readonly string SessionFolder = Path.Combine(Path.GetTempPath(), "SkEditor", "Session");
 
-    public static async void SaveSession()
+    public static async Task SaveSession()
     {
-        List<TabViewItem> tabs = ApiVault.Get().GetTabView().TabItems
-            .OfType<TabViewItem>()
-            .Where(tab => tab.Content is TextEditor)
-            .ToList();
+        if (Directory.Exists(SessionFolder)) Directory.Delete(SessionFolder, true);
+        Directory.CreateDirectory(SessionFolder);
 
-        Directory.CreateDirectory(sessionFolder);
-
-        foreach (TabViewItem tab in tabs)
+        var openedFiles = SkEditorAPI.Files.GetOpenedFiles();
+        var index = 0;
+        foreach (var openedFile in openedFiles)
         {
-            string path = tab.Tag?.ToString().TrimEnd('*');
-            string textToWrite = string.Empty;
-            TextEditor editor = tab.Content as TextEditor;
-
-            if (editor.Document.TextLength == 0) continue;
-
-            if (string.IsNullOrEmpty(path))
+            if (!openedFile.IsEditor || string.IsNullOrEmpty(openedFile.Editor.Text))
             {
-                string header = tab.Header.ToString().TrimEnd('*');
-                path = Path.Combine(sessionFolder, header);
-                textToWrite = editor.Text;
+                continue;
             }
-            else
-            {
-                string name = Path.GetFileName(path);
-                textToWrite = $"##SKEDITOR RESTORE:{path}##\n" + editor.Text;
-                path = Path.Combine(sessionFolder, name);
-            }
-
-            await File.WriteAllTextAsync(path, textToWrite);
+            
+            var jsonData = BuildSavingData(openedFile);
+            var compressed = await Compress(jsonData);
+            var path = Path.Combine(SessionFolder, $"file_{index}.skeditor");
+            await File.WriteAllTextAsync(path, compressed);
+            index++;
         }
-
-        ApiVault.Get().OnClosed();
-        ApiVault.Get().GetMainWindow().AlreadyClosed = true;
-        ApiVault.Get().GetMainWindow().Close();
     }
 
     public static async Task<bool> RestoreSession()
     {
-        bool filesAdded = false;
-
-        if (!Directory.Exists(sessionFolder)) return filesAdded;
-
-        foreach (string file in Directory.GetFiles(sessionFolder))
+        if (!Directory.Exists(SessionFolder)) 
+            return false;
+        
+        var files = Directory.GetFiles(SessionFolder);
+        if (files.Length == 0) 
+            return false;
+        
+        foreach (var file in files)
         {
-            string path = file;
-            string name = Path.GetFileName(file);
-            string content = await File.ReadAllTextAsync(file);
-
-            if (content.StartsWith("##SKEDITOR RESTORE"))
-            {
-                int endOfPathIndex = content.IndexOf('\n');
-                if (endOfPathIndex > 0)
-                {
-                    path = content[19..endOfPathIndex];
-                    path = path.Replace("##", string.Empty);
-                    content = content[(endOfPathIndex + 1)..];
-                }
-            }
-
-            TabViewItem tabItem = await FileBuilder.Build(name, path, content);
-            TextEditor editor = tabItem.Content as TextEditor;
-
-            (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-
-            File.Delete(file);
-            filesAdded = true;
+            var compressed = await File.ReadAllTextAsync(file);
+            var jsonData = await Decompress(compressed);
+            var data = BuildOpeningData(jsonData);
+            await (SkEditorAPI.Files as API.Files).AddEditorTab(data.Item1, data.Item2);
         }
+        
+        return true;
+    } 
 
-        await SyntaxLoader.RefreshSyntaxAsync();
-        return filesAdded;
+    #region Compressing/Decompressing
+
+    private static async Task<string> Compress(string data)
+    {
+        var byteArray = Encoding.UTF8.GetBytes(data);
+        using var ms = new MemoryStream();
+        await using (var sw = new GZipStream(ms, CompressionMode.Compress))
+            sw.Write(byteArray, 0, byteArray.Length);
+        return Convert.ToBase64String(ms.ToArray());
     }
+    
+    private static async Task<string> Decompress(string data)
+    {
+        var byteArray = Convert.FromBase64String(data);
+        using var ms = new MemoryStream(byteArray);
+        await using var sr = new GZipStream(ms, CompressionMode.Decompress);
+        using var reader = new StreamReader(sr);
+        return await reader.ReadToEndAsync();
+    }
+
+    #endregion
+
+    #region Serialization/Deserialization
+
+    private static string BuildSavingData(OpenedFile openedFile)
+    {
+        var obj = new JObject();
+        
+        if (openedFile.Path != null)
+            obj["Path"] = openedFile.Path;
+        else
+            obj["Content"] = openedFile.Editor.Text;
+        
+        return obj.ToString();
+    }
+    
+    private static (string, string?) BuildOpeningData(string data)
+    {
+        var obj = JObject.Parse(data);
+        
+        var path = obj["Path"]?.Value<string>();
+        var content = obj["Content"]?.Value<string>() ?? File.ReadAllText(path);
+
+        return (content, path);
+    }
+
+    #endregion
 }

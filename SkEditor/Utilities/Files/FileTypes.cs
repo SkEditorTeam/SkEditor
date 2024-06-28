@@ -26,7 +26,7 @@ public static class FileTypes
         association.IsFromAddon = true;
         if (association.Addon == null)
         {
-            ApiVault.Get().ShowError($"Unable to register file association for {association.GetType().Name}:\n\nAddon is null");
+            SkEditorAPI.Windows.ShowError($"Unable to register file association for {association.GetType().Name}:\n\nAddon is null");
             return;
         }
 
@@ -88,7 +88,7 @@ public static class FileTypes
             }
             catch (Exception e)
             {
-                ApiVault.Get().ShowError($"Unable to load the specified image:\n\n{e.Message}");
+                SkEditorAPI.Windows.ShowError($"Unable to load the specified image:\n\n{e.Message}");
                 return null;
             }
         }

@@ -5,6 +5,7 @@
 			 xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 xmlns:controls="using:SkEditor.Controls"
 			 xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+			 xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
 			 x:Class="SkEditor.Controls.MarketplaceItemView" Design.Height="600" Design.Width="800">
 
 	<UserControl.Styles>
@@ -36,6 +37,12 @@
 					<Button Name="UninstallButton" Content="{DynamicResource MarketplaceButtonUninstall}" IsVisible="False"/>
 					<Button Name="DisableButton" Content="{DynamicResource MarketplaceButtonDisable}" IsVisible="False"/>
 					<Button Name="EnableButton" Content="{DynamicResource MarketplaceButtonEnable}" IsVisible="False"/>
+					<Button Name="ManageButton" IsVisible="False" Classes="accent">
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<fluent:SymbolIcon Symbol="Settings"/>
+							<TextBlock Text="Manage"/>
+						</StackPanel>
+					</Button>
 				</StackPanel>
 			</StackPanel>
 		</StackPanel>

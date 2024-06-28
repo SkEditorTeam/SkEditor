@@ -8,16 +8,17 @@ public static class Tutorial
 {
     public async static void ShowTutorial()
     {
-        if (!ApiVault.Get().GetAppConfig().FirstTime) return;
+        if (!SkEditorAPI.Core.GetAppConfig().FirstTime) return;
 
-        ApiVault.Get().GetAppConfig().FirstTime = false;
-        ApiVault.Get().GetAppConfig().Save();
+        SkEditorAPI.Core.GetAppConfig().FirstTime = false;
+        SkEditorAPI.Core.GetAppConfig().Save();
 
         Application.Current.TryGetResource("SkEditorIcon", Avalonia.Styling.ThemeVariant.Default, out object icon);
         PathIconSource iconSource = icon as PathIconSource;
 
-        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon("Welcome to the SkEditor!", "Do you want to read a quick intro?\nIf you're new to the app, it's a good idea ;)",
-                                                                                iconSource, primaryButtonContent: "Yes", closeButtonContent: "No");
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Welcome to the SkEditor!",
+            "Do you want to read a quick intro?\nIf you're new to the app, it's a good idea ;)",
+            iconSource, primaryButtonText: "Yes", cancelButtonText: "No");
 
         if (result == ContentDialogResult.Primary)
         {
@@ -31,6 +32,6 @@ public static class Tutorial
 
     private async static Task ShowTutorialMessage(string title, string message, PathIconSource iconSource)
     {
-        await ApiVault.Get().ShowMessageWithIcon(title, message, iconSource, closeButtonContent: "Okay", primaryButton: false);
+        await SkEditorAPI.Windows.ShowDialog(title, message, iconSource);
     }
 }

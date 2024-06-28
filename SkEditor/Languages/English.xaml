@@ -15,6 +15,7 @@
 	<system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
 	<system:String x:Key="WindowTitleElementRename">Rename</system:String>
 	<system:String x:Key="WindowTitleElementCreate">Create</system:String>
+	<system:String x:Key="WindowTitleEditColor">Edit color</system:String>
 
 	<!-- Menu Headers -->
 	<system:String x:Key="MenuHeaderFile">File</system:String>
@@ -22,6 +23,7 @@
 	<system:String x:Key="MenuHeaderTools">Tools</system:String>
 	<system:String x:Key="MenuHeaderOther">Other</system:String>
 	<system:String x:Key="MenuHeaderAddons">Addons</system:String>
+	<system:String x:Key="MenuHeaderManageAddons">Manage Addons</system:String>
 
 	<!-- File Menu -->
 	<system:String x:Key="MenuHeaderNew">New</system:String>
@@ -291,6 +293,8 @@
 	<system:String x:Key="SettingsAboutDiscord">Discord server</system:String>
 	<system:String x:Key="SettingsAboutDiscordDescription">Click to join SkEditor's Discord server!</system:String>
 	<system:String x:Key="SettingsAboutAppdata">Open AppData folder</system:String>
+	<system:String x:Key="SettingsAboutDevMode">Developer mode</system:String>
+	<system:String x:Key="SettingsAboutDevModeDescription">Enable developer mode to access developer features.</system:String>
 
 	<!-- Personalization Settings -->
 	<system:String x:Key="SettingsPersonalizationTitle">Personalization</system:String>

@@ -37,7 +37,7 @@ public partial class ExperimentsPage : UserControl
 
             ToggleSwitch toggleSwitch = new()
             {
-                IsChecked = ApiVault.Get().GetAppConfig().GetOptionValue<bool>(experiment.Option),
+                IsChecked = SkEditorAPI.Core.GetAppConfig().GetOptionValue<bool>(experiment.Option),
             };
 
             toggleSwitch.IsCheckedChanged += (sender, e) => Switch(experiment, toggleSwitch);
@@ -69,8 +69,8 @@ public partial class ExperimentsPage : UserControl
             }
         }
 
-        ApiVault.Get().GetAppConfig().SetOptionValue(experiment.Option, toggleSwitch.IsChecked.Value);
-        ApiVault.Get().GetAppConfig().Save();
+        SkEditorAPI.Core.GetAppConfig().SetOptionValue(experiment.Option, toggleSwitch.IsChecked.Value);
+        SkEditorAPI.Core.GetAppConfig().Save();
     }
 }
 

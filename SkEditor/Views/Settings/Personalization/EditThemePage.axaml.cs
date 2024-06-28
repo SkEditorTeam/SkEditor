@@ -44,11 +44,11 @@ public partial class EditThemePage : UserControl
         colorPicker.ColorChanged += (s, e) => ChangeColor(propertyName, e.NewColor);
     }
 
-    private static void ChangeColor(string name, Color? color)
+    private static async void ChangeColor(string name, Color? color)
     {
         if (color is null) return;
 
         ThemeEditor.CurrentTheme.GetType().GetProperty(name)?.SetValue(ThemeEditor.CurrentTheme, new ImmutableSolidColorBrush(color.Value));
-        ThemeEditor.ApplyTheme();
+        await ThemeEditor.ApplyTheme();
     }
 }

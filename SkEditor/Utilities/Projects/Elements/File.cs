@@ -68,12 +68,12 @@ public class File : StorageElement
 
     public void CopyAbsolutePath()
     {
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFilePath));
+        SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFilePath));
     }
 
     public void CopyPath()
     {
         var path = StorageFilePath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path);
+        SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(path);
     }
 }

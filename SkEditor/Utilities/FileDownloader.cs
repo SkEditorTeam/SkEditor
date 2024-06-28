@@ -28,7 +28,7 @@ public static class FileDownloader
         if (standardResult == TaskDialogStandardResult.Cancel)
         {
             visual.Close();
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("DownloadMissingFilesFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DownloadMissingFilesFailed"));
         }
     }
 
