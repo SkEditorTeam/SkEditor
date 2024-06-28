@@ -237,5 +237,5 @@ jobs:
     - name: 📤 | Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Linux (arm64/x64)
+        name: Linux (multiarch)
         path: SkEditor.tar.gz
