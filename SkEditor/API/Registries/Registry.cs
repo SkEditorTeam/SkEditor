@@ -62,6 +62,16 @@ public class Registry<TValue> : IEnumerable<TValue>
     {
         return _registry.Values;
     }
+    
+    /// <summary>
+    /// Get the key for a specified value.
+    /// </summary>
+    /// <param name="value">The value to look for.</param>
+    /// <returns>The key associated with the value, or null if the value is not found.</returns>
+    public RegistryKey GetValueKey(TValue value)
+    {
+        return _registry.FirstOrDefault(pair => pair.Value.Equals(value)).Key;
+    }
 
     public void Unload(IAddon addon)
     {
