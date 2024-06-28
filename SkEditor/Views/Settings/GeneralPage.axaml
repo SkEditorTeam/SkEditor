@@ -22,7 +22,7 @@
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralWrapping}" IconSource="{StaticResource WrappingIcon}"
 									Description="{DynamicResource SettingsGeneralWrappingDescription}">
 					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled}"/>
+						<ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled, Mode=OneTime}"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 				
@@ -85,7 +85,7 @@
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralRpc}" IconSource="{StaticResource DiscordIcon}"
 				                     Description="{DynamicResource SettingsGeneralRpcDescription}">
 					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRpcEnabled}"/>
+						<ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRpcEnabled, Mode=OneTime}"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 
