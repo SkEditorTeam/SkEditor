@@ -21,6 +21,15 @@ public partial class SideBarControl : UserControl
     public SideBarControl()
     {
         InitializeComponent();
+
+        Loaded += (_, _) => SkEditorAPI.Windows.GetMainWindow().Splitter.DragCompleted += (sender, args) =>
+        {
+            if (_currentPanel == null)
+                return;
+
+            SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] =
+                (int)SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].Width.Value;
+        };
     }
 
     public void ReloadPanels()
@@ -86,7 +95,10 @@ public partial class SideBarControl : UserControl
                 _currentPanel = panel;
                 _currentPanel.OnOpen();
                 SkEditorAPI.Windows.GetMainWindow().SidebarContentBorder.Child = _currentPanel.Content;
-            
+                
+                var configuredWidth = SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(_currentPanel.GetId(), _currentPanel.DesiredWidth);
+                SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].Width = new GridLength(configuredWidth);
+                
                 SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MinWidth = _currentPanel.DesiredWidth;
                 SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MaxWidth = int.MaxValue;
             })
