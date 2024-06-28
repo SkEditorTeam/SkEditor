@@ -14,6 +14,7 @@ public static class Registries
     public static readonly Registry<SidebarPanel> SidebarPanels = new();
     public static readonly Registry<WelcomeEntryData> WelcomeEntries = new();
     public static readonly Registry<MarginIconData> MarginIcons = new();
+    public static readonly Registry<FileTypeData> FileTypes = new();
     
     public static void Unload(IAddon addon)
     {
@@ -22,5 +23,6 @@ public static class Registries
         SidebarPanels.Unload(addon);
         WelcomeEntries.Unload(addon);
         MarginIcons.Unload(addon);
+        FileTypes.Unload(addon);
     }
 }

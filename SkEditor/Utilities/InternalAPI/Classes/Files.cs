@@ -199,17 +199,69 @@ public class Files : IFiles
             return;
         }
 
-        var content = await File.ReadAllTextAsync(path);
-        // binary check
-        if (!force && content.Any(c => char.IsControl(c) && !char.IsWhiteSpace(c)))
+        OpenedFile? openedFile = null;
+        
+        var extension = Path.GetExtension(path);
+        var availableTypes = new List<FileTypeData>();
+        foreach (var fileType in Registries.FileTypes)
         {
-            var response = await SkEditorAPI.Windows.ShowDialog("BinaryFileTitle", "BinaryFileFound",
-                cancelButtonText: "Cancel", icon: Symbol.Code);
-            if (response != ContentDialogResult.Primary)
-                return;
+            if (fileType.SupportedExtensions.Contains(extension))
+                availableTypes.Add(fileType);
+        }
+
+        OpenedFile? BuildFromType(FileTypeData fileType, string path)
+        {
+            var result = fileType.FileOpener(path) ?? new FileTypeResult(null);
+            if (result.Control != null)
+            {
+                TabViewItem tabViewItem = new()
+                {
+                    Header = result.Header ?? Path.GetFileName(path),
+                    IsSelected = true,
+                    Content = result.Control,
+                    Tag = string.Empty
+                };
+                
+                openedFile = new OpenedFile
+                {
+                    TabViewItem = tabViewItem,
+                    Path = path,
+                    IsSaved = true
+                };
+                
+                GetOpenedFiles().Add(openedFile);
+                (GetTabView().TabItems as IList)?.Add(tabViewItem);
+                return openedFile;
+            }
+
+            return null;
         }
         
-        var openedFile = await AddEditorTab(content, path);
+        if (availableTypes.Count == 1)
+        {
+            openedFile = BuildFromType(availableTypes[0], path);
+        } else if (availableTypes.Count > 1)
+        {
+            
+        }
+        else
+        {
+            var content = await File.ReadAllTextAsync(path);
+            // binary check
+            if (!force && content.Any(c => char.IsControl(c) && !char.IsWhiteSpace(c)))
+            {
+                var response = await SkEditorAPI.Windows.ShowDialog("BinaryFileTitle", "BinaryFileFound",
+                    cancelButtonText: "Cancel", icon: Symbol.Code);
+                if (response != ContentDialogResult.Primary)
+                    return;
+            }
+            
+            openedFile = await AddEditorTab(content, path);
+        }
+        
+        if (openedFile == null)
+            return;
+        
         (SkEditorAPI.Events as Events).FileOpened(openedFile.TabViewItem.Content, path, 
             openedFile.TabViewItem, false);
         Select(openedFile);

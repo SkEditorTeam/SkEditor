@@ -159,7 +159,7 @@
 		  <DependentUpon>ImageViewer.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Controls\Sidebar\ParserSidebarPanel.axaml.cs">
-		  <DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
+			<DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 

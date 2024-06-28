@@ -14,6 +14,7 @@ using SkEditor.API.Settings;
 using SkEditor.API.Settings.Types;
 using SkEditor.Controls.Sidebar;
 using SkEditor.ViewModels;
+using SkEditor.Views.FileTypes;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
@@ -89,6 +90,29 @@ public class SkEditorSelfAddon : IAddon
         
         Registries.SidebarPanels.Register(new RegistryKey(this, "ProjectPanel"), ProjectPanel);
         Registries.SidebarPanels.Register(new RegistryKey(this, "ParserPanel"), ParserPanel);
+
+        #endregion
+
+        #region Registries - File Types
+
+        Registries.FileTypes.Register(new RegistryKey(this, "Images"), new FileTypeData(
+            [".png", ".jpg", ".ico", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"],
+            path =>
+            {
+                try
+                {
+                    var fileStream = File.OpenRead(Uri.UnescapeDataString(path));
+                    var bitmap = new Bitmap(fileStream);
+                    fileStream.Close();
+
+                    return new FileTypeResult(new ImageViewer(bitmap, path), Path.GetFileNameWithoutExtension(path));
+                }
+                catch (Exception e)
+                {
+                    SkEditorAPI.Windows.ShowError($"Unable to load the specified image:\n\n{e.Message}");
+                    return null;
+                }
+            }));
 
         #endregion
     }
