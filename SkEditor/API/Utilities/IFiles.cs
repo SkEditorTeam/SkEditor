@@ -87,7 +87,8 @@ public interface IFiles
     /// Open the provided file path into SkEditor.
     /// </summary>
     /// <param name="path">The path of the target file.</param>
-    public void OpenFile(string path);
+    /// <param name="force">Should the file be opened, even if it's detected as binary?</param>
+    public void OpenFile(string path, bool force = false);
 
     /// <summary>
     /// Get a (possibly-null) opened file with the given path.

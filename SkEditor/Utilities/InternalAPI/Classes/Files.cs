@@ -188,7 +188,7 @@ public class Files : IFiles
         await AddEditorTab(content, null);
     }
 
-    public async void OpenFile(string path)
+    public async void OpenFile(string path, bool force = false)
     {
         path = Uri.UnescapeDataString(Path.GetFullPath(path));
         if (!File.Exists(path))
@@ -202,6 +202,15 @@ public class Files : IFiles
         }
 
         var content = await File.ReadAllTextAsync(path);
+        // binary check
+        if (!force && content.Any(c => char.IsControl(c) && !char.IsWhiteSpace(c)))
+        {
+            var response = await SkEditorAPI.Windows.ShowDialog("BinaryFileTitle", "BinaryFileFound",
+                cancelButtonText: "Cancel", icon: Symbol.Code);
+            if (response != ContentDialogResult.Primary)
+                return;
+        }
+        
         var openedFile = await AddEditorTab(content, path);
         (SkEditorAPI.Events as Events).FileOpened(openedFile.TabViewItem.Content, path, 
             openedFile.TabViewItem, false);
