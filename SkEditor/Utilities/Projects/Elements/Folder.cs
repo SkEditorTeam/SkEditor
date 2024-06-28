@@ -87,9 +87,10 @@ public class Folder : StorageElement
         return null;
     }
 
-    public override void HandleDoubleClick()
+    public override void HandleClick()
     {
-        if (Children.Count > 0) IsExpanded = !IsExpanded;
+        if (Children.Count > 0) 
+            IsExpanded = !IsExpanded;
     }
 
     public void CopyAbsolutePath()

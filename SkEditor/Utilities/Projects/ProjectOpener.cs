@@ -66,7 +66,7 @@ public static class ProjectOpener
             var treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
             if (treeViewItem is null) return;
             var storageElement = treeViewItem.DataContext as StorageElement;
-            storageElement?.HandleDoubleClick();
+            storageElement?.HandleClick();
         }
         
         FileTreeView.DoubleTapped += (sender, e) =>

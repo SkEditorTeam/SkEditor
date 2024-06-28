@@ -64,7 +64,7 @@ public class File : StorageElement
         RefreshSelf();
     }
 
-    public override void HandleDoubleClick() => FileHandler.OpenFile(StorageFilePath);
+    public override void HandleClick() => FileHandler.OpenFile(StorageFilePath);
 
     public void CopyAbsolutePath()
     {
