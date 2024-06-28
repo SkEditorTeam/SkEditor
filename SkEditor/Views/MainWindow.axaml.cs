@@ -115,12 +115,15 @@ public partial class MainWindow : AppWindow
         await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 
         bool sessionFilesAdded = false;
-        if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring) sessionFilesAdded = await SessionRestorer.RestoreSession();
+        if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring) 
+            sessionFilesAdded = await SessionRestorer.RestoreSession();
 
         string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
-        if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash() && !sessionFilesAdded) 
+        if (startupFiles.Length == 0 && !sessionFilesAdded) 
             (SkEditorAPI.Files as Files).AddWelcomeTab();
         startupFiles.ToList().ForEach(FileHandler.OpenFile);
+        if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
+            (SkEditorAPI.Files as Files).AddWelcomeTab();
 
         Dispatcher.UIThread.Post(() =>
         {
@@ -133,5 +136,7 @@ public partial class MainWindow : AppWindow
             BottomBar.UpdatePosition();
             ChangelogChecker.Check();
         });
+        
+        await CrashChecker.CheckForCrash();
     }
 }

@@ -72,10 +72,11 @@ public class Core : ICore
 
     public void SaveData()
     {
-        List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
-
-        files.ForEach(file =>
+        SkEditorAPI.Files.GetOpenedEditors().ForEach(async file =>
         {
+            if (!file.IsEditor)
+                return;
+            
             string path = file.Path;
             if (string.IsNullOrEmpty(path))
             {
@@ -84,9 +85,17 @@ public class Core : ICore
                 string header = file.Header;
                 path = Path.Combine(tempPath, header);
             }
+            else
+            {
+                var txtToWrite = file.Editor?.Text;
+                await using StreamWriter savedWriter = new(path, false);
+                await savedWriter.WriteAsync(txtToWrite);
+                savedWriter.Close();
+            }
+            
             string textToWrite = file.Editor.Text;
-            using StreamWriter writer = new(path, false);
-            writer.Write(textToWrite);
+            await using StreamWriter writer = new(path, false);
+            await writer.WriteAsync(textToWrite);
         });
 
         GetAppConfig().Save();

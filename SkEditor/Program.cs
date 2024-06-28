@@ -37,7 +37,9 @@ class Program
             SkEditorAPI.Core.SaveData();
             AddonLoader.SaveMeta();
 
-            Process.Start(Environment.ProcessPath, "--crash");
+            var fullException = e.ToString();
+            var encodedMessage = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(fullException));
+            Process.Start(Environment.ProcessPath, "--crash " + encodedMessage);
         }
     }
 
