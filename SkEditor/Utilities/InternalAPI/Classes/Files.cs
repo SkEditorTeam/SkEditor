@@ -143,7 +143,6 @@ public class Files : IFiles
         GetOpenedFiles().Add(new OpenedFile()
         {
             TabViewItem = tabItem,
-            IsCustomTab = true
         });
         (GetTabView().TabItems as IList)?.Add(tabItem);
         if (select)
@@ -162,7 +161,6 @@ public class Files : IFiles
         var openedFile = new OpenedFile()
         {
             Editor = tabItem.Content as TextEditor,
-            IsCustomTab = false,
             Path = path,
             TabViewItem = tabItem,
             CustomName = header,

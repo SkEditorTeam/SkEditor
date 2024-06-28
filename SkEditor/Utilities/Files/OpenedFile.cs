@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Avalonia.Controls;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.InternalAPI;
@@ -32,7 +33,8 @@ public class OpenedFile
 
     #region Custom Tabs Properties
 
-    public bool IsCustomTab { get; set; } = false;
+    public bool IsCustomTab => Editor == null;
+    public Control? CustomControl => IsCustomTab ? TabViewItem.Content as Control : null;
     public string? CustomName = null;
 
     #endregion
