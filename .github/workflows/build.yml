@@ -137,7 +137,7 @@ jobs:
     - name: 📤 | Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: SkEditorLinuxDebian (arm64)
+        name: Debian-based operating systems (arm64)
         path: SkEditor-arm64.deb
 
   build-linux-debian-x64:
@@ -200,5 +200,42 @@ jobs:
     - name: 📤 | Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: SkEditorLinuxDebian (x64)
+        name: Debian-based operating systems (x64)
         path: SkEditor-x64.deb
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 📝 | Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: 📝 | Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: 🏗️ | Build and publish for Debian
+      run: |
+        cd SkEditor
+        dotnet restore
+        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+
+    - name: 🛠️ | Create archive structure
+      run: |
+        cd /home/runner/work/SkEditor/SkEditor/
+        mkdir -p "SkEditorFilesL/x64"
+        mkdir -p "SkEditorFilesL/arm64"
+        cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesL/x64/"
+        cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFilesL/arm64/"
+    
+    - name: 📦 | Pack SkEditor files
+      run: |
+        cd /home/runner/work/SkEditor/SkEditor/
+        tar -czf SkEditor.tar.gz SkEditorFilesL/
+
+    - name: 📤 | Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Linux (arm64/x64)
+        path: SkEditor.tar.gz
