@@ -15,6 +15,8 @@ using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Syntax;
+using SkEditor.ViewModels;
+using SkEditor.Views.FileTypes;
 using File = System.IO.File;
 
 namespace SkEditor.API;
@@ -242,7 +244,35 @@ public class Files : IFiles
             openedFile = BuildFromType(availableTypes[0], path);
         } else if (availableTypes.Count > 1)
         {
-            
+            var configuredTypeFullId = SkEditorAPI.Core.GetAppConfig().FileTypeChoices.GetValueOrDefault(extension, null);
+            if (configuredTypeFullId != null && !Registries.FileTypes.HasFullKey(configuredTypeFullId))
+                configuredTypeFullId = null;
+
+            if (configuredTypeFullId != null)
+            {
+                var key = RegistryKey.FromFullKey(configuredTypeFullId);
+                openedFile = BuildFromType(Registries.FileTypes.GetValue(key), path);
+            }
+            else
+            {
+
+                var selectionVM = new FileTypeSelectionViewModel()
+                {
+                    FileTypes = availableTypes,
+                    SelectedFileType = null,
+                };
+                await SkEditorAPI.Windows.ShowWindowAsDialog(new FileTypeSelectionWindow { DataContext = selectionVM });
+
+                if (selectionVM.SelectedFileType == null)
+                    return;
+                if (selectionVM.RememberSelection)
+                {
+                    SkEditorAPI.Core.GetAppConfig().FileTypeChoices[extension] = 
+                        Registries.FileTypes.GetValueKey(selectionVM.SelectedFileType).FullKey;
+                }
+                
+                openedFile = BuildFromType(selectionVM.SelectedFileType, path);
+            }
         }
         else
         {

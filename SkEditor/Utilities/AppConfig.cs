@@ -39,6 +39,11 @@ public partial class AppConfig : ObservableObject
     /// Represent the width of panels via their ID (<see cref="Registries.SidebarPanels"/>
     /// </summary>
     public Dictionary<string, int> SidebarPanelSizes { get; set; } = [];
+    
+    /// <summary>
+    /// Represent the (saved) choices the user made for file types.
+    /// </summary>
+    public Dictionary<string, string> FileTypeChoices { get; set; } = [];
 
     public HashSet<string> AddonsToDisable { get; set; } = [];
     public HashSet<string> AddonsToDelete { get; set; } = [];

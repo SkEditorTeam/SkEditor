@@ -255,6 +255,8 @@
 	<system:String x:Key="SettingsHomeAddons">Addons</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Enhance your experience with powerful addons!</system:String>
 	<system:String x:Key="SettingsHomeAbout">About</system:String>
+	<system:String x:Key="SettingsHomeFileTypes">File Types</system:String>
+	<system:String x:Key="SettingsHomeFileTypesDescription">Manage file types and their associations.</system:String>
 
 	<!-- General Settings -->
 	<system:String x:Key="SettingsGeneralTitle">General</system:String>
@@ -323,6 +325,11 @@
 	<!-- Connections Settings -->
 	<system:String x:Key="SettingsConnectionsTitle">Connections</system:String>
 	<system:String x:Key="SettingsConnectionsDashboardButton">Open dashboard</system:String>
+	
+	<!-- File Types Settings -->
+	<system:String x:Key="SettingsFileTypesTitle">File Types</system:String>
+	<system:String x:Key="SettingsFileTypesWarning">This page only let you manage the associations you already made. A prompt will be shown for other file types.</system:String>
+	<system:String x:Key="SettingsFileTypesRemove">Remove</system:String>
 	
 	<!-- File Views -->
 	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>

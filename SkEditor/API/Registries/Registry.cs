@@ -53,6 +53,17 @@ public class Registry<TValue> : IEnumerable<TValue>
     {
         return _registry.ContainsKey(key);
     }
+    
+    /// <summary>
+    /// Checks if a full key exists in the registry.
+    /// The full key is represented by the addon ID and the key ID, separated by a slash.
+    /// </summary>
+    /// <param name="fullKey">The full key to check for.</param>
+    /// <returns>True if the full key exists, false otherwise.</returns>
+    public bool HasFullKey(string fullKey)
+    {
+        return _registry.Keys.Any(key => key.FullKey == fullKey);
+    }
 
     /// <summary>
     /// Retrieves all values in the registry.

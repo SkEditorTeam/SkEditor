@@ -13,6 +13,12 @@
 		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsGeneralTitle}" Grid.Row="0"/>
 		<ScrollViewer Grid.Row="1">
 			<StackPanel Spacing="8">
+				<Grid ColumnDefinitions="*,Auto,*" HorizontalAlignment="Stretch">
+					<Separator Grid.Column="0" />
+					<TextBlock Text="Application" Margin="5 0" FontSize="16" FontWeight="SemiBold" Grid.Column="1"/>
+					<Separator Grid.Column="2"/>
+				</Grid>
+				
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralLanguage}" IconSource="{StaticResource LanguageIcon}">
 					<ui:SettingsExpander.Footer>
 						<ComboBox Name="LanguageComboBox"/>

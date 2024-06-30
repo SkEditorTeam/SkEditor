@@ -16,5 +16,6 @@ public partial class HomePage : UserControl
         AboutItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(AboutPage)));
         AddonsItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(AddonsPage)));
         ConnectionsItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(ConnectionsPage)));
+        FileTypesItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(FileTypesPage)));
     }
 }
