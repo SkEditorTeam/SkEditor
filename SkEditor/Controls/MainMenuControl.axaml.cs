@@ -50,7 +50,7 @@ public partial class MainMenuControl : UserControl
         MenuItemRedo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor.Redo());
         MenuItemDelete.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor.Delete());
         MenuItemGoToLine.Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLine()));
-        MenuItemTrimWhitespaces.Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea));
+        MenuItemTrimWhitespaces.Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.TextArea));
 
         MenuItemDuplicate.Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea));
         MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea));
