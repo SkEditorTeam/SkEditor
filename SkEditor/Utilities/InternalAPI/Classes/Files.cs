@@ -201,7 +201,7 @@ public class Files : IFiles
             return;
         }
 
-        OpenedFile? openedFile = null;
+        OpenedFile? openedFile;
         
         var extension = Path.GetExtension(path);
         var availableTypes = new List<FileTypeData>();
@@ -292,8 +292,7 @@ public class Files : IFiles
         if (openedFile == null)
             return;
         
-        (SkEditorAPI.Events as Events).FileOpened(openedFile.TabViewItem.Content, path, 
-            openedFile.TabViewItem, false);
+        (SkEditorAPI.Events as Events).FileOpened(openedFile, false);
         Select(openedFile);
     }
 

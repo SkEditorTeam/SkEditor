@@ -132,19 +132,6 @@ public class SkEditorSelfAddon : IAddon
         #endregion
     }
 
-    public List<MenuItem> GetMenuItems()
-    {
-        return [new MenuItem
-        {
-            Header = "SkEditor Test",
-            Icon = new SymbolIcon()
-            {
-                Symbol = Symbol.Attach
-            },
-            Command = new RelayCommand(() => SkEditorAPI.Addons.DisableAddon(this))
-        }];
-    }
-
     public Version GetMinimalSkEditorVersion()
     {
         return new Version(2, 5, 0);

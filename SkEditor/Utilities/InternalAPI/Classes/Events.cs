@@ -17,9 +17,9 @@ public class Events : IEvents
     public void FileCreated(TextEditor editor) => OnFileCreated?.Invoke(this, new FileCreatedEventArgs(editor));
     
     public event EventHandler<FileOpenedEventArgs>? OnFileOpened;
-    public void FileOpened(object content, string filePath, TabViewItem tabViewItem, bool causedByRestore)
+    public void FileOpened(OpenedFile openedFile, bool causedByRestore)
     {
-        OnFileOpened?.Invoke(this, new FileOpenedEventArgs(content, filePath, tabViewItem, causedByRestore));
+        OnFileOpened?.Invoke(this, new FileOpenedEventArgs(openedFile, causedByRestore));
     }
     
     public event EventHandler<AddonSettingChangedEventArgs>? OnAddonSettingChanged;
@@ -46,12 +46,10 @@ public class FileCreatedEventArgs(TextEditor editor) : EventArgs
     public TextEditor Editor { get; } = editor;
 }
 
-public class FileOpenedEventArgs(object content, string filePath, TabViewItem tabViewItem, bool causedByRestore) : EventArgs
+public class FileOpenedEventArgs(OpenedFile openedFile, bool causedByRestore) : EventArgs
 {
-    public object Content { get; } = content;
-    public string FilePath { get; } = filePath;
-    public TabViewItem TabViewItem { get; } = tabViewItem;
     public bool CausedByRestore { get; set; } = causedByRestore;
+    public OpenedFile OpenedFile { get; set; } = openedFile;
 }
 
 public class AddonSettingChangedEventArgs(Setting setting, object oldValue) : EventArgs
