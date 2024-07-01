@@ -60,6 +60,8 @@ public class AddonItem : MarketplaceItem
             Log.Error(e, "Failed to install addon!");
             await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
         }
+        
+        Marketplace.RefreshCurrentSelection();
     }
 
     private async void RunAddon(string addonIdentifier)

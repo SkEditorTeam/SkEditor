@@ -18,7 +18,7 @@ namespace SkEditor.Views;
 public partial class MarketplaceWindow : AppWindow
 {
     //public const string MarketplaceUrl = "https://marketplace-skeditor.vercel.app/";
-    public const string MarketplaceUrl = "https://marketplace-rg8gjy69i-skeditor.vercel.app/";
+    public const string MarketplaceUrl = "https://marketplace-rl92no55b-skeditor.vercel.app/";
 
     public static MarketplaceWindow Instance { get; private set; }
 
@@ -64,7 +64,9 @@ public partial class MarketplaceWindow : AppWindow
         MarketplaceListItem listItem = (MarketplaceListItem)ItemListBox.SelectedItem;
         if (listItem == null) return;
         MarketplaceItem item = (MarketplaceItem)listItem.Tag;
-        if (item == null) return;
+        if (item == null) 
+            return;
+        item.Marketplace = this;
 
 
         HideAllButtons();
@@ -139,6 +141,11 @@ public partial class MarketplaceWindow : AppWindow
                 addonItem2.Manage();
             });
         }
+    }
+    
+    public void RefreshCurrentSelection()
+    {
+        OnSelectedItemChanged(null, null);
     }
 
     public void HideAllButtons()

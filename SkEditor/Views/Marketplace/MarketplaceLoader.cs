@@ -117,6 +117,8 @@ public class MarketplaceItem
     {
         return false;
     }
+
+    [JsonIgnore] public MarketplaceWindow Marketplace { get; set; }
 }
 
 public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
