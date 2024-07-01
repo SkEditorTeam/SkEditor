@@ -72,7 +72,9 @@ public class Windows : IWindows
         }
         if (source is FontIconSource fontIconSource)
             fontIconSource.FontSize = 36;
-        
+        else if (source is SymbolIconSource symbolIconSource)
+            symbolIconSource.FontSize = 36;
+
         IconSourceElement iconElement = new()
         {
             IconSource = source,
