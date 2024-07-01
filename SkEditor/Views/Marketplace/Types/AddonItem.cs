@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Windows.Input;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Views.Settings;
 
 namespace SkEditor.Views.Marketplace.Types;
 
@@ -35,6 +36,8 @@ public class AddonItem : MarketplaceItem
             await using var stream = await response.Content.ReadAsStreamAsync();
             await using var fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
+            fileStream.Close();
+            stream.Close();
 
             var message = Translation.Get("MarketplaceInstallSuccess", ItemName);
 
@@ -75,8 +78,8 @@ public class AddonItem : MarketplaceItem
 
     public async void Manage()
     {
-        await new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow());
-        SettingsWindow.NavigateToPage(typeof(Addons));
+        SkEditorAPI.Windows.ShowWindow(new SettingsWindow());
+        SettingsWindow.NavigateToPage(typeof(AddonsPage));
     }
 
     public override bool IsInstalled()

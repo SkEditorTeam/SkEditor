@@ -107,6 +107,8 @@ public static class AddonLoader
         catch (Exception e)
         {
             SkEditorAPI.Logs.Warning($"Failed to load addon from \"{dllFile}\": {e.Message}, maybe it's the wrong architecture?");
+            await SkEditorAPI.Windows.ShowError(
+                $"Failed to load addon from \"{dllFile}\": {e.Message}, maybe it's the wrong architecture?");
             return;
         }
 
