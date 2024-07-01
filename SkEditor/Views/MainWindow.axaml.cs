@@ -89,7 +89,7 @@ public partial class MainWindow : AppWindow
             }
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-                Translation.Get("ClosingProgramWithUnsavedFiles"), icon: new SymbolIconSource() { Symbol = Symbol.ImportantFilled }, 
+                Translation.Get("ClosingProgramWithUnsavedFiles"), icon: Symbol.ImportantFilled, 
                 primaryButtonText: "Yes", cancelButtonText: "No");
 
             if (result == ContentDialogResult.Primary)
