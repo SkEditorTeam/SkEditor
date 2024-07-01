@@ -37,11 +37,16 @@
 					<TreeDataTemplate x:DataType="elements:StorageElement" ItemsSource="{Binding Children}">
 						<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
 							<Interaction.Behaviors>
-								<EventTriggerBehavior EventName="DoubleTapped">
-									<EventTriggerBehavior.Actions>
-										<InvokeCommandAction Command="{Binding DoubleClickCommand}" />
-									</EventTriggerBehavior.Actions>
-								</EventTriggerBehavior>
+                                <EventTriggerBehavior EventName="DoubleTapped">
+                                    <EventTriggerBehavior.Actions>
+                                        <InvokeCommandAction Command="{Binding DoubleClickCommand}" />
+                                    </EventTriggerBehavior.Actions>
+                                </EventTriggerBehavior>
+                                <EventTriggerBehavior EventName="Tapped">
+                                    <EventTriggerBehavior.Actions>
+                                        <InvokeCommandAction Command="{Binding SingleClickCommand}" />
+                                    </EventTriggerBehavior.Actions>
+                                </EventTriggerBehavior>
 							</Interaction.Behaviors>
                             <ui:IconSourceElement HorizontalAlignment="Left" VerticalAlignment="Center" IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="18" Height="18" />
                             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding Name}"/>

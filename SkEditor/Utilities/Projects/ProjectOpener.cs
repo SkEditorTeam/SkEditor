@@ -1,5 +1,4 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
@@ -11,12 +10,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Avalonia.Input;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
 {
     public static Folder? ProjectRootFolder = null;
-    private static ExplorerSidebarPanel Panel => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel;
+    private static ExplorerSidebarPanel Panel => AddonLoader.GetCoreAddon().ProjectPanel.Panel;
     public static TreeView FileTreeView => Panel.FileTreeView;
     private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
 
@@ -25,7 +25,7 @@ public static class ProjectOpener
         string folder = string.Empty;
         if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
         {
-            TopLevel topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
+            TopLevel topLevel = TopLevel.GetTopLevel(SkEditorAPI.Windows.GetMainWindow());
 
             IReadOnlyList<IStorageFolder> folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
@@ -66,19 +66,19 @@ public static class ProjectOpener
             var treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
             if (treeViewItem is null) return;
             var storageElement = treeViewItem.DataContext as StorageElement;
-            storageElement?.HandleDoubleClick();
+            storageElement?.HandleClick();
         }
         
         FileTreeView.DoubleTapped += (sender, e) =>
         {
-            if (ApiVault.Get().GetAppConfig().IsProjectSingleClickEnabled)
+            if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
                 return;
             HandleTapped(e);
         };
         
         FileTreeView.Tapped += (sender, e) =>
         {
-            if (!ApiVault.Get().GetAppConfig().IsProjectSingleClickEnabled)
+            if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
                 return;
             HandleTapped(e);
         };

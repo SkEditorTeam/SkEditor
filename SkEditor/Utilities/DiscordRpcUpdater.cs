@@ -10,7 +10,7 @@ public static class DiscordRpcUpdater
 
     public static void Initialize()
     {
-        if (!ApiVault.Get().GetAppConfig().IsDiscordRpcEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled) return;
 
         _client = new DiscordRpcClient(ApplicationId);
         _client.Initialize();
@@ -25,12 +25,12 @@ public static class DiscordRpcUpdater
             },
         });
 
-        ApiVault.Get().GetTabView().SelectionChanged += (sender, args) =>
+        SkEditorAPI.Files.GetTabView().SelectionChanged += (sender, args) =>
         {
             if (!_client.IsInitialized) return;
-            if (ApiVault.Get().IsFileOpen())
+            if (SkEditorAPI.Files.IsFileOpen())
             {
-                TabViewItem tab = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
+                TabViewItem tab = SkEditorAPI.Files.GetTabView().SelectedItem as TabViewItem;
                 _client.UpdateDetails(Translation.Get("DiscordRpcEditing").Replace("{0}", tab.Header.ToString().TrimEnd('*')));
             }
             else

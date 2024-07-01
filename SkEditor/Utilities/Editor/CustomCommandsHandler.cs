@@ -13,7 +13,7 @@ public class CustomCommandsHandler
 {
     public static void OnCommentCommandExecuted(object target)
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;
@@ -64,8 +64,10 @@ public class CustomCommandsHandler
 
     public static void OnTrimWhitespacesCommandExecuted(object target)
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
 
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;
         var selectionLength = editor.SelectionLength;
@@ -119,7 +121,7 @@ public class CustomCommandsHandler
 
     public static async void OnRefactorCommandExecuted(TextEditor editor)
     {
-        var parser = FileHandler.OpenedFiles.Find(file => file.Editor == editor).Parser;
+        var parser = SkEditorAPI.Files.GetOpenedFiles().Find(file => file.Editor == editor).Parser;
         if (parser == null)
             return;
         if (!parser.IsParsed)
@@ -135,6 +137,6 @@ public class CustomCommandsHandler
             return;
 
         var renameWindow = new SymbolRefactorWindow((INameableCodeElement)variable ?? option);
-        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
+        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
     }
 }

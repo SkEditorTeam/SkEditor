@@ -134,10 +134,7 @@ public class LocalProvider : IDocProvider
         return _localDocs;
     }
 
-    public async Task<Color?> GetAddonColor(string addonName)
-    {
-        return null;
-    }
+    public Task<Color?> GetAddonColor(string addonName) => null;
 
     public async Task DeleteAll()
     {

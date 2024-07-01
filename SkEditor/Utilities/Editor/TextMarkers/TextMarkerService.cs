@@ -77,7 +77,7 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
                                         (points[i].Y + points[i + 1].Y) / 2));
                         }
 
-                        var fontSize = ApiVault.Get().GetTextEditor().FontSize;
+                        var fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
                         var strokeThickness = (float)Math.Max(fontSize / 15, 1);
 
                         Pen usedPen = new(usedBrush, strokeThickness);
@@ -132,7 +132,7 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
     public void Redraw(ISegment segment)
     {
         RedrawRequested?.Invoke(this, EventArgs.Empty);
-        ApiVault.Get().GetTextEditor().TextArea.TextView.Redraw(segment);
+        SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea.TextView.Redraw(segment);
     }
 
     public event EventHandler RedrawRequested;
@@ -143,7 +143,7 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
     private static IEnumerable<Point> CreatePoints(Point start, Point end, double offset, int count)
     {
-        var fontSize = ApiVault.Get().GetTextEditor().FontSize;
+        var fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
         var multiplier = fontSize * 0.075;
 
 

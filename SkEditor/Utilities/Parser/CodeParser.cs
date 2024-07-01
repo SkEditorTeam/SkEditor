@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Parser;
 
 public partial class CodeParser : INotifyPropertyChanged
 {
-    public static ParserSidebarPanel ParserPanel =>
-        ApiVault.Get().GetMainWindow().SideBar.ParserPanel.Panel;
+    public static ParserSidebarPanel ParserPanel => AddonLoader.GetCoreAddon().ParserPanel.Panel;
 
     public CodeParser(TextEditor textEditor, bool parse = true)
     {
@@ -90,7 +90,7 @@ public partial class CodeParser : INotifyPropertyChanged
             Sections.Add(new CodeSection(this, lastSectionLine, linesToParse));
         }
 
-        if (ApiVault.Get().GetAppConfig().EnableFolding) FoldingCreator.CreateFoldings(Editor, Sections);
+        if (SkEditorAPI.Core.GetAppConfig().EnableFolding) FoldingCreator.CreateFoldings(Editor, Sections);
 
         ParserPanel.Refresh(Sections);
 

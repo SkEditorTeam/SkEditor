@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 
 namespace SkEditor.Utilities;
 
@@ -24,5 +25,7 @@ public abstract class SidebarPanel
     {
 
     }
+    
+    public string GetId() => Registries.SidebarPanels.GetValueKey(this).Key;
 
 }

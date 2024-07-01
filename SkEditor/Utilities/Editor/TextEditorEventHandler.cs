@@ -43,7 +43,7 @@ public partial class TextEditorEventHandler
 
         e.Handled = true;
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         int zoom = (e.Delta.Y > 0 && editor.FontSize < 200) ? 1 : -1;
 
@@ -54,7 +54,7 @@ public partial class TextEditorEventHandler
     {
         if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         if (e.Key == Key.OemPlus) Zoom(editor, 5);
         else if (e.Key == Key.OemMinus) Zoom(editor, -5);
@@ -75,7 +75,7 @@ public partial class TextEditorEventHandler
         scrollViewer.SetCurrentValue(ScrollViewer.OffsetProperty, new Vector(scrollViewer.Offset.X, newOffset));
     }
 
-    private static ScrollViewer GetScrollViewer(TextEditor editor)
+    public static ScrollViewer GetScrollViewer(TextEditor editor)
     {
         if (ScrollViewers.TryGetValue(editor, out ScrollViewer? value)) return value;
 
@@ -88,39 +88,37 @@ public partial class TextEditorEventHandler
         return scrollViewer;
     }
 
-    public async static void OnTextChanged(object sender, EventArgs e)
+    public static async void OnTextChanged(object sender, EventArgs e)
     {
-        if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem tab) return;
-        if (tab.Tag == null) return;
-
-        if (ApiVault.Get().GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(tab.Tag.ToString()))
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+        var editor = sender as TextEditor;
+        var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.Editor == editor);
+        if (openedFile == null)
+            return;
+        
+        if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
         {
-            await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFileSingle);
+            openedFile.IsSaved = false;
+            await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
             return;
         }
 
-        if (ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                var parser = FileHandler.OpenedFiles.Find(file => file.TabViewItem == tab)?.Parser;
-                if (parser == null) return;
-
-                parser.Parse();
-            });
+            await Dispatcher.UIThread.InvokeAsync(() => openedFile?.Parser.Parse());
         }
 
-        if (tab.Header.ToString().EndsWith('*')) return;
-
-        tab.Header += "*";
+        openedFile.IsSaved = false;
+        openedFile.IsNewFile = false;
     }
 
     public static void DoAutoIndent(object? sender, TextInputEventArgs e)
     {
-        if (!ApiVault.Get().GetAppConfig().IsAutoIndentEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsAutoIndentEnabled) return;
         if (!string.IsNullOrWhiteSpace(e.Text)) return;
 
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
         if (!string.IsNullOrWhiteSpace(textEditor.Document.GetText(line))) return;
@@ -139,12 +137,12 @@ public partial class TextEditorEventHandler
 
     public static void DoAutoPairing(object? sender, TextInputEventArgs e)
     {
-        if (!ApiVault.Get().GetAppConfig().IsAutoPairingEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsAutoPairingEnabled) return;
 
         char symbol = e.Text[0];
         if (!_symbolPairs.TryGetValue(symbol, out char value)) return;
 
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         if (textEditor.Document.TextLength > textEditor.CaretOffset)
         {
             string nextChar = textEditor.Document.GetText(textEditor.CaretOffset, 1);
@@ -210,7 +208,7 @@ public partial class TextEditorEventHandler
         if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
         e.Handled = true;
 
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         Point pos = e.GetPosition(textEditor.TextArea.TextView) + textEditor.TextArea.TextView.ScrollOffset;
         SimpleSegment word = TextEditorUtilities.GetWordAtMousePosition(pos, textEditor.TextArea);
@@ -223,7 +221,7 @@ public partial class TextEditorEventHandler
 
     public static void OnTextPasting(object? sender, TextEventArgs e)
     {
-        if (!ApiVault.Get().GetAppConfig().IsPasteIndentationEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
         if (!properText.Contains(Environment.NewLine) || properText.Contains("\n") || properText.Contains("\r"))
         {
@@ -231,7 +229,7 @@ public partial class TextEditorEventHandler
             return;
         }
 
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
 
         string lineText = textEditor.Document.GetText(line);
@@ -271,9 +269,9 @@ public partial class TextEditorEventHandler
             if (paste.StartsWith("-enableSkEditorOption:"))
             {
                 string option = paste.Split(':')[1].Trim();
-                PropertyInfo? prop = ApiVault.Get().GetAppConfig().GetType().GetProperty(option);
+                PropertyInfo? prop = SkEditorAPI.Core.GetAppConfig().GetType().GetProperty(option);
                 if (prop.PropertyType != typeof(bool)) continue;
-                prop?.SetValue(ApiVault.Get().GetAppConfig(), true);
+                prop?.SetValue(SkEditorAPI.Core.GetAppConfig(), true);
 
                 sb.AppendLine($"- Enabled {option}");
             }

@@ -141,14 +141,14 @@ public partial class DocElementControl : UserControl
     private void LoadPatternsEditor(IDocumentationEntry entry)
     {
         PatternsEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
-        if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
             Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
             PatternsEditor.FontFamily = (FontFamily)font;
         }
         else
         {
-            PatternsEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+            PatternsEditor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
         }
         PatternsEditor.Text = Format(entry.Patterns);
         PatternsEditor.SyntaxHighlighting = DocSyntaxColorizer.CreatePatternHighlighting();
@@ -229,14 +229,14 @@ public partial class DocElementControl : UserControl
 
         editor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
 
-        if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
             Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
             editor.FontFamily = (FontFamily)font;
         }
         else
         {
-            editor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+            editor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
         }
 
         return new Expander()
@@ -270,7 +270,7 @@ public partial class DocElementControl : UserControl
         catch (Exception e)
         {
             examples = [];
-            ApiVault.Get().ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
         }
 
         var localProvider = LocalProvider.Get();
@@ -421,14 +421,14 @@ public partial class DocElementControl : UserControl
 
                 textEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
 
-                if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+                if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
                 {
                     Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
                     textEditor.FontFamily = (FontFamily)font;
                 }
                 else
                 {
-                    textEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+                    textEditor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
                 }
 
                 textEditor.SyntaxHighlighting = SyntaxLoader.GetCurrentSkriptHighlighting();

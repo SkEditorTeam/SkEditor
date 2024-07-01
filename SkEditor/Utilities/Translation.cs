@@ -48,8 +48,8 @@ public static class Translation
 
         if (!File.Exists(languageXaml.OriginalString))
         {
-            ApiVault.Get().GetAppConfig().Language = "English";
-            ApiVault.Get().GetAppConfig().Save();
+            SkEditorAPI.Core.GetAppConfig().Language = "English";
+            SkEditorAPI.Core.GetAppConfig().Save();
             LoadDefaultLanguage();
             return;
         }

@@ -8,11 +8,12 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
+using SkEditor.Views;
 
 namespace SkEditor.Utilities;
 public static class FileDownloader
 {
-    private static readonly string zipUrl = "https://marketplace-skeditor.vercel.app/SkEditorFiles/Items_and_json.zip";
+    private static readonly string zipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
     private static readonly string appDataFolderPath = AppConfig.AppDataFolderPath;
     private static readonly string zipFilePath = Path.Combine(appDataFolderPath, "items.zip");
 
@@ -28,7 +29,7 @@ public static class FileDownloader
         if (standardResult == TaskDialogStandardResult.Cancel)
         {
             visual.Close();
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("DownloadMissingFilesFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DownloadMissingFilesFailed"));
         }
     }
 

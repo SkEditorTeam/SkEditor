@@ -3,6 +3,8 @@ using Serilog;
 using SkEditor.API;
 using System;
 using System.Diagnostics;
+using Avalonia.Data;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Desktop;
 
@@ -11,9 +13,10 @@ class Program
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
-    [STAThread]
     public static void Main(string[] args)
     {
+        GC.KeepAlive(typeof(RelativeSource));
+        
         try
         {
             BuildAvaloniaApp()
@@ -28,10 +31,15 @@ class Program
                 message += $" It's fault of {source} addon.";
             }
             Log.Fatal(e, message);
+            Console.Error.WriteLine(e);
+            Console.Error.WriteLine(message);
 
-            ApiVault.Get().SaveData();
+            SkEditorAPI.Core.SaveData();
+            AddonLoader.SaveMeta();
 
-            Process.Start(Environment.ProcessPath, "--crash");
+            var fullException = e.ToString();
+            var encodedMessage = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(fullException));
+            Process.Start(Environment.ProcessPath, "--crash " + encodedMessage);
         }
     }
 

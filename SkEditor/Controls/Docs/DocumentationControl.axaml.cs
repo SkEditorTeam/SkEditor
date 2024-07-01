@@ -35,7 +35,7 @@ public partial class DocumentationControl : UserControl
 
     public void AssignCommands()
     {
-        OpenLocalManagementButton.Command = new RelayCommand(async () => await new LocalDocsManagerWindow().ShowDialog(ApiVault.Get().GetMainWindow()));
+        OpenLocalManagementButton.Command = new RelayCommand(async () => await new LocalDocsManagerWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
         RefreshProviderButton.Command = new RelayCommand(() =>
         {
             ProviderBox.SelectionChanged -= HandleProviderBoxSelection;
@@ -44,14 +44,14 @@ public partial class DocumentationControl : UserControl
         DownloadAllButton.Command = new RelayCommand(DownloadAllEntries);
         RetrieveSkriptHubDocsButton.Command = new RelayCommand(async () =>
         {
-            var response = await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Attention"),
-                Translation.Get("DocumentationWindowFetchWarning"), 
+            var response = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
+                Translation.Get("DocumentationWindowFetchWarning"),
                 new SymbolIconSource { Symbol = Symbol.ImportantFilled });
             if (response == ContentDialogResult.Primary)
             {
                 var provider = IDocProvider.Providers[DocProvider.SkriptHub] as SkriptHubProvider;
                 provider.DeleteEverything();
-                ApiVault.Get().ShowMessage(Translation.Get("Success"),
+                await SkEditorAPI.Windows.ShowMessage(Translation.Get("Success"),
                     Translation.Get("DocumentationWindowFetchSuccessMessage"));
             }
         });
@@ -105,7 +105,7 @@ public partial class DocumentationControl : UserControl
             }
             catch (Exception e)
             {
-                ApiVault.Get().ShowError($"An error occurred while fetching the addons.\n\n{e.Message}");
+                await SkEditorAPI.Windows.ShowError($"An error occurred while fetching the addons.\n\n{e.Message}");
                 Log.Error(e, "An error occurred while fetching the addons.");
                 addons = [];
             }
@@ -124,7 +124,7 @@ public partial class DocumentationControl : UserControl
 
         if (availableProviders.Count == 0)
         {
-            ApiVault.Get().ShowError("No documentation providers are available.\n\nYou may need to connect your API keys from settings to use those.");
+            SkEditorAPI.Windows.ShowError("No documentation providers are available.\n\nYou may need to connect your API keys from settings to use those.");
             ProviderBox.IsEnabled = false;
             ProviderBox.Items.Clear();
             ProviderBox.Items.Add(new ComboBoxItem()
@@ -172,10 +172,10 @@ public partial class DocumentationControl : UserControl
     {
         StackPanel CreatePanel(DocProvider provider, string content)
         {
-            return CreateEntryWithIcon(IDocProvider.Providers[provider].Icon, content, 
+            return CreateEntryWithIcon(IDocProvider.Providers[provider].Icon, content,
                 provider == DocProvider.SkriptHub ? FontWeight.SemiBold : FontWeight.Normal);
         }
-        
+
         ProviderBox.Items.Clear();
         foreach (var provider in availableProviders)
         {
@@ -230,12 +230,12 @@ public partial class DocumentationControl : UserControl
         await PerformSearch(provider, searchData);
     }
 
-    private bool ValidateProvider(out IDocProvider provider)
+    private bool ValidateProvider(out IDocProvider? provider)
     {
         provider = null;
         if (ViewModel.Provider == null)
         {
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowNoProvidersMessage"));
+            SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowNoProvidersMessage"));
             OtherInformation.Text = Translation.Get("DocumentationWindowNoProviders");
             return false;
         }
@@ -248,7 +248,7 @@ public partial class DocumentationControl : UserControl
         var errors = provider.CanSearch(searchData);
         if (errors.Count > 0)
         {
-            ApiVault.Get().ShowError(string.Join("\n", errors));
+            SkEditorAPI.Windows.ShowError(string.Join("\n", errors));
             OtherInformation.Text = Translation.Get("DocumentationWindowInvalidData");
             return false;
         }
@@ -285,16 +285,17 @@ public partial class DocumentationControl : UserControl
     {
         if (EntriesContainer.Children.Count == 0)
         {
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowNoEntries"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowNoEntries"));
             return;
         }
 
         if (EntriesContainer.Children.Count > 0)
         {
-            var result = await ApiVault.Get().ShowAdvancedMessage("Download all",
-                Translation.Get("DocumentationWindowDownloadAllMessage", EntriesContainer.Children.Count.ToString()));
-            if (result != ContentDialogResult.Primary)
-                return;
+            var result = await SkEditorAPI.Windows.ShowDialog("Download all",
+                Translation.Get("DocumentationWindowDownloadAllMessage", EntriesContainer.Children.Count.ToString()),
+                primaryButtonText: "Yes", cancelButtonText: "No");
+
+            if (result != ContentDialogResult.Primary) return;
         }
 
         var taskDialog = new TaskDialog
@@ -322,14 +323,14 @@ public partial class DocumentationControl : UserControl
             taskDialog.Hide(TaskDialogStandardResult.OK);
         };
 
-        taskDialog.XamlRoot = ApiVault.Get().GetMainWindow();
+        taskDialog.XamlRoot = SkEditorAPI.Windows.GetMainWindow();
         await taskDialog.ShowAsync();
     }
 
     private static async Task<bool> ConfirmLargeResults()
     {
-        var result = await ApiVault.Get().ShowAdvancedMessage(Translation.Get("DocumentationWindowTooManyResults"),
-            Translation.Get("DocumentationWindowTooManyResultsMessage"));
+        var result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("DocumentationWindowTooManyResults"),
+            Translation.Get("DocumentationWindowTooManyResultsMessage"), primaryButtonText: "Yes", cancelButtonText: "No");
         return result == ContentDialogResult.Primary;
     }
 
@@ -337,7 +338,7 @@ public partial class DocumentationControl : UserControl
     {
         foreach (var element in elements)
         {
-            Task.Run(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
+            Task.Run(async () => await Dispatcher.UIThread.InvokeAsync(() =>
             {
                 EntriesContainer.Children.Add(new DocElementControl(element, this));
             }));
@@ -351,7 +352,7 @@ public partial class DocumentationControl : UserControl
 
     private void HandleError(Exception exception)
     {
-        ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", exception.Message));
+        SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", exception.Message));
         Log.Error(exception, "An error occurred while fetching the documentation.");
         OtherInformation.Text = Translation.Get("DocumentationWindowAnErrorOccured");
     }

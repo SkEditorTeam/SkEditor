@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SkEditor.Utilities;
 public static class HttpClientProgressExtensions
 {
-    public static async Task DownloadDataAsync(this HttpClient client, string requestUrl, Stream destination, IProgress<float> progress = null, CancellationToken cancellationToken = default)
+    public static async Task DownloadDataAsync(this HttpClient client, string requestUrl, Stream destination, IProgress<float>? progress = null, CancellationToken cancellationToken = default)
     {
         using var response = await client.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         var contentLength = response.Content.Headers.ContentLength;
@@ -25,7 +25,7 @@ public static class HttpClientProgressExtensions
         static float GetProgressPercentage(float totalBytes, float currentBytes) => (totalBytes / currentBytes) * 100f;
     }
 
-    static async Task CopyToAsync(this Stream source, Stream destination, int bufferSize, IProgress<long> progress = null, CancellationToken cancellationToken = default)
+    static async Task CopyToAsync(this Stream source, Stream destination, int bufferSize, IProgress<long>? progress = null, CancellationToken cancellationToken = default)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(bufferSize);
         ArgumentNullException.ThrowIfNull(source);

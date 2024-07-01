@@ -22,6 +22,7 @@
 	<system:String x:Key="MenuHeaderTools">Tools</system:String>
 	<system:String x:Key="MenuHeaderOther">Other</system:String>
 	<system:String x:Key="MenuHeaderAddons">Addons</system:String>
+	<system:String x:Key="MenuHeaderManageAddons">Manage Addons</system:String>
 
 	<!-- File Menu -->
 	<system:String x:Key="MenuHeaderNew">New</system:String>
@@ -254,6 +255,8 @@
 	<system:String x:Key="SettingsHomeAddons">Addons</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Enhance your experience with powerful addons!</system:String>
 	<system:String x:Key="SettingsHomeAbout">About</system:String>
+	<system:String x:Key="SettingsHomeFileTypes">File Types</system:String>
+	<system:String x:Key="SettingsHomeFileTypesDescription">Manage file types and their associations.</system:String>
 
 	<!-- General Settings -->
 	<system:String x:Key="SettingsGeneralTitle">General</system:String>
@@ -291,6 +294,8 @@
 	<system:String x:Key="SettingsAboutDiscord">Discord server</system:String>
 	<system:String x:Key="SettingsAboutDiscordDescription">Click to join SkEditor's Discord server!</system:String>
 	<system:String x:Key="SettingsAboutAppdata">Open AppData folder</system:String>
+	<system:String x:Key="SettingsAboutDevMode">Developer mode</system:String>
+	<system:String x:Key="SettingsAboutDevModeDescription">Enable developer mode to access developer features.</system:String>
 
 	<!-- Personalization Settings -->
 	<system:String x:Key="SettingsPersonalizationTitle">Personalization</system:String>
@@ -320,6 +325,11 @@
 	<!-- Connections Settings -->
 	<system:String x:Key="SettingsConnectionsTitle">Connections</system:String>
 	<system:String x:Key="SettingsConnectionsDashboardButton">Open dashboard</system:String>
+	
+	<!-- File Types Settings -->
+	<system:String x:Key="SettingsFileTypesTitle">File Types</system:String>
+	<system:String x:Key="SettingsFileTypesWarning">This page only let you manage the associations you already made. A prompt will be shown for other file types.</system:String>
+	<system:String x:Key="SettingsFileTypesRemove">Remove</system:String>
 	
 	<!-- File Views -->
 	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>

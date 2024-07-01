@@ -53,7 +53,7 @@ public partial class FontSelectionWindow : AppWindow
 
         FontListBox.ItemsSource = fonts;
 
-        FontListBox.SelectedItem = ApiVault.Get().GetAppConfig().Font;
+        FontListBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Font;
         FontListBox.ScrollIntoView(FontListBox.SelectedItem);
     }
 }
