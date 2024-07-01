@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using SkEditor.Views;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Syntax;
@@ -139,7 +140,7 @@ public class SyntaxLoader
             Directory.CreateDirectory(defaultSyntaxPath);
 
             HttpClient client = new();
-            string url = "https://marketplace-skeditor.vercel.app/SkEditorFiles/Default.xshd";
+            string url = MarketplaceWindow.MarketplaceUrl +"SkEditorFiles/Default.xshd";
             var response = await client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "syntax.xshd"), content);
