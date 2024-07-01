@@ -13,7 +13,9 @@ public partial class CustomAddonSettingsPage : UserControl
     private static CustomAddonSettingsPage _instance = null!;
 
     private SubSettings? _parent;
-    public static void Load(IAddon addon, List<Setting>? settings = null, SubSettings? parent = null)
+    public static void Load(IAddon addon, 
+        List<Setting>? settings = null, 
+        SubSettings? parent = null)
     {
         _instance._parent = parent;
         
@@ -56,7 +58,7 @@ public partial class CustomAddonSettingsPage : UserControl
                 Description = setting.Description
             };
 
-            var value = AddonSettingsManager.GetValue(setting);
+            var value = setting.Type.IsSelfManaged ? null : AddonSettingsManager.GetValue(setting);
             var control = setting.Type.CreateControl(value, 
                 newValue =>
                 {
@@ -73,7 +75,7 @@ public partial class CustomAddonSettingsPage : UserControl
                     setting.OnChanged?.Invoke(newValue);
                 });
             expander.Footer = control;
-            
+            setting.Type.SetupExpander(expander, setting);
             ItemStackPanel.Children.Add(expander);
         }
         

@@ -17,7 +17,8 @@ using SkEditor.Utilities.InternalAPI;
 namespace SkEditor.Views;
 public partial class MarketplaceWindow : AppWindow
 {
-    public const string MarketplaceUrl = "https://marketplace-skeditor.vercel.app/";
+    //public const string MarketplaceUrl = "https://marketplace-skeditor.vercel.app/";
+    public const string MarketplaceUrl = "https://marketplace-rg8gjy69i-skeditor.vercel.app/";
 
     public static MarketplaceWindow Instance { get; private set; }
 
@@ -70,8 +71,9 @@ public partial class MarketplaceWindow : AppWindow
 
         bool shouldShowInstallButton = false;
         bool shouldShowUninstallButton = false;
-
-        if (item is AddonItem addonItem)
+        
+        /*
+         * if (item is AddonItem addonItem)
         {
             IAddon addon = SkEditorAPI.Addons.GetAddon(addonItem.ItemFileUrl);
             string name = Path.GetFileNameWithoutExtension(addonItem.ItemFileUrl);
@@ -89,7 +91,10 @@ public partial class MarketplaceWindow : AppWindow
                 shouldShowInstallButton = true;
             }
         }
-        else if (item is SyntaxItem || item is ThemeItem || item is ThemeWithSyntaxItem)
+        else 
+         */
+
+        if (item is SyntaxItem or ThemeItem or ThemeWithSyntaxItem or AddonItem)
         {
             bool installed = item.IsInstalled();
             shouldShowUninstallButton = installed;

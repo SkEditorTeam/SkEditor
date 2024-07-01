@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.API.Settings;
-using SkEditor.API.Settings.Types;
 using SkEditor.Controls.Sidebar;
 using SkEditor.ViewModels;
 using SkEditor.Views.FileTypes;
@@ -152,29 +148,5 @@ public class SkEditorSelfAddon : IAddon
     public Version GetMinimalSkEditorVersion()
     {
         return new Version(2, 5, 0);
-    }
-
-    public List<Setting> GetSettings()
-    {
-        return
-        [
-            
-            new Setting(this, "TestSetting", "TestSettingKey", true,
-                new ToggleSetting(), "This is a test setting!", GetAddonIcon()) {
-                OnChanged = value =>
-                {
-                    SkEditorAPI.Logs.Debug($"Test setting changed to {value}");
-                }
-            },
-            
-            new Setting(this, "TestStringSetting", "TestStringSetting", "",
-                new TextSetting("Enter something here")) {
-                OnChanged = value =>
-                {
-                    SkEditorAPI.Logs.Debug($"his password is {value}");
-                }
-            }
-
-        ];
     }
 }

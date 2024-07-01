@@ -71,5 +71,11 @@ public partial class AddonsPage : UserControl
             await AddonLoader.LoadAddonFromFile(folder);
             LoadAddons();
         });
+
+        OpenMarketplaceButton.Command = new AsyncRelayCommand(async () =>
+        {
+            SettingsWindow.Instance.Close();
+            await SkEditorAPI.Windows.ShowWindowAsDialog(new MarketplaceWindow());
+        });
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia.Controls;
+using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json.Linq;
 
 namespace SkEditor.API.Settings.Types;
@@ -41,5 +42,17 @@ public interface ISettingType
     /// will not handle setting save and change events.
     /// </summary>
     public bool IsSelfManaged { get; }
-    
+
+    /// <summary>
+    /// Make custom modifications to the displayed setting expander.
+    /// This should be used when you are working with a self-managed
+    /// type, that do not represent an actual type (e.g. a subcategory).
+    /// </summary>
+    /// <param name="expander">The expander to modify.</param>
+    /// <param name="setting">The setting that the expander represents.</param>
+    public virtual void SetupExpander(SettingsExpander expander, Setting setting)
+    {
+        
+    }
+
 }

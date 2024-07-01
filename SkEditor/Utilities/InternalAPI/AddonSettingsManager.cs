@@ -42,7 +42,7 @@ public static class AddonSettingsManager
         
         foreach (var setting in addon.GetSettings())
         {
-            if (!LoadedAddonSettings[addon].ContainsKey(setting.Key))
+            if (!LoadedAddonSettings[addon].ContainsKey(setting.Key) && !setting.Type.IsSelfManaged)
             {
                 SkEditorAPI.Logs.Warning($"Setting {setting.Key} not found in settings for addon {addon.Identifier}, using default value.");
                 LoadedAddonSettings[addon][setting.Key] = setting.Type.Serialize(setting.DefaultValue);
