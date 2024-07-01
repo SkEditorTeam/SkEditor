@@ -55,7 +55,7 @@ public partial class AddonEntryControl : UserControl
             }
             
             StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
-            LoadVisuals(addonMeta);
+            _addonsPage.LoadAddons();
         };
 
         if (addonMeta.NeedsRestart) {
@@ -139,7 +139,8 @@ public partial class AddonEntryControl : UserControl
             Expander.Items.Add(restartText);
         }
 
-        if (isValid && addon.GetSettings().Count > 0 && AddonLoader.IsAddonEnabled(addon))
+        if (isValid && addon.GetSettings().Count > 0 
+                    && AddonLoader.IsAddonEnabled(addon))
         {
             Expander.IsClickEnabled = true;
             Expander.Click += (sender, args) =>
