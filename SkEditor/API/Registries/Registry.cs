@@ -10,9 +10,9 @@ namespace SkEditor.API;
 /// </summary>
 public class Registry<TValue> : IEnumerable<TValue>
 {
-    
+
     private readonly Dictionary<RegistryKey, TValue> _registry = new();
-    
+
     /// <summary>
     /// Get the value associated with the given key.
     /// </summary>
@@ -22,7 +22,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     {
         return _registry.GetValueOrDefault(key);
     }
-    
+
     /// <summary>
     /// Get all values registered by the specified <see cref="IAddon"/>.
     /// </summary>
@@ -32,7 +32,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     {
         return _registry.Where(pair => pair.Key.Addon == addon).Select(pair => pair.Value);
     }
-    
+
     /// <summary>
     /// Registers a new key-value pair in the registry.
     /// </summary>
@@ -53,7 +53,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     {
         return _registry.ContainsKey(key);
     }
-    
+
     /// <summary>
     /// Checks if a full key exists in the registry.
     /// The full key is represented by the addon ID and the key ID, separated by a slash.
@@ -73,7 +73,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     {
         return _registry.Values;
     }
-    
+
     /// <summary>
     /// Get the key for a specified value.
     /// </summary>

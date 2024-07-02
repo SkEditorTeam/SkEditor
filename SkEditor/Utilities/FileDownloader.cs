@@ -3,12 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Views;
 using System;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
-using SkEditor.Views;
 
 namespace SkEditor.Utilities;
 public static class FileDownloader

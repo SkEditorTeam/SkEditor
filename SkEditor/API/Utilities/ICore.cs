@@ -1,5 +1,5 @@
-﻿using System;
-using SkEditor.Utilities;
+﻿using SkEditor.Utilities;
+using System;
 
 namespace SkEditor.API;
 
@@ -8,7 +8,7 @@ namespace SkEditor.API;
 /// </summary>
 public interface ICore
 {
-    
+
     /// <summary>
     /// Get the application's configuration.
     /// </summary>
@@ -44,7 +44,7 @@ public interface ICore
     /// Open the desired folder in the file explorer.
     /// </summary>
     public void OpenFolder(string path);
-    
+
     /// <summary>
     /// Check if the developer mode is enabled or not.
     /// </summary>

@@ -7,7 +7,6 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
-using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.ViewModels;
@@ -96,7 +95,7 @@ public partial class TextEditorEventHandler
         var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.Editor == editor);
         if (openedFile == null)
             return;
-        
+
         if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
         {
             openedFile.IsSaved = false;

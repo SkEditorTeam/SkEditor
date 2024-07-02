@@ -174,9 +174,9 @@ public class FileBuilder
             FontSize = 16,
             WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled,
         };
-        
+
         editor.ContextFlyout = GetContextMenu(editor);
-        
+
         if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
             Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
@@ -186,11 +186,11 @@ public class FileBuilder
         {
             editor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
         }
-        
+
         editor.Text = content;
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
-        
+
         return editor;
     }
 

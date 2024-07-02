@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Parser;
+using System.Collections.Generic;
 
 namespace SkEditor.Utilities.Files;
 
@@ -19,7 +17,8 @@ public class OpenedFile
     public bool IsNewFile { get; set; } = false;
 
     private bool _saved;
-    public bool IsSaved {
+    public bool IsSaved
+    {
         get => _saved;
         set
         {

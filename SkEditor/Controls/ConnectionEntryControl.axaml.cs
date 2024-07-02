@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using SkEditor.API;
+using System.Diagnostics;
 
 namespace SkEditor.Controls;
 

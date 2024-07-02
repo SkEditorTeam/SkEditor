@@ -8,14 +8,14 @@ namespace SkEditor.API;
 /// </summary>
 public interface IAddons
 {
-    
+
     /// <summary>
     /// Get the <see cref="AddonState"/> of an addon.
     /// </summary>
     /// <param name="addon">The addon to get the state of.</param>
     /// <returns>The state of the addon.</returns>
     public AddonState GetAddonState(IAddon addon);
-    
+
     /// <summary>
     /// Enables the specified addon.
     /// </summary>
@@ -42,13 +42,13 @@ public interface IAddons
     /// <param name="state">The state of the addons to retrieve. Defaults to AddonState.Installed.</param>
     /// <returns>An enumerable of addons with the specified state.</returns>
     public IEnumerable<IAddon> GetAddons(AddonState state = AddonState.Installed);
-    
+
     /// <summary>
     /// Get the self addon of SkEditor. This is the addon that represents SkEditor itself.
     /// </summary>
     /// <returns>The self addon of SkEditor.</returns>
     public SkEditorSelfAddon GetSelfAddon();
-    
+
     /// <summary>
     /// Represents the state of an addon.
     /// </summary>
@@ -58,12 +58,12 @@ public interface IAddons
         /// The addon is installed. This regroups both enabled and disabled addons.
         /// </summary>
         Installed,
-        
+
         /// <summary>
         /// The addon is enabled.
         /// </summary>
         Enabled,
-        
+
         /// <summary>
         /// The addon is disabled.
         /// </summary>

@@ -5,27 +5,27 @@
 /// </summary>
 public static class SkEditorAPI
 {
-    
+
     /// <summary>
     /// Get the Logs API.
     /// </summary>
     public static ILogs Logs { get; } = new Logs();
-    
+
     /// <summary>
     /// Get the Windows API.
     /// </summary>
     public static IWindows Windows { get; } = new Windows();
-    
+
     /// <summary>
     /// Get the Core API.
     /// </summary>
     public static ICore Core { get; } = new Core();
-    
+
     /// <summary>
     /// Get the Events API.
     /// </summary>
     public static IEvents Events { get; } = new Events();
-    
+
     /// <summary>
     /// Get the Addons API.
     /// </summary>

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using SkEditor.API;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Files;
 public static class SessionRestorer
@@ -24,7 +24,7 @@ public static class SessionRestorer
             {
                 continue;
             }
-            
+
             var jsonData = BuildSavingData(openedFile);
             var compressed = await Compress(jsonData);
             var path = Path.Combine(SessionFolder, $"file_{index}.skeditor");
@@ -35,13 +35,13 @@ public static class SessionRestorer
 
     public static async Task<bool> RestoreSession()
     {
-        if (!Directory.Exists(SessionFolder)) 
+        if (!Directory.Exists(SessionFolder))
             return false;
-        
+
         var files = Directory.GetFiles(SessionFolder);
-        if (files.Length == 0) 
+        if (files.Length == 0)
             return false;
-        
+
         foreach (var file in files)
         {
             var compressed = await File.ReadAllTextAsync(file);
@@ -49,9 +49,9 @@ public static class SessionRestorer
             var data = BuildOpeningData(jsonData);
             await (SkEditorAPI.Files as API.Files).AddEditorTab(data.Item1, data.Item2);
         }
-        
+
         return true;
-    } 
+    }
 
     #region Compressing/Decompressing
 
@@ -63,7 +63,7 @@ public static class SessionRestorer
             sw.Write(byteArray, 0, byteArray.Length);
         return Convert.ToBase64String(ms.ToArray());
     }
-    
+
     private static async Task<string> Decompress(string data)
     {
         var byteArray = Convert.FromBase64String(data);
@@ -80,19 +80,19 @@ public static class SessionRestorer
     private static string BuildSavingData(OpenedFile openedFile)
     {
         var obj = new JObject();
-        
+
         if (openedFile.Path != null)
             obj["Path"] = openedFile.Path;
         else
             obj["Content"] = openedFile.Editor.Text;
-        
+
         return obj.ToString();
     }
-    
+
     private static (string, string?) BuildOpeningData(string data)
     {
         var obj = JObject.Parse(data);
-        
+
         var path = obj["Path"]?.Value<string>();
         var content = obj["Content"]?.Value<string>() ?? File.ReadAllText(path);
 

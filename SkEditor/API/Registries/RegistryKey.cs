@@ -9,7 +9,7 @@ namespace SkEditor.API;
 /// <param name="Key">The string key.</param>
 public record RegistryKey(IAddon Addon, string Key)
 {
-    
+
     /// <summary>
     /// Get the full key, which is the addon identifier followed by a slash and the key.
     /// </summary>
@@ -24,9 +24,9 @@ public record RegistryKey(IAddon Addon, string Key)
     public static RegistryKey FromFullKey(string fullKey)
     {
         var parts = fullKey.Split('/');
-        if (parts.Length != 2) 
+        if (parts.Length != 2)
             throw new ArgumentException("Invalid full key format.");
-        
+
         return new RegistryKey(SkEditorAPI.Addons.GetAddon(parts[0]), parts[1]);
     }
 };

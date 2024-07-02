@@ -1,29 +1,27 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
+using Serilog;
 using SkEditor.API;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using SkEditor.Utilities.InternalAPI;
-using Serilog;
 
 namespace SkEditor.Views;
 
 public partial class MainWindow : AppWindow
 {
     public static MainWindow Instance { get; private set; }
-    
+
     public BottomBarControl GetBottomBar() => BottomBar;
 
     public MainWindow()
@@ -89,7 +87,7 @@ public partial class MainWindow : AppWindow
             }
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-                Translation.Get("ClosingProgramWithUnsavedFiles"), icon: Symbol.ImportantFilled, 
+                Translation.Get("ClosingProgramWithUnsavedFiles"), icon: Symbol.ImportantFilled,
                 primaryButtonText: "Yes", cancelButtonText: "No");
 
             if (result == ContentDialogResult.Primary)
@@ -116,11 +114,11 @@ public partial class MainWindow : AppWindow
         await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 
         bool sessionFilesAdded = false;
-        if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring) 
+        if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
             sessionFilesAdded = await SessionRestorer.RestoreSession();
 
         string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
-        if (startupFiles.Length == 0 && !sessionFilesAdded) 
+        if (startupFiles.Length == 0 && !sessionFilesAdded)
             (SkEditorAPI.Files as Files).AddWelcomeTab();
         startupFiles.ToList().ForEach(FileHandler.OpenFile);
         if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
@@ -137,7 +135,7 @@ public partial class MainWindow : AppWindow
             BottomBar.UpdatePosition();
             ChangelogChecker.Check();
         });
-        
+
         await CrashChecker.CheckForCrash();
     }
 }

@@ -25,7 +25,7 @@ public abstract class SidebarPanel
     {
 
     }
-    
+
     public string GetId() => Registries.SidebarPanels.GetValueKey(this).Key;
 
 }

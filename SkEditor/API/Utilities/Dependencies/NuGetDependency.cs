@@ -10,10 +10,10 @@
 /// </summary>
 public class NuGetDependency(string packageId, string nameSpace, string? version, bool isRequired = true) : IDependency
 {
-    
+
     public string PackageId { get; } = packageId;
     public string NameSpace { get; } = nameSpace;
     public string? Version { get; } = version;
     public bool IsRequired { get; } = isRequired;
-    
+
 }

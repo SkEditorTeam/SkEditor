@@ -1,5 +1,4 @@
-﻿using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
+﻿using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
 using System;

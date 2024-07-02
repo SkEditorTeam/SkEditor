@@ -1,6 +1,6 @@
-﻿using System;
-using FluentAvalonia.UI.Controls;
+﻿using FluentAvalonia.UI.Controls;
 using SkEditor.API.Settings.Types;
+using System;
 
 namespace SkEditor.API.Settings;
 
@@ -16,12 +16,12 @@ public class Setting(
     string? description = null,
     IconSource? icon = null)
 {
-    
+
     /// <summary>
     /// The addon that owns this setting.
     /// </summary>
     public IAddon Addon { get; } = addon;
-    
+
     /// <summary>
     /// The displayed name of the setting, in the setting expander.
     /// </summary>
@@ -31,7 +31,7 @@ public class Setting(
     /// The displayed description of the setting, in the setting expander.
     /// </summary>
     public string? Description { get; } = description;
-    
+
     /// <summary>
     /// The key (= identifier) of the setting. It's used in
     /// the settings dictionary to store the value.
@@ -47,12 +47,12 @@ public class Setting(
     /// The default value of the setting.
     /// </summary>
     public object DefaultValue { get; } = defaultValue;
-    
+
     /// <summary>
     /// Get the type of the setting.
     /// </summary>
     public ISettingType Type { get; } = type;
-    
+
     /// <summary>
     /// Fired when the setting is changed.
     /// </summary>

@@ -19,5 +19,5 @@ public class AddonLoadContext(string pluginPath) : AssemblyLoadContext(true)
         var libraryPath = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
         return libraryPath != null ? LoadUnmanagedDllFromPath(libraryPath) : IntPtr.Zero;
     }
-    
+
 }

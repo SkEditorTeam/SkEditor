@@ -1,44 +1,44 @@
-﻿using System;
-using NuGet.Versioning;
+﻿using NuGet.Versioning;
 using SkEditor.API;
+using System;
 
 namespace SkEditor.Utilities.InternalAPI.Classes;
 
 public static class LoadingErrors
 {
-    
+
     public static IAddonLoadingError OutdatedSkEditor(Version minimalVersion)
     {
         return new OutdatedSkEditorError(minimalVersion);
     }
-    
+
     public static IAddonLoadingError OutdatedAddon(Version maximalVersion)
     {
         return new OutdatedAddonError(maximalVersion);
     }
-    
+
     public static IAddonLoadingError LoadingException(Exception exception)
     {
         return new LoadingExceptionError(exception);
     }
-    
+
     public static IAddonLoadingError OutdatedDependency(string dependencyName, NuGetVersion target, NuGetVersion found)
     {
         return new OutdatedDependencyError(dependencyName, target, found);
     }
-    
+
     public static IAddonLoadingError MissingAddonDependency(string addonIdentifier)
     {
         return new MissingAddonDependencyError(addonIdentifier);
     }
-    
+
     public static IAddonLoadingError FailedToLoadDependency(string dependencyName, string message)
     {
         return new FailedToLoadDependencyError(dependencyName, message);
     }
-    
+
     // --------------------------------------------------------------------------------------------------------
- 
+
     class OutdatedSkEditorError : IAddonLoadingError
     {
         private Version MinimalVersion { get; }
@@ -46,10 +46,10 @@ public static class LoadingErrors
         {
             MinimalVersion = minimalVersion;
         }
-        
+
         public bool IsCritical => true;
         public string Message => "The addon requires a newer version of SkEditor (" + MinimalVersion + " and you have " + SkEditorAPI.Core.GetAppVersion() + ").";
-    } 
+    }
     class OutdatedAddonError : IAddonLoadingError
     {
         private Version MaximalVersion { get; }
@@ -57,7 +57,7 @@ public static class LoadingErrors
         {
             MaximalVersion = maximalVersion;
         }
-        
+
         public bool IsCritical => true;
         public string Message => "The addon requires a newer version of itself (" + MaximalVersion + " and you have " + SkEditorAPI.Core.GetAppVersion() + ").";
     }
@@ -68,7 +68,7 @@ public static class LoadingErrors
         {
             Exception = exception;
         }
-        
+
         public bool IsCritical => true;
         public string Message => "An exception occurred while loading the addon: " + Exception.Message;
     }
@@ -79,7 +79,7 @@ public static class LoadingErrors
         {
             AddonIdentifier = addonIdentifier;
         }
-        
+
         public bool IsCritical => true;
         public string Message => "The addon requires the addon '" + AddonIdentifier + "' to be loaded.";
     }
@@ -94,7 +94,7 @@ public static class LoadingErrors
             Target = target;
             Found = found;
         }
-        
+
         public bool IsCritical => true;
         public string Message => "The addon requires the dependency '" + DependencyName + "' to be at least version " + Target + ", but you have version " + Found + ".";
     }
@@ -107,7 +107,7 @@ public static class LoadingErrors
             DependencyName = dependencyName;
             EMessage = message;
         }
-        
+
         public bool IsCritical => true;
         public string Message => "Failed to load the dependency '" + DependencyName + "': " + EMessage;
     }

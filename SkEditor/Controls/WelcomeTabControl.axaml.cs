@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -9,6 +7,8 @@ using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects;
 using SkEditor.Views;
+using System.Collections.Generic;
+using System.Linq;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 

@@ -1,23 +1,15 @@
-﻿using Avalonia.Controls;
-using Avalonia.Input;
+﻿using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using AvaloniaEdit;
-using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
-using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Projects;
-using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;

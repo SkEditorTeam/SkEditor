@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
+using SkEditor.API;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using SkEditor.API;
 
 namespace SkEditor.Utilities;
 
@@ -34,12 +33,12 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private bool _checkForChanges = true;
     [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
     [ObservableProperty] private bool _isDevModeEnabled = false;
-    
+
     /// <summary>
     /// Represent the width of panels via their ID (<see cref="Registries.SidebarPanels"/>
     /// </summary>
     public Dictionary<string, int> SidebarPanelSizes { get; set; } = [];
-    
+
     /// <summary>
     /// Represent the (saved) choices the user made for file types.
     /// </summary>

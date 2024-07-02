@@ -3,10 +3,9 @@ using SkEditor.Views;
 
 namespace SkEditor.API;
 
-using System;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Interface for Windows-related operations.
@@ -53,7 +52,7 @@ public interface IWindows
     /// </summary>
     /// <param name="error">The error message.</param>
     Task ShowError(string error);
-    
+
     /// <summary>
     /// Ask the user to select a file with the given options.
     /// </summary>

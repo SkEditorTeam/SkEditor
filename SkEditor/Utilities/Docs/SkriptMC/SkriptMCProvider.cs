@@ -93,7 +93,7 @@ public class SkriptMCProvider : IDocProvider
     public Task<Color?> GetAddonColor(string addonName) => null;
 
     public IconSource Icon => new BitmapIconSource() { UriSource = new("avares://SkEditor/Assets/Brands/SkriptMC.png") };
-    
+
     public string? GetLink(IDocumentationEntry entry)
     {
         return null;

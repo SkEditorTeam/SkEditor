@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
@@ -8,7 +9,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
@@ -89,7 +89,7 @@ public class Folder : StorageElement
 
     public override void HandleClick()
     {
-        if (Children.Count > 0) 
+        if (Children.Count > 0)
             IsExpanded = !IsExpanded;
     }
 

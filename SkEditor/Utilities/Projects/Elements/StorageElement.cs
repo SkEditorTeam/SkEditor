@@ -1,11 +1,11 @@
 ﻿using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Projects.Elements;
 

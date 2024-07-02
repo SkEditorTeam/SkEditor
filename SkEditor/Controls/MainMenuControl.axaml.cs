@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Controls.Docs;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects;
@@ -10,10 +11,6 @@ using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
-using System;
-using System.Collections;
-using SkEditor.Utilities;
-using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views.Settings;
 
 namespace SkEditor.Controls;
@@ -133,7 +130,8 @@ public partial class MainMenuControl : UserControl
             {
                 IconSource = new SymbolIconSource()
                 {
-                    Symbol = Symbol.Manage, FontSize = 20
+                    Symbol = Symbol.Manage,
+                    FontSize = 20
                 },
                 Width = 20,
                 Height = 20

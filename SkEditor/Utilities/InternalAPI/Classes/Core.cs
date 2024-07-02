@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Avalonia;
+using Avalonia.Styling;
+using SkEditor.Utilities;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Avalonia;
-using Avalonia.Styling;
-using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Files;
 
 namespace SkEditor.API;
 
@@ -16,7 +12,7 @@ public class Core : ICore
 {
     private AppConfig? _appConfig;
     private string[] _startupArguments = null!;
-    
+
     public AppConfig GetAppConfig()
     {
         return _appConfig ??= AppConfig.Load();
@@ -32,7 +28,7 @@ public class Core : ICore
     {
         return _startupArguments ?? [];
     }
-    
+
     public void SetStartupArguments(string[]? args)
     {
         _startupArguments = args ?? [];
@@ -67,7 +63,7 @@ public class Core : ICore
 #endif
 
         return GetAppConfig().IsDevModeEnabled;
-        #pragma warning restore 162
+#pragma warning restore 162
     }
 
     public void SaveData()
@@ -76,7 +72,7 @@ public class Core : ICore
         {
             if (!file.IsEditor)
                 return;
-            
+
             string path = file.Path;
             if (string.IsNullOrEmpty(path))
             {
@@ -92,7 +88,7 @@ public class Core : ICore
                 await savedWriter.WriteAsync(txtToWrite);
                 savedWriter.Close();
             }
-            
+
             string textToWrite = file.Editor.Text;
             await using StreamWriter writer = new(path, false);
             await writer.WriteAsync(textToWrite);

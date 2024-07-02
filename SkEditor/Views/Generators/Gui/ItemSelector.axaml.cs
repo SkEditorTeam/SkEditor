@@ -1,5 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using Newtonsoft.Json;
@@ -12,8 +14,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Layout;
-using Avalonia.Media.Imaging;
 
 namespace SkEditor.Views.Generators.Gui;
 public partial class ItemSelector : AppWindow
@@ -141,7 +141,7 @@ public partial class ItemSelector : AppWindow
             },
             Tag = item.Name,
         };
-    
+
     }
 }
 
@@ -165,7 +165,7 @@ public class Item
     public int CustomModelData { get; set; }
     [JsonIgnore]
     public bool HaveExampleAction { get; set; }
-    
+
     [JsonIgnore]
     private Bitmap _image = null!;
     [JsonIgnore]
@@ -178,7 +178,7 @@ public class Item
                 string itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, Name + ".png");
                 _image = new Bitmap(itemImagePath);
             }
-            
+
             return _image;
         }
     }

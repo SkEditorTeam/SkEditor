@@ -2,8 +2,8 @@
 
 public interface IAddonLoadingError
 {
-    
+
     bool IsCritical { get; }
     string Message { get; }
-    
+
 }

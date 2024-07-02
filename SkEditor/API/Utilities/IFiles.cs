@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.Files;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 
@@ -82,7 +81,7 @@ public interface IFiles
     /// </summary>
     /// <param name="content">The desired content of the new file</param>
     public void NewFile(string content = "");
-    
+
     /// <summary>
     /// Open the provided file path into SkEditor.
     /// </summary>
@@ -117,5 +116,5 @@ public interface IFiles
         AllLeft,
         All
     }
-    
+
 }

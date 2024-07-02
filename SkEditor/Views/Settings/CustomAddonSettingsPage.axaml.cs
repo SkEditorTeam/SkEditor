@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.InternalAPI;
+using System.Collections.Generic;
 
 namespace SkEditor.Views.Settings;
 
@@ -13,16 +13,16 @@ public partial class CustomAddonSettingsPage : UserControl
     private static CustomAddonSettingsPage _instance = null!;
 
     private SubSettings? _parent;
-    public static void Load(IAddon addon, 
-        List<Setting>? settings = null, 
+    public static void Load(IAddon addon,
+        List<Setting>? settings = null,
         SubSettings? parent = null)
     {
         _instance._parent = parent;
-        
+
         _instance.LoadBasics(addon);
         _instance.PopulateSettings(settings ?? addon.GetSettings());
     }
-    
+
     public CustomAddonSettingsPage()
     {
         InitializeComponent();
@@ -39,15 +39,15 @@ public partial class CustomAddonSettingsPage : UserControl
                 SettingsWindow.NavigateToPage(typeof(AddonsPage));
                 return;
             }
-            
+
             SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
             Load(addon, _parent.Settings, null);
         });
     }
-    
+
     public void PopulateSettings(List<Setting> settings)
     {
-        
+
         ItemStackPanel.Children.Clear();
         foreach (var setting in settings)
         {
@@ -59,7 +59,7 @@ public partial class CustomAddonSettingsPage : UserControl
             };
 
             var value = setting.Type.IsSelfManaged ? null : AddonSettingsManager.GetValue(setting);
-            var control = setting.Type.CreateControl(value, 
+            var control = setting.Type.CreateControl(value,
                 newValue =>
                 {
                     if (setting.Type.IsSelfManaged)
@@ -67,9 +67,9 @@ public partial class CustomAddonSettingsPage : UserControl
                         setting.OnChanged?.Invoke(newValue);
                         return;
                     }
-                    
+
                     (SkEditorAPI.Events as Events).AddonSettingChanged(setting, value);
-                    
+
                     value = newValue;
                     AddonSettingsManager.SetValue(setting, newValue);
                     setting.OnChanged?.Invoke(newValue);
@@ -78,7 +78,7 @@ public partial class CustomAddonSettingsPage : UserControl
             setting.Type.SetupExpander(expander, setting);
             ItemStackPanel.Children.Add(expander);
         }
-        
+
     }
 
     public record SubSettings(string Name, List<Setting> Settings);

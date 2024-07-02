@@ -1,6 +1,6 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
+using System;
 
 namespace SkEditor.API;
 
@@ -27,5 +27,5 @@ public record FileTypeData(
     #endregion
 
 };
-    
+
 public record FileTypeResult(Control? Control, string? Header = null);

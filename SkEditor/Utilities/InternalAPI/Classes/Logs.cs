@@ -1,14 +1,13 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using SkEditor.Utilities.InternalAPI;
+using System;
+using System.Diagnostics;
 
 namespace SkEditor.API;
 
 public class Logs : ILogs
 {
-    
+
     private string FormatMessage(string message)
     {
         var methodInfo = new StackTrace().GetFrame(2)?.GetMethod();
@@ -16,29 +15,29 @@ public class Logs : ILogs
         var addon = AddonLoader.GetAddonByNamespace(callerNamespace);
         return $"[{addon?.Name ?? "SkEditor"}] {message}";
     }
-    
+
     public void Debug(string message)
     {
         Serilog.Log.Debug(FormatMessage(message));
     }
-    
+
     public void Info(string message)
     {
         Serilog.Log.Information(FormatMessage(message));
     }
-    
+
     public void Warning(string message)
     {
         Serilog.Log.Warning(FormatMessage(message));
     }
-    
+
     public void Error(string message, bool informUser = false)
     {
         Serilog.Log.Error(FormatMessage(message));
         if (informUser)
             Dispatcher.UIThread.InvokeAsync(async () => await SkEditorAPI.Windows.ShowError(message));
     }
-    
+
     public void Fatal(string message)
     {
         Serilog.Log.Fatal(FormatMessage(message));
@@ -49,7 +48,7 @@ public class Logs : ILogs
         Serilog.Log.Fatal(exception, FormatMessage(exception.Message));
         Serilog.Log.Fatal(exception.StackTrace);
     }
-    
+
     public void AddonError(string message, bool informUser = false, IAddon? addon = null)
     {
         if (addon == null)
@@ -65,10 +64,10 @@ public class Logs : ILogs
                 addonNamespace = method.ReflectedType?.Namespace;
                 break;
             }
-            
+
             addon = AddonLoader.GetAddonByNamespace(addonNamespace);
         }
-        
+
         Serilog.Log.Error(FormatMessage($"[{addon?.Name ?? "Addon not Found"}] {message}"));
         if (informUser)
             Dispatcher.UIThread.InvokeAsync(async () => await SkEditorAPI.Windows.ShowError(message));

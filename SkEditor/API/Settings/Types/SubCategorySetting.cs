@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json.Linq;
 using SkEditor.Views;
 using SkEditor.Views.Settings;
+using System;
+using System.Collections.Generic;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 

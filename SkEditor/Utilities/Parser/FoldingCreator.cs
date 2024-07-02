@@ -1,12 +1,10 @@
-﻿using System;
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Folding;
 using AvaloniaEdit.Utils;
+using SkEditor.Utilities.Files;
 using System.Collections.Generic;
 using System.Linq;
-using SkEditor.API;
-using SkEditor.Utilities.Files;
 using static SkEditor.Utilities.Parser.CodeSection;
 
 namespace SkEditor.Utilities.Parser;
@@ -74,10 +72,10 @@ public static class FoldingCreator
     {
         if (file.Editor == null)
             return [];
-        
+
         List<int> hiddenLines = [];
         FoldingManager? foldingManager = file.Editor.GetService<FoldingManager>();
-        
+
         if (foldingManager != null)
         {
             foreach (FoldingSection folding in foldingManager.AllFoldings)

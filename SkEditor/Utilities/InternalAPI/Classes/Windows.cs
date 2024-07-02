@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
@@ -10,6 +7,9 @@ using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
 using SkEditor.Views;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 
@@ -21,7 +21,7 @@ public class Windows : IWindows
         return (MainWindow)(Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime)
             .MainWindow;
     }
-    
+
     public Window GetCurrentWindow()
     {
         var windows = (Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime).Windows;
@@ -36,13 +36,13 @@ public class Windows : IWindows
     {
         static string? TryGetTranslation(string? input)
         {
-            if (input == null) 
+            if (input == null)
                 return null;
-            
+
             var translation = Translation.Get(input);
             return translation == input ? input : translation;
         }
-        
+
         Application.Current.TryGetResource("MessageBoxBackground", out var background);
         var dialog = new ContentDialog()
         {
@@ -104,7 +104,7 @@ public class Windows : IWindows
 
         return await dialog.ShowAsync(GetCurrentWindow());
     }
-    
+
     public async Task ShowMessage(string title, string message)
     {
         await ShowDialog(title, message, Symbol.FlagFilled);
@@ -119,7 +119,7 @@ public class Windows : IWindows
     {
         var topLevel = GetCurrentWindow();
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
-        
+
         return files.FirstOrDefault()?.Path.AbsolutePath;
     }
 

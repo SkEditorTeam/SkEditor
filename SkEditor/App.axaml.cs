@@ -2,6 +2,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Serilog;
+using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Views;
 using System;
@@ -10,7 +11,6 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using SkEditor.API;
 
 namespace SkEditor;
 

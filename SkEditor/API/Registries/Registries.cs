@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SkEditor.Utilities;
+﻿using SkEditor.Utilities;
 
 namespace SkEditor.API;
 
@@ -8,14 +7,14 @@ namespace SkEditor.API;
 /// </summary>
 public static class Registries
 {
-    
+
     public static readonly Registry<ConnectionData> Connections = new();
     public static readonly Registry<IBottomIconElement> BottomIcons = new();
     public static readonly Registry<SidebarPanel> SidebarPanels = new();
     public static readonly Registry<WelcomeEntryData> WelcomeEntries = new();
     public static readonly Registry<MarginIconData> MarginIcons = new();
     public static readonly Registry<FileTypeData> FileTypes = new();
-    
+
     public static void Unload(IAddon addon)
     {
         Connections.Unload(addon);

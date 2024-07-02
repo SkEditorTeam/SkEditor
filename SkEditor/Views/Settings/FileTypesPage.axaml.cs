@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SpacedGridControl.Avalonia;
+using System.Linq;
 
 namespace SkEditor.Views.Settings;
 
@@ -29,10 +27,10 @@ public partial class FileTypesPage : UserControl
         {
             var ext = keyValue.Key;
             var fullId = keyValue.Value;
-            
+
             var availableTypes = Registries.FileTypes.GetValues().ToList()
                 .Where(x => x.SupportedExtensions.Contains(ext)).ToList();
-            
+
             var expander = new SettingsExpander()
             {
                 Header = ext
@@ -43,7 +41,7 @@ public partial class FileTypesPage : UserControl
                 MinWidth = 300,
                 HorizontalContentAlignment = HorizontalAlignment.Left
             };
-            
+
             int i = 0;
             int selectedIndex = -1;
             foreach (var type in availableTypes)
@@ -65,7 +63,7 @@ public partial class FileTypesPage : UserControl
                 grid.Children.Add(title);
                 Grid.SetColumn(title, 1);
                 Grid.SetRow(title, 0);
-                
+
                 var desc = new TextBlock
                 {
                     Text = type.DisplayedDescription,
@@ -87,7 +85,7 @@ public partial class FileTypesPage : UserControl
                 Grid.SetColumn(icon, 0);
                 Grid.SetRow(icon, 0);
                 Grid.SetRowSpan(icon, 2);
-                
+
                 var item = new ComboBoxItem
                 {
                     Content = grid,
@@ -102,18 +100,18 @@ public partial class FileTypesPage : UserControl
                 box.Items.Add(item);
                 i++;
             }
-            
+
             box.SelectedIndex = selectedIndex;
-            
+
             box.SelectionChanged += (sender, args) =>
             {
                 if (box.SelectedItem is ComboBoxItem item)
                 {
-                    var type = (FileTypeData) item.Tag;
+                    var type = (FileTypeData)item.Tag;
                     SkEditorAPI.Core.GetAppConfig().FileTypeChoices[ext] = Registries.FileTypes.GetValueKey(type).FullKey;
                 }
             };
-            
+
             var removeBtn = new Button
             {
                 Content = "Remove",
@@ -125,7 +123,7 @@ public partial class FileTypesPage : UserControl
                 VerticalContentAlignment = VerticalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Stretch
             };
-            
+
             expander.Footer = new StackPanel()
             {
                 Children = { box, removeBtn },

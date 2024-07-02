@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Markup.Xaml;
 
 namespace SkEditor.Controls;
 
@@ -15,7 +14,7 @@ public partial class SettingsCategorySeparator : UserControl
         get => GetValue(TitleProperty);
         set => SetValue(TitleProperty, value);
     }
-    
+
     public SettingsCategorySeparator()
     {
         InitializeComponent();

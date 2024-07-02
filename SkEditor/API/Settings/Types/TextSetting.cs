@@ -1,6 +1,6 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace SkEditor.API.Settings.Types;
 
@@ -29,8 +29,8 @@ public class TextSetting(string placeholder, int maxLength = -1, char? passwordC
 
     public Control CreateControl(object raw, Action<object> onChanged)
     {
-        var value = (string) raw;
-        
+        var value = (string)raw;
+
         var textBox = new TextBox
         {
             Text = value,

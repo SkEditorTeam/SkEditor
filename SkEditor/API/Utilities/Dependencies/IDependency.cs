@@ -9,11 +9,11 @@
 /// </summary>
 public interface IDependency
 {
-    
+
     /// <summary>
     /// Check if this dependency is required by the desired addon.
     /// If it is missing, the addon will not be enabled.
     /// </summary>
     public bool IsRequired { get; }
-    
+
 }

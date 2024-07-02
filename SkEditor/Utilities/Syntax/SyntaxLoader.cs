@@ -1,16 +1,15 @@
-﻿using AvaloniaEdit;
-using AvaloniaEdit.Highlighting;
+﻿using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using SkEditor.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using SkEditor.Views;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Syntax;
@@ -43,7 +42,7 @@ public class SyntaxLoader
                 catch (Exception e)
                 {
                     await SkEditorAPI.Windows.ShowDialog("Error",
-                        $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}", 
+                        $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}",
                         new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
                 }
             }
@@ -140,7 +139,7 @@ public class SyntaxLoader
             Directory.CreateDirectory(defaultSyntaxPath);
 
             HttpClient client = new();
-            string url = MarketplaceWindow.MarketplaceUrl +"SkEditorFiles/Default.xshd";
+            string url = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Default.xshd";
             var response = await client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "syntax.xshd"), content);

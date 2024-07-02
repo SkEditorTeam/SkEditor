@@ -1,4 +1,3 @@
-using System.Linq;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
@@ -6,12 +5,13 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
+using System.Linq;
 
 namespace SkEditor.Views.Generators.Gui;
 public partial class ExtendedItemSelector : AppWindow
 {
     private Item _item;
- 
+
     public ExtendedItemSelector(Item item)
     {
         InitializeComponent();

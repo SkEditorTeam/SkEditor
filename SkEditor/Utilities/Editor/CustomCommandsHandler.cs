@@ -2,7 +2,6 @@
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using SkEditor.API;
-using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Views;
 using System;

@@ -9,10 +9,7 @@ using SkEditor.Utilities;
 using SkEditor.Views.Marketplace;
 using SkEditor.Views.Marketplace.Types;
 using System;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views;
 public partial class MarketplaceWindow : AppWindow
@@ -64,7 +61,7 @@ public partial class MarketplaceWindow : AppWindow
         MarketplaceListItem listItem = (MarketplaceListItem)ItemListBox.SelectedItem;
         if (listItem == null) return;
         MarketplaceItem item = (MarketplaceItem)listItem.Tag;
-        if (item == null) 
+        if (item == null)
             return;
         item.Marketplace = this;
 
@@ -73,7 +70,7 @@ public partial class MarketplaceWindow : AppWindow
 
         bool shouldShowInstallButton = false;
         bool shouldShowUninstallButton = false;
-        
+
         /*
          * if (item is AddonItem addonItem)
         {
@@ -142,7 +139,7 @@ public partial class MarketplaceWindow : AppWindow
             });
         }
     }
-    
+
     public void RefreshCurrentSelection()
     {
         OnSelectedItemChanged(null, null);

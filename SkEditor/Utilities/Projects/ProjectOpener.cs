@@ -1,16 +1,16 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Projects.Elements;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using Avalonia.Input;
-using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
@@ -68,14 +68,14 @@ public static class ProjectOpener
             var storageElement = treeViewItem.DataContext as StorageElement;
             storageElement?.HandleClick();
         }
-        
+
         FileTreeView.DoubleTapped += (sender, e) =>
         {
             if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
                 return;
             HandleTapped(e);
         };
-        
+
         FileTreeView.Tapped += (sender, e) =>
         {
             if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)

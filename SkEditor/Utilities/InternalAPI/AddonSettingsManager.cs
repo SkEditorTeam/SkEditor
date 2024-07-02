@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using SkEditor.API.Settings;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SkEditor.Utilities.InternalAPI;
 
@@ -12,14 +12,14 @@ namespace SkEditor.Utilities.InternalAPI;
 /// </summary>
 public static class AddonSettingsManager
 {
-    
+
     private static readonly Dictionary<IAddon, JObject> LoadedAddonSettings = new();
-    
+
     public static void LoadSettings(IAddon addon)
     {
         if (LoadedAddonSettings.ContainsKey(addon))
             return;
-        
+
         var path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         if (!File.Exists(path))
@@ -27,7 +27,7 @@ public static class AddonSettingsManager
             LoadedAddonSettings[addon] = CreateDefaultSettings(addon);
             return;
         }
-        
+
         var json = File.ReadAllText(path);
         try
         {
@@ -39,7 +39,7 @@ public static class AddonSettingsManager
             LoadedAddonSettings[addon] = CreateDefaultSettings(addon);
             return;
         }
-        
+
         foreach (var setting in addon.GetSettings())
         {
             if (!LoadedAddonSettings[addon].ContainsKey(setting.Key) && !setting.Type.IsSelfManaged)
@@ -57,23 +57,23 @@ public static class AddonSettingsManager
             obj[setting.Key] = setting.Type.Serialize(setting.DefaultValue);
         return obj;
     }
-    
+
     private static void SaveSettings(IAddon addon)
     {
         if (!LoadedAddonSettings.ContainsKey(addon))
             return;
-        
+
         var path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
         var json = LoadedAddonSettings[addon].ToString();
         File.WriteAllText(path, json);
     }
-    
+
     public static object GetValue(Setting setting)
     {
         LoadSettings(setting.Addon);
         return setting.Type.Deserialize(LoadedAddonSettings[setting.Addon][setting.Key]);
     }
-    
+
     public static void SetValue(Setting setting, object value)
     {
         LoadSettings(setting.Addon);
@@ -89,10 +89,10 @@ public static class AddonSettingsManager
             SkEditorAPI.Logs.Error($"Setting {key} not found in settings for addon {addon.Identifier}");
             return;
         }
-        
+
         SetValue(setting, value);
     }
-    
+
     public static object GetAddonValue(IAddon addon, string key)
     {
         var setting = addon.GetSettings().Find(s => s.Key == key);
@@ -101,8 +101,8 @@ public static class AddonSettingsManager
             SkEditorAPI.Logs.Error($"Setting {key} not found in settings for addon {addon.Identifier}");
             return null;
         }
-        
+
         return GetValue(setting);
     }
-    
+
 }

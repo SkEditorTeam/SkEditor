@@ -1,11 +1,11 @@
 ﻿using AvaloniaEdit;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
+using SkEditor.Utilities.InternalAPI;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Parser;
 

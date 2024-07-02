@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 
@@ -26,11 +25,11 @@ public class SkriptHubDocEntry : IDocumentationEntry
         get => AddonObj?.Name ?? _addon;
         set => _addon = value;
     }
-    
+
     [JsonProperty("addon")]
     public SkriptHubAddon? AddonObj { get; set; }
-    
-    
+
+
     [JsonProperty("compatible_addon_version")]
     public string Version { get; set; }
 
@@ -70,10 +69,10 @@ public class SkriptHubDocEntry : IDocumentationEntry
 [Serializable]
 public class SkriptHubAddon
 {
-    
+
     [JsonProperty("name")]
     public string Name { get; set; }
     [JsonProperty("link_to_addon")]
     public string Link { get; set; }
-    
+
 }

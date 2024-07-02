@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
+﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.InternalAPI;
+using System;
 
 namespace SkEditor.API;
 
@@ -15,7 +13,7 @@ public class BottomIconData : IBottomIconElement
 
     private bool _initialized;
     private Button? _attachedButton; // will be null if it's a group
-    
+
     private TextBlock? _attachedTextBlock;
     private IconSourceElement? _attachedIconElement;
 
@@ -25,8 +23,8 @@ public class BottomIconData : IBottomIconElement
         _attachedButton = button;
         _attachedTextBlock = textBlock;
         _attachedIconElement = iconElement;
-        
-        if (_attachedButton != null) 
+
+        if (_attachedButton != null)
             _attachedButton.Click += (sender, _) => AddonLoader.HandleAddonMethod(() => Clicked?.Invoke(sender, new BottomIconElementClickedEventArgs(this)));
 
         _attachedTextBlock.Text = Text;
@@ -35,14 +33,14 @@ public class BottomIconData : IBottomIconElement
         _attachedIconElement.IconSource = IconSource;
         _attachedIconElement.IsVisible = IconSource != null;
     }
-    
+
     public Button? GetButton() => _attachedButton;
     public TextBlock GetTextBlock() => _attachedTextBlock;
     public IconSourceElement? GetIconElement() => _attachedIconElement;
     public bool IsInitialized() => _initialized;
 
     #region Properties
-    
+
     private bool _isEnabled = true;
     public bool IsEnabled
     {
@@ -69,7 +67,7 @@ public class BottomIconData : IBottomIconElement
             }
         }
     }
-    
+
     private string? _text;
     public string? Text
     {
@@ -84,7 +82,7 @@ public class BottomIconData : IBottomIconElement
             }
         }
     }
-    
+
     private EventHandler<BottomIconElementClickedEventArgs>? _clicked;
     public EventHandler<BottomIconElementClickedEventArgs>? Clicked
     {
@@ -96,7 +94,7 @@ public class BottomIconData : IBottomIconElement
                 _attachedButton.Click += (sender, _) => AddonLoader.HandleAddonMethod(() => value?.Invoke(sender, new BottomIconElementClickedEventArgs(this)));
         }
     }
-    
+
     public int Order { get; set; } = 0;
     public string Id { get; set; }
 

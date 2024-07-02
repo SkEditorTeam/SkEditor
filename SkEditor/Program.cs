@@ -1,10 +1,10 @@
 ﻿using Avalonia;
+using Avalonia.Data;
 using Serilog;
 using SkEditor.API;
+using SkEditor.Utilities.InternalAPI;
 using System;
 using System.Diagnostics;
-using Avalonia.Data;
-using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Desktop;
 
@@ -16,7 +16,7 @@ class Program
     public static void Main(string[] args)
     {
         GC.KeepAlive(typeof(RelativeSource));
-        
+
         try
         {
             BuildAvaloniaApp()
