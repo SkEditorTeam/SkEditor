@@ -29,7 +29,7 @@ public class Files : IFiles
 
     public bool IsFileOpen()
     {
-        return !GetCurrentOpenedFile().IsCustomTab;
+        return GetCurrentOpenedFile()?.IsCustomTab == false;
     }
 
     public bool IsEditorOpen()
