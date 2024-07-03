@@ -13,7 +13,7 @@ public partial class AboutPage : UserControl
 
         AssignCommands();
 
-        DataContext = new SettingsViewModel();
+        DataContext = SkEditorAPI.Core.GetAppConfig();
     }
 
     private void AssignCommands()
