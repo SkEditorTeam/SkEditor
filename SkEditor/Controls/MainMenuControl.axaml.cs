@@ -31,6 +31,7 @@ public partial class MainMenuControl : UserControl
         MenuItemOpenFolder.Command = new RelayCommand(() => ProjectOpener.OpenProject());
         MenuItemSave.Command = new RelayCommand(FileHandler.SaveFile);
         MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFile);
+        MenuItemSaveAll.Command = new RelayCommand(FileHandler.SaveAllFiles);
         MenuItemPublish.Command = new RelayCommand(() => new PublishWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
         MenuItemClose.Command = new RelayCommand(FileCloser.CloseCurrentFile);
