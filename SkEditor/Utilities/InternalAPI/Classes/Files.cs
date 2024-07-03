@@ -380,7 +380,7 @@ public class Files : IFiles
 
     public void AddWelcomeTab()
     {
-        AddCustomTab("Welcome", new WelcomeTabControl());
+        AddCustomTab(Translation.Get("WelcomeTabTitle"), new WelcomeTabControl());
     }
 
     private OpenedFile GetFromTabViewItem(TabViewItem tabViewItem)

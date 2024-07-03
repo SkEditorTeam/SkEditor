@@ -417,4 +417,15 @@
 	<system:String x:Key="ThemeEditorFocusedTextBoxBackground">Focused text box background</system:String>
 	<system:String x:Key="ThemeEditorAccentColor">Accent color</system:String>
 
+	<!-- Welcome Tab -->
+	<system:String x:Key="WelcomeTabTitle">Welcome</system:String>
+	<system:String x:Key="WelcomeTabGettingStarted">Getting Started</system:String>
+	<system:String x:Key="WelcomeTabNeedHelp">Need help?</system:String>
+	<system:String x:Key="WelcomeGettingStartedNewFile">New File</system:String>
+	<system:String x:Key="WelcomeGettingStartedOpenFile">Open File</system:String>
+	<system:String x:Key="WelcomeGettingStartedOpenFolder">Open Folder</system:String>
+	<system:String x:Key="WelcomeGettingStartedSettings">Settings</system:String>
+	<system:String x:Key="WelcomeNeedHelpDiscordServer">Discord Server</system:String>
+	<system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+	
 </ResourceDictionary>

@@ -4,6 +4,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects;
 using SkEditor.Views;
@@ -24,17 +25,21 @@ public partial class WelcomeTabControl : UserControl
     {
         InitializeComponent();
 
-        var gettingStarted = CreateActionSection("Getting Started", [
-            new ("New File", new (FileHandler.NewFile), CreateSymbolIcon(Symbol.DocumentAdd)),
-            new ("Open File", new (FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
-            new ("Open Folder", new (() => ProjectOpener.OpenProject()), CreateSymbolIcon(Symbol.FolderOpen)),
-            new ("Settings", new (OpenSettings), CreateSymbolIcon(Symbol.Settings)),
+        var gettingStarted = CreateActionSection(Translation.Get("WelcomeTabGettingStarted"),
+        [
+            new (Translation.Get("WelcomeGettingStartedNewFile"), new (FileHandler.NewFile), CreateSymbolIcon(Symbol.DocumentAdd)),
+            new (Translation.Get("WelcomeGettingStartedOpenFile"), new (FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
+            new (Translation.Get("WelcomeGettingStartedOpenFolder"), new (() => ProjectOpener.OpenProject()), CreateSymbolIcon(Symbol.FolderOpen)),
+            new (Translation.Get("WelcomeGettingStartedSettings"), new (OpenSettings), CreateSymbolIcon(Symbol.Settings)),
         ]);
 
-        var help = CreateActionSection("Need Help?", [
-            new ("Discord Server", new (() => SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/")), SkEditorAPI.Core.GetApplicationResource("DiscordIcon") as PathIconSource),
-            new ("GitHub", new (() => SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")), SkEditorAPI.Core.GetApplicationResource("GitHubIcon") as PathIconSource),
-            new ("skUnity Resource", new (() => SkEditorAPI.Core.OpenLink("https://forums.skunity.com/resources/1517/")), SkEditorAPI.Core.GetApplicationResource("SkEditorIcon") as PathIconSource)
+        var help = CreateActionSection(Translation.Get("WelcomeTabNeedHelp"),
+        [
+            new (Translation.Get("WelcomeNeedHelpDiscordServer"), new (() =>
+                SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/")), CreatePathIconSource("DiscordIcon")),
+
+            new (Translation.Get("WelcomeNeedHelpGitHub"), new (() =>
+                SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")), CreatePathIconSource("GitHubIcon")),
         ]);
 
         var addons = CreateAddonsSection();
@@ -43,16 +48,13 @@ public partial class WelcomeTabControl : UserControl
         VersionText.Text = $"v{SkEditorAPI.Core.GetAppVersion()}";
     }
 
-    private static SymbolIcon CreateSymbolIcon(Symbol symbol)
+    private static SymbolIcon CreateSymbolIcon(Symbol symbol) => new()
     {
-        SymbolIcon symbolIcon = new()
-        {
-            Symbol = symbol,
-            FontSize = _iconSize
-        };
+        Symbol = symbol,
+        FontSize = _iconSize
+    };
 
-        return symbolIcon;
-    }
+    private static PathIconSource CreatePathIconSource(string name) => SkEditorAPI.Core.GetApplicationResource(name) as PathIconSource;
 
     private void SetupGrid(List<StackPanel?> panels)
     {
