@@ -14,7 +14,7 @@ public class File : StorageElement
 
     public File(string file, Folder? parent = null)
     {
-        file = Uri.UnescapeDataString(file);
+        file = Uri.UnescapeDataString(file).FixLinuxPath();
 
         Parent = parent;
         StorageFilePath = file;

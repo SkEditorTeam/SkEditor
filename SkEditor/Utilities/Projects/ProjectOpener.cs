@@ -44,6 +44,8 @@ public static class ProjectOpener
             folder = path;
         }
 
+        folder.FixLinuxPath();
+
         NoFolderMessage.IsVisible = false;
 
         ProjectRootFolder = new Folder(folder) { IsExpanded = true };
@@ -60,7 +62,7 @@ public static class ProjectOpener
         //    ProjectRootFolder.GetItemByPath(path)?.RenameElement(e.Name, false);
         //};
 
-        void HandleTapped(TappedEventArgs e)
+        static void HandleTapped(TappedEventArgs e)
         {
             if (e.Source is not Border border) return;
             var treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();

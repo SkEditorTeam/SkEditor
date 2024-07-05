@@ -18,7 +18,7 @@ public class Folder : StorageElement
 
     public Folder(string folder, Folder? parent = null)
     {
-        folder = Uri.UnescapeDataString(folder);
+        folder = Uri.UnescapeDataString(folder).FixLinuxPath();
 
         Parent = parent;
         StorageFolderPath = folder;
