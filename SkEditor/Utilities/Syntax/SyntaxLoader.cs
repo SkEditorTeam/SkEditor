@@ -21,6 +21,8 @@ public class SyntaxLoader
     // Sorted by extensions
     public static Dictionary<string, List<FileSyntax>> SortedFileSyntaxes { get; set; } = [];
 
+    private static bool _enableChecking = true;
+
     public static async void LoadAdvancedSyntaxes()
     {
         Directory.CreateDirectory(SyntaxFolder);
@@ -108,27 +110,28 @@ public class SyntaxLoader
         CheckConfiguredFileSyntaxes();
     }
 
-    public static FileSyntax GetConfiguredSyntaxForLanguage(string language)
+    public static FileSyntax? GetConfiguredSyntaxForLanguage(string language)
     {
         if (FileSyntaxes.Count == 0) _ = SetupDefaultSyntax();
 
         var configuredSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
         return FileSyntaxes.FirstOrDefault(x => configuredSyntax == null
             ? x.Config.LanguageName == language
-            : x.Config.FullIdName == configuredSyntax) ?? FileSyntaxes[0];
+            : x.Config.FullIdName == configuredSyntax);
     }
 
-    public static async Task<FileSyntax> GetDefaultSyntax()
+    public static async Task<FileSyntax?> GetDefaultSyntax()
     {
-        if (FileSyntaxes.Count == 0)
+        if (FileSyntaxes.Count == 0 && !await SetupDefaultSyntax())
         {
-            await SetupDefaultSyntax();
+            _enableChecking = false;
+            return null;
         }
 
         return GetConfiguredSyntaxForLanguage("Skript");
     }
 
-    public static async Task SetupDefaultSyntax()
+    public static async Task<bool> SetupDefaultSyntax()
     {
         try
         {
@@ -148,18 +151,26 @@ public class SyntaxLoader
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "config.json"), json);
 
             FileSyntaxes.Add(await FileSyntax.LoadSyntax(defaultSyntaxPath));
+
+            return true;
         }
         catch
         {
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Error"),
                 Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
                 primaryButtonText: "Ok");
+
+            return false;
         }
     }
 
     public static async Task RefreshSyntaxAsync(string? extension = null)
     {
-        FileSyntax defaultSyntax = await GetDefaultSyntax();
+        if (!_enableChecking) return;
+
+        FileSyntax? defaultSyntax = await GetDefaultSyntax();
+        if (defaultSyntax == null) return;
+
         OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
         if (!file.IsEditor) return;
 
