@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using Newtonsoft.Json;
@@ -46,7 +47,7 @@ public partial class ItemSelector : AppWindow
 
         SearchBox.TextChanged += OnSearchChanged;
 
-        CheckForFile();
+        Dispatcher.UIThread.InvokeAsync(CheckForFile);
 
         Loaded += (sender, e) =>
         {
@@ -176,6 +177,10 @@ public class Item
             if (_image == null!)
             {
                 string itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, Name + ".png");
+                if (!File.Exists(itemImagePath))
+                {
+                    itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, "barrier.png");
+                }
                 _image = new Bitmap(itemImagePath);
             }
 
