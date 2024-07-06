@@ -60,7 +60,7 @@ public class FileBuilder
         {
             var editor = fileType.Display as TextEditor;
 
-            (SkEditorAPI.Events as Events).FileCreated(editor);
+            SkEditorAPI.Events.FileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
         }
 

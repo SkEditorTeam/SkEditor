@@ -46,4 +46,12 @@ public interface ILogs
     /// <param name="exception">The exception to log.</param>
     public void Fatal(Exception exception);
 
+    
+    /// <summary>
+    /// Sends an error message related to an addon to the log. Optionally informs the user.
+    /// </summary>
+    /// <param name="message">The error message to log.</param>
+    /// <param name="informUser">Whether to inform the user about the error. Default is false.</param>
+    /// <param name="addon">The addon related to the error. Default is null.</param>
+    public void AddonError(string message, bool informUser = false, IAddon? addon = null);
 }

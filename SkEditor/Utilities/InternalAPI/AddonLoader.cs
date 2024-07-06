@@ -74,7 +74,6 @@ public static class AddonLoader
 
             dllFiles.Add(dllFile);
         }
-        SkEditorAPI.Logs.Debug($"Found {dllFiles.Count} addon dll files.");
 
         foreach (var dllFile in dllFiles)
             await LoadAddonFromFile(Path.GetDirectoryName(dllFile));
@@ -89,7 +88,7 @@ public static class AddonLoader
             return;
         }
 
-        AddonLoadContext loadContext = new AddonLoadContext(Path.GetFullPath(dllFile));
+        AddonLoadContext loadContext = new(Path.GetFullPath(dllFile));
         List<IAddon?> addon;
         try
         {

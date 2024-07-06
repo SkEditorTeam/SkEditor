@@ -51,7 +51,7 @@ public partial class App : Application
             {
                 try
                 {
-                    (SkEditorAPI.Core as Core).SetStartupArguments(desktop.Args ?? []);
+                    SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
                     _ = new SkEditor();
 
                     MainWindow mainWindow = new();

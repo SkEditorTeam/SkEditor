@@ -28,6 +28,11 @@ public interface ICore
     public string[] GetStartupArguments();
 
     /// <summary>
+    /// Set the arguments passed to the application at startup.
+    /// </summary>
+    public void SetStartupArguments(string[]? args);
+
+    /// <summary>
     /// Gets a SkEditor's resource by key.
     /// </summary>
     /// <param name="key">The key of the resource.</param>

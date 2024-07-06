@@ -119,10 +119,10 @@ public partial class MainWindow : AppWindow
 
         string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
         if (startupFiles.Length == 0 && !sessionFilesAdded)
-            (SkEditorAPI.Files as Files).AddWelcomeTab();
+            SkEditorAPI.Files.AddWelcomeTab();
         startupFiles.ToList().ForEach(FileHandler.OpenFile);
         if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
-            (SkEditorAPI.Files as Files).AddWelcomeTab();
+            SkEditorAPI.Files.AddWelcomeTab();
 
         Dispatcher.UIThread.Post(() =>
         {

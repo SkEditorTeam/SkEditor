@@ -108,6 +108,11 @@ public interface IFiles
     /// </summary>
     public void BatchClose(FileCloseAction closeAction);
 
+    /// <summary>
+    /// Add a welcome tab to the tab view.
+    /// </summary>
+    public void AddWelcomeTab();
+
     public enum FileCloseAction
     {
         Unsaved,
@@ -116,5 +121,4 @@ public interface IFiles
         AllLeft,
         All
     }
-
 }

@@ -68,7 +68,7 @@ public partial class CustomAddonSettingsPage : UserControl
                         return;
                     }
 
-                    (SkEditorAPI.Events as Events).AddonSettingChanged(setting, value);
+                    SkEditorAPI.Events.AddonSettingChanged(setting, value);
 
                     value = newValue;
                     AddonSettingsManager.SetValue(setting, newValue);

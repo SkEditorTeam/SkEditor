@@ -20,7 +20,7 @@ public class Addons : IAddons
 
         if (addon is SkEditorSelfAddon)
         {
-            (SkEditorAPI.Logs as Logs).AddonError("Cannot enable the self addon of SkEditor.", true);
+            SkEditorAPI.Logs.AddonError("Cannot enable the self addon of SkEditor.", true);
             return false;
         }
 
@@ -34,7 +34,7 @@ public class Addons : IAddons
 
         if (addon is SkEditorSelfAddon)
         {
-            (SkEditorAPI.Logs as Logs).AddonError("Cannot disable the self addon of SkEditor.", true);
+            SkEditorAPI.Logs.AddonError("Cannot disable the self addon of SkEditor.", true);
             return;
         }
 

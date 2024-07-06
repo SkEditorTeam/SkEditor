@@ -293,7 +293,7 @@ public class Files : IFiles
         if (openedFile == null)
             return;
 
-        (SkEditorAPI.Events as Events).FileOpened(openedFile, false);
+        SkEditorAPI.Events.FileOpened(openedFile, false);
         Select(openedFile);
     }
 
@@ -318,7 +318,7 @@ public class Files : IFiles
                 return;
         }
 
-        var canClose = (SkEditorAPI.Events as Events).TabClosed(file);
+        var canClose = SkEditorAPI.Events.TabClosed(file);
         if (!canClose)
             return;
 
