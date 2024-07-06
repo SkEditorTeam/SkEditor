@@ -31,7 +31,6 @@ public partial class MainWindow : AppWindow
         WindowStyler.Style(this);
 
         ThemeEditor.LoadThemes();
-        Log.Debug("themes loaded");
         AddEvents();
 
         Translation.LoadDefaultLanguage();
