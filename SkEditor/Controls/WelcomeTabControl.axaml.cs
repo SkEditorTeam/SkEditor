@@ -8,6 +8,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects;
 using SkEditor.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Symbol = FluentIcons.Common.Symbol;
@@ -20,6 +21,9 @@ public partial class WelcomeTabControl : UserControl
     private const double _iconSize = 28;
     private const int _titleSize = 28;
     private const int _textSize = 16;
+
+    // This is just a little, funny thing serving no real purpose... But it's nice, right?
+    private readonly string[] _tooltips = ["Hey!", "Hi!", "How are you?", "This addon rework is kinda cool, right?", "Ohh, a pre-release? Nice!", "What will you code today?"];
 
     public WelcomeTabControl()
     {
@@ -46,6 +50,13 @@ public partial class WelcomeTabControl : UserControl
 
         SetupGrid([gettingStarted, help, addons]);
         VersionText.Text = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
+
+        ToolTip.SetShowDelay(SkEditorIcon, 500);
+        SkEditorIcon.PointerEntered += (_, _) =>
+        {
+            int index = new Random().Next(_tooltips.Length);
+            ToolTip.SetTip(SkEditorIcon, _tooltips[index]);
+        };
     }
 
     private static SymbolIcon CreateSymbolIcon(Symbol symbol) => new()
