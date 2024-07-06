@@ -117,7 +117,7 @@ public class SyntaxLoader
         var configuredSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
         return FileSyntaxes.FirstOrDefault(x => configuredSyntax == null
             ? x.Config.LanguageName == language
-            : x.Config.FullIdName == configuredSyntax);
+            : x.Config.FullIdName == configuredSyntax, FileSyntaxes.FirstOrDefault());
     }
 
     public static async Task<FileSyntax?> GetDefaultSyntax()
@@ -169,7 +169,6 @@ public class SyntaxLoader
         if (!_enableChecking) return;
 
         FileSyntax? defaultSyntax = await GetDefaultSyntax();
-        if (defaultSyntax == null) return;
 
         OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
         if (!file.IsEditor) return;
@@ -179,6 +178,7 @@ public class SyntaxLoader
             extension = Path.GetExtension(file.Path);
             if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
             {
+                if (defaultSyntax == null) return;
                 file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
                 return;
             }
@@ -186,6 +186,7 @@ public class SyntaxLoader
 
         if (!SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? fileSyntax))
         {
+            if (defaultSyntax == null) return;
             file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
             return;
         }
@@ -200,6 +201,7 @@ public class SyntaxLoader
 
         if (syntax == null)
         {
+            if (defaultSyntax == null) return;
             file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
             return;
         }
