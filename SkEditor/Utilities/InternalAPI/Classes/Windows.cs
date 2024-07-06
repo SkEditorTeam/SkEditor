@@ -44,7 +44,7 @@ public class Windows : IWindows
         }
 
         Application.Current.TryGetResource("MessageBoxBackground", out var background);
-        var dialog = new ContentDialog()
+        ContentDialog dialog = new()
         {
             Title = TryGetTranslation(title),
             Background = background as ImmutableSolidColorBrush,
@@ -55,7 +55,7 @@ public class Windows : IWindows
         icon = icon switch
         {
             IconSource iconSource => iconSource,
-            Symbol symbol => new SymbolIconSource() { Symbol = symbol, FontSize = 36 },
+            Symbol symbol => new SymbolIconSource() { Symbol = symbol, FontSize = 40 },
             _ => icon
         };
 
@@ -71,24 +71,24 @@ public class Windows : IWindows
             }
         }
         if (source is FontIconSource fontIconSource)
-            fontIconSource.FontSize = 36;
+            fontIconSource.FontSize = 40;
         else if (source is SymbolIconSource symbolIconSource)
-            symbolIconSource.FontSize = 36;
+            symbolIconSource.FontSize = 40;
 
         IconSourceElement iconElement = new()
         {
             IconSource = source,
-            Width = 36,
-            Height = 36,
         };
 
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*") };
+
+        double iconMargin = iconElement.IconSource is not null ? 24 : 0;
 
         var textBlock = new TextBlock()
         {
             Text = TryGetTranslation(message),
             FontSize = 16,
-            Margin = new Thickness(10, 10, 0, 0),
+            Margin = new Thickness(Math.Max(10, iconMargin), 10, 0, 0),
             TextWrapping = TextWrapping.Wrap,
             MaxWidth = 400,
         };
@@ -120,7 +120,7 @@ public class Windows : IWindows
         var topLevel = GetCurrentWindow();
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
 
-        return files.FirstOrDefault()?.Path.AbsolutePath;
+        return files[0]?.Path.AbsolutePath;
     }
 
     public void ShowWindow(Window window)
