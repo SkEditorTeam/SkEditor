@@ -45,7 +45,7 @@ public partial class WelcomeTabControl : UserControl
         var addons = CreateAddonsSection();
 
         SetupGrid([gettingStarted, help, addons]);
-        VersionText.Text = $"v{SkEditorAPI.Core.GetAppVersion()}";
+        VersionText.Text = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
     }
 
     private static SymbolIcon CreateSymbolIcon(Symbol symbol) => new()

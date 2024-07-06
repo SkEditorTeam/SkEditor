@@ -16,10 +16,16 @@ public interface ICore
     public AppConfig GetAppConfig();
 
     /// <summary>
-    /// Get the application's version.
+    /// Get the application's version in a Version object.
     /// </summary>
     /// <returns>The application's version.</returns>
     public Version GetAppVersion();
+
+    /// <summary>
+    /// Get the application's informational version that may contain additional suffixes.
+    /// </summary>
+    /// <returns>The application's informational version.</returns>
+    public string GetInformationalVersion();
 
     /// <summary>
     /// Get the arguments passed to the application at startup.

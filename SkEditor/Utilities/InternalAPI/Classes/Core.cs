@@ -24,6 +24,14 @@ public class Core : ICore
         return new Version(version.Major, version.Minor, version.Build);
     }
 
+    public string GetInformationalVersion()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+        return informationVersion;
+    }
+
     public string[] GetStartupArguments()
     {
         return _startupArguments ?? [];
