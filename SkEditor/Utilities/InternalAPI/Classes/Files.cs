@@ -313,6 +313,7 @@ public class Files : IFiles
                 "Unsaved File",
                 "The file '" + file.Name +
                 "' is not saved.\n\nAre you sure you want to close it and discard your changes?",
+                primaryButtonText: "Yes",
                 cancelButtonText: "Cancel", icon: Symbol.SaveLocal);
             if (response != ContentDialogResult.Primary)
                 return;
