@@ -293,7 +293,7 @@ public partial class TextEditorEventHandler
         }
     }
 
-    [GeneratedRegex(@"<##(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
+    [GeneratedRegex(@"<#[#]?(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();
     [GeneratedRegex("")]
     private static partial Regex EmptyRegex();
