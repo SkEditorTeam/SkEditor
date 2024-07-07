@@ -5,7 +5,6 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Controls;
 using SkEditor.Utilities;
@@ -123,7 +122,7 @@ public partial class MainWindow : AppWindow
         if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
             SkEditorAPI.Files.AddWelcomeTab();
 
-        Dispatcher.UIThread.Post(() =>
+        Dispatcher.UIThread.Post(async () =>
         {
             SyntaxLoader.LoadAdvancedSyntaxes();
             DiscordRpcUpdater.Initialize();
@@ -133,8 +132,8 @@ public partial class MainWindow : AppWindow
             Tutorial.ShowTutorial();
             BottomBar.UpdatePosition();
             ChangelogChecker.Check();
-        });
 
-        await CrashChecker.CheckForCrash();
+            await CrashChecker.CheckForCrash();
+        });
     }
 }
