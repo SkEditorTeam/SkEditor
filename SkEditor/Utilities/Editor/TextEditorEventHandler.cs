@@ -256,43 +256,6 @@ public partial class TextEditorEventHandler
         e.Text = sb.ToString().Trim();
     }
 
-    public static void CheckForSpecialPaste(object? sender, TextEventArgs e)
-    {
-        string[] pastes = e.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.TrimEntries);
-
-        StringBuilder sb = new("You used a special code to do something:");
-        sb.AppendLine();
-
-        foreach (string paste in pastes)
-        {
-            if (paste.StartsWith("-enableSkEditorOption:"))
-            {
-                string option = paste.Split(':')[1].Trim();
-                PropertyInfo? prop = SkEditorAPI.Core.GetAppConfig().GetType().GetProperty(option);
-                if (prop.PropertyType != typeof(bool)) continue;
-                prop?.SetValue(SkEditorAPI.Core.GetAppConfig(), true);
-
-                sb.AppendLine($"- Enabled {option}");
-            }
-            else if (paste.StartsWith("-openSkEditorAppdata"))
-            {
-                string path = AppConfig.AppDataFolderPath;
-                sb.AppendLine($"- Opened SkEditor's appdata folder");
-                Process.Start(new ProcessStartInfo("explorer.exe", path));
-            }
-            else if (paste.StartsWith("-printSkEditorVersion"))
-            {
-                sb.AppendLine($"- {SettingsViewModel.Version}");
-            }
-        }
-
-        if (Regex.Matches(sb.ToString(), Environment.NewLine).Count > 1)
-        {
-            e.Text = sb.ToString().Trim();
-            return;
-        }
-    }
-
     [GeneratedRegex(@"<#[#]?(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();
     [GeneratedRegex("")]
