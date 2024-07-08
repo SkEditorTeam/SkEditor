@@ -82,7 +82,7 @@ public class Files : IFiles
         var itemTag = tabItem.Tag as string;
         var openedFile = GetOpenedFiles().Find(file => file.TabViewItem == tabItem);
 
-        if (openedFile.IsSaved)
+        if (openedFile.IsSaved && !saveAs)
             return;
 
         var path = openedFile.Path == null ? null : Uri.UnescapeDataString(openedFile.Path);
