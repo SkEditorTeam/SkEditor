@@ -52,8 +52,6 @@ public class FileBuilder
 
             ToolTip.SetShowDelay(tabViewItem, 1200);
             ToolTip.SetTip(tabViewItem, toolTip);
-
-            Icon.SetIcon(tabViewItem);
         }
 
         if (fileType.IsEditor)

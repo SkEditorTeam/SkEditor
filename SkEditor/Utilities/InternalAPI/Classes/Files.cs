@@ -116,7 +116,7 @@ public class Files : IFiles
             openedFile.CustomName = Path.GetFileName(path);
             tabItem.Header = openedFile.Header;
 
-            Icon.SetIcon(openedFile.TabViewItem);
+            Icon.SetIcon(openedFile);
         }
 
         try
@@ -296,7 +296,7 @@ public class Files : IFiles
             openedFile = await AddEditorTab(content, path);
         }
 
-        Icon.SetIcon(openedFile.TabViewItem);
+        Icon.SetIcon(openedFile);
 
         if (openedFile == null)
             return;
