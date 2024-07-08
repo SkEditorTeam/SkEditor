@@ -111,6 +111,8 @@ public class Files : IFiles
             var absolutePath = Uri.UnescapeDataString(file.Path.AbsolutePath);
             Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
             path = absolutePath;
+
+            Icon.SetIcon(openedFile.TabViewItem);
         }
 
         try
@@ -289,6 +291,8 @@ public class Files : IFiles
 
             openedFile = await AddEditorTab(content, path);
         }
+
+        Icon.SetIcon(openedFile.TabViewItem);
 
         if (openedFile == null)
             return;
