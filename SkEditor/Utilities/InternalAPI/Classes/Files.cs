@@ -112,6 +112,10 @@ public class Files : IFiles
             Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
             path = absolutePath;
 
+            openedFile.Path = path;
+            openedFile.CustomName = Path.GetFileName(path);
+            tabItem.Header = openedFile.Header;
+
             Icon.SetIcon(openedFile.TabViewItem);
         }
 
@@ -129,7 +133,7 @@ public class Files : IFiles
         }
 
         openedFile.IsSaved = true;
-        openedFile.Path = path;
+        openedFile.IsNewFile = false;
     }
 
     #endregion
