@@ -129,6 +129,6 @@ public class SkEditorSelfAddon : IAddon
 
     public Version GetMinimalSkEditorVersion()
     {
-        return new Version(2, 5, 0);
+        return new Version(2, 7, 0);
     }
 }
