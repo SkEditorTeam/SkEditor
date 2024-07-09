@@ -24,7 +24,9 @@ public static class AddonLoader
 
     public static void Load()
     {
-        Directory.CreateDirectory(Path.Combine(AppConfig.AppDataFolderPath, "Addons"));
+        string addonsFolder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
+        CheckForOldAddons(addonsFolder);
+        Directory.CreateDirectory(addonsFolder);
 
         Addons.Clear();
         LoadMeta();
@@ -32,6 +34,31 @@ public static class AddonLoader
         LoadAddonsFromFiles();
 
         CheckForAddonsErrors();
+    }
+
+    private static void CheckForOldAddons(string addonsFolder)
+    {
+        int old = Directory.EnumerateFileSystemEntries(addonsFolder).Count();
+        if (!Directory.Exists(addonsFolder) || old == 0)
+            return;
+
+        string version = SkEditorAPI.Core.GetAppConfig().Version;
+        if (string.IsNullOrEmpty(version)) return;
+        if (version.Contains('-'))
+            version = version[..version.IndexOf('-')];
+
+        if (new Version(version) >= new SkEditorSelfAddon().GetMinimalSkEditorVersion())
+            return;
+
+        string oldAddonsFolder = Path.Combine(AppConfig.AppDataFolderPath, "OldAddons");
+
+        if (Directory.Exists(oldAddonsFolder))
+            Directory.Delete(oldAddonsFolder, true);
+
+        Directory.Move(addonsFolder, oldAddonsFolder);
+
+        SkEditorAPI.Windows.ShowMessage("Addons folder moved",
+            "Your addons have been moved to 'OldAddons' due to an update. Please review and reinstall them as needed.");
     }
 
     private static async void CheckForAddonsErrors()
