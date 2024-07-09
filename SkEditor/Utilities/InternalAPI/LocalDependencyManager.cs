@@ -93,11 +93,9 @@ public static class LocalDependencyManager
             await using FileStream outputStream = new FileStream(filePath, FileMode.Create);
             await reader.GetStream(nuspecFile).CopyToAsync(outputStream);
 
-            // delete the temp file
             inputStream.Close();
             File.Delete(tempPath);
 
-            SkEditorAPI.Logs.Info($"Dependency {dependencyName} downloaded and stored in the addon folder");
             addonMeta.NeedsRestart = true;
         }
 
