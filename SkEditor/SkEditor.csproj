@@ -68,7 +68,7 @@
 		<PackageReference Include="NuGet.Protocol" Version="6.11.0-preview.2" />
 		<PackageReference Include="Octokit" Version="13.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
-		<PackageReference Include="SkAvaloniaEdit" Version="11.0.6.6" />
+		<PackageReference Include="SkAvaloniaEdit" Version="11.0.6.7" />
 		<PackageReference Include="SkFluentAvalonia" Version="2.0.5.2" />
 		<PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0" />
 		<PackageReference Include="Svg.Skia" Version="2.0.0-rc1" />
