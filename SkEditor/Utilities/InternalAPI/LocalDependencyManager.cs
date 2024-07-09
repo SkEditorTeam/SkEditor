@@ -37,11 +37,7 @@ public static class LocalDependencyManager
             var dependencyVersion = dependency.Version == null ? null : new NuGetVersion(dependency.Version);
 
             var dependencyPath = Path.Combine(addonFolder, $"{nameSpace}.dll");
-            if (File.Exists(dependencyPath))
-            {
-                SkEditorAPI.Logs.Info($"Dependency {dependencyName} already exists in the addon folder");
-                continue;
-            }
+            if (File.Exists(dependencyPath)) continue;
 
             var cache = new SourceCacheContext();
             var repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
