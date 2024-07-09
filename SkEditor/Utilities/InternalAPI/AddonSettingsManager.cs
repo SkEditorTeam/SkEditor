@@ -4,6 +4,7 @@ using SkEditor.API.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace SkEditor.Utilities.InternalAPI;
 
@@ -53,18 +54,21 @@ public static class AddonSettingsManager
     private static JObject CreateDefaultSettings(IAddon addon)
     {
         var obj = new JObject();
-        foreach (var setting in addon.GetSettings())
-            obj[setting.Key] = setting.Type.Serialize(setting.DefaultValue);
+        addon.GetSettings()
+            .Where(s => !s.Type.IsSelfManaged)
+            .ToList()
+            .ForEach(setting => obj[setting.Key] = setting.Type.Serialize(setting.DefaultValue));
+
         return obj;
     }
 
     private static void SaveSettings(IAddon addon)
     {
-        if (!LoadedAddonSettings.ContainsKey(addon))
+        if (!LoadedAddonSettings.TryGetValue(addon, out JObject? value))
             return;
 
         var path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
-        var json = LoadedAddonSettings[addon].ToString();
+        var json = value.ToString();
         File.WriteAllText(path, json);
     }
 
