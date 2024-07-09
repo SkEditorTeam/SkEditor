@@ -62,7 +62,7 @@ public interface IFiles
     /// <param name="content">The control that represent the tab view item's content</param>
     /// <param name="header">The (mainly text) header of the created tab view item</param>
     /// <param name="select">Should the new created tab be selected right after its creation or not.</param>
-    public void AddCustomTab(object header, Control content, bool select = true);
+    public void AddCustomTab(object header, Control content, bool select = true, IconSource? icon = null);
 
     /// <summary>
     /// Select the desired opened file's tab item.

@@ -140,13 +140,16 @@ public class Files : IFiles
 
     #region Tab Manipulation
 
-    public void AddCustomTab(object header, Control content, bool select = true)
+    public void AddCustomTab(object header, Control content, bool select = true, IconSource? icon = null)
     {
         var tabItem = new TabViewItem()
         {
             Header = header,
             Content = content
         };
+
+        if (icon != null)
+            tabItem.IconSource = icon;
 
         GetOpenedFiles().Add(new OpenedFile()
         {
@@ -389,7 +392,11 @@ public class Files : IFiles
 
     public void AddWelcomeTab()
     {
-        AddCustomTab(Translation.Get("WelcomeTabTitle"), new WelcomeTabControl());
+        FluentIcons.Avalonia.Fluent.SymbolIconSource icon = new()
+        {
+            Symbol = FluentIcons.Common.Symbol.Home,
+        };
+        AddCustomTab(Translation.Get("WelcomeTabTitle"), new WelcomeTabControl(), icon: icon);
     }
 
     private OpenedFile GetFromTabViewItem(TabViewItem tabViewItem)

@@ -64,9 +64,13 @@ public partial class MainMenuControl : UserControl
         MenuItemDocs.Command = new RelayCommand(AddDocsTab);
     }
 
-    public void AddDocsTab()
+    public static void AddDocsTab()
     {
-        SkEditorAPI.Files.AddCustomTab("Documentation", new DocumentationControl());
+        FluentIcons.Avalonia.Fluent.SymbolIconSource icon = new()
+        {
+            Symbol = FluentIcons.Common.Symbol.Book,
+        };
+        SkEditorAPI.Files.AddCustomTab("Documentation", new DocumentationControl(), icon: icon);
     }
 
     public void ReloadAddonsMenus()
