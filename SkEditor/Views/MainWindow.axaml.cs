@@ -55,8 +55,7 @@ public partial class MainWindow : AppWindow
             }
         };
 
-        DragDrop.SetAllowDrop(this, true);
-        DragDrop.DropEvent.AddClassHandler(FileHandler.FileDropAction);
+        AddHandler(DragDrop.DropEvent, FileHandler.FileDropAction);
     }
 
     public void ReloadUiOfAddons()
