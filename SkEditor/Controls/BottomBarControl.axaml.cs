@@ -37,8 +37,8 @@ public partial class BottomBarControl : UserControl
         {
             var iconElement = new IconSourceElement()
             {
-                Width = 20,
-                Height = 20
+                Width = 18,
+                Height = 18
             };
             var textElement = new TextBlock();
             iconData.Setup(button, textElement, iconElement);
