@@ -42,37 +42,25 @@ public interface IEvents
     internal void SettingsOpened();
 }
 
-public class FileCreatedEventArgs : EventArgs
+public class FileCreatedEventArgs(TextEditor editor) : EventArgs
 {
-    public TextEditor Editor { get; }
-    public FileCreatedEventArgs(TextEditor editor) => Editor = editor;
+    public TextEditor Editor { get; } = editor;
 }
 
-public class FileOpenedEventArgs : EventArgs
-{
-    public bool CausedByRestore { get; set; }
-    public OpenedFile OpenedFile { get; set; }
-    public FileOpenedEventArgs(OpenedFile openedFile, bool causedByRestore)
+public class FileOpenedEventArgs(OpenedFile openedFile, bool causedByRestore) : EventArgs
     {
-        OpenedFile = openedFile;
-        CausedByRestore = causedByRestore;
-    }
+    public bool CausedByRestore { get; set; } = causedByRestore;
+    public OpenedFile OpenedFile { get; set; } = openedFile;
 }
 
-public class AddonSettingChangedEventArgs : EventArgs
-{
-    public Setting Setting { get; }
-    public object OldValue { get; }
-    public AddonSettingChangedEventArgs(Setting setting, object oldValue)
+public class AddonSettingChangedEventArgs(Setting setting, object oldValue) : EventArgs
     {
-        Setting = setting;
-        OldValue = oldValue;
-    }
+    public Setting Setting { get; } = setting;
+    public object OldValue { get; } = oldValue;
 }
 
-public class TabClosedEventArgs : EventArgs
+public class TabClosedEventArgs(OpenedFile closedFile) : EventArgs
 {
-    public OpenedFile OpenedFile { get; }
+    public OpenedFile OpenedFile { get; } = closedFile;
     public bool CanClose { get; set; } = true;
-    public TabClosedEventArgs(OpenedFile closedFile) => OpenedFile = closedFile;
 }
