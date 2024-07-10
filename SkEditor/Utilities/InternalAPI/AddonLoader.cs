@@ -38,9 +38,7 @@ public static class AddonLoader
 
     private static void CheckForOldAddons(string addonsFolder)
     {
-        int old = Directory.EnumerateFileSystemEntries(addonsFolder).Count();
-        if (!Directory.Exists(addonsFolder) || old == 0)
-            return;
+        if (!Directory.Exists(addonsFolder) || !Directory.EnumerateFileSystemEntries(addonsFolder).Any()) return;
 
         string version = SkEditorAPI.Core.GetAppConfig().Version;
         if (string.IsNullOrEmpty(version)) return;
