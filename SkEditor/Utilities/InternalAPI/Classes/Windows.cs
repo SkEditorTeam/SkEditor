@@ -8,7 +8,6 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
 using SkEditor.Views;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkEditor.API;

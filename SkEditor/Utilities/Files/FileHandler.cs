@@ -96,7 +96,7 @@ public class FileHandler
         await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile(), true);
     }
 
-    public static void SaveAllFiles() => 
+    public static void SaveAllFiles() =>
         SkEditorAPI.Files.GetOpenedEditors().ForEach(async file => await SkEditorAPI.Files.Save(file, false));
 
     public static void SwitchTab(int index)

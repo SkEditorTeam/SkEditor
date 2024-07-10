@@ -1,8 +1,5 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
+﻿using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using System.Reflection;
 
 namespace SkEditor.Utilities;
 public static class ChangelogChecker

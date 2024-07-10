@@ -13,7 +13,6 @@ using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using SkEditor.Views.Settings;
-using System;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
