@@ -7,10 +7,10 @@ using SkEditor.API;
 using System;
 
 namespace SkEditor.Utilities.Editor;
-public partial class GoToLine : AppWindow
+public partial class GoToLineWindow : AppWindow
 {
 
-    public GoToLine()
+    public GoToLineWindow()
     {
         InitializeComponent();
         GoToLineInput.Loaded += (sender, e) => GoToLineInput.Focus();
