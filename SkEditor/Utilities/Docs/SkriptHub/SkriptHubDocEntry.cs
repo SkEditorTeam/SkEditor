@@ -1,30 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 
-/*
- * {
-    "id": 919,
-    "creator": "bensku",
-    "title": "Region Members & Owners",
-    "description": "A list of members or owners of a region.\nThis expression requires a supported regions plugin to be installed.",
-    "syntax_pattern": "(all|the|) (members|owner[s]) of [[the] region[s]] %regions%\n[[the] region[s]] %regions%'[s] (members|owner[s])",
-    "compatible_addon_version": "2.1",
-    "compatible_minecraft_version": null,
-    "syntax_type": "expression",
-    "required_plugins": [],
-    "addon": "Skript",
-    "type_usage": null,
-    "return_type": "Offline Player",
-    "event_values": null,
-    "event_cancellable": false,
-    "link": "http://skripthub.net/docs/?id=919",
-    "created_at": "2017-10-04T00:46:01.931364Z",
-    "updated_at": "2019-09-30T12:31:32.754472Z",
-    "entries": null
-  },
- */
 [Serializable]
 public class SkriptHubDocEntry : IDocumentationEntry
 {
@@ -37,8 +16,20 @@ public class SkriptHubDocEntry : IDocumentationEntry
     public string Patterns { get; set; }
     [JsonProperty("id")]
     public string Id { get; set; }
+
+    [JsonIgnore]
+    private string _addon;
+    [JsonProperty("addon_name")]
+    public string Addon
+    {
+        get => AddonObj?.Name ?? _addon;
+        set => _addon = value;
+    }
+
     [JsonProperty("addon")]
-    public string Addon { get; set; }
+    public SkriptHubAddon? AddonObj { get; set; }
+
+
     [JsonProperty("compatible_addon_version")]
     public string Version { get; set; }
 
@@ -59,6 +50,29 @@ public class SkriptHubDocEntry : IDocumentationEntry
     [JsonProperty("event_values")]
     public string? EventValues { get; set; }
 
+    [JsonProperty("examples")] public List<SkriptHubDocExample>? Examples { get; set; }
+
     public DocProvider Provider => DocProvider.SkriptHub;
+
+    public bool DoMatch(SearchData searchData)
+    {
+        if (!string.IsNullOrEmpty(searchData.FilteredAddon) && AddonObj.Name != searchData.FilteredAddon)
+            return false;
+
+        if (searchData.FilteredType != IDocumentationEntry.Type.All && DocType != searchData.FilteredType)
+            return false;
+
+        return Name.Contains(searchData.Query, StringComparison.CurrentCultureIgnoreCase);
+    }
+}
+
+[Serializable]
+public class SkriptHubAddon
+{
+
+    [JsonProperty("name")]
+    public string Name { get; set; }
+    [JsonProperty("link_to_addon")]
+    public string Link { get; set; }
 
 }

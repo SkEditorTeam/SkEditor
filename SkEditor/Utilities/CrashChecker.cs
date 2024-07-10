@@ -1,8 +1,7 @@
-﻿using FluentAvalonia.UI.Controls;
+﻿using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities.Files;
+using SkEditor.Views;
 using System;
-using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,22 +12,32 @@ public class CrashChecker
 {
     public async static Task<bool> CheckForCrash()
     {
-        bool crash = Environment.GetCommandLineArgs().Any(arg => arg.Equals("--crash"));
-        if (!crash) return false;
+        var args = SkEditorAPI.Core.GetStartupArguments();
+        if (args is not ["--crash", _])
+            return false;
 
-        ApiVault.Get().ShowMessage("Oops!", "Sorry!\nIt looks that the app crashed, but don't worry, your files were saved.\nYou can check the logs for more details.\nIf you can, please report this on the Discord server.");
-
-        string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
-        if (!Directory.Exists(tempPath)) return false;
-        Directory.GetFiles(tempPath).ToList().ForEach(async file =>
+        // exception is '--crash <base64 encoded exception>'
+        try
         {
-            TabViewItem tabItem = await FileBuilder.Build(Path.GetFileName(file), file);
-            if (tabItem == null)
-                return;
-            tabItem.Tag = null;
-            (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-        });
-        Directory.Delete(tempPath, true);
-        return true;
+            var rawException = args[1];
+            var exception = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(rawException));
+
+            var tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
+            if (Directory.Exists(tempPath))
+            {
+                var files = Directory.GetFiles(tempPath).ToList();
+                if (files.Count != 0)
+                    files.ForEach(file => SkEditorAPI.Files.OpenFile(file));
+                Directory.Delete(tempPath, true);
+            }
+
+            await SkEditorAPI.Windows.ShowWindowAsDialog(new CrashWindow(exception));
+            return true;
+        }
+        catch (FormatException e)
+        {
+            SkEditorAPI.Logs.Warning($"Failed to decode crash exception: {e}");
+            return false;
+        }
     }
 }

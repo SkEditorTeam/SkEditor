@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 xmlns:controls="using:SkEditor.Controls"
-             mc:Ignorable="d" d:DesignWidth="800"
+			 xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+			 mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Settings.HomePage"
              x:CompileBindings="True">
 	
@@ -31,6 +32,14 @@
 				<ui:SettingsExpander Name="AddonsItem" Header="{DynamicResource SettingsHomeAddons}" IconSource="{StaticResource AddonIcon}"
 					Description="{DynamicResource SettingsHomeAddonsDescription}"
 					IsClickEnabled="True" />
+				
+				<ui:SettingsExpander Name="FileTypesItem" Header="{DynamicResource SettingsHomeFileTypes}"
+					Description="{DynamicResource SettingsHomeFileTypesDescription}"
+					IsClickEnabled="True">
+					<ui:SettingsExpander.IconSource>
+						<fluent:SymbolIconSource Symbol="DocumentPill" />
+					</ui:SettingsExpander.IconSource>
+				</ui:SettingsExpander>
 
 				<ui:SettingsExpander Name="AboutItem" Header="{DynamicResource SettingsHomeAbout}" IconSource="{StaticResource InfoIcon}"
 					IsClickEnabled="True" />

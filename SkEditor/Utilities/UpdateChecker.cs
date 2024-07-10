@@ -5,6 +5,7 @@ using FluentAvalonia.UI.Controls;
 using Octokit;
 using SkEditor.API;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -30,30 +31,31 @@ public static class UpdateChecker
     {
         try
         {
-            Release release = await _gitHubClient.Repository.Release.GetLatest(RepoId);
+            IReadOnlyList<Release> releases = await _gitHubClient.Repository.Release.GetAll(RepoId);
+            Release release = releases.FirstOrDefault(r => !r.Prerelease);
+
             (int, int, int) version = GetVersion(release.TagName);
             if (!IsNewerVersion(version)) return;
 
-            SymbolIconSource icon = new() { Symbol = Symbol.ImportantFilled };
-            ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(
+            ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("UpdateAvailable"),
                 Translation.Get("UpdateAvailableMessage"),
-                icon,
-                primaryButtonContent: Translation.Get("Yes"),
-                closeButtonContent: Translation.Get("No")
+                Symbol.ImportantFilled,
+                primaryButtonText: "Yes",
+                cancelButtonText: "No"
             );
 
             if (result != ContentDialogResult.Primary) return;
 
             if (!OperatingSystem.IsWindows())
             {
-                ApiVault.Get().ShowMessage(Translation.Get("Error"), "Automatic updates are only available on Windows for now.\nContact Notro for an updated version.");
+                await SkEditorAPI.Windows.ShowError("Automatic updates are only available on Windows for now.");
             }
 
             ReleaseAsset msi = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorInstaller.msi"));
             if (msi is null)
             {
-                ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("UpdateFailed"));
+                await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
                 return;
             }
             DownloadMsi(msi.BrowserDownloadUrl);
@@ -63,13 +65,13 @@ public static class UpdateChecker
 
     private async static void DownloadMsi(string url)
     {
-        TaskDialog td = CreateTaskDialog(ApiVault.Get().GetMainWindow(), url);
+        TaskDialog td = CreateTaskDialog(SkEditorAPI.Windows.GetMainWindow(), url);
         var result = await td.ShowAsync();
 
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
         if (standardResult == TaskDialogStandardResult.Cancel)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("UpdateFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
         }
     }
 

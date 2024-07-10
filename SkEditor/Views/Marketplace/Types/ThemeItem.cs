@@ -37,9 +37,9 @@ public class ThemeItem : MarketplaceItem
             string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
             message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
 
-            ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon("Success", message,
-                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonContent: "MarketplaceEnableNow",
-                closeButtonContent: "Okay");
+            ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message,
+                primaryButtonText: "MarketplaceEnableNow", cancelButtonText: "Okay",
+                icon: new SymbolIconSource() { Symbol = Symbol.Accept });
 
             if (result == ContentDialogResult.Primary)
             {
@@ -56,7 +56,7 @@ public class ThemeItem : MarketplaceItem
         catch (Exception e)
         {
             Log.Error(e, "Failed to install theme!");
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceInstallFailed", ItemName));
         }
     }
 
@@ -74,7 +74,8 @@ public class ThemeItem : MarketplaceItem
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await ApiVault.Get().ShowMessageWithIcon(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName), new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButton: false, closeButtonContent: "Okay");
+        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
+            icon: new SymbolIconSource() { Symbol = Symbol.Accept });
     }
 
     public override bool IsInstalled()

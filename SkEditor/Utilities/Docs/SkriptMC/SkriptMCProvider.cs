@@ -27,7 +27,7 @@ public class SkriptMCProvider : IDocProvider
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkriptMCAPIKey) + "&articleName=" + searchData.Query;
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMCAPIKey) + "&articleName=" + searchData.Query;
 
         uri += "&categorySlug=" + searchData.FilteredType.ToString().ToLower() + "s";
         uri += "&addonSlug=" + (string.IsNullOrEmpty(searchData.FilteredAddon) ? "Skript" : searchData.FilteredAddon);
@@ -40,7 +40,7 @@ public class SkriptMCProvider : IDocProvider
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowError(e is TaskCanceledException
+            await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
                 ? Translation.Get("DocumentationWindowErrorOffline")
                 : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
@@ -50,12 +50,12 @@ public class SkriptMCProvider : IDocProvider
         {
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
-                ApiVault.Get().ShowError(Translation.Get("DocumentationWindowSkriptMCBad2"));
+                await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowSkriptMCBad2"));
                 return [];
             }
 
-            //ApiVault.Get().ShowError($"An error occurred while fetching the documentation.\n\n{response.ReasonPhrase}");
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+            //SkEditorAPI.Windows.ShowError($"An error occurred while fetching the documentation.\n\n{response.ReasonPhrase}");
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
         }
 
@@ -77,7 +77,7 @@ public class SkriptMCProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkriptMCAPIKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkriptMCAPIKey);
     }
 
     public bool NeedsToLoadExamples => false;
@@ -88,15 +88,14 @@ public class SkriptMCProvider : IDocProvider
     }
 
     public bool HasAddons => false;
-    public async Task<List<string>> GetAddons()
-    {
-        return [];
-    }
+    public Task<List<string>> GetAddons() => Task.FromResult(new List<string>());
 
-    public async Task<Color?> GetAddonColor(string addonName)
+    public Task<Color?> GetAddonColor(string addonName) => null;
+
+    public IconSource Icon => new BitmapIconSource() { UriSource = new("avares://SkEditor/Assets/Brands/SkriptMC.png") };
+
+    public string? GetLink(IDocumentationEntry entry)
     {
         return null;
     }
-
-    public IconSource Icon => new BitmapIconSource() { UriSource = new("avares://SkEditor/Assets/Brands/SkriptMC.png") };
 }

@@ -21,31 +21,23 @@ namespace SkEditor;
 
 public class SkEditor : ISkEditorAPI
 {
-    private readonly string[] startupFiles = [];
-    public MainWindow mainWindow;
-    private AppConfig appConfig;
-
-    public SkEditor(string[] args)
+    public SkEditor()
     {
-        if (args.Length > 0)
-        {
-            //Serilog.Log.Debug("Starting SkEditor with args: " + string.Join(", ", args));
-            startupFiles = args.Where(File.Exists).ToArray();
-        }
-
+#pragma warning disable 0618
         ApiVault.Set(this);
+#pragma warning restore 0618
     }
 
     /// <returns>Main window</returns>
     public MainWindow GetMainWindow()
     {
-        return mainWindow;
+        return SkEditorAPI.Windows.GetMainWindow();
     }
 
     /// <returns>Startup files</returns>
     public string[] GetStartupFiles()
     {
-        return startupFiles;
+        return SkEditorAPI.Core.GetStartupArguments();
     }
 
 
@@ -76,7 +68,7 @@ public class SkEditor : ISkEditorAPI
 
     public OpenedFile? GetOpenedFile()
     {
-        return FileHandler.OpenedFiles.FirstOrDefault(file => file.TabViewItem == GetMainWindow().TabControl.SelectedItem);
+        return SkEditorAPI.Files.GetOpenedFiles().FirstOrDefault(file => file.TabViewItem == GetMainWindow().TabControl.SelectedItem);
     }
 
     /// <returns>App's tabcontrol</returns>
@@ -85,7 +77,7 @@ public class SkEditor : ISkEditorAPI
         return GetMainWindow().TabControl;
     }
 
-    public AppConfig GetAppConfig() => appConfig ??= AppConfig.Load().Result;
+    public AppConfig GetAppConfig() => SkEditorAPI.Core.GetAppConfig();
 
     /// <summary>
     /// Opens provided URL in default browser
@@ -266,8 +258,6 @@ public class SkEditor : ISkEditorAPI
     {
         GetMainWindow().BottomBar.UpdateLogs(message.ToString());
     }
-
-    public bool IsAddonEnabled(string addonName) => AddonLoader.Addons.Any(x => x.Name.Equals(addonName));
 
     public void SaveData()
     {

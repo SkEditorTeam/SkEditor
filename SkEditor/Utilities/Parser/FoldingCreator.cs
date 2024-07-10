@@ -2,6 +2,7 @@
 using AvaloniaEdit;
 using AvaloniaEdit.Folding;
 using AvaloniaEdit.Utils;
+using SkEditor.Utilities.Files;
 using System.Collections.Generic;
 using System.Linq;
 using static SkEditor.Utilities.Parser.CodeSection;
@@ -65,5 +66,36 @@ public static class FoldingCreator
         }
 
         return foldedSections;
+    }
+
+    public static List<int> GetHiddenLines(OpenedFile file)
+    {
+        if (file.Editor == null)
+            return [];
+
+        List<int> hiddenLines = [];
+        FoldingManager? foldingManager = file.Editor.GetService<FoldingManager>();
+
+        if (foldingManager != null)
+        {
+            foreach (FoldingSection folding in foldingManager.AllFoldings)
+            {
+                if (folding.IsFolded)
+                {
+                    var ls = new List<int>();
+                    for (var i = folding.StartOffset; i < folding.EndOffset; i++)
+                    {
+                        var l = file.Editor.Document.GetLineByOffset(i).LineNumber;
+                        if (!ls.Contains(l))
+                            ls.Add(l);
+                    }
+
+                    ls.RemoveAt(0); // Remove the first line of the section
+                    hiddenLines.AddRange(ls);
+                }
+            }
+        }
+
+        return hiddenLines.Distinct().ToList();
     }
 }

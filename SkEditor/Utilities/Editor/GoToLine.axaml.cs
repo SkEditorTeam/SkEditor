@@ -1,10 +1,10 @@
-using System;
 using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
+using System;
 
 namespace SkEditor.Utilities.Editor;
 public partial class GoToLine : AppWindow
@@ -16,7 +16,7 @@ public partial class GoToLine : AppWindow
         GoToLineInput.Loaded += (sender, e) => GoToLineInput.Focus();
         GoToLineInput.TextChanged += (_, _) => UpdateInput();
         GoToLineButton.Command = new RelayCommand(Execute);
-        
+
         KeyDown += (_, e) =>
         {
             if (e.Key == Key.Enter) Execute();
@@ -32,7 +32,10 @@ public partial class GoToLine : AppWindow
             return;
         }
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         if (!int.TryParse(GoToLineInput.Text, out int lineNumber)) return;
         DocumentLine line = editor.Document.GetLineByNumber(lineNumber);
         editor.ScrollTo(line.LineNumber, 0);
@@ -43,9 +46,13 @@ public partial class GoToLine : AppWindow
 
     private void UpdateInput()
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int documentLines = editor.Document.LineCount;
-        if (!int.TryParse(GoToLineInput.Text, out int line)) {
+        if (!int.TryParse(GoToLineInput.Text, out int line))
+        {
             GoToLineInput.Text = "";
             return;
         };

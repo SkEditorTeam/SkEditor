@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Generators.Gui.ItemSelector" Icon="/Assets/SkEditor.ico"
 		WindowStartupLocation="CenterOwner"
-        Title="{DynamicResource WindowTitleItemSelector}" Height="400" Width="350" CanResize="False" Theme="{StaticResource SmallWindowTheme}">
+        Title="{DynamicResource WindowTitleItemSelector}" Height="400" Width="450" CanResize="False" Theme="{StaticResource SmallWindowTheme}">
 
     <Window.Resources>
 		<ResourceDictionary>
@@ -17,9 +17,9 @@
     </Window.Resources>
 
 	<Grid ColumnDefinitions="auto,*" Margin="20">
-		<Grid Grid.Column="0" RowDefinitions="auto,*">
-			<TextBox Name="SearchBox" Grid.Row="0" Width="175" Margin="0,0,0,20"/>
-			<Border Grid.Row="1" Width="175" BorderBrush="#25ffffff" BorderThickness="1" CornerRadius="5">
+		<Grid Grid.Column="0" RowDefinitions="auto,*" Width="275">
+			<TextBox Name="SearchBox" Grid.Row="0" Width="275" Margin="0,0,0,20"/>
+			<Border Grid.Row="1" Width="275" BorderBrush="#25ffffff" BorderThickness="1" CornerRadius="5">
 				<ListBox Name="ItemListBox" ItemsSource="{Binding FilteredItems}"/>
 			</Border>
 		</Grid>

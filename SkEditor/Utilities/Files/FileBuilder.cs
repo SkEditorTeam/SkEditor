@@ -52,15 +52,13 @@ public class FileBuilder
 
             ToolTip.SetShowDelay(tabViewItem, 1200);
             ToolTip.SetTip(tabViewItem, toolTip);
-
-            Icon.SetIcon(tabViewItem);
         }
 
         if (fileType.IsEditor)
         {
             var editor = fileType.Display as TextEditor;
 
-            ApiVault.Get().OnFileCreated(editor);
+            SkEditorAPI.Events.FileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
         }
 
@@ -82,7 +80,7 @@ public class FileBuilder
             else
             {
                 var ext = Path.GetExtension(path);
-                if (ApiVault.Get().GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
+                if (SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
                 {
                     var pref = value;
                     if (pref == "SkEditor")
@@ -99,7 +97,7 @@ public class FileBuilder
                         }
                         else
                         {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
+                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
                         }
                     }
                 }
@@ -114,13 +112,13 @@ public class FileBuilder
                         fileType = selected.Handle(path);
                         if (window.RememberCheck.IsChecked == true)
                         {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations[ext] = selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
+                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations[ext] = selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
                         }
                         else
                         {
-                            ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
+                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
                         }
-                        ApiVault.Get().GetAppConfig().Save();
+                        SkEditorAPI.Core.GetAppConfig().Save();
                     }
                 }
             }
@@ -131,7 +129,7 @@ public class FileBuilder
 
     private static async Task<FileTypes.FileType?> GetDefaultEditor(string path, string? content)
     {
-        AppConfig config = ApiVault.Get().GetAppConfig();
+        AppConfig config = SkEditorAPI.Core.GetAppConfig();
 
         string fileContent = null;
         if (!string.IsNullOrWhiteSpace(path))
@@ -143,35 +141,14 @@ public class FileBuilder
 
         if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))
         {
-            var response = await ApiVault.Get().ShowMessageWithIcon(
+            var response = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
                 new SymbolIconSource() { Symbol = Symbol.Alert });
             if (response != ContentDialogResult.Primary)
                 return null;
         }
 
-        TextEditor editor = new()
-        {
-            ShowLineNumbers = true,
-            Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
-            Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
-            LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor"),
-            FontSize = 16,
-            WordWrap = config.IsWrappingEnabled,
-        };
-
-        editor.ContextFlyout = GetContextMenu(editor);
-
-        if (config.Font.Equals("Default"))
-        {
-            Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
-            editor.FontFamily = (FontFamily)font;
-        }
-        else
-        {
-            editor.FontFamily = new FontFamily(config.Font);
-        }
-
+        var editor = CreateEditor();
         if (!string.IsNullOrWhiteSpace(path))
         {
             path = Uri.UnescapeDataString(path);
@@ -181,10 +158,38 @@ public class FileBuilder
             }
         }
 
+        return new FileTypes.FileType(editor, path, true);
+    }
+
+    public static TextEditor CreateEditor(string content = "")
+    {
+        var editor = new TextEditor
+        {
+            ShowLineNumbers = true,
+            Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
+            Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
+            LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor"),
+            FontSize = 16,
+            WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled,
+        };
+
+        editor.ContextFlyout = GetContextMenu(editor);
+
+        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
+        {
+            Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
+            editor.FontFamily = (FontFamily)font;
+        }
+        else
+        {
+            editor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
+        }
+
+        editor.Text = content;
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
 
-        return new FileTypes.FileType(editor, path, true);
+        return editor;
     }
 
     private static TextEditor AddEventHandlers(TextEditor editor)
@@ -194,30 +199,29 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-        if (!ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        if (!SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
-            editor.TextChanged += (_, _) => ApiVault.Get().GetOpenedFile()?.Parser?.SetUnparsed();
+            editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser?.SetUnparsed();
         }
-        if (ApiVault.Get().GetAppConfig().EnableHexPreview)
+        if (SkEditorAPI.Core.GetAppConfig().EnableHexPreview)
         {
             editor.Document.TextChanged += (_, _) => TextEditorEventHandler.CheckForHex(editor);
         }
         editor.TextArea.Caret.PositionChanged += (sender, e) =>
         {
-            ApiVault.Get().GetMainWindow().BottomBar.UpdatePosition();
+            SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdatePosition();
         };
         editor.TextArea.KeyDown += TextEditorEventHandler.OnKeyDown;
         editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
         editor.TextArea.SelectionChanged += SelectionHandler.OnSelectionChanged;
 
-        if (ApiVault.Get().GetAppConfig().EnableAutoCompletionExperiment)
+        if (SkEditorAPI.Core.GetAppConfig().EnableAutoCompletionExperiment)
         {
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
         }
 
         editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
-        editor.TextArea.TextPasting += TextEditorEventHandler.CheckForSpecialPaste;
 
         return editor;
     }
@@ -234,8 +238,8 @@ public class FileBuilder
         editor.Options.AllowScrollBelowDocument = true;
         editor.Options.CutCopyWholeLine = true;
 
-        editor.Options.ConvertTabsToSpaces = ApiVault.Get().GetAppConfig().UseSpacesInsteadOfTabs;
-        editor.Options.IndentationSize = ApiVault.Get().GetAppConfig().TabSize;
+        editor.Options.ConvertTabsToSpaces = SkEditorAPI.Core.GetAppConfig().UseSpacesInsteadOfTabs;
+        editor.Options.IndentationSize = SkEditorAPI.Core.GetAppConfig().TabSize;
 
         return editor;
     }
@@ -251,7 +255,7 @@ public class FileBuilder
             new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.Redo },
             new { Header = "MenuHeaderDuplicate", Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Icon = Symbol.Copy },
             new { Header = "MenuHeaderComment", Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)), Icon = Symbol.Comment },
-            new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => new GoToLine().ShowDialog(ApiVault.Get().GetMainWindow())), Icon = Symbol.Find },
+            new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLine())), Icon = Symbol.Find },
             new { Header = "MenuHeaderTrimWhitespaces", Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)), Icon = Symbol.Remove },
             new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
             new { Header = "MenuHeaderRefactor", Command = new RelayCommand(() => CustomCommandsHandler.OnRefactorCommandExecuted(editor)), Icon = Symbol.Rename },

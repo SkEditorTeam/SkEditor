@@ -25,6 +25,12 @@
 				
 				<ui:SettingsExpander Name="DiscordItem" Header="{DynamicResource SettingsAboutDiscord}" IconSource="{StaticResource DiscordIcon}"
 					Description="{DynamicResource SettingsAboutDiscordDescription}" IsClickEnabled="True"/>
+				
+				<ui:SettingsExpander Header="{DynamicResource SettingsAboutDevMode}" Description="{DynamicResource SettingsAboutDevModeDescription}" IconSource="{StaticResource LightingIcon}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="DevModeToggleSwitch" IsChecked="{Binding IsDevModeEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
 
 				<ui:SettingsExpander Name="AppDataItem" Header="{DynamicResource SettingsAboutAppdata}" IconSource="{StaticResource Folder}"
 					IsClickEnabled="True"/>

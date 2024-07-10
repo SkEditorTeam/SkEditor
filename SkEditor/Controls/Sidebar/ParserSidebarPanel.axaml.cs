@@ -2,7 +2,6 @@
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
-using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Parser.ViewModels;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace SkEditor.Controls.Sidebar;
 
 public partial class ParserSidebarPanel : UserControl
 {
-    public static bool CodeParserEnabled => ApiVault.Get().GetAppConfig().EnableCodeParser;
+    public static bool CodeParserEnabled => SkEditorAPI.Core.GetAppConfig().EnableCodeParser;
     public ObservableCollection<CodeSection> Sections { get; set; } = [];
 
     public void Refresh(List<CodeSection> sections)
@@ -51,7 +50,7 @@ public partial class ParserSidebarPanel : UserControl
         ParserDisabled.IsVisible = !CodeParserEnabled;
         ScrollViewer.IsVisible = CodeParserEnabled;
 
-        if (ApiVault.Get().GetAppConfig().EnableRealtimeCodeParser)
+        if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
             ParseButton.IsVisible = false;
         }
@@ -63,8 +62,8 @@ public partial class ParserSidebarPanel : UserControl
 
         EnableParser.Click += (_, _) =>
         {
-            ApiVault.Get().GetAppConfig().EnableCodeParser = true;
-            ApiVault.Get().GetAppConfig().Save();
+            SkEditorAPI.Core.GetAppConfig().EnableCodeParser = true;
+            SkEditorAPI.Core.GetAppConfig().Save();
 
             ParserDisabled.IsVisible = false;
             ScrollViewer.IsVisible = true;
@@ -77,10 +76,9 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ParseCurrentFile()
     {
-        if (ApiVault.Get().GetTabView().SelectedItem is not TabViewItem selectedItem) return;
-
-        var parser = FileHandler.OpenedFiles.Find(file => file.TabViewItem == selectedItem)?.Parser;
-        if (parser == null) return;
+        var parser = SkEditorAPI.Files.GetCurrentOpenedFile().Parser;
+        if (parser == null)
+            return;
 
         ParseButton.IsEnabled = false;
         parser.Parse();

@@ -2,6 +2,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Serilog;
+using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Views;
 using System;
@@ -20,8 +21,6 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    static Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
-
     public override async void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
@@ -30,7 +29,10 @@ public partial class App : Application
             .MinimumLevel.Debug()
             .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "SkEditor/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
+            .WriteTo.Sink(new LogsHandler())
             .CreateLogger();
+
+        Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -41,7 +43,7 @@ public partial class App : Application
             }
             catch (AbandonedMutexException ex)
             {
-                ex.Mutex?.Close();
+                Log.Debug(ex, "Abandoned mutex");
                 isFirstInstance = true;
             }
 
@@ -49,10 +51,11 @@ public partial class App : Application
             {
                 try
                 {
-                    SkEditor SkEditor = new(desktop.Args);
+                    SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
+                    _ = new SkEditor();
+
                     MainWindow mainWindow = new();
                     desktop.MainWindow = mainWindow;
-                    SkEditor.mainWindow = mainWindow;
 
                     NamedPipeServer.Start();
                 }
@@ -94,5 +97,4 @@ public partial class App : Application
             }
         }
     }
-
 }

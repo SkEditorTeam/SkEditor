@@ -1,13 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
-using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.ViewModels;
 using SkEditor.Views.Settings.Personalization;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SkEditor.Views.Settings;
@@ -34,28 +31,23 @@ public partial class PersonalizationPage : UserControl
     private async void SelectFont()
     {
         FontSelectionWindow window = new();
-        string result = await window.ShowDialog<string>(ApiVault.Get().GetMainWindow());
+        string result = await window.ShowDialog<string>(SkEditorAPI.Windows.GetMainWindow());
         if (result is null)
             return;
 
-        ApiVault.Get().GetAppConfig().Font = result;
+        SkEditorAPI.Core.GetAppConfig().Font = result;
         CurrentFont.Description = Translation.Get("SettingsPersonalizationFontDescription").Replace("{0}", result);
 
-        List<TextEditor> textEditors = ApiVault.Get().GetTabView().TabItems
-            .Cast<TabViewItem>()
-            .Where(i => i.Content is TextEditor)
-            .Select(i => i.Content as TextEditor).ToList();
-
-        textEditors.ForEach(i =>
+        SkEditorAPI.Files.GetOpenedFiles().Where(o => o.IsEditor).ToList().ForEach(i =>
         {
             if (result.Equals("Default"))
             {
                 Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
-                i.FontFamily = (Avalonia.Media.FontFamily)font;
+                i.Editor.FontFamily = (Avalonia.Media.FontFamily)font;
             }
             else
             {
-                i.FontFamily = new(result);
+                i.Editor.FontFamily = new(result);
             }
         });
     }

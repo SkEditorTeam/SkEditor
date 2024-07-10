@@ -20,8 +20,8 @@
 	<Application.Styles>
 		<sty:FluentAvaloniaTheme />
 		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+		<StyleInclude Source="/Styles/ButtonStyles.axaml" />
 		<StyleInclude Source="/Views/FileTypes/Images/AdvancedImageBox.axaml"/>
-		<StyleInclude Source="/Styles/ButtonStyles.axaml"></StyleInclude>
 	</Application.Styles>
 
 	<Application.Resources>
@@ -49,5 +49,6 @@
 		<Thickness x:Key="FlyoutContentPadding">10</Thickness>
 		
 		<FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/JetBrainsMono#JetBrains Mono</FontFamily>
+		<FontFamily x:Key="MinecraftFont">avares://SkEditor/Assets/MinecraftFont#Minecraft</FontFamily>
 	</Application.Resources>
 </Application>

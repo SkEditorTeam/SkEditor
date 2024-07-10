@@ -48,7 +48,7 @@ public class FileSyntax
         }
     }
 
-    private FileSyntax(IHighlightingDefinition highlighting, FileSyntaxConfig config,
+    private FileSyntax(IHighlightingDefinition? highlighting, FileSyntaxConfig? config,
         string folderName)
     {
         Highlighting = highlighting;

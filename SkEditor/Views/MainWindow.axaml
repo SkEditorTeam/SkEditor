@@ -11,7 +11,7 @@
         x:Class="SkEditor.Views.MainWindow"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
-        Title="SkEditor" WindowState="Maximized">
+        Title="SkEditor" WindowState="Maximized" DragDrop.AllowDrop="True">
 
 	<Window.Styles>
 		<Style Selector="avaloniaedit|TextEditor /template/ Border">
@@ -37,12 +37,23 @@
 			<controls:MainMenuControl Name="MainMenu"/>
 		</DockPanel>
 
-		<Grid RowDefinitions="*,auto" ColumnDefinitions="auto,*" Grid.Row="1" Margin="10,0,10,10">
-			<controls:SideBarControl Name="SideBar" IsVisible="False" Grid.Column="0" Grid.Row="0" Margin="0,0,10,0"/>
+		<Grid RowDefinitions="*,auto" Grid.Row="1" Margin="10,0,10,10" Name="CoreGrid">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="50" />
+				<ColumnDefinition Width="Auto" MaxWidth="0" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" MinWidth="300" />
+			</Grid.ColumnDefinitions>
+			
+			<controls:SideBarControl Grid.Column="0" Grid.Row="0" Name="SideBar" MinWidth="42" IsVisible="False" Margin="0,0,10,0"/>
+			<Border Margin="-8,0,0,0" Grid.Row="0" Grid.Column="1" Name="SidebarContentBorder">
+			
+			</Border>
+			
+			<GridSplitter MaxWidth="6,0" Background="Transparent" Name="Splitter" Grid.Column="2" Grid.Row="0" ResizeDirection="Columns"/>
+			<ui:TabView Grid.Column="3" Grid.Row="0" Name="TabControl" Margin="0,-10,0,0" VerticalAlignment="Stretch" CanDragTabs="True" CanReorderTabs="True"/>
 
-			<ui:TabView Grid.Column="1" Grid.Row="0" Name="TabControl" Margin="0,-10,0,0" VerticalAlignment="Stretch" CanDragTabs="True" CanReorderTabs="True"/>
-
-			<controls:BottomBarControl Grid.ColumnSpan="2" x:Name="BottomBar" Name="BottomBar" Grid.Row="1" Margin="0,10,0,0"/>
+			<controls:BottomBarControl Grid.Column="0" Grid.ColumnSpan="4" x:Name="BottomBar" Name="BottomBar" Grid.Row="1" Margin="0,10,0,0"/>
 		</Grid>
 	</Grid>
 </Window>

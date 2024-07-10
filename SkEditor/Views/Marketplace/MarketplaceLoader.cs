@@ -12,7 +12,7 @@ namespace SkEditor.Views.Marketplace;
 public class MarketplaceLoader
 {
     private static readonly string[] supportedTypes = ["NewSyntax", "Theme", "Addon", "NewThemeWithSyntax", "ZipAddon"];
-    private static readonly string[] hiddenItems = ["Shadow", "Analyzer"];
+    private static readonly string[] hiddenItems = [];
 
     public static async IAsyncEnumerable<MarketplaceItem> GetItems()
     {
@@ -117,6 +117,8 @@ public class MarketplaceItem
     {
         return false;
     }
+
+    [JsonIgnore] public MarketplaceWindow Marketplace { get; set; }
 }
 
 public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>

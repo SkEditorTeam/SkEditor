@@ -9,17 +9,15 @@
              mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Settings.AddonsPage">
 
-	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsAddonsTitle}" Grid.Row="0"/>
-		<ScrollViewer Grid.Row="1">
-			<StackPanel Spacing="8">
-				<ui:SettingsExpander Header="{DynamicResource SettingsAddonsListTitle}" IconSource="{StaticResource AddonIcon}">
-					<ui:SettingsExpander.Footer>
-						<Border Grid.Row="1" Width="175" BorderBrush="#25ffffff" BorderThickness="1" CornerRadius="5">
-							<ListBox Name="AddonListBox" Height="100" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-						</Border>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+	<Grid RowDefinitions="auto,*" ColumnDefinitions="*,Auto" Margin="20, 10, 20, 20">
+		<controls:SettingsTitle Grid.Column="0" Grid.ColumnSpan="2" Name="Title" Title="{DynamicResource SettingsAddonsTitle}" Grid.Row="0"/>
+		<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="10" Margin="0,0,0,10">
+			<Button Name="LoadFromFileButton">Load from File</Button>
+			<Button Name="OpenMarketplaceButton" Content="{DynamicResource MenuHeaderMarketplace}" />
+		</StackPanel>
+		<ScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+			<StackPanel Spacing="8" Name="AddonsStackPanel">
+				
 			</StackPanel>
 		</ScrollViewer>
 	</Grid>

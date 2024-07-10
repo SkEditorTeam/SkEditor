@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using SkEditor.Views;
@@ -33,7 +32,7 @@ public class CodePublisher
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message, window);
+            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
         }
     }
 
@@ -62,7 +61,7 @@ public class CodePublisher
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message, window);
+            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
         }
     }
 
@@ -72,7 +71,7 @@ public class CodePublisher
         {
             string apiKey = window.ApiKeyTextBox.Text;
             string json = JsonSerializer.Serialize(new { content = code });
-            string fileName = (ApiVault.Get().GetTabView().SelectedItem as TabViewItem).Header.ToString().TrimEnd('*');
+            string fileName = SkEditorAPI.Files.GetCurrentOpenedFile().Name;
 
             HttpClient client = new();
             HttpRequestMessage request = new(HttpMethod.Post, $"https://api.skunity.com/v1/{apiKey}/parser/savenewfile/{fileName}");
@@ -88,7 +87,7 @@ public class CodePublisher
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message, window);
+            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
         }
     }
 }

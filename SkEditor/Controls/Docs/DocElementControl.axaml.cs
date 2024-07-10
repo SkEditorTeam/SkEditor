@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
 namespace SkEditor.Controls.Docs;
 
@@ -138,14 +140,14 @@ public partial class DocElementControl : UserControl
     private void LoadPatternsEditor(IDocumentationEntry entry)
     {
         PatternsEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
-        if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
             Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
             PatternsEditor.FontFamily = (FontFamily)font;
         }
         else
         {
-            PatternsEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+            PatternsEditor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
         }
         PatternsEditor.Text = Format(entry.Patterns);
         PatternsEditor.SyntaxHighlighting = DocSyntaxColorizer.CreatePatternHighlighting();
@@ -160,6 +162,32 @@ public partial class DocElementControl : UserControl
         DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? Translation.Get("DocumentationControlNoDescription") : entry.Description);
         VersionBadge.IconSource = new FontIconSource { Glyph = Translation.Get("DocumentationControlSince", (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version)), };
 
+        var uri = IDocProvider.Providers[entry.Provider].GetLink(entry);
+        OutsideButton.Content = new StackPanel()
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 2,
+            Children =
+            {
+                new TextBlock()
+                {
+                    Text = "See on " + entry.Provider,
+                    VerticalAlignment = VerticalAlignment.Center
+                },
+                new SymbolIcon()
+                {
+                    Symbol = Symbol.Open,
+                    FontSize = 18,
+                    VerticalAlignment = VerticalAlignment.Center
+                }
+            }
+        };
+        OutsideButton.Click += (_, _) => Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
+        if (uri == null)
+        {
+            OutsideButton.IsVisible = false;
+        }
+
         LoadAddonBadge(entry);
     }
 
@@ -173,9 +201,9 @@ public partial class DocElementControl : UserControl
         SourceBadge.Background = new SolidColorBrush(color.Value);
         SourceBadge.Foreground = color.Value.ToHsl().L < 0.2 ? Brushes.White : Brushes.Black;
 
-        if (entry.Provider == DocProvider.SkUnity)
+        if (entry.Provider == DocProvider.skUnity)
         {
-            var skUnityProvider = IDocProvider.Providers[DocProvider.SkUnity] as SkUnityProvider;
+            var skUnityProvider = IDocProvider.Providers[DocProvider.skUnity] as SkUnityProvider;
             SourceBadge.Tapped += (_, _) =>
             {
                 var uri = skUnityProvider.GetAddonLink(entry.Addon);
@@ -200,14 +228,14 @@ public partial class DocElementControl : UserControl
 
         editor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
 
-        if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
             Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
             editor.FontFamily = (FontFamily)font;
         }
         else
         {
-            editor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+            editor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
         }
 
         return new Expander()
@@ -241,7 +269,7 @@ public partial class DocElementControl : UserControl
         catch (Exception e)
         {
             examples = [];
-            ApiVault.Get().ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
         }
 
         var localProvider = LocalProvider.Get();
@@ -392,14 +420,14 @@ public partial class DocElementControl : UserControl
 
                 textEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
 
-                if (ApiVault.Get().GetAppConfig().Font.Equals("Default"))
+                if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
                 {
                     Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
                     textEditor.FontFamily = (FontFamily)font;
                 }
                 else
                 {
-                    textEditor.FontFamily = new FontFamily(ApiVault.Get().GetAppConfig().Font);
+                    textEditor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
                 }
 
                 textEditor.SyntaxHighlighting = SyntaxLoader.GetCurrentSkriptHighlighting();
