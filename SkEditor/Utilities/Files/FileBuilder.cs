@@ -255,7 +255,7 @@ public class FileBuilder
             new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.Redo },
             new { Header = "MenuHeaderDuplicate", Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Icon = Symbol.Copy },
             new { Header = "MenuHeaderComment", Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)), Icon = Symbol.Comment },
-            new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLine())), Icon = Symbol.Find },
+            new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())), Icon = Symbol.Find },
             new { Header = "MenuHeaderTrimWhitespaces", Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)), Icon = Symbol.Remove },
             new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
             new { Header = "MenuHeaderRefactor", Command = new RelayCommand(() => CustomCommandsHandler.OnRefactorCommandExecuted(editor)), Icon = Symbol.Rename },
