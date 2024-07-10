@@ -1,4 +1,5 @@
-﻿using AvaloniaEdit;
+﻿using Avalonia.Controls;
+using AvaloniaEdit;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.Files;
 using System;
@@ -35,6 +36,9 @@ public interface IEvents
     event EventHandler<TabClosedEventArgs> OnTabClosed;
     internal bool TabClosed(OpenedFile openedFile);
 
+    event EventHandler<SelectionChangedEventArgs> OnTabChanged;
+    internal void TabChanged(SelectionChangedEventArgs e);
+
     /// <summary>
     /// Called when a settings window is open.
     /// </summary>
@@ -48,13 +52,13 @@ public class FileCreatedEventArgs(TextEditor editor) : EventArgs
 }
 
 public class FileOpenedEventArgs(OpenedFile openedFile, bool causedByRestore) : EventArgs
-    {
+{
     public bool CausedByRestore { get; set; } = causedByRestore;
     public OpenedFile OpenedFile { get; set; } = openedFile;
 }
 
 public class AddonSettingChangedEventArgs(Setting setting, object oldValue) : EventArgs
-    {
+{
     public Setting Setting { get; } = setting;
     public object OldValue { get; } = oldValue;
 }

@@ -42,6 +42,7 @@ public partial class MainWindow : AppWindow
     {
         TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
         TabControl.TabCloseRequested += (sender, e) => FileCloser.CloseFile(e);
+        TabControl.SelectionChanged += (sender, e) => SkEditorAPI.Events.TabChanged(e);
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;
 

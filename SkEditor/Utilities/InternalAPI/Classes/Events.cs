@@ -1,4 +1,5 @@
-﻿using AvaloniaEdit;
+﻿using Avalonia.Controls;
+using AvaloniaEdit;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.Files;
 using System;
@@ -32,6 +33,9 @@ public class Events : IEvents
         OnTabClosed?.Invoke(this, args);
         return args.CanClose;
     }
+
+    public event EventHandler<SelectionChangedEventArgs>? OnTabChanged;
+    void IEvents.TabChanged(SelectionChangedEventArgs e) => OnTabChanged?.Invoke(this, e);
 
     public event EventHandler? OnSettingsOpened;
     void IEvents.SettingsOpened() => OnSettingsOpened?.Invoke(this, EventArgs.Empty);
