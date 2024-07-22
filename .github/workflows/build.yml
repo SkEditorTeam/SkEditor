@@ -113,7 +113,7 @@ jobs:
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
         wget -O control 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/control'
-        echo "Version: $(sed -n 's/.*<InformationalVersion>\(.*\)<\/InformationalVersion>.*/\1/p' /home/runner/work/SkEditor/SkEditor/SkEditor.csproj)" >> control
+        echo -e "Version: $(sed -n 's/.*<InformationalVersion>\(.*\)<\/InformationalVersion>.*/\1/p' /home/runner/work/SkEditor/SkEditor/SkEditor.csproj)\n" >> control
         wget -O postrm 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postrm'
         wget -O preinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/preinst'
         wget -O postinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postinst'
