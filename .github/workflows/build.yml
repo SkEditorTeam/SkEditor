@@ -129,6 +129,7 @@ jobs:
         TOKEN: ${{ secrets.APT_REPO_TOKEN }}
       run: |
         curl --header "Authorization: Bearer $env:TOKEN" --form "package=@SkEditor-x64.deb" --form "distribution=all" https://fixeq.baltorepo.com/skeditor/skeditor/upload/
+        echo "$env:TOKEN"
   build-linux:
     runs-on: ubuntu-latest
     steps:
