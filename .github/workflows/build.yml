@@ -113,10 +113,7 @@ jobs:
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
         pwd 
         wget -O control 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/control'
-        echo "exported_ver=\$(curl -s \"https://camo.githubusercontent.com/024e74589d307c8cbe664b87c58cf65e2b62587aec02459d998719874ea7b5eb/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f762f72656c656173652f536b456469746f725465616d2f536b456469746f723f636f6c6f723d253233376133346562266c6162656c3d76657273696f6e267374796c653d666c61742d737175617265\" | grep -oP '(?<=<title>).*?(?=</title>)' | sed 's/v\([0-9]\)/\1/') && exported_ver=\"\${exported_ver^}\"" >> getver
-        echo "echo \"\$exported_ver-gh-b${GITHUB_RUN_ID}\" >> control" >> getver
-        bash getver
-        rm -f getver
+        echo "Version: $(sed -n 's/.*<InformationalVersion>\(.*\)<\/InformationalVersion>.*/\1/p' /home/runner/work/SkEditor/SkEditor/SkEditor.csproj)" >> control
         wget -O postrm 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postrm'
         wget -O preinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/preinst'
         wget -O postinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postinst'
