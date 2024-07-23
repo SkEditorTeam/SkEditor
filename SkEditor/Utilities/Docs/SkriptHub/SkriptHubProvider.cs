@@ -171,7 +171,7 @@ public class SkriptHubProvider : IDocProvider
         return _cachedElements.Select(e => e.Addon).Distinct().ToList();
     }
 
-    public Task<Color?> GetAddonColor(string addonName) => null;
+    public Task<Color?> GetAddonColor(string addonName) => Task.FromResult<Color?>(null);
 
     public IconSource Icon => new ImageIconSource()
     {

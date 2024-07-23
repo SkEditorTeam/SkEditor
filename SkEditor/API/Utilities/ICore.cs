@@ -1,5 +1,6 @@
 ﻿using SkEditor.Utilities;
 using System;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 
@@ -66,5 +67,5 @@ public interface ICore
     /// Saves all the files to the temporary directory and saves the settings.
     /// This method is called when the application crashes.
     /// </summary>
-    public void SaveData();
+    public Task SaveData();
 }

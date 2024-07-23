@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Serilog;
 using SkEditor.API;
 using System;
 using System.IO;
@@ -46,6 +47,8 @@ public static class SessionRestorer
         {
             var compressed = await File.ReadAllTextAsync(file);
             var jsonData = await Decompress(compressed);
+            if (string.IsNullOrEmpty(jsonData)) continue;
+
             var data = BuildOpeningData(jsonData);
             await (SkEditorAPI.Files as API.Files).AddEditorTab(data.Item1, data.Item2);
         }
@@ -66,11 +69,20 @@ public static class SessionRestorer
 
     private static async Task<string> Decompress(string data)
     {
-        var byteArray = Convert.FromBase64String(data);
-        using var ms = new MemoryStream(byteArray);
-        await using var sr = new GZipStream(ms, CompressionMode.Decompress);
-        using var reader = new StreamReader(sr);
-        return await reader.ReadToEndAsync();
+        string result = string.Empty;
+        try
+        {
+            var byteArray = Convert.FromBase64String(data);
+            using var ms = new MemoryStream(byteArray);
+            await using var sr = new GZipStream(ms, CompressionMode.Decompress);
+            using var reader = new StreamReader(sr);
+            result = await reader.ReadToEndAsync();
+        }
+        catch (FormatException e)
+        {
+            Log.Warning(e, "Error while decompressing data");
+        }
+        return result;
     }
 
     #endregion

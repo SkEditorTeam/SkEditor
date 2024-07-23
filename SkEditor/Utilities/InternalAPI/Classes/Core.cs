@@ -1,10 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Styling;
+using Serilog;
 using SkEditor.Utilities;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 
@@ -74,33 +76,34 @@ public class Core : ICore
 #pragma warning restore 162
     }
 
-    public void SaveData()
+    public async Task SaveData()
     {
-        SkEditorAPI.Files.GetOpenedEditors().ForEach(async file =>
+        foreach (var file in SkEditorAPI.Files.GetOpenedEditors())
         {
             if (!file.IsEditor)
-                return;
+                continue;
 
             string path = file.Path;
             if (string.IsNullOrEmpty(path))
             {
                 string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
                 Directory.CreateDirectory(tempPath);
-                string header = file.Header;
-                path = Path.Combine(tempPath, header);
-            }
-            else
-            {
-                var txtToWrite = file.Editor?.Text;
-                await using StreamWriter savedWriter = new(path, false);
-                await savedWriter.WriteAsync(txtToWrite);
-                savedWriter.Close();
+                path = Path.Combine(tempPath, file.Header);
             }
 
-            string textToWrite = file.Editor.Text;
-            await using StreamWriter writer = new(path, false);
-            await writer.WriteAsync(textToWrite);
-        });
+            string textToWrite = file.Editor?.Text;
+            if (string.IsNullOrEmpty(textToWrite))
+                continue;
+
+            try
+            {
+                await File.WriteAllTextAsync(path, textToWrite);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to save file: {path}");
+            }
+        }
 
         GetAppConfig().Save();
     }
