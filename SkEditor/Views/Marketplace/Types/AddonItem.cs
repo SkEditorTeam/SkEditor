@@ -24,12 +24,13 @@ public class AddonItem : MarketplaceItem
         var fileName = ItemFileUrl.Split('/').Last();
         var addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
 
+        Directory.CreateDirectory(Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier));
         var filePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier, addonIdentifier + ".dll");
 
-        using HttpClient client = new();
-        var response = await client.GetAsync(ItemFileUrl);
         try
         {
+            using HttpClient client = new();
+            var response = await client.GetAsync(ItemFileUrl);
             await using var stream = await response.Content.ReadAsStreamAsync();
             await using var fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);

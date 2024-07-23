@@ -109,6 +109,9 @@
 		<Compile Update="Controls\EnchantSelector.axaml.cs">
 			<DependentUpon>EnchantSelector.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\GoToLineWindow.axaml.cs">
+		  <DependentUpon>GoToLineWindow.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\Generators\Gui\ExtendedItemSelector.axaml.cs">
 			<DependentUpon>ExtendedItemSelector.axaml</DependentUpon>
 		</Compile>

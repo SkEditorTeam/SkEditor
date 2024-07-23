@@ -1,4 +1,5 @@
-﻿using AvaloniaEdit;
+﻿using Avalonia.Controls;
+using AvaloniaEdit;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.Files;
 using System;
@@ -35,6 +36,9 @@ public interface IEvents
     event EventHandler<TabClosedEventArgs> OnTabClosed;
     internal bool TabClosed(OpenedFile openedFile);
 
+    event EventHandler<SelectionChangedEventArgs> OnTabChanged;
+    internal void TabChanged(SelectionChangedEventArgs e);
+
     /// <summary>
     /// Called when a settings window is open.
     /// </summary>
@@ -42,37 +46,25 @@ public interface IEvents
     internal void SettingsOpened();
 }
 
-public class FileCreatedEventArgs : EventArgs
+public class FileCreatedEventArgs(TextEditor editor) : EventArgs
 {
-    public TextEditor Editor { get; }
-    public FileCreatedEventArgs(TextEditor editor) => Editor = editor;
+    public TextEditor Editor { get; } = editor;
 }
 
-public class FileOpenedEventArgs : EventArgs
+public class FileOpenedEventArgs(OpenedFile openedFile, bool causedByRestore) : EventArgs
 {
-    public bool CausedByRestore { get; set; }
-    public OpenedFile OpenedFile { get; set; }
-    public FileOpenedEventArgs(OpenedFile openedFile, bool causedByRestore)
-    {
-        OpenedFile = openedFile;
-        CausedByRestore = causedByRestore;
-    }
+    public bool CausedByRestore { get; set; } = causedByRestore;
+    public OpenedFile OpenedFile { get; set; } = openedFile;
 }
 
-public class AddonSettingChangedEventArgs : EventArgs
+public class AddonSettingChangedEventArgs(Setting setting, object oldValue) : EventArgs
 {
-    public Setting Setting { get; }
-    public object OldValue { get; }
-    public AddonSettingChangedEventArgs(Setting setting, object oldValue)
-    {
-        Setting = setting;
-        OldValue = oldValue;
-    }
+    public Setting Setting { get; } = setting;
+    public object OldValue { get; } = oldValue;
 }
 
-public class TabClosedEventArgs : EventArgs
+public class TabClosedEventArgs(OpenedFile closedFile) : EventArgs
 {
-    public OpenedFile OpenedFile { get; }
+    public OpenedFile OpenedFile { get; } = closedFile;
     public bool CanClose { get; set; } = true;
-    public TabClosedEventArgs(OpenedFile closedFile) => OpenedFile = closedFile;
 }

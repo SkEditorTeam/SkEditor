@@ -118,7 +118,7 @@ public class FileHandler
             Title = Translation.Get("WindowTitleOpenFilePicker"),
             AllowMultiple = true
         });
-
+      
         files.ToList().ForEach(file => OpenFile(file.Path.AbsolutePath));
     }
 

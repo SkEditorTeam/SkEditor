@@ -1,5 +1,4 @@
-﻿using Serilog;
-using SkEditor.API;
+﻿using SkEditor.API;
 using SkEditor.Views;
 using System;
 using System.IO;

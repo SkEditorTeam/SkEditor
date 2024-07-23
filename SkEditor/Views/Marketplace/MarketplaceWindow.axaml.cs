@@ -14,8 +14,7 @@ using System.Threading.Tasks;
 namespace SkEditor.Views;
 public partial class MarketplaceWindow : AppWindow
 {
-    //public const string MarketplaceUrl = "https://marketplace-skeditor.vercel.app/";
-    public const string MarketplaceUrl = "https://marketplace-rl92no55b-skeditor.vercel.app/";
+    public const string MarketplaceUrl = "https://marketplace-skeditor.vercel.app/";
 
     public static MarketplaceWindow Instance { get; private set; }
 
