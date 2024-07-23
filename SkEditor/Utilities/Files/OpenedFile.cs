@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 using SkEditor.Utilities.Parser;
 using System.Collections.Generic;
 
@@ -44,7 +45,7 @@ public class OpenedFile
 
     public bool IsEditor => Editor != null;
     public string? Name => Path == null ? CustomName : System.IO.Path.GetFileName(Path);
-    public string? Header => Name + (IsSaved ? "" : " •");
+    public string? Header => Name + (IsSaved || SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled ? "" : " •");
 
     #endregion
 

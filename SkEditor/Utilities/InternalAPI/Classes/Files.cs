@@ -79,18 +79,17 @@ public class Files : IFiles
     public async Task Save(object entity, bool saveAs)
     {
         var tabItem = GetItem(entity);
-        var itemTag = tabItem.Tag as string;
         var openedFile = GetOpenedFiles().Find(file => file.TabViewItem == tabItem);
 
         if (openedFile.IsSaved && !saveAs)
             return;
 
-        var path = openedFile.Path == null ? null : Uri.UnescapeDataString(openedFile.Path);
+        var path = GetFromTabViewItem(tabItem).Path;
         if (path == null || saveAs)
         {
-            var suggestedFolder = string.IsNullOrEmpty(itemTag)
+            var suggestedFolder = string.IsNullOrEmpty(path)
                 ? await SkEditorAPI.Windows.GetMainWindow().StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Documents)
-                : await SkEditorAPI.Windows.GetMainWindow().StorageProvider.TryGetFolderFromPathAsync(itemTag);
+                : await SkEditorAPI.Windows.GetMainWindow().StorageProvider.TryGetFolderFromPathAsync(path);
 
             FilePickerFileType skriptFileType = new("Skript") { Patterns = ["*.sk"] };
             FilePickerFileType allFilesType = new("All Files") { Patterns = ["*"] };
@@ -99,7 +98,7 @@ public class Files : IFiles
             {
                 Title = Translation.Get("WindowTitleSaveFilePicker"),
                 SuggestedFileName = "",
-                DefaultExtension = Path.GetExtension(itemTag) ?? ".sk",
+                DefaultExtension = Path.GetExtension(path) ?? ".sk",
                 FileTypeChoices = [skriptFileType, allFilesType],
                 SuggestedStartLocation = suggestedFolder
             };

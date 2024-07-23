@@ -1,5 +1,6 @@
 ﻿using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
@@ -7,14 +8,75 @@ using SkEditor.API;
 using SkEditor.Utilities.Projects;
 using SkEditor.Views;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;
 public class FileHandler
 {
+    private static readonly ConcurrentQueue<Action> SaveQueue = new();
+    private static readonly AutoResetEvent SaveEvent = new(false);
+    private static readonly Thread SaveThread;
+
+    static FileHandler()
+    {
+        SaveThread = new Thread(ProcessSaveQueue)
+        {
+            IsBackground = true
+        };
+        SaveThread.Start();
+    }
+
+    private static void ProcessSaveQueue()
+    {
+        while (true)
+        {
+            SaveEvent.WaitOne();
+            while (SaveQueue.TryDequeue(out var saveAction))
+            {
+                saveAction();
+            }
+        }
+    }
+
+    public static void QueueSave(Action saveAction)
+    {
+        SaveQueue.Enqueue(saveAction);
+        SaveEvent.Set();
+    }
+
+    public static void SaveFile()
+    {
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+
+        QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () => 
+            await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile(), false)));
+    }
+
+    public static void SaveAsFile()
+    {
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+
+        QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
+            await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile(), true)));
+    }
+
+    public static void SaveAllFiles()
+    {
+        var openedEditors = SkEditorAPI.Files.GetOpenedEditors();
+        foreach (var file in openedEditors)
+        {
+            QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
+                await SkEditorAPI.Files.Save(file, false)));
+        }
+    }
+
     public static Action<AppWindow, DragEventArgs> FileDropAction = (window, e) =>
     {
         try
@@ -79,25 +141,6 @@ public class FileHandler
             }
         };
     }
-
-    public static async void SaveFile()
-    {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-            return;
-
-        await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile(), false);
-    }
-
-    public static async void SaveAsFile()
-    {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-            return;
-
-        await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile(), true);
-    }
-
-    public static void SaveAllFiles() => 
-        SkEditorAPI.Files.GetOpenedEditors().ForEach(async file => await SkEditorAPI.Files.Save(file, false));
 
     public static void SwitchTab(int index)
     {
