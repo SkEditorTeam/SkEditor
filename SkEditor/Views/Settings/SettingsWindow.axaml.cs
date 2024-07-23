@@ -22,6 +22,8 @@ public partial class SettingsWindow : AppWindow
 
         Instance = this;
         SkEditorAPI.Events.SettingsOpened();
+
+        Closed += (s, e) => SkEditorAPI.Core.GetAppConfig().Save();
     }
 
     public static void NavigateToPage(Type page)
