@@ -49,7 +49,7 @@ public class ChangeChecker
         }
         catch (Exception e)
         {
-            Log.Error(e, "Error while checking for changes");
+            Log.Warning(e, "Error while checking for changes");
         }
 
         isMessageShown = false;
