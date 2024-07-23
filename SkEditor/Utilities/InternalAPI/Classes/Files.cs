@@ -379,8 +379,10 @@ public class Files : IFiles
                 }
             case IFiles.FileCloseAction.All:
                 {
-                    GetOpenedFiles().ForEach(async tab => await Close(tab));
-                    AddWelcomeTab();
+                    var tabsToClose = GetOpenedFiles().ToList();
+                    tabsToClose.ForEach(async tab => await Close(tab));
+                    if (GetOpenedFiles().Count == 0)
+                        AddWelcomeTab();
                     break;
                 }
             default:
