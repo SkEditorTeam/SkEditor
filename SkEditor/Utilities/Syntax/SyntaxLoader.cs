@@ -47,7 +47,7 @@ class LocalRegistryOptions : IRegistryOptions
 
     public IRawGrammar GetGrammar(string scopeName)
     {
-        string grammarPath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting", "skript/syntaxes/skript.tmLanguage.json");
+        string grammarPath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting", "grammars/skript-grammar/skript.tmLanguage.json");
         using StreamReader reader = new(grammarPath);
         return GrammarReader.ReadGrammarSync(reader);
     }
@@ -56,7 +56,7 @@ class LocalRegistryOptions : IRegistryOptions
 
     public IRawTheme GetDefaultTheme()
     {
-        string themePath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting", "skript/themes/dark_skript.json");
+        string themePath = Path.Combine(AppConfig.AppDataFolderPath, "New Syntax Highlighting", "themes/dark_skript.json");
         using StreamReader reader = new(themePath);
         return ThemeReader.ReadThemeSync(reader);
     }
