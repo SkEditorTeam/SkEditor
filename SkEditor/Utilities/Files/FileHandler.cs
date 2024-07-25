@@ -127,21 +127,6 @@ public class FileHandler
         SkEditorAPI.Files.OpenFile(path);
     }
 
-    private static void AddChangeChecker(string path, TabViewItem tabItem)
-    {
-        if (!SkEditorAPI.Core.GetAppConfig().CheckForChanges || tabItem.Content is not TextEditor) return;
-
-        FileSystemWatcher watcher = new(Path.GetDirectoryName(path), Path.GetFileName(path));
-        watcher.Changed += (sender, e) => ChangeChecker.HasChangedDictionary[path] = true;
-        (tabItem.Content as TextEditor).Unloaded += (sender, e) =>
-        {
-            if (SkEditorAPI.Files.GetOpenedFiles().FirstOrDefault(openedFile => openedFile.TabViewItem == tabItem) is not OpenedFile openedFile)
-            {
-                watcher.Dispose();
-            }
-        };
-    }
-
     public static void SwitchTab(int index)
     {
         if (index < SkEditorAPI.Files.GetOpenedTabs().Count) SkEditorAPI.Files.Select(index);
