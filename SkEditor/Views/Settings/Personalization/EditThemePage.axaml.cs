@@ -34,6 +34,8 @@ public partial class EditThemePage : UserControl
         SetUpColorPicker(MenuBackgroundExpander, "MenuBackground");
         SetUpColorPicker(MenuBorderExpander, "MenuBorder");
         SetUpColorPicker(TextBoxFocusedBackgroundExpander, "TextBoxFocusedBackground");
+        SetUpColorPicker(CurrentLineBackgroundExpander, "CurrentLineBackground");
+        SetUpColorPicker(CurrentLineBorderExpander, "CurrentLineBorder");
         SetUpColorPicker(AccentColorExpander, "AccentColor");
     }
 

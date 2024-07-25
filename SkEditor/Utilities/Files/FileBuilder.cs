@@ -11,6 +11,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Styling;
 using SkEditor.Views;
 using SkEditor.Views.FileTypes;
 using System;
@@ -240,6 +241,10 @@ public class FileBuilder
 
         editor.Options.ConvertTabsToSpaces = SkEditorAPI.Core.GetAppConfig().UseSpacesInsteadOfTabs;
         editor.Options.IndentationSize = SkEditorAPI.Core.GetAppConfig().TabSize;
+
+        editor.TextArea.TextView.CurrentLineBackground = ThemeEditor.CurrentTheme.CurrentLineBackground;
+        editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(ThemeEditor.CurrentTheme.CurrentLineBorder, 2);
+        editor.Options.HighlightCurrentLine = SkEditorAPI.Core.GetAppConfig().HighlightCurrentLine;
 
         return editor;
     }

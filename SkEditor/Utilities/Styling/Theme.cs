@@ -24,6 +24,8 @@ public class Theme
     public ImmutableSolidColorBrush MenuBackground { get; set; } = new(Color.Parse("#ff151515"));
     public ImmutableSolidColorBrush MenuBorder { get; set; } = new(Color.Parse("#ff262626"));
     public ImmutableSolidColorBrush TextBoxFocusedBackground { get; set; } = new(Color.Parse("#ff191919"));
+    public ImmutableSolidColorBrush CurrentLineBackground { get; set; } = new(Color.Parse("#05FFFFFF"));
+    public ImmutableSolidColorBrush CurrentLineBorder { get; set; } = new(Color.Parse("#0DFFFFFF"));
     public ImmutableSolidColorBrush AccentColor { get; set; } = new(Colors.White);
     public string? CustomFont { get; set; }
     public bool UseMicaEffect { get; set; } = false;

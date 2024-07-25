@@ -305,6 +305,7 @@
 	<system:String x:Key="SettingsPersonalizationSyntaxDescription">Set how specific text is displayed with syntax highlightings.</system:String>
 	<system:String x:Key="SettingsPersonalizationFont">Font</system:String>
 	<system:String x:Key="SettingsPersonalizationFontDescription">Current font: {0}</system:String>
+	<system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Highlight current line</system:String>
 
 	<!-- Theme Settings -->
 	<system:String x:Key="SettingsThemeTitle">Theme</system:String>
@@ -415,6 +416,8 @@
 	<system:String x:Key="ThemeEditorMenuBackground">Menu background</system:String>
 	<system:String x:Key="ThemeEditorMenuBorder">Menu border</system:String>
 	<system:String x:Key="ThemeEditorFocusedTextBoxBackground">Focused text box background</system:String>
+	<system:String x:Key="ThemeEditorCurrentLineBackground">Current line background</system:String>
+	<system:String x:Key="ThemeEditorCurrentLineBorder">Current line border</system:String>
 	<system:String x:Key="ThemeEditorAccentColor">Accent color</system:String>
 
 	<!-- Welcome Tab -->

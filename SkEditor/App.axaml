@@ -46,6 +46,10 @@
 		<Brush x:Key="TextControlPlaceholderForegroundFocused">#26FFFFFF</Brush>
 		<Brush x:Key="SearchPanelBackgroundBrush">#161616</Brush>
 		
+		
+		<Brush x:Key="CurrentLineBackground">#05FFFFFF</Brush>
+		<Brush x:Key="CurrentLineBorder">#0DFFFFFF</Brush>
+		
 		<Thickness x:Key="FlyoutContentPadding">10</Thickness>
 		
 		<FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/JetBrainsMono#JetBrains Mono</FontFamily>

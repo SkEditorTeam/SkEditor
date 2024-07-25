@@ -27,6 +27,7 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private string _currentTheme = "Default.json";
     [ObservableProperty] private Dictionary<string, string> _fileSyntaxes = [];
     [ObservableProperty] private string _font = "Default";
+    [ObservableProperty] private bool _highlightCurrentLine = true;
     [ObservableProperty] private bool _useSpacesInsteadOfTabs = false;
     [ObservableProperty] private int _tabSize = 4;
     [ObservableProperty] private bool _checkForUpdates = true;
