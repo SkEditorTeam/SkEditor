@@ -83,15 +83,13 @@ jobs:
       run: |
         version=$(grep -oP '(?<=<InformationalVersion>).*?(?=</InformationalVersion>)' SkEditor/SkEditor.csproj)
         size=$(du -s --block-size=K SkEditorFilesx/opt/SkEditor | cut -f1 | tr -d 'K')
-        echo "Version: $version" >> SkEditorFilesx/DEBIAN/control
+        echo "Version: $version-b${GITHUB_RUN_ID}" >> SkEditorFilesx/DEBIAN/control
         echo "Version=$version" >> SkEditorFilesx/usr/share/applications/SkEditor.desktop
-        echo "Installed-Size: $size" >> SkEditorFilesx/DEBIAN/control
     - name: 🔍 | Calculate MD5 and SHA256 checksums
       run: |
-        cd SkEditorFilesx/opt/SkEditor
-        find . -type f -exec md5sum {} + > /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN/md5sums
-        find . -type f -exec sha256sum {} + > /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN/sha256sums
-    
+        cd SkEditorFilesx/
+        find . -type f -not -path './DEBIAN/*' -exec md5sum {} + | sed 's| \./| |' > DEBIAN/md5sums
+        find . -type f -not -path './DEBIAN/*' -exec sha256sum {} + | sed 's| \./| |' > DEBIAN/sha256sums    
     - name: 🎨 | Resize icon and create icon directories
       run: |
         sizes=(16 24 32 48 64 128 256)
