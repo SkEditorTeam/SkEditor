@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-      
 jobs:
   build-macos:
     runs-on: macos-latest
@@ -88,48 +87,68 @@ jobs:
         cd SkEditor
         dotnet restore
         dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+    
     - name: 📌 | Install Dependencies
       run: |
         sudo apt update
-        sudo apt install wget curl -y
+        sudo apt install wget curl imagemagick -y
+    
     - name: 🛠️ | Create .deb structure
       run: |
         mkdir -p "SkEditorFilesx/opt/SkEditor"
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
         mkdir -p "SkEditorFilesx/usr/share/applications"
         cd SkEditorFilesx/usr/share/applications
-        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/v178sdzprbasul0xatg1y/SkEditor.desktop?rlkey=fq2nsuf9dyvlm7jhg9e5jugqu&st=6vlpjwjg&dl=1'
-        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/opt/SkEditor/SkEditor.png https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png
-        mkdir -p mime/packages
-        cd mime/packages
-        wget -O skript.xml -r 'https://www.dropbox.com/scl/fi/5fh65lwl5n352tik2hl5p/skript.xml?rlkey=kikicagf306vd1b2lcaenyjyu&st=i6abr09z&dl=1'
+        wget -O SkEditor.desktop 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/ce4a0b2a782e73500aafde3ee24eb8ebf1194f98/SkEditor.desktop'
+        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/opt/SkEditor/SkEditor.png 'https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png'
+        mkdir -p /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/usr/share/mime/packages
+        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/usr/share/mime/packages/mime/packages/skript.xml 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/6d9cd730ecc86d8113b70b579627b11ff731ad6b/skript.xml'
         mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
         cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
-        pwd 
-        wget -O control 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/control'
-        echo "exported_ver=\$(curl -s \"https://camo.githubusercontent.com/024e74589d307c8cbe664b87c58cf65e2b62587aec02459d998719874ea7b5eb/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f762f72656c656173652f536b456469746f725465616d2f536b456469746f723f636f6c6f723d253233376133346562266c6162656c3d76657273696f6e267374796c653d666c61742d737175617265\" | grep -oP '(?<=<title>).*?(?=</title>)' | sed 's/v\([0-9]\)/\1/') && exported_ver=\"\${exported_ver^}\"" >> getver
-        echo "echo \"\$exported_ver-gh-b${GITHUB_RUN_ID}\" >> control" >> getver
-        bash getver
-        rm -f getver
-        wget -O postrm 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postrm'
-        wget -O preinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/preinst'
-        wget -O postinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postinst'
-    - name: 🔑 | Fix Permissions
+        wget -O control 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/98ca7ab3764efe4eee666878b76582b2ef37eb74/control'
+    
+    - name: 🔍 | Extract version from SkEditor.csproj, measure size, and update control file
       run: |
-        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
-        chmod 0755 *
+        version=$(grep -oP '(?<=<InformationalVersion>).*?(?=</InformationalVersion>)' SkEditor/SkEditor.csproj)
+        size=$(du -s --block-size=K SkEditorFilesx/opt/SkEditor | cut -f1 | tr -d 'K')
+        echo "Version: $version" >> SkEditorFilesx/DEBIAN/control
+        echo "Version=$version" >> SkEditorFilesx/usr/share/applications/SkEditor.desktop
+        echo "Installed-Size: $size" >> SkEditorFilesx/DEBIAN/control
+    - name: 🔍 | Calculate MD5 and SHA256 checksums
+      run: |
+        cd SkEditorFilesx/opt/SkEditor
+        find . -type f -exec md5sum {} + > /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN/md5sums
+        find . -type f -exec sha256sum {} + > /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN/sha256sums
+    
+    - name: 🎨 | Resize icon and create icon directories
+      run: |
+        sizes=(16 24 32 48 64 128 256)
+        for size in "${sizes[@]}"; do
+          mkdir -p "SkEditorFilesx/usr/share/icons/hicolor/${size}x${size}/apps"
+          convert SkEditorFilesx/opt/SkEditor/SkEditor.png -resize ${size}x${size} "SkEditorFilesx/usr/share/icons/hicolor/${size}x${size}/apps/SkEditor.png"
+        done
+    
+    - name: 📦 | Download control scripts
+      run: |
+        wget -O SkEditorFilesx/DEBIAN/postrm 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postrm'
+        wget -O SkEditorFilesx/DEBIAN/preinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/preinst'
+        wget -O SkEditorFilesx/DEBIAN/postinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postinst'
+    
+    - name: 🔑 | Fix Permissions
+      run: chmod 0755 SkEditorFilesx/DEBIAN/*
     
     - name: 📦 | Create .deb package
       run: |
         cd /home/runner/work/SkEditor/SkEditor/
-        pwd
         dpkg-deb -Zgzip -b SkEditorFilesx SkEditor-x64.deb
+    
     - name: 📤 | Upload artifacts
       env: 
         TOKEN: ${{ secrets.APT_REPO_TOKEN }}
       run: |
         curl --header "Authorization: Bearer ${TOKEN}" --form "package=@SkEditor-x64.deb" --form "distribution=all" https://fixeq.baltorepo.com/skeditor/skeditor/upload/
         echo "$env:TOKEN"
+
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -147,6 +166,7 @@ jobs:
         dotnet restore
         dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
         dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+    
     - name: 🛠️ | Create archive structure
       run: |
         cd /home/runner/work/SkEditor/SkEditor/
@@ -159,8 +179,10 @@ jobs:
       run: |
         cd /home/runner/work/SkEditor/SkEditor/
         tar -czf SkEditor.tar.gz SkEditorFilesL/
+    
     - name: 📤 | Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: Linux (multiarch)
         path: SkEditor.tar.gz
+        
