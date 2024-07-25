@@ -24,6 +24,7 @@ public class ChangeChecker
         try
         {
             OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+            if (file == null) return;
             if (!file.IsEditor || string.IsNullOrWhiteSpace(file.Path)) return;
 
             string path = Uri.UnescapeDataString(file.Path);
