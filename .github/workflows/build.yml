@@ -18,58 +18,32 @@ jobs:
       with:
         dotnet-version: '8.0.x'
     
-    - name: 🏗️ | Build and publish for macOS (x64)
+    - name: 🏗️ | Build and publish for macOS
       run: |
         cd SkEditor
-        dotnet restore
-        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
-    
-    - name: 🛠️ | Create .app structure
+        for arch in osx-x64 osx-arm64; do
+          dotnet restore
+          dotnet publish -c Release -r $arch -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
+        done
+
+    - name: 🛠️ | Create .app structure and zip for both architectures
       run: |
-        mkdir -p "SkEditor.app/Contents/MacOS"
-        mkdir -p "SkEditor.app/Contents/Resources"
-        cp -r SkEditor/bin/Release/net8.0/osx-x64/publish/* "SkEditor.app/Contents/MacOS/"
-        cp SkEditor/Info.plist "SkEditor.app/Contents/"
-        cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
+        for arch in osx-x64 osx-arm64; do
+          mkdir -p "SkEditor.app/Contents/MacOS"
+          mkdir -p "SkEditor.app/Contents/Resources"
+          cp -r SkEditor/bin/Release/net8.0/$arch/publish/* "SkEditor.app/Contents/MacOS/"
+          cp SkEditor/Info.plist "SkEditor.app/Contents/"
+          cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
+          find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
+          zip -r "SkEditorMac-$arch.zip" SkEditor.app
+          mv "SkEditorMac-$arch.zip" "$arch-SkEditorMac.zip"
+        done
     
-    - name: 🔑 | Set execute permissions
-      run: |
-        find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
-    
-    - name: 📦 | Zip .app package
-      run: |
-        zip -r SkEditorMac.zip SkEditor.app
-    
-    - name: 📤 | Upload artifacts
+    - name: 📤 | Upload macOS artifacts
       uses: actions/upload-artifact@v2
       with:
         name: SkEditorMac
-        path: SkEditorMac.zip
-
-    # now build osx-arm64
-    - name: 🏗️ | Build and publish for macOS (arm64)
-      run: |
-        cd SkEditor
-        dotnet restore
-        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
-    - name: 🛠️ | Create .app structure (arm64)
-      run: |
-        mkdir -p "SkEditor.app/Contents/MacOS"
-        mkdir -p "SkEditor.app/Contents/Resources"
-        cp -r SkEditor/bin/Release/net8.0/osx-arm64/publish/* "SkEditor.app/Contents/MacOS/"
-        cp SkEditor/Info.plist "SkEditor.app/Contents/"
-        cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
-    - name: 🔑 | Set execute permissions (arm64)
-      run: |
-        find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
-    - name: 📦 | Zip .app package (arm64)
-      run: |
-        zip -r SkEditorMac-arm64.zip SkEditor.app
-    - name: 📤 | Upload artifacts (arm64)
-      uses: actions/upload-artifact@v2
-      with:
-        name: SkEditorMac-arm64
-        path: SkEditorMac-arm64.zip
+        path: "*.zip"
 
   build-linux-debian-x64:
     runs-on: ubuntu-latest
@@ -98,16 +72,14 @@ jobs:
         mkdir -p "SkEditorFilesx/opt/SkEditor"
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
         mkdir -p "SkEditorFilesx/usr/share/applications"
-        cd SkEditorFilesx/usr/share/applications
-        wget -O SkEditor.desktop 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/ce4a0b2a782e73500aafde3ee24eb8ebf1194f98/SkEditor.desktop'
-        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/opt/SkEditor/SkEditor.png 'https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png'
-        mkdir -p /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/usr/share/mime/packages
-        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/usr/share/mime/packages/mime/packages/skript.xml 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/6d9cd730ecc86d8113b70b579627b11ff731ad6b/skript.xml'
-        mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
-        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
-        wget -O control 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/98ca7ab3764efe4eee666878b76582b2ef37eb74/control'
+        wget -O SkEditorFilesx/usr/share/applications/SkEditor.desktop 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/ce4a0b2a782e73500aafde3ee24eb8ebf1194f98/SkEditor.desktop'
+        wget -O SkEditorFilesx/opt/SkEditor/SkEditor.png 'https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png'
+        mkdir -p SkEditorFilesx/usr/share/mime/packages
+        wget -O SkEditorFilesx/usr/share/mime/packages/skript.xml 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/6d9cd730ecc86d8113b70b579627b11ff731ad6b/skript.xml'
+        mkdir -p "SkEditorFilesx/DEBIAN"
+        wget -O SkEditorFilesx/DEBIAN/control 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/98ca7ab3764efe4eee666878b76582b2ef37eb74/control'
     
-    - name: 🔍 | Extract version from SkEditor.csproj, measure size, and update control file
+    - name: 🔍 | Extract version, measure size, and update control file
       run: |
         version=$(grep -oP '(?<=<InformationalVersion>).*?(?=</InformationalVersion>)' SkEditor/SkEditor.csproj)
         size=$(du -s --block-size=K SkEditorFilesx/opt/SkEditor | cut -f1 | tr -d 'K')
@@ -147,7 +119,6 @@ jobs:
         TOKEN: ${{ secrets.APT_REPO_TOKEN }}
       run: |
         curl --header "Authorization: Bearer ${TOKEN}" --form "package=@SkEditor-x64.deb" --form "distribution=all" https://fixeq.baltorepo.com/skeditor/skeditor/upload/
-        echo "$env:TOKEN"
 
   build-linux:
     runs-on: ubuntu-latest
@@ -160,16 +131,16 @@ jobs:
       with:
         dotnet-version: '8.0.x'
     
-    - name: 🏗️ | Build and publish for Debian
+    - name: 🏗️ | Build and publish for Linux
       run: |
         cd SkEditor
-        dotnet restore
-        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
-        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        for arch in linux-x64 linux-arm64; do
+          dotnet restore
+          dotnet publish -c Release -r $arch -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        done
     
     - name: 🛠️ | Create archive structure
       run: |
-        cd /home/runner/work/SkEditor/SkEditor/
         mkdir -p "SkEditorFilesL/x64"
         mkdir -p "SkEditorFilesL/arm64"
         cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesL/x64/"
@@ -177,7 +148,6 @@ jobs:
     
     - name: 📦 | Pack SkEditor files
       run: |
-        cd /home/runner/work/SkEditor/SkEditor/
         tar -czf SkEditor.tar.gz SkEditorFilesL/
     
     - name: 📤 | Upload artifacts
