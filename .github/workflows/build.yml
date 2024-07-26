@@ -76,7 +76,7 @@ jobs:
           cp -r SkEditor/bin/Release/net8.0/linux-$arch/publish/* "SkEditorFiles-$arch/opt/SkEditor/"
           mkdir -p "SkEditorFiles-$arch/usr/share/applications"
           wget -O SkEditorFiles-$arch/usr/share/applications/SkEditor.desktop 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/ce4a0b2a782e73500aafde3ee24eb8ebf1194f98/SkEditor.desktop'
-          cp SkEditor/SkEditor.png SkEditorFiles-$arch/opt/SkEditor/SkEditor.png 
+          wget -O SkEditorFiles-$arch/opt/SkEditor/SkEditor.png 'https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png'
           mkdir -p SkEditorFiles-$arch/usr/share/mime/packages
           wget -O SkEditorFiles-$arch/usr/share/mime/packages/skript.xml 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/6d9cd730ecc86d8113b70b579627b11ff731ad6b/skript.xml'
           mkdir -p "SkEditorFiles-$arch/DEBIAN"
