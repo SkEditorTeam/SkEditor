@@ -97,14 +97,6 @@ jobs:
           fi
           echo "Architecture: $architecture" >> SkEditorFiles-$arch/DEBIAN/control
         done
-    - name: 🔍 | Calculate MD5 and SHA256 checksums
-      run: |
-        for arch in x64 arm64; do
-          cd SkEditorFiles-$arch/
-          find . -type f -not -path './DEBIAN/*' -exec md5sum {} + | sed 's| \./| |' > DEBIAN/md5sums
-          find . -type f -not -path './DEBIAN/*' -exec sha256sum {} + | sed 's| \./| |' > DEBIAN/sha256sums
-          cd -
-        done
     - name: 🎨 | Resize icon and create icon directories
       run: |
         for arch in x64 arm64; do
