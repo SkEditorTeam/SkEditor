@@ -45,7 +45,7 @@ jobs:
         name: SkEditorMac
         path: "*.zip"
 
-  build-linux-debian-x64:
+  build-linux-debian:
     runs-on: ubuntu-latest
     steps:
     - name: 📝 | Checkout repository
@@ -137,9 +137,7 @@ jobs:
       env: 
         TOKEN: ${{ secrets.APT_REPO_TOKEN }}
       run: |
-        for arch in x64 arm64; do
-          curl --header "Authorization: Bearer ${TOKEN}" --form "package=@SkEditor#${{ github.run_number }}-$arch.deb" --form "distribution=all" https://fixeq.baltorepo.com/skeditor/skeditor/upload/
-        done
+        curl --header "Authorization: Bearer ${TOKEN}" --form "package=@SkEditor#${{ github.run_number }}-$arch.deb" --form "distribution=all" https://fixeq.baltorepo.com/skeditor/skeditor/upload/
   build-linux:
     runs-on: ubuntu-latest
     steps:
