@@ -32,14 +32,21 @@ jobs:
 
     - name: Run tests
       run: |
-        chmod +x SkEditor/bin/Release/net8.0/osx-arm64/publish/SkEditor
-        result=$(SkEditor/bin/Release/net8.0/osx-arm64/publish/SkEditor --test)
-        if [[ "$result" == *"Test passed"* ]]; then
-          echo "Tests passed"
-        else
-          echo "Tests failed"
+        $exePath = "SkEditor\\bin\\Release\\net8.0\\win-x64\\publish\\SkEditor.exe"
+        if (Test-Path $exePath) {
+          Write-Host "Running tests from $exePath"
+          $result = & $exePath --test
+          Write-Host "Test result: $result"
+          if ($result -match "Test passed") {
+            Write-Host "Tests passed"
+          } else {
+            Write-Host "Tests failed"
+            exit 1
+          }
+        } else {
+          Write-Host "Executable not found at $exePath"
           exit 1
-        fi
+        }
 
   build-windows:
     runs-on: windows-latest
