@@ -65,7 +65,7 @@ jobs:
     - name: Run tests
       run: |
         $result = & SkEditor\\bin\\Release\\net8.0\\win-x64\\publish\\SkEditor.exe --test
-        if ($result -like "*Test passed*") {
+        if ($result -match "Test passed") {
           Write-Host "Tests passed"
         } else {
           Write-Host "Tests failed"
