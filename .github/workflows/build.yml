@@ -88,7 +88,7 @@ jobs:
         version=$(grep -oP '(?<=<InformationalVersion>).*?(?=</InformationalVersion>)' SkEditor/SkEditor.csproj)
         for arch in x64 arm64; do
           size=$(du -s --block-size=K SkEditorFiles-$arch/opt/SkEditor | cut -f1 | tr -d 'K')
-          echo "Version: $version-b${GITHUB_RUN_ID}" >> SkEditorFiles-$arch/DEBIAN/control
+          echo "Version: $version-b${{ github.run_number }}" >> SkEditorFiles-$arch/DEBIAN/control
           echo "Version=$version" >> SkEditorFiles-$arch/usr/share/applications/SkEditor.desktop
           if [ "$arch" = "x64" ]; then
                 architecture="amd64"
@@ -138,7 +138,7 @@ jobs:
         TOKEN: ${{ secrets.APT_REPO_TOKEN }}
       run: |
         for arch in x64 arm64; do
-          curl --header "Authorization: Bearer ${TOKEN}" --form "package=@SkEditor-b${{ github.run_number }}-$arch.deb" --form "distribution=all" https://fixeq.baltorepo.com/skeditor/skeditor/upload/
+          curl --header "Authorization: Bearer ${TOKEN}" --form "package=@SkEditor-b${{ github.run_number }}-$arch.deb" --form "distribution=all" https://fixeq.baltorepo.com/skeditor/app/upload/
         done
   build-linux:
     runs-on: ubuntu-latest
