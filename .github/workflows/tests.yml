@@ -1,0 +1,105 @@
+name: .NET Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependincies
+      run: |
+        cd SkEditor
+        dotnet restore
+
+    - name: Build project
+      run: |
+        cd SkEditor
+        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Run tests
+      run: |
+        chmod +x SkEditor/bin/Release/net8.0/osx-x64/publish/SkEditor
+        result=$(SkEditor/bin/Release/net8.0/osx-x64/publish/SkEditor --test)
+        if [[ "$result" == *"Test passed"* ]]; then
+          echo "Tests passed"
+        else
+          echo "Tests failed"
+          exit 1
+        fi
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: |
+        cd SkEditor
+        dotnet restore
+
+    - name: Build project
+      run: |
+        cd SkEditor
+        dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Run tests
+      run: |
+        $result = & SkEditor\\bin\\Release\\net8.0\\win-x64\\publish\\SkEditor.exe --test
+        if ($result -like "*Test passed*") {
+          Write-Host "Tests passed"
+        } else {
+          Write-Host "Tests failed"
+          exit 1
+        }
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: |
+        cd SkEditor
+        dotnet restore
+
+    - name: Build project
+      run: |
+        cd SkEditor
+        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
+
+    - name: Run tests
+      run: |
+        chmod +x SkEditor/bin/Release/net8.0/linux-x64/publish/SkEditor
+        result=$(SkEditor/bin/Release/net8.0/linux-x64/publish/SkEditor --test)
+        if [[ "$result" == *"Test passed"* ]]; then
+          echo "Tests passed"
+        else
+          echo "Tests failed"
+          exit 1
+        fi
