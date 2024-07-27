@@ -57,21 +57,27 @@ jobs:
       run: |
         cd SkEditor
         dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
-    - name: Run tests
+    - name: Check executable path
       run: |
         $exePath = "SkEditor\\bin\\Release\\net8.0\\win-x64\\publish\\SkEditor.exe"
         if (Test-Path $exePath) {
-          Write-Host "Running tests from $exePath"
-          $result = & $exePath --test
-          Write-Host "Test result: $result"
-          if ($result -match "Test passed") {
-            Write-Host "Tests passed"
-          } else {
-            Write-Host "Tests failed"
-            exit 1
-          }
+          Write-Host "Executable found at $exePath"
         } else {
           Write-Host "Executable not found at $exePath"
+          exit 1
+        }
+
+    - name: Run tests
+      run: |
+        $exePath = "SkEditor\\bin\\Release\\net8.0\\win-x64\\publish\\SkEditor.exe"
+        Write-Host "Running tests from $exePath"
+        & $exePath --test | Out-File -FilePath test_output.txt
+        $result = Get-Content -Path test_output.txt
+        Write-Host "Test result: $result"
+        if ($result -match "Test passed") {
+          Write-Host "Tests passed"
+        } else {
+          Write-Host "Tests failed"
           exit 1
         }
   build-linux:
