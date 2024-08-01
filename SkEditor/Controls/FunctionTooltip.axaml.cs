@@ -40,7 +40,6 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
             SelectableTextBlock descriptionTextBlock = CreateSelectableTextBlock(comment.Description, "#adbcc3", 12);
             descriptionTextBlock.MaxWidth = 300;
             descriptionTextBlock.TextWrapping = TextWrapping.Wrap;
-            descriptionTextBlock.Margin = new Thickness(-10, 0, 0, 0);
             descriptionTextBlock.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
             descriptionTextBlock.ContextFlyout = null;
             TooltipPanel.Children.Add(descriptionTextBlock);
