@@ -27,6 +27,8 @@ public partial class RefactorWindow : AppWindow
         Close();
     }
 
+    // TODO: Support for multi-line comments (Skript 2.9.0)
+    // TODO: Support for comments starting after a line of code in the same line
     private static Task RemoveComments()
     {
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
@@ -34,7 +36,7 @@ public partial class RefactorWindow : AppWindow
 
         StringBuilder builder = new();
         linesToStay.ForEach(x => builder.AppendLine(GetText(x)));
-        textEditor.Document.Text = builder.ToString();
+        textEditor.Document.Text = builder.ToString()[..^2];
 
         return Task.CompletedTask;
     }
