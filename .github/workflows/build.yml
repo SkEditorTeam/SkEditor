@@ -89,7 +89,7 @@ jobs:
         for arch in x64 arm64; do
           size=$(du -s --block-size=K SkEditorFiles-$arch/opt/SkEditor | cut -f1 | tr -d 'K')
           echo "Version: $version-b${{ github.run_number }}" >> SkEditorFiles-$arch/DEBIAN/control
-          echo "Version=$version" >> SkEditorFiles-$arch/usr/share/applications/SkEditor.desktop
+          echo -e "\nVersion=$version" >> SkEditorFiles-$arch/usr/share/applications/SkEditor.desktop
           if [ "$arch" = "x64" ]; then
                 architecture="amd64"
             else
