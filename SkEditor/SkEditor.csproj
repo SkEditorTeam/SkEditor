@@ -8,18 +8,14 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>SkEditor.ico</ApplicationIcon>
 		<PublishSingleFile>true</PublishSingleFile>
-		<AssemblyVersion>2.7.2</AssemblyVersion>
-		<FileVersion>2.7.2</FileVersion>
-		<Version>2.7.2</Version>
-		<InformationalVersion>2.7.2</InformationalVersion>
+		<AssemblyVersion>2.8.0</AssemblyVersion>
+		<FileVersion>2.8.0</FileVersion>
+		<Version>2.8.0</Version>
+		<InformationalVersion>2.8.0</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<NoWarn>CS8600;CS8604;CS8622;CS8603;CS8602;CA2211;CS8619;CS8629;CS8601;CS8618;CS8620</NoWarn>
-		<DebugType>portable</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	<PropertyGroup>
 		<NoWarn>CS8600;CS8604;CS8622;CS8603;CS8602;CA2211;CS8619;CS8629;CS8601;CS8618;CS8620</NoWarn>
 		<DebugType>portable</DebugType>
 	</PropertyGroup>
