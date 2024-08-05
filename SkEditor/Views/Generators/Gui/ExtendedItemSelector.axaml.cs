@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
@@ -15,6 +16,7 @@ public partial class ExtendedItemSelector : AppWindow
     public ExtendedItemSelector(Item item)
     {
         InitializeComponent();
+        Focusable = true;
 
         _item = item;
 
@@ -56,6 +58,11 @@ public partial class ExtendedItemSelector : AppWindow
 
             Close(_item);
         });
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
 
         ColoredTextHandler.SetupBox(DisplayNameTextBox);
     }

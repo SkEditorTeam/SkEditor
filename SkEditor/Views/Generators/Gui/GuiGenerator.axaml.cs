@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
@@ -34,6 +35,7 @@ public partial class GuiGenerator : AppWindow
     public GuiGenerator()
     {
         InitializeComponent();
+        Focusable = true;
 
         Instance = this;
         DataContext = new SettingsViewModel();
@@ -52,6 +54,11 @@ public partial class GuiGenerator : AppWindow
         Loaded += async (_, _) =>
         {
             await FileDownloader.CheckForMissingItemFiles(this);
+        };
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
         };
     }
 

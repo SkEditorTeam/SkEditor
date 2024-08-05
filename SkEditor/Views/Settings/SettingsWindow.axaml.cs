@@ -1,3 +1,4 @@
+using Avalonia.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Media.Animation;
 using FluentAvalonia.UI.Navigation;
@@ -16,6 +17,7 @@ public partial class SettingsWindow : AppWindow
     public SettingsWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;
@@ -23,6 +25,10 @@ public partial class SettingsWindow : AppWindow
         Instance = this;
         SkEditorAPI.Events.SettingsOpened();
 
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
         Closed += (s, e) => SkEditorAPI.Core.GetAppConfig().Save();
     }
 

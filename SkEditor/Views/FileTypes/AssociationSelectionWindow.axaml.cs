@@ -1,4 +1,5 @@
-﻿using FluentAvalonia.UI.Controls;
+﻿using Avalonia.Input;
+using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
@@ -16,6 +17,7 @@ public partial class AssociationSelectionWindow : AppWindow
     {
         InitializeComponent();
         WindowStyler.Style(this);
+        Focusable = true;
 
         fileTypes.Sort((a, b) => a.IsFromAddon.CompareTo(b.IsFromAddon));
         SelectedAssociation = fileTypes.Find(association => !association.IsFromAddon);
@@ -46,6 +48,11 @@ public partial class AssociationSelectionWindow : AppWindow
         };
 
         ConfirmButton.Click += (_, _) => Close();
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
 }

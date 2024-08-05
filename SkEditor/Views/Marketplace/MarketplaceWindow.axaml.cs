@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
@@ -21,11 +22,16 @@ public partial class MarketplaceWindow : AppWindow
     public MarketplaceWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         Instance = this;
 
         ItemListBox.SelectionChanged += OnSelectedItemChanged;
         Loaded += (_, _) => Task.Run(LoadItems);
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private async Task LoadItems()
