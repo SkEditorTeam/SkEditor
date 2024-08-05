@@ -3,6 +3,7 @@ using Avalonia.Platform.Storage;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
+using Serilog;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
@@ -186,6 +187,7 @@ public class Files : IFiles
         openedFile["Parser"] = new CodeParser(editor);
         openedFile["Margin"] = new EditorMargin(openedFile);
 
+        RemoveWelcomeTab();
         GetOpenedFiles().Add(openedFile);
         (GetTabView().TabItems as IList)?.Add(tabItem);
         await SyntaxLoader.RefreshSyntaxAsync();
@@ -305,7 +307,19 @@ public class Files : IFiles
             return;
 
         SkEditorAPI.Events.FileOpened(openedFile, false);
+
+        RemoveWelcomeTab();
         Select(openedFile);
+    }
+
+    private void RemoveWelcomeTab()
+    {
+        var welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem.Content is WelcomeTabControl);
+        if (welcomeTab != null)
+        {
+            (GetTabView().TabItems as IList)?.Remove(welcomeTab.TabViewItem);
+            GetOpenedFiles().Remove(welcomeTab);
+        }
     }
 
     public void Select(object entity)
