@@ -65,6 +65,11 @@ public interface IFiles
     public void AddCustomTab(object header, Control content, bool select = true, IconSource? icon = null);
 
     /// <summary>
+    /// Add a new editor tab with the desired content.
+    /// 
+    public Task<OpenedFile> AddEditorTab(string content, string? path);
+
+    /// <summary>
     /// Select the desired opened file's tab item.
     /// </summary>
     /// <param name="entity">The opened file or tab view item to select</param>
