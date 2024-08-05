@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Data;
+using Avalonia.Threading;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
@@ -17,13 +18,18 @@ namespace SkEditor.Desktop
         public static void Main(string[] args)
         {
             GC.KeepAlive(typeof(RelativeSource));
+            CheckTest(args);
 
-            // Check for the --test argument
+            BuildAvaloniaApp()
+                    .StartWithClassicDesktopLifetime(args);
+        }
+
+        private static void CheckTest(string[] args)
+        {
             if (args.Length > 0 && args[0] == "--test")
             {
                 try
                 {
-                    // Here you can add any initialization code that you want to test
                     Console.WriteLine("Test passed");
                 }
                 catch (Exception e)
@@ -32,31 +38,6 @@ namespace SkEditor.Desktop
                     Environment.Exit(1);
                 }
                 return;
-            }
-
-            try
-            {
-                BuildAvaloniaApp()
-                    .StartWithClassicDesktopLifetime(args);
-            }
-            catch (Exception e)
-            {
-                string message = "Application crashed!";
-                string? source = e.Source;
-                if (AddonLoader.DllNames.Contains(source + ".dll"))
-                {
-                    message += $" It's fault of {source} addon.";
-                }
-                Log.Fatal(e, message);
-                Console.Error.WriteLine(e);
-                Console.Error.WriteLine(message);
-
-                SkEditorAPI.Core.SaveData();
-                AddonLoader.SaveMeta();
-
-                var fullException = e.ToString();
-                var encodedMessage = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(fullException));
-                Process.Start(Environment.ProcessPath, "--crash " + encodedMessage);
             }
         }
 
