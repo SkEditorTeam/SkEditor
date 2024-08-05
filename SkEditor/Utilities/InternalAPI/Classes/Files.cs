@@ -166,7 +166,9 @@ public class Files : IFiles
 
         var tabItem = await FileBuilder.Build(header);
         tabItem.Tag = path;
-        (tabItem.Content as TextEditor).Text = content;
+
+        TextEditor editor = tabItem.Content as TextEditor;
+        editor.Text = content;
 
         var openedFile = new OpenedFile()
         {
@@ -181,10 +183,7 @@ public class Files : IFiles
         Icon.SetIcon(openedFile);
 
         // Custom Data
-        if (tabItem.Content is TextEditor editor)
-        {
-            openedFile["Parser"] = new CodeParser(editor);
-        }
+        openedFile["Parser"] = new CodeParser(editor);
         openedFile["Margin"] = new EditorMargin(openedFile);
 
         GetOpenedFiles().Add(openedFile);
