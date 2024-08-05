@@ -21,7 +21,6 @@ public partial class GuiGenerator : AppWindow
 {
     private RelayCommand<int> _buttonCommand;
 
-
     public HashSet<Button> Buttons { get; } = [];
     public Dictionary<int, Item> Items { get; set; } = [];
     public Item? BackgroundItem { get; set; }
@@ -54,6 +53,7 @@ public partial class GuiGenerator : AppWindow
         Loaded += async (_, _) =>
         {
             await FileDownloader.CheckForMissingItemFiles(this);
+            TitleTextBox.Focus();
         };
 
         KeyDown += (_, e) =>

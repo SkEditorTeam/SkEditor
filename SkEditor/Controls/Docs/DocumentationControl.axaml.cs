@@ -55,6 +55,8 @@ public partial class DocumentationControl : UserControl
             }
         });
 
+        Loaded += (sender, args) => QueryBox.Focus();
+
         KeyDown += (sender, args) =>
         {
             if (args is { Key: Key.Enter, KeyModifiers: KeyModifiers.None } && QueryBox.IsFocused)

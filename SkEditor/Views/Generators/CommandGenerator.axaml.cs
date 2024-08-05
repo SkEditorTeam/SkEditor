@@ -22,6 +22,7 @@ public partial class CommandGenerator : AppWindow
         {
             if (e.Key == Key.Escape) Close();
         };
+        Loaded += (_, e) => NameTextBox.Focus();
     }
 
     private void Generate()
