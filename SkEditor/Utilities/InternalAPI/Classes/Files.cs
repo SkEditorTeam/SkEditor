@@ -161,8 +161,8 @@ public class Files : IFiles
 
     public async Task<OpenedFile> AddEditorTab(string content, string? path)
     {
-        var header = Translation.Get("NewFileNameFormat").Replace("{0}",
-            GetOpenedFiles().Count.ToString());
+        int index = GetOpenedEditors().Count + 1;
+        var header = Translation.Get("NewFileNameFormat").Replace("{0}", index.ToString());
 
         var tabItem = await FileBuilder.Build(header);
         tabItem.Tag = path;
@@ -174,9 +174,11 @@ public class Files : IFiles
             Path = path,
             TabViewItem = tabItem,
             CustomName = header,
-            IsSaved = path != null,
+            IsSaved = !string.IsNullOrEmpty(path),
             IsNewFile = path == null,
         };
+
+        Icon.SetIcon(openedFile);
 
         // Custom Data
         if (tabItem.Content is TextEditor editor)
