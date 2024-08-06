@@ -305,6 +305,7 @@
 	<system:String x:Key="SettingsPersonalizationSyntaxDescription">Ustaw sposób wyświetlania określonego tekstu z podświetlaniem składni.</system:String>
 	<system:String x:Key="SettingsPersonalizationFont">Czcionka</system:String>
 	<system:String x:Key="SettingsPersonalizationFontDescription">Aktualnie: {0}</system:String>
+	<system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Podświetl bieżącą linię</system:String>
 
 	<!-- Theme Settings -->
 	<system:String x:Key="SettingsThemeTitle">Motyw</system:String>
@@ -415,6 +416,8 @@
 	<system:String x:Key="ThemeEditorMenuBackground">Tło menu</system:String>
 	<system:String x:Key="ThemeEditorMenuBorder">Obramowanie menu</system:String>
 	<system:String x:Key="ThemeEditorFocusedTextBoxBackground">Tło aktywnego pola tekstowego</system:String>
+	<system:String x:Key="ThemeEditorCurrentLineBackground">Tło aktualnej linii</system:String>
+	<system:String x:Key="ThemeEditorCurrentLineBorder">Obramowanie aktualnej linii</system:String>
 	<system:String x:Key="ThemeEditorAccentColor">Kolor wiodący</system:String>
 
 	<!-- Welcome Tab -->

@@ -1,3 +1,4 @@
+using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
@@ -14,8 +15,13 @@ public partial class RefactorWindow : AppWindow
     public RefactorWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         ApplyButton.Command = new RelayCommand(Apply);
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private async void Apply()

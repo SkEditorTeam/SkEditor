@@ -80,9 +80,6 @@ public class Core : ICore
     {
         foreach (var file in SkEditorAPI.Files.GetOpenedEditors())
         {
-            if (!file.IsEditor)
-                continue;
-
             string path = file.Path;
             if (string.IsNullOrEmpty(path))
             {
@@ -90,21 +87,19 @@ public class Core : ICore
                 Directory.CreateDirectory(tempPath);
                 path = Path.Combine(tempPath, file.Header);
             }
-
             string textToWrite = file.Editor?.Text;
             if (string.IsNullOrEmpty(textToWrite))
                 continue;
-
             try
             {
                 await File.WriteAllTextAsync(path, textToWrite);
+                using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Failed to save file: {path}");
             }
         }
-
         GetAppConfig().Save();
     }
 }

@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using ExCSS;
@@ -15,6 +16,7 @@ public partial class FontSelectionWindow : AppWindow
     public FontSelectionWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         SetUp();
         LoadFonts();
@@ -39,6 +41,11 @@ public partial class FontSelectionWindow : AppWindow
         FontListBox.SelectionChanged += (s, e) =>
         {
             _selectedFont = FontListBox.SelectedItem as FontInfo;
+        };
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
         };
     }
 

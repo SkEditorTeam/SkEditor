@@ -1,4 +1,5 @@
-﻿using Avalonia.Interactivity;
+﻿using Avalonia.Input;
+using Avalonia.Interactivity;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Projects.Elements;
@@ -13,11 +14,17 @@ public partial class RenameElementWindow : AppWindow
     public RenameElementWindow(StorageElement element)
     {
         InitializeComponent();
+        Focusable = true;
 
         Element = element;
         NameBox.Text = element.Name;
 
         WindowStyler.Style(this);
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private void RenameButtonClick(object? sender, RoutedEventArgs e)

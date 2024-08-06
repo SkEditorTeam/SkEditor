@@ -50,7 +50,16 @@ public static class SessionRestorer
             if (string.IsNullOrEmpty(jsonData)) continue;
 
             var data = BuildOpeningData(jsonData);
-            await (SkEditorAPI.Files as API.Files).AddEditorTab(data.Item1, data.Item2);
+            await SkEditorAPI.Files.AddEditorTab(data.Content, data.Path);
+
+            if (data.HasUnsavedChanges)
+            {
+                var openedFile = SkEditorAPI.Files.GetOpenedFileByPath(data.Path);
+                if (openedFile != null)
+                {
+                    openedFile.IsSaved = false;
+                }
+            }
         }
 
         return true;
@@ -91,24 +100,30 @@ public static class SessionRestorer
 
     private static string BuildSavingData(OpenedFile openedFile)
     {
-        var obj = new JObject();
-
-        if (openedFile.Path != null)
-            obj["Path"] = openedFile.Path;
-        else
-            obj["Content"] = openedFile.Editor.Text;
+        var obj = new JObject
+        {
+            ["Path"] = openedFile.Path,
+            ["Content"] = openedFile.Editor.Text,
+            ["HasUnsavedChanges"] = !openedFile.IsSaved
+        };
 
         return obj.ToString();
     }
 
-    private static (string, string?) BuildOpeningData(string data)
+    private static (string Content, string? Path, bool HasUnsavedChanges) BuildOpeningData(string data)
     {
         var obj = JObject.Parse(data);
 
         var path = obj["Path"]?.Value<string>();
-        var content = obj["Content"]?.Value<string>() ?? File.ReadAllText(path);
+        var content = obj["Content"]?.Value<string>();
+        var hasUnsavedChanges = obj["HasUnsavedChanges"]?.Value<bool>() ?? false;
 
-        return (content, path);
+        if (string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(path))
+        {
+            content = File.Exists(path) ? File.ReadAllText(path) : string.Empty;
+        }
+
+        return (content, path, hasUnsavedChanges);
     }
 
     #endregion

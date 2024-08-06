@@ -39,10 +39,12 @@ public class ThemeEditor
         { "SelectedTabItemBorder", new string[] { "TabViewSelectedItemBorderBrush" } },
         { "MenuBackground", new string[] { "MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground" } },
         { "MenuBorder", new string[] { "MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush" } },
-        { "TextBoxFocusedBackground", new string[] { "TextControlBackgroundFocused" } }
+        { "TextBoxFocusedBackground", new string[] { "TextControlBackgroundFocused" } },
+        { "CurrentLineBackground", new string[] { "CurrentLineBackground" } },
+        { "CurrentLineBorder", new string[] { "CurrentLineBorder" } },
     };
 
-    public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = new();
+    public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 
     public static void LoadThemes()
     {
@@ -216,6 +218,9 @@ public class ThemeEditor
             textEditor.Background = CurrentTheme.EditorBackgroundColor;
             textEditor.Foreground = CurrentTheme.EditorTextColor;
             textEditor.LineNumbersForeground = CurrentTheme.LineNumbersColor;
+            textEditor.TextArea.TextView.CurrentLineBackground = CurrentTheme.CurrentLineBackground;
+            textEditor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(CurrentTheme.CurrentLineBorder, 2);
+            textEditor.TextArea.TextView.InvalidateVisual();
         }
     }
 

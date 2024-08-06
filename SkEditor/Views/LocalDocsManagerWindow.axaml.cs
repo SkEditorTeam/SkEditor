@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Layout;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
@@ -22,6 +23,7 @@ public partial class LocalDocsManagerWindow : AppWindow
     public LocalDocsManagerWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         AssignCommands();
         LoadCategories(GroupBy.Provider);
@@ -39,6 +41,11 @@ public partial class LocalDocsManagerWindow : AppWindow
             await LocalProvider.Get().DeleteAll();
             LoadCategories(GroupBy.Provider);
         });
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     public void LoadCategories(GroupBy groupBy)

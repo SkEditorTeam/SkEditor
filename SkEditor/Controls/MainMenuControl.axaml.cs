@@ -24,6 +24,7 @@ public partial class MainMenuControl : UserControl
         InitializeComponent();
 
         AssignCommands();
+        AddMissingHotkeys();
     }
 
     private void AssignCommands()
@@ -70,6 +71,23 @@ public partial class MainMenuControl : UserControl
     {
         if (SkEditorAPI.Files.GetCurrentOpenedFile().IsEditor)
             window.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+    }
+
+    private void AddMissingHotkeys()
+    {
+        Loaded += (_, _) =>
+        {
+            SkEditorAPI.Windows.GetMainWindow().KeyDown += (sender, e) =>
+            {
+                if (e.PhysicalKey == PhysicalKey.S
+                    && e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Alt)
+                    && string.IsNullOrEmpty(e.KeySymbol))
+                {
+                    MenuItemSaveAll.Command.Execute(null);
+                    e.Handled = true;
+                }
+            };
+        };
     }
 
     public static void AddDocsTab()

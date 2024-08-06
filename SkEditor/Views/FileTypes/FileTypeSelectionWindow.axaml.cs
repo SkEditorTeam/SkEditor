@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Input;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.ViewModels;
 
@@ -10,6 +11,7 @@ public partial class FileTypeSelectionWindow : AppWindow
     {
         InitializeComponent();
 
+        Focusable = true;
         AssignCommands();
     }
 
@@ -21,5 +23,10 @@ public partial class FileTypeSelectionWindow : AppWindow
             Close();
         });
         OpenButton.Command = new RelayCommand(Close);
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 }

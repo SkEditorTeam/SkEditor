@@ -161,12 +161,14 @@ public class Files : IFiles
 
     public async Task<OpenedFile> AddEditorTab(string content, string? path)
     {
-        var header = Translation.Get("NewFileNameFormat").Replace("{0}",
-            GetOpenedFiles().Count.ToString());
+        int index = GetOpenedEditors().Count + 1;
+        var header = Translation.Get("NewFileNameFormat").Replace("{0}", index.ToString());
 
         var tabItem = await FileBuilder.Build(header);
         tabItem.Tag = path;
-        (tabItem.Content as TextEditor).Text = content;
+
+        TextEditor editor = tabItem.Content as TextEditor;
+        editor.Text = content;
 
         var openedFile = new OpenedFile()
         {
@@ -174,17 +176,17 @@ public class Files : IFiles
             Path = path,
             TabViewItem = tabItem,
             CustomName = header,
-            IsSaved = path != null,
+            IsSaved = !string.IsNullOrEmpty(path),
             IsNewFile = path == null,
         };
 
+        Icon.SetIcon(openedFile);
+
         // Custom Data
-        if (tabItem.Content is TextEditor editor)
-        {
-            openedFile["Parser"] = new CodeParser(editor);
-        }
+        openedFile["Parser"] = new CodeParser(editor);
         openedFile["Margin"] = new EditorMargin(openedFile);
 
+        RemoveWelcomeTab();
         GetOpenedFiles().Add(openedFile);
         (GetTabView().TabItems as IList)?.Add(tabItem);
         await SyntaxLoader.RefreshSyntaxAsync();
@@ -304,7 +306,19 @@ public class Files : IFiles
             return;
 
         SkEditorAPI.Events.FileOpened(openedFile, false);
+
+        RemoveWelcomeTab();
         Select(openedFile);
+    }
+
+    private void RemoveWelcomeTab()
+    {
+        var welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem.Content is WelcomeTabControl);
+        if (welcomeTab != null)
+        {
+            (GetTabView().TabItems as IList)?.Remove(welcomeTab.TabViewItem);
+            GetOpenedFiles().Remove(welcomeTab);
+        }
     }
 
     public void Select(object entity)

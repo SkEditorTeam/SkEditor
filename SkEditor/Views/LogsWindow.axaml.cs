@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit.Document;
@@ -18,7 +19,14 @@ public partial class LogsWindow : AppWindow
     public LogsWindow()
     {
         InitializeComponent();
+        Focusable = true;
+
         RenderDocument();
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     public void RenderDocument()
