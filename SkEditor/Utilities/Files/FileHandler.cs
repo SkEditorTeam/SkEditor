@@ -1,8 +1,6 @@
 ﻿using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities.Projects;
@@ -14,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Files;
 public class FileHandler
@@ -125,7 +122,7 @@ public class FileHandler
             Title = Translation.Get("WindowTitleOpenFilePicker"),
             AllowMultiple = true
         });
-      
+
         files.ToList().ForEach(file => OpenFile(file.Path.AbsolutePath));
     }
 

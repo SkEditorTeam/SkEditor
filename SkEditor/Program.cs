@@ -1,11 +1,6 @@
 using Avalonia;
 using Avalonia.Data;
-using Avalonia.Threading;
-using Serilog;
-using SkEditor.API;
-using SkEditor.Utilities.InternalAPI;
 using System;
-using System.Diagnostics;
 
 namespace SkEditor.Desktop
 {

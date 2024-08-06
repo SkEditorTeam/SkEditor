@@ -1,14 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media.Immutable;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities;
-using SkEditor.Utilities.Files;
-using SkEditor.ViewModels;
 using SkEditor.Views.Settings.Personalization;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace SkEditor.Views.Settings;

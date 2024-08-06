@@ -3,7 +3,6 @@ using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Controls.Docs;
 using SkEditor.Utilities;
@@ -15,7 +14,6 @@ using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using SkEditor.Views.Settings;
-using System;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -81,8 +79,8 @@ public partial class MainMenuControl : UserControl
         {
             SkEditorAPI.Windows.GetMainWindow().KeyDown += (sender, e) =>
             {
-                if (e.PhysicalKey == PhysicalKey.S 
-                    && e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Alt) 
+                if (e.PhysicalKey == PhysicalKey.S
+                    && e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Alt)
                     && string.IsNullOrEmpty(e.KeySymbol))
                 {
                     MenuItemSaveAll.Command.Execute(null);
