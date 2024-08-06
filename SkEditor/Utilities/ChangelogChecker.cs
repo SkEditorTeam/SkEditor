@@ -9,7 +9,8 @@ public static class ChangelogChecker
     private static readonly string[] changelog =
     [
         "Welcome to the new version of SkEditor!",
-        "This version is a PRE-RELEASE. If you find any bugs, please report them on the SkEditor Discord server.",
+        "The last two updates were pre-releases, so you might have missed some important changes.",
+        "Check the changelog on GitHub to see what's new!"
     ];
 
     public async static void Check()
