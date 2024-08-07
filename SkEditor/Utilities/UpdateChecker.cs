@@ -150,7 +150,7 @@ public static class UpdateChecker
             }
             else
             {
-                Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.Ok); });
+                Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.Yes); }); // Adjust based on available values
             }
         }
         catch
