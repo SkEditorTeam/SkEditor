@@ -270,7 +270,7 @@
 	<system:String x:Key="SettingsGeneralAutoPairingDescription">Ajoute automatiquement le caractère de fermeture lorsque vous entrez le caractère d'ouverture pour certains symboles.</system:String>
 	<system:String x:Key="SettingsGeneralAutoSave">Enregistrement automatique</system:String>
 	<system:String x:Key="SettingsGeneralAutoSaveDescription">Enregistre automatiquement votre fichier à chaque modification.</system:String>
-	<system:String x:Key="SettingsGeneralChangeChecker">Check for external file changes</system:String>
+	<system:String x:Key="SettingsGeneralChangeChecker">Vérification des modifications apportées aux fichiers externes</system:String>
 	<system:String x:Key="SettingsGeneralChangeCheckerDescription">Si un changement du contenu d'un fichier se produit, vous serez invité à recharger le fichier.</system:String>
 	<system:String x:Key="SettingsGeneralRpc">Présence riche Discord</system:String>
 	<system:String x:Key="SettingsGeneralRpcDescription">Afficher SkEditor dans votre statut Discord.</system:String>
