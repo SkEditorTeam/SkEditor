@@ -28,7 +28,7 @@ public static class UpdateChecker
     private static readonly GitHubClient _gitHubClient = new(new ProductHeaderValue("SkEditor"));
 
     private static readonly string _tempInstallerFileWindows = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
-    private static readonly string _tempInstallerFileLinux = Path.Combine(Path.GetTempPath(), "SkEditorForLinux.zip");
+    private static readonly string _tempInstallerFileLinux = Path.Combine(Path.GetTempPath(), "Linux-x64.zip");
     private static readonly string _tempUnpackDirLinux = Path.Combine(Path.GetTempPath(), "SkEditorUpdate");
 
     public static async void Check()
@@ -83,7 +83,7 @@ public static class UpdateChecker
 
     private static async Task UpdateLinux(Release release, (int, int, int) version)
     {
-        ReleaseAsset zip = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorForLinux.zip"));
+        ReleaseAsset zip = release.Assets.FirstOrDefault(asset => asset.Name.Equals("Linux-x64.zip"));
         if (zip is null)
         {
             await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
