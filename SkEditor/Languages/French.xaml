@@ -50,7 +50,7 @@
 	<system:String x:Key="MenuHeaderComment">Commenter</system:String>
 	<system:String x:Key="MenuHeaderDelete">Supprimer</system:String>
 	<system:String x:Key="MenuHeaderGoToLine">Aller à la ligne</system:String>
-	<system:String x:Key="MenuHeaderTrimWhitespaces">Sélectionner la ligne</system:String>
+	<system:String x:Key="MenuHeaderTrimWhitespaces">Supprimer toutes les lignes vides</system:String>
 
 	<!-- Menu Outils -->
 	<system:String x:Key="MenuHeaderDocumentation">Documentation</system:String>
