@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -16,6 +17,7 @@ using Application = Avalonia.Application;
 using FileMode = System.IO.FileMode;
 
 namespace SkEditor.Utilities;
+
 public static class UpdateChecker
 {
     private static readonly int _major = Assembly.GetExecutingAssembly().GetName().Version.Major;
@@ -25,7 +27,9 @@ public static class UpdateChecker
     private const long RepoId = 679628726;
     private static readonly GitHubClient _gitHubClient = new(new ProductHeaderValue("SkEditor"));
 
-    private static readonly string _tempInstallerFile = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
+    private static readonly string _tempInstallerFileWindows = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
+    private static readonly string _tempInstallerFileLinux = Path.Combine(Path.GetTempPath(), "Linux-x64.zip");
+    private static readonly string _tempUnpackDirLinux = Path.Combine(Path.GetTempPath(), "SkEditorUpdate");
 
     public static async void Check()
     {
@@ -47,23 +51,49 @@ public static class UpdateChecker
 
             if (result != ContentDialogResult.Primary) return;
 
-            if (!OperatingSystem.IsWindows())
+            if (OperatingSystem.IsWindows())
             {
-                await SkEditorAPI.Windows.ShowError("Automatic updates are only available on Windows for now.");
+                await UpdateWindows(release);
             }
-
-            ReleaseAsset msi = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorInstaller.msi"));
-            if (msi is null)
+            else if (OperatingSystem.IsLinux())
             {
-                await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
-                return;
+                await UpdateLinux(release, version);
             }
-            DownloadMsi(msi.BrowserDownloadUrl);
+            else
+            {
+                await SkEditorAPI.Windows.ShowError("Automatic updates are only available on Windows and Linux for now.");
+            }
         }
-        catch { }
+        catch (Exception ex)
+        {
+            await SkEditorAPI.Windows.ShowError($"Update check failed: {ex.Message}");
+        }
     }
 
-    private async static void DownloadMsi(string url)
+    private static async Task UpdateWindows(Release release)
+    {
+        ReleaseAsset msi = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorInstaller.msi"));
+        if (msi is null)
+        {
+            await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
+            return;
+        }
+        await DownloadFile(msi.BrowserDownloadUrl, _tempInstallerFileWindows, true);
+    }
+
+    private static async Task UpdateLinux(Release release, (int, int, int) version)
+    {
+        ReleaseAsset zip = release.Assets.FirstOrDefault(asset => asset.Name.Equals("Linux-x64.zip"));
+        if (zip is null)
+        {
+            await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
+            return;
+        }
+        await DownloadFile(zip.BrowserDownloadUrl, _tempInstallerFileLinux, false);
+        await UnpackAndUpdateLinux(version);
+    }
+
+    private static async Task DownloadFile(string url, string filePath, bool isWindows)
     {
         TaskDialog td = CreateTaskDialog(SkEditorAPI.Windows.GetMainWindow(), url);
         var result = await td.ShowAsync();
@@ -103,22 +133,68 @@ public static class UpdateChecker
                 var progress = new Progress<float>();
                 progress.ProgressChanged += (e, sender) => td.SetProgressBarState(sender, state);
 
-                using var file = new FileStream(_tempInstallerFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                using var file = new FileStream(url.Contains("msi") ? _tempInstallerFileWindows : _tempInstallerFileLinux, FileMode.Create, FileAccess.Write, FileShare.None);
                 await client.DownloadDataAsync(url, file, progress);
             }
 
-            Process.Start(new ProcessStartInfo
+            if (url.Contains("msi"))
             {
-                FileName = _tempInstallerFile,
-                UseShellExecute = true,
-                Verb = "runas"
-            });
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = _tempInstallerFileWindows,
+                    UseShellExecute = true,
+                    Verb = "runas"
+                });
 
-            (Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime).Shutdown();
+                (Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime).Shutdown();
+            }
+            else
+            {
+                Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.Yes); }); // Adjust based on available values
+            }
         }
         catch
         {
             Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.Cancel); });
+        }
+    }
+
+    private static async Task UnpackAndUpdateLinux((int, int, int) version)
+    {
+        try
+        {
+            if (Directory.Exists(_tempUnpackDirLinux))
+            {
+                Directory.Delete(_tempUnpackDirLinux, true);
+            }
+            Directory.CreateDirectory(_tempUnpackDirLinux);
+
+            using (FileStream fs = new FileStream(_tempInstallerFileLinux, FileMode.Open))
+            using (ZipArchive archive = new ZipArchive(fs, ZipArchiveMode.Read))
+            {
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    if (string.IsNullOrEmpty(entry.Name)) // Skip directories
+                    {
+                        continue;
+                    }
+
+                    string destinationPath = Path.Combine("/opt/SkEditor", entry.FullName);
+                    string destinationDirectory = Path.GetDirectoryName(destinationPath);
+                    if (!Directory.Exists(destinationDirectory))
+                    {
+                        Directory.CreateDirectory(destinationDirectory);
+                    }
+
+                    entry.ExtractToFile(destinationPath, true);
+                }
+            }
+
+            await SkEditorAPI.Windows.ShowError("Update completed successfully. Please restart the application.");
+        }
+        catch (Exception ex)
+        {
+            await SkEditorAPI.Windows.ShowError($"Update failed: {ex.Message}");
         }
     }
 
