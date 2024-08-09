@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +60,7 @@ public interface IDocumentationEntry
         {
             return new SymbolIconSource
             {
-                IsFilled = true,
+                IconVariant = IconVariant.Filled,
                 Symbol = symbol,
                 Foreground = colorKey != null ? GetColor(colorKey) : null
             };

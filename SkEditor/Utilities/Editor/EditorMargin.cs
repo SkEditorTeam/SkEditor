@@ -127,7 +127,7 @@ public class EditorMargin : AbstractMargin
         HoveredIcon = null;
     }
 
-    protected override async void OnPointerPressed(PointerPressedEventArgs e)
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         if (HoveredIcon == null)
             return;
