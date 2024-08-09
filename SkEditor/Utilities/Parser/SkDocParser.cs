@@ -127,7 +127,7 @@ public partial class SkDocParser
 
     public static Function? GetFunction(TextEditor editor, int line)
     {
-        var file = FileHandler.OpenedFiles.FirstOrDefault(x => x.Editor == editor);
+        var file = SkEditorAPI.Files.GetOpenedEditors().FirstOrDefault(x => x.Editor == editor);
         if (file == null)
             return null;
 
@@ -151,7 +151,7 @@ public partial class SkDocParser
         string name = match.Groups["name"].Value;
         if (!editor.Document.GetText(segment).Equals(name)) return null;
 
-        var file = FileHandler.OpenedFiles.FirstOrDefault(x => x.Editor == editor);
+        var file = SkEditorAPI.Files.GetOpenedEditors().FirstOrDefault(x => x.Editor == editor);
         if (file == null)
             return null;
 

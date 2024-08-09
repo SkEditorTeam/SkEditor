@@ -24,7 +24,7 @@ public class TooltipHandler
 
     public static void OnPointerHover(object? sender, PointerEventArgs e)
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         if (editor == null) return;
 
         Point pos = e.GetPosition(editor.TextArea.TextView);
@@ -50,10 +50,10 @@ public class TooltipHandler
 
             if (!(Math.Abs(delta.X) > 30) && !(Math.Abs(delta.Y) > 30)) return;
             Flyout.Hide();
-            ApiVault.Get().GetMainWindow().PointerMoved -= pointerMoved;
+            SkEditorAPI.Windows.GetMainWindow().PointerMoved -= pointerMoved;
         }
 
-        ApiVault.Get().GetMainWindow().PointerMoved += pointerMoved;
+        SkEditorAPI.Windows.GetMainWindow().PointerMoved += pointerMoved;
 
         editor.ContextFlyout.Hide();
         FlyoutBase.SetAttachedFlyout(editor, Flyout);

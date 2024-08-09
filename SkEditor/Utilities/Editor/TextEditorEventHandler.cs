@@ -113,7 +113,7 @@ public partial class TextEditorEventHandler
     public static void CheckForSkDoc(object? sender, TextInputEventArgs e)
     {
         string text = e.Text;
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         if (textEditor == null) return;
 
         int offset = textEditor.CaretOffset;

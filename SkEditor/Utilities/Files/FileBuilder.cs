@@ -11,7 +11,6 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
-using SkEditor.Utilities.Syntax;
 using SkEditor.Utilities.Styling;
 using SkEditor.Views;
 using SkEditor.Views.FileTypes;
@@ -72,20 +71,10 @@ public class FileBuilder
     private static async Task<FileTypes.FileType?> GetFileDisplay(string path, string? content)
     {
         FileTypes.FileType? fileType = null;
-        if (!FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
+        if (FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
         {
-            return fileType ?? await GetDefaultEditor(path, content);
-        }
-
-        var handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
-        if (handlers.Count == 1)
-        {
-            fileType = handlers[0].Handle(path);
-        }
-        else
-        {
-            var ext = Path.GetExtension(path);
-            if (ApiVault.Get().GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
+            var handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
+            if (handlers.Count == 1)
             {
                 fileType = handlers[0].Handle(path);
             }
@@ -94,15 +83,10 @@ public class FileBuilder
                 var ext = Path.GetExtension(path);
                 if (SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
                 {
-                    fileType = handlers.Find(association => !association.IsFromAddon).Handle(path);
-                }
-                else
-                {
-                    var preferred = handlers.Find(association => association.IsFromAddon &&
-                        association.Addon.Name == value);
-                    if (preferred != null)
+                    var pref = value;
+                    if (pref == "SkEditor")
                     {
-                        fileType = preferred.Handle(path);
+                        fileType = handlers.Find(association => !association.IsFromAddon).Handle(path);
                     }
                     else
                     {
@@ -118,17 +102,13 @@ public class FileBuilder
                         }
                     }
                 }
-            }
 
-            if (fileType == null)
-            {
-                var window = new AssociationSelectionWindow(path, handlers);
-                await window.ShowDialog(MainWindow.Instance);
-                var selected = window.SelectedAssociation;
-                if (selected != null)
+                if (fileType == null)
                 {
-                    fileType = selected.Handle(path);
-                    if (window.RememberCheck.IsChecked == true)
+                    var window = new AssociationSelectionWindow(path, handlers);
+                    await window.ShowDialog(MainWindow.Instance);
+                    var selected = window.SelectedAssociation;
+                    if (selected != null)
                     {
                         fileType = selected.Handle(path);
                         if (window.RememberCheck.IsChecked == true)
@@ -141,11 +121,6 @@ public class FileBuilder
                         }
                         SkEditorAPI.Core.GetAppConfig().Save();
                     }
-                    else
-                    {
-                        ApiVault.Get().GetAppConfig().PreferredFileAssociations.Remove(ext);
-                    }
-                    ApiVault.Get().GetAppConfig().Save();
                 }
             }
         }
@@ -225,7 +200,6 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-        editor.TextArea.TextEntered += TextEditorEventHandler.CheckForSkDoc;
         if (!SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
         {
             editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser?.SetUnparsed();
@@ -246,10 +220,6 @@ public class FileBuilder
         {
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
-        }
-        if (ApiVault.Get().GetAppConfig().EnableSkDoc)
-        {
-            editor.PointerHover += TooltipHandler.OnPointerHover;
         }
 
         editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;

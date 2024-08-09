@@ -59,8 +59,8 @@ public partial class MainMenuControl : UserControl
 
         MenuItemRefreshSyntax.Command = new RelayCommand(() =>
         {
-            TextEditor editor = ApiVault.Get().GetTextEditor();
-            if (editor != null) SyntaxLoader.Load(editor);
+            OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+            if (file?.IsEditor == true) SyntaxLoader.Load(file);
         });
 
         MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));

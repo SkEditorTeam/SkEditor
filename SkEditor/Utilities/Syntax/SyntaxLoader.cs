@@ -19,22 +19,21 @@ using TextMateSharp.Themes;
 namespace SkEditor.Utilities.Syntax;
 public static class SyntaxLoader
 {
-    public static void Load(TextEditor editor)
+    public static void Load(OpenedFile file)
     {
         int currentTheme = (int)ThemeName.DarkPlus;
         var _registryOptions = new RegistryOptions((ThemeName)currentTheme);
-        var _textMateInstallation = editor.InstallTextMate(_registryOptions);
+        var _textMateInstallation = file.Editor.InstallTextMate(_registryOptions);
 
-        var tab = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>().FirstOrDefault(t => t.Content == editor);
-        if (tab == null || string.IsNullOrEmpty(tab.Tag.ToString())) return;
+        if (!file.IsSaved) return;
 
-        var extension = Path.GetExtension(tab.Tag.ToString());
+        var extension = Path.GetExtension(file.Path);
         Language language = _registryOptions.GetLanguageByExtension(extension);
 
         if (language == null)
         {
             var localRegistryOptions = new LocalRegistryOptions();
-            var localTextMateInstallation = editor.InstallTextMate(localRegistryOptions);
+            var localTextMateInstallation = file.Editor.InstallTextMate(localRegistryOptions);
             localTextMateInstallation.SetGrammar("source.sk");
             localTextMateInstallation.SetTheme(localRegistryOptions.GetDefaultTheme());
             return;
