@@ -1,20 +1,22 @@
-﻿using System;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+using FluentAvalonia.UI.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using FluentAvalonia.UI.Controls;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Docs;
 
 /// <summary>
-/// Represent a documentation entry. Can be an expression, event, effect ...
+/// Represent a documentation entry. Can be an expression, event, effect...
 /// It is mainly used to have a common format for all documentation providers.
 /// </summary>
 public interface IDocumentationEntry
 {
-
     public static List<Type> AllTypes => Enum.GetValues<Type>().ToList();
 
     public enum Type
@@ -29,20 +31,40 @@ public interface IDocumentationEntry
         Structure,
         Function
     }
-    
-    public static IconSource GetTypeIcon(Type type) => type switch
+
+    public static IconSource GetTypeIcon(Type type)
     {
-        Type.All => new SymbolIconSource() { Symbol = Symbol.BorderAll },
-        Type.Event => new SymbolIconSource() { Symbol = Symbol.Call },
-        Type.Expression => new SymbolIconSource() { Symbol = Symbol.DocumentPageNumber },
-        Type.Effect => new SymbolIconSource() { Symbol = Symbol.LightbulbFilament },
-        Type.Condition => new SymbolIconSource() { Symbol = Symbol.Filter },
-        Type.Type => new SymbolIconSource() { Symbol = Symbol.Library },
-        Type.Section => new SymbolIconSource() { Symbol = Symbol.NotebookSubsection },
-        Type.Structure => new SymbolIconSource() { Symbol = Symbol.Code },
-        Type.Function => new SymbolIconSource() { Symbol = Symbol.MathFormula },
-        _ => throw new ArgumentOutOfRangeException()
-    };
+        static IBrush GetColor(string key)
+        {
+            return Application.Current.TryGetResource(key, out var color) && color is Color parsedColor
+                ? new SolidColorBrush(parsedColor)
+                : new SolidColorBrush(Colors.Black);
+        }
+
+        return type switch
+        {
+            Type.All => CreateIcon(Symbol.SelectAllOn, "ThemeGreyColor"),
+            Type.Event => CreateIcon(Symbol.Call, "ThemeDeepPurpleColor"),
+            Type.Expression => CreateIcon(Symbol.DocumentPageNumber, "ThemeMediumSeaGreenColor"),
+            Type.Effect => CreateIcon(Symbol.LightbulbFilament, "ThemeLightBlueColorTransparent"),
+            Type.Condition => CreateIcon(Symbol.Filter, "ThemeRedColor"),
+            Type.Type => CreateIcon(Symbol.Library, "ThemeOrangeColor"),
+            Type.Section => CreateIcon(Symbol.NotebookSubsection, "ThemeTealColor"),
+            Type.Structure => CreateIcon(Symbol.Code, "ThemeBrownColor"),
+            Type.Function => CreateIcon(Symbol.MathFormula, "ThemeBlueGreyColor"),
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
+
+        static SymbolIconSource CreateIcon(Symbol symbol, string? colorKey = null)
+        {
+            return new SymbolIconSource
+            {
+                IsFilled = true,
+                Symbol = symbol,
+                Foreground = colorKey != null ? GetColor(colorKey) : null
+            };
+        }
+    }
 
     public enum Changer
     {

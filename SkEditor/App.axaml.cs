@@ -1,15 +1,20 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using Serilog;
+using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SkEditor;
 
@@ -20,8 +25,6 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    static Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
-
     public override async void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
@@ -30,7 +33,36 @@ public partial class App : Application
             .MinimumLevel.Debug()
             .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "SkEditor/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
+            .WriteTo.Sink(new LogsHandler())
             .CreateLogger();
+
+        Dispatcher.UIThread.UnhandledException += async (sender, e) =>
+        {
+            e.Handled = true;
+            string? source = e.Exception.Source;
+            if (AddonLoader.DllNames.Contains(source + ".dll"))
+            {
+                Log.Error(e.Exception, $"An error occured in an addon: {source}");
+                await SkEditorAPI.Windows.ShowMessage("Error", $"An error occured in an addon: {source}\n\n{e.Exception.Message}");
+                return;
+            }
+
+            string message = "Application crashed!";
+            Log.Fatal(e.Exception, message);
+            Console.Error.WriteLine(e);
+            Console.Error.WriteLine(message);
+
+            await SkEditorAPI.Core.SaveData();
+            AddonLoader.SaveMeta();
+
+            var fullException = e.Exception.ToString();
+            var encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(fullException));
+            await Task.Delay(500);
+            Process.Start(Environment.ProcessPath, "--crash " + encodedMessage);
+            Environment.Exit(1);
+        };
+
+        Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -41,7 +73,7 @@ public partial class App : Application
             }
             catch (AbandonedMutexException ex)
             {
-                ex.Mutex?.Close();
+                Log.Debug(ex, "Abandoned mutex");
                 isFirstInstance = true;
             }
 
@@ -49,10 +81,11 @@ public partial class App : Application
             {
                 try
                 {
-                    SkEditor SkEditor = new(desktop.Args);
+                    SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
+                    _ = new SkEditor();
+
                     MainWindow mainWindow = new();
                     desktop.MainWindow = mainWindow;
-                    SkEditor.mainWindow = mainWindow;
 
                     NamedPipeServer.Start();
                 }
@@ -94,5 +127,4 @@ public partial class App : Application
             }
         }
     }
-
 }

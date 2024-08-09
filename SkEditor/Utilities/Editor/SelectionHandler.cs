@@ -13,7 +13,7 @@ public class SelectionHandler
 {
     public static void OnSelectionChanged(object? sender, EventArgs e)
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         textEditor.TextArea.TextView.LineTransformers
             .Where(x => x is OccurenceBackgroundTransformer)
             .ToList()

@@ -1,11 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using Avalonia.Media;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities.Files;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Docs.Local;
 
@@ -132,11 +134,18 @@ public class LocalProvider : IDocProvider
         return _localDocs;
     }
 
+    public Task<Color?> GetAddonColor(string addonName) => Task.FromResult<Color?>(null);
+
     public async Task DeleteAll()
     {
         _localDocs.Clear();
         await SaveLocalDocs();
     }
 
-    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.SaveLocal };
+    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Folder, IsFilled = true };
+
+    public string? GetLink(IDocumentationEntry entry)
+    {
+        return null;
+    }
 }

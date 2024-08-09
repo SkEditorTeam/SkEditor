@@ -1,6 +1,7 @@
 ﻿using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ public abstract class StorageElement
     public bool IsExpanded { get; set; } = false;
 
     public bool IsFile { get; set; }
+    public bool IsRootFolder { get; set; }
 
     public IconSource Icon { get; set; } = new SymbolIconSource() { Symbol = Symbol.Document, FontSize = 18 };
 
@@ -24,16 +26,29 @@ public abstract class StorageElement
     public RelayCommand RenameCommand => new(OpenRenameWindow);
     public RelayCommand DeleteCommand { get; set; }
     public RelayCommand DoubleClickCommand => new(HandleDoubleClick);
+    public RelayCommand SingleClickCommand => new(HandleSingleClick);
     public RelayCommand CopyPathCommand { get; set; }
     public RelayCommand CopyAbsolutePathCommand { get; set; }
     public RelayCommand CreateNewFileCommand { get; set; }
     public RelayCommand CreateNewFolderCommand { get; set; }
+    public RelayCommand CloseProjectCommand { get; set; }
 
     public abstract string? ValidateName(string input);
 
     public abstract void RenameElement(string newName, bool move = true);
 
-    public abstract void HandleDoubleClick();
+    public abstract void HandleClick();
+
+    public void HandleDoubleClick()
+    {
+        if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            HandleClick();
+    }
+    public void HandleSingleClick()
+    {
+        if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            HandleClick();
+    }
 
     public async void OpenRenameWindow()
     {

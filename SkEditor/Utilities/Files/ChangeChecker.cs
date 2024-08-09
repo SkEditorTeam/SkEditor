@@ -1,5 +1,4 @@
-﻿using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
+﻿using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
 using System;
@@ -10,26 +9,25 @@ using System.Threading.Tasks;
 namespace SkEditor.Utilities.Files;
 public class ChangeChecker
 {
-    private static Dictionary<TextEditor, string> lastKnownContentDictionary = [];
-    private static string GetLastKnownContent(TextEditor textEditor) =>
-        lastKnownContentDictionary.TryGetValue(textEditor, out string lastKnownContent) ? lastKnownContent : "";
-    private static void SetLastKnownContent(TextEditor textEditor, string content) => lastKnownContentDictionary[textEditor] = content;
+    private static Dictionary<OpenedFile, string> lastKnownContentDictionary = [];
+    private static string GetLastKnownContent(OpenedFile openedFile) =>
+        lastKnownContentDictionary.TryGetValue(openedFile, out string lastKnownContent) ? lastKnownContent : "";
+    private static void SetLastKnownContent(OpenedFile openedFile, string content) => lastKnownContentDictionary[openedFile] = content;
 
     private static bool isMessageShown = false;
     public static Dictionary<string, bool> HasChangedDictionary { get; } = [];
 
-    public async static void Check()
+    public static async void Check()
     {
-        if (!ApiVault.Get().GetAppConfig().CheckForChanges) return;
+        if (!SkEditorAPI.Core.GetAppConfig().CheckForChanges) return;
 
         try
         {
-            if (!ApiVault.Get().IsFileOpen()) return;
+            OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+            if (file == null) return;
+            if (!file.IsEditor || string.IsNullOrWhiteSpace(file.Path)) return;
 
-            TabViewItem item = ApiVault.Get().GetTabView().SelectedItem as TabViewItem;
-            if (item.Tag == null) return;
-            if (string.IsNullOrWhiteSpace(item.Tag.ToString())) return;
-            string path = Uri.UnescapeDataString(item.Tag.ToString());
+            string path = Uri.UnescapeDataString(file.Path);
             if (!File.Exists(path)) return;
 
             if (!HasChangedDictionary.TryGetValue(path, out bool hasChanged))
@@ -39,46 +37,46 @@ public class ChangeChecker
             }
             if (hasChanged) return;
 
-            string textToWrite = ApiVault.Get().GetTextEditor().Document.Text;
+            string textToWrite = file.Editor.Document.Text;
             using StreamReader reader = new(path);
             string textToRead = reader.ReadToEnd();
 
             if (textToWrite.Equals(textToRead) ||
-                textToRead.Equals(GetLastKnownContent(ApiVault.Get().GetTextEditor()))) return;
+                textToRead.Equals(GetLastKnownContent(file))) return;
 
             if (isMessageShown) return;
             isMessageShown = true;
-            await ShowMessage(item, textToRead);
+            await ShowMessage(file, textToRead);
         }
         catch (Exception e)
         {
-            Log.Error(e, "Error while checking for changes");
+            Log.Warning(e, "Error while checking for changes");
         }
 
         isMessageShown = false;
     }
 
-    private static async Task ShowMessage(TabViewItem item, string textToRead)
+    private static async Task ShowMessage(OpenedFile file, string textToRead)
     {
-        ContentDialogResult result = await ApiVault.Get().ShowMessageWithIcon(
+        var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(f => f == file);
+        var result = await SkEditorAPI.Windows.ShowDialog(
             Translation.Get("Attention"),
             Translation.Get("ChangesDetected"),
-            new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
-            primaryButtonContent: "Yes",
-            closeButtonContent: "No"
-        );
+            new SymbolIconSource { Symbol = Symbol.ImportantFilled },
+            primaryButtonText: "Yes",
+            cancelButtonText: "No");
 
 
         if (result == ContentDialogResult.Primary)
         {
-            ApiVault.Get().GetTextEditor().Document.Text = textToRead;
-            SetLastKnownContent(ApiVault.Get().GetTextEditor(), textToRead);
-            item.Header = item.Header.ToString().TrimEnd('*');
+            openedFile.Editor.Document.Text = textToRead;
+            SetLastKnownContent(SkEditorAPI.Files.GetCurrentOpenedFile(), textToRead);
+            openedFile.IsSaved = true;
         }
         else
         {
-            SetLastKnownContent(ApiVault.Get().GetTextEditor(), textToRead);
-            item.Header = item.Header.ToString().TrimEnd('*') + "*";
+            SetLastKnownContent(openedFile, textToRead);
+            openedFile.IsSaved = false;
         }
     }
 }

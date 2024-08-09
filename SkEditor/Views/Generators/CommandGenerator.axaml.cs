@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
@@ -14,21 +15,27 @@ public partial class CommandGenerator : AppWindow
     public CommandGenerator()
     {
         InitializeComponent();
+        Focusable = true;
 
         GenerateButton.Command = new RelayCommand(Generate);
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
+        Loaded += (_, e) => NameTextBox.Focus();
     }
 
     private void Generate()
     {
         if (string.IsNullOrWhiteSpace(NameTextBox.Text))
         {
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("CommandGeneratorPropertyMissing", "Name"));
+            SkEditorAPI.Windows.ShowError(Translation.Get("CommandGeneratorPropertyMissing", "Name"));
             return;
         }
 
         StringBuilder code = new();
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int offset = editor.CaretOffset;
         DocumentLine line = editor.Document.GetLineByOffset(offset);
 

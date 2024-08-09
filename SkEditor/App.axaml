@@ -11,6 +11,7 @@
 				<ResourceInclude Source="avares://SkEditor/Styles/CustomMenuItemStyle.axaml" />
 				<ResourceInclude Source="avares://SkEditor/Styles/ToggleSwitchStyle.axaml" />
 				<ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
+				<ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 
@@ -19,8 +20,8 @@
 	<Application.Styles>
 		<sty:FluentAvaloniaTheme />
 		<StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+		<StyleInclude Source="/Styles/ButtonStyles.axaml" />
 		<StyleInclude Source="/Views/FileTypes/Images/AdvancedImageBox.axaml"/>
-		<StyleInclude Source="/Styles/ButtonStyles.axaml"></StyleInclude>
 	</Application.Styles>
 
 	<Application.Resources>
@@ -45,8 +46,13 @@
 		<Brush x:Key="TextControlPlaceholderForegroundFocused">#26FFFFFF</Brush>
 		<Brush x:Key="SearchPanelBackgroundBrush">#161616</Brush>
 		
+		
+		<Brush x:Key="CurrentLineBackground">#05FFFFFF</Brush>
+		<Brush x:Key="CurrentLineBorder">#0DFFFFFF</Brush>
+		
 		<Thickness x:Key="FlyoutContentPadding">10</Thickness>
 		
 		<FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/JetBrainsMono#JetBrains Mono</FontFamily>
+		<FontFamily x:Key="MinecraftFont">avares://SkEditor/Assets/MinecraftFont#Minecraft</FontFamily>
 	</Application.Resources>
 </Application>

@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
@@ -22,12 +22,15 @@
 	<system:String x:Key="MenuHeaderTools">Tools</system:String>
 	<system:String x:Key="MenuHeaderOther">Other</system:String>
 	<system:String x:Key="MenuHeaderAddons">Addons</system:String>
+	<system:String x:Key="MenuHeaderManageAddons">Manage Addons</system:String>
 
 	<!-- File Menu -->
 	<system:String x:Key="MenuHeaderNew">New</system:String>
 	<system:String x:Key="MenuHeaderOpen">Open</system:String>
+	<system:String x:Key="MenuHeaderOpenFolder">Open folder</system:String>
 	<system:String x:Key="MenuHeaderSave">Save</system:String>
 	<system:String x:Key="MenuHeaderSaveAs">Save as</system:String>
+	<system:String x:Key="MenuHeaderSaveAll">Save all</system:String>
 	<system:String x:Key="MenuHeaderPublish">Publish</system:String>
 	<system:String x:Key="MenuHeaderClose">Close</system:String>
 	<system:String x:Key="MenuHeaderCloseCurrentFile">Current file</system:String>
@@ -46,6 +49,8 @@
 	<system:String x:Key="MenuHeaderDuplicate">Duplicate</system:String>
 	<system:String x:Key="MenuHeaderComment">Comment</system:String>
 	<system:String x:Key="MenuHeaderDelete">Delete</system:String>
+	<system:String x:Key="MenuHeaderGoToLine">Go to line</system:String>
+	<system:String x:Key="MenuHeaderTrimWhitespaces">Trim whitespaces</system:String>
 
 	<!-- Tools Menu -->
 	<system:String x:Key="MenuHeaderDocumentation">Documentation</system:String>
@@ -65,6 +70,7 @@
 	<system:String x:Key="MenuHeaderRename">Rename</system:String>
 	<system:String x:Key="MenuHeaderNewFile">New file</system:String>
 	<system:String x:Key="MenuHeaderNewFolder">New folder</system:String>
+	<system:String x:Key="MenuHeaderCloseProject">Close project</system:String>
 
 	<!-- Buttons -->
 	<system:String x:Key="ApplyButton">Apply</system:String>
@@ -101,7 +107,7 @@
 	
 
 	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowPasteApiKey">Paste your API key here</system:String>
+	<system:String x:Key="PublishWindowNoApiKey">Set your API key in the settings</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Click here to open a website with the API key. Make sure to log in first!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Anonymously</system:String>
 	<system:String x:Key="PublishWindowResultLink">Link to your code</system:String>
@@ -124,7 +130,7 @@
 	<system:String x:Key="DocumentationControlEventValues">Event Values</system:String>
 	<system:String x:Key="DocumentationControlChangers">Changers</system:String>
 	
-	<system:String x:Key="DocumentationControlActionsFilter">Filter via this element's ...</system:String>
+	<system:String x:Key="DocumentationControlActionsFilter">Filter via this element'...</system:String>
 	<system:String x:Key="DocumentationControlType">Type</system:String>
 	<system:String x:Key="DocumentationControlAddon">Addon</system:String>
 	
@@ -171,7 +177,15 @@
 	<system:String x:Key="DocumentationWindowDownloadAllMessage">Are you sure you want to download all the documentation entries found? (total: {0})</system:String>
 	<system:String x:Key="DocumentationWindowDownloadingElements">Downloading elements...</system:String>
 	<system:String x:Key="DocumentationWindowDownloading">Downloading</system:String>
-	<system:String x:Key="DocumentationWindowDownloadingMessage">We're downloading the documentation entries for you. Please wait ...</system:String>
+	<system:String x:Key="DocumentationWindowDownloadingMessage">We're downloading the documentation entries for you. Please wait...</system:String>
+	
+	<system:String x:Key="DocumentationWindowCacheSkriptHub">Caching SkriptHub's elements...</system:String>
+	<system:String x:Key="DocumentationWindowCacheSkriptHubMessage">We're caching SkriptHub's elements for you. Please wait...</system:String>
+	<system:String x:Key="DocumentationWindowSorting">Sorting downloaded elements...</system:String>
+	
+	<system:String x:Key="DocumentationWindowFetchAgain">Re-fetch Documentation</system:String>
+	<system:String x:Key="DocumentationWindowFetchWarning">This will re-fetch the documentation entries from SkriptHub. You probably don't need to do this unless you want to see everything updated. Are you sure?</system:String>
+	<system:String x:Key="DocumentationWindowFetchSuccessMessage">Cache deleted. You'll have to search for the elements again to re-download SkriptHub's documentation.</system:String>
 
 	<!-- Refactor Window -->
 	<system:String x:Key="RefactorWindowRemoveComments">Remove comments</system:String>
@@ -241,11 +255,14 @@
 	<system:String x:Key="SettingsHomeAddons">Addons</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Enhance your experience with powerful addons!</system:String>
 	<system:String x:Key="SettingsHomeAbout">About</system:String>
+	<system:String x:Key="SettingsHomeFileTypes">File Types</system:String>
+	<system:String x:Key="SettingsHomeFileTypesDescription">Manage file types and their associations.</system:String>
 
 	<!-- General Settings -->
 	<system:String x:Key="SettingsGeneralTitle">General</system:String>
 	<system:String x:Key="SettingsGeneralLanguage">Language</system:String>
 	<system:String x:Key="SettingsGeneralWrapping">Wrapping</system:String>
+	<system:String x:Key="SettingsGeneralWrappingDescription">Choose whether lines should wrap at the viewport width.</system:String>
 	<system:String x:Key="SettingsGeneralTabType">Indentation Type</system:String>
 	<system:String x:Key="SettingsGeneralTabTypeDescription">Choose between tabs and spaces, and set the size of the tab.</system:String>
 	<system:String x:Key="SettingsGeneralTabTypeTabs">Tabs</system:String>
@@ -257,11 +274,14 @@
 	<system:String x:Key="SettingsGeneralAutoSave">Autosave</system:String>
 	<system:String x:Key="SettingsGeneralAutoSaveDescription">Automatically saves your file every time you make a change.</system:String>
 	<system:String x:Key="SettingsGeneralChangeChecker">Check for external file changes</system:String>
+	<system:String x:Key="SettingsGeneralChangeCheckerDescription">If any change of a file's content occurs, you will be prompted to reload the file.</system:String>
 	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
 	<system:String x:Key="SettingsGeneralRpcDescription">Show SkEditor in your Discord status.</system:String>
 	<system:String x:Key="SettingsGeneralPasteIndent">Auto-indent Paste</system:String>
 	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatically adjusts the indentation of pasted text to match the previous line's format.</system:String>
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Check for updates</system:String>
+	<system:String x:Key="SettingsGeneralProjectSingleFolderClick">Open project folder on single click</system:String>
+	<system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">When enabled, opens a folder with a single click instead of a double click.</system:String>
 
 	<!-- About Settings -->
 	<system:String x:Key="SettingsAboutTitle">About</system:String>
@@ -274,29 +294,43 @@
 	<system:String x:Key="SettingsAboutDiscord">Discord server</system:String>
 	<system:String x:Key="SettingsAboutDiscordDescription">Click to join SkEditor's Discord server!</system:String>
 	<system:String x:Key="SettingsAboutAppdata">Open AppData folder</system:String>
+	<system:String x:Key="SettingsAboutDevMode">Developer mode</system:String>
+	<system:String x:Key="SettingsAboutDevModeDescription">Enable developer mode to access developer features.</system:String>
 
 	<!-- Personalization Settings -->
 	<system:String x:Key="SettingsPersonalizationTitle">Personalization</system:String>
 	<system:String x:Key="SettingsPersonalizationTheme">Theme</system:String>
 	<system:String x:Key="SettingsPersonalizationThemeDescription">Customize colors of the app.</system:String>
 	<system:String x:Key="SettingsPersonalizationSyntax">Syntax highlighting</system:String>
+	<system:String x:Key="SettingsPersonalizationSyntaxDescription">Set how specific text is displayed with syntax highlightings.</system:String>
 	<system:String x:Key="SettingsPersonalizationFont">Font</system:String>
 	<system:String x:Key="SettingsPersonalizationFontDescription">Current font: {0}</system:String>
+	<system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Highlight current line</system:String>
 
 	<!-- Theme Settings -->
 	<system:String x:Key="SettingsThemeTitle">Theme</system:String>
 	<system:String x:Key="SettingsThemeOpenFolder">Open folder</system:String>
 	<system:String x:Key="SettingsThemeCurrentTheme">Current theme</system:String>
 	<system:String x:Key="SettingsThemeCurrentThemeDescription">A restart isn't necessary, but it might be needed for a 100% color update.</system:String>
+	<system:String x:Key="SettingsThemeEditThemeDescription">Edit current theme and preview changes in real time.</system:String>
+	<system:String x:Key="SettingsThemeNewThemeInfo">If you want to create a new theme, you need to create a file in the Themes folder.</system:String>
+	<system:String x:Key="SettingsThemeEditTheme">Edit theme</system:String>
 
 	<!-- Syntax Highlighting Settings -->
 	<system:String x:Key="SettingsSyntaxesTitle">Syntax highlighting</system:String>
 
 	<!-- Addon Settings -->
 	<system:String x:Key="SettingsAddonsTitle">Addons</system:String>
+	<system:String x:Key="SettingsAddonsListTitle">List of addons</system:String>
 	
 	<!-- Connections Settings -->
 	<system:String x:Key="SettingsConnectionsTitle">Connections</system:String>
+	<system:String x:Key="SettingsConnectionsDashboardButton">Open dashboard</system:String>
+	
+	<!-- File Types Settings -->
+	<system:String x:Key="SettingsFileTypesTitle">File Types</system:String>
+	<system:String x:Key="SettingsFileTypesWarning">This page only let you manage the associations you already made. A prompt will be shown for other file types.</system:String>
+	<system:String x:Key="SettingsFileTypesRemove">Remove</system:String>
 	
 	<!-- File Views -->
 	<system:String x:Key="FileViewImageAA">Antialiasing</system:String>
@@ -307,6 +341,7 @@
 	<!-- Bottom bar -->
 	<system:String x:Key="BottomBarLine">Line {0}</system:String>
 	<system:String x:Key="BottomBarColumn">Column {0}</system:String>
+	<system:String x:Key="BottomBarDocumentSize">Length {0}</system:String>
 	
 	
 	<!-- GUI Generator -->
@@ -358,12 +393,42 @@
 	<system:String x:Key="MarketplaceUpdateSuccess">Successfully updated {0}!\nPlease restart the app to load the addon.</system:String>
 	<system:String x:Key="MarketplaceUpdateFailed">Failed to update {0}!</system:String>
 	<system:String x:Key="MarketplaceLoadFailed">Something went wrong when trying to load Marketplace items. Are you connected to the internet?</system:String>
-	<system:String x:Key="MarketplaceInfo">This is a very simple Marketplace design, just meant to allow users to install official addons. It will be significantly improved in the future.</system:String>
+	<system:String x:Key="MarketplaceInfo">This is a very simple Marketplace design that will be completely reworked in the future.</system:String>
 	<system:String x:Key="MarketplaceButtonInstall">Install</system:String>
 	<system:String x:Key="MarketplaceButtonUpdate">Update</system:String>
 	<system:String x:Key="MarketplaceButtonUninstall">Uninstall</system:String>
 	<system:String x:Key="MarketplaceButtonDisable">Disable</system:String>
 	<system:String x:Key="MarketplaceButtonEnable">Enable</system:String>
 
+	<!-- Go to line -->
+	<system:String x:Key="GoToLine">Go to line</system:String>
+	<system:String x:Key="GoToLineButton">Go</system:String>
 
+	<!-- Theme editor -->
+	<system:String x:Key="ThemeEditorWindowBackground">Window background</system:String>
+	<system:String x:Key="ThemeEditorSmallWindowBackground">Small window background</system:String>
+	<system:String x:Key="ThemeEditorEditorBackground">Editor background</system:String>
+	<system:String x:Key="ThemeEditorEditorText">Editor text</system:String>
+	<system:String x:Key="ThemeEditorLineNumber">Line number</system:String>
+	<system:String x:Key="ThemeEditorSelection">Selection</system:String>
+	<system:String x:Key="ThemeEditorSelectedTabBackground">Selected tab background</system:String>
+	<system:String x:Key="ThemeEditorSelectedTabBorder">Selected tab border</system:String>
+	<system:String x:Key="ThemeEditorMenuBackground">Menu background</system:String>
+	<system:String x:Key="ThemeEditorMenuBorder">Menu border</system:String>
+	<system:String x:Key="ThemeEditorFocusedTextBoxBackground">Focused text box background</system:String>
+	<system:String x:Key="ThemeEditorCurrentLineBackground">Current line background</system:String>
+	<system:String x:Key="ThemeEditorCurrentLineBorder">Current line border</system:String>
+	<system:String x:Key="ThemeEditorAccentColor">Accent color</system:String>
+
+	<!-- Welcome Tab -->
+	<system:String x:Key="WelcomeTabTitle">Welcome</system:String>
+	<system:String x:Key="WelcomeTabGettingStarted">Getting Started</system:String>
+	<system:String x:Key="WelcomeTabNeedHelp">Need help?</system:String>
+	<system:String x:Key="WelcomeGettingStartedNewFile">New File</system:String>
+	<system:String x:Key="WelcomeGettingStartedOpenFile">Open File</system:String>
+	<system:String x:Key="WelcomeGettingStartedOpenFolder">Open Folder</system:String>
+	<system:String x:Key="WelcomeGettingStartedSettings">Settings</system:String>
+	<system:String x:Key="WelcomeNeedHelpDiscordServer">Discord Server</system:String>
+	<system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+	
 </ResourceDictionary>

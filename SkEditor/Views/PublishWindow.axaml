@@ -21,7 +21,7 @@
 				Severity="Warning"
 				Message="{DynamicResource PublishWindowWarning}"
 				/>
-			<TextBox IsEnabled="False" Name="ApiKeyTextBox" Watermark="{DynamicResource PublishWindowPasteApiKey}" PasswordChar="●"/>
+			<TextBox IsEnabled="False" Name="ApiKeyTextBox" Watermark="{DynamicResource PublishWindowNoApiKey}" PasswordChar="●"/>
 		</StackPanel>
 		
 		<ComboBox Name="LanguageComboBox" Width="150" SelectedIndex="0" Grid.Row="2" Margin="0,6">

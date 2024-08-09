@@ -25,7 +25,7 @@ public class Generation
 
         if (string.IsNullOrWhiteSpace(_guiGen.TitleTextBox.Text)) _guiGen.TitleTextBox.Text = "GUI";
 
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int offset = editor.CaretOffset;
         DocumentLine line = editor.Document.GetLineByOffset(offset);
 

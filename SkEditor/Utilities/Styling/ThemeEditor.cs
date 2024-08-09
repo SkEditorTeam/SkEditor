@@ -8,9 +8,9 @@ using AvaloniaEdit;
 using ExCSS;
 using FluentAvalonia.Interop;
 using FluentAvalonia.Styling;
-using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using SkEditor.API;
+using SkEditor.Utilities.Files;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,10 +39,12 @@ public class ThemeEditor
         { "SelectedTabItemBorder", new string[] { "TabViewSelectedItemBorderBrush" } },
         { "MenuBackground", new string[] { "MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground" } },
         { "MenuBorder", new string[] { "MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush" } },
-        { "TextBoxFocusedBackground", new string[] { "TextControlBackgroundFocused" } }
+        { "TextBoxFocusedBackground", new string[] { "TextControlBackgroundFocused" } },
+        { "CurrentLineBackground", new string[] { "CurrentLineBackground" } },
+        { "CurrentLineBorder", new string[] { "CurrentLineBorder" } },
     };
 
-    public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = new();
+    public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 
     public static void LoadThemes()
     {
@@ -54,7 +56,8 @@ public class ThemeEditor
         if (!File.Exists(Path.Combine(ThemeFolderPath, "Default.json"))) SaveTheme(GetDefaultTheme());
 
         string[] files = Directory.GetFiles(ThemeFolderPath);
-        string currentTheme = ApiVault.Get().GetAppConfig().CurrentTheme;
+
+        string currentTheme = SkEditorAPI.Core.GetAppConfig().CurrentTheme;
 
         files.Where(x => Path.GetExtension(x) == ".json").ToList().ForEach(x => LoadTheme(x));
 
@@ -86,7 +89,7 @@ public class ThemeEditor
 
     private static Theme GetUsedTheme()
     {
-        string currentTheme = ApiVault.Get()?.GetAppConfig()?.CurrentTheme;
+        string currentTheme = SkEditorAPI.Core.GetAppConfig().CurrentTheme;
 
         if (currentTheme != null && File.Exists(Path.Combine(ThemeFolderPath, currentTheme)))
         {
@@ -121,7 +124,7 @@ public class ThemeEditor
     public static async Task SetTheme(Theme theme)
     {
         CurrentTheme = theme;
-        ApiVault.Get().GetAppConfig().CurrentTheme = theme.FileName;
+        SkEditorAPI.Core.GetAppConfig().CurrentTheme = theme.FileName;
 
         await ApplyTheme();
     }
@@ -175,12 +178,12 @@ public class ThemeEditor
             if (CurrentTheme.UseMicaEffect)
             {
                 smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
-                ApiVault.Get().GetMainWindow().TransparencyLevelHint = levels;
+                SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = levels;
             }
             else
             {
                 smallWindow.Setters.Remove(smallWindow.Setters.OfType<Setter>().FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint"));
-                ApiVault.Get().GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
+                SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
             }
 
             Application.Current.Resources.MergedDictionaries.Add(style);
@@ -209,14 +212,15 @@ public class ThemeEditor
 
     private static void UpdateTextEditorColors()
     {
-        List<TextEditor> textEditors = ApiVault.Get().GetTabView().TabItems.Cast<TabViewItem>()
-            .Where(i => i.Content is TextEditor)
-            .Select(i => i.Content as TextEditor).ToList();
-        foreach (TextEditor textEditor in textEditors)
+        List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
+        foreach (TextEditor textEditor in files.Select(x => x.Editor))
         {
             textEditor.Background = CurrentTheme.EditorBackgroundColor;
             textEditor.Foreground = CurrentTheme.EditorTextColor;
             textEditor.LineNumbersForeground = CurrentTheme.LineNumbersColor;
+            textEditor.TextArea.TextView.CurrentLineBackground = CurrentTheme.CurrentLineBackground;
+            textEditor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(CurrentTheme.CurrentLineBorder, 2);
+            textEditor.TextArea.TextView.InvalidateVisual();
         }
     }
 

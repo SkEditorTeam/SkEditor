@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
@@ -9,8 +10,6 @@ using SkEditor.Utilities;
 using SkEditor.Views.Marketplace;
 using SkEditor.Views.Marketplace.Types;
 using System;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkEditor.Views;
@@ -23,11 +22,16 @@ public partial class MarketplaceWindow : AppWindow
     public MarketplaceWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         Instance = this;
 
         ItemListBox.SelectionChanged += OnSelectedItemChanged;
         Loaded += (_, _) => Task.Run(LoadItems);
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private async Task LoadItems()
@@ -52,7 +56,7 @@ public partial class MarketplaceWindow : AppWindow
         catch (Exception e)
         {
             Log.Error(e, "Failed to load Marketplace items");
-            ApiVault.Get().ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceLoadFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceLoadFailed"));
         }
     }
 
@@ -62,7 +66,9 @@ public partial class MarketplaceWindow : AppWindow
         MarketplaceListItem listItem = (MarketplaceListItem)ItemListBox.SelectedItem;
         if (listItem == null) return;
         MarketplaceItem item = (MarketplaceItem)listItem.Tag;
-        if (item == null) return;
+        if (item == null)
+            return;
+        item.Marketplace = this;
 
 
         HideAllButtons();
@@ -70,17 +76,18 @@ public partial class MarketplaceWindow : AppWindow
         bool shouldShowInstallButton = false;
         bool shouldShowUninstallButton = false;
 
-        if (item is AddonItem addonItem)
+        /*
+         * if (item is AddonItem addonItem)
         {
-            IAddon addon = AddonLoader.Addons.FirstOrDefault(x => x.Name.Equals(item.ItemName));
+            IAddon addon = SkEditorAPI.Addons.GetAddon(addonItem.ItemFileUrl);
             string name = Path.GetFileNameWithoutExtension(addonItem.ItemFileUrl);
 
-            if (addon != null || ApiVault.Get().GetAppConfig().AddonsToDisable.Contains(name))
+            if (addon != null || SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Contains(name))
             {
                 shouldShowUninstallButton = true;
                 if (addon != null) ItemView.UpdateButton.IsVisible = !addon.Version.Equals(item.ItemVersion);
-                ItemView.UninstallButton.IsEnabled = !ApiVault.Get().GetAppConfig().AddonsToDelete.Contains(name);
-                ItemView.DisableButton.IsVisible = !ApiVault.Get().GetAppConfig().AddonsToDisable.Contains(name);
+                ItemView.UninstallButton.IsEnabled = !SkEditorAPI.Core.GetAppConfig().AddonsToDelete.Contains(name);
+                ItemView.DisableButton.IsVisible = !SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Contains(name);
                 ItemView.EnableButton.IsVisible = !ItemView.DisableButton.IsVisible;
             }
             else
@@ -88,7 +95,10 @@ public partial class MarketplaceWindow : AppWindow
                 shouldShowInstallButton = true;
             }
         }
-        else if (item is SyntaxItem || item is ThemeItem || item is ThemeWithSyntaxItem)
+        else 
+         */
+
+        if (item is SyntaxItem or ThemeItem or ThemeWithSyntaxItem or AddonItem)
         {
             bool installed = item.IsInstalled();
             shouldShowUninstallButton = installed;
@@ -110,6 +120,7 @@ public partial class MarketplaceWindow : AppWindow
         ItemView.InstallButton.CommandParameter = ItemView.DisableButton.CommandParameter = ItemView.UninstallButton.CommandParameter
                 = ItemView.EnableButton.CommandParameter = ItemView.UpdateButton.CommandParameter = item;
 
+        ItemView.ManageButton.IsVisible = false;
         ItemView.InstallButton.Command = new RelayCommand(item.Install);
         ItemView.UninstallButton.Command = new RelayCommand(item.Uninstall);
         if (item is ZipAddonItem zipAddonItem)
@@ -120,10 +131,23 @@ public partial class MarketplaceWindow : AppWindow
         }
         else if (item is AddonItem addonItem2)
         {
-            ItemView.DisableButton.Command = new RelayCommand(addonItem2.Disable);
-            ItemView.EnableButton.Command = new RelayCommand(addonItem2.Enable);
-            ItemView.UpdateButton.Command = new RelayCommand(addonItem2.Update);
+            ItemView.DisableButton.IsVisible = false;
+            ItemView.EnableButton.IsVisible = false;
+            ItemView.UpdateButton.IsVisible = false;
+            ItemView.UninstallButton.IsVisible = false;
+
+            ItemView.ManageButton.IsVisible = addonItem2.IsInstalled();
+            ItemView.ManageButton.Command = new RelayCommand(() =>
+            {
+                Close();
+                addonItem2.Manage();
+            });
         }
+    }
+
+    public void RefreshCurrentSelection()
+    {
+        OnSelectedItemChanged(null, null);
     }
 
     public void HideAllButtons()

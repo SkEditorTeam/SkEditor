@@ -1,15 +1,16 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Avalonia.Media;
+using Avalonia.Platform;
+using Avalonia.Svg.Skia;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Platform;
-using Avalonia.Svg.Skia;
-using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 
@@ -18,8 +19,6 @@ public class SkriptHubProvider : IDocProvider
     public static IDocProvider Get() => IDocProvider.Providers[DocProvider.SkriptHub];
 
     private const string BaseUri = "https://skripthub.net/api/v1/";
-
-    private readonly HttpClient _client = new();
 
     public DocProvider Provider => DocProvider.SkriptHub;
     public Task<IDocumentationEntry> FetchElement(string id)
@@ -36,70 +35,87 @@ public class SkriptHubProvider : IDocProvider
         return [];
     }
 
+    private readonly List<SkriptHubDocEntry> _cachedElements = [];
+
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
-        var uri = BaseUri + "syntax/";
-        var parameters = new List<string>();
+        const string uri = BaseUri + "addonsyntaxlist/";
 
-        if (!string.IsNullOrEmpty(searchData.Query))
-            parameters.Add("search=" + searchData.Query);
-        if (searchData.FilteredType != IDocumentationEntry.Type.All)
-            parameters.Add("type=" + searchData.FilteredType.ToString().ToLower());
-        if (!string.IsNullOrEmpty(searchData.FilteredAddon))
-            parameters.Add("addon=" + searchData.FilteredAddon);
-
-        uri += "?" + string.Join("&", parameters);
-
-        _client.DefaultRequestHeaders.Clear();
-        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
-
-        var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
-        HttpResponseMessage response;
-        try
+        if (_cachedElements.Count > 0)
         {
-            response = await _client.GetAsync(uri, cancellationToken.Token);
-        }
-        catch (Exception e)
-        {
-            ApiVault.Get().ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
-            return [];
+            var foundElements = _cachedElements.Where(e => e.DoMatch(searchData)).ToList();
+            return foundElements.Cast<IDocumentationEntry>().ToList();
         }
 
-        if (!response.IsSuccessStatusCode)
+        var cacheFile = Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json");
+        if (!File.Exists(cacheFile))
         {
-            try
+            var taskDialog = new TaskDialog
             {
-                ApiVault.Get().Log(await response.Content.ReadAsStringAsync());
-            }
-            catch (Exception e)
+                Title = Translation.Get("DocumentationWindowCacheSkriptHub"),
+                ShowProgressBar = true,
+                IconSource = new SymbolIconSource { Symbol = Symbol.Download },
+                SubHeader = Translation.Get("DocumentationWindowDownloading"),
+                Content = Translation.Get("DocumentationWindowCacheSkriptHubMessage")
+            };
+
+            taskDialog.Opened += async (sender, args) =>
             {
-                ApiVault.Get().Log(e.Message);
-            }
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
-            return [];
+                try
+                {
+                    using HttpClient client = new();
+                    var progress = new Progress<float>();
+                    progress.ProgressChanged += (e, sender) =>
+                        taskDialog.SetProgressBarState(sender, TaskDialogProgressState.Normal);
+
+                    await using var file = new FileStream(cacheFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                    await client.DownloadDataAsync(uri, file, progress);
+                    file.Close();
+
+                    taskDialog.Hide(TaskDialogStandardResult.OK);
+                }
+                catch (Exception e)
+                {
+                    await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
+                        ? Translation.Get("DocumentationWindowErrorOffline")
+                        : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                    _cachedElements.Clear();
+
+                    taskDialog.Hide(TaskDialogStandardResult.Cancel);
+                }
+            };
+
+            taskDialog.XamlRoot = SkEditorAPI.Windows.GetMainWindow();
+            var result = (TaskDialogStandardResult)await taskDialog.ShowAsync();
+            if (result == TaskDialogStandardResult.Cancel)
+                return [];
         }
 
-        var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        var elements = JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content);
-        return elements.Cast<IDocumentationEntry>().ToList();
+        var content = await File.ReadAllTextAsync(cacheFile);
+        _cachedElements.AddRange(JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content));
+        SaveCache();
+
+        var foundElements2 = _cachedElements.Where(e => e.DoMatch(searchData)).ToList();
+        return foundElements2.Cast<IDocumentationEntry>().ToList();
     }
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
+        return true;
     }
 
     public bool NeedsToLoadExamples => true;
 
     public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
+        var foundEntry = _cachedElements.FirstOrDefault(e => e.Id == entry.Id);
+        if (foundEntry == null)
+            return [];
+        if (foundEntry.Examples != null)
+            return foundEntry.Examples.Cast<IDocumentationExample>().ToList();
+
         var elementId = entry.Id;
         var uri = BaseUri + "syntaxexample/" + "?syntax=" + elementId;
-
-        _client.DefaultRequestHeaders.Clear();
-        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -109,7 +125,7 @@ public class SkriptHubProvider : IDocProvider
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowError(e is TaskCanceledException
+            await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
                 ? Translation.Get("DocumentationWindowErrorOffline")
                 : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
@@ -119,61 +135,43 @@ public class SkriptHubProvider : IDocProvider
         {
             try
             {
-                ApiVault.Get().Log(await response.Content.ReadAsStringAsync(cancellationToken.Token));
+                SkEditorAPI.Logs.Info(await response.Content.ReadAsStringAsync(cancellationToken.Token));
             }
             catch (Exception e)
             {
-                ApiVault.Get().Log(e.Message);
+                SkEditorAPI.Logs.Error(e.Message);
             }
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
         }
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var elements = JsonConvert.DeserializeObject<List<SkriptHubDocExample>>(content);
-        return elements.Cast<IDocumentationExample>().ToList();
+        foundEntry.Examples = elements;
+        SaveCache();
+        var examples = elements.Cast<IDocumentationExample>().ToList();
+        return examples;
     }
 
-    public bool HasAddons => true;
+    private readonly HttpClient _client = new();
+    public bool HasAddons => false;
     public async Task<List<string>> GetAddons()
     {
-        var uri = BaseUri + "addon/";
+        if (_cachedElements.Count > 0)
+            return _cachedElements.Select(e => e.Addon).Distinct().ToList();
 
-        _client.DefaultRequestHeaders.Clear();
-        _client.DefaultRequestHeaders.Add("Authorization", "Token " + ApiVault.Get().GetAppConfig().SkriptHubAPIKey);
-
-        var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
-        HttpResponseMessage response;
-        try
-        {
-            response = await _client.GetAsync(uri, cancellationToken.Token);
-        }
-        catch (Exception e)
-        {
-            ApiVault.Get().ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+        var cacheFile = Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json");
+        if (!File.Exists(cacheFile))
             return [];
-        }
 
-        if (!response.IsSuccessStatusCode)
-        {
-            try
-            {
-                ApiVault.Get().Log(await response.Content.ReadAsStringAsync(cancellationToken.Token));
-            }
-            catch (Exception e)
-            {
-                ApiVault.Get().Log(e.Message);
-            }
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
-            return [];
-        }
+        var content = await File.ReadAllTextAsync(cacheFile);
+        _cachedElements.AddRange(JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content));
+        SaveCache();
 
-        var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        var elements = JsonConvert.DeserializeObject<List<JObject>>(content);
-        return elements.Select(e => e["name"].ToString()).ToList();
+        return _cachedElements.Select(e => e.Addon).Distinct().ToList();
     }
+
+    public Task<Color?> GetAddonColor(string addonName) => Task.FromResult<Color?>(null);
 
     public IconSource Icon => new ImageIconSource()
     {
@@ -182,4 +180,22 @@ public class SkriptHubProvider : IDocProvider
             Source = SvgSource.LoadFromStream(AssetLoader.Open(new Uri("avares://SkEditor/Assets/Brands/SkriptHub.svg")))
         }
     };
+
+    public string? GetLink(IDocumentationEntry entry)
+    {
+        return "https://skripthub.net/docs/?id=" + entry.Id;
+    }
+
+    public async void SaveCache()
+    {
+        var cacheFile = Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json");
+        var content = JsonConvert.SerializeObject(_cachedElements);
+        await File.WriteAllTextAsync(cacheFile, content);
+    }
+
+    public void DeleteEverything()
+    {
+        _cachedElements.Clear();
+        File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json"));
+    }
 }

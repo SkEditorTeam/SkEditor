@@ -31,7 +31,7 @@ public class SkUnityDocEntry : IDocumentationEntry
             {
                 return Enum.Parse<IDocumentationEntry.Type>(RawDoc, true);
             }
-            catch (Exception e)
+            catch
             {
                 return Enum.Parse<IDocumentationEntry.Type>(RawDoc[..^1], true);
             }
@@ -49,5 +49,5 @@ public class SkUnityDocEntry : IDocumentationEntry
     [JsonProperty("eventvalues")]
     public string? EventValues { set; get; }
 
-    public DocProvider Provider => DocProvider.SkUnity;
+    public DocProvider Provider => DocProvider.skUnity;
 }

@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Avalonia.Media;
+using Avalonia.Platform;
+using Avalonia.Svg.Skia;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using System;
 using System.Collections.Generic;
@@ -6,9 +10,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Platform;
-using Avalonia.Svg.Skia;
-using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
@@ -19,7 +20,7 @@ public class SkUnityProvider : IDocProvider
     private readonly HttpClient _client = new HttpClient()
         .WithUserAgent("SkEditor App");
 
-    public DocProvider Provider => DocProvider.SkUnity;
+    public DocProvider Provider => DocProvider.skUnity;
     public List<string> CanSearch(SearchData searchData)
     {
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
@@ -36,7 +37,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
         // First build the URI
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "search/";
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "search/";
         var queryElements = new List<string>();
 
         if (!string.IsNullOrEmpty(searchData.Query))
@@ -56,42 +57,42 @@ public class SkUnityProvider : IDocProvider
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+            await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
+                 ? Translation.Get("DocumentationWindowErrorOffline")
+                 : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
-            return new List<IDocumentationEntry>();
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+            return [];
         }
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var responseObject = JObject.Parse(content);
         if (responseObject["response"].ToString() != "success")
         {
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", responseObject["response"].ToString()));
-            return new List<IDocumentationEntry>();
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", responseObject["response"].ToString()));
+            return [];
         }
         var entries = responseObject["result"].ToObject<List<SkUnityDocEntry>>();
-        return entries.ToList<IDocumentationEntry>();
+        return [.. entries];
     }
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(ApiVault.Get().GetAppConfig().SkUnityAPIKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey);
     }
 
-    public static IDocProvider Get() => (SkUnityProvider)IDocProvider.Providers[DocProvider.SkUnity];
+    public static IDocProvider Get() => (SkUnityProvider)IDocProvider.Providers[DocProvider.skUnity];
 
     public bool NeedsToLoadExamples => true;
 
     public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
         var elementId = entry.Id;
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getExamplesByID/" + elementId;
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "getExamplesByID/" + elementId;
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -101,7 +102,7 @@ public class SkUnityProvider : IDocProvider
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowError(e is TaskCanceledException
+            await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
                 ? Translation.Get("DocumentationWindowErrorOffline")
                 : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
             return [];
@@ -109,16 +110,16 @@ public class SkUnityProvider : IDocProvider
 
         if (!response.IsSuccessStatusCode)
         {
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
-            return new List<IDocumentationExample>();
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+            return [];
         }
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var responseObject = JObject.Parse(content);
         var result = responseObject["result"];
+
         // if result is a JArray, it means there are no examples
-        if (result is JArray)
-            return new List<IDocumentationExample>();
+        if (result is JArray) return [];
 
         var resultObject = responseObject["result"].ToObject<JObject>();
 
@@ -132,14 +133,13 @@ public class SkUnityProvider : IDocProvider
         return keys.Select(key => resultObject[key].ToObject<SkUnityDocExample>()).ToList<IDocumentationExample>();
     }
 
-    private readonly List<string> _addonCache = new();
     public bool HasAddons => true;
     public async Task<List<string>> GetAddons()
     {
-        if (_addonCache.Count > 0)
-            return _addonCache;
+        if (CachedAddons.Count > 0)
+            return [.. CachedAddons.Keys];
 
-        var uri = BaseUri.Replace("%s", ApiVault.Get().GetAppConfig().SkUnityAPIKey) + "getAllAddons/";
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "getAllAddons/";
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -149,16 +149,16 @@ public class SkUnityProvider : IDocProvider
         }
         catch (Exception e)
         {
-            ApiVault.Get().ShowError(e is TaskCanceledException
+            await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
                 ? Translation.Get("DocumentationWindowErrorOffline")
                 : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
-            return new List<string>();
+            return [];
         }
 
         if (!response.IsSuccessStatusCode)
         {
-            ApiVault.Get().ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
-            return new List<string>();
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+            return [];
         }
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
@@ -166,10 +166,17 @@ public class SkUnityProvider : IDocProvider
         var addonsObj = responseObject["result"].ToObject<JObject>();
         var addons = addonsObj.Properties().Select(prop => prop.Name).ToList();
 
-        _addonCache.AddRange(addons);
+        foreach (string key in addons)
+        {
+            var obj = addonsObj[key];
+            var color = Color.Parse("#" + obj["colour"].ToObject<string>());
+            var forumResourceId = obj["forums_resource_id"].ToObject<string>();
+            CachedAddons[key] = new AddonData(key, color, forumResourceId);
+        }
+
         return addons;
     }
-    
+
     public IconSource Icon => new ImageIconSource()
     {
         Source = new SvgImage
@@ -177,4 +184,38 @@ public class SkUnityProvider : IDocProvider
             Source = SvgSource.LoadFromStream(AssetLoader.Open(new Uri("avares://SkEditor/Assets/Brands/skUnity.svg")))
         }
     };
+
+    public string GetAddonLink(string addonName)
+    {
+        return "https://forums.skunity.com/resources/" + CachedAddons[addonName].ForumResourceId + "/";
+    }
+
+    public async Task<Color?> GetAddonColor(string addonName)
+    {
+        if (CachedAddons.Count == 0)
+        {
+            try
+            {
+                await GetAddons();
+            }
+            catch (Exception e)
+            {
+                await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
+                    ? Translation.Get("DocumentationWindowErrorOffline")
+                    : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                Serilog.Log.Error(e, "Failed to fetch addons");
+                return null;
+            }
+        }
+
+        return CachedAddons.TryGetValue(addonName, out var addon) ? addon.Color : null;
+    }
+
+    private record AddonData(string Name, Color Color, string ForumResourceId);
+    private static readonly Dictionary<string, AddonData> CachedAddons = [];
+
+    public string? GetLink(IDocumentationEntry entry)
+    {
+        return "https://docs.skunity.com/syntax/search/id:" + entry.Id;
+    }
 }

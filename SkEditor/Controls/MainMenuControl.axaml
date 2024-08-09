@@ -23,7 +23,7 @@
 					<ui:SymbolIcon Symbol="OpenFile"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Open folder" Name="MenuItemOpenFolder" IsVisible="False" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
+			<MenuItem Header="{DynamicResource MenuHeaderOpenFolder}" Name="MenuItemOpenFolder" IsVisible="False" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
 				<MenuItem.Icon>
 					<ui:SymbolIcon Symbol="Folder"/>
 				</MenuItem.Icon>
@@ -34,6 +34,11 @@
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderSaveAs}" Name="MenuItemSaveAs" HotKey="Ctrl+Shift+S" InputGesture="Ctrl+Shift+S">
+				<MenuItem.Icon>
+					<ui:SymbolIcon Symbol="SaveAs"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="{DynamicResource MenuHeaderSaveAll}" Name="MenuItemSaveAll" InputGesture="Ctrl+Alt+S">
 				<MenuItem.Icon>
 					<ui:SymbolIcon Symbol="SaveAs"/>
 				</MenuItem.Icon>
@@ -119,6 +124,16 @@
 			<MenuItem Header="{DynamicResource MenuHeaderComment}" Name="MenuItemComment" InputGesture="Ctrl+OemQuestion" HotKey="Ctrl+OemQuestion">
 				<MenuItem.Icon>
 					<ui:SymbolIcon Symbol="Comment"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="{DynamicResource MenuHeaderGoToLine}" Name="MenuItemGoToLine" InputGesture="Ctrl+G" HotKey="Ctrl+G">
+				<MenuItem.Icon>
+					<ui:SymbolIcon Symbol="Find"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="{DynamicResource MenuHeaderTrimWhitespaces}" Name="MenuItemTrimWhitespaces" InputGesture="Ctrl+T" HotKey="Ctrl+T">
+				<MenuItem.Icon>
+					<ui:SymbolIcon Symbol="Remove"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderDelete}" Name="MenuItemDelete" InputGesture="Delete">

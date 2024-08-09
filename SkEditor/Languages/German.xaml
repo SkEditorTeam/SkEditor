@@ -74,7 +74,6 @@
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">Sie haben in mindestens einer Datei ungespeicherte Änderungen. Möchten Sie die Anwendung wirklich schließen?</system:String>
 
 	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowPasteApiKey">Fügen Sie hier Ihren API-Schlüssel ein</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Klicken Sie hier, um eine Website mit dem API-Schlüssel zu öffnen. Stellen Sie sicher, dass Sie sich zuerst anmelden!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Anonym</system:String>
 	<system:String x:Key="PublishWindowResultLink">Link zu Ihrem Code</system:String>

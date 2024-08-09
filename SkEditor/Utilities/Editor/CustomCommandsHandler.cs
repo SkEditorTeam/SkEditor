@@ -13,7 +13,10 @@ public class CustomCommandsHandler
 {
     public static void OnCommentCommandExecuted(object target)
     {
-        TextEditor editor = ApiVault.Get().GetTextEditor();
+        OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        if (!file.IsEditor) return;
+
+        TextEditor editor = file.Editor;
 
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;
@@ -62,6 +65,36 @@ public class CustomCommandsHandler
         editor.Select(startOffset, replacement.Length);
     }
 
+    public static void OnTrimWhitespacesCommandExecuted(object target)
+    {
+        if (!SkEditorAPI.Files.IsEditorOpen())
+            return;
+
+        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        var document = editor.Document;
+        var selectionStart = editor.SelectionStart;
+        var selectionLength = editor.SelectionLength;
+
+        var selectedLines = document.Lines
+            .Where(line => selectionStart <= line.EndOffset && selectionStart + selectionLength >= line.Offset)
+            .ToList();
+
+        var modifiedLines = selectedLines.Select(line =>
+        {
+            var text = document.GetText(line);
+            if (string.IsNullOrWhiteSpace(text))
+                return "";
+            return text;
+        }).ToList();
+
+        var replacement = string.Join("\n", modifiedLines);
+        var startOffset = selectedLines.First().Offset;
+        var endOffset = selectedLines.Last().EndOffset - startOffset;
+
+        document.Replace(startOffset, endOffset, replacement);
+        editor.Select(startOffset, replacement.Length);
+    }
+
     public static void OnDuplicateCommandExecuted(object target)
     {
         if (target is not TextArea textArea || textArea.Document == null) return;
@@ -91,7 +124,7 @@ public class CustomCommandsHandler
 
     public static async void OnRefactorCommandExecuted(TextEditor editor)
     {
-        var parser = FileHandler.OpenedFiles.Find(file => file.Editor == editor).Parser;
+        var parser = SkEditorAPI.Files.GetOpenedFiles().Find(file => file.Editor == editor).Parser;
         if (parser == null)
             return;
         if (!parser.IsParsed)
@@ -107,6 +140,6 @@ public class CustomCommandsHandler
             return;
 
         var renameWindow = new SymbolRefactorWindow((INameableCodeElement)variable ?? option);
-        await renameWindow.ShowDialog(ApiVault.Get().GetMainWindow());
+        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
     }
 }

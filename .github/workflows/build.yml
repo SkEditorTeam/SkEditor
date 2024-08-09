@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-      
 jobs:
   build-macos:
     runs-on: macos-latest
@@ -19,64 +18,34 @@ jobs:
       with:
         dotnet-version: '8.0.x'
     
-    - name: 🏗️ | Build and publish for macOS (x64)
+    - name: 🏗️ | Build and publish for macOS
       run: |
         cd SkEditor
-        dotnet restore
-        dotnet publish -c Release -r osx-x64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
-    
-    - name: 🛠️ | Create .app structure
+        for arch in osx-x64 osx-arm64; do
+          dotnet restore
+          dotnet publish -c Release -r $arch -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
+        done
+
+    - name: 🛠️ | Create .app structure and zip for both architectures
       run: |
-        mkdir -p "SkEditor.app/Contents/MacOS"
-        mkdir -p "SkEditor.app/Contents/Resources"
-        cp -r SkEditor/bin/Release/net8.0/osx-x64/publish/* "SkEditor.app/Contents/MacOS/"
-        cp SkEditor/Info.plist "SkEditor.app/Contents/"
-        cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
+        for arch in osx-x64 osx-arm64; do
+          mkdir -p "SkEditor.app/Contents/MacOS"
+          mkdir -p "SkEditor.app/Contents/Resources"
+          cp -r SkEditor/bin/Release/net8.0/$arch/publish/* "SkEditor.app/Contents/MacOS/"
+          cp SkEditor/Info.plist "SkEditor.app/Contents/"
+          cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
+          find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
+          zip -r "SkEditorMac-$arch.zip" SkEditor.app
+          mv "SkEditorMac-$arch.zip" "$arch-SkEditorMac.zip"
+        done
     
-    - name: 🔑 | Set execute permissions
-      run: |
-        find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
-    
-    - name: 📦 | Zip .app package
-      run: |
-        zip -r SkEditorMac.zip SkEditor.app
-    
-    - name: 📤 | Upload artifacts
+    - name: 📤 | Upload macOS artifacts
       uses: actions/upload-artifact@v2
       with:
         name: SkEditorMac
-        path: SkEditorMac.zip
+        path: "*.zip"
 
-    # now build osx-arm64
-    - name: 🏗️ | Build and publish for macOS (arm64)
-      run: |
-        cd SkEditor
-        dotnet restore
-        dotnet publish -c Release -r osx-arm64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
-
-    - name: 🛠️ | Create .app structure (arm64)
-      run: |
-        mkdir -p "SkEditor.app/Contents/MacOS"
-        mkdir -p "SkEditor.app/Contents/Resources"
-        cp -r SkEditor/bin/Release/net8.0/osx-arm64/publish/* "SkEditor.app/Contents/MacOS/"
-        cp SkEditor/Info.plist "SkEditor.app/Contents/"
-        cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
-
-    - name: 🔑 | Set execute permissions (arm64)
-      run: |
-        find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
-
-    - name: 📦 | Zip .app package (arm64)
-      run: |
-        zip -r SkEditorMac-arm64.zip SkEditor.app
-
-    - name: 📤 | Upload artifacts (arm64)
-      uses: actions/upload-artifact@v2
-      with:
-        name: SkEditorMac-arm64
-        path: SkEditorMac-arm64.zip
-
-  build-linux-debian-arm64:
+  build-linux-debian:
     runs-on: ubuntu-latest
     steps:
     - name: 📝 | Checkout repository
@@ -90,54 +59,88 @@ jobs:
     - name: 🏗️ | Build and publish for Debian
       run: |
         cd SkEditor
-        dotnet restore
-        dotnet publish -c Release -r linux-arm64 -p:PublishSingleFile=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
-
+        for arch in linux-x64 linux-arm64; do
+          dotnet restore
+          dotnet publish -c Release -r $arch -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        done
+    
     - name: 📌 | Install Dependencies
       run: |
         sudo apt update
-        sudo apt install wget curl -y
-
+        sudo apt install wget curl imagemagick -y
+    
     - name: 🛠️ | Create .deb structure
       run: |
-        mkdir -p "SkEditorFiles/opt/SkEditor"
-        cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFiles/opt/SkEditor/"
-        mkdir -p "SkEditorFiles/usr/share/applications"
-        cd SkEditorFiles/usr/share/applications
-        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
-        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFiles/opt/SkEditor/SkEditor.png https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png
-        mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN"
-        cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
-        pwd 
-        wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
-        echo "exported_ver=\$(curl -s \"https://camo.githubusercontent.com/024e74589d307c8cbe664b87c58cf65e2b62587aec02459d998719874ea7b5eb/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f762f72656c656173652f536b456469746f725465616d2f536b456469746f723f636f6c6f723d253233376133346562266c6162656c3d76657273696f6e267374796c653d666c61742d737175617265\" | grep -oP '(?<=<title>).*?(?=</title>)' | sed 's/v\([0-9]\)/\1/') && exported_ver=\"\${exported_ver^}\"" >> getver
-        echo "echo \"\$exported_ver\" >> control" >> getver
-        bash getver
-        rm -f getver
-        echo "Maintainer: Notro" >> control
-        wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
-        wget -O preinst -r 'https://www.dropbox.com/scl/fi/d3v6523n16ndetbg7x5yh/preinst?rlkey=xfrk7go1gxl8zhwt0cswrihjo&st=rwyq4bpo&dl=1'
-        wget -O postinst -r 'https://www.dropbox.com/scl/fi/9g1zkrut89cnxr0628g7t/postinst?rlkey=puohu1xktrub2txj9l0t1q9dc&st=q5ykofhe&dl=1'
-        
-
+        for arch in x64 arm64; do
+          mkdir -p "SkEditorFiles-$arch/opt/SkEditor"
+          cp -r SkEditor/bin/Release/net8.0/linux-$arch/publish/* "SkEditorFiles-$arch/opt/SkEditor/"
+          mkdir -p "SkEditorFiles-$arch/usr/share/applications"
+          wget -O SkEditorFiles-$arch/usr/share/applications/SkEditor.desktop 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/ce4a0b2a782e73500aafde3ee24eb8ebf1194f98/SkEditor.desktop'
+          wget -O SkEditorFiles-$arch/opt/SkEditor/SkEditor.png 'https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png'
+          mkdir -p SkEditorFiles-$arch/usr/share/mime/application
+          wget -O SkEditorFiles-$arch/usr/share/mime/application/skript.xml 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/6d9cd730ecc86d8113b70b579627b11ff731ad6b/skript.xml'
+          mkdir -p "SkEditorFiles-$arch/DEBIAN"
+          wget -O SkEditorFiles-$arch/DEBIAN/control 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/fb98edb82e7df9c973ed80545fb2758caed65692/control'
+        done
+    
+    - name: 🔍 | Extract version, measure size, and update control file
+      run: |
+        version=$(grep -oP '(?<=<InformationalVersion>).*?(?=</InformationalVersion>)' SkEditor/SkEditor.csproj)
+        for arch in x64 arm64; do
+          size=$(du -s --block-size=K SkEditorFiles-$arch/opt/SkEditor | cut -f1 | tr -d 'K')
+          echo "Version: $version-b${{ github.run_number }}" >> SkEditorFiles-$arch/DEBIAN/control
+          echo -e "\nVersion=$version" >> SkEditorFiles-$arch/usr/share/applications/SkEditor.desktop
+          if [ "$arch" = "x64" ]; then
+                architecture="amd64"
+            else
+                architecture="$arch"
+          fi
+          echo "Architecture: $architecture" >> SkEditorFiles-$arch/DEBIAN/control
+        done
+    - name: 🔍 | Calculate MD5 and SHA256 checksums
+      run: |
+        for arch in x64 arm64; do
+          cd SkEditorFiles-$arch/
+          find . -type f -not -path './DEBIAN/*' -exec md5sum {} + | sed 's| \./| |' > DEBIAN/md5sums
+          find . -type f -not -path './DEBIAN/*' -exec sha256sum {} + | sed 's| \./| |' > DEBIAN/sha256sums
+          cd -
+        done
+    - name: 🎨 | Resize icon and create icon directories
+      run: |
+        for arch in x64 arm64; do
+          sizes=(16 24 32 48 64 128 256)
+          for size in "${sizes[@]}"; do
+            mkdir -p "SkEditorFiles-$arch/usr/share/icons/hicolor/${size}x${size}/apps"
+            convert SkEditorFiles-$arch/opt/SkEditor/SkEditor.png -resize ${size}x${size} "SkEditorFiles-$arch/usr/share/icons/hicolor/${size}x${size}/apps/SkEditor.png"
+          done
+        done
+    - name: 📦 | Download control scripts
+      run: |
+        for arch in x64 arm64; do
+          wget -O SkEditorFiles-$arch/DEBIAN/postrm 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/1eaea30df407c0e8f4b507dd4a0653dd20adc7eb/postrm'
+          wget -O SkEditorFiles-$arch/DEBIAN/preinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/1eaea30df407c0e8f4b507dd4a0653dd20adc7eb/preinst'
+          wget -O SkEditorFiles-$arch/DEBIAN/postinst 'https://gist.github.com/FixeQyt/8eb19f6f236c504ea86d873bd172113c/raw/23e2c4503059777a10c78f54cbe87fa676bb94d2/postinst'
+        done
     - name: 🔑 | Fix Permissions
       run: |
-        cd /home/runner/work/SkEditor/SkEditor/SkEditorFiles/DEBIAN
-        chmod 0755 *
+        for arch in x64 arm64; do
+          chmod 0755 SkEditorFiles-$arch/DEBIAN/*
+        done
     
     - name: 📦 | Create .deb package
       run: |
         cd /home/runner/work/SkEditor/SkEditor/
-        pwd
-        dpkg-deb -b SkEditorFiles SkEditor-arm64.deb
-
+        for arch in x64 arm64; do   
+          dpkg-deb -Zgzip -b SkEditorFiles-$arch SkEditor-b${{ github.run_number }}-$arch.deb
+        done
     - name: 📤 | Upload artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: SkEditorLinuxDebian (arm64)
-        path: SkEditor-arm64.deb
-
-  build-linux-debian-x64:
+      env: 
+        TOKEN: ${{ secrets.APT_REPO_TOKEN }}
+      run: |
+        for arch in x64 arm64; do
+          curl --header "Authorization: Bearer ${TOKEN}" --form "package=@SkEditor-b${{ github.run_number }}-$arch.deb" --form "distribution=all" https://fixeq.baltorepo.com/skeditor/app/upload/
+        done
+  build-linux:
     runs-on: ubuntu-latest
     steps:
     - name: 📝 | Checkout repository
@@ -148,51 +151,28 @@ jobs:
       with:
         dotnet-version: '8.0.x'
     
-    - name: 🏗️ | Build and publish for Debian
+    - name: 🏗️ | Build and publish for Linux
       run: |
         cd SkEditor
-        dotnet restore
-        dotnet publish -c Release -r linux-x64 -p:PublishSingleFile=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
-
-    - name: 📌 | Install Dependencies
-      run: |
-        sudo apt update
-        sudo apt install wget curl -y
-
-    - name: 🛠️ | Create .deb structure
-      run: |
-        mkdir -p "SkEditorFilesx/opt/SkEditor"
-        cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesx/opt/SkEditor/"
-        mkdir -p "SkEditorFilesx/usr/share/applications"
-        cd SkEditorFilesx/usr/share/applications
-        wget -O SkEditor.desktop -r 'https://www.dropbox.com/scl/fi/vy8j6uil0aj1k3mhjbq1n/SkEditor.desktop?rlkey=xhvi3ay35g1afox23pgvu0ht4&dl=1'
-        wget -O /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/opt/SkEditor/SkEditor.png https://raw.githubusercontent.com/SkEditorTeam/SkEditor/main/SkEditor.png
-        mkdir -p "/home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN"
-        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
-        pwd 
-        wget -O control -r 'https://www.dropbox.com/scl/fi/tep20aykrghy2aamc1m77/control-arm64?rlkey=bhfztntq2tzzbtiv3xv9oea6j&dl=1'
-        echo "exported_ver=\$(curl -s \"https://camo.githubusercontent.com/024e74589d307c8cbe664b87c58cf65e2b62587aec02459d998719874ea7b5eb/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f762f72656c656173652f536b456469746f725465616d2f536b456469746f723f636f6c6f723d253233376133346562266c6162656c3d76657273696f6e267374796c653d666c61742d737175617265\" | grep -oP '(?<=<title>).*?(?=</title>)' | sed 's/v\([0-9]\)/\1/') && exported_ver=\"\${exported_ver^}\"" >> getver
-        echo "echo \"\$exported_ver\" >> control" >> getver
-        bash getver
-        rm -f getver
-        echo "Maintainer: Notro" >> control
-        wget -O postrm -r 'https://www.dropbox.com/scl/fi/qni5y6fahxrz80ttenct5/postrm?rlkey=zn88axbghrwxokxtx1i5hhbgr&dl=1'
-        wget -O preinst -r 'https://www.dropbox.com/scl/fi/d3v6523n16ndetbg7x5yh/preinst?rlkey=xfrk7go1gxl8zhwt0cswrihjo&st=rwyq4bpo&dl=1'
-        wget -O postinst -r 'https://www.dropbox.com/scl/fi/9g1zkrut89cnxr0628g7t/postinst?rlkey=puohu1xktrub2txj9l0t1q9dc&st=q5ykofhe&dl=1'
-
-    - name: 🔑 | Fix Permissions
-      run: |
-        cd /home/runner/work/SkEditor/SkEditor/SkEditorFilesx/DEBIAN
-        chmod 0755 *
+        for arch in linux-x64 linux-arm64; do
+          dotnet restore
+          dotnet publish -c Release -r $arch -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained /p:DebugType=None /p:DebugSymbols=false
+        done
     
-    - name: 📦 | Create .deb package
+    - name: 🛠️ | Create archive structure
       run: |
-        cd /home/runner/work/SkEditor/SkEditor/
-        pwd
-        dpkg-deb -b SkEditorFilesx SkEditor-x64.deb
-
+        mkdir -p "SkEditorFilesL/x64"
+        mkdir -p "SkEditorFilesL/arm64"
+        cp -r SkEditor/bin/Release/net8.0/linux-x64/publish/* "SkEditorFilesL/x64/"
+        cp -r SkEditor/bin/Release/net8.0/linux-arm64/publish/* "SkEditorFilesL/arm64/"
+    
+    - name: 📦 | Pack SkEditor files
+      run: |
+        tar -czf SkEditor.tar.gz SkEditorFilesL/
+    
     - name: 📤 | Upload artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: SkEditorLinuxDebian (x64)
-        path: SkEditor-x64.deb
+        name: Linux (multiarch)
+        path: SkEditor.tar.gz
+    

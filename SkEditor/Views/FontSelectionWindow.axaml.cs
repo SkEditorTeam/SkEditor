@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using ExCSS;
@@ -15,6 +16,7 @@ public partial class FontSelectionWindow : AppWindow
     public FontSelectionWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         SetUp();
         LoadFonts();
@@ -40,6 +42,11 @@ public partial class FontSelectionWindow : AppWindow
         {
             _selectedFont = FontListBox.SelectedItem as FontInfo;
         };
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private void LoadFonts()
@@ -53,7 +60,7 @@ public partial class FontSelectionWindow : AppWindow
 
         FontListBox.ItemsSource = fonts;
 
-        FontListBox.SelectedItem = ApiVault.Get().GetAppConfig().Font;
+        FontListBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Font;
         FontListBox.ScrollIntoView(FontListBox.SelectedItem);
     }
 }

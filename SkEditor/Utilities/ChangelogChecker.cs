@@ -1,27 +1,27 @@
-﻿using SkEditor.API;
-using System.Reflection;
+﻿using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 
 namespace SkEditor.Utilities;
 public static class ChangelogChecker
 {
-    private static string GetVersion() => $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}";
+    private static string GetVersion() => SkEditorAPI.Core.GetInformationalVersion();
 
     private static readonly string[] changelog =
     [
         "Welcome to the new version of SkEditor!",
-        "This version includes the following changes:",
-        "🔬 Added Session Restoring: SkEditor now remembers your last opened files! Enable as experiment in the settings.",
-        "🗑️ Added more closing options to the menu.",
-        "🅰️ The default font now supports bold and italic styles.",
+        "The last two updates were pre-releases, so you might have missed some important changes.",
+        "Check the changelog on GitHub to see what's new!"
     ];
 
     public async static void Check()
     {
-        string version = ApiVault.Get().GetAppConfig().Version;
+        string version = SkEditorAPI.Core.GetAppConfig().Version;
         if (version == GetVersion()) return;
 
-        await ApiVault.Get().ShowAdvancedMessage($"v{GetVersion()} 🚀", string.Join('\n', changelog), primaryButton: false, closeButtonContent: "OK");
+        FontIconSource rocketIcon = new() { Glyph = "🚀" };
 
-        ApiVault.Get().GetAppConfig().Version = GetVersion();
+        await SkEditorAPI.Windows.ShowDialog($"v{GetVersion()}", string.Join('\n', changelog), icon: rocketIcon);
+
+        SkEditorAPI.Core.GetAppConfig().Version = GetVersion();
     }
 }

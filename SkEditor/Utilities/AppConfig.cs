@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
+using SkEditor.API;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
 
@@ -27,10 +27,23 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private string _currentTheme = "Default.json";
     [ObservableProperty] private Dictionary<string, string> _fileSyntaxes = [];
     [ObservableProperty] private string _font = "Default";
+    [ObservableProperty] private bool _highlightCurrentLine = true;
     [ObservableProperty] private bool _useSpacesInsteadOfTabs = false;
     [ObservableProperty] private int _tabSize = 4;
     [ObservableProperty] private bool _checkForUpdates = true;
-    [ObservableProperty] private bool _checkForChanges = true;
+    [ObservableProperty] private bool _checkForChanges = false;
+    [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
+    [ObservableProperty] private bool _isDevModeEnabled = false;
+
+    /// <summary>
+    /// Represent the width of panels via their ID (<see cref="Registries.SidebarPanels"/>
+    /// </summary>
+    public Dictionary<string, int> SidebarPanelSizes { get; set; } = [];
+
+    /// <summary>
+    /// Represent the (saved) choices the user made for file types.
+    /// </summary>
+    public Dictionary<string, string> FileTypeChoices { get; set; } = [];
 
     public HashSet<string> AddonsToDisable { get; set; } = [];
     public HashSet<string> AddonsToDelete { get; set; } = [];
@@ -50,14 +63,13 @@ public partial class AppConfig : ObservableObject
     public bool EnableSkDoc { get; set; } = false;
 
     public string SkUnityAPIKey { get; set; } = "";
-    public string SkriptHubAPIKey { get; set; } = "";
     public string SkriptMCAPIKey { get; set; } = "";
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
 
     public static string SettingsFilePath { get; set; } = Path.Combine(AppDataFolderPath, "settings.json");
 
-    public static async Task<AppConfig> Load()
+    public static AppConfig Load()
     {
         string settingsFilePath = SettingsFilePath;
 
@@ -99,10 +111,7 @@ public partial class AppConfig : ObservableObject
     /// </summary>
     public void SetUpNewOption(string optionName, object defaultValue)
     {
-        if (!CustomOptions.ContainsKey(optionName))
-        {
-            CustomOptions[optionName] = defaultValue;
-        }
+        CustomOptions.TryAdd(optionName, defaultValue);
     }
 
     /// <summary>
@@ -121,14 +130,7 @@ public partial class AppConfig : ObservableObject
     /// </summary>
     public object GetOption(string optionName)
     {
-        if (CustomOptions.TryGetValue(optionName, out object? value))
-        {
-            return value;
-        }
-        else
-        {
-            return null;
-        }
+        return CustomOptions.GetValueOrDefault(optionName);
     }
 
     /// <summary>

@@ -1,8 +1,11 @@
-﻿using AvaloniaEdit;
+using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
+using AvaloniaEdit.Highlighting;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using SkEditor.Views;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

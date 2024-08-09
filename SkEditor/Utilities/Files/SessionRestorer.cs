@@ -1,89 +1,131 @@
-﻿using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
+﻿using Newtonsoft.Json.Linq;
+using Serilog;
 using SkEditor.API;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.IO;
-using System.Linq;
+using System.IO.Compression;
+using System.Text;
 using System.Threading.Tasks;
 using SkEditor.Utilities.Syntax;
 
 namespace SkEditor.Utilities.Files;
 public static class SessionRestorer
 {
-    private static string sessionFolder = Path.Combine(Path.GetTempPath(), "SkEditor", "Session");
+    private static readonly string SessionFolder = Path.Combine(Path.GetTempPath(), "SkEditor", "Session");
 
-    public static async void SaveSession()
+    public static async Task SaveSession()
     {
-        List<TabViewItem> tabs = ApiVault.Get().GetTabView().TabItems
-            .OfType<TabViewItem>()
-            .Where(tab => tab.Content is TextEditor)
-            .ToList();
+        if (Directory.Exists(SessionFolder)) Directory.Delete(SessionFolder, true);
+        Directory.CreateDirectory(SessionFolder);
 
-        Directory.CreateDirectory(sessionFolder);
-
-        foreach (TabViewItem tab in tabs)
+        var openedFiles = SkEditorAPI.Files.GetOpenedFiles();
+        var index = 0;
+        foreach (var openedFile in openedFiles)
         {
-            string path = tab.Tag?.ToString().TrimEnd('*');
-            string textToWrite = string.Empty;
-            TextEditor editor = tab.Content as TextEditor;
-
-            if (editor.Document.TextLength == 0) continue;
-
-            if (string.IsNullOrEmpty(path))
+            if (!openedFile.IsEditor || string.IsNullOrEmpty(openedFile.Editor.Text))
             {
-                string header = tab.Header.ToString().TrimEnd('*');
-                path = Path.Combine(sessionFolder, header);
-                textToWrite = editor.Text;
-            }
-            else
-            {
-                string name = Path.GetFileName(path);
-                textToWrite = $"##SKEDITOR RESTORE:{path}##\n" + editor.Text;
-                path = Path.Combine(sessionFolder, name);
+                continue;
             }
 
-            await File.WriteAllTextAsync(path, textToWrite);
+            var jsonData = BuildSavingData(openedFile);
+            var compressed = await Compress(jsonData);
+            var path = Path.Combine(SessionFolder, $"file_{index}.skeditor");
+            await File.WriteAllTextAsync(path, compressed);
+            index++;
         }
-
-        ApiVault.Get().OnClosed();
-        ApiVault.Get().GetMainWindow().AlreadyClosed = true;
-        ApiVault.Get().GetMainWindow().Close();
     }
 
     public static async Task<bool> RestoreSession()
     {
-        bool filesAdded = false;
+        if (!Directory.Exists(SessionFolder))
+            return false;
 
-        if (!Directory.Exists(sessionFolder)) return filesAdded;
+        var files = Directory.GetFiles(SessionFolder);
+        if (files.Length == 0)
+            return false;
 
-        foreach (string file in Directory.GetFiles(sessionFolder))
+        foreach (var file in files)
         {
-            string path = file;
-            string name = Path.GetFileName(file);
-            string content = await File.ReadAllTextAsync(file);
+            var compressed = await File.ReadAllTextAsync(file);
+            var jsonData = await Decompress(compressed);
+            if (string.IsNullOrEmpty(jsonData)) continue;
 
-            if (content.StartsWith("##SKEDITOR RESTORE"))
+            var data = BuildOpeningData(jsonData);
+            await SkEditorAPI.Files.AddEditorTab(data.Content, data.Path);
+
+            if (data.HasUnsavedChanges)
             {
-                int endOfPathIndex = content.IndexOf('\n');
-                if (endOfPathIndex > 0)
+                var openedFile = SkEditorAPI.Files.GetOpenedFileByPath(data.Path);
+                if (openedFile != null)
                 {
-                    path = content[19..endOfPathIndex];
-                    path = path.Replace("##", string.Empty);
-                    content = content[(endOfPathIndex + 1)..];
+                    openedFile.IsSaved = false;
                 }
             }
-
-            TabViewItem tabItem = await FileBuilder.Build(name, path, content);
-            TextEditor editor = tabItem.Content as TextEditor;
-
-            (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-            SyntaxLoader.Load(editor);
-
-            File.Delete(file);
-            filesAdded = true;
         }
 
-        return filesAdded;
+        return true;
     }
+
+    #region Compressing/Decompressing
+
+    private static async Task<string> Compress(string data)
+    {
+        var byteArray = Encoding.UTF8.GetBytes(data);
+        using var ms = new MemoryStream();
+        await using (var sw = new GZipStream(ms, CompressionMode.Compress))
+            sw.Write(byteArray, 0, byteArray.Length);
+        return Convert.ToBase64String(ms.ToArray());
+    }
+
+    private static async Task<string> Decompress(string data)
+    {
+        string result = string.Empty;
+        try
+        {
+            var byteArray = Convert.FromBase64String(data);
+            using var ms = new MemoryStream(byteArray);
+            await using var sr = new GZipStream(ms, CompressionMode.Decompress);
+            using var reader = new StreamReader(sr);
+            result = await reader.ReadToEndAsync();
+        }
+        catch (FormatException e)
+        {
+            Log.Warning(e, "Error while decompressing data");
+        }
+        return result;
+    }
+
+    #endregion
+
+    #region Serialization/Deserialization
+
+    private static string BuildSavingData(OpenedFile openedFile)
+    {
+        var obj = new JObject
+        {
+            ["Path"] = openedFile.Path,
+            ["Content"] = openedFile.Editor.Text,
+            ["HasUnsavedChanges"] = !openedFile.IsSaved
+        };
+
+        return obj.ToString();
+    }
+
+    private static (string Content, string? Path, bool HasUnsavedChanges) BuildOpeningData(string data)
+    {
+        var obj = JObject.Parse(data);
+
+        var path = obj["Path"]?.Value<string>();
+        var content = obj["Content"]?.Value<string>();
+        var hasUnsavedChanges = obj["HasUnsavedChanges"]?.Value<bool>() ?? false;
+
+        if (string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(path))
+        {
+            content = File.Exists(path) ? File.ReadAllText(path) : string.Empty;
+        }
+
+        return (content, path, hasUnsavedChanges);
+    }
+
+    #endregion
 }

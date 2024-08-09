@@ -1,3 +1,4 @@
+using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
@@ -14,8 +15,13 @@ public partial class RefactorWindow : AppWindow
     public RefactorWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         ApplyButton.Command = new RelayCommand(Apply);
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private async void Apply()
@@ -27,21 +33,23 @@ public partial class RefactorWindow : AppWindow
         Close();
     }
 
+    // TODO: Support for multi-line comments (Skript 2.9.0)
+    // TODO: Support for comments starting after a line of code in the same line
     private static Task RemoveComments()
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var linesToStay = textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
 
         StringBuilder builder = new();
         linesToStay.ForEach(x => builder.AppendLine(GetText(x)));
-        textEditor.Document.Text = builder.ToString();
+        textEditor.Document.Text = builder.ToString()[..^2];
 
         return Task.CompletedTask;
     }
 
     private static Task TabsToSpaces()
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var lines = textEditor.Document.Lines;
 
         lines.Where(line => GetText(line).StartsWith("\t")).ToList().ForEach(line =>
@@ -54,7 +62,7 @@ public partial class RefactorWindow : AppWindow
 
     private static Task SpacesToTabs()
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int tabSize = GetTabSize();
         var lines = textEditor.Document.Lines;
         lines.Where(line => GetText(line).StartsWith(" ")).ToList().ForEach(line =>
@@ -71,7 +79,7 @@ public partial class RefactorWindow : AppWindow
 
     private static int GetTabSize()
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         var lines = textEditor.Document.Lines;
         int tabSize = 4;
 
@@ -84,7 +92,7 @@ public partial class RefactorWindow : AppWindow
 
     private static string GetText(DocumentLine line)
     {
-        TextEditor textEditor = ApiVault.Get().GetTextEditor();
+        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         return textEditor.Document.GetText(line.Offset, line.Length);
     }
 }

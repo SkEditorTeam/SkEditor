@@ -82,7 +82,6 @@
 	
 
 	<!-- Közzététel ablak -->
-	<system:String x:Key="PublishWindowPasteApiKey">Illessze be az API kulcsot ide</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Kattintson ide egy webhely megnyitásához az API kulcsával. Győződjön meg róla, hogy be van jelentkezve!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Névtelenül</system:String>
 	<system:String x:Key="PublishWindowResultLink">A kódja hivatkozása</system:String>

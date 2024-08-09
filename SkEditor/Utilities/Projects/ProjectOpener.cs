@@ -1,9 +1,11 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Projects.Elements;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +16,7 @@ namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
 {
     public static Folder? ProjectRootFolder = null;
-    private static ExplorerSidebarPanel Panel => ApiVault.Get().GetMainWindow().SideBar.ProjectPanel.Panel;
+    private static ExplorerSidebarPanel Panel => AddonLoader.GetCoreAddon().ProjectPanel.Panel;
     public static TreeView FileTreeView => Panel.FileTreeView;
     private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
 
@@ -23,7 +25,7 @@ public static class ProjectOpener
         string folder = string.Empty;
         if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
         {
-            TopLevel topLevel = TopLevel.GetTopLevel(ApiVault.Get().GetMainWindow());
+            TopLevel topLevel = TopLevel.GetTopLevel(SkEditorAPI.Windows.GetMainWindow());
 
             IReadOnlyList<IStorageFolder> folders = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
@@ -42,6 +44,8 @@ public static class ProjectOpener
             folder = path;
         }
 
+        folder.FixLinuxPath();
+
         NoFolderMessage.IsVisible = false;
 
         ProjectRootFolder = new Folder(folder) { IsExpanded = true };
@@ -58,13 +62,27 @@ public static class ProjectOpener
         //    ProjectRootFolder.GetItemByPath(path)?.RenameElement(e.Name, false);
         //};
 
-        FileTreeView.DoubleTapped += (sender, e) =>
+        static void HandleTapped(TappedEventArgs e)
         {
             if (e.Source is not Border border) return;
             var treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
             if (treeViewItem is null) return;
             var storageElement = treeViewItem.DataContext as StorageElement;
-            storageElement?.HandleDoubleClick();
+            storageElement?.HandleClick();
+        }
+
+        FileTreeView.DoubleTapped += (sender, e) =>
+        {
+            if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+                return;
+            HandleTapped(e);
+        };
+
+        FileTreeView.Tapped += (sender, e) =>
+        {
+            if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+                return;
+            HandleTapped(e);
         };
     }
 

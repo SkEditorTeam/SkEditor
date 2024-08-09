@@ -14,7 +14,7 @@ public class File : StorageElement
 
     public File(string file, Folder? parent = null)
     {
-        file = Uri.UnescapeDataString(file).Replace("/", "\\");
+        file = Uri.UnescapeDataString(file).FixLinuxPath();
 
         Parent = parent;
         StorageFilePath = file;
@@ -64,16 +64,16 @@ public class File : StorageElement
         RefreshSelf();
     }
 
-    public override void HandleDoubleClick() => FileHandler.OpenFile(StorageFilePath);
+    public override void HandleClick() => FileHandler.OpenFile(StorageFilePath);
 
     public void CopyAbsolutePath()
     {
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFilePath));
+        SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFilePath));
     }
 
     public void CopyPath()
     {
         var path = StorageFilePath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path);
+        SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(path);
     }
 }

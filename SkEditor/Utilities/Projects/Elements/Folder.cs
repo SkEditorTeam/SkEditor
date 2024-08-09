@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
@@ -7,6 +8,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
@@ -16,7 +18,7 @@ public class Folder : StorageElement
 
     public Folder(string folder, Folder? parent = null)
     {
-        folder = Uri.UnescapeDataString(folder).Replace("/", "\\");
+        folder = Uri.UnescapeDataString(folder).FixLinuxPath();
 
         Parent = parent;
         StorageFolderPath = folder;
@@ -34,10 +36,13 @@ public class Folder : StorageElement
         CreateNewFolderCommand = new RelayCommand(() => CreateNewElement(false));
     }
 
-    private void LoadChildren()
+    private async void LoadChildren()
     {
-        Directory.GetDirectories(StorageFolderPath).ToList().ForEach(x => Children.Add(new Folder(x, this)));
-        Directory.GetFiles(StorageFolderPath).ToList().ForEach(x => Children.Add(new File(x, this)));
+        await Task.Run(() => Dispatcher.UIThread.Invoke(() =>
+        {
+            Directory.GetDirectories(StorageFolderPath).ToList().ForEach(x => Children.Add(new Folder(x, this)));
+            Directory.GetFiles(StorageFolderPath).ToList().ForEach(x => Children.Add(new File(x, this)));
+        }));
     }
 
     public void OpenInExplorer()
@@ -82,20 +87,21 @@ public class Folder : StorageElement
         return null;
     }
 
-    public override void HandleDoubleClick()
+    public override void HandleClick()
     {
-        if (Children.Count > 0) IsExpanded = !IsExpanded;
+        if (Children.Count > 0)
+            IsExpanded = !IsExpanded;
     }
 
     public void CopyAbsolutePath()
     {
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFolderPath));
+        SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(Path.GetFullPath(StorageFolderPath));
     }
 
     public void CopyPath()
     {
         var path = StorageFolderPath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
-        ApiVault.Get().GetMainWindow().Clipboard.SetTextAsync(path);
+        SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(path);
     }
 
     public async void CreateNewElement(bool file)

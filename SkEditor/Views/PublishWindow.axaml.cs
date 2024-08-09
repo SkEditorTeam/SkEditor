@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
@@ -14,6 +15,7 @@ public partial class PublishWindow : AppWindow
     public PublishWindow()
     {
         InitializeComponent();
+        Focusable = true;
         InitializeUI();
     }
 
@@ -26,7 +28,7 @@ public partial class PublishWindow : AppWindow
 
         CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
 
-        WebsiteComboBox.SelectedIndex = ApiVault.Get().GetAppConfig().LastUsedPublishService switch
+        WebsiteComboBox.SelectedIndex = SkEditorAPI.Core.GetAppConfig().LastUsedPublishService switch
         {
             "Pastebin" => 0,
             "code.skript.pl" => 1,
@@ -36,12 +38,17 @@ public partial class PublishWindow : AppWindow
 
         WebsiteComboBox.SelectionChanged += (sender, e) => UpdateServiceInfo();
 
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
+
         UpdateServiceInfo();
     }
 
     private void UpdateServiceInfo()
     {
-        AppConfig appConfig = ApiVault.Get().GetAppConfig();
+        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
         ApiKeyTextBox.Text = CurrentService switch
         {
             "Pastebin" => appConfig.PastebinApiKey,
@@ -60,13 +67,13 @@ public partial class PublishWindow : AppWindow
         switch (CurrentService)
         {
             case "Pastebin":
-                ApiVault.Get().GetAppConfig().PastebinApiKey = ApiKeyTextBox.Text;
+                SkEditorAPI.Core.GetAppConfig().PastebinApiKey = ApiKeyTextBox.Text;
                 break;
             case "code.skript.pl":
-                ApiVault.Get().GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
+                SkEditorAPI.Core.GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
                 break;
             case "skUnity Parser":
-                ApiVault.Get().GetAppConfig().SkUnityAPIKey = ApiKeyTextBox.Text;
+                SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey = ApiKeyTextBox.Text;
                 break;
         }
     }
@@ -80,22 +87,27 @@ public partial class PublishWindow : AppWindow
             _ => "https://pastebin.com/doc_api"
         };
 
-        ApiVault.Get().OpenUrl(url);
+        SkEditorAPI.Core.OpenLink(url);
     }
 
     private void Publish()
     {
-        string code = ApiVault.Get().GetTextEditor().Document.Text;
+        if (!SkEditorAPI.Files.IsEditorOpen())
+        {
+            SkEditorAPI.Windows.ShowError("The current opened tab is not a code editor.");
+            return;
+        }
 
+        var code = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Text;
         if (string.IsNullOrWhiteSpace(code))
         {
-            ApiVault.Get().ShowMessage("Error", "You can't publish empty code!", this);
+            SkEditorAPI.Windows.ShowError("You can't publish empty code!");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(ApiKeyTextBox.Text))
         {
-            ApiVault.Get().ShowMessage("Error", "You need to enter the API key!", this);
+            SkEditorAPI.Windows.ShowError("You need to enter the API key!");
             return;
         }
 

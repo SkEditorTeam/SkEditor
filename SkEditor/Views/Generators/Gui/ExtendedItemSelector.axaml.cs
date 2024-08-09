@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
@@ -15,6 +16,7 @@ public partial class ExtendedItemSelector : AppWindow
     public ExtendedItemSelector(Item item)
     {
         InitializeComponent();
+        Focusable = true;
 
         _item = item;
 
@@ -23,11 +25,17 @@ public partial class ExtendedItemSelector : AppWindow
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;
 
+        AssignCommands(item);
+        SetContextMenu();
+    }
+
+    private void AssignCommands(Item item)
+    {
         ContinueButton.Command = new RelayCommand(() =>
         {
             _item.Lore = [];
-            LoreLineStackPanel.Children.Where(x => x is LoreLineEditor)
-                .Select(x => (LoreLineEditor)x)
+            LoreLineStackPanel.Children
+                .OfType<LoreLineEditor>()
                 .Where(x => !string.IsNullOrWhiteSpace(x.LineTextBox.Text))
                 .ToList()
                 .ForEach(x => _item.Lore.Add(x.LineTextBox.Text));
@@ -51,7 +59,12 @@ public partial class ExtendedItemSelector : AppWindow
             Close(_item);
         });
 
-        SetContextMenu();
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
+
+        ColoredTextHandler.SetupBox(DisplayNameTextBox);
     }
 
     private void CheckForEditing()

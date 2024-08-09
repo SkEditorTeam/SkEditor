@@ -1,5 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
+using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using Newtonsoft.Json;
@@ -11,6 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Views.Generators.Gui;
 public partial class ItemSelector : AppWindow
@@ -43,7 +47,7 @@ public partial class ItemSelector : AppWindow
 
         SearchBox.TextChanged += OnSearchChanged;
 
-        CheckForFile();
+        Dispatcher.UIThread.InvokeAsync(CheckForFile);
 
         Loaded += (sender, e) =>
         {
@@ -92,30 +96,53 @@ public partial class ItemSelector : AppWindow
         }
 
         _itemBindings.FilteredItems = new ObservableCollection<ComboBoxItem>(
-            filteredItems.Select(x => new ComboBoxItem { Content = x.DisplayName, Tag = x.Name })
+            filteredItems.Select(CreateItem)
         );
 
         ItemListBox.SelectedIndex = 0;
     }
 
-    private void CheckForFile()
+    private async void CheckForFile()
     {
         string itemsFile = Path.Combine(AppConfig.AppDataFolderPath, "items.json");
 
         if (!File.Exists(itemsFile)) return;
 
-        List<Item> items = JsonConvert.DeserializeObject<List<Item>>(File.ReadAllText(itemsFile));
+        List<Item> items = JsonConvert.DeserializeObject<List<Item>>(await File.ReadAllTextAsync(itemsFile));
 
         foreach (Item item in items)
         {
             _itemBindings.Items.Add(item);
-            ComboBoxItem comboBoxItem = new()
-            {
-                Content = item.DisplayName,
-                Tag = item.Name
-            };
-            _itemBindings.FilteredItems.Add(comboBoxItem);
+            _itemBindings.FilteredItems.Add(CreateItem(item));
         }
+    }
+
+    private ComboBoxItem CreateItem(Item item)
+    {
+        return new ComboBoxItem
+        {
+            Content = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 10,
+                Children =
+                {
+                    new Image
+                    {
+                        Source = item.Icon,
+                        Width = 24,
+                        Height = 24,
+                    },
+                    new TextBlock
+                    {
+                        Text = item.DisplayName,
+                        VerticalAlignment = VerticalAlignment.Center,
+                    }
+                }
+            },
+            Tag = item.Name,
+        };
+
     }
 }
 
@@ -139,4 +166,30 @@ public class Item
     public int CustomModelData { get; set; }
     [JsonIgnore]
     public bool HaveExampleAction { get; set; }
+
+    [JsonIgnore]
+    private Bitmap _image = null!;
+    [JsonIgnore]
+    public Bitmap Icon
+    {
+        get
+        {
+            if (_image == null!)
+            {
+                string itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, Name + ".png");
+                if (!File.Exists(itemImagePath))
+                {
+                    itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, "barrier.png");
+                }
+                _image = new Bitmap(itemImagePath);
+            }
+
+            return _image;
+        }
+    }
+
+    public async Task<Bitmap> GetIcon()
+    {
+        return await Task.Run(() => Icon);
+    }
 }

@@ -1,3 +1,4 @@
+using Avalonia.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Media.Animation;
 using FluentAvalonia.UI.Navigation;
@@ -16,12 +17,19 @@ public partial class SettingsWindow : AppWindow
     public SettingsWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         Instance = this;
-        ApiVault.Get().OnSettingsOpened();
+        SkEditorAPI.Events.SettingsOpened();
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
+        Closed += (s, e) => SkEditorAPI.Core.GetAppConfig().Save();
     }
 
     public static void NavigateToPage(Type page)

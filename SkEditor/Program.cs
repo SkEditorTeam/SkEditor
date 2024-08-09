@@ -1,45 +1,46 @@
-﻿using Avalonia;
-using Serilog;
-using SkEditor.API;
+using Avalonia;
+using Avalonia.Data;
 using System;
-using System.Diagnostics;
 
-namespace SkEditor.Desktop;
-
-class Program
+namespace SkEditor.Desktop
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
-    [STAThread]
-    public static void Main(string[] args)
+    class Program
     {
-        try
+        // Initialization code. Don't use any Avalonia, third-party APIs or any
+        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+        // yet and stuff might break.
+        [STAThread]
+        public static void Main(string[] args)
         {
+            GC.KeepAlive(typeof(RelativeSource));
+            CheckTest(args);
+
             BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args);
+                    .StartWithClassicDesktopLifetime(args);
         }
-        catch (Exception e)
+
+        private static void CheckTest(string[] args)
         {
-            string message = "Application crashed!";
-            string? source = e.Source;
-            if (AddonLoader.DllNames.Contains(source + ".dll"))
+            if (args.Length > 0 && args[0] == "--test")
             {
-                message += $" It's fault of {source} addon.";
+                try
+                {
+                    Console.WriteLine("Test passed");
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine($"Test failed: {e.Message}");
+                    Environment.Exit(1);
+                }
+                return;
             }
-            Log.Fatal(e, message);
-
-            ApiVault.Get().SaveData();
-
-            Process.Start(Environment.ProcessPath, "--crash");
         }
+
+        // Avalonia configuration, don't remove; also used by visual designer.
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .LogToTrace()
+                .WithInterFont();
     }
-
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .LogToTrace()
-            .WithInterFont();
-
 }

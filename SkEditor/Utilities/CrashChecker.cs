@@ -1,10 +1,7 @@
-﻿using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
-using SkEditor.API;
-using SkEditor.Utilities.Files;
-using SkEditor.Utilities.Syntax;
+﻿using SkEditor.API;
+using SkEditor.Views;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,23 +12,76 @@ public class CrashChecker
 {
     public async static Task<bool> CheckForCrash()
     {
-        bool crash = Environment.GetCommandLineArgs().Any(arg => arg.Equals("--crash"));
-        if (!crash) return false;
+        var args = SkEditorAPI.Core.GetStartupArguments();
+        if (args is not ["--crash", _])
+            return false;
 
-        ApiVault.Get().ShowMessage("Oops!", "Sorry!\nIt looks that the app crashed, but don't worry, your files were saved.\nYou can check the logs for more details.\nIf you can, please report this on the Discord server.");
-
-        string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
-        if (!Directory.Exists(tempPath)) return false;
-        Directory.GetFiles(tempPath).ToList().ForEach(async file =>
+        try
         {
-            TabViewItem tabItem = await FileBuilder.Build(Path.GetFileName(file), file);
-            if (tabItem == null)
-                return;
-            tabItem.Tag = null;
-            (ApiVault.Get().GetTabView().TabItems as IList)?.Add(tabItem);
-            SyntaxLoader.Load(tabItem.Content as TextEditor);
+            var rawException = args[1];
+            var exception = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(rawException));
+            var tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
+            if (Directory.Exists(tempPath))
+            {
+                var files = Directory.GetFiles(tempPath).ToList();
+                if (files.Count != 0)
+                {
+                    files.ForEach(file => SkEditorAPI.Files.OpenFile(file));
+                    await WaitForUnlock(files);
+
+                    try
+                    {
+                        Directory.Delete(tempPath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        SkEditorAPI.Logs.Warning($"Failed to delete temporary directory: {ex}");
+                    }
+                }
+            }
+            await SkEditorAPI.Windows.ShowWindowAsDialog(new CrashWindow(exception));
+            return true;
+        }
+        catch (FormatException e)
+        {
+            SkEditorAPI.Logs.Warning($"Failed to decode crash exception: {e}");
+            return false;
+        }
+    }
+
+    private static async Task WaitForUnlock(List<string> files)
+    {
+        await Task.Run(async () =>
+        {
+            bool allFilesUnlocked = false;
+            while (!allFilesUnlocked)
+            {
+                allFilesUnlocked = true;
+                foreach (var file in files)
+                {
+                    if (IsFileLocked(file))
+                    {
+                        allFilesUnlocked = false;
+                        break;
+                    }
+                }
+                if (!allFilesUnlocked)
+                    await Task.Delay(100);
+            }
         });
-        Directory.Delete(tempPath, true);
-        return true;
+    }
+
+    private static bool IsFileLocked(string filePath)
+    {
+        try
+        {
+            using FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
+            stream.Close();
+        }
+        catch (IOException)
+        {
+            return true;
+        }
+        return false;
     }
 }

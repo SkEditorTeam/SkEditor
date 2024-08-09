@@ -80,7 +80,6 @@
 
 
 	<!-- 发布窗口 -->
-	<system:String x:Key="PublishWindowPasteApiKey">在此粘贴您的API密钥</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">点击这里打开一个包含API密钥的网站。请确保先登录！</system:String>
 	<system:String x:Key="PublishWindowAnonymously">匿名</system:String>
 	<system:String x:Key="PublishWindowResultLink">您代码的链接</system:String>
