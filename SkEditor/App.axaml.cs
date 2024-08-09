@@ -82,7 +82,6 @@ public partial class App : Application
                 try
                 {
                     SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
-                    _ = new SkEditor();
 
                     MainWindow mainWindow = new();
                     desktop.MainWindow = mainWindow;
