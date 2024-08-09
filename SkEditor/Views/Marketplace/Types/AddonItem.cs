@@ -76,7 +76,7 @@ public class AddonItem : MarketplaceItem
         throw new NotImplementedException();
     }
 
-    public async void Manage()
+    public void Manage()
     {
         SkEditorAPI.Windows.ShowWindow(new SettingsWindow());
         SettingsWindow.NavigateToPage(typeof(AddonsPage));

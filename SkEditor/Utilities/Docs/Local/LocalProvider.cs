@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -142,7 +143,7 @@ public class LocalProvider : IDocProvider
         await SaveLocalDocs();
     }
 
-    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Folder, IsFilled = true };
+    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Folder, IconVariant = IconVariant.Filled };
 
     public string? GetLink(IDocumentationEntry entry)
     {
