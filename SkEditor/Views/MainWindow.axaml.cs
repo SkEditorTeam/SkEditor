@@ -97,7 +97,6 @@ public partial class MainWindow : AppWindow
         else
         {
             await SessionRestorer.SaveSession();
-            SkEditorAPI.Logs.Debug("Session saved.");
             AlreadyClosed = true;
             Close();
         }
