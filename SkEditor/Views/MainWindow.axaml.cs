@@ -11,7 +11,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Styling;
-using SkEditor.Utilities.Syntax;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
@@ -124,7 +124,6 @@ public partial class MainWindow : AppWindow
 
         Dispatcher.UIThread.Post(async () =>
         {
-            SyntaxLoader.LoadAdvancedSyntaxes();
             DiscordRpcUpdater.Initialize();
 
             if (SkEditorAPI.Core.GetAppConfig().CheckForUpdates) UpdateChecker.Check();
