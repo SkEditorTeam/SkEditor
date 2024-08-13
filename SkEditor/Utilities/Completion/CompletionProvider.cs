@@ -1,5 +1,6 @@
 ﻿using AvaloniaEdit;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Completion;
@@ -24,19 +25,19 @@ public partial class CompletionProvider
             yield return completionItem;
         }
 
-        //string text = textEditor.Text;
-        //foreach (Match match in WordRegex().Matches(text).Cast<Match>())
-        //{
-        //    string matchValue = match.Value;
-        //    if (matchValue == word) continue;
-        //    if (!matchValue.StartsWith(word)) continue;
-        //    if (CompletionItems.Any(x => x.Name == matchValue)) continue;
-        //    yield return new CompletionItem(matchValue, matchValue);
-        //}
+        string text = textEditor.Text;
+        foreach (Match match in VariableRegex().Matches(text).Cast<Match>().DistinctBy(x => x.Value))
+        {
+            string matchValue = match.Value;
+            if (matchValue == word) continue;
+            if (!matchValue.StartsWith(word)) continue;
+            if (CompletionItems.Any(x => x.Name == matchValue)) continue;
+            yield return new CompletionItem(matchValue, matchValue);
+        }
     }
 
-    [GeneratedRegex(@"\w+")]
-    private static partial Regex WordRegex();
+    [GeneratedRegex(@"{\w+}")]
+    private static partial Regex VariableRegex();
 }
 
 public record CompletionItem(string Name, string Content);
