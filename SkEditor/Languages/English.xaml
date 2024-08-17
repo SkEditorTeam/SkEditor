@@ -15,6 +15,7 @@
 	<system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
 	<system:String x:Key="WindowTitleElementRename">Rename</system:String>
 	<system:String x:Key="WindowTitleElementCreate">Create</system:String>
+	<system:String x:Key="WindowTitleColorSelector">Color selector</system:String>
 
 	<!-- Menu Headers -->
 	<system:String x:Key="MenuHeaderFile">File</system:String>
@@ -58,6 +59,7 @@
 	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
 	<system:String x:Key="MenuHeaderGenerateCommand">Command</system:String>
 	<system:String x:Key="MenuHeaderRefactor">Refactor</system:String>
+	<system:String x:Key="MenuHeaderColorSelector">Color selector</system:String>
 	
 	<!-- Other Menu -->
 	<system:String x:Key="MenuHeaderMarketplace">Marketplace</system:String>
@@ -192,6 +194,9 @@
 	<system:String x:Key="RefactorWindowTabsToSpaces">Convert tabs to spaces</system:String>
 	<system:String x:Key="RefactorWindowSpacesToTabs">Convert spaces to tabs</system:String>
 	<system:String x:Key="RefactorWindowRefactorBoxName">Renaming '{0}' into...</system:String>
+	
+	<!-- Color Selector -->
+	<system:String x:Key="ColorSelectorWindowHexResult">Result in hex</system:String>
 	
 
 	<!-- Projects -->

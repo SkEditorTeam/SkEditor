@@ -123,6 +123,10 @@
 		<Compile Update="Views\Marketplace\MarketplaceWindow.axaml.cs">
 			<DependentUpon>MarketplaceWindow.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\ColorSelectionWindow.axaml.cs">
+		  <SubType>Code</SubType>
+		  <DependentUpon>ColorSelectionWindow.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\RefactorWindow.axaml.cs">
 			<DependentUpon>RefactorWindow.axaml</DependentUpon>
 		</Compile>
@@ -166,6 +170,12 @@
 
 	<ItemGroup>
 		<Folder Include="Assets\GUI\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AvaloniaXaml Update="Views\ColorSelectionWindow.axaml">
+	    <SubType>Designer</SubType>
+	  </AvaloniaXaml>
 	</ItemGroup>
 
 	<ItemGroup>
