@@ -8,7 +8,7 @@ public static class Tutorial
 {
     public async static void ShowTutorial()
     {
-        if (!SkEditorAPI.Core.GetAppConfig().FirstTime) return;
+        //if (!SkEditorAPI.Core.GetAppConfig().FirstTime) return;
 
         SkEditorAPI.Core.GetAppConfig().FirstTime = false;
         SkEditorAPI.Core.GetAppConfig().Save();
@@ -32,6 +32,6 @@ public static class Tutorial
 
     private async static Task ShowTutorialMessage(string title, string message, PathIconSource iconSource)
     {
-        await SkEditorAPI.Windows.ShowDialog(title, message, iconSource);
+        await SkEditorAPI.Windows.ShowDialog(title, message, icon: iconSource, translate: false);
     }
 }
