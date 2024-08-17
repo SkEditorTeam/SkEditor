@@ -8,7 +8,7 @@ public static class Tutorial
 {
     public async static void ShowTutorial()
     {
-        //if (!SkEditorAPI.Core.GetAppConfig().FirstTime) return;
+        if (!SkEditorAPI.Core.GetAppConfig().FirstTime) return;
 
         SkEditorAPI.Core.GetAppConfig().FirstTime = false;
         SkEditorAPI.Core.GetAppConfig().Save();
