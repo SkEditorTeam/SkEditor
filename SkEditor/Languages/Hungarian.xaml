@@ -1,10 +1,10 @@
+<!-- Translated by Beni34 -->
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
-
-	<!-- Ablak címek -->
+	<!-- Ablak Címek -->
 	<system:String x:Key="WindowTitlePublish">Közzététel</system:String>
-	<system:String x:Key="WindowTitleRefactor">Átszerkesztés</system:String>
+	<system:String x:Key="WindowTitleRefactor">Refaktorálás</system:String>
 	<system:String x:Key="WindowTitleSettings">Beállítások</system:String>
 	<system:String x:Key="WindowTitleFontSelector">Betűtípus kiválasztása</system:String>
 	<system:String x:Key="WindowTitleSaveFilePicker">Fájl mentése</system:String>
@@ -12,42 +12,65 @@
 	<system:String x:Key="WindowTitleGuiGenerator">GUI generálás</system:String>
 	<system:String x:Key="WindowTitleCommandGenerator">Parancs generálás</system:String>
 	<system:String x:Key="WindowTitleItemSelector">Elem kiválasztása</system:String>
-	<system:String x:Key="WindowTitleMarketplace">Piac</system:String>
+	<system:String x:Key="WindowTitleMarketplace">Piactér</system:String>
+	<system:String x:Key="WindowTitleElementRename">Átnevezés</system:String>
+	<system:String x:Key="WindowTitleElementCreate">Létrehozás</system:String>
 
-	<!-- Menü fejlécek -->
+	<!-- Menü Fejlécek -->
 	<system:String x:Key="MenuHeaderFile">Fájl</system:String>
 	<system:String x:Key="MenuHeaderEdit">Szerkesztés</system:String>
 	<system:String x:Key="MenuHeaderTools">Eszközök</system:String>
 	<system:String x:Key="MenuHeaderOther">Egyéb</system:String>
+	<system:String x:Key="MenuHeaderAddons">Kiegészítők</system:String>
+	<system:String x:Key="MenuHeaderManageAddons">Kiegészítők kezelése</system:String>
 
-	<!-- Fájl menü -->
+	<!-- Fájl Menü -->
 	<system:String x:Key="MenuHeaderNew">Új</system:String>
 	<system:String x:Key="MenuHeaderOpen">Megnyitás</system:String>
+	<system:String x:Key="MenuHeaderOpenFolder">Mappa megnyitása</system:String>
 	<system:String x:Key="MenuHeaderSave">Mentés</system:String>
 	<system:String x:Key="MenuHeaderSaveAs">Mentés másként</system:String>
+	<system:String x:Key="MenuHeaderSaveAll">Összes mentése</system:String>
 	<system:String x:Key="MenuHeaderPublish">Közzététel</system:String>
 	<system:String x:Key="MenuHeaderClose">Bezárás</system:String>
+	<system:String x:Key="MenuHeaderCloseCurrentFile">Jelenlegi fájl</system:String>
+	<system:String x:Key="MenuHeaderCloseAll">Összes</system:String>
+	<system:String x:Key="MenuHeaderCloseAllButCurrent">Összes a jelenlegi kivételével</system:String>
+	<system:String x:Key="MenuHeaderCloseUnsaved">Összes nem mentett</system:String>
+	<system:String x:Key="MenuHeaderCloseLeft">Összes balra</system:String>
+	<system:String x:Key="MenuHeaderCloseRight">Összes jobbra</system:String>
 
-	<!-- Szerkesztés menü -->
+	<!-- Szerkesztés Menü -->
 	<system:String x:Key="MenuHeaderCopy">Másolás</system:String>
 	<system:String x:Key="MenuHeaderPaste">Beillesztés</system:String>
 	<system:String x:Key="MenuHeaderCut">Kivágás</system:String>
 	<system:String x:Key="MenuHeaderUndo">Visszavonás</system:String>
-	<system:String x:Key="MenuHeaderRedo">Ismétlés</system:String>
-	<system:String x:Key="MenuHeaderDuplicate">Másolat készítése</system:String>
-	<system:String x:Key="MenuHeaderComment">Megjegyzés</system:String>
+	<system:String x:Key="MenuHeaderRedo">Újra</system:String>
+	<system:String x:Key="MenuHeaderDuplicate">Duplikálás</system:String>
+	<system:String x:Key="MenuHeaderComment">Komment</system:String>
 	<system:String x:Key="MenuHeaderDelete">Törlés</system:String>
+	<system:String x:Key="MenuHeaderGoToLine">Ugrás sorra</system:String>
+	<system:String x:Key="MenuHeaderTrimWhitespaces">Whitespace-ek levágása</system:String>
 
-	<!-- Eszközök menü -->
+	<!-- Eszközök Menü -->
 	<system:String x:Key="MenuHeaderDocumentation">Dokumentáció</system:String>
 	<system:String x:Key="MenuHeaderGenerate">Generálás</system:String>
 	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
 	<system:String x:Key="MenuHeaderGenerateCommand">Parancs</system:String>
-	<system:String x:Key="MenuHeaderRefactor">Átszerkesztés</system:String>
-
-	<!-- Egyéb menü -->
-	<system:String x:Key="MenuHeaderMarketplace">Piac</system:String>
+	<system:String x:Key="MenuHeaderRefactor">Refaktorálás</system:String>
+	
+	<!-- Egyéb Menü -->
+	<system:String x:Key="MenuHeaderMarketplace">Piactér</system:String>
 	<system:String x:Key="MenuHeaderRefreshSyntax">Szintaxis frissítése</system:String>
+
+	<!-- Projekt Menü -->
+	<system:String x:Key="MenuHeaderOpenInExplorer">Megnyitás Intézőben</system:String>
+	<system:String x:Key="MenuHeaderCopyPath">Relatív útvonal másolása</system:String>
+	<system:String x:Key="MenuHeaderCopyAbsolutePath">Abszolút útvonal másolása</system:String>
+	<system:String x:Key="MenuHeaderRename">Átnevezés</system:String>
+	<system:String x:Key="MenuHeaderNewFile">Új fájl</system:String>
+	<system:String x:Key="MenuHeaderNewFolder">Új mappa</system:String>
+	<system:String x:Key="MenuHeaderCloseProject">Projekt bezárása</system:String>
 
 	<!-- Gombok -->
 	<system:String x:Key="ApplyButton">Alkalmaz</system:String>
@@ -65,150 +88,346 @@
 
 	<!-- Üzenetek -->
 	<system:String x:Key="NewFileNameFormat">Új fájl {0}</system:String>
-	<system:String x:Key="FailedToDownloadSyntax">Nem sikerült letölteni a szintaxis kiemelési fájlt! Ellenőrizze az internetkapcsolatát. Nélküle a kódja nem lesz kiemelve.</system:String>
+	<system:String x:Key="FailedToDownloadSyntax">Nem sikerült letölteni a szintaxis kiemelő fájlt! Ellenőrizze az internetkapcsolatát. Enélkül a kódja nem lesz kiemelve.</system:String>
 	<system:String x:Key="DownloadingMissingFilesTitle">Hiányzó fájlok</system:String>
 	<system:String x:Key="Downloading">Letöltés</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Az elemválasztó által használt fájlok hiányoznak, és most letöltésre kerülnek.</system:String>
+	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Az elemválasztó által használt fájlok hiányoznak, és most töltődnek le.</system:String>
 	<system:String x:Key="DownloadingMissingFiles">Letöltés</system:String>
-	<system:String x:Key="DownloadMissingFilesFailed">Nem sikerült letölteni a hiányzó fájlokat. Kérjük, próbálja meg később újra.</system:String>
-	<system:String x:Key="ClosingUnsavedFile">Nincsenek mentett változtatásai ebben a fájlban. Biztosan be akarja zárni?</system:String>
-	<system:String x:Key="ClosingProgramWithUnsavedFiles">Legalább egy fájlban vannak mentetlen változtatásai. Biztosan be akarja zárni az alkalmazást?</system:String>
-	<system:String x:Key="ChangesDetected">Ezt a fájlt külsőleg megváltoztatták.\nSzeretné újratölteni, és esetleg elveszíteni a SkEditorben végzett változtatásokat?</system:String>
+	<system:String x:Key="DownloadMissingFilesFailed">Nem sikerült letölteni a hiányzó fájlokat. Kérjük, próbálja újra később.</system:String>
+	<system:String x:Key="ClosingUnsavedFile">Nem mentett változtatások vannak ebben a fájlban. Biztosan be akarja zárni?</system:String>
+	<system:String x:Key="ClosingFiles">Biztosan be akarja zárni a fájlokat? Minden nem mentett változtatás elvész.</system:String>
+	<system:String x:Key="ClosingProgramWithUnsavedFiles">Legalább egy fájlban nem mentett változtatások vannak. Biztosan be akarja zárni az alkalmazást?</system:String>
+	<system:String x:Key="ChangesDetected">Ez a fájl külsőleg megváltozott.\nSzeretnéd újratölteni, és esetlegesen elveszíteni a SkEditorban végzett változtatásokat?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Frissítés letöltése</system:String>
 	<system:String x:Key="UpdateAvailable">Frissítés elérhető</system:String>
-	<system:String x:Key="UpdateAvailableMessage">Elérhető egy frissítés.\nSzeretné letölteni most?</system:String>
-	<system:String x:Key="UpdateFailed">Nem sikerült letölteni a frissítést. Kérjük, próbálja meg később újra.</system:String>
+	<system:String x:Key="UpdateAvailableMessage">Frissítés érhető el.\nSzeretnéd most letölteni?</system:String>
+	<system:String x:Key="UpdateFailed">Nem sikerült letölteni a frissítést. Kérjük, próbálja újra később.</system:String>
+	<system:String x:Key="BinaryFileFound">Úgy tűnik, egy bináris fájlt (vagy nem szöveg alapú fájlt) próbál megnyitni.\n\nBiztosan meg akarja nyitni? A SkEditor esetleg nem kezeli megfelelően.</system:String>
+	<system:String x:Key="BinaryFileTitle">Bináris Fájl Található</system:String>
 	
 
-	<!-- Közzététel ablak -->
-	<system:String x:Key="PublishWindowApiKeyHint">Kattintson ide egy webhely megnyitásához az API kulcsával. Győződjön meg róla, hogy be van jelentkezve!</system:String>
+	<!-- Közzététel Ablak -->
+	<system:String x:Key="PublishWindowNoApiKey">Állítsa be az API kulcsát a beállításokban</system:String>
+	<system:String x:Key="PublishWindowApiKeyHint">Kattintson ide, hogy megnyissa az API kulcsot tartalmazó weboldalt. Győződjön meg róla, hogy először bejelentkezett!</system:String>
 	<system:String x:Key="PublishWindowAnonymously">Névtelenül</system:String>
-	<system:String x:Key="PublishWindowResultLink">A kódja hivatkozása</system:String>
+	<system:String x:Key="PublishWindowResultLink">Link a kódjához</system:String>
 	<system:String x:Key="PublishWindowPublishButton">Közzététel</system:String>
+	<system:String x:Key="PublishWindowWarning">Az API kulcsait mostantól a Beállítások -> Kapcsolatok menüpontban kezelheti.</system:String>
 	
-	<!-- Átszerkesztés ablak -->
+	<!-- Helyi Dokumentációkezelő Ablak -->
+	<system:String x:Key="LocalDocsManagerWindowTitle">Helyi Dokumentációkezelő</system:String>
+	<system:String x:Key="LocalDocsManagerWindowInfo">Innen kezelheti a letöltött dokumentációs elemeket.</system:String>
+	<system:String x:Key="LocalDocsManagerWindowDeleteEverything">Minden Törlése</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupBy">Csoportosítás</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByProvider">Szolgáltató</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByType">Típus</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByAddon">Kiegészítő</system:String>
+	<system:String x:Key="LocalDocsManagerWindowEntryDescription">{0} szolgáltatja: {1}</system:String>
+	
+	<!-- (Elem) Dokumentáció Vezérlő -->
+	<system:String x:Key="DocumentationControlExamples">Példák</system:String>
+	<system:String x:Key="DocumentationControlActions">Műveletek</system:String>
+	<system:String x:Key="DocumentationControlEventValues">Esemény Értékek</system:String>
+	<system:String x:Key="DocumentationControlChangers">Módosítók</system:String>
+	
+	<system:String x:Key="DocumentationControlActionsFilter">Szűrés ezen elem szerint...</system:String>
+	<system:String x:Key="DocumentationControlType">Típus</system:String>
+	<system:String x:Key="DocumentationControlAddon">Kiegészítő</system:String>
+	
+	<system:String x:Key="DocumentationControlChangerHelp">kattintson a kívánt módosítóra a generált kód másolásához.</system:String>
+	<system:String x:Key="DocumentationControlSince">v{0} óta</system:String>
+	<system:String x:Key="DocumentationControlDownload">Letöltés</system:String>
+	<system:String x:Key="DocumentationControlRemove">Eltávolítás</system:String>
+	<system:String x:Key="DocumentationControlExampleAuthor">Szerző: {0}</system:String>
+
+	<system:String x:Key="DocumentationControlNoExamples">Nem találhatók példák ehhez az elemhez.</system:String>
+	<system:String x:Key="DocumentationControlNoEventValues">Nem találhatók esemény értékek ehhez az elemhez.</system:String>
+	<system:String x:Key="DocumentationControlNoChangers">Nem találhatók módosítók ehhez az elemhez.</system:String>
+	<system:String x:Key="DocumentationControlNoDescription">Nincs leírás.</system:String>
+
+	<system:String x:Key="DocumentationControlErrorExamples">Hiba történt a példák betöltése közben: {0}</system:String>
+
+	<!-- Dokumentáció Ablak -->
+	<system:String x:Key="DocumentationWindowTitle">Dokumentáció</system:String>
+	<system:String x:Key="DocumentationWindowSearchQuery">Keresési kifejezés</system:String>
+	<system:String x:Key="DocumentationWindowSearch">Keresés</system:String>
+	<system:String x:Key="DocumentationWindowFilteredType">Szűrt típus</system:String>
+	<system:String x:Key="DocumentationWindowFilteredAddon">Szűrt kiegészítő</system:String>
+	<system:String x:Key="DocumentationWindowProvider">Szolgáltató</system:String>
+	<system:String x:Key="DocumentationWindowManageCached">Gyorsítótárazott elemek kezelése</system:String>
+	<system:String x:Key="DocumentationWindowDownloadAll">Összes talált letöltése</system:String>
+	<system:String x:Key="DocumentationWindowLoading">Betöltés...</system:String>
+
+	<system:String x:Key="DocumentationWindowErrorGlobal">Hiba történt a dokumentáció lekérése közben.\n\n{0}</system:String>
+	<system:String x:Key="DocumentationWindowErrorOffline">A dokumentációs szerver kérése időtúllépést szenvedett. Lehet, hogy a dokumentáció nem elérhető?</system:String>
+
+	<system:String x:Key="DocumentationWindowNoProvidersMessage">Nincs kiválasztva dokumentációs szolgáltató.\n\nLehet, hogy kapcsolnia kell az API kulcsait a beállításokban ezek használatához.</system:String>
+	
+	<system:String x:Key="DocumentationWindowNoResults">Nincs találat.</system:String>
+	<system:String x:Key="DocumentationWindowNoProviders">Nem találhatók szolgáltatók.</system:String>
+	<system:String x:Key="DocumentationWindowInvalidData">Érvénytelen keresési adatok.</system:String>
+	<system:String x:Key="DocumentationWindowAnErrorOccured">Hiba történt.</system:String>
+	<system:String x:Key="DocumentationWindowTooManyResults">Túl sok találat.</system:String>
+	<system:String x:Key="DocumentationWindowTooManyResultsMessage">A keresés több mint 100 találatot eredményezett. Biztosan meg akarja jeleníteni mindet?\n\nLelassíthatja az alkalmazást!</system:String>
+	<system:String x:Key="DocumentationWindowInvalidDataQuery">A keresési kifejezésnek legalább 3 karakter hosszúnak kell lennie</system:String>
+	<system:String x:Key="DocumentationWindowSkriptMCBad">A SkriptMC nem támogatja az összes típus keresését.</system:String>
+	<system:String x:Key="DocumentationWindowSkriptMCBad2">A SkriptMC jelenleg nem érhető el dokumentációhoz. Kérjük, próbálja újra később.</system:String>
+
+	<system:String x:Key="DocumentationWindowNoEntries">Nem találhatók dokumentációs bejegyzések. Miért nem keres először?</system:String>
+	<system:String x:Key="DocumentationWindowDownloadAllMessage">Biztosan le szeretné tölteni az összes talált dokumentációs bejegyzést? (összesen: {0})</system:String>
+	<system:String x:Key="DocumentationWindowDownloadingElements">Elemek letöltése...</system:String>
+	<system:String x:Key="DocumentationWindowDownloading">Letöltés</system:String>
+	<system:String x:Key="DocumentationWindowDownloadingMessage">A dokumentációs bejegyzések letöltése folyamatban. Kérjük, várjon...</system:String>
+	
+	<system:String x:Key="DocumentationWindowCacheSkriptHub">SkriptHub elemeinek gyorsítótárazása...</system:String>
+	<system:String x:Key="DocumentationWindowCacheSkriptHubMessage">A SkriptHub elemeinek gyorsítótárazása folyamatban. Kérjük, várjon...</system:String>
+	<system:String x:Key="DocumentationWindowSorting">Letöltött elemek rendezése...</system:String>
+	
+	<system:String x:Key="DocumentationWindowFetchAgain">Dokumentáció újbóli lekérése</system:String>
+	<system:String x:Key="DocumentationWindowFetchWarning">Ez újra le fogja kérni a dokumentációs bejegyzéseket a SkriptHubról. Valószínűleg nincs erre szüksége, hacsak nem szeretne mindent frissítve látni. Biztos benne?</system:String>
+	<system:String x:Key="DocumentationWindowFetchSuccessMessage">Gyorsítótár törölve. Újra kell keresnie az elemeket a SkriptHub dokumentációjának újbóli letöltéséhez.</system:String>
+
+	<!-- Refaktorálás Ablak -->
 	<system:String x:Key="RefactorWindowRemoveComments">Megjegyzések eltávolítása</system:String>
-	<system:String x:Key="RefactorWindowTabsToSpaces">Tabulátorok átalakítása szóközökké</system:String>
-	<system:String x:Key="RefactorWindowSpacesToTabs">Szóközök átalakítása tabulátorokká</system:String>
+	<system:String x:Key="RefactorWindowTabsToSpaces">Tabulátorok konvertálása szóközökké</system:String>
+	<system:String x:Key="RefactorWindowSpacesToTabs">Szóközök konvertálása tabulátorokká</system:String>
+	<system:String x:Key="RefactorWindowRefactorBoxName">'{0}' átnevezése erre...</system:String>
+	
+
+	<!-- Projektek -->
+	<system:String x:Key="ProjectExplorerTitle">Fájlkezelő</system:String>
+	<system:String x:Key="ProjectExplorerInfoText">Még nem nyitott meg egy mappát sem.</system:String>
+	<system:String x:Key="ProjectExplorerInfoButton">Mappa megnyitása</system:String>
+	<system:String x:Key="ProjectRenameText">Átnevezés erre...</system:String>
+	<system:String x:Key="ProjectRenameErrorNameEmpty">A név nem lehet üres.</system:String>
+	<system:String x:Key="ProjectRenameErrorParentNull">A szülő nem lehet null.</system:String>
+	<system:String x:Key="ProjectErrorNameExists">Már létezik ilyen nevű fájl vagy mappa.</system:String>
+	<system:String x:Key="ProjectRenameErrorSameName">Az új név megegyezik a régi névvel.</system:String>
+	<system:String x:Key="ProjectCreateFileName">Fájlnév</system:String>
+	<system:String x:Key="ProjectCreateFolderName">Mappanév</system:String>
+	<system:String x:Key="ProjectCreateTemplate">Sablon</system:String>
+	
+	<!-- Kód Parser -->
+	<system:String x:Key="CodeParserTitle">Kód Elemzés</system:String>
+	<system:String x:Key="CodeParserWarning">A kód elemző még béta verzióban van! Kérjük, jelentse az esetleges hibákat a Discord szerveren.</system:String>
+	<system:String x:Key="CodeParserEnableInfo">A kód elemző még béta verzióban van, és előfordulhatnak hibák. Alapértelmezetten ki van kapcsolva, de az alábbi gombbal bekapcsolhatja.</system:String>
+	<system:String x:Key="CodeParserSearch">Keresés...</system:String>
+	<system:String x:Key="CodeParserFilterName">Szűrés név szerint</system:String>
+	<system:String x:Key="CodeParserFilterType">Szűrés típus szerint</system:String>
+	<system:String x:Key="CodeParserFilterTypeAny">Bármely</system:String>
+	<system:String x:Key="CodeParserFilterTypeFunctions">Funkciók</system:String>
+	<system:String x:Key="CodeParserFilterTypeEvents">Események</system:String>
+	<system:String x:Key="CodeParserFilterTypeOptions">Opciók</system:String>
+	<system:String x:Key="CodeParserFilterTypeCommands">Parancsok</system:String>
+	<system:String x:Key="CodeParserClearFilters">Jelenlegi szűrők törlése</system:String>
+	<system:String x:Key="CodeParserNavigate">Navigálás</system:String>
+	<system:String x:Key="CodeParserNavigateToDefinition">Ugrás a definícióhoz</system:String>
+	<system:String x:Key="CodeParserRename">Átnevezés</system:String>
+	<system:String x:Key="CodeParserNoSections">Nem találhatók szakaszok a kódban. Talán írnia kellene valamit? :)</system:String>
+	<system:String x:Key="CodeParserBadFormat">Ez a fájl nem elemezhető, mert nem tűnik Skript fájlnak.</system:String>
+	<system:String x:Key="CodeParserParseCode">Kód elemzése</system:String>
+	<system:String x:Key="CodeParserParsed">Aktuális kód elemezve</system:String>
+
+	<!-- Fájltípus Kiválasztó Ablak -->
+	<system:String x:Key="FileAssociationSelectionWindowTitle">Fájltípus társítás kiválasztása</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowInfo">Több szolgáltató is van ehhez a fájltípushoz. Kérjük, válasszon egyet.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowOfficialItem">Ez egy hivatalos fájltípus a SkEditortól.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">Ez egy nem hivatalos fájltípus egy kiegészítőtől, {0}.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Emlékezzen a választásomra</system:String>
+
 
 	<!-- Beállítások -->
-	<system:String x:Key="SettingsEnabled">Engedélyezve</system:String>
-	<system:String x:Key="SettingsDisabled">Letiltva</system:String>
+	<system:String x:Key="SettingsEnabled">Bekapcsolva</system:String>
+	<system:String x:Key="SettingsDisabled">Kikapcsolva</system:String>
 
-	<!-- Beállítások kezdőlap -->
+	<!-- Beállítások Kezdőlap -->
 	<system:String x:Key="SettingsHomeTitle">Beállítások</system:String>
 	<system:String x:Key="SettingsHomeGeneral">Általános</system:String>
 	<system:String x:Key="SettingsHomeGeneralDescription">Nyelv, szövegszerkesztő funkciók</system:String>
 	<system:String x:Key="SettingsHomePersonalization">Személyre szabás</system:String>
 	<system:String x:Key="SettingsHomePersonalizationDescription">Téma, betűtípus, szintaxis kiemelés</system:String>
 	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
-	<system:String x:Key="SettingsHomeDiscordDescription">Mutassa be a SkEditor-t a Discord profilján!</system:String>
+	<system:String x:Key="SettingsHomeDiscordDescription">Jelenítse meg a SkEditort a Discord profilján!</system:String>
 	<system:String x:Key="SettingsHomeExperiments">Kísérletek</system:String>
-	<system:String x:Key="SettingsHomeExperimentsDescription">Próbálja ki a közelgő funkciókat!</system:String>
-	<system:String x:Key="SettingsHomeAddons">Bővítmények</system:String>
-	<system:String x:Key="SettingsHomeAddonsDescription">Fokozza élményét erőteljes bővítményekkel!</system:String>
+	<system:String x:Key="SettingsHomeExperimentsDescription">Tesztelje a közelgő funkciókat!</system:String>
+	<system:String x:Key="SettingsHomeConnections">Kapcsolatok</system:String>
+	<system:String x:Key="SettingsHomeConnectionsDescription">Kezelje a harmadik féltől származó kapcsolatait.</system:String>
+	<system:String x:Key="SettingsHomeAddons">Kiegészítők</system:String>
+	<system:String x:Key="SettingsHomeAddonsDescription">Javítsa élményét hatékony kiegészítőkkel!</system:String>
 	<system:String x:Key="SettingsHomeAbout">Névjegy</system:String>
+	<system:String x:Key="SettingsHomeFileTypes">Fájltípusok</system:String>
+	<system:String x:Key="SettingsHomeFileTypesDescription">Fájltípusok és társításaik kezelése.</system:String>
 
-	<!-- Általános beállítások -->
+	<!-- Általános Beállítások -->
 	<system:String x:Key="SettingsGeneralTitle">Általános</system:String>
 	<system:String x:Key="SettingsGeneralLanguage">Nyelv</system:String>
-	<system:String x:Key="SettingsGeneralWrapping">Csomagolás</system:String>
+	<system:String x:Key="SettingsGeneralWrapping">Sortörés</system:String>
+	<system:String x:Key="SettingsGeneralWrappingDescription">Válassza ki, hogy a sorok tördelődjenek-e a viewport szélességénél.</system:String>
+	<system:String x:Key="SettingsGeneralTabType">Behúzás típusa</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeDescription">Válasszon a tabulátorok és szóközök között, és állítsa be a tabulátor méretét.</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeTabs">Tabulátorok</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeSpaces">Szóközök</system:String>
 	<system:String x:Key="SettingsGeneralAutoIndent">Automatikus behúzás</system:String>
 	<system:String x:Key="SettingsGeneralAutoIndentDescription">Automatikusan beszúr egy tabulátort az új sorba, ha az előző sor kettősponttal végződik.</system:String>
 	<system:String x:Key="SettingsGeneralAutoPairing">Automatikus párosítás</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairingDescription">Automatikusan hozzáadja a záró karaktert, amikor beírja az adott szimbólumok megnyitó karakterét.</system:String>
+	<system:String x:Key="SettingsGeneralAutoPairingDescription">Automatikusan hozzáadja a záró karaktert, amikor beírja a nyitó karaktert bizonyos szimbólumokhoz.</system:String>
 	<system:String x:Key="SettingsGeneralAutoSave">Automatikus mentés</system:String>
-	<system:String x:Key="SettingsGeneralAutoSaveDescription">Automatikusan menti a fájlját minden változtatás után.</system:String>
-	<system:String x:Key="SettingsGeneralRpc">Discord Gazdag Jelenlét</system:String>
-	<system:String x:Key="SettingsGeneralRpcDescription">Mutassa be a SkEditor-t a Discord állapotában.</system:String>
+	<system:String x:Key="SettingsGeneralAutoSaveDescription">Automatikusan menti a fájlt minden alkalommal, amikor változtatást végez.</system:String>
+	<system:String x:Key="SettingsGeneralChangeChecker">Külső fájlváltozások ellenőrzése</system:String>
+	<system:String x:Key="SettingsGeneralChangeCheckerDescription">Ha a fájl tartalmában bármilyen változás történik, a program kérni fogja a fájl újratöltését.</system:String>
+	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
+	<system:String x:Key="SettingsGeneralRpcDescription">Mutassa a SkEditort a Discord állapotában.</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndent">Automatikus behúzás beillesztéskor</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatikusan beállítja a beillesztett szöveg behúzását, hogy megfeleljen az előző sor formátumának.</system:String>
+	<system:String x:Key="SettingsGeneralCheckForUpdates">Frissítések keresése</system:String>
+	<system:String x:Key="SettingsGeneralProjectSingleFolderClick">Projekt mappa megnyitása egy kattintásra</system:String>
+	<system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Ha be van kapcsolva, egy kattintással nyitja meg a mappát dupla kattintás helyett.</system:String>
 
-	<!-- Névjegy beállítások -->
-	<system:String x:Key="SettingsAboutTitle">Névjegy</system:String>
-	<system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
-	<system:String x:Key="SettingsAboutSkEditorDescription">A SkEditor egy alkalmazás a Skript fájlok szerkesztéséhez, amit a Notro készített.</system:String>
-	<system:String x:Key="SettingsAboutVersion">Verzió</system:String>
-	<system:String x:Key="SettingsAboutVersionDescription">Az ön verziószám: {0}</system:String>
-	<system:String x:Key="SettingsAboutGithub">GitHub</system:String>
-	<system:String x:Key="SettingsAboutGithubDescription">Kattintson a SkEditor GitHub repository megnyitásához!</system:String>
-	<system:String x:Key="SettingsAboutDiscord">Discord szerver</system:String>
-	<system:String x:Key="SettingsAboutDiscordDescription">Kattintson a SkEditor Discord szerverhez való csatlakozáshoz!</system:String>
-	<!-- Személyre szabási beállítások -->
-	<system:String x:Key="SettingsPersonalizationTitle">Személyre szabás</system:String>
-	<system:String x:Key="SettingsPersonalizationTheme">Téma</system:String>
-	<system:String x:Key="SettingsPersonalizationThemeDescription">Alkalmazás színeinek testreszabása.</system:String>
-	<system:String x:Key="SettingsPersonalizationSyntax">Szintaxis kiemelés</system:String>
-	<system:String x:Key="SettingsPersonalizationFont">Betűtípus</system:String>
-	<system:String x:Key="SettingsPersonalizationFontDescription">Jelenlegi betűtípus: {0}</system:String>
+    <!-- Névjegy beállítások -->
+    <system:String x:Key="SettingsAboutTitle">Névjegy</system:String>
+    <system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
+    <system:String x:Key="SettingsAboutSkEditorDescription">A SkEditor egy alkalmazás Skript fájlok szerkesztésére, amit Notro készített.</system:String>
+    <system:String x:Key="SettingsAboutVersion">Verzió</system:String>
+    <system:String x:Key="SettingsAboutVersionDescription">A jelenlegi verzió: {0}</system:String>
+    <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">Kattints ide a SkEditor GitHub tárházának megnyitásához!</system:String>
+    <system:String x:Key="SettingsAboutDiscord">Discord szerver</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">Kattints ide a SkEditor Discord szerverhez való csatlakozáshoz!</system:String>
+    <system:String x:Key="SettingsAboutAppdata">AppData mappa megnyitása</system:String>
+    <system:String x:Key="SettingsAboutDevMode">Fejlesztői mód</system:String>
+    <system:String x:Key="SettingsAboutDevModeDescription">Kapcsold be a fejlesztői módot a fejlesztői funkciók eléréséhez.</system:String>
 
-	<!-- Téma beállítások -->
-	<system:String x:Key="SettingsThemeTitle">Téma</system:String>
-	<system:String x:Key="SettingsThemeOpenFolder">Mappa megnyitása</system:String>
-	<system:String x:Key="SettingsThemeCurrentTheme">Aktuális téma</system:String>
-	<system:String x:Key="SettingsThemeCurrentThemeDescription">Az újraszükséges indítás nem szükséges, de 100%-os színfrissítéshez lehet szükséges.</system:String>
+    <!-- Személyre szabás beállítások -->
+    <system:String x:Key="SettingsPersonalizationTitle">Személyre szabás</system:String>
+    <system:String x:Key="SettingsPersonalizationTheme">Téma</system:String>
+    <system:String x:Key="SettingsPersonalizationThemeDescription">Az alkalmazás színeinek testreszabása.</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntax">Szintaxis kiemelés</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntaxDescription">Állítsd be, hogyan jelenjen meg a specifikus szöveg a szintaxis kiemeléssel.</system:String>
+    <system:String x:Key="SettingsPersonalizationFont">Betűtípus</system:String>
+    <system:String x:Key="SettingsPersonalizationFontDescription">Jelenlegi betűtípus: {0}</system:String>
+    <system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Aktuális sor kiemelése</system:String>
 
-	<!-- Kiegészítő beállítások -->
-	<system:String x:Key="SettingsAddonsTitle">Kiegészítők</system:String>
+    <!-- Téma beállítások -->
+    <system:String x:Key="SettingsThemeTitle">Téma</system:String>
+    <system:String x:Key="SettingsThemeOpenFolder">Mappa megnyitása</system:String>
+    <system:String x:Key="SettingsThemeCurrentTheme">Jelenlegi téma</system:String>
+    <system:String x:Key="SettingsThemeCurrentThemeDescription">Újraindítás nem szükséges, de a 100%-os színfrissítéshez szükség lehet rá.</system:String>
+    <system:String x:Key="SettingsThemeEditThemeDescription">Szerkeszd az aktuális témát és előnézd a változtatásokat valós időben.</system:String>
+    <system:String x:Key="SettingsThemeNewThemeInfo">Új téma létrehozásához egy fájlt kell létrehozni a Témák mappában.</system:String>
+    <system:String x:Key="SettingsThemeEditTheme">Téma szerkesztése</system:String>
 
-	<!-- Discord RPC -->
-	<system:String x:Key="DiscordRpcEditing">Szerkesztés: {0}</system:String>
+    <!-- Szintaxis kiemelés beállítások -->
+    <system:String x:Key="SettingsSyntaxesTitle">Szintaxis kiemelés</system:String>
 
-	<!-- Alsó sáv -->
-	<system:String x:Key="BottomBarLine">Sor {0}</system:String>
-	<system:String x:Key="BottomBarColumn">Oszlop {0}</system:String>
+    <!-- Addon beállítások -->
+    <system:String x:Key="SettingsAddonsTitle">Addons</system:String>
+    <system:String x:Key="SettingsAddonsListTitle">Addonok listája</system:String>
+    
+    <!-- Kapcsolatok beállítások -->
+    <system:String x:Key="SettingsConnectionsTitle">Kapcsolatok</system:String>
+    <system:String x:Key="SettingsConnectionsDashboardButton">Irányítópult megnyitása</system:String>
+    
+    <!-- Fájltípus beállítások -->
+    <system:String x:Key="SettingsFileTypesTitle">Fájltípusok</system:String>
+    <system:String x:Key="SettingsFileTypesWarning">Ez az oldal csak a már meglévő társítások kezelését engedi. Más fájltípusokhoz figyelmeztetés jelenik meg.</system:String>
+    <system:String x:Key="SettingsFileTypesRemove">Eltávolítás</system:String>
+    
+    <!-- Fájlnézet -->
+    <system:String x:Key="FileViewImageAA">Élsimítás</system:String>
 
-	<!-- GUI generátor -->
-	<system:String x:Key="GuiGeneratorTitle">Cím</system:String>
-	<system:String x:Key="GuiGeneratorFunctionName">Függvény neve</system:String>
-	<system:String x:Key="GuiGeneratorRowQuantity">Sorok száma</system:String>
-	<system:String x:Key="GuiGeneratorBackgroundItem">Háttérelem</system:String>
-	<system:String x:Key="GuiGeneratorPreviewButton">Előnézet</system:String>
-	<system:String x:Key="GuiGeneratorGenerateButton">Generálás</system:String>
-	<system:String x:Key="GuiGeneratorSkriptGui">Skript-gui használata</system:String>
-	<system:String x:Key="GuiGeneratorDisplayName">Megjelenített név</system:String>
-	<system:String x:Key="GuiGeneratorLore">Leírás</system:String>
-	<system:String x:Key="GuiGeneratorOptional">Opcionális</system:String>
-	<system:String x:Key="GuiGeneratorCustomModelData">Egyedi modell adatazonosító</system:String>
-	<system:String x:Key="GuiGeneratorLoreLineWatermark">Jobb kattintás egy új sor hozzáadásához</system:String>
-	<system:String x:Key="GuiGeneratorAddLoreLine">Új leírássor hozzáadása</system:String>
-	<system:String x:Key="GuiGeneratorAddExampleAction">Példa művelet hozzáadása</system:String>
+    <!-- Discord RPC -->
+    <system:String x:Key="DiscordRpcEditing">Szerkesztés: {0}</system:String>
 
-	<!-- Parancs generátor -->
-	<system:String x:Key="CommandGeneratorName">Név</system:String>
-	<system:String x:Key="CommandGeneratorPermission">Jogosultság</system:String>
-	<system:String x:Key="CommandGeneratorNoPermissionMessage">Nincs jogosultság üzenet</system:String>
-	<system:String x:Key="CommandGeneratorAliases">Aliasok</system:String>
-	<system:String x:Key="CommandGeneratorInvalidUsageMessage">Érvénytelen használat üzenet</system:String>
-	<system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Ki használhatja a parancsot</system:String>
-	<system:String x:Key="CommandGeneratorPlayer">Játékos</system:String>
-	<system:String x:Key="CommandGeneratorConsole">Konzi</system:String>
-	<system:String x:Key="CommandGeneratorCooldown">Lehűlés</system:String>
-	<system:String x:Key="CommandGeneratorTicks">Tick-ek</system:String>
-	<system:String x:Key="CommandGeneratorSeconds">Másodpercek</system:String>
-	<system:String x:Key="CommandGeneratorMinutes">Percek</system:String>
-	<system:String x:Key="CommandGeneratorHours">Órák</system:String>
-	<system:String x:Key="CommandGeneratorDays">Napok</system:String>
-	<system:String x:Key="CommandGeneratorWeeks">Hetek</system:String>
-	<system:String x:Key="CommandGeneratorMonths">Hónapok</system:String>
-	<system:String x:Key="CommandGeneratorYears">Évek</system:String>
-	<system:String x:Key="CommandGeneratorGenerate">Generálás</system:String>
-	<system:String x:Key="CommandGeneratorPropertyMissing">A(z) {0} tulajdonság kötelező!</system:String>
+    <!-- Alsó sáv -->
+    <system:String x:Key="BottomBarLine">Sor {0}</system:String>
+    <system:String x:Key="BottomBarColumn">Oszlop {0}</system:String>
+    <system:String x:Key="BottomBarDocumentSize">Hossz {0}</system:String>
+    
+    <!-- GUI Generátor -->
+    <system:String x:Key="GuiGeneratorTitle">Cím</system:String>
+    <system:String x:Key="GuiGeneratorFunctionName">Függvény neve</system:String>
+    <system:String x:Key="GuiGeneratorRowQuantity">Sorok száma</system:String>
+    <system:String x:Key="GuiGeneratorBackgroundItem">Háttér elem</system:String>
+    <system:String x:Key="GuiGeneratorPreviewButton">Előnézet</system:String>
+    <system:String x:Key="GuiGeneratorGenerateButton">Generálás</system:String>
+    <system:String x:Key="GuiGeneratorSkriptGui">Skript-gui használata</system:String>
+    <system:String x:Key="GuiGeneratorDisplayName">Megjelenítési név</system:String>
+    <system:String x:Key="GuiGeneratorLore">Történet</system:String>
+    <system:String x:Key="GuiGeneratorOptional">Opcionális</system:String>
+    <system:String x:Key="GuiGeneratorCustomModelData">Egyedi Modell Adat ID</system:String>
+    <system:String x:Key="GuiGeneratorLoreLineWatermark">Jobb klikk az új sor hozzáadásához</system:String>
+    <system:String x:Key="GuiGeneratorAddLoreLine">Új történet sor hozzáadása</system:String>
+    <system:String x:Key="GuiGeneratorAddExampleAction">Példa akció hozzáadása</system:String>
+    
+    <!-- Parancsgenerátor -->
+    <system:String x:Key="CommandGeneratorName">Név</system:String>
+    <system:String x:Key="CommandGeneratorPermission">Engedély</system:String>
+    <system:String x:Key="CommandGeneratorNoPermissionMessage">Nincs engedély üzenet</system:String>
+    <system:String x:Key="CommandGeneratorAliases">Aliasok</system:String>
+    <system:String x:Key="CommandGeneratorInvalidUsageMessage">Érvénytelen használat üzenet</system:String>
+    <system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Ki használhatja a parancsot</system:String>
+    <system:String x:Key="CommandGeneratorPlayer">Játékos</system:String>
+    <system:String x:Key="CommandGeneratorConsole">Konzol</system:String>
+    <system:String x:Key="CommandGeneratorCooldown">Lehűlés</system:String>
+    <system:String x:Key="CommandGeneratorTicks">Ticks</system:String>
+    <system:String x:Key="CommandGeneratorSeconds">Másodpercek</system:String>
+    <system:String x:Key="CommandGeneratorMinutes">Percek</system:String>
+    <system:String x:Key="CommandGeneratorHours">Órák</system:String>
+    <system:String x:Key="CommandGeneratorDays">Napok</system:String>
+    <system:String x:Key="CommandGeneratorWeeks">Hetek</system:String>
+    <system:String x:Key="CommandGeneratorMonths">Hónapok</system:String>
+    <system:String x:Key="CommandGeneratorYears">Évek</system:String>
+    <system:String x:Key="CommandGeneratorGenerate">Generálás</system:String>
+    <system:String x:Key="CommandGeneratorPropertyMissing">A {0} tulajdonság szükséges!</system:String>
 
-	<!-- Piactér -->
-	<system:String x:Key="MarketplaceSearch">Keresés</system:String>
-	<system:String x:Key="MarketplaceEnableNow">Engedélyezés most</system:String>
-	<system:String x:Key="MarketplaceInstallSuccess">Sikeresen letöltve: {0}!</system:String>
-	<system:String x:Key="MarketplaceInstallRestart">Kérlek indítsd újra az alkalmazást a kiegészítő betöltéséhez.</system:String>
-	<system:String x:Key="MarketplaceInstallEnableNow">Szeretnéd most engedélyezni?</system:String>
-	<system:String x:Key="MarketplaceInstallNoNeedToRestart">A kiegészítőnek működnie kell indítás nélkül is, de ha hibákat tapasztalsz, indítsd újra az alkalmazást.</system:String>
-	<system:String x:Key="MarketplaceInstallFailed">Sikertelen letöltés: {0}!</system:String>
-	<system:String x:Key="MarketplaceUninstallSuccess">Sikeresen eltávolítva: {0}!\nKérlek indítsd újra az alkalmazást a kiegészítő kikapcsolásához.</system:String>
-	<system:String x:Key="MarketplaceUpdateSuccess">Sikeresen frissítve: {0}!\nKérlek indítsd újra az alkalmazást a kiegészítő betöltéséhez.</system:String>
-	<system:String x:Key="MarketplaceUpdateFailed">Sikertelen frissítés: {0}!</system:String>
-	<system:String x:Key="MarketplaceLoadFailed">Valami hiba történt a piactér elemek betöltésekor. Biztosan csatlakozol az internethez?</system:String>
-	<system:String x:Key="MarketplaceInfo">Ez egy nagyon egyszerű piactér tervezet, csak arra szolgál, hogy a felhasználók hivatalos kiegészítőket telepíthessenek. A jövőben jelentősen fejlesztve lesz.</system:String>
-	<system:String x:Key="MarketplaceButtonInstall">Telepítés</system:String>
-	<system:String x:Key="MarketplaceButtonUpdate">Frissítés</system:String>
-	<system:String x:Key="MarketplaceButtonUninstall">Eltávolítás</system:String>
-	<system:String x:Key="MarketplaceButtonDisable">Kikapcsolás</system:String>
-	<system:String x:Key="MarketplaceButtonEnable">Engedélyezés</system:String>
+    <!-- Piac -->
+    <system:String x:Key="MarketplaceSearch">Keresés</system:String>
+    <system:String x:Key="MarketplaceEnableNow">Engedélyezés most</system:String>
+    <system:String x:Key="MarketplaceInstallSuccess">Sikeresen letöltve: {0}!</system:String>
+    <system:String x:Key="MarketplaceInstallRestart">Indítsd újra az alkalmazást az addon betöltéséhez.</system:String>
+    <system:String x:Key="MarketplaceInstallEnableNow">Szeretnéd most engedélyezni?</system:String>
+    <system:String x:Key="MarketplaceInstallNoNeedToRestart">Az addon újraindítás nélkül is működhet, de ha hibákat tapasztalsz, indítsd újra az alkalmazást.</system:String>
+    <system:String x:Key="MarketplaceInstallFailed">Nem sikerült letölteni: {0}!</system:String>
+    <system:String x:Key="MarketplaceUninstallSuccess">Sikeresen eltávolítva: {0}!\nIndítsd újra az alkalmazást az addon eltávolításához.</system:String>
+    <system:String x:Key="MarketplaceUpdateSuccess">Sikeresen frissítve: {0}!\nIndítsd újra az alkalmazást az addon betöltéséhez.</system:String>
+    <system:String x:Key="MarketplaceUpdateFailed">Nem sikerült frissíteni: {0}!</system:String>
+    <system:String x:Key="MarketplaceLoadFailed">Valami hiba történt a Marketplace elemek betöltése közben. Csatlakozva vagy az internethez?</system:String>
+    <system:String x:Key="MarketplaceInfo">Ez egy nagyon egyszerű Marketplace dizájn, ami a jövőben teljesen átdolgozásra kerül.</system:String>
+    <system:String x:Key="MarketplaceButtonInstall">Telepítés</system:String>
+    <system:String x:Key="MarketplaceButtonUpdate">Frissítés</system:String>
+    <system:String x:Key="MarketplaceButtonUninstall">Eltávolítás</system:String>
+    <system:String x:Key="MarketplaceButtonDisable">Letiltás</system:String>
+    <system:String x:Key="MarketplaceButtonEnable">Engedélyezés</system:String>
+
+    <!-- Ugrás a sorra -->
+    <system:String x:Key="GoToLine">Ugrás a sorra</system:String>
+    <system:String x:Key="GoToLineButton">Ugrás</system:String>
+
+    <!-- Téma szerkesztő -->
+    <system:String x:Key="ThemeEditorWindowBackground">Ablak háttér</system:String>
+    <system:String x:Key="ThemeEditorSmallWindowBackground">Kis ablak háttér</system:String>
+    <system:String x:Key="ThemeEditorEditorBackground">Szerkesztő háttér</system:String>
+    <system:String x:Key="ThemeEditorEditorText">Szerkesztő szöveg</system:String>
+    <system:String x:Key="ThemeEditorLineNumber">Sorszám</system:String>
+    <system:String x:Key="ThemeEditorSelection">Kiválasztás</system:String>
+    <system:String x:Key="ThemeEditorSelectedTabBackground">Kiválasztott fül háttér</system:String>
+    <system:String x:Key="ThemeEditorSelectedTabBorder">Kiválasztott fül szegély</system:String>
+    <system:String x:Key="ThemeEditorMenuBackground">Menü háttér</system:String>
+    <system:String x:Key="ThemeEditorMenuBorder">Menü szegély</system:String>
+    <system:String x:Key="ThemeEditorFocusedTextBoxBackground">Fókuszált szövegdoboz háttér</system:String>
+    <system:String x:Key="ThemeEditorCurrentLineBackground">Aktuális sor háttér</system:String>
+    <system:String x:Key="ThemeEditorCurrentLineBorder">Aktuális sor szegély</system:String>
+    <system:String x:Key="ThemeEditorAccentColor">Kiemelő szín</system:String>
+
+    <!-- Üdvözlő fül -->
+    <system:String x:Key="WelcomeTabTitle">Üdvözlet</system:String>
+    <system:String x:Key="WelcomeTabGettingStarted">Első lépések</system:String>
+    <system:String x:Key="WelcomeTabNeedHelp">Szükséged van segítségre?</system:String>
+    <system:String x:Key="WelcomeGettingStartedNewFile">Új fájl</system:String>
+    <system:String x:Key="WelcomeGettingStartedOpenFile">Fájl megnyitása</system:String>
+    <system:String x:Key="WelcomeGettingStartedOpenFolder">Mappa megnyitása</system:String>
+    <system:String x:Key="WelcomeGettingStartedSettings">Beállítások</system:String>
+    <system:String x:Key="WelcomeNeedHelpDiscordServer">Discord szerver</system:String>
+    <system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+    
 </ResourceDictionary>
