@@ -110,15 +110,18 @@ public static class UpdateChecker
             Process.Start(new ProcessStartInfo
             {
                 FileName = _tempInstallerFile,
-                UseShellExecute = true,
-                Verb = "runas"
+                UseShellExecute = true
             });
 
             (Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime).Shutdown();
         }
-        catch
+        catch (Exception e)
         {
-            Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.Cancel); });
+            Dispatcher.UIThread.Post(() =>
+            {
+                td.Hide(TaskDialogStandardResult.Cancel);
+                SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed") + "\n" + e.Message);
+            });
         }
     }
 
