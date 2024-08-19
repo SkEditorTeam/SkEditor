@@ -1,13 +1,7 @@
 using Avalonia.Input;
 using Avalonia.Media;
-using AvaloniaEdit;
-using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.API;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SkEditor.Views;
 public partial class ColorSelectionWindow : AppWindow

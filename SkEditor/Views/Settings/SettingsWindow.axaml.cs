@@ -3,7 +3,6 @@ using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Media.Animation;
 using FluentAvalonia.UI.Navigation;
 using FluentAvalonia.UI.Windowing;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Styling;
 using SkEditor.Views.Settings;
