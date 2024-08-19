@@ -1,17 +1,15 @@
-﻿using Avalonia.Controls;
-using FluentAvalonia.UI.Controls;
-using SkEditor.API;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Parser;
-using SkEditor.Utilities.Parser.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia.Controls;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 using SkEditor.Parser;
 using SkEditor.Parser.Elements;
+using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Styling;
 

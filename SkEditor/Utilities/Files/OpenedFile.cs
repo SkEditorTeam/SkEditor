@@ -1,9 +1,11 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Parser;
 using System.Collections.Generic;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Files;
 

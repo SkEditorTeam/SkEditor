@@ -24,6 +24,8 @@ using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 using SkEditor.Views.FileTypes;
 using System;
 using System.IO;
+using CommunityToolkit.Mvvm.Input;
+using Path = System.IO.Path;
 
 namespace SkEditor;
 

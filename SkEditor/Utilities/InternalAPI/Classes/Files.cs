@@ -185,7 +185,7 @@ public class Files : IFiles
         Icon.SetIcon(openedFile);
 
         // Custom Data
-        openedFile["Parser"] = new CodeParser(editor);
+        openedFile["Parser"] = new FileParser(editor);
         openedFile["Margin"] = new EditorMargin(openedFile);
         if (tabItem.Content is TextEditor textEditor)
             openedFile["Parser"] = new FileParser(textEditor);
