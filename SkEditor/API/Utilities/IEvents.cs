@@ -1,41 +1,70 @@
-﻿using System;
+﻿using Avalonia.Controls;
+using AvaloniaEdit;
+using SkEditor.API.Settings;
+using SkEditor.Utilities.Files;
+using System;
 
 namespace SkEditor.API;
 
 /// <summary>
-/// Class handling all events in the application, that addons
+/// Interface handling all events in the application, that addons
 /// can subscribe to.
 /// </summary>
 public interface IEvents
 {
-    
     /// <summary>
-    /// Called when every addons has been enabled, and the
+    /// Called when every addon has been enabled, and the
     /// first lifecycle event has been called. This is when you
     /// can do UI-related things for instance.
     /// </summary>
-    public event EventHandler OnPostEnable;
+    event EventHandler OnPostEnable;
+    internal void PostEnable();
 
-    #region Editors
+    event EventHandler<FileCreatedEventArgs> OnFileCreated;
+    internal void FileCreated(TextEditor editor);
 
-    public event EventHandler<FileCreatedEventArgs> OnFileCreated;
+    event EventHandler<FileOpenedEventArgs> OnFileOpened;
+    internal void FileOpened(OpenedFile openedFile, bool causedByRestore);
 
-    public event EventHandler<FileOpenedEventArgs> OnFileOpened;
-    
+    event EventHandler<AddonSettingChangedEventArgs> OnAddonSettingChanged;
+    internal void AddonSettingChanged(Setting setting, object oldValue);
+
     /// <summary>
     /// Called when a tab view item is closed. You can
     /// cancel the close if needed.
     /// </summary>
-    public event EventHandler<TabClosedEventArgs> OnTabClosed;
+    event EventHandler<TabClosedEventArgs> OnTabClosed;
+    internal bool TabClosed(OpenedFile openedFile);
 
-    #endregion
-
-    #region Settings
+    event EventHandler<SelectionChangedEventArgs> OnTabChanged;
+    internal void TabChanged(SelectionChangedEventArgs e);
 
     /// <summary>
     /// Called when a settings window is open.
     /// </summary>
-    public event EventHandler OnSettingsOpened;
+    event EventHandler OnSettingsOpened;
+    internal void SettingsOpened();
+}
 
-    #endregion
+public class FileCreatedEventArgs(TextEditor editor) : EventArgs
+{
+    public TextEditor Editor { get; } = editor;
+}
+
+public class FileOpenedEventArgs(OpenedFile openedFile, bool causedByRestore) : EventArgs
+{
+    public bool CausedByRestore { get; set; } = causedByRestore;
+    public OpenedFile OpenedFile { get; set; } = openedFile;
+}
+
+public class AddonSettingChangedEventArgs(Setting setting, object oldValue) : EventArgs
+{
+    public Setting Setting { get; } = setting;
+    public object OldValue { get; } = oldValue;
+}
+
+public class TabClosedEventArgs(OpenedFile closedFile) : EventArgs
+{
+    public OpenedFile OpenedFile { get; } = closedFile;
+    public bool CanClose { get; set; } = true;
 }

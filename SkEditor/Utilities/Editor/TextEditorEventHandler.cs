@@ -7,13 +7,10 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
-using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
-using SkEditor.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -97,7 +94,7 @@ public partial class TextEditorEventHandler
         var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.Editor == editor);
         if (openedFile == null)
             return;
-        
+
         if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
         {
             openedFile.IsSaved = false;
@@ -177,7 +174,7 @@ public partial class TextEditorEventHandler
 
             foreach (Match match in matches.Cast<Match>())
             {
-                string hex = match.Value[2..^1];
+                string hex = match.Value.Contains("##") ? match.Value[2..^1] : match.Value[1..^1];
                 bool parsed = Color.TryParse(hex, out Color color);
                 if (!parsed) continue;
 
@@ -189,7 +186,7 @@ public partial class TextEditorEventHandler
 
                 HighlightingSpan span = new()
                 {
-                    StartExpression = new Regex(@"<#" + hex + @">"),
+                    StartExpression = new Regex(@"<[#]?" + hex + @">"),
                     EndExpression = EmptyRegex(),
                     SpanColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(color) },
                     RuleSet = ruleSet,
@@ -224,6 +221,11 @@ public partial class TextEditorEventHandler
     {
         if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
+        if (!properText.Contains(Environment.NewLine) || properText.Contains("\n") || properText.Contains("\r"))
+        {
+            e.Text = properText;
+            return;
+        }
 
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
@@ -253,44 +255,7 @@ public partial class TextEditorEventHandler
         e.Text = sb.ToString().Trim();
     }
 
-    public static void CheckForSpecialPaste(object? sender, TextEventArgs e)
-    {
-        string[] pastes = e.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.TrimEntries);
-
-        StringBuilder sb = new("You used a special code to do something:");
-        sb.AppendLine();
-
-        foreach (string paste in pastes)
-        {
-            if (paste.StartsWith("-enableSkEditorOption:"))
-            {
-                string option = paste.Split(':')[1].Trim();
-                PropertyInfo? prop = SkEditorAPI.Core.GetAppConfig().GetType().GetProperty(option);
-                if (prop.PropertyType != typeof(bool)) continue;
-                prop?.SetValue(SkEditorAPI.Core.GetAppConfig(), true);
-
-                sb.AppendLine($"- Enabled {option}");
-            }
-            else if (paste.StartsWith("-openSkEditorAppdata"))
-            {
-                string path = AppConfig.AppDataFolderPath;
-                sb.AppendLine($"- Opened SkEditor's appdata folder");
-                Process.Start(new ProcessStartInfo("explorer.exe", path));
-            }
-            else if (paste.StartsWith("-printSkEditorVersion"))
-            {
-                sb.AppendLine($"- {SettingsViewModel.Version}");
-            }
-        }
-
-        if (Regex.Matches(sb.ToString(), Environment.NewLine).Count > 1)
-        {
-            e.Text = sb.ToString().Trim();
-            return;
-        }
-    }
-
-    [GeneratedRegex(@"<##(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
+    [GeneratedRegex(@"<#[#]?(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();
     [GeneratedRegex("")]
     private static partial Regex EmptyRegex();

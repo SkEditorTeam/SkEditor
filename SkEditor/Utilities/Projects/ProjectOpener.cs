@@ -1,16 +1,16 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Projects.Elements;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using Avalonia.Input;
-using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Projects;
 public static class ProjectOpener
@@ -44,6 +44,8 @@ public static class ProjectOpener
             folder = path;
         }
 
+        folder.FixLinuxPath();
+
         NoFolderMessage.IsVisible = false;
 
         ProjectRootFolder = new Folder(folder) { IsExpanded = true };
@@ -60,22 +62,22 @@ public static class ProjectOpener
         //    ProjectRootFolder.GetItemByPath(path)?.RenameElement(e.Name, false);
         //};
 
-        void HandleTapped(TappedEventArgs e)
+        static void HandleTapped(TappedEventArgs e)
         {
             if (e.Source is not Border border) return;
             var treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
             if (treeViewItem is null) return;
             var storageElement = treeViewItem.DataContext as StorageElement;
-            storageElement?.HandleDoubleClick();
+            storageElement?.HandleClick();
         }
-        
+
         FileTreeView.DoubleTapped += (sender, e) =>
         {
             if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
                 return;
             HandleTapped(e);
         };
-        
+
         FileTreeView.Tapped += (sender, e) =>
         {
             if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)

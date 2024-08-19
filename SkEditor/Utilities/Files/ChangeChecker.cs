@@ -1,5 +1,4 @@
-﻿using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
+﻿using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
 using System;
@@ -25,6 +24,7 @@ public class ChangeChecker
         try
         {
             OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+            if (file == null) return;
             if (!file.IsEditor || string.IsNullOrWhiteSpace(file.Path)) return;
 
             string path = Uri.UnescapeDataString(file.Path);
@@ -50,7 +50,7 @@ public class ChangeChecker
         }
         catch (Exception e)
         {
-            Log.Error(e, "Error while checking for changes");
+            Log.Warning(e, "Error while checking for changes");
         }
 
         isMessageShown = false;

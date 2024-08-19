@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Logging;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using FluentAvalonia.UI.Windowing;
 using Serilog.Events;
-using SkEditor.API;
-using SkEditor.Utilities.Styling;
+using System.Collections.Generic;
 using LogEventLevel = Serilog.Events.LogEventLevel;
 
 namespace SkEditor.Views;
@@ -18,11 +15,18 @@ namespace SkEditor.Views;
 public partial class LogsWindow : AppWindow
 {
     public static readonly List<LogEvent> Logs = [];
-    
+
     public LogsWindow()
     {
         InitializeComponent();
+        Focusable = true;
+
         RenderDocument();
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     public void RenderDocument()
@@ -34,13 +38,13 @@ public partial class LogsWindow : AppWindow
         LogsEditor.FontSize = 14;
         LogsEditor.WordWrap = true;
         LogsEditor.Margin = new Thickness(5);
-        
+
         int lineNumber = 1;
         foreach (LogEvent logEvent in Logs)
         {
             LogsEditor.Document.Insert(LogsEditor.Document.TextLength, logEvent.RenderMessage());
             LogsEditor.Document.Insert(LogsEditor.Document.TextLength, "\n");
-            
+
             var color = logEvent.Level switch
             {
                 LogEventLevel.Debug => Colors.Gray,
@@ -50,12 +54,12 @@ public partial class LogsWindow : AppWindow
                 LogEventLevel.Fatal => Colors.Red,
                 _ => Colors.Bisque
             };
-            
+
             LogsEditor.TextArea.TextView.LineTransformers.Add(new LineColorizer(lineNumber, color));
             lineNumber++;
         }
     }
-    
+
     public class LineColorizer(int lineNumber, Color color) : DocumentColorizingTransformer
     {
         protected override void ColorizeLine(DocumentLine line)

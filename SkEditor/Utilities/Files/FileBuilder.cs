@@ -11,6 +11,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Styling;
 using SkEditor.Views;
 using SkEditor.Views.FileTypes;
 using System;
@@ -53,15 +54,13 @@ public class FileBuilder
 
             ToolTip.SetShowDelay(tabViewItem, 1200);
             ToolTip.SetTip(tabViewItem, toolTip);
-
-            Icon.SetIcon(tabViewItem);
         }
 
         if (fileType.IsEditor)
         {
             var editor = fileType.Display as TextEditor;
 
-            (SkEditorAPI.Events as Events).FileCreated(editor);
+            SkEditorAPI.Events.FileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
         }
 
@@ -175,9 +174,9 @@ public class FileBuilder
             FontSize = 16,
             WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled,
         };
-        
+
         editor.ContextFlyout = GetContextMenu(editor);
-        
+
         if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
             Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
@@ -187,11 +186,11 @@ public class FileBuilder
         {
             editor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
         }
-        
+
         editor.Text = content;
         editor = AddEventHandlers(editor);
         editor = SetOptions(editor);
-        
+
         return editor;
     }
 
@@ -225,7 +224,6 @@ public class FileBuilder
         }
 
         editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
-        editor.TextArea.TextPasting += TextEditorEventHandler.CheckForSpecialPaste;
 
         return editor;
     }
@@ -245,6 +243,10 @@ public class FileBuilder
         editor.Options.ConvertTabsToSpaces = SkEditorAPI.Core.GetAppConfig().UseSpacesInsteadOfTabs;
         editor.Options.IndentationSize = SkEditorAPI.Core.GetAppConfig().TabSize;
 
+        editor.TextArea.TextView.CurrentLineBackground = ThemeEditor.CurrentTheme.CurrentLineBackground;
+        editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(ThemeEditor.CurrentTheme.CurrentLineBorder, 2);
+        editor.Options.HighlightCurrentLine = SkEditorAPI.Core.GetAppConfig().HighlightCurrentLine;
+
         return editor;
     }
 
@@ -259,7 +261,7 @@ public class FileBuilder
             new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.Redo },
             new { Header = "MenuHeaderDuplicate", Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Icon = Symbol.Copy },
             new { Header = "MenuHeaderComment", Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)), Icon = Symbol.Comment },
-            new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLine())), Icon = Symbol.Find },
+            new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())), Icon = Symbol.Find },
             new { Header = "MenuHeaderTrimWhitespaces", Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)), Icon = Symbol.Remove },
             new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
             new { Header = "MenuHeaderRefactor", Command = new RelayCommand(() => CustomCommandsHandler.OnRefactorCommandExecuted(editor)), Icon = Symbol.Rename },

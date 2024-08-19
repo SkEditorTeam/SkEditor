@@ -58,7 +58,7 @@ public class SyntaxItem : MarketplaceItem
         string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
         message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
 
-        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message, 
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message,
             primaryButtonText: "MarketplaceEnableNow", cancelButtonText: "Okay");
 
         if (result == ContentDialogResult.Primary)

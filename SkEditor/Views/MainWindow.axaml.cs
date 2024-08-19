@@ -1,5 +1,4 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -10,20 +9,18 @@ using SkEditor.API;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using SkEditor.Utilities.InternalAPI;
-using Serilog;
 
 namespace SkEditor.Views;
 
 public partial class MainWindow : AppWindow
 {
     public static MainWindow Instance { get; private set; }
-    
+
     public BottomBarControl GetBottomBar() => BottomBar;
 
     public MainWindow()
@@ -33,7 +30,6 @@ public partial class MainWindow : AppWindow
         WindowStyler.Style(this);
 
         ThemeEditor.LoadThemes();
-        Log.Debug("themes loaded");
         AddEvents();
 
         Translation.LoadDefaultLanguage();
@@ -46,6 +42,7 @@ public partial class MainWindow : AppWindow
     {
         TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
         TabControl.TabCloseRequested += (sender, e) => FileCloser.CloseFile(e);
+        TabControl.SelectionChanged += (sender, e) => SkEditorAPI.Events.TabChanged(e);
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;
 
@@ -59,8 +56,7 @@ public partial class MainWindow : AppWindow
             }
         };
 
-        DragDrop.SetAllowDrop(this, true);
-        DragDrop.DropEvent.AddClassHandler(FileHandler.FileDropAction);
+        AddHandler(DragDrop.DropEvent, FileHandler.FileDropAction);
     }
 
     public void ReloadUiOfAddons()
@@ -89,7 +85,8 @@ public partial class MainWindow : AppWindow
             }
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-                Translation.Get("ClosingProgramWithUnsavedFiles"), icon: new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+                Translation.Get("ClosingProgramWithUnsavedFiles"), icon: Symbol.ImportantFilled,
+                primaryButtonText: "Yes", cancelButtonText: "No");
 
             if (result == ContentDialogResult.Primary)
             {
@@ -100,7 +97,6 @@ public partial class MainWindow : AppWindow
         else
         {
             await SessionRestorer.SaveSession();
-            SkEditorAPI.Logs.Debug("Session saved.");
             AlreadyClosed = true;
             Close();
         }
@@ -115,14 +111,17 @@ public partial class MainWindow : AppWindow
         await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
 
         bool sessionFilesAdded = false;
-        if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring) sessionFilesAdded = await SessionRestorer.RestoreSession();
+        if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
+            sessionFilesAdded = await SessionRestorer.RestoreSession();
 
         string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
-        if (startupFiles.Length == 0 && !await CrashChecker.CheckForCrash() && !sessionFilesAdded) 
-            (SkEditorAPI.Files as Files).AddWelcomeTab();
+        if (startupFiles.Length == 0 && !sessionFilesAdded)
+            SkEditorAPI.Files.AddWelcomeTab();
         startupFiles.ToList().ForEach(FileHandler.OpenFile);
+        if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
+            SkEditorAPI.Files.AddWelcomeTab();
 
-        Dispatcher.UIThread.Post(() =>
+        Dispatcher.UIThread.Post(async () =>
         {
             SyntaxLoader.LoadAdvancedSyntaxes();
             DiscordRpcUpdater.Initialize();
@@ -132,6 +131,8 @@ public partial class MainWindow : AppWindow
             Tutorial.ShowTutorial();
             BottomBar.UpdatePosition();
             ChangelogChecker.Check();
+
+            await CrashChecker.CheckForCrash();
         });
     }
 }

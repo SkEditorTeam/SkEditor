@@ -1,15 +1,11 @@
-using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Controls.Sidebar;
+using SkEditor.API;
 using SkEditor.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using SkEditor.API;
 
 namespace SkEditor.Controls;
 public partial class SideBarControl : UserControl
@@ -21,6 +17,15 @@ public partial class SideBarControl : UserControl
     public SideBarControl()
     {
         InitializeComponent();
+
+        Loaded += (_, _) => SkEditorAPI.Windows.GetMainWindow().Splitter.DragCompleted += (sender, args) =>
+        {
+            if (_currentPanel == null)
+                return;
+
+            SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] =
+                (int)SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].Width.Value;
+        };
     }
 
     public void ReloadPanels()
@@ -31,12 +36,12 @@ public partial class SideBarControl : UserControl
             IsVisible = false;
             return;
         }
-        
+
         IsVisible = true;
         Buttons.Children.Clear();
         SkEditorAPI.Windows.GetMainWindow().SidebarContentBorder.Child = null;
         _currentPanel = null;
-        
+
         foreach (var panel in panels)
             Buttons.Children.Add(CreatePanelButton(panel));
     }
@@ -67,26 +72,29 @@ public partial class SideBarControl : UserControl
                     _currentPanel.OnClose();
                     _currentPanel = null;
                     SkEditorAPI.Windows.GetMainWindow().SidebarContentBorder.Child = null;
-                    
+
                     SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MaxWidth = 0;
                     SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MinWidth = 0;
-                    
+
                     return;
                 }
 
-                if (panel.IsDisabled) 
+                if (panel.IsDisabled)
                     return;
 
                 if (_currentPanel != null)
                 {
-                    _currentPanel.OnClose(); 
+                    _currentPanel.OnClose();
                     _currentPanel = null;
                 }
 
                 _currentPanel = panel;
                 _currentPanel.OnOpen();
                 SkEditorAPI.Windows.GetMainWindow().SidebarContentBorder.Child = _currentPanel.Content;
-            
+
+                var configuredWidth = SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(_currentPanel.GetId(), _currentPanel.DesiredWidth);
+                SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].Width = new GridLength(configuredWidth);
+
                 SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MinWidth = _currentPanel.DesiredWidth;
                 SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MaxWidth = int.MaxValue;
             })

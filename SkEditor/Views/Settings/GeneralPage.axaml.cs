@@ -2,13 +2,12 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Files;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SkEditor.Utilities.Files;
 
 namespace SkEditor.Views.Settings;
 public partial class GeneralPage : UserControl
@@ -35,8 +34,8 @@ public partial class GeneralPage : UserControl
         LanguageComboBox.SelectionChanged += (s, e) =>
         {
             string language = LanguageComboBox.SelectedItem.ToString();
-            ApiVault.Get().GetAppConfig().Language = language;
-            Dispatcher.UIThread.InvokeAsync(() => 
+            SkEditorAPI.Core.GetAppConfig().Language = language;
+            Dispatcher.UIThread.InvokeAsync(() =>
             {
                 Translation.ChangeLanguage(language);
 

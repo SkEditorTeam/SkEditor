@@ -15,7 +15,7 @@
     </Design.PreviewWith>
     
     <Style Selector="Button.success">
-        <Style Selector="^ /template/ ui|FABorder#Root">
+        <Style Selector="^ /template/ Border#Root">
             <Setter Property="Background" Value="{DynamicResource ThemeGreenColor}" />
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeGreenColor}" />
         </Style>
@@ -24,7 +24,7 @@
         </Style>
 
         <Style Selector="^:pointerover">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource ThemeDarkGreenColor}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeDarkGreenColor}" />
             </Style>
@@ -34,7 +34,7 @@
         </Style>
 
         <Style Selector="^:pressed">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource ThemeDarkDarkGreenColor}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeDarkDarkGreenColor}" />
             </Style>
@@ -44,7 +44,7 @@
         </Style>
 
         <Style Selector="^:disabled">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="Purple" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
             </Style>
@@ -56,7 +56,7 @@
     
     <!-- Danger -->
     <Style Selector="Button.danger">
-        <Style Selector="^ /template/ ui|FABorder#Root">
+        <Style Selector="^ /template/ Border#Root">
             <Setter Property="Background" Value="{DynamicResource ThemeRedColor}" />
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeRedColor}" />
         </Style>
@@ -65,7 +65,7 @@
         </Style>
 
         <Style Selector="^:pointerover">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource ThemeDarkRedColor}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeDarkRedColor}" />
             </Style>
@@ -75,7 +75,7 @@
         </Style>
 
         <Style Selector="^:pressed">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource ThemeDarkDarkRedColor}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeDarkDarkRedColor}" />
             </Style>
@@ -85,7 +85,7 @@
         </Style>
 
         <Style Selector="^:disabled">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
             </Style>
@@ -97,7 +97,7 @@
     
     <!-- Info -->
     <Style Selector="Button.info">
-        <Style Selector="^ /template/ ui|FABorder#Root">
+        <Style Selector="^ /template/ Border#Root">
             <Setter Property="Background" Value="{DynamicResource ThemeLightBlueColor}" />
             <Setter Property="BorderBrush" Value="{DynamicResource ThemeLightBlueColor}" />
         </Style>
@@ -106,7 +106,7 @@
         </Style>
 
         <Style Selector="^:pointerover">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource ThemeBlueColor}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeBlueColor}" />
             </Style>
@@ -116,7 +116,7 @@
         </Style>
 
         <Style Selector="^:pressed">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource ThemeDarkBlueColor}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeDarkBlueColor}" />
             </Style>
@@ -126,7 +126,7 @@
         </Style>
 
         <Style Selector="^:disabled">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
             </Style>
@@ -138,7 +138,7 @@
     
     <!--Accent Button-->
     <Style Selector="Button.accent">
-        <Style Selector="^ /template/ ui|FABorder#Root">
+        <Style Selector="^ /template/ Border#Root">
             <Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
             <Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrush}" />
         </Style>
@@ -147,7 +147,7 @@
         </Style>
 
         <Style Selector="^:pointerover">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrushPointerOver}" />
             </Style>
@@ -157,7 +157,7 @@
         </Style>
 
         <Style Selector="^:pressed">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundPressed}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrushPressed}" />
             </Style>
@@ -167,7 +167,7 @@
         </Style>
 
         <Style Selector="^:disabled">
-            <Style Selector="^ /template/ ui|FABorder#Root">
+            <Style Selector="^ /template/ Border#Root">
                 <Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundDisabled}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrushDisabled}" />
             </Style>

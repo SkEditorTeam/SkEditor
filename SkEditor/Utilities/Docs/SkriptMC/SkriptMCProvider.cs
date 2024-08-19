@@ -90,10 +90,10 @@ public class SkriptMCProvider : IDocProvider
     public bool HasAddons => false;
     public Task<List<string>> GetAddons() => Task.FromResult(new List<string>());
 
-    public Task<Color?> GetAddonColor(string addonName) => null;
+    public Task<Color?> GetAddonColor(string addonName) => Task.FromResult<Color?>(null);
 
     public IconSource Icon => new BitmapIconSource() { UriSource = new("avares://SkEditor/Assets/Brands/SkriptMC.png") };
-    
+
     public string? GetLink(IDocumentationEntry entry)
     {
         return null;

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using NuGet.Common;
+﻿using NuGet.Common;
 using NuGet.Packaging;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI.Classes;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using FileMode = System.IO.FileMode;
 using Repository = NuGet.Protocol.Core.Types.Repository;
 
@@ -28,7 +26,7 @@ public static class LocalDependencyManager
         var nugetDependencies = addonMeta.Addon.GetDependencies()
             .Where(x => x is NuGetDependency)
             .Cast<NuGetDependency>().ToList();
-        
+
         var addonFolder = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addonMeta.Addon.Identifier);
         if (Directory.Exists(addonFolder)) Directory.CreateDirectory(addonFolder);
 
@@ -37,13 +35,9 @@ public static class LocalDependencyManager
             var dependencyName = dependency.PackageId;
             var nameSpace = dependency.NameSpace;
             var dependencyVersion = dependency.Version == null ? null : new NuGetVersion(dependency.Version);
-            
+
             var dependencyPath = Path.Combine(addonFolder, $"{nameSpace}.dll");
-            if (File.Exists(dependencyPath))
-            {
-                SkEditorAPI.Logs.Info($"Dependency {dependencyName} already exists in the addon folder");
-                continue;
-            }
+            if (File.Exists(dependencyPath)) continue;
 
             var cache = new SourceCacheContext();
             var repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
@@ -57,11 +51,11 @@ public static class LocalDependencyManager
             if (dependencyVersion != null && latestVersion < dependencyVersion)
             {
                 SkEditorAPI.Logs.Error($"Dependency {dependencyName} is outdated! Required: {dependencyVersion}, found: {latestVersion}");
-                addonMeta.Errors.Add(LoadingErrors.OutdatedDependency(dependencyName, 
+                addonMeta.Errors.Add(LoadingErrors.OutdatedDependency(dependencyName,
                     dependencyVersion, latestVersion));
                 return false;
             }
-            
+
             if (dependencyVersion != null)
                 latestVersion = dependencyVersion;
 
@@ -70,11 +64,11 @@ public static class LocalDependencyManager
                 dependencyName, latestVersion,
                 packageStream, cache,
                 NullLogger.Instance, default);
-            
+
             // it's a nupkg file, we need to extract it
             var tempPath = Path.Combine(addonFolder, $"{dependencyName}_{latestVersion}.nupkg");
             await File.WriteAllBytesAsync(tempPath, packageStream.ToArray());
-            
+
             // extract the nupkg file
             await using FileStream inputStream = new FileStream(tempPath, FileMode.Open);
             using PackageArchiveReader reader = new PackageArchiveReader(inputStream);
@@ -94,19 +88,17 @@ public static class LocalDependencyManager
                 addonMeta.Errors.Add(LoadingErrors.LoadingException(new Exception("Failed to find the nuspec file")));
                 return false;
             }
-            
+
             var filePath = Path.Combine(addonFolder, $"{namespaceName}.dll");
             await using FileStream outputStream = new FileStream(filePath, FileMode.Create);
             await reader.GetStream(nuspecFile).CopyToAsync(outputStream);
-            
-            // delete the temp file
+
             inputStream.Close();
             File.Delete(tempPath);
-            
-            SkEditorAPI.Logs.Info($"Dependency {dependencyName} downloaded and stored in the addon folder");
+
             addonMeta.NeedsRestart = true;
         }
-        
+
         return true;
     }
 

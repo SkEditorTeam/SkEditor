@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
@@ -14,6 +15,7 @@ public partial class PublishWindow : AppWindow
     public PublishWindow()
     {
         InitializeComponent();
+        Focusable = true;
         InitializeUI();
     }
 
@@ -35,6 +37,11 @@ public partial class PublishWindow : AppWindow
         };
 
         WebsiteComboBox.SelectionChanged += (sender, e) => UpdateServiceInfo();
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
 
         UpdateServiceInfo();
     }

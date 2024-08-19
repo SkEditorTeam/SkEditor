@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Views.FileTypes.Images;
+namespace SkEditor.Views.FileTypes.Images;
 
 /*
  *                               The MIT License (MIT)
@@ -105,10 +105,7 @@ public class AdvancedImageBox : TemplatedControl
         public ZoomLevelCollection(IEnumerable<int> collection)
             : this()
         {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
+            ArgumentNullException.ThrowIfNull(collection);
 
             AddRange(collection);
         }
@@ -225,10 +222,7 @@ public class AdvancedImageBox : TemplatedControl
         /// <exception cref="System.ArgumentNullException">Thrown if the <c>collection</c> parameter is null.</exception>
         public void AddRange(IEnumerable<int> collection)
         {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
+            ArgumentNullException.ThrowIfNull(collection);
 
             foreach (var value in collection)
             {
@@ -1424,7 +1418,7 @@ public class AdvancedImageBox : TemplatedControl
                 ? new Size(_trackerImage!.Size.Width * zoomFactor, _trackerImage.Size.Height * zoomFactor)
                 : image.Size;
 
-            var destPos = new Point(_pointerPosition.X - destSize.Width / 2, _pointerPosition.Y - destSize.Height / 2);
+            var destPos = new Point(_pointerPosition.X - (destSize.Width / 2), _pointerPosition.Y - (destSize.Height / 2));
             context.DrawImage(_trackerImage!, new Rect(destPos, destSize));
         }
 
@@ -1562,11 +1556,11 @@ public class AdvancedImageBox : TemplatedControl
         {
             if (
                 !(
-                    pointer.Properties.IsLeftButtonPressed && (SelectWithMouseButtons & MouseButtons.LeftButton) != 0
-                    || pointer.Properties.IsMiddleButtonPressed
-                        && (SelectWithMouseButtons & MouseButtons.MiddleButton) != 0
-                    || pointer.Properties.IsRightButtonPressed
-                        && (SelectWithMouseButtons & MouseButtons.RightButton) != 0
+                    (pointer.Properties.IsLeftButtonPressed && (SelectWithMouseButtons & MouseButtons.LeftButton) != 0)
+                    || (pointer.Properties.IsMiddleButtonPressed
+                        && (SelectWithMouseButtons & MouseButtons.MiddleButton) != 0)
+                    || (pointer.Properties.IsRightButtonPressed
+                        && (SelectWithMouseButtons & MouseButtons.RightButton) != 0)
                 )
             )
                 return;
@@ -1576,10 +1570,10 @@ public class AdvancedImageBox : TemplatedControl
         {
             if (
                 !(
-                    pointer.Properties.IsLeftButtonPressed && (PanWithMouseButtons & MouseButtons.LeftButton) != 0
-                    || pointer.Properties.IsMiddleButtonPressed
-                        && (PanWithMouseButtons & MouseButtons.MiddleButton) != 0
-                    || pointer.Properties.IsRightButtonPressed && (PanWithMouseButtons & MouseButtons.RightButton) != 0
+                    (pointer.Properties.IsLeftButtonPressed && (PanWithMouseButtons & MouseButtons.LeftButton) != 0)
+                    || (pointer.Properties.IsMiddleButtonPressed
+                        && (PanWithMouseButtons & MouseButtons.MiddleButton) != 0)
+                    || (pointer.Properties.IsRightButtonPressed && (PanWithMouseButtons & MouseButtons.RightButton) != 0)
                 )
                 || !AutoPan
                 || SizeMode != SizeModes.Normal
@@ -1973,8 +1967,8 @@ public class AdvancedImageBox : TemplatedControl
         var ratioX = ViewPortSize.Width / rectangle.Width;
         var ratioY = ViewPortSize.Height / rectangle.Height;
         var zoomFactor = Math.Min(ratioX, ratioY);
-        var cx = rectangle.X + rectangle.Width / 2;
-        var cy = rectangle.Y + rectangle.Height / 2;
+        var cx = rectangle.X + (rectangle.Width / 2);
+        var cy = rectangle.Y + (rectangle.Height / 2);
 
         CanRender = false;
         Zoom = (int)(zoomFactor * 100); // This function sets the zoom so viewport will change
@@ -2328,8 +2322,8 @@ public class AdvancedImageBox : TemplatedControl
     {
         //CanRender = false;
         var zoomFactor = ZoomFactor;
-        var x = imageLocation.X * zoomFactor - relativeDisplayPoint.X;
-        var y = imageLocation.Y * zoomFactor - relativeDisplayPoint.Y;
+        var x = (imageLocation.X * zoomFactor) - relativeDisplayPoint.X;
+        var y = (imageLocation.Y * zoomFactor) - relativeDisplayPoint.Y;
 
         _canRender = true;
         Offset = new Vector(x, y);

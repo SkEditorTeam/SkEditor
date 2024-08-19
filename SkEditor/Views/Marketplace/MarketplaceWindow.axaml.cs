@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
@@ -9,10 +10,7 @@ using SkEditor.Utilities;
 using SkEditor.Views.Marketplace;
 using SkEditor.Views.Marketplace.Types;
 using System;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Views;
 public partial class MarketplaceWindow : AppWindow
@@ -24,11 +22,16 @@ public partial class MarketplaceWindow : AppWindow
     public MarketplaceWindow()
     {
         InitializeComponent();
+        Focusable = true;
 
         Instance = this;
 
         ItemListBox.SelectionChanged += OnSelectedItemChanged;
         Loaded += (_, _) => Task.Run(LoadItems);
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private async Task LoadItems()
@@ -63,7 +66,9 @@ public partial class MarketplaceWindow : AppWindow
         MarketplaceListItem listItem = (MarketplaceListItem)ItemListBox.SelectedItem;
         if (listItem == null) return;
         MarketplaceItem item = (MarketplaceItem)listItem.Tag;
-        if (item == null) return;
+        if (item == null)
+            return;
+        item.Marketplace = this;
 
 
         HideAllButtons();
@@ -71,7 +76,8 @@ public partial class MarketplaceWindow : AppWindow
         bool shouldShowInstallButton = false;
         bool shouldShowUninstallButton = false;
 
-        if (item is AddonItem addonItem)
+        /*
+         * if (item is AddonItem addonItem)
         {
             IAddon addon = SkEditorAPI.Addons.GetAddon(addonItem.ItemFileUrl);
             string name = Path.GetFileNameWithoutExtension(addonItem.ItemFileUrl);
@@ -89,7 +95,10 @@ public partial class MarketplaceWindow : AppWindow
                 shouldShowInstallButton = true;
             }
         }
-        else if (item is SyntaxItem || item is ThemeItem || item is ThemeWithSyntaxItem)
+        else 
+         */
+
+        if (item is SyntaxItem or ThemeItem or ThemeWithSyntaxItem or AddonItem)
         {
             bool installed = item.IsInstalled();
             shouldShowUninstallButton = installed;
@@ -134,6 +143,11 @@ public partial class MarketplaceWindow : AppWindow
                 addonItem2.Manage();
             });
         }
+    }
+
+    public void RefreshCurrentSelection()
+    {
+        OnSelectedItemChanged(null, null);
     }
 
     public void HideAllButtons()

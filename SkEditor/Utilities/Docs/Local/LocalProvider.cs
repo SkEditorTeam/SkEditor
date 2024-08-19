@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -134,7 +135,7 @@ public class LocalProvider : IDocProvider
         return _localDocs;
     }
 
-    public Task<Color?> GetAddonColor(string addonName) => null;
+    public Task<Color?> GetAddonColor(string addonName) => Task.FromResult<Color?>(null);
 
     public async Task DeleteAll()
     {
@@ -142,7 +143,7 @@ public class LocalProvider : IDocProvider
         await SaveLocalDocs();
     }
 
-    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Folder, IsFilled = true };
+    public IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Folder, IconVariant = IconVariant.Filled };
 
     public string? GetLink(IDocumentationEntry entry)
     {

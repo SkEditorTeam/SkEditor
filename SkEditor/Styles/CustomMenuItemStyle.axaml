@@ -73,11 +73,11 @@
                     </Border>
                     <Popup Name="PART_Popup"
                            WindowManagerAddShadowHint="False"
-                           PlacementMode="RightEdgeAlignedTop"
+                           Placement="RightEdgeAlignedTop"
                            HorizontalOffset="{DynamicResource MenuFlyoutSubItemPopupHorizontalOffset}"
                            IsLightDismissEnabled="False"
                            IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
-                        <ui:FABorder Background="{DynamicResource MenuFlyoutPresenterBackground}"
+                        <Border Background="{DynamicResource MenuFlyoutPresenterBackground}"
                                      BorderBrush="{DynamicResource MenuFlyoutPresenterBorderBrush}"
                                      BorderThickness="{DynamicResource MenuFlyoutPresenterBorderThemeThickness}"
                                      MaxWidth="{DynamicResource FlyoutThemeMaxWidth}"
@@ -91,7 +91,7 @@
                                                 Margin="{DynamicResource MenuFlyoutPresenterThemePadding}"
                                                 Grid.IsSharedSizeScope="True" />
                             </ScrollViewer>
-                        </ui:FABorder>
+                        </Border>
                     </Popup>
                 </Panel>
             </ControlTemplate>

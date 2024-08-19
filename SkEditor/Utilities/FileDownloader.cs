@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Views;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace SkEditor.Utilities;
 public static class FileDownloader
 {
-    private static readonly string zipUrl = "https://marketplace-skeditor.vercel.app/SkEditorFiles/Items_and_json.zip";
+    private static readonly string zipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
     private static readonly string appDataFolderPath = AppConfig.AppDataFolderPath;
     private static readonly string zipFilePath = Path.Combine(appDataFolderPath, "items.zip");
 

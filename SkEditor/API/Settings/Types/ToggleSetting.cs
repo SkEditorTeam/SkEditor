@@ -1,6 +1,6 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace SkEditor.API.Settings.Types;
 
@@ -21,11 +21,11 @@ public class ToggleSetting : ISettingType
 
     public Control CreateControl(object raw, Action<object> onChanged)
     {
-        var value = (bool) raw;
+        var value = (bool)raw;
         var toggle = new ToggleSwitch { IsChecked = value };
         toggle.IsCheckedChanged += (_, _) => onChanged(toggle.IsChecked ?? false);
         return toggle;
     }
-    
+
     public bool IsSelfManaged => false;
 }

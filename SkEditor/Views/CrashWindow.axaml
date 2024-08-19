@@ -1,0 +1,45 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+        xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SkEditor.Views.CrashWindow"
+        Icon="/Assets/SkEditor.ico"
+        Title="Application Crashed!" 
+        Height="600" Width="800"
+        WindowStartupLocation="CenterOwner" 
+        Theme="{StaticResource SmallWindowTheme}">
+        <avalonia:SpacedGrid Margin="25" 
+                             RowDefinitions="Auto,*,Auto" RowSpacing="20"
+                             ColumnDefinitions="*,*" ColumnSpacing="10"
+                             >
+                <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                            Spacing="5" Orientation="Vertical">
+                        <TextBlock TextAlignment="Center" HorizontalAlignment="Stretch" Text="Application Crash" 
+								   FontSize="28" FontWeight="SemiBold"/>
+                        <TextBlock TextAlignment="Center" xml:space="preserve">Sorry!
+It looks that the app crashed, but don't worry, your files were saved.
+You can check the logs for more details.
+If you can, please report this on the Discord server.</TextBlock>
+                </StackPanel>
+                <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" 
+                        CornerRadius="10" ClipToBounds="True" Background="#4d000000">
+                        <avaloniaEdit:TextEditor Name="CrashStackTrace" 
+                            Foreground="{DynamicResource EditorTextColor}"
+                            Background="{DynamicResource EditorBackgroundColor}"
+                            Padding="10"
+                            HorizontalScrollBarVisibility="Visible"
+                            FontFamily="{DynamicResource JetBrainsFont}"
+                            FontSize="14"
+                            IsReadOnly="True"/>
+                </Border>
+                
+                <Button Name="DiscordButton" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Stretch"
+						HorizontalContentAlignment="Center" Content="Open Discord Server" />
+                
+                <Button Name="CloseButton" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" 
+						HorizontalContentAlignment="Center" Content="Close"/>
+        </avalonia:SpacedGrid>
+</Window>

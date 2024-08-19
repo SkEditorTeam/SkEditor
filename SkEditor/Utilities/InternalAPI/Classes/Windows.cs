@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
@@ -10,6 +7,8 @@ using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
 using SkEditor.Views;
+using System;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 
@@ -21,7 +20,7 @@ public class Windows : IWindows
         return (MainWindow)(Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime)
             .MainWindow;
     }
-    
+
     public Window GetCurrentWindow()
     {
         var windows = (Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime).Windows;
@@ -32,21 +31,21 @@ public class Windows : IWindows
         string message,
         object? icon = null,
         string? cancelButtonText = null,
-        string primaryButtonText = "Okay")
+        string primaryButtonText = "Okay", bool translate = true)
     {
         static string? TryGetTranslation(string? input)
         {
-            if (input == null) 
+            if (input == null)
                 return null;
-            
+
             var translation = Translation.Get(input);
             return translation == input ? input : translation;
         }
-        
+
         Application.Current.TryGetResource("MessageBoxBackground", out var background);
-        var dialog = new ContentDialog()
+        ContentDialog dialog = new()
         {
-            Title = TryGetTranslation(title),
+            Title = translate ? TryGetTranslation(title) : title,
             Background = background as ImmutableSolidColorBrush,
             PrimaryButtonText = TryGetTranslation(primaryButtonText),
             CloseButtonText = TryGetTranslation(cancelButtonText),
@@ -55,7 +54,7 @@ public class Windows : IWindows
         icon = icon switch
         {
             IconSource iconSource => iconSource,
-            Symbol symbol => new SymbolIconSource() { Symbol = symbol, FontSize = 36 },
+            Symbol symbol => new SymbolIconSource() { Symbol = symbol, FontSize = 40 },
             _ => icon
         };
 
@@ -71,22 +70,26 @@ public class Windows : IWindows
             }
         }
         if (source is FontIconSource fontIconSource)
-            fontIconSource.FontSize = 36;
-        
+            fontIconSource.FontSize = 40;
+        else if (source is SymbolIconSource symbolIconSource)
+            symbolIconSource.FontSize = 40;
+
         IconSourceElement iconElement = new()
         {
             IconSource = source,
-            Width = 36,
-            Height = 36,
+            Height = 40,
+            Width = 40,
         };
 
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*") };
+
+        double iconMargin = iconElement.IconSource is not null ? 24 : 0;
 
         var textBlock = new TextBlock()
         {
             Text = TryGetTranslation(message),
             FontSize = 16,
-            Margin = new Thickness(10, 10, 0, 0),
+            Margin = new Thickness(Math.Max(10, iconMargin), 10, 0, 0),
             TextWrapping = TextWrapping.Wrap,
             MaxWidth = 400,
         };
@@ -102,7 +105,7 @@ public class Windows : IWindows
 
         return await dialog.ShowAsync(GetCurrentWindow());
     }
-    
+
     public async Task ShowMessage(string title, string message)
     {
         await ShowDialog(title, message, Symbol.FlagFilled);
@@ -117,19 +120,17 @@ public class Windows : IWindows
     {
         var topLevel = GetCurrentWindow();
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
-        
-        return files.FirstOrDefault()?.Path.AbsolutePath;
+
+        return files[0]?.Path.AbsolutePath;
     }
 
     public void ShowWindow(Window window)
     {
-        SkEditorAPI.Logs.Debug($"Showing window {window.GetType().Name}");
         window.Show(GetCurrentWindow());
     }
 
     public Task ShowWindowAsDialog(Window window)
     {
-        SkEditorAPI.Logs.Debug($"Showing window {window.GetType().Name}");
         return window.ShowDialog(GetCurrentWindow());
     }
 }

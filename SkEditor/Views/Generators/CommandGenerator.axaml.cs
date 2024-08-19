@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
@@ -14,8 +15,14 @@ public partial class CommandGenerator : AppWindow
     public CommandGenerator()
     {
         InitializeComponent();
+        Focusable = true;
 
         GenerateButton.Command = new RelayCommand(Generate);
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
+        Loaded += (_, e) => NameTextBox.Focus();
     }
 
     private void Generate()

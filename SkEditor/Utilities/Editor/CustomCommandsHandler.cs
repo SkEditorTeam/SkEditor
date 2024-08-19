@@ -15,7 +15,10 @@ public class CustomCommandsHandler
 {
     public static void OnCommentCommandExecuted(object target)
     {
-        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        if (!file.IsEditor) return;
+
+        TextEditor editor = file.Editor;
 
         var document = editor.Document;
         var selectionStart = editor.SelectionStart;

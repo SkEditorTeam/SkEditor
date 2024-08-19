@@ -42,6 +42,9 @@ public static class DiscordRpcUpdater
 
     public static void Uninitialize()
     {
+        if (_client == null)
+            return;
+
         _client.ClearPresence();
         _client.Dispose();
     }

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace SkEditor.API.Settings.Types;
 
@@ -12,8 +12,8 @@ namespace SkEditor.API.Settings.Types;
 /// <param name="minWidth">The minimum width of the ComboBox, defaulting to 100</param>
 public class ComboBoxSetting(string[] items, int minWidth = 100) : ISettingType
 {
-    
-    public List<string> Items { get; } = [..items];
+
+    public List<string> Items { get; } = [.. items];
     public int MinWidth { get; } = minWidth;
 
     public object Deserialize(JToken value)
@@ -29,15 +29,15 @@ public class ComboBoxSetting(string[] items, int minWidth = 100) : ISettingType
     public Control CreateControl(object value, Action<object> onChanged)
     {
         var comboBox = new ComboBox { MinWidth = MinWidth };
-        
+
         foreach (var item in Items)
             comboBox.Items.Add(new ComboBoxItem { Content = item, Tag = item });
-        
+
         comboBox.SelectedItem = Items.Contains(value as string) ? value : Items[0];
         comboBox.SelectionChanged += (_, _) => onChanged((comboBox.SelectedItem as ComboBoxItem)?.Tag);
-        
+
         return comboBox;
     }
-    
+
     public bool IsSelfManaged => false;
 }

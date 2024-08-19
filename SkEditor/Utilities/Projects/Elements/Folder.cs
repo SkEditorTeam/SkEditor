@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
@@ -8,7 +9,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
@@ -18,7 +18,7 @@ public class Folder : StorageElement
 
     public Folder(string folder, Folder? parent = null)
     {
-        folder = Uri.UnescapeDataString(folder);
+        folder = Uri.UnescapeDataString(folder).FixLinuxPath();
 
         Parent = parent;
         StorageFolderPath = folder;
@@ -87,9 +87,10 @@ public class Folder : StorageElement
         return null;
     }
 
-    public override void HandleDoubleClick()
+    public override void HandleClick()
     {
-        if (Children.Count > 0) IsExpanded = !IsExpanded;
+        if (Children.Count > 0)
+            IsExpanded = !IsExpanded;
     }
 
     public void CopyAbsolutePath()

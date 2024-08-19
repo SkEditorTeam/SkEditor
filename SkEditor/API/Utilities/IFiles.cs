@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.Files;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 
@@ -63,7 +62,12 @@ public interface IFiles
     /// <param name="content">The control that represent the tab view item's content</param>
     /// <param name="header">The (mainly text) header of the created tab view item</param>
     /// <param name="select">Should the new created tab be selected right after its creation or not.</param>
-    public void AddCustomTab(object header, Control content, bool select = true);
+    public void AddCustomTab(object header, Control content, bool select = true, IconSource? icon = null);
+
+    /// <summary>
+    /// Add a new editor tab with the desired content.
+    /// 
+    public Task<OpenedFile> AddEditorTab(string content, string? path);
 
     /// <summary>
     /// Select the desired opened file's tab item.
@@ -82,12 +86,13 @@ public interface IFiles
     /// </summary>
     /// <param name="content">The desired content of the new file</param>
     public void NewFile(string content = "");
-    
+
     /// <summary>
     /// Open the provided file path into SkEditor.
     /// </summary>
     /// <param name="path">The path of the target file.</param>
-    public void OpenFile(string path);
+    /// <param name="force">Should the file be opened, even if it's detected as binary?</param>
+    public void OpenFile(string path, bool force = false);
 
     /// <summary>
     /// Get a (possibly-null) opened file with the given path.
@@ -108,6 +113,11 @@ public interface IFiles
     /// </summary>
     public void BatchClose(FileCloseAction closeAction);
 
+    /// <summary>
+    /// Add a welcome tab to the tab view.
+    /// </summary>
+    public void AddWelcomeTab();
+
     public enum FileCloseAction
     {
         Unsaved,
@@ -116,5 +126,4 @@ public interface IFiles
         AllLeft,
         All
     }
-    
 }

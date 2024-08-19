@@ -23,6 +23,8 @@
 				<controls:ColorPickerSettingsExpander Name="MenuBackgroundExpander" ExpanderHeader="{DynamicResource ThemeEditorMenuBackground}"/>
 				<controls:ColorPickerSettingsExpander Name="MenuBorderExpander" ExpanderHeader="{DynamicResource ThemeEditorMenuBorder}"/>
 				<controls:ColorPickerSettingsExpander Name="TextBoxFocusedBackgroundExpander" ExpanderHeader="{DynamicResource ThemeEditorFocusedTextBoxBackground}"/>
+				<controls:ColorPickerSettingsExpander Name="CurrentLineBackgroundExpander" ExpanderHeader="{DynamicResource ThemeEditorCurrentLineBackground}"/>
+				<controls:ColorPickerSettingsExpander Name="CurrentLineBorderExpander" ExpanderHeader="{DynamicResource ThemeEditorCurrentLineBorder}"/>
 				<controls:ColorPickerSettingsExpander Name="AccentColorExpander" ExpanderHeader="{DynamicResource ThemeEditorAccentColor}"/>
 			</StackPanel>
 		</ScrollViewer>

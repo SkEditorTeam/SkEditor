@@ -22,7 +22,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
-using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Controls.Docs;
 

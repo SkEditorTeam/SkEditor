@@ -5,6 +5,7 @@ using FluentAvalonia.UI.Controls;
 using Octokit;
 using SkEditor.API;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -30,18 +31,18 @@ public static class UpdateChecker
     {
         try
         {
-            Release release = await _gitHubClient.Repository.Release.GetLatest(RepoId);
+            IReadOnlyList<Release> releases = await _gitHubClient.Repository.Release.GetAll(RepoId);
+            Release release = releases.FirstOrDefault(r => !r.Prerelease);
+
             (int, int, int) version = GetVersion(release.TagName);
             if (!IsNewerVersion(version)) return;
-
-            SymbolIconSource icon = new() { Symbol = Symbol.ImportantFilled };
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("UpdateAvailable"),
                 Translation.Get("UpdateAvailableMessage"),
-                icon,
-                primaryButtonText: Translation.Get("Yes"),
-                cancelButtonText: Translation.Get("No")
+                Symbol.ImportantFilled,
+                primaryButtonText: "Yes",
+                cancelButtonText: "No"
             );
 
             if (result != ContentDialogResult.Primary) return;
@@ -106,21 +107,21 @@ public static class UpdateChecker
                 await client.DownloadDataAsync(url, file, progress);
             }
 
-            ProcessStartInfo startInfo = new()
+            Process.Start(new ProcessStartInfo
             {
-                FileName = "msiexec",
-                Arguments = $"/i \"{_tempInstallerFile}\" /quiet",
-                UseShellExecute = true,
-                Verb = "runas"
-            };
-
-            Process.Start(startInfo);
+                FileName = _tempInstallerFile,
+                UseShellExecute = true
+            });
 
             (Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime).Shutdown();
         }
-        catch
+        catch (Exception e)
         {
-            Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.Cancel); });
+            Dispatcher.UIThread.Post(() =>
+            {
+                td.Hide(TaskDialogStandardResult.Cancel);
+                SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed") + "\n" + e.Message);
+            });
         }
     }
 

@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Net.Mime;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using System.Collections.Generic;
 
 namespace SkEditor.Views.Generators.Gui;
 
@@ -72,7 +71,7 @@ public static class ColoredTextHandler
         public FontStyle FontStyle { get; set; }
         public List<TextDecoration> TextDecorations { get; set; }
     }
-    
+
     public static void SetupBox(TextBox textBox)
     {
         var flyout = new Flyout { Placement = PlacementMode.BottomEdgeAlignedLeft };
@@ -94,22 +93,22 @@ public static class ColoredTextHandler
                     TextDecorations = new TextDecorationCollection(formattedText.TextDecorations),
                     FontFamily = GetMinecraftFont()
                 };
-                
+
                 panel.Children.Add(block);
             }
-            
+
             flyout.Content = panel;
             FlyoutBase.ShowAttachedFlyout(textBox);
         };
     }
-    
+
     private static List<FormattedText> ParseFormattedText(string text)
     {
         List<FormattedText> formattedTexts = new();
         FormattedText currentFormattedText = new()
         {
             Text = "",
-            Color = (Color) TextFormats["5"],
+            Color = (Color)TextFormats["5"],
             FontWeight = FontWeight.Normal,
             FontStyle = FontStyle.Italic,
             TextDecorations = new List<TextDecoration>()
@@ -132,7 +131,7 @@ public static class ColoredTextHandler
                     currentFormattedText = currentFormattedText with
                     {
                         Text = "",
-                        TextDecorations = [..currentFormattedText.TextDecorations]
+                        TextDecorations = [.. currentFormattedText.TextDecorations]
                     };
 
                     switch (TextFormats[code.ToString()])
@@ -158,7 +157,7 @@ public static class ColoredTextHandler
                     // Reset all styles to default when '&r' code is encountered
                     if (code == 'r')
                     {
-                        currentFormattedText.Color = (Color) TextFormats["f"];
+                        currentFormattedText.Color = (Color)TextFormats["f"];
                         currentFormattedText.FontWeight = FontWeight.Normal;
                         currentFormattedText.FontStyle = FontStyle.Normal;
                         currentFormattedText.TextDecorations.Clear();
@@ -195,9 +194,9 @@ public static class ColoredTextHandler
     {
         if (_cachedFont != null!)
             return _cachedFont;
-        
+
         Application.Current.TryGetResource("MinecraftFont", ThemeVariant.Default, out var font);
-        _cachedFont = (FontFamily) font;
+        _cachedFont = (FontFamily)font;
         return _cachedFont;
     }
 

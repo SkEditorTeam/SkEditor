@@ -2,6 +2,8 @@
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Parser;
+using SkEditor.Utilities.Parser.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;

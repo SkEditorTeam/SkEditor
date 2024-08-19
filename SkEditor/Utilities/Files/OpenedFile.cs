@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Avalonia.Controls;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities.InternalAPI;
+using SkEditor.API;
 using SkEditor.Utilities.Parser;
+using System.Collections.Generic;
 
 namespace SkEditor.Utilities.Files;
 
@@ -17,7 +17,8 @@ public class OpenedFile
     public bool IsNewFile { get; set; } = false;
 
     private bool _saved;
-    public bool IsSaved {
+    public bool IsSaved
+    {
         get => _saved;
         set
         {
@@ -31,7 +32,8 @@ public class OpenedFile
 
     #region Custom Tabs Properties
 
-    public bool IsCustomTab { get; set; } = false;
+    public bool IsCustomTab => Editor == null;
+    public Control? CustomControl => IsCustomTab ? TabViewItem.Content as Control : null;
     public string? CustomName = null;
 
     #endregion
@@ -45,13 +47,13 @@ public class OpenedFile
 
     public bool IsEditor => Editor != null;
     public string? Name => Path == null ? CustomName : System.IO.Path.GetFileName(Path);
-    public string? Header => Name + (IsSaved ? "" : " •");
+    public string? Header => Name + (IsSaved || (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && Path != null) ? "" : " •");
 
     #endregion
 
     #region Custom Data
 
-    public List<CustomFileData> CustomData { get; } = new();
+    public List<CustomFileData> CustomData { get; } = [];
     public object? this[string key]
     {
         get

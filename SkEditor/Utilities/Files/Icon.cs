@@ -11,13 +11,13 @@ public class Icon
         { ".sk", "SkriptIcon" },
     };
 
-    public static void SetIcon(TabViewItem tabViewItem)
+    public static void SetIcon(OpenedFile openedFile)
     {
-        string tag = tabViewItem.Tag.ToString();
+        if (openedFile.Path is null) return;
 
         IconSource iconSource = null;
 
-        string extension = Path.GetExtension(tag);
+        string extension = Path.GetExtension(openedFile.Path);
         string iconName = IconDictionary.GetValueOrDefault(extension);
 
         if (iconName is not null)
@@ -26,7 +26,7 @@ public class Icon
             iconSource = icon as PathIconSource;
         }
 
-        tabViewItem.IconSource = iconSource;
+        openedFile.TabViewItem.IconSource = iconSource;
     }
 
     public static IconSource? GetIcon(string extension)

@@ -14,7 +14,7 @@ public class File : StorageElement
 
     public File(string file, Folder? parent = null)
     {
-        file = Uri.UnescapeDataString(file);
+        file = Uri.UnescapeDataString(file).FixLinuxPath();
 
         Parent = parent;
         StorageFilePath = file;
@@ -64,7 +64,7 @@ public class File : StorageElement
         RefreshSelf();
     }
 
-    public override void HandleDoubleClick() => FileHandler.OpenFile(StorageFilePath);
+    public override void HandleClick() => FileHandler.OpenFile(StorageFilePath);
 
     public void CopyAbsolutePath()
     {

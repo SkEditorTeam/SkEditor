@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Avalonia;
+using Avalonia.Styling;
+using Serilog;
+using SkEditor.Utilities;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Avalonia;
-using Avalonia.Styling;
-using AvaloniaEdit;
-using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Files;
+using System.Threading.Tasks;
 
 namespace SkEditor.API;
 
@@ -16,7 +14,7 @@ public class Core : ICore
 {
     private AppConfig? _appConfig;
     private string[] _startupArguments = null!;
-    
+
     public AppConfig GetAppConfig()
     {
         return _appConfig ??= AppConfig.Load();
@@ -28,11 +26,19 @@ public class Core : ICore
         return new Version(version.Major, version.Minor, version.Build);
     }
 
+    public string GetInformationalVersion()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+
+        return informationVersion;
+    }
+
     public string[] GetStartupArguments()
     {
         return _startupArguments ?? [];
     }
-    
+
     public void SetStartupArguments(string[]? args)
     {
         _startupArguments = args ?? [];
@@ -67,28 +73,33 @@ public class Core : ICore
 #endif
 
         return GetAppConfig().IsDevModeEnabled;
-        #pragma warning restore 162
+#pragma warning restore 162
     }
 
-    public void SaveData()
+    public async Task SaveData()
     {
-        List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
-
-        files.ForEach(file =>
+        foreach (var file in SkEditorAPI.Files.GetOpenedEditors())
         {
             string path = file.Path;
             if (string.IsNullOrEmpty(path))
             {
                 string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
                 Directory.CreateDirectory(tempPath);
-                string header = file.Header;
-                path = Path.Combine(tempPath, header);
+                path = Path.Combine(tempPath, file.Header);
             }
-            string textToWrite = file.Editor.Text;
-            using StreamWriter writer = new(path, false);
-            writer.Write(textToWrite);
-        });
-
+            string textToWrite = file.Editor?.Text;
+            if (string.IsNullOrEmpty(textToWrite))
+                continue;
+            try
+            {
+                await File.WriteAllTextAsync(path, textToWrite);
+                using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to save file: {path}");
+            }
+        }
         GetAppConfig().Save();
     }
 }

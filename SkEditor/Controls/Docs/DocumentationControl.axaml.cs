@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
@@ -17,6 +13,10 @@ using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.SkriptHub;
 using SkEditor.ViewModels;
 using SkEditor.Views;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Controls.Docs;
 
@@ -54,6 +54,14 @@ public partial class DocumentationControl : UserControl
                     Translation.Get("DocumentationWindowFetchSuccessMessage"));
             }
         });
+
+        Loaded += (sender, args) => QueryBox.Focus();
+
+        KeyDown += (sender, args) =>
+        {
+            if (args is { Key: Key.Enter, KeyModifiers: KeyModifiers.None } && QueryBox.IsFocused)
+                SearchButtonClick(sender, args);
+        };
     }
 
     public void AddItems()

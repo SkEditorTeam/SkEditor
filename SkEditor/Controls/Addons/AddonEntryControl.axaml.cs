@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Avalonia.Fluent;
@@ -11,6 +8,7 @@ using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views;
 using SkEditor.Views.Settings;
+using System.Linq;
 
 namespace SkEditor.Controls.Addons;
 
@@ -37,7 +35,7 @@ public partial class AddonEntryControl : UserControl
 
         var enabled = addonMeta.State == IAddons.AddonState.Enabled;
         SetStateButton(enabled);
-        
+
         StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
         StateButton.Click += async (_, _) =>
         {
@@ -53,17 +51,18 @@ public partial class AddonEntryControl : UserControl
                 var success = await SkEditorAPI.Addons.EnableAddon(addonMeta.Addon);
                 SetStateButton(success);
             }
-            
+
             StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
-            LoadVisuals(addonMeta);
+            _addonsPage.LoadAddons();
         };
 
-        if (addonMeta.NeedsRestart) {
+        if (addonMeta.NeedsRestart)
+        {
             StateButton.IsEnabled = false;
             StateButton.Content = "Restart Required";
         }
     }
-    
+
     public void SetStateButton(bool enabled)
     {
         if (enabled)
@@ -78,7 +77,7 @@ public partial class AddonEntryControl : UserControl
         }
         StateButton.IsEnabled = true;
     }
-    
+
     private static readonly Color ErrorColor = Colors.OrangeRed;
     private static readonly Color WarningColor = Colors.Orange;
 
@@ -89,7 +88,7 @@ public partial class AddonEntryControl : UserControl
         Expander.Header = addon.Name;
         Expander.Description = addon.Description;
         Expander.IconSource = addon.GetAddonIcon();
-        
+
         if (addonMeta.HasErrors)
         {
             isValid = false;
@@ -98,7 +97,7 @@ public partial class AddonEntryControl : UserControl
                 Symbol = Symbol.Warning,
                 Foreground = new SolidColorBrush(addonMeta.HasCriticalErrors ? ErrorColor : WarningColor),
                 FontSize = 36,
-                IsFilled = true
+                IconVariant = IconVariant.Filled
             };
             Expander.Header = new TextBlock()
             {
@@ -106,7 +105,7 @@ public partial class AddonEntryControl : UserControl
                 Foreground = new SolidColorBrush(addonMeta.HasCriticalErrors ? ErrorColor : WarningColor),
                 TextDecorations = TextDecorations.Strikethrough,
             };
-            
+
             var panels = new StackPanel()
             {
                 Spacing = 2,
@@ -123,10 +122,10 @@ public partial class AddonEntryControl : UserControl
             }
             Expander.Items.Add(panels);
         }
-        
+
         if (addonMeta.DllFilePath == null)
             ControlsPanel.IsVisible = false;
-        
+
         if (addonMeta.NeedsRestart)
         {
             isValid = false;
@@ -139,7 +138,8 @@ public partial class AddonEntryControl : UserControl
             Expander.Items.Add(restartText);
         }
 
-        if (isValid && addon.GetSettings().Count > 0 && AddonLoader.IsAddonEnabled(addon))
+        if (isValid && addon.GetSettings().Count > 0
+                    && AddonLoader.IsAddonEnabled(addon))
         {
             Expander.IsClickEnabled = true;
             Expander.Click += (sender, args) =>

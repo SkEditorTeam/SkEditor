@@ -11,7 +11,7 @@
         x:Class="SkEditor.Views.MainWindow"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
-        Title="SkEditor" WindowState="Maximized">
+        Title="SkEditor" WindowState="Maximized" DragDrop.AllowDrop="True">
 
 	<Window.Styles>
 		<Style Selector="avaloniaedit|TextEditor /template/ Border">

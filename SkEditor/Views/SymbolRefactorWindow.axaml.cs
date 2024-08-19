@@ -1,6 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using Avalonia.Input;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Parser;
@@ -14,12 +14,18 @@ public partial class SymbolRefactorWindow : AppWindow
     {
         InitializeComponent();
         Reference = reference;
+        Focusable = true;
 
         RenameText.Text = Translation.Get("RefactorWindowRefactorBoxName",
             Reference.Name);
         NameBox.Text = Reference.Name;
         
         RefactorButton.Command = new RelayCommand(Refactor);
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape) Close();
+        };
     }
 
     private void Refactor()
