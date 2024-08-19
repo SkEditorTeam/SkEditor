@@ -97,7 +97,7 @@ public partial class AddonEntryControl : UserControl
                 Symbol = Symbol.Warning,
                 Foreground = new SolidColorBrush(addonMeta.HasCriticalErrors ? ErrorColor : WarningColor),
                 FontSize = 36,
-                IsFilled = true
+                IconVariant = IconVariant.Filled
             };
             Expander.Header = new TextBlock()
             {

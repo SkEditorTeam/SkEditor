@@ -58,13 +58,15 @@ public partial class MainMenuControl : UserControl
 
         MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
 
-        MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemDocs.Command = new RelayCommand(AddDocsTab);
         MenuItemGenerateGui.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new GuiGenerator()));
         MenuItemGenerateCommand.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new CommandGenerator()));
         MenuItemRefactor.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new RefactorWindow()));
+        MenuItemColorSelector.Command = new RelayCommand(() => new ColorSelectionWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+
         MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
-        MenuItemDocs.Command = new RelayCommand(AddDocsTab);
+        MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
     }
 
     private static void ShowDialogIfEditorIsOpen(AppWindow window)

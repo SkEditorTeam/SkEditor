@@ -32,6 +32,6 @@ public static class Tutorial
 
     private async static Task ShowTutorialMessage(string title, string message, PathIconSource iconSource)
     {
-        await SkEditorAPI.Windows.ShowDialog(title, message, iconSource);
+        await SkEditorAPI.Windows.ShowDialog(title, message, icon: iconSource, translate: false);
     }
 }
