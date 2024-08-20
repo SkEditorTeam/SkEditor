@@ -1,6 +1,8 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
+using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
@@ -9,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static SkEditor.Controls.Sidebar.ExplorerSidebarPanel;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
@@ -24,6 +27,7 @@ public class Folder : StorageElement
         StorageFolderPath = folder;
         Name = Path.GetFileName(folder);
         IsFile = false;
+        IsRootFolder = parent is null;
 
         Children = [];
         LoadChildren();
@@ -34,6 +38,7 @@ public class Folder : StorageElement
         CopyAbsolutePathCommand = new RelayCommand(CopyAbsolutePath);
         CreateNewFileCommand = new RelayCommand(() => CreateNewElement(true));
         CreateNewFolderCommand = new RelayCommand(() => CreateNewElement(false));
+        CloseProjectCommand = new RelayCommand(CloseProject);
     }
 
     private async void LoadChildren()
@@ -54,6 +59,15 @@ public class Folder : StorageElement
     {
         Directory.Delete(StorageFolderPath, true);
         Parent.Children.Remove(this);
+    }
+
+    private static void CloseProject()
+    {
+        ProjectOpener.FileTreeView.ItemsSource = null;
+        Folder? ProjectRootFolder = null;
+        ExplorerPanel? Panel = Registries.SidebarPanels.FirstOrDefault(x => x is ExplorerPanel) as ExplorerPanel;
+        StackPanel NoFolderMessage = Panel.Panel.NoFolderMessage;
+        NoFolderMessage.IsVisible = ProjectRootFolder == null;
     }
 
     public override void RenameElement(string newName, bool move = true)
