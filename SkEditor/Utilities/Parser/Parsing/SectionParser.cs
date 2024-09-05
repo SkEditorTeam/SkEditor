@@ -67,7 +67,8 @@ public static class SectionParser
         }
         
         // And we set up parents of each node
-        SetupParents(nodes);
+        foreach (var node in nodes)
+            SetupParent(node);
 
         return nodes;
     }
@@ -102,21 +103,15 @@ public static class SectionParser
             }
         }
     }
-    
-    private static void SetupParents(IEnumerable<Node> nodes)
-    {
-        foreach (var node in nodes)
-        {
-            if (node is not SectionNode section)
-                continue;
 
-            foreach (var child in section.Children)
+    private static void SetupParent(Node node)
+    {
+        if (node is SectionNode sectionNode)
+        {
+            foreach (var child in sectionNode)
             {
-                child.Parent = section;
-                if (child.IsSection)
-                {
-                    SetupParents(child as SectionNode);
-                }
+                child.Parent = sectionNode;
+                SetupParent(child);
             }
         }
     }

@@ -65,8 +65,8 @@ public partial class StructCommand : Element
         // Parse trigger
         var triggerNode = section.GetSectionChild("trigger");
         if (triggerNode != null) {
-            ElementParser.ParseNode(triggerNode, context);
             node.Element = new CommandTrigger(this);
+            ElementParser.ParseNode(triggerNode, context);
         }
     }
 
