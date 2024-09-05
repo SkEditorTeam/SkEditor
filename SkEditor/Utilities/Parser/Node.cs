@@ -39,6 +39,24 @@ public abstract class Node
 
         return parent;
     }
+
+    public Node? GetPreviousNode()
+    {
+        var index = Parent.Children.IndexOf(this);
+        if (index == 0)
+            return null;
+        
+        return Parent.Children[index - 1];
+    }
+    
+    public Node GetNextNode()
+    {
+        var index = Parent.Children.IndexOf(this);
+        if (index == Parent.Children.Count - 1)
+            return Parent;
+        
+        return Parent.Children[index + 1];
+    }
     
     public bool IsTopLevel => Indent == 0;
 }
