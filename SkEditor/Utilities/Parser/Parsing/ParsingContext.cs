@@ -13,6 +13,8 @@ public class ParsingContext
     
     public List<Node> ParsedNodes { get; } = new();
     
+    public Dictionary<string, object> Data { get; } = new();
+    
     public void Error(Node node, string message)
     {
         Errors.Add((node, message));
