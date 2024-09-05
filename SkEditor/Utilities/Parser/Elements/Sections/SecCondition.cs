@@ -43,9 +43,26 @@ public class SecCondition : ExprProviderElement
                 break;
             }
         }
-        
+
         if (Condition != null)
             ParseExpressions(node.Key, context);
+
+        if (Type == ConditionalType.ElseIf || Type == ConditionalType.Else)
+        {
+            var previous = node.GetPreviousNode();
+            if (previous == null || previous.Element is not SecCondition)
+            {
+                context.Warning(node, "Else/ElseIf must come after an if");
+            }
+            else
+            {
+                var secCondition = (SecCondition) previous.Element;
+                if (secCondition.Type == ConditionalType.Else)
+                    context.Warning(node, "Invalid condition placement (must be after an if or else if)");
+            }
+            
+            SkEditorAPI.Logs.Warning($"Previous: {previous?.Element?.Debug()} {previous?.Element?.GetType()}");
+        }
     }
 
     public static bool Parse(Node node)
