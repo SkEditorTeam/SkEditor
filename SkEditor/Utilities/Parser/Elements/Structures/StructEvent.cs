@@ -7,8 +7,8 @@ public class StructEvent : Element
 {
     public override void Load(Node node, ParsingContext context)
     {
-        var section = (SectionNode) node;
-        ElementParser.ParseNodes(section.Children, context);
+        /*var section = (SectionNode) node;
+        ElementParser.ParseNodes(section.Children, context);*/
     }
 
     public static bool Parse(Node node)
