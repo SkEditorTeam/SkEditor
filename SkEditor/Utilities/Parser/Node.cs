@@ -1,11 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using SkEditor.Parser.Elements;
 
 namespace SkEditor.Parser;
-
-using System;
-using System.Collections.Generic;
 
 public abstract class Node
 {
@@ -31,15 +29,6 @@ public abstract class Node
     
     public abstract void Print(int indent = 0);
 
-    public SectionNode GetParentStructure()
-    {
-        var parent = Parent;
-        while (parent != null)
-            parent = parent.Parent;
-
-        return parent;
-    }
-
     public Node? GetPreviousNode()
     {
         var index = Parent.Children.IndexOf(this);
@@ -59,6 +48,19 @@ public abstract class Node
     }
     
     public bool IsTopLevel => Indent == 0;
+
+    public Node GetStructureNode()
+    {
+        Node FindParent (Node node)
+        {
+            if (node.Parent == null)
+                return node;
+            
+            return FindParent(node.Parent);
+        }
+        
+        return FindParent(this);
+    }
 }
 
 /// <summary>
