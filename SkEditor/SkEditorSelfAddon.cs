@@ -25,6 +25,7 @@ using SkEditor.Views.FileTypes;
 using System;
 using System.IO;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Utilities.Parser;
 using Path = System.IO.Path;
 
 namespace SkEditor;
@@ -58,14 +59,20 @@ public class SkEditorSelfAddon : IAddon
             new ParserElementData(typeof(StructEvent), 1000));
         Registries.ParserElements.Register(new RegistryKey(this, "StructCommand"),
             new ParserElementData(typeof(StructCommand), 500));
+        Registries.ParserElements.Register(new RegistryKey(this, "StructFunction"),
+            new ParserElementData(typeof(StructFunction), 300));
         Registries.ParserElements.Register(new RegistryKey(this, "StructOptions"),
             new ParserElementData(typeof(StructOptions), 250));
         
         Registries.ParserElements.Register(new RegistryKey(this, "SecConditional"),
             new ParserElementData(typeof(SecCondition), 100));
         
+        Registries.ParserElements.Register(new RegistryKey(this, "EffDelay"),
+            new ParserElementData(typeof(EffDelay), 500));
         Registries.ParserElements.Register(new RegistryKey(this, "UnknownEffect"),
             new ParserElementData(typeof(UnknownEffect), 5000));
+        
+        Registries.ParserElements.RegisterWarnings(this);
 
         #endregion
         
