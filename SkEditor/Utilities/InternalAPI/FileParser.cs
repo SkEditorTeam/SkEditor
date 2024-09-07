@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaEdit;
@@ -45,6 +46,42 @@ public class FileParser
             
             IsParsed = false;
         };
+        /*Editor.PointerHover += (sender, args) =>
+        {
+            var position = Editor.GetPositionFromPoint(args.GetPosition(Editor));
+            if (position == null)
+                return;
+            var tooltip = LastContext.Tooltips.FirstOrDefault(t => t.Line == position.Value.Line 
+                                                                   && t.StartingIndex <= position.Value.Column
+                                                                   && t.StartingIndex + t.Length >= position.Value.Column);
+            if (tooltip == null)
+            {
+                CurrentTooltip = null;
+                return;
+            } else if (CurrentTooltip == null)
+            {
+                SkEditorAPI.Logs.Debug("Showing tooltip at line " + position.Value.Line + " with length " + tooltip.Length);
+
+                var flyout = new Flyout
+                {
+                    Content = tooltip.Tooltip,
+                    Placement = PlacementMode.LeftEdgeAlignedTop
+                };
+                flyout.ShowAt(editor);
+                
+                CurrentTooltip = (tooltip, flyout);
+            } else if (CurrentTooltip.Value.Item1 == tooltip)
+            {
+                SkEditorAPI.Logs.Debug("Updating location of tooltip at line " + position.Value.Line);
+                
+                var flyout = CurrentTooltip.Value.Item2;
+                flyout.ShowAt(editor);
+            } else
+            {
+                SkEditorAPI.Logs.Debug("Hiding tooltip at line " + position.Value.Line);
+                FlyoutBase.SetAttachedFlyout(editor, null);
+            }
+        };*/
     }
     
     public EventHandler OnParsed;
@@ -52,6 +89,9 @@ public class FileParser
     public bool IsParsed { get; private set; } = false;
     
     public List<Node> ParsedNodes { get; private set; } = new();
+    public List<TooltipInformation> Tooltips { get; private set; } = new();
+    
+    public (TooltipInformation, Flyout)? CurrentTooltip { get; private set; }
 
     public void Parse()
     {
@@ -67,7 +107,6 @@ public class FileParser
         OnParsed?.Invoke(this, EventArgs.Empty);
         SkEditorAPI.Addons.GetSelfAddon().ParserPanel.Panel.Refresh(ParsedNodes.OfType<SectionNode>().ToList());
         
-        
         SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} nodes, with {LastContext.Warnings.Count} warnings! [{LastContext.ParsedNodes.Count}]");
 
         HintGenerator.Controls.Clear();
@@ -78,7 +117,13 @@ public class FileParser
         {
             var node = pair.Item1;
             var warning = pair.Item2;
-            SkEditorAPI.Logs.Debug("Warning: " + warning + " at line " + node.Line);
+            if (SkEditorAPI.Core.GetAppConfig().IgnoredParserWarnings.Contains(warning.Identifier))
+            {
+                SkEditorAPI.Logs.Debug("Ignoring warning: " + warning + " at line " + node.Line);
+                continue;
+            }
+            
+            //SkEditorAPI.Logs.Debug("Warning: " + warning + " at line " + node.Line);
             var line = Editor.Document.GetLineByNumber(node.Line);
             
             var marker = TextMarkerService.Create(line.Offset, line.Length);
@@ -86,11 +131,15 @@ public class FileParser
             marker.MarkerColor = Colors.Orange;
             
             var offset = line.Offset + line.Length;
-            var panel = ParseContent(warning);
+            var panel = ParseContent(warning.Identifier);
             panel.Margin = new Thickness(5, 0, 0, 0);
             HintGenerator.Controls.Add((offset, panel));
             Editor.TextArea.TextView.Redraw();
         }
+        
+        Tooltips.Clear();
+        Tooltips.AddRange(LastContext.Tooltips);
+        //SkEditorAPI.Logs.Debug($"Gathered {Tooltips.Count} tooltips.");
         
         if (SkEditorAPI.Core.GetAppConfig().EnableFolding) 
             FoldingCreator.CreateFoldings(Editor, ParsedNodes);

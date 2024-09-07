@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Avalonia.Controls;
 using SkEditor.API;
 using SkEditor.Parser;
 using SkEditor.Parser.Elements;
@@ -65,6 +66,8 @@ public abstract partial class ExprProviderElement : Element
         {
             var key = match.Groups["key"].Value;
             Options.Add(new Option(key.TrimStart('@'), context.CurrentNode, match.Index, match.Length));
+            context.Tooltips.Add(new TooltipInformation(new TextBlock { Text = "Hello there: " + key }, 
+                context.CurrentNode.Line, match.Index, match.Length));
         }
         
         // Parse colors
