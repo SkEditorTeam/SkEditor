@@ -7,6 +7,9 @@ namespace SkEditor.Parser.Elements;
 
 public class SecCondition : ExprProviderElement
 {
+    public static readonly ParserWarning InvalidConditionPlacement
+        = new("invalid_condition_placement", "Invalid condition placement (must be after an if or else if)");
+    
     public enum ConditionalType {
         Else, 
         ElseIf, 
@@ -52,13 +55,13 @@ public class SecCondition : ExprProviderElement
             var previous = node.GetPreviousNode();
             if (previous == null || previous.Element is not SecCondition)
             {
-                context.Warning(node, "Else/ElseIf must come after an if");
+                context.Warning(node, InvalidConditionPlacement);
             }
             else
             {
                 var secCondition = (SecCondition) previous.Element;
                 if (secCondition.Type == ConditionalType.Else)
-                    context.Warning(node, "Invalid condition placement (must be after an if or else if)");
+                    context.Warning(node, InvalidConditionPlacement);
             }
             
             SkEditorAPI.Logs.Warning($"Previous: {previous?.Element?.Debug()} {previous?.Element?.GetType()}");

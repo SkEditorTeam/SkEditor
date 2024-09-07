@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SkEditor.API;
 
 namespace SkEditor.Parser.Elements;
 
 public partial class StructCommand : Element
 {
+    public static readonly ParserWarning CommandAlreadyExists 
+        = new("command_already_exists", "Another command with the same name already exists.");
     
     public string Name { get; set; }
     
@@ -43,13 +46,14 @@ public partial class StructCommand : Element
 
         // Parse the name
         var match = CommandRegex().Match(node.Key);
-        if (!match.Success) {
-            context.Warning(node, "Invalid command definition.");
+        if (!match.Success)
+        {
+            context.Warning(node, UnknownElement);
             return;
         }
         
         if (context.ParsedNodes.Any(n => n.Element is StructCommand c && c.Name == match.Groups[1].Value))
-            context.Warning(node, "Another command with the same name already exists.");
+            context.Warning(node, CommandAlreadyExists);
         
         Name = match.Groups[1].Value;
         
@@ -79,7 +83,7 @@ public partial class StructCommand : Element
     {
         return node is SectionNode
             && node.Key.StartsWith("command")
-            && node.Indent == 0;
+            && node.IsTopLevel;
     }
 
     [GeneratedRegex("(?i)^command\\s+/?(\\S+)\\s*(\\s+(.+))?$", RegexOptions.None, "fr-FR")]

@@ -20,6 +20,7 @@ public static class Registries
 
     
     public static readonly Registry<ParserElementData> ParserElements = new(); 
+    public static readonly Registry<ParserWarning> ParserWarnings = new();
     
     public static void Unload(IAddon addon)
     {
@@ -31,5 +32,6 @@ public static class Registries
         FileTypes.Unload(addon);
         
         ParserElements.Unload(addon);
+        ParserWarnings.Unload(addon);
     }
 }

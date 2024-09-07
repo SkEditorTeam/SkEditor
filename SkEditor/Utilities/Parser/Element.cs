@@ -1,4 +1,5 @@
-﻿using SkEditor.Utilities.Parser;
+﻿using SkEditor.API;
+using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Parser;
 
@@ -13,6 +14,9 @@ namespace SkEditor.Parser;
 /// </summary>
 public abstract class Element
 {
+    public static readonly ParserWarning UnknownElement 
+        = new ("unknown_element", "Can't understand this element.");
+    
     /// <summary>
     /// Load the element's data from a <see cref="Node"/>.
     /// Type of node should be checked in the Parse method instead.

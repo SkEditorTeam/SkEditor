@@ -46,7 +46,8 @@ public static class ElementParser
                     }
                     catch (ParsingException e)
                     {
-                        context.Errors.Add((node, e.Message));
+                        SkEditorAPI.Logs.Error($"An error occurred while parsing node '{node.Key}' at line {node.Line} with element '{elementType.Name}': {e.Message}");
+                        SkEditorAPI.Logs.Error(e.StackTrace);
                         return;
                     }
                     
@@ -58,7 +59,6 @@ public static class ElementParser
             {
                 SkEditorAPI.Logs.Fatal($"An error occurred while parsing node '{node.Key}' at line {node.Line} with element '{elementType.Name}': {e.Message}");
                 SkEditorAPI.Logs.Fatal(e.StackTrace);
-                context.Errors.Add((node, e.Message));
             }
         }
     }

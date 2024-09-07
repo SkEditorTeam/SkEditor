@@ -8,6 +8,10 @@ namespace SkEditor.Parser.Elements;
 
 public class StructOptions : Element
 {   
+    public static readonly ParserWarning MultipleOptionsSections 
+        = new("multiple_options_sections", "Only one options section is allowed.");
+    public static readonly ParserWarning OptionNodeNotSimple 
+        = new("option_node_not_simple", "Option node is not simple ('key: value').");
     
     public readonly List<OptionDefinition> Options = new();
     
@@ -17,7 +21,7 @@ public class StructOptions : Element
         if (anotherOptions != null && anotherOptions != node)
         {
             SkEditorAPI.Logs.Debug("Found multiple options sections.");
-            context.Warning(node, "Only one options section is allowed. Found another one at <line:" + anotherOptions.Line + ">.");
+            context.Warning(node, MultipleOptionsSections);
         }
         
         foreach (var optionNode in node as SectionNode)
@@ -32,7 +36,7 @@ public class StructOptions : Element
             }
             else
             {
-                context.Warning(optionNode, "Option node is not simple ('key: value').");
+                context.Warning(optionNode, OptionNodeNotSimple);
             }
         }
     }

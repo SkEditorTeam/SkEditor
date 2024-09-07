@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using SkEditor.API;
 using SkEditor.Parser;
+using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Parser;
 
@@ -8,21 +10,17 @@ public class ParsingContext
     public bool Debug { get; set; }
     public Node CurrentNode { get; set; }
 
-    public List<(Node, string)> Errors { get; } = new();
-    public List<(Node, string)> Warnings { get; } = new();
+    public List<(Node, ParserWarning)> Warnings { get; } = new();
     
     public List<Node> ParsedNodes { get; } = new();
     
     public Dictionary<string, object> Data { get; } = new();
     
-    public void Error(Node node, string message)
-    {
-        Errors.Add((node, message));
-    }
+    public List<TooltipInformation> Tooltips { get; } = new();
     
-    public void Warning(Node node, string message)
+    public void Warning(Node node, ParserWarning warning)
     {
-        Warnings.Add((node, message));
+        Warnings.Add((node, warning));
     }
-    
+
 }
