@@ -359,6 +359,9 @@ public class SkEditorSelfAddon : IAddon
         {
             var node = pair.Item1;
             var warning = pair.Item2;
+            if (SkEditorAPI.Core.GetAppConfig().IgnoredParserWarnings.TryGetValue(warning.Identifier, out var isEnabled) && isEnabled)
+                continue;
+            
             if (node.Line == args.Line)
             {
                 var size = 12 * args.Scale;

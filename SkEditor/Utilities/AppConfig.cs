@@ -34,7 +34,7 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private bool _checkForChanges = false;
     [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
     [ObservableProperty] private bool _isDevModeEnabled = false;
-    [ObservableProperty] private List<string> _ignoredParserWarnings = [];
+    [ObservableProperty] private Dictionary<string, bool> _ignoredParserWarnings = [];
 
     /// <summary>
     /// Represent the width of panels via their ID (<see cref="Registries.SidebarPanels"/>

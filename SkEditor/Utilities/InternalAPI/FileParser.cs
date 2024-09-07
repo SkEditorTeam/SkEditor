@@ -117,7 +117,7 @@ public class FileParser
         {
             var node = pair.Item1;
             var warning = pair.Item2;
-            if (SkEditorAPI.Core.GetAppConfig().IgnoredParserWarnings.Contains(warning.Identifier))
+            if (SkEditorAPI.Core.GetAppConfig().IgnoredParserWarnings.TryGetValue(warning.Identifier, out var isIgnored) || isIgnored)
             {
                 SkEditorAPI.Logs.Debug("Ignoring warning: " + warning + " at line " + node.Line);
                 continue;
@@ -131,7 +131,7 @@ public class FileParser
             marker.MarkerColor = Colors.Orange;
             
             var offset = line.Offset + line.Length;
-            var panel = ParseContent(warning.Identifier);
+            var panel = ParseContent(warning.Message);
             panel.Margin = new Thickness(5, 0, 0, 0);
             HintGenerator.Controls.Add((offset, panel));
             Editor.TextArea.TextView.Redraw();
