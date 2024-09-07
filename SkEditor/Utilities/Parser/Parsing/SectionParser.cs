@@ -11,9 +11,9 @@ public static class SectionParser
     
     public static List<Node> Parse(string[] lines, bool debug = false)
     {
-        List<Node> nodes = new List<Node>();
-        Stack<(SectionNode node, int indent)> sectionStack = new Stack<(SectionNode node, int indent)>();
-        Regex simpleNodeRegex = new Regex(@"^(\s*)(.+)\s*:\s*(.+)$");
+        List<Node> nodes = new();
+        Stack<(SectionNode node, int indent)> sectionStack = new();
+        Regex simpleNodeRegex = new Regex(@"^(\s*)(.+?)\s*:\s*([^:]+)$");
         Regex sectionNodeRegex = new Regex(@"^(\s*)(.+)\s*:$");
 
         for (int i = 0; i < lines.Length; i++)
@@ -63,6 +63,27 @@ public static class SectionParser
             if (node.IsSection)
             {
                 IndentChildren((SectionNode) node, 0);
+            }
+        }
+        
+        void DebugNode(Node node, int indent)
+        {
+            SkEditorAPI.Logs.Debug($"{new string(' ', indent * 2)}{node.GetType().Name}: {node.Key}");
+            if (node is SectionNode sectionNode)
+            {
+                foreach (var child in sectionNode)
+                {
+                    DebugNode(child, indent + 1);
+                }
+            }
+        }
+        
+        if (!debug)
+        {
+            SkEditorAPI.Logs.Debug("--- Parsed nodes:");
+            foreach (var node in nodes)
+            {
+                DebugNode(node, 0);
             }
         }
         
