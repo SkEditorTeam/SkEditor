@@ -22,7 +22,6 @@ public partial class ParserSettingsViewModel : ObservableObject
                 OnPropertyChanged();
                     
                 SkEditorAPI.Logs.Debug($"Setting warning {Warning.Identifier} to {value}");
-                //SkEditorAPI.Core.GetAppConfig().IgnoredParserWarnings.Add(Warning.Identifier, value);
                 var config = SkEditorAPI.Core.GetAppConfig();
                 config.IgnoredParserWarnings[Warning.Identifier] = value;
             }

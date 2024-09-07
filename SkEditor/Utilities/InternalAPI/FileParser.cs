@@ -38,12 +38,6 @@ public class FileParser
         Editor.TextArea.TextView.ElementGenerators.Add(HintGenerator = new HintGenerator());
         Editor.TextChanged += (sender, args) =>
         {
-            if (HintGenerator.Controls.Count > 0)
-            {
-                HintGenerator.Controls.Clear();
-                Editor.TextArea.TextView.Redraw();   
-            }
-            
             IsParsed = false;
         };
         /*Editor.PointerHover += (sender, args) =>
@@ -117,23 +111,24 @@ public class FileParser
         {
             var node = pair.Item1;
             var warning = pair.Item2;
-            if (SkEditorAPI.Core.GetAppConfig().IgnoredParserWarnings.TryGetValue(warning.Identifier, out var isIgnored) || isIgnored)
+            if (!IsWarningIgnored(warning.Identifier))
+            {
+                SkEditorAPI.Logs.Debug("Warning: " + warning.Message + " at line " + node.Line);
+                var line = Editor.Document.GetLineByNumber(node.Line);
+            
+                var marker = TextMarkerService.Create(line.Offset, line.Length);
+                marker.MarkerTypes = TextMarkerTypes.SquigglyUnderline;
+                marker.MarkerColor = Colors.Orange;
+            
+                var offset = line.Offset + line.Length;
+                var panel = ParseContent(warning.Message);
+                panel.Margin = new Thickness(5, 0, 0, 0);
+                HintGenerator.Controls.Add((offset, panel));
+            }
+            else
             {
                 SkEditorAPI.Logs.Debug("Ignoring warning: " + warning + " at line " + node.Line);
-                continue;
             }
-            
-            //SkEditorAPI.Logs.Debug("Warning: " + warning + " at line " + node.Line);
-            var line = Editor.Document.GetLineByNumber(node.Line);
-            
-            var marker = TextMarkerService.Create(line.Offset, line.Length);
-            marker.MarkerTypes = TextMarkerTypes.SquigglyUnderline;
-            marker.MarkerColor = Colors.Orange;
-            
-            var offset = line.Offset + line.Length;
-            var panel = ParseContent(warning.Message);
-            panel.Margin = new Thickness(5, 0, 0, 0);
-            HintGenerator.Controls.Add((offset, panel));
             Editor.TextArea.TextView.Redraw();
         }
         
@@ -166,8 +161,24 @@ public class FileParser
 
     public StackPanel ParseContent(string input)
     {
-        var panel = new StackPanel { Orientation = Orientation.Horizontal };
+        return new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Children =
+            {
+                new TextBlock {
+                    Text = input, 
+                    Foreground = Brushes.Orange,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(15, 0, 0, 0),
+                    FontStyle = FontStyle.Italic,
+                    Opacity = 0.6
+                }
+            }
+        };
         
+        /*
         var regex = new Regex(@"<line:(\d+)>");
         var matches = regex.Matches(input);
         
@@ -225,7 +236,7 @@ public class FileParser
             panel.Children.Add(textBlock);
         }
         
-        return panel;
+        return panel;*/
     }
 
     public Node? FindNodeAtLine(int line, bool deep = false)
@@ -274,6 +285,12 @@ public class FileParser
         Editor.Document.Replace(offset, length, content);
         
         Parse();
+    }
+    
+    public static bool IsWarningIgnored(string warning)
+    {
+        var dict = SkEditorAPI.Core.GetAppConfig().IgnoredParserWarnings;
+        return dict.ContainsKey(warning) && dict[warning];
     }
 }
 

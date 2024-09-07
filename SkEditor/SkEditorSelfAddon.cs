@@ -359,7 +359,7 @@ public class SkEditorSelfAddon : IAddon
         {
             var node = pair.Item1;
             var warning = pair.Item2;
-            if (SkEditorAPI.Core.GetAppConfig().IgnoredParserWarnings.TryGetValue(warning.Identifier, out var isEnabled) && isEnabled)
+            if (FileParser.IsWarningIgnored(warning.Identifier))
                 continue;
             
             if (node.Line == args.Line)
