@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.Files;
@@ -55,10 +56,17 @@ public class Folder : StorageElement
         Process.Start(new ProcessStartInfo(StorageFolderPath) { UseShellExecute = true });
     }
 
-    public void DeleteFolder()
+    public async void DeleteFolder()
     {
+        var result = await SkEditorAPI.Windows.ShowDialog("Delete File",
+            $"Are you sure you want to delete {Name} from the file system?",
+            icon: Symbol.Delete, primaryButtonText: "Delete", cancelButtonText: "Cancel", translate: false);
+
+        if (result != ContentDialogResult.Primary) return;
+
         Directory.Delete(StorageFolderPath, true);
-        Parent.Children.Remove(this);
+        Parent?.Children?.Remove(this);
+        if (Parent is null) CloseProject();
     }
 
     private static void CloseProject()
