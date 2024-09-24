@@ -53,7 +53,7 @@ public class SkEditorSelfAddon : IAddon
 
     public void OnEnable()
     {
-        #region Registries - Parser Elements 
+        #region Registries - Parser Elements & Events
         
         Registries.ParserElements.Register(new RegistryKey(this, "StructEvent"),
             new ParserElementData(typeof(StructEvent), 1000));
@@ -73,6 +73,14 @@ public class SkEditorSelfAddon : IAddon
             new ParserElementData(typeof(UnknownEffect), 5000));
         
         Registries.ParserElements.RegisterWarnings(this);
+
+        SkEditorAPI.Events.OnFileOpened += (sender, args) =>
+        {
+            if (!args.OpenedFile.IsEditor)
+                return;
+            var parser = args.OpenedFile["Parser"] as FileParser;
+            parser.Parse();
+        };
 
         #endregion
         
