@@ -1,6 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Parser.Elements;
 
@@ -23,6 +29,11 @@ public partial class StructFunction : Element
         var parameters = new List<FunctionParameter>();
         
         var rawParameters = match.Groups["parameters"].Value.Split(",");
+        if (rawParameters.Length == 1 && string.IsNullOrWhiteSpace(rawParameters[0]))
+        {
+            rawParameters = [];
+        }
+        
         foreach (var rawParameter in rawParameters)
         {
             var parameterMatch = ParameterRegex().Match(rawParameter);
@@ -36,7 +47,7 @@ public partial class StructFunction : Element
             var parameterType = parameterMatch.Groups["type"].Value;
             var defaultValue = parameterMatch.Groups["defaultValue"].Value;
             parameters.Add(new FunctionParameter(parameterName, parameterType, defaultValue));
-        }
+        }   
 
         InternalFunction = new Function(name, returnType, parameters, isLocal);
     }
@@ -76,4 +87,8 @@ public partial class StructFunction : Element
     {
         return $"{(InternalFunction.IsLocal ? "local " : "")}function {InternalFunction.Name}({string.Join(", ", InternalFunction.Parameters)}) :: {InternalFunction.ReturnType}";
     }
+
+    public override IconSource? IconSource => new SymbolIconSource() { Symbol = Symbol.Braces };
+    
+    public override string DisplayString => Translation.Get("CodeParserFilterTypeFunctions");
 }
