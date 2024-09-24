@@ -20,7 +20,7 @@ public static class SectionParser
         {
             var line = lines[i];
             var trimmedLine = line.Trim();
-            if (string.IsNullOrEmpty(trimmedLine))
+            if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith("#"))
             {
                 if (debug) SkEditorAPI.Logs.Debug($"--- Skipping empty line {i + 1}");
                 continue;
