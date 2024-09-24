@@ -28,7 +28,7 @@ public static class SectionParser
 
             if (debug) SkEditorAPI.Logs.Debug($"--- Processing line {i + 1}: {line}");
 
-            var simpleMatch = simpleNodeRegex.Match(line);
+            var simpleMatch = simpleNodeRegex.Match(line.TrimEnd());
             if (simpleMatch.Success)
             {
                 var indent = simpleMatch.Groups[1].Value.Length;
@@ -40,7 +40,7 @@ public static class SectionParser
                 continue;
             }
 
-            var sectionMatch = sectionNodeRegex.Match(line);
+            var sectionMatch = sectionNodeRegex.Match(line.TrimEnd());
             if (sectionMatch.Success)
             {
                 var indent = sectionMatch.Groups[1].Value.Length;
