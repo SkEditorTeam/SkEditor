@@ -40,15 +40,19 @@
 				
                 <ComboBox Margin="5 0" Grid.Column="1" x:DataType="sidebar:ParserFilterViewModel" 
                           SelectedIndex="{Binding SelectedFilterIndex}"
+                          ItemsSource="{Binding AvailableSections}"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch"
                           Name="TypeFilterBox"
                           ToolTip.Tip="{DynamicResource CodeParserFilterType}">
-                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeAny}" Tag="-" />
-                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeFunctions}" Tag="functions" />
-                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeEvents}" Tag="events" />
-                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeOptions}" Tag="options" />
-                    <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeCommands}" Tag="commands" />
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                <ui:IconSourceElement IconSource="{Binding IconSource}" />
+                                <TextBlock Text="{Binding DisplayString}" /> 
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Grid.Column="2" Height="30" Width="30" Padding="0" Name="ClearSearch"
                         ToolTip.Tip="{DynamicResource CodeParserClearFilters}">
@@ -58,11 +62,11 @@
             <ScrollViewer Name="ScrollViewer" Grid.Row="4" HorizontalAlignment="Stretch"
 						  VerticalAlignment="Stretch" VerticalContentAlignment="Top"
 						  HorizontalContentAlignment="Center" Margin="5,0">
-                <ItemsRepeater Name="ItemsRepeater">
+                <ItemsRepeater x:DataType="sidebar:ParserFilterViewModel" ItemsSource="{Binding FilteredSections}">
                     <ItemsRepeater.ItemTemplate>
-                        <DataTemplate DataType="sidebar:ParserSectionNode">
-                            <Expander Margin="0,5">
-                                <Interaction.Behaviors>
+                        <DataTemplate>
+                            <ui:SettingsExpander IsClickEnabled="True" Margin="5" P>
+                                <!-- <Interaction.Behaviors>
                                     <EventTriggerBehavior EventName="PointerEntered">
                                         <EventTriggerBehavior.Actions>
                                             <InvokeCommandAction Command="{Binding OnSectionPointerEntered}" />
@@ -73,23 +77,14 @@
                                             <InvokeCommandAction Command="{Binding OnSectionPointerExited}" />
                                         </EventTriggerBehavior.Actions>
                                     </EventTriggerBehavior>
-                                </Interaction.Behaviors>
-                                <Expander.Header>
+                                </Interaction.Behaviors> -->
+                                <ui:SettingsExpander.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <ui:IconSourceElement Width="20" Height="20" IconSource="{Binding Icon}" />
-                                        <TextBlock Text="{Binding Name}" Margin="10,0,0,0" FontWeight="DemiBold"/>
+                                        <ui:IconSourceElement Width="20" Height="20" IconSource="{Binding  Element.IconSource}" />
+                                        <TextBlock Text="{Binding Key}" Margin="10,0,0,0" FontWeight="DemiBold"/>
                                     </StackPanel>
-                                </Expander.Header>
-                                <StackPanel Spacing="10">
-                                    <Grid ColumnDefinitions="*,*">
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding LinesDisplay}" />
-                                        <Button Grid.Column="1" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch"
-                                                Content="{DynamicResource CodeParserNavigate}"
-                                                Name="NavigateToButton" Command="{Binding NavigateToCommand}" />
-                                    </Grid>
-                                    <Separator Margin="0,3"/>
-                                </StackPanel >
-                            </Expander>
+                                </ui:SettingsExpander.Header>
+                            </ui:SettingsExpander>
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>

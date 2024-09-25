@@ -27,64 +27,9 @@ public partial class ParserSidebarPanel : UserControl
         nodes.ForEach(Nodes.Add);
 
         var viewModel = (ParserFilterViewModel) DataContext;
-        var filteredSections = Nodes
-            .Where(node => string.IsNullOrWhiteSpace(viewModel.SearchText) || node.Key.Contains(viewModel.SearchText))
-            .ToList();
-        
-        if (viewModel.SelectedFilterIndex != 0)
-        {
-            var type = viewModel.SelectedFilterIndex switch
-            {
-                1 => StructureType.Function,
-                2 => StructureType.Event,
-                3 => StructureType.Options,
-                4 => StructureType.Command,
-                _ => StructureType.Other
-            };
-            filteredSections = filteredSections.Where(section =>
-            {
-                if (section.Element is StructCommand && type == StructureType.Command)
-                    return true;
-                if (section.Element is StructEvent && type == StructureType.Event)
-                    return true;
-                
-                // TODO: Implement the function structure
-                /*if (section.Element is StructFunction && type == SectionType.Function)
-                    return true;*/
-                
-                if (section.Element is StructOptions && type == StructureType.Options)
-                    return true;
-                
-                return type == StructureType.Other;
-            }).ToList();
-        }
-        ItemsRepeater.ItemsSource = filteredSections.Select(section => 
-            new ParserSectionNode(section, Parser, GetSectionType(section)));
+        viewModel.AllSections = new ObservableCollection<Node>(nodes);
 
         UpdateInformationBox();
-    }
-
-    public StructureType GetSectionType(SectionNode section)
-    {
-        if (section.Element is StructCommand)
-            return StructureType.Command;
-        if (section.Element is StructEvent)
-            return StructureType.Event;
-        if (section.Element is StructOptions)
-            return StructureType.Options;
-        /*if (section.Element is StructFunction)
-            return StructureType.Function;*/
-        
-        return StructureType.Other;
-    }
-
-    public enum StructureType
-    {
-        Function,
-        Event,
-        Options,
-        Command,
-        Other
     }
 
     public ParserSidebarPanel()
@@ -143,6 +88,19 @@ public partial class ParserSidebarPanel : UserControl
         Refresh([.. Nodes]);
     }
 
+    public void UpdateSectionTypeChoice(List<SectionNode> nodes)
+    {
+        var structures = new List<Element>();
+        foreach (var node in nodes)
+            if (node.Element != null && structures.All(el => el.GetType() != node.Element.GetType())) 
+                structures.Add(node.Element);
+
+        var viewModel = (ParserFilterViewModel) DataContext;
+        var oldIndex = viewModel.SelectedFilterIndex;
+        viewModel.AvailableSections = new ObservableCollection<Element>(structures);
+        viewModel.SelectedFilterIndex = oldIndex;
+    }
+    
     public void UpdateInformationBox(bool notifyUnparsing = false)
     {
         if (!CodeParserEnabled)
@@ -181,17 +139,17 @@ public partial class ParserSidebarPanel : UserControl
     
 }
 
-public record ParserSectionNode(SectionNode SectionNode, FileParser Parser, ParserSidebarPanel.StructureType Type)
+public record ParserSectionNode(SectionNode SectionNode, FileParser Parser)
 {
     public string Name => SectionNode.Key;
-    public IconSource Icon => Type switch
+    /*public IconSource Icon => Type switch
     {
         ParserSidebarPanel.StructureType.Command => SkEditorAPI.Core.GetApplicationResource("MagicWandIcon") as IconSource,
         ParserSidebarPanel.StructureType.Event => SkEditorAPI.Core.GetApplicationResource("LightingIcon") as IconSource,
         ParserSidebarPanel.StructureType.Function => SkEditorAPI.Core.GetApplicationResource("FunctionIcon") as IconSource,
         ParserSidebarPanel.StructureType.Options => new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 20 },
         _ => SkEditorAPI.Core.GetApplicationResource("CodeIcon") as IconSource
-    };
+    };*/
 
     public string LinesDisplay => $"From {SectionNode.Line} to {SectionNode.FindLastNode().Line}";
 

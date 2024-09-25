@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Parser.Elements;
 
@@ -115,4 +119,8 @@ public partial class StructCommand : Element
             throw new NotImplementedException();
         }
     }
+
+    public override IconSource? IconSource => new SymbolIconSource() { Symbol = Symbol.Code };
+
+    public override string DisplayString => Translation.Get("CodeParserFilterTypeCommands");
 }

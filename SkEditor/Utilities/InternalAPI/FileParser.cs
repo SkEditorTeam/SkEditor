@@ -100,6 +100,7 @@ public class FileParser
         IsParsed = true;
         OnParsed?.Invoke(this, EventArgs.Empty);
         SkEditorAPI.Addons.GetSelfAddon().ParserPanel.Panel.Refresh(ParsedNodes.OfType<SectionNode>().ToList());
+        SkEditorAPI.Addons.GetSelfAddon().ParserPanel.Panel.UpdateSectionTypeChoice(ParsedNodes.OfType<SectionNode>().ToList());
         
         SkEditorAPI.Logs.Debug($"Parsed {ParsedNodes.Count} nodes, with {LastContext.Warnings.Count} warnings! [{LastContext.ParsedNodes.Count}]");
 

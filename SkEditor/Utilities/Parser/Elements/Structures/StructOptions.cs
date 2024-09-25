@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Parser;
 using SkEditor.Parser.Elements;
+using SkEditor.Utilities;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Parser.Elements;
 
@@ -66,4 +70,8 @@ public class StructOptions : Element
         return "Options[" + Options.Count + "]:" +
                string.Join("\n  - ", Options.Select(x => x.Key + ": " + x.Value));
     }
+
+    public override IconSource? IconSource => new SymbolIconSource() { Symbol = Symbol.BracesVariable };
+    
+    public override string DisplayString => Translation.Get("CodeParserFilterTypeOptions");
 }

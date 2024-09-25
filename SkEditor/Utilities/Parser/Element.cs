@@ -1,4 +1,5 @@
-﻿using SkEditor.API;
+﻿using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 using SkEditor.Utilities.Parser;
 
 namespace SkEditor.Parser;
@@ -37,4 +38,17 @@ public abstract class Element
     /// </summary>
     /// <returns>The display string for this section.</returns>
     public virtual string? SectionDisplay() => null;
+    
+    /// <summary>
+    /// Get the icon source for this element.
+    /// Thise will only be used when that element is considered as a structure
+    /// (e.g. a function, an event, a command, etc.) to be displayed in the
+    /// parser sidebar results.
+    /// </summary>
+    public virtual IconSource? IconSource => null;
+    
+    /// <summary>
+    /// Get the display string for this element.
+    /// </summary>
+    public virtual string DisplayString => GetType().Name;
 }
