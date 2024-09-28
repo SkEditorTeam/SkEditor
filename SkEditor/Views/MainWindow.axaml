@@ -23,7 +23,7 @@
 			<Setter Property="ClipToBounds" Value="True"/>
 		</Style>
 		<Style Selector="ui|TabView#TabControl /template/ uip|TabViewListView#TabListView">
-			<Setter Property="Margin" Value="-7,0,0,0"/>
+			<Setter Property="Margin" Value="-10,0,0,0"/>
 		</Style>
 		<Style Selector="ui|TabViewItem">
 			<Setter Property="BorderThickness" Value="1,1,1,0"/>
