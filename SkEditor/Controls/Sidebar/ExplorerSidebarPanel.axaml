@@ -5,8 +5,7 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:ar="clr-namespace:SkEditor.Utilities.Projects"
              xmlns:elements="clr-namespace:SkEditor.Utilities.Projects.Elements"
-             x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel"
-			 Margin="10,0,0,0">
+             x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel">
     
     <UserControl.Styles>
         <Style Selector="Button.barButton">

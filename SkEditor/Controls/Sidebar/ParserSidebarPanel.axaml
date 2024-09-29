@@ -3,8 +3,7 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:parser="clr-namespace:SkEditor.Utilities.Parser"
              xmlns:viewModels="clr-namespace:SkEditor.Utilities.Parser.ViewModels"
-             x:Class="SkEditor.Controls.Sidebar.ParserSidebarPanel"
-			 Margin="10,0,0,0">
+             x:Class="SkEditor.Controls.Sidebar.ParserSidebarPanel">
     
     <UserControl.Styles>
         <Style Selector="Button.barButton">
