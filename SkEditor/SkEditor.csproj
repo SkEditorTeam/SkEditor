@@ -105,6 +105,10 @@
 		<Compile Update="Controls\EnchantSelector.axaml.cs">
 			<DependentUpon>EnchantSelector.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\TerminalWindow.axaml.cs">
+		  <SubType>Code</SubType>
+		  <DependentUpon>TerminalWindow.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Views\GoToLineWindow.axaml.cs">
 		  <DependentUpon>GoToLineWindow.axaml</DependentUpon>
 		</Compile>
@@ -173,6 +177,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AvaloniaXaml Update="Views\TerminalWindow.axaml">
+	    <SubType>Designer</SubType>
+	  </AvaloniaXaml>
 	  <AvaloniaXaml Update="Views\ColorSelectionWindow.axaml">
 	    <SubType>Designer</SubType>
 	  </AvaloniaXaml>

@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+        mc:Ignorable="d"
+        x:Class="SkEditor.Views.TerminalWindow" Icon="/Assets/SkEditor.ico"
+        Title="Terminal" Height="400" Width="800" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+
+	<Window.Styles>
+		<Style Selector="TextBox.readonly">
+			<Setter Property="Background" Value="{DynamicResource TextControlBackgroundFocused}"/>
+			<Setter Property="Foreground" Value="#cccccc"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushFocused}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="Padding" Value="5"/>
+			<Setter Property="FontFamily" Value="{DynamicResource JetBrainsFont}"/>
+			<Setter Property="CaretBrush" Value="Transparent"/>
+
+			<Style Selector="^:pointerover">
+				<Style Selector="^ /template/ Border#PART_BorderElement">
+					<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushFocused}"/>
+					<Setter Property="Background" Value="{DynamicResource TextControlBackgroundFocused}" />
+				</Style>
+			</Style>
+		</Style>
+
+		<Style Selector="TextBox.readonly /template/ Border#PART_BorderElement">
+			<Setter Property="BorderBrush" Value="#1f1f1f"/>
+		</Style>
+	</Window.Styles>
+
+	<Grid RowDefinitions="*,auto" Margin="15">
+		<TextBox Name="OutputTextBox" Grid.Row="0" Classes="readonly" IsReadOnly="True"/>
+
+		<TextBox Name="InputTextBox" Grid.Row="1" Margin="0,10,0,0"/>
+	</Grid>
+</Window>
