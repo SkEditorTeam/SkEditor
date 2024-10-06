@@ -1,15 +1,19 @@
-using Avalonia.Input;
-using Avalonia.Media;
-using Avalonia.Threading;
-using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Windowing;
-using Serilog;
 using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Avalonia.Input;
+using Avalonia.Threading;
+using FluentAvalonia.UI.Windowing;
+using Serilog;
 
 namespace SkEditor.Views;
+
 public partial class TerminalWindow : AppWindow
 {
+    private StreamWriter _inputWriter;
     private Process _process;
 
     public TerminalWindow()
@@ -19,6 +23,11 @@ public partial class TerminalWindow : AppWindow
 
         LoadTerminal();
         AssignEvents();
+    }
+
+    private static Encoding GetTerminalEncoding()
+    {
+        return Encoding.GetEncoding(CultureInfo.CurrentCulture.TextInfo.OEMCodePage);
     }
 
     private void LoadTerminal()
@@ -31,15 +40,22 @@ public partial class TerminalWindow : AppWindow
 
     private void InitializeProcess()
     {
+        Encoding encoding = GetTerminalEncoding();
+
         ProcessStartInfo startInfo = new()
         {
             FileName = "cmd.exe",
+            UseShellExecute = false,
+            CreateNoWindow = true,
+
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+
+            StandardOutputEncoding = encoding,
+            StandardErrorEncoding = encoding,
+
+            WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
         };
 
         _process = new Process
@@ -51,45 +67,57 @@ public partial class TerminalWindow : AppWindow
 
     private void SetupProcessHandlers()
     {
-        _process.OutputDataReceived += HandleOutput;
-        _process.ErrorDataReceived += HandleOutput;
+        Task.Run(() => ReadAsync(_process.StandardOutput));
+        Task.Run(() => ReadAsync(_process.StandardError));
 
-        _process.BeginOutputReadLine();
-        _process.BeginErrorReadLine();
+        _inputWriter = new StreamWriter(_process.StandardInput.BaseStream, GetTerminalEncoding())
+        {
+            AutoFlush = true
+        };
     }
 
-    private void HandleOutput(object sender, DataReceivedEventArgs e)
+    private async Task ReadAsync(StreamReader reader)
     {
-        Dispatcher.UIThread.InvokeAsync(() => OutputTextBox.Text += e.Data + Environment.NewLine);
+        while (!_process.HasExited)
+        {
+            char[] buffer = new char[1024];
+
+            int bytesRead = await reader.ReadAsync(buffer, 0, buffer.Length);
+            if (bytesRead <= 0)
+            {
+                continue;
+            }
+
+            string output = new(buffer, 0, bytesRead);
+
+            Dispatcher.UIThread.Invoke(() => OutputTextBox.Text += output);
+        }
     }
 
     private void AssignEvents()
     {
-        InputTextBox.KeyDown += (sender, e) =>
+        InputTextBox.KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Enter)
+            if (e.Key != Key.Enter)
             {
-                var text = InputTextBox.Text;
-                InputTextBox.Text = string.Empty;
-
-                _process.StandardInput.WriteLine(text);
-                _process.StandardInput.Flush();
+                return;
             }
+
+            _inputWriter.WriteLine(InputTextBox.Text);
+            InputTextBox.Text = string.Empty;
         };
 
-        Closing += (sender, e) =>
+        Closing += (_, _) =>
         {
             try
             {
-                _process.StandardInput.Close();
+                _inputWriter.Close();
 
                 if (!_process.WaitForExit(1000))
                 {
-                    _process.Kill(entireProcessTree: true);
+                    _process.Kill(true);
                 }
 
-                _process.CancelOutputRead();
-                _process.CancelErrorRead();
                 _process.Dispose();
             }
             catch (Exception ex)
