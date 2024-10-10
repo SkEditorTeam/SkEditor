@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
@@ -23,6 +24,8 @@ public partial class TerminalWindow : AppWindow
 
         LoadTerminal();
         AssignEvents();
+
+        OutputTextBox.TextArea.Caret.CaretBrush = Brushes.Transparent;
     }
 
     private static Encoding GetTerminalEncoding()
