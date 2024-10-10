@@ -24,7 +24,7 @@
             </Style>
 			
 			<Style Selector="^ Border">
-                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
             </Style>
         </Style>
     </Window.Styles>
