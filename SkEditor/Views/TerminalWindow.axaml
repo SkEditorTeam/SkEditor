@@ -15,13 +15,16 @@
             <Setter Property="Foreground" Value="#cccccc" />
             <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}" />
             <Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
-            <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
             <Setter Property="Padding" Value="{DynamicResource TextControlThemePadding}" />
             <Setter Property="FontFamily" Value="{DynamicResource JetBrainsFont}" />
 
             <Style Selector="^ ScrollViewer > aee|TextArea">
                 <Setter Property="SelectionBrush" Value="{DynamicResource TextControlSelectionHighlightColor}" />
                 <Setter Property="SelectionForeground" Value="{DynamicResource TextOnAccentFillColorSelectedTextBrush}" />
+            </Style>
+			
+			<Style Selector="^ Border">
+                <Setter Property="CornerRadius" Value="5" />
             </Style>
         </Style>
     </Window.Styles>
