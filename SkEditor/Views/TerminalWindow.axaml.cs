@@ -32,6 +32,9 @@ public partial class TerminalWindow : AppWindow
         AssignEvents();
 
         OutputTextBox.TextArea.Caret.CaretBrush = Brushes.Transparent;
+
+        OutputTextBox.Options.EnableHyperlinks = false;
+        OutputTextBox.Options.AllowScrollBelowDocument = false;
     }
 
     [GeneratedRegex(CrSplitPattern)]
@@ -110,7 +113,14 @@ public partial class TerminalWindow : AppWindow
     {
         lock (_lock)
         {
+            bool atEnd = OutputTextBox.ExtentHeight <= OutputTextBox.VerticalOffset + OutputTextBox.ViewportHeight;
+
             Array.ForEach(CrSplitter().Split(text), AppendPart);
+
+            if (atEnd)
+            {
+                OutputTextBox.ScrollToEnd();
+            }
         }
     }
 
