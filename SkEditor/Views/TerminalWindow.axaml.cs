@@ -126,26 +126,21 @@ public partial class TerminalWindow : AppWindow
 
     private void AppendPart(string part)
     {
-        if (part.StartsWith("\r\n"))
-        {
-            OutputTextBox.Text += part;
-            OutputTextBox.CaretOffset = OutputTextBox.Text.Length;
-            return;
-        }
-
         TextDocument document = OutputTextBox.Document;
         DocumentLine caretLine = document.GetLineByOffset(OutputTextBox.CaretOffset);
+        int offset = caretLine.Offset;
+        int endOffset = caretLine.EndOffset;
 
         if (part.Length > 0 && part.First() == '\r')
         {
-            OutputTextBox.CaretOffset = caretLine.Offset;
+            OutputTextBox.CaretOffset = offset;
             part = part[1..];
         }
 
         if (part.Length > 0 && part.First() == '\n')
         {
             OutputTextBox.Document.Text += '\n';
-            OutputTextBox.CaretOffset = caretLine.EndOffset + 1;
+            OutputTextBox.CaretOffset = endOffset + 1;
             part = part[1..];
         }
 
