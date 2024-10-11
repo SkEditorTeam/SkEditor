@@ -2,11 +2,14 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
+using AvaloniaEdit.Document;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
 
@@ -14,6 +17,7 @@ namespace SkEditor.Views;
 
 public partial class TerminalWindow : AppWindow
 {
+    private readonly object _lock = new ();
     private StreamWriter _inputWriter;
     private Process _process;
 
@@ -93,8 +97,54 @@ public partial class TerminalWindow : AppWindow
 
             string output = new(buffer, 0, bytesRead);
 
-            Dispatcher.UIThread.Invoke(() => OutputTextBox.Text += output);
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                lock (_lock)
+                {
+                    foreach (string part in Regex.Split(output, "(?=\r)"))
+                    {
+                        AppendPart(part);
+                    }
+                }
+            });
         }
+    }
+
+    private void AppendPart(string part)
+    {
+        if (part.StartsWith("\r\n"))
+        {
+            OutputTextBox.Text += part;
+            OutputTextBox.CaretOffset = OutputTextBox.Text.Length;
+            return;
+        }
+
+        TextDocument document = OutputTextBox.Document;
+        DocumentLine caretLine = document.GetLineByOffset(OutputTextBox.CaretOffset);
+
+        if (part.Length > 0 && part.First() == '\r')
+        {
+            OutputTextBox.CaretOffset = caretLine.Offset;
+            part = part[1..];
+        }
+
+        if (part.Length > 0 && part.First() == '\n')
+        {
+            OutputTextBox.Document.Text += '\n';
+            OutputTextBox.CaretOffset = caretLine.NextLine.Offset;
+            part = part[1..];
+        }
+
+        if (part.Length <= 0)
+        {
+            return;
+        }
+
+        int caretOffset = OutputTextBox.CaretOffset;
+        int lineLength = document.GetLineByOffset(caretOffset).EndOffset - caretOffset;
+
+        document.Replace(caretOffset, Math.Min(part.Length, lineLength), part);
+        OutputTextBox.CaretOffset = OutputTextBox.Text.Length;
     }
 
     private void AssignEvents()
