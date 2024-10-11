@@ -131,7 +131,7 @@ public partial class TerminalWindow : AppWindow
         if (part.Length > 0 && part.First() == '\n')
         {
             OutputTextBox.Document.Text += '\n';
-            OutputTextBox.CaretOffset = caretLine.NextLine.Offset;
+            OutputTextBox.CaretOffset = caretLine.EndOffset + 1;
             part = part[1..];
         }
 
