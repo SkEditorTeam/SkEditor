@@ -17,7 +17,9 @@ namespace SkEditor.Views;
 
 public partial class TerminalWindow : AppWindow
 {
-    private readonly object _lock = new ();
+    private const string CrSplitPattern = "(?=\r)";
+
+    private readonly object _lock = new();
     private StreamWriter _inputWriter;
     private Process _process;
 
@@ -31,6 +33,9 @@ public partial class TerminalWindow : AppWindow
 
         OutputTextBox.TextArea.Caret.CaretBrush = Brushes.Transparent;
     }
+
+    [GeneratedRegex(CrSplitPattern)]
+    private static partial Regex CrSplitter();
 
     private static Encoding GetTerminalEncoding()
     {
@@ -97,16 +102,15 @@ public partial class TerminalWindow : AppWindow
 
             string output = new(buffer, 0, bytesRead);
 
-            Dispatcher.UIThread.Invoke(() =>
-            {
-                lock (_lock)
-                {
-                    foreach (string part in Regex.Split(output, "(?=\r)"))
-                    {
-                        AppendPart(part);
-                    }
-                }
-            });
+            Dispatcher.UIThread.Invoke(() => AppendText(output));
+        }
+    }
+
+    private void AppendText(string text)
+    {
+        lock (_lock)
+        {
+            Array.ForEach(CrSplitter().Split(text), AppendPart);
         }
     }
 
