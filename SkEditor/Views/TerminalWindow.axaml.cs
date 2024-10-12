@@ -70,7 +70,14 @@ public partial class TerminalWindow : AppWindow
             StandardOutputEncoding = encoding,
             StandardErrorEncoding = encoding,
 
-            WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+            WorkingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+
+            EnvironmentVariables =
+            {
+                ["COLORTERM"] = "",
+                ["NO_COLOR"] = "1",
+                ["TERM"] = "dumb"
+            }
         };
 
         _process = new Process
