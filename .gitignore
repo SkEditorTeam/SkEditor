@@ -367,3 +367,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 .idea/
+
+# nix
+.direnv
