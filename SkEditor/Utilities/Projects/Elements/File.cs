@@ -23,8 +23,7 @@ public class File : StorageElement
         Name = Path.GetFileName(file);
         IsFile = true;
 
-        var icon = Files.Icon.GetIcon(Path.GetExtension(file));
-        if (icon is not null) Icon = icon;
+        UpdateIcon();
 
         OpenInExplorerCommand = new RelayCommand(OpenInExplorer);
         DeleteCommand = new RelayCommand(DeleteFile);
@@ -68,10 +67,17 @@ public class File : StorageElement
         StorageFilePath = newPath;
         Name = newName;
 
+        UpdateIcon();
         RefreshSelf();
     }
 
     public override void HandleClick() => FileHandler.OpenFile(StorageFilePath);
+
+    public void UpdateIcon()
+    {
+        var icon = Files.Icon.GetIcon(Path.GetExtension(StorageFilePath));
+        if (icon is not null) Icon = icon;
+    }
 
     public void CopyAbsolutePath()
     {
