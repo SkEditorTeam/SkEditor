@@ -66,6 +66,7 @@
 	<system:String x:Key="MenuHeaderRefreshSyntax">Odśwież składnię</system:String>
 
 	<!-- Project Menu -->
+	<system:String x:Key="MenuHeaderDeleteFromDisk">Usuń z dysku</system:String>
 	<system:String x:Key="MenuHeaderOpenInExplorer">Otwórz w eksploratorze</system:String>
 	<system:String x:Key="MenuHeaderCopyPath">Skopiuj ścieżkę względną</system:String>
 	<system:String x:Key="MenuHeaderCopyAbsolutePath">Skopiuj ścieżkę bezwzględną</system:String>

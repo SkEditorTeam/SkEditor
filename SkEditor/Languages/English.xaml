@@ -66,6 +66,7 @@
 	<system:String x:Key="MenuHeaderRefreshSyntax">Refresh syntax</system:String>
 
 	<!-- Project Menu -->
+	<system:String x:Key="MenuHeaderDeleteFromDisk">Delete from Disk</system:String>
 	<system:String x:Key="MenuHeaderOpenInExplorer">Open in explorer</system:String>
 	<system:String x:Key="MenuHeaderCopyPath">Copy relative path</system:String>
 	<system:String x:Key="MenuHeaderCopyAbsolutePath">Copy absolute path</system:String>

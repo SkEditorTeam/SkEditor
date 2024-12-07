@@ -19,7 +19,7 @@ public class Theme
     public ImmutableSolidColorBrush EditorTextColor { get; set; } = new(Color.Parse("#ffcdcaca"));
     public ImmutableSolidColorBrush LineNumbersColor { get; set; } = new(Color.Parse("#ff8a8a8a"));
     public ImmutableSolidColorBrush SelectionColor { get; set; } = new(Color.Parse("#641a6096"));
-    public ImmutableSolidColorBrush SelectedTabItemBackground { get; set; } = new(Color.Parse("#ff151515"));
+    public ImmutableSolidColorBrush SelectedTabItemBackground { get; set; } = new(Color.Parse("#ff161616"));
     public ImmutableSolidColorBrush SelectedTabItemBorder { get; set; } = new(Color.Parse("#00181818"));
     public ImmutableSolidColorBrush MenuBackground { get; set; } = new(Color.Parse("#ff151515"));
     public ImmutableSolidColorBrush MenuBorder { get; set; } = new(Color.Parse("#ff262626"));

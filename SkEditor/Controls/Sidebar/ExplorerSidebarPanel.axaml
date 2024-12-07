@@ -5,8 +5,7 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:ar="clr-namespace:SkEditor.Utilities.Projects"
              xmlns:elements="clr-namespace:SkEditor.Utilities.Projects.Elements"
-             x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel"
-			 Margin="10,0,0,0">
+             x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel">
     
     <UserControl.Styles>
         <Style Selector="Button.barButton">
@@ -81,7 +80,7 @@
                                     <MenuItem Header="{DynamicResource MenuHeaderRename}" Command="{Binding RenameCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="Rename" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="{DynamicResource MenuHeaderDelete}" Command="{Binding DeleteCommand}">
+                                    <MenuItem Header="{DynamicResource MenuHeaderDeleteFromDisk}" Command="{Binding DeleteCommand}">
                                         <MenuItem.Icon><ui:SymbolIcon Symbol="Delete" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
                                     </MenuItem>
                                 </MenuFlyout>

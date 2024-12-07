@@ -47,8 +47,8 @@ public class Windows : IWindows
         {
             Title = translate ? TryGetTranslation(title) : title,
             Background = background as ImmutableSolidColorBrush,
-            PrimaryButtonText = TryGetTranslation(primaryButtonText),
-            CloseButtonText = TryGetTranslation(cancelButtonText),
+            PrimaryButtonText = translate ? TryGetTranslation(primaryButtonText) : primaryButtonText,
+            CloseButtonText = translate ? TryGetTranslation(cancelButtonText) : cancelButtonText,
         };
 
         icon = icon switch
