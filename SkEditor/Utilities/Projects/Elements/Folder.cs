@@ -2,6 +2,7 @@
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using Serilog;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.Files;
@@ -22,7 +23,7 @@ public class Folder : StorageElement
 
     public Folder(string folder, Folder? parent = null)
     {
-        folder = Uri.UnescapeDataString(folder).FixLinuxPath();
+        folder = Uri.UnescapeDataString(folder).FixLinuxPath().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
         Parent = parent;
         StorageFolderPath = folder;
