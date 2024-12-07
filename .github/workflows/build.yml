@@ -40,7 +40,7 @@ jobs:
         done
     
     - name: 📤 | Upload macOS artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: SkEditorMac
         path: "*.zip"
@@ -76,7 +76,7 @@ jobs:
         tar -czf SkEditor.tar.gz SkEditorFilesL/
     
     - name: 📤 | Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: Linux (multiarch)
         path: SkEditor.tar.gz
