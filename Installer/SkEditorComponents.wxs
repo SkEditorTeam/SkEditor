@@ -1,19 +1,14 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 	<Fragment>
 		<ComponentGroup Id="SkEditorComponents" Directory="INSTALLFOLDER">
+			<Files Include="..\SkEditor\bin\Release\publish\win\**">
+				<Exclude Files="..\SkEditor\bin\Release\publish\win\SkEditor.exe" />
+			</Files>
+
 			<Component>
 				<File Source="..\SkEditor\bin\Release\publish\win\SkEditor.exe"/>
 				<Shortcut Name="SkEditor" Directory="DesktopFolder" Advertise="yes" Icon="SkEditorIcon.exe" />
 				<Shortcut Name="SkEditor" Directory="ProgramMenuFolder" Advertise="yes" Icon="SkEditorIcon.exe" />
-			</Component>
-			<Component>
-				<File Source="..\SkEditor\bin\Release\publish\win\av_libglesv2.dll" />
-			</Component>
-			<Component>
-				<File Source="..\SkEditor\bin\Release\publish\win\libHarfBuzzSharp.dll" />
-			</Component>
-			<Component>
-				<File Source="..\SkEditor\bin\Release\publish\win\libSkiaSharp.dll" />
 			</Component>
 		</ComponentGroup>
 
