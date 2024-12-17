@@ -78,6 +78,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="Controls\FunctionTooltip.axaml.cs">
+		  <DependentUpon>FunctionTooltip.axaml</DependentUpon>
+		</Compile>
 		<Compile Update="Controls\SideBarControl.axaml.cs">
 		  <DependentUpon>SideBarControl.axaml</DependentUpon>
 		</Compile>
