@@ -31,7 +31,7 @@ public class Windows : IWindows
         string message,
         object? icon = null,
         string? cancelButtonText = null,
-        string primaryButtonText = "Okay")
+        string primaryButtonText = "Okay", bool translate = true)
     {
         static string? TryGetTranslation(string? input)
         {
@@ -45,10 +45,10 @@ public class Windows : IWindows
         Application.Current.TryGetResource("MessageBoxBackground", out var background);
         ContentDialog dialog = new()
         {
-            Title = TryGetTranslation(title),
+            Title = translate ? TryGetTranslation(title) : title,
             Background = background as ImmutableSolidColorBrush,
-            PrimaryButtonText = TryGetTranslation(primaryButtonText),
-            CloseButtonText = TryGetTranslation(cancelButtonText),
+            PrimaryButtonText = translate ? TryGetTranslation(primaryButtonText) : primaryButtonText,
+            CloseButtonText = translate ? TryGetTranslation(cancelButtonText) : cancelButtonText,
         };
 
         icon = icon switch
@@ -77,6 +77,8 @@ public class Windows : IWindows
         IconSourceElement iconElement = new()
         {
             IconSource = source,
+            Height = 40,
+            Width = 40,
         };
 
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*") };

@@ -29,6 +29,8 @@ public partial class App : Application
     {
         base.OnFrameworkInitializationCompleted();
 
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),

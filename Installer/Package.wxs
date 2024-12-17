@@ -1,34 +1,31 @@
-﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
-	 xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-	<Package Name="SkEditor" Manufacturer="Notro" Version="2.8.1" UpgradeCode="14564974-da58-4917-8a0d-590043f589c2">
-		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+	<Package Name="SkEditor"
+             Manufacturer="Notro"
+             Version="2.8.3"
+             UpgradeCode="14564974-da58-4917-8a0d-590043f589c2">
 		<MediaTemplate EmbedCab="yes" />
 
 		<Feature Id="Main">
 			<ComponentGroupRef Id="SkEditorComponents" />
-			<ComponentGroupRef Id="LanguagesComponents" />
 		</Feature>
 
 		<ui:WixUI
-			Id="SkEditorInstaller_InstallDir"
-			InstallDirectory="INSTALLFOLDER"/>
-		
+            Id="SkEditorInstaller_InstallDir"
+            InstallDirectory="INSTALLFOLDER" />
+
 		<UIRef Id="WixUI_ErrorProgressText" />
 
-		<WixVariable
-			  Id="WixUIDialogBmp"
-			  Value="Assets/background.png"/>
-				  
-		<WixVariable
-			  Id="WixUIBannerBmp"
-			  Value="Assets/top.png"/>
-		
-		<WixVariable
-			  Id="WixUIExclamationIco"
-			  Value="Assets/Warning.ico"/>
-		
-		<WixVariable
-			  Id="WixUIInfoIco"
-			  Value="Assets/Info.ico"/>
+		<WixVariable Id="WixUIDialogBmp"
+                     Value="Assets/background.png" />
+
+		<WixVariable Id="WixUIBannerBmp"
+                     Value="Assets/top.png" />
+
+		<WixVariable Id="WixUIExclamationIco"
+                     Value="Assets/Warning.ico" />
+
+		<WixVariable Id="WixUIInfoIco"
+                     Value="Assets/Info.ico" />
 	</Package>
 </Wix>

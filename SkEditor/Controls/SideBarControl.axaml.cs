@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
@@ -76,6 +77,8 @@ public partial class SideBarControl : UserControl
                     SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MaxWidth = 0;
                     SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MinWidth = 0;
 
+                    SkEditorAPI.Windows.GetMainWindow().SideBar.Margin = new Thickness(0, 0, 0, 0);
+
                     return;
                 }
 
@@ -97,6 +100,8 @@ public partial class SideBarControl : UserControl
 
                 SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MinWidth = _currentPanel.DesiredWidth;
                 SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MaxWidth = int.MaxValue;
+
+                SkEditorAPI.Windows.GetMainWindow().SideBar.Margin = new Thickness(0, 0, 10, 0);
             })
         };
 

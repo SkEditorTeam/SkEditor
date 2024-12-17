@@ -15,6 +15,7 @@
 	<system:String x:Key="WindowTitleMarketplace">Rynek</system:String>
 	<system:String x:Key="WindowTitleElementRename">Zmień nazwę</system:String>
 	<system:String x:Key="WindowTitleElementCreate">Stwórz</system:String>
+	<system:String x:Key="WindowTitleColorSelector">Selektor kolorów</system:String>
 
 	<!-- Menu Headers -->
 	<system:String x:Key="MenuHeaderFile">Plik</system:String>
@@ -58,12 +59,14 @@
 	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
 	<system:String x:Key="MenuHeaderGenerateCommand">Komenda</system:String>
 	<system:String x:Key="MenuHeaderRefactor">Refaktoryzacja</system:String>
-	
+	<system:String x:Key="MenuHeaderColorSelector">Selektor kolorów</system:String>
+
 	<!-- Other Menu -->
 	<system:String x:Key="MenuHeaderMarketplace">Rynek</system:String>
 	<system:String x:Key="MenuHeaderRefreshSyntax">Odśwież składnię</system:String>
 
 	<!-- Project Menu -->
+	<system:String x:Key="MenuHeaderDeleteFromDisk">Usuń z dysku</system:String>
 	<system:String x:Key="MenuHeaderOpenInExplorer">Otwórz w eksploratorze</system:String>
 	<system:String x:Key="MenuHeaderCopyPath">Skopiuj ścieżkę względną</system:String>
 	<system:String x:Key="MenuHeaderCopyAbsolutePath">Skopiuj ścieżkę bezwzględną</system:String>
@@ -192,6 +195,9 @@
 	<system:String x:Key="RefactorWindowTabsToSpaces">Zamień taby na spacje</system:String>
 	<system:String x:Key="RefactorWindowSpacesToTabs">Zamień spacje na taby</system:String>
 	<system:String x:Key="RefactorWindowRefactorBoxName">Zmiana nazwy '{0}' na...</system:String>
+
+	<!-- Color Selector -->
+	<system:String x:Key="ColorSelectorWindowHexResult">Rezultat w HEX</system:String>
 	
 
 	<!-- Projects -->

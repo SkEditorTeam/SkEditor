@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:ui="using:FluentAvalonia.UI.Controls"
+			 xmlns:icons="using:FluentIcons.Avalonia.Fluent"
 			 x:Class="SkEditor.Controls.MainMenuControl">
 
 	<UserControl.Styles>
-		<Style Selector="ui|SymbolIcon">
+		<Style Selector="icons|SymbolIcon">
 			<Setter Property="FontSize" Value="22"/>
 		</Style>
 	</UserControl.Styles>
@@ -15,76 +15,76 @@
 		<MenuItem Header="{DynamicResource MenuHeaderFile}">
 			<MenuItem Header="{DynamicResource MenuHeaderNew}" Name="MenuItemNew" HotKey="Ctrl+N" InputGesture="Ctrl+N">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Document"/>
+					<icons:SymbolIcon Symbol="Document"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderOpen}" Name="MenuItemOpen" HotKey="Ctrl+O" InputGesture="Ctrl+O">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="OpenFile"/>
+					<icons:SymbolIcon Symbol="DocumentArrowUp"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderOpenFolder}" Name="MenuItemOpenFolder" IsVisible="False" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Folder"/>
+					<icons:SymbolIcon Symbol="Folder"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderSave}" Name="MenuItemSave" HotKey="Ctrl+S" InputGesture="Ctrl+S">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Save"/>
+					<icons:SymbolIcon Symbol="Save"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderSaveAs}" Name="MenuItemSaveAs" HotKey="Ctrl+Shift+S" InputGesture="Ctrl+Shift+S">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="SaveAs"/>
+					<icons:SymbolIcon Symbol="SaveEdit"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderSaveAll}" Name="MenuItemSaveAll" InputGesture="Ctrl+Alt+S">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="SaveAs"/>
+					<icons:SymbolIcon Symbol="SaveMultiple"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderPublish}" Name="MenuItemPublish" HotKey="Ctrl+Shift+P" InputGesture="Ctrl+Shift+P">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Share"/>
+					<icons:SymbolIcon Symbol="Share"/>
 				</MenuItem.Icon>
 			</MenuItem>
 
 			<MenuItem Header="{DynamicResource MenuHeaderClose}">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Clear"/>
+					<icons:SymbolIcon Symbol="Dismiss"/>
 				</MenuItem.Icon>
 
 				<MenuItem Header="{DynamicResource MenuHeaderCloseCurrentFile}" Name="MenuItemClose" HotKey="Ctrl+W" InputGesture="Ctrl+W">
 					<MenuItem.Icon>
-						<ui:SymbolIcon Symbol="Document"/>
+						<icons:SymbolIcon Symbol="Document"/>
 					</MenuItem.Icon>
 				</MenuItem>
 				<MenuItem Header="{DynamicResource MenuHeaderCloseAll}" Name="MenuItemCloseAll" HotKey="Ctrl+Shift+W" InputGesture="Ctrl+Shift+W">
 					<MenuItem.Icon>
-						<ui:IconSourceElement IconSource="{StaticResource DocumentMultipleIcon}" />
+						<icons:SymbolIcon Symbol="DocumentMultiple"/>
 					</MenuItem.Icon>
 				</MenuItem>
 
 				<MenuItem Header="{DynamicResource MenuHeaderCloseAllButCurrent}" Name="MenuItemCloseAllExceptCurrent">
 					<MenuItem.Icon>
-						<ui:IconSourceElement IconSource="{StaticResource DocumentMultipleIcon}" />
+						<icons:SymbolIcon Symbol="DocumentMultiple"/>
 					</MenuItem.Icon>
 				</MenuItem>
 				<MenuItem Header="{DynamicResource MenuHeaderCloseUnsaved}" Name="MenuItemCloseAllUnsaved">
 					<MenuItem.Icon>
-						<ui:IconSourceElement IconSource="{StaticResource DocumentMultipleIcon}" />
+						<icons:SymbolIcon Symbol="DocumentMultiple"/>
 					</MenuItem.Icon>
 				</MenuItem>
 
 				<MenuItem Header="{DynamicResource MenuHeaderCloseLeft}" Name="MenuItemCloseAllLeft">
 					<MenuItem.Icon>
-						<ui:IconSourceElement IconSource="{StaticResource LeftIcon}" />
+						<icons:SymbolIcon Symbol="DocumentArrowLeft"/>
 					</MenuItem.Icon>
 				</MenuItem>
 
 				<MenuItem Header="{DynamicResource MenuHeaderCloseRight}" Name="MenuItemCloseAllRight">
 					<MenuItem.Icon>
-						<ui:IconSourceElement IconSource="{StaticResource RightIcon}" />
+						<icons:SymbolIcon Symbol="DocumentArrowRight"/>
 					</MenuItem.Icon>
 				</MenuItem>
 
@@ -93,79 +93,84 @@
 		<MenuItem Header="{DynamicResource MenuHeaderEdit}">
 			<MenuItem Header="{DynamicResource MenuHeaderCopy}" Name="MenuItemCopy" InputGesture="Ctrl+C">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Copy"/>
+					<icons:SymbolIcon Symbol="Copy"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderPaste}" Name="MenuItemPaste" InputGesture="Ctrl+V">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Paste"/>
+					<icons:SymbolIcon Symbol="ClipboardPaste"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderCut}" Name="MenuItemCut" InputGesture="Ctrl+X">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Cut"/>
+					<icons:SymbolIcon Symbol="Cut"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderUndo}" Name="MenuItemUndo" InputGesture="Ctrl+Z">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Undo"/>
+					<icons:SymbolIcon Symbol="ArrowUndo"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderRedo}" Name="MenuItemRedo" InputGesture="Ctrl+Y">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Redo"/>
+					<icons:SymbolIcon Symbol="ArrowRedo"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderDuplicate}" Name="MenuItemDuplicate" InputGesture="Ctrl+D" HotKey="Ctrl+D">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Copy"/>
+					<icons:SymbolIcon Symbol="Copy"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderComment}" Name="MenuItemComment" InputGesture="Ctrl+OemQuestion" HotKey="Ctrl+OemQuestion">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Comment"/>
+					<icons:SymbolIcon Symbol="Comment"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderGoToLine}" Name="MenuItemGoToLine" InputGesture="Ctrl+G" HotKey="Ctrl+G">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Find"/>
+					<icons:SymbolIcon Symbol="Search"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderTrimWhitespaces}" Name="MenuItemTrimWhitespaces" InputGesture="Ctrl+T" HotKey="Ctrl+T">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Remove"/>
+					<icons:SymbolIcon Symbol="Cut"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderDelete}" Name="MenuItemDelete" InputGesture="Delete">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Delete"/>
+					<icons:SymbolIcon Symbol="Delete"/>
 				</MenuItem.Icon>
 			</MenuItem>
 		</MenuItem>
 		<MenuItem Header="{DynamicResource MenuHeaderTools}">
 			<MenuItem Header="{DynamicResource MenuHeaderGenerate}" Name="MenuItemGenerate">
 				<MenuItem.Icon>
-					<ui:IconSourceElement IconSource="{StaticResource MagicWandIcon}" />
+					<icons:SymbolIcon Symbol="Wand"/>
 				</MenuItem.Icon>
 				<MenuItem Header="{DynamicResource MenuHeaderGenerateGUI}" Name="MenuItemGenerateGui" HotKey="Ctrl+Shift+G" InputGesture="Ctrl+Shift+G">
 					<MenuItem.Icon>
-						<ui:IconSourceElement IconSource="{StaticResource WindowIcon}" />
+						<icons:SymbolIcon Symbol="Window"/>
 					</MenuItem.Icon>
 				</MenuItem>
 				<MenuItem Header="{DynamicResource MenuHeaderGenerateCommand}" Name="MenuItemGenerateCommand">
 					<MenuItem.Icon>
-						<ui:SymbolIcon Symbol="Keyboard"/>
+						<icons:SymbolIcon Symbol="Keyboard"/>
 					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderDocumentation}" Name="MenuItemDocs">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Library"/>
+					<icons:SymbolIcon Symbol="Library"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderRefactor}" Name="MenuItemRefactor">
 				<MenuItem.Icon>
-					<ui:IconSourceElement IconSource="{StaticResource RefactorIcon}" />
+					<icons:SymbolIcon Symbol="Beaker"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="{DynamicResource MenuHeaderColorSelector}" Name="MenuItemColorSelector">
+				<MenuItem.Icon>
+					<icons:SymbolIcon Symbol="Color"/>
 				</MenuItem.Icon>
 			</MenuItem>
 		</MenuItem>
@@ -175,18 +180,18 @@
 		<MenuItem Header="{DynamicResource MenuHeaderOther}">
 			<MenuItem Header="{DynamicResource MenuHeaderMarketplace}" Name="MenuItemMarketplace">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Shop"/>
+					<icons:SymbolIcon Symbol="ShoppingBag"/>
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="{DynamicResource MenuHeaderRefreshSyntax}" Name="MenuItemRefreshSyntax">
 				<MenuItem.Icon>
-					<ui:SymbolIcon Symbol="Refresh"/>
+					<icons:SymbolIcon Symbol="ArrowClockwise"/>
 				</MenuItem.Icon>
 			</MenuItem>
 		</MenuItem>
 		<MenuItem Name="MenuItemSettings" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
 			<MenuItem.Header>
-				<ui:SymbolIcon Symbol="Settings" FontSize="21" />
+				<icons:SymbolIcon Symbol="Settings" FontSize="21" />
 			</MenuItem.Header>
 		</MenuItem>
 	</Menu>

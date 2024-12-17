@@ -33,12 +33,13 @@ public interface IWindows
     /// <param name="icon">The dialog's icon. Can be null.</param>
     /// <param name="cancelButtonText">The text of the cancel button. If null, no cancel button will be shown.</param>
     /// <param name="primaryButtonText">The text of the primary button. Default is "Okay", <b>cannot be null</b></param>
+    /// <param name="translate">Whether to try translate the title</param>
     /// <returns>The result of the dialog.</returns>
     Task<ContentDialogResult> ShowDialog(string title,
         string message,
         object? icon = null,
         string? cancelButtonText = null,
-        string primaryButtonText = "Okay");
+        string primaryButtonText = "Okay", bool translate = true);
 
     /// <summary>
     /// Show a message dialog to the user.

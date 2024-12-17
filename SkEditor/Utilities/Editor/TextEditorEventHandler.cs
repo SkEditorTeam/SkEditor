@@ -191,7 +191,7 @@ public partial class TextEditorEventHandler
 
             foreach (Match match in matches.Cast<Match>())
             {
-                string hex = match.Value[2..^1];
+                string hex = match.Value.Contains("##") ? match.Value[2..^1] : match.Value[1..^1];
                 bool parsed = Color.TryParse(hex, out Color color);
                 if (!parsed) continue;
 
@@ -203,7 +203,7 @@ public partial class TextEditorEventHandler
 
                 HighlightingSpan span = new()
                 {
-                    StartExpression = new Regex(@"<#" + hex + @">"),
+                    StartExpression = new Regex(@"<[#]?" + hex + @">"),
                     EndExpression = EmptyRegex(),
                     SpanColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(color) },
                     RuleSet = ruleSet,

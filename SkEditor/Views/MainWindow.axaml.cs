@@ -54,6 +54,11 @@ public partial class MainWindow : AppWindow
             {
                 FileHandler.SwitchTab((int)e.Key - 35);
             }
+            else if (e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift) && e.Key == Key.Oem3)
+            {
+                TerminalWindow terminal = new();
+                terminal.Show();
+            }
         };
 
         AddHandler(DragDrop.DropEvent, FileHandler.FileDropAction);
@@ -97,7 +102,6 @@ public partial class MainWindow : AppWindow
         else
         {
             await SessionRestorer.SaveSession();
-            SkEditorAPI.Logs.Debug("Session saved.");
             AlreadyClosed = true;
             Close();
         }

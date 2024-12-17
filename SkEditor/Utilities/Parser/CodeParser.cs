@@ -61,6 +61,7 @@ public partial class CodeParser : INotifyPropertyChanged
         // Split the code into lines
         List<string> lines = [.. Editor.Text.Split('\n')];
         int lastSectionLine = -1;
+        RemoveComments(ref lines);
 
         // Parse sections
         for (var lineIndex = 0; lineIndex < lines.Count; lineIndex++)
@@ -97,6 +98,34 @@ public partial class CodeParser : INotifyPropertyChanged
 
         ParserPanel.ParseButton.IsEnabled = false;
         ParserPanel.ParseButton.Content = Translation.Get("CodeParserParsed");
+    }
+
+    private static void RemoveComments(ref List<string> lines)
+    {
+        for (var i = 0; i < lines.Count; i++)
+        {
+            var line = lines[i];
+            if (line.Contains("###"))
+            {
+                var index = line.IndexOf("###");
+                lines[i] = line[..index];
+                for (var j = i + 1; j < lines.Count; j++)
+                {
+                    if (lines[j].Contains("###"))
+                    {
+                        var index2 = lines[j].IndexOf("###");
+                        lines[j] = lines[j][(index2 + 3)..];
+                        break;
+                    }
+                    lines[j] = "";
+                }
+            }
+            else if (line.Contains('#'))
+            {
+                var index = line.IndexOf('#');
+                lines[i] = line[..index];
+            }
+        }
     }
 
     public void SetUnparsed()
