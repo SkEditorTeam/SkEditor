@@ -50,7 +50,8 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
             StackPanel paramsPanel = new()
             {
                 Orientation = Orientation.Horizontal,
-                Margin = new Thickness(0, 5, 0, 0)
+                Margin = new Thickness(0, 5, 0, 0),
+                Spacing = 10
             };
 
             TextBlock textBlock = CreateTextBlock("Params:", "#7d7d7d", 12);
@@ -59,7 +60,6 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
             StackPanel parametersPanel = new()
             {
                 Orientation = Orientation.Vertical,
-                Margin = new Thickness(10, 0, 0, 0),
                 Spacing = 3
             };
 
@@ -87,7 +87,8 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
             StackPanel returnsPanel = new()
             {
                 Orientation = Orientation.Horizontal,
-                Margin = new Thickness(0, 5, 0, 0)
+                Margin = new Thickness(0, 5, 0, 0),
+                Spacing = 10
             };
 
             TextBlock textBlock = CreateTextBlock("Returns:", "#7d7d7d", 12);
@@ -96,7 +97,6 @@ public partial class FunctionTooltip : UserControl, INotifyPropertyChanged
                 FontFamily = new FontFamily("JetBrains Mono"),
                 FontSize = 12,
                 Foreground = new SolidColorBrush(Color.Parse("#adbcc3")),
-                Margin = new Thickness(5, 0, 0, 0),
                 Text = comment.Return,
                 SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor,
                 ContextFlyout = null
