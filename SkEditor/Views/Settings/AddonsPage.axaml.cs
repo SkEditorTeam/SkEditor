@@ -74,7 +74,7 @@ public partial class AddonsPage : UserControl
         OpenMarketplaceButton.Command = new AsyncRelayCommand(async () =>
         {
             SettingsWindow.Instance.Close();
-            await SkEditorAPI.Windows.ShowWindowAsDialog(new MarketplaceWindow());
+            // TODO: Open the marketplace
         });
     }
 }

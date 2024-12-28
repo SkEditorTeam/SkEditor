@@ -84,12 +84,6 @@
 		<Compile Update="Controls\CompletionMenu.axaml.cs">
 		  <DependentUpon>CompletionMenu.axaml</DependentUpon>
 		</Compile>
-		<Compile Update="Controls\MarketplaceItemView.axaml.cs">
-			<DependentUpon>MarketplaceItemView.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\MarketplaceListItem.axaml.cs">
-			<DependentUpon>MarketplaceListItem.axaml</DependentUpon>
-		</Compile>
 		<Compile Update="Controls\BottomBarControl.axaml.cs">
 			<DependentUpon>BottomBarControl.axaml</DependentUpon>
 		</Compile>
@@ -123,9 +117,6 @@
 		</Compile>
 		<Compile Update="Views\Generators\CommandGenerator.axaml.cs">
 		  <DependentUpon>CommandGenerator.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Marketplace\MarketplaceWindow.axaml.cs">
-			<DependentUpon>MarketplaceWindow.axaml</DependentUpon>
 		</Compile>
 		<Compile Update="Views\ColorSelectionWindow.axaml.cs">
 		  <SubType>Code</SubType>

@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:asyncImg="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkEditor.Controls.MarketplaceItem">
+	<Border Width="220" Height="240" Background="#0FFFFFFF" CornerRadius="8" Padding="16,20">
+		<StackPanel>
+			<Border CornerRadius="8" Width="72" Height="72" HorizontalAlignment="Center" ClipToBounds="True">
+				<Image asyncImg:ImageLoader.Source="{Binding IconUrl}"
+                       Width="72" Height="72"/>
+			</Border>
+			<TextBlock Text="{Binding ItemName}"
+			FontSize="18" FontWeight="Regular" Foreground="#FFFFFF" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+			<Grid ColumnDefinitions="auto,auto,*" Margin="0,8,0,0">
+				<icons:SymbolIcon Grid.Column="0" FontSize="16" Symbol="Person" VerticalAlignment="Center" Margin="0,0,4,0"/>
+				<TextBlock Grid.Column="1" Text="{Binding Author}"
+                           FontSize="14" Foreground="#FFFFFF"/>
+				<TextBlock Grid.Column="2" Text="{Binding Version}"
+                           FontSize="14" Foreground="#BFFFFFFF" HorizontalAlignment="Right"/>
+			</Grid>
+			<TextBlock TextWrapping="Wrap" Text="{Binding Description}"
+                       FontSize="12" Foreground="#BFFFFFFF" Margin="0,16,0,0" TextAlignment="Center"/>
+		</StackPanel>
+	</Border>
+</UserControl>

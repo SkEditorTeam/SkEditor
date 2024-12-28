@@ -5,6 +5,7 @@ using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Controls.Docs;
+using SkEditor.Pages;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
@@ -64,7 +65,11 @@ public partial class MainMenuControl : UserControl
         MenuItemRefactor.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new RefactorWindow()));
         MenuItemColorSelector.Command = new RelayCommand(() => new ColorSelectionWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
-        MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemMarketplace.Command = new RelayCommand(() =>
+        {
+            MarketplacePage page = new();
+            SkEditorAPI.Files.AddCustomTab("Marketplace", page, icon: new SymbolIconSource() { Symbol = Symbol.Shop });
+        });
 
         MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
     }
