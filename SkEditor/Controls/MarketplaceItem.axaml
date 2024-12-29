@@ -1,28 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:asyncImg="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:controls="using:SkEditor.Controls"
+             xmlns:utils="using:SkEditor.Utilities"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Controls.MarketplaceItem">
-	<Border Width="220" Height="240" Background="#0FFFFFFF" CornerRadius="8" Padding="16,20">
+
+	<UserControl.Resources>
+		<utils:NumberFormatConverter x:Key="NumberFormatConverter"/>
+	</UserControl.Resources>
+
+	<Border Width="220" Height="260" Background="#0FFFFFFF" CornerRadius="8" Padding="16,20">
 		<StackPanel>
+			<!-- Icon -->
 			<Border CornerRadius="8" Width="72" Height="72" HorizontalAlignment="Center" ClipToBounds="True">
-				<Image asyncImg:ImageLoader.Source="{Binding IconUrl}"
+				<Image asyncImg:ImageLoader.Source="{Binding IconUrl}" RenderOptions.BitmapInterpolationMode="HighQuality"
                        Width="72" Height="72"/>
 			</Border>
+
+			<!-- Title -->
 			<TextBlock Text="{Binding ItemName}"
-			FontSize="18" FontWeight="Regular" Foreground="#FFFFFF" HorizontalAlignment="Center" Margin="0,8,0,0"/>
-			<Grid ColumnDefinitions="auto,auto,*" Margin="0,8,0,0">
-				<icons:SymbolIcon Grid.Column="0" FontSize="16" Symbol="Person" VerticalAlignment="Center" Margin="0,0,4,0"/>
-				<TextBlock Grid.Column="1" Text="{Binding Author}"
-                           FontSize="14" Foreground="#FFFFFF"/>
-				<TextBlock Grid.Column="2" Text="{Binding Version}"
-                           FontSize="14" Foreground="#BFFFFFFF" HorizontalAlignment="Right"/>
-			</Grid>
-			<TextBlock TextWrapping="Wrap" Text="{Binding Description}"
-                       FontSize="12" Foreground="#BFFFFFFF" Margin="0,16,0,0" TextAlignment="Center"/>
+                      FontSize="18"
+                      FontWeight="SemiBold"
+                      Foreground="#FFFFFF"
+                      HorizontalAlignment="Center"
+                      Margin="0,12,0,0"/>
+
+			<!-- Version with Downloads -->
+			<StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Center"
+                      Margin="0,4,0,0"
+                      Spacing="8">
+				<TextBlock Text="{Binding Version}"
+                         FontSize="13"
+                         Foreground="#78FFFFFF"
+                         FontWeight="Medium"/>
+
+				<StackPanel Orientation="Horizontal" Spacing="2">
+					<icons:SymbolIcon Symbol="ArrowDownload"
+									  FontSize="13"
+									  Foreground="#78FFFFFF"/>
+					<TextBlock FontSize="13" Foreground="#78FFFFFF">
+						<TextBlock.Text>
+							<Binding Path="Downloads" Converter="{StaticResource NumberFormatConverter}" />
+						</TextBlock.Text>
+					</TextBlock>
+				</StackPanel>
+			</StackPanel>
+
+			<!-- Description -->
+			<TextBlock TextWrapping="Wrap"
+                      Text="{Binding Description}"
+                      FontSize="12"
+                      Foreground="#BFFFFFFF"
+                      Margin="0,12,0,0"
+                      TextAlignment="Center"
+                      Height="44"/>
+
+			<!-- Footer Info -->
+			<StackPanel Margin="0,12,0,0" Spacing="4">
+				<StackPanel Orientation="Horizontal" Spacing="4">
+					<icons:SymbolIcon Symbol="Person"
+                                    FontSize="15"
+                                    Foreground="#78FFFFFF"/>
+					<TextBlock Text="{Binding Author}"
+                             FontSize="12"
+                             Foreground="#78FFFFFF"/>
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal" Spacing="4">
+					<icons:SymbolIcon Symbol="Calendar"
+                                    FontSize="15"
+                                    Foreground="#78FFFFFF"/>
+					<TextBlock Text="{Binding LastUpdated}"
+                             FontSize="12"
+                             Foreground="#78FFFFFF"/>
+				</StackPanel>
+			</StackPanel>
 		</StackPanel>
 	</Border>
 </UserControl>

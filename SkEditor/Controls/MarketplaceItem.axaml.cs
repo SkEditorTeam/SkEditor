@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 namespace SkEditor.Controls;
 public partial class MarketplaceItem : UserControl
@@ -17,8 +16,17 @@ public partial class MarketplaceItem : UserControl
     public static readonly StyledProperty<string> VersionProperty =
         AvaloniaProperty.Register<MarketplaceItem, string>(nameof(Version));
 
+    public static readonly StyledProperty<string> LastUpdatedProperty =
+        AvaloniaProperty.Register<MarketplaceItem, string>(nameof(LastUpdated));
+
+    public static readonly StyledProperty<string> DownloadsProperty =
+        AvaloniaProperty.Register<MarketplaceItem, string>(nameof(Downloads));
+
     public static readonly StyledProperty<string> DescriptionProperty =
         AvaloniaProperty.Register<MarketplaceItem, string>(nameof(Description));
+
+    public static readonly StyledProperty<string> RatingProperty =
+        AvaloniaProperty.Register<MarketplaceItem, string>(nameof(Rating));
 
     public string ItemName
     {
@@ -44,10 +52,28 @@ public partial class MarketplaceItem : UserControl
         set => SetValue(VersionProperty, value);
     }
 
+    public string LastUpdated
+    {
+        get => GetValue(LastUpdatedProperty);
+        set => SetValue(LastUpdatedProperty, value);
+    }
+
+    public string Downloads
+    {
+        get => GetValue(DownloadsProperty);
+        set => SetValue(DownloadsProperty, value);
+    }
+
     public string Description
     {
         get => GetValue(DescriptionProperty);
         set => SetValue(DescriptionProperty, value);
+    }
+
+    public string Rating
+    {
+        get => GetValue(RatingProperty);
+        set => SetValue(RatingProperty, value);
     }
 
     public MarketplaceItem()
