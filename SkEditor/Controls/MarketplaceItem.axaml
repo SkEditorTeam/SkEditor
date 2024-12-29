@@ -14,73 +14,86 @@
 		<utils:NumberFormatConverter x:Key="NumberFormatConverter"/>
 	</UserControl.Resources>
 
-	<Border Width="220" Height="260" Background="#0FFFFFFF" CornerRadius="8" Padding="16,20">
-		<StackPanel>
-			<!-- Icon -->
-			<Border CornerRadius="8" Width="72" Height="72" HorizontalAlignment="Center" ClipToBounds="True">
-				<Image asyncImg:ImageLoader.Source="{Binding IconUrl}" RenderOptions.BitmapInterpolationMode="HighQuality"
-                       Width="72" Height="72"/>
-			</Border>
+	<Design.PreviewWith>
+		<controls:MarketplaceItem
+                    ItemName="Analyzer"
+                    IconUrl="https://github.com/SkEditorTeam/Marketplace/blob/main/items/Analyzer/Analyzer.png?raw=true"
+                    Author="Glicz &amp; Notro"
+                    Version="1.3.5"
+                    LastUpdated="Mar 15, 2024"
+                    Downloads="2547"
+                    Description="Quickly identify errors in your scripts!"/>
+	</Design.PreviewWith>
 
-			<!-- Title -->
-			<TextBlock Text="{Binding ItemName}"
-                      FontSize="18"
-                      FontWeight="SemiBold"
-                      Foreground="#FFFFFF"
-                      HorizontalAlignment="Center"
-                      Margin="0,12,0,0"/>
-
-			<!-- Version with Downloads -->
-			<StackPanel Orientation="Horizontal"
-                      HorizontalAlignment="Center"
-                      Margin="0,4,0,0"
-                      Spacing="8">
-				<TextBlock Text="{Binding Version}"
-                         FontSize="13"
-                         Foreground="#78FFFFFF"
-                         FontWeight="Medium"/>
-
-				<StackPanel Orientation="Horizontal" Spacing="2">
-					<icons:SymbolIcon Symbol="ArrowDownload"
-									  FontSize="13"
-									  Foreground="#78FFFFFF"/>
-					<TextBlock FontSize="13" Foreground="#78FFFFFF">
-						<TextBlock.Text>
-							<Binding Path="Downloads" Converter="{StaticResource NumberFormatConverter}" />
-						</TextBlock.Text>
-					</TextBlock>
-				</StackPanel>
-			</StackPanel>
-
-			<!-- Description -->
-			<TextBlock TextWrapping="Wrap"
-                      Text="{Binding Description}"
-                      FontSize="12"
-                      Foreground="#BFFFFFFF"
-                      Margin="0,12,0,0"
-                      TextAlignment="Center"
-                      Height="44"/>
-
+	<Border Width="220" Height="280" Background="#0FFFFFFF" CornerRadius="8" Padding="16">
+		<DockPanel>
 			<!-- Footer Info -->
-			<StackPanel Margin="0,12,0,0" Spacing="4">
+			<StackPanel DockPanel.Dock="Bottom" Margin="0,12,0,0" Spacing="4">
 				<StackPanel Orientation="Horizontal" Spacing="4">
 					<icons:SymbolIcon Symbol="Person"
-                                    FontSize="15"
-                                    Foreground="#78FFFFFF"/>
+									FontSize="15"
+									Foreground="#78FFFFFF"/>
 					<TextBlock Text="{Binding Author}"
-                             FontSize="12"
-                             Foreground="#78FFFFFF"/>
+							 FontSize="12"
+							 Foreground="#78FFFFFF"/>
 				</StackPanel>
 
 				<StackPanel Orientation="Horizontal" Spacing="4">
 					<icons:SymbolIcon Symbol="Calendar"
-                                    FontSize="15"
-                                    Foreground="#78FFFFFF"/>
+									FontSize="15"
+									Foreground="#78FFFFFF"/>
 					<TextBlock Text="{Binding LastUpdated}"
-                             FontSize="12"
-                             Foreground="#78FFFFFF"/>
+							 FontSize="12"
+							 Foreground="#78FFFFFF"/>
 				</StackPanel>
 			</StackPanel>
-		</StackPanel>
+
+			<StackPanel>
+				<!-- Icon -->
+				<Border CornerRadius="8" Width="72" Height="72" HorizontalAlignment="Center" ClipToBounds="True">
+					<Image asyncImg:ImageLoader.Source="{Binding IconUrl}" RenderOptions.BitmapInterpolationMode="HighQuality"
+						   Width="72" Height="72"/>
+				</Border>
+
+				<!-- Title -->
+				<TextBlock Text="{Binding ItemName}"
+						  FontSize="18"
+						  FontWeight="SemiBold"
+						  Foreground="#FFFFFF"
+						  HorizontalAlignment="Center"
+						  Margin="0,12,0,0"/>
+
+				<!-- Version with Downloads -->
+				<StackPanel Orientation="Horizontal"
+						  HorizontalAlignment="Center"
+						  Margin="0,4,0,0"
+						  Spacing="8">
+					<TextBlock Text="{Binding Version}"
+							 FontSize="13"
+							 Foreground="#78FFFFFF"
+							 FontWeight="Medium"/>
+
+					<StackPanel Orientation="Horizontal" Spacing="2">
+						<icons:SymbolIcon Symbol="ArrowDownload"
+										  FontSize="13"
+										  Foreground="#78FFFFFF"/>
+						<TextBlock FontSize="13" Foreground="#78FFFFFF">
+							<TextBlock.Text>
+								<Binding Path="Downloads" Converter="{StaticResource NumberFormatConverter}" />
+							</TextBlock.Text>
+						</TextBlock>
+					</StackPanel>
+				</StackPanel>
+
+				<!-- Description -->
+				<TextBlock TextWrapping="Wrap"
+						  Text="{Binding Description}"
+						  FontSize="12"
+						  Foreground="#BFFFFFFF"
+						  Margin="0,12,0,0"
+						  TextAlignment="Center"
+						  Height="44"/>
+			</StackPanel>
+		</DockPanel>
 	</Border>
 </UserControl>
