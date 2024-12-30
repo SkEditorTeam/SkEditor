@@ -11,11 +11,38 @@ namespace SkEditor.API;
 /// All icons with the same column key will be displayed in the same column. If the column key is null,
 /// the icon will be displayed in the first column with a random order.
 /// </summary>
-/// <param name="DrawingFunc">Function taking <see cref="DrawingArgs"/> and returning true if something has been drawn, false otherwise.</param>
-/// <param name="MouseClickFunc">Function taking <see cref="DrawingArgs"/> and called when the icon is clicked.</param>
-/// <param name="ColumnKey">The column key to use for this icon. If null, the icon will be displayed in the first column.</param>
-public record MarginIconData(Func<DrawingArgs, bool> DrawingFunc,
-    Action<ClickedArgs> MouseClickFunc, string? ColumnKey = null);
+public record MarginIconData
+{
+    public Func<DrawingArgs, bool> DrawingFunc { get; }
+    public Action<ClickedArgs> MouseClickFunc { get; }
+    public string? ColumnKey { get; }
+    private readonly Func<double, double>? _widthCalculator;
+
+    /// <summary>
+    /// Creates a new MarginIconData instance.
+    /// </summary>
+    /// <param name="drawingFunc">Function taking DrawingArgs and returning true if something has been drawn, false otherwise.</param>
+    /// <param name="mouseClickFunc">Function taking DrawingArgs and called when the icon is clicked.</param>
+    /// <param name="columnKey">The column key to use for this icon. If null, the icon will be displayed in the first column.</param>
+    /// <param name="widthCalculator">Function that takes a scale factor and returns the required width at that scale. If null, uses default 16 * scale.</param>
+    public MarginIconData(
+        Func<DrawingArgs, bool> drawingFunc,
+        Action<ClickedArgs> mouseClickFunc,
+        string? columnKey = null,
+        Func<double, double>? widthCalculator = null)
+    {
+        DrawingFunc = drawingFunc;
+        MouseClickFunc = mouseClickFunc;
+        ColumnKey = columnKey;
+        _widthCalculator = widthCalculator;
+    }
+
+    /// <summary>
+    /// Gets the required width for this icon at the given scale.
+    /// </summary>
+    /// <param name="scale">The current scale factor (fontSize / 12)</param>
+    public double GetWidth(double scale) => _widthCalculator?.Invoke(scale) ?? 16 * scale;
+}
 
 /// <summary>
 /// Represent the arguments passed to the drawing function of a <see cref="MarginIconData"/>.

@@ -57,11 +57,18 @@ public class EditorMargin : AbstractMargin
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        var requiredColumns = Registries.MarginIcons.Select(i => i.ColumnKey).Distinct().Count();
         var scale = File.Editor.FontSize / 12;
 
-        return new Size(16 * requiredColumns * scale, 0);
+        double GetWidthSelector(MarginIconData icon) => icon.GetWidth(scale);
+        string GroupByKeySelector(MarginIconData icon) => icon.ColumnKey;
+
+        var totalWidth = Registries.MarginIcons
+            .GroupBy(GroupByKeySelector)
+            .Sum(group => group.Max(GetWidthSelector));
+
+        return new Size(totalWidth, 0);
     }
+
 
     public override void Render(DrawingContext context)
     {
