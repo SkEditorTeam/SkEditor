@@ -1,5 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using System.ComponentModel;
 
 namespace SkEditor.Controls;
 public partial class MarketplaceItem : UserControl
@@ -80,5 +83,24 @@ public partial class MarketplaceItem : UserControl
     {
         InitializeComponent();
         DataContext = this;
+
+        Icon.PropertyChanged += OnIconPropertyChanged;
+    }
+
+    private void OnIconPropertyChanged(object sender, AvaloniaPropertyChangedEventArgs args)
+    {
+        if (args.Property.Name != nameof(Icon.IsLoading))
+            return;
+
+        if (!Icon.IsLoading)
+        {
+            UpdateIconVisuals();
+        }
+    }
+
+    private void UpdateIconVisuals()
+    {
+        IconBorder.Background = Brushes.Transparent;
+        Icon.Opacity = 1;
     }
 }
