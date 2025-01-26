@@ -59,9 +59,9 @@ public partial class MainMenuControl : UserControl
         MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
 
         MenuItemDocs.Command = new RelayCommand(AddDocsTab);
-        MenuItemGenerateGui.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new GuiGenerator()));
-        MenuItemGenerateCommand.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new CommandGenerator()));
-        MenuItemRefactor.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new RefactorWindow()));
+        MenuItemGenerateGui.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new GuiGenerator(), false));
+        MenuItemGenerateCommand.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new CommandGenerator(), false));
+        MenuItemRefactor.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new RefactorWindow(), false));
         MenuItemColorSelector.Command = new RelayCommand(() => new ColorSelectionWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
         MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
@@ -69,10 +69,14 @@ public partial class MainMenuControl : UserControl
         MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
     }
 
-    private static void ShowDialogIfEditorIsOpen(AppWindow window)
+    private static void ShowDialogIfEditorIsOpen(AppWindow window, bool openAsDialog = true)
     {
-        if (SkEditorAPI.Files.GetCurrentOpenedFile().IsEditor)
+        if (!SkEditorAPI.Files.GetCurrentOpenedFile().IsEditor) return;
+
+        if (openAsDialog)
             window.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        else
+            window.Show(SkEditorAPI.Windows.GetMainWindow());
     }
 
     private void AddMissingHotkeys()

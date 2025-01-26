@@ -3,6 +3,7 @@ using Avalonia.Platform.Storage;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
+using Serilog;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
@@ -69,7 +70,7 @@ public class Files : IFiles
 
     public OpenedFile? GetOpenedFileByPath(string path)
     {
-        return GetOpenedFiles().Find(file => file.Path == path);
+        return GetOpenedFiles().Find(file => file.Path.NormalizePathSeparators() == path.NormalizePathSeparators());
     }
 
     #endregion

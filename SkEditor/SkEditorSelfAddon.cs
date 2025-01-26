@@ -105,25 +105,6 @@ public class SkEditorSelfAddon : IAddon
                 }
             }));
 
-        Registries.FileTypes.Register(new RegistryKey(this, "Images2"), new FileTypeData(
-            [".png", ".jpg", ".ico", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"],
-            path =>
-            {
-                try
-                {
-                    var fileStream = File.OpenRead(Uri.UnescapeDataString(path));
-                    var bitmap = new Bitmap(fileStream);
-                    fileStream.Close();
-
-                    return new FileTypeResult(new ImageViewer(bitmap, path), Path.GetFileNameWithoutExtension(path));
-                }
-                catch (Exception e)
-                {
-                    SkEditorAPI.Windows.ShowError($"Unable to load the specified image:\n\n{e.Message}");
-                    return null;
-                }
-            }, "Another image file type"));
-
         #endregion
     }
 

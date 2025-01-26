@@ -8,10 +8,10 @@
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>SkEditor.ico</ApplicationIcon>
 		<PublishSingleFile>true</PublishSingleFile>
-		<AssemblyVersion>2.8.3</AssemblyVersion>
-		<FileVersion>2.8.3</FileVersion>
-		<Version>2.8.3</Version>
-		<InformationalVersion>2.8.3</InformationalVersion>
+		<AssemblyVersion>2.8.4</AssemblyVersion>
+		<FileVersion>2.8.4</FileVersion>
+		<Version>2.8.4</Version>
+		<InformationalVersion>2.8.4</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
@@ -59,13 +59,13 @@
 		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.2.2" />
 		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.2.2" />
 		<PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
-		<PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.266" />
+		<PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.271" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="NuGet.Protocol" Version="6.12.1" />
 		<PackageReference Include="Octokit" Version="13.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
 		<PackageReference Include="SkAvaloniaEdit" Version="11.1.0" />
-		<PackageReference Include="SkFluentAvalonia" Version="2.1.1" />
+		<PackageReference Include="SkFluentAvalonia" Version="2.1.2" />
 		<PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0" />
 		<PackageReference Include="Svg.Skia" Version="2.0.0.4" />
 		<PackageReference Include="System.Threading.AccessControl" Version="9.0.0" />

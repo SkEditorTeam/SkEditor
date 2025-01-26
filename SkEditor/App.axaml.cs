@@ -85,6 +85,8 @@ public partial class App : Application
                 {
                     SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
 
+                    FluentAvalonia.UI.Windowing.AppWindow.AlwaysFallback = SkEditorAPI.Core.GetAppConfig().ForceNativeTitleBar;
+
                     MainWindow mainWindow = new();
                     desktop.MainWindow = mainWindow;
 
