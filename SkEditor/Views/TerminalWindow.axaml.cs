@@ -17,6 +17,7 @@ namespace SkEditor.Views;
 
 public partial class TerminalWindow : AppWindow
 {
+    private const char EscapeChar = '\x1b';
     private const string CrSplitPattern = "(?=\r)";
 
     private readonly object _lock = new();
@@ -131,8 +132,49 @@ public partial class TerminalWindow : AppWindow
         }
     }
 
+    private string ProcessText(string text)
+    {
+        bool escapeSequence = false;
+        var builder = new StringBuilder();
+
+        string rawCodes = "";
+        foreach (var c in text)
+        {
+            if (c == EscapeChar)
+            {
+                escapeSequence = true;
+                continue;
+            }
+
+            if (escapeSequence)
+            {
+                if (char.IsLetter(c))
+                {
+                    escapeSequence = false;
+
+                    var codes = rawCodes.Split(';').Select(int.Parse).ToArray();
+                    rawCodes = "";
+
+                    //Console.WriteLine("Found codes: " + string.Join(", ", codes) + "; end char: " + c);
+                }
+                else if (c != '[')
+                {
+                    rawCodes += c;
+                }
+
+                continue;
+            }
+
+            builder.Append(c);
+        }
+
+        return builder.ToString();
+    }
+
     private void AppendPart(string part)
     {
+        part = ProcessText(part);
+
         TextDocument document = OutputTextBox.Document;
         DocumentLine caretLine = document.GetLineByOffset(OutputTextBox.CaretOffset);
         int offset = caretLine.Offset;
