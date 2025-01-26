@@ -23,7 +23,7 @@ public class Folder : StorageElement
 
     public Folder(string folder, Folder? parent = null)
     {
-        folder = Uri.UnescapeDataString(folder).FixLinuxPath().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        folder = Uri.UnescapeDataString(folder).NormalizePathSeparators().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
         Parent = parent;
         StorageFolderPath = folder;

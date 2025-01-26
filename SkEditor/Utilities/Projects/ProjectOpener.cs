@@ -44,7 +44,7 @@ public static class ProjectOpener
             folder = path;
         }
 
-        folder.FixLinuxPath();
+        folder.NormalizePathSeparators();
 
         NoFolderMessage.IsVisible = false;
 
