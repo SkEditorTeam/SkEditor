@@ -70,7 +70,7 @@ public class Files : IFiles
 
     public OpenedFile? GetOpenedFileByPath(string path)
     {
-        return GetOpenedFiles().Find(file => file.Path.NormalizePathSeparators() == path.NormalizePathSeparators());
+        return GetOpenedFiles().Find(file => file.Path?.NormalizePathSeparators() == path?.NormalizePathSeparators());
     }
 
     #endregion
