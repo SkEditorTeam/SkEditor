@@ -4,6 +4,7 @@ using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
