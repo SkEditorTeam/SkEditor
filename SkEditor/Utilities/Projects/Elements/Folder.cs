@@ -29,7 +29,6 @@ public class Folder : StorageElement
             .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
         Parent = parent;
-
         StorageFolderPath = folder;
 
         if (folder.StartsWith("\\\\") && folder.Count(c => c == '\\') == 3)
@@ -61,25 +60,17 @@ public class Folder : StorageElement
         }
 
         IsFile = false;
-
         IsRootFolder = parent is null;
-
         Children = [];
 
         LoadChildren();
 
         OpenInExplorerCommand = new RelayCommand(OpenInExplorer);
-
         DeleteCommand = new RelayCommand(DeleteFolder);
-
         CopyPathCommand = new RelayCommand(CopyPath);
-
         CopyAbsolutePathCommand = new RelayCommand(CopyAbsolutePath);
-
         CreateNewFileCommand = new RelayCommand(() => CreateNewElement(true));
-
         CreateNewFolderCommand = new RelayCommand(() => CreateNewElement(false));
-
         CloseProjectCommand = new RelayCommand(CloseProject);
     }
 
@@ -122,7 +113,6 @@ public class Folder : StorageElement
             return;
 
         Directory.Delete(StorageFolderPath, true);
-
         Parent?.Children?.Remove(this);
 
         if (Parent is null)
@@ -139,7 +129,6 @@ public class Folder : StorageElement
             Registries.SidebarPanels.FirstOrDefault(x => x is ExplorerPanel) as ExplorerPanel;
 
         StackPanel NoFolderMessage = Panel.Panel.NoFolderMessage;
-
         NoFolderMessage.IsVisible = ProjectRootFolder == null;
     }
 
@@ -151,9 +140,7 @@ public class Folder : StorageElement
             Directory.Move(StorageFolderPath, newPath);
 
         StorageFolderPath = newPath;
-
         Name = newName;
-
         RefreshSelf();
     }
 
@@ -200,42 +187,33 @@ public class Folder : StorageElement
     public void CopyPath()
     {
         var path = StorageFolderPath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
-
         SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(path);
     }
 
     public async void CreateNewElement(bool file)
     {
         var window = new CreateStorageElementWindow(this, file);
-
         await window.ShowDialog(MainWindow.Instance);
     }
 
     public void CreateFile(string name)
     {
         var path = Path.Combine(StorageFolderPath, name);
-
         System.IO.File.Create(path).Close();
-
         FileHandler.OpenFile(path);
 
         var element = new File(path, this);
-
         Children.Add(element);
-
         Sort(this);
     }
 
     public void CreateFolder(string name)
     {
         var path = Path.Combine(StorageFolderPath, name);
-
         Directory.CreateDirectory(path);
 
         var element = new Folder(path, this);
-
         Children.Add(element);
-
         Sort(this);
     }
 
@@ -249,7 +227,6 @@ public class Folder : StorageElement
             if (child is Folder folder)
             {
                 var item = folder.GetItemByPath(path);
-
                 if (item is not null)
                     return item;
             }

@@ -43,7 +43,6 @@ public static class ProjectOpener
             if (folders.Count == 0)
             {
                 NoFolderMessage.IsVisible = ProjectRootFolder == null;
-
                 return;
             }
 
@@ -60,7 +59,6 @@ public static class ProjectOpener
                     if (firstSlash >= 0)
                     {
                         string server = serverPart.Substring(0, firstSlash);
-
                         string sharePath = serverPart.Substring(firstSlash);
 
                         folder = $@"\\{server}{sharePath}";
