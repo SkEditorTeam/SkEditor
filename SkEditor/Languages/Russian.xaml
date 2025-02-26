@@ -13,20 +13,33 @@
 	<system:String x:Key="WindowTitleCommandGenerator">Сгенерировать команду</system:String>
 	<system:String x:Key="WindowTitleItemSelector">Выбрать элемент</system:String>
 	<system:String x:Key="WindowTitleMarketplace">Торговая площадка</system:String>
+	<system:String x:Key="WindowTitleElementRename">Переименовать</system:String>
+	<system:String x:Key="WindowTitleElementCreate">Создать</system:String>
+	<system:String x:Key="WindowTitleColorSelector">Выбор цвета</system:String>
 
 	<!-- Заголовки меню -->
 	<system:String x:Key="MenuHeaderFile">Файл</system:String>
 	<system:String x:Key="MenuHeaderEdit">Изменить</system:String>
 	<system:String x:Key="MenuHeaderTools">Инструменты</system:String>
 	<system:String x:Key="MenuHeaderOther">Другое</system:String>
+	<system:String x:Key="MenuHeaderAddons">Дополнения</system:String>
+	<system:String x:Key="MenuHeaderManageAddons">Управление дополнениями</system:String>
 
 	<!-- Меню файлов -->
 	<system:String x:Key="MenuHeaderNew">Новый</system:String>
 	<system:String x:Key="MenuHeaderOpen">Открыть</system:String>
+	<system:String x:Key="MenuHeaderOpenFolder">Открыть папку</system:String>
 	<system:String x:Key="MenuHeaderSave">Сохранить</system:String>
 	<system:String x:Key="MenuHeaderSaveAs">Сохранить как</system:String>
+	<system:String x:Key="MenuHeaderSaveAll">Сохранить все</system:String>
 	<system:String x:Key="MenuHeaderPublish">Опубликовать</system:String>
 	<system:String x:Key="MenuHeaderClose">Закрыть</system:String>
+	<system:String x:Key="MenuHeaderCloseCurrentFile">Текущий файл</system:String>
+	<system:String x:Key="MenuHeaderCloseAll">Все</system:String>
+	<system:String x:Key="MenuHeaderCloseAllButCurrent">Все, кроме текущего</system:String>
+	<system:String x:Key="MenuHeaderCloseUnsaved">Все несохраненные</system:String>
+	<system:String x:Key="MenuHeaderCloseLeft">Все слева</system:String>
+	<system:String x:Key="MenuHeaderCloseRight">Все справа</system:String>
 
 	<!-- Меню редактирования -->
 	<system:String x:Key="MenuHeaderCopy">Копировать</system:String>
@@ -34,20 +47,33 @@
 	<system:String x:Key="MenuHeaderCut">Вырезать</system:String>
 	<system:String x:Key="MenuHeaderUndo">Отменить</system:String>
 	<system:String x:Key="MenuHeaderRedo">Повторить</system:String>
-	<system:String x:Key="MenuHeaderDuulate">Дублировать</system:String>
+	<system:String x:Key="MenuHeaderDuplicate">Дублировать</system:String>
 	<system:String x:Key="MenuHeaderComment">Комментарий</system:String>
 	<system:String x:Key="MenuHeaderDelete">Удалить</system:String>
+	<system:String x:Key="MenuHeaderGoToLine">Перейти к строке</system:String>
+	<system:String x:Key="MenuHeaderTrimWhitespaces">Обрезать пробелы</system:String>
 
 	<!-- Меню инструментов -->
 	<system:String x:Key="MenuHeaderDocumentation">Документация</system:String>
-	<system:String x:Key="MenuHeaderGenerate">Создать</system:String>
+	<system:String x:Key="MenuHeaderGenerate">Генерировать</system:String>
 	<system:String x:Key="MenuHeaderGenerateGUI">GUI-меню</system:String>
 	<system:String x:Key="MenuHeaderGenerateCommand">Команда</system:String>
-	<system:String x:Key="MenuHeaderRefactor">Рефакторинг</system:String>
+	<system:String x:Key="MenuHeaderRefactor">Реорганизация</system:String>
+	<system:String x:Key="MenuHeaderColorSelector">Выбор цвета</system:String>
 
 	<!-- Другое меню -->
 	<system:String x:Key="MenuHeaderMarketplace">Торговая площадка</system:String>
 	<system:String x:Key="MenuHeaderRefreshSyntax">Обновить синтаксис</system:String>
+
+	<!-- Меню проекта -->
+	<system:String x:Key="MenuHeaderDeleteFromDisk">Удалить с диска</system:String>
+	<system:String x:Key="MenuHeaderOpenInExplorer">Открыть в проводнике</system:String>
+	<system:String x:Key="MenuHeaderCopyPath">Копировать относительный путь</system:String>
+	<system:String x:Key="MenuHeaderCopyAbsolutePath">Копировать абсолютный путь</system:String>
+	<system:String x:Key="MenuHeaderRename">Переименовать</system:String>
+	<system:String x:Key="MenuHeaderNewFile">Новый файл</system:String>
+	<system:String x:Key="MenuHeaderNewFolder">Новая папка</system:String>
+	<system:String x:Key="MenuHeaderCloseProject">Закрыть проект</system:String>
 
 	<!-- Кнопки -->
 	<system:String x:Key="ApplyButton">Применить</system:String>
@@ -59,9 +85,9 @@
 	<system:String x:Key="Error">Ошибка</system:String>
 	<system:String x:Key="Success">Успех</system:String>
 	<system:String x:Key="Attention">Внимание!</system:String>
-	<system:String x:Key="Да">Да</system:String>
+	<system:String x:Key="Yes">Да</system:String>
 	<system:String x:Key="No">Нет</system:String>
-	<system:String x:Key="ОК">ОК</system:String>
+	<system:String x:Key="Okay">ОК</system:String>
 
 	<!-- Сообщения -->
 	<system:String x:Key="NewFileNameFormat">Новый файл {0}</system:String>
@@ -69,32 +95,158 @@
 	<system:String x:Key="DownloadingMissingFilesTitle">Отсутствующие файлы</system:String>
 	<system:String x:Key="Downloading">Загрузка</system:String>
 	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Файлы, используемые селектором элементов, отсутствуют и сейчас загружаются.</system:String>
+	<system:String x:Key="DownloadingMissingFiles">Загрузка</system:String>
 	<system:String x:Key="DownloadMissingFilesFailed">Не удалось загрузить отсутствующие файлы. Пожалуйста, повторите попытку позже.</system:String>
 	<system:String x:Key="ClosingUnsavedFile">В этом файле есть несохраненные изменения. Вы уверены, что хотите закрыть его?</system:String>
+	<system:String x:Key="ClosingFiles">Вы уверены, что хотите закрыть файлы? Любые несохраненные изменения будут потеряны.</system:String>
 	<system:String x:Key="ClosingProgramWithUnsavedFiles">У вас есть несохраненные изменения хотя бы в одном файле. Вы уверены, что хотите закрыть приложение?</system:String>
 	<system:String x:Key="ChangesDetected">Этот файл был изменен извне.\nХотите перезагрузить его и, возможно, потерять изменения, внесенные в SkEditor?</system:String>
 	<system:String x:Key="DownloadingUpdateTitle">Загрузка обновления</system:String>
 	<system:String x:Key="UpdateAvailable">Доступно обновление</system:String>
 	<system:String x:Key="UpdateAvailableMessage">Доступно обновление.\nХотите загрузить его сейчас?</system:String>
 	<system:String x:Key="UpdateFailed">Не удалось загрузить обновление. Пожалуйста, повторите попытку позже.</system:String>
+	<system:String x:Key="BinaryFileFound">Похоже, вы пытаетесь открыть двоичный файл (или нетекстовый файл).\n\nВы все равно хотите его открыть? SkEditor может некорректно его обработать.</system:String>
+	<system:String x:Key="BinaryFileTitle">Найден двоичный файл</system:String>
 	
 
 	<!-- Окно публикации -->
+	<system:String x:Key="PublishWindowNoApiKey">Установите свой ключ API в настройках</system:String>
 	<system:String x:Key="PublishWindowApiKeyHint">Нажмите здесь, чтобы открыть веб-сайт с ключом API. Обязательно сначала войдите в систему!</system:String>
-	<system:String x:Key="PublishWindowAnonymous">Анонимно</system:String>
+	<system:String x:Key="PublishWindowAnonymously">Анонимно</system:String>
 	<system:String x:Key="PublishWindowResultLink">Ссылка на ваш код</system:String>
 	<system:String x:Key="PublishWindowPublishButton">Опубликовать</system:String>
+	<system:String x:Key="PublishWindowWarning">Теперь вашими ключами API можно управлять в разделе Настройки -> Подключения.</system:String>
+	
+	<!-- Окно диспетчера локальных документов -->
+	<system:String x:Key="LocalDocsManagerWindowTitle">Менеджер по локальной документации</system:String>
+	<system:String x:Key="LocalDocsManagerWindowInfo">Отсюда вы можете управлять загруженными вами элементами документации.</system:String>
+	<system:String x:Key="LocalDocsManagerWindowDeleteEverything">Удалить все</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupBy">Группировать по</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByProvider">Поставщик</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByType">Тип</system:String>
+	<system:String x:Key="LocalDocsManagerWindowGroupByAddon">Дополнение</system:String>
+	<system:String x:Key="LocalDocsManagerWindowEntryDescription">{0} предоставлено {1}</system:String>
+	
+	<!-- (Элемент) Контроль документации -->
+	<system:String x:Key="DocumentationControlExamples">Примеры</system:String>
+	<system:String x:Key="DocumentationControlActions">Действия</system:String>
+	<system:String x:Key="DocumentationControlEventValues">Значения событий</system:String>
+	<system:String x:Key="DocumentationControlChangers">Изменители</system:String>
+	
+	<system:String x:Key="DocumentationControlActionsFilter">Фильтровать по этому элементу'...</system:String>
+	<system:String x:Key="DocumentationControlType">Тип</system:String>
+	<system:String x:Key="DocumentationControlAddon">Дополнение</system:String>
+	
+	<system:String x:Key="DocumentationControlChangerHelp">нажмите нужный изменитель, чтобы скопировать его сгенерированный код.</system:String>
+	<system:String x:Key="DocumentationControlSince">С версии {0}</system:String>
+	<system:String x:Key="DocumentationControlDownload">Загрузить</system:String>
+	<system:String x:Key="DocumentationControlRemove">Удалить</system:String>
+	<system:String x:Key="DocumentationControlExampleAuthor">Автор {0}</system:String>
+
+	<system:String x:Key="DocumentationControlNoExamples">Примеров для этого элемента не найдено.</system:String>
+	<system:String x:Key="DocumentationControlNoEventValues">Значений событий для этого элемента не найдено.</system:String>
+	<system:String x:Key="DocumentationControlNoChangers">Для этого элемента не найдено ни одного изменителя.</system:String>
+	<system:String x:Key="DocumentationControlNoDescription">Описание не предоставлено.</system:String>
+
+	<system:String x:Key="DocumentationControlErrorExamples">Произошла ошибка при загрузке примеров: {0}</system:String>
+
+	<!-- Окно документации -->
+	<system:String x:Key="DocumentationWindowTitle">Документация</system:String>
+	<system:String x:Key="DocumentationWindowSearchQuery">Поисковый запрос</system:String>
+	<system:String x:Key="DocumentationWindowSearch">Поиск</system:String>
+	<system:String x:Key="DocumentationWindowFilteredType">Фильтрованный тип</system:String>
+	<system:String x:Key="DocumentationWindowFilteredAddon">Фильтрованное дополнение</system:String>
+	<system:String x:Key="DocumentationWindowProvider">Поставщик</system:String>
+	<system:String x:Key="DocumentationWindowManageCached">Управление кэшированными элементами</system:String>
+	<system:String x:Key="DocumentationWindowDownloadAll">Загрузить все найденные</system:String>
+	<system:String x:Key="DocumentationWindowLoading">Загрузка...</system:String>
+
+	<system:String x:Key="DocumentationWindowErrorGlobal">Произошла ошибка при получении документации.\n\n{0}</system:String>
+	<system:String x:Key="DocumentationWindowErrorOffline">Истекло время ожидания запроса к серверу документации. Документы не работают?</system:String>
+
+	<system:String x:Key="DocumentationWindowNoProvidersMessage">Поставщик документации не выбран.\n\nВам может потребоваться подключить ключи API из настроек, чтобы их использовать.</system:String>
+	
+	<system:String x:Key="DocumentationWindowNoResults">Результаты не найдены.</system:String>
+	<system:String x:Key="DocumentationWindowNoProviders">Поставщики не найдены.</system:String>
+	<system:String x:Key="DocumentationWindowInvalidData">Недопустимые данные поиска.</system:String>
+	<system:String x:Key="DocumentationWindowAnErrorOccured">Произошла ошибка.</system:String>
+	<system:String x:Key="DocumentationWindowTooManyResults">Слишком много результатов.</system:String>
+	<system:String x:Key="DocumentationWindowTooManyResultsMessage">Поиск вернул более 100 результатов. Вы уверены, что хотите отобразить их все?\n\nЭто может замедлить работу приложения!</system:String>
+	<system:String x:Key="DocumentationWindowInvalidDataQuery">Запрос должен быть длиной не менее 3 символов</system:String>
+	<system:String x:Key="DocumentationWindowSkriptMCBad">SkriptMC не поддерживает поиск по всем типам.</system:String>
+	<system:String x:Key="DocumentationWindowSkriptMCBad2">SkriptMC в настоящее время недоступен для документации. Повторите попытку позже.</system:String>
+
+	<system:String x:Key="DocumentationWindowNoEntries">Не найдено ни одной записи документации. Почему бы сначала не поискать?</system:String>
+	<system:String x:Key="DocumentationWindowDownloadAllMessage">Вы уверены, что хотите загрузить все найденные записи документации? (всего: {0})</system:String>
+	<system:String x:Key="DocumentationWindowDownloadingElements">Загрузка элементов...</system:String>
+	<system:String x:Key="DocumentationWindowDownloading">Загрузка</system:String>
+	<system:String x:Key="DocumentationWindowDownloadingMessage">Мы загружаем записи документации для вас. Пожалуйста, подождите...</system:String>
+	
+	<system:String x:Key="DocumentationWindowCacheSkriptHub">Кэширование элементов SkriptHub...</system:String>
+	<system:String x:Key="DocumentationWindowCacheSkriptHubMessage">Мы кэшируем элементы SkriptHub для вас. Пожалуйста, подождите...</system:String>
+	<system:String x:Key="DocumentationWindowSorting">Сортировка загруженных элементов...</system:String>
+	
+	<system:String x:Key="DocumentationWindowFetchAgain">Повторно загрузить документацию</system:String>
+	<system:String x:Key="DocumentationWindowFetchWarning">Это повторно загрузит записи документации из SkriptHub. Вам, вероятно, не нужно этого делать, если вы не хотите видеть все обновленным. Вы уверены?</system:String>
+	<system:String x:Key="DocumentationWindowFetchSuccessMessage">Кэш удален. Вам придется снова искать элементы, чтобы повторно загрузить документацию SkriptHub.</system:String>
 
 	<!-- Окно рефакторинга -->
 	<system:String x:Key="RefactorWindowRemoveComments">Удалить комментарии</system:String>
 	<system:String x:Key="RefactorWindowTabsToSpaces">Преобразовать табуляцию в пробелы</system:String>
 	<system:String x:Key="RefactorWindowSpacesToTabs">Преобразовать пробелы в табуляции</system:String>
+	<system:String x:Key="RefactorWindowRefactorBoxName">Переименование '{0}' в...</system:String>
+	
+	<!-- Выбор цвета -->
+	<system:String x:Key="ColorSelectorWindowHexResult">Результат в hex</system:String>
+	
+
+	<!-- Проекты -->
+	<system:String x:Key="ProjectExplorerTitle">Проводник</system:String>
+	<system:String x:Key="ProjectExplorerInfoText">У вас пока нет открытых папок.</system:String>
+	<system:String x:Key="ProjectExplorerInfoButton">Открыть папку</system:String>
+	<system:String x:Key="ProjectRenameText">Переименование в...</system:String>
+	<system:String x:Key="ProjectRenameErrorNameEmpty">Имя не может быть пустым.</system:String>
+	<system:String x:Key="ProjectRenameErrorParentNull">Родитель не может быть пустым.</system:String>
+	<system:String x:Key="ProjectErrorNameExists">Файл или папка с таким именем уже существует.</system:String>
+	<system:String x:Key="ProjectRenameErrorSameName">Новое имя совпадает со старым именем.</system:String>
+	<system:String x:Key="ProjectCreateFileName">Имя файла</system:String>
+	<system:String x:Key="ProjectCreateFolderName">Имя папки</system:String>
+	<system:String x:Key="ProjectCreateTemplate">Шаблон</system:String>
+	
+	<!-- Анализатор кода -->
+	<system:String x:Key="CodeParserTitle">Анализ кода</system:String>
+	<system:String x:Key="CodeParserWarning">Анализатор кода все еще находится в стадии бета-тестирования! Пожалуйста, сообщайте о любых ошибках, которые вы найдете на сервере Discord.</system:String>
+	<system:String x:Key="CodeParserEnableInfo">Анализатор кода все еще находится в стадии бета-тестирования, и могут возникать ошибки. По умолчанию он отключен, но вы можете включить его с помощью кнопки ниже.</system:String>
+	<system:String x:Key="CodeParserSearch">Поиск...</system:String>
+	<system:String x:Key="CodeParserFilterName">Фильтр по имени</system:String>
+	<system:String x:Key="CodeParserFilterType">Фильтр по типу</system:String>
+	<system:String x:Key="CodeParserFilterTypeAny">Любой</system:String>
+	<system:String x:Key="CodeParserFilterTypeFunctions">Функции</system:String>
+	<system:String x:Key="CodeParserFilterTypeEvents">События</system:String>
+	<system:String x:Key="CodeParserFilterTypeOptions">Параметры</system:String>
+	<system:String x:Key="CodeParserFilterTypeCommands">Команды</system:String>
+	<system:String x:Key="CodeParserClearFilters">Очистить текущие фильтры</system:String>
+	<system:String x:Key="CodeParserNavigate">Перейти</system:String>
+	<system:String x:Key="CodeParserNavigateToDefinition">Перейти к определению</system:String>
+	<system:String x:Key="CodeParserRename">Переименовать</system:String>
+	<system:String x:Key="CodeParserNoSections">В коде не найдено разделов. Может, стоит что-то написать? :)</system:String>
+	<system:String x:Key="CodeParserBadFormat">Этот файл не может быть проанализирован, так как он не похож на файл Skript.</system:String>
+	<system:String x:Key="CodeParserParseCode">Проанализировать код</system:String>
+	<system:String x:Key="CodeParserParsed">Текущий проанализированный код</system:String>
+
+		<!-- File Association Selection Window -->
+	<system:String x:Key="FileAssociationSelectionWindowTitle">Выберите ассоциацию файла</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowInfo">Для этого типа файла есть несколько поставщиков. Выберите одного.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowOfficialItem">Это официальный тип файла от SkEditor.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">Это неофициальный тип файла от дополнения {0}.</system:String>
+	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Запомнить мой выбор</system:String>
+
 
 	<!-- Настройки -->
 	<system:String x:Key="SettingsEnabled">Включено</system:String>
 	<system:String x:Key="SettingsDisabled">Отключено</system:String>
 
-	<!-- Главная страница настроек -->
+	<!-- Настройки Домашняя страница -->
 	<system:String x:Key="SettingsHomeTitle">Настройки</system:String>
 	<system:String x:Key="SettingsHomeGeneral">Общие</system:String>
 	<system:String x:Key="SettingsHomeGeneralDescription">Язык, функции текстового редактора</system:String>
@@ -104,22 +256,38 @@
 	<system:String x:Key="SettingsHomeDiscordDescription">Отобразите SkEditor в своем профиле Discord!</system:String>
 	<system:String x:Key="SettingsHomeExperiments">Эксперименты</system:String>
 	<system:String x:Key="SettingsHomeExperimentsDescription">Протестируйте будущие функции!</system:String>
+	<system:String x:Key="SettingsHomeConnections">Соединения</system:String>
+	<system:String x:Key="SettingsHomeConnectionsDescription">Управляйте своими сторонними подключениями.</system:String>
 	<system:String x:Key="SettingsHomeAddons">Дополнения</system:String>
 	<system:String x:Key="SettingsHomeAddonsDescription">Расширьте свои возможности с помощью мощных дополнений!</system:String>
 	<system:String x:Key="SettingsHomeAbout">О программе</system:String>
+	<system:String x:Key="SettingsHomeFileTypes">Типы файлов</system:String>
+	<system:String x:Key="SettingsHomeFileTypesDescription">Управление типами файлов и их ассоциациями.</system:String>
 
 	<!-- Общие настройки -->
 	<system:String x:Key="SettingsGeneralTitle">Общие</system:String>
 	<system:String x:Key="SettingsGeneralLanguage">Язык</system:String>
 	<system:String x:Key="SettingsGeneralWrapping">Упаковка</system:String>
+	<system:String x:Key="SettingsGeneralWrappingDescription">Выберите, следует ли переносить строки по ширине области просмотра.</system:String>
+	<system:String x:Key="SettingsGeneralTabType">Тип отступа</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeDescription">Выберите табуляцию или пробелы и задайте размер табуляции.</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeTabs">Табы</system:String>
+	<system:String x:Key="SettingsGeneralTabTypeSpaces">Пробелы</system:String>
 	<system:String x:Key="SettingsGeneralAutoIndent">Автоматический отступ</system:String>
 	<system:String x:Key="SettingsGeneralAutoIndentDescription">Автоматически вставляет табуляцию в новую строку, если предыдущая строка заканчивается двоеточием.</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairing">Автосопряжение</system:String>
+	<system:String x:Key="SettingsGeneralAutoPairing">Автоматическое сопряжение</system:String>
 	<system:String x:Key="SettingsGeneralAutoPairingDescription">Автоматически добавляет закрывающий символ при вводе открывающего символа для определенных символов.</system:String>
 	<system:String x:Key="SettingsGeneralAutoSave">Автосохранение</system:String>
-	<system:String x:Key="SettingsGeneralAutoSaveDescription">Автоматически сохраняет файл каждый раз, когда вы вносите изменения.</system:String>
-	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
-	<system:String x:Key="SettingsGeneralRpcDescription">Показать SkEditor в вашем статусе Discord.</system:String>
+	<system:String x:Key="SettingsGeneralAutoSaveDescription">Автоматически сохраняет ваш файл каждый раз, когда вы вносите изменения.</system:String>
+	<system:String x:Key="SettingsGeneralChangeChecker">Проверка внешних изменений файла</system:String>
+	<system:String x:Key="SettingsGeneralChangeCheckerDescription">Если произошло какое-либо изменение содержимого файла, вам будет предложено перезагрузить файл.</system:String>
+	<system:String x:Key="SettingsGeneralRpc">Discord присутствие</system:String>
+	<system:String x:Key="SettingsGeneralRpcDescription">Показывать SkEditor в статусе Discord.</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndent">Автоматическая вставка с отступом</system:String>
+	<system:String x:Key="SettingsGeneralPasteIndentDescription">Автоматически корректирует отступ вставленного текста в соответствии с форматом предыдущей строки.</system:String>
+	<system:String x:Key="SettingsGeneralCheckForUpdates">Проверка обновлений</system:String>
+	<system:String x:Key="SettingsGeneralProjectSingleFolderClick">Открытие папки проекта одним щелчком</system:String>
+	<system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Если включено, открывает папку одним щелчком вместо двойного.</system:String>
 
 	<!-- О настройках -->
 	<system:String x:Key="SettingsAboutTitle">О программе</system:String>
@@ -131,24 +299,47 @@
 	<system:String x:Key="SettingsAboutGithubDescription">Нажмите, чтобы открыть репозиторий SkEditor на GitHub!</system:String>
 	<system:String x:Key="SettingsAboutDiscord">Сервер Discord</system:String>
 	<system:String x:Key="SettingsAboutDiscordDescription">Нажмите, чтобы присоединиться к серверу Discord SkEditor!</system:String>
+	<system:String x:Key="SettingsAboutAppdata">Открыть папку AppData</system:String>
+	<system:String x:Key="SettingsAboutDevMode">Режим разработчика</system:String>
+	<system:String x:Key="SettingsAboutDevModeDescription">Включить режим разработчика для доступа к функциям разработчика.</system:String>
 
-	<!-- Персонализация -->
+	<!-- Настройки персонализации -->
 	<system:String x:Key="SettingsPersonalizationTitle">Персонализация</system:String>
 	<system:String x:Key="SettingsPersonalizationTheme">Тема</system:String>
 	<system:String x:Key="SettingsPersonalizationThemeDescription">Настроить цвета приложения.</system:String>
 	<system:String x:Key="SettingsPersonalizationSyntax">Подсветка синтаксиса</system:String>
+	<system:String x:Key="SettingsPersonalizationSyntaxDescription">Установите, как будет отображаться определенный текст с подсветкой синтаксиса.</system:String>
 	<system:String x:Key="SettingsPersonalizationFont">Шрифт</system:String>
 	<system:String x:Key="SettingsPersonalizationFontDescription">Текущий шрифт: {0}</system:String>
+	<system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Выделить текущую строку</system:String>
 
 	<!-- Настройки темы -->
 	<system:String x:Key="SettingsThemeTitle">Тема</system:String>
-	<system:String x:Key="SettingsThemeInformation">В будущем вы сможете редактировать цвета прямо отсюда. А пока создавайте и редактируйте файлы в папке Themes.</system:String>
 	<system:String x:Key="SettingsThemeOpenFolder">Открыть папку</system:String>
 	<system:String x:Key="SettingsThemeCurrentTheme">Текущая тема</system:String>
-	<system:String x:Key="SettingsThemeCurrentThemeDescription">Перезапуск не требуется, но он может потребоваться для 100% обновления цвета.</system:String>
+	<system:String x:Key="SettingsThemeCurrentThemeDescription">Перезагрузка не требуется, но может потребоваться для 100% обновления цвета.</system:String>
+	<system:String x:Key="SettingsThemeEditThemeDescription">Изменить текущую тему и просмотреть изменения в реальном времени.</system:String>
+	<system:String x:Key="SettingsThemeNewThemeInfo">Если вы хотите создать новую тему, вам нужно создать файл в папке Themes.</system:String>
+	<system:String x:Key="SettingsThemeEditTheme">Изменить тему</system:String>
 
-	<!-- Настройки дополнения -->
+	<!-- Настройки подсветки синтаксиса -->
+	<system:String x:Key="SettingsSyntaxesTitle">Подсветка синтаксиса</system:String>
+
+	<!-- Настройки дополнений -->
 	<system:String x:Key="SettingsAddonsTitle">Дополнения</system:String>
+	<system:String x:Key="SettingsAddonsListTitle">Список дополнений</system:String>
+	
+	<!-- Настройки подключений -->
+	<system:String x:Key="SettingsConnectionsTitle">Подключения</system:String>
+	<system:String x:Key="SettingsConnectionsDashboardButton">Открыть панель управления</system:String>
+	
+	<!-- Настройки типов файлов -->
+	<system:String x:Key="SettingsFileTypesTitle">Типы файлов</system:String>
+	<system:String x:Key="SettingsFileTypesWarning">Эта страница позволяет управлять только уже созданными ассоциациями. Для других типов файлов будет отображаться запрос.</system:String>
+	<system:String x:Key="SettingsFileTypesRemove">Удалить</system:String>
+	
+	<!-- Виды файлов -->
+	<system:String x:Key="FileViewImageAA">Сглаживание</system:String>
 
 	<!-- Discord RPC -->
 	<system:String x:Key="DiscordRpcEditing">Редактирование: {0}</system:String>
@@ -156,6 +347,7 @@
 	<!-- Нижняя панель -->
 	<system:String x:Key="BottomBarLine">Строка {0}</system:String>
 	<system:String x:Key="BottomBarColumn">Столбец {0}</system:String>
+	<system:String x:Key="BottomBarDocumentSize">Длина {0}</system:String>
 	
 	
 	<!-- Генератор GUI -->
@@ -195,7 +387,7 @@
 	<system:String x:Key="CommandGeneratorGenerate">Создать</system:String>
 	<system:String x:Key="CommandGeneratorPropertyMissing">Свойство {0} является обязательным!</system:String>
 
-	<!-- Marketplace -->
+	<!-- Торговая площадка -->
 	<system:String x:Key="MarketplaceSearch">Поиск</system:String>
 	<system:String x:Key="MarketplaceEnableNow">Включите его</system:String>
 	<system:String x:Key="MarketplaceInstallSuccess">Успешно загружено {0}!</system:String>
@@ -214,5 +406,35 @@
 	<system:String x:Key="MarketplaceButtonDisable">Отключить</system:String>
 	<system:String x:Key="MarketplaceButtonEnable">Включить</system:String>
 
+	<!-- Переход к строке -->
+	<system:String x:Key="GoToLine">Перейти к строке</system:String>
+	<system:String x:Key="GoToLineButton">Перейти</system:String>
 
+	<!-- Редактор тем -->
+	<system:String x:Key="ThemeEditorWindowBackground">Фон окна</system:String>
+	<system:String x:Key="ThemeEditorSmallWindowBackground">Фон маленького окна</system:String>
+	<system:String x:Key="ThemeEditorEditorBackground">Фон редактора</system:String>
+	<system:String x:Key="ThemeEditorEditorText">Текст редактора</system:String>
+	<system:String x:Key="ThemeEditorLineNumber">Номер строки</system:String>
+	<system:String x:Key="ThemeEditorSelection">Выделение</system:String>
+	<system:String x:Key="ThemeEditorSelectedTabBackground">Выбранный фон вкладки</system:String>
+	<system:String x:Key="ThemeEditorSelectedTabBorder">Выбранная граница вкладки</system:String>
+	<system:String x:Key="ThemeEditorMenuBackground">Фон меню</system:String>
+	<system:String x:Key="ThemeEditorMenuBorder">Граница меню</system:String>
+	<system:String x:Key="ThemeEditorFocusedTextBoxBackground">Фон текстового поля с фокусом</system:String>
+	<system:String x:Key="ThemeEditorCurrentLineBackground">Текущий фон строки</system:String>
+	<system:String x:Key="ThemeEditorCurrentLineBorder">Текущий край строки</system:String>
+	<system:String x:Key="ThemeEditorAccentColor">Цвет акцента</system:String>
+
+	<!-- Вкладка приветствия -->
+	<system:String x:Key="WelcomeTabTitle">Добро пожаловать</system:String>
+	<system:String x:Key="WelcomeTabGettingStarted">Начало работы</system:String>
+	<system:String x:Key="WelcomeTabNeedHelp">Нужна помощь?</system:String>
+	<system:String x:Key="WelcomeGettingStartedNewFile">Новый файл</system:String>
+	<system:String x:Key="WelcomeGettingStartedOpenFile">Открыть файл</system:String>
+	<system:String x:Key="WelcomeGettingStartedOpenFolder">Открыть папку</system:String>
+	<system:String x:Key="WelcomeGettingStartedSettings">Настройки</system:String>
+	<system:String x:Key="WelcomeNeedHelpDiscordServer">Сервер Discord</system:String>
+	<system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+	
 </ResourceDictionary>
