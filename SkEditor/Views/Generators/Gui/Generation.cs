@@ -116,7 +116,7 @@ public class Generation
             if (pair.Value.HaveExampleAction)
             {
                 code.Append(':');
-                code.Append($"\n\t\t\tsend \"You clicked on slot {pair.Key}\"");
+                code.Append($"\n\t\t\tsend \"You clicked on slot %gui slot%\"");
             }
         }
         code.Append("\n\topen the last gui for {_p}");
