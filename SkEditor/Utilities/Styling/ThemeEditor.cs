@@ -240,4 +240,16 @@ public class ThemeEditor
         }
         Application.Current.Resources["ContentControlThemeFontFamily"] = new FontFamily(fontName);
     }
+
+    public static async Task ReloadCurrentTheme()
+    {
+        string themePath = Path.Combine(ThemeFolderPath, CurrentTheme.FileName);
+
+        Themes.RemoveAll(t => t.FileName == CurrentTheme.FileName);
+
+        Theme reloadedTheme = LoadTheme(themePath);
+        CurrentTheme = reloadedTheme;
+
+        await ApplyTheme();
+    }
 }

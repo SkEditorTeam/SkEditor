@@ -63,7 +63,9 @@
 	
 	<!-- Other Menu -->
 	<system:String x:Key="MenuHeaderMarketplace">Marketplace</system:String>
+	<system:String x:Key="MenuHeaderDevTools">Developer tools</system:String>
 	<system:String x:Key="MenuHeaderRefreshSyntax">Refresh syntax</system:String>
+	<system:String x:Key="MenuHeaderRefreshTheme">Refresh theme</system:String>
 
 	<!-- Project Menu -->
 	<system:String x:Key="MenuHeaderDeleteFromDisk">Delete from Disk</system:String>
