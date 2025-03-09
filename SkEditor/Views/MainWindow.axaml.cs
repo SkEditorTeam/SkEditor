@@ -28,6 +28,7 @@ public partial class MainWindow : AppWindow
         InitializeComponent();
 
         WindowStyler.Style(this);
+        TitleBar.Height = 50;
 
         ThemeEditor.LoadThemes();
         AddEvents();

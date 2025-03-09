@@ -31,30 +31,36 @@
 	</Window.Styles>
 
 	<Grid RowDefinitions="Auto,*">
-		<DockPanel VerticalAlignment="Top" Grid.Row="0">
-			<Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="20" Width="20" HorizontalAlignment="Left" Margin="7"/>
+		<Border Grid.Row="0" Padding="5" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource TitleBarBackground}">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+				<Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Margin="6,0,0,0" Height="20" Width="20"/>
 
-			<controls:MainMenuControl Name="MainMenu"/>
-		</DockPanel>
+				<controls:MainMenuControl Name="MainMenu" Margin="15,0,0,0"/>
+			</StackPanel>
+		</Border>
 
-		<Grid RowDefinitions="*,auto" Grid.Row="1" Margin="10,0,10,10" Name="CoreGrid">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="42" />
-				<ColumnDefinition Width="Auto" MaxWidth="0" />
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="*" MinWidth="300" />
-			</Grid.ColumnDefinitions>
-			
-			<!-- Sidebar -->
-			<controls:SideBarControl Name="SideBar" Grid.Column="0" Grid.Row="0" MinWidth="42"/>
-			<Border Name="SidebarContentBorder" Grid.Column="1" Grid.Row="0" Margin="0,0,0,0"/>
-			<GridSplitter Name="Splitter" Grid.Column="2" Grid.Row="0" Width="6" Margin="0,0,4,0" Background="Transparent" ResizeDirection="Columns"/>
-			
-			<!-- TabControl -->
-			<ui:TabView Name="TabControl" Grid.Column="3" Grid.Row="0" Margin="0,-10,0,0" VerticalAlignment="Stretch" CanDragTabs="True" CanReorderTabs="True"/>
+		<Separator Grid.Row="0" Height="1" Margin="0,1,0,0" VerticalAlignment="Bottom" Background="{DynamicResource WindowBorderBrush}"/>
 
-			<!-- BottomBar -->
-			<controls:BottomBarControl x:Name="BottomBar" Name="BottomBar" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" Margin="0,10,0,0"/>
-		</Grid>
+		<Border Grid.Row="1" Padding="10,12,10,10" Background="{DynamicResource MainWindowGridBackground}">
+			<Grid RowDefinitions="*,auto" Name="CoreGrid">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="48" />
+					<ColumnDefinition Width="Auto" MaxWidth="0" />
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" MinWidth="300" />
+				</Grid.ColumnDefinitions>
+
+				<!-- Sidebar -->
+				<controls:SideBarControl Name="SideBar" Grid.Column="0" Grid.Row="0" MinWidth="48"/>
+				<Border Name="SidebarContentBorder" Grid.Column="1" Grid.Row="0" Margin="0,0,0,0"/>
+				<GridSplitter Name="Splitter" Grid.Column="2" Grid.Row="0" Width="6" Margin="0,0,4,0" Background="Transparent" ResizeDirection="Columns"/>
+
+				<!-- TabControl -->
+				<ui:TabView Name="TabControl" Grid.Column="3" Grid.Row="0" Margin="0,-10,0,0" VerticalAlignment="Stretch" CanDragTabs="True" CanReorderTabs="True"/>
+
+				<!-- BottomBar -->
+				<controls:BottomBarControl x:Name="BottomBar" Name="BottomBar" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" Margin="0,10,0,0"/>
+			</Grid>
+		</Border>
 	</Grid>
 </Window>
