@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Parser;
@@ -7,6 +8,8 @@ using SkEditor.Utilities.Parser.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Controls.Sidebar;
 
@@ -135,6 +138,7 @@ public partial class ParserSidebarPanel : UserControl
     {
         public override UserControl Content => Panel;
         public override IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Code };
+        public override IconSource IconActive => new SymbolIconSource() { Symbol = Symbol.Code, IconVariant = IconVariant.Filled };
         public override bool IsDisabled => false;
 
         public readonly ParserSidebarPanel Panel = new();

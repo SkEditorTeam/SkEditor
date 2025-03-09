@@ -20,7 +20,7 @@
 	</UserControl.Styles>
 
 	<Grid Name="GridPanels" ColumnDefinitions="auto,auto" RowDefinitions="*">
-		<Border Grid.Column="0" Width="42" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
+		<Border Grid.Column="0" Width="48" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
 			<StackPanel Name="Buttons" Spacing="10" HorizontalAlignment="Center">
 
 			</StackPanel>
