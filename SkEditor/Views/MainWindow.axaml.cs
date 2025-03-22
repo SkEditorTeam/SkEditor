@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
@@ -115,6 +116,9 @@ public partial class MainWindow : AppWindow
         SideBar.ReloadPanels();
 
         await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
+
+        double scale = SkEditorAPI.Core.GetAppConfig().CustomUiScale;
+        LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
 
         bool sessionFilesAdded = false;
         if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
