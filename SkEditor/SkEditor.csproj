@@ -6,7 +6,7 @@
 		<LangVersion>latest</LangVersion>
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
-		<ApplicationIcon>SkEditor.ico</ApplicationIcon>
+		<ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>
 		<PublishSingleFile>true</PublishSingleFile>
 		<AssemblyVersion>2.8.5</AssemblyVersion>
 		<FileVersion>2.8.5</FileVersion>
