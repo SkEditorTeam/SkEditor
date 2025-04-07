@@ -9,11 +9,13 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects;
+using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using SkEditor.Views.Settings;
+using System;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -23,8 +25,17 @@ public partial class MainMenuControl : UserControl
     {
         InitializeComponent();
 
+        ConfigureMenu();
         AssignCommands();
         AddMissingHotkeys();
+    }
+
+    private void ConfigureMenu()
+    {
+        void setVisibility() => MenuItemDevTools.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
+
+        setVisibility();
+        SkEditorAPI.Core.GetAppConfig().PropertyChanged += (_, _) => setVisibility();
     }
 
     private void AssignCommands()
@@ -57,6 +68,7 @@ public partial class MainMenuControl : UserControl
         MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.TextArea));
 
         MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
+        MenuItemRefreshTheme.Command = new RelayCommand(async () => await ThemeEditor.ReloadCurrentTheme());
 
         MenuItemDocs.Command = new RelayCommand(AddDocsTab);
         MenuItemGenerateGui.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new GuiGenerator(), false));

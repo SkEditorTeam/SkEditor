@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using System;
 using System.Diagnostics;

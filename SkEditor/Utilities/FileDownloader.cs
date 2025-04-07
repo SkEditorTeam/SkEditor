@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
 using System;
 using System.IO;

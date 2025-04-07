@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using Octokit;
 using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

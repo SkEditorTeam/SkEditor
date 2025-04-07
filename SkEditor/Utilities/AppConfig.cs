@@ -35,6 +35,7 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
     [ObservableProperty] private bool _isDevModeEnabled = false;
     [ObservableProperty] private bool _forceNativeTitleBar = false;
+    [ObservableProperty] private double _customUiScale = 1.0;
 
     /// <summary>
     /// Represent the width of panels via their ID (<see cref="Registries.SidebarPanels"/>

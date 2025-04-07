@@ -7,6 +7,7 @@ using Serilog;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Syntax;

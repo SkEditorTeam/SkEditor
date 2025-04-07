@@ -23,7 +23,7 @@ public partial class WelcomeTabControl : UserControl
     private const int _textSize = 16;
 
     // This is just a little, funny thing serving no real purpose... But it's nice, right?
-    private readonly string[] _tooltips = ["Hey!", "Hi!", "How are you?", "This addon rework is kinda cool, right?", "Ohh, a pre-release? Nice!", "What will you code today?"];
+    private readonly string[] _tooltips = ["Hey!", "Hi!", "How are you?", "What will you code today?"];
 
     public WelcomeTabControl()
     {

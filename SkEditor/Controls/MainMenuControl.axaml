@@ -183,10 +183,20 @@
 					<icons:SymbolIcon Symbol="ShoppingBag"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="{DynamicResource MenuHeaderRefreshSyntax}" Name="MenuItemRefreshSyntax">
+			<MenuItem Header="{DynamicResource MenuHeaderDevTools}" Name="MenuItemDevTools">
 				<MenuItem.Icon>
-					<icons:SymbolIcon Symbol="ArrowClockwise"/>
+					<icons:SymbolIcon Symbol="WindowDevTools"/>
 				</MenuItem.Icon>
+				<MenuItem Header="{DynamicResource MenuHeaderRefreshSyntax}" Name="MenuItemRefreshSyntax">
+					<MenuItem.Icon>
+						<icons:SymbolIcon Symbol="Color"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="{DynamicResource MenuHeaderRefreshTheme}" Name="MenuItemRefreshTheme">
+					<MenuItem.Icon>
+						<icons:SymbolIcon Symbol="PaintBucket"/>
+					</MenuItem.Icon>
+				</MenuItem>
 			</MenuItem>
 		</MenuItem>
 		<MenuItem Name="MenuItemSettings" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">

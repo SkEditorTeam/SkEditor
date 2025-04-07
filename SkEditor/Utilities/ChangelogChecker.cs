@@ -6,11 +6,10 @@ public static class ChangelogChecker
 {
     private static string GetVersion() => SkEditorAPI.Core.GetInformationalVersion();
 
+    // This changelog system is pretty lame, will be improved in the future
     private static readonly string[] changelog =
     [
         "Welcome to the new version of SkEditor!",
-        "This update focuses exclusively on bug fixes.",
-        "Check the changelog on GitHub to see what's fixed!",
     ];
 
     public async static void Check()
