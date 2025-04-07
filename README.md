@@ -43,7 +43,7 @@
 
 <h3 align="center">SkEditor is an app for editing Skript files.</h3>
 <p align='center'>
-  <img src="https://i.imgur.com/kCfoIxp.png" alt="SkEditor+" width=75% height=75%>
+  <img src="https://notro.me/resources/skeditor/window2.png" alt="SkEditor+" width=75% height=75%>
 </p>
 
 ---
