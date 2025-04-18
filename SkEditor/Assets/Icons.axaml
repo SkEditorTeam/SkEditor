@@ -60,4 +60,5 @@
 	<ui:SymbolIconSource x:Key="Rename" Symbol="Rename"/>
 	<ui:SymbolIconSource x:Key="Folder" Symbol="Folder"/>
 	<ui:SymbolIconSource x:Key="Settings" Symbol="Settings"/>
+	<ui:SymbolIconSource x:Key="ZoomIcon" Symbol="ZoomIn"/>
 </ResourceDictionary>

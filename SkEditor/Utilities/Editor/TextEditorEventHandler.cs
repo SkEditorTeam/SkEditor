@@ -59,6 +59,21 @@ public partial class TextEditorEventHandler
 
     private static void Zoom(TextEditor editor, int value)
     {
+        if (SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled)
+        {
+            foreach (var openedFile in SkEditorAPI.Files.GetOpenedEditors())
+            {
+                ZoomEditor(value, openedFile.Editor);
+            }
+        }
+        else
+        {
+            ZoomEditor(value, editor);
+        }
+    }
+
+    public static void ZoomEditor(int value, TextEditor editor)
+    {
         if (value < 0 && editor.FontSize <= 5) return;
 
         ScrollViewer scrollViewer = GetScrollViewer(editor);

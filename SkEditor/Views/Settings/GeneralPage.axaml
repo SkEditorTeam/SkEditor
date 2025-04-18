@@ -43,6 +43,13 @@
 						<ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled, Mode=OneTime}"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
+
+				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralZoomSync}" IconSource="{StaticResource ZoomIcon}"
+                     Description="{DynamicResource SettingsGeneralZoomSyncDescription}">
+					<ui:SettingsExpander.Footer>
+						<ToggleSwitch Name="ZoomSyncToggleSwitch" IsChecked="{Binding IsZoomSyncEnabled}"/>
+					</ui:SettingsExpander.Footer>
+				</ui:SettingsExpander>
 				
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralTabType}" IconSource="{StaticResource FunctionIcon}"
 				                     Description="{DynamicResource SettingsGeneralTabTypeDescription}">

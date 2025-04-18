@@ -271,6 +271,8 @@
 	<system:String x:Key="SettingsGeneralLanguage">Language</system:String>
 	<system:String x:Key="SettingsGeneralWrapping">Wrapping</system:String>
 	<system:String x:Key="SettingsGeneralWrappingDescription">Choose whether lines should wrap at the viewport width.</system:String>
+	<system:String x:Key="SettingsGeneralZoomSync">Synchronize zoom between tabs</system:String>
+	<system:String x:Key="SettingsGeneralZoomSyncDescription">When enabled, changing zoom level in one tab will apply the same zoom to all other tabs.</system:String>
 	<system:String x:Key="SettingsGeneralTabType">Indentation Type</system:String>
 	<system:String x:Key="SettingsGeneralTabTypeDescription">Choose between tabs and spaces, and set the size of the tab.</system:String>
 	<system:String x:Key="SettingsGeneralTabTypeTabs">Tabs</system:String>

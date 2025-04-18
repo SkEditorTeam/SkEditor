@@ -20,6 +20,7 @@ public partial class AppConfig : ObservableObject
 
     [ObservableProperty] private bool _isDiscordRpcEnabled = true;
     [ObservableProperty] private bool _isWrappingEnabled = false;
+    [ObservableProperty] private bool _isZoomSyncEnabled = false;
     [ObservableProperty] private bool _isAutoIndentEnabled = false;
     [ObservableProperty] private bool _isPasteIndentationEnabled = false;
     [ObservableProperty] private bool _isAutoPairingEnabled = false;
