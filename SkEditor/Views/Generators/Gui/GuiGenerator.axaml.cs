@@ -9,7 +9,6 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
 using SkEditor.ViewModels;
-using SkEditor.Views.Generators.Gui.Generator;
 using System;
 using System.Collections.Generic;
 using System.IO;

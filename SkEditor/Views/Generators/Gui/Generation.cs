@@ -9,15 +9,13 @@ using System.Text;
 namespace SkEditor.Views.Generators.Gui;
 public class Generation
 {
-    private static Dictionary<int, Item> _items = [];
     private static GuiGenerator _guiGen;
 
-    const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     public static void Generate()
     {
         _guiGen = GuiGenerator.Instance;
-        _items = _guiGen.Items;
 
         StringBuilder code = new();
 
@@ -26,6 +24,8 @@ public class Generation
         if (string.IsNullOrWhiteSpace(_guiGen.TitleTextBox.Text)) _guiGen.TitleTextBox.Text = "GUI";
 
         TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        if (editor == null) return;
+        
         int offset = editor.CaretOffset;
         DocumentLine line = editor.Document.GetLineByOffset(offset);
 
@@ -113,11 +113,10 @@ public class Generation
             AppendCustomName(code, pair.Value);
             AppendLore(code, pair.Value);
             AppendCustomModelData(code, pair.Value);
-            if (pair.Value.HaveExampleAction)
-            {
-                code.Append(':');
-                code.Append($"\n\t\t\tsend \"You clicked on slot {pair.Key}\"");
-            }
+            if (!pair.Value.HaveExampleAction) continue;
+
+            code.Append(':');
+            code.Append($"\n\t\t\tsend \"You clicked on slot {pair.Key}\"");
         }
         code.Append("\n\topen the last gui for {_p}");
 
@@ -185,7 +184,6 @@ public class Generation
         if (rowQuantity == 1)
         {
             code.Append($" \"{string.Join("", rows[0])}\"");
-            return code.ToString();
         }
         else
         {
@@ -202,7 +200,7 @@ public class Generation
     {
         Random random = new();
         char randomChar;
-        do { randomChar = chars[random.Next(chars.Length)]; } while (usedChars.Contains(randomChar));
+        do { randomChar = Chars[random.Next(Chars.Length)]; } while (usedChars.Contains(randomChar));
         return randomChar;
     }
     #endregion
