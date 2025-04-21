@@ -8,9 +8,6 @@ using SkEditor.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
-using Symbol = FluentIcons.Common.Symbol;
-using Serilog;
 
 namespace SkEditor.Controls;
 public partial class SideBarControl : UserControl
@@ -26,14 +23,25 @@ public partial class SideBarControl : UserControl
     {
         InitializeComponent();
 
-        Loaded += (_, _) => SkEditorAPI.Windows.GetMainWindow().Splitter.DragCompleted += (sender, args) =>
+        Loaded += (_, _) =>
         {
-            if (_currentPanel == null)
-                return;
+            SkEditorAPI.Windows.GetMainWindow().Splitter.DragCompleted += (sender, args) =>
+            {
+                if (_currentPanel == null)
+                    return;
 
-            SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] =
-                (int)SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].Width.Value;
+                SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] =
+                    (int)SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].Width.Value;
+            };
         };
+    }
+
+    private void UpdateSplitterVisibility()
+    {
+        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        var splitter = mainWindow.Splitter;
+
+        splitter.IsEnabled = _currentPanel != null;
     }
 
     public void ReloadPanels()
@@ -49,6 +57,7 @@ public partial class SideBarControl : UserControl
         Buttons.Children.Clear();
         SkEditorAPI.Windows.GetMainWindow().SidebarContentBorder.Child = null;
         _currentPanel = null;
+        UpdateSplitterVisibility();
 
         foreach (var panel in panels)
             Buttons.Children.Add(CreatePanelButton(panel));
@@ -94,6 +103,8 @@ public partial class SideBarControl : UserControl
 
                 SkEditorAPI.Windows.GetMainWindow().SideBar.Margin = new Thickness(0, 0, 0, 0);
 
+                UpdateSplitterVisibility();
+
                 return;
             }
 
@@ -123,6 +134,8 @@ public partial class SideBarControl : UserControl
             SkEditorAPI.Windows.GetMainWindow().CoreGrid.ColumnDefinitions[1].MaxWidth = int.MaxValue;
 
             SkEditorAPI.Windows.GetMainWindow().SideBar.Margin = new Thickness(0, 0, 10, 0);
+
+            UpdateSplitterVisibility();
         });
 
         return button;
