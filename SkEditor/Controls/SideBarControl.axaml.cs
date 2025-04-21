@@ -9,6 +9,7 @@ using SkEditor.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SkEditor.Controls;
@@ -22,12 +23,15 @@ public partial class SideBarControl : UserControl
     private readonly SolidColorBrush _activeButtonForeground = new(Color.Parse("#60cdff"));
 
     private bool _isAnimating;
-    private TaskCompletionSource<bool>? _animationCompletionSource;
+    private CancellationTokenSource? _animationCancellationSource;
 
     private const int GapColumnIndex = 1;
     private const int ContentColumnIndex = 2;
     private const double GapWidth = 10.0;
     private const double ZeroWidth = 0.0;
+
+    private DateTime _lastToggleTime = DateTime.MinValue;
+    private readonly TimeSpan _toggleDebounceTime = TimeSpan.FromMilliseconds(250);
 
     public SideBarControl()
     {
@@ -65,8 +69,15 @@ public partial class SideBarControl : UserControl
 
     private void StopAnimation()
     {
-        _animationCompletionSource?.TrySetResult(false);
-        _animationCompletionSource = null;
+        if (_animationCancellationSource != null)
+        {
+            if (!_animationCancellationSource.IsCancellationRequested)
+            {
+                _animationCancellationSource.Cancel();
+            }
+            _animationCancellationSource.Dispose();
+            _animationCancellationSource = null;
+        }
     }
 
     private void UpdateSplitterVisibility()
@@ -129,10 +140,14 @@ public partial class SideBarControl : UserControl
         if (panel.IsDisabled)
             return;
 
-        if (_isAnimating)
+        var now = DateTime.Now;
+        if ((now - _lastToggleTime) < _toggleDebounceTime)
         {
-            StopAnimation();
+            return;
         }
+        _lastToggleTime = now;
+
+        StopAnimation();
 
         _isAnimating = true;
         UpdateSplitterVisibility();
@@ -185,12 +200,18 @@ public partial class SideBarControl : UserControl
 
         _currentPanel.OnOpen();
 
-        AnimateColumnsAsync(contentColumn, targetContentWidth, gapColumn, GapWidth).ContinueWith(_ =>
+        AnimateColumnsAsync(contentColumn, targetContentWidth, gapColumn, GapWidth).ContinueWith(task =>
         {
-            Dispatcher.UIThread.Post(() =>
+            if (!task.IsCanceled && !task.IsFaulted)
             {
-                FinalizePanelAnimation(panel, panelContent, contentColumn, gapColumn, sidebarContentBorder);
-            });
+                Dispatcher.UIThread.Post(() =>
+                {
+                    if (_currentPanel == panel)
+                    {
+                        FinalizePanelAnimation(panel, panelContent, contentColumn, gapColumn, sidebarContentBorder);
+                    }
+                });
+            }
         });
     }
 
@@ -211,21 +232,28 @@ public partial class SideBarControl : UserControl
 
         contentColumn.MinWidth = 0;
 
-        AnimateColumnsAsync(contentColumn, ZeroWidth, gapColumn, ZeroWidth).ContinueWith(_ =>
+        AnimateColumnsAsync(contentColumn, ZeroWidth, gapColumn, ZeroWidth).ContinueWith(task =>
         {
-            Dispatcher.UIThread.Post(() =>
+            if (!task.IsCanceled && !task.IsFaulted)
             {
-                panelToClose?.OnClose();
-                sidebarContentBorder.Child = null;
-
-                if (contentToClose != null)
+                Dispatcher.UIThread.Post(() =>
                 {
-                    ResetControlAlignment(contentToClose);
-                }
+                    panelToClose?.OnClose();
+                    
+                    if (sidebarContentBorder.Child == contentToClose)
+                    {
+                        sidebarContentBorder.Child = null;
+                    }
 
-                _isAnimating = false;
-                UpdateSplitterVisibility();
-            });
+                    if (contentToClose != null)
+                    {
+                        ResetControlAlignment(contentToClose);
+                    }
+
+                    _isAnimating = false;
+                    UpdateSplitterVisibility();
+                });
+            }
         });
     }
 
@@ -312,10 +340,11 @@ public partial class SideBarControl : UserControl
         }
     }
 
-    private Task<bool> AnimateColumnsAsync(ColumnDefinition contentColumn, double targetContentWidth, ColumnDefinition gapColumn, double targetGapWidth)
+    private async Task<bool> AnimateColumnsAsync(ColumnDefinition contentColumn, double targetContentWidth, ColumnDefinition gapColumn, double targetGapWidth)
     {
         StopAnimation();
-        _animationCompletionSource = new TaskCompletionSource<bool>();
+        _animationCancellationSource = new CancellationTokenSource();
+        var token = _animationCancellationSource.Token;
 
         var startContentWidth = contentColumn.Width.Value;
         var startGapWidth = gapColumn.Width.Value;
@@ -328,8 +357,16 @@ public partial class SideBarControl : UserControl
         if (gapColumn.Width.GridUnitType != GridUnitType.Pixel)
             gapColumn.Width = new GridLength(startGapWidth, GridUnitType.Pixel);
 
+        var tcs = new TaskCompletionSource<bool>();
+
         void AnimateFrame(TimeSpan _)
         {
+            if (token.IsCancellationRequested)
+            {
+                tcs.TrySetCanceled();
+                return;
+            }
+
             var elapsed = (DateTime.UtcNow - startTime).TotalMilliseconds;
             double progress = duration <= 0 ? 1.0 : Math.Clamp(elapsed / duration, 0.0, 1.0);
             double easedProgress = 1 - Math.Pow(1 - progress, 3);
@@ -340,22 +377,36 @@ public partial class SideBarControl : UserControl
             contentColumn.Width = new GridLength(currentContentWidth, GridUnitType.Pixel);
             gapColumn.Width = new GridLength(currentGapWidth, GridUnitType.Pixel);
 
-            if (progress < 1.0)
+            if (progress < 1.0 && !token.IsCancellationRequested)
             {
                 TopLevel.GetTopLevel(this)?.RequestAnimationFrame(AnimateFrame);
             }
             else
             {
-                contentColumn.Width = new GridLength(targetContentWidth, GridUnitType.Pixel);
-                gapColumn.Width = new GridLength(targetGapWidth, GridUnitType.Pixel);
-                _animationCompletionSource?.TrySetResult(true);
+                if (!token.IsCancellationRequested)
+                {
+                    contentColumn.Width = new GridLength(targetContentWidth, GridUnitType.Pixel);
+                    gapColumn.Width = new GridLength(targetGapWidth, GridUnitType.Pixel);
+                    tcs.TrySetResult(true);
+                }
+                else
+                {
+                    tcs.TrySetCanceled();
+                }
             }
         }
 
         TopLevel.GetTopLevel(this)?.RequestAnimationFrame(AnimateFrame);
-        return _animationCompletionSource.Task;
+        
+        try
+        {
+            return await tcs.Task;
+        }
+        catch (TaskCanceledException)
+        {
+            return false;
+        }
     }
-
 
     private static Viewbox CreateIconViewbox(IconSource icon, SolidColorBrush foreground)
     {
