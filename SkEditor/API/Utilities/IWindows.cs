@@ -15,8 +15,8 @@ public interface IWindows
     /// <summary>
     /// Get the main SkEditor window.
     /// </summary>
-    /// <returns>The main SkEditor window.</returns>
-    MainWindow GetMainWindow();
+    /// <returns>The main SkEditor window. Can be <see langword="null" /> in early or broken states.</returns>
+    MainWindow? GetMainWindow();
 
     /// <summary>
     /// Get the current top-level window. This may not be the main window.

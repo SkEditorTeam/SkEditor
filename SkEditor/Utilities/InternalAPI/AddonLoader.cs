@@ -226,7 +226,7 @@ public static class AddonLoader
 
             meta.State = IAddons.AddonState.Enabled;
             SaveMeta();
-            SkEditorAPI.Windows.GetMainWindow().ReloadUiOfAddons();
+            SkEditorAPI.Windows.GetMainWindow()?.ReloadUiOfAddons();
             return true;
         }
         catch (Exception e)
@@ -237,7 +237,7 @@ public static class AddonLoader
             meta.State = IAddons.AddonState.Disabled;
             SaveMeta();
             Registries.Unload(addon);
-            SkEditorAPI.Windows.GetMainWindow().ReloadUiOfAddons();
+            SkEditorAPI.Windows.GetMainWindow()?.ReloadUiOfAddons();
             return false;
         }
     }
