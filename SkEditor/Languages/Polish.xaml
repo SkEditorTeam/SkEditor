@@ -292,6 +292,8 @@
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Sprawdzaj aktualizacje</system:String>
 	<system:String x:Key="SettingsGeneralProjectSingleFolderClick">Otwórz folder projektu pojedynczym kliknięciem</system:String>
 	<system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Po włączeniu, otwiera folder pojedynczym kliknięciem zamiast podwójnym.</system:String>
+	<system:String x:Key="SettingsGeneralSidebarAnimations">Animacje paska bocznego</system:String>
+	<system:String x:Key="SettingsGeneralSidebarAnimationsDescription">Włącz lub wyłącz animacje podczas otwierania i zamykania paneli paska bocznego.</system:String>
 
 	<!-- About Settings -->
 	<system:String x:Key="SettingsAboutTitle">O programie</system:String>

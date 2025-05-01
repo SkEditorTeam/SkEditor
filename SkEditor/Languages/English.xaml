@@ -292,6 +292,8 @@
 	<system:String x:Key="SettingsGeneralCheckForUpdates">Check for updates</system:String>
 	<system:String x:Key="SettingsGeneralProjectSingleFolderClick">Open project folder on single click</system:String>
 	<system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">When enabled, opens a folder with a single click instead of a double click.</system:String>
+	<system:String x:Key="SettingsGeneralSidebarAnimations">Sidebar Animations</system:String>
+	<system:String x:Key="SettingsGeneralSidebarAnimationsDescription">Enable or disable animations when opening and closing sidebar panels.</system:String>
 
 	<!-- About Settings -->
 	<system:String x:Key="SettingsAboutTitle">About</system:String>

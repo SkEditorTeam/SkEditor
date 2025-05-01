@@ -16,22 +16,21 @@ namespace SkEditor.Controls;
 
 public partial class SideBarControl : UserControl
 {
-    private SidebarPanel? _currentPanel;
     public static TimeSpan TransitionDuration = TimeSpan.FromMilliseconds(250);
-
-    private readonly SolidColorBrush _buttonForeground = new(Color.Parse("#cccccc"));
-    private readonly SolidColorBrush _activeButtonForeground = new(Color.Parse("#60cdff"));
-
-    private bool _isAnimating;
-    private CancellationTokenSource? _animationCancellationSource;
 
     private const int GapColumnIndex = 1;
     private const int ContentColumnIndex = 2;
     private const double GapWidth = 10.0;
     private const double ZeroWidth = 0.0;
 
-    private DateTime _lastToggleTime = DateTime.MinValue;
+    private readonly SolidColorBrush _buttonForeground = new(Color.Parse("#cccccc"));
+    private readonly SolidColorBrush _activeButtonForeground = new(Color.Parse("#60cdff"));
     private readonly TimeSpan _toggleDebounceTime = TimeSpan.FromMilliseconds(250);
+
+    private SidebarPanel? _currentPanel;
+    private bool _isAnimating;
+    private CancellationTokenSource? _animationCancellationSource;
+    private DateTime _lastToggleTime = DateTime.MinValue;
 
     public SideBarControl()
     {
@@ -41,43 +40,49 @@ public partial class SideBarControl : UserControl
 
     private void SetupEventHandlers()
     {
-        Loaded += (_, _) => OnLoaded();
-        Unloaded += (_, _) => StopAnimation();
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
     }
 
-    private void OnLoaded()
+    private void OnLoaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         var mainWindow = SkEditorAPI.Windows.GetMainWindow();
         if (mainWindow?.Splitter == null) return;
 
-        mainWindow.Splitter.DragCompleted += (_, _) =>
-        {
-            if (_currentPanel == null || _isAnimating)
-                return;
-
-            var currentWidth = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width.Value;
-            SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] = (int)currentWidth;
-
-            mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = _currentPanel.DesiredWidth;
-        };
+        mainWindow.Splitter.DragCompleted += Splitter_DragCompleted;
 
         if (_currentPanel != null) return;
 
-        SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, 0);
+        SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, ZeroWidth);
         mainWindow.SidebarContentBorder.Child = null;
+    }
+
+    private void OnUnloaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        StopAnimation();
+        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow?.Splitter != null)
+        {
+            mainWindow.Splitter.DragCompleted -= Splitter_DragCompleted;
+        }
+    }
+
+    private void Splitter_DragCompleted(object? sender, Avalonia.Input.VectorEventArgs e)
+    {
+        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow == null || _currentPanel == null || _isAnimating)
+            return;
+
+        var currentWidth = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width.Value;
+        SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] = (int)currentWidth;
+        mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = _currentPanel.DesiredWidth;
     }
 
     private void StopAnimation()
     {
-        if (_animationCancellationSource != null)
-        {
-            if (!_animationCancellationSource.IsCancellationRequested)
-            {
-                _animationCancellationSource.Cancel();
-            }
-            _animationCancellationSource.Dispose();
-            _animationCancellationSource = null;
-        }
+        _animationCancellationSource?.Cancel();
+        _animationCancellationSource?.Dispose();
+        _animationCancellationSource = null;
     }
 
     private void UpdateSplitterVisibility()
@@ -99,7 +104,10 @@ public partial class SideBarControl : UserControl
         if (!panels.Any())
         {
             IsVisible = false;
-            SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, 0);
+            SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, ZeroWidth);
+            mainWindow.SidebarContentBorder.Child = null;
+            _currentPanel = null;
+            UpdateSplitterVisibility();
             return;
         }
 
@@ -108,7 +116,7 @@ public partial class SideBarControl : UserControl
         mainWindow.SidebarContentBorder.Child = null;
         _currentPanel = null;
 
-        SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, 0);
+        SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, ZeroWidth);
         UpdateSplitterVisibility();
 
         foreach (var panel in panels)
@@ -137,28 +145,25 @@ public partial class SideBarControl : UserControl
 
     private void TogglePanel(SidebarPanel panel, Button button)
     {
-        if (panel.IsDisabled)
-            return;
+        if (panel.IsDisabled) return;
+        
+        bool useAnimation = SkEditorAPI.Core.GetAppConfig().IsSidebarAnimationEnabled;
 
-        var now = DateTime.Now;
-        if ((now - _lastToggleTime) < _toggleDebounceTime)
+        if (useAnimation)
         {
-            return;
+            var now = DateTime.Now;
+            if ((now - _lastToggleTime) < _toggleDebounceTime && _currentPanel != panel)
+            {
+                return;
+            }
+
+            _lastToggleTime = now;
         }
-        _lastToggleTime = now;
 
         StopAnimation();
 
-        _isAnimating = true;
-        UpdateSplitterVisibility();
-
         var mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow == null)
-        {
-            _isAnimating = false;
-            UpdateSplitterVisibility();
-            return;
-        }
+        if (mainWindow == null) return;
 
         var contentColumn = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex];
         var gapColumn = mainWindow.CoreGrid.ColumnDefinitions[GapColumnIndex];
@@ -166,132 +171,108 @@ public partial class SideBarControl : UserControl
 
         if (_currentPanel == panel)
         {
-            AnimateClose(contentColumn, gapColumn, sidebarContentBorder, button);
+            ClosePanelInternal(panel, button, contentColumn, gapColumn, sidebarContentBorder, useAnimation);
         }
         else
         {
-            AnimateOpen(panel, button, contentColumn, gapColumn, sidebarContentBorder);
+            OpenPanelInternal(panel, button, contentColumn, gapColumn, sidebarContentBorder, useAnimation);
         }
     }
 
-    private void AnimateOpen(SidebarPanel panel, Button button, ColumnDefinition contentColumn, ColumnDefinition gapColumn, Border sidebarContentBorder)
+    private void OpenPanelInternal(SidebarPanel panel, Button button, ColumnDefinition contentColumn,
+        ColumnDefinition gapColumn, Border sidebarContentBorder, bool animate)
     {
-        ResetButtonIcons();
-
         var previousPanel = _currentPanel;
         var previousContent = sidebarContentBorder.Child;
 
+        ResetButtonIcons();
+
         if (previousPanel != null)
         {
-            ClosePanel(previousPanel, previousContent, contentColumn);
+            previousPanel.OnClose();
+            if (previousContent != null) ResetControlAlignment(previousContent);
             sidebarContentBorder.Child = null;
         }
 
-        SetButtonActive(button, true);
-
         _currentPanel = panel;
+        SetButtonActive(button, true);
         var panelContent = _currentPanel.Content;
         var targetContentWidth = GetPanelWidth(_currentPanel);
+        contentColumn.MinWidth = 0;
 
         if (panelContent != null)
         {
-            ConfigurePanelContent(panelContent, targetContentWidth, sidebarContentBorder);
+            ConfigurePanelContentForAnimation(panelContent, targetContentWidth);
+            sidebarContentBorder.Child = panelContent;
         }
 
         _currentPanel.OnOpen();
 
-        AnimateColumnsAsync(contentColumn, targetContentWidth, gapColumn, GapWidth).ContinueWith(task =>
+        if (animate)
         {
-            if (!task.IsCanceled && !task.IsFaulted)
-            {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    if (_currentPanel == panel)
-                    {
-                        FinalizePanelAnimation(panel, panelContent, contentColumn, gapColumn, sidebarContentBorder);
-                    }
-                });
-            }
-        });
+            _isAnimating = true;
+            UpdateSplitterVisibility();
+            AnimateColumnsAsync(contentColumn, targetContentWidth, gapColumn, GapWidth)
+                .ContinueWith(task => Dispatcher.UIThread.Post(() =>
+                        FinalizeOpen(panel, panelContent, contentColumn, sidebarContentBorder,
+                            task.IsCompletedSuccessfully)),
+                    TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        else
+        {
+            contentColumn.Width = new GridLength(targetContentWidth);
+            gapColumn.Width = new GridLength(GapWidth);
+            FinalizeOpen(panel, panelContent, contentColumn, sidebarContentBorder, true);
+        }
     }
 
-    private void AnimateClose(ColumnDefinition contentColumn, ColumnDefinition gapColumn, Border sidebarContentBorder, Button button)
+    private void ClosePanelInternal(SidebarPanel panelToClose, Button button, ColumnDefinition contentColumn,
+        ColumnDefinition gapColumn, Border sidebarContentBorder, bool animate)
     {
-        var panelToClose = _currentPanel;
-        var contentToClose = sidebarContentBorder.Child;
         _currentPanel = null;
+        var contentToClose = sidebarContentBorder.Child;
 
         SetButtonActive(button, false);
 
         if (contentToClose != null)
         {
-            double currentWidth = contentColumn.Width.Value;
-            contentToClose.Width = currentWidth;
+            contentToClose.Width = contentColumn.Width.Value;
             contentToClose.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
         }
 
         contentColumn.MinWidth = 0;
 
-        AnimateColumnsAsync(contentColumn, ZeroWidth, gapColumn, ZeroWidth).ContinueWith(task =>
+        if (animate)
         {
-            if (!task.IsCanceled && !task.IsFaulted)
-            {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    panelToClose?.OnClose();
-                    
-                    if (sidebarContentBorder.Child == contentToClose)
-                    {
-                        sidebarContentBorder.Child = null;
-                    }
-
-                    if (contentToClose != null)
-                    {
-                        ResetControlAlignment(contentToClose);
-                    }
-
-                    _isAnimating = false;
-                    UpdateSplitterVisibility();
-                });
-            }
-        });
-    }
-
-    #region Helper Methods
-
-    private static void SetColumnWidths(MainWindow mainWindow, double gapWidth, double contentWidth, double minWidth)
-    {
-        mainWindow.CoreGrid.ColumnDefinitions[GapColumnIndex].Width = new GridLength(gapWidth);
-        mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width = new GridLength(contentWidth);
-        mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = minWidth;
-    }
-
-    private static void ClosePanel(SidebarPanel panel, Control? content, ColumnDefinition contentColumn)
-    {
-        panel.OnClose();
-        contentColumn.MinWidth = 0;
-
-        if (content != null)
+            _isAnimating = true;
+            UpdateSplitterVisibility();
+            AnimateColumnsAsync(contentColumn, ZeroWidth, gapColumn, ZeroWidth)
+                .ContinueWith(task => Dispatcher.UIThread.Post(() =>
+                        FinalizeClose(panelToClose, contentToClose, sidebarContentBorder,
+                            task.IsCompletedSuccessfully)),
+                    TaskScheduler.FromCurrentSynchronizationContext());
+        }
+        else
         {
-            ResetControlAlignment(content);
+            contentColumn.Width = new GridLength(ZeroWidth);
+            gapColumn.Width = new GridLength(ZeroWidth);
+            FinalizeClose(panelToClose, contentToClose, sidebarContentBorder, true);
         }
     }
 
-    private static void ConfigurePanelContent(Control panelContent, double width, Border sidebarContentBorder)
+    private void FinalizeOpen(SidebarPanel panel, Control? panelContent, ColumnDefinition contentColumn, Border sidebarContentBorder, bool success)
     {
-        panelContent.Width = width;
-        panelContent.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
-        panelContent.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch;
-        sidebarContentBorder.Child = panelContent;
-    }
+        _isAnimating = false;
 
-    private void FinalizePanelAnimation(SidebarPanel panel, Control? panelContent, ColumnDefinition contentColumn,
-        ColumnDefinition gapColumn, Border sidebarContentBorder)
-    {
+        if (!success)
+        {
+            UpdateSplitterVisibility();
+            return;
+        }
+
         if (_currentPanel == panel)
         {
             contentColumn.MinWidth = _currentPanel.DesiredWidth;
-
             if (panelContent != null)
             {
                 ResetControlAlignment(panelContent);
@@ -299,16 +280,53 @@ public partial class SideBarControl : UserControl
         }
         else
         {
-            contentColumn.MinWidth = 0;
+            if (_currentPanel == null)
+            {
+                SetColumnWidths(SkEditorAPI.Windows.GetMainWindow()!, ZeroWidth, ZeroWidth, ZeroWidth);
+            }
+
             if (panelContent != null && sidebarContentBorder.Child != panelContent)
             {
                 ResetControlAlignment(panelContent);
             }
-            gapColumn.Width = new GridLength(0);
         }
 
-        _isAnimating = false;
         UpdateSplitterVisibility();
+    }
+
+    private void FinalizeClose(SidebarPanel panelToClose, Control? contentToClose, Border sidebarContentBorder,
+        bool success)
+    {
+        _isAnimating = false;
+
+        panelToClose.OnClose();
+
+        if (success && sidebarContentBorder.Child == contentToClose)
+        {
+            sidebarContentBorder.Child = null;
+        }
+
+        if (contentToClose != null)
+        {
+            ResetControlAlignment(contentToClose);
+        }
+
+        UpdateSplitterVisibility();
+    }
+
+    private static void SetColumnWidths(MainWindow mainWindow, double gapWidth, double contentWidth, double minWidth)
+    {
+        if (mainWindow == null) return;
+        mainWindow.CoreGrid.ColumnDefinitions[GapColumnIndex].Width = new GridLength(gapWidth);
+        mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width = new GridLength(contentWidth);
+        mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = minWidth;
+    }
+
+    private static void ConfigurePanelContentForAnimation(Control panelContent, double width)
+    {
+        panelContent.Width = width;
+        panelContent.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
+        panelContent.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch;
     }
 
     private static void ResetControlAlignment(Control control)
@@ -324,51 +342,55 @@ public partial class SideBarControl : UserControl
 
     private static void SetButtonActive(Button button, bool isActive)
     {
-        if (button.Tag is not ValueTuple<Viewbox, Viewbox, SidebarPanel> buttonData) return;
-
-        button.Content = isActive ? buttonData.Item2 : buttonData.Item1;
+        if (button.Tag is not (Viewbox icon, Viewbox activeIcon, SidebarPanel _)) return;
+        button.Content = isActive ? activeIcon : icon;
     }
 
     private void ResetButtonIcons()
     {
         foreach (var child in Buttons.Children)
         {
-            if (child is Button { Tag: ValueTuple<Viewbox, Viewbox, SidebarPanel> } btn)
+            if (child is Button btn)
             {
                 SetButtonActive(btn, false);
             }
         }
     }
 
-    private async Task<bool> AnimateColumnsAsync(ColumnDefinition contentColumn, double targetContentWidth, ColumnDefinition gapColumn, double targetGapWidth)
+    private async Task<bool> AnimateColumnsAsync(ColumnDefinition contentColumn, double targetContentWidth,
+        ColumnDefinition gapColumn, double targetGapWidth)
     {
         StopAnimation();
         _animationCancellationSource = new CancellationTokenSource();
         var token = _animationCancellationSource.Token;
 
-        var startContentWidth = contentColumn.Width.Value;
-        var startGapWidth = gapColumn.Width.Value;
+        var startContentWidth = contentColumn.Width.IsAbsolute ? contentColumn.Width.Value : 0;
+        var startGapWidth = gapColumn.Width.IsAbsolute ? gapColumn.Width.Value : 0;
+
+        contentColumn.Width = new GridLength(startContentWidth, GridUnitType.Pixel);
+        gapColumn.Width = new GridLength(startGapWidth, GridUnitType.Pixel);
 
         var duration = TransitionDuration.TotalMilliseconds;
+        if (duration <= 0)
+        {
+            contentColumn.Width = new GridLength(targetContentWidth, GridUnitType.Pixel);
+            gapColumn.Width = new GridLength(targetGapWidth, GridUnitType.Pixel);
+            return true;
+        }
+
         var startTime = DateTime.UtcNow;
-
-        if (contentColumn.Width.GridUnitType != GridUnitType.Pixel)
-            contentColumn.Width = new GridLength(startContentWidth, GridUnitType.Pixel);
-        if (gapColumn.Width.GridUnitType != GridUnitType.Pixel)
-            gapColumn.Width = new GridLength(startGapWidth, GridUnitType.Pixel);
-
         var tcs = new TaskCompletionSource<bool>();
 
-        void AnimateFrame(TimeSpan _)
+        void AnimationTick(TimeSpan time)
         {
             if (token.IsCancellationRequested)
             {
-                tcs.TrySetCanceled();
+                tcs.TrySetCanceled(token);
                 return;
             }
 
             var elapsed = (DateTime.UtcNow - startTime).TotalMilliseconds;
-            double progress = duration <= 0 ? 1.0 : Math.Clamp(elapsed / duration, 0.0, 1.0);
+            double progress = Math.Clamp(elapsed / duration, 0.0, 1.0);
             double easedProgress = 1 - Math.Pow(1 - progress, 3);
 
             double currentContentWidth = startContentWidth + (targetContentWidth - startContentWidth) * easedProgress;
@@ -377,27 +399,22 @@ public partial class SideBarControl : UserControl
             contentColumn.Width = new GridLength(currentContentWidth, GridUnitType.Pixel);
             gapColumn.Width = new GridLength(currentGapWidth, GridUnitType.Pixel);
 
-            if (progress < 1.0 && !token.IsCancellationRequested)
+            if (progress < 1.0)
             {
-                TopLevel.GetTopLevel(this)?.RequestAnimationFrame(AnimateFrame);
+                Dispatcher.UIThread.InvokeAsync(() => TopLevel.GetTopLevel(this)?.RequestAnimationFrame(AnimationTick),
+                    DispatcherPriority.Render);
             }
             else
             {
-                if (!token.IsCancellationRequested)
-                {
-                    contentColumn.Width = new GridLength(targetContentWidth, GridUnitType.Pixel);
-                    gapColumn.Width = new GridLength(targetGapWidth, GridUnitType.Pixel);
-                    tcs.TrySetResult(true);
-                }
-                else
-                {
-                    tcs.TrySetCanceled();
-                }
+                contentColumn.Width = new GridLength(targetContentWidth, GridUnitType.Pixel);
+                gapColumn.Width = new GridLength(targetGapWidth, GridUnitType.Pixel);
+                tcs.TrySetResult(true);
             }
         }
 
-        TopLevel.GetTopLevel(this)?.RequestAnimationFrame(AnimateFrame);
-        
+        Dispatcher.UIThread.Post(() => TopLevel.GetTopLevel(this)?.RequestAnimationFrame(AnimationTick),
+            DispatcherPriority.Background);
+
         try
         {
             return await tcs.Task;
@@ -410,18 +427,15 @@ public partial class SideBarControl : UserControl
 
     private static Viewbox CreateIconViewbox(IconSource icon, SolidColorBrush foreground)
     {
-        var iconElement = new IconSourceElement()
-        {
-            IconSource = icon,
-            Foreground = foreground,
-        };
-
         return new Viewbox
         {
-            Child = iconElement,
+            Child = new IconSourceElement
+            {
+                IconSource = icon,
+                Foreground = foreground,
+            },
             Width = 26,
             Height = 26
         };
     }
-    #endregion
 }

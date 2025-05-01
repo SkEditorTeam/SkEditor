@@ -33,6 +33,7 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private int _tabSize = 4;
     [ObservableProperty] private bool _checkForUpdates = true;
     [ObservableProperty] private bool _checkForChanges = false;
+    [ObservableProperty] private bool _isSidebarAnimationEnabled = false;
     [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
     [ObservableProperty] private bool _isDevModeEnabled = false;
     [ObservableProperty] private bool _forceNativeTitleBar = false;
