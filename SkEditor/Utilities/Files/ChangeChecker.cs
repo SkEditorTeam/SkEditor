@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 namespace SkEditor.Utilities.Files;
 public class ChangeChecker
 {
-    private static Dictionary<OpenedFile, string> lastKnownContentDictionary = [];
+    private static readonly Dictionary<OpenedFile, string> LastKnownContentDictionary = [];
     private static string GetLastKnownContent(OpenedFile openedFile) =>
-        lastKnownContentDictionary.TryGetValue(openedFile, out string lastKnownContent) ? lastKnownContent : "";
-    private static void SetLastKnownContent(OpenedFile openedFile, string content) => lastKnownContentDictionary[openedFile] = content;
+        LastKnownContentDictionary.GetValueOrDefault(openedFile, "");
+    private static void SetLastKnownContent(OpenedFile openedFile, string content) => LastKnownContentDictionary[openedFile] = content;
 
-    private static bool isMessageShown = false;
+    private static bool _isMessageShown;
     public static Dictionary<string, bool> HasChangedDictionary { get; } = [];
 
-    public static async void Check()
+    public static async Task Check()
     {
         if (!SkEditorAPI.Core.GetAppConfig().CheckForChanges) return;
 
@@ -39,13 +39,13 @@ public class ChangeChecker
 
             string textToWrite = file.Editor.Document.Text;
             using StreamReader reader = new(path);
-            string textToRead = reader.ReadToEnd();
+            string textToRead = await reader.ReadToEndAsync();
 
             if (textToWrite.Equals(textToRead) ||
                 textToRead.Equals(GetLastKnownContent(file))) return;
 
-            if (isMessageShown) return;
-            isMessageShown = true;
+            if (_isMessageShown) return;
+            _isMessageShown = true;
             await ShowMessage(file, textToRead);
         }
         catch (Exception e)
@@ -53,7 +53,7 @@ public class ChangeChecker
             Log.Warning(e, "Error while checking for changes");
         }
 
-        isMessageShown = false;
+        _isMessageShown = false;
     }
 
     private static async Task ShowMessage(OpenedFile file, string textToRead)
@@ -65,7 +65,6 @@ public class ChangeChecker
             new SymbolIconSource { Symbol = Symbol.ImportantFilled },
             primaryButtonText: "Yes",
             cancelButtonText: "No");
-
 
         if (result == ContentDialogResult.Primary)
         {

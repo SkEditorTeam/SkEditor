@@ -170,6 +170,10 @@
 		<Compile Update="Controls\Sidebar\ParserSidebarPanel.axaml.cs">
 			<DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
 		</Compile>
+		<Compile Update="Views\SplashScreen.axaml.cs">
+		  <DependentUpon>SplashScreen.axaml</DependentUpon>
+		  <SubType>Code</SubType>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>

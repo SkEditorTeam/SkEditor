@@ -8,6 +8,7 @@ using SkEditor.Controls.Docs;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Views;
 
@@ -26,20 +27,20 @@ public partial class LocalDocsManagerWindow : AppWindow
         Focusable = true;
 
         AssignCommands();
-        LoadCategories(GroupBy.Provider);
+        _ = LoadCategories(GroupBy.Provider);
     }
 
     public void AssignCommands()
     {
-        GroupByComboBox.SelectionChanged += (sender, args) =>
+        GroupByComboBox.SelectionChanged += async (_, _) =>
         {
             var groupBy = (GroupBy)GroupByComboBox.SelectedIndex;
-            LoadCategories(groupBy);
+            await LoadCategories(groupBy);
         };
-        DeleteEverythingButton.Command = new RelayCommand(async () =>
+        DeleteEverythingButton.Command = new AsyncRelayCommand(async () =>
         {
             await LocalProvider.Get().DeleteAll();
-            LoadCategories(GroupBy.Provider);
+            await LoadCategories(GroupBy.Provider);
         });
 
         KeyDown += (_, e) =>
@@ -48,26 +49,26 @@ public partial class LocalDocsManagerWindow : AppWindow
         };
     }
 
-    public void LoadCategories(GroupBy groupBy)
+    public async Task LoadCategories(GroupBy groupBy)
     {
         GroupByComboBox.SelectedIndex = (int)groupBy;
         switch (groupBy)
         {
             case GroupBy.Provider:
-                LoadByProviders();
+                await LoadByProviders();
                 break;
             case GroupBy.Type:
-                LoadByTypes();
+                await LoadByTypes();
                 break;
             case GroupBy.Addon:
-                LoadByAddons();
+                await LoadByAddons();
                 break;
         }
     }
 
     #region Loaders
 
-    public async void LoadByProviders()
+    public async Task LoadByProviders()
     {
         var elements = await LocalProvider.Get().GetElements();
         var providers = elements.Select(x => x.OriginalProvider).Distinct().ToList();
@@ -81,9 +82,8 @@ public partial class LocalDocsManagerWindow : AppWindow
             var expander = CreateExpander(provider.ToString(),
                 IDocProvider.Providers[provider].Icon, providerGroup.Count);
 
-            foreach (var element in providerGroup)
+            foreach (DocManagementEntry entry in providerGroup.Select(element => new DocManagementEntry(element)))
             {
-                var entry = new DocManagementEntry(element);
                 expander.Items.Add(entry);
             }
 
@@ -91,7 +91,7 @@ public partial class LocalDocsManagerWindow : AppWindow
         }
     }
 
-    public async void LoadByTypes()
+    public async Task LoadByTypes()
     {
         var elements = await LocalProvider.Get().GetElements();
         var types = elements.Select(x => x.DocType).Distinct().ToList();
@@ -105,9 +105,8 @@ public partial class LocalDocsManagerWindow : AppWindow
             var expander = CreateExpander(type.ToString(),
                 IDocumentationEntry.GetTypeIcon(type), typeGroup.Count);
 
-            foreach (var element in typeGroup)
+            foreach (DocManagementEntry entry in typeGroup.Select(element => new DocManagementEntry(element)))
             {
-                var entry = new DocManagementEntry(element);
                 expander.Items.Add(entry);
             }
 
@@ -115,7 +114,7 @@ public partial class LocalDocsManagerWindow : AppWindow
         }
     }
 
-    public async void LoadByAddons()
+    public async Task LoadByAddons()
     {
         var elements = await LocalProvider.Get().GetElements();
         var addons = elements.Select(x => x.Addon).Distinct().ToList();
@@ -139,11 +138,11 @@ public partial class LocalDocsManagerWindow : AppWindow
         }
     }
 
-    public SettingsExpander CreateExpander(string categoryName, IconSource? icon, int elementAmount)
+    public static SettingsExpander CreateExpander(string categoryName, IconSource? icon, int elementAmount)
     {
-        return new SettingsExpander()
+        return new SettingsExpander
         {
-            Header = new StackPanel()
+            Header = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
                 Spacing = 5,
@@ -156,7 +155,6 @@ public partial class LocalDocsManagerWindow : AppWindow
             IconSource = icon
         };
     }
-
 
     #endregion
 }

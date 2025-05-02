@@ -79,7 +79,7 @@ public class LocalProvider : IDocProvider
         return _localDocs.Any(x => x.Id == entry.Id);
     }
 
-    public async void DownloadElement(IDocumentationEntry entry, List<IDocumentationExample> examples)
+    public async Task DownloadElement(IDocumentationEntry entry, List<IDocumentationExample> examples)
     {
         if (!IsLoaded)
             await LoadLocalDocs();
@@ -91,7 +91,7 @@ public class LocalProvider : IDocProvider
         await SaveLocalDocs();
     }
 
-    public async void RemoveElement(IDocumentationEntry entry)
+    public async Task RemoveElement(IDocumentationEntry entry)
     {
         if (!IsLoaded)
             await LoadLocalDocs();

@@ -24,7 +24,7 @@ public class SkriptHubProvider : IDocProvider
     public DocProvider Provider => DocProvider.SkriptHub;
     public Task<IDocumentationEntry> FetchElement(string id)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public List<string> CanSearch(SearchData searchData)
@@ -60,13 +60,13 @@ public class SkriptHubProvider : IDocProvider
                 Content = Translation.Get("DocumentationWindowCacheSkriptHubMessage")
             };
 
-            taskDialog.Opened += async (sender, args) =>
+            taskDialog.Opened += async (_, _) =>
             {
                 try
                 {
                     using HttpClient client = new();
                     var progress = new Progress<float>();
-                    progress.ProgressChanged += (e, sender) =>
+                    progress.ProgressChanged += (_, sender) =>
                         taskDialog.SetProgressBarState(sender, TaskDialogProgressState.Normal);
 
                     await using var file = new FileStream(cacheFile, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -94,7 +94,7 @@ public class SkriptHubProvider : IDocProvider
 
         var content = await File.ReadAllTextAsync(cacheFile);
         _cachedElements.AddRange(JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content));
-        SaveCache();
+        await SaveCache();
 
         var foundElements2 = _cachedElements.Where(e => e.DoMatch(searchData)).ToList();
         return foundElements2.Cast<IDocumentationEntry>().ToList();
@@ -149,7 +149,7 @@ public class SkriptHubProvider : IDocProvider
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         var elements = JsonConvert.DeserializeObject<List<SkriptHubDocExample>>(content);
         foundEntry.Examples = elements;
-        SaveCache();
+        await SaveCache();
         var examples = elements.Cast<IDocumentationExample>().ToList();
         return examples;
     }
@@ -167,7 +167,7 @@ public class SkriptHubProvider : IDocProvider
 
         var content = await File.ReadAllTextAsync(cacheFile);
         _cachedElements.AddRange(JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content));
-        SaveCache();
+        await SaveCache();
 
         return _cachedElements.Select(e => e.Addon).Distinct().ToList();
     }
@@ -182,12 +182,12 @@ public class SkriptHubProvider : IDocProvider
         }
     };
 
-    public string? GetLink(IDocumentationEntry entry)
+    public string GetLink(IDocumentationEntry entry)
     {
         return "https://skripthub.net/docs/?id=" + entry.Id;
     }
 
-    public async void SaveCache()
+    public async Task SaveCache()
     {
         var cacheFile = Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json");
         var content = JsonConvert.SerializeObject(_cachedElements);

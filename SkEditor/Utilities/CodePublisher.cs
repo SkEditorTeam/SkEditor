@@ -6,11 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
 public class CodePublisher
 {
-    public static async void PublishPastebin(string code, PublishWindow window)
+    public static async Task PublishPastebin(string code, PublishWindow window)
     {
         try
         {
@@ -27,8 +28,7 @@ public class CodePublisher
             var response = await client.SendAsync(request);
             string responseString = await response.Content.ReadAsStringAsync();
 
-            string url = responseString;
-            window.ResultTextBox.Text = url;
+            window.ResultTextBox.Text = responseString;
         }
         catch (Exception e)
         {
@@ -36,7 +36,7 @@ public class CodePublisher
         }
     }
 
-    public static async void PublishCodeSkriptPl(string code, PublishWindow window)
+    public static async Task PublishCodeSkriptPl(string code, PublishWindow window)
     {
         string language = (window.LanguageComboBox.SelectedItem as ComboBoxItem).Content.ToString().ToLower();
 
@@ -65,7 +65,7 @@ public class CodePublisher
         }
     }
 
-    public static async void PublishSkUnity(string code, PublishWindow window)
+    public static async Task PublishSkUnity(string code, PublishWindow window)
     {
         try
         {
@@ -82,7 +82,7 @@ public class CodePublisher
             string responseString = await response.Content.ReadAsStringAsync();
 
             JObject jsonResult = JObject.Parse(responseString);
-            string url = "https://parser.skunity.com/" + jsonResult["result"]["share_code"].ToString();
+            string url = "https://parser.skunity.com/" + jsonResult["result"]["share_code"];
             window.ResultTextBox.Text = url;
         }
         catch (Exception e)

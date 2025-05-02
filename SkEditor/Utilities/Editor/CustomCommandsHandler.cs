@@ -7,6 +7,7 @@ using SkEditor.Utilities.Parser;
 using SkEditor.Views;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Editor;
 public class CustomCommandsHandler
@@ -122,7 +123,7 @@ public class CustomCommandsHandler
         textArea.Caret.BringCaretToView();
     }
 
-    public static async void OnRefactorCommandExecuted(TextEditor editor)
+    public static async Task OnRefactorCommandExecuted(TextEditor editor)
     {
         var parser = SkEditorAPI.Files.GetOpenedFiles().Find(file => file.Editor == editor).Parser;
         if (parser == null)

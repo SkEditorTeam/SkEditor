@@ -20,22 +20,21 @@ public static class AddonLoader
 {
     public static List<AddonMeta> Addons { get; } = [];
     public static HashSet<string> DllNames { get; } = [];
-    private static JObject RawMeta = null!;
 
-    public static void Load()
+    public static async Task Load()
     {
         string addonsFolder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
         Directory.CreateDirectory(addonsFolder);
 
         Addons.Clear();
         LoadMeta();
-        LoadAddon(typeof(SkEditorSelfAddon));
-        LoadAddonsFromFiles();
+        await LoadAddon(typeof(SkEditorSelfAddon));
+        await LoadAddonsFromFiles();
 
-        CheckForAddonsErrors();
+        await CheckForAddonsErrors();
     }
 
-    private static async void CheckForAddonsErrors()
+    private static async Task CheckForAddonsErrors()
     {
         var addonsWithErrors = Addons.Where(addon => addon.HasErrors).ToList();
         if (addonsWithErrors.Count == 0)
@@ -59,22 +58,17 @@ public static class AddonLoader
         if (!File.Exists(metaFile))
             File.WriteAllText(metaFile, "{}");
 
-        RawMeta = JObject.Parse(File.ReadAllText(metaFile));
+        JObject.Parse(File.ReadAllText(metaFile));
     }
 
-    private static async void LoadAddonsFromFiles()
+    private static async Task LoadAddonsFromFiles()
     {
         var folder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
         var folders = Directory.GetDirectories(folder);
-        var dllFiles = new List<string>();
-        foreach (string sub in folders)
-        {
-            var dllFile = Path.Combine(sub, Path.GetFileName(sub) + ".dll");
-            if (!File.Exists(dllFile))
-                continue;
-
-            dllFiles.Add(dllFile);
-        }
+        var dllFiles = folders
+            .Select(sub => Path.Combine(sub, Path.GetFileName(sub) + ".dll"))
+            .Where(File.Exists)
+            .ToList();
 
         foreach (var dllFile in dllFiles)
             await LoadAddonFromFile(Path.GetDirectoryName(dllFile));
@@ -111,16 +105,14 @@ public static class AddonLoader
             return;
         }
 
-        if (addon.Count == 0)
+        switch (addon.Count)
         {
-            SkEditorAPI.Logs.Warning($"Failed to load addon from \"{dllFile}\": No addon class found. No worries if it's a library.");
-            return;
-        }
-
-        if (addon.Count > 1)
-        {
-            SkEditorAPI.Logs.Warning($"Failed to load addon from \"{dllFile}\": Multiple addon classes found.");
-            return;
+            case 0:
+                SkEditorAPI.Logs.Warning($"Failed to load addon from \"{dllFile}\": No addon class found. No worries if it's a library.");
+                return;
+            case > 1:
+                SkEditorAPI.Logs.Warning($"Failed to load addon from \"{dllFile}\": Multiple addon classes found.");
+                return;
         }
 
         if (addon[0] is SkEditorSelfAddon)
@@ -135,7 +127,7 @@ public static class AddonLoader
             return;
         }
 
-        Addons.Add(new AddonMeta()
+        Addons.Add(new AddonMeta
         {
             Addon = addon[0],
             State = IAddons.AddonState.Installed,
@@ -147,10 +139,10 @@ public static class AddonLoader
         await EnableAddon(addon[0]);
     }
 
-    public static async void LoadAddon(Type addonClass)
+    public static async Task LoadAddon(Type addonClass)
     {
         var addon = (IAddon)Activator.CreateInstance(addonClass);
-        Addons.Add(new AddonMeta()
+        Addons.Add(new AddonMeta
         {
             Addon = addon,
             State = IAddons.AddonState.Disabled,
@@ -221,11 +213,12 @@ public static class AddonLoader
         {
             AddonSettingsManager.LoadSettings(addon);
 
+            // ReSharper disable once MethodHasAsyncOverload
             addon.OnEnable();
             await addon.OnEnableAsync();
 
             meta.State = IAddons.AddonState.Enabled;
-            SaveMeta();
+            await SaveMeta();
             SkEditorAPI.Windows.GetMainWindow()?.ReloadUiOfAddons();
             return true;
         }
@@ -235,14 +228,14 @@ public static class AddonLoader
             SkEditorAPI.Logs.Fatal(e);
             meta.Errors.Add(LoadingErrors.LoadingException(e));
             meta.State = IAddons.AddonState.Disabled;
-            SaveMeta();
+            await SaveMeta();
             Registries.Unload(addon);
             SkEditorAPI.Windows.GetMainWindow()?.ReloadUiOfAddons();
             return false;
         }
     }
 
-    public static void DisableAddon(IAddon addon)
+    public static async Task DisableAddon(IAddon addon)
     {
         var meta = Addons.First(m => m.Addon == addon);
         if (meta.State == IAddons.AddonState.Disabled)
@@ -259,7 +252,7 @@ public static class AddonLoader
             meta.State = IAddons.AddonState.Disabled;
         }
 
-        SaveMeta();
+        await SaveMeta();
         Registries.Unload(addon);
         SkEditorAPI.Windows.GetMainWindow().ReloadUiOfAddons();
     }
@@ -269,7 +262,7 @@ public static class AddonLoader
         return Addons.First(m => m.Addon == addon).State == IAddons.AddonState.Enabled;
     }
 
-    public static void DeleteAddon(IAddon addon)
+    public static async Task DeleteAddon(IAddon addon)
     {
         if (addon is SkEditorSelfAddon)
         {
@@ -298,7 +291,7 @@ public static class AddonLoader
             File.Delete(addonFile);
 
         Addons.Remove(addonMeta);
-        SaveMeta();
+        await SaveMeta();
         Registries.Unload(addon);
         SkEditorAPI.Windows.GetMainWindow().ReloadUiOfAddons();
     }
@@ -313,7 +306,7 @@ public static class AddonLoader
         return (SkEditorSelfAddon)Addons.First(addon => addon.Addon is SkEditorSelfAddon).Addon;
     }
 
-    public static async void SaveMeta()
+    public static async Task SaveMeta()
     {
         var metaFile = Path.Combine(AppConfig.AppDataFolderPath, "Addons", "meta.json");
         var objs = new JObject();

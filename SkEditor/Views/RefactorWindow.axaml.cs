@@ -11,20 +11,19 @@ using System.Threading.Tasks;
 namespace SkEditor.Views;
 public partial class RefactorWindow : AppWindow
 {
-
     public RefactorWindow()
     {
         InitializeComponent();
         Focusable = true;
 
-        ApplyButton.Command = new RelayCommand(Apply);
+        ApplyButton.Command = new AsyncRelayCommand(Apply);
         KeyDown += (_, e) =>
         {
             if (e.Key == Key.Escape) Close();
         };
     }
 
-    private async void Apply()
+    private async Task Apply()
     {
         if (RemoveCommentsCheckBox.IsChecked == true) await RemoveComments();
         if (TabsToSpacesCheckBox.IsChecked == true) await TabsToSpaces();

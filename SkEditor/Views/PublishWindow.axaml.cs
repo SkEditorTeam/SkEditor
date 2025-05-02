@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -11,22 +12,21 @@ public partial class PublishWindow : AppWindow
 {
     private string CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string;
 
-
     public PublishWindow()
     {
         InitializeComponent();
         Focusable = true;
-        InitializeUI();
+        InitializeUi();
     }
 
-    private void InitializeUI()
+    private void InitializeUi()
     {
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;
 
-        PublishButton.Command = new RelayCommand(Publish);
+        PublishButton.Command = new AsyncRelayCommand(Publish);
 
-        CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
+        CopyButton.Command = new AsyncRelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
 
         WebsiteComboBox.SelectedIndex = SkEditorAPI.Core.GetAppConfig().LastUsedPublishService switch
         {
@@ -36,7 +36,7 @@ public partial class PublishWindow : AppWindow
             _ => 0,
         };
 
-        WebsiteComboBox.SelectionChanged += (sender, e) => UpdateServiceInfo();
+        WebsiteComboBox.SelectionChanged += (_, _) => UpdateServiceInfo();
 
         KeyDown += (_, e) =>
         {
@@ -62,65 +62,37 @@ public partial class PublishWindow : AppWindow
         AnonymouslyCheckBox.IsVisible = LanguageComboBox.IsVisible = CurrentService.Equals("code.skript.pl");
     }
 
-    private void SaveApiKey()
-    {
-        switch (CurrentService)
-        {
-            case "Pastebin":
-                SkEditorAPI.Core.GetAppConfig().PastebinApiKey = ApiKeyTextBox.Text;
-                break;
-            case "code.skript.pl":
-                SkEditorAPI.Core.GetAppConfig().CodeSkriptPlApiKey = ApiKeyTextBox.Text;
-                break;
-            case "skUnity Parser":
-                SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey = ApiKeyTextBox.Text;
-                break;
-        }
-    }
-
-    private void OpenSiteWithApiKey()
-    {
-        string url = CurrentService switch
-        {
-            "code.skript.pl" => "https://code.skript.pl/api-key",
-            "skUnity Parser" => "https://skunity.com/dashboard/skunity-api",
-            _ => "https://pastebin.com/doc_api"
-        };
-
-        SkEditorAPI.Core.OpenLink(url);
-    }
-
-    private void Publish()
+    private async Task Publish()
     {
         if (!SkEditorAPI.Files.IsEditorOpen())
         {
-            SkEditorAPI.Windows.ShowError("The current opened tab is not a code editor.");
+            await SkEditorAPI.Windows.ShowError("The current opened tab is not a code editor.");
             return;
         }
 
         var code = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Text;
         if (string.IsNullOrWhiteSpace(code))
         {
-            SkEditorAPI.Windows.ShowError("You can't publish empty code!");
+            await SkEditorAPI.Windows.ShowError("You can't publish empty code!");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(ApiKeyTextBox.Text))
         {
-            SkEditorAPI.Windows.ShowError("You need to enter the API key!");
+            await SkEditorAPI.Windows.ShowError("You need to enter the API key!");
             return;
         }
 
         switch ((WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string)
         {
             case "Pastebin":
-                CodePublisher.PublishPastebin(code, this);
+                await CodePublisher.PublishPastebin(code, this);
                 break;
             case "code.skript.pl":
-                CodePublisher.PublishCodeSkriptPl(code, this);
+                await CodePublisher.PublishCodeSkriptPl(code, this);
                 break;
             case "skUnity Parser":
-                CodePublisher.PublishSkUnity(code, this);
+                await CodePublisher.PublishSkUnity(code, this);
                 break;
         }
     }

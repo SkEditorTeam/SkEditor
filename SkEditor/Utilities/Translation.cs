@@ -5,6 +5,7 @@ using SkEditor.API;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
 public static class Translation
@@ -25,21 +26,11 @@ public static class Translation
         return translationString;
     }
 
-    public async static void LoadDefaultLanguage()
-    {
-        Uri languageXaml = new(Path.Combine(LanguagesFolder, $"English.xaml"));
-        await using var stream = new FileStream(languageXaml.OriginalString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
-        if (AvaloniaRuntimeXamlLoader.Load(stream) is ResourceDictionary dictionary)
-        {
-            Application.Current.Resources.MergedDictionaries.Add(dictionary);
-        }
-    }
+    private static readonly HashSet<ResourceDictionary> Translations = [];
 
-    private static HashSet<ResourceDictionary> _translations = [];
-
-    public async static void ChangeLanguage(string language)
+    public static async Task ChangeLanguage(string language)
     {
-        foreach (ResourceDictionary translation in _translations)
+        foreach (ResourceDictionary translation in Translations)
         {
             Application.Current.Resources.MergedDictionaries.Remove(translation);
         }
@@ -50,7 +41,6 @@ public static class Translation
         {
             SkEditorAPI.Core.GetAppConfig().Language = "English";
             SkEditorAPI.Core.GetAppConfig().Save();
-            LoadDefaultLanguage();
             return;
         }
 
@@ -59,7 +49,7 @@ public static class Translation
         if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
         {
             Application.Current.Resources.MergedDictionaries.Add(dictionary);
-            _translations.Add(dictionary);
+            Translations.Add(dictionary);
         }
     }
 }

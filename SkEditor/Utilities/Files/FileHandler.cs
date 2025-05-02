@@ -18,11 +18,10 @@ public class FileHandler
 {
     private static readonly ConcurrentQueue<Func<Task>> SaveQueue = new();
     private static readonly SemaphoreSlim SaveSemaphore = new(1, 1);
-    private static readonly Task SaveTask;
 
     static FileHandler()
     {
-        SaveTask = ProcessSaveQueueAsync();
+        _ = ProcessSaveQueueAsync();
     }
 
     private static async Task ProcessSaveQueueAsync()
@@ -59,7 +58,7 @@ public class FileHandler
             return;
 
         QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
-            await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile(), false)));
+            await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile())));
     }
 
     public static void SaveAsFile()
@@ -77,11 +76,11 @@ public class FileHandler
         foreach (var file in openedEditors)
         {
             QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
-                await SkEditorAPI.Files.Save(file, false)));
+                await SkEditorAPI.Files.Save(file)));
         }
     }
 
-    public static Action<AppWindow, DragEventArgs> FileDropAction = (window, e) =>
+    public static readonly Action<AppWindow, DragEventArgs> FileDropAction = (_, e) =>
     {
         try
         {
@@ -97,7 +96,10 @@ public class FileHandler
                 OpenFile(file.Path.AbsolutePath);
             });
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     };
 
     public static void TabSwitchAction()
@@ -106,7 +108,7 @@ public class FileHandler
             return;
         OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
 
-        var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header.ToString());
+        var fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header);
         MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
 
@@ -115,7 +117,7 @@ public class FileHandler
         SkEditorAPI.Files.NewFile();
     }
 
-    public static async void OpenFile()
+    public static async Task OpenFile()
     {
         var files = await SkEditorAPI.Windows.GetMainWindow().StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {

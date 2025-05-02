@@ -15,7 +15,6 @@ using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using SkEditor.Views.Settings;
-using System;
 
 namespace SkEditor.Controls;
 public partial class MainMenuControl : UserControl
@@ -41,19 +40,19 @@ public partial class MainMenuControl : UserControl
     private void AssignCommands()
     {
         MenuItemNew.Command = new RelayCommand(FileHandler.NewFile);
-        MenuItemOpen.Command = new RelayCommand(FileHandler.OpenFile);
+        MenuItemOpen.Command = new AsyncRelayCommand(FileHandler.OpenFile);
         MenuItemOpenFolder.Command = new RelayCommand(() => ProjectOpener.OpenProject());
         MenuItemSave.Command = new RelayCommand(FileHandler.SaveFile);
         MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFile);
         MenuItemSaveAll.Command = new RelayCommand(FileHandler.SaveAllFiles);
         MenuItemPublish.Command = new RelayCommand(() => new PublishWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
-        MenuItemClose.Command = new RelayCommand(FileCloser.CloseCurrentFile);
-        MenuItemCloseAll.Command = new RelayCommand(FileCloser.CloseAllFiles);
-        MenuItemCloseAllExceptCurrent.Command = new RelayCommand(FileCloser.CloseAllExceptCurrent);
-        MenuItemCloseAllUnsaved.Command = new RelayCommand(FileCloser.CloseUnsaved);
-        MenuItemCloseAllLeft.Command = new RelayCommand(FileCloser.CloseAllToTheLeft);
-        MenuItemCloseAllRight.Command = new RelayCommand(FileCloser.CloseAllToTheRight);
+        MenuItemClose.Command = new AsyncRelayCommand(FileCloser.CloseCurrentFile);
+        MenuItemCloseAll.Command = new AsyncRelayCommand(FileCloser.CloseAllFiles);
+        MenuItemCloseAllExceptCurrent.Command = new AsyncRelayCommand(FileCloser.CloseAllExceptCurrent);
+        MenuItemCloseAllUnsaved.Command = new AsyncRelayCommand(FileCloser.CloseUnsaved);
+        MenuItemCloseAllLeft.Command = new AsyncRelayCommand(FileCloser.CloseAllToTheLeft);
+        MenuItemCloseAllRight.Command = new AsyncRelayCommand(FileCloser.CloseAllToTheRight);
 
         MenuItemCopy.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.Copy());
         MenuItemPaste.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.Paste());
@@ -67,8 +66,8 @@ public partial class MainMenuControl : UserControl
         MenuItemDuplicate.Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.TextArea));
         MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.TextArea));
 
-        MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
-        MenuItemRefreshTheme.Command = new RelayCommand(async () => await ThemeEditor.ReloadCurrentTheme());
+        MenuItemRefreshSyntax.Command = new AsyncRelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
+        MenuItemRefreshTheme.Command = new AsyncRelayCommand(async () => await ThemeEditor.ReloadCurrentTheme());
 
         MenuItemDocs.Command = new RelayCommand(AddDocsTab);
         MenuItemGenerateGui.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new GuiGenerator(), false));
@@ -95,15 +94,16 @@ public partial class MainMenuControl : UserControl
     {
         Loaded += (_, _) =>
         {
-            SkEditorAPI.Windows.GetMainWindow().KeyDown += (sender, e) =>
+            SkEditorAPI.Windows.GetMainWindow().KeyDown += (_, e) =>
             {
-                if (e.PhysicalKey == PhysicalKey.S
-                    && e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Alt)
-                    && string.IsNullOrEmpty(e.KeySymbol))
+                if (e is not { PhysicalKey: PhysicalKey.S, KeyModifiers: (KeyModifiers.Control | KeyModifiers.Alt) }
+                    || !string.IsNullOrEmpty(e.KeySymbol))
                 {
-                    MenuItemSaveAll.Command.Execute(null);
-                    e.Handled = true;
+                    return;
                 }
+
+                MenuItemSaveAll.Command.Execute(null);
+                e.Handled = true;
             };
         };
     }

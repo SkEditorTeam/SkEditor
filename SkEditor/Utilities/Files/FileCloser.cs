@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 namespace SkEditor.Utilities.Files;
 internal static class FileCloser
 {
-    public static async void CloseFile(TabViewTabCloseRequestedEventArgs e) =>
+    public static async Task CloseFile(TabViewTabCloseRequestedEventArgs e) =>
         await SkEditorAPI.Files.Close(e.Tab);
-    public static async void CloseCurrentFile() =>
+    public static async Task CloseCurrentFile() =>
         await SkEditorAPI.Files.Close(SkEditorAPI.Files.GetCurrentOpenedFile());
 
-    public static async void CloseAllFiles()
+    public static async Task CloseAllFiles()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
             return;
@@ -18,7 +18,7 @@ internal static class FileCloser
         SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.All);
     }
 
-    public static async void CloseAllExceptCurrent()
+    public static async Task CloseAllExceptCurrent()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
             return;
@@ -26,7 +26,7 @@ internal static class FileCloser
         SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllExceptCurrent);
     }
 
-    public static async void CloseUnsaved()
+    public static async Task CloseUnsaved()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
             return;
@@ -34,7 +34,7 @@ internal static class FileCloser
         SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.Unsaved);
     }
 
-    public static async void CloseAllToTheLeft()
+    public static async Task CloseAllToTheLeft()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
             return;
@@ -42,7 +42,7 @@ internal static class FileCloser
         SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllLeft);
     }
 
-    public static async void CloseAllToTheRight()
+    public static async Task CloseAllToTheRight()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary) return;
 
