@@ -39,8 +39,9 @@ public partial class SplashScreen : AppWindow
             Width = 150,
             Height = 150,
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
         };
+        
         Grid.SetRow(logo, 0);
 
         _statusText = new TextBlock

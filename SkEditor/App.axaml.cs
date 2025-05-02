@@ -32,10 +32,13 @@ public class App : Application
         base.OnFrameworkInitializationCompleted();
 
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
-
-        _splashScreen = new SplashScreen();
-        desktop.MainWindow = _splashScreen;
-        _splashScreen.Show();
+        
+        if (!desktop.Args.Contains("--hideSplashScreen"))
+        {
+            _splashScreen = new SplashScreen();
+            desktop.MainWindow = _splashScreen;
+            _splashScreen.Show();
+        }
 
         Dispatcher.UIThread.Post(() => CompleteApplicationStart(desktop), DispatcherPriority.Background);
     }
@@ -44,26 +47,26 @@ public class App : Application
     {
         try
         {
-            _splashScreen.UpdateStatus("Initializing...");
+            _splashScreen?.UpdateStatus("Initializing...");
 
             Task.Run(async () =>
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen.UpdateStatus("Setting up logging..."));
+                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Setting up logging..."));
                 SetupLogging();
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
-                    _splashScreen.UpdateStatus("Configuring error handling..."));
+                    _splashScreen?.UpdateStatus("Configuring error handling..."));
                 ConfigureErrorHandling();
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
-                    _splashScreen.UpdateStatus("Checking for other instances..."));
+                    _splashScreen?.UpdateStatus("Checking for other instances..."));
 
                 bool continueStartup = await Dispatcher.UIThread.InvokeAsync(() => HandleSingleInstance(desktop));
                 if (!continueStartup) return;
 
-                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen.UpdateStatus("Loading configuration..."));
+                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Loading configuration..."));
                 SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
@@ -72,13 +75,13 @@ public class App : Application
                         SkEditorAPI.Core.GetAppConfig().ForceNativeTitleBar;
                 });
 
-                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen.UpdateStatus("Creating main window..."));
+                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Creating main window..."));
 
                 var mainWindow =
                     await Dispatcher.UIThread.InvokeAsync(() => new MainWindow(_splashScreen) { IsVisible = false });
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
-                    _splashScreen.UpdateStatus("Starting named pipe server..."));
+                    _splashScreen?.UpdateStatus("Starting named pipe server..."));
                 NamedPipeServer.Start();
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
@@ -96,7 +99,7 @@ public class App : Application
                 Log.Error(t.Exception, "Error creating SkEditor");
                 Dispatcher.UIThread.Post(() =>
                 {
-                    _splashScreen.UpdateStatus(
+                    _splashScreen?.UpdateStatus(
                         $"Error: {t.Exception.InnerException?.Message ?? t.Exception.Message}");
 
                     Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
@@ -108,7 +111,7 @@ public class App : Application
         catch (Exception ex)
         {
             Log.Error(ex, "Error creating SkEditor");
-            _splashScreen.UpdateStatus($"Error: {ex.Message}");
+            _splashScreen?.UpdateStatus($"Error: {ex.Message}");
 
             Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
                 DispatcherPriority.Background,
