@@ -204,9 +204,6 @@ public partial class MainWindow : AppWindow
                     }
                 }, DispatcherPriority.Background);
             }, DispatcherPriority.Background);
-
-            App.Stopwatch.Stop();
-            SkEditorAPI.Logs.Info($"Window loaded in {App.Stopwatch.ElapsedMilliseconds}ms");
         }
         catch (Exception exc)
         {

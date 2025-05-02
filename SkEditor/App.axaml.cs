@@ -20,7 +20,6 @@ namespace SkEditor;
 
 public class App : Application
 {
-    public static Stopwatch Stopwatch { get; } = new();
     private SplashScreen? _splashScreen;
 
     public override void Initialize()
@@ -31,8 +30,6 @@ public class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
-
-        Stopwatch.Start();
 
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
 
