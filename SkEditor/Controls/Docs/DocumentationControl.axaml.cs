@@ -34,14 +34,15 @@ public partial class DocumentationControl : UserControl
 
     public void AssignCommands()
     {
-        OpenLocalManagementButton.Command = new RelayCommand(async () => await new LocalDocsManagerWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        OpenLocalManagementButton.Command = new AsyncRelayCommand(async () => await new LocalDocsManagerWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        
         RefreshProviderButton.Command = new RelayCommand(() =>
         {
             ProviderBox.SelectionChanged -= HandleProviderBoxSelection;
             InitializeProviderBox();
         });
-        DownloadAllButton.Command = new RelayCommand(DownloadAllEntries);
-        RetrieveSkriptHubDocsButton.Command = new RelayCommand(async () =>
+        DownloadAllButton.Command = new AsyncRelayCommand(DownloadAllEntries);
+        RetrieveSkriptHubDocsButton.Command = new AsyncRelayCommand(async () =>
         {
             var response = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
                 Translation.Get("DocumentationWindowFetchWarning"),
@@ -55,7 +56,7 @@ public partial class DocumentationControl : UserControl
             }
         });
 
-        Loaded += (sender, args) => QueryBox.Focus();
+        Loaded += (_, _) => QueryBox.Focus();
 
         KeyDown += (sender, args) =>
         {
@@ -75,14 +76,14 @@ public partial class DocumentationControl : UserControl
     {
         foreach (IDocumentationEntry.Type type in IDocumentationEntry.AllTypes)
         {
-            FilteredTypesBox.Items.Add(new ComboBoxItem()
+            FilteredTypesBox.Items.Add(new ComboBoxItem
             {
                 Content = CreateEntryWithIcon(IDocumentationEntry.GetTypeIcon(type), type.ToString()),
                 Tag = type
             });
         }
         FilteredTypesBox.SelectedIndex = 0;
-        FilteredTypesBox.SelectionChanged += (sender, args) =>
+        FilteredTypesBox.SelectionChanged += (_, _) =>
         {
             ViewModel.SearchData.FilteredType = (IDocumentationEntry.Type)((ComboBoxItem)FilteredTypesBox.SelectedItem!).Tag!;
         };
@@ -91,7 +92,7 @@ public partial class DocumentationControl : UserControl
     private void InitializeFilteredAddonBox()
     {
         FilteredAddonBox.FilterMode = AutoCompleteFilterMode.None;
-        FilteredAddonBox.AsyncPopulator = async (text, ct) =>
+        FilteredAddonBox.AsyncPopulator = async (_, _) =>
         {
             var provider = IDocProvider.Providers[ViewModel.Provider!.Value];
             if (!provider.HasAddons) return new List<string>();
@@ -113,7 +114,7 @@ public partial class DocumentationControl : UserControl
 
             return addons;
         };
-        FilteredAddonBox.TextChanged += (sender, args) =>
+        FilteredAddonBox.TextChanged += (_, _) =>
         {
             ViewModel.SearchData.FilteredAddon = FilteredAddonBox.Text;
         };
@@ -219,16 +220,23 @@ public partial class DocumentationControl : UserControl
 
     private async void SearchButtonClick(object? sender, RoutedEventArgs e)
     {
-        LoadingInformation.IsVisible = false;
-        OtherInformation.Text = "";
-        EntriesContainer.Children.Clear();
+        try
+        {
+            LoadingInformation.IsVisible = false;
+            OtherInformation.Text = "";
+            EntriesContainer.Children.Clear();
 
-        if (!ValidateProvider(out var provider)) return;
+            if (!ValidateProvider(out var provider)) return;
 
-        var searchData = ViewModel.SearchData;
-        if (!ValidateSearchData(provider, searchData)) return;
+            var searchData = ViewModel.SearchData;
+            if (!ValidateSearchData(provider, searchData)) return;
 
-        await PerformSearch(provider, searchData);
+            await PerformSearch(provider, searchData);
+        }
+        catch (Exception exc)
+        {
+            await SkEditorAPI.Windows.ShowError($"An error occurred while searching for documentation.\n\n{exc.Message}");
+        }
     }
 
     private bool ValidateProvider(out IDocProvider? provider)
@@ -247,13 +255,11 @@ public partial class DocumentationControl : UserControl
     private bool ValidateSearchData(IDocProvider provider, SearchData searchData)
     {
         var errors = provider.CanSearch(searchData);
-        if (errors.Count > 0)
-        {
-            SkEditorAPI.Windows.ShowError(string.Join("\n", errors));
-            OtherInformation.Text = Translation.Get("DocumentationWindowInvalidData");
-            return false;
-        }
-        return true;
+        if (errors.Count <= 0) return true;
+
+        SkEditorAPI.Windows.ShowError(string.Join("\n", errors));
+        OtherInformation.Text = Translation.Get("DocumentationWindowInvalidData");
+        return false;
     }
 
     private async Task PerformSearch(IDocProvider provider, SearchData searchData)
@@ -282,21 +288,22 @@ public partial class DocumentationControl : UserControl
         }
     }
 
-    private async void DownloadAllEntries()
+    private async Task DownloadAllEntries()
     {
-        if (EntriesContainer.Children.Count == 0)
+        switch (EntriesContainer.Children.Count)
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowNoEntries"));
-            return;
-        }
+            case 0:
+                await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowNoEntries"));
+                return;
+            case > 0:
+            {
+                var result = await SkEditorAPI.Windows.ShowDialog("Download all",
+                    Translation.Get("DocumentationWindowDownloadAllMessage", EntriesContainer.Children.Count.ToString()),
+                    primaryButtonText: "Yes", cancelButtonText: "No");
 
-        if (EntriesContainer.Children.Count > 0)
-        {
-            var result = await SkEditorAPI.Windows.ShowDialog("Download all",
-                Translation.Get("DocumentationWindowDownloadAllMessage", EntriesContainer.Children.Count.ToString()),
-                primaryButtonText: "Yes", cancelButtonText: "No");
-
-            if (result != ContentDialogResult.Primary) return;
+                if (result != ContentDialogResult.Primary) return;
+                break;
+            }
         }
 
         var taskDialog = new TaskDialog
@@ -307,25 +314,32 @@ public partial class DocumentationControl : UserControl
             SubHeader = Translation.Get("DocumentationWindowDownloading"),
             Content = Translation.Get("DocumentationWindowDownloadingMessage")
         };
-        var chidren = EntriesContainer.Children;
         taskDialog.SetProgressBarState(0, TaskDialogProgressState.Normal);
-
-        taskDialog.Opened += async (sender, args) =>
+    
+        var window = SkEditorAPI.Windows.GetMainWindow();
+        taskDialog.XamlRoot = window;
+        
+        var dialogTask = taskDialog.ShowAsync();
+    
+        for (var index = 0; index < EntriesContainer.Children.Count; index++)
         {
-            for (var index = 0; index < EntriesContainer.Children.Count; index++)
+            var element = EntriesContainer.Children[index];
+            if (element is DocElementControl docElement)
+                await docElement.ForceDownloadElement();
+        
+            var progress = (index + 1) * 100.0 / EntriesContainer.Children.Count;
+            await Dispatcher.UIThread.InvokeAsync(() => 
             {
-                var element = EntriesContainer.Children[index];
-                if (element is DocElementControl docElement)
-                    await docElement.ForceDownloadElement();
-                taskDialog.SetProgressBarState((index + 1) * 100 / EntriesContainer.Children.Count,
-                    TaskDialogProgressState.Normal);
-            }
-
+                taskDialog.SetProgressBarState(progress, TaskDialogProgressState.Normal);
+            });
+        }
+    
+        await Dispatcher.UIThread.InvokeAsync(() => 
+        {
             taskDialog.Hide(TaskDialogStandardResult.OK);
-        };
-
-        taskDialog.XamlRoot = SkEditorAPI.Windows.GetMainWindow();
-        await taskDialog.ShowAsync();
+        });
+    
+        await dialogTask;
     }
 
     private static async Task<bool> ConfirmLargeResults()
