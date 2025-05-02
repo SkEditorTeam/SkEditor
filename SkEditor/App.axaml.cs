@@ -33,7 +33,7 @@ public class App : Application
 
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
         
-        if (!desktop.Args.Contains("--hideSplashScreen"))
+        if (!desktop.Args.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase))
         {
             _splashScreen = new SplashScreen();
             desktop.MainWindow = _splashScreen;
