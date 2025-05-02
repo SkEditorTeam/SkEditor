@@ -161,7 +161,7 @@
                                                     <DataTemplate>
                                                         <Grid ColumnDefinitions="*,Auto" Margin="0 2">
                                                             <TextBlock TextAlignment="Left" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Name}"/>
-                                                            <Button Height="28" Width="28" Grid.Column="2" Command="{Binding Rename}" Padding="0" ToolTip.Tip="{DynamicResource CodeParserRename}">
+                                                            <Button Height="28" Width="28" Grid.Column="1" Command="{Binding Rename}" Padding="0" ToolTip.Tip="{DynamicResource CodeParserRename}">
                                                                 <ui:SymbolIcon Symbol="Rename" FontSize="20" Margin="0" />
                                                             </Button>
                                                         </Grid>

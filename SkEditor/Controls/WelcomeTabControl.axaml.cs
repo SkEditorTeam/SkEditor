@@ -20,7 +20,7 @@ namespace SkEditor.Controls;
 
 public partial class WelcomeTabControl : UserControl
 {
-    private const double IconSize = 28;
+    private const double IconSize = 24;
     private const int TitleSize = 28;
     private const int TextSize = 16;
 

@@ -434,8 +434,8 @@ public partial class SideBarControl : UserControl
                 IconSource = icon,
                 Foreground = foreground,
             },
-            Width = 26,
-            Height = 26
+            Width = 22,
+            Height = 22
         };
     }
 }

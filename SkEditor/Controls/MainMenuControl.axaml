@@ -7,7 +7,7 @@
 
 	<UserControl.Styles>
 		<Style Selector="icons|SymbolIcon">
-			<Setter Property="FontSize" Value="22"/>
+			<Setter Property="FontSize" Value="18"/>
 		</Style>
 	</UserControl.Styles>
 
@@ -201,7 +201,7 @@
 		</MenuItem>
 		<MenuItem Name="MenuItemSettings" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
 			<MenuItem.Header>
-				<icons:SymbolIcon Symbol="Settings" FontSize="21" />
+				<icons:SymbolIcon Symbol="Settings" FontSize="18" />
 			</MenuItem.Header>
 		</MenuItem>
 	</Menu>

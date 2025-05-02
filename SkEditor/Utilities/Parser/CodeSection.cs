@@ -53,7 +53,7 @@ public partial class CodeSection
         SectionType.Command => GetIconFromName("MagicWandIcon"),
         SectionType.Event => GetIconFromName("LightingIcon"),
         SectionType.Function => GetIconFromName("FunctionIcon"),
-        SectionType.Options => new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 20 },
+        SectionType.Options => new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 22 },
         _ => throw new System.NotImplementedException(),
     };
 
