@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 
 namespace SkEditor.Utilities.InternalAPI;
 
@@ -256,7 +257,7 @@ public static class AddonLoader
             meta.State = IAddons.AddonState.Enabled;
             await SaveMeta();
             
-            _ = Task.Run(() => SkEditorAPI.Windows.GetMainWindow()?.ReloadUiOfAddons());
+            _ = Dispatcher.UIThread.InvokeAsync(() => SkEditorAPI.Windows.GetMainWindow()?.ReloadUiOfAddons());
             return true;
         }
         catch (Exception e)
