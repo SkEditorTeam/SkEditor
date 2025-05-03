@@ -10,7 +10,7 @@ using Avalonia.Svg.Skia;
 
 namespace SkEditor.Views;
 
-public partial class SplashScreen : AppWindow
+public partial class SplashScreen : Window
 {
     private readonly TextBlock _statusText;
 
@@ -22,8 +22,10 @@ public partial class SplashScreen : AppWindow
         Height = 300;
         CanResize = false;
 
-        TitleBar.Height = 0;
-        TitleBar.ExtendsContentIntoTitleBar = true;
+        ExtendClientAreaToDecorationsHint = true;
+        ExtendClientAreaTitleBarHeightHint = 0;
+        ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+        SystemDecorations = SystemDecorations.None;
 
         var grid = new Grid
         {
