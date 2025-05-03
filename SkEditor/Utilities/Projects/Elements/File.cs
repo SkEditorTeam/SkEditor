@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
@@ -27,7 +28,7 @@ public class File : StorageElement
         UpdateIcon();
 
         OpenInExplorerCommand = new RelayCommand(OpenInExplorer);
-        DeleteCommand = new RelayCommand(DeleteFile);
+        DeleteCommand = new AsyncRelayCommand(DeleteFile);
         CopyAbsolutePathCommand = new RelayCommand(CopyAbsolutePath);
         CopyPathCommand = new RelayCommand(CopyPath);
     }
@@ -37,7 +38,7 @@ public class File : StorageElement
         Process.Start(new ProcessStartInfo(Parent.StorageFolderPath) { UseShellExecute = true });
     }
 
-    public async void DeleteFile()
+    public async Task DeleteFile()
     {
         var result = await SkEditorAPI.Windows.ShowDialog("Delete File", 
             $"Are you sure you want to delete {Name} from the file system?",
@@ -55,9 +56,7 @@ public class File : StorageElement
         if (Parent is null) return Translation.Get("ProjectRenameErrorParentNull");
 
         var file = Parent.Children.FirstOrDefault(x => x.Name == input);
-        if (file is not null) return Translation.Get("ProjectErrorNameExists");
-
-        return null;
+        return file is not null ? Translation.Get("ProjectErrorNameExists") : null;
     }
 
     public override void RenameElement(string newName, bool move = true)

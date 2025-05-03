@@ -2,6 +2,7 @@
 using SkEditor.API;
 using SkEditor.Views;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -30,7 +31,7 @@ public class CodeOption : INameableCodeElement
         return caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
     }
 
-    public async void Rename()
+    public async Task Rename()
     {
         var renameWindow = new SymbolRefactorWindow(this);
         await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());

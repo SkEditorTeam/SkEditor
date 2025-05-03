@@ -159,7 +159,7 @@ public class App : Application
         };
     }
 
-    private static bool HandleSingleInstance(IClassicDesktopStyleApplicationLifetime desktop)
+    private static async Task<bool> HandleSingleInstance(IClassicDesktopStyleApplicationLifetime desktop)
     {
         Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
 
@@ -185,12 +185,12 @@ public class App : Application
             return true;
         }
 
-        SendArgsToExistingInstance();
+        await SendArgsToExistingInstance();
         desktop.Shutdown();
         return false;
     }
 
-    private static async void SendArgsToExistingInstance()
+    private static async Task SendArgsToExistingInstance()
     {
         try
         {

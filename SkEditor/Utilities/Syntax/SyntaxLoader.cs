@@ -23,7 +23,7 @@ public class SyntaxLoader
 
     private static bool _enableChecking = true;
 
-    public static async void LoadAdvancedSyntaxes()
+    public static async Task LoadAdvancedSyntaxes()
     {
         Directory.CreateDirectory(SyntaxFolder);
 
@@ -93,13 +93,13 @@ public class SyntaxLoader
         return true;
     }
 
-    public static async void SelectSyntax(FileSyntax syntax, bool refresh = true)
+    public static async Task SelectSyntax(FileSyntax syntax, bool refresh = true)
     {
         SkEditorAPI.Core.GetAppConfig().FileSyntaxes[syntax.Config.LanguageName] = syntax.Config.FullIdName;
         if (refresh) await RefreshSyntaxAsync();
     }
 
-    public static async void SetDefaultSyntax()
+    public static async Task SetDefaultSyntax()
     {
         if (!Directory.Exists(Path.Combine(SyntaxFolder, "Default")))
         {
@@ -216,7 +216,7 @@ public class SyntaxLoader
 
         foreach (var file in openedFiles)
         {
-            var ext = Path.GetExtension(file.Path?.ToString()?.TrimEnd('*').ToLower() ?? "");
+            var ext = Path.GetExtension(file.Path?.TrimEnd('*').ToLower() ?? "");
             if (string.IsNullOrWhiteSpace(ext) || !SortedFileSyntaxes.ContainsKey(ext))
             {
                 continue;

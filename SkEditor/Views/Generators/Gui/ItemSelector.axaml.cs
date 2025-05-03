@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace SkEditor.Views.Generators.Gui;
 public partial class ItemSelector : AppWindow
 {
-    private ItemBindings _itemBindings = new();
+    private readonly ItemBindings _itemBindings = new();
 
     public ItemSelector()
     {
@@ -49,12 +49,12 @@ public partial class ItemSelector : AppWindow
 
         Dispatcher.UIThread.InvokeAsync(CheckForFile);
 
-        Loaded += (sender, e) =>
+        Loaded += (_, _) =>
         {
             SearchBox.Focus();
         };
 
-        KeyDown += (sender, e) =>
+        KeyDown += (_, e) =>
         {
             switch (e.Key)
             {
@@ -70,6 +70,8 @@ public partial class ItemSelector : AppWindow
                 case Key.Down:
                     ItemListBox.SelectedIndex++;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         };
     }
@@ -102,7 +104,7 @@ public partial class ItemSelector : AppWindow
         ItemListBox.SelectedIndex = 0;
     }
 
-    private async void CheckForFile()
+    private async Task CheckForFile()
     {
         string itemsFile = Path.Combine(AppConfig.AppDataFolderPath, "items.json");
 

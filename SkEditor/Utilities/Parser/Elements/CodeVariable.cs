@@ -5,6 +5,7 @@ using SkEditor.API;
 using SkEditor.Views;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -122,7 +123,7 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
         }
     }
 
-    public async void Rename()
+    public async Task Rename()
     {
         var renameWindow = new SymbolRefactorWindow(this);
         await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());

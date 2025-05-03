@@ -22,7 +22,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
     [JsonProperty("syntaxFolders")]
     public string[] SyntaxFolders { get; set; }
 
-    public async override void Install()
+    public override async Task Install()
     {
         string themeFileName = ThemeFileUrl.Split('/').Last();
         string themeFilePath = Path.Combine(AppConfig.AppDataFolderPath, "Themes", themeFileName);
@@ -77,7 +77,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
 
             foreach (var syntax in installedSyntaxes)
             {
-                SyntaxLoader.SelectSyntax(syntax);
+                await SyntaxLoader.SelectSyntax(syntax);
             }
         }
 
@@ -91,14 +91,13 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         HttpResponseMessage response = await client.GetAsync(url);
         try
         {
-            using Stream stream = await response.Content.ReadAsStreamAsync();
-            using FileStream fileStream = File.Create(filePath);
+            await using Stream stream = await response.Content.ReadAsStreamAsync();
+            await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
-            await stream.DisposeAsync();
         }
         catch (Exception e)
         {
-            Log.Error(e, $"Failed to install {ItemName}!");
+            Log.Error(e, "Failed to install {S}!", ItemName);
             await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceInstallFailed", ItemName));
             return false;
         }
@@ -106,10 +105,10 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         return true;
     }
 
-    public override async void Uninstall()
+    public override async Task Uninstall()
     {
         await UninstallTheme();
-        UninstallSyntax();
+        await UninstallSyntax();
 
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
@@ -129,16 +128,14 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "Themes", fileName));
     }
 
-    private async void UninstallSyntax()
+    private async Task UninstallSyntax()
     {
         List<string> folders = SyntaxFolders.ToList();
         var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
-        foreach (string folder in folders)
+        foreach (string localSyntaxPath in folders
+                     .Select(folder => folder.Split('/').Last())
+                     .Select(folderName => Path.Combine(syntaxFolder, folderName)))
         {
-            var folderName = folder.Split('/').Last();
-            string localSyntaxPath = Path.Combine(syntaxFolder,
-                folderName);
-
             await SyntaxLoader.UnloadSyntax(localSyntaxPath);
             Directory.Delete(localSyntaxPath, true);
         }

@@ -121,33 +121,34 @@ public partial class MarketplaceWindow : AppWindow
                 = ItemView.EnableButton.CommandParameter = ItemView.UpdateButton.CommandParameter = item;
 
         ItemView.ManageButton.IsVisible = false;
-        ItemView.InstallButton.Command = new RelayCommand(item.Install);
-        ItemView.UninstallButton.Command = new RelayCommand(item.Uninstall);
-        if (item is ZipAddonItem zipAddonItem)
+        ItemView.InstallButton.Command = new AsyncRelayCommand(item.Install);
+        ItemView.UninstallButton.Command = new AsyncRelayCommand(item.Uninstall);
+        switch (item)
         {
-            ItemView.DisableButton.Command = new RelayCommand(zipAddonItem.Disable);
-            ItemView.EnableButton.Command = new RelayCommand(zipAddonItem.Enable);
-            ItemView.UpdateButton.Command = new RelayCommand(zipAddonItem.Update);
-        }
-        else if (item is AddonItem addonItem2)
-        {
-            ItemView.DisableButton.IsVisible = false;
-            ItemView.EnableButton.IsVisible = false;
-            ItemView.UpdateButton.IsVisible = false;
-            ItemView.UninstallButton.IsVisible = false;
+            case ZipAddonItem zipAddonItem:
+                ItemView.DisableButton.Command = new RelayCommand(zipAddonItem.Disable);
+                ItemView.EnableButton.Command = new RelayCommand(zipAddonItem.Enable);
+                ItemView.UpdateButton.Command = new AsyncRelayCommand(zipAddonItem.Update);
+                break;
+            case AddonItem addonItem2:
+                ItemView.DisableButton.IsVisible = false;
+                ItemView.EnableButton.IsVisible = false;
+                ItemView.UpdateButton.IsVisible = false;
+                ItemView.UninstallButton.IsVisible = false;
 
-            ItemView.ManageButton.IsVisible = addonItem2.IsInstalled();
-            ItemView.ManageButton.Command = new RelayCommand(() =>
-            {
-                Close();
-                addonItem2.Manage();
-            });
+                ItemView.ManageButton.IsVisible = addonItem2.IsInstalled();
+                ItemView.ManageButton.Command = new RelayCommand(() =>
+                {
+                    Close();
+                    AddonItem.Manage();
+                });
+                break;
         }
     }
 
     public void RefreshCurrentSelection()
     {
-        OnSelectedItemChanged(null, null);
+        OnSelectedItemChanged(null, null!);
     }
 
     public void HideAllButtons()

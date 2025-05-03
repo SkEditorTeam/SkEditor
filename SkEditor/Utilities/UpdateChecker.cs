@@ -19,20 +19,20 @@ using FileMode = System.IO.FileMode;
 namespace SkEditor.Utilities;
 public static class UpdateChecker
 {
-    private static readonly int _major = Assembly.GetExecutingAssembly().GetName().Version.Major;
-    private static readonly int _minor = Assembly.GetExecutingAssembly().GetName().Version.Minor;
-    private static readonly int _build = Assembly.GetExecutingAssembly().GetName().Version.Build;
+    private static readonly int Major = Assembly.GetExecutingAssembly().GetName().Version.Major;
+    private static readonly int Minor = Assembly.GetExecutingAssembly().GetName().Version.Minor;
+    private static readonly int Build = Assembly.GetExecutingAssembly().GetName().Version.Build;
 
     private const long RepoId = 679628726;
-    private static readonly GitHubClient _gitHubClient = new(new ProductHeaderValue("SkEditor"));
+    private static readonly GitHubClient GitHubClient = new(new ProductHeaderValue("SkEditor"));
 
-    private static readonly string _tempInstallerFile = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
+    private static readonly string TempInstallerFile = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
 
-    public static async void Check()
+    public static async Task Check()
     {
         try
         {
-            IReadOnlyList<Release> releases = await _gitHubClient.Repository.Release.GetAll(RepoId);
+            IReadOnlyList<Release> releases = await GitHubClient.Repository.Release.GetAll(RepoId);
             Release release = releases.FirstOrDefault(r => !r.Prerelease);
 
             (int, int, int) version = GetVersion(release.TagName);
@@ -59,12 +59,15 @@ public static class UpdateChecker
                 await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
                 return;
             }
-            DownloadMsi(msi.BrowserDownloadUrl);
+            await DownloadMsi(msi.BrowserDownloadUrl);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
-    private async static void DownloadMsi(string url)
+    private static async Task DownloadMsi(string url)
     {
         TaskDialog td = CreateTaskDialog(SkEditorAPI.Windows.GetMainWindow(), url);
         var result = await td.ShowAsync();
@@ -86,7 +89,7 @@ public static class UpdateChecker
             SubHeader = Translation.Get("Downloading"),
         };
 
-        td.Opened += async (s, e) => await DownloadUpdate(td, url);
+        td.Opened += async (_, _) => await DownloadUpdate(td, url);
 
         td.XamlRoot = visual;
         return td;
@@ -94,7 +97,7 @@ public static class UpdateChecker
 
     private static async Task DownloadUpdate(TaskDialog td, string url)
     {
-        TaskDialogProgressState state = TaskDialogProgressState.Normal;
+        const TaskDialogProgressState state = TaskDialogProgressState.Normal;
         td.SetProgressBarState(0, state);
 
         try
@@ -102,15 +105,15 @@ public static class UpdateChecker
             using (HttpClient client = new())
             {
                 var progress = new Progress<float>();
-                progress.ProgressChanged += (e, sender) => td.SetProgressBarState(sender, state);
+                progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
 
-                using var file = new FileStream(_tempInstallerFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                await using var file = new FileStream(TempInstallerFile, FileMode.Create, FileAccess.Write, FileShare.None);
                 await client.DownloadDataAsync(url, file, progress);
             }
 
             Process.Start(new ProcessStartInfo
             {
-                FileName = _tempInstallerFile,
+                FileName = TempInstallerFile,
                 UseShellExecute = true
             });
 
@@ -135,8 +138,8 @@ public static class UpdateChecker
 
     private static bool IsNewerVersion((int, int, int) version)
     {
-        return version.Item1 > _major ||
-               (version.Item1 == _major && version.Item2 > _minor) ||
-               (version.Item1 == _major && version.Item2 == _minor && version.Item3 > _build);
+        return version.Item1 > Major ||
+               (version.Item1 == Major && version.Item2 > Minor) ||
+               (version.Item1 == Major && version.Item2 == Minor && version.Item3 > Build);
     }
 }

@@ -62,11 +62,12 @@ public interface IFiles
     /// <param name="content">The control that represent the tab view item's content</param>
     /// <param name="header">The (mainly text) header of the created tab view item</param>
     /// <param name="select">Should the new created tab be selected right after its creation or not.</param>
+    /// <param name="icon">Icon to be shown in the tab view item</param>
     public void AddCustomTab(object header, Control content, bool select = true, IconSource? icon = null);
 
     /// <summary>
     /// Add a new editor tab with the desired content.
-    /// 
+    /// </summary>
     public Task<OpenedFile> AddEditorTab(string content, string? path);
 
     /// <summary>
@@ -85,14 +86,14 @@ public interface IFiles
     /// Add a "New File" tab with the desired content.
     /// </summary>
     /// <param name="content">The desired content of the new file</param>
-    public void NewFile(string content = "");
+    public Task NewFile(string content = "");
 
     /// <summary>
     /// Open the provided file path into SkEditor.
     /// </summary>
     /// <param name="path">The path of the target file.</param>
     /// <param name="force">Should the file be opened, even if it's detected as binary?</param>
-    public void OpenFile(string path, bool force = false);
+    public Task OpenFile(string path, bool force = false);
 
     /// <summary>
     /// Get a (possibly-null) opened file with the given path.
@@ -105,13 +106,14 @@ public interface IFiles
     /// the path if it was a new/unsaved file.
     /// </summary>
     /// <param name="entity">The tab view item or opened file to save.</param>
+    /// <param name="saveAs">Should the file be saved as a new file, even if it already has a path?</param>
     public Task Save(object entity, bool saveAs = false);
 
     /// <summary>
     /// Close a lot of tab view items according to the given
     /// <see cref="FileCloseAction"/>.
     /// </summary>
-    public void BatchClose(FileCloseAction closeAction);
+    public Task BatchClose(FileCloseAction closeAction);
 
     /// <summary>
     /// Add a welcome tab to the tab view.

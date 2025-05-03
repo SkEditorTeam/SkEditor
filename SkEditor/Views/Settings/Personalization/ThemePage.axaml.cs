@@ -58,6 +58,6 @@ public partial class ThemePage : UserControl
             UseShellExecute = true
         }));
 
-        EditThemeItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(EditThemePage)));
+        EditThemeItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(Personalization.EditThemePage)));
     }
 }

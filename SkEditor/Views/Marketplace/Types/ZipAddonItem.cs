@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SkEditor.Views.Marketplace.Types;
 
@@ -17,7 +18,7 @@ public class ZipAddonItem : AddonItem
     [JsonIgnore]
     private const string FolderName = "Addons";
 
-    public async override void Install()
+    public override async Task Install()
     {
         string fileName = ItemFileUrl.Split('/').Last();
         string filePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, fileName);
@@ -26,11 +27,9 @@ public class ZipAddonItem : AddonItem
         HttpResponseMessage response = await client.GetAsync(ItemFileUrl);
         try
         {
-            using Stream stream = await response.Content.ReadAsStreamAsync();
-            using FileStream fileStream = File.Create(filePath);
+            await using Stream stream = await response.Content.ReadAsStreamAsync();
+            await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
-            await stream.DisposeAsync();
-            await fileStream.DisposeAsync();
 
             ZipFile.ExtractToDirectory(filePath, Path.Combine(AppConfig.AppDataFolderPath, FolderName));
             File.Delete(filePath);
@@ -47,7 +46,7 @@ public class ZipAddonItem : AddonItem
             }
 
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
-                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
+                new SymbolIconSource { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
 
             MarketplaceWindow.Instance.HideAllButtons();
             MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
@@ -69,7 +68,7 @@ public class ZipAddonItem : AddonItem
         string addonDirectory = Path.Combine(AppConfig.AppDataFolderPath, FolderName, Path.GetFileNameWithoutExtension(fileName));
         if (!Directory.Exists(addonDirectory))
         {
-            Log.Error($"Addon directory '{addonDirectory}' does not exist!"); return;
+            Log.Error("Addon directory '{AddonDirectory}' does not exist!", addonDirectory); return;
         }
 
         Dispatcher.UIThread.Post(() =>
@@ -97,7 +96,7 @@ public class ZipAddonItem : AddonItem
         });
     }
 
-    public async override void Uninstall()
+    public override async Task Uninstall()
     {
         string fileName = Path.GetFileNameWithoutExtension(ItemFileUrl.Split('/').Last());
 
@@ -107,10 +106,10 @@ public class ZipAddonItem : AddonItem
         MarketplaceWindow.Instance.ItemView.UninstallButton.IsEnabled = false;
 
         await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
+            new SymbolIconSource { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
     }
 
-    public async void Update()
+    public async Task Update()
     {
         string fileName = "updated-" + ItemFileUrl.Split('/').Last();
         SkEditorAPI.Core.GetAppConfig().AddonsToUpdate.Add(fileName);
@@ -124,8 +123,8 @@ public class ZipAddonItem : AddonItem
 
         try
         {
-            using Stream stream = await response.Content.ReadAsStreamAsync();
-            using FileStream fileStream = File.Create(filePath);
+            await using Stream stream = await response.Content.ReadAsStreamAsync();
+            await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
 
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUpdateSuccess", ItemName),

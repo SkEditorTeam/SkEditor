@@ -1,5 +1,4 @@
-﻿using ExCSS;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using SkEditor.Views.Marketplace.Types;
@@ -7,16 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SkEditor.Views.Marketplace;
 public class MarketplaceLoader
 {
-    private static readonly string[] supportedTypes = ["NewSyntax", "Theme", "Addon", "NewThemeWithSyntax", "ZipAddon"];
-    private static readonly string[] hiddenItems = [];
+    private static readonly string[] SupportedTypes = ["NewSyntax", "Theme", "Addon", "NewThemeWithSyntax", "ZipAddon"];
+    private static readonly string[] HiddenItems = [];
 
     public static async IAsyncEnumerable<MarketplaceItem> GetItems()
     {
-        string url = MarketplaceWindow.MarketplaceUrl + "/items.json";
+        const string url = MarketplaceWindow.MarketplaceUrl + "/items.json";
         using HttpClient client = new();
         HttpResponseMessage response = await client.GetAsync(url);
         if (response.IsSuccessStatusCode)
@@ -25,11 +25,11 @@ public class MarketplaceLoader
             string[] itemNames = JsonConvert.DeserializeObject<string[]>(json);
             foreach (string itemName in itemNames)
             {
-                if (hiddenItems.Contains(itemName)) continue;
+                if (HiddenItems.Contains(itemName)) continue;
 
                 MarketplaceItem item = GetItem(itemName);
                 if (item.ItemName == null) continue;
-                if (!supportedTypes.Contains(item.ItemType)) continue;
+                if (!SupportedTypes.Contains(item.ItemType)) continue;
                 yield return item;
             }
         }
@@ -37,8 +37,6 @@ public class MarketplaceLoader
         {
             Log.Error("Failed to get items.json");
         }
-
-        yield break;
     }
 
     private static MarketplaceItem GetItem(string name)
@@ -110,8 +108,9 @@ public class MarketplaceItem
     [JsonProperty("author")]
     public string ItemAuthor { get; set; }
 
-    public virtual void Install() { }
-    public virtual void Uninstall() { }
+    public virtual Task Install() => Task.CompletedTask;
+
+    public virtual Task Uninstall() => Task.CompletedTask;
 
     public virtual bool IsInstalled()
     {

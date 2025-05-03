@@ -2,6 +2,7 @@
 using SkEditor.Views;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -51,7 +52,7 @@ public class CodeOptionReference : INameableCodeElement
         Section.Parser.GetOptionsSection()?.Options.ToList().Find(o => o.Name == Name)?.Rename(newName);
     }
 
-    public async void Rename()
+    public async Task Rename()
     {
         var renameWindow = new SymbolRefactorWindow(this);
         await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());

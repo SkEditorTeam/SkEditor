@@ -3,7 +3,6 @@ using Avalonia.Platform.Storage;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
@@ -201,12 +200,12 @@ public class Files : IFiles
         return openedFile;
     }
 
-    public async void NewFile(string content = "")
+    public async Task NewFile(string content = "")
     {
         await AddEditorTab(content, null);
     }
 
-    public async void OpenFile(string path, bool force = false)
+    public async Task OpenFile(string path, bool force = false)
     {
         path = Uri.UnescapeDataString(Path.GetFullPath(path));
         if (!File.Exists(path))
@@ -222,40 +221,9 @@ public class Files : IFiles
         OpenedFile? openedFile;
 
         var extension = Path.GetExtension(path);
-        var availableTypes = new List<FileTypeData>();
-        foreach (var fileType in Registries.FileTypes)
-        {
-            if (fileType.SupportedExtensions.Contains(extension))
-                availableTypes.Add(fileType);
-        }
-
-        OpenedFile? BuildFromType(FileTypeData fileType, string path)
-        {
-            var result = fileType.FileOpener(path) ?? new FileTypeResult(null);
-            if (result.Control != null)
-            {
-                TabViewItem tabViewItem = new()
-                {
-                    Header = result.Header ?? Path.GetFileName(path),
-                    IsSelected = true,
-                    Content = result.Control,
-                    Tag = string.Empty
-                };
-
-                openedFile = new OpenedFile
-                {
-                    TabViewItem = tabViewItem,
-                    Path = path,
-                    IsSaved = true
-                };
-
-                GetOpenedFiles().Add(openedFile);
-                (GetTabView().TabItems as IList)?.Add(tabViewItem);
-                return openedFile;
-            }
-
-            return null;
-        }
+        var availableTypes = Registries.FileTypes
+            .Where(fileType => fileType.SupportedExtensions.Contains(extension))
+            .ToList();
 
         if (availableTypes.Count == 1)
         {
@@ -275,22 +243,22 @@ public class Files : IFiles
             else
             {
 
-                var selectionVM = new FileTypeSelectionViewModel()
+                var selectionVm = new FileTypeSelectionViewModel()
                 {
                     FileTypes = availableTypes,
                     SelectedFileType = null,
                 };
-                await SkEditorAPI.Windows.ShowWindowAsDialog(new FileTypeSelectionWindow { DataContext = selectionVM });
+                await SkEditorAPI.Windows.ShowWindowAsDialog(new FileTypeSelectionWindow { DataContext = selectionVm });
 
-                if (selectionVM.SelectedFileType == null)
+                if (selectionVm.SelectedFileType == null)
                     return;
-                if (selectionVM.RememberSelection)
+                if (selectionVm.RememberSelection)
                 {
                     SkEditorAPI.Core.GetAppConfig().FileTypeChoices[extension] =
-                        Registries.FileTypes.GetValueKey(selectionVM.SelectedFileType).FullKey;
+                        Registries.FileTypes.GetValueKey(selectionVm.SelectedFileType).FullKey;
                 }
 
-                openedFile = BuildFromType(selectionVM.SelectedFileType, path);
+                openedFile = BuildFromType(selectionVm.SelectedFileType, path);
             }
         }
         else
@@ -317,6 +285,32 @@ public class Files : IFiles
 
         RemoveWelcomeTab();
         Select(openedFile);
+        return;
+
+        OpenedFile? BuildFromType(FileTypeData fileType, string filePath)
+        {
+            var result = fileType.FileOpener(filePath) ?? new FileTypeResult(null);
+            if (result.Control == null) return null;
+
+            TabViewItem tabViewItem = new()
+            {
+                Header = result.Header ?? Path.GetFileName(filePath),
+                IsSelected = true,
+                Content = result.Control,
+                Tag = string.Empty
+            };
+
+            openedFile = new OpenedFile
+            {
+                TabViewItem = tabViewItem,
+                Path = filePath,
+                IsSaved = true
+            };
+
+            GetOpenedFiles().Add(openedFile);
+            (GetTabView().TabItems as IList)?.Add(tabViewItem);
+            return openedFile;
+        }
     }
 
     private void RemoveWelcomeTab()
@@ -365,7 +359,7 @@ public class Files : IFiles
             AddWelcomeTab();
     }
 
-    public async void BatchClose(IFiles.FileCloseAction closeAction)
+    public async Task BatchClose(IFiles.FileCloseAction closeAction)
     {
         switch (closeAction)
         {
@@ -394,14 +388,20 @@ public class Files : IFiles
                         : openedTabs.GetRange(0, index);
 
                     items.RemoveAll(tab => tab == currentTabViewItem);
-                    items.ForEach(async tab => await Close(tab));
+                    await Parallel.ForEachAsync(items, async (tab, _) =>
+                    {
+                        await Close(tab);
+                    });
 
                     break;
                 }
             case IFiles.FileCloseAction.All:
                 {
                     var tabsToClose = GetOpenedFiles().ToList();
-                    tabsToClose.ForEach(async tab => await Close(tab));
+                    await Parallel.ForEachAsync(tabsToClose, async (tab, _) =>
+                    {
+                        await Close(tab);
+                    });
                     if (GetOpenedFiles().Count == 0)
                         AddWelcomeTab();
                     break;

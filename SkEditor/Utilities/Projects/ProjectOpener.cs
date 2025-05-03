@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
@@ -19,7 +20,7 @@ namespace SkEditor.Utilities.Projects;
 
 public static class ProjectOpener
 {
-    public static Folder? ProjectRootFolder = null;
+    public static Folder? ProjectRootFolder;
 
     private static ExplorerSidebarPanel Panel => AddonLoader.GetCoreAddon().ProjectPanel.Panel;
 
@@ -27,9 +28,9 @@ public static class ProjectOpener
 
     private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
 
-    public static async void OpenProject(string? path = null)
+    public static async Task OpenProject(string? path = null)
     {
-        string folder = string.Empty;
+        string folder;
 
         if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
         {
@@ -89,7 +90,7 @@ public static class ProjectOpener
 
                 string rawString = folders[0].ToString();
 
-                int pathIndex = rawString.IndexOf("Path=");
+                int pathIndex = rawString.IndexOf("Path=", StringComparison.Ordinal);
 
                 if (pathIndex >= 0)
                 {
@@ -132,7 +133,7 @@ public static class ProjectOpener
             storageElement?.HandleClick();
         }
 
-        FileTreeView.DoubleTapped += (sender, e) =>
+        FileTreeView.DoubleTapped += (_, e) =>
         {
             if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
                 return;
@@ -140,7 +141,7 @@ public static class ProjectOpener
             HandleTapped(e);
         };
 
-        FileTreeView.Tapped += (sender, e) =>
+        FileTreeView.Tapped += (_, e) =>
         {
             if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
                 return;

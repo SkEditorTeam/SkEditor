@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SkEditor.Views.Marketplace.Types;
 
@@ -20,7 +21,7 @@ public class ThemeItem : MarketplaceItem
     [JsonIgnore]
     public const string FolderName = "Themes";
 
-    public async override void Install()
+    public override async Task Install()
     {
         string fileName = ItemFileUrl.Split('/').Last();
         string filePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, fileName);
@@ -29,10 +30,9 @@ public class ThemeItem : MarketplaceItem
         HttpResponseMessage response = await client.GetAsync(ItemFileUrl);
         try
         {
-            using Stream stream = await response.Content.ReadAsStreamAsync();
-            using FileStream fileStream = File.Create(filePath);
+            await using Stream stream = await response.Content.ReadAsStreamAsync();
+            await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
-            await stream.DisposeAsync();
 
             string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
             message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
@@ -60,7 +60,7 @@ public class ThemeItem : MarketplaceItem
         }
     }
 
-    public async override void Uninstall()
+    public override async Task Uninstall()
     {
         string fileName = ItemFileUrl.Split('/').Last();
 
@@ -81,7 +81,6 @@ public class ThemeItem : MarketplaceItem
     public override bool IsInstalled()
     {
         string themePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, Path.GetFileName(ItemFileUrl));
-        if (!File.Exists(themePath)) return false;
-        else return true;
+        return File.Exists(themePath);
     }
 }

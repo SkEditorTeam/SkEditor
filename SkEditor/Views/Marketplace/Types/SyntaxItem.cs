@@ -20,7 +20,7 @@ public class SyntaxItem : MarketplaceItem
     [JsonIgnore]
     public const string FolderName = "Syntax Highlighting";
 
-    public async override void Install()
+    public override async Task Install()
     {
         string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
 
@@ -65,7 +65,7 @@ public class SyntaxItem : MarketplaceItem
         {
             foreach (var syntax in installedSyntaxes)
             {
-                SyntaxLoader.SelectSyntax(syntax);
+                await SyntaxLoader.SelectSyntax(syntax);
             }
 
             SyntaxLoader.RefreshAllOpenedEditors();
@@ -81,10 +81,9 @@ public class SyntaxItem : MarketplaceItem
         HttpResponseMessage response = await client.GetAsync(url);
         try
         {
-            using Stream stream = await response.Content.ReadAsStreamAsync();
-            using FileStream fileStream = File.Create(filePath);
+            await using Stream stream = await response.Content.ReadAsStreamAsync();
+            await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
-            await stream.DisposeAsync();
         }
         catch (Exception e)
         {
@@ -96,16 +95,15 @@ public class SyntaxItem : MarketplaceItem
         return true;
     }
 
-    public override async void Uninstall()
+    public override async Task Uninstall()
     {
         List<string> folders = ItemSyntaxFolders.ToList();
         var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
-        foreach (string folder in folders)
+        foreach (string localSyntaxPath in folders
+                     .Select(folder => folder.Split('/').Last())
+                     .Select(folderName => Path.Combine(syntaxFolder,
+                     folderName)))
         {
-            var folderName = folder.Split('/').Last();
-            string localSyntaxPath = Path.Combine(syntaxFolder,
-                folderName);
-
             await SyntaxLoader.UnloadSyntax(localSyntaxPath);
             Directory.Delete(localSyntaxPath, true);
         }
@@ -121,15 +119,9 @@ public class SyntaxItem : MarketplaceItem
     public override bool IsInstalled()
     {
         var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
-        foreach (string folder in ItemSyntaxFolders)
-        {
-            var folderName = folder.Split('/').Last();
-            string localSyntaxPath = Path.Combine(syntaxFolder,
-                folderName);
-            if (!Directory.Exists(localSyntaxPath))
-                return false;
-        }
-
-        return true;
+        return ItemSyntaxFolders
+            .Select(folder => folder.Split('/').Last())
+            .Select(folderName => Path.Combine(syntaxFolder, folderName))
+            .All(Directory.Exists);
     }
 }

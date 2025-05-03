@@ -193,7 +193,7 @@ public partial class MainWindow : AppWindow
                     try
                     {
                         if (SkEditorAPI.Core.GetAppConfig().CheckForUpdates)
-                            UpdateChecker.Check();
+                            await UpdateChecker.Check();
 
                         Tutorial.ShowTutorial();
                         ChangelogChecker.Check();

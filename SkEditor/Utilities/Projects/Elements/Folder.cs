@@ -7,9 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using Serilog;
 using SkEditor.API;
-using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
@@ -31,18 +29,11 @@ public class Folder : StorageElement
         Parent = parent;
         StorageFolderPath = folder;
 
-        if (folder.StartsWith("\\\\") && folder.Count(c => c == '\\') == 3)
+        if (folder.StartsWith(@"\\") && folder.Count(c => c == '\\') == 3)
         {
             string[] parts = folder.Split('\\', StringSplitOptions.RemoveEmptyEntries);
 
-            if (parts.Length >= 2)
-            {
-                Name = parts[1];
-            }
-            else
-            {
-                Name = Path.GetFileName(folder);
-            }
+            Name = parts.Length >= 2 ? parts[1] : Path.GetFileName(folder);
         }
         else
         {
@@ -63,10 +54,10 @@ public class Folder : StorageElement
         IsRootFolder = parent is null;
         Children = [];
 
-        LoadChildren();
+        _ = LoadChildren();
 
         OpenInExplorerCommand = new RelayCommand(OpenInExplorer);
-        DeleteCommand = new RelayCommand(DeleteFolder);
+        DeleteCommand = new AsyncRelayCommand(DeleteFolder);
         CopyPathCommand = new RelayCommand(CopyPath);
         CopyAbsolutePathCommand = new RelayCommand(CopyAbsolutePath);
         CreateNewFileCommand = new RelayCommand(() => CreateNewElement(true));
@@ -74,7 +65,7 @@ public class Folder : StorageElement
         CloseProjectCommand = new RelayCommand(CloseProject);
     }
 
-    private async void LoadChildren()
+    private async Task LoadChildren()
     {
         await Task.Run(
             () =>
@@ -98,7 +89,7 @@ public class Folder : StorageElement
         Process.Start(new ProcessStartInfo(StorageFolderPath) { UseShellExecute = true });
     }
 
-    public async void DeleteFolder()
+    public async Task DeleteFolder()
     {
         var result = await SkEditorAPI.Windows.ShowDialog(
             "Delete File",
@@ -123,13 +114,13 @@ public class Folder : StorageElement
     {
         ProjectOpener.FileTreeView.ItemsSource = null;
 
-        Folder? ProjectRootFolder = null;
+        Folder? projectRootFolder = null;
 
-        ExplorerPanel? Panel =
+        ExplorerPanel? panel =
             Registries.SidebarPanels.FirstOrDefault(x => x is ExplorerPanel) as ExplorerPanel;
 
-        StackPanel NoFolderMessage = Panel.Panel.NoFolderMessage;
-        NoFolderMessage.IsVisible = ProjectRootFolder == null;
+        StackPanel noFolderMessage = panel.Panel.NoFolderMessage;
+        noFolderMessage.IsVisible = projectRootFolder == null;
     }
 
     public override void RenameElement(string newName, bool move = true)
@@ -154,10 +145,7 @@ public class Folder : StorageElement
 
         var folder = Parent.Children.FirstOrDefault(x => x.Name == input);
 
-        if (folder is not null)
-            return Translation.Get("ProjectErrorNameExists");
-
-        return null;
+        return folder is not null ? Translation.Get("ProjectErrorNameExists") : null;
     }
 
     public string? ValidateCreationName(string input)
@@ -190,7 +178,7 @@ public class Folder : StorageElement
         SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(path);
     }
 
-    public async void CreateNewElement(bool file)
+    public async Task CreateNewElement(bool file)
     {
         var window = new CreateStorageElementWindow(this, file);
         await window.ShowDialog(MainWindow.Instance);
@@ -224,18 +212,18 @@ public class Folder : StorageElement
 
         foreach (var child in Children)
         {
-            if (child is Folder folder)
+            switch (child)
             {
-                var item = folder.GetItemByPath(path);
-                if (item is not null)
-                    return item;
-            }
-            else if (
-                child is File file
-                && Path.GetFullPath(file.StorageFilePath) == Path.GetFullPath(path)
-            )
-            {
-                return file;
+                case Folder folder:
+                {
+                    var item = folder.GetItemByPath(path);
+                    if (item is not null)
+                        return item;
+                    break;
+                }
+                case File file
+                    when Path.GetFullPath(file.StorageFilePath) == Path.GetFullPath(path):
+                    return file;
             }
         }
 

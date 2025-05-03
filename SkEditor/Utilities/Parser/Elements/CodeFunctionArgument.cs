@@ -1,6 +1,8 @@
-﻿using SkEditor.API;
+﻿using System.Linq;
+using SkEditor.API;
 using SkEditor.Views;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -30,7 +32,7 @@ public class CodeFunctionArgument : INameableCodeElement
         Length = raw.Length;
     }
 
-    public async void Rename()
+    public async Task Rename()
     {
         var renameWindow = new SymbolRefactorWindow(this);
         await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
@@ -45,10 +47,9 @@ public class CodeFunctionArgument : INameableCodeElement
         Function.Lines[0] = newFunctionDeclaration;
 
         // Then replace all local variable with the new name
-        foreach (CodeVariable variable in Function.Variables)
+        foreach (CodeVariable variable in Function.Variables.Where(variable => variable.IsLocal && variable.Name == Name))
         {
-            if (variable.IsLocal && variable.Name == Name)
-                variable.Rename(newName, true);
+            variable.Rename(newName, true);
         }
 
         Function.RefreshCode();

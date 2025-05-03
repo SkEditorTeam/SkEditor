@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace SkEditor.Views.Marketplace.Types;
 
@@ -19,7 +20,7 @@ public class AddonItem : MarketplaceItem
 
     [JsonIgnore] private const string FolderName = "Addons";
 
-    public override async void Install()
+    public override async Task Install()
     {
         var fileName = ItemFileUrl.Split('/').Last();
         var addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
@@ -51,7 +52,7 @@ public class AddonItem : MarketplaceItem
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
                 new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
 
-            RunAddon(addonIdentifier);
+            await RunAddon(addonIdentifier);
         }
         catch (Exception e)
         {
@@ -62,7 +63,7 @@ public class AddonItem : MarketplaceItem
         Marketplace.RefreshCurrentSelection();
     }
 
-    private async void RunAddon(string addonIdentifier)
+    private async Task RunAddon(string addonIdentifier)
     {
         if (ItemRequiresRestart)
             return;
@@ -71,12 +72,12 @@ public class AddonItem : MarketplaceItem
         await AddonLoader.LoadAddonFromFile(folder);
     }
 
-    public override void Uninstall()
+    public override Task Uninstall()
     {
         throw new NotImplementedException();
     }
 
-    public void Manage()
+    public static void Manage()
     {
         SkEditorAPI.Windows.ShowWindow(new SettingsWindow());
         SettingsWindow.NavigateToPage(typeof(AddonsPage));

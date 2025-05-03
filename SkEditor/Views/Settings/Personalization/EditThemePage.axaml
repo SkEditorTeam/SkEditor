@@ -5,7 +5,7 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 xmlns:controls="using:SkEditor.Controls"
              mc:Ignorable="d" d:DesignWidth="800"
-             x:Class="SkEditor.Views.Settings.EditThemePage"
+             x:Class="SkEditor.Views.Settings.Personalization.EditThemePage"
              x:CompileBindings="True">
 
 	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">

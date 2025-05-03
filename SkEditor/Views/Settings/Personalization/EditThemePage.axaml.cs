@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -5,7 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.Controls;
 using SkEditor.Utilities.Styling;
 
-namespace SkEditor.Views.Settings;
+namespace SkEditor.Views.Settings.Personalization;
 public partial class EditThemePage : UserControl
 {
     public EditThemePage()
@@ -43,10 +44,10 @@ public partial class EditThemePage : UserControl
     {
         var colorPicker = expander.ColorPicker;
         colorPicker.Color = (ThemeEditor.CurrentTheme.GetType().GetProperty(propertyName)?.GetValue(ThemeEditor.CurrentTheme) as ImmutableSolidColorBrush)?.Color;
-        colorPicker.ColorChanged += (s, e) => ChangeColor(propertyName, e.NewColor);
+        colorPicker.ColorChanged += async (_, e) => await ChangeColor(propertyName, e.NewColor);
     }
 
-    private static async void ChangeColor(string name, Color? color)
+    private static async Task ChangeColor(string name, Color? color)
     {
         if (color is null) return;
 
