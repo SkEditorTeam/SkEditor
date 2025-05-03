@@ -34,12 +34,16 @@
 	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf" />
 	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf" />
 	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf" />
-	  <None Remove="Languages\English.xaml" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<Content Update="Languages\*">
 			<Generator>MSBuild:Compile</Generator>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<AvaloniaResource Include="Languages\English.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -74,9 +78,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<AvaloniaResource Update="Assets\Icons.axaml">
-			<SubType>Designer</SubType>
-		</AvaloniaResource>
+		<AvaloniaResource Update="Assets\Icons.axaml"/>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -189,14 +191,5 @@
 	  <AvaloniaXaml Update="Views\ColorSelectionWindow.axaml">
 	    <SubType>Designer</SubType>
 	  </AvaloniaXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Languages\Hungarian.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </None>
-	  <None Update="Languages\Korean.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </None>
 	</ItemGroup>
 </Project>

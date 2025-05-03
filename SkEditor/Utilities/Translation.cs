@@ -5,6 +5,7 @@ using SkEditor.API;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
@@ -26,13 +27,14 @@ public static class Translation
         return translationString;
     }
 
-    private static readonly HashSet<ResourceDictionary> Translations = [];
+    private static readonly Dictionary<string, ResourceDictionary> Translations = [];
 
     public static async Task ChangeLanguage(string language)
     {
-        foreach (ResourceDictionary translation in Translations)
+        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation => translation.Key != "English"))
         {
-            Application.Current.Resources.MergedDictionaries.Remove(translation);
+            Application.Current.Resources.MergedDictionaries.Remove(translation.Value);
+            Translations.Remove(translation.Key);
         }
 
         Uri languageXaml = new(Path.Combine(LanguagesFolder, $"{language}.xaml"));
@@ -49,7 +51,7 @@ public static class Translation
         if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
         {
             Application.Current.Resources.MergedDictionaries.Add(dictionary);
-            Translations.Add(dictionary);
+            Translations.Add(language, dictionary);
         }
     }
 }
