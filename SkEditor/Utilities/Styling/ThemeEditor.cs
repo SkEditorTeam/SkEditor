@@ -5,8 +5,6 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Styling;
 using AvaloniaEdit;
-using ExCSS;
-using FluentAvalonia.Interop;
 using FluentAvalonia.Styling;
 using Newtonsoft.Json;
 using SkEditor.API;
@@ -19,29 +17,37 @@ using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Styling;
 
-
 public class ThemeEditor
 {
-    public static List<Theme> Themes { get; set; } = new();
+    public static List<Theme> Themes { get; set; } = [];
     public static Theme CurrentTheme { get; set; } = new();
 
     public static string ThemeFolderPath { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Themes");
 
-    public static Dictionary<string, string[]> themeToResourceDictionary = new()
+    public static readonly Dictionary<string, string[]> ThemeToResourceDictionary = new()
     {
-        { "BackgroundColor", new string[] { "BackgroundColor" } },
-        { "SmallWindowBackgroundColor", new string[] { "SmallWindowBackgroundColor", "ContentDialogBackground", "TaskDialogButtonAreaBackground" } },
-        { "EditorBackgroundColor", new string[] { "EditorBackgroundColor" } },
-        { "EditorTextColor", new string[] { "EditorTextColor" } },
-        { "LineNumbersColor", new string[] { "LineNumbersColor" } },
-        { "SelectionColor", new string[] { "SelectionColor" } },
-        { "SelectedTabItemBackground", new string[] { "TabViewItemHeaderBackgroundSelected" } },
-        { "SelectedTabItemBorder", new string[] { "TabViewSelectedItemBorderBrush" } },
-        { "MenuBackground", new string[] { "MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground" } },
-        { "MenuBorder", new string[] { "MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush" } },
-        { "TextBoxFocusedBackground", new string[] { "TextControlBackgroundFocused" } },
-        { "CurrentLineBackground", new string[] { "CurrentLineBackground" } },
-        { "CurrentLineBorder", new string[] { "CurrentLineBorder" } },
+        { "BackgroundColor", ["BackgroundColor"] },
+        {
+            "SmallWindowBackgroundColor",
+            ["SmallWindowBackgroundColor", "ContentDialogBackground", "TaskDialogButtonAreaBackground"]
+        },
+        { "EditorBackgroundColor", ["EditorBackgroundColor"] },
+        { "EditorTextColor", ["EditorTextColor"] },
+        { "LineNumbersColor", ["LineNumbersColor"] },
+        { "SelectionColor", ["SelectionColor"] },
+        { "SelectedTabItemBackground", ["TabViewItemHeaderBackgroundSelected"] },
+        { "SelectedTabItemBorder", ["TabViewSelectedItemBorderBrush"] },
+        {
+            "MenuBackground",
+            ["MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground"]
+        },
+        {
+            "MenuBorder",
+            ["MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush"]
+        },
+        { "TextBoxFocusedBackground", ["TextControlBackgroundFocused"] },
+        { "CurrentLineBackground", ["CurrentLineBackground"] },
+        { "CurrentLineBorder", ["CurrentLineBorder"] },
     };
 
     public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
@@ -56,8 +62,6 @@ public class ThemeEditor
         if (!File.Exists(Path.Combine(ThemeFolderPath, "Default.json"))) SaveTheme(GetDefaultTheme());
 
         string[] files = Directory.GetFiles(ThemeFolderPath);
-
-        string currentTheme = SkEditorAPI.Core.GetAppConfig().CurrentTheme;
 
         files.Where(x => Path.GetExtension(x) == ".json").ToList().ForEach(x => LoadTheme(x));
 
@@ -77,6 +81,7 @@ public class ThemeEditor
                 File.Delete(path);
                 theme = GetDefaultTheme();
             }
+
             theme.FileName = Path.GetFileName(path);
             Themes.Add(theme);
         }
@@ -84,6 +89,7 @@ public class ThemeEditor
         {
             theme = GetDefaultTheme();
         }
+
         return theme;
     }
 
@@ -135,24 +141,24 @@ public class ThemeEditor
 
         var tasks = new List<Task>();
 
-        foreach (var item in themeToResourceDictionary)
+        foreach (var item in ThemeToResourceDictionary)
         {
-            ImmutableSolidColorBrush brush = (ImmutableSolidColorBrush)CurrentTheme.GetType().GetProperty(item.Key).GetValue(CurrentTheme);
+            ImmutableSolidColorBrush brush = CurrentTheme.GetBrushByName(item.Key);
 
             tasks.AddRange(item.Value.Select(resource =>
             {
                 Application.Current.Resources[resource] = brush;
                 return Task.CompletedTask;
             }));
-
-            UpdateTextEditorColors();
-
-            tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
-            {
-                Application.Current.Resources[colorChange.Key] = colorChange.Value;
-                return Task.CompletedTask;
-            }));
         }
+
+        UpdateTextEditorColors();
+
+        tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
+        {
+            Application.Current.Resources[colorChange.Key] = colorChange.Value;
+            return Task.CompletedTask;
+        }));
 
         FluentAvaloniaTheme styles = Application.Current.Styles.OfType<FluentAvaloniaTheme>().First();
         styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
@@ -165,30 +171,32 @@ public class ThemeEditor
     }
 
     public static ControlTheme SmallWindowTheme { get; private set; }
+
     private static void ApplyMica()
     {
         Uri uri = new("avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml");
         var style = new ResourceInclude(uri) { Source = uri };
 
-        if (style.TryGetResource("SmallWindowTheme", ThemeVariant.Default, out var smallWindowTheme))
+        if (!style.TryGetResource("SmallWindowTheme", ThemeVariant.Default, out var smallWindowTheme)) return;
+
+        WindowTransparencyLevel[] levels =
+            [WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur];
+
+        ControlTheme smallWindow = (ControlTheme)smallWindowTheme;
+        if (CurrentTheme.UseMicaEffect)
         {
-            WindowTransparencyLevel[] levels = [WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur];
-
-            ControlTheme smallWindow = (ControlTheme)smallWindowTheme;
-            if (CurrentTheme.UseMicaEffect)
-            {
-                smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
-                SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = levels;
-            }
-            else
-            {
-                smallWindow.Setters.Remove(smallWindow.Setters.OfType<Setter>().FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint"));
-                SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
-            }
-
-            Application.Current.Resources.MergedDictionaries.Add(style);
-            SmallWindowTheme = smallWindow;
+            smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
+            SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = levels;
         }
+        else
+        {
+            smallWindow.Setters.Remove(smallWindow.Setters.OfType<Setter>()
+                .FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint"));
+            SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
+        }
+
+        Application.Current.Resources.MergedDictionaries.Add(style);
+        SmallWindowTheme = smallWindow;
     }
 
     private static void SaveDefaultColors()
@@ -198,10 +206,11 @@ public class ThemeEditor
             .ToList()
             .ForEach(colorChange =>
             {
-                if (!Application.Current.TryGetResource(colorChange.Key, Avalonia.Styling.ThemeVariant.Dark, out var defaultColor)) return;
-                if (defaultColor.GetType() == typeof(SolidColorBrush))
+                if (!Application.Current.TryGetResource(colorChange.Key, ThemeVariant.Dark, out var defaultColor))
+                    return;
+                if (defaultColor is SolidColorBrush brush)
                 {
-                    DefaultColors.Add(colorChange.Key, new ImmutableSolidColorBrush((SolidColorBrush)defaultColor));
+                    DefaultColors.Add(colorChange.Key, new ImmutableSolidColorBrush(brush));
                 }
                 else if (defaultColor.GetType() == typeof(ImmutableSolidColorBrush))
                 {
@@ -226,18 +235,16 @@ public class ThemeEditor
 
     private static void UpdateFont()
     {
-        string fontName = CurrentTheme.CustomFont;
-        if (fontName == null)
-        {
-            if (OSVersionHelper.IsWindows())
-            {
-                fontName = OSVersionHelper.IsWindows11() ? "Segoe UI Variable Text" : "Segoe UI";
-            }
-            else
-            {
-                fontName = FontFamily.Default.Name;
-            }
-        }
+        // if (OSVersionHelper.IsWindows())
+        // {
+        //     fontName = OSVersionHelper.IsWindows11() ? "Segoe UI Variable Text" : "Segoe UI";
+        // }
+        // else
+        // {
+        //     fontName = FontFamily.Default.Name;
+        // }
+        string fontName = CurrentTheme.CustomFont ?? FontFamily.Default.Name;
+
         Application.Current.Resources["ContentControlThemeFontFamily"] = new FontFamily(fontName);
     }
 

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace SkEditor.Utilities.Styling;
 
-
 public class Theme
 {
     [JsonIgnore]
@@ -32,9 +31,31 @@ public class Theme
 
     public Dictionary<string, ImmutableSolidColorBrush> CustomColorChanges { get; set; } = new()
     {
-        { "TextControlSelectionHighlightColor", new(Color.Parse("#25ffffff")) },
-        { "ContentDialogTopOverlay", new(Color.Parse("#ff141414")) },
-        { "ToggleButtonBackgroundChecked", new(Color.Parse("#40ffffff")) },
-        { "ToggleButtonBackgroundCheckedPointerOver", new(Color.Parse("#40ffffff")) }
+        { "TextControlSelectionHighlightColor", new ImmutableSolidColorBrush(Color.Parse("#25ffffff")) },
+        { "ContentDialogTopOverlay", new ImmutableSolidColorBrush(Color.Parse("#ff141414")) },
+        { "ToggleButtonBackgroundChecked", new ImmutableSolidColorBrush(Color.Parse("#40ffffff")) },
+        { "ToggleButtonBackgroundCheckedPointerOver", new ImmutableSolidColorBrush(Color.Parse("#40ffffff")) }
     };
+    
+    public ImmutableSolidColorBrush GetBrushByName(string propertyName)
+    {
+        return propertyName switch
+        {
+            "BackgroundColor" => BackgroundColor,
+            "SmallWindowBackgroundColor" => SmallWindowBackgroundColor,
+            "EditorBackgroundColor" => EditorBackgroundColor,
+            "EditorTextColor" => EditorTextColor,
+            "LineNumbersColor" => LineNumbersColor,
+            "SelectionColor" => SelectionColor,
+            "SelectedTabItemBackground" => SelectedTabItemBackground,
+            "SelectedTabItemBorder" => SelectedTabItemBorder,
+            "MenuBackground" => MenuBackground,
+            "MenuBorder" => MenuBorder,
+            "TextBoxFocusedBackground" => TextBoxFocusedBackground,
+            "CurrentLineBackground" => CurrentLineBackground,
+            "CurrentLineBorder" => CurrentLineBorder,
+            "AccentColor" => AccentColor,
+            _ => throw new System.ArgumentException($"Property {propertyName} not found in Theme")
+        };
+    }
 }
