@@ -69,6 +69,8 @@
 		<PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0" />
 		<PackageReference Include="Svg.Skia" Version="3.0.0" />
 		<PackageReference Include="System.Threading.AccessControl" Version="9.0.4" />
+		
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'" />
 	</ItemGroup>
 
 	<ItemGroup>
