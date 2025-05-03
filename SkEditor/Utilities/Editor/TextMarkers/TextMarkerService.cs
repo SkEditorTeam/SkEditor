@@ -11,11 +11,10 @@ using System.Linq;
 namespace SkEditor.Utilities.Editor.TextMarkers;
 
 public sealed class TextMarkerService(TextDocument document) : DocumentColorizingTransformer, IBackgroundRenderer,
-    ITextMarkerService,
-    ITextViewConnect
+    ITextMarkerService
 {
-    private readonly TextDocument document = document ?? throw new ArgumentNullException(nameof(document));
-    private readonly TextSegmentCollection<TextMarker> markers = new(document);
+    private readonly TextDocument _document = document ?? throw new ArgumentNullException(nameof(document));
+    private readonly TextSegmentCollection<TextMarker> _markers = new(document);
 
     public KnownLayer Layer => KnownLayer.Selection;
 
@@ -23,14 +22,14 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
     {
         ArgumentNullException.ThrowIfNull(textView);
         ArgumentNullException.ThrowIfNull(drawingContext);
-        if (markers == null || !textView.VisualLinesValid)
+        if (_markers == null || !textView.VisualLinesValid)
             return;
         var visualLines = textView.VisualLines;
         if (visualLines.Count == 0)
             return;
         var viewStart = visualLines.First().FirstDocumentLine.Offset;
         var viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
-        foreach (var marker in markers.FindOverlappingSegments(viewStart, viewEnd - viewStart))
+        foreach (var marker in _markers.FindOverlappingSegments(viewStart, viewEnd - viewStart))
         {
             if (marker.BackgroundColor != null)
             {
@@ -95,28 +94,28 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
     public ITextMarker Create(int startOffset, int length)
     {
-        if (markers == null) return null;
+        if (_markers == null) return null;
 
-        var textLength = document.TextLength;
+        var textLength = _document.TextLength;
         if (startOffset < 0 || startOffset > textLength
                             || length < 0 || startOffset + length > textLength) return null;
 
         TextMarker marker = new(this, startOffset, length);
-        markers.Add(marker);
+        _markers.Add(marker);
         Redraw(marker);
         return marker;
     }
 
     public IEnumerable<ITextMarker> GetMarkersAtOffset(int offset)
     {
-        return markers?.FindSegmentsContaining(offset) ?? Enumerable.Empty<ITextMarker>();
+        return _markers?.FindSegmentsContaining(offset) ?? Enumerable.Empty<ITextMarker>();
     }
 
-    public IEnumerable<ITextMarker> TextMarkers => markers ?? Enumerable.Empty<ITextMarker>();
+    public IEnumerable<ITextMarker> TextMarkers => _markers;
 
     public void RemoveAll()
     {
-        markers.ToList().ToList().ForEach(Remove);
+        _markers.ToList().ForEach(Remove);
     }
 
     public void Remove(ITextMarker marker)
@@ -125,7 +124,7 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
         var m = marker as TextMarker;
 
-        markers.Remove(m);
+        _markers.Remove(m);
         Redraw(m);
     }
 
@@ -164,11 +163,11 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
 public sealed class TextMarker : TextSegment, ITextMarker
 {
-    private readonly TextMarkerService service;
+    private readonly TextMarkerService _service;
 
     public TextMarker(TextMarkerService service, int startOffset, int length)
     {
-        this.service = service ?? throw new ArgumentNullException(nameof(service));
+        this._service = service ?? throw new ArgumentNullException(nameof(service));
         StartOffset = startOffset;
         Length = length;
         MarkerTypes = TextMarkerTypes.None;
@@ -185,6 +184,6 @@ public sealed class TextMarker : TextSegment, ITextMarker
 
     public void Delete()
     {
-        service.Remove(this);
+        _service.Remove(this);
     }
 }

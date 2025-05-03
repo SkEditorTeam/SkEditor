@@ -29,14 +29,13 @@ public partial class ColorSelectionWindow : AppWindow
 
         ResultTextBox.KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Enter && ResultTextBox.Text.Length == 7)
-            {
-                bool isValid = Color.TryParse(ResultTextBox.Text, out Color color);
-                if (!isValid) return;
-                ColorPicker.Color = color;
-            }
+            if (e.Key != Key.Enter || ResultTextBox.Text.Length != 7) return;
+
+            bool isValid = Color.TryParse(ResultTextBox.Text, out Color color);
+            if (!isValid) return;
+            ColorPicker.Color = color;
         };
 
-        CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
+        CopyButton.Command = new AsyncRelayCommand(() => Clipboard.SetTextAsync(ResultTextBox.Text));
     }
 }

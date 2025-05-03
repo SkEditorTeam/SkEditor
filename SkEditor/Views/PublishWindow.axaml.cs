@@ -53,7 +53,7 @@ public partial class PublishWindow : AppWindow
         {
             "Pastebin" => appConfig.PastebinApiKey,
             "code.skript.pl" => appConfig.CodeSkriptPlApiKey,
-            "skUnity Parser" => appConfig.SkUnityAPIKey,
+            "skUnity Parser" => appConfig.SkUnityApiKey,
             _ => "",
         };
 

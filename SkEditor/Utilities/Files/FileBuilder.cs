@@ -105,7 +105,7 @@ public class FileBuilder
 
                 if (fileType == null)
                 {
-                    var window = new AssociationSelectionWindow(path, handlers);
+                    var window = new AssociationSelectionWindow(handlers);
                     await window.ShowDialog(MainWindow.Instance);
                     var selected = window.SelectedAssociation;
                     if (selected != null)
@@ -130,8 +130,6 @@ public class FileBuilder
 
     private static async Task<FileTypes.FileType?> GetDefaultEditor(string path, string? content)
     {
-        AppConfig config = SkEditorAPI.Core.GetAppConfig();
-
         string fileContent = null;
         if (!string.IsNullOrWhiteSpace(path))
         {
@@ -150,13 +148,15 @@ public class FileBuilder
         }
 
         var editor = CreateEditor();
-        if (!string.IsNullOrWhiteSpace(path))
+        if (string.IsNullOrWhiteSpace(path))
         {
-            path = Uri.UnescapeDataString(path);
-            if (File.Exists(path))
-            {
-                editor.Text = fileContent;
-            }
+            return new FileTypes.FileType(editor, path, true);
+        }
+
+        path = Uri.UnescapeDataString(path);
+        if (File.Exists(path))
+        {
+            editor.Text = fileContent;
         }
 
         return new FileTypes.FileType(editor, path, true);
@@ -196,7 +196,7 @@ public class FileBuilder
     private static TextEditor AddEventHandlers(TextEditor editor)
     {
         editor.TextArea.PointerWheelChanged += TextEditorEventHandler.OnZoom;
-        editor.TextArea.Loaded += (sender, e) => editor.Focus();
+        editor.TextArea.Loaded += (_, _) => editor.Focus();
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
@@ -208,7 +208,7 @@ public class FileBuilder
         {
             editor.Document.TextChanged += (_, _) => TextEditorEventHandler.CheckForHex(editor);
         }
-        editor.TextArea.Caret.PositionChanged += (sender, e) =>
+        editor.TextArea.Caret.PositionChanged += (_, _) =>
         {
             SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdatePosition();
         };
@@ -251,7 +251,7 @@ public class FileBuilder
 
     public static MenuFlyout GetContextMenu(TextEditor editor)
     {
-        var commands = new[]
+        var commands = new object[]
         {
             new { Header = "MenuHeaderCopy", Command = new RelayCommand(editor.Copy), Icon = Symbol.Copy },
             new { Header = "MenuHeaderPaste", Command = new RelayCommand(editor.Paste), Icon = Symbol.Paste },
@@ -263,16 +263,19 @@ public class FileBuilder
             new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())), Icon = Symbol.Find },
             new { Header = "MenuHeaderTrimWhitespaces", Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)), Icon = Symbol.Remove },
             new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
-            new { Header = "MenuHeaderRefactor", Command = new RelayCommand(() => CustomCommandsHandler.OnRefactorCommandExecuted(editor)), Icon = Symbol.Rename },
+            new { Header = "MenuHeaderRefactor", Command = new AsyncRelayCommand(async () => await CustomCommandsHandler.OnRefactorCommandExecuted(editor)), Icon = Symbol.Rename },
         };
 
         var contextMenu = new MenuFlyout();
-        commands.Select(item => new MenuItem
+        foreach (dynamic item in commands)
         {
-            Header = Translation.Get(item.Header),
-            Command = item.Command,
-            Icon = new SymbolIcon { Symbol = item.Icon, FontSize = 20 }
-        }).ToList().ForEach(item => contextMenu.Items.Add(item));
+            contextMenu.Items.Add(new MenuItem
+            {
+                Header = Translation.Get(item.Header),
+                Command = item.Command,
+                Icon = new SymbolIcon { Symbol = item.Icon, FontSize = 20 }
+            });
+        }
 
         return contextMenu;
     }

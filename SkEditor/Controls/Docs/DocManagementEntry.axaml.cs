@@ -29,7 +29,7 @@ public partial class DocManagementEntry : UserControl
     {
         DeleteButton.Command = new RelayCommand(() =>
         {
-            LocalProvider.Get().RemoveElement(_entry);
+            _ = LocalProvider.Get().RemoveElement(_entry);
             var parent = Parent as SettingsExpander;
             parent.Items.Remove(this);
             if (parent.Items.Count != 0)

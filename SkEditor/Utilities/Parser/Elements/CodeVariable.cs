@@ -52,7 +52,7 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
 
     public void Rename(string newName) => Rename(newName, false);
 
-    public void Rename(string newName, bool callingFromFunction = false)
+    public void Rename(string newName, bool callingFromFunction)
     {
         if (newName.StartsWith('{') && newName.EndsWith('}')) newName = newName[1..^1];
         if (newName.StartsWith('_')) newName = newName[1..];

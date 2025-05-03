@@ -41,7 +41,7 @@ public partial class CustomAddonSettingsPage : UserControl
             }
 
             SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
-            Load(addon, _parent.Settings, null);
+            Load(addon, _parent.Settings);
         });
     }
 

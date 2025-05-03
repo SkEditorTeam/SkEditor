@@ -13,14 +13,21 @@ public partial class GoToLineWindow : AppWindow
     public GoToLineWindow()
     {
         InitializeComponent();
-        GoToLineInput.Loaded += (sender, e) => GoToLineInput.Focus();
+        GoToLineInput.Loaded += (_, _) => GoToLineInput.Focus();
         GoToLineInput.TextChanged += (_, _) => UpdateInput();
         GoToLineButton.Command = new RelayCommand(Execute);
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Enter) Execute();
-            if (e.Key == Key.Escape) Close();
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    Execute();
+                    break;
+                case Key.Escape:
+                    Close();
+                    break;
+            }
         };
     }
 
@@ -55,7 +62,8 @@ public partial class GoToLineWindow : AppWindow
         {
             GoToLineInput.Text = "";
             return;
-        };
+        }
+
         line = Math.Clamp(line, 1, documentLines);
         GoToLineInput.Text = line.ToString();
     }

@@ -98,11 +98,6 @@ public class ZipAddonItem : AddonItem
 
     public override async Task Uninstall()
     {
-        string fileName = Path.GetFileNameWithoutExtension(ItemFileUrl.Split('/').Last());
-
-        SkEditorAPI.Core.GetAppConfig().AddonsToDelete.Add(Path.GetFileNameWithoutExtension(fileName));
-        SkEditorAPI.Core.GetAppConfig().Save();
-
         MarketplaceWindow.Instance.ItemView.UninstallButton.IsEnabled = false;
 
         await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
@@ -112,7 +107,6 @@ public class ZipAddonItem : AddonItem
     public async Task Update()
     {
         string fileName = "updated-" + ItemFileUrl.Split('/').Last();
-        SkEditorAPI.Core.GetAppConfig().AddonsToUpdate.Add(fileName);
         SkEditorAPI.Core.GetAppConfig().Save();
         MarketplaceWindow.Instance.ItemView.UpdateButton.IsEnabled = false;
 
@@ -138,8 +132,6 @@ public class ZipAddonItem : AddonItem
 
     public void Disable()
     {
-        string fileName = ItemFileUrl.Split('/').Last().Replace(".zip", "");
-        SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Add(fileName);
         SkEditorAPI.Core.GetAppConfig().Save();
         MarketplaceWindow.Instance.ItemView.DisableButton.IsVisible = false;
         MarketplaceWindow.Instance.ItemView.EnableButton.IsVisible = true;
@@ -147,8 +139,6 @@ public class ZipAddonItem : AddonItem
 
     public void Enable()
     {
-        string fileName = ItemFileUrl.Split('/').Last().Replace(".zip", "");
-        SkEditorAPI.Core.GetAppConfig().AddonsToDisable.Remove(fileName);
         SkEditorAPI.Core.GetAppConfig().Save();
         MarketplaceWindow.Instance.ItemView.DisableButton.IsVisible = true;
         MarketplaceWindow.Instance.ItemView.EnableButton.IsVisible = false;

@@ -42,7 +42,7 @@ public partial class MainMenuControl : UserControl
     {
         MenuItemNew.Command = new RelayCommand(FileHandler.NewFile);
         MenuItemOpen.Command = new AsyncRelayCommand(FileHandler.OpenFile);
-        MenuItemOpenFolder.Command = new RelayCommand(() => ProjectOpener.OpenProject());
+        MenuItemOpenFolder.Command = new AsyncRelayCommand(async () => await ProjectOpener.OpenProject());
         MenuItemSave.Command = new RelayCommand(FileHandler.SaveFile);
         MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFile);
         MenuItemSaveAll.Command = new RelayCommand(FileHandler.SaveAllFiles);

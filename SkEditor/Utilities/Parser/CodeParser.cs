@@ -1,4 +1,5 @@
-﻿using AvaloniaEdit;
+﻿using System;
+using AvaloniaEdit;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.InternalAPI;
@@ -40,7 +41,7 @@ public partial class CodeParser : INotifyPropertyChanged
     /// </summary>
     public CodeSection? GetOptionsSection() => Sections.Find(section => section.Type == CodeSection.SectionType.Options);
 
-    public bool IsParsed { get; private set; } = false;
+    public bool IsParsed { get; private set; }
 
     /// <summary>
     /// Get section from a line.
@@ -106,13 +107,13 @@ public partial class CodeParser : INotifyPropertyChanged
             var line = lines[i];
             if (line.Contains("###"))
             {
-                var index = line.IndexOf("###");
+                var index = line.IndexOf("###", StringComparison.Ordinal);
                 lines[i] = line[..index];
                 for (var j = i + 1; j < lines.Count; j++)
                 {
                     if (lines[j].Contains("###"))
                     {
-                        var index2 = lines[j].IndexOf("###");
+                        var index2 = lines[j].IndexOf("###", StringComparison.Ordinal);
                         lines[j] = lines[j][(index2 + 3)..];
                         break;
                     }

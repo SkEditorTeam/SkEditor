@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 
 namespace SkEditor.Views.Generators;
+
 public partial class CommandGenerator : AppWindow
 {
     public CommandGenerator()
@@ -22,7 +23,7 @@ public partial class CommandGenerator : AppWindow
         {
             if (e.Key == Key.Escape) Close();
         };
-        Loaded += (_, e) => NameTextBox.Focus();
+        Loaded += (_, _) => NameTextBox.Focus();
     }
 
     private void Generate()
@@ -55,7 +56,8 @@ public partial class CommandGenerator : AppWindow
                 ? ((ComboBoxItem)ExecutorComboBox.SelectedItem).Tag.ToString()
                 : string.Empty);
 
-        AppendIfExists(ref code, "\n\tcooldown: {0} {1}", CooldownQuantityTextBox.Text, ((ComboBoxItem)CooldownUnitComboBox.SelectedItem).Tag.ToString());
+        AppendIfExists(ref code, "\n\tcooldown: {0} {1}", CooldownQuantityTextBox.Text,
+            ((ComboBoxItem)CooldownUnitComboBox.SelectedItem).Tag.ToString());
 
         code.Append("\n\ttrigger:\n\t\t");
 
@@ -70,6 +72,7 @@ public partial class CommandGenerator : AppWindow
         {
             template = template.Replace($"{{{i}}}", values[i]);
         }
+
         code.Append(template);
     }
 }

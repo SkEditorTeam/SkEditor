@@ -256,7 +256,7 @@ public partial class DocElementControl : UserControl
     public void DeleteElementFromCache(bool removeFromParent = false)
     {
         var localProvider = LocalProvider.Get();
-        localProvider.RemoveElement(_entry);
+        _ = localProvider.RemoveElement(_entry);
         if (removeFromParent)
             _documentationControl.RemoveElement(this);
     }
@@ -276,7 +276,7 @@ public partial class DocElementControl : UserControl
         }
 
         var localProvider = LocalProvider.Get();
-        localProvider.DownloadElement(_entry, examples);
+        await localProvider.DownloadElement(_entry, examples);
     }
 
     public async void DownloadButtonClicked(object? sender, RoutedEventArgs args)

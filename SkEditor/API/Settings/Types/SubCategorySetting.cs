@@ -13,7 +13,6 @@ namespace SkEditor.API.Settings.Types;
 /// <summary>
 /// A setting that contains a list of settings, used to create subcategories in the settings window.
 /// </summary>
-/// <param name="Name">The name of this subcategory.</param>
 /// <param name="settings">The settings that are contained in this subcategory.</param>
 public class SubCategorySetting(List<Setting> settings) : ISettingType
 {

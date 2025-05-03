@@ -60,8 +60,8 @@ public class Folder : StorageElement
         DeleteCommand = new AsyncRelayCommand(DeleteFolder);
         CopyPathCommand = new RelayCommand(CopyPath);
         CopyAbsolutePathCommand = new RelayCommand(CopyAbsolutePath);
-        CreateNewFileCommand = new RelayCommand(() => CreateNewElement(true));
-        CreateNewFolderCommand = new RelayCommand(() => CreateNewElement(false));
+        CreateNewFileCommand = new AsyncRelayCommand(() => CreateNewElement(true));
+        CreateNewFolderCommand = new AsyncRelayCommand(() => CreateNewElement(false));
         CloseProjectCommand = new RelayCommand(CloseProject);
     }
 

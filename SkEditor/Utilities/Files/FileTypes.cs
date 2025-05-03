@@ -13,7 +13,6 @@ namespace SkEditor.Utilities.Files;
 /// </summary>
 public static class FileTypes
 {
-
     public static readonly Dictionary<string, List<FileAssociation>> RegisteredFileTypes = new();
 
     public static void RegisterDefaultAssociations()
@@ -26,7 +25,8 @@ public static class FileTypes
         association.IsFromAddon = true;
         if (association.Addon == null)
         {
-            SkEditorAPI.Windows.ShowError($"Unable to register file association for {association.GetType().Name}:\n\nAddon is null");
+            SkEditorAPI.Windows.ShowError(
+                $"Unable to register file association for {association.GetType().Name}:\n\nAddon is null");
             return;
         }
 
@@ -56,9 +56,8 @@ public static class FileTypes
 
     public abstract class FileAssociation
     {
-
-        public List<string> SupportedExtensions { get; set; }
-        public bool IsFromAddon { get; set; } = false;
+        public List<string> SupportedExtensions { get; protected set; }
+        public bool IsFromAddon { get; set; }
 
         public IAddon? Addon { get; set; } = null;
 

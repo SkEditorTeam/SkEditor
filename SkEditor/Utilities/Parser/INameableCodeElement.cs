@@ -9,7 +9,7 @@ public interface INameableCodeElement
 
     public void Rename(string newName);
 
-    public virtual string GetNameDisplay()
+    public string GetNameDisplay()
     {
         return Name;
     }

@@ -1,16 +1,5 @@
 namespace SkEditor.Views.FileTypes.Images;
 
-/*
- *                               The MIT License (MIT)
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so.
- */
-// Port from: https://github.com/cyotek/Cyotek.Windows.Forms.ImageBox to AvaloniaUI
-// Modified from: https://github.com/sn4k3/UVtools/blob/master/UVtools.AvaloniaControls/AdvancedImageBox.axaml.cs
-
 using AsyncImageLoader;
 using Avalonia;
 using Avalonia.Controls;
@@ -39,9 +28,10 @@ using Point = Avalonia.Point;
 using Size = Avalonia.Size;
 
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-public class AdvancedImageBox : TemplatedControl
+public sealed class AdvancedImageBox : TemplatedControl
 {
     #region Bindable Base
+
     /// <summary>
     /// Multicast event for property change notifications.
     /// </summary>
@@ -53,17 +43,6 @@ public class AdvancedImageBox : TemplatedControl
         remove => _propertyChanged -= value;
     }
 
-    protected bool RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-            return false;
-        field = value;
-        RaisePropertyChanged(propertyName);
-        return true;
-    }
-
-    protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) { }
-
     /// <summary>
     ///     Notifies listeners that a property value has changed.
     /// </summary>
@@ -72,12 +51,12 @@ public class AdvancedImageBox : TemplatedControl
     ///     value is optional and can be provided automatically when invoked from compilers
     ///     that support <see cref="CallerMemberNameAttribute" />.
     /// </param>
-    protected void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
+    private void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
     {
         var e = new PropertyChangedEventArgs(propertyName);
-        OnPropertyChanged(e);
         _propertyChanged?.Invoke(this, e);
     }
+
     #endregion
 
     #region Sub Classes
@@ -119,8 +98,7 @@ public class AdvancedImageBox : TemplatedControl
         /// </summary>
         public static ZoomLevelCollection Default =>
             new(
-                new[]
-                {
+                [
                     7,
                     10,
                     13,
@@ -156,7 +134,7 @@ public class AdvancedImageBox : TemplatedControl
                     6800,
                     7800,
                     8800
-                }
+                ]
             );
 
         #endregion
@@ -279,6 +257,7 @@ public class AdvancedImageBox : TemplatedControl
                     nearestDifference = difference;
                 }
             }
+
             return nearestValue;
         }
 
@@ -472,14 +451,11 @@ public class AdvancedImageBox : TemplatedControl
 
     #region UI Controls
 
-    [NotNull]
-    public ScrollBar? HorizontalScrollBar { get; private set; }
+    [NotNull] public ScrollBar? HorizontalScrollBar { get; private set; }
 
-    [NotNull]
-    public ScrollBar? VerticalScrollBar { get; private set; }
+    [NotNull] public ScrollBar? VerticalScrollBar { get; private set; }
 
-    [NotNull]
-    public ContentPresenter? ViewPort { get; private set; }
+    [NotNull] public ContentPresenter? ViewPort { get; private set; }
 
     // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
     public bool IsViewPortLoaded => ViewPort is not null;
@@ -497,9 +473,11 @@ public class AdvancedImageBox : TemplatedControl
     }
 
     public Size ViewPortSize => ViewPort.Bounds.Size;
+
     #endregion
 
     #region Private Members
+
     private Point _startMousePosition;
     private Vector _startScrollPosition;
     private bool _isPanning;
@@ -507,9 +485,11 @@ public class AdvancedImageBox : TemplatedControl
     private Bitmap? _trackerImage;
     private bool _canRender = true;
     private Point _pointerPosition;
+
     #endregion
 
     #region Properties
+
     public static readonly DirectProperty<AdvancedImageBox, bool> CanRenderProperty = AvaloniaProperty.RegisterDirect<
         AdvancedImageBox,
         bool
@@ -590,10 +570,7 @@ public class AdvancedImageBox : TemplatedControl
 
                 Dispatcher
                     .UIThread
-                    .InvokeAsync(async () =>
-                    {
-                        Image = await loader.ProvideImageAsync(value);
-                    })
+                    .InvokeAsync(async () => { Image = await loader.ProvideImageAsync(value); })
                     .ConfigureAwait(false);
             }
         }
@@ -645,7 +622,7 @@ public class AdvancedImageBox : TemplatedControl
 
                     /*var oldScaledSize = oldImage.Size * ZoomFactor;
                     var newScaledSize = newImage.Size * ZoomFactor;
-                    
+
                     Debug.WriteLine($"Old scaled {oldScaledSize} -> new scaled {newScaledSize}");*/
 
                     var currentZoom = Zoom;
@@ -798,22 +775,14 @@ public class AdvancedImageBox : TemplatedControl
     public bool IsPanning
     {
         get => _isPanning;
-        protected set
+        private set
         {
             if (!SetAndRaise(IsPanningProperty, ref _isPanning, value))
                 return;
             _startScrollPosition = Offset;
 
-            if (value)
-            {
-                Cursor = new Cursor(StandardCursorType.SizeAll);
-                //this.OnPanStart(EventArgs.Empty);
-            }
-            else
-            {
-                Cursor = Cursor.Default;
-                //this.OnPanEnd(EventArgs.Empty);
-            }
+            Cursor = value ? new Cursor(StandardCursorType.SizeAll) :
+                Cursor.Default;
         }
     }
 
@@ -828,7 +797,7 @@ public class AdvancedImageBox : TemplatedControl
     public bool IsSelecting
     {
         get => _isSelecting;
-        protected set => SetAndRaise(IsSelectingProperty, ref _isSelecting, value);
+        private set => SetAndRaise(IsSelectingProperty, ref _isSelecting, value);
     }
 
     /// <summary>
@@ -1226,7 +1195,7 @@ public class AdvancedImageBox : TemplatedControl
     public static readonly StyledProperty<Rect> SelectionRegionProperty = AvaloniaProperty.Register<
         AdvancedImageBox,
         Rect
-    >(nameof(SelectionRegion), EmptyRect);
+    >(nameof(SelectionRegion));
 
     public Rect SelectionRegion
     {
@@ -1315,6 +1284,7 @@ public class AdvancedImageBox : TemplatedControl
     #endregion
 
     #region Render methods
+
     public void TriggerRender(bool renderOnlyCursorTracker = false)
     {
         if (!_canRender)
@@ -1418,7 +1388,8 @@ public class AdvancedImageBox : TemplatedControl
                 ? new Size(_trackerImage!.Size.Width * zoomFactor, _trackerImage.Size.Height * zoomFactor)
                 : image.Size;
 
-            var destPos = new Point(_pointerPosition.X - (destSize.Width / 2), _pointerPosition.Y - (destSize.Height / 2));
+            var destPos = new Point(_pointerPosition.X - (destSize.Width / 2),
+                _pointerPosition.Y - (destSize.Height / 2));
             context.DrawImage(_trackerImage!, new Rect(destPos, destSize));
         }
 
@@ -1453,13 +1424,13 @@ public class AdvancedImageBox : TemplatedControl
         }
     }
 
-    private bool UpdateViewPort()
+    private void UpdateViewPort()
     {
         if (Image is null)
         {
             HorizontalScrollBar.Maximum = 0;
             VerticalScrollBar.Maximum = 0;
-            return true;
+            return;
         }
 
         var scaledImageWidth = ScaledImageWidth;
@@ -1469,33 +1440,18 @@ public class AdvancedImageBox : TemplatedControl
         //var width = scaledImageWidth <= Viewport.Width ? Viewport.Width : scaledImageWidth;
         //var height = scaledImageHeight <= Viewport.Height ? Viewport.Height : scaledImageHeight;
 
-        var changed = false;
         if (Math.Abs(HorizontalScrollBar.Maximum - width) > 0.01)
         {
             HorizontalScrollBar.Maximum = width;
-            changed = true;
         }
 
         if (Math.Abs(VerticalScrollBar.Maximum - scaledImageHeight) > 0.01)
         {
             VerticalScrollBar.Maximum = height;
-            changed = true;
         }
-
-        /*if (changed)
-        {
-            var newContainer = new ContentControl
-            {
-                Width = width,
-                Height = height
-            };
-            FillContainer.Content = SizedContainer = newContainer;
-            Debug.WriteLine($"Updated ViewPort: {DateTime.Now.Ticks}");
-            //TriggerRender();
-        }*/
-
-        return changed;
+        
     }
+
     #endregion
 
     #region Events and Overrides
@@ -1573,7 +1529,8 @@ public class AdvancedImageBox : TemplatedControl
                     (pointer.Properties.IsLeftButtonPressed && (PanWithMouseButtons & MouseButtons.LeftButton) != 0)
                     || (pointer.Properties.IsMiddleButtonPressed
                         && (PanWithMouseButtons & MouseButtons.MiddleButton) != 0)
-                    || (pointer.Properties.IsRightButtonPressed && (PanWithMouseButtons & MouseButtons.RightButton) != 0)
+                    || (pointer.Properties.IsRightButtonPressed &&
+                        (PanWithMouseButtons & MouseButtons.RightButton) != 0)
                 )
                 || !AutoPan
                 || SizeMode != SizeModes.Normal
@@ -1828,6 +1785,7 @@ public class AdvancedImageBox : TemplatedControl
     #endregion
 
     #region Zoom and Size modes
+
     private void ProcessMouseZoom(bool isZoomIn, Point cursorPosition) =>
         PerformZoom(isZoomIn ? ZoomActions.ZoomIn : ZoomActions.ZoomOut, true, cursorPosition);
 
@@ -1852,7 +1810,7 @@ public class AdvancedImageBox : TemplatedControl
     /// <summary>
     /// Resets the <see cref="SizeModes"/> property whilsts retaining the original <see cref="Zoom"/>.
     /// </summary>
-    protected void RestoreSizeMode()
+    private void RestoreSizeMode()
     {
         if (SizeMode != SizeModes.Normal)
         {
@@ -1994,9 +1952,11 @@ public class AdvancedImageBox : TemplatedControl
         //SetZoom(100, ImageZoomActions.ActualSize | (Zoom < 100 ? ImageZoomActions.ZoomIn : ImageZoomActions.ZoomOut));
         Zoom = 100;
     }
+
     #endregion
 
     #region Utility methods
+
     /// <summary>
     /// Determines whether the specified rectangle is empty
     /// </summary>
@@ -2290,9 +2250,11 @@ public class AdvancedImageBox : TemplatedControl
 
         return new(x, y, w, h);
     }
+
     #endregion
 
     #region Navigate / Scroll methods
+
     /// <summary>
     ///   Scrolls the control to the given point in the image, offset at the specified display point
     /// </summary>
@@ -2377,6 +2339,7 @@ public class AdvancedImageBox : TemplatedControl
     {
         Offset = new Vector(HorizontalScrollBar.Maximum / 2, VerticalScrollBar.Maximum / 2);
     }
+
     #endregion
 
     #region Selection / ROI methods
@@ -2566,6 +2529,7 @@ public class AdvancedImageBox : TemplatedControl
     #endregion
 
     #region Viewport and image region methods
+
     /// <summary>
     ///   Gets the source image region.
     /// </summary>
@@ -2647,9 +2611,11 @@ public class AdvancedImageBox : TemplatedControl
 
         return new(xOffset, yOffset, width, height);
     }
+
     #endregion
 
     #region Image methods
+
     public void LoadImage(string path)
     {
         Image = new Bitmap(path);
@@ -2663,7 +2629,6 @@ public class AdvancedImageBox : TemplatedControl
         using var stream = new MemoryStream();
         Image.Save(stream);
         var image = WriteableBitmap.Decode(stream);
-        stream.Dispose();
 
         var selection = SelectionRegionNet;
         var pixelSize = SelectionPixelSize;
@@ -2691,5 +2656,6 @@ public class AdvancedImageBox : TemplatedControl
 
         return newBitmap;
     }
+
     #endregion
 }

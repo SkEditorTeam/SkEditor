@@ -9,11 +9,9 @@ namespace SkEditor.Views.FileTypes;
 
 public partial class AssociationSelectionWindow : AppWindow
 {
-
     public Utilities.Files.FileTypes.FileAssociation? SelectedAssociation { get; set; }
 
-    public AssociationSelectionWindow(string path,
-        List<Utilities.Files.FileTypes.FileAssociation> fileTypes)
+    public AssociationSelectionWindow(List<Utilities.Files.FileTypes.FileAssociation> fileTypes)
     {
         InitializeComponent();
         WindowStyler.Style(this);
@@ -44,7 +42,8 @@ public partial class AssociationSelectionWindow : AppWindow
             if (Associations.SelectedItem is not AssociationItemView item)
                 return;
 
-            SelectedAssociation = fileTypes.Find(association => association.IsFromAddon && association.Addon.Name == item.Tag.ToString());
+            SelectedAssociation = fileTypes.Find(association =>
+                association.IsFromAddon && association.Addon.Name == item.Tag.ToString());
         };
 
         ConfirmButton.Click += (_, _) => Close();
@@ -54,5 +53,4 @@ public partial class AssociationSelectionWindow : AppWindow
             if (e.Key == Key.Escape) Close();
         };
     }
-
 }

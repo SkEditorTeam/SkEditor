@@ -14,9 +14,9 @@ using System.Threading.Tasks;
 namespace SkEditor.Utilities;
 public static class FileDownloader
 {
-    private static readonly string zipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
-    private static readonly string appDataFolderPath = AppConfig.AppDataFolderPath;
-    private static readonly string zipFilePath = Path.Combine(appDataFolderPath, "items.zip");
+    private const string ZipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
+    private static readonly string AppDataFolderPath = AppConfig.AppDataFolderPath;
+    private static readonly string ZipFilePath = Path.Combine(AppDataFolderPath, "items.zip");
 
     public static async Task CheckForMissingItemFiles(Window visual)
     {
@@ -45,7 +45,7 @@ public static class FileDownloader
             Content = Translation.Get("DownloadingMissingFilesDescriptionItems"),
         };
 
-        td.Opened += async (s, e) => await DownloadMissingFiles(td);
+        td.Opened += async (_, _) => await DownloadMissingFiles(td);
 
         td.XamlRoot = visual;
         return td;
@@ -53,7 +53,7 @@ public static class FileDownloader
 
     private static async Task DownloadMissingFiles(TaskDialog td)
     {
-        TaskDialogProgressState state = TaskDialogProgressState.Normal;
+        const TaskDialogProgressState state = TaskDialogProgressState.Normal;
         td.SetProgressBarState(0, state);
 
         try
@@ -61,14 +61,14 @@ public static class FileDownloader
             using (HttpClient client = new())
             {
                 var progress = new Progress<float>();
-                progress.ProgressChanged += (e, sender) => td.SetProgressBarState(sender, state);
+                progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
 
-                using var file = new FileStream(zipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-                await client.DownloadDataAsync(zipUrl, file, progress);
+                await using var file = new FileStream(ZipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await client.DownloadDataAsync(ZipUrl, file, progress);
             }
 
-            ZipFile.ExtractToDirectory(zipFilePath, appDataFolderPath);
-            File.Delete(zipFilePath);
+            ZipFile.ExtractToDirectory(ZipFilePath, AppDataFolderPath);
+            File.Delete(ZipFilePath);
 
             Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.OK); });
         }

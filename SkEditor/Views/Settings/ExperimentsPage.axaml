@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 xmlns:controls="using:SkEditor.Controls"
-			 xmlns:vm="using:SkEditor.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Settings.ExperimentsPage">
 

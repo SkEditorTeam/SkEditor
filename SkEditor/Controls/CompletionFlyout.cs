@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using AvaloniaEdit;
 
@@ -7,7 +8,7 @@ public class CompletionFlyout : Flyout
 {
     public void UpdatePosition()
     {
-        if (Popup.HorizontalOffset == HorizontalOffset && Popup.VerticalOffset == VerticalOffset) return;
+        if (Math.Abs(Popup.HorizontalOffset - HorizontalOffset) < 0.001 && Math.Abs(Popup.VerticalOffset - VerticalOffset) < 0.001) return;
 
         Popup.VerticalOffset = VerticalOffset;
         Popup.HorizontalOffset = HorizontalOffset;

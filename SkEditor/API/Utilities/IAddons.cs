@@ -27,7 +27,7 @@ public interface IAddons
     /// Disables the specified addon.
     /// </summary>
     /// <param name="addon">The addon to disable.</param>
-    public void DisableAddon(IAddon addon);
+    public Task DisableAddon(IAddon addon);
 
     /// <summary>
     /// Retrieves the addon with the specified identifier.

@@ -15,17 +15,17 @@ public static class DiscordRpcUpdater
         _client = new DiscordRpcClient(ApplicationId);
         _client.Initialize();
 
-        _client.SetPresence(new RichPresence()
+        _client.SetPresence(new RichPresence
         {
             Timestamps = Timestamps.Now,
-            Assets = new Assets()
+            Assets = new Assets
             {
                 LargeImageKey = "image_large",
                 LargeImageText = "SkEditor",
             },
         });
 
-        SkEditorAPI.Files.GetTabView().SelectionChanged += (sender, args) =>
+        SkEditorAPI.Files.GetTabView().SelectionChanged += (_, _) =>
         {
             if (!_client.IsInitialized) return;
             if (SkEditorAPI.Files.IsFileOpen())

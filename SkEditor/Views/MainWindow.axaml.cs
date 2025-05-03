@@ -165,11 +165,11 @@ public partial class MainWindow : AppWindow
 
             _splashScreen?.UpdateStatus("Finishing up...");
 
-            await Dispatcher.UIThread.InvokeAsync(() =>
+            await Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 try
                 {
-                    SyntaxLoader.LoadAdvancedSyntaxes();
+                    await SyntaxLoader.LoadAdvancedSyntaxes();
                     DiscordRpcUpdater.Initialize();
                 }
                 catch (Exception exc)

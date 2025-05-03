@@ -45,7 +45,7 @@ public class OpenedFile
 
     public bool IsEditor => Editor != null;
     public string? Name => Path == null ? CustomName : System.IO.Path.GetFileName(Path);
-    public string? Header => Name + (IsSaved || (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && Path != null) ? "" : " •");
+    public string Header => Name + (IsSaved || (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && Path != null) ? "" : " •");
 
     #endregion
 

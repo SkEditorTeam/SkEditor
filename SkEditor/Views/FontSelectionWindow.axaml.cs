@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
-using ExCSS;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using System.Collections.Generic;
@@ -30,15 +29,14 @@ public partial class FontSelectionWindow : AppWindow
             Close(fontName);
         });
 
-        SearchBox.TextChanged += (s, e) =>
+        SearchBox.TextChanged += (_, _) =>
         {
-            List<string> fonts = FontListBox.Items.Cast<FontInfo>().Select(x => x.Name).ToList();
             FontListBox.SelectedItem = FontListBox.Items
                 .Cast<FontInfo>()
-                .FirstOrDefault(x => x.Name.ToLower().StartsWith(SearchBox.Text.ToLower()));
+                .FirstOrDefault(x => x.Name.StartsWith(SearchBox.Text, System.StringComparison.CurrentCultureIgnoreCase));
         };
 
-        FontListBox.SelectionChanged += (s, e) =>
+        FontListBox.SelectionChanged += (_, _) =>
         {
             _selectedFont = FontListBox.SelectedItem as FontInfo;
         };
@@ -52,7 +50,7 @@ public partial class FontSelectionWindow : AppWindow
     private void LoadFonts()
     {
         List<FontInfo> fonts = FontManager.Current.SystemFonts
-            .Select(font => new FontInfo { Name = font.Name, Font = font })
+            .Select(fontInfo => new FontInfo { Name = fontInfo.Name, Font = fontInfo })
             .ToList();
 
         Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);

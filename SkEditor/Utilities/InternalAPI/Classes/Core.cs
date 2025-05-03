@@ -36,7 +36,7 @@ public class Core : ICore
 
     public string[] GetStartupArguments()
     {
-        return _startupArguments ?? [];
+        return _startupArguments;
     }
 
     public void SetStartupArguments(string[]? args)
@@ -71,7 +71,7 @@ public class Core : ICore
 #if DEBUG
         return true;
 #endif
-
+        // ReSharper disable once HeuristicUnreachableCode
         return GetAppConfig().IsDevModeEnabled;
 #pragma warning restore 162
     }
@@ -93,7 +93,7 @@ public class Core : ICore
             try
             {
                 await File.WriteAllTextAsync(path, textToWrite);
-                using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+                await using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
             }
             catch (Exception ex)
             {

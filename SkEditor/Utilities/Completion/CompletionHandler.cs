@@ -40,7 +40,8 @@ public static partial class CompletionHandler
         var word = document.GetText(segment.Offset, segment.Length);
 
         IEnumerable<CompletionItem> completions = CompletionProvider.GetCompletions(word, textEditor);
-        if (!completions.Any())
+        IEnumerable<CompletionItem> completionItems = completions as CompletionItem[] ?? completions.ToArray();
+        if (!completionItems.Any())
         {
             CompletionPopup.Hide();
             return;
@@ -53,7 +54,7 @@ public static partial class CompletionHandler
             completionMenu = (CompletionMenu)CompletionPopup.Content;
             completionMenu.CompletionListBox.ItemsSource = null;
             completionMenu.CompletionListBox.Items.Clear();
-            completionMenu.SetItems(completions);
+            completionMenu.SetItems(completionItems);
         }
         else
         {
@@ -156,7 +157,7 @@ public static partial class CompletionHandler
         }
 
 
-        int caretOffset = completionItem.Content.IndexOf("{c}");
+        int caretOffset = completionItem.Content.IndexOf("{c}", StringComparison.Ordinal);
         if (caretOffset != -1)
         {
             content = content.Remove(caretOffset, 3);

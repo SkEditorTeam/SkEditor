@@ -152,7 +152,7 @@ public partial class TerminalWindow : AppWindow
                 {
                     escapeSequence = false;
 
-                    var codes = rawCodes.Split(';').Select(int.Parse).ToArray();
+                    rawCodes.Split(';').Select(int.Parse).ToArray();
                     rawCodes = "";
 
                     //Console.WriteLine("Found codes: " + string.Join(", ", codes) + "; end char: " + c);

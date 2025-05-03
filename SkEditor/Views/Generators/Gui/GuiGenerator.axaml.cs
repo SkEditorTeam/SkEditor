@@ -16,9 +16,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkEditor.Views.Generators.Gui;
+
 public partial class GuiGenerator : AppWindow
 {
-    private RelayCommand<int> _buttonCommand;
+    private IRelayCommand<int> _buttonCommand;
 
     public HashSet<Button> Buttons { get; } = [];
     public Dictionary<int, Item> Items { get; set; } = [];
@@ -26,9 +27,8 @@ public partial class GuiGenerator : AppWindow
     public int CurrentRows { get; set; } = 6;
 
 
-    public string _itemPath = Path.Combine(AppConfig.AppDataFolderPath, "Items");
+    public readonly string ItemPath = Path.Combine(AppConfig.AppDataFolderPath, "Items");
     public static GuiGenerator Instance { get; private set; }
-
 
     public GuiGenerator()
     {
@@ -74,14 +74,14 @@ public partial class GuiGenerator : AppWindow
 
     private void AssignCommands()
     {
-        _buttonCommand = new RelayCommand<int>(async (slotId) =>
+        _buttonCommand = new AsyncRelayCommand<int>(async (slotId) =>
         {
             Item item = await SelectItem();
             if (item == null) return;
 
             UpdateItem(slotId, item);
         });
-        BackgroundItemButton.Command = new RelayCommand(async () =>
+        BackgroundItemButton.Command = new AsyncRelayCommand(async () =>
         {
             Item item = await SelectItem();
             if (item == null) return;
@@ -92,7 +92,8 @@ public partial class GuiGenerator : AppWindow
 
         PreviewButton.Command = new RelayCommand(Preview.Show);
         GenerateButton.Command = new RelayCommand(Generation.Generate);
-        UseSkriptGuiCheckBox.IsCheckedChanged += (_, _) => SkEditorAPI.Core.GetAppConfig().UseSkriptGui = UseSkriptGuiCheckBox.IsChecked == true;
+        UseSkriptGuiCheckBox.IsCheckedChanged += (_, _) =>
+            SkEditorAPI.Core.GetAppConfig().UseSkriptGui = UseSkriptGuiCheckBox.IsChecked == true;
     }
 
     private void UpdateRows()
@@ -129,7 +130,7 @@ public partial class GuiGenerator : AppWindow
     {
         Button button = Buttons.FirstOrDefault(x => (int?)x.Tag == slotId);
 
-        string itemImagePath = Path.Combine(_itemPath, item.Name + ".png");
+        string itemImagePath = Path.Combine(ItemPath, item.Name + ".png");
 
         if (File.Exists(itemImagePath))
         {

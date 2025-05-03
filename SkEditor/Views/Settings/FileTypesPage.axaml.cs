@@ -103,13 +103,12 @@ public partial class FileTypesPage : UserControl
 
             box.SelectedIndex = selectedIndex;
 
-            box.SelectionChanged += (sender, args) =>
+            box.SelectionChanged += (_, _) =>
             {
-                if (box.SelectedItem is ComboBoxItem item)
-                {
-                    var type = (FileTypeData)item.Tag;
-                    SkEditorAPI.Core.GetAppConfig().FileTypeChoices[ext] = Registries.FileTypes.GetValueKey(type).FullKey;
-                }
+                if (box.SelectedItem is not ComboBoxItem item) return;
+
+                var type = (FileTypeData)item.Tag;
+                SkEditorAPI.Core.GetAppConfig().FileTypeChoices[ext] = Registries.FileTypes.GetValueKey(type).FullKey;
             };
 
             var removeBtn = new Button

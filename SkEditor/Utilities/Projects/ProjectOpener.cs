@@ -8,7 +8,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
-using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
@@ -149,31 +148,4 @@ public static class ProjectOpener
             HandleTapped(e);
         };
     }
-
-    #region Sorting
-
-
-
-    private static void SortTabItem(TreeViewItem parent)
-    {
-        var folders = parent
-            .Items.OfType<TabViewItem>()
-            .Where(item => item.Tag is IStorageFolder)
-            .OrderBy(item => item.Header);
-
-        var files = parent
-            .Items.OfType<TabViewItem>()
-            .Where(item => item.Tag is IStorageFile)
-            .OrderBy(item => item.Header);
-
-        parent.Items.Clear();
-
-        foreach (var folder in folders)
-            parent.Items.Add(folder);
-
-        foreach (var file in files)
-            parent.Items.Add(file);
-    }
-
-    #endregion
 }

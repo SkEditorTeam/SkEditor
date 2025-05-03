@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Files;
+
 public class FileHandler
 {
     private static readonly ConcurrentQueue<Func<Task>> SaveQueue = new();
@@ -80,14 +81,15 @@ public class FileHandler
         }
     }
 
-    public static readonly Action<AppWindow, DragEventArgs> FileDropAction = (_, e) =>
+    public static readonly Func<AppWindow, DragEventArgs, Task> FileDropAction = async (_, e) =>
     {
         try
         {
-            string? folder = e.Data.GetFiles().FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path.AbsolutePath;
+            string? folder = e.Data.GetFiles().FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path
+                .AbsolutePath;
             if (folder != null)
             {
-                ProjectOpener.OpenProject(folder);
+                await ProjectOpener.OpenProject(folder);
                 return;
             }
 
@@ -119,11 +121,12 @@ public class FileHandler
 
     public static async Task OpenFile()
     {
-        var files = await SkEditorAPI.Windows.GetMainWindow().StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-        {
-            Title = Translation.Get("WindowTitleOpenFilePicker"),
-            AllowMultiple = true
-        });
+        var files = await SkEditorAPI.Windows.GetMainWindow().StorageProvider.OpenFilePickerAsync(
+            new FilePickerOpenOptions
+            {
+                Title = Translation.Get("WindowTitleOpenFilePicker"),
+                AllowMultiple = true
+            });
 
         files.ToList().ForEach(file => OpenFile(file.Path.AbsolutePath));
     }

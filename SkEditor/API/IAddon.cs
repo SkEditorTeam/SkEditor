@@ -39,7 +39,7 @@ public interface IAddon
     /// The icon of the addon.
     /// </summary>
     /// <returns>The icon of the addon.</returns>
-    public virtual IconSource GetAddonIcon()
+    public IconSource GetAddonIcon()
     {
         return new SymbolIconSource() { Symbol = Symbol.AppsAddIn };
     }
@@ -49,7 +49,7 @@ public interface IAddon
     /// menu by SkEditor, so you don't have to worry about conflicts.
     /// </summary>
     /// <returns>The menu items of the addon.</returns>
-    public virtual List<MenuItem> GetMenuItems()
+    public List<MenuItem> GetMenuItems()
     {
         return [];
     }
@@ -68,7 +68,7 @@ public interface IAddon
     ///
     /// Use this method if you need to do async stuff when enabling the addon.
     /// </summary>
-    public virtual Task OnEnableAsync()
+    public Task OnEnableAsync()
     {
         return Task.CompletedTask;
     }
@@ -78,7 +78,9 @@ public interface IAddon
     /// unregister your stuff from <see cref="Registries"/>, as
     /// SkEditor will do that for you!
     /// </summary>
-    public virtual void OnDisable() { }
+    public void OnDisable()
+    {
+    }
 
     /// <summary>
     /// Get the minimal version of SkEditor that is required for this addon.
@@ -91,20 +93,18 @@ public interface IAddon
     /// If null, there is no maximal version.
     /// </summary>
     /// <returns>The maximal version of SkEditor that is required for this addon, or null if there is no maximal version.</returns>
-    public virtual Version? GetMaximalSkEditorVersion() => null;
+    public Version? GetMaximalSkEditorVersion() => null;
 
     /// <summary>
     /// Get all the dependencies of this addon. Those can either be
     /// <see cref="AddonDependency"/>s or <see cref="NuGetDependency"/>s.
     /// </summary>
     /// <returns>All the dependencies of this addon.</returns>
-    public virtual List<IDependency> GetDependencies() => [];
+    public List<IDependency> GetDependencies() => [];
 
     /// <summary>
     /// Get all the settings of this addon.
     /// </summary>
-    /// <typeparam name="T">The type of the setting.</typeparam>
     /// <returns>All the settings of this addon.</returns>
-    public virtual List<Setting> GetSettings() => [];
-
+    public List<Setting> GetSettings() => [];
 }

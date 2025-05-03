@@ -11,18 +11,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
+
 public static class NamedPipeServer
 {
-    private static bool isRunning = false;
+    private static bool _isRunning;
 
     public static void Start()
     {
-        if (!isRunning)
-        {
-            isRunning = true;
+        if (_isRunning) return;
 
-            Task.Run(RunServer);
-        }
+        _isRunning = true;
+
+        Task.Run(RunServer);
     }
 
     private static async Task RunServer()
@@ -31,7 +31,8 @@ public static class NamedPipeServer
         {
             while (true)
             {
-                using NamedPipeServerStream serverStream = new("SkEditor", PipeDirection.InOut, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
+                await using NamedPipeServerStream serverStream = new("SkEditor", PipeDirection.InOut, 1,
+                    PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
                 await serverStream.WaitForConnectionAsync();
 
                 await Task.Run(() => OnClientConnected(serverStream));
@@ -39,7 +40,7 @@ public static class NamedPipeServer
         }
         catch (Exception ex)
         {
-            Log.Error($"Named Pipe Server error: {ex.Message}\n\n{ex.StackTrace}");
+            Log.Error("Named Pipe Server error: {ExMessage}\n\n{ExStackTrace}", ex.Message, ex.StackTrace);
         }
     }
 
@@ -52,17 +53,14 @@ public static class NamedPipeServer
 
             await Dispatcher.UIThread.InvokeAsync(() =>
             {
-                if (bytesRead is 0 or 1)
-                {
-                    BringMainWindowToFront();
-                }
-                else
+                if (bytesRead is not (0 or 1))
                 {
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
                     OpenFiles(message);
-                    BringMainWindowToFront();
                 }
+
+                BringMainWindowToFront();
             });
         }
         catch (Exception ex)
@@ -72,11 +70,10 @@ public static class NamedPipeServer
     }
 
 
-
     private static void OpenFiles(string filesToOpen)
     {
         filesToOpen.Split(Environment.NewLine)
-                    .Where(x => !string.IsNullOrEmpty(x)).ToList().ForEach(FileHandler.OpenFile);
+            .Where(x => !string.IsNullOrEmpty(x)).ToList().ForEach(FileHandler.OpenFile);
     }
 
     private static void BringMainWindowToFront()

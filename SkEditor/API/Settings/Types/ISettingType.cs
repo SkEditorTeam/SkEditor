@@ -50,9 +50,8 @@ public interface ISettingType
     /// </summary>
     /// <param name="expander">The expander to modify.</param>
     /// <param name="setting">The setting that the expander represents.</param>
-    public virtual void SetupExpander(SettingsExpander expander, Setting setting)
+    public void SetupExpander(SettingsExpander expander, Setting setting)
     {
 
     }
-
 }

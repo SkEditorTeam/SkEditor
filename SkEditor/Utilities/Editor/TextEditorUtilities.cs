@@ -64,7 +64,5 @@ public class TextEditorUtilities
             yield return new SimpleSegment(wordStartPos, word.Length);
             offset = wordStartPos + 1;
         }
-
-        yield break;
     }
 }

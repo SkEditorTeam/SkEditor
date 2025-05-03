@@ -27,7 +27,7 @@ public class SkriptMCProvider : IDocProvider
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
-        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMCAPIKey) + "&articleName=" + searchData.Query;
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMcapiKey) + "&articleName=" + searchData.Query;
 
         uri += "&categorySlug=" + searchData.FilteredType.ToString().ToLower() + "s";
         uri += "&addonSlug=" + (string.IsNullOrEmpty(searchData.FilteredAddon) ? "Skript" : searchData.FilteredAddon);
@@ -60,7 +60,7 @@ public class SkriptMCProvider : IDocProvider
         }
 
         var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        var entries = JsonConvert.DeserializeObject<List<SkriptMCDocEntry>>(content);
+        var entries = JsonConvert.DeserializeObject<List<SkriptMcDocEntry>>(content);
         return entries.Cast<IDocumentationEntry>().ToList();
     }
 
@@ -77,13 +77,13 @@ public class SkriptMCProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkriptMCAPIKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkriptMcapiKey);
     }
 
     public bool NeedsToLoadExamples => false;
     public Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
-        var example = (entry as SkriptMCDocEntry)?.Example;
+        var example = (entry as SkriptMcDocEntry)?.Example;
         return Task.FromResult<List<IDocumentationExample>>(example == null ? [] : [example]);
     }
 

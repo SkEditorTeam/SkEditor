@@ -27,7 +27,7 @@ public class Addons : IAddons
         return await AddonLoader.EnableAddon(addon);
     }
 
-    public void DisableAddon(IAddon addon)
+    public async Task DisableAddon(IAddon addon)
     {
         if (GetAddonState(addon) == IAddons.AddonState.Disabled)
             return;
@@ -38,7 +38,7 @@ public class Addons : IAddons
             return;
         }
 
-        AddonLoader.DisableAddon(addon);
+        await AddonLoader.DisableAddon(addon);
     }
 
     public IAddon? GetAddon(string addonIdentifier)

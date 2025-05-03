@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Styling;
@@ -9,7 +8,6 @@ using FluentAvalonia.Styling;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

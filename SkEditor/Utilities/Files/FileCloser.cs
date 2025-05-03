@@ -15,7 +15,7 @@ internal static class FileCloser
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
             return;
 
-        SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.All);
+        await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.All);
     }
 
     public static async Task CloseAllExceptCurrent()
@@ -23,7 +23,7 @@ internal static class FileCloser
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
             return;
 
-        SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllExceptCurrent);
+        await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllExceptCurrent);
     }
 
     public static async Task CloseUnsaved()
@@ -31,7 +31,7 @@ internal static class FileCloser
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
             return;
 
-        SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.Unsaved);
+        await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.Unsaved);
     }
 
     public static async Task CloseAllToTheLeft()
@@ -39,14 +39,14 @@ internal static class FileCloser
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
             return;
 
-        SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllLeft);
+        await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllLeft);
     }
 
     public static async Task CloseAllToTheRight()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary) return;
 
-        SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllRight);
+        await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllRight);
     }
 
     private static async Task<ContentDialogResult> ShowConfirmationDialog() =>

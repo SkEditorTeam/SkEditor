@@ -9,6 +9,7 @@ using SkEditor.Views.Settings;
 using System;
 
 namespace SkEditor.Views;
+
 public partial class SettingsWindow : AppWindow
 {
     public static SettingsWindow Instance { get; private set; }
@@ -39,14 +40,15 @@ public partial class SettingsWindow : AppWindow
                 Close();
             }
         };
-        Closed += (s, e) => SkEditorAPI.Core.GetAppConfig().Save();
+        Closed += (_, _) => SkEditorAPI.Core.GetAppConfig().Save();
     }
 
     public static void NavigateToPage(Type page)
     {
         EntranceNavigationTransitionInfo transitionInfo = new();
 
-        var navOpt = new FrameNavigationOptions() { TransitionInfoOverride = transitionInfo, IsNavigationStackEnabled = true };
+        var navOpt = new FrameNavigationOptions()
+            { TransitionInfoOverride = transitionInfo, IsNavigationStackEnabled = true };
         Instance.FrameView.NavigateToType(page, null, navOpt);
 
         if (page == typeof(HomePage))

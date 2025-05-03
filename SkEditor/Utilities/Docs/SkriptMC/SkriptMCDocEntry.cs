@@ -3,22 +3,7 @@ using System;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 
-/**
- * {
-        "id": 1,
-        "addon": "Skript",
-        "name": "All Scripts (Tous les scripts)",
-        "content": "Retourne tous les scripts, ou seulement ceux qui sont activ&eacute;s ou d&eacute;sactiv&eacute;s.",
-        "version": "2.5",
-        "example": "on script load:<br />\r\n&nbsp; &nbsp; send &quot;Voici la liste des addons actuellement charg&eacute;s : %enabled scripts%.&quot;",
-        "pattern": "[all [of the]] scripts [(without ([subdirectory] paths|parents))]\r\n[all [of the]] (enabled|loaded) scripts [(without ([subdirectory] paths|parents))]\r\n[all [of the]] (disabled|unloaded) scripts [(without ([subdirectory] paths|parents))]",
-        "category": "expressions",
-        "documentationUrl": "https://skript-mc.fr/documentation/skript/expressions#all_scripts",
-        "deprecation": null,
-        "deprecationLink": null
-    }
- */
-public class SkriptMCDocEntry : IDocumentationEntry
+public class SkriptMcDocEntry : IDocumentationEntry
 {
     [JsonProperty("name")]
     public string Name { get; set; }

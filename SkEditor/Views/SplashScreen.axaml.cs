@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
-using FluentAvalonia.UI.Windowing;
 using System;
 using System.IO;
 using Avalonia.Platform;

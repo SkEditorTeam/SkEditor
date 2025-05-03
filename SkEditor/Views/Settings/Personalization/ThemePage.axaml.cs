@@ -10,7 +10,7 @@ using System.Linq;
 namespace SkEditor.Views.Settings;
 public partial class ThemePage : UserControl
 {
-    public static Dictionary<ColorPickerSettingsExpander, string> colorMappings = new();
+    public static Dictionary<ColorPickerSettingsExpander, string> ColorMappings = new();
 
     public ThemePage()
     {
@@ -22,26 +22,26 @@ public partial class ThemePage : UserControl
 
     private void LoadThemes()
     {
-        foreach (Theme theme in ThemeEditor.Themes)
+        IEnumerable<ComboBoxItem> themeItems = ThemeEditor.Themes.Select(theme => new ComboBoxItem
         {
-            ComboBoxItem item = new()
-            {
-                Content = theme.Name,
-                Tag = theme.FileName
-            };
-
+            Content = theme.Name,
+            Tag = theme.FileName
+        });
+        
+        foreach (ComboBoxItem item in themeItems)
+        {
             ThemeComboBox.Items.Add(item);
         }
 
         ThemeComboBox.SelectedItem = ThemeComboBox.Items.FirstOrDefault(x => ((ComboBoxItem)x).Tag.Equals(ThemeEditor.CurrentTheme.FileName));
 
-        ThemeComboBox.SelectionChanged += (s, e) =>
+        ThemeComboBox.SelectionChanged += (_, _) =>
         {
-            Dispatcher.UIThread.Post(async () =>
+            Dispatcher.UIThread.Post(() =>
             {
                 ComboBoxItem item = (ComboBoxItem)ThemeComboBox.SelectedItem;
                 Theme theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(item.Tag));
-                await ThemeEditor.SetTheme(theme);
+                _ = ThemeEditor.SetTheme(theme);
                 SettingsWindow.Instance.Theme = ThemeEditor.SmallWindowTheme;
             });
         };

@@ -178,10 +178,10 @@ public class Item
         {
             if (_image == null!)
             {
-                string itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, Name + ".png");
+                string itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, Name + ".png");
                 if (!File.Exists(itemImagePath))
                 {
-                    itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, "barrier.png");
+                    itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, "barrier.png");
                 }
                 _image = new Bitmap(itemImagePath);
             }

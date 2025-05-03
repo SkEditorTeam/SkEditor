@@ -37,7 +37,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
         // First build the URI
-        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "search/";
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityApiKey) + "search/";
         var queryElements = new List<string>();
 
         if (!string.IsNullOrEmpty(searchData.Query))
@@ -82,7 +82,7 @@ public class SkUnityProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkUnityApiKey);
     }
 
     public static IDocProvider Get() => (SkUnityProvider)IDocProvider.Providers[DocProvider.skUnity];
@@ -92,7 +92,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
         var elementId = entry.Id;
-        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "getExamplesByID/" + elementId;
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityApiKey) + "getExamplesByID/" + elementId;
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -139,7 +139,7 @@ public class SkUnityProvider : IDocProvider
         if (CachedAddons.Count > 0)
             return [.. CachedAddons.Keys];
 
-        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityAPIKey) + "getAllAddons/";
+        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityApiKey) + "getAllAddons/";
 
         var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -214,7 +214,7 @@ public class SkUnityProvider : IDocProvider
     private record AddonData(string Name, Color Color, string ForumResourceId);
     private static readonly Dictionary<string, AddonData> CachedAddons = [];
 
-    public string? GetLink(IDocumentationEntry entry)
+    public string GetLink(IDocumentationEntry entry)
     {
         return "https://docs.skunity.com/syntax/search/id:" + entry.Id;
     }

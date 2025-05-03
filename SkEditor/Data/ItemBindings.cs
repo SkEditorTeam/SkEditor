@@ -2,14 +2,13 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Views.Generators.Gui;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace SkEditor.Data;
-public partial class ItemBindings : ObservableObject, INotifyPropertyChanged
+public partial class ItemBindings : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<Item> items = [];
+    private ObservableCollection<Item> _items = [];
 
     [ObservableProperty]
-    private ObservableCollection<ComboBoxItem> filteredItems = [];
+    private ObservableCollection<ComboBoxItem> _filteredItems = [];
 }

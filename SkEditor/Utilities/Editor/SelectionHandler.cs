@@ -56,7 +56,10 @@ public class OccurenceBackgroundTransformer : DocumentColorizingTransformer
         {
             ChangeLinePart(StartOffset, EndOffset, ApplyChanges);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
     private void ApplyChanges(VisualLineElement element)

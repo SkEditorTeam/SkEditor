@@ -68,7 +68,7 @@ public class Preview
         int slotX = 18 + column * 41;
         int slotY = 41 * (row + 1);
 
-        string itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, item.Name + ".png");
+        string itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, item.Name + ".png");
 
         if (!CachedImages.TryGetValue(itemImagePath, out Bitmap itemBitmap))
         {

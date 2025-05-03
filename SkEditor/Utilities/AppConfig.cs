@@ -16,27 +16,27 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private string _lastUsedPublishService = "Pastebin";
     [ObservableProperty] private string _pastebinApiKey = "";
     [ObservableProperty] private string _codeSkriptPlApiKey = "";
-    [ObservableProperty] private bool _useSkriptGui = false;
+    [ObservableProperty] private bool _useSkriptGui;
 
     [ObservableProperty] private bool _isDiscordRpcEnabled = true;
-    [ObservableProperty] private bool _isWrappingEnabled = false;
-    [ObservableProperty] private bool _isZoomSyncEnabled = false;
-    [ObservableProperty] private bool _isAutoIndentEnabled = false;
-    [ObservableProperty] private bool _isPasteIndentationEnabled = false;
-    [ObservableProperty] private bool _isAutoPairingEnabled = false;
-    [ObservableProperty] private bool _isAutoSaveEnabled = false;
+    [ObservableProperty] private bool _isWrappingEnabled;
+    [ObservableProperty] private bool _isZoomSyncEnabled;
+    [ObservableProperty] private bool _isAutoIndentEnabled;
+    [ObservableProperty] private bool _isPasteIndentationEnabled;
+    [ObservableProperty] private bool _isAutoPairingEnabled;
+    [ObservableProperty] private bool _isAutoSaveEnabled;
     [ObservableProperty] private string _currentTheme = "Default.json";
     [ObservableProperty] private Dictionary<string, string> _fileSyntaxes = [];
     [ObservableProperty] private string _font = "Default";
     [ObservableProperty] private bool _highlightCurrentLine = true;
-    [ObservableProperty] private bool _useSpacesInsteadOfTabs = false;
+    [ObservableProperty] private bool _useSpacesInsteadOfTabs;
     [ObservableProperty] private int _tabSize = 4;
     [ObservableProperty] private bool _checkForUpdates = true;
-    [ObservableProperty] private bool _checkForChanges = false;
-    [ObservableProperty] private bool _isSidebarAnimationEnabled = false;
+    [ObservableProperty] private bool _checkForChanges;
+    [ObservableProperty] private bool _isSidebarAnimationEnabled;
     [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
-    [ObservableProperty] private bool _isDevModeEnabled = false;
-    [ObservableProperty] private bool _forceNativeTitleBar = false;
+    [ObservableProperty] private bool _isDevModeEnabled;
+    [ObservableProperty] private bool _forceNativeTitleBar;
     [ObservableProperty] private double _customUiScale = 1.0;
 
     /// <summary>
@@ -49,24 +49,20 @@ public partial class AppConfig : ObservableObject
     /// </summary>
     public Dictionary<string, string> FileTypeChoices { get; set; } = [];
 
-    public HashSet<string> AddonsToDisable { get; set; } = [];
-    public HashSet<string> AddonsToDelete { get; set; } = [];
-    public HashSet<string> AddonsToUpdate { get; set; } = [];
-
     public Dictionary<string, object> CustomOptions { get; set; } = [];
     public Dictionary<string, string> PreferredFileAssociations { get; set; } = [];
 
     public bool EnableAutoCompletionExperiment { get; set; } = false;
     public bool EnableProjectsExperiment { get; set; } = false;
     public bool EnableHexPreview { get; set; } = false;
-    public bool EnableCodeParser { get; set; } = false;
+    public bool EnableCodeParser { get; set; }
     public bool EnableFolding { get; set; } = false;
     public bool EnableBetterPairing { get; set; } = false;
     public bool EnableSessionRestoring { get; set; } = false;
     public bool EnableRealtimeCodeParser { get; set; } = false;
 
-    public string SkUnityAPIKey { get; set; } = "";
-    public string SkriptMCAPIKey { get; set; } = "";
+    public string SkUnityApiKey { get; set; } = "";
+    public string SkriptMcapiKey { get; set; } = "";
 
     public static string AppDataFolderPath { get; set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
 

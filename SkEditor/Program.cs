@@ -32,7 +32,6 @@ class Program
                 Console.Error.WriteLine($"Test failed: {e.Message}");
                 Environment.Exit(1);
             }
-            return;
         }
     }
 

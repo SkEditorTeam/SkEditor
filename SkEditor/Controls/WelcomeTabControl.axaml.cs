@@ -35,7 +35,7 @@ public partial class WelcomeTabControl : UserControl
         [
             new WelcomeEntryData(Translation.Get("WelcomeGettingStartedNewFile"), new RelayCommand(FileHandler.NewFile), CreateSymbolIcon(Symbol.DocumentAdd)),
             new WelcomeEntryData(Translation.Get("WelcomeGettingStartedOpenFile"), new AsyncRelayCommand(FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
-            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedOpenFolder"), new RelayCommand(() => ProjectOpener.OpenProject()), CreateSymbolIcon(Symbol.FolderOpen)),
+            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedOpenFolder"), new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()), CreateSymbolIcon(Symbol.FolderOpen)),
             new WelcomeEntryData(Translation.Get("WelcomeGettingStartedSettings"), new AsyncRelayCommand(OpenSettings), CreateSymbolIcon(Symbol.Settings)),
         ]);
 

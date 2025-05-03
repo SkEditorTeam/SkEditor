@@ -1,9 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:ar="clr-namespace:SkEditor.Utilities.Projects"
              xmlns:elements="clr-namespace:SkEditor.Utilities.Projects.Elements"
              x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel">
     
@@ -91,7 +88,7 @@
             </TreeView>
             <StackPanel Name="NoFolderMessage" VerticalAlignment="Center" Grid.Row="3" Margin="5" Spacing="10">
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Text="{DynamicResource ProjectExplorerInfoText}"/>
-                <Button Click="OpenFolder" HorizontalAlignment="Center">
+                <Button Name="OpenFolderButton" HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
                         <ui:SymbolIcon Symbol="OpenFolder" FontSize="18"></ui:SymbolIcon>
                         <TextBlock Text="{DynamicResource ProjectExplorerInfoButton}"/>

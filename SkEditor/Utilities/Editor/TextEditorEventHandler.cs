@@ -19,7 +19,7 @@ using System.Text.RegularExpressions;
 namespace SkEditor.Utilities.Editor;
 public partial class TextEditorEventHandler
 {
-    private static readonly Dictionary<char, char> _symbolPairs = new()
+    private static readonly Dictionary<char, char> SymbolPairs = new()
     {
         { '(', ')' },
         { '[', ']' },
@@ -29,8 +29,7 @@ public partial class TextEditorEventHandler
         { '%', '%' },
     };
 
-    private const string commentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
-    private readonly static Regex _commentRegex = CommentRegex();
+    private const string CommentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
 
     public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 
@@ -102,27 +101,34 @@ public partial class TextEditorEventHandler
 
     public static async void OnTextChanged(object sender, EventArgs e)
     {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-            return;
-        var editor = sender as TextEditor;
-        var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.Editor == editor);
-        if (openedFile == null)
-            return;
-
-        if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
+        try
         {
+            if (!SkEditorAPI.Files.IsEditorOpen())
+                return;
+            var editor = sender as TextEditor;
+            var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.Editor == editor);
+            if (openedFile == null)
+                return;
+
+            if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
+            {
+                openedFile.IsSaved = false;
+                await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
+                return;
+            }
+
+            if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() => openedFile.Parser.Parse());
+            }
+
             openedFile.IsSaved = false;
-            await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
-            return;
+            openedFile.IsNewFile = false;
         }
-
-        if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
+        catch (Exception exc)
         {
-            await Dispatcher.UIThread.InvokeAsync(() => openedFile?.Parser.Parse());
+            SkEditorAPI.Logs.Error($"Error in TextEditorEventHandler.OnTextChanged: {exc}");
         }
-
-        openedFile.IsSaved = false;
-        openedFile.IsNewFile = false;
     }
 
     public static void DoAutoIndent(object? sender, TextInputEventArgs e)
@@ -139,7 +145,7 @@ public partial class TextEditorEventHandler
         DocumentLine previousLine = line.PreviousLine;
 
         string previousLineText = textEditor.Document.GetText(previousLine);
-        previousLineText = _commentRegex.Replace(previousLineText, "");
+        previousLineText = CommentRegex().Replace(previousLineText, "");
         previousLineText = previousLineText.TrimEnd();
 
         if (!previousLineText.EndsWith(':')) return;
@@ -152,13 +158,13 @@ public partial class TextEditorEventHandler
         if (!SkEditorAPI.Core.GetAppConfig().IsAutoPairingEnabled) return;
 
         char symbol = e.Text[0];
-        if (!_symbolPairs.TryGetValue(symbol, out char value)) return;
+        if (!SymbolPairs.TryGetValue(symbol, out char value)) return;
 
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         if (textEditor.Document.TextLength > textEditor.CaretOffset)
         {
             string nextChar = textEditor.Document.GetText(textEditor.CaretOffset, 1);
-            if (nextChar.Equals(value)) return;
+            if (nextChar.Equals(value.ToString())) return;
         }
 
         int lineOffset = textEditor.Document.GetLineByOffset(textEditor.CaretOffset).Offset;
@@ -174,8 +180,6 @@ public partial class TextEditorEventHandler
 
     public static void CheckForHex(TextEditor textEditor)
     {
-        TextDocument document = textEditor.Document;
-
         Regex regex = HexRegex();
 
         Dispatcher.UIThread.Post(() =>
@@ -192,7 +196,7 @@ public partial class TextEditorEventHandler
                 bool parsed = Color.TryParse(hex, out Color color);
                 if (!parsed) continue;
 
-                if (ruleSet.Spans.Any(s => s is HighlightingSpan span && span.StartExpression.ToString().Contains(hex)))
+                if (ruleSet.Spans.Any(s => s != null && s.StartExpression.ToString().Contains(hex)))
                 {
                     textEditor.TextArea.TextView.Redraw(match.Index, match.Length);
                     continue;
@@ -202,7 +206,7 @@ public partial class TextEditorEventHandler
                 {
                     StartExpression = new Regex(@"<[#]?" + hex + @">"),
                     EndExpression = EmptyRegex(),
-                    SpanColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(color) },
+                    SpanColor = new HighlightingColor { Foreground = new SimpleHighlightingBrush(color) },
                     RuleSet = ruleSet,
                     SpanColorIncludesEnd = true,
                     SpanColorIncludesStart = true,
@@ -235,7 +239,7 @@ public partial class TextEditorEventHandler
     {
         if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled) return;
         string properText = e.Text; // TODO: Handle bad indented copied code
-        if (!properText.Contains(Environment.NewLine) || properText.Contains("\n") || properText.Contains("\r"))
+        if (!properText.Contains(Environment.NewLine) || properText.Contains('\n') || properText.Contains('\r'))
         {
             e.Text = properText;
             return;
@@ -273,6 +277,6 @@ public partial class TextEditorEventHandler
     private static partial Regex HexRegex();
     [GeneratedRegex("")]
     private static partial Regex EmptyRegex();
-    [GeneratedRegex(commentPattern, RegexOptions.Compiled)]
+    [GeneratedRegex(CommentPattern, RegexOptions.Compiled)]
     private static partial Regex CommentRegex();
 }
