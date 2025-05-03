@@ -31,13 +31,13 @@ public partial class GeneralPage : UserControl
             LanguageComboBox.Items.Add(Path.GetFileNameWithoutExtension(file));
         }
         LanguageComboBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Language;
-        LanguageComboBox.SelectionChanged += (s, e) =>
+        LanguageComboBox.SelectionChanged += (_, _) =>
         {
             string language = LanguageComboBox.SelectedItem.ToString();
             SkEditorAPI.Core.GetAppConfig().Language = language;
-            Dispatcher.UIThread.InvokeAsync(() =>
+            Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                Translation.ChangeLanguage(language);
+                await Translation.ChangeLanguage(language);
 
                 // Regenerate the text editor context menu
                 // TODO: Context menu language doesn't change, when user has documentation tab opened.
@@ -80,19 +80,20 @@ public partial class GeneralPage : UserControl
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
         RpcToggleSwitch.Command = new RelayCommand(ToggleRpc);
         WrappingToggleSwitch.Command = new RelayCommand(ToggleWrapping);
+        ZoomSyncToggleSwitch.Command = new RelayCommand(ToggleZoomSync);
         ProjectSingleClickToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsProjectSingleClickEnabled"));
 
-        IndentationAmountComboBox.SelectionChanged += (s, e) =>
+        IndentationAmountComboBox.SelectionChanged += (_, _) =>
         {
             var appConfig = SkEditorAPI.Core.GetAppConfig();
             appConfig.TabSize = int.Parse((IndentationAmountComboBox.SelectedItem as ComboBoxItem).Tag.ToString());
-            SkEditorAPI.Files.GetOpenedEditors().ForEach(e => e.Editor.Options.IndentationSize = appConfig.TabSize);
+            SkEditorAPI.Files.GetOpenedEditors().ForEach(file => file.Editor.Options.IndentationSize = appConfig.TabSize);
         };
-        IndentationTypeComboBox.SelectionChanged += (s, e) =>
+        IndentationTypeComboBox.SelectionChanged += (_, _) =>
         {
             var appConfig = SkEditorAPI.Core.GetAppConfig();
             appConfig.UseSpacesInsteadOfTabs = (IndentationTypeComboBox.SelectedItem as ComboBoxItem).Tag.ToString() == "spaces";
-            SkEditorAPI.Files.GetOpenedEditors().ForEach(e => e.Editor.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
+            SkEditorAPI.Files.GetOpenedEditors().ForEach(file => file.Editor.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
         };
     }
 
@@ -110,7 +111,21 @@ public partial class GeneralPage : UserControl
 
         List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList();
 
-        textEditors.ForEach(e => e.WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled);
+        textEditors.ForEach(textEditor => textEditor.WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled);
+    }
+    
+    private void ToggleZoomSync()
+    {
+        ToggleSetting("IsZoomSyncEnabled");
+
+        if (!SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled) return;
+
+        List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList();
+        double fontSize = textEditors.First().FontSize;
+        textEditors.ForEach(textEditor =>
+        {
+            textEditor.FontSize = fontSize;
+        });
     }
 
     private static void ToggleSetting(string propertyName)

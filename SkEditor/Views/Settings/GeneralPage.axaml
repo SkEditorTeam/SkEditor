@@ -47,7 +47,7 @@
 				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralZoomSync}" IconSource="{StaticResource ZoomIcon}"
                      Description="{DynamicResource SettingsGeneralZoomSyncDescription}">
 					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="ZoomSyncToggleSwitch" IsChecked="{Binding IsZoomSyncEnabled}"/>
+						<ToggleSwitch Name="ZoomSyncToggleSwitch" IsChecked="{Binding IsZoomSyncEnabled, Mode=OneTime}"/>
 					</ui:SettingsExpander.Footer>
 				</ui:SettingsExpander>
 				

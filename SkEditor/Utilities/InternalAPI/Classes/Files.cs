@@ -182,6 +182,12 @@ public class Files : IFiles
             IsNewFile = path == null,
         };
 
+        if (SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled &&
+            GetOpenedEditors()?.FirstOrDefault()?.Editor is { } firstEditor)
+        {
+            editor.FontSize = firstEditor.FontSize;
+        }
+
         Icon.SetIcon(openedFile);
 
         // Custom Data
