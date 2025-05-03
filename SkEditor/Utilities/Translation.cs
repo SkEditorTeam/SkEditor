@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
+
 public static class Translation
 {
     public static string LanguagesFolder { get; } = $"{AppContext.BaseDirectory}/Languages";
@@ -31,7 +32,9 @@ public static class Translation
 
     public static async Task ChangeLanguage(string language)
     {
-        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation => translation.Key != "English"))
+#if !AOT
+        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
+                     translation.Key != "English"))
         {
             Application.Current.Resources.MergedDictionaries.Remove(translation.Value);
             Translations.Remove(translation.Key);
@@ -46,12 +49,14 @@ public static class Translation
             return;
         }
 
-        await using var languageStream = new FileStream(languageXaml.OriginalString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
+        await using var languageStream = new FileStream(languageXaml.OriginalString, FileMode.Open, FileAccess.Read,
+            FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
 
         if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
         {
             Application.Current.Resources.MergedDictionaries.Add(dictionary);
             Translations.Add(language, dictionary);
         }
+#endif
     }
 }

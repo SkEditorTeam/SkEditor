@@ -174,15 +174,17 @@ public class ThemeEditor
 
     private static void ApplyMica()
     {
-        Uri uri = new("avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml");
-        var style = new ResourceInclude(uri) { Source = uri };
+        if (!Application.Current.Resources.TryGetResource("SmallWindowTheme", ThemeVariant.Default,
+                out object smallWindowTheme))
+        {
+            SkEditorAPI.Logs.Error("Failed to get SmallWindowTheme resource.", true);
+            return;
+        }
 
-        if (!style.TryGetResource("SmallWindowTheme", ThemeVariant.Default, out var smallWindowTheme)) return;
-
+        ControlTheme smallWindow = (ControlTheme)smallWindowTheme;
         WindowTransparencyLevel[] levels =
             [WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur];
 
-        ControlTheme smallWindow = (ControlTheme)smallWindowTheme;
         if (CurrentTheme.UseMicaEffect)
         {
             smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
@@ -190,12 +192,16 @@ public class ThemeEditor
         }
         else
         {
-            smallWindow.Setters.Remove(smallWindow.Setters.OfType<Setter>()
-                .FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint"));
+            var existingSetter = smallWindow.Setters.OfType<Setter>()
+                .FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint");
+            if (existingSetter != null)
+            {
+                smallWindow.Setters.Remove(existingSetter);
+            }
+
             SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
         }
 
-        Application.Current.Resources.MergedDictionaries.Add(style);
         SmallWindowTheme = smallWindow;
     }
 

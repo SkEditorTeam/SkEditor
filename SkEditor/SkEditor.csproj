@@ -20,8 +20,17 @@
 		<DebugType>portable</DebugType>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(PublishAot)' == 'true'">
+		<DefineConstants>$(DefineConstants);AOT</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
+		<AvaloniaXaml Remove="Assets\*.axaml" />
 		<AvaloniaResource Include="Assets\**" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<AvaloniaResource Include="Styles\**" />
 	</ItemGroup>
 
 	<ItemGroup>

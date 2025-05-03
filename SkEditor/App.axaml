@@ -18,6 +18,7 @@
 				<ResourceInclude Source="avares://SkEditor/Languages/English.xaml"/>
 				<ResourceInclude Source="avares://SkEditor/Styles/CustomMenuItemStyle.axaml" />
 				<ResourceInclude Source="avares://SkEditor/Styles/ToggleSwitchStyle.axaml" />
+				<ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
 				<ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
 				<ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
 			</ResourceDictionary.MergedDictionaries>

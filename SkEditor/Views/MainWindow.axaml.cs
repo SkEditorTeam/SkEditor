@@ -165,7 +165,7 @@ public partial class MainWindow : AppWindow
 
             _splashScreen?.UpdateStatus("Finishing up...");
 
-            await Task.Run(() =>
+            await Dispatcher.UIThread.InvokeAsync(() =>
             {
                 try
                 {
@@ -209,7 +209,7 @@ public partial class MainWindow : AppWindow
         }
         catch (Exception exc)
         {
-            SkEditorAPI.Logs.Error($"Something went wrong while loading the window: {exc.Message}", true);
+            SkEditorAPI.Logs.Error($"Something went wrong while loading the window: {exc.Message} + {exc.InnerException} {exc.StackTrace}", true);
 
             _isFullyLoaded = true;
             IsVisible = true;

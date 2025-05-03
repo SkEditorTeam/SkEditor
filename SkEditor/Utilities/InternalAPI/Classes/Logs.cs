@@ -9,10 +9,14 @@ public class Logs : ILogs
 {
     private static string FormatMessage(string message)
     {
+#if !AOT
         var methodInfo = new StackTrace().GetFrame(2)?.GetMethod();
         var callerNamespace = methodInfo.ReflectedType?.Namespace;
         var addon = AddonLoader.GetAddonByNamespace(callerNamespace);
         return $"[{addon?.Name ?? "SkEditor"}] {message}";
+#else
+        return $"[SkEditor] {message}";
+#endif
     }
 
     public void Debug(string message) => Serilog.Log.Debug(FormatMessage(message));

@@ -39,7 +39,9 @@ public static class AddonLoader
         });
         await EnableAddon(coreAddon);
         
+        #if !AOT
         await LoadAddonsFromFiles();
+        #endif
 
         var addonsWithErrors = Addons.Where(addon => addon.HasErrors).ToList();
         if (addonsWithErrors.Count > 0)
