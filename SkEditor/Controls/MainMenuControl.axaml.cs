@@ -31,10 +31,11 @@ public partial class MainMenuControl : UserControl
 
     private void ConfigureMenu()
     {
-        void setVisibility() => MenuItemDevTools.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
+        SetVisibility();
+        SkEditorAPI.Core.GetAppConfig().PropertyChanged += (_, _) => SetVisibility();
+        return;
 
-        setVisibility();
-        SkEditorAPI.Core.GetAppConfig().PropertyChanged += (_, _) => setVisibility();
+        void SetVisibility() => MenuItemDevTools.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
     }
 
     private void AssignCommands()
@@ -128,10 +129,10 @@ public partial class MainMenuControl : UserControl
                 continue;
 
             hasAnyMenu = true;
-            var menuItem = new MenuItem()
+            var menuItem = new MenuItem
             {
                 Header = addon.Name,
-                Icon = new IconSourceElement()
+                Icon = new IconSourceElement
                 {
                     IconSource = addon.GetAddonIcon(),
                     Width = 20,
@@ -167,7 +168,7 @@ public partial class MainMenuControl : UserControl
         }
 
         AddonsMenuItem.Items.Add(new Separator());
-        AddonsMenuItem.Items.Add(new MenuItem()
+        AddonsMenuItem.Items.Add(new MenuItem
         {
             Header = Translation.Get("MenuHeaderManageAddons"),
             Command = new RelayCommand(() =>
@@ -175,9 +176,9 @@ public partial class MainMenuControl : UserControl
                 new SettingsWindow().ShowDialog(MainWindow.Instance);
                 SettingsWindow.NavigateToPage(typeof(AddonsPage));
             }),
-            Icon = new IconSourceElement()
+            Icon = new IconSourceElement
             {
-                IconSource = new SymbolIconSource()
+                IconSource = new SymbolIconSource
                 {
                     Symbol = Symbol.Manage,
                     FontSize = 20

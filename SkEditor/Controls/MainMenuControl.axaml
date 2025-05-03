@@ -174,9 +174,7 @@
 				</MenuItem.Icon>
 			</MenuItem>
 		</MenuItem>
-		<MenuItem Name="AddonsMenuItem" Header="{DynamicResource MenuHeaderAddons}">
-
-		</MenuItem>
+		<MenuItem Name="AddonsMenuItem" Header="{DynamicResource MenuHeaderAddons}" IsVisible="False"/>
 		<MenuItem Header="{DynamicResource MenuHeaderOther}">
 			<MenuItem Header="{DynamicResource MenuHeaderMarketplace}" Name="MenuItemMarketplace">
 				<MenuItem.Icon>
