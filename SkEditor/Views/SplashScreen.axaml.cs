@@ -25,7 +25,7 @@ public partial class SplashScreen : Window
         ExtendClientAreaToDecorationsHint = true;
         ExtendClientAreaTitleBarHeightHint = 0;
         ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
-        SystemDecorations = SystemDecorations.None;
+        SystemDecorations = SystemDecorations.BorderOnly;
 
         var grid = new Grid
         {
