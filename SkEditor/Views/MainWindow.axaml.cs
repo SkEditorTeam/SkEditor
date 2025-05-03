@@ -145,11 +145,13 @@ public partial class MainWindow : AppWindow
 
             double scale = SkEditorAPI.Core.GetAppConfig().CustomUiScale;
             LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
-
-            _splashScreen?.UpdateStatus("Restoring session...");
+            
             bool sessionFilesAdded = false;
             if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
+            {
+                _splashScreen?.UpdateStatus("Restoring session...");
                 sessionFilesAdded = await SessionRestorer.RestoreSession();
+            }
 
             _splashScreen?.UpdateStatus("Opening files...");
             string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
