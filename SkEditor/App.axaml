@@ -24,6 +24,8 @@
         </ResourceDictionary>
 
         <Brush x:Key="BackgroundColor">#1f1f1f</Brush>
+        <Brush x:Key="TitleBarBackground">#00000000</Brush>
+        <Brush x:Key="MainWindowGridBackground">#00000000</Brush>
         <Brush x:Key="SmallWindowBackgroundColor">#1f1f1f</Brush>
         <Brush x:Key="EditorBackgroundColor">#1b1b1b</Brush>
         <Brush x:Key="EditorTextColor">#cdcaca</Brush>

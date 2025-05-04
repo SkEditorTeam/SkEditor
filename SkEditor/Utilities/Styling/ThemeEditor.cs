@@ -49,6 +49,8 @@ public class ThemeEditor
     public static string ThemeFolderPath { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Themes");
 
     public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
+    
+    private static bool _defaultColorsCollected;
 
     public static ControlTheme SmallWindowTheme { get; private set; }
 
@@ -66,6 +68,7 @@ public class ThemeEditor
 
         string[] files = Directory.GetFiles(ThemeFolderPath);
 
+        Themes.Clear();
         files.Where(x => Path.GetExtension(x) == ".json").ToList().ForEach(x => LoadTheme(x));
 
         Themes = [.. Themes.OrderBy(x => x.FileName.Equals("Default.json") ? 0 : 1)];
@@ -78,7 +81,9 @@ public class ThemeEditor
         Theme theme;
         try
         {
-            theme = JsonConvert.DeserializeObject<Theme>(File.ReadAllText(path));
+            string json = File.ReadAllText(path);
+            
+            theme = JsonConvert.DeserializeObject<Theme>(json);
             if (theme == null)
             {
                 File.Delete(path);
@@ -138,6 +143,11 @@ public class ThemeEditor
 
     public static async Task SetTheme(Theme theme)
     {
+        if (CurrentTheme.UseMicaEffect && !theme.UseMicaEffect)
+        {
+            SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
+        }
+        
         CurrentTheme = theme;
         SkEditorAPI.Core.GetAppConfig().CurrentTheme = theme.FileName;
 
@@ -146,9 +156,19 @@ public class ThemeEditor
 
     public static async Task ApplyTheme()
     {
-        SaveDefaultColors();
+        if (_defaultColorsCollected)
+        {
+            CaptureNewDefaultColors(CurrentTheme);
+        }
+        else
+        {
+            CollectDefaultColors();
+            _defaultColorsCollected = true;
+        }
 
-        List<Task> tasks = new();
+        RestoreDefaultColors();
+
+        List<Task> tasks = [];
 
         foreach (KeyValuePair<string, string[]> item in ThemeToResourceDictionary)
         {
@@ -211,28 +231,85 @@ public class ThemeEditor
 
         SmallWindowTheme = smallWindow;
     }
-
-    private static void SaveDefaultColors()
+    
+    private static void CaptureNewDefaultColors(Theme themeToApply)
     {
-        CurrentTheme.CustomColorChanges
-            .Where(colorChange => !DefaultColors.ContainsKey(colorChange.Key))
+        themeToApply.CustomColorChanges
+            .Where(kvp => !DefaultColors.ContainsKey(kvp.Key))
             .ToList()
-            .ForEach(colorChange =>
+            .ForEach(kvp =>
             {
-                if (!Application.Current.TryGetResource(colorChange.Key, ThemeVariant.Dark, out object? defaultColor))
+                if (Application.Current.TryGetResource(kvp.Key, ThemeVariant.Dark, out object? defaultColor))
                 {
-                    return;
+                    switch (defaultColor)
+                    {
+                        case SolidColorBrush brush:
+                            DefaultColors.Add(kvp.Key, new ImmutableSolidColorBrush(brush));
+                            break;
+                        case ImmutableSolidColorBrush immutableBrush:
+                            DefaultColors.Add(kvp.Key, immutableBrush);
+                            break;
+                    }
                 }
-
-                if (defaultColor is SolidColorBrush brush)
+                else
                 {
-                    DefaultColors.Add(colorChange.Key, new ImmutableSolidColorBrush(brush));
-                }
-                else if (defaultColor.GetType() == typeof(ImmutableSolidColorBrush))
-                {
-                    DefaultColors.Add(colorChange.Key, (ImmutableSolidColorBrush)defaultColor);
+                    SkEditorAPI.Logs.Warning($"Could not find default resource for key '{kvp.Key}' introduced by theme '{themeToApply.Name}'. It might not reset correctly.");
                 }
             });
+    }
+
+
+    private static void CollectDefaultColors()
+    {
+        DefaultColors.Clear();
+        
+        foreach (string resourceKey in ThemeToResourceDictionary.SelectMany(item => item.Value))
+        {
+            if (DefaultColors.ContainsKey(resourceKey) ||
+                !Application.Current.TryGetResource(resourceKey, ThemeVariant.Dark, out object? defaultColor))
+            {
+                continue;
+            }
+
+            switch (defaultColor)
+            {
+                case SolidColorBrush brush:
+                    DefaultColors.Add(resourceKey, new ImmutableSolidColorBrush(brush));
+                    break;
+                case ImmutableSolidColorBrush immutableBrush:
+                    DefaultColors.Add(resourceKey, immutableBrush);
+                    break;
+            }
+        }
+        
+        foreach (var key in CurrentTheme.CustomColorChanges.Keys)
+        {
+            if (DefaultColors.ContainsKey(key) ||
+                !Application.Current.TryGetResource(key, ThemeVariant.Dark, out object? defaultColor))
+            {
+                continue;
+            }
+
+            switch (defaultColor)
+            {
+                case SolidColorBrush brush:
+                    DefaultColors.Add(key, new ImmutableSolidColorBrush(brush));
+                    break;
+                case ImmutableSolidColorBrush immutableBrush:
+                    DefaultColors.Add(key, immutableBrush);
+                    break;
+            }
+        }
+        
+        _defaultColorsCollected = true;
+    }
+
+    private static void RestoreDefaultColors()
+    {
+        foreach (var kvp in DefaultColors)
+        {
+            Application.Current.Resources[kvp.Key] = kvp.Value;
+        }
     }
 
     private static void UpdateTextEditorColors()
