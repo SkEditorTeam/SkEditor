@@ -1,24 +1,23 @@
-﻿using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
-using Serilog;
-using SkEditor.API;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
+using Serilog;
+using SkEditor.API;
+using SkEditor.Utilities;
+using SkEditor.Utilities.Syntax;
 
 namespace SkEditor.Views.Marketplace.Types;
+
 public class SyntaxItem : MarketplaceItem
 {
-    [JsonProperty("syntaxFolders")]
-    public string[] ItemSyntaxFolders { get; set; }
+    [JsonIgnore] public const string FolderName = "Syntax Highlighting";
 
-    [JsonIgnore]
-    public const string FolderName = "Syntax Highlighting";
+    [JsonProperty("syntaxFolders")] public string[] ItemSyntaxFolders { get; set; }
 
     public override async Task Install()
     {
@@ -28,15 +27,19 @@ public class SyntaxItem : MarketplaceItem
         bool allInstalled = true;
         foreach (string folder in ItemSyntaxFolders)
         {
-            var folderName = folder.Split('/').Last();
+            string folderName = folder.Split('/').Last();
             string localSyntaxPath = Path.Combine(baseLocalSyntaxPath,
                 folderName);
             Directory.CreateDirectory(localSyntaxPath);
-            allInstalled = allInstalled && await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
-            allInstalled = allInstalled && await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
+            allInstalled = allInstalled &&
+                           await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
+            allInstalled = allInstalled &&
+                           await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
 
             if (!allInstalled)
+            {
                 break;
+            }
 
             try
             {
@@ -63,7 +66,7 @@ public class SyntaxItem : MarketplaceItem
 
         if (result == ContentDialogResult.Primary)
         {
-            foreach (var syntax in installedSyntaxes)
+            foreach (FileSyntax syntax in installedSyntaxes)
             {
                 await SyntaxLoader.SelectSyntax(syntax);
             }
@@ -98,27 +101,29 @@ public class SyntaxItem : MarketplaceItem
     public override async Task Uninstall()
     {
         List<string> folders = ItemSyntaxFolders.ToList();
-        var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        string syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
         foreach (string localSyntaxPath in folders
                      .Select(folder => folder.Split('/').Last())
                      .Select(folderName => Path.Combine(syntaxFolder,
-                     folderName)))
+                         folderName)))
         {
             await SyntaxLoader.UnloadSyntax(localSyntaxPath);
             Directory.Delete(localSyntaxPath, true);
         }
+
         SyntaxLoader.CheckConfiguredFileSyntaxes();
         SyntaxLoader.RefreshAllOpenedEditors();
 
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await SkEditorAPI.Windows.ShowDialog("Success", Translation.Get("MarketplaceUninstallSuccess", ItemName), primaryButtonText: "Okay");
+        await SkEditorAPI.Windows.ShowDialog("Success", Translation.Get("MarketplaceUninstallSuccess", ItemName),
+            primaryButtonText: "Okay");
     }
 
     public override bool IsInstalled()
     {
-        var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        string syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
         return ItemSyntaxFolders
             .Select(folder => folder.Split('/').Last())
             .Select(folderName => Path.Combine(syntaxFolder, folderName))

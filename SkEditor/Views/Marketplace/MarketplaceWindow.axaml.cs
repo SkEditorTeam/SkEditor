@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
@@ -9,15 +11,12 @@ using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Views.Marketplace;
 using SkEditor.Views.Marketplace.Types;
-using System;
-using System.Threading.Tasks;
 
 namespace SkEditor.Views;
+
 public partial class MarketplaceWindow : AppWindow
 {
     public const string MarketplaceUrl = "https://marketplace-skeditor.vercel.app/";
-
-    public static MarketplaceWindow Instance { get; private set; }
 
     public MarketplaceWindow()
     {
@@ -30,9 +29,14 @@ public partial class MarketplaceWindow : AppWindow
         Loaded += (_, _) => Task.Run(LoadItems);
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
+
+    public static MarketplaceWindow Instance { get; private set; }
 
     private async Task LoadItems()
     {
@@ -64,10 +68,17 @@ public partial class MarketplaceWindow : AppWindow
     {
         ItemView.IsVisible = false;
         MarketplaceListItem listItem = (MarketplaceListItem)ItemListBox.SelectedItem;
-        if (listItem == null) return;
+        if (listItem == null)
+        {
+            return;
+        }
+
         MarketplaceItem item = (MarketplaceItem)listItem.Tag;
         if (item == null)
+        {
             return;
+        }
+
         item.Marketplace = this;
 
 
@@ -95,7 +106,7 @@ public partial class MarketplaceWindow : AppWindow
                 shouldShowInstallButton = true;
             }
         }
-        else 
+        else
          */
 
         if (item is SyntaxItem or ThemeItem or ThemeWithSyntaxItem or AddonItem)
@@ -117,7 +128,8 @@ public partial class MarketplaceWindow : AppWindow
         ItemView.ItemLongDescription = item.ItemLongDescription;
         ItemView.ItemImageUrl = item.ItemImageUrl;
 
-        ItemView.InstallButton.CommandParameter = ItemView.DisableButton.CommandParameter = ItemView.UninstallButton.CommandParameter
+        ItemView.InstallButton.CommandParameter = ItemView.DisableButton.CommandParameter =
+            ItemView.UninstallButton.CommandParameter
                 = ItemView.EnableButton.CommandParameter = ItemView.UpdateButton.CommandParameter = item;
 
         ItemView.ManageButton.IsVisible = false;
@@ -153,7 +165,11 @@ public partial class MarketplaceWindow : AppWindow
 
     public void HideAllButtons()
     {
-        Button[] buttons = [ItemView.InstallButton, ItemView.UninstallButton, ItemView.DisableButton, ItemView.EnableButton, ItemView.UpdateButton];
+        Button[] buttons =
+        [
+            ItemView.InstallButton, ItemView.UninstallButton, ItemView.DisableButton, ItemView.EnableButton,
+            ItemView.UpdateButton
+        ];
 
         foreach (Button button in buttons)
         {

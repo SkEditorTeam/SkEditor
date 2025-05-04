@@ -1,12 +1,13 @@
-﻿using Avalonia;
-using Avalonia.Styling;
-using Serilog;
-using SkEditor.Utilities;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Styling;
+using Serilog;
+using SkEditor.Utilities;
+using SkEditor.Utilities.Files;
 
 namespace SkEditor.API;
 
@@ -22,14 +23,15 @@ public class Core : ICore
 
     public Version GetAppVersion()
     {
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
+        Version? version = Assembly.GetExecutingAssembly().GetName().Version;
         return new Version(version.Major, version.Minor, version.Build);
     }
 
     public string GetInformationalVersion()
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        var informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string informationVersion =
+            assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
         return informationVersion;
     }
@@ -46,7 +48,7 @@ public class Core : ICore
 
     public object? GetApplicationResource(string key)
     {
-        Application.Current.TryGetResource(key, ThemeVariant.Dark, out var resource);
+        Application.Current.TryGetResource(key, ThemeVariant.Dark, out object? resource);
         return resource;
     }
 
@@ -78,7 +80,7 @@ public class Core : ICore
 
     public async Task SaveData()
     {
-        foreach (var file in SkEditorAPI.Files.GetOpenedEditors())
+        foreach (OpenedFile file in SkEditorAPI.Files.GetOpenedEditors())
         {
             string path = file.Path;
             if (string.IsNullOrEmpty(path))
@@ -87,19 +89,24 @@ public class Core : ICore
                 Directory.CreateDirectory(tempPath);
                 path = Path.Combine(tempPath, file.Header);
             }
+
             string textToWrite = file.Editor?.Text;
             if (string.IsNullOrEmpty(textToWrite))
+            {
                 continue;
+            }
+
             try
             {
                 await File.WriteAllTextAsync(path, textToWrite);
-                await using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+                await using FileStream fileStream = new(path, FileMode.Open, FileAccess.Read, FileShare.None);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Failed to save file: {path}");
             }
         }
+
         GetAppConfig().Save();
     }
 }

@@ -1,7 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Newtonsoft.Json.Linq;
-using System;
 
 namespace SkEditor.API.Settings.Types;
 
@@ -10,7 +10,9 @@ public class ColorSetting : ISettingType
     public object Deserialize(JToken value)
     {
         if (value is not JObject obj)
+        {
             throw new ArgumentException("Value is not a JObject", nameof(value));
+        }
 
         return Color.FromArgb(
             obj["A"]?.Value<byte>() ?? 255,
@@ -23,7 +25,9 @@ public class ColorSetting : ISettingType
     public JToken Serialize(object value)
     {
         if (value is not Color color)
+        {
             throw new ArgumentException("Value is not a Color", nameof(value));
+        }
 
         return new JObject
         {
@@ -37,9 +41,11 @@ public class ColorSetting : ISettingType
     public Control CreateControl(object value, Action<object> onChanged)
     {
         if (value is not Color color)
+        {
             throw new ArgumentException("Value is not a Color", nameof(value));
+        }
 
-        var picker = new ColorPicker
+        ColorPicker picker = new()
         {
             Color = color
         };

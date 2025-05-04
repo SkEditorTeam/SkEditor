@@ -1,4 +1,10 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -9,16 +15,13 @@ using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Editor;
+
 public partial class TextEditorEventHandler
 {
+    private const string CommentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
+
     private static readonly Dictionary<char, char> SymbolPairs = new()
     {
         { '(', ')' },
@@ -26,41 +29,51 @@ public partial class TextEditorEventHandler
         { '"', '"' },
         { '<', '>' },
         { '{', '}' },
-        { '%', '%' },
+        { '%', '%' }
     };
-
-    private const string CommentPattern = @"#(?!#(?:\s*#[^#]*)?)\s*[^#]*$";
 
     public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 
     public static void OnZoom(object sender, PointerWheelEventArgs e)
     {
-        if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
+        if (e.KeyModifiers != KeyUtility.GetControlModifier())
+        {
+            return;
+        }
 
         e.Handled = true;
 
         TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
-        int zoom = (e.Delta.Y > 0 && editor.FontSize < 200) ? 1 : -1;
+        int zoom = e.Delta.Y > 0 && editor.FontSize < 200 ? 1 : -1;
 
         Zoom(editor, zoom);
     }
 
     public static void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
+        if (e.KeyModifiers != KeyUtility.GetControlModifier())
+        {
+            return;
+        }
 
         TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
-        if (e.Key == Key.OemPlus) Zoom(editor, 5);
-        else if (e.Key == Key.OemMinus) Zoom(editor, -5);
+        if (e.Key == Key.OemPlus)
+        {
+            Zoom(editor, 5);
+        }
+        else if (e.Key == Key.OemMinus)
+        {
+            Zoom(editor, -5);
+        }
     }
 
     private static void Zoom(TextEditor editor, int value)
     {
         if (SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled)
         {
-            foreach (var openedFile in SkEditorAPI.Files.GetOpenedEditors())
+            foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
             {
                 ZoomEditor(value, openedFile.Editor);
             }
@@ -73,7 +86,10 @@ public partial class TextEditorEventHandler
 
     public static void ZoomEditor(int value, TextEditor editor)
     {
-        if (value < 0 && editor.FontSize <= 5) return;
+        if (value < 0 && editor.FontSize <= 5)
+        {
+            return;
+        }
 
         ScrollViewer scrollViewer = GetScrollViewer(editor);
         double oldLineHeight = editor.TextArea.TextView.DefaultLineHeight;
@@ -88,11 +104,17 @@ public partial class TextEditorEventHandler
 
     public static ScrollViewer GetScrollViewer(TextEditor editor)
     {
-        if (ScrollViewers.TryGetValue(editor, out ScrollViewer? value)) return value;
+        if (ScrollViewers.TryGetValue(editor, out ScrollViewer? value))
+        {
+            return value;
+        }
 
         Type type = editor.GetType();
         PropertyInfo propInfo = type.GetProperty("ScrollViewer", BindingFlags.Instance | BindingFlags.NonPublic);
-        if (propInfo == null) return null;
+        if (propInfo == null)
+        {
+            return null;
+        }
 
         ScrollViewer scrollViewer = (ScrollViewer)propInfo.GetValue(editor);
         ScrollViewers[editor] = scrollViewer;
@@ -104,11 +126,16 @@ public partial class TextEditorEventHandler
         try
         {
             if (!SkEditorAPI.Files.IsEditorOpen())
+            {
                 return;
-            var editor = sender as TextEditor;
-            var openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.Editor == editor);
+            }
+
+            TextEditor? editor = sender as TextEditor;
+            OpenedFile? openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(tab => tab.Editor == editor);
             if (openedFile == null)
+            {
                 return;
+            }
 
             if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
             {
@@ -133,14 +160,28 @@ public partial class TextEditorEventHandler
 
     public static void DoAutoIndent(object? sender, TextInputEventArgs e)
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsAutoIndentEnabled) return;
-        if (!string.IsNullOrWhiteSpace(e.Text)) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsAutoIndentEnabled)
+        {
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(e.Text))
+        {
+            return;
+        }
 
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
 
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
-        if (!string.IsNullOrWhiteSpace(textEditor.Document.GetText(line))) return;
-        if (line.PreviousLine == null) return;
+        if (!string.IsNullOrWhiteSpace(textEditor.Document.GetText(line)))
+        {
+            return;
+        }
+
+        if (line.PreviousLine == null)
+        {
+            return;
+        }
 
         DocumentLine previousLine = line.PreviousLine;
 
@@ -148,31 +189,50 @@ public partial class TextEditorEventHandler
         previousLineText = CommentRegex().Replace(previousLineText, "");
         previousLineText = previousLineText.TrimEnd();
 
-        if (!previousLineText.EndsWith(':')) return;
+        if (!previousLineText.EndsWith(':'))
+        {
+            return;
+        }
 
         textEditor.Document.Insert(line.Offset, textEditor.Options.IndentationString);
     }
 
     public static void DoAutoPairing(object? sender, TextInputEventArgs e)
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsAutoPairingEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsAutoPairingEnabled)
+        {
+            return;
+        }
 
         char symbol = e.Text[0];
-        if (!SymbolPairs.TryGetValue(symbol, out char value)) return;
+        if (!SymbolPairs.TryGetValue(symbol, out char value))
+        {
+            return;
+        }
 
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         if (textEditor.Document.TextLength > textEditor.CaretOffset)
         {
             string nextChar = textEditor.Document.GetText(textEditor.CaretOffset, 1);
-            if (nextChar.Equals(value.ToString())) return;
+            if (nextChar.Equals(value.ToString()))
+            {
+                return;
+            }
         }
 
         int lineOffset = textEditor.Document.GetLineByOffset(textEditor.CaretOffset).Offset;
         string textBefore = textEditor.Document.GetText(lineOffset, textEditor.CaretOffset - lineOffset - 1);
         int count1 = textBefore.Count(c => c == symbol);
         int count2 = textBefore.Count(c => c == value);
-        if (symbol == value && count1 % 2 == 1) return;
-        if (count1 > count2) return;
+        if (symbol == value && count1 % 2 == 1)
+        {
+            return;
+        }
+
+        if (count1 > count2)
+        {
+            return;
+        }
 
         textEditor.Document.Insert(textEditor.CaretOffset, value.ToString());
         textEditor.CaretOffset--;
@@ -186,15 +246,26 @@ public partial class TextEditorEventHandler
         {
             MatchCollection matches = regex.Matches(textEditor.Text);
 
-            if (textEditor.SyntaxHighlighting == null) return;
-            HighlightingRuleSet ruleSet = textEditor.SyntaxHighlighting.GetNamedRuleSet("BracedExpressionAndColorsRuleSet");
-            if (ruleSet == null) return;
+            if (textEditor.SyntaxHighlighting == null)
+            {
+                return;
+            }
+
+            HighlightingRuleSet ruleSet =
+                textEditor.SyntaxHighlighting.GetNamedRuleSet("BracedExpressionAndColorsRuleSet");
+            if (ruleSet == null)
+            {
+                return;
+            }
 
             foreach (Match match in matches.Cast<Match>())
             {
                 string hex = match.Value.Contains("##") ? match.Value[2..^1] : match.Value[1..^1];
                 bool parsed = Color.TryParse(hex, out Color color);
-                if (!parsed) continue;
+                if (!parsed)
+                {
+                    continue;
+                }
 
                 if (ruleSet.Spans.Any(s => s != null && s.StartExpression.ToString().Contains(hex)))
                 {
@@ -209,7 +280,7 @@ public partial class TextEditorEventHandler
                     SpanColor = new HighlightingColor { Foreground = new SimpleHighlightingBrush(color) },
                     RuleSet = ruleSet,
                     SpanColorIncludesEnd = true,
-                    SpanColorIncludesStart = true,
+                    SpanColorIncludesStart = true
                 };
 
                 ruleSet.Spans.Add(span);
@@ -221,7 +292,11 @@ public partial class TextEditorEventHandler
 
     public static void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
+        if (e.KeyModifiers != KeyUtility.GetControlModifier())
+        {
+            return;
+        }
+
         e.Handled = true;
 
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
@@ -237,7 +312,11 @@ public partial class TextEditorEventHandler
 
     public static void OnTextPasting(object? sender, TextEventArgs e)
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled)
+        {
+            return;
+        }
+
         string properText = e.Text; // TODO: Handle bad indented copied code
         if (!properText.Contains(Environment.NewLine) || properText.Contains('\n') || properText.Contains('\r'))
         {
@@ -252,8 +331,14 @@ public partial class TextEditorEventHandler
         string indentation = "";
         foreach (char c in lineText)
         {
-            if (char.IsWhiteSpace(c)) indentation += c;
-            else break;
+            if (char.IsWhiteSpace(c))
+            {
+                indentation += c;
+            }
+            else
+            {
+                break;
+            }
         }
 
         string[] pastes = properText.Split([Environment.NewLine], StringSplitOptions.None);
@@ -275,8 +360,10 @@ public partial class TextEditorEventHandler
 
     [GeneratedRegex(@"<#[#]?(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();
+
     [GeneratedRegex("")]
     private static partial Regex EmptyRegex();
+
     [GeneratedRegex(CommentPattern, RegexOptions.Compiled)]
     private static partial Regex CommentRegex();
 }

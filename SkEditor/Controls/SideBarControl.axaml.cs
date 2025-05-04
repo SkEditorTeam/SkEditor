@@ -1,4 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
@@ -6,30 +14,24 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SkEditor.Controls;
 
 public partial class SideBarControl : UserControl
 {
-    public static TimeSpan TransitionDuration = TimeSpan.FromMilliseconds(250);
-
     private const int GapColumnIndex = 1;
     private const int ContentColumnIndex = 2;
     private const double GapWidth = 10.0;
     private const double ZeroWidth = 0.0;
+    public static TimeSpan TransitionDuration = TimeSpan.FromMilliseconds(250);
+    private readonly SolidColorBrush _activeButtonForeground = new(Color.Parse("#60cdff"));
 
     private readonly SolidColorBrush _buttonForeground = new(Color.Parse("#cccccc"));
-    private readonly SolidColorBrush _activeButtonForeground = new(Color.Parse("#60cdff"));
     private readonly TimeSpan _toggleDebounceTime = TimeSpan.FromMilliseconds(250);
+    private CancellationTokenSource? _animationCancellationSource;
 
     private SidebarPanel? _currentPanel;
     private bool _isAnimating;
-    private CancellationTokenSource? _animationCancellationSource;
     private DateTime _lastToggleTime = DateTime.MinValue;
 
     public SideBarControl()
@@ -44,36 +46,44 @@ public partial class SideBarControl : UserControl
         Unloaded += OnUnloaded;
     }
 
-    private void OnLoaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnLoaded(object? sender, RoutedEventArgs e)
     {
-        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow?.Splitter == null) return;
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow?.Splitter == null)
+        {
+            return;
+        }
 
         mainWindow.Splitter.DragCompleted += Splitter_DragCompleted;
 
-        if (_currentPanel != null) return;
+        if (_currentPanel != null)
+        {
+            return;
+        }
 
         SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, ZeroWidth);
         mainWindow.SidebarContentBorder.Child = null;
     }
 
-    private void OnUnloaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void OnUnloaded(object? sender, RoutedEventArgs e)
     {
         StopAnimation();
-        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
         if (mainWindow?.Splitter != null)
         {
             mainWindow.Splitter.DragCompleted -= Splitter_DragCompleted;
         }
     }
 
-    private void Splitter_DragCompleted(object? sender, Avalonia.Input.VectorEventArgs e)
+    private void Splitter_DragCompleted(object? sender, VectorEventArgs e)
     {
-        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
         if (mainWindow == null || _currentPanel == null || _isAnimating)
+        {
             return;
+        }
 
-        var currentWidth = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width.Value;
+        double currentWidth = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width.Value;
         SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] = (int)currentWidth;
         mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = _currentPanel.DesiredWidth;
     }
@@ -87,20 +97,27 @@ public partial class SideBarControl : UserControl
 
     private void UpdateSplitterVisibility()
     {
-        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow?.Splitter == null) return;
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow?.Splitter == null)
+        {
+            return;
+        }
+
         mainWindow.Splitter.IsEnabled = _currentPanel != null && !_isAnimating;
     }
 
     public void ReloadPanels()
     {
-        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow == null) return;
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow == null)
+        {
+            return;
+        }
 
         StopAnimation();
         _isAnimating = false;
 
-        var panels = Registries.SidebarPanels;
+        Registry<SidebarPanel> panels = Registries.SidebarPanels;
         if (!panels.Any())
         {
             IsVisible = false;
@@ -119,8 +136,10 @@ public partial class SideBarControl : UserControl
         SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, ZeroWidth);
         UpdateSplitterVisibility();
 
-        foreach (var panel in panels)
+        foreach (SidebarPanel panel in panels)
+        {
             Buttons.Children.Add(CreatePanelButton(panel));
+        }
     }
 
     private Button CreatePanelButton(SidebarPanel panel)
@@ -145,14 +164,17 @@ public partial class SideBarControl : UserControl
 
     private void TogglePanel(SidebarPanel panel, Button button)
     {
-        if (panel.IsDisabled) return;
-        
+        if (panel.IsDisabled)
+        {
+            return;
+        }
+
         bool useAnimation = SkEditorAPI.Core.GetAppConfig().IsSidebarAnimationEnabled;
 
         if (useAnimation)
         {
-            var now = DateTime.Now;
-            if ((now - _lastToggleTime) < _toggleDebounceTime && _currentPanel != panel)
+            DateTime now = DateTime.Now;
+            if (now - _lastToggleTime < _toggleDebounceTime && _currentPanel != panel)
             {
                 return;
             }
@@ -162,12 +184,15 @@ public partial class SideBarControl : UserControl
 
         StopAnimation();
 
-        var mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow == null) return;
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow == null)
+        {
+            return;
+        }
 
-        var contentColumn = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex];
-        var gapColumn = mainWindow.CoreGrid.ColumnDefinitions[GapColumnIndex];
-        var sidebarContentBorder = mainWindow.SidebarContentBorder;
+        ColumnDefinition contentColumn = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex];
+        ColumnDefinition gapColumn = mainWindow.CoreGrid.ColumnDefinitions[GapColumnIndex];
+        Border? sidebarContentBorder = mainWindow.SidebarContentBorder;
 
         if (_currentPanel == panel)
         {
@@ -182,22 +207,26 @@ public partial class SideBarControl : UserControl
     private void OpenPanelInternal(SidebarPanel panel, Button button, ColumnDefinition contentColumn,
         ColumnDefinition gapColumn, Border sidebarContentBorder, bool animate)
     {
-        var previousPanel = _currentPanel;
-        var previousContent = sidebarContentBorder.Child;
+        SidebarPanel? previousPanel = _currentPanel;
+        Control? previousContent = sidebarContentBorder.Child;
 
         ResetButtonIcons();
 
         if (previousPanel != null)
         {
             previousPanel.OnClose();
-            if (previousContent != null) ResetControlAlignment(previousContent);
+            if (previousContent != null)
+            {
+                ResetControlAlignment(previousContent);
+            }
+
             sidebarContentBorder.Child = null;
         }
 
         _currentPanel = panel;
         SetButtonActive(button, true);
-        var panelContent = _currentPanel.Content;
-        var targetContentWidth = GetPanelWidth(_currentPanel);
+        UserControl? panelContent = _currentPanel.Content;
+        double targetContentWidth = GetPanelWidth(_currentPanel);
         contentColumn.MinWidth = 0;
 
         if (panelContent != null)
@@ -230,14 +259,14 @@ public partial class SideBarControl : UserControl
         ColumnDefinition gapColumn, Border sidebarContentBorder, bool animate)
     {
         _currentPanel = null;
-        var contentToClose = sidebarContentBorder.Child;
+        Control? contentToClose = sidebarContentBorder.Child;
 
         SetButtonActive(button, false);
 
         if (contentToClose != null)
         {
             contentToClose.Width = contentColumn.Width.Value;
-            contentToClose.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
+            contentToClose.HorizontalAlignment = HorizontalAlignment.Left;
         }
 
         contentColumn.MinWidth = 0;
@@ -260,7 +289,8 @@ public partial class SideBarControl : UserControl
         }
     }
 
-    private void FinalizeOpen(SidebarPanel panel, Control? panelContent, ColumnDefinition contentColumn, Border sidebarContentBorder, bool success)
+    private void FinalizeOpen(SidebarPanel panel, Control? panelContent, ColumnDefinition contentColumn,
+        Border sidebarContentBorder, bool success)
     {
         _isAnimating = false;
 
@@ -316,7 +346,11 @@ public partial class SideBarControl : UserControl
 
     private static void SetColumnWidths(MainWindow mainWindow, double gapWidth, double contentWidth, double minWidth)
     {
-        if (mainWindow == null) return;
+        if (mainWindow == null)
+        {
+            return;
+        }
+
         mainWindow.CoreGrid.ColumnDefinitions[GapColumnIndex].Width = new GridLength(gapWidth);
         mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width = new GridLength(contentWidth);
         mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = minWidth;
@@ -325,14 +359,14 @@ public partial class SideBarControl : UserControl
     private static void ConfigurePanelContentForAnimation(Control panelContent, double width)
     {
         panelContent.Width = width;
-        panelContent.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
-        panelContent.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch;
+        panelContent.HorizontalAlignment = HorizontalAlignment.Left;
+        panelContent.VerticalAlignment = VerticalAlignment.Stretch;
     }
 
     private static void ResetControlAlignment(Control control)
     {
         control.Width = double.NaN;
-        control.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch;
+        control.HorizontalAlignment = HorizontalAlignment.Stretch;
     }
 
     private static double GetPanelWidth(SidebarPanel panel)
@@ -342,13 +376,17 @@ public partial class SideBarControl : UserControl
 
     private static void SetButtonActive(Button button, bool isActive)
     {
-        if (button.Tag is not (Viewbox icon, Viewbox activeIcon, SidebarPanel _)) return;
+        if (button.Tag is not (Viewbox icon, Viewbox activeIcon, SidebarPanel _))
+        {
+            return;
+        }
+
         button.Content = isActive ? activeIcon : icon;
     }
 
     private void ResetButtonIcons()
     {
-        foreach (var child in Buttons.Children)
+        foreach (Control? child in Buttons.Children)
         {
             if (child is Button btn)
             {
@@ -362,15 +400,15 @@ public partial class SideBarControl : UserControl
     {
         StopAnimation();
         _animationCancellationSource = new CancellationTokenSource();
-        var token = _animationCancellationSource.Token;
+        CancellationToken token = _animationCancellationSource.Token;
 
-        var startContentWidth = contentColumn.Width.IsAbsolute ? contentColumn.Width.Value : 0;
-        var startGapWidth = gapColumn.Width.IsAbsolute ? gapColumn.Width.Value : 0;
+        double startContentWidth = contentColumn.Width.IsAbsolute ? contentColumn.Width.Value : 0;
+        double startGapWidth = gapColumn.Width.IsAbsolute ? gapColumn.Width.Value : 0;
 
         contentColumn.Width = new GridLength(startContentWidth, GridUnitType.Pixel);
         gapColumn.Width = new GridLength(startGapWidth, GridUnitType.Pixel);
 
-        var duration = TransitionDuration.TotalMilliseconds;
+        double duration = TransitionDuration.TotalMilliseconds;
         if (duration <= 0)
         {
             contentColumn.Width = new GridLength(targetContentWidth, GridUnitType.Pixel);
@@ -378,8 +416,8 @@ public partial class SideBarControl : UserControl
             return true;
         }
 
-        var startTime = DateTime.UtcNow;
-        var tcs = new TaskCompletionSource<bool>();
+        DateTime startTime = DateTime.UtcNow;
+        TaskCompletionSource<bool> tcs = new();
 
         void AnimationTick(TimeSpan time)
         {
@@ -389,12 +427,12 @@ public partial class SideBarControl : UserControl
                 return;
             }
 
-            var elapsed = (DateTime.UtcNow - startTime).TotalMilliseconds;
+            double elapsed = (DateTime.UtcNow - startTime).TotalMilliseconds;
             double progress = Math.Clamp(elapsed / duration, 0.0, 1.0);
             double easedProgress = 1 - Math.Pow(1 - progress, 3);
 
-            double currentContentWidth = startContentWidth + (targetContentWidth - startContentWidth) * easedProgress;
-            double currentGapWidth = startGapWidth + (targetGapWidth - startGapWidth) * easedProgress;
+            double currentContentWidth = startContentWidth + ((targetContentWidth - startContentWidth) * easedProgress);
+            double currentGapWidth = startGapWidth + ((targetGapWidth - startGapWidth) * easedProgress);
 
             contentColumn.Width = new GridLength(currentContentWidth, GridUnitType.Pixel);
             gapColumn.Width = new GridLength(currentGapWidth, GridUnitType.Pixel);
@@ -432,7 +470,7 @@ public partial class SideBarControl : UserControl
             Child = new IconSourceElement
             {
                 IconSource = icon,
-                Foreground = foreground,
+                Foreground = foreground
             },
             Width = 22,
             Height = 22

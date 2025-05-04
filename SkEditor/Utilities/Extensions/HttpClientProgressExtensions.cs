@@ -5,13 +5,16 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Extensions;
+
 public static class HttpClientProgressExtensions
 {
-    public static async Task DownloadDataAsync(this HttpClient client, string requestUrl, Stream destination, IProgress<float>? progress = null, CancellationToken cancellationToken = default)
+    public static async Task DownloadDataAsync(this HttpClient client, string requestUrl, Stream destination,
+        IProgress<float>? progress = null, CancellationToken cancellationToken = default)
     {
-        using var response = await client.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-        var contentLength = response.Content.Headers.ContentLength;
-        using var download = await response.Content.ReadAsStreamAsync(cancellationToken);
+        using HttpResponseMessage response =
+            await client.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        long? contentLength = response.Content.Headers.ContentLength;
+        using Stream download = await response.Content.ReadAsStreamAsync(cancellationToken);
 
         if (progress is null || !contentLength.HasValue)
         {
@@ -19,23 +22,33 @@ public static class HttpClientProgressExtensions
             return;
         }
 
-        var progressWrapper = new Progress<long>(totalBytes => progress.Report(GetProgressPercentage(totalBytes, contentLength.Value)));
+        Progress<long> progressWrapper =
+            new(totalBytes => progress.Report(GetProgressPercentage(totalBytes, contentLength.Value)));
         await download.CopyToAsync(destination, 81920, progressWrapper, cancellationToken);
 
-        static float GetProgressPercentage(float totalBytes, float currentBytes) => totalBytes / currentBytes * 100f;
+        static float GetProgressPercentage(float totalBytes, float currentBytes)
+        {
+            return totalBytes / currentBytes * 100f;
+        }
     }
 
-    static async Task CopyToAsync(this Stream source, Stream destination, int bufferSize, IProgress<long>? progress = null, CancellationToken cancellationToken = default)
+    private static async Task CopyToAsync(this Stream source, Stream destination, int bufferSize,
+        IProgress<long>? progress = null, CancellationToken cancellationToken = default)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(bufferSize);
         ArgumentNullException.ThrowIfNull(source);
         if (!source.CanRead)
+        {
             throw new InvalidOperationException($"'{nameof(source)}' is not readable.");
+        }
+
         ArgumentNullException.ThrowIfNull(destination);
         if (!destination.CanWrite)
+        {
             throw new InvalidOperationException($"'{nameof(destination)}' is not writable.");
+        }
 
-        var buffer = new byte[bufferSize];
+        byte[] buffer = new byte[bufferSize];
         long totalBytesRead = 0;
         int bytesRead;
         while ((bytesRead = await source.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) != 0)

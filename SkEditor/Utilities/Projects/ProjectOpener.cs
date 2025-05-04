@@ -79,7 +79,9 @@ public static class ProjectOpener
                         folder = rawPath;
 
                         if (folder.StartsWith("file:///"))
+                        {
                             folder = folder[8..];
+                        }
                     }
                 }
             }
@@ -96,7 +98,9 @@ public static class ProjectOpener
                     folder = rawString[(pathIndex + 5)..].Trim();
 
                     if (folder.StartsWith('\"') && folder.EndsWith('\"'))
+                    {
                         folder = folder[1..^1];
+                    }
                 }
                 else
                 {
@@ -120,14 +124,18 @@ public static class ProjectOpener
         static void HandleTapped(TappedEventArgs e)
         {
             if (e.Source is not Border border)
+            {
                 return;
+            }
 
-            var treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
+            TreeViewItem? treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
 
             if (treeViewItem is null)
+            {
                 return;
+            }
 
-            var storageElement = treeViewItem.DataContext as StorageElement;
+            StorageElement? storageElement = treeViewItem.DataContext as StorageElement;
 
             storageElement?.HandleClick();
         }
@@ -135,7 +143,9 @@ public static class ProjectOpener
         FileTreeView.DoubleTapped += (_, e) =>
         {
             if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            {
                 return;
+            }
 
             HandleTapped(e);
         };
@@ -143,7 +153,9 @@ public static class ProjectOpener
         FileTreeView.Tapped += (_, e) =>
         {
             if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            {
                 return;
+            }
 
             HandleTapped(e);
         };

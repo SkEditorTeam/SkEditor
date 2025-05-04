@@ -1,8 +1,15 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
@@ -14,11 +21,6 @@ using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Styling;
 using SkEditor.Views;
 using SkEditor.Views.FileTypes;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Files;
 
@@ -28,9 +30,11 @@ public class FileBuilder
 
     public static async Task<TabViewItem?> Build(string header, string path = "", string? content = null)
     {
-        var fileType = await GetFileDisplay(path, content);
+        FileTypes.FileType? fileType = await GetFileDisplay(path, content);
         if (fileType == null)
+        {
             return null;
+        }
 
         TabViewItem tabViewItem = new()
         {
@@ -48,7 +52,7 @@ public class FileBuilder
 
             ToolTip toolTip = new()
             {
-                Content = path,
+                Content = path
             };
 
             ToolTip.SetShowDelay(tabViewItem, 1200);
@@ -57,7 +61,7 @@ public class FileBuilder
 
         if (fileType.IsEditor)
         {
-            var editor = fileType.Display as TextEditor;
+            TextEditor? editor = fileType.Display as TextEditor;
 
             SkEditorAPI.Events.FileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
@@ -73,24 +77,24 @@ public class FileBuilder
         FileTypes.FileType? fileType = null;
         if (FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
         {
-            var handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
+            List<FileTypes.FileAssociation> handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
             if (handlers.Count == 1)
             {
                 fileType = handlers[0].Handle(path);
             }
             else
             {
-                var ext = Path.GetExtension(path);
+                string ext = Path.GetExtension(path);
                 if (SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
                 {
-                    var pref = value;
+                    string pref = value;
                     if (pref == "SkEditor")
                     {
                         fileType = handlers.Find(association => !association.IsFromAddon).Handle(path);
                     }
                     else
                     {
-                        var preferred = handlers.Find(association => association.IsFromAddon &&
+                        FileTypes.FileAssociation? preferred = handlers.Find(association => association.IsFromAddon &&
                             association.Addon.Name == value);
                         if (preferred != null)
                         {
@@ -105,20 +109,22 @@ public class FileBuilder
 
                 if (fileType == null)
                 {
-                    var window = new AssociationSelectionWindow(handlers);
+                    AssociationSelectionWindow window = new(handlers);
                     await window.ShowDialog(MainWindow.Instance);
-                    var selected = window.SelectedAssociation;
+                    FileTypes.FileAssociation? selected = window.SelectedAssociation;
                     if (selected != null)
                     {
                         fileType = selected.Handle(path);
                         if (window.RememberCheck.IsChecked == true)
                         {
-                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations[ext] = selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
+                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations[ext] =
+                                selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
                         }
                         else
                         {
                             SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
                         }
+
                         SkEditorAPI.Core.GetAppConfig().Save();
                     }
                 }
@@ -135,19 +141,23 @@ public class FileBuilder
         {
             path = Uri.UnescapeDataString(path);
             if (File.Exists(path))
+            {
                 fileContent = content ?? await File.ReadAllTextAsync(path);
+            }
         }
 
         if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))
         {
-            var response = await SkEditorAPI.Windows.ShowDialog(
+            ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
-                new SymbolIconSource() { Symbol = Symbol.Alert });
+                new SymbolIconSource { Symbol = Symbol.Alert });
             if (response != ContentDialogResult.Primary)
+            {
                 return null;
+            }
         }
 
-        var editor = CreateEditor();
+        TextEditor editor = CreateEditor();
         if (string.IsNullOrWhiteSpace(path))
         {
             return new FileTypes.FileType(editor, path, true);
@@ -164,21 +174,21 @@ public class FileBuilder
 
     public static TextEditor CreateEditor(string content = "")
     {
-        var editor = new TextEditor
+        TextEditor editor = new()
         {
             ShowLineNumbers = true,
             Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
             Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
             LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor"),
             FontSize = 16,
-            WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled,
+            WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled
         };
 
         editor.ContextFlyout = GetContextMenu(editor);
 
         if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
-            Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
+            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object font);
             editor.FontFamily = (FontFamily)font;
         }
         else
@@ -204,10 +214,12 @@ public class FileBuilder
         {
             editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser?.SetUnparsed();
         }
+
         if (SkEditorAPI.Core.GetAppConfig().EnableHexPreview)
         {
             editor.Document.TextChanged += (_, _) => TextEditorEventHandler.CheckForHex(editor);
         }
+
         editor.TextArea.Caret.PositionChanged += (_, _) =>
         {
             SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdatePosition();
@@ -219,7 +231,8 @@ public class FileBuilder
         if (SkEditorAPI.Core.GetAppConfig().EnableAutoCompletionExperiment)
         {
             editor.TextChanged += CompletionHandler.OnTextChanged;
-            editor.TextArea.AddHandler(Avalonia.Input.InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true, routes: RoutingStrategies.Tunnel);
+            editor.TextArea.AddHandler(InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true,
+                routes: RoutingStrategies.Tunnel);
         }
 
         editor.TextArea.TextPasting += TextEditorEventHandler.OnTextPasting;
@@ -251,22 +264,49 @@ public class FileBuilder
 
     public static MenuFlyout GetContextMenu(TextEditor editor)
     {
-        var commands = new object[]
+        object[] commands = new object[]
         {
             new { Header = "MenuHeaderCopy", Command = new RelayCommand(editor.Copy), Icon = Symbol.Copy },
             new { Header = "MenuHeaderPaste", Command = new RelayCommand(editor.Paste), Icon = Symbol.Paste },
             new { Header = "MenuHeaderCut", Command = new RelayCommand(editor.Cut), Icon = Symbol.Cut },
             new { Header = "MenuHeaderUndo", Command = new RelayCommand(() => editor.Undo()), Icon = Symbol.Undo },
             new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.Redo },
-            new { Header = "MenuHeaderDuplicate", Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Icon = Symbol.Copy },
-            new { Header = "MenuHeaderComment", Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)), Icon = Symbol.Comment },
-            new { Header = "MenuHeaderGoToLine", Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())), Icon = Symbol.Find },
-            new { Header = "MenuHeaderTrimWhitespaces", Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)), Icon = Symbol.Remove },
+            new
+            {
+                Header = "MenuHeaderDuplicate",
+                Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)),
+                Icon = Symbol.Copy
+            },
+            new
+            {
+                Header = "MenuHeaderComment",
+                Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)),
+                Icon = Symbol.Comment
+            },
+            new
+            {
+                Header = "MenuHeaderGoToLine",
+                Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())),
+                Icon = Symbol.Find
+            },
+            new
+            {
+                Header = "MenuHeaderTrimWhitespaces",
+                Command =
+                    new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)),
+                Icon = Symbol.Remove
+            },
             new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
-            new { Header = "MenuHeaderRefactor", Command = new AsyncRelayCommand(async () => await CustomCommandsHandler.OnRefactorCommandExecuted(editor)), Icon = Symbol.Rename },
+            new
+            {
+                Header = "MenuHeaderRefactor",
+                Command = new AsyncRelayCommand(async () =>
+                    await CustomCommandsHandler.OnRefactorCommandExecuted(editor)),
+                Icon = Symbol.Rename
+            }
         };
 
-        var contextMenu = new MenuFlyout();
+        MenuFlyout contextMenu = new();
         foreach (dynamic item in commands)
         {
             contextMenu.Items.Add(new MenuItem

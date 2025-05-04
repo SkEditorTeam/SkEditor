@@ -1,21 +1,21 @@
-﻿using Avalonia.Controls;
+﻿using System.IO;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using System.IO;
 
 namespace SkEditor.Views.FileTypes;
 
 public partial class ImageViewer : UserControl
 {
-
     public ImageViewer(Bitmap image, string path)
     {
         InitializeComponent();
 
         Image.Source = path;
         Image.Image = image;
-        InformationText.Text = $"{Path.GetExtension(path).ToUpper()} Image ({image.Size.Width}x{image.Size.Height} pixels)";
+        InformationText.Text =
+            $"{Path.GetExtension(path).ToUpper()} Image ({image.Size.Width}x{image.Size.Height} pixels)";
 
         AssignCommands();
     }
@@ -32,5 +32,4 @@ public partial class ImageViewer : UserControl
             : BitmapInterpolationMode.None);
         Image.InvalidateVisual();
     }
-
 }

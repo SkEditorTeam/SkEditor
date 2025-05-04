@@ -135,10 +135,10 @@ public partial class TerminalWindow : AppWindow
     private string ProcessText(string text)
     {
         bool escapeSequence = false;
-        var builder = new StringBuilder();
+        StringBuilder builder = new();
 
         string rawCodes = "";
-        foreach (var c in text)
+        foreach (char c in text)
         {
             if (c == EscapeChar)
             {

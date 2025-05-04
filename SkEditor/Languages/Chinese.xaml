@@ -2,217 +2,217 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
-	<!-- 窗口标题 -->
-	<system:String x:Key="WindowTitlePublish">发布</system:String>
-	<system:String x:Key="WindowTitleRefactor">重构</system:String>
-	<system:String x:Key="WindowTitleSettings">设置</system:String>
-	<system:String x:Key="WindowTitleFontSelector">选择字体</system:String>
-	<system:String x:Key="WindowTitleSaveFilePicker">保存文件</system:String>
-	<system:String x:Key="WindowTitleOpenFilePicker">打开文件</system:String>
-	<system:String x:Key="WindowTitleGuiGenerator">生成GUI</system:String>
-	<system:String x:Key="WindowTitleCommandGenerator">生成命令</system:String>
-	<system:String x:Key="WindowTitleItemSelector">选择项目</system:String>
-	<system:String x:Key="WindowTitleMarketplace">市场</system:String>
+    <!-- 窗口标题 -->
+    <system:String x:Key="WindowTitlePublish">发布</system:String>
+    <system:String x:Key="WindowTitleRefactor">重构</system:String>
+    <system:String x:Key="WindowTitleSettings">设置</system:String>
+    <system:String x:Key="WindowTitleFontSelector">选择字体</system:String>
+    <system:String x:Key="WindowTitleSaveFilePicker">保存文件</system:String>
+    <system:String x:Key="WindowTitleOpenFilePicker">打开文件</system:String>
+    <system:String x:Key="WindowTitleGuiGenerator">生成GUI</system:String>
+    <system:String x:Key="WindowTitleCommandGenerator">生成命令</system:String>
+    <system:String x:Key="WindowTitleItemSelector">选择项目</system:String>
+    <system:String x:Key="WindowTitleMarketplace">市场</system:String>
 
-	<!-- 菜单头部 -->
-	<system:String x:Key="MenuHeaderFile">文件</system:String>
-	<system:String x:Key="MenuHeaderEdit">编辑</system:String>
-	<system:String x:Key="MenuHeaderTools">工具</system:String>
-	<system:String x:Key="MenuHeaderOther">其他</system:String>
+    <!-- 菜单头部 -->
+    <system:String x:Key="MenuHeaderFile">文件</system:String>
+    <system:String x:Key="MenuHeaderEdit">编辑</system:String>
+    <system:String x:Key="MenuHeaderTools">工具</system:String>
+    <system:String x:Key="MenuHeaderOther">其他</system:String>
 
-	<!-- 文件菜单 -->
-	<system:String x:Key="MenuHeaderNew">新建</system:String>
-	<system:String x:Key="MenuHeaderOpen">打开</system:String>
-	<system:String x:Key="MenuHeaderSave">保存</system:String>
-	<system:String x:Key="MenuHeaderSaveAs">另存为</system:String>
-	<system:String x:Key="MenuHeaderPublish">发布</system:String>
-	<system:String x:Key="MenuHeaderClose">关闭</system:String>
+    <!-- 文件菜单 -->
+    <system:String x:Key="MenuHeaderNew">新建</system:String>
+    <system:String x:Key="MenuHeaderOpen">打开</system:String>
+    <system:String x:Key="MenuHeaderSave">保存</system:String>
+    <system:String x:Key="MenuHeaderSaveAs">另存为</system:String>
+    <system:String x:Key="MenuHeaderPublish">发布</system:String>
+    <system:String x:Key="MenuHeaderClose">关闭</system:String>
 
-	<!-- 编辑菜单 -->
-	<system:String x:Key="MenuHeaderCopy">复制</system:String>
-	<system:String x:Key="MenuHeaderPaste">粘贴</system:String>
-	<system:String x:Key="MenuHeaderCut">剪切</system:String>
-	<system:String x:Key="MenuHeaderUndo">撤销</system:String>
-	<system:String x:Key="MenuHeaderRedo">重做</system:String>
-	<system:String x:Key="MenuHeaderDuplicate">复制</system:String>
-	<system:String x:Key="MenuHeaderComment">注释</system:String>
-	<system:String x:Key="MenuHeaderDelete">删除</system:String>
+    <!-- 编辑菜单 -->
+    <system:String x:Key="MenuHeaderCopy">复制</system:String>
+    <system:String x:Key="MenuHeaderPaste">粘贴</system:String>
+    <system:String x:Key="MenuHeaderCut">剪切</system:String>
+    <system:String x:Key="MenuHeaderUndo">撤销</system:String>
+    <system:String x:Key="MenuHeaderRedo">重做</system:String>
+    <system:String x:Key="MenuHeaderDuplicate">复制</system:String>
+    <system:String x:Key="MenuHeaderComment">注释</system:String>
+    <system:String x:Key="MenuHeaderDelete">删除</system:String>
 
-	<!-- 工具菜单 -->
-	<system:String x:Key="MenuHeaderDocumentation">文档</system:String>
-	<system:String x:Key="MenuHeaderGenerate">生成</system:String>
-	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
-	<system:String x:Key="MenuHeaderGenerateCommand">命令</system:String>
-	<system:String x:Key="MenuHeaderRefactor">重构</system:String>
+    <!-- 工具菜单 -->
+    <system:String x:Key="MenuHeaderDocumentation">文档</system:String>
+    <system:String x:Key="MenuHeaderGenerate">生成</system:String>
+    <system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
+    <system:String x:Key="MenuHeaderGenerateCommand">命令</system:String>
+    <system:String x:Key="MenuHeaderRefactor">重构</system:String>
 
-	<!-- 其他菜单 -->
-	<system:String x:Key="MenuHeaderMarketplace">市场</system:String>
-	<system:String x:Key="MenuHeaderRefreshSyntax">刷新语法</system:String>
+    <!-- 其他菜单 -->
+    <system:String x:Key="MenuHeaderMarketplace">市场</system:String>
+    <system:String x:Key="MenuHeaderRefreshSyntax">刷新语法</system:String>
 
-	<!-- 按钮 -->
-	<system:String x:Key="ApplyButton">应用</system:String>
-	<system:String x:Key="ConfirmButton">确认</system:String>
-	<system:String x:Key="CloseButton">关闭</system:String>
-	<system:String x:Key="SelectButton">选择</system:String>
-	<system:String x:Key="CancelButton">取消</system:String>
-	<system:String x:Key="ContinueButton">继续</system:String>
-	<system:String x:Key="Error">错误</system:String>
-	<system:String x:Key="Success">成功</system:String>
-	<system:String x:Key="Attention">注意！</system:String>
-	<system:String x:Key="Yes">是</system:String>
-	<system:String x:Key="No">否</system:String>
-	<system:String x:Key="Okay">确定</system:String>
+    <!-- 按钮 -->
+    <system:String x:Key="ApplyButton">应用</system:String>
+    <system:String x:Key="ConfirmButton">确认</system:String>
+    <system:String x:Key="CloseButton">关闭</system:String>
+    <system:String x:Key="SelectButton">选择</system:String>
+    <system:String x:Key="CancelButton">取消</system:String>
+    <system:String x:Key="ContinueButton">继续</system:String>
+    <system:String x:Key="Error">错误</system:String>
+    <system:String x:Key="Success">成功</system:String>
+    <system:String x:Key="Attention">注意！</system:String>
+    <system:String x:Key="Yes">是</system:String>
+    <system:String x:Key="No">否</system:String>
+    <system:String x:Key="Okay">确定</system:String>
 
-	<!-- 消息 -->
-	<system:String x:Key="NewFileNameFormat">新文件 {0}</system:String>
-	<system:String x:Key="FailedToDownloadSyntax">无法下载语法高亮文件！请检查您的互联网连接。否则，您的代码将无法高亮显示。</system:String>
-	<system:String x:Key="DownloadingMissingFilesTitle">缺少文件</system:String>
-	<system:String x:Key="Downloading">正在下载</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionItems">项目选择器使用的文件丢失，正在下载中。</system:String>
-	<system:String x:Key="DownloadMissingFilesFailed">无法下载缺失的文件。请稍后重试。</system:String>
-	<system:String x:Key="ClosingUnsavedFile">此文件有未保存的更改。确定要关闭吗？</system:String>
-	<system:String x:Key="ClosingProgramWithUnsavedFiles">至少有一个文件有未保存的更改。确定要关闭应用程序吗？</system:String>
-	<system:String x:Key="ChangesDetected">此文件已在外部更改。\n是否要重新加载它，可能会丢失在SkEditor中进行的更改？</system:String>
-	<system:String x:Key="DownloadingUpdateTitle">正在下载更新</system:String>
-	<system:String x:Key="UpdateAvailable">有更新</system:String>
-	<system:String x:Key="UpdateAvailableMessage">有更新可用。\n您要立即下载吗？</system:String>
-	<system:String x:Key="UpdateFailed">无法下载更新。请稍后重试。</system:String>
-
-
-	<!-- 发布窗口 -->
-	<system:String x:Key="PublishWindowApiKeyHint">点击这里打开一个包含API密钥的网站。请确保先登录！</system:String>
-	<system:String x:Key="PublishWindowAnonymously">匿名</system:String>
-	<system:String x:Key="PublishWindowResultLink">您代码的链接</system:String>
-	<system:String x:Key="PublishWindowPublishButton">发布</system:String>
-
-	<!-- Refactor Window -->
-	<system:String x:Key="RefactorWindowRemoveComments">移除注释</system:String>
-	<system:String x:Key="RefactorWindowTabsToSpaces">将Tab转换为空格</system:String>
-	<system:String x:Key="RefactorWindowSpacesToTabs">将空格转换为Tab</system:String>
-
-	<!-- 设置 -->
-	<system:String x:Key="SettingsEnabled">已启用</system:String>
-	<system:String x:Key="SettingsDisabled">已禁用</system:String>
-
-	<!-- 设置主页 -->
-	<system:String x:Key="SettingsHomeTitle">设置</system:String>
-	<system:String x:Key="SettingsHomeGeneral">常规</system:String>
-	<system:String x:Key="SettingsHomeGeneralDescription">语言，文本编辑器功能</system:String>
-	<system:String x:Key="SettingsHomePersonalization">个性化</system:String>
-	<system:String x:Key="SettingsHomePersonalizationDescription">主题，字体，语法高亮</system:String>
-	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
-	<system:String x:Key="SettingsHomeDiscordDescription">在Discord配置文件中显示SkEditor！</system:String>
-	<system:String x:Key="SettingsHomeExperiments">实验</system:String>
-	<system:String x:Key="SettingsHomeExperimentsDescription">测试即将推出的功能！</system:String>
-	<system:String x:Key="SettingsHomeAddons">插件</system:String>
-	<system:String x:Key="SettingsHomeAddonsDescription">通过强大的插件增强您的体验！</system:String>
-	<system:String x:Key="SettingsHomeAbout">关于</system:String>
-
-	<!-- 常规设置 -->
-	<system:String x:Key="SettingsGeneralTitle">常规</system:String>
-	<system:String x:Key="SettingsGeneralLanguage">语言</system:String>
-	<system:String x:Key="SettingsGeneralWrapping">换行</system:String>
-	<system:String x:Key="SettingsGeneralAutoIndent">自动缩进</system:String>
-	<system:String x:Key="SettingsGeneralAutoIndentDescription">如果前一行以冒号结尾，新行中自动插入制表符。</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairing">自动配对</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairingDescription">输入某些符号的开头时，自动添加结束字符。</system:String>
-	<system:String x:Key="SettingsGeneralAutoSave">自动保存</system:String>
-	<system:String x:Key="SettingsGeneralAutoSaveDescription">每次更改时自动保存文件。</system:String>
-	<system:String x:Key="SettingsGeneralRpc">Discord富文本</system:String>
-	<system:String x:Key="SettingsGeneralRpcDescription">在您的Discord状态中显示SkEditor。</system:String>
-
-	<!-- 关于设置 -->
-	<system:String x:Key="SettingsAboutTitle">关于</system:String>
-	<system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
-	<system:String x:Key="SettingsAboutSkEditorDescription">SkEditor是由Notro创建的用于编辑Skript文件的应用程序。</system:String>
-	<system:String x:Key="SettingsAboutVersion">版本</system:String>
-	<system:String x:Key="SettingsAboutVersionDescription">您正在运行版本：{0}</system:String>
-	<system:String x:Key="SettingsAboutGithub">GitHub</system:String>
-	<system:String x:Key="SettingsAboutGithubDescription">单击打开SkEditor的GitHub存储库！</system:String>
-	<system:String x:Key="SettingsAboutDiscord">Discord服务器</system:String>
-	<system:String x:Key="SettingsAboutDiscordDescription">单击加入SkEditor的Discord服务器！</system:String>
-
-	<!-- 个性化设置 -->
-	<system:String x:Key="SettingsPersonalizationTitle">个性化</system:String>
-	<system:String x:Key="SettingsPersonalizationTheme">主题</system:String>
-	<system:String x:Key="SettingsPersonalizationThemeDescription">自定义应用程序的颜色。</system:String>
-	<system:String x:Key="SettingsPersonalizationSyntax">语法高亮</system:String>
-	<system:String x:Key="SettingsPersonalizationFont">字体</system:String>
-	<system:String x:Key="SettingsPersonalizationFontDescription">当前字体：{0}</system:String>
-
-	<!-- 主题设置 -->
-	<system:String x:Key="SettingsThemeTitle">主题</system:String>
-	<system:String x:Key="SettingsThemeInformation">将来，您将能够直接从这里编辑颜色。目前，请在Themes文件夹中创建和编辑文件。</system:String>
-	<system:String x:Key="SettingsThemeOpenFolder">打开文件夹</system:String>
-	<system:String x:Key="SettingsThemeCurrentTheme">当前主题</system:String>
-	<system:String x:Key="SettingsThemeCurrentThemeDescription">无需重新启动，但可能需要进行100％的颜色更新。</system:String>
-
-	<!-- 插件设置 -->
-	<system:String x:Key="SettingsAddonsTitle">插件</system:String>
-
-	<!-- Discord富文本 -->
-	<system:String x:Key="DiscordRpcEditing">正在编辑：{0}</system:String>
-
-	<!-- 底部栏 -->
-	<system:String x:Key="BottomBarLine">行 {0}</system:String>
-	<system:String x:Key="BottomBarColumn">列 {0}</system:String>
+    <!-- 消息 -->
+    <system:String x:Key="NewFileNameFormat">新文件 {0}</system:String>
+    <system:String x:Key="FailedToDownloadSyntax">无法下载语法高亮文件！请检查您的互联网连接。否则，您的代码将无法高亮显示。</system:String>
+    <system:String x:Key="DownloadingMissingFilesTitle">缺少文件</system:String>
+    <system:String x:Key="Downloading">正在下载</system:String>
+    <system:String x:Key="DownloadingMissingFilesDescriptionItems">项目选择器使用的文件丢失，正在下载中。</system:String>
+    <system:String x:Key="DownloadMissingFilesFailed">无法下载缺失的文件。请稍后重试。</system:String>
+    <system:String x:Key="ClosingUnsavedFile">此文件有未保存的更改。确定要关闭吗？</system:String>
+    <system:String x:Key="ClosingProgramWithUnsavedFiles">至少有一个文件有未保存的更改。确定要关闭应用程序吗？</system:String>
+    <system:String x:Key="ChangesDetected">此文件已在外部更改。\n是否要重新加载它，可能会丢失在SkEditor中进行的更改？</system:String>
+    <system:String x:Key="DownloadingUpdateTitle">正在下载更新</system:String>
+    <system:String x:Key="UpdateAvailable">有更新</system:String>
+    <system:String x:Key="UpdateAvailableMessage">有更新可用。\n您要立即下载吗？</system:String>
+    <system:String x:Key="UpdateFailed">无法下载更新。请稍后重试。</system:String>
 
 
-	<!-- GUI生成器 -->
-	<system:String x:Key="GuiGeneratorTitle">标题</system:String>
-	<system:String x:Key="GuiGeneratorFunctionName">函数名称</system:String>
-	<system:String x:Key="GuiGeneratorRowQuantity">行数量</system:String>
-	<system:String x:Key="GuiGeneratorBackgroundItem">背景项</system:String>
-	<system:String x:Key="GuiGeneratorPreviewButton">预览</system:String>
-	<system:String x:Key="GuiGeneratorGenerateButton">生成</system:String>
-	<system:String x:Key="GuiGeneratorSkriptGui">使用skript-gui</system:String>
-	<system:String x:Key="GuiGeneratorDisplayName">显示名称</system:String>
-	<system:String x:Key="GuiGeneratorLore">说明</system:String>
-	<system:String x:Key="GuiGeneratorOptional">可选</system:String>
-	<system:String x:Key="GuiGeneratorCustomModelData">自定义模型数据 ID</system:String>
-	<system:String x:Key="GuiGeneratorLoreLineWatermark">右键单击以添加新行</system:String>
-	<system:String x:Key="GuiGeneratorAddLoreLine">添加新的说明行</system:String>
-	<system:String x:Key="GuiGeneratorAddExampleAction">添加示例操作</system:String>
+    <!-- 发布窗口 -->
+    <system:String x:Key="PublishWindowApiKeyHint">点击这里打开一个包含API密钥的网站。请确保先登录！</system:String>
+    <system:String x:Key="PublishWindowAnonymously">匿名</system:String>
+    <system:String x:Key="PublishWindowResultLink">您代码的链接</system:String>
+    <system:String x:Key="PublishWindowPublishButton">发布</system:String>
 
-	<!-- 命令生成器 -->
-	<system:String x:Key="CommandGeneratorName">名称</system:String>
-	<system:String x:Key="CommandGeneratorPermission">权限</system:String>
-	<system:String x:Key="CommandGeneratorNoPermissionMessage">无权限消息</system:String>
-	<system:String x:Key="CommandGeneratorAliases">别名</system:String>
-	<system:String x:Key="CommandGeneratorInvalidUsageMessage">无效的用法消息</system:String>
-	<system:String x:Key="CommandGeneratorWhoCanUseTheCommand">谁可以使用该命令</system:String>
-	<system:String x:Key="CommandGeneratorPlayer">玩家</system:String>
-	<system:String x:Key="CommandGeneratorConsole">控制台</system:String>
-	<system:String x:Key="CommandGeneratorCooldown">冷却时间</system:String>
-	<system:String x:Key="CommandGeneratorTicks">刻</system:String>
-	<system:String x:Key="CommandGeneratorSeconds">秒</system:String>
-	<system:String x:Key="CommandGeneratorMinutes">分钟</system:String>
-	<system:String x:Key="CommandGeneratorHours">小时</system:String>
-	<system:String x:Key="CommandGeneratorDays">天</system:String>
-	<system:String x:Key="CommandGeneratorWeeks">周</system:String>
-	<system:String x:Key="CommandGeneratorMonths">月</system:String>
-	<system:String x:Key="CommandGeneratorYears">年</system:String>
-	<system:String x:Key="CommandGeneratorGenerate">生成</system:String>
-	<system:String x:Key="CommandGeneratorPropertyMissing">{0}属性是必需的！</system:String>
+    <!-- Refactor Window -->
+    <system:String x:Key="RefactorWindowRemoveComments">移除注释</system:String>
+    <system:String x:Key="RefactorWindowTabsToSpaces">将Tab转换为空格</system:String>
+    <system:String x:Key="RefactorWindowSpacesToTabs">将空格转换为Tab</system:String>
 
-	<!-- 市场 -->
-	<system:String x:Key="MarketplaceSearch">搜索</system:String>
-	<system:String x:Key="MarketplaceEnableNow">立即启用</system:String>
-	<system:String x:Key="MarketplaceInstallSuccess">成功下载 {0}！</system:String>
-	<system:String x:Key="MarketplaceInstallRestart">请重新启动应用程序以加载插件。</system:String>
-	<system:String x:Key="MarketplaceInstallEnableNow">您要立即启用它吗？</system:String>
-	<system:String x:Key="MarketplaceInstallNoNeedToRestart">插件应该在不重新启动的情况下工作，但如果遇到错误，请重新启动应用程序。</system:String>
-	<system:String x:Key="MarketplaceInstallFailed">下载 {0} 失败！</system:String>
-	<system:String x:Key="MarketplaceUninstallSuccess">成功卸载 {0}！\n请重新启动应用程序以卸载插件。</system:String>
-	<system:String x:Key="MarketplaceUpdateSuccess">成功更新 {0}！\n请重新启动应用程序以加载插件。</system:String>
-	<system:String x:Key="MarketplaceUpdateFailed">更新 {0} 失败！</system:String>
-	<system:String x:Key="MarketplaceLoadFailed">尝试加载市场项目时出现问题。您是否连接到互联网？</system:String>
-	<system:String x:Key="MarketplaceInfo">这是一个非常简单的市场设计，只是为了让用户安装官方插件。它将在未来得到显著改进。</system:String>
-	<system:String x:Key="MarketplaceButtonInstall">安装</system:String>
-	<system:String x:Key="MarketplaceButtonUpdate">更新</system:String>
-	<system:String x:Key="MarketplaceButtonUninstall">卸载</system:String>
-	<system:String x:Key="MarketplaceButtonDisable">禁用</system:String>
-	<system:String x:Key="MarketplaceButtonEnable">启用</system:String>
+    <!-- 设置 -->
+    <system:String x:Key="SettingsEnabled">已启用</system:String>
+    <system:String x:Key="SettingsDisabled">已禁用</system:String>
+
+    <!-- 设置主页 -->
+    <system:String x:Key="SettingsHomeTitle">设置</system:String>
+    <system:String x:Key="SettingsHomeGeneral">常规</system:String>
+    <system:String x:Key="SettingsHomeGeneralDescription">语言，文本编辑器功能</system:String>
+    <system:String x:Key="SettingsHomePersonalization">个性化</system:String>
+    <system:String x:Key="SettingsHomePersonalizationDescription">主题，字体，语法高亮</system:String>
+    <system:String x:Key="SettingsHomeDiscord">Discord</system:String>
+    <system:String x:Key="SettingsHomeDiscordDescription">在Discord配置文件中显示SkEditor！</system:String>
+    <system:String x:Key="SettingsHomeExperiments">实验</system:String>
+    <system:String x:Key="SettingsHomeExperimentsDescription">测试即将推出的功能！</system:String>
+    <system:String x:Key="SettingsHomeAddons">插件</system:String>
+    <system:String x:Key="SettingsHomeAddonsDescription">通过强大的插件增强您的体验！</system:String>
+    <system:String x:Key="SettingsHomeAbout">关于</system:String>
+
+    <!-- 常规设置 -->
+    <system:String x:Key="SettingsGeneralTitle">常规</system:String>
+    <system:String x:Key="SettingsGeneralLanguage">语言</system:String>
+    <system:String x:Key="SettingsGeneralWrapping">换行</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndent">自动缩进</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndentDescription">如果前一行以冒号结尾，新行中自动插入制表符。</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairing">自动配对</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairingDescription">输入某些符号的开头时，自动添加结束字符。</system:String>
+    <system:String x:Key="SettingsGeneralAutoSave">自动保存</system:String>
+    <system:String x:Key="SettingsGeneralAutoSaveDescription">每次更改时自动保存文件。</system:String>
+    <system:String x:Key="SettingsGeneralRpc">Discord富文本</system:String>
+    <system:String x:Key="SettingsGeneralRpcDescription">在您的Discord状态中显示SkEditor。</system:String>
+
+    <!-- 关于设置 -->
+    <system:String x:Key="SettingsAboutTitle">关于</system:String>
+    <system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
+    <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor是由Notro创建的用于编辑Skript文件的应用程序。</system:String>
+    <system:String x:Key="SettingsAboutVersion">版本</system:String>
+    <system:String x:Key="SettingsAboutVersionDescription">您正在运行版本：{0}</system:String>
+    <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">单击打开SkEditor的GitHub存储库！</system:String>
+    <system:String x:Key="SettingsAboutDiscord">Discord服务器</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">单击加入SkEditor的Discord服务器！</system:String>
+
+    <!-- 个性化设置 -->
+    <system:String x:Key="SettingsPersonalizationTitle">个性化</system:String>
+    <system:String x:Key="SettingsPersonalizationTheme">主题</system:String>
+    <system:String x:Key="SettingsPersonalizationThemeDescription">自定义应用程序的颜色。</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntax">语法高亮</system:String>
+    <system:String x:Key="SettingsPersonalizationFont">字体</system:String>
+    <system:String x:Key="SettingsPersonalizationFontDescription">当前字体：{0}</system:String>
+
+    <!-- 主题设置 -->
+    <system:String x:Key="SettingsThemeTitle">主题</system:String>
+    <system:String x:Key="SettingsThemeInformation">将来，您将能够直接从这里编辑颜色。目前，请在Themes文件夹中创建和编辑文件。</system:String>
+    <system:String x:Key="SettingsThemeOpenFolder">打开文件夹</system:String>
+    <system:String x:Key="SettingsThemeCurrentTheme">当前主题</system:String>
+    <system:String x:Key="SettingsThemeCurrentThemeDescription">无需重新启动，但可能需要进行100％的颜色更新。</system:String>
+
+    <!-- 插件设置 -->
+    <system:String x:Key="SettingsAddonsTitle">插件</system:String>
+
+    <!-- Discord富文本 -->
+    <system:String x:Key="DiscordRpcEditing">正在编辑：{0}</system:String>
+
+    <!-- 底部栏 -->
+    <system:String x:Key="BottomBarLine">行 {0}</system:String>
+    <system:String x:Key="BottomBarColumn">列 {0}</system:String>
+
+
+    <!-- GUI生成器 -->
+    <system:String x:Key="GuiGeneratorTitle">标题</system:String>
+    <system:String x:Key="GuiGeneratorFunctionName">函数名称</system:String>
+    <system:String x:Key="GuiGeneratorRowQuantity">行数量</system:String>
+    <system:String x:Key="GuiGeneratorBackgroundItem">背景项</system:String>
+    <system:String x:Key="GuiGeneratorPreviewButton">预览</system:String>
+    <system:String x:Key="GuiGeneratorGenerateButton">生成</system:String>
+    <system:String x:Key="GuiGeneratorSkriptGui">使用skript-gui</system:String>
+    <system:String x:Key="GuiGeneratorDisplayName">显示名称</system:String>
+    <system:String x:Key="GuiGeneratorLore">说明</system:String>
+    <system:String x:Key="GuiGeneratorOptional">可选</system:String>
+    <system:String x:Key="GuiGeneratorCustomModelData">自定义模型数据 ID</system:String>
+    <system:String x:Key="GuiGeneratorLoreLineWatermark">右键单击以添加新行</system:String>
+    <system:String x:Key="GuiGeneratorAddLoreLine">添加新的说明行</system:String>
+    <system:String x:Key="GuiGeneratorAddExampleAction">添加示例操作</system:String>
+
+    <!-- 命令生成器 -->
+    <system:String x:Key="CommandGeneratorName">名称</system:String>
+    <system:String x:Key="CommandGeneratorPermission">权限</system:String>
+    <system:String x:Key="CommandGeneratorNoPermissionMessage">无权限消息</system:String>
+    <system:String x:Key="CommandGeneratorAliases">别名</system:String>
+    <system:String x:Key="CommandGeneratorInvalidUsageMessage">无效的用法消息</system:String>
+    <system:String x:Key="CommandGeneratorWhoCanUseTheCommand">谁可以使用该命令</system:String>
+    <system:String x:Key="CommandGeneratorPlayer">玩家</system:String>
+    <system:String x:Key="CommandGeneratorConsole">控制台</system:String>
+    <system:String x:Key="CommandGeneratorCooldown">冷却时间</system:String>
+    <system:String x:Key="CommandGeneratorTicks">刻</system:String>
+    <system:String x:Key="CommandGeneratorSeconds">秒</system:String>
+    <system:String x:Key="CommandGeneratorMinutes">分钟</system:String>
+    <system:String x:Key="CommandGeneratorHours">小时</system:String>
+    <system:String x:Key="CommandGeneratorDays">天</system:String>
+    <system:String x:Key="CommandGeneratorWeeks">周</system:String>
+    <system:String x:Key="CommandGeneratorMonths">月</system:String>
+    <system:String x:Key="CommandGeneratorYears">年</system:String>
+    <system:String x:Key="CommandGeneratorGenerate">生成</system:String>
+    <system:String x:Key="CommandGeneratorPropertyMissing">{0}属性是必需的！</system:String>
+
+    <!-- 市场 -->
+    <system:String x:Key="MarketplaceSearch">搜索</system:String>
+    <system:String x:Key="MarketplaceEnableNow">立即启用</system:String>
+    <system:String x:Key="MarketplaceInstallSuccess">成功下载 {0}！</system:String>
+    <system:String x:Key="MarketplaceInstallRestart">请重新启动应用程序以加载插件。</system:String>
+    <system:String x:Key="MarketplaceInstallEnableNow">您要立即启用它吗？</system:String>
+    <system:String x:Key="MarketplaceInstallNoNeedToRestart">插件应该在不重新启动的情况下工作，但如果遇到错误，请重新启动应用程序。</system:String>
+    <system:String x:Key="MarketplaceInstallFailed">下载 {0} 失败！</system:String>
+    <system:String x:Key="MarketplaceUninstallSuccess">成功卸载 {0}！\n请重新启动应用程序以卸载插件。</system:String>
+    <system:String x:Key="MarketplaceUpdateSuccess">成功更新 {0}！\n请重新启动应用程序以加载插件。</system:String>
+    <system:String x:Key="MarketplaceUpdateFailed">更新 {0} 失败！</system:String>
+    <system:String x:Key="MarketplaceLoadFailed">尝试加载市场项目时出现问题。您是否连接到互联网？</system:String>
+    <system:String x:Key="MarketplaceInfo">这是一个非常简单的市场设计，只是为了让用户安装官方插件。它将在未来得到显著改进。</system:String>
+    <system:String x:Key="MarketplaceButtonInstall">安装</system:String>
+    <system:String x:Key="MarketplaceButtonUpdate">更新</system:String>
+    <system:String x:Key="MarketplaceButtonUninstall">卸载</system:String>
+    <system:String x:Key="MarketplaceButtonDisable">禁用</system:String>
+    <system:String x:Key="MarketplaceButtonEnable">启用</system:String>
 
 
 </ResourceDictionary>

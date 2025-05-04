@@ -1,22 +1,24 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using SkEditor.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
+using SkEditor.API;
 
 namespace SkEditor.Utilities;
 
 public static class Translation
 {
+    private static readonly Dictionary<string, ResourceDictionary> Translations = [];
     public static string LanguagesFolder { get; } = $"{AppContext.BaseDirectory}/Languages";
 
     public static string Get(string key, params string[] parameters)
     {
-        Application.Current.TryGetResource(key, Avalonia.Styling.ThemeVariant.Default, out object translation);
+        Application.Current.TryGetResource(key, ThemeVariant.Default, out object translation);
         string translationString = translation?.ToString() ?? key;
         translationString = translationString.Replace("\\n", Environment.NewLine);
 
@@ -27,8 +29,6 @@ public static class Translation
 
         return translationString;
     }
-
-    private static readonly Dictionary<string, ResourceDictionary> Translations = [];
 
     public static async Task ChangeLanguage(string language)
     {
@@ -49,7 +49,7 @@ public static class Translation
             return;
         }
 
-        await using var languageStream = new FileStream(languageXaml.OriginalString, FileMode.Open, FileAccess.Read,
+        await using FileStream languageStream = new(languageXaml.OriginalString, FileMode.Open, FileAccess.Read,
             FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
 
         if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)

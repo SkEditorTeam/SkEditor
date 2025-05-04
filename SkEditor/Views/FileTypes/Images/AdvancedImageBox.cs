@@ -1,5 +1,12 @@
-namespace SkEditor.Views.FileTypes.Images;
-
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.IO;
+using System.Runtime.CompilerServices;
 using AsyncImageLoader;
 using Avalonia;
 using Avalonia.Controls;
@@ -11,50 +18,46 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.IO;
-using System.Runtime.CompilerServices;
-using Bitmap = Avalonia.Media.Imaging.Bitmap;
-using Brushes = Avalonia.Media.Brushes;
 using Color = Avalonia.Media.Color;
-using Pen = Avalonia.Media.Pen;
 using Point = Avalonia.Point;
 using Size = Avalonia.Size;
+
+namespace SkEditor.Views.FileTypes.Images;
+
+using Bitmap = Bitmap;
+using Brushes = Brushes;
+using Color = Color;
+using Pen = Pen;
+using Point = Point;
+using Size = Size;
 
 [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
 public sealed class AdvancedImageBox : TemplatedControl
 {
-    #region Bindable Base
+    #region Constructor
 
-    /// <summary>
-    /// Multicast event for property change notifications.
-    /// </summary>
-    private PropertyChangedEventHandler? _propertyChanged;
-
-    public new event PropertyChangedEventHandler PropertyChanged
+    /// <inheritdoc />
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        add => _propertyChanged += value;
-        remove => _propertyChanged -= value;
-    }
+        base.OnApplyTemplate(e);
 
-    /// <summary>
-    ///     Notifies listeners that a property value has changed.
-    /// </summary>
-    /// <param name="propertyName">
-    ///     Name of the property used to notify listeners.  This
-    ///     value is optional and can be provided automatically when invoked from compilers
-    ///     that support <see cref="CallerMemberNameAttribute" />.
-    /// </param>
-    private void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        var e = new PropertyChangedEventArgs(propertyName);
-        _propertyChanged?.Invoke(this, e);
+        // FocusableProperty.OverrideDefaultValue(typeof(AdvancedImageBox), true);
+        AffectsRender<AdvancedImageBox>(ShowGridProperty);
+
+        HorizontalScrollBar =
+            e.NameScope.Find<ScrollBar>("PART_HorizontalScrollBar") ?? throw new NullReferenceException();
+        VerticalScrollBar = e.NameScope.Find<ScrollBar>("PART_VerticalScrollBar") ?? throw new NullReferenceException();
+        ViewPort = e.NameScope.Find<ContentPresenter>("PART_ViewPort") ?? throw new NullReferenceException();
+
+        SizeModeChanged();
+
+        HorizontalScrollBar.Scroll += ScrollBarOnScroll;
+        VerticalScrollBar.Scroll += ScrollBarOnScroll;
+
+        // ViewPort.PointerPressed += ViewPortOnPointerPressed;
+        // ViewPort.PointerExited += ViewPortOnPointerExited;
+        // ViewPort.PointerMoved += ViewPortOnPointerMoved;
+        // ViewPort!.PointerWheelChanged += ViewPort_OnPointerWheelChanged;
     }
 
     #endregion
@@ -62,39 +65,14 @@ public sealed class AdvancedImageBox : TemplatedControl
     #region Sub Classes
 
     /// <summary>
-    /// Represents available levels of zoom in an <see cref="AdvancedImageBox"/> control
+    ///     Represents available levels of zoom in an <see cref="AdvancedImageBox" /> control
     /// </summary>
     public class ZoomLevelCollection : IList<int>
     {
-        #region Public Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ZoomLevelCollection"/> class.
-        /// </summary>
-        public ZoomLevelCollection()
-        {
-            List = new SortedList<int, int>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ZoomLevelCollection"/> class.
-        /// </summary>
-        /// <param name="collection">The default values to populate the collection with.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if the <c>collection</c> parameter is null</exception>
-        public ZoomLevelCollection(IEnumerable<int> collection)
-            : this()
-        {
-            ArgumentNullException.ThrowIfNull(collection);
-
-            AddRange(collection);
-        }
-
-        #endregion
-
         #region Public Class Properties
 
         /// <summary>
-        /// Returns the default zoom levels
+        ///     Returns the default zoom levels
         /// </summary>
         public static ZoomLevelCollection Default =>
             new(
@@ -139,26 +117,74 @@ public sealed class AdvancedImageBox : TemplatedControl
 
         #endregion
 
+        #region Protected Properties
+
+        /// <summary>
+        ///     Gets or sets the backing list.
+        /// </summary>
+        protected SortedList<int, int> List { get; set; }
+
+        #endregion
+
+        #region IList<int> Members
+
+        /// <summary>
+        ///     Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>An <see cref="ZoomLevelCollection" /> object that can be used to iterate through the collection.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        #endregion
+
+        #region Public Constructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ZoomLevelCollection" /> class.
+        /// </summary>
+        public ZoomLevelCollection()
+        {
+            List = new SortedList<int, int>();
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ZoomLevelCollection" /> class.
+        /// </summary>
+        /// <param name="collection">The default values to populate the collection with.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown if the <c>collection</c> parameter is null</exception>
+        public ZoomLevelCollection(IEnumerable<int> collection)
+            : this()
+        {
+            ArgumentNullException.ThrowIfNull(collection);
+
+            AddRange(collection);
+        }
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="ZoomLevelCollection" />.
+        ///     Gets the number of elements contained in the <see cref="ZoomLevelCollection" />.
         /// </summary>
         /// <returns>
-        /// The number of elements contained in the <see cref="ZoomLevelCollection" />.
+        ///     The number of elements contained in the <see cref="ZoomLevelCollection" />.
         /// </returns>
         public int Count => List.Count;
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
+        ///     Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
         /// </summary>
         /// <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
-        /// <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only; otherwise, false.
+        /// <returns>
+        ///     true if the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only; otherwise, false.
         /// </returns>
         public bool IsReadOnly => false;
 
         /// <summary>
-        /// Gets or sets the zoom level at the specified index.
+        ///     Gets or sets the zoom level at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         public int this[int index]
@@ -173,19 +199,10 @@ public sealed class AdvancedImageBox : TemplatedControl
 
         #endregion
 
-        #region Protected Properties
-
-        /// <summary>
-        /// Gets or sets the backing list.
-        /// </summary>
-        protected SortedList<int, int> List { get; set; }
-
-        #endregion
-
         #region Public Members
 
         /// <summary>
-        /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
+        ///     Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
         public void Add(int item)
@@ -194,7 +211,7 @@ public sealed class AdvancedImageBox : TemplatedControl
         }
 
         /// <summary>
-        /// Adds a range of items to the <see cref="ZoomLevelCollection"/>.
+        ///     Adds a range of items to the <see cref="ZoomLevelCollection" />.
         /// </summary>
         /// <param name="collection">The items to add to the collection.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if the <c>collection</c> parameter is null.</exception>
@@ -202,14 +219,14 @@ public sealed class AdvancedImageBox : TemplatedControl
         {
             ArgumentNullException.ThrowIfNull(collection);
 
-            foreach (var value in collection)
+            foreach (int value in collection)
             {
                 Add(value);
             }
         }
 
         /// <summary>
-        /// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.
+        ///     Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
         public void Clear()
         {
@@ -217,40 +234,46 @@ public sealed class AdvancedImageBox : TemplatedControl
         }
 
         /// <summary>
-        /// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
+        ///     Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
         /// </summary>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
-        /// <returns>true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.</returns>
+        /// <returns>
+        ///     true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />;
+        ///     otherwise, false.
+        /// </returns>
         public bool Contains(int item)
         {
             return List.ContainsKey(item);
         }
 
         /// <summary>
-        /// Copies a range of elements this collection into a destination <see cref="Array"/>.
+        ///     Copies a range of elements this collection into a destination <see cref="Array" />.
         /// </summary>
-        /// <param name="array">The <see cref="Array"/> that receives the data.</param>
-        /// <param name="arrayIndex">A 64-bit integer that represents the index in the <see cref="Array"/> at which storing begins.</param>
+        /// <param name="array">The <see cref="Array" /> that receives the data.</param>
+        /// <param name="arrayIndex">
+        ///     A 64-bit integer that represents the index in the <see cref="Array" /> at which storing
+        ///     begins.
+        /// </param>
         public void CopyTo(int[] array, int arrayIndex)
         {
-            for (var i = 0; i < Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 array[arrayIndex + i] = List.Values[i];
             }
         }
 
         /// <summary>
-        /// Finds the index of a zoom level matching or nearest to the specified value.
+        ///     Finds the index of a zoom level matching or nearest to the specified value.
         /// </summary>
         /// <param name="zoomLevel">The zoom level.</param>
         public int FindNearest(int zoomLevel)
         {
-            var nearestValue = List.Values[0];
-            var nearestDifference = Math.Abs(nearestValue - zoomLevel);
-            for (var i = 1; i < Count; i++)
+            int nearestValue = List.Values[0];
+            int nearestDifference = Math.Abs(nearestValue - zoomLevel);
+            for (int i = 1; i < Count; i++)
             {
-                var value = List.Values[i];
-                var difference = Math.Abs(value - zoomLevel);
+                int value = List.Values[i];
+                int difference = Math.Abs(value - zoomLevel);
                 if (difference < nearestDifference)
                 {
                     nearestValue = value;
@@ -262,16 +285,19 @@ public sealed class AdvancedImageBox : TemplatedControl
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through the collection.
+        ///     Returns an enumerator that iterates through the collection.
         /// </summary>
-        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.</returns>
+        /// <returns>
+        ///     A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the
+        ///     collection.
+        /// </returns>
         public IEnumerator<int> GetEnumerator()
         {
             return List.Values.GetEnumerator();
         }
 
         /// <summary>
-        /// Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1" />.
+        ///     Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1" />.
         /// </summary>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
         /// <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
@@ -281,7 +307,7 @@ public sealed class AdvancedImageBox : TemplatedControl
         }
 
         /// <summary>
-        /// Not implemented.
+        ///     Not implemented.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <param name="item">The item.</param>
@@ -292,47 +318,56 @@ public sealed class AdvancedImageBox : TemplatedControl
         }
 
         /// <summary>
-        /// Returns the next increased zoom level for the given current zoom.
+        ///     Returns the next increased zoom level for the given current zoom.
         /// </summary>
         /// <param name="zoomLevel">The current zoom level.</param>
         /// <param name="constrainZoomLevel">When positive, constrain maximum zoom to this value</param>
         /// <returns>The next matching increased zoom level for the given current zoom if applicable, otherwise the nearest zoom.</returns>
         public int NextZoom(int zoomLevel, int constrainZoomLevel = 0)
         {
-            var index = IndexOf(FindNearest(zoomLevel));
+            int index = IndexOf(FindNearest(zoomLevel));
             if (index < Count - 1)
+            {
                 index++;
+            }
 
             return constrainZoomLevel > 0 && this[index] >= constrainZoomLevel ? constrainZoomLevel : this[index];
         }
 
         /// <summary>
-        /// Returns the next decreased zoom level for the given current zoom.
+        ///     Returns the next decreased zoom level for the given current zoom.
         /// </summary>
         /// <param name="zoomLevel">The current zoom level.</param>
         /// <param name="constrainZoomLevel">When positive, constrain minimum zoom to this value</param>
         /// <returns>The next matching decreased zoom level for the given current zoom if applicable, otherwise the nearest zoom.</returns>
         public int PreviousZoom(int zoomLevel, int constrainZoomLevel = 0)
         {
-            var index = IndexOf(FindNearest(zoomLevel));
+            int index = IndexOf(FindNearest(zoomLevel));
             if (index > 0)
+            {
                 index--;
+            }
 
             return constrainZoomLevel > 0 && this[index] <= constrainZoomLevel ? constrainZoomLevel : this[index];
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
+        ///     Removes the first occurrence of a specific object from the
+        ///     <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
         /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
-        /// <returns>true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
+        /// <returns>
+        ///     true if <paramref name="item" /> was successfully removed from the
+        ///     <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if
+        ///     <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.
+        /// </returns>
         public bool Remove(int item)
         {
             return List.Remove(item);
         }
 
         /// <summary>
-        /// Removes the element at the specified index of the <see cref="ZoomLevelCollection"/>.
+        ///     Removes the element at the specified index of the <see cref="ZoomLevelCollection" />.
         /// </summary>
         /// <param name="index">The zero-based index of the element to remove.</param>
         public void RemoveAt(int index)
@@ -341,28 +376,15 @@ public sealed class AdvancedImageBox : TemplatedControl
         }
 
         /// <summary>
-        /// Copies the elements of the <see cref="ZoomLevelCollection"/> to a new array.
+        ///     Copies the elements of the <see cref="ZoomLevelCollection" /> to a new array.
         /// </summary>
-        /// <returns>An array containing copies of the elements of the <see cref="ZoomLevelCollection"/>.</returns>
+        /// <returns>An array containing copies of the elements of the <see cref="ZoomLevelCollection" />.</returns>
         public int[] ToArray()
         {
-            var results = new int[Count];
+            int[] results = new int[Count];
             CopyTo(results, 0);
 
             return results;
-        }
-
-        #endregion
-
-        #region IList<int> Members
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>An <see cref="ZoomLevelCollection" /> object that can be used to iterate through the collection.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         #endregion
@@ -370,25 +392,55 @@ public sealed class AdvancedImageBox : TemplatedControl
 
     #endregion
 
+    #region Bindable Base
+
+    /// <summary>
+    ///     Multicast event for property change notifications.
+    /// </summary>
+    private PropertyChangedEventHandler? _propertyChanged;
+
+    public new event PropertyChangedEventHandler PropertyChanged
+    {
+        add => _propertyChanged += value;
+        remove => _propertyChanged -= value;
+    }
+
+    /// <summary>
+    ///     Notifies listeners that a property value has changed.
+    /// </summary>
+    /// <param name="propertyName">
+    ///     Name of the property used to notify listeners.  This
+    ///     value is optional and can be provided automatically when invoked from compilers
+    ///     that support <see cref="CallerMemberNameAttribute" />.
+    /// </param>
+    private void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChangedEventArgs e = new(propertyName);
+        _propertyChanged?.Invoke(this, e);
+    }
+
+    #endregion
+
     #region Enums
 
     /// <summary>
-    /// Determines the sizing mode of an image hosted in an <see cref="AdvancedImageBox" /> control.
+    ///     Determines the sizing mode of an image hosted in an <see cref="AdvancedImageBox" /> control.
     /// </summary>
     public enum SizeModes : byte
     {
         /// <summary>
-        /// The image is displayed according to current zoom and scroll properties.
+        ///     The image is displayed according to current zoom and scroll properties.
         /// </summary>
         Normal,
 
         /// <summary>
-        /// The image is stretched to fill the client area of the control.
+        ///     The image is stretched to fill the client area of the control.
         /// </summary>
         Stretch,
 
         /// <summary>
-        /// The image is stretched to fill as much of the client area of the control as possible, whilst retaining the same aspect ratio for the width and height.
+        ///     The image is stretched to fill as much of the client area of the control as possible, whilst retaining the same
+        ///     aspect ratio for the width and height.
         /// </summary>
         Fit
     }
@@ -403,28 +455,28 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    /// Describes the zoom action occurring
+    ///     Describes the zoom action occurring
     /// </summary>
     [Flags]
     public enum ZoomActions : byte
     {
         /// <summary>
-        /// No action.
+        ///     No action.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// The control is increasing the zoom.
+        ///     The control is increasing the zoom.
         /// </summary>
         ZoomIn = 1,
 
         /// <summary>
-        /// The control is decreasing the zoom.
+        ///     The control is decreasing the zoom.
         /// </summary>
         ZoomOut = 2,
 
         /// <summary>
-        /// The control zoom was reset.
+        ///     The control zoom was reset.
         /// </summary>
         ActualSize = 4
     }
@@ -432,17 +484,17 @@ public sealed class AdvancedImageBox : TemplatedControl
     public enum SelectionModes
     {
         /// <summary>
-        ///   No selection.
+        ///     No selection.
         /// </summary>
         None,
 
         /// <summary>
-        ///   Rectangle selection.
+        ///     Rectangle selection.
         /// </summary>
         Rectangle,
 
         /// <summary>
-        ///   Zoom selection.
+        ///     Zoom selection.
         /// </summary>
         Zoom
     }
@@ -496,7 +548,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(CanRender), o => o.CanRender);
 
     /// <summary>
-    /// Gets or sets if control can render the image
+    ///     Gets or sets if control can render the image
     /// </summary>
     public bool CanRender
     {
@@ -504,9 +556,14 @@ public sealed class AdvancedImageBox : TemplatedControl
         set
         {
             if (!SetAndRaise(CanRenderProperty, ref _canRender, value))
+            {
                 return;
+            }
+
             if (_canRender)
+            {
                 TriggerRender();
+            }
         }
     }
 
@@ -516,7 +573,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(GridCellSize), 15);
 
     /// <summary>
-    /// Gets or sets the grid cell size
+    ///     Gets or sets the grid cell size
     /// </summary>
     public byte GridCellSize
     {
@@ -530,7 +587,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(GridColor), SolidColorBrush.Parse("#181818"));
 
     /// <summary>
-    /// Gets or sets the color used to create the checkerboard style background
+    ///     Gets or sets the color used to create the checkerboard style background
     /// </summary>
     public ISolidColorBrush GridColor
     {
@@ -544,7 +601,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(GridColorAlternate), SolidColorBrush.Parse("#252525"));
 
     /// <summary>
-    /// Gets or sets the color used to create the checkerboard style background
+    ///     Gets or sets the color used to create the checkerboard style background
     /// </summary>
     public ISolidColorBrush GridColorAlternate
     {
@@ -566,7 +623,7 @@ public sealed class AdvancedImageBox : TemplatedControl
             // Also set the image
             if (value is not null)
             {
-                var loader = ImageLoader.AsyncImageLoader;
+                IAsyncImageLoader loader = ImageLoader.AsyncImageLoader;
 
                 Dispatcher
                     .UIThread
@@ -581,7 +638,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     );
 
     /// <summary>
-    /// Gets or sets the image to be displayed
+    ///     Gets or sets the image to be displayed
     /// </summary>
     public Bitmap? Image
     {
@@ -596,7 +653,7 @@ public sealed class AdvancedImageBox : TemplatedControl
 
         if (change.Property == ImageProperty)
         {
-            var (oldImage, newImage) = change.GetOldAndNewValue<Bitmap?>();
+            (Bitmap? oldImage, Bitmap? newImage) = change.GetOldAndNewValue<Bitmap?>();
 
             Vector? offsetBackup = null;
 
@@ -615,8 +672,8 @@ public sealed class AdvancedImageBox : TemplatedControl
                 {
                     offsetBackup = Offset;
 
-                    var zoomFactorScale = (float)GetZoomLevelToFit(newImage) / GetZoomLevelToFit(oldImage);
-                    var imageScale = newImage.Size / oldImage.Size;
+                    float zoomFactorScale = (float)GetZoomLevelToFit(newImage) / GetZoomLevelToFit(oldImage);
+                    Vector imageScale = newImage.Size / oldImage.Size;
 
                     Debug.WriteLine($"Image scale: {imageScale}");
 
@@ -625,8 +682,8 @@ public sealed class AdvancedImageBox : TemplatedControl
 
                     Debug.WriteLine($"Old scaled {oldScaledSize} -> new scaled {newScaledSize}");*/
 
-                    var currentZoom = Zoom;
-                    var currentFactor = ZoomFactor;
+                    int currentZoom = Zoom;
+                    double currentFactor = ZoomFactor;
                     // var currentOffset = Offset;
 
                     // Scale zoom and offset to new size
@@ -673,7 +730,7 @@ public sealed class AdvancedImageBox : TemplatedControl
         );
 
     /// <summary>
-    /// Gets or sets an image to follow the mouse pointer
+    ///     Gets or sets an image to follow the mouse pointer
     /// </summary>
     public Bitmap? TrackerImage
     {
@@ -681,7 +738,10 @@ public sealed class AdvancedImageBox : TemplatedControl
         set
         {
             if (!SetAndRaise(TrackerImageProperty, ref _trackerImage, value))
+            {
                 return;
+            }
+
             TriggerRender();
             RaisePropertyChanged(nameof(HaveTrackerImage));
         }
@@ -695,7 +755,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(TrackerImageAutoZoom), true);
 
     /// <summary>
-    /// Gets or sets if the tracker image will be scaled to the current zoom
+    ///     Gets or sets if the tracker image will be scaled to the current zoom
     /// </summary>
     public bool TrackerImageAutoZoom
     {
@@ -719,9 +779,15 @@ public sealed class AdvancedImageBox : TemplatedControl
         get
         {
             if (Image is null)
+            {
                 return false;
+            }
+
             if (SizeMode != SizeModes.Normal)
+            {
                 return false;
+            }
+
             return ScaledImageWidth > ViewPortSize.Width;
         }
     }
@@ -731,9 +797,15 @@ public sealed class AdvancedImageBox : TemplatedControl
         get
         {
             if (Image is null)
+            {
                 return false;
+            }
+
             if (SizeMode != SizeModes.Normal)
+            {
                 return false;
+            }
+
             return ScaledImageHeight > ViewPortSize.Height;
         }
     }
@@ -744,7 +816,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     );
 
     /// <summary>
-    /// Gets or sets the grid visibility when reach high zoom levels
+    ///     Gets or sets the grid visibility when reach high zoom levels
     /// </summary>
     public bool ShowGrid
     {
@@ -756,7 +828,7 @@ public sealed class AdvancedImageBox : TemplatedControl
         AvaloniaProperty.RegisterDirect<AdvancedImageBox, Point>(nameof(PointerPosition), o => o.PointerPosition);
 
     /// <summary>
-    /// Gets the current pointer position
+    ///     Gets the current pointer position
     /// </summary>
     public Point PointerPosition
     {
@@ -770,7 +842,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(IsPanning), o => o.IsPanning);
 
     /// <summary>
-    /// Gets if control is currently panning
+    ///     Gets if control is currently panning
     /// </summary>
     public bool IsPanning
     {
@@ -778,11 +850,13 @@ public sealed class AdvancedImageBox : TemplatedControl
         private set
         {
             if (!SetAndRaise(IsPanningProperty, ref _isPanning, value))
+            {
                 return;
+            }
+
             _startScrollPosition = Offset;
 
-            Cursor = value ? new Cursor(StandardCursorType.SizeAll) :
-                Cursor.Default;
+            Cursor = value ? new Cursor(StandardCursorType.SizeAll) : Cursor.Default;
         }
     }
 
@@ -792,7 +866,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(IsSelecting), o => o.IsSelecting);
 
     /// <summary>
-    /// Gets if control is currently selecting a ROI
+    ///     Gets if control is currently selecting a ROI
     /// </summary>
     public bool IsSelecting
     {
@@ -801,14 +875,14 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    /// Gets the center point of the viewport
+    ///     Gets the center point of the viewport
     /// </summary>
     public Point CenterPoint
     {
         get
         {
-            var viewport = GetImageViewPort();
-            return new(viewport.Width / 2, viewport.Height / 2);
+            Rect viewport = GetImageViewPort();
+            return new Point(viewport.Width / 2, viewport.Height / 2);
         }
     }
 
@@ -818,7 +892,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     );
 
     /// <summary>
-    /// Gets or sets if the control can pan with the mouse
+    ///     Gets or sets if the control can pan with the mouse
     /// </summary>
     public bool AutoPan
     {
@@ -832,7 +906,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(PanWithMouseButtons), MouseButtons.LeftButton | MouseButtons.MiddleButton);
 
     /// <summary>
-    /// Gets or sets the mouse buttons to pan the image
+    ///     Gets or sets the mouse buttons to pan the image
     /// </summary>
     public MouseButtons PanWithMouseButtons
     {
@@ -846,7 +920,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(PanWithArrows), true);
 
     /// <summary>
-    /// Gets or sets if the control can pan with the keyboard arrows
+    ///     Gets or sets if the control can pan with the keyboard arrows
     /// </summary>
     public bool PanWithArrows
     {
@@ -860,7 +934,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(SelectWithMouseButtons), MouseButtons.LeftButton);
 
     /// <summary>
-    /// Gets or sets the mouse buttons to select a region on image
+    ///     Gets or sets the mouse buttons to select a region on image
     /// </summary>
     public MouseButtons SelectWithMouseButtons
     {
@@ -874,7 +948,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(InvertMousePan));
 
     /// <summary>
-    /// Gets or sets if mouse pan is inverted
+    ///     Gets or sets if mouse pan is inverted
     /// </summary>
     public bool InvertMousePan
     {
@@ -888,7 +962,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     );
 
     /// <summary>
-    /// Gets or sets if image is auto centered
+    ///     Gets or sets if image is auto centered
     /// </summary>
     public bool AutoCenter
     {
@@ -902,7 +976,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(SizeMode));
 
     /// <summary>
-    /// Gets or sets the image size mode
+    ///     Gets or sets the image size mode
     /// </summary>
     public SizeModes SizeMode
     {
@@ -946,7 +1020,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     );
 
     /// <summary>
-    /// Gets or sets if zoom is allowed
+    ///     Gets or sets if zoom is allowed
     /// </summary>
     public bool AllowZoom
     {
@@ -961,10 +1035,10 @@ public sealed class AdvancedImageBox : TemplatedControl
             (o, v) => o.ZoomLevels = v
         );
 
-    ZoomLevelCollection _zoomLevels = ZoomLevelCollection.Default;
+    private ZoomLevelCollection _zoomLevels = ZoomLevelCollection.Default;
 
     /// <summary>
-    ///   Gets or sets the zoom levels.
+    ///     Gets or sets the zoom levels.
     /// </summary>
     /// <value>The zoom levels.</value>
     public ZoomLevelCollection ZoomLevels
@@ -979,7 +1053,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     );
 
     /// <summary>
-    /// Gets or sets the minimum possible zoom.
+    ///     Gets or sets the minimum possible zoom.
     /// </summary>
     /// <value>The zoom.</value>
     public int MinZoom
@@ -994,7 +1068,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     );
 
     /// <summary>
-    /// Gets or sets the maximum possible zoom.
+    ///     Gets or sets the maximum possible zoom.
     /// </summary>
     /// <value>The zoom.</value>
     public int MaxZoom
@@ -1009,7 +1083,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(ConstrainZoomOutToFitLevel), true);
 
     /// <summary>
-    /// Gets or sets if the zoom out should constrain to fit image as the lowest zoom level.
+    ///     Gets or sets if the zoom out should constrain to fit image as the lowest zoom level.
     /// </summary>
     public bool ConstrainZoomOutToFitLevel
     {
@@ -1025,7 +1099,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     private int _oldZoom = 100;
 
     /// <summary>
-    /// Gets the previous zoom value
+    ///     Gets the previous zoom value
     /// </summary>
     /// <value>The zoom.</value>
     public int OldZoom
@@ -1040,7 +1114,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     );
 
     /// <summary>
-    ///  Gets or sets the zoom.
+    ///     Gets or sets the zoom.
     /// </summary>
     /// <value>The zoom.</value>
     public int Zoom
@@ -1048,14 +1122,20 @@ public sealed class AdvancedImageBox : TemplatedControl
         get => GetValue(ZoomProperty);
         set
         {
-            var minZoom = MinZoom;
+            int minZoom = MinZoom;
             if (ConstrainZoomOutToFitLevel)
+            {
                 minZoom = Math.Max(ZoomLevelToFit, minZoom);
-            var newZoom = Math.Clamp(value, minZoom, MaxZoom);
+            }
 
-            var previousZoom = Zoom;
+            int newZoom = Math.Clamp(value, minZoom, MaxZoom);
+
+            int previousZoom = Zoom;
             if (previousZoom == newZoom)
+            {
                 return;
+            }
+
             OldZoom = previousZoom;
             SetValue(ZoomProperty, newZoom);
 
@@ -1068,19 +1148,19 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    /// <para>Gets if the image have zoom.</para>
-    /// <para>True if zoomed in or out</para>
-    /// <para>False if no zoom applied</para>
+    ///     <para>Gets if the image have zoom.</para>
+    ///     <para>True if zoomed in or out</para>
+    ///     <para>False if no zoom applied</para>
     /// </summary>
     public bool IsActualSize => Zoom == 100;
 
     /// <summary>
-    /// Gets the zoom factor, the zoom / 100.0
+    ///     Gets the zoom factor, the zoom / 100.0
     /// </summary>
     public double ZoomFactor => Zoom / 100.0;
 
     /// <summary>
-    /// Gets the zoom to fit level which shows all the image
+    ///     Gets the zoom to fit level which shows all the image
     /// </summary>
     public int ZoomLevelToFit => Image is null ? 100 : GetZoomLevelToFit(Image);
 
@@ -1116,13 +1196,13 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    /// Gets the width of the scaled image.
+    ///     Gets the width of the scaled image.
     /// </summary>
     /// <value>The width of the scaled image.</value>
     public double ScaledImageWidth => Image?.Size.Width * ZoomFactor ?? 0;
 
     /// <summary>
-    /// Gets the height of the scaled image.
+    ///     Gets the height of the scaled image.
     /// </summary>
     /// <value>The height of the scaled image.</value>
     public double ScaledImageHeight => Image?.Size.Height * ZoomFactor ?? 0;
@@ -1133,7 +1213,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(PixelGridColor), Brushes.DimGray);
 
     /// <summary>
-    /// Gets or sets the color of the pixel grid.
+    ///     Gets or sets the color of the pixel grid.
     /// </summary>
     /// <value>The color of the pixel grid.</value>
     public ISolidColorBrush PixelGridColor
@@ -1148,7 +1228,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >(nameof(PixelGridZoomThreshold), 13);
 
     /// <summary>
-    /// Minimum size of zoomed pixel's before the pixel grid will be drawn
+    ///     Minimum size of zoomed pixel's before the pixel grid will be drawn
     /// </summary>
     public int PixelGridZoomThreshold
     {
@@ -1167,7 +1247,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     >("IsPixelGridEnabled", true);
 
     /// <summary>
-    /// Whether or not to draw the pixel grid at the <see cref="PixelGridZoomThreshold"/>
+    ///     Whether or not to draw the pixel grid at the <see cref="PixelGridZoomThreshold" />
     /// </summary>
     public bool IsPixelGridEnabled
     {
@@ -1215,7 +1295,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     {
         get
         {
-            var rect = SelectionRegion;
+            Rect rect = SelectionRegion;
             return new Rectangle(
                 (int)Math.Ceiling(rect.X),
                 (int)Math.Ceiling(rect.Y),
@@ -1229,7 +1309,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     {
         get
         {
-            var rect = SelectionRegion;
+            Rect rect = SelectionRegion;
             return new PixelSize((int)rect.Width, (int)rect.Height);
         }
     }
@@ -1239,7 +1319,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     private BitmapInterpolationMode? _bitmapInterpolationMode;
 
     /// <summary>
-    /// Gets or sets the current Bitmap Interpolation Mode
+    ///     Gets or sets the current Bitmap Interpolation Mode
     /// </summary>
     public BitmapInterpolationMode BitmapInterpolationMode
     {
@@ -1247,38 +1327,13 @@ public sealed class AdvancedImageBox : TemplatedControl
         set
         {
             if (_bitmapInterpolationMode == value)
+            {
                 return;
+            }
+
             _bitmapInterpolationMode = value;
             RenderOptions.SetBitmapInterpolationMode(this, value);
         }
-    }
-
-    #endregion
-
-    #region Constructor
-
-    /// <inheritdoc />
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-
-        // FocusableProperty.OverrideDefaultValue(typeof(AdvancedImageBox), true);
-        AffectsRender<AdvancedImageBox>(ShowGridProperty);
-
-        HorizontalScrollBar =
-            e.NameScope.Find<ScrollBar>("PART_HorizontalScrollBar") ?? throw new NullReferenceException();
-        VerticalScrollBar = e.NameScope.Find<ScrollBar>("PART_VerticalScrollBar") ?? throw new NullReferenceException();
-        ViewPort = e.NameScope.Find<ContentPresenter>("PART_ViewPort") ?? throw new NullReferenceException();
-
-        SizeModeChanged();
-
-        HorizontalScrollBar.Scroll += ScrollBarOnScroll;
-        VerticalScrollBar.Scroll += ScrollBarOnScroll;
-
-        // ViewPort.PointerPressed += ViewPortOnPointerPressed;
-        // ViewPort.PointerExited += ViewPortOnPointerExited;
-        // ViewPort.PointerMoved += ViewPortOnPointerMoved;
-        // ViewPort!.PointerWheelChanged += ViewPort_OnPointerWheelChanged;
     }
 
     #endregion
@@ -1288,11 +1343,16 @@ public sealed class AdvancedImageBox : TemplatedControl
     public void TriggerRender(bool renderOnlyCursorTracker = false)
     {
         if (!_canRender)
+        {
             return;
-        if (renderOnlyCursorTracker && _trackerImage is null)
-            return;
+        }
 
-        var isHighZoom = ZoomFactor > PixelGridZoomThreshold;
+        if (renderOnlyCursorTracker && _trackerImage is null)
+        {
+            return;
+        }
+
+        bool isHighZoom = ZoomFactor > PixelGridZoomThreshold;
 
         // If we're in high zoom, switch off bitmap interpolation mode
         // Otherwise use high quality
@@ -1304,29 +1364,29 @@ public sealed class AdvancedImageBox : TemplatedControl
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RenderBackgroundGrid(DrawingContext context)
     {
-        var size = GridCellSize;
+        byte size = GridCellSize;
 
-        var square1Drawing = new GeometryDrawing
+        GeometryDrawing square1Drawing = new()
         {
             Brush = GridColorAlternate,
             Geometry = new RectangleGeometry(new Rect(0.0, 0.0, size, size))
         };
 
-        var square2Drawing = new GeometryDrawing
+        GeometryDrawing square2Drawing = new()
         {
             Brush = GridColorAlternate,
             Geometry = new RectangleGeometry(new Rect(size, size, size, size))
         };
 
-        var drawingGroup = new DrawingGroup { Children = { square1Drawing, square2Drawing } };
+        DrawingGroup drawingGroup = new() { Children = { square1Drawing, square2Drawing } };
 
-        var tileBrush = new DrawingBrush(drawingGroup)
+        DrawingBrush tileBrush = new(drawingGroup)
         {
             AlignmentX = AlignmentX.Left,
             AlignmentY = AlignmentY.Top,
             DestinationRect = new RelativeRect(new Size(2 * size, 2 * size), RelativeUnit.Absolute),
             Stretch = Stretch.None,
-            TileMode = TileMode.Tile,
+            TileMode = TileMode.Tile
         };
 
         context.FillRectangle(GridColor, Bounds);
@@ -1335,16 +1395,16 @@ public sealed class AdvancedImageBox : TemplatedControl
 
     public override void Render(DrawingContext context)
     {
-        var gridCellSize = GridCellSize;
+        byte gridCellSize = GridCellSize;
 
-        if (ShowGrid & gridCellSize > 0 && (!IsHorizontalBarVisible || !IsVerticalBarVisible))
+        if (ShowGrid & (gridCellSize > 0) && (!IsHorizontalBarVisible || !IsVerticalBarVisible))
         {
             RenderBackgroundGrid(context);
         }
 
-        var zoomFactor = ZoomFactor;
+        double zoomFactor = ZoomFactor;
 
-        var shouldDrawPixelGrid =
+        bool shouldDrawPixelGrid =
             IsPixelGridEnabled && SizeMode == SizeModes.Normal && zoomFactor > PixelGridZoomThreshold;
 
         // Draw Grid
@@ -1374,21 +1434,24 @@ public sealed class AdvancedImageBox : TemplatedControl
             context.FillRectangle(Background, new Rect(0, 0, Viewport.Width, Viewport.Height));
         }*/
 
-        var image = Image;
+        Bitmap? image = Image;
         if (image is null)
+        {
             return;
-        var imageViewPort = GetImageViewPort();
+        }
+
+        Rect imageViewPort = GetImageViewPort();
 
         // Draw iamge
         context.DrawImage(image, GetSourceImageRegion(), imageViewPort);
 
         if (HaveTrackerImage && _pointerPosition is { X: >= 0, Y: >= 0 })
         {
-            var destSize = TrackerImageAutoZoom
+            Size destSize = TrackerImageAutoZoom
                 ? new Size(_trackerImage!.Size.Width * zoomFactor, _trackerImage.Size.Height * zoomFactor)
                 : image.Size;
 
-            var destPos = new Point(_pointerPosition.X - (destSize.Width / 2),
+            Point destPos = new(_pointerPosition.X - (destSize.Width / 2),
                 _pointerPosition.Y - (destSize.Height / 2));
             context.DrawImage(_trackerImage!, new Rect(destPos, destSize));
         }
@@ -1397,16 +1460,16 @@ public sealed class AdvancedImageBox : TemplatedControl
         // Draw pixel grid
         if (shouldDrawPixelGrid)
         {
-            var offsetX = Offset.X % zoomFactor;
-            var offsetY = Offset.Y % zoomFactor;
+            double offsetX = Offset.X % zoomFactor;
+            double offsetY = Offset.Y % zoomFactor;
 
             Pen pen = new(PixelGridColor);
-            for (var x = imageViewPort.X + zoomFactor - offsetX; x < imageViewPort.Right; x += zoomFactor)
+            for (double x = imageViewPort.X + zoomFactor - offsetX; x < imageViewPort.Right; x += zoomFactor)
             {
                 context.DrawLine(pen, new Point(x, imageViewPort.X), new Point(x, imageViewPort.Bottom));
             }
 
-            for (var y = imageViewPort.Y + zoomFactor - offsetY; y < imageViewPort.Bottom; y += zoomFactor)
+            for (double y = imageViewPort.Y + zoomFactor - offsetY; y < imageViewPort.Bottom; y += zoomFactor)
             {
                 context.DrawLine(pen, new Point(imageViewPort.Y, y), new Point(imageViewPort.Right, y));
             }
@@ -1416,10 +1479,10 @@ public sealed class AdvancedImageBox : TemplatedControl
 
         if (!IsRectEmpty(SelectionRegion))
         {
-            var rect = GetOffsetRectangle(SelectionRegion);
-            var selectionColor = SelectionColor;
+            Rect rect = GetOffsetRectangle(SelectionRegion);
+            ISolidColorBrush selectionColor = SelectionColor;
             context.FillRectangle(selectionColor, rect);
-            var color = Color.FromArgb(255, selectionColor.Color.R, selectionColor.Color.G, selectionColor.Color.B);
+            Color color = Color.FromArgb(255, selectionColor.Color.R, selectionColor.Color.G, selectionColor.Color.B);
             context.DrawRectangle(new Pen(color.ToUInt32()), rect);
         }
     }
@@ -1433,10 +1496,10 @@ public sealed class AdvancedImageBox : TemplatedControl
             return;
         }
 
-        var scaledImageWidth = ScaledImageWidth;
-        var scaledImageHeight = ScaledImageHeight;
-        var width = scaledImageWidth - HorizontalScrollBar.ViewportSize;
-        var height = scaledImageHeight - VerticalScrollBar.ViewportSize;
+        double scaledImageWidth = ScaledImageWidth;
+        double scaledImageHeight = ScaledImageHeight;
+        double width = scaledImageWidth - HorizontalScrollBar.ViewportSize;
+        double height = scaledImageHeight - VerticalScrollBar.ViewportSize;
         //var width = scaledImageWidth <= Viewport.Width ? Viewport.Width : scaledImageWidth;
         //var height = scaledImageHeight <= Viewport.Height ? Viewport.Height : scaledImageHeight;
 
@@ -1449,7 +1512,6 @@ public sealed class AdvancedImageBox : TemplatedControl
         {
             VerticalScrollBar.Maximum = height;
         }
-        
     }
 
     #endregion
@@ -1483,7 +1545,9 @@ public sealed class AdvancedImageBox : TemplatedControl
         e.Handled = true;
 
         if (Image is null)
+        {
             return;
+        }
 
         if (AllowZoom && SizeMode == SizeModes.Normal)
         {
@@ -1504,9 +1568,11 @@ public sealed class AdvancedImageBox : TemplatedControl
         base.OnPointerPressed(e);
 
         if (e.Handled || _isPanning || _isSelecting || Image is null)
+        {
             return;
+        }
 
-        var pointer = e.GetCurrentPoint(this);
+        PointerPoint pointer = e.GetCurrentPoint(this);
 
         if (SelectionMode != SelectionModes.None)
         {
@@ -1519,7 +1585,10 @@ public sealed class AdvancedImageBox : TemplatedControl
                         && (SelectWithMouseButtons & MouseButtons.RightButton) != 0)
                 )
             )
+            {
                 return;
+            }
+
             IsSelecting = true;
         }
         else
@@ -1535,17 +1604,25 @@ public sealed class AdvancedImageBox : TemplatedControl
                 || !AutoPan
                 || SizeMode != SizeModes.Normal
             )
+            {
                 return;
+            }
 
             IsPanning = true;
         }
 
-        var location = pointer.Position;
+        Point location = pointer.Position;
 
         if (location.X > ViewPortSize.Width)
+        {
             return;
+        }
+
         if (location.Y > ViewPortSize.Height)
+        {
             return;
+        }
+
         _startMousePosition = location;
     }
 
@@ -1553,7 +1630,9 @@ public sealed class AdvancedImageBox : TemplatedControl
     {
         base.OnPointerReleased(e);
         if (e.Handled)
+        {
             return;
+        }
 
         IsPanning = false;
         IsSelecting = false;
@@ -1590,9 +1669,11 @@ public sealed class AdvancedImageBox : TemplatedControl
         base.OnPointerMoved(e);
 
         if (e.Handled)
+        {
             return;
+        }
 
-        var pointer = e.GetCurrentPoint(ViewPort);
+        PointerPoint pointer = e.GetCurrentPoint(ViewPort);
         PointerPosition = pointer.Position;
 
         if (!_isPanning && !_isSelecting)
@@ -1613,15 +1694,15 @@ public sealed class AdvancedImageBox : TemplatedControl
             }
             else
             {
-                x = (_startScrollPosition.X - (_startMousePosition.X - _pointerPosition.X));
-                y = (_startScrollPosition.Y - (_startMousePosition.Y - _pointerPosition.Y));
+                x = _startScrollPosition.X - (_startMousePosition.X - _pointerPosition.X);
+                y = _startScrollPosition.Y - (_startMousePosition.Y - _pointerPosition.Y);
             }
 
             Offset = new Vector(x, y);
         }
         else if (_isSelecting)
         {
-            var viewPortPoint = new Point(
+            Point viewPortPoint = new(
                 Math.Min(_pointerPosition.X, ViewPort.Bounds.Right),
                 Math.Min(_pointerPosition.Y, ViewPort.Bounds.Bottom)
             );
@@ -1631,7 +1712,7 @@ public sealed class AdvancedImageBox : TemplatedControl
             double w;
             double h;
 
-            var imageOffset = GetImageViewPort().Position;
+            Point imageOffset = GetImageViewPort().Position;
 
             if (viewPortPoint.X < _startMousePosition.X)
             {
@@ -1658,7 +1739,7 @@ public sealed class AdvancedImageBox : TemplatedControl
             x -= imageOffset.X - Offset.X;
             y -= imageOffset.Y - Offset.Y;
 
-            var zoomFactor = ZoomFactor;
+            double zoomFactor = ZoomFactor;
             x /= zoomFactor;
             y /= zoomFactor;
             w /= zoomFactor;
@@ -1786,48 +1867,52 @@ public sealed class AdvancedImageBox : TemplatedControl
 
     #region Zoom and Size modes
 
-    private void ProcessMouseZoom(bool isZoomIn, Point cursorPosition) =>
+    private void ProcessMouseZoom(bool isZoomIn, Point cursorPosition)
+    {
         PerformZoom(isZoomIn ? ZoomActions.ZoomIn : ZoomActions.ZoomOut, true, cursorPosition);
+    }
 
     /// <summary>
-    /// Returns an appropriate zoom level based on the specified action, relative to the current zoom level.
+    ///     Returns an appropriate zoom level based on the specified action, relative to the current zoom level.
     /// </summary>
     /// <param name="action">The action to determine the zoom level.</param>
     /// <exception cref="System.ArgumentOutOfRangeException">Thrown if an unsupported action is specified.</exception>
     private int GetZoomLevel(ZoomActions action)
     {
-        var result = action switch
+        int result = action switch
         {
             ZoomActions.None => Zoom,
             ZoomActions.ZoomIn => _zoomLevels.NextZoom(Zoom),
             ZoomActions.ZoomOut => _zoomLevels.PreviousZoom(Zoom),
             ZoomActions.ActualSize => 100,
-            _ => throw new ArgumentOutOfRangeException(nameof(action), action, null),
+            _ => throw new ArgumentOutOfRangeException(nameof(action), action, null)
         };
         return result;
     }
 
     /// <summary>
-    /// Resets the <see cref="SizeModes"/> property whilsts retaining the original <see cref="Zoom"/>.
+    ///     Resets the <see cref="SizeModes" /> property whilsts retaining the original <see cref="Zoom" />.
     /// </summary>
     private void RestoreSizeMode()
     {
         if (SizeMode != SizeModes.Normal)
         {
-            var previousZoom = Zoom;
+            int previousZoom = Zoom;
             SizeMode = SizeModes.Normal;
             Zoom = previousZoom; // Stop the zoom getting reset to 100% before calculating the new zoom
         }
     }
 
-    private void PerformZoom(ZoomActions action, bool preservePosition) =>
+    private void PerformZoom(ZoomActions action, bool preservePosition)
+    {
         PerformZoom(action, preservePosition, CenterPoint);
+    }
 
     private void PerformZoom(ZoomActions action, bool preservePosition, Point relativePoint)
     {
-        var currentPixel = PointToImage(relativePoint);
-        var currentZoom = Zoom;
-        var newZoom = GetZoomLevel(action);
+        Point currentPixel = PointToImage(relativePoint);
+        int currentZoom = Zoom;
+        int newZoom = GetZoomLevel(action);
 
         /*if (preservePosition && Zoom != currentZoom)
             CanRender = false;*/
@@ -1842,45 +1927,60 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    ///   Zooms into the image
+    ///     Zooms into the image
     /// </summary>
-    public void ZoomIn() => ZoomIn(true);
+    public void ZoomIn()
+    {
+        ZoomIn(true);
+    }
 
     /// <summary>
-    ///   Zooms into the image
+    ///     Zooms into the image
     /// </summary>
-    /// <param name="preservePosition"><c>true</c> if the current scrolling position should be preserved relative to the new zoom level, <c>false</c> to reset.</param>
+    /// <param name="preservePosition">
+    ///     <c>true</c> if the current scrolling position should be preserved relative to the new
+    ///     zoom level, <c>false</c> to reset.
+    /// </param>
     public void ZoomIn(bool preservePosition)
     {
         PerformZoom(ZoomActions.ZoomIn, preservePosition);
     }
 
     /// <summary>
-    ///   Zooms out of the image
+    ///     Zooms out of the image
     /// </summary>
-    public void ZoomOut() => ZoomOut(true);
+    public void ZoomOut()
+    {
+        ZoomOut(true);
+    }
 
     /// <summary>
-    ///   Zooms out of the image
+    ///     Zooms out of the image
     /// </summary>
-    /// <param name="preservePosition"><c>true</c> if the current scrolling position should be preserved relative to the new zoom level, <c>false</c> to reset.</param>
+    /// <param name="preservePosition">
+    ///     <c>true</c> if the current scrolling position should be preserved relative to the new
+    ///     zoom level, <c>false</c> to reset.
+    /// </param>
     public void ZoomOut(bool preservePosition)
     {
         PerformZoom(ZoomActions.ZoomOut, preservePosition);
     }
 
     /// <summary>
-    /// Zooms to the maximum size for displaying the entire image within the bounds of the control.
+    ///     Zooms to the maximum size for displaying the entire image within the bounds of the control.
     /// </summary>
     public void ZoomToFit()
     {
         if (!IsImageLoaded)
+        {
             return;
+        }
+
         Zoom = ZoomLevelToFit;
     }
 
     /// <summary>
-    ///   Adjusts the view port to fit the given region
+    ///     Adjusts the view port to fit the given region
     /// </summary>
     /// <param name="x">The X co-ordinate of the selection region.</param>
     /// <param name="y">The Y co-ordinate of the selection region.</param>
@@ -1893,7 +1993,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    ///   Adjusts the view port to fit the given region
+    ///     Adjusts the view port to fit the given region
     /// </summary>
     /// <param name="x">The X co-ordinate of the selection region.</param>
     /// <param name="y">The Y co-ordinate of the selection region.</param>
@@ -1906,27 +2006,32 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    ///   Adjusts the view port to fit the given region
+    ///     Adjusts the view port to fit the given region
     /// </summary>
     /// <param name="rectangle">The rectangle to fit the view port to.</param>
     /// <param name="margin">Give a margin to rectangle by a value to zoom-out that pixel value</param>
-    public void ZoomToRegion(Rectangle rectangle, double margin = 0) =>
+    public void ZoomToRegion(Rectangle rectangle, double margin = 0)
+    {
         ZoomToRegion(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, margin);
+    }
 
     /// <summary>
-    ///   Adjusts the view port to fit the given region
+    ///     Adjusts the view port to fit the given region
     /// </summary>
     /// <param name="rectangle">The rectangle to fit the view port to.</param>
     /// <param name="margin">Give a margin to rectangle by a value to zoom-out that pixel value</param>
     public void ZoomToRegion(Rect rectangle, double margin = 0)
     {
         if (margin > 0)
+        {
             rectangle = rectangle.Inflate(margin);
-        var ratioX = ViewPortSize.Width / rectangle.Width;
-        var ratioY = ViewPortSize.Height / rectangle.Height;
-        var zoomFactor = Math.Min(ratioX, ratioY);
-        var cx = rectangle.X + (rectangle.Width / 2);
-        var cy = rectangle.Y + (rectangle.Height / 2);
+        }
+
+        double ratioX = ViewPortSize.Width / rectangle.Width;
+        double ratioY = ViewPortSize.Height / rectangle.Height;
+        double zoomFactor = Math.Min(ratioX, ratioY);
+        double cx = rectangle.X + (rectangle.Width / 2);
+        double cy = rectangle.Y + (rectangle.Height / 2);
 
         CanRender = false;
         Zoom = (int)(zoomFactor * 100); // This function sets the zoom so viewport will change
@@ -1934,17 +2039,20 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    /// Zooms to current selection region
+    ///     Zooms to current selection region
     /// </summary>
     public void ZoomToSelectionRegion(double margin = 0)
     {
         if (!HaveSelection)
+        {
             return;
+        }
+
         ZoomToRegion(SelectionRegion, margin);
     }
 
     /// <summary>
-    /// Resets the zoom to 100%.
+    ///     Resets the zoom to 100%.
     /// </summary>
     public void PerformActualSize()
     {
@@ -1958,7 +2066,7 @@ public sealed class AdvancedImageBox : TemplatedControl
     #region Utility methods
 
     /// <summary>
-    /// Determines whether the specified rectangle is empty
+    ///     Determines whether the specified rectangle is empty
     /// </summary>
     private static bool IsRectEmpty(Rect rect)
     {
@@ -1966,58 +2074,71 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    /// Static empty rectangle
+    ///     Static empty rectangle
     /// </summary>
     private static readonly Rect EmptyRect = new();
 
     /// <summary>
-    ///   Determines whether the specified point is located within the image view port
+    ///     Determines whether the specified point is located within the image view port
     /// </summary>
     /// <param name="point">The point.</param>
     /// <returns>
-    ///   <c>true</c> if the specified point is located within the image view port; otherwise, <c>false</c>.
+    ///     <c>true</c> if the specified point is located within the image view port; otherwise, <c>false</c>.
     /// </returns>
-    public bool IsPointInImage(Point point) => GetImageViewPort().Contains(point);
+    public bool IsPointInImage(Point point)
+    {
+        return GetImageViewPort().Contains(point);
+    }
 
     /// <summary>
-    ///   Determines whether the specified point is located within the image view port
+    ///     Determines whether the specified point is located within the image view port
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to check.</param>
     /// <param name="y">The Y co-ordinate of the point to check.</param>
     /// <returns>
-    ///   <c>true</c> if the specified point is located within the image view port; otherwise, <c>false</c>.
+    ///     <c>true</c> if the specified point is located within the image view port; otherwise, <c>false</c>.
     /// </returns>
-    public bool IsPointInImage(int x, int y) => IsPointInImage(new Point(x, y));
+    public bool IsPointInImage(int x, int y)
+    {
+        return IsPointInImage(new Point(x, y));
+    }
 
     /// <summary>
-    ///   Determines whether the specified point is located within the image view port
+    ///     Determines whether the specified point is located within the image view port
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to check.</param>
     /// <param name="y">The Y co-ordinate of the point to check.</param>
     /// <returns>
-    ///   <c>true</c> if the specified point is located within the image view port; otherwise, <c>false</c>.
+    ///     <c>true</c> if the specified point is located within the image view port; otherwise, <c>false</c>.
     /// </returns>
-    public bool IsPointInImage(double x, double y) => IsPointInImage(new Point(x, y));
+    public bool IsPointInImage(double x, double y)
+    {
+        return IsPointInImage(new Point(x, y));
+    }
 
     /// <summary>
-    ///   Converts the given client size point to represent a coordinate on the source image.
+    ///     Converts the given client size point to represent a coordinate on the source image.
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to convert.</param>
     /// <param name="y">The Y co-ordinate of the point to convert.</param>
     /// <param name="fitToBounds">
-    ///   if set to <c>true</c> and the point is outside the bounds of the source image, it will be mapped to the nearest edge.
+    ///     if set to <c>true</c> and the point is outside the bounds of the source image, it will be mapped to the nearest
+    ///     edge.
     /// </param>
     /// <returns><c>Point.Empty</c> if the point could not be matched to the source image, otherwise the new translated point</returns>
-    public Point PointToImage(double x, double y, bool fitToBounds = true) =>
-        PointToImage(new Point(x, y), fitToBounds);
+    public Point PointToImage(double x, double y, bool fitToBounds = true)
+    {
+        return PointToImage(new Point(x, y), fitToBounds);
+    }
 
     /// <summary>
-    ///   Converts the given client size point to represent a coordinate on the source image.
+    ///     Converts the given client size point to represent a coordinate on the source image.
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to convert.</param>
     /// <param name="y">The Y co-ordinate of the point to convert.</param>
     /// <param name="fitToBounds">
-    ///   if set to <c>true</c> and the point is outside the bounds of the source image, it will be mapped to the nearest edge.
+    ///     if set to <c>true</c> and the point is outside the bounds of the source image, it will be mapped to the nearest
+    ///     edge.
     /// </param>
     /// <returns><c>Point.Empty</c> if the point could not be matched to the source image, otherwise the new translated point</returns>
     public Point PointToImage(int x, int y, bool fitToBounds = true)
@@ -2026,11 +2147,12 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    ///   Converts the given client size point to represent a coordinate on the source image.
+    ///     Converts the given client size point to represent a coordinate on the source image.
     /// </summary>
     /// <param name="point">The source point.</param>
     /// <param name="fitToBounds">
-    ///   if set to <c>true</c> and the point is outside the bounds of the source image, it will be mapped to the nearest edge.
+    ///     if set to <c>true</c> and the point is outside the bounds of the source image, it will be mapped to the nearest
+    ///     edge.
     /// </param>
     /// <returns><c>Point.Empty</c> if the point could not be matched to the source image, otherwise the new translated point</returns>
     public Point PointToImage(Point point, bool fitToBounds = true)
@@ -2038,14 +2160,14 @@ public sealed class AdvancedImageBox : TemplatedControl
         double x;
         double y;
 
-        var viewport = GetImageViewPort();
+        Rect viewport = GetImageViewPort();
 
         if (!fitToBounds || viewport.Contains(point))
         {
             x = (point.X + Offset.X - viewport.X) / ZoomFactor;
             y = (point.Y + Offset.Y - viewport.Y) / ZoomFactor;
 
-            var image = Image;
+            Bitmap? image = Image;
             if (fitToBounds)
             {
                 x = Math.Clamp(x, 0, image!.Size.Width - 1);
@@ -2058,133 +2180,159 @@ public sealed class AdvancedImageBox : TemplatedControl
             y = 0;
         }
 
-        return new(x, y);
+        return new Point(x, y);
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.Point" /> repositioned to include the current image offset and scaled by the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.Point" /> repositioned to include the current image offset and
+    ///     scaled by the current zoom level
     /// </summary>
-    /// <param name="source">The source <see cref="Point"/> to offset.</param>
-    /// <returns>A <see cref="Point"/> which has been repositioned to match the current zoom level and image offset</returns>
+    /// <param name="source">The source <see cref="Point" /> to offset.</param>
+    /// <returns>A <see cref="Point" /> which has been repositioned to match the current zoom level and image offset</returns>
     public Point GetOffsetPoint(System.Drawing.Point source)
     {
-        var offset = GetOffsetPoint(new Point(source.X, source.Y));
+        Point offset = GetOffsetPoint(new Point(source.X, source.Y));
 
-        return new((int)offset.X, (int)offset.Y);
+        return new Point((int)offset.X, (int)offset.Y);
     }
 
     /// <summary>
-    ///   Returns the source co-ordinates repositioned to include the current image offset and scaled by the current zoom level
+    ///     Returns the source co-ordinates repositioned to include the current image offset and scaled by the current zoom
+    ///     level
     /// </summary>
     /// <param name="x">The source X co-ordinate.</param>
     /// <param name="y">The source Y co-ordinate.</param>
-    /// <returns>A <see cref="Point"/> which has been repositioned to match the current zoom level and image offset</returns>
+    /// <returns>A <see cref="Point" /> which has been repositioned to match the current zoom level and image offset</returns>
     public Point GetOffsetPoint(int x, int y)
     {
         return GetOffsetPoint(new System.Drawing.Point(x, y));
     }
 
     /// <summary>
-    ///   Returns the source co-ordinates repositioned to include the current image offset and scaled by the current zoom level
+    ///     Returns the source co-ordinates repositioned to include the current image offset and scaled by the current zoom
+    ///     level
     /// </summary>
     /// <param name="x">The source X co-ordinate.</param>
     /// <param name="y">The source Y co-ordinate.</param>
-    /// <returns>A <see cref="Point"/> which has been repositioned to match the current zoom level and image offset</returns>
+    /// <returns>A <see cref="Point" /> which has been repositioned to match the current zoom level and image offset</returns>
     public Point GetOffsetPoint(double x, double y)
     {
         return GetOffsetPoint(new Point(x, y));
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.PointF" /> repositioned to include the current image offset and scaled by the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.PointF" /> repositioned to include the current image offset and
+    ///     scaled by the current zoom level
     /// </summary>
-    /// <param name="source">The source <see cref="System.Drawing.PointF"/> to offset.</param>
-    /// <returns>A <see cref="System.Drawing.PointF"/> which has been repositioned to match the current zoom level and image offset</returns>
+    /// <param name="source">The source <see cref="System.Drawing.PointF" /> to offset.</param>
+    /// <returns>
+    ///     A <see cref="System.Drawing.PointF" /> which has been repositioned to match the current zoom level and image
+    ///     offset
+    /// </returns>
     public Point GetOffsetPoint(Point source)
     {
-        var viewport = GetImageViewPort();
-        var scaled = GetScaledPoint(source);
-        var offsetX = viewport.Left + Offset.X;
-        var offsetY = viewport.Top + Offset.Y;
+        Rect viewport = GetImageViewPort();
+        Point scaled = GetScaledPoint(source);
+        double offsetX = viewport.Left + Offset.X;
+        double offsetY = viewport.Top + Offset.Y;
 
-        return new(scaled.X + offsetX, scaled.Y + offsetY);
+        return new Point(scaled.X + offsetX, scaled.Y + offsetY);
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.RectangleF" /> scaled according to the current zoom level and repositioned to include the current image offset
+    ///     Returns the source <see cref="T:System.Drawing.RectangleF" /> scaled according to the current zoom level and
+    ///     repositioned to include the current image offset
     /// </summary>
-    /// <param name="source">The source <see cref="System.Drawing.RectangleF"/> to offset.</param>
-    /// <returns>A <see cref="System.Drawing.RectangleF"/> which has been resized and repositioned to match the current zoom level and image offset</returns>
+    /// <param name="source">The source <see cref="System.Drawing.RectangleF" /> to offset.</param>
+    /// <returns>
+    ///     A <see cref="System.Drawing.RectangleF" /> which has been resized and repositioned to match the current zoom
+    ///     level and image offset
+    /// </returns>
     public Rect GetOffsetRectangle(Rect source)
     {
-        var viewport = GetImageViewPort();
-        var scaled = GetScaledRectangle(source);
-        var offsetX = viewport.Left - Offset.X;
-        var offsetY = viewport.Top - Offset.Y;
+        Rect viewport = GetImageViewPort();
+        Rect scaled = GetScaledRectangle(source);
+        double offsetX = viewport.Left - Offset.X;
+        double offsetY = viewport.Top - Offset.Y;
 
-        return new(new Point(scaled.Left + offsetX, scaled.Top + offsetY), scaled.Size);
+        return new Rect(new Point(scaled.Left + offsetX, scaled.Top + offsetY), scaled.Size);
     }
 
     /// <summary>
-    ///   Returns the source rectangle scaled according to the current zoom level and repositioned to include the current image offset
+    ///     Returns the source rectangle scaled according to the current zoom level and repositioned to include the current
+    ///     image offset
     /// </summary>
     /// <param name="x">The X co-ordinate of the source rectangle.</param>
     /// <param name="y">The Y co-ordinate of the source rectangle.</param>
     /// <param name="width">The width of the rectangle.</param>
     /// <param name="height">The height of the rectangle.</param>
-    /// <returns>A <see cref="Rectangle"/> which has been resized and repositioned to match the current zoom level and image offset</returns>
+    /// <returns>
+    ///     A <see cref="Rectangle" /> which has been resized and repositioned to match the current zoom level and image
+    ///     offset
+    /// </returns>
     public Rectangle GetOffsetRectangle(int x, int y, int width, int height)
     {
         return GetOffsetRectangle(new Rectangle(x, y, width, height));
     }
 
     /// <summary>
-    ///   Returns the source rectangle scaled according to the current zoom level and repositioned to include the current image offset
+    ///     Returns the source rectangle scaled according to the current zoom level and repositioned to include the current
+    ///     image offset
     /// </summary>
     /// <param name="x">The X co-ordinate of the source rectangle.</param>
     /// <param name="y">The Y co-ordinate of the source rectangle.</param>
     /// <param name="width">The width of the rectangle.</param>
     /// <param name="height">The height of the rectangle.</param>
-    /// <returns>A <see cref="System.Drawing.RectangleF"/> which has been resized and repositioned to match the current zoom level and image offset</returns>
+    /// <returns>
+    ///     A <see cref="System.Drawing.RectangleF" /> which has been resized and repositioned to match the current zoom
+    ///     level and image offset
+    /// </returns>
     public Rect GetOffsetRectangle(double x, double y, double width, double height)
     {
         return GetOffsetRectangle(new Rect(x, y, width, height));
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.Rectangle" /> scaled according to the current zoom level and repositioned to include the current image offset
+    ///     Returns the source <see cref="T:System.Drawing.Rectangle" /> scaled according to the current zoom level and
+    ///     repositioned to include the current image offset
     /// </summary>
-    /// <param name="source">The source <see cref="Rectangle"/> to offset.</param>
-    /// <returns>A <see cref="Rectangle"/> which has been resized and repositioned to match the current zoom level and image offset</returns>
+    /// <param name="source">The source <see cref="Rectangle" /> to offset.</param>
+    /// <returns>
+    ///     A <see cref="Rectangle" /> which has been resized and repositioned to match the current zoom level and image
+    ///     offset
+    /// </returns>
     public Rectangle GetOffsetRectangle(Rectangle source)
     {
-        var viewport = GetImageViewPort();
-        var scaled = GetScaledRectangle(source);
-        var offsetX = viewport.Left + Offset.X;
-        var offsetY = viewport.Top + Offset.Y;
+        Rect viewport = GetImageViewPort();
+        RectangleF scaled = GetScaledRectangle(source);
+        double offsetX = viewport.Left + Offset.X;
+        double offsetY = viewport.Top + Offset.Y;
 
-        return new(
+        return new Rectangle(
             new System.Drawing.Point((int)(scaled.Left + offsetX), (int)(scaled.Top + offsetY)),
             new System.Drawing.Size((int)scaled.Size.Width, (int)scaled.Size.Height)
         );
     }
 
     /// <summary>
-    ///   Fits a given <see cref="T:System.Drawing.Rectangle" /> to match image boundaries
+    ///     Fits a given <see cref="T:System.Drawing.Rectangle" /> to match image boundaries
     /// </summary>
     /// <param name="rectangle">The rectangle.</param>
     /// <returns>
-    ///   A <see cref="T:System.Drawing.Rectangle" /> structure remapped to fit the image boundaries
+    ///     A <see cref="T:System.Drawing.Rectangle" /> structure remapped to fit the image boundaries
     /// </returns>
     public Rectangle FitRectangle(Rectangle rectangle)
     {
-        var image = Image;
+        Bitmap? image = Image;
         if (image is null)
+        {
             return Rectangle.Empty;
-        var x = rectangle.X;
-        var y = rectangle.Y;
-        var w = rectangle.Width;
-        var h = rectangle.Height;
+        }
+
+        int x = rectangle.X;
+        int y = rectangle.Y;
+        int w = rectangle.Width;
+        int h = rectangle.Height;
 
         if (x < 0)
         {
@@ -2206,25 +2354,28 @@ public sealed class AdvancedImageBox : TemplatedControl
             h = (int)(image.Size.Height - y);
         }
 
-        return new(x, y, w, h);
+        return new Rectangle(x, y, w, h);
     }
 
     /// <summary>
-    ///   Fits a given <see cref="T:System.Drawing.RectangleF" /> to match image boundaries
+    ///     Fits a given <see cref="T:System.Drawing.RectangleF" /> to match image boundaries
     /// </summary>
     /// <param name="rectangle">The rectangle.</param>
     /// <returns>
-    ///   A <see cref="T:System.Drawing.RectangleF" /> structure remapped to fit the image boundaries
+    ///     A <see cref="T:System.Drawing.RectangleF" /> structure remapped to fit the image boundaries
     /// </returns>
     public Rect FitRectangle(Rect rectangle)
     {
-        var image = Image;
+        Bitmap? image = Image;
         if (image is null)
+        {
             return EmptyRect;
-        var x = rectangle.X;
-        var y = rectangle.Y;
-        var w = rectangle.Width;
-        var h = rectangle.Height;
+        }
+
+        double x = rectangle.X;
+        double y = rectangle.Y;
+        double w = rectangle.Width;
+        double h = rectangle.Height;
 
         if (x < 0)
         {
@@ -2248,7 +2399,7 @@ public sealed class AdvancedImageBox : TemplatedControl
             h = image.Size.Height - y;
         }
 
-        return new(x, y, w, h);
+        return new Rect(x, y, w, h);
     }
 
     #endregion
@@ -2256,36 +2407,40 @@ public sealed class AdvancedImageBox : TemplatedControl
     #region Navigate / Scroll methods
 
     /// <summary>
-    ///   Scrolls the control to the given point in the image, offset at the specified display point
+    ///     Scrolls the control to the given point in the image, offset at the specified display point
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to scroll to.</param>
     /// <param name="y">The Y co-ordinate of the point to scroll to.</param>
     /// <param name="relativeX">The X co-ordinate relative to the <c>x</c> parameter.</param>
     /// <param name="relativeY">The Y co-ordinate relative to the <c>y</c> parameter.</param>
-    public void ScrollTo(double x, double y, double relativeX, double relativeY) =>
+    public void ScrollTo(double x, double y, double relativeX, double relativeY)
+    {
         ScrollTo(new Point(x, y), new Point(relativeX, relativeY));
+    }
 
     /// <summary>
-    ///   Scrolls the control to the given point in the image, offset at the specified display point
+    ///     Scrolls the control to the given point in the image, offset at the specified display point
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to scroll to.</param>
     /// <param name="y">The Y co-ordinate of the point to scroll to.</param>
     /// <param name="relativeX">The X co-ordinate relative to the <c>x</c> parameter.</param>
     /// <param name="relativeY">The Y co-ordinate relative to the <c>y</c> parameter.</param>
-    public void ScrollTo(int x, int y, int relativeX, int relativeY) =>
+    public void ScrollTo(int x, int y, int relativeX, int relativeY)
+    {
         ScrollTo(new Point(x, y), new Point(relativeX, relativeY));
+    }
 
     /// <summary>
-    ///   Scrolls the control to the given point in the image, offset at the specified display point
+    ///     Scrolls the control to the given point in the image, offset at the specified display point
     /// </summary>
     /// <param name="imageLocation">The point of the image to attempt to scroll to.</param>
     /// <param name="relativeDisplayPoint">The relative display point to offset scrolling by.</param>
     public void ScrollTo(Point imageLocation, Point relativeDisplayPoint)
     {
         //CanRender = false;
-        var zoomFactor = ZoomFactor;
-        var x = (imageLocation.X * zoomFactor) - relativeDisplayPoint.X;
-        var y = (imageLocation.Y * zoomFactor) - relativeDisplayPoint.Y;
+        double zoomFactor = ZoomFactor;
+        double x = (imageLocation.X * zoomFactor) - relativeDisplayPoint.X;
+        double y = (imageLocation.Y * zoomFactor) - relativeDisplayPoint.Y;
 
         _canRender = true;
         Offset = new Vector(x, y);
@@ -2302,38 +2457,48 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    ///   Centers the given point in the image in the center of the control
+    ///     Centers the given point in the image in the center of the control
     /// </summary>
     /// <param name="imageLocation">The point of the image to attempt to center.</param>
-    public void CenterAt(System.Drawing.Point imageLocation) =>
+    public void CenterAt(System.Drawing.Point imageLocation)
+    {
         ScrollTo(
             new Point(imageLocation.X, imageLocation.Y),
             new Point(ViewPortSize.Width / 2, ViewPortSize.Height / 2)
         );
+    }
 
     /// <summary>
-    ///   Centers the given point in the image in the center of the control
+    ///     Centers the given point in the image in the center of the control
     /// </summary>
     /// <param name="imageLocation">The point of the image to attempt to center.</param>
-    public void CenterAt(Point imageLocation) =>
+    public void CenterAt(Point imageLocation)
+    {
         ScrollTo(imageLocation, new Point(ViewPortSize.Width / 2, ViewPortSize.Height / 2));
+    }
 
     /// <summary>
-    ///   Centers the given point in the image in the center of the control
+    ///     Centers the given point in the image in the center of the control
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to center.</param>
     /// <param name="y">The Y co-ordinate of the point to center.</param>
-    public void CenterAt(int x, int y) => CenterAt(new Point(x, y));
+    public void CenterAt(int x, int y)
+    {
+        CenterAt(new Point(x, y));
+    }
 
     /// <summary>
-    ///   Centers the given point in the image in the center of the control
+    ///     Centers the given point in the image in the center of the control
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to center.</param>
     /// <param name="y">The Y co-ordinate of the point to center.</param>
-    public void CenterAt(double x, double y) => CenterAt(new Point(x, y));
+    public void CenterAt(double x, double y)
+    {
+        CenterAt(new Point(x, y));
+    }
 
     /// <summary>
-    /// Resets the viewport to show the center of the image.
+    ///     Resets the viewport to show the center of the image.
     /// </summary>
     public void CenterToImage()
     {
@@ -2345,103 +2510,103 @@ public sealed class AdvancedImageBox : TemplatedControl
     #region Selection / ROI methods
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.Point" /> scaled according to the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.Point" /> scaled according to the current zoom level
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to scale.</param>
     /// <param name="y">The Y co-ordinate of the point to scale.</param>
-    /// <returns>A <see cref="Point"/> which has been scaled to match the current zoom level</returns>
+    /// <returns>A <see cref="Point" /> which has been scaled to match the current zoom level</returns>
     public Point GetScaledPoint(int x, int y)
     {
         return GetScaledPoint(new Point(x, y));
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.Point" /> scaled according to the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.Point" /> scaled according to the current zoom level
     /// </summary>
     /// <param name="x">The X co-ordinate of the point to scale.</param>
     /// <param name="y">The Y co-ordinate of the point to scale.</param>
-    /// <returns>A <see cref="Point"/> which has been scaled to match the current zoom level</returns>
+    /// <returns>A <see cref="Point" /> which has been scaled to match the current zoom level</returns>
     public PointF GetScaledPoint(float x, float y)
     {
         return GetScaledPoint(new PointF(x, y));
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.Point" /> scaled according to the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.Point" /> scaled according to the current zoom level
     /// </summary>
-    /// <param name="source">The source <see cref="Point"/> to scale.</param>
-    /// <returns>A <see cref="Point"/> which has been scaled to match the current zoom level</returns>
+    /// <param name="source">The source <see cref="Point" /> to scale.</param>
+    /// <returns>A <see cref="Point" /> which has been scaled to match the current zoom level</returns>
     public Point GetScaledPoint(Point source)
     {
-        return new(source.X * ZoomFactor, source.Y * ZoomFactor);
+        return new Point(source.X * ZoomFactor, source.Y * ZoomFactor);
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.PointF" /> scaled according to the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.PointF" /> scaled according to the current zoom level
     /// </summary>
-    /// <param name="source">The source <see cref="PointF"/> to scale.</param>
-    /// <returns>A <see cref="PointF"/> which has been scaled to match the current zoom level</returns>
+    /// <param name="source">The source <see cref="PointF" /> to scale.</param>
+    /// <returns>A <see cref="PointF" /> which has been scaled to match the current zoom level</returns>
     public PointF GetScaledPoint(PointF source)
     {
-        return new((float)(source.X * ZoomFactor), (float)(source.Y * ZoomFactor));
+        return new PointF((float)(source.X * ZoomFactor), (float)(source.Y * ZoomFactor));
     }
 
     /// <summary>
-    ///   Returns the source rectangle scaled according to the current zoom level
+    ///     Returns the source rectangle scaled according to the current zoom level
     /// </summary>
     /// <param name="x">The X co-ordinate of the source rectangle.</param>
     /// <param name="y">The Y co-ordinate of the source rectangle.</param>
     /// <param name="width">The width of the rectangle.</param>
     /// <param name="height">The height of the rectangle.</param>
-    /// <returns>A <see cref="Rectangle"/> which has been scaled to match the current zoom level</returns>
+    /// <returns>A <see cref="Rectangle" /> which has been scaled to match the current zoom level</returns>
     public Rect GetScaledRectangle(int x, int y, int width, int height)
     {
         return GetScaledRectangle(new Rect(x, y, width, height));
     }
 
     /// <summary>
-    ///   Returns the source rectangle scaled according to the current zoom level
+    ///     Returns the source rectangle scaled according to the current zoom level
     /// </summary>
     /// <param name="x">The X co-ordinate of the source rectangle.</param>
     /// <param name="y">The Y co-ordinate of the source rectangle.</param>
     /// <param name="width">The width of the rectangle.</param>
     /// <param name="height">The height of the rectangle.</param>
-    /// <returns>A <see cref="RectangleF"/> which has been scaled to match the current zoom level</returns>
+    /// <returns>A <see cref="RectangleF" /> which has been scaled to match the current zoom level</returns>
     public RectangleF GetScaledRectangle(float x, float y, float width, float height)
     {
         return GetScaledRectangle(new RectangleF(x, y, width, height));
     }
 
     /// <summary>
-    ///   Returns the source rectangle scaled according to the current zoom level
+    ///     Returns the source rectangle scaled according to the current zoom level
     /// </summary>
     /// <param name="location">The location of the source rectangle.</param>
     /// <param name="size">The size of the source rectangle.</param>
-    /// <returns>A <see cref="Rectangle"/> which has been scaled to match the current zoom level</returns>
+    /// <returns>A <see cref="Rectangle" /> which has been scaled to match the current zoom level</returns>
     public Rect GetScaledRectangle(Point location, Size size)
     {
         return GetScaledRectangle(new Rect(location, size));
     }
 
     /// <summary>
-    ///   Returns the source rectangle scaled according to the current zoom level
+    ///     Returns the source rectangle scaled according to the current zoom level
     /// </summary>
     /// <param name="location">The location of the source rectangle.</param>
     /// <param name="size">The size of the source rectangle.</param>
-    /// <returns>A <see cref="Rectangle"/> which has been scaled to match the current zoom level</returns>
+    /// <returns>A <see cref="Rectangle" /> which has been scaled to match the current zoom level</returns>
     public RectangleF GetScaledRectangle(PointF location, SizeF size)
     {
         return GetScaledRectangle(new RectangleF(location, size));
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.Rectangle" /> scaled according to the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.Rectangle" /> scaled according to the current zoom level
     /// </summary>
-    /// <param name="source">The source <see cref="Rectangle"/> to scale.</param>
-    /// <returns>A <see cref="Rectangle"/> which has been scaled to match the current zoom level</returns>
+    /// <param name="source">The source <see cref="Rectangle" /> to scale.</param>
+    /// <returns>A <see cref="Rectangle" /> which has been scaled to match the current zoom level</returns>
     public Rect GetScaledRectangle(Rect source)
     {
-        return new(
+        return new Rect(
             source.Left * ZoomFactor,
             source.Top * ZoomFactor,
             source.Width * ZoomFactor,
@@ -2450,13 +2615,13 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.RectangleF" /> scaled according to the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.RectangleF" /> scaled according to the current zoom level
     /// </summary>
-    /// <param name="source">The source <see cref="RectangleF"/> to scale.</param>
-    /// <returns>A <see cref="RectangleF"/> which has been scaled to match the current zoom level</returns>
+    /// <param name="source">The source <see cref="RectangleF" /> to scale.</param>
+    /// <returns>A <see cref="RectangleF" /> which has been scaled to match the current zoom level</returns>
     public RectangleF GetScaledRectangle(RectangleF source)
     {
-        return new(
+        return new RectangleF(
             (float)(source.Left * ZoomFactor),
             (float)(source.Top * ZoomFactor),
             (float)(source.Width * ZoomFactor),
@@ -2465,61 +2630,64 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    ///   Returns the source size scaled according to the current zoom level
+    ///     Returns the source size scaled according to the current zoom level
     /// </summary>
     /// <param name="width">The width of the size to scale.</param>
     /// <param name="height">The height of the size to scale.</param>
-    /// <returns>A <see cref="SizeF"/> which has been resized to match the current zoom level</returns>
+    /// <returns>A <see cref="SizeF" /> which has been resized to match the current zoom level</returns>
     public SizeF GetScaledSize(float width, float height)
     {
         return GetScaledSize(new SizeF(width, height));
     }
 
     /// <summary>
-    ///   Returns the source size scaled according to the current zoom level
+    ///     Returns the source size scaled according to the current zoom level
     /// </summary>
     /// <param name="width">The width of the size to scale.</param>
     /// <param name="height">The height of the size to scale.</param>
-    /// <returns>A <see cref="Size"/> which has been resized to match the current zoom level</returns>
+    /// <returns>A <see cref="Size" /> which has been resized to match the current zoom level</returns>
     public Size GetScaledSize(int width, int height)
     {
         return GetScaledSize(new Size(width, height));
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.SizeF" /> scaled according to the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.SizeF" /> scaled according to the current zoom level
     /// </summary>
-    /// <param name="source">The source <see cref="SizeF"/> to scale.</param>
-    /// <returns>A <see cref="SizeF"/> which has been resized to match the current zoom level</returns>
+    /// <param name="source">The source <see cref="SizeF" /> to scale.</param>
+    /// <returns>A <see cref="SizeF" /> which has been resized to match the current zoom level</returns>
     public SizeF GetScaledSize(SizeF source)
     {
-        return new((float)(source.Width * ZoomFactor), (float)(source.Height * ZoomFactor));
+        return new SizeF((float)(source.Width * ZoomFactor), (float)(source.Height * ZoomFactor));
     }
 
     /// <summary>
-    ///   Returns the source <see cref="T:System.Drawing.Size" /> scaled according to the current zoom level
+    ///     Returns the source <see cref="T:System.Drawing.Size" /> scaled according to the current zoom level
     /// </summary>
-    /// <param name="source">The source <see cref="Size"/> to scale.</param>
-    /// <returns>A <see cref="Size"/> which has been resized to match the current zoom level</returns>
+    /// <param name="source">The source <see cref="Size" /> to scale.</param>
+    /// <returns>A <see cref="Size" /> which has been resized to match the current zoom level</returns>
     public Size GetScaledSize(Size source)
     {
-        return new(source.Width * ZoomFactor, source.Height * ZoomFactor);
+        return new Size(source.Width * ZoomFactor, source.Height * ZoomFactor);
     }
 
     /// <summary>
-    ///   Creates a selection region which encompasses the entire image
+    ///     Creates a selection region which encompasses the entire image
     /// </summary>
     /// <exception cref="System.InvalidOperationException">Thrown if no image is currently set</exception>
     public void SelectAll()
     {
-        var image = Image;
+        Bitmap? image = Image;
         if (image is null)
+        {
             return;
+        }
+
         SelectionRegion = new Rect(0, 0, image.Size.Width, image.Size.Height);
     }
 
     /// <summary>
-    /// Clears any existing selection region
+    ///     Clears any existing selection region
     /// </summary>
     public void SelectNone()
     {
@@ -2531,25 +2699,27 @@ public sealed class AdvancedImageBox : TemplatedControl
     #region Viewport and image region methods
 
     /// <summary>
-    ///   Gets the source image region.
+    ///     Gets the source image region.
     /// </summary>
     /// <returns></returns>
     public Rect GetSourceImageRegion()
     {
-        var image = Image;
+        Bitmap? image = Image;
         if (image is null)
+        {
             return EmptyRect;
+        }
 
         switch (SizeMode)
         {
             case SizeModes.Normal:
-                var offset = Offset;
-                var viewPort = GetImageViewPort();
-                var zoomFactor = ZoomFactor;
-                var sourceLeft = offset.X / zoomFactor;
-                var sourceTop = offset.Y / zoomFactor;
-                var sourceWidth = viewPort.Width / zoomFactor;
-                var sourceHeight = viewPort.Height / zoomFactor;
+                Vector offset = Offset;
+                Rect viewPort = GetImageViewPort();
+                double zoomFactor = ZoomFactor;
+                double sourceLeft = offset.X / zoomFactor;
+                double sourceTop = offset.Y / zoomFactor;
+                double sourceWidth = viewPort.Width / zoomFactor;
+                double sourceHeight = viewPort.Height / zoomFactor;
 
                 return new Rect(sourceLeft, sourceTop, sourceWidth, sourceHeight);
         }
@@ -2558,14 +2728,16 @@ public sealed class AdvancedImageBox : TemplatedControl
     }
 
     /// <summary>
-    /// Gets the image view port.
+    ///     Gets the image view port.
     /// </summary>
     /// <returns></returns>
     public Rect GetImageViewPort()
     {
-        var viewPortSize = ViewPortSize;
+        Size viewPortSize = ViewPortSize;
         if (!IsImageLoaded || viewPortSize is { Width: 0, Height: 0 })
+        {
             return EmptyRect;
+        }
 
         double xOffset = 0;
         double yOffset = 0;
@@ -2577,8 +2749,8 @@ public sealed class AdvancedImageBox : TemplatedControl
             case SizeModes.Normal:
                 if (AutoCenter)
                 {
-                    xOffset = (!IsHorizontalBarVisible ? (viewPortSize.Width - ScaledImageWidth) / 2 : 0);
-                    yOffset = (!IsVerticalBarVisible ? (viewPortSize.Height - ScaledImageHeight) / 2 : 0);
+                    xOffset = !IsHorizontalBarVisible ? (viewPortSize.Width - ScaledImageWidth) / 2 : 0;
+                    yOffset = !IsVerticalBarVisible ? (viewPortSize.Height - ScaledImageHeight) / 2 : 0;
                 }
 
                 width = Math.Min(ScaledImageWidth - Math.Abs(Offset.X), viewPortSize.Width);
@@ -2589,8 +2761,8 @@ public sealed class AdvancedImageBox : TemplatedControl
                 height = viewPortSize.Height;
                 break;
             case SizeModes.Fit:
-                var image = Image;
-                var scaleFactor = Math.Min(
+                Bitmap? image = Image;
+                double scaleFactor = Math.Min(
                     viewPortSize.Width / image!.Size.Width,
                     viewPortSize.Height / image.Size.Height
                 );
@@ -2609,7 +2781,7 @@ public sealed class AdvancedImageBox : TemplatedControl
                 throw new ArgumentOutOfRangeException(nameof(SizeMode), SizeMode, null);
         }
 
-        return new(xOffset, yOffset, width, height);
+        return new Rect(xOffset, yOffset, width, height);
     }
 
     #endregion
@@ -2624,30 +2796,32 @@ public sealed class AdvancedImageBox : TemplatedControl
     public Bitmap? GetSelectedBitmap()
     {
         if (!HaveSelection || Image is null)
+        {
             return null;
+        }
 
-        using var stream = new MemoryStream();
+        using MemoryStream stream = new();
         Image.Save(stream);
-        var image = WriteableBitmap.Decode(stream);
+        WriteableBitmap image = WriteableBitmap.Decode(stream);
 
-        var selection = SelectionRegionNet;
-        var pixelSize = SelectionPixelSize;
-        using var frameBuffer = image.Lock();
+        Rectangle selection = SelectionRegionNet;
+        PixelSize pixelSize = SelectionPixelSize;
+        using ILockedFramebuffer frameBuffer = image.Lock();
 
-        var newBitmap = new WriteableBitmap(pixelSize, image.Dpi, frameBuffer.Format, AlphaFormat.Unpremul);
-        using var newFrameBuffer = newBitmap.Lock();
+        WriteableBitmap newBitmap = new(pixelSize, image.Dpi, frameBuffer.Format, AlphaFormat.Unpremul);
+        using ILockedFramebuffer newFrameBuffer = newBitmap.Lock();
 
-        var i = 0;
+        int i = 0;
 
         unsafe
         {
-            var inputPixels = (uint*)(void*)frameBuffer.Address;
-            var targetPixels = (uint*)(void*)newFrameBuffer.Address;
+            uint* inputPixels = (uint*)(void*)frameBuffer.Address;
+            uint* targetPixels = (uint*)(void*)newFrameBuffer.Address;
 
-            for (var y = selection.Y; y < selection.Bottom; y++)
+            for (int y = selection.Y; y < selection.Bottom; y++)
             {
-                var thisY = y * frameBuffer.Size.Width;
-                for (var x = selection.X; x < selection.Right; x++)
+                int thisY = y * frameBuffer.Size.Width;
+                for (int x = selection.X; x < selection.Right; x++)
                 {
                     targetPixels![i++] = inputPixels![thisY + x];
                 }

@@ -1,10 +1,10 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.InternalAPI;
-using System.Collections.Generic;
 
 namespace SkEditor.Views.Settings;
 
@@ -13,6 +13,13 @@ public partial class CustomAddonSettingsPage : UserControl
     private static CustomAddonSettingsPage _instance = null!;
 
     private SubSettings? _parent;
+
+    public CustomAddonSettingsPage()
+    {
+        InitializeComponent();
+        _instance = this;
+    }
+
     public static void Load(IAddon addon,
         List<Setting>? settings = null,
         SubSettings? parent = null)
@@ -21,12 +28,6 @@ public partial class CustomAddonSettingsPage : UserControl
 
         _instance.LoadBasics(addon);
         _instance.PopulateSettings(settings ?? addon.GetSettings());
-    }
-
-    public CustomAddonSettingsPage()
-    {
-        InitializeComponent();
-        _instance = this;
     }
 
     public void LoadBasics(IAddon addon)
@@ -47,19 +48,18 @@ public partial class CustomAddonSettingsPage : UserControl
 
     public void PopulateSettings(List<Setting> settings)
     {
-
         ItemStackPanel.Children.Clear();
-        foreach (var setting in settings)
+        foreach (Setting setting in settings)
         {
-            var expander = new SettingsExpander()
+            SettingsExpander expander = new()
             {
                 Header = setting.Name,
                 IconSource = setting.Icon,
                 Description = setting.Description
             };
 
-            var value = setting.Type.IsSelfManaged ? null : AddonSettingsManager.GetValue(setting);
-            var control = setting.Type.CreateControl(value,
+            object? value = setting.Type.IsSelfManaged ? null : AddonSettingsManager.GetValue(setting);
+            Control control = setting.Type.CreateControl(value,
                 newValue =>
                 {
                     if (setting.Type.IsSelfManaged)
@@ -78,7 +78,6 @@ public partial class CustomAddonSettingsPage : UserControl
             setting.Type.SetupExpander(expander, setting);
             ItemStackPanel.Children.Add(expander);
         }
-
     }
 
     public record SubSettings(string Name, List<Setting> Settings);

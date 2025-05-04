@@ -1,20 +1,13 @@
-﻿using AvaloniaEdit.Editing;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AvaloniaEdit.Editing;
 using SkEditor.API;
 using SkEditor.Views;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Parser;
 
 public class CodeOption : INameableCodeElement
 {
-    public string Name { get; }
-    public CodeSection Section { get; }
-
-    public int Line { get; set; }
-    public int Column { get; set; }
-    public int Length { get; set; }
-
     public CodeOption(CodeSection section, string line,
         int lineIndex = -1, int column = -1)
     {
@@ -26,32 +19,27 @@ public class CodeOption : INameableCodeElement
         Length = Name.Length;
     }
 
-    public bool ContainsCaret(Caret caret)
-    {
-        return caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
-    }
+    public CodeSection Section { get; }
 
-    public async Task Rename()
-    {
-        var renameWindow = new SymbolRefactorWindow(this);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
-        Section.Parser.Parse();
-    }
+    public int Line { get; set; }
+    public int Column { get; set; }
+    public int Length { get; set; }
+    public string Name { get; }
 
     public void Rename(string newName)
     {
         // First rename the option declaration
-        var currentLine = Section.Lines[Line - Section.StartingLineIndex - 1];
-        var regex = new Regex(Regex.Escape(Name));
-        var newCurrentLine = regex.Replace(currentLine, newName, 1);
+        string currentLine = Section.Lines[Line - Section.StartingLineIndex - 1];
+        Regex regex = new(Regex.Escape(Name));
+        string newCurrentLine = regex.Replace(currentLine, newName, 1);
         Section.Lines[Line - Section.StartingLineIndex - 1] = newCurrentLine;
         Length = newName.Length;
         Section.RefreshCode();
 
         // Then rename all references
-        foreach (var section in Section.Parser.Sections)
+        foreach (CodeSection section in Section.Parser.Sections)
         {
-            foreach (var reference in section.OptionReferences)
+            foreach (CodeOptionReference reference in section.OptionReferences)
             {
                 if (reference.IsSimilar(this))
                 {
@@ -59,5 +47,17 @@ public class CodeOption : INameableCodeElement
                 }
             }
         }
+    }
+
+    public bool ContainsCaret(Caret caret)
+    {
+        return caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
+    }
+
+    public async Task Rename()
+    {
+        SymbolRefactorWindow renameWindow = new(this);
+        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        Section.Parser.Parse();
     }
 }

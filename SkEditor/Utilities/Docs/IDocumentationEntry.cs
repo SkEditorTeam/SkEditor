@@ -1,24 +1,33 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json.Serialization;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Docs;
 
 /// <summary>
-/// Represent a documentation entry. Can be an expression, event, effect...
-/// It is mainly used to have a common format for all documentation providers.
+///     Represent a documentation entry. Can be an expression, event, effect...
+///     It is mainly used to have a common format for all documentation providers.
 /// </summary>
 public interface IDocumentationEntry
 {
-    public static List<Type> AllTypes => Enum.GetValues<Type>().ToList();
+    public enum Changer
+    {
+        Set,
+        Add,
+        Remove,
+        RemoveAll,
+        Reset,
+        Clear,
+        Delete
+    }
 
     public enum Type
     {
@@ -33,11 +42,25 @@ public interface IDocumentationEntry
         Function
     }
 
+    public static List<Type> AllTypes => Enum.GetValues<Type>().ToList();
+
+    #region Events Properties
+
+    public string? EventValues { set; get; }
+
+    #endregion
+
+    #region Visual Utilities
+
+    [JsonIgnore] public string Since => $"Since v{Version}";
+
+    #endregion
+
     public static IconSource GetTypeIcon(Type type)
     {
         static IBrush GetColor(string key)
         {
-            return Application.Current.TryGetResource(key, out var color) && color is Color parsedColor
+            return Application.Current.TryGetResource(key, out object? color) && color is Color parsedColor
                 ? new SolidColorBrush(parsedColor)
                 : new SolidColorBrush(Colors.Black);
         }
@@ -67,17 +90,6 @@ public interface IDocumentationEntry
         }
     }
 
-    public enum Changer
-    {
-        Set,
-        Add,
-        Remove,
-        RemoveAll,
-        Reset,
-        Clear,
-        Delete
-    }
-
     #region Common Properties
 
     public string Name { set; get; }
@@ -97,17 +109,4 @@ public interface IDocumentationEntry
     public string? Changers { set; get; }
 
     #endregion
-
-    #region Events Properties
-
-    public string? EventValues { set; get; }
-
-    #endregion
-
-    #region Visual Utilities
-
-    [JsonIgnore] public string Since => $"Since v{Version}";
-
-    #endregion
-
 }

@@ -1,4 +1,8 @@
-﻿using Avalonia;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -8,20 +12,11 @@ using FluentAvalonia.Styling;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Styling;
 
 public class ThemeEditor
 {
-    public static List<Theme> Themes { get; set; } = [];
-    public static Theme CurrentTheme { get; set; } = new();
-
-    public static string ThemeFolderPath { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Themes");
-
     public static readonly Dictionary<string, string[]> ThemeToResourceDictionary = new()
     {
         { "BackgroundColor", ["BackgroundColor"] },
@@ -45,10 +40,17 @@ public class ThemeEditor
         },
         { "TextBoxFocusedBackground", ["TextControlBackgroundFocused"] },
         { "CurrentLineBackground", ["CurrentLineBackground"] },
-        { "CurrentLineBorder", ["CurrentLineBorder"] },
+        { "CurrentLineBorder", ["CurrentLineBorder"] }
     };
 
+    public static List<Theme> Themes { get; set; } = [];
+    public static Theme CurrentTheme { get; set; } = new();
+
+    public static string ThemeFolderPath { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Themes");
+
     public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
+
+    public static ControlTheme SmallWindowTheme { get; private set; }
 
     public static void LoadThemes()
     {
@@ -57,7 +59,10 @@ public class ThemeEditor
             Directory.CreateDirectory(ThemeFolderPath);
         }
 
-        if (!File.Exists(Path.Combine(ThemeFolderPath, "Default.json"))) SaveTheme(GetDefaultTheme());
+        if (!File.Exists(Path.Combine(ThemeFolderPath, "Default.json")))
+        {
+            SaveTheme(GetDefaultTheme());
+        }
 
         string[] files = Directory.GetFiles(ThemeFolderPath);
 
@@ -109,11 +114,14 @@ public class ThemeEditor
         return GetDefaultTheme();
     }
 
-    public static Theme GetDefaultTheme() => new()
+    public static Theme GetDefaultTheme()
     {
-        Name = "Default",
-        FileName = "Default.json"
-    };
+        return new Theme
+        {
+            Name = "Default",
+            FileName = "Default.json"
+        };
+    }
 
     public static void SaveTheme(Theme theme)
     {
@@ -123,7 +131,10 @@ public class ThemeEditor
         File.WriteAllText(path, serializedTheme);
     }
 
-    public static void SaveAllThemes() => Themes.ForEach(SaveTheme);
+    public static void SaveAllThemes()
+    {
+        Themes.ForEach(SaveTheme);
+    }
 
     public static async Task SetTheme(Theme theme)
     {
@@ -137,9 +148,9 @@ public class ThemeEditor
     {
         SaveDefaultColors();
 
-        var tasks = new List<Task>();
+        List<Task> tasks = new();
 
-        foreach (var item in ThemeToResourceDictionary)
+        foreach (KeyValuePair<string, string[]> item in ThemeToResourceDictionary)
         {
             ImmutableSolidColorBrush brush = CurrentTheme.GetBrushByName(item.Key);
 
@@ -168,8 +179,6 @@ public class ThemeEditor
         await Task.WhenAll(tasks);
     }
 
-    public static ControlTheme SmallWindowTheme { get; private set; }
-
     private static void ApplyMica()
     {
         if (!Application.Current.Resources.TryGetResource("SmallWindowTheme", ThemeVariant.Default,
@@ -190,7 +199,7 @@ public class ThemeEditor
         }
         else
         {
-            var existingSetter = smallWindow.Setters.OfType<Setter>()
+            Setter? existingSetter = smallWindow.Setters.OfType<Setter>()
                 .FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint");
             if (existingSetter != null)
             {
@@ -210,8 +219,11 @@ public class ThemeEditor
             .ToList()
             .ForEach(colorChange =>
             {
-                if (!Application.Current.TryGetResource(colorChange.Key, ThemeVariant.Dark, out var defaultColor))
+                if (!Application.Current.TryGetResource(colorChange.Key, ThemeVariant.Dark, out object? defaultColor))
+                {
                     return;
+                }
+
                 if (defaultColor is SolidColorBrush brush)
                 {
                     DefaultColors.Add(colorChange.Key, new ImmutableSolidColorBrush(brush));

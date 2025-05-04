@@ -5,16 +5,25 @@ using System.Linq;
 namespace SkEditor.API;
 
 /// <summary>
-/// Represent a registry, which is a collection of key-value pairs,
-/// each being linked with a registry key (= the IAddon instance).
+///     Represent a registry, which is a collection of key-value pairs,
+///     each being linked with a registry key (= the IAddon instance).
 /// </summary>
 public class Registry<TValue> : IEnumerable<TValue>
 {
-
     private readonly Dictionary<RegistryKey, TValue> _registry = new();
 
+    public IEnumerator<TValue> GetEnumerator()
+    {
+        return _registry.Values.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
     /// <summary>
-    /// Get the value associated with the given key.
+    ///     Get the value associated with the given key.
     /// </summary>
     /// <param name="key">The key to look for.</param>
     /// <returns>The value associated with the key, or the default value if the key is not found.</returns>
@@ -24,7 +33,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     }
 
     /// <summary>
-    /// Get all values registered by the specified <see cref="IAddon"/>.
+    ///     Get all values registered by the specified <see cref="IAddon" />.
     /// </summary>
     /// <param name="addon">The addon to get the values for.</param>
     /// <returns>An IEnumerable of all values registered by the addon.</returns>
@@ -34,7 +43,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     }
 
     /// <summary>
-    /// Registers a new key-value pair in the registry.
+    ///     Registers a new key-value pair in the registry.
     /// </summary>
     /// <param name="key">The key to register.</param>
     /// <param name="value">The value to associate with the key.</param>
@@ -45,7 +54,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     }
 
     /// <summary>
-    /// Checks if a key exists in the registry.
+    ///     Checks if a key exists in the registry.
     /// </summary>
     /// <param name="key">The key to check for.</param>
     /// <returns>True if the key exists, false otherwise.</returns>
@@ -55,8 +64,8 @@ public class Registry<TValue> : IEnumerable<TValue>
     }
 
     /// <summary>
-    /// Checks if a full key exists in the registry.
-    /// The full key is represented by the addon ID and the key ID, separated by a slash.
+    ///     Checks if a full key exists in the registry.
+    ///     The full key is represented by the addon ID and the key ID, separated by a slash.
     /// </summary>
     /// <param name="fullKey">The full key to check for.</param>
     /// <returns>True if the full key exists, false otherwise.</returns>
@@ -66,7 +75,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     }
 
     /// <summary>
-    /// Retrieves all values in the registry.
+    ///     Retrieves all values in the registry.
     /// </summary>
     /// <returns>An IEnumerable of all values in the registry.</returns>
     public IEnumerable<TValue> GetValues()
@@ -75,7 +84,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     }
 
     /// <summary>
-    /// Get the key for a specified value.
+    ///     Get the key for a specified value.
     /// </summary>
     /// <param name="value">The value to look for.</param>
     /// <returns>The key associated with the value, or null if the value is not found.</returns>
@@ -93,15 +102,5 @@ public class Registry<TValue> : IEnumerable<TValue>
                 _registry.Remove(key);
             }
         }
-    }
-
-    public IEnumerator<TValue> GetEnumerator()
-    {
-        return _registry.Values.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 }

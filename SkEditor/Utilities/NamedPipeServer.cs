@@ -1,14 +1,14 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.IO.Pipes;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
-using System;
-using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
 
@@ -18,7 +18,10 @@ public static class NamedPipeServer
 
     public static void Start()
     {
-        if (_isRunning) return;
+        if (_isRunning)
+        {
+            return;
+        }
 
         _isRunning = true;
 

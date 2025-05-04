@@ -1,12 +1,13 @@
-﻿using AvaloniaEdit.Utils;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
@@ -21,7 +22,7 @@ public abstract class StorageElement
     public bool IsFile { get; set; }
     public bool IsRootFolder { get; set; }
 
-    public IconSource Icon { get; set; } = new SymbolIconSource() { Symbol = Symbol.Document, FontSize = 18 };
+    public IconSource Icon { get; set; } = new SymbolIconSource { Symbol = Symbol.Document, FontSize = 18 };
 
     public IRelayCommand OpenInExplorerCommand { get; set; }
     public IRelayCommand RenameCommand => new AsyncRelayCommand(OpenRenameWindow);
@@ -43,17 +44,22 @@ public abstract class StorageElement
     public void HandleDoubleClick()
     {
         if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+        {
             HandleClick();
+        }
     }
+
     public void HandleSingleClick()
     {
         if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+        {
             HandleClick();
+        }
     }
 
     public async Task OpenRenameWindow()
     {
-        var window = new RenameElementWindow(this);
+        RenameElementWindow window = new(this);
         await window.ShowDialog(MainWindow.Instance);
     }
 
@@ -65,9 +71,12 @@ public abstract class StorageElement
 
     protected static void Sort(StorageElement element)
     {
-        if (element.Children == null) return;
+        if (element.Children == null)
+        {
+            return;
+        }
 
-        var temp = element.Children.ToList();
+        List<StorageElement> temp = element.Children.ToList();
         element.Children.Clear();
         element.Children.AddRange(temp.OrderBy(x => x.IsFile).ThenBy(x => x.Name));
     }

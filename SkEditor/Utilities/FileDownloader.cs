@@ -1,17 +1,18 @@
-﻿using Avalonia;
+﻿using System;
+using System.IO;
+using System.IO.Compression;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
-using System;
-using System.IO;
-using System.IO.Compression;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
+
 public static class FileDownloader
 {
     private const string ZipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
@@ -21,10 +22,13 @@ public static class FileDownloader
     public static async Task CheckForMissingItemFiles(Window visual)
     {
         string itemsFile = Path.Combine(AppConfig.AppDataFolderPath, "items.json");
-        if (File.Exists(itemsFile)) return;
+        if (File.Exists(itemsFile))
+        {
+            return;
+        }
 
         TaskDialog td = CreateTaskDialog(visual);
-        var result = await td.ShowAsync();
+        object? result = await td.ShowAsync();
 
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
         if (standardResult == TaskDialogStandardResult.Cancel)
@@ -36,13 +40,13 @@ public static class FileDownloader
 
     private static TaskDialog CreateTaskDialog(Visual visual)
     {
-        var td = new TaskDialog
+        TaskDialog td = new()
         {
             Title = Translation.Get("DownloadingMissingFilesTitle"),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.Download },
             SubHeader = Translation.Get("Downloading"),
-            Content = Translation.Get("DownloadingMissingFilesDescriptionItems"),
+            Content = Translation.Get("DownloadingMissingFilesDescriptionItems")
         };
 
         td.Opened += async (_, _) => await DownloadMissingFiles(td);
@@ -60,10 +64,10 @@ public static class FileDownloader
         {
             using (HttpClient client = new())
             {
-                var progress = new Progress<float>();
+                Progress<float> progress = new();
                 progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
 
-                await using var file = new FileStream(ZipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await using FileStream file = new(ZipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
                 await client.DownloadDataAsync(ZipUrl, file, progress);
             }
 

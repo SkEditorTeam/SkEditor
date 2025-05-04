@@ -8,16 +8,17 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views;
+
 public partial class PublishWindow : AppWindow
 {
-    private string CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string;
-
     public PublishWindow()
     {
         InitializeComponent();
         Focusable = true;
         InitializeUi();
     }
+
+    private string CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string;
 
     private void InitializeUi()
     {
@@ -33,14 +34,17 @@ public partial class PublishWindow : AppWindow
             "Pastebin" => 0,
             "code.skript.pl" => 1,
             "skUnity Parser" => 2,
-            _ => 0,
+            _ => 0
         };
 
         WebsiteComboBox.SelectionChanged += (_, _) => UpdateServiceInfo();
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
 
         UpdateServiceInfo();
@@ -54,7 +58,7 @@ public partial class PublishWindow : AppWindow
             "Pastebin" => appConfig.PastebinApiKey,
             "code.skript.pl" => appConfig.CodeSkriptPlApiKey,
             "skUnity Parser" => appConfig.SkUnityApiKey,
-            _ => "",
+            _ => ""
         };
 
         appConfig.LastUsedPublishService = CurrentService;
@@ -70,7 +74,7 @@ public partial class PublishWindow : AppWindow
             return;
         }
 
-        var code = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Text;
+        string? code = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Text;
         if (string.IsNullOrWhiteSpace(code))
         {
             await SkEditorAPI.Windows.ShowError("You can't publish empty code!");

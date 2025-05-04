@@ -1,14 +1,14 @@
-﻿using Avalonia.Media;
+﻿using System;
+using System.Collections.Generic;
+using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace SkEditor.Utilities.Styling;
 
 public class Theme
 {
-    [JsonIgnore]
-    public string FileName { get; set; } = string.Empty;
+    [JsonIgnore] public string FileName { get; set; } = string.Empty;
 
     public string Name { get; set; } = string.Empty;
 
@@ -36,7 +36,7 @@ public class Theme
         { "ToggleButtonBackgroundChecked", new ImmutableSolidColorBrush(Color.Parse("#40ffffff")) },
         { "ToggleButtonBackgroundCheckedPointerOver", new ImmutableSolidColorBrush(Color.Parse("#40ffffff")) }
     };
-    
+
     public ImmutableSolidColorBrush GetBrushByName(string propertyName)
     {
         return propertyName switch
@@ -55,7 +55,7 @@ public class Theme
             "CurrentLineBackground" => CurrentLineBackground,
             "CurrentLineBorder" => CurrentLineBorder,
             "AccentColor" => AccentColor,
-            _ => throw new System.ArgumentException($"Property {propertyName} not found in Theme")
+            _ => throw new ArgumentException($"Property {propertyName} not found in Theme")
         };
     }
 }

@@ -1,23 +1,24 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using AvaloniaEdit;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.Files;
-using System;
 
 namespace SkEditor.API;
 
 /// <summary>
-/// Interface handling all events in the application, that addons
-/// can subscribe to.
+///     Interface handling all events in the application, that addons
+///     can subscribe to.
 /// </summary>
 public interface IEvents
 {
     /// <summary>
-    /// Called when every addon has been enabled, and the
-    /// first lifecycle event has been called. This is when you
-    /// can do UI-related things for instance.
+    ///     Called when every addon has been enabled, and the
+    ///     first lifecycle event has been called. This is when you
+    ///     can do UI-related things for instance.
     /// </summary>
     event EventHandler OnPostEnable;
+
     internal void PostEnable();
 
     event EventHandler<FileCreatedEventArgs> OnFileCreated;
@@ -30,19 +31,21 @@ public interface IEvents
     internal void AddonSettingChanged(Setting setting, object oldValue);
 
     /// <summary>
-    /// Called when a tab view item is closed. You can
-    /// cancel the close if needed.
+    ///     Called when a tab view item is closed. You can
+    ///     cancel the close if needed.
     /// </summary>
     event EventHandler<TabClosedEventArgs> OnTabClosed;
+
     internal bool TabClosed(OpenedFile openedFile);
 
     event EventHandler<SelectionChangedEventArgs> OnTabChanged;
     internal void TabChanged(SelectionChangedEventArgs e);
 
     /// <summary>
-    /// Called when a settings window is open.
+    ///     Called when a settings window is open.
     /// </summary>
     event EventHandler OnSettingsOpened;
+
     internal void SettingsOpened();
 }
 

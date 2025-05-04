@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -5,11 +9,9 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace SkEditor.Views.Settings;
+
 public partial class GeneralPage : UserControl
 {
     public GeneralPage()
@@ -30,6 +32,7 @@ public partial class GeneralPage : UserControl
         {
             LanguageComboBox.Items.Add(Path.GetFileNameWithoutExtension(file));
         }
+
         LanguageComboBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Language;
         LanguageComboBox.SelectionChanged += (_, _) =>
         {
@@ -42,7 +45,9 @@ public partial class GeneralPage : UserControl
                 // Regenerate the text editor context menu
                 // TODO: Context menu language doesn't change, when user has documentation tab opened.
                 if (!SkEditorAPI.Files.IsEditorOpen())
+                {
                     return;
+                }
 
                 TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
                 editor.ContextFlyout = FileBuilder.GetContextMenu(editor);
@@ -52,11 +57,11 @@ public partial class GeneralPage : UserControl
 
     private void LoadIndentation()
     {
-        var appConfig = SkEditorAPI.Core.GetAppConfig();
-        var tag = appConfig.UseSpacesInsteadOfTabs ? "spaces" : "tabs";
-        var amount = appConfig.TabSize;
+        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
+        string tag = appConfig.UseSpacesInsteadOfTabs ? "spaces" : "tabs";
+        int amount = appConfig.TabSize;
 
-        foreach (var item in IndentationTypeComboBox.Items)
+        foreach (object? item in IndentationTypeComboBox.Items)
         {
             if ((item as ComboBoxItem).Tag.ToString() == tag)
             {
@@ -65,7 +70,7 @@ public partial class GeneralPage : UserControl
             }
         }
 
-        foreach (var item in IndentationAmountComboBox.Items)
+        foreach (object? item in IndentationAmountComboBox.Items)
         {
             if ((item as ComboBoxItem).Tag.ToString() == amount.ToString())
             {
@@ -85,15 +90,18 @@ public partial class GeneralPage : UserControl
 
         IndentationAmountComboBox.SelectionChanged += (_, _) =>
         {
-            var appConfig = SkEditorAPI.Core.GetAppConfig();
+            AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
             appConfig.TabSize = int.Parse((IndentationAmountComboBox.SelectedItem as ComboBoxItem).Tag.ToString());
-            SkEditorAPI.Files.GetOpenedEditors().ForEach(file => file.Editor.Options.IndentationSize = appConfig.TabSize);
+            SkEditorAPI.Files.GetOpenedEditors()
+                .ForEach(file => file.Editor.Options.IndentationSize = appConfig.TabSize);
         };
         IndentationTypeComboBox.SelectionChanged += (_, _) =>
         {
-            var appConfig = SkEditorAPI.Core.GetAppConfig();
-            appConfig.UseSpacesInsteadOfTabs = (IndentationTypeComboBox.SelectedItem as ComboBoxItem).Tag.ToString() == "spaces";
-            SkEditorAPI.Files.GetOpenedEditors().ForEach(file => file.Editor.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
+            AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
+            appConfig.UseSpacesInsteadOfTabs =
+                (IndentationTypeComboBox.SelectedItem as ComboBoxItem).Tag.ToString() == "spaces";
+            SkEditorAPI.Files.GetOpenedEditors().ForEach(file =>
+                file.Editor.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
         };
     }
 
@@ -101,8 +109,14 @@ public partial class GeneralPage : UserControl
     {
         ToggleSetting("IsDiscordRpcEnabled");
 
-        if (SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled) DiscordRpcUpdater.Initialize();
-        else DiscordRpcUpdater.Uninitialize();
+        if (SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled)
+        {
+            DiscordRpcUpdater.Initialize();
+        }
+        else
+        {
+            DiscordRpcUpdater.Uninitialize();
+        }
     }
 
     private void ToggleWrapping()
@@ -113,28 +127,32 @@ public partial class GeneralPage : UserControl
 
         textEditors.ForEach(textEditor => textEditor.WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled);
     }
-    
+
     private void ToggleZoomSync()
     {
         ToggleSetting("IsZoomSyncEnabled");
 
-        if (!SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled)
+        {
+            return;
+        }
 
         List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList();
         double fontSize = textEditors.First().FontSize;
-        textEditors.ForEach(textEditor =>
-        {
-            textEditor.FontSize = fontSize;
-        });
+        textEditors.ForEach(textEditor => { textEditor.FontSize = fontSize; });
     }
 
     private static void ToggleSetting(string propertyName)
     {
-        var appConfig = SkEditorAPI.Core.GetAppConfig();
-        var property = appConfig.GetType().GetProperty(propertyName);
+        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
+        PropertyInfo? property = appConfig.GetType().GetProperty(propertyName);
 
-        if (property == null || property.PropertyType != typeof(bool)) return;
-        var currentValue = (bool?)property.GetValue(appConfig);
+        if (property == null || property.PropertyType != typeof(bool))
+        {
+            return;
+        }
+
+        bool? currentValue = (bool?)property.GetValue(appConfig);
         property.SetValue(appConfig, !currentValue);
     }
 }

@@ -1,14 +1,16 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using SkEditor.Views;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
+
 public class CodePublisher
 {
     public static async Task PublishPastebin(string code, PublishWindow window)
@@ -16,23 +18,25 @@ public class CodePublisher
         try
         {
             HttpClient client = new();
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://pastebin.com/api/api_post.php");
-            var collection = new List<KeyValuePair<string, string>>
+            HttpRequestMessage request = new(HttpMethod.Post, "https://pastebin.com/api/api_post.php");
+            List<KeyValuePair<string, string>> collection = new()
             {
-                new("api_dev_key", window.ApiKeyTextBox.Text),
-                new("api_paste_code", code),
-                new("api_option", "paste")
+                new KeyValuePair<string, string>("api_dev_key", window.ApiKeyTextBox.Text),
+                new KeyValuePair<string, string>("api_paste_code", code),
+                new KeyValuePair<string, string>("api_option", "paste")
             };
-            var content = new FormUrlEncodedContent(collection);
+            FormUrlEncodedContent content = new(collection);
             request.Content = content;
-            var response = await client.SendAsync(request);
+            HttpResponseMessage response = await client.SendAsync(request);
             string responseString = await response.Content.ReadAsStringAsync();
 
             window.ResultTextBox.Text = responseString;
         }
         catch (Exception e)
         {
-            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
+            await SkEditorAPI.Windows.ShowError(
+                "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" +
+                e.Message);
         }
     }
 
@@ -52,7 +56,7 @@ public class CodePublisher
 
             HttpClient client = new();
             HttpResponseMessage response = await client.PostAsync("https://code.skript.pl/api/v1/codes/create",
-                                                    new StringContent(json, System.Text.Encoding.UTF8, "application/json"));
+                new StringContent(json, Encoding.UTF8, "application/json"));
             string responseString = await response.Content.ReadAsStringAsync();
 
             JObject jsonResult = JObject.Parse(responseString);
@@ -61,7 +65,9 @@ public class CodePublisher
         }
         catch (Exception e)
         {
-            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
+            await SkEditorAPI.Windows.ShowError(
+                "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" +
+                e.Message);
         }
     }
 
@@ -74,9 +80,10 @@ public class CodePublisher
             string fileName = SkEditorAPI.Files.GetCurrentOpenedFile().Name;
 
             HttpClient client = new();
-            HttpRequestMessage request = new(HttpMethod.Post, $"https://api.skunity.com/v1/{apiKey}/parser/savenewfile/{fileName}");
+            HttpRequestMessage request = new(HttpMethod.Post,
+                $"https://api.skunity.com/v1/{apiKey}/parser/savenewfile/{fileName}");
             request.Headers.Add("User-Agent", "SkEditor");
-            request.Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.SendAsync(request);
             string responseString = await response.Content.ReadAsStringAsync();
@@ -87,7 +94,9 @@ public class CodePublisher
         }
         catch (Exception e)
         {
-            await SkEditorAPI.Windows.ShowError("Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" + e.Message);
+            await SkEditorAPI.Windows.ShowError(
+                "Something went wrong.\nDo you have an internet connection? Did you enter correct API key?\n\n" +
+                e.Message);
         }
     }
 }

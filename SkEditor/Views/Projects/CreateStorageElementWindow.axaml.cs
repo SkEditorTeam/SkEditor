@@ -27,13 +27,16 @@ public partial class CreateStorageElementWindow : AppWindow
         CreateButton.Command = new RelayCommand(Create);
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
 
     private void Create()
     {
-        var input = NameTextBox.Text;
+        string? input = NameTextBox.Text;
         string? error = Folder.ValidateCreationName(input);
         if (error != null)
         {

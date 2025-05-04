@@ -1,13 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
-using Avalonia.Threading;
-using Serilog;
-using SkEditor.API;
-using SkEditor.Utilities;
-using SkEditor.Utilities.InternalAPI;
-using SkEditor.Views;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -15,6 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
+using FluentAvalonia.UI.Windowing;
+using Serilog;
+using SkEditor.API;
+using SkEditor.Utilities;
+using SkEditor.Utilities.InternalAPI;
+using SkEditor.Views;
 
 namespace SkEditor;
 
@@ -31,8 +32,11 @@ public class App : Application
     {
         base.OnFrameworkInitializationCompleted();
 
-        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
-        
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            return;
+        }
+
         if (!desktop.Args.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase))
         {
             _splashScreen = new SplashScreen();
@@ -64,20 +68,23 @@ public class App : Application
                     _splashScreen?.UpdateStatus("Checking for other instances..."));
 
                 bool continueStartup = await Dispatcher.UIThread.InvokeAsync(() => HandleSingleInstance(desktop));
-                if (!continueStartup) return;
+                if (!continueStartup)
+                {
+                    return;
+                }
 
                 await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Loading configuration..."));
                 SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    FluentAvalonia.UI.Windowing.AppWindow.AlwaysFallback =
+                    AppWindow.AlwaysFallback =
                         SkEditorAPI.Core.GetAppConfig().ForceNativeTitleBar;
                 });
 
                 await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Creating main window..."));
 
-                var mainWindow =
+                MainWindow mainWindow =
                     await Dispatcher.UIThread.InvokeAsync(() => new MainWindow(_splashScreen) { IsVisible = false });
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
@@ -88,13 +95,16 @@ public class App : Application
                 {
                     desktop.MainWindow = mainWindow;
                     mainWindow.ApplyTemplate();
-                    #if DEBUG
+#if DEBUG
                     mainWindow.AttachDevTools();
-                    #endif
+#endif
                 });
             }).ContinueWith(t =>
             {
-                if (!t.IsFaulted || t.Exception == null) return;
+                if (!t.IsFaulted || t.Exception == null)
+                {
+                    return;
+                }
 
                 Log.Error(t.Exception, "Error creating SkEditor");
                 Dispatcher.UIThread.Post(() =>
@@ -151,8 +161,8 @@ public class App : Application
             await SkEditorAPI.Core.SaveData();
             await AddonLoader.SaveMeta();
 
-            var fullException = e.Exception.ToString();
-            var encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(fullException));
+            string fullException = e.Exception.ToString();
+            string encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(fullException));
             await Task.Delay(500);
             Process.Start(Environment.ProcessPath, "--crash " + encodedMessage);
             Environment.Exit(1);
@@ -194,7 +204,7 @@ public class App : Application
     {
         try
         {
-            var args = Environment.GetCommandLineArgs();
+            string[] args = Environment.GetCommandLineArgs();
             await using NamedPipeClientStream namedPipeClientStream = new("SkEditor");
             await namedPipeClientStream.ConnectAsync();
             if (args is { Length: > 1 })

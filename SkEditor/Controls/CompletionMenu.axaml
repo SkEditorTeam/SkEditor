@@ -1,16 +1,16 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 x:Class="SkEditor.Controls.CompletionMenu">
+             x:Class="SkEditor.Controls.CompletionMenu">
 
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceInclude Source="avares://SkEditor/Styles/CompletionListBoxItemStyle.axaml" />
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</UserControl.Resources>
-	
-	<ScrollViewer>
-		<ListBox Name="CompletionListBox" Height="75" Width="200"/>
-	</ScrollViewer>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://SkEditor/Styles/CompletionListBoxItemStyle.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer>
+        <ListBox Name="CompletionListBox" Height="75" Width="200" />
+    </ScrollViewer>
 </UserControl>

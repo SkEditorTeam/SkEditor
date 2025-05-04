@@ -1,14 +1,14 @@
-﻿using Avalonia.Media;
-using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
-using SkEditor.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Media;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
+using SkEditor.API;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 
@@ -27,12 +27,13 @@ public class SkriptMCProvider : IDocProvider
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
-        var uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMcapiKey) + "&articleName=" + searchData.Query;
+        string uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMcapiKey) + "&articleName=" +
+                     searchData.Query;
 
         uri += "&categorySlug=" + searchData.FilteredType.ToString().ToLower() + "s";
         uri += "&addonSlug=" + (string.IsNullOrEmpty(searchData.FilteredAddon) ? "Skript" : searchData.FilteredAddon);
 
-        var cancellationToken = new CancellationTokenSource(new TimeSpan(0, 0, 5));
+        CancellationTokenSource cancellationToken = new(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
         try
         {
@@ -55,22 +56,28 @@ public class SkriptMCProvider : IDocProvider
             }
 
             //SkEditorAPI.Windows.ShowError($"An error occurred while fetching the documentation.\n\n{response.ReasonPhrase}");
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+            await SkEditorAPI.Windows.ShowError(
+                Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
         }
 
-        var content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        var entries = JsonConvert.DeserializeObject<List<SkriptMcDocEntry>>(content);
+        string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
+        List<SkriptMcDocEntry>? entries = JsonConvert.DeserializeObject<List<SkriptMcDocEntry>>(content);
         return entries.Cast<IDocumentationEntry>().ToList();
     }
 
     public List<string> CanSearch(SearchData searchData)
     {
-        if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) && searchData.FilteredType == IDocumentationEntry.Type.All)
+        if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) &&
+            searchData.FilteredType == IDocumentationEntry.Type.All)
+        {
             return [Translation.Get("DocumentationWindowInvalidDataQuery")];
+        }
 
         if (searchData.FilteredType == IDocumentationEntry.Type.All)
+        {
             return [Translation.Get("DocumentationWindowSkriptMCBad")];
+        }
 
         return [];
     }
@@ -81,18 +88,27 @@ public class SkriptMCProvider : IDocProvider
     }
 
     public bool NeedsToLoadExamples => false;
+
     public Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
-        var example = (entry as SkriptMcDocEntry)?.Example;
+        IDocumentationExample? example = (entry as SkriptMcDocEntry)?.Example;
         return Task.FromResult<List<IDocumentationExample>>(example == null ? [] : [example]);
     }
 
     public bool HasAddons => false;
-    public Task<List<string>> GetAddons() => Task.FromResult(new List<string>());
 
-    public Task<Color?> GetAddonColor(string addonName) => Task.FromResult<Color?>(null);
+    public Task<List<string>> GetAddons()
+    {
+        return Task.FromResult(new List<string>());
+    }
 
-    public IconSource Icon => new BitmapIconSource() { UriSource = new("avares://SkEditor/Assets/Brands/SkriptMC.png") };
+    public Task<Color?> GetAddonColor(string addonName)
+    {
+        return Task.FromResult<Color?>(null);
+    }
+
+    public IconSource Icon => new BitmapIconSource
+        { UriSource = new Uri("avares://SkEditor/Assets/Brands/SkriptMC.png") };
 
     public string? GetLink(IDocumentationEntry entry)
     {

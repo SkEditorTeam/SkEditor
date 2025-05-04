@@ -18,8 +18,6 @@ namespace SkEditor.Utilities.Projects.Elements;
 
 public class Folder : StorageElement
 {
-    public string StorageFolderPath { get; set; }
-
     public Folder(string folder, Folder? parent = null)
     {
         folder = Uri.UnescapeDataString(folder)
@@ -42,7 +40,7 @@ public class Folder : StorageElement
 
         if (string.IsNullOrEmpty(Name))
         {
-            var segments = folder.Split(
+            string[] segments = folder.Split(
                 [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar],
                 StringSplitOptions.RemoveEmptyEntries
             );
@@ -65,22 +63,23 @@ public class Folder : StorageElement
         CloseProjectCommand = new RelayCommand(CloseProject);
     }
 
+    public string StorageFolderPath { get; set; }
+
     private async Task LoadChildren()
     {
-        await Task.Run(
-            () =>
-                Dispatcher.UIThread.Invoke(() =>
-                {
-                    Directory
-                        .GetDirectories(StorageFolderPath)
-                        .ToList()
-                        .ForEach(x => Children.Add(new Folder(x, this)));
+        await Task.Run(() =>
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                Directory
+                    .GetDirectories(StorageFolderPath)
+                    .ToList()
+                    .ForEach(x => Children.Add(new Folder(x, this)));
 
-                    Directory
-                        .GetFiles(StorageFolderPath)
-                        .ToList()
-                        .ForEach(x => Children.Add(new File(x, this)));
-                })
+                Directory
+                    .GetFiles(StorageFolderPath)
+                    .ToList()
+                    .ForEach(x => Children.Add(new File(x, this)));
+            })
         );
     }
 
@@ -91,23 +90,27 @@ public class Folder : StorageElement
 
     public async Task DeleteFolder()
     {
-        var result = await SkEditorAPI.Windows.ShowDialog(
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
             "Delete File",
             $"Are you sure you want to delete {Name} from the file system?",
-            icon: Symbol.Delete,
+            Symbol.Delete,
             primaryButtonText: "Delete",
             cancelButtonText: "Cancel",
             translate: false
         );
 
         if (result != ContentDialogResult.Primary)
+        {
             return;
+        }
 
         Directory.Delete(StorageFolderPath, true);
         Parent?.Children?.Remove(this);
 
         if (Parent is null)
+        {
             CloseProject();
+        }
     }
 
     private static void CloseProject()
@@ -125,10 +128,12 @@ public class Folder : StorageElement
 
     public override void RenameElement(string newName, bool move = true)
     {
-        var newPath = Path.Combine(Parent.StorageFolderPath, newName);
+        string newPath = Path.Combine(Parent.StorageFolderPath, newName);
 
         if (move)
+        {
             Directory.Move(StorageFolderPath, newPath);
+        }
 
         StorageFolderPath = newPath;
         Name = newName;
@@ -138,12 +143,16 @@ public class Folder : StorageElement
     public override string? ValidateName(string input)
     {
         if (input == Name)
+        {
             return Translation.Get("ProjectRenameErrorSameName");
+        }
 
         if (Parent is null)
+        {
             return Translation.Get("ProjectRenameErrorParentNull");
+        }
 
-        var folder = Parent.Children.FirstOrDefault(x => x.Name == input);
+        StorageElement? folder = Parent.Children.FirstOrDefault(x => x.Name == input);
 
         return folder is not null ? Translation.Get("ProjectErrorNameExists") : null;
     }
@@ -151,10 +160,14 @@ public class Folder : StorageElement
     public string? ValidateCreationName(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
+        {
             return Translation.Get("ProjectCreateErrorNameEmpty");
+        }
 
         if (Children.Any(x => x.Name == input))
+        {
             return Translation.Get("ProjectErrorNameExists");
+        }
 
         return null;
     }
@@ -162,7 +175,9 @@ public class Folder : StorageElement
     public override void HandleClick()
     {
         if (Children.Count > 0)
+        {
             IsExpanded = !IsExpanded;
+        }
     }
 
     public void CopyAbsolutePath()
@@ -174,33 +189,33 @@ public class Folder : StorageElement
 
     public void CopyPath()
     {
-        var path = StorageFolderPath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
+        string path = StorageFolderPath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
         SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(path);
     }
 
     public async Task CreateNewElement(bool file)
     {
-        var window = new CreateStorageElementWindow(this, file);
+        CreateStorageElementWindow window = new(this, file);
         await window.ShowDialog(MainWindow.Instance);
     }
 
     public void CreateFile(string name)
     {
-        var path = Path.Combine(StorageFolderPath, name);
+        string path = Path.Combine(StorageFolderPath, name);
         System.IO.File.Create(path).Close();
         FileHandler.OpenFile(path);
 
-        var element = new File(path, this);
+        File element = new(path, this);
         Children.Add(element);
         Sort(this);
     }
 
     public void CreateFolder(string name)
     {
-        var path = Path.Combine(StorageFolderPath, name);
+        string path = Path.Combine(StorageFolderPath, name);
         Directory.CreateDirectory(path);
 
-        var element = new Folder(path, this);
+        Folder element = new(path, this);
         Children.Add(element);
         Sort(this);
     }
@@ -208,17 +223,22 @@ public class Folder : StorageElement
     public StorageElement? GetItemByPath(string path)
     {
         if (StorageFolderPath == path)
+        {
             return this;
+        }
 
-        foreach (var child in Children)
+        foreach (StorageElement child in Children)
         {
             switch (child)
             {
                 case Folder folder:
                 {
-                    var item = folder.GetItemByPath(path);
+                    StorageElement? item = folder.GetItemByPath(path);
                     if (item is not null)
+                    {
                         return item;
+                    }
+
                     break;
                 }
                 case File file

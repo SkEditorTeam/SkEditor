@@ -1,27 +1,28 @@
-﻿using Newtonsoft.Json.Linq;
-using SkEditor.API;
-using SkEditor.API.Settings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using SkEditor.API;
+using SkEditor.API.Settings;
 
 namespace SkEditor.Utilities.InternalAPI;
 
 /// <summary>
-/// Manager for custom addon settings.
+///     Manager for custom addon settings.
 /// </summary>
 public static class AddonSettingsManager
 {
-
     private static readonly Dictionary<IAddon, JObject> LoadedAddonSettings = new();
 
     public static void LoadSettings(IAddon addon)
     {
         if (LoadedAddonSettings.ContainsKey(addon))
+        {
             return;
+        }
 
-        var path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
+        string path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         if (!File.Exists(path))
         {
@@ -29,7 +30,7 @@ public static class AddonSettingsManager
             return;
         }
 
-        var json = File.ReadAllText(path);
+        string json = File.ReadAllText(path);
         try
         {
             LoadedAddonSettings[addon] = JObject.Parse(json);
@@ -41,11 +42,12 @@ public static class AddonSettingsManager
             return;
         }
 
-        foreach (var setting in addon.GetSettings())
+        foreach (Setting setting in addon.GetSettings())
         {
             if (!LoadedAddonSettings[addon].ContainsKey(setting.Key) && !setting.Type.IsSelfManaged)
             {
-                SkEditorAPI.Logs.Warning($"Setting {setting.Key} not found in settings for addon {addon.Identifier}, using default value.");
+                SkEditorAPI.Logs.Warning(
+                    $"Setting {setting.Key} not found in settings for addon {addon.Identifier}, using default value.");
                 LoadedAddonSettings[addon][setting.Key] = setting.Type.Serialize(setting.DefaultValue);
             }
         }
@@ -53,7 +55,7 @@ public static class AddonSettingsManager
 
     private static JObject CreateDefaultSettings(IAddon addon)
     {
-        var obj = new JObject();
+        JObject obj = new();
         addon.GetSettings()
             .Where(s => !s.Type.IsSelfManaged)
             .ToList()
@@ -65,10 +67,12 @@ public static class AddonSettingsManager
     private static void SaveSettings(IAddon addon)
     {
         if (!LoadedAddonSettings.TryGetValue(addon, out JObject? value))
+        {
             return;
+        }
 
-        var path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
-        var json = value.ToString();
+        string path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
+        string json = value.ToString();
         File.WriteAllText(path, json);
     }
 
@@ -87,7 +91,7 @@ public static class AddonSettingsManager
 
     public static void SetAddonValue(IAddon addon, string key, object value)
     {
-        var setting = addon.GetSettings().Find(s => s.Key == key);
+        Setting? setting = addon.GetSettings().Find(s => s.Key == key);
         if (setting == null)
         {
             SkEditorAPI.Logs.Error($"Setting {key} not found in settings for addon {addon.Identifier}");
@@ -99,7 +103,7 @@ public static class AddonSettingsManager
 
     public static object GetAddonValue(IAddon addon, string key)
     {
-        var setting = addon.GetSettings().Find(s => s.Key == key);
+        Setting? setting = addon.GetSettings().Find(s => s.Key == key);
         if (setting == null)
         {
             SkEditorAPI.Logs.Error($"Setting {key} not found in settings for addon {addon.Identifier}");
@@ -108,5 +112,4 @@ public static class AddonSettingsManager
 
         return GetValue(setting);
     }
-
 }

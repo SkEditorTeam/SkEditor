@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Collections.Generic;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -7,7 +8,6 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using FluentAvalonia.UI.Windowing;
 using Serilog.Events;
-using System.Collections.Generic;
 using LogEventLevel = Serilog.Events.LogEventLevel;
 
 namespace SkEditor.Views;
@@ -25,7 +25,10 @@ public partial class LogsWindow : AppWindow
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
 
@@ -34,7 +37,8 @@ public partial class LogsWindow : AppWindow
         LogsEditor.ShowLineNumbers = false;
         LogsEditor.Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor");
         LogsEditor.Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor");
-        LogsEditor.LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor");
+        LogsEditor.LineNumbersForeground =
+            (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor");
         LogsEditor.FontSize = 14;
         LogsEditor.WordWrap = true;
         LogsEditor.Margin = new Thickness(5);
@@ -45,7 +49,7 @@ public partial class LogsWindow : AppWindow
             LogsEditor.Document.Insert(LogsEditor.Document.TextLength, logEvent.RenderMessage());
             LogsEditor.Document.Insert(LogsEditor.Document.TextLength, "\n");
 
-            var color = logEvent.Level switch
+            Color color = logEvent.Level switch
             {
                 LogEventLevel.Debug => Colors.Gray,
                 LogEventLevel.Information => Colors.CornflowerBlue,

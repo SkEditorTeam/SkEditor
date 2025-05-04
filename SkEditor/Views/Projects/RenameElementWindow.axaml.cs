@@ -9,8 +9,6 @@ namespace SkEditor.Views.Projects;
 
 public partial class RenameElementWindow : AppWindow
 {
-    public StorageElement Element { get; }
-
     public RenameElementWindow(StorageElement element)
     {
         InitializeComponent();
@@ -23,20 +21,25 @@ public partial class RenameElementWindow : AppWindow
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
 
+    public StorageElement Element { get; }
+
     private void RenameButtonClick(object? sender, RoutedEventArgs e)
     {
-        var input = NameBox.Text;
+        string? input = NameBox.Text;
         if (string.IsNullOrWhiteSpace(input))
         {
             ErrorBox.Text = Translation.Get("ProjectRenameErrorNameEmpty");
             return;
         }
 
-        var error = Element.ValidateName(input);
+        string? error = Element.ValidateName(input);
         if (error != null)
         {
             ErrorBox.Text = error;

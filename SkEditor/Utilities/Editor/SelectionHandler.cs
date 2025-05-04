@@ -1,14 +1,15 @@
-﻿using Avalonia.Media;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using SkEditor.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SkEditor.Utilities.Editor;
+
 public class SelectionHandler
 {
     public static void OnSelectionChanged(object? sender, EventArgs e)
@@ -23,14 +24,18 @@ public class SelectionHandler
         int length = textEditor.SelectionLength;
         string selectedText = textEditor.Document.GetText(start, length);
 
-        if (string.IsNullOrWhiteSpace(selectedText)) return;
-
-        IEnumerable<SimpleSegment> wordOccurrences = TextEditorUtilities.GetWordOccurrences(selectedText, textEditor.Document);
-        var lineTransformers = textEditor.TextArea.TextView.LineTransformers;
-
-        foreach (var segment in wordOccurrences.Where(s => s.Offset != start || s.Length != length))
+        if (string.IsNullOrWhiteSpace(selectedText))
         {
-            var lineNumber = textEditor.Document.GetLineByOffset(segment.Offset).LineNumber;
+            return;
+        }
+
+        IEnumerable<SimpleSegment> wordOccurrences =
+            TextEditorUtilities.GetWordOccurrences(selectedText, textEditor.Document);
+        IList<IVisualLineTransformer>? lineTransformers = textEditor.TextArea.TextView.LineTransformers;
+
+        foreach (SimpleSegment segment in wordOccurrences.Where(s => s.Offset != start || s.Length != length))
+        {
+            int lineNumber = textEditor.Document.GetLineByOffset(segment.Offset).LineNumber;
             lineTransformers.Add(new OccurenceBackgroundTransformer
             {
                 LineNumber = lineNumber,
@@ -50,7 +55,10 @@ public class OccurenceBackgroundTransformer : DocumentColorizingTransformer
 
     protected override void ColorizeLine(DocumentLine line)
     {
-        if (line.LineNumber != LineNumber || StartOffset < 0 || EndOffset < 0) return;
+        if (line.LineNumber != LineNumber || StartOffset < 0 || EndOffset < 0)
+        {
+            return;
+        }
 
         try
         {

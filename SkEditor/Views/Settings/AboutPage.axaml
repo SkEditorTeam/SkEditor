@@ -7,32 +7,41 @@
              mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Settings.AboutPage">
 
-	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsAboutTitle}" Grid.Row="0"/>
-		<ScrollViewer Grid.Row="1">
-			<StackPanel Spacing="8">
+    <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsAboutTitle}" Grid.Row="0" />
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="8">
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsAboutSkEditor}" IconSource="{StaticResource AppIcon}"
-					Description="{DynamicResource SettingsAboutSkEditorDescription}"/>
-				
-				<ui:SettingsExpander Header="{DynamicResource SettingsAboutVersion}" IconSource="{StaticResource WrenchIcon}"
-					Description="{Binding Version}"/>
+                <ui:SettingsExpander Header="{DynamicResource SettingsAboutSkEditor}"
+                                     IconSource="{StaticResource AppIcon}"
+                                     Description="{DynamicResource SettingsAboutSkEditorDescription}" />
 
-				<ui:SettingsExpander Name="GitHubItem" Header="{DynamicResource SettingsAboutGithub}" IconSource="{StaticResource GitHubIcon}"
-					Description="{DynamicResource SettingsAboutGithubDescription}" IsClickEnabled="True"/>
-				
-				<ui:SettingsExpander Name="DiscordItem" Header="{DynamicResource SettingsAboutDiscord}" IconSource="{StaticResource DiscordIcon}"
-					Description="{DynamicResource SettingsAboutDiscordDescription}" IsClickEnabled="True"/>
-				
-				<ui:SettingsExpander Header="{DynamicResource SettingsAboutDevMode}" Description="{DynamicResource SettingsAboutDevModeDescription}" IconSource="{StaticResource LightingIcon}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="DevModeToggleSwitch" IsChecked="{Binding IsDevModeEnabled}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+                <ui:SettingsExpander Header="{DynamicResource SettingsAboutVersion}"
+                                     IconSource="{StaticResource WrenchIcon}"
+                                     Description="{Binding Version}" />
 
-				<ui:SettingsExpander Name="AppDataItem" Header="{DynamicResource SettingsAboutAppdata}" IconSource="{StaticResource Folder}"
-					IsClickEnabled="True"/>
-			</StackPanel>
-		</ScrollViewer>
-	</Grid>
+                <ui:SettingsExpander Name="GitHubItem" Header="{DynamicResource SettingsAboutGithub}"
+                                     IconSource="{StaticResource GitHubIcon}"
+                                     Description="{DynamicResource SettingsAboutGithubDescription}"
+                                     IsClickEnabled="True" />
+
+                <ui:SettingsExpander Name="DiscordItem" Header="{DynamicResource SettingsAboutDiscord}"
+                                     IconSource="{StaticResource DiscordIcon}"
+                                     Description="{DynamicResource SettingsAboutDiscordDescription}"
+                                     IsClickEnabled="True" />
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsAboutDevMode}"
+                                     Description="{DynamicResource SettingsAboutDevModeDescription}"
+                                     IconSource="{StaticResource LightingIcon}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="DevModeToggleSwitch" IsChecked="{Binding IsDevModeEnabled}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Name="AppDataItem" Header="{DynamicResource SettingsAboutAppdata}"
+                                     IconSource="{StaticResource Folder}"
+                                     IsClickEnabled="True" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

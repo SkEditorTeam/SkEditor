@@ -1,43 +1,50 @@
-﻿using AvaloniaEdit;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Views;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Editor;
+
 public class CustomCommandsHandler
 {
     public static void OnCommentCommandExecuted(object target)
     {
         OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
-        if (!file.IsEditor) return;
+        if (!file.IsEditor)
+        {
+            return;
+        }
 
         TextEditor editor = file.Editor;
 
-        var document = editor.Document;
-        var selectionStart = editor.SelectionStart;
-        var selectionLength = editor.SelectionLength;
-        var indentation = editor.Options.IndentationString;
+        TextDocument? document = editor.Document;
+        int selectionStart = editor.SelectionStart;
+        int selectionLength = editor.SelectionLength;
+        string? indentation = editor.Options.IndentationString;
 
-        var selectedLines = document.Lines
+        List<DocumentLine> selectedLines = document.Lines
             .Where(line => selectionStart <= line.EndOffset && selectionStart + selectionLength >= line.Offset)
             .ToList();
 
-        var modifiedLines = selectedLines.Select(line =>
+        List<string> modifiedLines = selectedLines.Select(line =>
         {
-            var text = document.GetText(line);
+            string? text = document.GetText(line);
             if (string.IsNullOrWhiteSpace(text))
+            {
                 return text;
+            }
 
             // Find the first non-tabulator character
-            var strippedLine = text.TrimStart();
-            var isCommented = text.TrimStart().StartsWith('#');
-            var indentationAmount = 0;
+            string strippedLine = text.TrimStart();
+            bool isCommented = text.TrimStart().StartsWith('#');
+            int indentationAmount = 0;
             while (text.StartsWith(indentation))
             {
                 text = text[indentation.Length..];
@@ -46,21 +53,21 @@ public class CustomCommandsHandler
 
             string indentationToInsert = "";
             for (int i = 0; i < indentationAmount; i++)
+            {
                 indentationToInsert += indentation;
+            }
 
             if (isCommented)
             {
                 return indentationToInsert + strippedLine[1..];
             }
-            else
-            {
-                return indentationToInsert + "#" + strippedLine;
-            }
+
+            return indentationToInsert + "#" + strippedLine;
         }).ToList();
 
-        var replacement = string.Join("\n", modifiedLines);
-        var startOffset = selectedLines.First().Offset;
-        var endOffset = selectedLines.Last().EndOffset - startOffset;
+        string replacement = string.Join("\n", modifiedLines);
+        int startOffset = selectedLines.First().Offset;
+        int endOffset = selectedLines.Last().EndOffset - startOffset;
 
         document.Replace(startOffset, endOffset, replacement);
         editor.Select(startOffset, replacement.Length);
@@ -69,28 +76,33 @@ public class CustomCommandsHandler
     public static void OnTrimWhitespacesCommandExecuted(object target)
     {
         if (!SkEditorAPI.Files.IsEditorOpen())
+        {
             return;
+        }
 
         TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
-        var document = editor.Document;
-        var selectionStart = editor.SelectionStart;
-        var selectionLength = editor.SelectionLength;
+        TextDocument? document = editor.Document;
+        int selectionStart = editor.SelectionStart;
+        int selectionLength = editor.SelectionLength;
 
-        var selectedLines = document.Lines
+        List<DocumentLine> selectedLines = document.Lines
             .Where(line => selectionStart <= line.EndOffset && selectionStart + selectionLength >= line.Offset)
             .ToList();
 
-        var modifiedLines = selectedLines.Select(line =>
+        List<string> modifiedLines = selectedLines.Select(line =>
         {
-            var text = document.GetText(line);
+            string? text = document.GetText(line);
             if (string.IsNullOrWhiteSpace(text))
+            {
                 return "";
+            }
+
             return text;
         }).ToList();
 
-        var replacement = string.Join("\n", modifiedLines);
-        var startOffset = selectedLines.First().Offset;
-        var endOffset = selectedLines.Last().EndOffset - startOffset;
+        string replacement = string.Join("\n", modifiedLines);
+        int startOffset = selectedLines.First().Offset;
+        int endOffset = selectedLines.Last().EndOffset - startOffset;
 
         document.Replace(startOffset, endOffset, replacement);
         editor.Select(startOffset, replacement.Length);
@@ -98,7 +110,10 @@ public class CustomCommandsHandler
 
     public static void OnDuplicateCommandExecuted(object target)
     {
-        if (target is not TextArea textArea || textArea.Document == null) return;
+        if (target is not TextArea textArea || textArea.Document == null)
+        {
+            return;
+        }
 
         if (textArea.Selection.IsEmpty)
         {
@@ -111,8 +126,10 @@ public class CustomCommandsHandler
 
         string selectedText = textArea.Selection.GetText();
 
-        int endOffset = textArea.Document.GetLineByNumber(textArea.Selection.EndPosition.Line).Offset + textArea.Document.GetLineByNumber(textArea.Selection.EndPosition.Line).Length;
-        int startOffset = textArea.Document.GetLineByNumber(textArea.Selection.StartPosition.Line).Offset + textArea.Document.GetLineByNumber(textArea.Selection.StartPosition.Line).Length;
+        int endOffset = textArea.Document.GetLineByNumber(textArea.Selection.EndPosition.Line).Offset +
+                        textArea.Document.GetLineByNumber(textArea.Selection.EndPosition.Line).Length;
+        int startOffset = textArea.Document.GetLineByNumber(textArea.Selection.StartPosition.Line).Offset +
+                          textArea.Document.GetLineByNumber(textArea.Selection.StartPosition.Line).Length;
 
         int usedOffset = Math.Max(startOffset, endOffset);
 
@@ -125,22 +142,31 @@ public class CustomCommandsHandler
 
     public static async Task OnRefactorCommandExecuted(TextEditor editor)
     {
-        var parser = SkEditorAPI.Files.GetOpenedFiles().Find(file => file.Editor == editor).Parser;
+        CodeParser? parser = SkEditorAPI.Files.GetOpenedFiles().Find(file => file.Editor == editor).Parser;
         if (parser == null)
+        {
             return;
+        }
+
         if (!parser.IsParsed)
+        {
             parser.Parse();
+        }
 
-        var section = parser.GetSectionFromLine(editor.TextArea.Caret.Line);
+        CodeSection? section = parser.GetSectionFromLine(editor.TextArea.Caret.Line);
         if (section == null)
+        {
             return;
+        }
 
-        var variable = section.GetVariableFromCaret(editor.TextArea.Caret);
-        var option = section.GetOptionFromCaret(editor.TextArea.Caret);
+        CodeVariable? variable = section.GetVariableFromCaret(editor.TextArea.Caret);
+        CodeOption? option = section.GetOptionFromCaret(editor.TextArea.Caret);
         if (variable == null && option == null)
+        {
             return;
+        }
 
-        var renameWindow = new SymbolRefactorWindow((INameableCodeElement)variable ?? option);
+        SymbolRefactorWindow renameWindow = new((INameableCodeElement)variable ?? option);
         await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
     }
 }

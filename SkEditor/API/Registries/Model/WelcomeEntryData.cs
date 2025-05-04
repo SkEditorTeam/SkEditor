@@ -3,7 +3,7 @@
 namespace SkEditor.API;
 
 /// <summary>
-/// Represent an entry in the welcome tab.
+///     Represent an entry in the welcome tab.
 /// </summary>
 /// <param name="name">The displayed name of the entry</param>
 /// <param name="command">The command to be executed if the entry is clicked</param>

@@ -1,11 +1,12 @@
-﻿using Avalonia;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using System.Linq;
 
 namespace SkEditor.Views.Settings;
 
@@ -23,20 +24,20 @@ public partial class FileTypesPage : UserControl
     {
         TypeContainer.Children.Clear();
 
-        foreach (var keyValue in SkEditorAPI.Core.GetAppConfig().FileTypeChoices)
+        foreach (KeyValuePair<string, string> keyValue in SkEditorAPI.Core.GetAppConfig().FileTypeChoices)
         {
-            var ext = keyValue.Key;
-            var fullId = keyValue.Value;
+            string ext = keyValue.Key;
+            string fullId = keyValue.Value;
 
-            var availableTypes = Registries.FileTypes.GetValues().ToList()
+            List<FileTypeData> availableTypes = Registries.FileTypes.GetValues().ToList()
                 .Where(x => x.SupportedExtensions.Contains(ext)).ToList();
 
-            var expander = new SettingsExpander()
+            SettingsExpander expander = new()
             {
                 Header = ext
             };
 
-            var box = new ComboBox()
+            ComboBox box = new()
             {
                 MinWidth = 300,
                 HorizontalContentAlignment = HorizontalAlignment.Left
@@ -44,17 +45,17 @@ public partial class FileTypesPage : UserControl
 
             int i = 0;
             int selectedIndex = -1;
-            foreach (var type in availableTypes)
+            foreach (FileTypeData type in availableTypes)
             {
-                var grid = new Grid()
+                Grid grid = new()
                 {
                     RowDefinitions = new RowDefinitions("*,*"),
-                    ColumnDefinitions = new ColumnDefinitions("Auto, *"),
+                    ColumnDefinitions = new ColumnDefinitions("Auto, *")
                     /*RowSpacing = 10,
                     ColumnSpacing = 10*/
                 };
 
-                var title = new TextBlock
+                TextBlock title = new()
                 {
                     Text = type.AddonName,
                     FontWeight = FontWeight.SemiBold,
@@ -64,7 +65,7 @@ public partial class FileTypesPage : UserControl
                 Grid.SetColumn(title, 1);
                 Grid.SetRow(title, 0);
 
-                var desc = new TextBlock
+                TextBlock desc = new()
                 {
                     Text = type.DisplayedDescription,
                     FontStyle = FontStyle.Italic,
@@ -74,7 +75,7 @@ public partial class FileTypesPage : UserControl
                 Grid.SetColumn(desc, 1);
                 Grid.SetRow(desc, 1);
 
-                var icon = new IconSourceElement
+                IconSourceElement icon = new()
                 {
                     IconSource = type.Icon,
                     Width = 32,
@@ -86,7 +87,7 @@ public partial class FileTypesPage : UserControl
                 Grid.SetRow(icon, 0);
                 Grid.SetRowSpan(icon, 2);
 
-                var item = new ComboBoxItem
+                ComboBoxItem item = new()
                 {
                     Content = grid,
                     Tag = type
@@ -105,13 +106,16 @@ public partial class FileTypesPage : UserControl
 
             box.SelectionChanged += (_, _) =>
             {
-                if (box.SelectedItem is not ComboBoxItem item) return;
+                if (box.SelectedItem is not ComboBoxItem item)
+                {
+                    return;
+                }
 
-                var type = (FileTypeData)item.Tag;
+                FileTypeData? type = (FileTypeData)item.Tag;
                 SkEditorAPI.Core.GetAppConfig().FileTypeChoices[ext] = Registries.FileTypes.GetValueKey(type).FullKey;
             };
 
-            var removeBtn = new Button
+            Button removeBtn = new()
             {
                 Content = "Remove",
                 Command = new RelayCommand(() =>
@@ -123,7 +127,7 @@ public partial class FileTypesPage : UserControl
                 VerticalAlignment = VerticalAlignment.Stretch
             };
 
-            expander.Footer = new StackPanel()
+            expander.Footer = new StackPanel
             {
                 Children = { box, removeBtn },
                 Orientation = Orientation.Horizontal,

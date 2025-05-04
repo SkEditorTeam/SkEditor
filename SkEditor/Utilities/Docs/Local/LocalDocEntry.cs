@@ -7,7 +7,9 @@ namespace SkEditor.Utilities.Docs.Local;
 [Serializable]
 public class LocalDocEntry : IDocumentationEntry
 {
-    public LocalDocEntry() { }
+    public LocalDocEntry()
+    {
+    }
 
     public LocalDocEntry(IDocumentationEntry other, List<IDocumentationExample> examples)
     {
@@ -26,6 +28,10 @@ public class LocalDocEntry : IDocumentationEntry
         OriginalProvider = other.Provider;
     }
 
+    public DocProvider OriginalProvider { get; set; }
+
+    public List<LocalDocExample> Examples { get; set; } = new();
+
     public string Name { get; set; }
     public string Description { get; set; }
     public string Patterns { get; set; }
@@ -34,27 +40,31 @@ public class LocalDocEntry : IDocumentationEntry
     public string Version { get; set; }
     public IDocumentationEntry.Type DocType { get; set; }
 
-    [JsonIgnore]
-    public DocProvider Provider => DocProvider.Local;
+    [JsonIgnore] public DocProvider Provider => DocProvider.Local;
+
     public string? ReturnType { get; set; }
     public string? Changers { get; set; }
     public string? EventValues { get; set; }
 
-    public DocProvider OriginalProvider { get; set; }
-
-    public List<LocalDocExample> Examples { get; set; } = new();
-
     public bool DoMatch(SearchData searchData)
     {
         if (searchData.FilteredType != IDocumentationEntry.Type.All && DocType != searchData.FilteredType)
+        {
             return false;
+        }
 
         if (!string.IsNullOrEmpty(searchData.FilteredAddon) && Addon != searchData.FilteredAddon)
+        {
             return false;
+        }
 
-        if (!string.IsNullOrEmpty(searchData.Query) && !Name.Contains(searchData.Query, StringComparison.OrdinalIgnoreCase)
-                                                    && !Description.Contains(searchData.Query, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrEmpty(searchData.Query) && !Name.Contains(searchData.Query,
+                                                        StringComparison.OrdinalIgnoreCase)
+                                                    && !Description.Contains(searchData.Query,
+                                                        StringComparison.OrdinalIgnoreCase))
+        {
             return false;
+        }
 
         return true;
     }

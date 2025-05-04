@@ -1,52 +1,66 @@
 ﻿using System;
-using AvaloniaEdit;
-using SkEditor.API;
-using SkEditor.Controls.Sidebar;
-using SkEditor.Utilities.InternalAPI;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AvaloniaEdit;
+using SkEditor.API;
+using SkEditor.Controls.Sidebar;
+using SkEditor.Utilities.InternalAPI;
 
 namespace SkEditor.Utilities.Parser;
 
 public partial class CodeParser : INotifyPropertyChanged
 {
-    public static ParserSidebarPanel ParserPanel => AddonLoader.GetCoreAddon().ParserPanel.Panel;
-
     public CodeParser(TextEditor textEditor, bool parse = true)
     {
         Editor = textEditor;
         Sections = [];
-        if (parse) Parse();
+        if (parse)
+        {
+            Parse();
+        }
     }
 
-    /// <summary>
-    /// Get the editor that is being parsed.
-    /// </summary>
-    public TextEditor Editor { get; private set; }
+    public static ParserSidebarPanel ParserPanel => AddonLoader.GetCoreAddon().ParserPanel.Panel;
 
     /// <summary>
-    /// Get the parsed code sections. This will be empty if the code is not parsed yet.
+    ///     Get the editor that is being parsed.
     /// </summary>
-    public List<CodeSection> Sections { get; private set; }
+    public TextEditor Editor { get; }
 
     /// <summary>
-    /// Get sections with the specified type.
+    ///     Get the parsed code sections. This will be empty if the code is not parsed yet.
     /// </summary>
-    public List<CodeSection> GetSectionFromType(CodeSection.SectionType sectionType) => Sections.FindAll(section => section.Type == sectionType);
-
-    /// <summary>
-    /// Get the options section, if any is defined.
-    /// </summary>
-    public CodeSection? GetOptionsSection() => Sections.Find(section => section.Type == CodeSection.SectionType.Options);
+    public List<CodeSection> Sections { get; }
 
     public bool IsParsed { get; private set; }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+
     /// <summary>
-    /// Get section from a line.
+    ///     Get sections with the specified type.
     /// </summary>
-    public CodeSection? GetSectionFromLine(int line) => Sections.Find(section => section.ContainsLineIndex(line));
+    public List<CodeSection> GetSectionFromType(CodeSection.SectionType sectionType)
+    {
+        return Sections.FindAll(section => section.Type == sectionType);
+    }
+
+    /// <summary>
+    ///     Get the options section, if any is defined.
+    /// </summary>
+    public CodeSection? GetOptionsSection()
+    {
+        return Sections.Find(section => section.Type == CodeSection.SectionType.Options);
+    }
+
+    /// <summary>
+    ///     Get section from a line.
+    /// </summary>
+    public CodeSection? GetSectionFromLine(int line)
+    {
+        return Sections.Find(section => section.ContainsLineIndex(line));
+    }
 
     public void Parse()
     {
@@ -65,13 +79,16 @@ public partial class CodeParser : INotifyPropertyChanged
         RemoveComments(ref lines);
 
         // Parse sections
-        for (var lineIndex = 0; lineIndex < lines.Count; lineIndex++)
+        for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
         {
-            var line = lines[lineIndex];
+            string line = lines[lineIndex];
             if (string.IsNullOrWhiteSpace(line))
+            {
                 continue;
+            }
 
-            if (SectionRegex().IsMatch(line) && !line.StartsWith(' ') && !line.StartsWith('\t') && !line.StartsWith('#'))
+            if (SectionRegex().IsMatch(line) && !line.StartsWith(' ') && !line.StartsWith('\t') &&
+                !line.StartsWith('#'))
             {
                 if (lastSectionLine == -1) // Starting
                 {
@@ -79,7 +96,7 @@ public partial class CodeParser : INotifyPropertyChanged
                 }
                 else
                 {
-                    var linesToParse = lines.GetRange(lastSectionLine, lineIndex - lastSectionLine);
+                    List<string> linesToParse = lines.GetRange(lastSectionLine, lineIndex - lastSectionLine);
                     Sections.Add(new CodeSection(this, lastSectionLine, linesToParse));
                     lastSectionLine = lineIndex;
                 }
@@ -88,11 +105,14 @@ public partial class CodeParser : INotifyPropertyChanged
 
         if (lastSectionLine != -1)
         {
-            var linesToParse = lines.GetRange(lastSectionLine, lines.Count - lastSectionLine);
+            List<string> linesToParse = lines.GetRange(lastSectionLine, lines.Count - lastSectionLine);
             Sections.Add(new CodeSection(this, lastSectionLine, linesToParse));
         }
 
-        if (SkEditorAPI.Core.GetAppConfig().EnableFolding) FoldingCreator.CreateFoldings(Editor, Sections);
+        if (SkEditorAPI.Core.GetAppConfig().EnableFolding)
+        {
+            FoldingCreator.CreateFoldings(Editor, Sections);
+        }
 
         ParserPanel.Refresh(Sections);
 
@@ -102,27 +122,28 @@ public partial class CodeParser : INotifyPropertyChanged
 
     private static void RemoveComments(ref List<string> lines)
     {
-        for (var i = 0; i < lines.Count; i++)
+        for (int i = 0; i < lines.Count; i++)
         {
-            var line = lines[i];
+            string line = lines[i];
             if (line.Contains("###"))
             {
-                var index = line.IndexOf("###", StringComparison.Ordinal);
+                int index = line.IndexOf("###", StringComparison.Ordinal);
                 lines[i] = line[..index];
-                for (var j = i + 1; j < lines.Count; j++)
+                for (int j = i + 1; j < lines.Count; j++)
                 {
                     if (lines[j].Contains("###"))
                     {
-                        var index2 = lines[j].IndexOf("###", StringComparison.Ordinal);
+                        int index2 = lines[j].IndexOf("###", StringComparison.Ordinal);
                         lines[j] = lines[j][(index2 + 3)..];
                         break;
                     }
+
                     lines[j] = "";
                 }
             }
             else if (line.Contains('#'))
             {
-                var index = line.IndexOf('#');
+                int index = line.IndexOf('#');
                 lines[i] = line[..index];
             }
         }
@@ -140,8 +161,6 @@ public partial class CodeParser : INotifyPropertyChanged
     {
         return !Editor.Text.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t');
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName)
     {

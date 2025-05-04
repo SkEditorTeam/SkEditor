@@ -1,18 +1,21 @@
-﻿using Avalonia.Media;
-using AvaloniaEdit.Highlighting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Avalonia.Media;
+using AvaloniaEdit.Highlighting;
 
 namespace SkEditor.Utilities.Docs;
+
 public partial class DocSyntaxColorizer
 {
     public static IHighlightingDefinition CreatePatternHighlighting()
     {
-        var highlighting = new EmptyHighlighting();
-        var ruleSet = new HighlightingRuleSet();
+        EmptyHighlighting highlighting = new();
+        HighlightingRuleSet ruleSet = new();
 
-        foreach (var span in CreateSyntaxRules(ruleSet))
+        foreach (HighlightingSpan span in CreateSyntaxRules(ruleSet))
+        {
             ruleSet.Spans.Add(span);
+        }
 
         highlighting.MainRuleSet = ruleSet;
         return highlighting;
@@ -42,12 +45,12 @@ public partial class DocSyntaxColorizer
 
     private static HighlightingSpan CreateSimpleCharRule(Regex pattern, Color color, HighlightingRuleSet ruleSet)
     {
-        return new HighlightingSpan()
+        return new HighlightingSpan
         {
             StartExpression = pattern,
             EndExpression = EmptyRegex(),
             RuleSet = ruleSet,
-            StartColor = new HighlightingColor()
+            StartColor = new HighlightingColor
             {
                 Foreground = new SimpleHighlightingBrush(color)
             }
@@ -57,41 +60,57 @@ public partial class DocSyntaxColorizer
     private static HighlightingSpan CreateSurroundingRule(Regex start, Regex end,
         Color delimiterColor, Color contentColor, HighlightingRuleSet ruleSet)
     {
-        return new HighlightingSpan()
+        return new HighlightingSpan
         {
             StartExpression = start,
             EndExpression = end,
             RuleSet = ruleSet,
-            StartColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(delimiterColor) },
-            EndColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(delimiterColor) },
-            SpanColor = new HighlightingColor() { Foreground = new SimpleHighlightingBrush(contentColor) }
+            StartColor = new HighlightingColor { Foreground = new SimpleHighlightingBrush(delimiterColor) },
+            EndColor = new HighlightingColor { Foreground = new SimpleHighlightingBrush(delimiterColor) },
+            SpanColor = new HighlightingColor { Foreground = new SimpleHighlightingBrush(contentColor) }
         };
     }
+
+    [GeneratedRegex("")]
+    private static partial Regex EmptyRegex();
+
+    [GeneratedRegex(@"\|")]
+    private static partial Regex BarCharRegex();
+
+    [GeneratedRegex(@"\:")]
+    private static partial Regex ColonCharRegex();
+
+    [GeneratedRegex(@"\%")]
+    private static partial Regex PercentCharRegex();
+
+    [GeneratedRegex(@"\(")]
+    private static partial Regex OpeningBracketRegex();
+
+    [GeneratedRegex(@"\)")]
+    private static partial Regex ClosingBracketRegex();
+
+    [GeneratedRegex(@"\[")]
+    private static partial Regex OpeningSquareBracketRegex();
+
+    [GeneratedRegex(@"\]")]
+    private static partial Regex ClosingSquareBracketRegex();
 
     public class EmptyHighlighting : IHighlightingDefinition
     {
         public string Name => "Empty";
         public HighlightingRuleSet MainRuleSet { get; set; }
-        public HighlightingRuleSet GetNamedRuleSet(string name) => new();
-        public HighlightingColor GetNamedColor(string name) => new();
+
+        public HighlightingRuleSet GetNamedRuleSet(string name)
+        {
+            return new HighlightingRuleSet();
+        }
+
+        public HighlightingColor GetNamedColor(string name)
+        {
+            return new HighlightingColor();
+        }
+
         public IEnumerable<HighlightingColor> NamedHighlightingColors => [];
         public IDictionary<string, string> Properties => new Dictionary<string, string>();
     }
-
-    [GeneratedRegex("")]
-    private static partial Regex EmptyRegex();
-    [GeneratedRegex(@"\|")]
-    private static partial Regex BarCharRegex();
-    [GeneratedRegex(@"\:")]
-    private static partial Regex ColonCharRegex();
-    [GeneratedRegex(@"\%")]
-    private static partial Regex PercentCharRegex();
-    [GeneratedRegex(@"\(")]
-    private static partial Regex OpeningBracketRegex();
-    [GeneratedRegex(@"\)")]
-    private static partial Regex ClosingBracketRegex();
-    [GeneratedRegex(@"\[")]
-    private static partial Regex OpeningSquareBracketRegex();
-    [GeneratedRegex(@"\]")]
-    private static partial Regex ClosingSquareBracketRegex();
 }

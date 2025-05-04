@@ -1,50 +1,79 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using Avalonia;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
-using System;
-using System.Collections.Generic;
+using AvaloniaEdit.Rendering;
 
 namespace SkEditor.Utilities.Editor;
+
 public class TextEditorUtilities
 {
     public static SimpleSegment GetWordAtMousePosition(Point pos, TextArea textArea)
     {
-        var textView = textArea.TextView;
-        if (textView == null) return SimpleSegment.Invalid;
+        TextView? textView = textArea.TextView;
+        if (textView == null)
+        {
+            return SimpleSegment.Invalid;
+        }
 
-        if (pos.Y < 0) pos = pos.WithY(0);
-        if (pos.Y > textView.Bounds.Height) pos = pos.WithY(textView.Bounds.Height);
+        if (pos.Y < 0)
+        {
+            pos = pos.WithY(0);
+        }
+
+        if (pos.Y > textView.Bounds.Height)
+        {
+            pos = pos.WithY(textView.Bounds.Height);
+        }
 
         pos += textView.ScrollOffset;
 
-        var line = textView.GetVisualLineFromVisualTop(pos.Y);
+        VisualLine? line = textView.GetVisualLineFromVisualTop(pos.Y);
 
-        if (line == null || line.TextLines == null) return SimpleSegment.Invalid;
+        if (line == null || line.TextLines == null)
+        {
+            return SimpleSegment.Invalid;
+        }
 
-        var visualColumn = line.GetVisualColumn(pos, textArea.Selection.EnableVirtualSpace);
+        int visualColumn = line.GetVisualColumn(pos, textArea.Selection.EnableVirtualSpace);
 
-        var wordStartVc = line.GetNextCaretPosition(visualColumn + 1, LogicalDirection.Backward, CaretPositioningMode.WordStartOrSymbol, textArea.Selection.EnableVirtualSpace);
-        if (wordStartVc == -1) wordStartVc = 0;
+        int wordStartVc = line.GetNextCaretPosition(visualColumn + 1, LogicalDirection.Backward,
+            CaretPositioningMode.WordStartOrSymbol, textArea.Selection.EnableVirtualSpace);
+        if (wordStartVc == -1)
+        {
+            wordStartVc = 0;
+        }
 
-        var wordEndVc = line.GetNextCaretPosition(wordStartVc, LogicalDirection.Forward, CaretPositioningMode.WordBorderOrSymbol, textArea.Selection.EnableVirtualSpace);
-        if (wordEndVc == -1) wordEndVc = line.VisualLength;
+        int wordEndVc = line.GetNextCaretPosition(wordStartVc, LogicalDirection.Forward,
+            CaretPositioningMode.WordBorderOrSymbol, textArea.Selection.EnableVirtualSpace);
+        if (wordEndVc == -1)
+        {
+            wordEndVc = line.VisualLength;
+        }
 
-        var relOffset = line.FirstDocumentLine.Offset;
-        var wordStartOffset = line.GetRelativeOffset(wordStartVc) + relOffset;
-        var wordEndOffset = line.GetRelativeOffset(wordEndVc) + relOffset;
+        int relOffset = line.FirstDocumentLine.Offset;
+        int wordStartOffset = line.GetRelativeOffset(wordStartVc) + relOffset;
+        int wordEndOffset = line.GetRelativeOffset(wordEndVc) + relOffset;
 
         return new SimpleSegment(wordStartOffset, wordEndOffset - wordStartOffset);
     }
 
     public static SimpleSegment GetSegmentBeforeOffset(int offset, TextDocument document)
     {
-        if (offset <= 0) return SimpleSegment.Invalid;
+        if (offset <= 0)
+        {
+            return SimpleSegment.Invalid;
+        }
 
-        var line = document.GetLineByOffset(offset);
-        if (line == null) return SimpleSegment.Invalid;
+        DocumentLine? line = document.GetLineByOffset(offset);
+        if (line == null)
+        {
+            return SimpleSegment.Invalid;
+        }
 
-        var lineText = document.GetText(line.Offset, offset - line.Offset);
-        var wordStartPos = lineText.LastIndexOfAny([' ', '\t', '\n', '\r']);
+        string? lineText = document.GetText(line.Offset, offset - line.Offset);
+        int wordStartPos = lineText.LastIndexOfAny([' ', '\t', '\n', '\r']);
         if (wordStartPos == -1)
         {
             return new SimpleSegment(line.Offset, offset - line.Offset);

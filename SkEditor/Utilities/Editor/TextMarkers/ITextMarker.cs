@@ -1,7 +1,7 @@
-﻿using Avalonia.Controls;
-using Avalonia.Media;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Avalonia.Controls;
+using Avalonia.Media;
 
 namespace SkEditor.Utilities.Editor.TextMarkers;
 

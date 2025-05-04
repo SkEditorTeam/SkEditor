@@ -13,16 +13,16 @@
         WindowStartupLocation="CenterOwner"
         Theme="{StaticResource SmallWindowTheme}">
     <avalonia:SpacedGrid Margin="20" RowDefinitions="Auto,*" RowSpacing="20">
-        <TextBlock Text="Logs" FontSize="28" FontWeight="SemiBold"/>
-		
-		<Border Background="#4d000000" Grid.Row="1" CornerRadius="10" ClipToBounds="True">
-			<avaloniaEdit:TextEditor Name="LogsEditor"  Background="{DynamicResource EditorBackgroundColor}"
-                Foreground="{DynamicResource EditorTextColor}"
-                Padding="10"
-                HorizontalScrollBarVisibility="Visible"
-                FontFamily="{DynamicResource JetBrainsFont}"
-                FontSize="14"
-                IsReadOnly="True"/>
-		</Border>
-	</avalonia:SpacedGrid>
+        <TextBlock Text="Logs" FontSize="28" FontWeight="SemiBold" />
+
+        <Border Background="#4d000000" Grid.Row="1" CornerRadius="10" ClipToBounds="True">
+            <avaloniaEdit:TextEditor Name="LogsEditor" Background="{DynamicResource EditorBackgroundColor}"
+                                     Foreground="{DynamicResource EditorTextColor}"
+                                     Padding="10"
+                                     HorizontalScrollBarVisibility="Visible"
+                                     FontFamily="{DynamicResource JetBrainsFont}"
+                                     FontSize="14"
+                                     IsReadOnly="True" />
+        </Border>
+    </avalonia:SpacedGrid>
 </Window>

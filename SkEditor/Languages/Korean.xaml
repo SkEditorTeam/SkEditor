@@ -2,262 +2,262 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
-	<!-- Window Titles -->
-	<system:String x:Key="WindowTitlePublish">게시</system:String>
-	<system:String x:Key="WindowTitleRefactor">코드 서식 다시 지정</system:String>
-	<system:String x:Key="WindowTitleSettings">설정</system:String>
-	<system:String x:Key="WindowTitleFontSelector">글꼴 선택</system:String>
-	<system:String x:Key="WindowTitleSaveFilePicker">파일 저장</system:String>
-	<system:String x:Key="WindowTitleOpenFilePicker">파일 열기</system:String>
-	<system:String x:Key="WindowTitleGuiGenerator">GUI 생성</system:String>
-	<system:String x:Key="WindowTitleCommandGenerator">명령어 생성</system:String>
-	<system:String x:Key="WindowTitleItemSelector">아이템 선택</system:String>
-	<system:String x:Key="WindowTitleMarketplace">마켓플레이스</system:String>
-	<system:String x:Key="WindowTitleElementRename">이름 변경</system:String>
-	<system:String x:Key="WindowTitleElementCreate">생성</system:String>
+    <!-- Window Titles -->
+    <system:String x:Key="WindowTitlePublish">게시</system:String>
+    <system:String x:Key="WindowTitleRefactor">코드 서식 다시 지정</system:String>
+    <system:String x:Key="WindowTitleSettings">설정</system:String>
+    <system:String x:Key="WindowTitleFontSelector">글꼴 선택</system:String>
+    <system:String x:Key="WindowTitleSaveFilePicker">파일 저장</system:String>
+    <system:String x:Key="WindowTitleOpenFilePicker">파일 열기</system:String>
+    <system:String x:Key="WindowTitleGuiGenerator">GUI 생성</system:String>
+    <system:String x:Key="WindowTitleCommandGenerator">명령어 생성</system:String>
+    <system:String x:Key="WindowTitleItemSelector">아이템 선택</system:String>
+    <system:String x:Key="WindowTitleMarketplace">마켓플레이스</system:String>
+    <system:String x:Key="WindowTitleElementRename">이름 변경</system:String>
+    <system:String x:Key="WindowTitleElementCreate">생성</system:String>
 
-	<!-- Menu Headers -->
-	<system:String x:Key="MenuHeaderFile">파일</system:String>
-	<system:String x:Key="MenuHeaderEdit">수정</system:String>
-	<system:String x:Key="MenuHeaderTools">도구</system:String>
-	<system:String x:Key="MenuHeaderOther">기타</system:String>
-	<system:String x:Key="MenuHeaderAddons">애드온</system:String>
+    <!-- Menu Headers -->
+    <system:String x:Key="MenuHeaderFile">파일</system:String>
+    <system:String x:Key="MenuHeaderEdit">수정</system:String>
+    <system:String x:Key="MenuHeaderTools">도구</system:String>
+    <system:String x:Key="MenuHeaderOther">기타</system:String>
+    <system:String x:Key="MenuHeaderAddons">애드온</system:String>
 
-	<!-- File Menu -->
-	<system:String x:Key="MenuHeaderNew">새로 만들기</system:String>
-	<system:String x:Key="MenuHeaderOpen">열기</system:String>
-	<system:String x:Key="MenuHeaderSave">저장</system:String>
-	<system:String x:Key="MenuHeaderSaveAs">다른 이름으로 저장</system:String>
-	<system:String x:Key="MenuHeaderPublish">게시</system:String>
-	<system:String x:Key="MenuHeaderClose">닫기</system:String>
+    <!-- File Menu -->
+    <system:String x:Key="MenuHeaderNew">새로 만들기</system:String>
+    <system:String x:Key="MenuHeaderOpen">열기</system:String>
+    <system:String x:Key="MenuHeaderSave">저장</system:String>
+    <system:String x:Key="MenuHeaderSaveAs">다른 이름으로 저장</system:String>
+    <system:String x:Key="MenuHeaderPublish">게시</system:String>
+    <system:String x:Key="MenuHeaderClose">닫기</system:String>
 
-	<!-- Edit Menu -->
-	<system:String x:Key="MenuHeaderCopy">복사</system:String>
-	<system:String x:Key="MenuHeaderPaste">붙여넣기</system:String>
-	<system:String x:Key="MenuHeaderCut">자르기</system:String>
-	<system:String x:Key="MenuHeaderUndo">실행 취소</system:String>
-	<system:String x:Key="MenuHeaderRedo">다시 실행</system:String>
-	<system:String x:Key="MenuHeaderDuplicate">복제</system:String>
-	<system:String x:Key="MenuHeaderComment">주석</system:String>
-	<system:String x:Key="MenuHeaderDelete">삭제</system:String>
+    <!-- Edit Menu -->
+    <system:String x:Key="MenuHeaderCopy">복사</system:String>
+    <system:String x:Key="MenuHeaderPaste">붙여넣기</system:String>
+    <system:String x:Key="MenuHeaderCut">자르기</system:String>
+    <system:String x:Key="MenuHeaderUndo">실행 취소</system:String>
+    <system:String x:Key="MenuHeaderRedo">다시 실행</system:String>
+    <system:String x:Key="MenuHeaderDuplicate">복제</system:String>
+    <system:String x:Key="MenuHeaderComment">주석</system:String>
+    <system:String x:Key="MenuHeaderDelete">삭제</system:String>
 
-	<!-- Tools Menu -->
-	<system:String x:Key="MenuHeaderDocumentation">문서</system:String>
-	<system:String x:Key="MenuHeaderGenerate">생성</system:String>
-	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
-	<system:String x:Key="MenuHeaderGenerateCommand">명령어</system:String>
-	<system:String x:Key="MenuHeaderRefactor">코드 서식 다시 지정</system:String>
-	
-	<!-- Other Menu -->
-	<system:String x:Key="MenuHeaderMarketplace">마켓플레이스</system:String>
-	<system:String x:Key="MenuHeaderRefreshSyntax">구문 새로 고침</system:String>
+    <!-- Tools Menu -->
+    <system:String x:Key="MenuHeaderDocumentation">문서</system:String>
+    <system:String x:Key="MenuHeaderGenerate">생성</system:String>
+    <system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
+    <system:String x:Key="MenuHeaderGenerateCommand">명령어</system:String>
+    <system:String x:Key="MenuHeaderRefactor">코드 서식 다시 지정</system:String>
 
-	<!-- Project Menu -->
-	<system:String x:Key="MenuHeaderOpenInExplorer">파일 탐색기에서 열기</system:String>
-	<system:String x:Key="MenuHeaderCopyPath">경로 복사</system:String>
-	<system:String x:Key="MenuHeaderCopyAbsolutePath">절대 경로 복사</system:String>
-	<system:String x:Key="MenuHeaderRename">이름 변경</system:String>
-	<system:String x:Key="MenuHeaderNewFile">새 파일</system:String>
-	<system:String x:Key="MenuHeaderNewFolder">새 폴더</system:String>
+    <!-- Other Menu -->
+    <system:String x:Key="MenuHeaderMarketplace">마켓플레이스</system:String>
+    <system:String x:Key="MenuHeaderRefreshSyntax">구문 새로 고침</system:String>
 
-	<!-- Buttons -->
-	<system:String x:Key="ApplyButton">적용</system:String>
-	<system:String x:Key="ConfirmButton">확인</system:String>
-	<system:String x:Key="CloseButton">닫기</system:String>
-	<system:String x:Key="SelectButton">선택</system:String>
-	<system:String x:Key="CancelButton">취소</system:String>
-	<system:String x:Key="ContinueButton">계속</system:String>
-	<system:String x:Key="Error">오류</system:String>
-	<system:String x:Key="Success">성공</system:String>
-	<system:String x:Key="Attention">경고!</system:String>
-	<system:String x:Key="Yes">예</system:String>
-	<system:String x:Key="No">아니오</system:String>
-	<system:String x:Key="Okay">알겠습니다</system:String>
+    <!-- Project Menu -->
+    <system:String x:Key="MenuHeaderOpenInExplorer">파일 탐색기에서 열기</system:String>
+    <system:String x:Key="MenuHeaderCopyPath">경로 복사</system:String>
+    <system:String x:Key="MenuHeaderCopyAbsolutePath">절대 경로 복사</system:String>
+    <system:String x:Key="MenuHeaderRename">이름 변경</system:String>
+    <system:String x:Key="MenuHeaderNewFile">새 파일</system:String>
+    <system:String x:Key="MenuHeaderNewFolder">새 폴더</system:String>
 
-	<!-- Messages -->
-	<system:String x:Key="NewFileNameFormat">새 파일 {0}</system:String>
-	<system:String x:Key="FailedToDownloadSyntax">구문 강조 파일을 다운로드하는 도중 문제가 발생했습니다.\n인터넷 연결 상태를 확인하세요.</system:String>
-	<system:String x:Key="DownloadingMissingFilesTitle">파일 누락됨</system:String>
-	<system:String x:Key="Downloading">다운로드중</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionItems">아이템 선택기에 사용되는 파일이 누락되어 있어, 파일을 다운로드 하고 있습니다.</system:String>
-	<system:String x:Key="DownloadingMissingFiles">다운로드중</system:String>
-	<system:String x:Key="DownloadMissingFilesFailed">누락된 파일 다운로드에 실패했습니다. 나중에 다시 시도하십시오.</system:String>
-	<system:String x:Key="ClosingUnsavedFile">파일에 저장되지 않은 변경 사항이 있습니다! 정말로 파일을 닫으시겠습니까?</system:String>
-	<system:String x:Key="ClosingProgramWithUnsavedFiles">일부 파일에 저장되지 않은 변경 사항이 있습니다! 정말로 편집기를 종료하시겠습니까?</system:String>
-	<system:String x:Key="ChangesDetected">파일이 외부적으로 변경되었습니다!\n변경 사항을 모두 취소하고 파일을 다시 로드하시겠습니까?</system:String>
-	<system:String x:Key="DownloadingUpdateTitle">업데이트 다운로드중</system:String>
-	<system:String x:Key="UpdateAvailable">업데이트 사용 가능</system:String>
-	<system:String x:Key="UpdateAvailableMessage">새로운 업데이트를 사용할 수 있습니다.\n지금 다운로드 하시겠습니까?</system:String>
-	<system:String x:Key="UpdateFailed">업데이트를 다운로드하는 도중 문제가 발생했습니다. 나중에 다시 시도하십시오.</system:String>
-	<system:String x:Key="BinaryFileFound">파일이 이진이거나 지원되지 않는 텍스트 인코딩을 사용하므로 편집기에 정상적으로 표시되지 않을 수 있습니다.\n정말로 파일을 여시겠습니까?</system:String>
-	<system:String x:Key="BinaryFileTitle">지원되지 않는 인코딩 감지됨</system:String>
-	
+    <!-- Buttons -->
+    <system:String x:Key="ApplyButton">적용</system:String>
+    <system:String x:Key="ConfirmButton">확인</system:String>
+    <system:String x:Key="CloseButton">닫기</system:String>
+    <system:String x:Key="SelectButton">선택</system:String>
+    <system:String x:Key="CancelButton">취소</system:String>
+    <system:String x:Key="ContinueButton">계속</system:String>
+    <system:String x:Key="Error">오류</system:String>
+    <system:String x:Key="Success">성공</system:String>
+    <system:String x:Key="Attention">경고!</system:String>
+    <system:String x:Key="Yes">예</system:String>
+    <system:String x:Key="No">아니오</system:String>
+    <system:String x:Key="Okay">알겠습니다</system:String>
 
-	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowApiKeyHint">여기를 눌러 API 키 관리 사이트를 엽니다. 먼저 로그인되어 있는지 확인하세요!</system:String>
-	<system:String x:Key="PublishWindowAnonymously">익명으로</system:String>
-	<system:String x:Key="PublishWindowResultLink">게시된 코드 링크</system:String>
-	<system:String x:Key="PublishWindowPublishButton">게시</system:String>
-	
-	<!-- Refactor Window -->
-	<system:String x:Key="RefactorWindowRemoveComments">주석 제거</system:String>
-	<system:String x:Key="RefactorWindowTabsToSpaces">탭을 띄어쓰기로 전환</system:String>
-	<system:String x:Key="RefactorWindowSpacesToTabs">띄어쓰기를 탭으로 전환</system:String>
-	<system:String x:Key="RefactorWindowRefactorBoxName">'{0}' 에서 이름 변경...</system:String>
-	
-
-	<!-- Projects -->
-	<system:String x:Key="ProjectExplorerTitle">프로젝트</system:String>
-	<system:String x:Key="ProjectExplorerInfoButton">폴더 열기</system:String>
-	<system:String x:Key="ProjectRenameText">프로젝트 이름 변경...</system:String>
-	<system:String x:Key="ProjectRenameErrorNameEmpty">이름은 공백일 수 없습니다.</system:String>
-	<system:String x:Key="ProjectRenameErrorParentNull">상위 폴더는 누락될 수 없습니다.</system:String>
-	<system:String x:Key="ProjectErrorNameExists">해당 이름의 파일 또는 폴더가 이미 존재합니다.</system:String>
-	<system:String x:Key="ProjectRenameErrorSameName">새로운 이름은 기존과 같을 수 없습니다.</system:String>
-	<system:String x:Key="ProjectCreateFileName">파일 이름</system:String>
-	<system:String x:Key="ProjectCreateFolderName">폴더 이름</system:String>
-	<system:String x:Key="ProjectCreateTemplate">템플릿</system:String>
-
-	<!-- File Association Selection Window -->
-	<system:String x:Key="FileAssociationSelectionWindowTitle">파일 제공자 선택</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowInfo">해당 파일 확장자에서 사용 가능한 여러 제공자가 있습니다. 하나를 선택하여 주십시오.</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowOfficialItem">SkEditor에서 제공하는 공식 파일 확장자입니다.</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">애드온 {0} 에서 제공중인 비공식 파일 확장자입니다.</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">내 선택 기억</system:String>
+    <!-- Messages -->
+    <system:String x:Key="NewFileNameFormat">새 파일 {0}</system:String>
+    <system:String x:Key="FailedToDownloadSyntax">구문 강조 파일을 다운로드하는 도중 문제가 발생했습니다.\n인터넷 연결 상태를 확인하세요.</system:String>
+    <system:String x:Key="DownloadingMissingFilesTitle">파일 누락됨</system:String>
+    <system:String x:Key="Downloading">다운로드중</system:String>
+    <system:String x:Key="DownloadingMissingFilesDescriptionItems">아이템 선택기에 사용되는 파일이 누락되어 있어, 파일을 다운로드 하고 있습니다.</system:String>
+    <system:String x:Key="DownloadingMissingFiles">다운로드중</system:String>
+    <system:String x:Key="DownloadMissingFilesFailed">누락된 파일 다운로드에 실패했습니다. 나중에 다시 시도하십시오.</system:String>
+    <system:String x:Key="ClosingUnsavedFile">파일에 저장되지 않은 변경 사항이 있습니다! 정말로 파일을 닫으시겠습니까?</system:String>
+    <system:String x:Key="ClosingProgramWithUnsavedFiles">일부 파일에 저장되지 않은 변경 사항이 있습니다! 정말로 편집기를 종료하시겠습니까?</system:String>
+    <system:String x:Key="ChangesDetected">파일이 외부적으로 변경되었습니다!\n변경 사항을 모두 취소하고 파일을 다시 로드하시겠습니까?</system:String>
+    <system:String x:Key="DownloadingUpdateTitle">업데이트 다운로드중</system:String>
+    <system:String x:Key="UpdateAvailable">업데이트 사용 가능</system:String>
+    <system:String x:Key="UpdateAvailableMessage">새로운 업데이트를 사용할 수 있습니다.\n지금 다운로드 하시겠습니까?</system:String>
+    <system:String x:Key="UpdateFailed">업데이트를 다운로드하는 도중 문제가 발생했습니다. 나중에 다시 시도하십시오.</system:String>
+    <system:String x:Key="BinaryFileFound">파일이 이진이거나 지원되지 않는 텍스트 인코딩을 사용하므로 편집기에 정상적으로 표시되지 않을 수 있습니다.\n정말로 파일을 여시겠습니까?</system:String>
+    <system:String x:Key="BinaryFileTitle">지원되지 않는 인코딩 감지됨</system:String>
 
 
-	<!-- Settings -->
-	<system:String x:Key="SettingsEnabled">활성</system:String>
-	<system:String x:Key="SettingsDisabled">비활성</system:String>
+    <!-- Publish Window -->
+    <system:String x:Key="PublishWindowApiKeyHint">여기를 눌러 API 키 관리 사이트를 엽니다. 먼저 로그인되어 있는지 확인하세요!</system:String>
+    <system:String x:Key="PublishWindowAnonymously">익명으로</system:String>
+    <system:String x:Key="PublishWindowResultLink">게시된 코드 링크</system:String>
+    <system:String x:Key="PublishWindowPublishButton">게시</system:String>
 
-	<!-- Settings Home -->
-	<system:String x:Key="SettingsHomeTitle">설정</system:String>
-	<system:String x:Key="SettingsHomeGeneral">일반</system:String>
-	<system:String x:Key="SettingsHomeGeneralDescription">언어 및 기능</system:String>
-	<system:String x:Key="SettingsHomePersonalization">개인화</system:String>
-	<system:String x:Key="SettingsHomePersonalizationDescription">테마, 폰트 및 구문 강조</system:String>
-	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
-	<system:String x:Key="SettingsHomeDiscordDescription">Discord 프로필에 SkEditor 상태를 표시해 보세요!</system:String>
-	<system:String x:Key="SettingsHomeExperiments">실험실</system:String>
-	<system:String x:Key="SettingsHomeExperimentsDescription">곧 추가될 기능을 미리 사용해보세요!</system:String>
-	<system:String x:Key="SettingsHomeAddons">애드온</system:String>
-	<system:String x:Key="SettingsHomeAddonsDescription">애드온을 추가하여 더 나은 경험을 해보세요!</system:String>
-	<system:String x:Key="SettingsHomeAbout">정보</system:String>
+    <!-- Refactor Window -->
+    <system:String x:Key="RefactorWindowRemoveComments">주석 제거</system:String>
+    <system:String x:Key="RefactorWindowTabsToSpaces">탭을 띄어쓰기로 전환</system:String>
+    <system:String x:Key="RefactorWindowSpacesToTabs">띄어쓰기를 탭으로 전환</system:String>
+    <system:String x:Key="RefactorWindowRefactorBoxName">'{0}' 에서 이름 변경...</system:String>
 
-	<!-- General Settings -->
-	<system:String x:Key="SettingsGeneralTitle">일반</system:String>
-	<system:String x:Key="SettingsGeneralLanguage">언어</system:String>
-	<system:String x:Key="SettingsGeneralWrapping">래핑</system:String>
-	<system:String x:Key="SettingsGeneralTabType">들여 쓰기</system:String>
-	<system:String x:Key="SettingsGeneralTabTypeDescription">들여쓰기에 사용할 문자와, 탭의 크기를 지정합니다.</system:String>
-	<system:String x:Key="SettingsGeneralTabTypeTabs">탭</system:String>
-	<system:String x:Key="SettingsGeneralTabTypeSpaces">띄어쓰기</system:String>
-	<system:String x:Key="SettingsGeneralAutoIndent">자동 들여 쓰기</system:String>
-	<system:String x:Key="SettingsGeneralAutoIndentDescription">이전 줄이 콜론으로 끝나면 다음 줄을 자동으로 들여 씁니다.</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairing">자동 닫기 문자</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairingDescription">열기 문자를 입력하면 자동으로 커서 뒤에 닫기 문자를 추가합니다.</system:String>
-	<system:String x:Key="SettingsGeneralAutoSave">자동 저장</system:String>
-	<system:String x:Key="SettingsGeneralAutoSaveDescription">파일을 수정할 때 마다 자동으로 변경 사항을 저장합니다.</system:String>
-	<system:String x:Key="SettingsGeneralRpc">Discord 활동 상태 (RPC)</system:String>
-	<system:String x:Key="SettingsGeneralRpcDescription">Discord 상태에 SkEditor 상태를 표시합니다.</system:String>
 
-	<!-- About Settings -->
-	<system:String x:Key="SettingsAboutTitle">정보</system:String>
-	<system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
-	<system:String x:Key="SettingsAboutSkEditorDescription">SkEditor는 Notro가 제작한 Skript 파일 편집기입니다.</system:String>
-	<system:String x:Key="SettingsAboutVersion">버전</system:String>
-	<system:String x:Key="SettingsAboutVersionDescription">현재 사용 버전: {0}</system:String>
-	<system:String x:Key="SettingsAboutGithub">GitHub</system:String>
-	<system:String x:Key="SettingsAboutGithubDescription">클릭하여 SkEditor GitHub 저장소를 엽니다.</system:String>
-	<system:String x:Key="SettingsAboutDiscord">Discord 서버</system:String>
-	<system:String x:Key="SettingsAboutDiscordDescription">클릭하여 SkEditor Discord 서버에 접속합니다.</system:String>
+    <!-- Projects -->
+    <system:String x:Key="ProjectExplorerTitle">프로젝트</system:String>
+    <system:String x:Key="ProjectExplorerInfoButton">폴더 열기</system:String>
+    <system:String x:Key="ProjectRenameText">프로젝트 이름 변경...</system:String>
+    <system:String x:Key="ProjectRenameErrorNameEmpty">이름은 공백일 수 없습니다.</system:String>
+    <system:String x:Key="ProjectRenameErrorParentNull">상위 폴더는 누락될 수 없습니다.</system:String>
+    <system:String x:Key="ProjectErrorNameExists">해당 이름의 파일 또는 폴더가 이미 존재합니다.</system:String>
+    <system:String x:Key="ProjectRenameErrorSameName">새로운 이름은 기존과 같을 수 없습니다.</system:String>
+    <system:String x:Key="ProjectCreateFileName">파일 이름</system:String>
+    <system:String x:Key="ProjectCreateFolderName">폴더 이름</system:String>
+    <system:String x:Key="ProjectCreateTemplate">템플릿</system:String>
 
-	<!-- Personalization Settings -->
-	<system:String x:Key="SettingsPersonalizationTitle">개인화</system:String>
-	<system:String x:Key="SettingsPersonalizationTheme">테마</system:String>
-	<system:String x:Key="SettingsPersonalizationThemeDescription">편집기의 색상을 사용자화 합니다.</system:String>
-	<system:String x:Key="SettingsPersonalizationSyntax">구문 강조</system:String>
-	<system:String x:Key="SettingsPersonalizationFont">글꼴</system:String>
-	<system:String x:Key="SettingsPersonalizationFontDescription">현재 글꼴: {0}</system:String>
+    <!-- File Association Selection Window -->
+    <system:String x:Key="FileAssociationSelectionWindowTitle">파일 제공자 선택</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowInfo">해당 파일 확장자에서 사용 가능한 여러 제공자가 있습니다. 하나를 선택하여 주십시오.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowOfficialItem">SkEditor에서 제공하는 공식 파일 확장자입니다.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowUnofficialItem">애드온 {0} 에서 제공중인 비공식 파일 확장자입니다.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">내 선택 기억</system:String>
 
-	<!-- Theme Settings -->
-	<system:String x:Key="SettingsThemeTitle">테마</system:String>
-	<system:String x:Key="SettingsThemeOpenFolder">폴더 열기</system:String>
-	<system:String x:Key="SettingsThemeCurrentTheme">현재 테마</system:String>
-	<system:String x:Key="SettingsThemeCurrentThemeDescription">편집기를 재시작하지 않아도 테마가 적용되지만, 일부 색상은 재시작하기 전까지 변경되지 않을 수 있습니다.</system:String>
 
-	<!-- Syntax Highlighting Settings -->
-	<system:String x:Key="SettingsSyntaxesTitle">구문 강조</system:String>
+    <!-- Settings -->
+    <system:String x:Key="SettingsEnabled">활성</system:String>
+    <system:String x:Key="SettingsDisabled">비활성</system:String>
 
-	<!-- Addon Settings -->
-	<system:String x:Key="SettingsAddonsTitle">애드온</system:String>
-	
-	<!-- File Views -->
-	<system:String x:Key="FileViewImageAA">안티 앨리어싱</system:String>
+    <!-- Settings Home -->
+    <system:String x:Key="SettingsHomeTitle">설정</system:String>
+    <system:String x:Key="SettingsHomeGeneral">일반</system:String>
+    <system:String x:Key="SettingsHomeGeneralDescription">언어 및 기능</system:String>
+    <system:String x:Key="SettingsHomePersonalization">개인화</system:String>
+    <system:String x:Key="SettingsHomePersonalizationDescription">테마, 폰트 및 구문 강조</system:String>
+    <system:String x:Key="SettingsHomeDiscord">Discord</system:String>
+    <system:String x:Key="SettingsHomeDiscordDescription">Discord 프로필에 SkEditor 상태를 표시해 보세요!</system:String>
+    <system:String x:Key="SettingsHomeExperiments">실험실</system:String>
+    <system:String x:Key="SettingsHomeExperimentsDescription">곧 추가될 기능을 미리 사용해보세요!</system:String>
+    <system:String x:Key="SettingsHomeAddons">애드온</system:String>
+    <system:String x:Key="SettingsHomeAddonsDescription">애드온을 추가하여 더 나은 경험을 해보세요!</system:String>
+    <system:String x:Key="SettingsHomeAbout">정보</system:String>
 
-	<!-- Discord RPC -->
-	<system:String x:Key="DiscordRpcEditing">{0} 편집중</system:String>
+    <!-- General Settings -->
+    <system:String x:Key="SettingsGeneralTitle">일반</system:String>
+    <system:String x:Key="SettingsGeneralLanguage">언어</system:String>
+    <system:String x:Key="SettingsGeneralWrapping">래핑</system:String>
+    <system:String x:Key="SettingsGeneralTabType">들여 쓰기</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeDescription">들여쓰기에 사용할 문자와, 탭의 크기를 지정합니다.</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeTabs">탭</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeSpaces">띄어쓰기</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndent">자동 들여 쓰기</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndentDescription">이전 줄이 콜론으로 끝나면 다음 줄을 자동으로 들여 씁니다.</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairing">자동 닫기 문자</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairingDescription">열기 문자를 입력하면 자동으로 커서 뒤에 닫기 문자를 추가합니다.</system:String>
+    <system:String x:Key="SettingsGeneralAutoSave">자동 저장</system:String>
+    <system:String x:Key="SettingsGeneralAutoSaveDescription">파일을 수정할 때 마다 자동으로 변경 사항을 저장합니다.</system:String>
+    <system:String x:Key="SettingsGeneralRpc">Discord 활동 상태 (RPC)</system:String>
+    <system:String x:Key="SettingsGeneralRpcDescription">Discord 상태에 SkEditor 상태를 표시합니다.</system:String>
 
-	<!-- Bottom bar -->
-	<system:String x:Key="BottomBarLine">줄 {0}</system:String>
-	<system:String x:Key="BottomBarColumn">열 {0}</system:String>
-	
-	
-	<!-- GUI Generator -->
-	<system:String x:Key="GuiGeneratorTitle">제목</system:String>
-	<system:String x:Key="GuiGeneratorFunctionName">함수명</system:String>
-	<system:String x:Key="GuiGeneratorRowQuantity">줄 개수</system:String>
-	<system:String x:Key="GuiGeneratorBackgroundItem">배경 아이템</system:String>
-	<system:String x:Key="GuiGeneratorPreviewButton">미리 보기</system:String>
-	<system:String x:Key="GuiGeneratorGenerateButton">생성</system:String>
-	<system:String x:Key="GuiGeneratorSkriptGui">skript-gui 사용</system:String>
-	<system:String x:Key="GuiGeneratorDisplayName">표시 이름</system:String>
-	<system:String x:Key="GuiGeneratorLore">아이템 설명</system:String>
-	<system:String x:Key="GuiGeneratorOptional">선택</system:String>
-	<system:String x:Key="GuiGeneratorCustomModelData">사용자 지정 모델 데이터 ID</system:String>
-	<system:String x:Key="GuiGeneratorLoreLineWatermark">오른쪽 마우스로 클릭하여 줄을 넘깁니다</system:String>
-	<system:String x:Key="GuiGeneratorAddLoreLine">줄 넘기기</system:String>
-	<system:String x:Key="GuiGeneratorAddExampleAction">예시 상호 작용 추가</system:String>
-	
-	<!-- Command Generator -->
-	<system:String x:Key="CommandGeneratorName">이름</system:String>
-	<system:String x:Key="CommandGeneratorPermission">권한</system:String>
-	<system:String x:Key="CommandGeneratorNoPermissionMessage">권한 오류 메세지 없음</system:String>
-	<system:String x:Key="CommandGeneratorAliases">별칭</system:String>
-	<system:String x:Key="CommandGeneratorInvalidUsageMessage">사용 오류 메세지</system:String>
-	<system:String x:Key="CommandGeneratorWhoCanUseTheCommand">명령어 사용 대상자</system:String>
-	<system:String x:Key="CommandGeneratorPlayer">플레이어</system:String>
-	<system:String x:Key="CommandGeneratorConsole">콘솔</system:String>
-	<system:String x:Key="CommandGeneratorCooldown">재사용 대기 시간</system:String>
-	<system:String x:Key="CommandGeneratorTicks">틱</system:String>
-	<system:String x:Key="CommandGeneratorSeconds">초</system:String>
-	<system:String x:Key="CommandGeneratorMinutes">분</system:String>
-	<system:String x:Key="CommandGeneratorHours">시간</system:String>
-	<system:String x:Key="CommandGeneratorDays">일</system:String>
-	<system:String x:Key="CommandGeneratorWeeks">주</system:String>
-	<system:String x:Key="CommandGeneratorMonths">개월</system:String>
-	<system:String x:Key="CommandGeneratorYears">년</system:String>
-	<system:String x:Key="CommandGeneratorGenerate">생성</system:String>
-	<system:String x:Key="CommandGeneratorPropertyMissing">{0} 이 아직 설정되지 않았습니다!</system:String>
+    <!-- About Settings -->
+    <system:String x:Key="SettingsAboutTitle">정보</system:String>
+    <system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
+    <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor는 Notro가 제작한 Skript 파일 편집기입니다.</system:String>
+    <system:String x:Key="SettingsAboutVersion">버전</system:String>
+    <system:String x:Key="SettingsAboutVersionDescription">현재 사용 버전: {0}</system:String>
+    <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">클릭하여 SkEditor GitHub 저장소를 엽니다.</system:String>
+    <system:String x:Key="SettingsAboutDiscord">Discord 서버</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">클릭하여 SkEditor Discord 서버에 접속합니다.</system:String>
 
-	<!-- Marketplace -->
-	<system:String x:Key="MarketplaceSearch">검색</system:String>
-	<system:String x:Key="MarketplaceEnableNow">지금 활성화</system:String>
-	<system:String x:Key="MarketplaceInstallSuccess">{0} 을(를) 성공적으로 다운로드 했습니다!</system:String>
-	<system:String x:Key="MarketplaceInstallRestart">애드온을 적용하려면 폊집기를 재시작하십시오.</system:String>
-	<system:String x:Key="MarketplaceInstallEnableNow">지금 바로 적용하시겠습니까?</system:String>
-	<system:String x:Key="MarketplaceInstallNoNeedToRestart">일반적으로 애드온은 재시작하지 않아도 작동하지만, 만약 오류가 발생하는 경우, 편집기를 재시작하십시오.</system:String>
-	<system:String x:Key="MarketplaceInstallFailed">{0} 을(를) 다운로드하는 도중 문제가 발생했습니다!</system:String>
-	<system:String x:Key="MarketplaceUninstallSuccess">{0} 을(를) 성공적으로 제거했습니다!\n애드온을 완전히 제거하려면 편집기를 재시작하십시오.</system:String>
-	<system:String x:Key="MarketplaceUpdateSuccess">{0} 을(를) 성공적으로 업데이트 했습니다!\n애드온 업데이트를 적용하려면 편집기를 재시작하십시오.</system:String>
-	<system:String x:Key="MarketplaceUpdateFailed">{0} 을(를) 업데이트하는 도중 문제가 발생했습니다!</system:String>
-	<system:String x:Key="MarketplaceLoadFailed">마켓플레이스 목록을 불러오는 도중 예기치 못한 문제가 발생했습니다. 인터넷 연결 상태를 확인하십시오.</system:String>
-	<system:String x:Key="MarketplaceInfo">공식 애드온을 설치할 수 있도록 생성된 임시 UI입니다. 이후에 개선될 예정입니다.</system:String>
-	<system:String x:Key="MarketplaceButtonInstall">설치</system:String>
-	<system:String x:Key="MarketplaceButtonUpdate">업데이트</system:String>
-	<system:String x:Key="MarketplaceButtonUninstall">제거</system:String>
-	<system:String x:Key="MarketplaceButtonDisable">비활성화</system:String>
-	<system:String x:Key="MarketplaceButtonEnable">활성화</system:String>
+    <!-- Personalization Settings -->
+    <system:String x:Key="SettingsPersonalizationTitle">개인화</system:String>
+    <system:String x:Key="SettingsPersonalizationTheme">테마</system:String>
+    <system:String x:Key="SettingsPersonalizationThemeDescription">편집기의 색상을 사용자화 합니다.</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntax">구문 강조</system:String>
+    <system:String x:Key="SettingsPersonalizationFont">글꼴</system:String>
+    <system:String x:Key="SettingsPersonalizationFontDescription">현재 글꼴: {0}</system:String>
+
+    <!-- Theme Settings -->
+    <system:String x:Key="SettingsThemeTitle">테마</system:String>
+    <system:String x:Key="SettingsThemeOpenFolder">폴더 열기</system:String>
+    <system:String x:Key="SettingsThemeCurrentTheme">현재 테마</system:String>
+    <system:String x:Key="SettingsThemeCurrentThemeDescription">편집기를 재시작하지 않아도 테마가 적용되지만, 일부 색상은 재시작하기 전까지 변경되지 않을 수 있습니다.</system:String>
+
+    <!-- Syntax Highlighting Settings -->
+    <system:String x:Key="SettingsSyntaxesTitle">구문 강조</system:String>
+
+    <!-- Addon Settings -->
+    <system:String x:Key="SettingsAddonsTitle">애드온</system:String>
+
+    <!-- File Views -->
+    <system:String x:Key="FileViewImageAA">안티 앨리어싱</system:String>
+
+    <!-- Discord RPC -->
+    <system:String x:Key="DiscordRpcEditing">{0} 편집중</system:String>
+
+    <!-- Bottom bar -->
+    <system:String x:Key="BottomBarLine">줄 {0}</system:String>
+    <system:String x:Key="BottomBarColumn">열 {0}</system:String>
+
+
+    <!-- GUI Generator -->
+    <system:String x:Key="GuiGeneratorTitle">제목</system:String>
+    <system:String x:Key="GuiGeneratorFunctionName">함수명</system:String>
+    <system:String x:Key="GuiGeneratorRowQuantity">줄 개수</system:String>
+    <system:String x:Key="GuiGeneratorBackgroundItem">배경 아이템</system:String>
+    <system:String x:Key="GuiGeneratorPreviewButton">미리 보기</system:String>
+    <system:String x:Key="GuiGeneratorGenerateButton">생성</system:String>
+    <system:String x:Key="GuiGeneratorSkriptGui">skript-gui 사용</system:String>
+    <system:String x:Key="GuiGeneratorDisplayName">표시 이름</system:String>
+    <system:String x:Key="GuiGeneratorLore">아이템 설명</system:String>
+    <system:String x:Key="GuiGeneratorOptional">선택</system:String>
+    <system:String x:Key="GuiGeneratorCustomModelData">사용자 지정 모델 데이터 ID</system:String>
+    <system:String x:Key="GuiGeneratorLoreLineWatermark">오른쪽 마우스로 클릭하여 줄을 넘깁니다</system:String>
+    <system:String x:Key="GuiGeneratorAddLoreLine">줄 넘기기</system:String>
+    <system:String x:Key="GuiGeneratorAddExampleAction">예시 상호 작용 추가</system:String>
+
+    <!-- Command Generator -->
+    <system:String x:Key="CommandGeneratorName">이름</system:String>
+    <system:String x:Key="CommandGeneratorPermission">권한</system:String>
+    <system:String x:Key="CommandGeneratorNoPermissionMessage">권한 오류 메세지 없음</system:String>
+    <system:String x:Key="CommandGeneratorAliases">별칭</system:String>
+    <system:String x:Key="CommandGeneratorInvalidUsageMessage">사용 오류 메세지</system:String>
+    <system:String x:Key="CommandGeneratorWhoCanUseTheCommand">명령어 사용 대상자</system:String>
+    <system:String x:Key="CommandGeneratorPlayer">플레이어</system:String>
+    <system:String x:Key="CommandGeneratorConsole">콘솔</system:String>
+    <system:String x:Key="CommandGeneratorCooldown">재사용 대기 시간</system:String>
+    <system:String x:Key="CommandGeneratorTicks">틱</system:String>
+    <system:String x:Key="CommandGeneratorSeconds">초</system:String>
+    <system:String x:Key="CommandGeneratorMinutes">분</system:String>
+    <system:String x:Key="CommandGeneratorHours">시간</system:String>
+    <system:String x:Key="CommandGeneratorDays">일</system:String>
+    <system:String x:Key="CommandGeneratorWeeks">주</system:String>
+    <system:String x:Key="CommandGeneratorMonths">개월</system:String>
+    <system:String x:Key="CommandGeneratorYears">년</system:String>
+    <system:String x:Key="CommandGeneratorGenerate">생성</system:String>
+    <system:String x:Key="CommandGeneratorPropertyMissing">{0} 이 아직 설정되지 않았습니다!</system:String>
+
+    <!-- Marketplace -->
+    <system:String x:Key="MarketplaceSearch">검색</system:String>
+    <system:String x:Key="MarketplaceEnableNow">지금 활성화</system:String>
+    <system:String x:Key="MarketplaceInstallSuccess">{0} 을(를) 성공적으로 다운로드 했습니다!</system:String>
+    <system:String x:Key="MarketplaceInstallRestart">애드온을 적용하려면 폊집기를 재시작하십시오.</system:String>
+    <system:String x:Key="MarketplaceInstallEnableNow">지금 바로 적용하시겠습니까?</system:String>
+    <system:String x:Key="MarketplaceInstallNoNeedToRestart">일반적으로 애드온은 재시작하지 않아도 작동하지만, 만약 오류가 발생하는 경우, 편집기를 재시작하십시오.</system:String>
+    <system:String x:Key="MarketplaceInstallFailed">{0} 을(를) 다운로드하는 도중 문제가 발생했습니다!</system:String>
+    <system:String x:Key="MarketplaceUninstallSuccess">{0} 을(를) 성공적으로 제거했습니다!\n애드온을 완전히 제거하려면 편집기를 재시작하십시오.</system:String>
+    <system:String x:Key="MarketplaceUpdateSuccess">{0} 을(를) 성공적으로 업데이트 했습니다!\n애드온 업데이트를 적용하려면 편집기를 재시작하십시오.</system:String>
+    <system:String x:Key="MarketplaceUpdateFailed">{0} 을(를) 업데이트하는 도중 문제가 발생했습니다!</system:String>
+    <system:String x:Key="MarketplaceLoadFailed">마켓플레이스 목록을 불러오는 도중 예기치 못한 문제가 발생했습니다. 인터넷 연결 상태를 확인하십시오.</system:String>
+    <system:String x:Key="MarketplaceInfo">공식 애드온을 설치할 수 있도록 생성된 임시 UI입니다. 이후에 개선될 예정입니다.</system:String>
+    <system:String x:Key="MarketplaceButtonInstall">설치</system:String>
+    <system:String x:Key="MarketplaceButtonUpdate">업데이트</system:String>
+    <system:String x:Key="MarketplaceButtonUninstall">제거</system:String>
+    <system:String x:Key="MarketplaceButtonDisable">비활성화</system:String>
+    <system:String x:Key="MarketplaceButtonEnable">활성화</system:String>
 
 
 </ResourceDictionary>

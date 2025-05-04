@@ -1,204 +1,204 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<LangVersion>latest</LangVersion>
-		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-		<ApplicationManifest>app.manifest</ApplicationManifest>
-		<ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>
-		<PublishSingleFile>true</PublishSingleFile>
-		<AssemblyVersion>2.8.6</AssemblyVersion>
-		<FileVersion>2.8.6</FileVersion>
-		<Version>2.8.6</Version>
-		<InformationalVersion>2.8.6</InformationalVersion>
-		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<PropertyGroup>
-		<NoWarn>CS8600;CS8604;CS8622;CS8603;CS8602;CA2211;CS8619;CS8629;CS8601;CS8618;CS8620</NoWarn>
-		<DebugType>portable</DebugType>
-	</PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>
+        <PublishSingleFile>true</PublishSingleFile>
+        <AssemblyVersion>2.8.6</AssemblyVersion>
+        <FileVersion>2.8.6</FileVersion>
+        <Version>2.8.6</Version>
+        <InformationalVersion>2.8.6</InformationalVersion>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup>
+        <NoWarn>CS8600;CS8604;CS8622;CS8603;CS8602;CA2211;CS8619;CS8629;CS8601;CS8618;CS8620</NoWarn>
+        <DebugType>portable</DebugType>
+    </PropertyGroup>
 
-	<PropertyGroup Condition="'$(PublishAot)' == 'true'">
-		<DefineConstants>$(DefineConstants);AOT</DefineConstants>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(PublishAot)' == 'true'">
+        <DefineConstants>$(DefineConstants);AOT</DefineConstants>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<AvaloniaXaml Remove="Assets\*.axaml" />
-		<AvaloniaResource Include="Assets\**" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<AvaloniaResource Include="Styles\**" />
-	</ItemGroup>
+    <ItemGroup>
+        <AvaloniaXaml Remove="Assets\*.axaml"/>
+        <AvaloniaResource Include="Assets\**"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<Content Include="Languages\**">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
+    <ItemGroup>
+        <AvaloniaResource Include="Styles\**"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf" />
-	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf" />
-	  <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf" />
-	</ItemGroup>
+    <ItemGroup>
+        <Content Include="Languages\**">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 
-	<ItemGroup>
-		<Content Update="Languages\*">
-			<Generator>MSBuild:Compile</Generator>
-		</Content>
-	</ItemGroup>
+    <ItemGroup>
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf"/>
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf"/>
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<AvaloniaResource Include="Languages\English.xaml" />
-	</ItemGroup>
+    <ItemGroup>
+        <Content Update="Languages\*">
+            <Generator>MSBuild:Compile</Generator>
+        </Content>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="AsyncImageLoader.Avalonia" Version="3.3.0" />
-		<PackageReference Include="Avalonia" Version="11.3.0" />
-		<PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
-		<PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
-		<PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.0" />
-		<PackageReference Include="Avalonia.Svg.Skia" Version="11.2.7.1" />
-		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
-		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
-		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.7.3" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <ItemGroup>
+        <AvaloniaResource Include="Languages\English.xaml"/>
+    </ItemGroup>
 
-		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.0" />
-		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
-		<PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0" />
-		<PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
-		<PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.298" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="NuGet.Protocol" Version="6.13.2" />
-		<PackageReference Include="Octokit" Version="14.0.0" />
-		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-		<PackageReference Include="SkAvaloniaEdit" Version="11.1.2" />
-		<PackageReference Include="SkFluentAvalonia" Version="2.2.1" />
-		<PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0" />
-		<PackageReference Include="Svg.Skia" Version="3.0.0" />
-		<PackageReference Include="System.Threading.AccessControl" Version="9.0.4" />
-		
-		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.3.0"/>
+        <PackageReference Include="Avalonia" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.7.1"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.7.3"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
 
-	<ItemGroup>
-		<AvaloniaResource Update="Assets\Icons.axaml"/>
-	</ItemGroup>
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.0"/>
+        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0"/>
+        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0"/>
+        <PackageReference Include="DiscordRichPresence" Version="1.2.1.24"/>
+        <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.298"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="NuGet.Protocol" Version="6.13.2"/>
+        <PackageReference Include="Octokit" Version="14.0.0"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
+        <PackageReference Include="SkAvaloniaEdit" Version="11.1.2"/>
+        <PackageReference Include="SkFluentAvalonia" Version="2.2.1"/>
+        <PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0"/>
+        <PackageReference Include="Svg.Skia" Version="3.0.0"/>
+        <PackageReference Include="System.Threading.AccessControl" Version="9.0.4"/>
 
-	<ItemGroup>
-		<Compile Update="Controls\SideBarControl.axaml.cs">
-		  <DependentUpon>SideBarControl.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\CompletionMenu.axaml.cs">
-		  <DependentUpon>CompletionMenu.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\MarketplaceItemView.axaml.cs">
-			<DependentUpon>MarketplaceItemView.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\MarketplaceListItem.axaml.cs">
-			<DependentUpon>MarketplaceListItem.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\BottomBarControl.axaml.cs">
-			<DependentUpon>BottomBarControl.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\SettingsTitle.axaml.cs">
-			<DependentUpon>SettingsTitle.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\ColorPickerSettingsExpander.axaml.cs">
-			<DependentUpon>ColorPickerSettingsExpander.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\LoreLineEditor.axaml.cs">
-			<DependentUpon>LoreLineEditor.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\EnchantSelector.axaml.cs">
-			<DependentUpon>EnchantSelector.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\TerminalWindow.axaml.cs">
-		  <SubType>Code</SubType>
-		  <DependentUpon>TerminalWindow.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\GoToLineWindow.axaml.cs">
-		  <DependentUpon>GoToLineWindow.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Generators\Gui\ExtendedItemSelector.axaml.cs">
-			<DependentUpon>ExtendedItemSelector.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Generators\Gui\ItemSelector.axaml.cs">
-			<DependentUpon>ItemSelector.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\FontSelectionWindow.axaml.cs">
-			<DependentUpon>FontSelectionWindow.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Generators\CommandGenerator.axaml.cs">
-		  <DependentUpon>CommandGenerator.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Marketplace\MarketplaceWindow.axaml.cs">
-			<DependentUpon>MarketplaceWindow.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\ColorSelectionWindow.axaml.cs">
-		  <SubType>Code</SubType>
-		  <DependentUpon>ColorSelectionWindow.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\RefactorWindow.axaml.cs">
-			<DependentUpon>RefactorWindow.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\PublishWindow.axaml.cs">
-			<DependentUpon>PublishWindow.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\AddonsPage.axaml.cs">
-			<DependentUpon>AddonsPage.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\ExperimentsPage.axaml.cs">
-		  <DependentUpon>ExperimentsPage.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\GeneralPage.axaml.cs">
-			<DependentUpon>GeneralPage.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\AboutPage.axaml.cs">
-			<DependentUpon>AboutPage.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\PersonalizationPage.axaml.cs">
-			<DependentUpon>PersonalizationPage.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\ConnectionsPage.axaml.cs">
-			<DependentUpon>ConnectionsPage.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Generators\Gui\GuiGenerator.axaml.cs">
-			<DependentUpon>GuiGenerator.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\Personalization\EditThemePage.axaml.cs">
-		  <DependentUpon>EditThemePage.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\Settings\Personalization\ThemePage.axaml.cs">
-			<DependentUpon>ThemePage.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\FileTypes\Images\ImageViewer.axaml.cs">
-		  <DependentUpon>ImageViewer.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Controls\Sidebar\ParserSidebarPanel.axaml.cs">
-			<DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
-		</Compile>
-		<Compile Update="Views\SplashScreen.axaml.cs">
-		  <DependentUpon>SplashScreen.axaml</DependentUpon>
-		  <SubType>Code</SubType>
-		</Compile>
-	</ItemGroup>
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Assets\GUI\" />
-	</ItemGroup>
+    <ItemGroup>
+        <AvaloniaResource Update="Assets\Icons.axaml"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <AvaloniaXaml Update="Views\TerminalWindow.axaml">
-	    <SubType>Designer</SubType>
-	  </AvaloniaXaml>
-	  <AvaloniaXaml Update="Views\ColorSelectionWindow.axaml">
-	    <SubType>Designer</SubType>
-	  </AvaloniaXaml>
-	</ItemGroup>
+    <ItemGroup>
+        <Compile Update="Controls\SideBarControl.axaml.cs">
+            <DependentUpon>SideBarControl.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\CompletionMenu.axaml.cs">
+            <DependentUpon>CompletionMenu.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\MarketplaceItemView.axaml.cs">
+            <DependentUpon>MarketplaceItemView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\MarketplaceListItem.axaml.cs">
+            <DependentUpon>MarketplaceListItem.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\BottomBarControl.axaml.cs">
+            <DependentUpon>BottomBarControl.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\SettingsTitle.axaml.cs">
+            <DependentUpon>SettingsTitle.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\ColorPickerSettingsExpander.axaml.cs">
+            <DependentUpon>ColorPickerSettingsExpander.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\LoreLineEditor.axaml.cs">
+            <DependentUpon>LoreLineEditor.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\EnchantSelector.axaml.cs">
+            <DependentUpon>EnchantSelector.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\TerminalWindow.axaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>TerminalWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\GoToLineWindow.axaml.cs">
+            <DependentUpon>GoToLineWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Generators\Gui\ExtendedItemSelector.axaml.cs">
+            <DependentUpon>ExtendedItemSelector.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Generators\Gui\ItemSelector.axaml.cs">
+            <DependentUpon>ItemSelector.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\FontSelectionWindow.axaml.cs">
+            <DependentUpon>FontSelectionWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Generators\CommandGenerator.axaml.cs">
+            <DependentUpon>CommandGenerator.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Marketplace\MarketplaceWindow.axaml.cs">
+            <DependentUpon>MarketplaceWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\ColorSelectionWindow.axaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>ColorSelectionWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\RefactorWindow.axaml.cs">
+            <DependentUpon>RefactorWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\PublishWindow.axaml.cs">
+            <DependentUpon>PublishWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Settings\AddonsPage.axaml.cs">
+            <DependentUpon>AddonsPage.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Settings\ExperimentsPage.axaml.cs">
+            <DependentUpon>ExperimentsPage.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Settings\GeneralPage.axaml.cs">
+            <DependentUpon>GeneralPage.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Settings\AboutPage.axaml.cs">
+            <DependentUpon>AboutPage.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Settings\PersonalizationPage.axaml.cs">
+            <DependentUpon>PersonalizationPage.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Settings\ConnectionsPage.axaml.cs">
+            <DependentUpon>ConnectionsPage.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Generators\Gui\GuiGenerator.axaml.cs">
+            <DependentUpon>GuiGenerator.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Settings\Personalization\EditThemePage.axaml.cs">
+            <DependentUpon>EditThemePage.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Settings\Personalization\ThemePage.axaml.cs">
+            <DependentUpon>ThemePage.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\FileTypes\Images\ImageViewer.axaml.cs">
+            <DependentUpon>ImageViewer.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\Sidebar\ParserSidebarPanel.axaml.cs">
+            <DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\SplashScreen.axaml.cs">
+            <DependentUpon>SplashScreen.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Assets\GUI\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AvaloniaXaml Update="Views\TerminalWindow.axaml">
+            <SubType>Designer</SubType>
+        </AvaloniaXaml>
+        <AvaloniaXaml Update="Views\ColorSelectionWindow.axaml">
+            <SubType>Designer</SubType>
+        </AvaloniaXaml>
+    </ItemGroup>
 </Project>

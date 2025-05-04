@@ -1,11 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
-using Octokit;
-using SkEditor.API;
-using SkEditor.Utilities.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,17 +6,24 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
+using FluentAvalonia.UI.Controls;
+using Octokit;
+using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using Application = Avalonia.Application;
 using FileMode = System.IO.FileMode;
 
 namespace SkEditor.Utilities;
+
 public static class UpdateChecker
 {
+    private const long RepoId = 679628726;
     private static readonly int Major = Assembly.GetExecutingAssembly().GetName().Version.Major;
     private static readonly int Minor = Assembly.GetExecutingAssembly().GetName().Version.Minor;
     private static readonly int Build = Assembly.GetExecutingAssembly().GetName().Version.Build;
-
-    private const long RepoId = 679628726;
     private static readonly GitHubClient GitHubClient = new(new ProductHeaderValue("SkEditor"));
 
     private static readonly string TempInstallerFile = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
@@ -36,7 +36,10 @@ public static class UpdateChecker
             Release release = releases.FirstOrDefault(r => !r.Prerelease);
 
             (int, int, int) version = GetVersion(release.TagName);
-            if (!IsNewerVersion(version)) return;
+            if (!IsNewerVersion(version))
+            {
+                return;
+            }
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("UpdateAvailable"),
@@ -46,7 +49,10 @@ public static class UpdateChecker
                 cancelButtonText: "No"
             );
 
-            if (result != ContentDialogResult.Primary) return;
+            if (result != ContentDialogResult.Primary)
+            {
+                return;
+            }
 
             if (!OperatingSystem.IsWindows())
             {
@@ -59,6 +65,7 @@ public static class UpdateChecker
                 await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
                 return;
             }
+
             await DownloadMsi(msi.BrowserDownloadUrl);
         }
         catch
@@ -70,7 +77,7 @@ public static class UpdateChecker
     private static async Task DownloadMsi(string url)
     {
         TaskDialog td = CreateTaskDialog(SkEditorAPI.Windows.GetMainWindow(), url);
-        var result = await td.ShowAsync();
+        object? result = await td.ShowAsync();
 
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
         if (standardResult == TaskDialogStandardResult.Cancel)
@@ -81,12 +88,12 @@ public static class UpdateChecker
 
     private static TaskDialog CreateTaskDialog(Visual visual, string url)
     {
-        var td = new TaskDialog
+        TaskDialog td = new()
         {
             Title = Translation.Get("DownloadingUpdateTitle"),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.Download },
-            SubHeader = Translation.Get("Downloading"),
+            SubHeader = Translation.Get("Downloading")
         };
 
         td.Opened += async (_, _) => await DownloadUpdate(td, url);
@@ -104,10 +111,10 @@ public static class UpdateChecker
         {
             using (HttpClient client = new())
             {
-                var progress = new Progress<float>();
+                Progress<float> progress = new();
                 progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
 
-                await using var file = new FileStream(TempInstallerFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                await using FileStream file = new(TempInstallerFile, FileMode.Create, FileAccess.Write, FileShare.None);
                 await client.DownloadDataAsync(url, file, progress);
             }
 

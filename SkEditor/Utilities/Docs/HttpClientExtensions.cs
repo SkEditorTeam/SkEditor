@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace SkEditor.Utilities.Docs;
 
@@ -17,7 +18,7 @@ public static class HttpClientExtensions
 
     public static HttpClient WithAuthorization(this HttpClient client, string token)
     {
-        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", token);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
         return client;
     }
 }

@@ -1,14 +1,15 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace SkEditor.Views.Generators.Gui;
+
 public class Preview
 {
     private const int SlotWidth = 37;
@@ -26,14 +27,18 @@ public class Preview
         DrawingContext ctx = renderTargetBitmap.CreateDrawingContext();
         ctx.DrawImage(guiBitmap, new Rect(0, 0, guiBitmap.PixelSize.Width, guiBitmap.PixelSize.Height));
 
-        GuiGenerator.Instance.Items.ToList().ForEach((pair) => DrawItem(ctx, pair.Key, pair.Value));
+        GuiGenerator.Instance.Items.ToList().ForEach(pair => DrawItem(ctx, pair.Key, pair.Value));
 
         if (GuiGenerator.Instance.BackgroundItem != null)
         {
             int slots = GuiGenerator.Instance.CurrentRows * SlotsPerRow;
             for (int i = 0; i < slots; i++)
             {
-                if (GuiGenerator.Instance.Items.ContainsKey(i)) continue;
+                if (GuiGenerator.Instance.Items.ContainsKey(i))
+                {
+                    continue;
+                }
+
                 DrawItem(ctx, i, GuiGenerator.Instance.BackgroundItem);
             }
         }
@@ -65,7 +70,7 @@ public class Preview
         int row = slot / SlotsPerRow;
         int column = slot % SlotsPerRow;
 
-        int slotX = 18 + column * 41;
+        int slotX = 18 + (column * 41);
         int slotY = 41 * (row + 1);
 
         string itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, item.Name + ".png");

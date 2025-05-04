@@ -1,16 +1,16 @@
-﻿using Avalonia;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SkEditor.Views.Generators.Gui;
 
 /// <summary>
-/// Class to handle colored text in the GUI.
+///     Class to handle colored text in the GUI.
 /// </summary>
 public static class ColoredTextHandler
 {
@@ -39,25 +39,18 @@ public static class ColoredTextHandler
         { "r", Color.FromRgb(255, 255, 255) }
     };
 
-    private struct FormattedText
-    {
-        public string Text { get; set; }
-        public Color Color { get; set; }
-        public FontWeight FontWeight { get; set; }
-        public FontStyle FontStyle { get; set; }
-        public List<TextDecoration> TextDecorations { get; init; }
-    }
+    private static FontFamily _cachedFont = null!;
 
     public static void SetupBox(TextBox textBox)
     {
-        var flyout = new Flyout { Placement = PlacementMode.BottomEdgeAlignedLeft };
+        Flyout flyout = new() { Placement = PlacementMode.BottomEdgeAlignedLeft };
         FlyoutBase.SetAttachedFlyout(textBox, flyout);
 
         textBox.TextChanged += (_, _) =>
         {
-            var text = textBox.Text;
+            string? text = textBox.Text;
             List<FormattedText> formattedTexts = ParseFormattedText(text);
-            var panel = new StackPanel() { Orientation = Orientation.Horizontal };
+            StackPanel panel = new() { Orientation = Orientation.Horizontal };
             foreach (TextBlock block in formattedTexts.Select(formattedText => new TextBlock
                      {
                          Text = formattedText.Text,
@@ -154,15 +147,24 @@ public static class ColoredTextHandler
         return formattedTexts;
     }
 
-    private static FontFamily _cachedFont = null!;
-
     private static FontFamily GetMinecraftFont()
     {
         if (_cachedFont != null!)
+        {
             return _cachedFont;
+        }
 
-        Application.Current.TryGetResource("MinecraftFont", ThemeVariant.Default, out var font);
+        Application.Current.TryGetResource("MinecraftFont", ThemeVariant.Default, out object? font);
         _cachedFont = (FontFamily)font;
         return _cachedFont;
+    }
+
+    private struct FormattedText
+    {
+        public string Text { get; set; }
+        public Color Color { get; set; }
+        public FontWeight FontWeight { get; set; }
+        public FontStyle FontStyle { get; set; }
+        public List<TextDecoration> TextDecorations { get; init; }
     }
 }

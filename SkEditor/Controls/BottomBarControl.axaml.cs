@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -10,9 +12,9 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
-using System.Linq;
 
 namespace SkEditor.Controls;
+
 public partial class BottomBarControl : UserControl
 {
     public BottomBarControl()
@@ -33,12 +35,12 @@ public partial class BottomBarControl : UserControl
     public void ReloadBottomIcons()
     {
         IconsStackPanel.Children.Clear();
-        var icons = Registries.BottomIcons.ToList();
+        List<IBottomIconElement> icons = Registries.BottomIcons.ToList();
         icons.Sort((a, b) => a.Order.CompareTo(b.Order));
 
-        foreach (var element in icons)
+        foreach (IBottomIconElement element in icons)
         {
-            var button = new Button();
+            Button button = new();
 
             if (element is BottomIconData bottomIconData)
             {
@@ -46,8 +48,8 @@ public partial class BottomBarControl : UserControl
             }
             else
             {
-                var group = (BottomIconGroupData)element;
-                var stackPanel = new StackPanel
+                BottomIconGroupData group = (BottomIconGroupData)element;
+                StackPanel stackPanel = new()
                 {
                     Orientation = Orientation.Horizontal,
                     Spacing = 5
@@ -69,12 +71,12 @@ public partial class BottomBarControl : UserControl
 
         StackPanel CreatePanel(BottomIconData iconData, Button? button)
         {
-            var iconElement = new IconSourceElement
+            IconSourceElement iconElement = new()
             {
                 Width = 18,
                 Height = 18
             };
-            var textElement = new TextBlock();
+            TextBlock textElement = new();
             iconData.Setup(button, textElement, iconElement);
 
             return new StackPanel
@@ -104,18 +106,19 @@ public partial class BottomBarControl : UserControl
 
         LineText.Text = Translation.Get("BottomBarLine").Replace("{0}", location.Line.ToString());
         ColumnText.Text = Translation.Get("BottomBarColumn").Replace("{0}", location.Column.ToString());
-        DocumentSizeText.Text = Translation.Get("BottomBarDocumentSize").Replace("{0}", textEditor.Document.TextLength.ToString());
+        DocumentSizeText.Text = Translation.Get("BottomBarDocumentSize")
+            .Replace("{0}", textEditor.Document.TextLength.ToString());
     }
 
     public void UpdateLogs(string logs)
     {
-        Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            LogsText.Text = logs;
-        });
+        Dispatcher.UIThread.InvokeAsync(() => { LogsText.Text = logs; });
     }
 
-    public Grid GetMainGrid() => MainGrid;
+    public Grid GetMainGrid()
+    {
+        return MainGrid;
+    }
 
     private async void OpenLogsWindow(object? sender, TappedEventArgs e)
     {

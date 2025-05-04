@@ -1,10 +1,10 @@
+using System;
 using Avalonia;
 using Avalonia.Data;
-using System;
 
 namespace SkEditor;
 
-class Program
+internal class Program
 {
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -16,7 +16,7 @@ class Program
         CheckTest(args);
 
         BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args);
+            .StartWithClassicDesktopLifetime(args);
     }
 
     private static void CheckTest(string[] args)
@@ -37,8 +37,10 @@ class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
             .WithInterFont();
+    }
 }

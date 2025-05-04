@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -9,13 +10,15 @@ using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views;
 using SkEditor.Views.Settings;
-using System.Linq;
 
 namespace SkEditor.Controls.Addons;
 
 public partial class AddonEntryControl : UserControl
 {
+    private static readonly Color ErrorColor = Colors.OrangeRed;
+    private static readonly Color WarningColor = Colors.Orange;
     private readonly AddonsPage _addonsPage;
+
     public AddonEntryControl(AddonMeta addonMeta, AddonsPage addonsPage)
     {
         InitializeComponent();
@@ -34,14 +37,14 @@ public partial class AddonEntryControl : UserControl
             _addonsPage.LoadAddons();
         });
 
-        var enabled = addonMeta.State == IAddons.AddonState.Enabled;
+        bool enabled = addonMeta.State == IAddons.AddonState.Enabled;
         SetStateButton(enabled);
 
         StateButton.IsEnabled = !addonMeta.HasCriticalErrors;
         StateButton.Click += async (_, _) =>
         {
             StateButton.IsEnabled = false;
-            var isAddonEnabled = addonMeta.State == IAddons.AddonState.Enabled;
+            bool isAddonEnabled = addonMeta.State == IAddons.AddonState.Enabled;
             if (isAddonEnabled)
             {
                 SkEditorAPI.Addons.DisableAddon(addonMeta.Addon);
@@ -49,7 +52,7 @@ public partial class AddonEntryControl : UserControl
             }
             else
             {
-                var success = await SkEditorAPI.Addons.EnableAddon(addonMeta.Addon);
+                bool success = await SkEditorAPI.Addons.EnableAddon(addonMeta.Addon);
                 SetStateButton(success);
             }
 
@@ -57,7 +60,10 @@ public partial class AddonEntryControl : UserControl
             _addonsPage.LoadAddons();
         };
 
-        if (!addonMeta.NeedsRestart) return;
+        if (!addonMeta.NeedsRestart)
+        {
+            return;
+        }
 
         StateButton.IsEnabled = false;
         StateButton.Content = "Restart Required";
@@ -75,16 +81,14 @@ public partial class AddonEntryControl : UserControl
             StateButton.Content = "Enable";
             StateButton.Classes.Add("accent");
         }
+
         StateButton.IsEnabled = true;
     }
-
-    private static readonly Color ErrorColor = Colors.OrangeRed;
-    private static readonly Color WarningColor = Colors.Orange;
 
     public void LoadVisuals(AddonMeta addonMeta)
     {
         bool isValid = true;
-        var addon = addonMeta.Addon;
+        IAddon addon = addonMeta.Addon;
         Expander.Header = addon.Name;
         Expander.Description = addon.Description;
         Expander.IconSource = addon.GetAddonIcon();
@@ -103,12 +107,12 @@ public partial class AddonEntryControl : UserControl
             {
                 Text = addon.Name,
                 Foreground = new SolidColorBrush(addonMeta.HasCriticalErrors ? ErrorColor : WarningColor),
-                TextDecorations = TextDecorations.Strikethrough,
+                TextDecorations = TextDecorations.Strikethrough
             };
 
-            var panels = new StackPanel
+            StackPanel panels = new()
             {
-                Spacing = 2,
+                Spacing = 2
             };
 
             IEnumerable<TextBlock> errorTextBlocks = addonMeta.Errors.Select(error => new TextBlock
@@ -117,21 +121,24 @@ public partial class AddonEntryControl : UserControl
                 Foreground = new SolidColorBrush(error.IsCritical ? ErrorColor : WarningColor),
                 TextWrapping = TextWrapping.Wrap
             });
-            
+
             foreach (TextBlock textBlock in errorTextBlocks)
             {
                 panels.Children.Add(textBlock);
             }
+
             Expander.Items.Add(panels);
         }
 
         if (addonMeta.DllFilePath == null)
+        {
             ControlsPanel.IsVisible = false;
+        }
 
         if (addonMeta.NeedsRestart)
         {
             isValid = false;
-            var restartText = new TextBlock
+            TextBlock restartText = new()
             {
                 Text = "This addon requires a restart to take effect.",
                 Foreground = new SolidColorBrush(Colors.Gray),

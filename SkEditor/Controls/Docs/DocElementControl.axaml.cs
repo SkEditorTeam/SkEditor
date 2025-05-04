@@ -1,4 +1,9 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
@@ -15,11 +20,6 @@ using SkEditor.Utilities.Docs.SkUnity;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
@@ -27,9 +27,9 @@ namespace SkEditor.Controls.Docs;
 
 public partial class DocElementControl : UserControl
 {
-    private bool _hasLoadedExamples;
     private readonly DocumentationControl _documentationControl;
     private readonly IDocumentationEntry _entry;
+    private bool _hasLoadedExamples;
 
     public DocElementControl(IDocumentationEntry entry, DocumentationControl documentationControl)
     {
@@ -48,62 +48,70 @@ public partial class DocElementControl : UserControl
         if (entry.DocType == IDocumentationEntry.Type.Event)
         {
             OtherElementPanel.Children.Add(CreateExpander(Translation.Get("DocumentationControlEventValues"),
-                Format(string.IsNullOrEmpty(entry.EventValues) ? Translation.Get("DocumentationControlNoEventValues") : entry.EventValues)));
+                Format(string.IsNullOrEmpty(entry.EventValues)
+                    ? Translation.Get("DocumentationControlNoEventValues")
+                    : entry.EventValues)));
         }
     }
 
     private void LoadExpressionChangers(IDocumentationEntry entry)
     {
-        if (entry.DocType != IDocumentationEntry.Type.Expression || string.IsNullOrEmpty(entry.Changers)) return;
+        if (entry.DocType != IDocumentationEntry.Type.Expression || string.IsNullOrEmpty(entry.Changers))
+        {
+            return;
+        }
 
 
-        var expander = CreateExpander(Translation.Get("DocumentationControlChangers"),
-            Format(string.IsNullOrEmpty(entry.Changers) ? Translation.Get("DocumentationControlNoChangers") : entry.Changers));
+        Expander expander = CreateExpander(Translation.Get("DocumentationControlChangers"),
+            Format(string.IsNullOrEmpty(entry.Changers)
+                ? Translation.Get("DocumentationControlNoChangers")
+                : entry.Changers));
 
-        var buttons = new StackPanel()
+        StackPanel buttons = new()
         {
             Orientation = Orientation.Horizontal,
             HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness(2),
             Spacing = 2
         };
-        expander.Content = new StackPanel()
+        expander.Content = new StackPanel
         {
             Orientation = Orientation.Vertical,
             Spacing = 3,
             Children =
             {
-                new TextBlock() { Text = Translation.Get("DocumentationControlChangerHelp") },
+                new TextBlock { Text = Translation.Get("DocumentationControlChangerHelp") },
                 buttons
             }
         };
 
         foreach (string raw in entry.Changers.Split("\n"))
         {
-            if (!Enum.TryParse(typeof(IDocumentationEntry.Changer), raw, true, out var change))
+            if (!Enum.TryParse(typeof(IDocumentationEntry.Changer), raw, true, out object? change))
             {
-                buttons.Children.Add(new Button()
+                buttons.Children.Add(new Button
                 {
                     Content = raw,
                     IsEnabled = false
                 });
                 continue;
             }
-            var changer = (IDocumentationEntry.Changer)change;
-            var button = new Button { Content = raw };
+
+            IDocumentationEntry.Changer changer = (IDocumentationEntry.Changer)change;
+            Button button = new() { Content = raw };
             button.Click += async (_, _) =>
             {
-                var firstPattern = GenerateUsablePattern(PatternsEditor.Text.Split("\n")[0]);
+                string firstPattern = GenerateUsablePattern(PatternsEditor.Text.Split("\n")[0]);
                 const string value = "<value>";
-                var format = changer switch
+                string format = changer switch
                 {
                     IDocumentationEntry.Changer.Set => $"set %s to {value}",
                     IDocumentationEntry.Changer.Add => $"add {value} to %s",
                     IDocumentationEntry.Changer.Remove => $"remove {value} from %s",
-                    IDocumentationEntry.Changer.Reset => $"reset %s",
-                    IDocumentationEntry.Changer.Clear => $"clear %s",
-                    IDocumentationEntry.Changer.Delete => $"delete %s",
-                    IDocumentationEntry.Changer.RemoveAll => $"remove all %s",
+                    IDocumentationEntry.Changer.Reset => "reset %s",
+                    IDocumentationEntry.Changer.Clear => "clear %s",
+                    IDocumentationEntry.Changer.Delete => "delete %s",
+                    IDocumentationEntry.Changer.RemoveAll => "remove all %s",
                     _ => throw new NotImplementedException("Changer not implemented")
                 };
 
@@ -130,7 +138,10 @@ public partial class DocElementControl : UserControl
         ExamplesEntry.Expanded += async (_, _) =>
         {
             if (_hasLoadedExamples)
+            {
                 return;
+            }
+
             _hasLoadedExamples = true;
 
             await LoadExamples(entry);
@@ -142,13 +153,14 @@ public partial class DocElementControl : UserControl
         PatternsEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
         if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
-            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
+            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object? font);
             PatternsEditor.FontFamily = (FontFamily)font;
         }
         else
         {
             PatternsEditor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
         }
+
         PatternsEditor.Text = Format(entry.Patterns);
         PatternsEditor.SyntaxHighlighting = DocSyntaxColorizer.CreatePatternHighlighting();
         PatternsEditor.TextArea.TextView.Redraw();
@@ -159,22 +171,28 @@ public partial class DocElementControl : UserControl
         NameText.Text = entry.Name;
         Expander.Description = entry.DocType + " from " + entry.Addon;
         Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
-        DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description) ? Translation.Get("DocumentationControlNoDescription") : entry.Description);
-        VersionBadge.IconSource = new FontIconSource { Glyph = Translation.Get("DocumentationControlSince", (string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version)), };
+        DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description)
+            ? Translation.Get("DocumentationControlNoDescription")
+            : entry.Description);
+        VersionBadge.IconSource = new FontIconSource
+        {
+            Glyph = Translation.Get("DocumentationControlSince",
+                string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version)
+        };
 
-        var uri = IDocProvider.Providers[entry.Provider].GetLink(entry);
-        OutsideButton.Content = new StackPanel()
+        string? uri = IDocProvider.Providers[entry.Provider].GetLink(entry);
+        OutsideButton.Content = new StackPanel
         {
             Orientation = Orientation.Horizontal,
             Spacing = 2,
             Children =
             {
-                new TextBlock()
+                new TextBlock
                 {
                     Text = "See on " + entry.Provider,
                     VerticalAlignment = VerticalAlignment.Center
                 },
-                new SymbolIcon()
+                new SymbolIcon
                 {
                     Symbol = Symbol.Open,
                     FontSize = 18,
@@ -193,20 +211,23 @@ public partial class DocElementControl : UserControl
 
     private async Task LoadAddonBadge(IDocumentationEntry entry)
     {
-        SourceBadge.IconSource = new FontIconSource { Glyph = entry.Addon, };
+        SourceBadge.IconSource = new FontIconSource { Glyph = entry.Addon };
 
-        var color = await IDocProvider.Providers[entry.Provider].GetAddonColor(entry.Addon);
-        if (color == null) return;
+        Color? color = await IDocProvider.Providers[entry.Provider].GetAddonColor(entry.Addon);
+        if (color == null)
+        {
+            return;
+        }
 
         SourceBadge.Background = new SolidColorBrush(color.Value);
         SourceBadge.Foreground = color.Value.ToHsl().L < 0.2 ? Brushes.White : Brushes.Black;
 
         if (entry.Provider == DocProvider.skUnity)
         {
-            var skUnityProvider = IDocProvider.Providers[DocProvider.skUnity] as SkUnityProvider;
+            SkUnityProvider? skUnityProvider = IDocProvider.Providers[DocProvider.skUnity] as SkUnityProvider;
             SourceBadge.Tapped += (_, _) =>
             {
-                var uri = skUnityProvider.GetAddonLink(entry.Addon);
+                string uri = skUnityProvider.GetAddonLink(entry.Addon);
                 Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
             };
         }
@@ -214,7 +235,7 @@ public partial class DocElementControl : UserControl
 
     public static Expander CreateExpander(string name, string content)
     {
-        var editor = new TextEditor
+        TextEditor editor = new()
         {
             Margin = new Thickness(5),
             FontSize = 16,
@@ -232,7 +253,7 @@ public partial class DocElementControl : UserControl
 
         if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
-            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
+            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object? font);
             editor.FontFamily = (FontFamily)font;
         }
         else
@@ -249,16 +270,18 @@ public partial class DocElementControl : UserControl
 
     private static object GetResource(string key)
     {
-        Application.Current.TryGetResource(key, ThemeVariant.Default, out var resource);
+        Application.Current.TryGetResource(key, ThemeVariant.Default, out object? resource);
         return resource;
     }
 
     public void DeleteElementFromCache(bool removeFromParent = false)
     {
-        var localProvider = LocalProvider.Get();
+        LocalProvider localProvider = LocalProvider.Get();
         _ = localProvider.RemoveElement(_entry);
         if (removeFromParent)
+        {
             _documentationControl.RemoveElement(this);
+        }
     }
 
     public async Task DownloadElementToCache()
@@ -275,7 +298,7 @@ public partial class DocElementControl : UserControl
             await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
         }
 
-        var localProvider = LocalProvider.Get();
+        LocalProvider localProvider = LocalProvider.Get();
         await localProvider.DownloadElement(_entry, examples);
     }
 
@@ -323,7 +346,10 @@ public partial class DocElementControl : UserControl
 
     public async Task ForceDownloadElement()
     {
-        if (await LocalProvider.Get().IsElementDownloaded(_entry)) return;
+        if (await LocalProvider.Get().IsElementDownloaded(_entry))
+        {
+            return;
+        }
 
         await DownloadElementToCache();
         DisableDownloadButton();
@@ -331,7 +357,7 @@ public partial class DocElementControl : UserControl
 
     public async Task LoadDownloadButton()
     {
-        var localProvider = LocalProvider.Get();
+        LocalProvider localProvider = LocalProvider.Get();
         DownloadElementButton.Click += DownloadButtonClicked;
         DownloadElementButton.Classes.Clear();
 
@@ -347,7 +373,7 @@ public partial class DocElementControl : UserControl
 
     public async Task LoadExamples(IDocumentationEntry entry)
     {
-        var provider = IDocProvider.Providers[entry.Provider];
+        IDocProvider provider = IDocProvider.Providers[entry.Provider];
 
         // First we setup a small loading bar
         ExamplesEntry.Content = new ProgressBar
@@ -361,8 +387,8 @@ public partial class DocElementControl : UserControl
         // Then we load the examples
         try
         {
-            var examples = await provider.FetchExamples(entry);
-            ExamplesEntry.Content = new StackPanel()
+            List<IDocumentationExample> examples = await provider.FetchExamples(entry);
+            ExamplesEntry.Content = new StackPanel
             {
                 Orientation = Orientation.Vertical,
                 Margin = new Thickness(5)
@@ -382,7 +408,7 @@ public partial class DocElementControl : UserControl
 
             foreach (IDocumentationExample example in examples)
             {
-                var stackPanel = new StackPanel
+                StackPanel stackPanel = new()
                 {
                     Orientation = Orientation.Vertical,
                     Margin = new Thickness(0, 2)
@@ -401,11 +427,15 @@ public partial class DocElementControl : UserControl
                             FontSize = 16,
                             Margin = new Thickness(0, 0, 0, 5)
                         },
-                        new InfoBadge { IconSource = new FontIconSource { Glyph = example.Votes }, VerticalAlignment = VerticalAlignment.Top }
+                        new InfoBadge
+                        {
+                            IconSource = new FontIconSource { Glyph = example.Votes },
+                            VerticalAlignment = VerticalAlignment.Top
+                        }
                     }
                 });
 
-                var textEditor = new TextEditor
+                TextEditor textEditor = new()
                 {
                     Foreground = (IBrush)GetAppResource("EditorTextColor"),
                     Background = (IBrush)GetAppResource("EditorBackgroundColor"),
@@ -422,7 +452,7 @@ public partial class DocElementControl : UserControl
 
                 if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
                 {
-                    Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out var font);
+                    Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object? font);
                     textEditor.FontFamily = (FontFamily)font;
                 }
                 else
@@ -438,14 +468,14 @@ public partial class DocElementControl : UserControl
 
                 static object GetAppResource(string key)
                 {
-                    Application.Current.TryGetResource(key, ThemeVariant.Default, out var resource);
+                    Application.Current.TryGetResource(key, ThemeVariant.Default, out object? resource);
                     return resource;
                 }
             }
         }
         catch (Exception e)
         {
-            ExamplesEntry.Content = new TextBlock()
+            ExamplesEntry.Content = new TextBlock
             {
                 Text = Translation.Get("DocumentationControlErrorExamples", e.Message),
                 Foreground = Brushes.Red,
@@ -462,24 +492,12 @@ public partial class DocElementControl : UserControl
             .Replace("&#039;", "'").Replace("&#034;", "\"");
     }
 
-    #region Actions
-
-    private void FilterByThisType(object? sender, RoutedEventArgs e)
-    {
-        _documentationControl.FilterByType(_entry.DocType);
-    }
-
-    private void FilterByThisAddon(object? sender, RoutedEventArgs e)
-    {
-        _documentationControl.FilterByAddon(_entry.Addon);
-    }
-
-    #endregion
-
-    static string GenerateUsablePattern(string pattern)
+    private static string GenerateUsablePattern(string pattern)
     {
         while (BracketedTextRegex().IsMatch(pattern))
+        {
             pattern = BracketedTextRegex().Replace(pattern, "");
+        }
 
         // Step 2: Select the first option within ()
         pattern = FirstOptionInParenthesesRegex().Replace(pattern, "$1");
@@ -494,8 +512,24 @@ public partial class DocElementControl : UserControl
 
     [GeneratedRegex(@"\(([^|]+)\|.*?\)")]
     private static partial Regex FirstOptionInParenthesesRegex();
+
     [GeneratedRegex(@"\s+")]
     private static partial Regex WhitespaceRegex();
+
     [GeneratedRegex(@"\[([^[\]])*?\]")]
     private static partial Regex BracketedTextRegex();
+
+    #region Actions
+
+    private void FilterByThisType(object? sender, RoutedEventArgs e)
+    {
+        _documentationControl.FilterByType(_entry.DocType);
+    }
+
+    private void FilterByThisAddon(object? sender, RoutedEventArgs e)
+    {
+        _documentationControl.FilterByAddon(_entry.Addon);
+    }
+
+    #endregion
 }

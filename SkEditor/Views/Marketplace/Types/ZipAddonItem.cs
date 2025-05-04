@@ -1,22 +1,21 @@
-﻿using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
-using Serilog;
-using SkEditor.API;
-using SkEditor.Utilities;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Avalonia.Threading;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
+using Serilog;
+using SkEditor.API;
+using SkEditor.Utilities;
 
 namespace SkEditor.Views.Marketplace.Types;
 
 public class ZipAddonItem : AddonItem
 {
-    [JsonIgnore]
-    private const string FolderName = "Addons";
+    [JsonIgnore] private const string FolderName = "Addons";
 
     public override async Task Install()
     {
@@ -56,24 +55,30 @@ public class ZipAddonItem : AddonItem
         catch (Exception e)
         {
             Log.Error(e, "Failed to install addon!");
-            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"),
+                Translation.Get("MarketplaceInstallFailed", ItemName));
         }
     }
 
     private void RunAddon()
     {
-        if (ItemRequiresRestart) return;
+        if (ItemRequiresRestart)
+        {
+            return;
+        }
 
         string fileName = ItemFileUrl.Split('/').Last();
-        string addonDirectory = Path.Combine(AppConfig.AppDataFolderPath, FolderName, Path.GetFileNameWithoutExtension(fileName));
+        string addonDirectory = Path.Combine(AppConfig.AppDataFolderPath, FolderName,
+            Path.GetFileNameWithoutExtension(fileName));
         if (!Directory.Exists(addonDirectory))
         {
-            Log.Error("Addon directory '{AddonDirectory}' does not exist!", addonDirectory); return;
+            Log.Error("Addon directory '{AddonDirectory}' does not exist!", addonDirectory);
+            return;
         }
 
         Dispatcher.UIThread.Post(() =>
         {
-            var packagesFolder = Path.Combine(addonDirectory, "Packages");
+            string packagesFolder = Path.Combine(addonDirectory, "Packages");
             if (Directory.Exists(packagesFolder))
             {
                 //AddonLoader.LoadAddonsFromFolder(packagesFolder);
@@ -100,7 +105,8 @@ public class ZipAddonItem : AddonItem
     {
         MarketplaceWindow.Instance.ItemView.UninstallButton.IsEnabled = false;
 
-        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
+        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
+            Translation.Get("MarketplaceUninstallSuccess", ItemName),
             new SymbolIconSource { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
     }
 
@@ -121,12 +127,14 @@ public class ZipAddonItem : AddonItem
             await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
 
-            await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUpdateSuccess", ItemName),
-                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
+            await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
+                Translation.Get("MarketplaceUpdateSuccess", ItemName),
+                new SymbolIconSource { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
         }
         catch
         {
-            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceUpdateFailed", ItemName));
+            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"),
+                Translation.Get("MarketplaceUpdateFailed", ItemName));
         }
     }
 

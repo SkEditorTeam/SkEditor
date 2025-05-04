@@ -1,18 +1,18 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects;
 using SkEditor.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
@@ -31,24 +31,30 @@ public partial class WelcomeTabControl : UserControl
     {
         InitializeComponent();
 
-        var gettingStarted = CreateActionSection(Translation.Get("WelcomeTabGettingStarted"),
+        StackPanel gettingStarted = CreateActionSection(Translation.Get("WelcomeTabGettingStarted"),
         [
-            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedNewFile"), new RelayCommand(FileHandler.NewFile), CreateSymbolIcon(Symbol.DocumentAdd)),
-            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedOpenFile"), new AsyncRelayCommand(FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
-            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedOpenFolder"), new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()), CreateSymbolIcon(Symbol.FolderOpen)),
-            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedSettings"), new AsyncRelayCommand(OpenSettings), CreateSymbolIcon(Symbol.Settings)),
+            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedNewFile"), new RelayCommand(FileHandler.NewFile),
+                CreateSymbolIcon(Symbol.DocumentAdd)),
+            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedOpenFile"),
+                new AsyncRelayCommand(FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
+            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedOpenFolder"),
+                new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()),
+                CreateSymbolIcon(Symbol.FolderOpen)),
+            new WelcomeEntryData(Translation.Get("WelcomeGettingStartedSettings"), new AsyncRelayCommand(OpenSettings),
+                CreateSymbolIcon(Symbol.Settings))
         ]);
 
-        var help = CreateActionSection(Translation.Get("WelcomeTabNeedHelp"),
+        StackPanel help = CreateActionSection(Translation.Get("WelcomeTabNeedHelp"),
         [
             new WelcomeEntryData(Translation.Get("WelcomeNeedHelpDiscordServer"), new RelayCommand(() =>
                 SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/")), CreatePathIconSource("DiscordIcon")),
 
             new WelcomeEntryData(Translation.Get("WelcomeNeedHelpGitHub"), new RelayCommand(() =>
-                SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")), CreatePathIconSource("GitHubIcon")),
+                    SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
+                CreatePathIconSource("GitHubIcon"))
         ]);
 
-        var addons = CreateAddonsSection();
+        StackPanel? addons = CreateAddonsSection();
 
         SetupGrid([gettingStarted, help, addons]);
         VersionText.Text = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
@@ -61,18 +67,24 @@ public partial class WelcomeTabControl : UserControl
         };
     }
 
-    private static SymbolIcon CreateSymbolIcon(Symbol symbol) => new()
+    private static SymbolIcon CreateSymbolIcon(Symbol symbol)
     {
-        Symbol = symbol,
-        FontSize = IconSize
-    };
+        return new SymbolIcon
+        {
+            Symbol = symbol,
+            FontSize = IconSize
+        };
+    }
 
-    private static PathIconSource CreatePathIconSource(string name) => SkEditorAPI.Core.GetApplicationResource(name) as PathIconSource;
+    private static PathIconSource CreatePathIconSource(string name)
+    {
+        return SkEditorAPI.Core.GetApplicationResource(name) as PathIconSource;
+    }
 
     private void SetupGrid(List<StackPanel?> panels)
     {
-        var x = 0;
-        var y = 0;
+        int x = 0;
+        int y = 0;
         foreach (StackPanel panel in panels.OfType<StackPanel>())
         {
             WelcomeGrid.Children.Add(panel);
@@ -80,7 +92,10 @@ public partial class WelcomeTabControl : UserControl
             Grid.SetColumn(panel, x);
 
             x++;
-            if (x != 2) continue;
+            if (x != 2)
+            {
+                continue;
+            }
 
             x = 0;
             y++;
@@ -89,19 +104,20 @@ public partial class WelcomeTabControl : UserControl
 
     private static StackPanel? CreateAddonsSection()
     {
-        var addonsEntries = Registries.WelcomeEntries.ToList();
+        List<WelcomeEntryData> addonsEntries = Registries.WelcomeEntries.ToList();
         return addonsEntries.Count == 0 ? null : CreateActionSection("Addons", addonsEntries);
     }
 
     public static StackPanel CreateActionSection(string name, List<WelcomeEntryData> entries)
     {
-        var panel = new StackPanel { Spacing = 5 };
-        var title = new TextBlock { Text = name, FontSize = TitleSize, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 0, 0, 5) };
+        StackPanel panel = new() { Spacing = 5 };
+        TextBlock title = new()
+            { Text = name, FontSize = TitleSize, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 0, 0, 5) };
         panel.Children.Add(title);
 
-        foreach (var entry in entries)
+        foreach (WelcomeEntryData entry in entries)
         {
-            var button = new Button
+            Button button = new()
             {
                 Command = entry.Command,
                 Padding = new Thickness(5),
@@ -109,8 +125,8 @@ public partial class WelcomeTabControl : UserControl
                 HorizontalContentAlignment = HorizontalAlignment.Left
             };
 
-            var textBlock = new TextBlock { Text = entry.Name, FontSize = TextSize };
-            var buttonPanel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10 };
+            TextBlock textBlock = new() { Text = entry.Name, FontSize = TextSize };
+            StackPanel buttonPanel = new() { Orientation = Orientation.Horizontal, Spacing = 10 };
 
             switch (entry.Icon)
             {
@@ -122,10 +138,11 @@ public partial class WelcomeTabControl : UserControl
                     {
                         IconSource = iconSource,
                         Width = IconSize,
-                        Height = IconSize,
+                        Height = IconSize
                     });
                     break;
             }
+
             buttonPanel.Children.Add(textBlock);
 
             button.Content = buttonPanel;
@@ -135,5 +152,8 @@ public partial class WelcomeTabControl : UserControl
         return panel;
     }
 
-    private static async Task OpenSettings() => await new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+    private static async Task OpenSettings()
+    {
+        await new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+    }
 }

@@ -1,34 +1,40 @@
-﻿using Newtonsoft.Json.Linq;
-using Serilog;
-using SkEditor.API;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using Serilog;
+using SkEditor.API;
 
 namespace SkEditor.Utilities.Files;
+
 public static class SessionRestorer
 {
     private static readonly string SessionFolder = Path.Combine(Path.GetTempPath(), "SkEditor", "Session");
 
     public static async Task SaveSession()
     {
-        if (Directory.Exists(SessionFolder)) Directory.Delete(SessionFolder, true);
+        if (Directory.Exists(SessionFolder))
+        {
+            Directory.Delete(SessionFolder, true);
+        }
+
         Directory.CreateDirectory(SessionFolder);
 
-        var openedFiles = SkEditorAPI.Files.GetOpenedFiles();
-        var index = 0;
-        foreach (var openedFile in openedFiles)
+        List<OpenedFile> openedFiles = SkEditorAPI.Files.GetOpenedFiles();
+        int index = 0;
+        foreach (OpenedFile openedFile in openedFiles)
         {
             if (!openedFile.IsEditor || string.IsNullOrEmpty(openedFile.Editor.Text))
             {
                 continue;
             }
 
-            var jsonData = BuildSavingData(openedFile);
-            var compressed = await Compress(jsonData);
-            var path = Path.Combine(SessionFolder, $"file_{index}.skeditor");
+            string jsonData = BuildSavingData(openedFile);
+            string compressed = await Compress(jsonData);
+            string path = Path.Combine(SessionFolder, $"file_{index}.skeditor");
             await File.WriteAllTextAsync(path, compressed);
             index++;
         }
@@ -37,24 +43,31 @@ public static class SessionRestorer
     public static async Task<bool> RestoreSession()
     {
         if (!Directory.Exists(SessionFolder))
-            return false;
-
-        var files = Directory.GetFiles(SessionFolder);
-        if (files.Length == 0)
-            return false;
-
-        foreach (var file in files)
         {
-            var compressed = await File.ReadAllTextAsync(file);
-            var jsonData = await Decompress(compressed);
-            if (string.IsNullOrEmpty(jsonData)) continue;
+            return false;
+        }
 
-            var data = BuildOpeningData(jsonData);
+        string[] files = Directory.GetFiles(SessionFolder);
+        if (files.Length == 0)
+        {
+            return false;
+        }
+
+        foreach (string file in files)
+        {
+            string compressed = await File.ReadAllTextAsync(file);
+            string jsonData = await Decompress(compressed);
+            if (string.IsNullOrEmpty(jsonData))
+            {
+                continue;
+            }
+
+            (string Content, string? Path, bool HasUnsavedChanges) data = BuildOpeningData(jsonData);
             await SkEditorAPI.Files.AddEditorTab(data.Content, data.Path);
 
             if (data.HasUnsavedChanges)
             {
-                var openedFile = SkEditorAPI.Files.GetOpenedFileByPath(data.Path);
+                OpenedFile? openedFile = SkEditorAPI.Files.GetOpenedFileByPath(data.Path);
                 if (openedFile != null)
                 {
                     openedFile.IsSaved = false;
@@ -69,10 +82,13 @@ public static class SessionRestorer
 
     private static async Task<string> Compress(string data)
     {
-        var byteArray = Encoding.UTF8.GetBytes(data);
-        using var ms = new MemoryStream();
-        await using (var sw = new GZipStream(ms, CompressionMode.Compress))
+        byte[] byteArray = Encoding.UTF8.GetBytes(data);
+        using MemoryStream ms = new();
+        await using (GZipStream sw = new(ms, CompressionMode.Compress))
+        {
             sw.Write(byteArray, 0, byteArray.Length);
+        }
+
         return Convert.ToBase64String(ms.ToArray());
     }
 
@@ -81,16 +97,17 @@ public static class SessionRestorer
         string result = string.Empty;
         try
         {
-            var byteArray = Convert.FromBase64String(data);
-            using var ms = new MemoryStream(byteArray);
-            await using var sr = new GZipStream(ms, CompressionMode.Decompress);
-            using var reader = new StreamReader(sr);
+            byte[] byteArray = Convert.FromBase64String(data);
+            using MemoryStream ms = new(byteArray);
+            await using GZipStream sr = new(ms, CompressionMode.Decompress);
+            using StreamReader reader = new(sr);
             result = await reader.ReadToEndAsync();
         }
         catch (FormatException e)
         {
             Log.Warning(e, "Error while decompressing data");
         }
+
         return result;
     }
 
@@ -100,7 +117,7 @@ public static class SessionRestorer
 
     private static string BuildSavingData(OpenedFile openedFile)
     {
-        var obj = new JObject
+        JObject obj = new()
         {
             ["Path"] = openedFile.Path,
             ["Content"] = openedFile.Editor.Text,
@@ -112,11 +129,11 @@ public static class SessionRestorer
 
     private static (string Content, string? Path, bool HasUnsavedChanges) BuildOpeningData(string data)
     {
-        var obj = JObject.Parse(data);
+        JObject obj = JObject.Parse(data);
 
-        var path = obj["Path"]?.Value<string>();
-        var content = obj["Content"]?.Value<string>();
-        var hasUnsavedChanges = obj["HasUnsavedChanges"]?.Value<bool>() ?? false;
+        string? path = obj["Path"]?.Value<string>();
+        string? content = obj["Content"]?.Value<string>();
+        bool hasUnsavedChanges = obj["HasUnsavedChanges"]?.Value<bool>() ?? false;
 
         if (string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(path))
         {

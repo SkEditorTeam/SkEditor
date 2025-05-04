@@ -3,17 +3,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-			 xmlns:controls="using:SkEditor.Controls"
+             xmlns:controls="using:SkEditor.Controls"
              mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Settings.ExperimentsPage">
 
-	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsHomeExperiments}" Grid.Row="0"/>
+    <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsHomeExperiments}" Grid.Row="0" />
 
-		<ScrollViewer Grid.Row="1">
-			<StackPanel Name="ExperimentsStackPanel" Spacing="8">
-				<ui:InfoBar IsOpen="True" IsClosable="False" Severity="Warning" Message="Some experiments may be really unstable. Disable them if the app starts crashing."/>
-			</StackPanel>
-		</ScrollViewer>
-	</Grid>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Name="ExperimentsStackPanel" Spacing="8">
+                <ui:InfoBar IsOpen="True" IsClosable="False" Severity="Warning"
+                            Message="Some experiments may be really unstable. Disable them if the app starts crashing." />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

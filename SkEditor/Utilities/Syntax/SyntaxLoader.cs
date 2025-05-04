@@ -1,43 +1,47 @@
-﻿using AvaloniaEdit.Highlighting;
-using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
-using SkEditor.API;
-using SkEditor.Utilities.Files;
-using SkEditor.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AvaloniaEdit.Highlighting;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
+using SkEditor.API;
+using SkEditor.Utilities.Files;
+using SkEditor.Views;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Syntax;
+
 public class SyntaxLoader
 {
-    private static string SyntaxFolder { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+    private static bool _enableChecking = true;
+    private static string SyntaxFolder { get; } = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
 
     public static List<FileSyntax> FileSyntaxes { get; set; } = [];
+
     // Sorted by extensions
     public static Dictionary<string, List<FileSyntax>> SortedFileSyntaxes { get; set; } = [];
-
-    private static bool _enableChecking = true;
 
     public static async Task LoadAdvancedSyntaxes()
     {
         Directory.CreateDirectory(SyntaxFolder);
 
-        var directories = Directory.GetDirectories(SyntaxFolder).ToList();
-        var hasOtherSyntaxDir = directories.Any(x => Path.GetFileName(x) == "Other Languages");
+        List<string> directories = Directory.GetDirectories(SyntaxFolder).ToList();
+        bool hasOtherSyntaxDir = directories.Any(x => Path.GetFileName(x) == "Other Languages");
 
         if (!hasOtherSyntaxDir)
         {
-            foreach (var directory in directories)
+            foreach (string directory in directories)
             {
                 try
                 {
                     FileSyntax syntax = await FileSyntax.LoadSyntax(directory);
-                    if (syntax.Config == null || syntax.Config.Extensions.Length == 0) return;
+                    if (syntax.Config == null || syntax.Config.Extensions.Length == 0)
+                    {
+                        return;
+                    }
 
                     RegisterSyntax(syntax);
                 }
@@ -45,7 +49,7 @@ public class SyntaxLoader
                 {
                     await SkEditorAPI.Windows.ShowDialog("Error",
                         $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}",
-                        new SymbolIconSource() { Symbol = Symbol.ImportantFilled });
+                        new SymbolIconSource { Symbol = Symbol.ImportantFilled });
                 }
             }
         }
@@ -58,8 +62,14 @@ public class SyntaxLoader
         FileSyntaxes.Add(syntax);
         foreach (string extension in syntax.Config.Extensions)
         {
-            if (SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? value)) value.Add(syntax);
-            else SortedFileSyntaxes.Add(extension, [syntax]);
+            if (SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? value))
+            {
+                value.Add(syntax);
+            }
+            else
+            {
+                SortedFileSyntaxes.Add(extension, [syntax]);
+            }
         }
     }
 
@@ -73,19 +83,21 @@ public class SyntaxLoader
 
     public static async Task<FileSyntax> LoadSyntax(string folder)
     {
-        var fileSyntax = await FileSyntax.LoadSyntax(folder);
+        FileSyntax fileSyntax = await FileSyntax.LoadSyntax(folder);
         RegisterSyntax(fileSyntax);
         return fileSyntax;
     }
 
     public static async Task<bool> UnloadSyntax(string folder)
     {
-        var fileSyntax = await FileSyntax.LoadSyntax(folder);
+        FileSyntax fileSyntax = await FileSyntax.LoadSyntax(folder);
         FileSyntaxes.RemoveAll(x => x.Config.FullIdName.Equals(fileSyntax.Config.FullIdName));
         foreach (string extension in fileSyntax.Config.Extensions)
         {
             if (SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? value))
+            {
                 value.Remove(fileSyntax);
+            }
 
             SkEditorAPI.Core.GetAppConfig().FileSyntaxes.Remove(fileSyntax.Config.LanguageName);
         }
@@ -96,7 +108,10 @@ public class SyntaxLoader
     public static async Task SelectSyntax(FileSyntax syntax, bool refresh = true)
     {
         SkEditorAPI.Core.GetAppConfig().FileSyntaxes[syntax.Config.LanguageName] = syntax.Config.FullIdName;
-        if (refresh) await RefreshSyntaxAsync();
+        if (refresh)
+        {
+            await RefreshSyntaxAsync();
+        }
     }
 
     public static async Task SetDefaultSyntax()
@@ -112,9 +127,12 @@ public class SyntaxLoader
 
     public static FileSyntax? GetConfiguredSyntaxForLanguage(string language)
     {
-        if (FileSyntaxes.Count == 0) _ = SetupDefaultSyntax();
+        if (FileSyntaxes.Count == 0)
+        {
+            _ = SetupDefaultSyntax();
+        }
 
-        var configuredSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
+        string? configuredSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
         return FileSyntaxes.FirstOrDefault(x => configuredSyntax == null
             ? x.Config.LanguageName == language
             : x.Config.FullIdName == configuredSyntax, FileSyntaxes.FirstOrDefault());
@@ -135,19 +153,19 @@ public class SyntaxLoader
     {
         try
         {
-            var defaultSyntaxPath = Path.Combine(SyntaxFolder, "Default");
-            var config = FileSyntax.DefaultSkriptConfig;
+            string defaultSyntaxPath = Path.Combine(SyntaxFolder, "Default");
+            FileSyntax.FileSyntaxConfig config = FileSyntax.DefaultSkriptConfig;
 
             Directory.CreateDirectory(SyntaxFolder);
             Directory.CreateDirectory(defaultSyntaxPath);
 
             HttpClient client = new();
             string url = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Default.xshd";
-            var response = await client.GetAsync(url);
-            var content = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await client.GetAsync(url);
+            string content = await response.Content.ReadAsStringAsync();
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "syntax.xshd"), content);
 
-            var json = JsonConvert.SerializeObject(config, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(config, Formatting.Indented);
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "config.json"), json);
 
             FileSyntaxes.Add(await FileSyntax.LoadSyntax(defaultSyntaxPath));
@@ -157,7 +175,7 @@ public class SyntaxLoader
         catch
         {
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Error"),
-                Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource() { Symbol = Symbol.ImportantFilled },
+                Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource { Symbol = Symbol.ImportantFilled },
                 primaryButtonText: "Ok");
 
             return false;
@@ -166,19 +184,29 @@ public class SyntaxLoader
 
     public static async Task RefreshSyntaxAsync(string? extension = null)
     {
-        if (!_enableChecking) return;
+        if (!_enableChecking)
+        {
+            return;
+        }
 
         FileSyntax? defaultSyntax = await GetDefaultSyntax();
 
         OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
-        if (!file.IsEditor) return;
+        if (!file.IsEditor)
+        {
+            return;
+        }
 
         if (extension == null)
         {
             extension = Path.GetExtension(file.Path);
             if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
             {
-                if (defaultSyntax == null) return;
+                if (defaultSyntax == null)
+                {
+                    return;
+                }
+
                 file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
                 return;
             }
@@ -186,12 +214,16 @@ public class SyntaxLoader
 
         if (!SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? fileSyntax))
         {
-            if (defaultSyntax == null) return;
+            if (defaultSyntax == null)
+            {
+                return;
+            }
+
             file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
             return;
         }
 
-        var syntax = fileSyntax.FirstOrDefault(x =>
+        FileSyntax? syntax = fileSyntax.FirstOrDefault(x =>
             x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
             && x.Config.Extensions.Contains(extension));
         if (syntax == null && fileSyntax.Count > 0)
@@ -201,7 +233,11 @@ public class SyntaxLoader
 
         if (syntax == null)
         {
-            if (defaultSyntax == null) return;
+            if (defaultSyntax == null)
+            {
+                return;
+            }
+
             file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
             return;
         }
@@ -214,23 +250,27 @@ public class SyntaxLoader
     {
         List<OpenedFile> openedFiles = SkEditorAPI.Files.GetOpenedEditors();
 
-        foreach (var file in openedFiles)
+        foreach (OpenedFile file in openedFiles)
         {
-            var ext = Path.GetExtension(file.Path?.TrimEnd('*').ToLower() ?? "");
+            string ext = Path.GetExtension(file.Path?.TrimEnd('*').ToLower() ?? "");
             if (string.IsNullOrWhiteSpace(ext) || !SortedFileSyntaxes.ContainsKey(ext))
             {
                 continue;
             }
 
-            var syntax = SortedFileSyntaxes[ext].FirstOrDefault(x =>
-                x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
+            FileSyntax? syntax = SortedFileSyntaxes[ext].FirstOrDefault(x =>
+                x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes
+                    .GetValueOrDefault(x.Config.LanguageName)
                 && x.Config.Extensions.Contains(ext));
             if (syntax == null && SortedFileSyntaxes[ext].Count > 0)
             {
                 syntax = SortedFileSyntaxes[ext][0];
             }
 
-            if (syntax == null) continue;
+            if (syntax == null)
+            {
+                continue;
+            }
 
             file.Editor.SyntaxHighlighting = syntax.Highlighting;
         }
@@ -238,7 +278,7 @@ public class SyntaxLoader
 
     public static IHighlightingDefinition GetCurrentSkriptHighlighting()
     {
-        var syntax = GetConfiguredSyntaxForLanguage("Skript");
+        FileSyntax? syntax = GetConfiguredSyntaxForLanguage("Skript");
         return syntax.Highlighting;
     }
 }

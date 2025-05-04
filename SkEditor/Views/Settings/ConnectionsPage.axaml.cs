@@ -18,7 +18,7 @@ public partial class ConnectionsPage : UserControl
     {
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
 
-        foreach (var connectionData in Registries.Connections)
+        foreach (ConnectionData connectionData in Registries.Connections)
         {
             ElementsPanel.Children.Add(new ConnectionEntryControl(connectionData));
         }

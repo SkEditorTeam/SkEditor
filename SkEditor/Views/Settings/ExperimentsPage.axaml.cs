@@ -1,24 +1,33 @@
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SkEditor.Views.Settings;
+
 public partial class ExperimentsPage : UserControl
 {
     private readonly List<Experiment> _experiments =
     [
-        new("Auto Completion", "Early prototype of auto completion, not very helpful.", "EnableAutoCompletionExperiment", "MagicWandIcon"),
+        new("Auto Completion", "Early prototype of auto completion, not very helpful.",
+            "EnableAutoCompletionExperiment", "MagicWandIcon"),
         new("Projects", "Adds a sidebar for managing projects.", "EnableProjectsExperiment", "Folder"),
         new("Hex Preview", "Preview hex colors in the editor.", "EnableHexPreview", "ColorIcon"),
-        new("Code Parser", "Parse code for informations. Doesn't contain error checking, see Analyzer addon instead. Requires Projects experiment.", "EnableCodeParser", "SearchIcon", Dependency: "EnableProjectsExperiment"),
-        new("Real-Time Code Parser", "Automatically parses your code with every change you make. Requires Code Parser experiment.", "EnableRealtimeCodeParser", "SearchIcon", Dependency: "EnableCodeParser"),
-        new("Folding", "Folding code blocks. Requires Code Parser experiment.", "EnableFolding", "FoldingIcon", Dependency: "EnableCodeParser"),
+        new("Code Parser",
+            "Parse code for informations. Doesn't contain error checking, see Analyzer addon instead. Requires Projects experiment.",
+            "EnableCodeParser", "SearchIcon", "EnableProjectsExperiment"),
+        new("Real-Time Code Parser",
+            "Automatically parses your code with every change you make. Requires Code Parser experiment.",
+            "EnableRealtimeCodeParser", "SearchIcon", "EnableCodeParser"),
+        new("Folding", "Folding code blocks. Requires Code Parser experiment.", "EnableFolding", "FoldingIcon",
+            "EnableCodeParser"),
         //new Experiment("Better pairing", "Experimental better version of auto pairing.", "EnableBetterPairing", "AutoPairingIcon"),
-        new("Session restoring", "Automatically saves your files and reopens it next time you start the app.", "EnableSessionRestoring", "SessionRestoringIcon")
+        new("Session restoring", "Automatically saves your files and reopens it next time you start the app.",
+            "EnableSessionRestoring", "SessionRestoringIcon")
     ];
 
     public ExperimentsPage()
@@ -31,13 +40,13 @@ public partial class ExperimentsPage : UserControl
 
     private void AddExperiments()
     {
-        foreach (var experiment in _experiments)
+        foreach (Experiment experiment in _experiments)
         {
-            Application.Current.TryGetResource(experiment.Icon, Avalonia.Styling.ThemeVariant.Default, out object icon);
+            Application.Current.TryGetResource(experiment.Icon, ThemeVariant.Default, out object icon);
 
             ToggleSwitch toggleSwitch = new()
             {
-                IsChecked = SkEditorAPI.Core.GetAppConfig().GetOptionValue<bool>(experiment.Option),
+                IsChecked = SkEditorAPI.Core.GetAppConfig().GetOptionValue<bool>(experiment.Option)
             };
 
             toggleSwitch.IsCheckedChanged += (_, _) => Switch(experiment, toggleSwitch);
@@ -47,7 +56,7 @@ public partial class ExperimentsPage : UserControl
                 Header = experiment.Name,
                 Description = experiment.Description,
                 Footer = toggleSwitch,
-                IconSource = icon as IconSource,
+                IconSource = icon as IconSource
             };
 
             ExperimentsStackPanel.Children.Add(expander);
@@ -58,10 +67,12 @@ public partial class ExperimentsPage : UserControl
     {
         if (toggleSwitch.IsChecked.Value && experiment.Dependency is not null)
         {
-            var dependency = _experiments.Find(e => e.Option == experiment.Dependency);
+            Experiment? dependency = _experiments.Find(e => e.Option == experiment.Dependency);
             if (dependency is not null)
             {
-                if (ExperimentsStackPanel.Children.OfType<SettingsExpander>().FirstOrDefault(e => e.Header.ToString() == dependency.Name)?.Footer is ToggleSwitch dependencySwitch)
+                if (ExperimentsStackPanel.Children.OfType<SettingsExpander>()
+                        .FirstOrDefault(e => e.Header.ToString() == dependency.Name)
+                        ?.Footer is ToggleSwitch dependencySwitch)
                 {
                     dependencySwitch.IsChecked = true;
                 }
@@ -73,4 +84,9 @@ public partial class ExperimentsPage : UserControl
     }
 }
 
-public record Experiment(string Name, string Description, string Option, string Icon = "Settings", string? Dependency = null);
+public record Experiment(
+    string Name,
+    string Description,
+    string Option,
+    string Icon = "Settings",
+    string? Dependency = null);

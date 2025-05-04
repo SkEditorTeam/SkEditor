@@ -3,6 +3,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 
 namespace SkEditor.Utilities;
+
 public static class DiscordRpcUpdater
 {
     private const string ApplicationId = "1152625623777431662";
@@ -10,7 +11,10 @@ public static class DiscordRpcUpdater
 
     public static void Initialize()
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled) return;
+        if (!SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled)
+        {
+            return;
+        }
 
         _client = new DiscordRpcClient(ApplicationId);
         _client.Initialize();
@@ -21,17 +25,22 @@ public static class DiscordRpcUpdater
             Assets = new Assets
             {
                 LargeImageKey = "image_large",
-                LargeImageText = "SkEditor",
-            },
+                LargeImageText = "SkEditor"
+            }
         });
 
         SkEditorAPI.Files.GetTabView().SelectionChanged += (_, _) =>
         {
-            if (!_client.IsInitialized) return;
+            if (!_client.IsInitialized)
+            {
+                return;
+            }
+
             if (SkEditorAPI.Files.IsFileOpen())
             {
                 TabViewItem tab = SkEditorAPI.Files.GetTabView().SelectedItem as TabViewItem;
-                _client.UpdateDetails(Translation.Get("DiscordRpcEditing").Replace("{0}", tab.Header.ToString().TrimEnd('*')));
+                _client.UpdateDetails(Translation.Get("DiscordRpcEditing")
+                    .Replace("{0}", tab.Header.ToString().TrimEnd('*')));
             }
             else
             {
@@ -43,7 +52,9 @@ public static class DiscordRpcUpdater
     public static void Uninitialize()
     {
         if (_client == null)
+        {
             return;
+        }
 
         _client.ClearPresence();
         _client.Dispose();

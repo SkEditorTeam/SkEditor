@@ -1,19 +1,27 @@
-﻿using FluentAvalonia.UI.Controls;
+﻿using System.Threading.Tasks;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Files;
+
 internal static class FileCloser
 {
-    public static async Task CloseFile(TabViewTabCloseRequestedEventArgs e) =>
+    public static async Task CloseFile(TabViewTabCloseRequestedEventArgs e)
+    {
         await SkEditorAPI.Files.Close(e.Tab);
-    public static async Task CloseCurrentFile() =>
+    }
+
+    public static async Task CloseCurrentFile()
+    {
         await SkEditorAPI.Files.Close(SkEditorAPI.Files.GetCurrentOpenedFile());
+    }
 
     public static async Task CloseAllFiles()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
+        {
             return;
+        }
 
         await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.All);
     }
@@ -21,7 +29,9 @@ internal static class FileCloser
     public static async Task CloseAllExceptCurrent()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
+        {
             return;
+        }
 
         await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllExceptCurrent);
     }
@@ -29,7 +39,9 @@ internal static class FileCloser
     public static async Task CloseUnsaved()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
+        {
             return;
+        }
 
         await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.Unsaved);
     }
@@ -37,19 +49,26 @@ internal static class FileCloser
     public static async Task CloseAllToTheLeft()
     {
         if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
+        {
             return;
+        }
 
         await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllLeft);
     }
 
     public static async Task CloseAllToTheRight()
     {
-        if (await ShowConfirmationDialog() != ContentDialogResult.Primary) return;
+        if (await ShowConfirmationDialog() != ContentDialogResult.Primary)
+        {
+            return;
+        }
 
         await SkEditorAPI.Files.BatchClose(IFiles.FileCloseAction.AllRight);
     }
 
-    private static async Task<ContentDialogResult> ShowConfirmationDialog() =>
-        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
+    private static async Task<ContentDialogResult> ShowConfirmationDialog()
+    {
+        return await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
             Translation.Get("ClosingFiles"), new SymbolIconSource { Symbol = Symbol.ImportantFilled });
+    }
 }

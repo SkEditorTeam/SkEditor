@@ -1,12 +1,13 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using SkEditor.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SkEditor.Utilities.Editor.TextMarkers;
 
@@ -23,61 +24,72 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
         ArgumentNullException.ThrowIfNull(textView);
         ArgumentNullException.ThrowIfNull(drawingContext);
         if (_markers == null || !textView.VisualLinesValid)
+        {
             return;
-        var visualLines = textView.VisualLines;
+        }
+
+        ReadOnlyCollection<VisualLine>? visualLines = textView.VisualLines;
         if (visualLines.Count == 0)
+        {
             return;
-        var viewStart = visualLines.First().FirstDocumentLine.Offset;
-        var viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
-        foreach (var marker in _markers.FindOverlappingSegments(viewStart, viewEnd - viewStart))
+        }
+
+        int viewStart = visualLines.First().FirstDocumentLine.Offset;
+        int viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
+        foreach (TextMarker? marker in _markers.FindOverlappingSegments(viewStart, viewEnd - viewStart))
         {
             if (marker.BackgroundColor != null)
             {
-                var geoBuilder = new BackgroundGeometryBuilder
+                BackgroundGeometryBuilder geoBuilder = new()
                 {
                     AlignToWholePixels = true,
                     CornerRadius = 3
                 };
                 geoBuilder.AddSegment(textView, marker);
-                var geometry = geoBuilder.CreateGeometry();
+                Geometry? geometry = geoBuilder.CreateGeometry();
                 if (geometry != null)
                 {
-                    var color = marker.BackgroundColor.Value;
-                    var brush = new SolidColorBrush(color);
+                    Color color = marker.BackgroundColor.Value;
+                    SolidColorBrush brush = new(color);
                     drawingContext.DrawGeometry(brush, null, geometry);
                 }
             }
 
-            var underlineMarkerTypes = TextMarkerTypes.SquigglyUnderline | TextMarkerTypes.NormalUnderline;
+            TextMarkerTypes underlineMarkerTypes = TextMarkerTypes.SquigglyUnderline | TextMarkerTypes.NormalUnderline;
             if ((marker.MarkerTypes & underlineMarkerTypes) != 0)
-                foreach (var r in BackgroundGeometryBuilder.GetRectsForSegment(textView, marker))
+            {
+                foreach (Rect r in BackgroundGeometryBuilder.GetRectsForSegment(textView, marker))
                 {
-                    var startPoint = r.BottomLeft;
-                    var endPoint = r.BottomRight;
+                    Point startPoint = r.BottomLeft;
+                    Point endPoint = r.BottomRight;
 
                     Brush usedBrush = new SolidColorBrush(marker.MarkerColor);
                     if ((marker.MarkerTypes & TextMarkerTypes.SquigglyUnderline) != 0)
                     {
-                        var offset = 2.5;
+                        double offset = 2.5;
 
-                        var count = Math.Max((int)((endPoint.X - startPoint.X) / offset) + 1, 0);
+                        int count = Math.Max((int)((endPoint.X - startPoint.X) / offset) + 1, 0);
 
-                        var geometry = new StreamGeometry();
+                        StreamGeometry geometry = new();
 
-                        using (var ctx = geometry.Open())
+                        using (StreamGeometryContext ctx = geometry.Open())
                         {
-                            var points = CreatePoints(startPoint, endPoint, offset, count).ToArray();
+                            Point[] points = CreatePoints(startPoint, endPoint, offset, count).ToArray();
 
                             ctx.BeginFigure(points[0], false);
 
-                            for (var i = 0; i < points.Length; i++)
+                            for (int i = 0; i < points.Length; i++)
+                            {
                                 if (i + 1 < points.Length)
+                                {
                                     ctx.QuadraticBezierTo(points[i], new Point((points[i].X + points[i + 1].X) / 2,
                                         (points[i].Y + points[i + 1].Y) / 2));
+                                }
+                            }
                         }
 
-                        var fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
-                        var strokeThickness = (float)Math.Max(fontSize / 15, 1);
+                        double fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
+                        float strokeThickness = (float)Math.Max(fontSize / 15, 1);
 
                         Pen usedPen = new(usedBrush, strokeThickness);
                         drawingContext.DrawGeometry(Brushes.Transparent, usedPen, geometry);
@@ -85,20 +97,27 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
                     if ((marker.MarkerTypes & TextMarkerTypes.NormalUnderline) != 0)
                     {
-                        var usedPen = new Pen(usedBrush);
+                        Pen usedPen = new(usedBrush);
                         drawingContext.DrawLine(usedPen, startPoint, endPoint);
                     }
                 }
+            }
         }
     }
 
     public ITextMarker Create(int startOffset, int length)
     {
-        if (_markers == null) return null;
+        if (_markers == null)
+        {
+            return null;
+        }
 
-        var textLength = _document.TextLength;
+        int textLength = _document.TextLength;
         if (startOffset < 0 || startOffset > textLength
-                            || length < 0 || startOffset + length > textLength) return null;
+                            || length < 0 || startOffset + length > textLength)
+        {
+            return null;
+        }
 
         TextMarker marker = new(this, startOffset, length);
         _markers.Add(marker);
@@ -120,9 +139,12 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
     public void Remove(ITextMarker marker)
     {
-        if (marker == null) return;
+        if (marker == null)
+        {
+            return;
+        }
 
-        var m = marker as TextMarker;
+        TextMarker? m = marker as TextMarker;
 
         _markers.Remove(m);
         Redraw(m);
@@ -142,21 +164,21 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
     private static IEnumerable<Point> CreatePoints(Point start, Point end, double offset, int count)
     {
-        var fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
-        var multiplier = fontSize * 0.075;
+        double fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
+        double multiplier = fontSize * 0.075;
 
 
-        for (var i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
-            var yOffset = (i + 1) % 2 == 0 ? offset : 0;
+            double yOffset = (i + 1) % 2 == 0 ? offset : 0;
             yOffset -= 2.5;
-            if (start.X + i * offset * multiplier > end.X)
+            if (start.X + (i * offset * multiplier) > end.X)
             {
                 yield return end;
                 yield break;
             }
 
-            yield return new Point(start.X + i * offset * multiplier, start.Y + yOffset * multiplier);
+            yield return new Point(start.X + (i * offset * multiplier), start.Y + (yOffset * multiplier));
         }
     }
 }
@@ -167,7 +189,7 @@ public sealed class TextMarker : TextSegment, ITextMarker
 
     public TextMarker(TextMarkerService service, int startOffset, int length)
     {
-        this._service = service ?? throw new ArgumentNullException(nameof(service));
+        _service = service ?? throw new ArgumentNullException(nameof(service));
         StartOffset = startOffset;
         Length = length;
         MarkerTypes = TextMarkerTypes.None;

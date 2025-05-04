@@ -3,11 +3,10 @@
 namespace SkEditor.API;
 
 /// <summary>
-/// Represent datas about a possible third-party connection, displayed
-/// in the connection manager.
-///
-/// This will automatically handle saving, with the provided option Key, into
-/// SkEditor's settings.
+///     Represent datas about a possible third-party connection, displayed
+///     in the connection manager.
+///     This will automatically handle saving, with the provided option Key, into
+///     SkEditor's settings.
 /// </summary>
 /// <param name="Name">The name of the connection.</param>
 /// <param name="Description">A description of the connection.</param>

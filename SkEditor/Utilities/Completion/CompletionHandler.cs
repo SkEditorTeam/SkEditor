@@ -1,4 +1,8 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
@@ -7,37 +11,34 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using SkEditor.Controls;
 using SkEditor.Utilities.Editor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Completion;
+
 public static partial class CompletionHandler
 {
+    private static TextEditor _currentTextEditor;
+
     public static CompletionFlyout CompletionPopup { get; } = new()
     {
         PlacementAnchor = PopupAnchor.BottomRight,
         Placement = PlacementMode.BottomEdgeAlignedRight,
-        ShowMode = FlyoutShowMode.Transient,
+        ShowMode = FlyoutShowMode.Transient
     };
 
-    private static TextEditor _currentTextEditor;
-
-    public async static void OnTextChanged(object sender, EventArgs e)
+    public static async void OnTextChanged(object sender, EventArgs e)
     {
         TextEditor textEditor = (TextEditor)sender;
         _currentTextEditor = textEditor;
         TextDocument document = textEditor.Document;
 
-        var segment = TextEditorUtilities.GetSegmentBeforeOffset(textEditor.TextArea.Caret.Offset, document);
+        SimpleSegment segment = TextEditorUtilities.GetSegmentBeforeOffset(textEditor.TextArea.Caret.Offset, document);
         if (segment == SimpleSegment.Invalid)
         {
             CompletionPopup.Hide();
             return;
         }
 
-        var word = document.GetText(segment.Offset, segment.Length);
+        string? word = document.GetText(segment.Offset, segment.Length);
 
         IEnumerable<CompletionItem> completions = CompletionProvider.GetCompletions(word, textEditor);
         IEnumerable<CompletionItem> completionItems = completions as CompletionItem[] ?? completions.ToArray();
@@ -46,11 +47,11 @@ public static partial class CompletionHandler
             CompletionPopup.Hide();
             return;
         }
+
         CompletionMenu completionMenu;
 
         if (CompletionPopup.IsOpen)
         {
-
             completionMenu = (CompletionMenu)CompletionPopup.Content;
             completionMenu.CompletionListBox.ItemsSource = null;
             completionMenu.CompletionListBox.Items.Clear();
@@ -58,13 +59,14 @@ public static partial class CompletionHandler
         }
         else
         {
-            completionMenu = new(CompletionProvider.GetCompletions(word, textEditor));
+            completionMenu = new CompletionMenu(CompletionProvider.GetCompletions(word, textEditor));
         }
 
         CompletionPopup.Content = completionMenu;
 
-        var caret = textEditor.TextArea.Caret.CalculateCaretRectangle();
-        var pointOnScreen = textEditor.TextArea.TextView.PointToScreen(caret.Position - textEditor.TextArea.TextView.ScrollOffset);
+        Rect caret = textEditor.TextArea.Caret.CalculateCaretRectangle();
+        PixelPoint pointOnScreen =
+            textEditor.TextArea.TextView.PointToScreen(caret.Position - textEditor.TextArea.TextView.ScrollOffset);
         CompletionPopup.HorizontalOffset = pointOnScreen.X + 10;
         CompletionPopup.VerticalOffset = pointOnScreen.Y + 25;
 
@@ -107,9 +109,9 @@ public static partial class CompletionHandler
             case Key.Tab:
                 e.Handled = true;
                 CompletionMenu completionMenu = (CompletionMenu)CompletionPopup.Content;
-                var listBox = completionMenu.CompletionListBox;
-                var selectedItem = (ListBoxItem)listBox.SelectedItem;
-                var completionItem = (CompletionItem)selectedItem.Tag;
+                ListBox? listBox = completionMenu.CompletionListBox;
+                ListBoxItem? selectedItem = (ListBoxItem)listBox.SelectedItem;
+                CompletionItem? completionItem = (CompletionItem)selectedItem.Tag;
                 CompletionPopup.Hide();
                 OnCompletion(completionItem);
                 break;
@@ -118,20 +120,20 @@ public static partial class CompletionHandler
 
     private static void HandleArrowKey(bool isUpKey)
     {
-        var completionMenu = (CompletionMenu)CompletionPopup.Content;
-        var listBox = completionMenu.CompletionListBox;
+        CompletionMenu? completionMenu = (CompletionMenu)CompletionPopup.Content;
+        ListBox? listBox = completionMenu.CompletionListBox;
 
         int selectedIndex = listBox.SelectedIndex;
         int itemCount = listBox.Items.Count;
 
-        listBox.SelectedIndex = isUpKey ? (selectedIndex == 0 ? itemCount - 1 : selectedIndex - 1)
-                                      : (selectedIndex == itemCount - 1 ? 0 : selectedIndex + 1);
+        listBox.SelectedIndex = isUpKey ? selectedIndex == 0 ? itemCount - 1 : selectedIndex - 1
+            : selectedIndex == itemCount - 1 ? 0 : selectedIndex + 1;
     }
 
     private static void OnCompletion(CompletionItem completionItem)
     {
         int offset = _currentTextEditor.TextArea.Caret.Offset;
-        var segment = TextEditorUtilities.GetSegmentBeforeOffset(offset, _currentTextEditor.Document);
+        SimpleSegment segment = TextEditorUtilities.GetSegmentBeforeOffset(offset, _currentTextEditor.Document);
         if (segment == SimpleSegment.Invalid)
         {
             return;
@@ -140,17 +142,18 @@ public static partial class CompletionHandler
         string content = completionItem.Content;
         if (content.Contains('\t'))
         {
-            var line = _currentTextEditor.Document.GetLineByOffset(segment.Offset);
-            var lineText = _currentTextEditor.Document.GetText(line.Offset, line.Length);
+            DocumentLine? line = _currentTextEditor.Document.GetLineByOffset(segment.Offset);
+            string? lineText = _currentTextEditor.Document.GetText(line.Offset, line.Length);
             int tabs = lineText.Count(c => c == '\t');
 
-            content = string.Join("", content.Split('\t').Select((part, index) => index > 0 ? new string('\t', tabs + 1) + part : part));
+            content = string.Join("",
+                content.Split('\t').Select((part, index) => index > 0 ? new string('\t', tabs + 1) + part : part));
         }
 
         if (content.Contains('\n'))
         {
-            var line = _currentTextEditor.Document.GetLineByOffset(segment.Offset);
-            var lineText = _currentTextEditor.Document.GetText(line.Offset, line.Length);
+            DocumentLine? line = _currentTextEditor.Document.GetLineByOffset(segment.Offset);
+            string? lineText = _currentTextEditor.Document.GetText(line.Offset, line.Length);
             int tabs = lineText.Count(c => c == '\t');
 
             content = NewLineWithoutTabRegex().Replace(content, "\n" + new string('\t', tabs));

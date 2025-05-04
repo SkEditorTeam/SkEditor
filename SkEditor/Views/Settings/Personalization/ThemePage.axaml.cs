@@ -1,13 +1,15 @@
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Controls;
 using SkEditor.Utilities.Styling;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using SkEditor.Views.Settings.Personalization;
 
 namespace SkEditor.Views.Settings;
+
 public partial class ThemePage : UserControl
 {
     public static Dictionary<ColorPickerSettingsExpander, string> ColorMappings = new();
@@ -27,13 +29,14 @@ public partial class ThemePage : UserControl
             Content = theme.Name,
             Tag = theme.FileName
         });
-        
+
         foreach (ComboBoxItem item in themeItems)
         {
             ThemeComboBox.Items.Add(item);
         }
 
-        ThemeComboBox.SelectedItem = ThemeComboBox.Items.FirstOrDefault(x => ((ComboBoxItem)x).Tag.Equals(ThemeEditor.CurrentTheme.FileName));
+        ThemeComboBox.SelectedItem =
+            ThemeComboBox.Items.FirstOrDefault(x => ((ComboBoxItem)x).Tag.Equals(ThemeEditor.CurrentTheme.FileName));
 
         ThemeComboBox.SelectionChanged += (_, _) =>
         {
@@ -52,12 +55,12 @@ public partial class ThemePage : UserControl
     {
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(PersonalizationPage)));
 
-        OpenThemesFolderButton.Command = new RelayCommand(() => Process.Start(new ProcessStartInfo()
+        OpenThemesFolderButton.Command = new RelayCommand(() => Process.Start(new ProcessStartInfo
         {
             FileName = ThemeEditor.ThemeFolderPath,
             UseShellExecute = true
         }));
 
-        EditThemeItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(Personalization.EditThemePage)));
+        EditThemeItem.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(EditThemePage)));
     }
 }

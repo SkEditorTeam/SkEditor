@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+
     <!-- Static colors -->
     <Color x:Key="ThemeDarkDarkRedColor">#952923</Color>
     <Color x:Key="ThemeDarkRedColor">#C2362E</Color>
@@ -35,5 +35,5 @@
     <Color x:Key="ThemeGreyColor">#9E9E9E</Color>
     <Color x:Key="ThemeLightGreyColor">#C0C0C0</Color>
     <Color x:Key="ThemeBlueGreyColor">#607D8B</Color>
-    
+
 </ResourceDictionary>

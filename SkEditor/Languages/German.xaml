@@ -2,97 +2,97 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
-	<!-- Window Titles -->
-	<system:String x:Key="WindowTitlePublish">Veröffentlichen</system:String>
-	<system:String x:Key="WindowTitleRefactor">Umbenennen</system:String>
-	<system:String x:Key="WindowTitleSettings">Einstellungen</system:String>
-	<system:String x:Key="WindowTitleFontSelector">Schriftart auswählen</system:String>
-	<system:String x:Key="WindowTitleSaveFilePicker">Datei speichern</system:String>
-	<system:String x:Key="WindowTitleOpenFilePicker">Datei öffnen</system:String>
-	<system:String x:Key="WindowTitleGuiGenerator">GUI generieren</system:String>
-	<system:String x:Key="WindowTitleItemSelector">Element auswählen</system:String>
-	<system:String x:Key="WindowTitleMarketplace">Marktplatz</system:String>
+    <!-- Window Titles -->
+    <system:String x:Key="WindowTitlePublish">Veröffentlichen</system:String>
+    <system:String x:Key="WindowTitleRefactor">Umbenennen</system:String>
+    <system:String x:Key="WindowTitleSettings">Einstellungen</system:String>
+    <system:String x:Key="WindowTitleFontSelector">Schriftart auswählen</system:String>
+    <system:String x:Key="WindowTitleSaveFilePicker">Datei speichern</system:String>
+    <system:String x:Key="WindowTitleOpenFilePicker">Datei öffnen</system:String>
+    <system:String x:Key="WindowTitleGuiGenerator">GUI generieren</system:String>
+    <system:String x:Key="WindowTitleItemSelector">Element auswählen</system:String>
+    <system:String x:Key="WindowTitleMarketplace">Marktplatz</system:String>
 
-	<!-- Menu Headers -->
-	<system:String x:Key="MenuHeaderFile">Datei</system:String>
-	<system:String x:Key="MenuHeaderEdit">Bearbeiten</system:String>
-	<system:String x:Key="MenuHeaderTools">Werkzeuge</system:String>
-	<system:String x:Key="MenuHeaderOther">Andere</system:String>
+    <!-- Menu Headers -->
+    <system:String x:Key="MenuHeaderFile">Datei</system:String>
+    <system:String x:Key="MenuHeaderEdit">Bearbeiten</system:String>
+    <system:String x:Key="MenuHeaderTools">Werkzeuge</system:String>
+    <system:String x:Key="MenuHeaderOther">Andere</system:String>
 
-	<!-- File Menu -->
-	<system:String x:Key="MenuHeaderNew">Neu</system:String>
-	<system:String x:Key="MenuHeaderOpen">Öffnen</system:String>
-	<system:String x:Key="MenuHeaderSave">Speichern</system:String>
-	<system:String x:Key="MenuHeaderSaveAs">Speichern unter</system:String>
-	<system:String x:Key="MenuHeaderPublish">Veröffentlichen</system:String>
-	<system:String x:Key="MenuHeaderClose">Schließen</system:String>
+    <!-- File Menu -->
+    <system:String x:Key="MenuHeaderNew">Neu</system:String>
+    <system:String x:Key="MenuHeaderOpen">Öffnen</system:String>
+    <system:String x:Key="MenuHeaderSave">Speichern</system:String>
+    <system:String x:Key="MenuHeaderSaveAs">Speichern unter</system:String>
+    <system:String x:Key="MenuHeaderPublish">Veröffentlichen</system:String>
+    <system:String x:Key="MenuHeaderClose">Schließen</system:String>
 
-	<!-- Edit Menu -->
-	<system:String x:Key="MenuHeaderCopy">Kopieren</system:String>
-	<system:String x:Key="MenuHeaderPaste">Einfügen</system:String>
-	<system:String x:Key="MenuHeaderCut">Ausschneiden</system:String>
-	<system:String x:Key="MenuHeaderUndo">Rückgängig</system:String>
-	<system:String x:Key="MenuHeaderRedo">Wiederholen</system:String>
-	<system:String x:Key="MenuHeaderDuplicate">Duplizieren</system:String>
-	<system:String x:Key="MenuHeaderComment">Kommentieren</system:String>
-	<system:String x:Key="MenuHeaderDelete">Löschen</system:String>
+    <!-- Edit Menu -->
+    <system:String x:Key="MenuHeaderCopy">Kopieren</system:String>
+    <system:String x:Key="MenuHeaderPaste">Einfügen</system:String>
+    <system:String x:Key="MenuHeaderCut">Ausschneiden</system:String>
+    <system:String x:Key="MenuHeaderUndo">Rückgängig</system:String>
+    <system:String x:Key="MenuHeaderRedo">Wiederholen</system:String>
+    <system:String x:Key="MenuHeaderDuplicate">Duplizieren</system:String>
+    <system:String x:Key="MenuHeaderComment">Kommentieren</system:String>
+    <system:String x:Key="MenuHeaderDelete">Löschen</system:String>
 
-	<!-- Tools Menu -->
-	<system:String x:Key="MenuHeaderDocumentation">Dokumentation</system:String>
-	<system:String x:Key="MenuHeaderGenerate">Generieren</system:String>
-	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
-	<system:String x:Key="MenuHeaderGenerateCommand">Befehl</system:String>
-	<system:String x:Key="MenuHeaderRefactor">Umbenennen</system:String>
+    <!-- Tools Menu -->
+    <system:String x:Key="MenuHeaderDocumentation">Dokumentation</system:String>
+    <system:String x:Key="MenuHeaderGenerate">Generieren</system:String>
+    <system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
+    <system:String x:Key="MenuHeaderGenerateCommand">Befehl</system:String>
+    <system:String x:Key="MenuHeaderRefactor">Umbenennen</system:String>
 
-	<!-- Other Menu -->
-	<system:String x:Key="MenuHeaderMarketplace">Marktplatz</system:String>
-	<system:String x:Key="MenuHeaderRefreshSyntax">Syntax aktualisieren</system:String>
+    <!-- Other Menu -->
+    <system:String x:Key="MenuHeaderMarketplace">Marktplatz</system:String>
+    <system:String x:Key="MenuHeaderRefreshSyntax">Syntax aktualisieren</system:String>
 
-	<!-- Buttons -->
-	<system:String x:Key="ApplyButton">Anwenden</system:String>
-	<system:String x:Key="ConfirmButton">Bestätigen</system:String>
-	<system:String x:Key="CloseButton">Schließen</system:String>
-	<system:String x:Key="SelectButton">Auswählen</system:String>
-	<system:String x:Key="CancelButton">Abbrechen</system:String>
-	<system:String x:Key="ContinueButton">Fortfahren</system:String>
-	<system:String x:Key="Error">Fehler</system:String>
-	<system:String x:Key="Success">Erfolg</system:String>
-	<system:String x:Key="Attention">Achtung!</system:String>
-	<system:String x:Key="Yes">Ja</system:String>
-	<system:String x:Key="No">Nein</system:String>
-	<system:String x:Key="Okay">Okay</system:String>
+    <!-- Buttons -->
+    <system:String x:Key="ApplyButton">Anwenden</system:String>
+    <system:String x:Key="ConfirmButton">Bestätigen</system:String>
+    <system:String x:Key="CloseButton">Schließen</system:String>
+    <system:String x:Key="SelectButton">Auswählen</system:String>
+    <system:String x:Key="CancelButton">Abbrechen</system:String>
+    <system:String x:Key="ContinueButton">Fortfahren</system:String>
+    <system:String x:Key="Error">Fehler</system:String>
+    <system:String x:Key="Success">Erfolg</system:String>
+    <system:String x:Key="Attention">Achtung!</system:String>
+    <system:String x:Key="Yes">Ja</system:String>
+    <system:String x:Key="No">Nein</system:String>
+    <system:String x:Key="Okay">Okay</system:String>
 
-	<!-- Messages -->
-	<system:String x:Key="NewFileNameFormat">Neue Datei {0}</system:String>
-	<system:String x:Key="FailedToDownloadSyntax">Fehler beim Herunterladen der Syntax-Hervorhebungsdatei! Überprüfen Sie Ihre Internetverbindung. Ohne sie wird Ihr Code nicht hervorgehoben.</system:String>
-	<system:String x:Key="DownloadingMissingFilesTitle">Fehlende Dateien</system:String>
-	<system:String x:Key="DownloadingMissingFiles">Herunterladen</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Dateien, die vom Elementauswahlwerkzeug verwendet werden, fehlen und werden jetzt heruntergeladen.</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionAnalyzer">Die vom Analysetool verwendete Datei fehlt und wird jetzt heruntergeladen.</system:String>
-	<system:String x:Key="DownloadMissingFilesFailed">Das Herunterladen fehlender Dateien ist fehlgeschlagen. Bitte versuchen Sie es später erneut.</system:String>
-	<system:String x:Key="ClosingUnsavedFile">Sie haben ungespeicherte Änderungen in dieser Datei. Möchten Sie sie wirklich schließen?</system:String>
-	<system:String x:Key="ClosingProgramWithUnsavedFiles">Sie haben in mindestens einer Datei ungespeicherte Änderungen. Möchten Sie die Anwendung wirklich schließen?</system:String>
+    <!-- Messages -->
+    <system:String x:Key="NewFileNameFormat">Neue Datei {0}</system:String>
+    <system:String x:Key="FailedToDownloadSyntax">Fehler beim Herunterladen der Syntax-Hervorhebungsdatei! Überprüfen Sie Ihre Internetverbindung. Ohne sie wird Ihr Code nicht hervorgehoben.</system:String>
+    <system:String x:Key="DownloadingMissingFilesTitle">Fehlende Dateien</system:String>
+    <system:String x:Key="DownloadingMissingFiles">Herunterladen</system:String>
+    <system:String x:Key="DownloadingMissingFilesDescriptionItems">Dateien, die vom Elementauswahlwerkzeug verwendet werden, fehlen und werden jetzt heruntergeladen.</system:String>
+    <system:String x:Key="DownloadingMissingFilesDescriptionAnalyzer">Die vom Analysetool verwendete Datei fehlt und wird jetzt heruntergeladen.</system:String>
+    <system:String x:Key="DownloadMissingFilesFailed">Das Herunterladen fehlender Dateien ist fehlgeschlagen. Bitte versuchen Sie es später erneut.</system:String>
+    <system:String x:Key="ClosingUnsavedFile">Sie haben ungespeicherte Änderungen in dieser Datei. Möchten Sie sie wirklich schließen?</system:String>
+    <system:String x:Key="ClosingProgramWithUnsavedFiles">Sie haben in mindestens einer Datei ungespeicherte Änderungen. Möchten Sie die Anwendung wirklich schließen?</system:String>
 
-	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowApiKeyHint">Klicken Sie hier, um eine Website mit dem API-Schlüssel zu öffnen. Stellen Sie sicher, dass Sie sich zuerst anmelden!</system:String>
-	<system:String x:Key="PublishWindowAnonymously">Anonym</system:String>
-	<system:String x:Key="PublishWindowResultLink">Link zu Ihrem Code</system:String>
-	<system:String x:Key="PublishWindowPublishButton">Veröffentlichen</system:String>
-	
-	<!-- Refactor Window -->
-	<system:String x:Key="RefactorWindowRemoveComments">Kommentare entfernen</system:String>
-	<system:String x:Key="RefactorWindowTabsToSpaces">Tabs in Leerzeichen umwandeln</system:String>
-	<system:String x:Key="RefactorWindowSpacesToTabs">Leerzeichen in Tabs umwandeln</system:String>
-	
-	<!-- Settings -->
-	<system:String x:Key="SettingsEnabled">Aktiviert</system:String>
-	<system:String x:Key="SettingsDisabled">Deaktiviert</system:String>
+    <!-- Publish Window -->
+    <system:String x:Key="PublishWindowApiKeyHint">Klicken Sie hier, um eine Website mit dem API-Schlüssel zu öffnen. Stellen Sie sicher, dass Sie sich zuerst anmelden!</system:String>
+    <system:String x:Key="PublishWindowAnonymously">Anonym</system:String>
+    <system:String x:Key="PublishWindowResultLink">Link zu Ihrem Code</system:String>
+    <system:String x:Key="PublishWindowPublishButton">Veröffentlichen</system:String>
 
-	<!-- Settings Home -->
-	<system:String x:Key="SettingsHomeTitle">Einstellungen</system:String>
-	<system:String x:Key="SettingsHomeGeneral">Allgemein</system:String>
-	<system:String x:Key="SettingsHomeGeneralDescription">Sprache, Texteditor-Funktionen</system:String>
-	<system:String x:Key="SettingsHomePersonalization">Personalisierung</system:String>
+    <!-- Refactor Window -->
+    <system:String x:Key="RefactorWindowRemoveComments">Kommentare entfernen</system:String>
+    <system:String x:Key="RefactorWindowTabsToSpaces">Tabs in Leerzeichen umwandeln</system:String>
+    <system:String x:Key="RefactorWindowSpacesToTabs">Leerzeichen in Tabs umwandeln</system:String>
+
+    <!-- Settings -->
+    <system:String x:Key="SettingsEnabled">Aktiviert</system:String>
+    <system:String x:Key="SettingsDisabled">Deaktiviert</system:String>
+
+    <!-- Settings Home -->
+    <system:String x:Key="SettingsHomeTitle">Einstellungen</system:String>
+    <system:String x:Key="SettingsHomeGeneral">Allgemein</system:String>
+    <system:String x:Key="SettingsHomeGeneralDescription">Sprache, Texteditor-Funktionen</system:String>
+    <system:String x:Key="SettingsHomePersonalization">Personalisierung</system:String>
     <system:String x:Key="SettingsHomePersonalizationDescription">Theme, Schriftart, Syntax-Hervorhebung</system:String>
     <system:String x:Key="SettingsHomeDiscord">Discord</system:String>
     <system:String x:Key="SettingsHomeDiscordDescription">Zeige SkEditor auf deinem Discord-Profil an!</system:String>

@@ -7,17 +7,14 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Settings.FileTypesPage">
     <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsFileTypesTitle}" Grid.Row="0"/>
+        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsFileTypesTitle}" Grid.Row="0" />
         <ScrollViewer Grid.Row="1">
             <StackPanel Orientation="Vertical" Spacing="5">
                 <ui:InfoBar Severity="Warning"
                             Message="{DynamicResource SettingsFileTypesWarning}"
-                            IsClosable="False" IsOpen="True"/>
-            
-                <StackPanel Spacing="8" Name="TypeContainer">
+                            IsClosable="False" IsOpen="True" />
 
-                
-                </StackPanel>
+                <StackPanel Spacing="8" Name="TypeContainer" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -3,55 +3,56 @@
                     xmlns:wnd="using:FluentAvalonia.UI.Windowing"
                     x:CompileBindings="True">
 
-	<ControlTheme x:Key="OnlyCloseButtonTheme" TargetType="wnd:MinMaxCloseControl">
-		<Setter Property="Template">
-			<ControlTemplate>
-				<StackPanel Orientation="Horizontal">
-					<Button Name="MinimizeButton"
-							   Theme="{StaticResource FA_SystemCaptionButton}"
-							   Content="&#xE738;" IsVisible="False"/>
-					<Button Name="MaxRestoreButton"
-							   Theme="{StaticResource FA_SystemCaptionButton}"
-							   Content="&#xE739;" IsVisible="False"/>
-					<Button Name="CloseButton"
-							   Theme="{StaticResource FA_SystemCaptionButton}"
-							   Content="&#xE711;"
-							   FontSize="16"
-							   Classes="Close"  /> 
-				</StackPanel>
-			</ControlTemplate>
-		</Setter>
+    <ControlTheme x:Key="OnlyCloseButtonTheme" TargetType="wnd:MinMaxCloseControl">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Orientation="Horizontal">
+                    <Button Name="MinimizeButton"
+                            Theme="{StaticResource FA_SystemCaptionButton}"
+                            Content="&#xE738;" IsVisible="False" />
+                    <Button Name="MaxRestoreButton"
+                            Theme="{StaticResource FA_SystemCaptionButton}"
+                            Content="&#xE739;" IsVisible="False" />
+                    <Button Name="CloseButton"
+                            Theme="{StaticResource FA_SystemCaptionButton}"
+                            Content="&#xE711;"
+                            FontSize="16"
+                            Classes="Close" />
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
 
-		<Style Selector="^:maximized /template/ Button#MaxRestoreButton">
-			<Setter Property="Content" Value="&#xE923;" />
-			<Setter Property="FontSize" Value="16" />
-		</Style>
-	</ControlTheme>
+        <Style Selector="^:maximized /template/ Button#MaxRestoreButton">
+            <Setter Property="Content" Value="&#xE923;" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+    </ControlTheme>
 
-	<ControlTemplate x:Key="OnlyCloseButtonWindowTemplate" TargetType="{x:Type wnd:AppWindow}">
-		<VisualLayerManager>
-			<Border Background="{DynamicResource SmallWindowBackgroundColor}"
+    <ControlTemplate x:Key="OnlyCloseButtonWindowTemplate" TargetType="{x:Type wnd:AppWindow}">
+        <VisualLayerManager>
+            <Border Background="{DynamicResource SmallWindowBackgroundColor}"
                     Padding="{TemplateBinding Padding}"
                     Name="RootBorder">
-				<Panel>
-					<Panel Name="DefaultTitleBar"
+                <Panel>
+                    <Panel Name="DefaultTitleBar"
                            Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}"
                            Background="{DynamicResource FATitle_TitleBarBackground}"
                            TextElement.Foreground="{DynamicResource FATitle_TitleBarForeground}"
                            VerticalAlignment="Top">
 
-						<Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="20" Width="20" HorizontalAlignment="Left" Margin="8"/>
+                        <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="20" Width="20"
+                             HorizontalAlignment="Left" Margin="8" />
 
-						<TextBlock Name="TitleText"
-                             Text="{TemplateBinding Title}"
-                             Padding="5,0,0,0"
-                             FontSize="12"
-                             IsVisible="{Binding TemplateSettings.IsTitleBarContentVisible, RelativeSource={RelativeSource TemplatedParent}}"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Left" />
-					</Panel>
+                        <TextBlock Name="TitleText"
+                                   Text="{TemplateBinding Title}"
+                                   Padding="5,0,0,0"
+                                   FontSize="12"
+                                   IsVisible="{Binding TemplateSettings.IsTitleBarContentVisible, RelativeSource={RelativeSource TemplatedParent}}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left" />
+                    </Panel>
 
-					<ContentPresenter Name="PART_ContentPresenter"
+                    <ContentPresenter Name="PART_ContentPresenter"
                                       ClipToBounds="False"
                                       Margin="{Binding TemplateSettings.ContentMargin, RelativeSource={RelativeSource TemplatedParent}}"
                                       HorizontalAlignment="Stretch"
@@ -59,58 +60,59 @@
                                       Content="{TemplateBinding Content}"
                                       ContentTemplate="{TemplateBinding ContentTemplate}" />
 
-					<wnd:MinMaxCloseControl HorizontalAlignment="Right"
+                    <wnd:MinMaxCloseControl HorizontalAlignment="Right"
                                             VerticalAlignment="Top"
                                             Name="SystemCaptionButtons"
-											Theme="{StaticResource OnlyCloseButtonTheme}"
-                                            Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            Theme="{StaticResource OnlyCloseButtonTheme}"
+                                            Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}" />
 
-				</Panel>
-			</Border>
-		</VisualLayerManager>
-	</ControlTemplate>
+                </Panel>
+            </Border>
+        </VisualLayerManager>
+    </ControlTemplate>
 
-	<ControlTheme x:Key="SmallWindowTheme" TargetType="wnd:AppWindow">
-		<Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource ApplicationPageBackgroundThemeBrush}" />
-		<Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
-		<Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}"/>
-		<Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
-		<Setter Property="Background" Value="{DynamicResource ApplicationPageBackgroundThemeBrush}" />
-		<Setter Property="Template" Value="{StaticResource AppWindowDefaultTemplate}" />
+    <ControlTheme x:Key="SmallWindowTheme" TargetType="wnd:AppWindow">
+        <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource ApplicationPageBackgroundThemeBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+        <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
+        <Setter Property="Background" Value="{DynamicResource ApplicationPageBackgroundThemeBrush}" />
+        <Setter Property="Template" Value="{StaticResource AppWindowDefaultTemplate}" />
 
-		<Style Selector="^:windows">
-			<Setter Property="Template" Value="{StaticResource OnlyCloseButtonWindowTemplate}" />
+        <Style Selector="^:windows">
+            <Setter Property="Template" Value="{StaticResource OnlyCloseButtonWindowTemplate}" />
 
-			<Style Selector="^:icon">
-				<Style Selector="^ /template/ Image#Icon">
-					<Setter Property="IsVisible" Value="True" />
-				</Style>
-				<Style Selector="^ /template/ TextBlock#TitleText">
-					<Setter Property="Margin" Value="32 0 0 0" />
-				</Style>
-			</Style>
+            <Style Selector="^:icon">
+                <Style Selector="^ /template/ Image#Icon">
+                    <Setter Property="IsVisible" Value="True" />
+                </Style>
+                <Style Selector="^ /template/ TextBlock#TitleText">
+                    <Setter Property="Margin" Value="32 0 0 0" />
+                </Style>
+            </Style>
 
-			<Style Selector="^[WindowState=FullScreen]">
-				<Style Selector="^ /template/ Panel#DefaultTitleBar">
-					<Setter Property="IsVisible" Value="False" />
-				</Style>
-				<Style Selector="^ /template/ wnd|MinMaxCloseControl#SystemCaptionButtons">
-					<Setter Property="IsVisible" Value="False" />
-				</Style>
-			</Style>
+            <Style Selector="^[WindowState=FullScreen]">
+                <Style Selector="^ /template/ Panel#DefaultTitleBar">
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+                <Style Selector="^ /template/ wnd|MinMaxCloseControl#SystemCaptionButtons">
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+            </Style>
 
-			<Style Selector="^[IsActive=False]">
-				<Style Selector="^ /template/ Panel#DefaultTitleBar">
-					<Setter Property="Background" Value="{DynamicResource FATitle_TitleBarBackgroundInactive}" />
-					<Setter Property="TextElement.Foreground" Value="{DynamicResource FATitle_TitleBarForegroundInactive}" />
-				</Style>
-			</Style>
-		</Style>
+            <Style Selector="^[IsActive=False]">
+                <Style Selector="^ /template/ Panel#DefaultTitleBar">
+                    <Setter Property="Background" Value="{DynamicResource FATitle_TitleBarBackgroundInactive}" />
+                    <Setter Property="TextElement.Foreground"
+                            Value="{DynamicResource FATitle_TitleBarForegroundInactive}" />
+                </Style>
+            </Style>
+        </Style>
 
-		<Style Selector="^:splashOpen">
-			<Style Selector="^ /template/ wnd|AppSplashScreen#SplashHost">
-				<Setter Property="IsVisible" Value="True" />
-			</Style>
-		</Style>
-	</ControlTheme>
+        <Style Selector="^:splashOpen">
+            <Style Selector="^ /template/ wnd|AppSplashScreen#SplashHost">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+    </ControlTheme>
 </ResourceDictionary>

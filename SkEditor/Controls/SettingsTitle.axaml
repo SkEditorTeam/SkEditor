@@ -3,18 +3,19 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              x:Class="SkEditor.Controls.SettingsTitle">
 
-	<UserControl.Styles>
-		<Style Selector="Button#BackButton">
-			<Setter Property="IsVisible" Value="{Binding HasBackButton}" />
-		</Style>
-	</UserControl.Styles>
+    <UserControl.Styles>
+        <Style Selector="Button#BackButton">
+            <Setter Property="IsVisible" Value="{Binding HasBackButton}" />
+        </Style>
+    </UserControl.Styles>
 
-	<StackPanel Orientation="Horizontal" Margin="0,0,0,4" Spacing="5" Height="32">
-		<Button Name="BackButton" Height="28" Width="28" Padding="0" Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Center">
-			<Button.Content>
-				<ui:IconSourceElement IconSource="{StaticResource BackIcon}" Height="16" Width="16"/>
-			</Button.Content>
-		</Button>
-		<TextBlock Text="{Binding Title}" FontSize="24" FontWeight="DemiBold" VerticalAlignment="Center"/>
-	</StackPanel>
+    <StackPanel Orientation="Horizontal" Margin="0,0,0,4" Spacing="5" Height="32">
+        <Button Name="BackButton" Height="28" Width="28" Padding="0" Background="Transparent" BorderBrush="Transparent"
+                VerticalAlignment="Center">
+            <Button.Content>
+                <ui:IconSourceElement IconSource="{StaticResource BackIcon}" Height="16" Width="16" />
+            </Button.Content>
+        </Button>
+        <TextBlock Text="{Binding Title}" FontSize="24" FontWeight="DemiBold" VerticalAlignment="Center" />
+    </StackPanel>
 </UserControl>

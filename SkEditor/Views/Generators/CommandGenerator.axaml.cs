@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Text;
 using Avalonia.Controls;
 using Avalonia.Input;
 using AvaloniaEdit;
@@ -6,8 +8,6 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities;
-using System.Linq;
-using System.Text;
 
 namespace SkEditor.Views.Generators;
 
@@ -21,7 +21,10 @@ public partial class CommandGenerator : AppWindow
         GenerateButton.Command = new RelayCommand(Generate);
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
         Loaded += (_, _) => NameTextBox.Focus();
     }
@@ -67,7 +70,11 @@ public partial class CommandGenerator : AppWindow
 
     private static void AppendIfExists(ref StringBuilder code, string template, params string[] values)
     {
-        if (values.Any(string.IsNullOrWhiteSpace)) return;
+        if (values.Any(string.IsNullOrWhiteSpace))
+        {
+            return;
+        }
+
         for (int i = 0; i < values.Length; i++)
         {
             template = template.Replace($"{{{i}}}", values[i]);

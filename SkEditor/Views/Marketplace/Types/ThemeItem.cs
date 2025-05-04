@@ -1,25 +1,23 @@
-﻿using Avalonia.Threading;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
-using System;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace SkEditor.Views.Marketplace.Types;
 
 public class ThemeItem : MarketplaceItem
 {
-    [JsonProperty("file")]
-    public string ItemFileUrl { get; set; }
+    [JsonIgnore] public const string FolderName = "Themes";
 
-    [JsonIgnore]
-    public const string FolderName = "Themes";
+    [JsonProperty("file")] public string ItemFileUrl { get; set; }
 
     public override async Task Install()
     {
@@ -39,7 +37,7 @@ public class ThemeItem : MarketplaceItem
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message,
                 primaryButtonText: "MarketplaceEnableNow", cancelButtonText: "Okay",
-                icon: new SymbolIconSource() { Symbol = Symbol.Accept });
+                icon: new SymbolIconSource { Symbol = Symbol.Accept });
 
             if (result == ContentDialogResult.Primary)
             {
@@ -65,7 +63,10 @@ public class ThemeItem : MarketplaceItem
         string fileName = ItemFileUrl.Split('/').Last();
 
         if (fileName.Equals(ThemeEditor.CurrentTheme.FileName))
-            await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ?? ThemeEditor.GetDefaultTheme());
+        {
+            await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ??
+                                       ThemeEditor.GetDefaultTheme());
+        }
 
         ThemeEditor.Themes.Remove(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName)));
         ThemeEditor.SaveAllThemes();
@@ -74,8 +75,9 @@ public class ThemeItem : MarketplaceItem
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            icon: new SymbolIconSource() { Symbol = Symbol.Accept });
+        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
+            Translation.Get("MarketplaceUninstallSuccess", ItemName),
+            new SymbolIconSource { Symbol = Symbol.Accept });
     }
 
     public override bool IsInstalled()

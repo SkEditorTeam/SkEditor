@@ -1,11 +1,12 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Media;
-using Avalonia.Threading;
-using System;
+﻿using System;
 using System.IO;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
+using Avalonia.Threading;
 
 namespace SkEditor.Views;
 
@@ -26,7 +27,7 @@ public partial class SplashScreen : Window
         ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
         SystemDecorations = SystemDecorations.BorderOnly;
 
-        var grid = new Grid
+        Grid grid = new()
         {
             RowDefinitions = new RowDefinitions("*, Auto"),
             Margin = new Thickness(20)
@@ -34,15 +35,15 @@ public partial class SplashScreen : Window
 
         Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/SkEditor.svg"));
 
-        var logo = new Image
+        Image logo = new()
         {
             Source = new SvgImage { Source = SvgSource.LoadFromStream(stream) },
             Width = 150,
             Height = 150,
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
         };
-        
+
         Grid.SetRow(logo, 0);
 
         _statusText = new TextBlock

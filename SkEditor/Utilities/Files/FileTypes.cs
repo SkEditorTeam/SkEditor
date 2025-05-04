@@ -1,15 +1,15 @@
-﻿using Avalonia.Media.Imaging;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Avalonia.Media.Imaging;
 using AvaloniaEdit;
 using SkEditor.API;
 using SkEditor.Views.FileTypes;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace SkEditor.Utilities.Files;
 
 /// <summary>
-/// Class handling opening of non-editor files (images, audio, etc.)
+///     Class handling opening of non-editor files (images, audio, etc.)
 /// </summary>
 public static class FileTypes
 {
@@ -35,14 +35,45 @@ public static class FileTypes
 
     private static void RegisterAssociation(FileAssociation association)
     {
-        foreach (var extension in association.SupportedExtensions)
+        foreach (string extension in association.SupportedExtensions)
         {
             if (!RegisteredFileTypes.ContainsKey(extension))
+            {
                 RegisteredFileTypes.Add(extension, new List<FileAssociation>());
+            }
 
             RegisteredFileTypes[extension].Add(association);
         }
     }
+
+    #region Default File Associations
+
+    public class ImageAssociation : FileAssociation
+    {
+        public ImageAssociation()
+        {
+            SupportedExtensions = [".png", ".jpg", ".ico", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"];
+        }
+
+        public override FileType? Handle(string path)
+        {
+            try
+            {
+                FileStream fileStream = File.OpenRead(Uri.UnescapeDataString(path));
+                Bitmap bitmap = new(fileStream);
+                fileStream.Close();
+
+                return new FileType(new ImageViewer(bitmap, path), path);
+            }
+            catch (Exception e)
+            {
+                SkEditorAPI.Windows.ShowError($"Unable to load the specified image:\n\n{e.Message}");
+                return null;
+            }
+        }
+    }
+
+    #endregion
 
     #region Classes
 
@@ -62,35 +93,6 @@ public static class FileTypes
         public IAddon? Addon { get; set; } = null;
 
         public abstract FileType? Handle(string path);
-    }
-
-    #endregion
-
-    #region Default File Associations
-
-    public class ImageAssociation : FileAssociation
-    {
-        public ImageAssociation()
-        {
-            SupportedExtensions = [".png", ".jpg", ".ico", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"];
-        }
-
-        public override FileType? Handle(string path)
-        {
-            try
-            {
-                var fileStream = File.OpenRead(Uri.UnescapeDataString(path));
-                var bitmap = new Bitmap(fileStream);
-                fileStream.Close();
-
-                return new FileType(new ImageViewer(bitmap, path), path);
-            }
-            catch (Exception e)
-            {
-                SkEditorAPI.Windows.ShowError($"Unable to load the specified image:\n\n{e.Message}");
-                return null;
-            }
-        }
     }
 
     #endregion

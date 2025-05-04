@@ -1,3 +1,4 @@
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -6,12 +7,14 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
-using System.Linq;
 
 namespace SkEditor.Views.Generators.Gui;
+
 public partial class ExtendedItemSelector : AppWindow
 {
-    private Item _item;
+    private readonly Item _item;
+
+    private MenuFlyout contextFlyout;
 
     public ExtendedItemSelector(Item item)
     {
@@ -45,6 +48,7 @@ public partial class ExtendedItemSelector : AppWindow
                 item.HaveCustomName = true;
                 item.CustomName = DisplayNameTextBox.Text;
             }
+
             if (!string.IsNullOrWhiteSpace(CustomModelDataTextBox.Text))
             {
                 bool isInt = int.TryParse(CustomModelDataTextBox.Text, out int result);
@@ -54,6 +58,7 @@ public partial class ExtendedItemSelector : AppWindow
                     item.CustomModelData = result;
                 }
             }
+
             item.HaveExampleAction = ExampleActionCheckBox.IsChecked == true;
 
             Close(_item);
@@ -61,7 +66,10 @@ public partial class ExtendedItemSelector : AppWindow
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
 
         ColoredTextHandler.SetupBox(DisplayNameTextBox);
@@ -70,10 +78,20 @@ public partial class ExtendedItemSelector : AppWindow
     private void CheckForEditing()
     {
         Item editedItem = ItemContextMenu.EditedItem;
-        if (editedItem == null) return;
+        if (editedItem == null)
+        {
+            return;
+        }
 
-        if (editedItem.HaveCustomName) DisplayNameTextBox.Text = editedItem.CustomName;
-        if (editedItem.HaveCustomModelData) CustomModelDataTextBox.Text = editedItem.CustomModelData.ToString();
+        if (editedItem.HaveCustomName)
+        {
+            DisplayNameTextBox.Text = editedItem.CustomName;
+        }
+
+        if (editedItem.HaveCustomModelData)
+        {
+            CustomModelDataTextBox.Text = editedItem.CustomModelData.ToString();
+        }
 
         if (editedItem.Lore.Count > 0)
         {
@@ -86,21 +104,20 @@ public partial class ExtendedItemSelector : AppWindow
                     IsDeleteButtonVisible = true
                 };
                 lineEditor.LineTextBox.ContextFlyout = contextFlyout;
-                lineEditor.DeleteButton.Command = new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
+                lineEditor.DeleteButton.Command =
+                    new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
                 lineEditor.LineTextBox.Text = editedItem.Lore[i];
                 LoreLineStackPanel.Children.Add(lineEditor);
             }
         }
     }
 
-    private MenuFlyout contextFlyout;
-
     private void SetContextMenu()
     {
         MenuItem addMenuItem = new()
         {
             Header = Translation.Get("GuiGeneratorAddLoreLine"),
-            Icon = new SymbolIcon() { Symbol = Symbol.Add, FontSize = 20 },
+            Icon = new SymbolIcon { Symbol = Symbol.Add, FontSize = 20 },
             Command = new RelayCommand(() =>
             {
                 LoreLineEditor lineEditor = new()
@@ -108,7 +125,8 @@ public partial class ExtendedItemSelector : AppWindow
                     IsDeleteButtonVisible = true
                 };
                 lineEditor.LineTextBox.ContextFlyout = contextFlyout;
-                lineEditor.DeleteButton.Command = new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
+                lineEditor.DeleteButton.Command =
+                    new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
                 LoreLineStackPanel.Children.Add(lineEditor);
             })
         };

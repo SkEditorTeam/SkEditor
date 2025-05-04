@@ -1,4 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using CommunityToolkit.Mvvm.Input;
@@ -7,8 +10,6 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.Controls.Docs;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Views;
 
@@ -34,7 +35,7 @@ public partial class LocalDocsManagerWindow : AppWindow
     {
         GroupByComboBox.SelectionChanged += async (_, _) =>
         {
-            var groupBy = (GroupBy)GroupByComboBox.SelectedIndex;
+            GroupBy groupBy = (GroupBy)GroupByComboBox.SelectedIndex;
             await LoadCategories(groupBy);
         };
         DeleteEverythingButton.Command = new AsyncRelayCommand(async () =>
@@ -45,7 +46,10 @@ public partial class LocalDocsManagerWindow : AppWindow
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
 
@@ -70,16 +74,17 @@ public partial class LocalDocsManagerWindow : AppWindow
 
     public async Task LoadByProviders()
     {
-        var elements = await LocalProvider.Get().GetElements();
-        var providers = elements.Select(x => x.OriginalProvider).Distinct().ToList();
-        var providerGroups = providers.Select(x => elements.FindAll(y => y.OriginalProvider == x)).ToList();
+        List<LocalDocEntry> elements = await LocalProvider.Get().GetElements();
+        List<DocProvider> providers = elements.Select(x => x.OriginalProvider).Distinct().ToList();
+        List<List<LocalDocEntry>> providerGroups =
+            providers.Select(x => elements.FindAll(y => y.OriginalProvider == x)).ToList();
 
         CategoriesPanel.Children.Clear();
 
-        foreach (var providerGroup in providerGroups)
+        foreach (List<LocalDocEntry> providerGroup in providerGroups)
         {
-            var provider = providerGroup.First().OriginalProvider;
-            var expander = CreateExpander(provider.ToString(),
+            DocProvider provider = providerGroup.First().OriginalProvider;
+            SettingsExpander expander = CreateExpander(provider.ToString(),
                 IDocProvider.Providers[provider].Icon, providerGroup.Count);
 
             foreach (DocManagementEntry entry in providerGroup.Select(element => new DocManagementEntry(element)))
@@ -93,16 +98,16 @@ public partial class LocalDocsManagerWindow : AppWindow
 
     public async Task LoadByTypes()
     {
-        var elements = await LocalProvider.Get().GetElements();
-        var types = elements.Select(x => x.DocType).Distinct().ToList();
-        var typeGroups = types.Select(x => elements.FindAll(y => y.DocType == x)).ToList();
+        List<LocalDocEntry> elements = await LocalProvider.Get().GetElements();
+        List<IDocumentationEntry.Type> types = elements.Select(x => x.DocType).Distinct().ToList();
+        List<List<LocalDocEntry>> typeGroups = types.Select(x => elements.FindAll(y => y.DocType == x)).ToList();
 
         CategoriesPanel.Children.Clear();
 
-        foreach (var typeGroup in typeGroups)
+        foreach (List<LocalDocEntry> typeGroup in typeGroups)
         {
-            var type = typeGroup.First().DocType;
-            var expander = CreateExpander(type.ToString(),
+            IDocumentationEntry.Type type = typeGroup.First().DocType;
+            SettingsExpander expander = CreateExpander(type.ToString(),
                 IDocumentationEntry.GetTypeIcon(type), typeGroup.Count);
 
             foreach (DocManagementEntry entry in typeGroup.Select(element => new DocManagementEntry(element)))
@@ -116,21 +121,21 @@ public partial class LocalDocsManagerWindow : AppWindow
 
     public async Task LoadByAddons()
     {
-        var elements = await LocalProvider.Get().GetElements();
-        var addons = elements.Select(x => x.Addon).Distinct().ToList();
-        var addonGroups = addons.Select(x => elements.FindAll(y => y.Addon == x)).ToList();
+        List<LocalDocEntry> elements = await LocalProvider.Get().GetElements();
+        List<string> addons = elements.Select(x => x.Addon).Distinct().ToList();
+        List<List<LocalDocEntry>> addonGroups = addons.Select(x => elements.FindAll(y => y.Addon == x)).ToList();
 
         CategoriesPanel.Children.Clear();
 
-        foreach (var addonGroup in addonGroups)
+        foreach (List<LocalDocEntry> addonGroup in addonGroups)
         {
-            var addon = addonGroup.First().Addon;
-            var expander = CreateExpander(addon,
+            string addon = addonGroup.First().Addon;
+            SettingsExpander expander = CreateExpander(addon,
                 null, addonGroup.Count);
 
-            foreach (var element in addonGroup)
+            foreach (LocalDocEntry element in addonGroup)
             {
-                var entry = new DocManagementEntry(element);
+                DocManagementEntry entry = new(element);
                 expander.Items.Add(entry);
             }
 
