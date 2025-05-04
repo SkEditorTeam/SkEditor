@@ -47,7 +47,7 @@ public partial class AddonEntryControl : UserControl
             bool isAddonEnabled = addonMeta.State == IAddons.AddonState.Enabled;
             if (isAddonEnabled)
             {
-                SkEditorAPI.Addons.DisableAddon(addonMeta.Addon);
+                await SkEditorAPI.Addons.DisableAddon(addonMeta.Addon);
                 SetStateButton(false);
             }
             else
