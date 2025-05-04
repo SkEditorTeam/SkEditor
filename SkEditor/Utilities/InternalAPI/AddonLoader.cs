@@ -162,10 +162,10 @@ public static class AddonLoader
 
         Addons.Add(addonMeta);
 
-        bool shouldBeEnabled = _metaCache.TryGetValue(addon[0].Identifier, out JToken? enabledToken) &&
-                               enabledToken?.Value<bool>() == true;
+        bool shouldBeDisabled = _metaCache.TryGetValue(addon[0].Identifier, out JToken? enabledToken) &&
+                                enabledToken?.Value<bool>() == false;
 
-        if (shouldBeEnabled)
+        if (!shouldBeDisabled)
         {
             await EnableAddon(addon[0]);
         }
