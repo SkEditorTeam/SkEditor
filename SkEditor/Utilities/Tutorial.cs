@@ -8,7 +8,7 @@ namespace SkEditor.Utilities;
 
 public static class Tutorial
 {
-    public static async void ShowTutorial()
+    public static async Task ShowTutorial()
     {
         if (!SkEditorAPI.Core.GetAppConfig().FirstTime)
         {

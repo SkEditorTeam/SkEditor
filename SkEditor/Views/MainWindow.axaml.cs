@@ -212,8 +212,8 @@ public partial class MainWindow : AppWindow
                             await UpdateChecker.Check();
                         }
 
-                        Tutorial.ShowTutorial();
-                        ChangelogChecker.Check();
+                        await Tutorial.ShowTutorial();
+                        await ChangelogChecker.Check();
 
                         await CrashChecker.CheckForCrash();
                     }

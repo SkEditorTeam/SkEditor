@@ -1,4 +1,5 @@
-﻿using FluentAvalonia.UI.Controls;
+﻿using System.Threading.Tasks;
+using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 
 namespace SkEditor.Utilities;
@@ -16,7 +17,7 @@ public static class ChangelogChecker
         return SkEditorAPI.Core.GetInformationalVersion();
     }
 
-    public static async void Check()
+    public static async Task Check()
     {
         string version = SkEditorAPI.Core.GetAppConfig().Version;
         if (version == GetVersion())
