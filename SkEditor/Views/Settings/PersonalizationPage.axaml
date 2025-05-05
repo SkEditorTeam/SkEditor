@@ -3,36 +3,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-			 xmlns:controls="using:SkEditor.Controls"
-			 xmlns:utilities="clr-namespace:SkEditor.Utilities"
-			 mc:Ignorable="d" d:DesignWidth="800"
+             xmlns:controls="using:SkEditor.Controls"
+             xmlns:utilities="clr-namespace:SkEditor.Utilities"
+             mc:Ignorable="d" d:DesignWidth="800"
              x:DataType="utilities:AppConfig"
              x:Class="SkEditor.Views.Settings.PersonalizationPage">
-	
-	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsPersonalizationTitle}" Grid.Row="0"/>
-		<ScrollViewer Grid.Row="1">
-			<StackPanel Spacing="8">
-				<ui:SettingsExpander Name="ThemePageButton" Header="{DynamicResource SettingsPersonalizationTheme}" IconSource="{StaticResource PaintIcon}"
-				                     Description="{DynamicResource SettingsPersonalizationThemeDescription}"
-				                     IsClickEnabled="True" />
 
-				<ui:SettingsExpander Name="SyntaxPageButton" Header="{DynamicResource SettingsPersonalizationSyntax}" IconSource="{StaticResource CodeIcon}"
-									 Description="{DynamicResource SettingsPersonalizationSyntaxDescription}"
-				                     IsClickEnabled="True"/>
+    <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsPersonalizationTitle}" Grid.Row="0" />
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="8">
+                <ui:SettingsExpander Name="ThemePageButton" Header="{DynamicResource SettingsPersonalizationTheme}"
+                                     IconSource="{StaticResource PaintIcon}"
+                                     Description="{DynamicResource SettingsPersonalizationThemeDescription}"
+                                     IsClickEnabled="True" />
 
-				<ui:SettingsExpander Name="CurrentFont" Header="{DynamicResource SettingsPersonalizationFont}" Description="{Binding CurrentFont}" IconSource="{StaticResource TextFontIcon}">
-					<ui:SettingsExpander.Footer>
-						<Button Name="FontButton" Content="{DynamicResource SelectButton}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+                <ui:SettingsExpander Name="SyntaxPageButton" Header="{DynamicResource SettingsPersonalizationSyntax}"
+                                     IconSource="{StaticResource CodeIcon}"
+                                     Description="{DynamicResource SettingsPersonalizationSyntaxDescription}"
+                                     IsClickEnabled="True" />
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationHighlightCurrentLine}" IconSource="{StaticResource HighlightCurrentLineIcon}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="HighlightCurrentLineSwitch" IsChecked="{Binding HighlightCurrentLine}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
-			</StackPanel>
-		</ScrollViewer>
-	</Grid>
+                <ui:SettingsExpander Name="CurrentFont" Header="{DynamicResource SettingsPersonalizationFont}"
+                                     Description="{Binding CurrentFont}" IconSource="{StaticResource TextFontIcon}">
+                    <ui:SettingsExpander.Footer>
+                        <Button Name="FontButton" Content="{DynamicResource SelectButton}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationHighlightCurrentLine}"
+                                     IconSource="{StaticResource HighlightCurrentLineIcon}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="HighlightCurrentLineSwitch" IsChecked="{Binding HighlightCurrentLine}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

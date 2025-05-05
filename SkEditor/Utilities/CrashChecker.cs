@@ -1,29 +1,33 @@
-﻿using SkEditor.API;
-using SkEditor.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using SkEditor.API;
+using SkEditor.Views;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities;
+
 public class CrashChecker
 {
-    public async static Task<bool> CheckForCrash()
+    public static async Task<bool> CheckForCrash()
     {
-        var args = SkEditorAPI.Core.GetStartupArguments();
+        string[] args = SkEditorAPI.Core.GetStartupArguments();
         if (args is not ["--crash", _])
+        {
             return false;
+        }
 
         try
         {
-            var rawException = args[1];
-            var exception = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(rawException));
-            var tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
+            string rawException = args[1];
+            string exception = Encoding.UTF8.GetString(Convert.FromBase64String(rawException));
+            string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
             if (Directory.Exists(tempPath))
             {
-                var files = Directory.GetFiles(tempPath).ToList();
+                List<string> files = Directory.GetFiles(tempPath).ToList();
                 if (files.Count != 0)
                 {
                     files.ForEach(file => SkEditorAPI.Files.OpenFile(file));
@@ -39,6 +43,7 @@ public class CrashChecker
                     }
                 }
             }
+
             await SkEditorAPI.Windows.ShowWindowAsDialog(new CrashWindow(exception));
             return true;
         }
@@ -57,7 +62,7 @@ public class CrashChecker
             while (!allFilesUnlocked)
             {
                 allFilesUnlocked = true;
-                foreach (var file in files)
+                foreach (string file in files)
                 {
                     if (IsFileLocked(file))
                     {
@@ -65,8 +70,11 @@ public class CrashChecker
                         break;
                     }
                 }
+
                 if (!allFilesUnlocked)
+                {
                     await Task.Delay(100);
+                }
             }
         });
     }
@@ -82,6 +90,7 @@ public class CrashChecker
         {
             return true;
         }
+
         return false;
     }
 }

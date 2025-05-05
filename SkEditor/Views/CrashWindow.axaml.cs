@@ -21,9 +21,15 @@ public partial class CrashWindow : AppWindow
         CloseButton.Click += (_, _) => Close();
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
 
-    public static void OpenDiscord() => SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/");
+    public static void OpenDiscord()
+    {
+        SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/");
+    }
 }

@@ -1,16 +1,20 @@
 using Avalonia;
 using Avalonia.Controls;
-using System.ComponentModel;
 
 namespace SkEditor.Controls;
-public partial class SettingsTitle : UserControl, INotifyPropertyChanged
+
+public partial class SettingsTitle : UserControl
 {
     public static readonly StyledProperty<string> TitleProperty =
         AvaloniaProperty.Register<SettingsTitle, string>(nameof(Title));
 
-    public bool HasBackButton { get; set; } = true;
+    public SettingsTitle()
+    {
+        InitializeComponent();
+        DataContext = this;
+    }
 
-    public Button GetBackButton() => this.FindControl<Button>("BackButton");
+    public bool HasBackButton { get; set; } = true;
 
     public string Title
     {
@@ -18,9 +22,8 @@ public partial class SettingsTitle : UserControl, INotifyPropertyChanged
         set => SetValue(TitleProperty, value);
     }
 
-    public SettingsTitle()
+    public Button GetBackButton()
     {
-        InitializeComponent();
-        DataContext = this;
+        return this.FindControl<Button>("BackButton");
     }
 }

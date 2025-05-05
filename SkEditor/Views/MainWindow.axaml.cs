@@ -1,4 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -13,19 +16,18 @@ using SkEditor.Utilities.Files;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
-using System.Linq;
-using System.Reactive.Linq;
 
 namespace SkEditor.Views;
 
 public partial class MainWindow : AppWindow
 {
-    public static MainWindow Instance { get; private set; }
+    private readonly SplashScreen? _splashScreen;
+    private bool _isFullyLoaded;
 
-    public BottomBarControl GetBottomBar() => BottomBar;
-
-    public MainWindow()
+    public MainWindow(SplashScreen? splashScreen = null)
     {
+        _splashScreen = splashScreen;
+
         InitializeComponent();
 
         WindowStyler.Style(this);
@@ -34,32 +36,43 @@ public partial class MainWindow : AppWindow
         ThemeEditor.LoadThemes();
         AddEvents();
 
-        Translation.LoadDefaultLanguage();
-        Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language);
+        Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language).Wait();
 
         Instance = this;
+    }
+
+    public static MainWindow Instance { get; private set; }
+
+    public bool AlreadyClosed { get; set; }
+
+    public BottomBarControl GetBottomBar()
+    {
+        return BottomBar;
     }
 
     private void AddEvents()
     {
         TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
-        TabControl.TabCloseRequested += (sender, e) => FileCloser.CloseFile(e);
-        TabControl.SelectionChanged += (sender, e) => SkEditorAPI.Events.TabChanged(e);
+        TabControl.TabCloseRequested += async (_, e) => await FileCloser.CloseFile(e);
+        TabControl.SelectionChanged += (_, e) => SkEditorAPI.Events.TabChanged(e);
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;
 
-        Activated += (sender, e) => ChangeChecker.Check();
+        Activated += (_, _) => _ = ChangeChecker.Check();
 
-        KeyDown += (sender, e) =>
+        KeyDown += (_, e) =>
         {
-            if (e.KeyModifiers == KeyModifiers.Control && e.Key >= Key.D1 && e.Key <= Key.D9)
+            switch (e)
             {
-                FileHandler.SwitchTab((int)e.Key - 35);
-            }
-            else if (e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift) && e.Key == Key.Oem3)
-            {
-                TerminalWindow terminal = new();
-                terminal.Show();
+                case { KeyModifiers: KeyModifiers.Control, Key: >= Key.D1 and <= Key.D9 }:
+                    FileHandler.SwitchTab((int)e.Key - 35);
+                    break;
+                case { KeyModifiers: KeyModifiers.Control | KeyModifiers.Shift, Key: Key.Oem3 }:
+                {
+                    TerminalWindow terminal = new();
+                    terminal.Show();
+                    break;
+                }
             }
         };
 
@@ -73,76 +86,158 @@ public partial class MainWindow : AppWindow
         SideBar.ReloadPanels();
     }
 
-    public bool AlreadyClosed { get; set; } = false;
     private async void OnClosing(object sender, WindowClosingEventArgs e)
     {
-        if (AlreadyClosed) return;
-
-        ThemeEditor.SaveAllThemes();
-        SkEditorAPI.Core.GetAppConfig().Save();
-
-        e.Cancel = true;
-        if (!SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
+        try
         {
-            bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
-            if (!anyUnsaved)
+            if (AlreadyClosed)
             {
-                e.Cancel = false;
                 return;
             }
 
-            ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-                Translation.Get("ClosingProgramWithUnsavedFiles"), icon: Symbol.ImportantFilled,
-                primaryButtonText: "Yes", cancelButtonText: "No");
+            ThemeEditor.SaveAllThemes();
+            SkEditorAPI.Core.GetAppConfig().Save();
 
-            if (result == ContentDialogResult.Primary)
+            e.Cancel = true;
+            if (!SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
             {
+                bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
+                if (!anyUnsaved)
+                {
+                    e.Cancel = false;
+                    return;
+                }
+
+                ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
+                    Translation.Get("ClosingProgramWithUnsavedFiles"), Symbol.ImportantFilled,
+                    primaryButtonText: "Yes", cancelButtonText: "No");
+
+                if (result != ContentDialogResult.Primary)
+                {
+                    return;
+                }
+
+                AlreadyClosed = true;
+                Close();
+            }
+            else
+            {
+                await SessionRestorer.SaveSession();
                 AlreadyClosed = true;
                 Close();
             }
         }
-        else
+        catch (Exception exc)
         {
-            await SessionRestorer.SaveSession();
+            SkEditorAPI.Logs.Error($"Error while closing the window: {exc.Message}");
             AlreadyClosed = true;
             Close();
+        }
+        finally
+        {
+            SkEditorAPI.Core.GetAppConfig().Save();
         }
     }
 
     private async void OnWindowLoaded(object sender, RoutedEventArgs e)
     {
-        AddonLoader.Load();
-        Utilities.Files.FileTypes.RegisterDefaultAssociations();
-        SideBar.ReloadPanels();
-
-        await ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
-
-        double scale = SkEditorAPI.Core.GetAppConfig().CustomUiScale;
-        LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
-
-        bool sessionFilesAdded = false;
-        if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
-            sessionFilesAdded = await SessionRestorer.RestoreSession();
-
-        string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
-        if (startupFiles.Length == 0 && !sessionFilesAdded)
-            SkEditorAPI.Files.AddWelcomeTab();
-        startupFiles.ToList().ForEach(FileHandler.OpenFile);
-        if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
-            SkEditorAPI.Files.AddWelcomeTab();
-
-        Dispatcher.UIThread.Post(async () =>
+        try
         {
-            SyntaxLoader.LoadAdvancedSyntaxes();
-            DiscordRpcUpdater.Initialize();
+            _splashScreen?.UpdateStatus("Loading themes and addons...");
 
-            if (SkEditorAPI.Core.GetAppConfig().CheckForUpdates) UpdateChecker.Check();
+            Task themeTask = ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
+            Task addonTask = AddonLoader.Load();
+            await Task.WhenAll(themeTask, addonTask);
 
-            Tutorial.ShowTutorial();
+            _splashScreen?.UpdateStatus("Registering file types...");
+            Utilities.Files.FileTypes.RegisterDefaultAssociations();
+            SideBar.ReloadPanels();
+
+            double scale = SkEditorAPI.Core.GetAppConfig().CustomUiScale;
+            LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
+
+            bool sessionFilesAdded = false;
+            if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
+            {
+                _splashScreen?.UpdateStatus("Restoring session...");
+                sessionFilesAdded = await SessionRestorer.RestoreSession();
+            }
+
+            _splashScreen?.UpdateStatus("Opening files...");
+            string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
+            if (startupFiles.Length == 0 && !sessionFilesAdded)
+            {
+                SkEditorAPI.Files.AddWelcomeTab();
+            }
+
+            startupFiles.ToList().ForEach(FileHandler.OpenFile);
+            if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
+            {
+                SkEditorAPI.Files.AddWelcomeTab();
+            }
+
             BottomBar.UpdatePosition();
-            ChangelogChecker.Check();
 
-            await CrashChecker.CheckForCrash();
-        });
+            _splashScreen?.UpdateStatus("Finishing up...");
+
+            await Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                try
+                {
+                    await SyntaxLoader.LoadAdvancedSyntaxes();
+                    DiscordRpcUpdater.Initialize();
+                }
+                catch (Exception exc)
+                {
+                    SkEditorAPI.Logs.Error($"Error loading final components: {exc.Message}", true);
+                }
+            });
+
+            _isFullyLoaded = true;
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                IsVisible = true;
+                Activate();
+                Focus();
+
+                _splashScreen?.Close();
+
+                Dispatcher.UIThread.Post(async void () =>
+                {
+                    try
+                    {
+                        if (SkEditorAPI.Core.GetAppConfig().CheckForUpdates)
+                        {
+                            await UpdateChecker.Check();
+                        }
+
+                        await Tutorial.ShowTutorial();
+                        await ChangelogChecker.Check();
+
+                        await CrashChecker.CheckForCrash();
+                    }
+                    catch (Exception exc)
+                    {
+                        SkEditorAPI.Logs.Error($"Error loading non-blocking components: {exc.Message}", true);
+                    }
+                }, DispatcherPriority.Background);
+            }, DispatcherPriority.Background);
+        }
+        catch (Exception exc)
+        {
+            SkEditorAPI.Logs.Error(
+                $"Something went wrong while loading the window: {exc.Message} + {exc.InnerException} {exc.StackTrace}",
+                true);
+
+            _isFullyLoaded = true;
+            IsVisible = true;
+            _splashScreen?.Close();
+        }
+    }
+
+    public bool IsFullyLoaded()
+    {
+        return _isFullyLoaded;
     }
 }

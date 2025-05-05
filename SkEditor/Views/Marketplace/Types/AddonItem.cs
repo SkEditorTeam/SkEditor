@@ -1,43 +1,44 @@
-﻿using FluentAvalonia.UI.Controls;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views.Settings;
-using System;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
 
 namespace SkEditor.Views.Marketplace.Types;
 
 public class AddonItem : MarketplaceItem
 {
+    [JsonIgnore] private const string FolderName = "Addons";
     [JsonProperty("requiresRestart")] public bool ItemRequiresRestart { get; set; }
     [JsonProperty("file")] public string ItemFileUrl { get; set; }
 
-    [JsonIgnore] private const string FolderName = "Addons";
-
-    public override async void Install()
+    public override async Task Install()
     {
-        var fileName = ItemFileUrl.Split('/').Last();
-        var addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
+        string fileName = ItemFileUrl.Split('/').Last();
+        string addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
 
         Directory.CreateDirectory(Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier));
-        var filePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier, addonIdentifier + ".dll");
+        string filePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier,
+            addonIdentifier + ".dll");
 
         try
         {
             using HttpClient client = new();
-            var response = await client.GetAsync(ItemFileUrl);
-            await using var stream = await response.Content.ReadAsStreamAsync();
-            await using var fileStream = File.Create(filePath);
+            HttpResponseMessage response = await client.GetAsync(ItemFileUrl);
+            await using Stream stream = await response.Content.ReadAsStreamAsync();
+            await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
             fileStream.Close();
             stream.Close();
 
-            var message = Translation.Get("MarketplaceInstallSuccess", ItemName);
+            string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
 
             if (ItemRequiresRestart)
             {
@@ -49,34 +50,38 @@ public class AddonItem : MarketplaceItem
             }
 
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
-                new SymbolIconSource() { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
+                new SymbolIconSource { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
 
-            RunAddon(addonIdentifier);
+            await RunAddon(addonIdentifier);
         }
         catch (Exception e)
         {
             Log.Error(e, "Failed to install addon!");
-            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"), Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"),
+                Translation.Get("MarketplaceInstallFailed", ItemName));
         }
 
         Marketplace.RefreshCurrentSelection();
     }
 
-    private async void RunAddon(string addonIdentifier)
+    private async Task RunAddon(string addonIdentifier)
     {
         if (ItemRequiresRestart)
+        {
             return;
-        var folder = Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier);
+        }
+
+        string folder = Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier);
 
         await AddonLoader.LoadAddonFromFile(folder);
     }
 
-    public override void Uninstall()
+    public override Task Uninstall()
     {
         throw new NotImplementedException();
     }
 
-    public void Manage()
+    public static void Manage()
     {
         SkEditorAPI.Windows.ShowWindow(new SettingsWindow());
         SettingsWindow.NavigateToPage(typeof(AddonsPage));
@@ -84,8 +89,8 @@ public class AddonItem : MarketplaceItem
 
     public override bool IsInstalled()
     {
-        var fileName = ItemFileUrl.Split('/').Last();
-        var addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
+        string fileName = ItemFileUrl.Split('/').Last();
+        string addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
 
         return SkEditorAPI.Addons.GetAddon(addonIdentifier) != null;
     }

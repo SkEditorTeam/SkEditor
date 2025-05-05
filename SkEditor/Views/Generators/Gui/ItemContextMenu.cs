@@ -1,20 +1,22 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Views.Generators.Gui;
+
 internal class ItemContextMenu
 {
-    private static Item? _copiedItem = null;
+    private static Item? _copiedItem;
     public static Item? EditedItem { get; set; }
 
     public static MenuFlyout Get(int slot)
     {
-        MenuItem editItem = CreateMenuItem("MenuHeaderEdit", Symbol.Edit, async () => await EditItem(slot));
+        MenuItem editItem = CreateMenuItem("MenuHeaderEdit", Symbol.Edit, () => EditItem(slot));
 
         MenuItem copyItem = CreateMenuItem("MenuHeaderCopy", Symbol.Copy, () => CopyItem(slot));
 
@@ -22,27 +24,33 @@ internal class ItemContextMenu
 
         MenuItem deleteItem = CreateMenuItem("MenuHeaderDelete", Symbol.Delete, () => DeleteItem(slot));
 
-        return new MenuFlyout()
+        return new MenuFlyout
         {
             Items = { editItem, copyItem, pasteItem, deleteItem }
         };
     }
 
-    private static MenuItem CreateMenuItem(string headerKey, Symbol symbol, Action action)
+    private static MenuItem CreateMenuItem(string headerKey, Symbol symbol, Func<Task> asyncAction)
     {
-        return new MenuItem()
+        return new MenuItem
         {
             Header = Translation.Get(headerKey),
-            Icon = new SymbolIcon() { Symbol = symbol, FontSize = 20 },
-            Command = new RelayCommand(() => action.Invoke())
+            Icon = new SymbolIcon { Symbol = symbol, FontSize = 20 },
+            Command = new AsyncRelayCommand(asyncAction)
         };
     }
 
     private static async Task EditItem(int slot)
     {
-        EditedItem = (slot == -1) ? GuiGenerator.Instance.BackgroundItem : GuiGenerator.Instance.Items.TryGetValue(slot, out Item? value) ? value : null;
+        EditedItem = slot == -1
+            ? GuiGenerator.Instance.BackgroundItem
+            : GuiGenerator.Instance.Items.GetValueOrDefault(slot);
         Item item = await GuiGenerator.Instance.SelectItem();
-        if (item == null) return;
+        if (item == null)
+        {
+            return;
+        }
+
         if (slot == -1)
         {
             GuiGenerator.Instance.BackgroundItem = item;
@@ -53,17 +61,26 @@ internal class ItemContextMenu
             GuiGenerator.Instance.Items[slot] = item;
             GuiGenerator.Instance.UpdateItem(slot, item);
         }
+
         EditedItem = null;
     }
 
-    private static void CopyItem(int slot)
+    private static Task CopyItem(int slot)
     {
-        _copiedItem = (slot == -1) ? GuiGenerator.Instance.BackgroundItem : GuiGenerator.Instance.Items.TryGetValue(slot, out Item? value) ? value : null;
+        _copiedItem = slot == -1
+            ? GuiGenerator.Instance.BackgroundItem
+            : GuiGenerator.Instance.Items.GetValueOrDefault(slot);
+
+        return Task.CompletedTask;
     }
 
-    private static void PasteItem(int slot)
+    private static Task PasteItem(int slot)
     {
-        if (_copiedItem == null) return;
+        if (_copiedItem == null)
+        {
+            return Task.CompletedTask;
+        }
+
         if (slot == -1)
         {
             GuiGenerator.Instance.BackgroundItem = _copiedItem;
@@ -74,9 +91,11 @@ internal class ItemContextMenu
             GuiGenerator.Instance.Items[slot] = _copiedItem;
             GuiGenerator.Instance.UpdateItem(slot, _copiedItem);
         }
+
+        return Task.CompletedTask;
     }
 
-    private static void DeleteItem(int slot)
+    private static Task DeleteItem(int slot)
     {
         if (slot == -1)
         {
@@ -87,7 +106,12 @@ internal class ItemContextMenu
         {
             GuiGenerator.Instance.Items.Remove(slot);
             Button? button = GuiGenerator.Instance.Buttons.FirstOrDefault(x => (int?)x.Tag == slot);
-            if (button != null) button.Content = "";
+            if (button != null)
+            {
+                button.Content = "";
+            }
         }
+
+        return Task.CompletedTask;
     }
 }

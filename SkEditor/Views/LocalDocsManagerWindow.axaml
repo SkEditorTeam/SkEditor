@@ -9,39 +9,37 @@
         Title="{DynamicResource LocalDocsManagerWindowTitle}"
         CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
     <Grid RowDefinitions="Auto,*" Margin="10">
-        
+
         <controls:InfoBar
             Grid.Row="0"
             Message="{DynamicResource LocalDocsManagerWindowInfo}"
             Severity="Informational"
             IsOpen="True"
-            IsClosable="False"
-            />
-        
+            IsClosable="False" />
+
         <Grid Grid.Row="1"
               Margin="5,10"
               RowDefinitions="Auto,*" ColumnDefinitions="Auto,*,Auto">
-            
-            <TextBlock VerticalAlignment="Center" Grid.Row="0" Margin="0,0,5,0" Grid.Column="0" Text="{DynamicResource LocalDocsManagerWindowGroupBy}"/>
+
+            <TextBlock VerticalAlignment="Center" Grid.Row="0" Margin="0,0,5,0" Grid.Column="0"
+                       Text="{DynamicResource LocalDocsManagerWindowGroupBy}" />
             <ComboBox Grid.Row="0" Grid.Column="1" Width="150" Name="GroupByComboBox" SelectedIndex="0">
-                <ComboBoxItem Tag="0" Content="{DynamicResource LocalDocsManagerWindowGroupByProvider}"/>
-                <ComboBoxItem Tag="1" Content="{DynamicResource LocalDocsManagerWindowGroupByType}"/>
-                <ComboBoxItem Tag="2" Content="{DynamicResource LocalDocsManagerWindowGroupByAddon}"/>
+                <ComboBoxItem Tag="0" Content="{DynamicResource LocalDocsManagerWindowGroupByProvider}" />
+                <ComboBoxItem Tag="1" Content="{DynamicResource LocalDocsManagerWindowGroupByType}" />
+                <ComboBoxItem Tag="2" Content="{DynamicResource LocalDocsManagerWindowGroupByAddon}" />
             </ComboBox>
-            
+
             <Button Width="200" Grid.Row="0" Grid.Column="2" Name="DeleteEverythingButton">
                 <StackPanel Spacing="5" Orientation="Horizontal">
-                    <TextBlock Text="{DynamicResource LocalDocsManagerWindowDeleteEverything}"/>
+                    <TextBlock Text="{DynamicResource LocalDocsManagerWindowDeleteEverything}" />
                 </StackPanel>
             </Button>
-            
+
             <ScrollViewer Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
-                <StackPanel Orientation="Vertical" Spacing="5" Name="CategoriesPanel">
-                    
-                </StackPanel>
+                <StackPanel Orientation="Vertical" Spacing="5" Name="CategoriesPanel" />
             </ScrollViewer>
-            
+
         </Grid>
-        
+
     </Grid>
 </Window>

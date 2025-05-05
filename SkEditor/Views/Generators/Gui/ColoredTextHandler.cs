@@ -1,15 +1,16 @@
-﻿using Avalonia;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
-using System.Collections.Generic;
 
 namespace SkEditor.Views.Generators.Gui;
 
 /// <summary>
-/// Class to handle colored text in the GUI.
+///     Class to handle colored text in the GUI.
 /// </summary>
 public static class ColoredTextHandler
 {
@@ -38,37 +39,28 @@ public static class ColoredTextHandler
         { "r", Color.FromRgb(255, 255, 255) }
     };
 
-    private struct FormattedText
-    {
-        public string Text { get; set; }
-        public Color Color { get; set; }
-        public FontWeight FontWeight { get; set; }
-        public FontStyle FontStyle { get; set; }
-        public List<TextDecoration> TextDecorations { get; set; }
-    }
+    private static FontFamily _cachedFont = null!;
 
     public static void SetupBox(TextBox textBox)
     {
-        var flyout = new Flyout { Placement = PlacementMode.BottomEdgeAlignedLeft };
+        Flyout flyout = new() { Placement = PlacementMode.BottomEdgeAlignedLeft };
         FlyoutBase.SetAttachedFlyout(textBox, flyout);
 
-        textBox.TextChanged += (source, args) =>
+        textBox.TextChanged += (_, _) =>
         {
-            var text = textBox.Text;
+            string? text = textBox.Text;
             List<FormattedText> formattedTexts = ParseFormattedText(text);
-            var panel = new StackPanel() { Orientation = Orientation.Horizontal };
-            foreach (var formattedText in formattedTexts)
+            StackPanel panel = new() { Orientation = Orientation.Horizontal };
+            foreach (TextBlock block in formattedTexts.Select(formattedText => new TextBlock
+                     {
+                         Text = formattedText.Text,
+                         Foreground = new SolidColorBrush(formattedText.Color),
+                         FontWeight = formattedText.FontWeight,
+                         FontStyle = formattedText.FontStyle,
+                         TextDecorations = new TextDecorationCollection(formattedText.TextDecorations),
+                         FontFamily = GetMinecraftFont()
+                     }))
             {
-                var block = new TextBlock
-                {
-                    Text = formattedText.Text,
-                    Foreground = new SolidColorBrush(formattedText.Color),
-                    FontWeight = formattedText.FontWeight,
-                    FontStyle = formattedText.FontStyle,
-                    TextDecorations = new TextDecorationCollection(formattedText.TextDecorations),
-                    FontFamily = GetMinecraftFont()
-                };
-
                 panel.Children.Add(block);
             }
 
@@ -79,14 +71,14 @@ public static class ColoredTextHandler
 
     private static List<FormattedText> ParseFormattedText(string text)
     {
-        List<FormattedText> formattedTexts = new();
+        List<FormattedText> formattedTexts = [];
         FormattedText currentFormattedText = new()
         {
             Text = "",
             Color = (Color)TextFormats["5"],
             FontWeight = FontWeight.Normal,
             FontStyle = FontStyle.Italic,
-            TextDecorations = new List<TextDecoration>()
+            TextDecorations = []
         };
 
         for (int i = 0; i < text.Length; i++)
@@ -96,13 +88,11 @@ public static class ColoredTextHandler
                 char code = text[i + 1];
                 if (TextFormats.ContainsKey(code.ToString()))
                 {
-                    // If the current formatted text has any text, add it to the list
                     if (currentFormattedText.Text.Length > 0)
                     {
                         formattedTexts.Add(currentFormattedText);
                     }
 
-                    // Start a new formatted text with the new format
                     currentFormattedText = currentFormattedText with
                     {
                         Text = "",
@@ -113,7 +103,6 @@ public static class ColoredTextHandler
                     {
                         case Color color:
                             currentFormattedText.Color = color;
-                            // Reset style and weight when a color code is encountered
                             currentFormattedText.FontWeight = FontWeight.Normal;
                             currentFormattedText.FontStyle = FontStyle.Normal;
                             currentFormattedText.TextDecorations.Clear();
@@ -129,7 +118,6 @@ public static class ColoredTextHandler
                             break;
                     }
 
-                    // Reset all styles to default when '&r' code is encountered
                     if (code == 'r')
                     {
                         currentFormattedText.Color = (Color)TextFormats["f"];
@@ -138,23 +126,19 @@ public static class ColoredTextHandler
                         currentFormattedText.TextDecorations.Clear();
                     }
 
-                    // Skip the next character as it is the format code
                     i++;
                 }
                 else
                 {
-                    // If the code is not recognized, treat it as normal text
                     currentFormattedText.Text += text[i];
                 }
             }
             else
             {
-                // If the character is not a format code, add it to the current text
                 currentFormattedText.Text += text[i];
             }
         }
 
-        // Add the last formatted text to the list
         if (currentFormattedText.Text.Length > 0)
         {
             formattedTexts.Add(currentFormattedText);
@@ -163,16 +147,24 @@ public static class ColoredTextHandler
         return formattedTexts;
     }
 
-    private static FontFamily _cachedFont = null!;
-
     private static FontFamily GetMinecraftFont()
     {
         if (_cachedFont != null!)
+        {
             return _cachedFont;
+        }
 
-        Application.Current.TryGetResource("MinecraftFont", ThemeVariant.Default, out var font);
+        Application.Current.TryGetResource("MinecraftFont", ThemeVariant.Default, out object? font);
         _cachedFont = (FontFamily)font;
         return _cachedFont;
     }
 
+    private struct FormattedText
+    {
+        public string Text { get; set; }
+        public Color Color { get; set; }
+        public FontWeight FontWeight { get; set; }
+        public FontStyle FontStyle { get; set; }
+        public List<TextDecoration> TextDecorations { get; init; }
+    }
 }

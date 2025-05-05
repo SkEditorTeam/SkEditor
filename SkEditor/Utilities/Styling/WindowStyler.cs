@@ -2,6 +2,7 @@
 using FluentAvalonia.UI.Windowing;
 
 namespace SkEditor.Utilities.Styling;
+
 public class WindowStyler
 {
     public static void Style(AppWindow window)

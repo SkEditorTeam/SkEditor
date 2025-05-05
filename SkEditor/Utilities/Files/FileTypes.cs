@@ -1,19 +1,18 @@
-﻿using Avalonia.Media.Imaging;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using Avalonia.Media.Imaging;
 using AvaloniaEdit;
 using SkEditor.API;
 using SkEditor.Views.FileTypes;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace SkEditor.Utilities.Files;
 
 /// <summary>
-/// Class handling opening of non-editor files (images, audio, etc.)
+///     Class handling opening of non-editor files (images, audio, etc.)
 /// </summary>
 public static class FileTypes
 {
-
     public static readonly Dictionary<string, List<FileAssociation>> RegisteredFileTypes = new();
 
     public static void RegisterDefaultAssociations()
@@ -26,7 +25,8 @@ public static class FileTypes
         association.IsFromAddon = true;
         if (association.Addon == null)
         {
-            SkEditorAPI.Windows.ShowError($"Unable to register file association for {association.GetType().Name}:\n\nAddon is null");
+            SkEditorAPI.Windows.ShowError(
+                $"Unable to register file association for {association.GetType().Name}:\n\nAddon is null");
             return;
         }
 
@@ -35,37 +35,16 @@ public static class FileTypes
 
     private static void RegisterAssociation(FileAssociation association)
     {
-        foreach (var extension in association.SupportedExtensions)
+        foreach (string extension in association.SupportedExtensions)
         {
             if (!RegisteredFileTypes.ContainsKey(extension))
+            {
                 RegisteredFileTypes.Add(extension, new List<FileAssociation>());
+            }
 
             RegisteredFileTypes[extension].Add(association);
         }
     }
-
-    #region Classes
-
-    public class FileType(object display, string path, bool needsBottomBar = false)
-    {
-        public object Display { get; set; } = display;
-        public string Path { get; set; } = path;
-        public bool NeedsBottomBar { get; set; } = needsBottomBar;
-        public bool IsEditor => Display is TextEditor;
-    }
-
-    public abstract class FileAssociation
-    {
-
-        public List<string> SupportedExtensions { get; set; }
-        public bool IsFromAddon { get; set; } = false;
-
-        public IAddon? Addon { get; set; } = null;
-
-        public abstract FileType? Handle(string path);
-    }
-
-    #endregion
 
     #region Default File Associations
 
@@ -80,8 +59,8 @@ public static class FileTypes
         {
             try
             {
-                var fileStream = File.OpenRead(Uri.UnescapeDataString(path));
-                var bitmap = new Bitmap(fileStream);
+                FileStream fileStream = File.OpenRead(Uri.UnescapeDataString(path));
+                Bitmap bitmap = new(fileStream);
                 fileStream.Close();
 
                 return new FileType(new ImageViewer(bitmap, path), path);
@@ -92,6 +71,28 @@ public static class FileTypes
                 return null;
             }
         }
+    }
+
+    #endregion
+
+    #region Classes
+
+    public class FileType(object display, string path, bool needsBottomBar = false)
+    {
+        public object Display { get; set; } = display;
+        public string Path { get; set; } = path;
+        public bool NeedsBottomBar { get; set; } = needsBottomBar;
+        public bool IsEditor => Display is TextEditor;
+    }
+
+    public abstract class FileAssociation
+    {
+        public List<string> SupportedExtensions { get; protected set; }
+        public bool IsFromAddon { get; set; }
+
+        public IAddon? Addon { get; set; } = null;
+
+        public abstract FileType? Handle(string path);
     }
 
     #endregion

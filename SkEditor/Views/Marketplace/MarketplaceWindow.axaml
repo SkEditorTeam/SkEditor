@@ -2,26 +2,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:ui="using:FluentAvalonia.UI.Controls"
-		xmlns:controls="using:SkEditor.Controls"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        xmlns:controls="using:SkEditor.Controls"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.MarketplaceWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleMarketplace}" Height="600" Width="1000" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+        Title="{DynamicResource WindowTitleMarketplace}" Height="600" Width="1000" CanResize="False"
+        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
-	<Grid RowDefinitions="auto,*" Margin="15">
-		<!--<TextBox Grid.Row="0" Name="SearchBox" Width="250" Watermark="{DynamicResource MarketplaceSearch}" HorizontalAlignment="Left"/>-->
+    <Grid RowDefinitions="auto,*" Margin="15">
+        <!--<TextBox Grid.Row="0" Name="SearchBox" Width="250" Watermark="{DynamicResource MarketplaceSearch}" HorizontalAlignment="Left"/>-->
 
-		<ui:InfoBar Grid.Row="0" IsOpen="True" IsClosable="False" Severity="Informational" Message="{DynamicResource MarketplaceInfo}" />
+        <ui:InfoBar Grid.Row="0" IsOpen="True" IsClosable="False" Severity="Informational"
+                    Message="{DynamicResource MarketplaceInfo}" />
 
-		<Grid Grid.Row="1" ColumnDefinitions="*,auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,15,0,0">
-			<Border Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderBrush="#25ffffff" BorderThickness="1" CornerRadius="5">
-				<ListBox Name="ItemListBox" VerticalAlignment="Stretch">
-				</ListBox>
-			</Border>
+        <Grid Grid.Row="1" ColumnDefinitions="*,auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+              Margin="0,15,0,0">
+            <Border Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderBrush="#25ffffff"
+                    BorderThickness="1" CornerRadius="5">
+                <ListBox Name="ItemListBox" VerticalAlignment="Stretch" />
+            </Border>
 
-			<Grid Grid.Column="1" Width="500" VerticalAlignment="Top" Margin="15,0,0,0">
-				<controls:MarketplaceItemView Name="ItemView" IsVisible="False"/>
-			</Grid>
-		</Grid>
-	</Grid>
+            <Grid Grid.Column="1" Width="500" VerticalAlignment="Top" Margin="15,0,0,0">
+                <controls:MarketplaceItemView Name="ItemView" IsVisible="False" />
+            </Grid>
+        </Grid>
+    </Grid>
 </Window>

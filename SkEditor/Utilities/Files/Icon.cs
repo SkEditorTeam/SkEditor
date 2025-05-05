@@ -1,19 +1,24 @@
-﻿using Avalonia;
-using FluentAvalonia.UI.Controls;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using Avalonia;
+using Avalonia.Styling;
+using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Utilities.Files;
+
 public class Icon
 {
     public static Dictionary<string, string> IconDictionary = new()
     {
-        { ".sk", "SkriptIcon" },
+        { ".sk", "SkriptIcon" }
     };
 
     public static void SetIcon(OpenedFile openedFile)
     {
-        if (openedFile.Path is null) return;
+        if (openedFile.Path is null)
+        {
+            return;
+        }
 
         IconSource iconSource = null;
 
@@ -22,7 +27,7 @@ public class Icon
 
         if (iconName is not null)
         {
-            Application.Current.TryGetResource(iconName, Avalonia.Styling.ThemeVariant.Default, out object icon);
+            Application.Current.TryGetResource(iconName, ThemeVariant.Default, out object icon);
             iconSource = icon as PathIconSource;
         }
 
@@ -35,7 +40,7 @@ public class Icon
 
         if (iconName is not null)
         {
-            Application.Current.TryGetResource(iconName, Avalonia.Styling.ThemeVariant.Default, out object icon);
+            Application.Current.TryGetResource(iconName, ThemeVariant.Default, out object icon);
             return icon as PathIconSource;
         }
 

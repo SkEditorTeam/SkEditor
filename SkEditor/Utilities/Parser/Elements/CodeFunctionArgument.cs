@@ -1,26 +1,21 @@
-﻿using SkEditor.API;
-using SkEditor.Views;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using SkEditor.API;
+using SkEditor.Views;
 
 namespace SkEditor.Utilities.Parser;
 
 /// <summary>
-/// Represent a function argument in a function declaration.
+///     Represent a function argument in a function declaration.
 /// </summary>
 public class CodeFunctionArgument : INameableCodeElement
 {
     public static readonly string FunctionArgumentPattern = "([a-zA-Z0-9_]+):( )?([a-zA-Z0-9_]+)";
 
-    public string Name { get; }
-    public string Type { get; }
-    public CodeSection Function { get; }
-    public int Line { get; set; }
-    public int Column { get; set; }
-    public int Length { get; set; }
-
     public CodeFunctionArgument(CodeSection function, string raw, int line = -1, int column = -1)
     {
-        var match = Regex.Match(raw, FunctionArgumentPattern);
+        Match match = Regex.Match(raw, FunctionArgumentPattern);
         Name = match.Groups[1].Value;
         Type = match.Groups[3].Value;
 
@@ -30,29 +25,37 @@ public class CodeFunctionArgument : INameableCodeElement
         Length = raw.Length;
     }
 
-    public async void Rename()
-    {
-        var renameWindow = new SymbolRefactorWindow(this);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
-        Function.Parser.Parse();
-    }
+    public string Type { get; }
+    public CodeSection Function { get; }
+    public int Line { get; set; }
+    public int Column { get; set; }
+    public int Length { get; set; }
+
+    public string Name { get; }
 
     public void Rename(string newName)
     {
         // First, rename the function argument in the function declaration
-        var functionDeclaration = Function.Lines[0];
-        var newFunctionDeclaration = functionDeclaration.Replace(Name, newName);
+        string functionDeclaration = Function.Lines[0];
+        string newFunctionDeclaration = functionDeclaration.Replace(Name, newName);
         Function.Lines[0] = newFunctionDeclaration;
 
         // Then replace all local variable with the new name
-        foreach (CodeVariable variable in Function.Variables)
+        foreach (CodeVariable variable in
+                 Function.Variables.Where(variable => variable.IsLocal && variable.Name == Name))
         {
-            if (variable.IsLocal && variable.Name == Name)
-                variable.Rename(newName, true);
+            variable.Rename(newName, true);
         }
 
         Function.RefreshCode();
         Function.Parse();
+    }
+
+    public async Task Rename()
+    {
+        SymbolRefactorWindow renameWindow = new(this);
+        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        Function.Parser.Parse();
     }
 
     public bool IsDefinitionOf(CodeVariable variable)

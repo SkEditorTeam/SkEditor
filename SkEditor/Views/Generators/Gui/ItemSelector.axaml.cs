@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -9,17 +15,12 @@ using Newtonsoft.Json;
 using SkEditor.Data;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Views.Generators.Gui;
+
 public partial class ItemSelector : AppWindow
 {
-    private ItemBindings _itemBindings = new();
+    private readonly ItemBindings _itemBindings = new();
 
     public ItemSelector()
     {
@@ -40,6 +41,7 @@ public partial class ItemSelector : AppWindow
                 Close();
                 return;
             }
+
             Item item = _itemBindings.Items.First(x => x.Name.Equals(comboBoxItem.Tag.ToString()));
             Close(item);
         });
@@ -49,12 +51,9 @@ public partial class ItemSelector : AppWindow
 
         Dispatcher.UIThread.InvokeAsync(CheckForFile);
 
-        Loaded += (sender, e) =>
-        {
-            SearchBox.Focus();
-        };
+        Loaded += (_, _) => { SearchBox.Focus(); };
 
-        KeyDown += (sender, e) =>
+        KeyDown += (_, e) =>
         {
             switch (e.Key)
             {
@@ -70,27 +69,34 @@ public partial class ItemSelector : AppWindow
                 case Key.Down:
                     ItemListBox.SelectedIndex++;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         };
     }
 
     private void CheckForEditing()
     {
-        if (ItemContextMenu.EditedItem == null) return;
+        if (ItemContextMenu.EditedItem == null)
+        {
+            return;
+        }
 
         SearchBox.Text = ItemContextMenu.EditedItem.DisplayName;
     }
 
     private void OnSearchChanged(object sender, TextChangedEventArgs e)
     {
-        var searchText = SearchBox.Text;
-        var filteredItems = _itemBindings.Items
+        string? searchText = SearchBox.Text;
+        List<Item> filteredItems = _itemBindings.Items
             .Where(x => x.DisplayName.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        if (filteredItems.Any(item => item.DisplayName.ToString().Equals(searchText, StringComparison.OrdinalIgnoreCase)))
+        if (filteredItems.Any(item =>
+                item.DisplayName.ToString().Equals(searchText, StringComparison.OrdinalIgnoreCase)))
         {
-            var item = filteredItems.First(item => item.DisplayName.ToString().Equals(searchText, StringComparison.OrdinalIgnoreCase));
+            Item item = filteredItems.First(item =>
+                item.DisplayName.ToString().Equals(searchText, StringComparison.OrdinalIgnoreCase));
             filteredItems.Remove(item);
             filteredItems.Insert(0, item);
         }
@@ -102,11 +108,14 @@ public partial class ItemSelector : AppWindow
         ItemListBox.SelectedIndex = 0;
     }
 
-    private async void CheckForFile()
+    private async Task CheckForFile()
     {
         string itemsFile = Path.Combine(AppConfig.AppDataFolderPath, "items.json");
 
-        if (!File.Exists(itemsFile)) return;
+        if (!File.Exists(itemsFile))
+        {
+            return;
+        }
 
         List<Item> items = JsonConvert.DeserializeObject<List<Item>>(await File.ReadAllTextAsync(itemsFile));
 
@@ -131,44 +140,40 @@ public partial class ItemSelector : AppWindow
                     {
                         Source = item.Icon,
                         Width = 24,
-                        Height = 24,
+                        Height = 24
                     },
                     new TextBlock
                     {
                         Text = item.DisplayName,
-                        VerticalAlignment = VerticalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center
                     }
                 }
             },
-            Tag = item.Name,
+            Tag = item.Name
         };
-
     }
 }
 
 public class Item
 {
-    [JsonProperty("name")]
-    public required string Name { get; set; }
+    [JsonIgnore] private Bitmap _image = null!;
 
-    [JsonProperty("displayName")]
-    public required string DisplayName { get; set; }
+    [JsonProperty("name")] public required string Name { get; set; }
 
-    [JsonIgnore]
-    public bool HaveCustomName { get; set; }
-    [JsonIgnore]
-    public string CustomName { get; set; }
-    [JsonIgnore]
-    public List<string> Lore { get; set; }
-    [JsonIgnore]
-    public bool HaveCustomModelData { get; set; }
-    [JsonIgnore]
-    public int CustomModelData { get; set; }
-    [JsonIgnore]
-    public bool HaveExampleAction { get; set; }
+    [JsonProperty("displayName")] public required string DisplayName { get; set; }
 
-    [JsonIgnore]
-    private Bitmap _image = null!;
+    [JsonIgnore] public bool HaveCustomName { get; set; }
+
+    [JsonIgnore] public string CustomName { get; set; }
+
+    [JsonIgnore] public List<string> Lore { get; set; }
+
+    [JsonIgnore] public bool HaveCustomModelData { get; set; }
+
+    [JsonIgnore] public int CustomModelData { get; set; }
+
+    [JsonIgnore] public bool HaveExampleAction { get; set; }
+
     [JsonIgnore]
     public Bitmap Icon
     {
@@ -176,11 +181,12 @@ public class Item
         {
             if (_image == null!)
             {
-                string itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, Name + ".png");
+                string itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, Name + ".png");
                 if (!File.Exists(itemImagePath))
                 {
-                    itemImagePath = Path.Combine(GuiGenerator.Instance._itemPath, "barrier.png");
+                    itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, "barrier.png");
                 }
+
                 _image = new Bitmap(itemImagePath);
             }
 

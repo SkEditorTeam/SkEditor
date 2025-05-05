@@ -1,37 +1,39 @@
-﻿using AvaloniaEdit.Utils;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Views;
 using SkEditor.Views.Projects;
-using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
 public abstract class StorageElement
 {
     public ObservableCollection<StorageElement>? Children { get; set; }
-    public Folder? Parent { get; set; }
+    protected Folder? Parent { get; set; }
 
     public string Name { get; set; } = "";
-    public bool IsExpanded { get; set; } = false;
+    public bool IsExpanded { get; set; }
 
     public bool IsFile { get; set; }
     public bool IsRootFolder { get; set; }
 
-    public IconSource Icon { get; set; } = new SymbolIconSource() { Symbol = Symbol.Document, FontSize = 18 };
+    public IconSource Icon { get; set; } = new SymbolIconSource { Symbol = Symbol.Document, FontSize = 18 };
 
-    public RelayCommand OpenInExplorerCommand { get; set; }
-    public RelayCommand RenameCommand => new(OpenRenameWindow);
-    public RelayCommand DeleteCommand { get; set; }
-    public RelayCommand DoubleClickCommand => new(HandleDoubleClick);
-    public RelayCommand SingleClickCommand => new(HandleSingleClick);
-    public RelayCommand CopyPathCommand { get; set; }
-    public RelayCommand CopyAbsolutePathCommand { get; set; }
-    public RelayCommand CreateNewFileCommand { get; set; }
-    public RelayCommand CreateNewFolderCommand { get; set; }
-    public RelayCommand CloseProjectCommand { get; set; }
+    public IRelayCommand OpenInExplorerCommand { get; set; }
+    public IRelayCommand RenameCommand => new AsyncRelayCommand(OpenRenameWindow);
+    public IRelayCommand DeleteCommand { get; set; }
+    public IRelayCommand DoubleClickCommand => new RelayCommand(HandleDoubleClick);
+    public IRelayCommand SingleClickCommand => new RelayCommand(HandleSingleClick);
+    public IRelayCommand CopyPathCommand { get; set; }
+    public IRelayCommand CopyAbsolutePathCommand { get; set; }
+    public IRelayCommand CreateNewFileCommand { get; set; }
+    public IRelayCommand CreateNewFolderCommand { get; set; }
+    public IRelayCommand CloseProjectCommand { get; set; }
 
     public abstract string? ValidateName(string input);
 
@@ -42,31 +44,39 @@ public abstract class StorageElement
     public void HandleDoubleClick()
     {
         if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+        {
             HandleClick();
+        }
     }
+
     public void HandleSingleClick()
     {
         if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+        {
             HandleClick();
+        }
     }
 
-    public async void OpenRenameWindow()
+    public async Task OpenRenameWindow()
     {
-        var window = new RenameElementWindow(this);
+        RenameElementWindow window = new(this);
         await window.ShowDialog(MainWindow.Instance);
     }
 
-    public void RefreshSelf()
+    protected void RefreshSelf()
     {
         Parent.Children[Parent.Children.IndexOf(this)] = this;
         Sort(Parent);
     }
 
-    public static void Sort(StorageElement element)
+    protected static void Sort(StorageElement element)
     {
-        if (element.Children == null) return;
+        if (element.Children == null)
+        {
+            return;
+        }
 
-        var temp = element.Children.ToList();
+        List<StorageElement> temp = element.Children.ToList();
         element.Children.Clear();
         element.Children.AddRange(temp.OrderBy(x => x.IsFile).ThenBy(x => x.Name));
     }

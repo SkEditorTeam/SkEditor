@@ -1,11 +1,14 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using SkEditor.Controls;
 using SkEditor.Utilities.Styling;
 
-namespace SkEditor.Views.Settings;
+namespace SkEditor.Views.Settings.Personalization;
+
 public partial class EditThemePage : UserControl
 {
     public EditThemePage()
@@ -41,16 +44,22 @@ public partial class EditThemePage : UserControl
 
     private static void SetUpColorPicker(ColorPickerSettingsExpander expander, string propertyName)
     {
-        var colorPicker = expander.ColorPicker;
-        colorPicker.Color = (ThemeEditor.CurrentTheme.GetType().GetProperty(propertyName)?.GetValue(ThemeEditor.CurrentTheme) as ImmutableSolidColorBrush)?.Color;
-        colorPicker.ColorChanged += (s, e) => ChangeColor(propertyName, e.NewColor);
+        ColorPickerButton? colorPicker = expander.ColorPicker;
+        colorPicker.Color =
+            (ThemeEditor.CurrentTheme.GetType().GetProperty(propertyName)?.GetValue(ThemeEditor.CurrentTheme) as
+                ImmutableSolidColorBrush)?.Color;
+        colorPicker.ColorChanged += async (_, e) => await ChangeColor(propertyName, e.NewColor);
     }
 
-    private static async void ChangeColor(string name, Color? color)
+    private static async Task ChangeColor(string name, Color? color)
     {
-        if (color is null) return;
+        if (color is null)
+        {
+            return;
+        }
 
-        ThemeEditor.CurrentTheme.GetType().GetProperty(name)?.SetValue(ThemeEditor.CurrentTheme, new ImmutableSolidColorBrush(color.Value));
+        ThemeEditor.CurrentTheme.GetType().GetProperty(name)
+            ?.SetValue(ThemeEditor.CurrentTheme, new ImmutableSolidColorBrush(color.Value));
         await ThemeEditor.ApplyTheme();
     }
 }

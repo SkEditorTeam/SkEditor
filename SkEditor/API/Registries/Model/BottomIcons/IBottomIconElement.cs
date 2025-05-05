@@ -3,9 +3,9 @@
 namespace SkEditor.API;
 
 /// <summary>
-/// Represent an element of the bottom bar of SkEditor's window.
-/// Can either be a single icon (see <see cref="BottomIconData"/>), or a group of icons
-/// (see <see cref="BottomIconGroupData"/>).
+///     Represent an element of the bottom bar of SkEditor's window.
+///     Can either be a single icon (see <see cref="BottomIconData" />), or a group of icons
+///     (see <see cref="BottomIconGroupData" />).
 /// </summary>
 public interface IBottomIconElement
 {

@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Text;
 using Avalonia.Controls;
 using Avalonia.Input;
 using AvaloniaEdit;
@@ -6,10 +8,9 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities;
-using System.Linq;
-using System.Text;
 
 namespace SkEditor.Views.Generators;
+
 public partial class CommandGenerator : AppWindow
 {
     public CommandGenerator()
@@ -20,9 +21,12 @@ public partial class CommandGenerator : AppWindow
         GenerateButton.Command = new RelayCommand(Generate);
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
-        Loaded += (_, e) => NameTextBox.Focus();
+        Loaded += (_, _) => NameTextBox.Focus();
     }
 
     private void Generate()
@@ -55,7 +59,8 @@ public partial class CommandGenerator : AppWindow
                 ? ((ComboBoxItem)ExecutorComboBox.SelectedItem).Tag.ToString()
                 : string.Empty);
 
-        AppendIfExists(ref code, "\n\tcooldown: {0} {1}", CooldownQuantityTextBox.Text, ((ComboBoxItem)CooldownUnitComboBox.SelectedItem).Tag.ToString());
+        AppendIfExists(ref code, "\n\tcooldown: {0} {1}", CooldownQuantityTextBox.Text,
+            ((ComboBoxItem)CooldownUnitComboBox.SelectedItem).Tag.ToString());
 
         code.Append("\n\ttrigger:\n\t\t");
 
@@ -65,11 +70,16 @@ public partial class CommandGenerator : AppWindow
 
     private static void AppendIfExists(ref StringBuilder code, string template, params string[] values)
     {
-        if (values.Any(string.IsNullOrWhiteSpace)) return;
+        if (values.Any(string.IsNullOrWhiteSpace))
+        {
+            return;
+        }
+
         for (int i = 0; i < values.Length; i++)
         {
             template = template.Replace($"{{{i}}}", values[i]);
         }
+
         code.Append(template);
     }
 }

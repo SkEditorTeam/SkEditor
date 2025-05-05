@@ -2,17 +2,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:ui="using:FluentAvalonia.UI.Controls"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.RefactorWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleRefactor}" Height="400" Width="350" CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+        Title="{DynamicResource WindowTitleRefactor}" Height="400" Width="350" CanResize="False"
+        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
-	<Grid RowDefinitions="auto,*" Margin="20">
-		<StackPanel Spacing="0">
-			<CheckBox Name="RemoveCommentsCheckBox" Content="{DynamicResource RefactorWindowRemoveComments}"/>
-			<RadioButton Name="TabsToSpacesCheckBox" Content="{DynamicResource RefactorWindowTabsToSpaces}"/>
-			<RadioButton Name="SpacesToTabsCheckBox" Content="{DynamicResource RefactorWindowSpacesToTabs}"/>
-		</StackPanel>
-		<Button Name="ApplyButton" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Content="{DynamicResource ApplyButton}"/>
-	</Grid>
+    <Grid RowDefinitions="auto,*" Margin="20">
+        <StackPanel Spacing="0">
+            <CheckBox Name="RemoveCommentsCheckBox" Content="{DynamicResource RefactorWindowRemoveComments}" />
+            <RadioButton Name="TabsToSpacesCheckBox" Content="{DynamicResource RefactorWindowTabsToSpaces}" />
+            <RadioButton Name="SpacesToTabsCheckBox" Content="{DynamicResource RefactorWindowSpacesToTabs}" />
+        </StackPanel>
+        <Button Name="ApplyButton" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Content="{DynamicResource ApplyButton}" />
+    </Grid>
 </Window>

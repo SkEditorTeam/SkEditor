@@ -2,13 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ui="using:FluentAvalonia.UI.Controls"
                     xmlns:sys="clr-namespace:System;assembly=netstandard"
-					xmlns:wnd="using:FluentAvalonia.UI.Windowing"
                     x:CompileBindings="True">
 
     <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
-        <Setter Property="Background" Value="{DynamicResource MenuBarItemBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource MenuBarItemBorderBrush}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource MenuBarItemBorderThickness}"/>
+        <Setter Property="Background" Value="{DynamicResource MenuBarItemBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource MenuBarItemBorderBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource MenuBarItemBorderThickness}" />
         <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
         <Setter Property="Padding" Value="{DynamicResource MenuFlyoutItemThemePaddingNarrow}" />
@@ -32,14 +31,14 @@
                                 <ColumnDefinition Width="Auto"
                                                   SharedSizeGroup="MenuItemChevron" />
                             </Grid.ColumnDefinitions>
-                            
+
                             <Viewbox Name="PART_IconPresenter"
                                      Margin="{DynamicResource MenuIconPresenterMargin}"
                                      StretchDirection="DownOnly"
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
                                      IsVisible="False">
-                                <ContentPresenter Content="{TemplateBinding Icon}"/>
+                                <ContentPresenter Content="{TemplateBinding Icon}" />
                             </Viewbox>
 
                             <ContentPresenter Name="PART_HeaderPresenter"
@@ -65,10 +64,10 @@
                                            Symbol="ChevronRight"
                                            Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
                                            VerticalAlignment="Center"
-										   HorizontalAlignment="Right"
+                                           HorizontalAlignment="Right"
                                            Grid.Column="2"
                                            FontSize="18"
-                                           Foreground="{DynamicResource MenuFlyoutSubItemChevron}"/>
+                                           Foreground="{DynamicResource MenuFlyoutSubItemChevron}" />
                         </Grid>
                     </Border>
                     <Popup Name="PART_Popup"
@@ -78,12 +77,12 @@
                            IsLightDismissEnabled="False"
                            IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}">
                         <Border Background="{DynamicResource MenuFlyoutPresenterBackground}"
-                                     BorderBrush="{DynamicResource MenuFlyoutPresenterBorderBrush}"
-                                     BorderThickness="{DynamicResource MenuFlyoutPresenterBorderThemeThickness}"
-                                     MaxWidth="{DynamicResource FlyoutThemeMaxWidth}"
-                                     MinHeight="{DynamicResource MenuFlyoutThemeMinHeight}"
-                                     HorizontalAlignment="Stretch"
-                                     CornerRadius="{DynamicResource OverlayCornerRadius}">
+                                BorderBrush="{DynamicResource MenuFlyoutPresenterBorderBrush}"
+                                BorderThickness="{DynamicResource MenuFlyoutPresenterBorderThemeThickness}"
+                                MaxWidth="{DynamicResource FlyoutThemeMaxWidth}"
+                                MinHeight="{DynamicResource MenuFlyoutThemeMinHeight}"
+                                HorizontalAlignment="Stretch"
+                                CornerRadius="{DynamicResource OverlayCornerRadius}">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto"
                                           VerticalScrollBarVisibility="Auto">
                                 <ItemsPresenter Name="PART_ItemsPresenter"
@@ -101,13 +100,13 @@
             <Setter Property="IsVisible" Value="True" />
         </Style>
 
-		<Style Selector="^ /template/ Border#PART_LayoutRoot">
-			<Setter Property="Transitions">
-				<Transitions>
-					<BrushTransition Duration="00:00:00.1" Property="Background" />
-				</Transitions>
-			</Setter>
-		</Style>
+        <Style Selector="^ /template/ Border#PART_LayoutRoot">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Duration="00:00:00.1" Property="Background" />
+                </Transitions>
+            </Setter>
+        </Style>
 
         <Style Selector="^:selected">
             <Style Selector="^ /template/ Border#PART_LayoutRoot">
@@ -117,7 +116,8 @@
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemForegroundPointerOver}" />
             </Style>
             <Style Selector="^ /template/ TextBlock#PART_InputGestureText">
-                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundPointerOver}" />
+                <Setter Property="Foreground"
+                        Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundPointerOver}" />
             </Style>
             <Style Selector="^ /template/ ui|SymbolIcon#PART_ChevronPath">
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronPointerOver}" />
@@ -131,7 +131,8 @@
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemForegroundPressed}" />
             </Style>
             <Style Selector="^ TextBlock#PART_InputGestureText">
-                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundPressed}" />
+                <Setter Property="Foreground"
+                        Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundPressed}" />
             </Style>
             <Style Selector="^ ui|SymbolIcon#PART_ChevronPath">
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronPressed}" />
@@ -147,13 +148,14 @@
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemForegroundDisabled}" />
             </Style>
             <Style Selector="^ /template/ TextBlock#PART_InputGestureText">
-                <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundDisabled}" />
+                <Setter Property="Foreground"
+                        Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundDisabled}" />
             </Style>
             <Style Selector="^ /template/ ui|SymbolIcon#PART_ChevronPath">
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronDisabled}" />
             </Style>
         </Style>
-        
+
         <Style Selector="^:open /template/ ui|SymbolIcon#PART_ChevronPath">
             <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronSubMenuOpened}" />
         </Style>
@@ -165,7 +167,7 @@
         <Style Selector="^:separator">
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Separator/>
+                    <Separator />
                 </ControlTemplate>
             </Setter>
         </Style>

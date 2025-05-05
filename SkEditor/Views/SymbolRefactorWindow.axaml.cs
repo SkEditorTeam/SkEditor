@@ -9,7 +9,6 @@ namespace SkEditor.Views;
 
 public partial class SymbolRefactorWindow : AppWindow
 {
-    public INameableCodeElement Element { get; }
     public SymbolRefactorWindow(INameableCodeElement element)
     {
         InitializeComponent();
@@ -23,9 +22,14 @@ public partial class SymbolRefactorWindow : AppWindow
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
+
+    public INameableCodeElement Element { get; }
 
     private void Refactor()
     {

@@ -1,13 +1,18 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
-using System.Collections.Generic;
 
 namespace SkEditor.ViewModels;
 
 public partial class FileTypeSelectionViewModel : ObservableObject
 {
+    [ObservableProperty] private List<FileTypeData> _fileTypes;
+
+    [ObservableProperty] private bool _isFileTypeSelected;
+    [ObservableProperty] private bool _rememberSelection;
 
     private FileTypeData? _selectedFileType;
+
     public FileTypeData? SelectedFileType
     {
         get => _selectedFileType;
@@ -17,10 +22,4 @@ public partial class FileTypeSelectionViewModel : ObservableObject
             IsFileTypeSelected = value != null;
         }
     }
-
-    [ObservableProperty] private List<FileTypeData> _fileTypes;
-
-    [ObservableProperty] private bool _isFileTypeSelected;
-    [ObservableProperty] private bool _rememberSelection;
-
 }

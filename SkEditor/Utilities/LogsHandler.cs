@@ -1,8 +1,8 @@
-﻿using Serilog.Core;
+﻿using System;
+using Serilog.Core;
 using Serilog.Events;
 using SkEditor.API;
 using SkEditor.Views;
-using System;
 
 namespace SkEditor.Utilities;
 
@@ -12,7 +12,7 @@ public class LogsHandler : ILogEventSink
     {
         LogsWindow.Logs.Add(logEvent);
 
-        var color = GetColor(logEvent.Level);
+        string color = GetColor(logEvent.Level);
         if (logEvent.Level == LogEventLevel.Fatal)
         {
             Console.WriteLine(color + logEvent.Level + " | " + logEvent.RenderMessage());
@@ -24,7 +24,9 @@ public class LogsHandler : ILogEventSink
         }
 
         if (logEvent.Level == LogEventLevel.Debug && SkEditorAPI.Core.IsDeveloperMode())
+        {
             SkEditorAPI.Windows.GetMainWindow()?.BottomBar.UpdateLogs(logEvent.RenderMessage());
+        }
     }
 
     private static string GetColor(LogEventLevel level)

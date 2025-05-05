@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -15,12 +16,13 @@ using SkEditor.Views;
 using SkEditor.Views.Generators;
 using SkEditor.Views.Generators.Gui;
 using SkEditor.Views.Settings;
-using System;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Controls;
+
 public partial class MainMenuControl : UserControl
 {
-
     public MainMenuControl()
     {
         InitializeComponent();
@@ -32,28 +34,33 @@ public partial class MainMenuControl : UserControl
 
     private void ConfigureMenu()
     {
-        void setVisibility() => MenuItemDevTools.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
+        SetVisibility();
+        SkEditorAPI.Core.GetAppConfig().PropertyChanged += (_, _) => SetVisibility();
+        return;
 
-        setVisibility();
-        SkEditorAPI.Core.GetAppConfig().PropertyChanged += (_, _) => setVisibility();
+        void SetVisibility()
+        {
+            MenuItemDevTools.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
+        }
     }
 
     private void AssignCommands()
     {
         MenuItemNew.Command = new RelayCommand(FileHandler.NewFile);
-        MenuItemOpen.Command = new RelayCommand(FileHandler.OpenFile);
-        MenuItemOpenFolder.Command = new RelayCommand(() => ProjectOpener.OpenProject());
+        MenuItemOpen.Command = new AsyncRelayCommand(FileHandler.OpenFile);
+        MenuItemOpenFolder.Command = new AsyncRelayCommand(async () => await ProjectOpener.OpenProject());
         MenuItemSave.Command = new RelayCommand(FileHandler.SaveFile);
         MenuItemSaveAs.Command = new RelayCommand(FileHandler.SaveAsFile);
         MenuItemSaveAll.Command = new RelayCommand(FileHandler.SaveAllFiles);
-        MenuItemPublish.Command = new RelayCommand(() => new PublishWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemPublish.Command =
+            new RelayCommand(() => new PublishWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
-        MenuItemClose.Command = new RelayCommand(FileCloser.CloseCurrentFile);
-        MenuItemCloseAll.Command = new RelayCommand(FileCloser.CloseAllFiles);
-        MenuItemCloseAllExceptCurrent.Command = new RelayCommand(FileCloser.CloseAllExceptCurrent);
-        MenuItemCloseAllUnsaved.Command = new RelayCommand(FileCloser.CloseUnsaved);
-        MenuItemCloseAllLeft.Command = new RelayCommand(FileCloser.CloseAllToTheLeft);
-        MenuItemCloseAllRight.Command = new RelayCommand(FileCloser.CloseAllToTheRight);
+        MenuItemClose.Command = new AsyncRelayCommand(FileCloser.CloseCurrentFile);
+        MenuItemCloseAll.Command = new AsyncRelayCommand(FileCloser.CloseAllFiles);
+        MenuItemCloseAllExceptCurrent.Command = new AsyncRelayCommand(FileCloser.CloseAllExceptCurrent);
+        MenuItemCloseAllUnsaved.Command = new AsyncRelayCommand(FileCloser.CloseUnsaved);
+        MenuItemCloseAllLeft.Command = new AsyncRelayCommand(FileCloser.CloseAllToTheLeft);
+        MenuItemCloseAllRight.Command = new AsyncRelayCommand(FileCloser.CloseAllToTheRight);
 
         MenuItemCopy.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.Copy());
         MenuItemPaste.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.Paste());
@@ -62,57 +69,74 @@ public partial class MainMenuControl : UserControl
         MenuItemRedo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.Redo());
         MenuItemDelete.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.Delete());
         MenuItemGoToLine.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new GoToLineWindow()));
-        MenuItemTrimWhitespaces.Command = new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.TextArea));
+        MenuItemTrimWhitespaces.Command = new RelayCommand(() =>
+            CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor
+                ?.TextArea));
 
-        MenuItemDuplicate.Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.TextArea));
-        MenuItemComment.Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.TextArea));
+        MenuItemDuplicate.Command = new RelayCommand(() =>
+            CustomCommandsHandler.OnDuplicateCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor
+                ?.TextArea));
+        MenuItemComment.Command = new RelayCommand(() =>
+            CustomCommandsHandler.OnCommentCommandExecuted(SkEditorAPI.Files.GetCurrentOpenedFile().Editor?.TextArea));
 
-        MenuItemRefreshSyntax.Command = new RelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
-        MenuItemRefreshTheme.Command = new RelayCommand(async () => await ThemeEditor.ReloadCurrentTheme());
+        MenuItemRefreshSyntax.Command = new AsyncRelayCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
+        MenuItemRefreshTheme.Command = new AsyncRelayCommand(async () => await ThemeEditor.ReloadCurrentTheme());
 
         MenuItemDocs.Command = new RelayCommand(AddDocsTab);
         MenuItemGenerateGui.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new GuiGenerator(), false));
-        MenuItemGenerateCommand.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new CommandGenerator(), false));
+        MenuItemGenerateCommand.Command =
+            new RelayCommand(() => ShowDialogIfEditorIsOpen(new CommandGenerator(), false));
         MenuItemRefactor.Command = new RelayCommand(() => ShowDialogIfEditorIsOpen(new RefactorWindow(), false));
-        MenuItemColorSelector.Command = new RelayCommand(() => new ColorSelectionWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemColorSelector.Command =
+            new RelayCommand(() => new ColorSelectionWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
-        MenuItemMarketplace.Command = new RelayCommand(() => new MarketplaceWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemMarketplace.Command =
+            new RelayCommand(() => new MarketplaceWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
 
-        MenuItemSettings.Command = new RelayCommand(() => new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        MenuItemSettings.Command =
+            new RelayCommand(() => new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
     }
 
     private static void ShowDialogIfEditorIsOpen(AppWindow window, bool openAsDialog = true)
     {
-        if (!SkEditorAPI.Files.GetCurrentOpenedFile().IsEditor) return;
+        if (!SkEditorAPI.Files.GetCurrentOpenedFile().IsEditor)
+        {
+            return;
+        }
 
         if (openAsDialog)
+        {
             window.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        }
         else
+        {
             window.Show(SkEditorAPI.Windows.GetMainWindow());
+        }
     }
 
     private void AddMissingHotkeys()
     {
         Loaded += (_, _) =>
         {
-            SkEditorAPI.Windows.GetMainWindow().KeyDown += (sender, e) =>
+            SkEditorAPI.Windows.GetMainWindow().KeyDown += (_, e) =>
             {
-                if (e.PhysicalKey == PhysicalKey.S
-                    && e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Alt)
-                    && string.IsNullOrEmpty(e.KeySymbol))
+                if (e is not { PhysicalKey: PhysicalKey.S, KeyModifiers: (KeyModifiers.Control | KeyModifiers.Alt) }
+                    || !string.IsNullOrEmpty(e.KeySymbol))
                 {
-                    MenuItemSaveAll.Command.Execute(null);
-                    e.Handled = true;
+                    return;
                 }
+
+                MenuItemSaveAll.Command.Execute(null);
+                e.Handled = true;
             };
         };
     }
 
     public static void AddDocsTab()
     {
-        FluentIcons.Avalonia.Fluent.SymbolIconSource icon = new()
+        SymbolIconSource icon = new()
         {
-            Symbol = FluentIcons.Common.Symbol.Book,
+            Symbol = Symbol.Book
         };
         SkEditorAPI.Files.AddCustomTab("Documentation", new DocumentationControl(), icon: icon);
     }
@@ -123,15 +147,17 @@ public partial class MainMenuControl : UserControl
         AddonsMenuItem.Items.Clear();
         foreach (IAddon addon in SkEditorAPI.Addons.GetAddons(IAddons.AddonState.Enabled))
         {
-            var items = addon.GetMenuItems();
+            List<MenuItem> items = addon.GetMenuItems();
             if (items.Count <= 0)
+            {
                 continue;
+            }
 
             hasAnyMenu = true;
-            var menuItem = new MenuItem()
+            MenuItem menuItem = new()
             {
                 Header = addon.Name,
-                Icon = new IconSourceElement()
+                Icon = new IconSourceElement
                 {
                     IconSource = addon.GetAddonIcon(),
                     Width = 20,
@@ -141,7 +167,7 @@ public partial class MainMenuControl : UserControl
 
             if (addon.GetSettings().Count > 0)
             {
-                menuItem.Items.Add(new MenuItem()
+                menuItem.Items.Add(new MenuItem
                 {
                     Header = Translation.Get("WindowTitleSettings"),
                     Command = new RelayCommand(() =>
@@ -150,9 +176,10 @@ public partial class MainMenuControl : UserControl
                         SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
                         CustomAddonSettingsPage.Load(addon);
                     }),
-                    Icon = new IconSourceElement()
+                    Icon = new IconSourceElement
                     {
-                        IconSource = new SymbolIconSource() { Symbol = Symbol.Setting, FontSize = 20 },
+                        IconSource = new FluentAvalonia.UI.Controls.SymbolIconSource
+                            { Symbol = FluentAvalonia.UI.Controls.Symbol.Setting, FontSize = 20 },
                         Width = 20,
                         Height = 20
                     }
@@ -161,13 +188,15 @@ public partial class MainMenuControl : UserControl
             }
 
             foreach (MenuItem sub in items)
+            {
                 menuItem.Items.Add(sub);
+            }
 
             AddonsMenuItem.Items.Add(menuItem);
         }
 
         AddonsMenuItem.Items.Add(new Separator());
-        AddonsMenuItem.Items.Add(new MenuItem()
+        AddonsMenuItem.Items.Add(new MenuItem
         {
             Header = Translation.Get("MenuHeaderManageAddons"),
             Command = new RelayCommand(() =>
@@ -175,11 +204,11 @@ public partial class MainMenuControl : UserControl
                 new SettingsWindow().ShowDialog(MainWindow.Instance);
                 SettingsWindow.NavigateToPage(typeof(AddonsPage));
             }),
-            Icon = new IconSourceElement()
+            Icon = new IconSourceElement
             {
-                IconSource = new SymbolIconSource()
+                IconSource = new FluentAvalonia.UI.Controls.SymbolIconSource
                 {
-                    Symbol = Symbol.Manage,
+                    Symbol = FluentAvalonia.UI.Controls.Symbol.Manage,
                     FontSize = 20
                 },
                 Width = 20,

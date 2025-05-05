@@ -26,7 +26,10 @@ public partial class FileTypeSelectionWindow : AppWindow
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
 }

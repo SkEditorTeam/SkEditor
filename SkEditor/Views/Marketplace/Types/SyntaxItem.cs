@@ -1,26 +1,25 @@
-﻿using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
-using Serilog;
-using SkEditor.API;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAvalonia.UI.Controls;
+using Newtonsoft.Json;
+using Serilog;
+using SkEditor.API;
+using SkEditor.Utilities;
+using SkEditor.Utilities.Syntax;
 
 namespace SkEditor.Views.Marketplace.Types;
+
 public class SyntaxItem : MarketplaceItem
 {
-    [JsonProperty("syntaxFolders")]
-    public string[] ItemSyntaxFolders { get; set; }
+    [JsonIgnore] public const string FolderName = "Syntax Highlighting";
 
-    [JsonIgnore]
-    public const string FolderName = "Syntax Highlighting";
+    [JsonProperty("syntaxFolders")] public string[] ItemSyntaxFolders { get; set; }
 
-    public async override void Install()
+    public override async Task Install()
     {
         string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
 
@@ -28,15 +27,19 @@ public class SyntaxItem : MarketplaceItem
         bool allInstalled = true;
         foreach (string folder in ItemSyntaxFolders)
         {
-            var folderName = folder.Split('/').Last();
+            string folderName = folder.Split('/').Last();
             string localSyntaxPath = Path.Combine(baseLocalSyntaxPath,
                 folderName);
             Directory.CreateDirectory(localSyntaxPath);
-            allInstalled = allInstalled && await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
-            allInstalled = allInstalled && await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
+            allInstalled = allInstalled &&
+                           await Install(folder + "/config.json", Path.Combine(localSyntaxPath, "config.json"));
+            allInstalled = allInstalled &&
+                           await Install(folder + "/syntax.xshd", Path.Combine(localSyntaxPath, "syntax.xshd"));
 
             if (!allInstalled)
+            {
                 break;
+            }
 
             try
             {
@@ -63,9 +66,9 @@ public class SyntaxItem : MarketplaceItem
 
         if (result == ContentDialogResult.Primary)
         {
-            foreach (var syntax in installedSyntaxes)
+            foreach (FileSyntax syntax in installedSyntaxes)
             {
-                SyntaxLoader.SelectSyntax(syntax);
+                await SyntaxLoader.SelectSyntax(syntax);
             }
 
             SyntaxLoader.RefreshAllOpenedEditors();
@@ -81,10 +84,9 @@ public class SyntaxItem : MarketplaceItem
         HttpResponseMessage response = await client.GetAsync(url);
         try
         {
-            using Stream stream = await response.Content.ReadAsStreamAsync();
-            using FileStream fileStream = File.Create(filePath);
+            await using Stream stream = await response.Content.ReadAsStreamAsync();
+            await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
-            await stream.DisposeAsync();
         }
         catch (Exception e)
         {
@@ -96,40 +98,35 @@ public class SyntaxItem : MarketplaceItem
         return true;
     }
 
-    public override async void Uninstall()
+    public override async Task Uninstall()
     {
         List<string> folders = ItemSyntaxFolders.ToList();
-        var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
-        foreach (string folder in folders)
+        string syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        foreach (string localSyntaxPath in folders
+                     .Select(folder => folder.Split('/').Last())
+                     .Select(folderName => Path.Combine(syntaxFolder,
+                         folderName)))
         {
-            var folderName = folder.Split('/').Last();
-            string localSyntaxPath = Path.Combine(syntaxFolder,
-                folderName);
-
             await SyntaxLoader.UnloadSyntax(localSyntaxPath);
             Directory.Delete(localSyntaxPath, true);
         }
+
         SyntaxLoader.CheckConfiguredFileSyntaxes();
         SyntaxLoader.RefreshAllOpenedEditors();
 
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await SkEditorAPI.Windows.ShowDialog("Success", Translation.Get("MarketplaceUninstallSuccess", ItemName), primaryButtonText: "Okay");
+        await SkEditorAPI.Windows.ShowDialog("Success", Translation.Get("MarketplaceUninstallSuccess", ItemName),
+            primaryButtonText: "Okay");
     }
 
     public override bool IsInstalled()
     {
-        var syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
-        foreach (string folder in ItemSyntaxFolders)
-        {
-            var folderName = folder.Split('/').Last();
-            string localSyntaxPath = Path.Combine(syntaxFolder,
-                folderName);
-            if (!Directory.Exists(localSyntaxPath))
-                return false;
-        }
-
-        return true;
+        string syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        return ItemSyntaxFolders
+            .Select(folder => folder.Split('/').Last())
+            .Select(folderName => Path.Combine(syntaxFolder, folderName))
+            .All(Directory.Exists);
     }
 }

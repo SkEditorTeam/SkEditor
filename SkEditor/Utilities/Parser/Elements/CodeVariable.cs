@@ -1,25 +1,16 @@
-﻿using Avalonia.Media;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Avalonia.Media;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
 using SkEditor.Views;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace SkEditor.Utilities.Parser;
 
 public partial class CodeVariable : ObservableObject, INameableCodeElement
 {
-    public CodeSection Section { get; private set; }
-
-    public string Name { get; private set; }
-
-    public bool IsLocal { get; private set; }
-
-    public int Line { get; set; }
-    public int Column { get; set; }
-    public int Length { get; set; }
-
     public CodeVariable(CodeSection section, string raw,
         int line = -1, int column = -1)
     {
@@ -41,22 +32,56 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
         Length = argument.Length;
     }
 
-    public override string ToString() => $"{{{(IsLocal ? "_" : "")}{Name}}}";
+    public CodeSection Section { get; }
 
-    public bool IsSimilar(CodeVariable other) => Name == other.Name && IsLocal == other.IsLocal;
+    public bool IsLocal { get; }
 
-    public bool ContainsCaret(Caret caret) => caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
+    public int Line { get; set; }
+    public int Column { get; set; }
+    public int Length { get; set; }
 
     public FontStyle Style => IsLocal ? FontStyle.Italic : FontStyle.Normal;
 
-    public void Rename(string newName) => Rename(newName, false);
+    public string Name { get; }
 
-    public void Rename(string newName, bool callingFromFunction = false)
+    public void Rename(string newName)
     {
-        if (newName.StartsWith('{') && newName.EndsWith('}')) newName = newName[1..^1];
-        if (newName.StartsWith('_')) newName = newName[1..];
+        Rename(newName, false);
+    }
 
-        var definition = Section.GetVariableDefinition(this);
+    public string GetNameDisplay()
+    {
+        return $"{{{(IsLocal ? "_" : "")}{Name}}}";
+    }
+
+    public override string ToString()
+    {
+        return $"{{{(IsLocal ? "_" : "")}{Name}}}";
+    }
+
+    public bool IsSimilar(CodeVariable other)
+    {
+        return Name == other.Name && IsLocal == other.IsLocal;
+    }
+
+    public bool ContainsCaret(Caret caret)
+    {
+        return caret.Line == Line && caret.Column - 1 >= Column && caret.Column - 1 <= Column + Length;
+    }
+
+    public void Rename(string newName, bool callingFromFunction)
+    {
+        if (newName.StartsWith('{') && newName.EndsWith('}'))
+        {
+            newName = newName[1..^1];
+        }
+
+        if (newName.StartsWith('_'))
+        {
+            newName = newName[1..];
+        }
+
+        CodeFunctionArgument? definition = Section.GetVariableDefinition(this);
         if (definition != null && !callingFromFunction)
         {
             definition.Rename(newName);
@@ -65,25 +90,27 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
 
         if (IsLocal) // rename all within the section
         {
-            var current = Section.Lines;
-            var newLines = new List<string>();
-            foreach (var line in current)
+            List<string> current = Section.Lines;
+            List<string> newLines = new();
+            foreach (string line in current)
             {
                 bool lineAdded = false;
-                var matches = VariableRegex().Matches(line);
-                foreach (var m in matches)
+                MatchCollection matches = VariableRegex().Matches(line);
+                foreach (object? m in matches)
                 {
-                    var variable = new CodeVariable(Section, m.ToString(), Line, Column);
+                    CodeVariable variable = new(Section, m.ToString(), Line, Column);
                     if (variable.IsSimilar(this))
                     {
-                        var newLine = line.Replace(variable.ToString(), $"{{_{newName}}}");
+                        string newLine = line.Replace(variable.ToString(), $"{{_{newName}}}");
                         newLines.Add(newLine);
                         lineAdded = true;
                     }
                 }
 
                 if (!lineAdded)
+                {
                     newLines.Add(line);
+                }
             }
 
             Section.Lines = newLines;
@@ -92,27 +119,29 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
         }
         else // rename all within the file
         {
-            foreach (var section in Section.Parser.Sections)
+            foreach (CodeSection section in Section.Parser.Sections)
             {
-                var current = section.Lines;
-                var newLines = new List<string>();
-                foreach (var line in current)
+                List<string> current = section.Lines;
+                List<string> newLines = new();
+                foreach (string line in current)
                 {
                     bool lineAdded = false;
-                    var matches = VariableRegex().Matches(line);
-                    foreach (var m in matches)
+                    MatchCollection matches = VariableRegex().Matches(line);
+                    foreach (object? m in matches)
                     {
-                        var variable = new CodeVariable(Section, m.ToString(), Line, Column);
+                        CodeVariable variable = new(Section, m.ToString(), Line, Column);
                         if (variable.IsSimilar(this))
                         {
-                            var newLine = line.Replace(variable.ToString(), $"{{{newName}}}");
+                            string newLine = line.Replace(variable.ToString(), $"{{{newName}}}");
                             newLines.Add(newLine);
                             lineAdded = true;
                         }
                     }
 
                     if (!lineAdded)
+                    {
                         newLines.Add(line);
+                    }
                 }
 
                 section.Lines = newLines;
@@ -122,16 +151,11 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
         }
     }
 
-    public async void Rename()
+    public async Task Rename()
     {
-        var renameWindow = new SymbolRefactorWindow(this);
+        SymbolRefactorWindow renameWindow = new(this);
         await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
         Section.Parser.Parse();
-    }
-
-    public string GetNameDisplay()
-    {
-        return $"{{{(IsLocal ? "_" : "")}{Name}}}";
     }
 
     [GeneratedRegex(@"(?<=\{)_?(.*?)(?=\})")]

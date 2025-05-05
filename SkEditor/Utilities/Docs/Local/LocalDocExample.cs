@@ -5,7 +5,9 @@ namespace SkEditor.Utilities.Docs.Local;
 [Serializable]
 public class LocalDocExample : IDocumentationExample
 {
-    public LocalDocExample() { }
+    public LocalDocExample()
+    {
+    }
 
     public LocalDocExample(IDocumentationExample other)
     {

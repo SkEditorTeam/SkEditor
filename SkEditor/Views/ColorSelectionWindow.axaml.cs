@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 
 namespace SkEditor.Views;
+
 public partial class ColorSelectionWindow : AppWindow
 {
     public ColorSelectionWindow()
@@ -18,7 +19,10 @@ public partial class ColorSelectionWindow : AppWindow
     {
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
 
         ColorPicker.ColorChanged += (_, e) =>
@@ -29,14 +33,20 @@ public partial class ColorSelectionWindow : AppWindow
 
         ResultTextBox.KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Enter && ResultTextBox.Text.Length == 7)
+            if (e.Key != Key.Enter || ResultTextBox.Text.Length != 7)
             {
-                bool isValid = Color.TryParse(ResultTextBox.Text, out Color color);
-                if (!isValid) return;
-                ColorPicker.Color = color;
+                return;
             }
+
+            bool isValid = Color.TryParse(ResultTextBox.Text, out Color color);
+            if (!isValid)
+            {
+                return;
+            }
+
+            ColorPicker.Color = color;
         };
 
-        CopyButton.Command = new RelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
+        CopyButton.Command = new AsyncRelayCommand(() => Clipboard.SetTextAsync(ResultTextBox.Text));
     }
 }

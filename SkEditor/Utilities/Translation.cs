@@ -1,19 +1,24 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using SkEditor.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
+using SkEditor.API;
 
 namespace SkEditor.Utilities;
+
 public static class Translation
 {
+    private static readonly Dictionary<string, ResourceDictionary> Translations = [];
     public static string LanguagesFolder { get; } = $"{AppContext.BaseDirectory}/Languages";
 
     public static string Get(string key, params string[] parameters)
     {
-        Application.Current.TryGetResource(key, Avalonia.Styling.ThemeVariant.Default, out object translation);
+        Application.Current.TryGetResource(key, ThemeVariant.Default, out object translation);
         string translationString = translation?.ToString() ?? key;
         translationString = translationString.Replace("\\n", Environment.NewLine);
 
@@ -25,23 +30,14 @@ public static class Translation
         return translationString;
     }
 
-    public async static void LoadDefaultLanguage()
+    public static async Task ChangeLanguage(string language)
     {
-        Uri languageXaml = new(Path.Combine(LanguagesFolder, $"English.xaml"));
-        await using var stream = new FileStream(languageXaml.OriginalString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
-        if (AvaloniaRuntimeXamlLoader.Load(stream) is ResourceDictionary dictionary)
+#if !AOT
+        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
+                     translation.Key != "English"))
         {
-            Application.Current.Resources.MergedDictionaries.Add(dictionary);
-        }
-    }
-
-    private static HashSet<ResourceDictionary> _translations = [];
-
-    public async static void ChangeLanguage(string language)
-    {
-        foreach (ResourceDictionary translation in _translations)
-        {
-            Application.Current.Resources.MergedDictionaries.Remove(translation);
+            Application.Current.Resources.MergedDictionaries.Remove(translation.Value);
+            Translations.Remove(translation.Key);
         }
 
         Uri languageXaml = new(Path.Combine(LanguagesFolder, $"{language}.xaml"));
@@ -50,16 +46,17 @@ public static class Translation
         {
             SkEditorAPI.Core.GetAppConfig().Language = "English";
             SkEditorAPI.Core.GetAppConfig().Save();
-            LoadDefaultLanguage();
             return;
         }
 
-        await using var languageStream = new FileStream(languageXaml.OriginalString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
+        await using FileStream languageStream = new(languageXaml.OriginalString, FileMode.Open, FileAccess.Read,
+            FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
 
         if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
         {
             Application.Current.Resources.MergedDictionaries.Add(dictionary);
-            _translations.Add(dictionary);
+            Translations.Add(language, dictionary);
         }
+#endif
     }
 }

@@ -2,441 +2,445 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
-	<!-- Window Titles -->
-	<system:String x:Key="WindowTitlePublish">Opublikuj</system:String>
-	<system:String x:Key="WindowTitleRefactor">Refaktoryzacja</system:String>
-	<system:String x:Key="WindowTitleSettings">Ustawienia</system:String>
-	<system:String x:Key="WindowTitleFontSelector">Wybierz czcionkę</system:String>
-	<system:String x:Key="WindowTitleSaveFilePicker">Zapisz plik</system:String>
-	<system:String x:Key="WindowTitleOpenFilePicker">Otwórz plik</system:String>
-	<system:String x:Key="WindowTitleGuiGenerator">Wygeneruj GUI</system:String>
-	<system:String x:Key="WindowTitleCommandGenerator">Wygeneruj komendę</system:String>
-	<system:String x:Key="WindowTitleItemSelector">Wybierz przedmiot</system:String>
-	<system:String x:Key="WindowTitleMarketplace">Rynek</system:String>
-	<system:String x:Key="WindowTitleElementRename">Zmień nazwę</system:String>
-	<system:String x:Key="WindowTitleElementCreate">Stwórz</system:String>
-	<system:String x:Key="WindowTitleColorSelector">Selektor kolorów</system:String>
+    <!-- Window Titles -->
+    <system:String x:Key="WindowTitlePublish">Opublikuj</system:String>
+    <system:String x:Key="WindowTitleRefactor">Refaktoryzacja</system:String>
+    <system:String x:Key="WindowTitleSettings">Ustawienia</system:String>
+    <system:String x:Key="WindowTitleFontSelector">Wybierz czcionkę</system:String>
+    <system:String x:Key="WindowTitleSaveFilePicker">Zapisz plik</system:String>
+    <system:String x:Key="WindowTitleOpenFilePicker">Otwórz plik</system:String>
+    <system:String x:Key="WindowTitleGuiGenerator">Wygeneruj GUI</system:String>
+    <system:String x:Key="WindowTitleCommandGenerator">Wygeneruj komendę</system:String>
+    <system:String x:Key="WindowTitleItemSelector">Wybierz przedmiot</system:String>
+    <system:String x:Key="WindowTitleMarketplace">Rynek</system:String>
+    <system:String x:Key="WindowTitleElementRename">Zmień nazwę</system:String>
+    <system:String x:Key="WindowTitleElementCreate">Stwórz</system:String>
+    <system:String x:Key="WindowTitleColorSelector">Selektor kolorów</system:String>
 
-	<!-- Menu Headers -->
-	<system:String x:Key="MenuHeaderFile">Plik</system:String>
-	<system:String x:Key="MenuHeaderEdit">Edycja</system:String>
-	<system:String x:Key="MenuHeaderTools">Narzędzia</system:String>
-	<system:String x:Key="MenuHeaderOther">Inne</system:String>
-	<system:String x:Key="MenuHeaderAddons">Dodatki</system:String>
-	<system:String x:Key="MenuHeaderManageAddons">Zarządzaj dodatkami</system:String>
+    <!-- Menu Headers -->
+    <system:String x:Key="MenuHeaderFile">Plik</system:String>
+    <system:String x:Key="MenuHeaderEdit">Edycja</system:String>
+    <system:String x:Key="MenuHeaderTools">Narzędzia</system:String>
+    <system:String x:Key="MenuHeaderOther">Inne</system:String>
+    <system:String x:Key="MenuHeaderAddons">Dodatki</system:String>
+    <system:String x:Key="MenuHeaderManageAddons">Zarządzaj dodatkami</system:String>
 
-	<!-- File Menu -->
-	<system:String x:Key="MenuHeaderNew">Nowy</system:String>
-	<system:String x:Key="MenuHeaderOpen">Otwórz</system:String>
-	<system:String x:Key="MenuHeaderOpenFolder">Otwórz folder</system:String>
-	<system:String x:Key="MenuHeaderSave">Zapisz</system:String>
-	<system:String x:Key="MenuHeaderSaveAs">Zapisz jako</system:String>
-	<system:String x:Key="MenuHeaderSaveAll">Zapisz wszystko</system:String>
-	<system:String x:Key="MenuHeaderPublish">Publikuj</system:String>
-	<system:String x:Key="MenuHeaderClose">Zamknij</system:String>
-	<system:String x:Key="MenuHeaderCloseCurrentFile">Bieżący plik</system:String>
-	<system:String x:Key="MenuHeaderCloseAll">Wszystko</system:String>
-	<system:String x:Key="MenuHeaderCloseAllButCurrent">Wszystko oprócz bieżącego pliku</system:String>
-	<system:String x:Key="MenuHeaderCloseUnsaved">Wszystko niezapisane</system:String>
-	<system:String x:Key="MenuHeaderCloseLeft">Wszystko na lewo</system:String>
-	<system:String x:Key="MenuHeaderCloseRight">Wszystko na prawo</system:String>
+    <!-- File Menu -->
+    <system:String x:Key="MenuHeaderNew">Nowy</system:String>
+    <system:String x:Key="MenuHeaderOpen">Otwórz</system:String>
+    <system:String x:Key="MenuHeaderOpenFolder">Otwórz folder</system:String>
+    <system:String x:Key="MenuHeaderSave">Zapisz</system:String>
+    <system:String x:Key="MenuHeaderSaveAs">Zapisz jako</system:String>
+    <system:String x:Key="MenuHeaderSaveAll">Zapisz wszystko</system:String>
+    <system:String x:Key="MenuHeaderPublish">Publikuj</system:String>
+    <system:String x:Key="MenuHeaderClose">Zamknij</system:String>
+    <system:String x:Key="MenuHeaderCloseCurrentFile">Bieżący plik</system:String>
+    <system:String x:Key="MenuHeaderCloseAll">Wszystko</system:String>
+    <system:String x:Key="MenuHeaderCloseAllButCurrent">Wszystko oprócz bieżącego pliku</system:String>
+    <system:String x:Key="MenuHeaderCloseUnsaved">Wszystko niezapisane</system:String>
+    <system:String x:Key="MenuHeaderCloseLeft">Wszystko na lewo</system:String>
+    <system:String x:Key="MenuHeaderCloseRight">Wszystko na prawo</system:String>
 
-	<!-- Edit Menu -->
-	<system:String x:Key="MenuHeaderCopy">Kopiuj</system:String>
-	<system:String x:Key="MenuHeaderPaste">Wklej</system:String>
-	<system:String x:Key="MenuHeaderCut">Wytnij</system:String>
-	<system:String x:Key="MenuHeaderUndo">Cofnij</system:String>
-	<system:String x:Key="MenuHeaderRedo">Ponów</system:String>
-	<system:String x:Key="MenuHeaderDuplicate">Duplikuj</system:String>
-	<system:String x:Key="MenuHeaderComment">Zakomentuj</system:String>
-	<system:String x:Key="MenuHeaderDelete">Usuń</system:String>
-	<system:String x:Key="MenuHeaderGoToLine">Przejdź do linii</system:String>
-	<system:String x:Key="MenuHeaderTrimWhitespaces">Usuń białe znaki</system:String>
+    <!-- Edit Menu -->
+    <system:String x:Key="MenuHeaderCopy">Kopiuj</system:String>
+    <system:String x:Key="MenuHeaderPaste">Wklej</system:String>
+    <system:String x:Key="MenuHeaderCut">Wytnij</system:String>
+    <system:String x:Key="MenuHeaderUndo">Cofnij</system:String>
+    <system:String x:Key="MenuHeaderRedo">Ponów</system:String>
+    <system:String x:Key="MenuHeaderDuplicate">Duplikuj</system:String>
+    <system:String x:Key="MenuHeaderComment">Zakomentuj</system:String>
+    <system:String x:Key="MenuHeaderDelete">Usuń</system:String>
+    <system:String x:Key="MenuHeaderGoToLine">Przejdź do linii</system:String>
+    <system:String x:Key="MenuHeaderTrimWhitespaces">Usuń białe znaki</system:String>
 
-	<!-- Tools Menu -->
-	<system:String x:Key="MenuHeaderDocumentation">Dokumentacja</system:String>
-	<system:String x:Key="MenuHeaderGenerate">Wygeneruj</system:String>
-	<system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
-	<system:String x:Key="MenuHeaderGenerateCommand">Komenda</system:String>
-	<system:String x:Key="MenuHeaderRefactor">Refaktoryzacja</system:String>
-	<system:String x:Key="MenuHeaderColorSelector">Selektor kolorów</system:String>
+    <!-- Tools Menu -->
+    <system:String x:Key="MenuHeaderDocumentation">Dokumentacja</system:String>
+    <system:String x:Key="MenuHeaderGenerate">Wygeneruj</system:String>
+    <system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
+    <system:String x:Key="MenuHeaderGenerateCommand">Komenda</system:String>
+    <system:String x:Key="MenuHeaderRefactor">Refaktoryzacja</system:String>
+    <system:String x:Key="MenuHeaderColorSelector">Selektor kolorów</system:String>
 
-	<!-- Other Menu -->
-	<system:String x:Key="MenuHeaderMarketplace">Rynek</system:String>
-	<system:String x:Key="MenuHeaderDevTools">Narzędzia deweloperskie</system:String>
-	<system:String x:Key="MenuHeaderRefreshSyntax">Odśwież składnię</system:String>
-	<system:String x:Key="MenuHeaderRefreshTheme">Odśwież motyw</system:String>
+    <!-- Other Menu -->
+    <system:String x:Key="MenuHeaderMarketplace">Rynek</system:String>
+    <system:String x:Key="MenuHeaderDevTools">Narzędzia deweloperskie</system:String>
+    <system:String x:Key="MenuHeaderRefreshSyntax">Odśwież składnię</system:String>
+    <system:String x:Key="MenuHeaderRefreshTheme">Odśwież motyw</system:String>
 
-	<!-- Project Menu -->
-	<system:String x:Key="MenuHeaderDeleteFromDisk">Usuń z dysku</system:String>
-	<system:String x:Key="MenuHeaderOpenInExplorer">Otwórz w eksploratorze</system:String>
-	<system:String x:Key="MenuHeaderCopyPath">Skopiuj ścieżkę względną</system:String>
-	<system:String x:Key="MenuHeaderCopyAbsolutePath">Skopiuj ścieżkę bezwzględną</system:String>
-	<system:String x:Key="MenuHeaderRename">Zmień nazwę</system:String>
-	<system:String x:Key="MenuHeaderNewFile">Nowy plik</system:String>
-	<system:String x:Key="MenuHeaderNewFolder">Nowy folder</system:String>
-	<system:String x:Key="MenuHeaderCloseProject">Zamknij projekt</system:String>
+    <!-- Project Menu -->
+    <system:String x:Key="MenuHeaderDeleteFromDisk">Usuń z dysku</system:String>
+    <system:String x:Key="MenuHeaderOpenInExplorer">Otwórz w eksploratorze</system:String>
+    <system:String x:Key="MenuHeaderCopyPath">Skopiuj ścieżkę względną</system:String>
+    <system:String x:Key="MenuHeaderCopyAbsolutePath">Skopiuj ścieżkę bezwzględną</system:String>
+    <system:String x:Key="MenuHeaderRename">Zmień nazwę</system:String>
+    <system:String x:Key="MenuHeaderNewFile">Nowy plik</system:String>
+    <system:String x:Key="MenuHeaderNewFolder">Nowy folder</system:String>
+    <system:String x:Key="MenuHeaderCloseProject">Zamknij projekt</system:String>
 
-	<!-- Buttons -->
-	<system:String x:Key="ApplyButton">Zastosuj</system:String>
-	<system:String x:Key="ConfirmButton">Potwierdź</system:String>
-	<system:String x:Key="CloseButton">Zamknij</system:String>
-	<system:String x:Key="SelectButton">Wybierz</system:String>
-	<system:String x:Key="CancelButton">Anuluj</system:String>
-	<system:String x:Key="ContinueButton">Kontynuuj</system:String>
-	<system:String x:Key="Error">Błąd</system:String>
-	<system:String x:Key="Success">Sukces</system:String>
-	<system:String x:Key="Attention">Uwaga!</system:String>
-	<system:String x:Key="Yes">Tak</system:String>
-	<system:String x:Key="No">Nie</system:String>
-	<system:String x:Key="Okay">Okej</system:String>
+    <!-- Buttons -->
+    <system:String x:Key="ApplyButton">Zastosuj</system:String>
+    <system:String x:Key="ConfirmButton">Potwierdź</system:String>
+    <system:String x:Key="CloseButton">Zamknij</system:String>
+    <system:String x:Key="SelectButton">Wybierz</system:String>
+    <system:String x:Key="CancelButton">Anuluj</system:String>
+    <system:String x:Key="ContinueButton">Kontynuuj</system:String>
+    <system:String x:Key="Error">Błąd</system:String>
+    <system:String x:Key="Success">Sukces</system:String>
+    <system:String x:Key="Attention">Uwaga!</system:String>
+    <system:String x:Key="Yes">Tak</system:String>
+    <system:String x:Key="No">Nie</system:String>
+    <system:String x:Key="Okay">Okej</system:String>
 
-	<!-- Messages -->
-	<system:String x:Key="NewFileNameFormat">Nowy plik {0}</system:String>
-	<system:String x:Key="FailedToDownloadSyntax">Pobieranie pliku podświetlania składni nie powiodło się! Sprawdź połączenie z internetem. Bez pliku, twój kod nie będzie podświetlany.</system:String>
-	<system:String x:Key="DownloadingMissingFilesTitle">Brakujące pliki</system:String>
-	<system:String x:Key="Downloading">Pobieranie</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Brakuje plików używanych przez okno wyboru przedmiotu, więc są teraz pobieranie.</system:String>
-	<system:String x:Key="DownloadingMissingFiles">Pobieranie</system:String>
-	<system:String x:Key="DownloadMissingFilesFailed">Pobieranie brakujących plików nie powiodło się. Spróbuj ponownie.</system:String>
-	<system:String x:Key="ClosingUnsavedFile">Masz w tym pliku niezapisane zmiany. Jesteś pewny, że chcesz go zamknąć?</system:String>
-	<system:String x:Key="ClosingFiles">Jesteś pewny, że chcesz zamknąć te pliki? Wszelkie niezapisane zmiany zostaną utracone.</system:String>
-	<system:String x:Key="ClosingProgramWithUnsavedFiles">Masz niezapisane zmiany w przynajmniej jednym pliku. Jesteś pewny, że chcesz zamknąć aplikację?</system:String>
-	<system:String x:Key="ChangesDetected">Ten plik został zmodyfikowany poza programem.\nCzy chcesz go przeładować i ewentualnie stracić zmiany dokonane w SkEditorze?</system:String>
-	<system:String x:Key="DownloadingUpdateTitle">Pobieranie aktualizacji</system:String>
-	<system:String x:Key="UpdateAvailable">Dostępna aktualizacja</system:String>
-	<system:String x:Key="UpdateAvailableMessage">Aktualizacja jest dostępna.\nCzy chciałbyś ją teraz pobrać?</system:String>
-	<system:String x:Key="UpdateFailed">Pobieranie aktualizacji nie powiodło się. Spróbuj ponownie.</system:String>
-	<system:String x:Key="BinaryFileFound">Wygląda na to, że próbujesz otworzyć plik o nieznanym formacie.\n\nCzy na pewno chcesz go otworzyć? SkEditor może go nie obsługiwać poprawnie.</system:String>
-	<system:String x:Key="BinaryFileTitle">Nieznany format</system:String>
-	
+    <!-- Messages -->
+    <system:String x:Key="NewFileNameFormat">Nowy plik {0}</system:String>
+    <system:String x:Key="FailedToDownloadSyntax">Pobieranie pliku podświetlania składni nie powiodło się! Sprawdź połączenie z internetem. Bez pliku, twój kod nie będzie podświetlany.</system:String>
+    <system:String x:Key="DownloadingMissingFilesTitle">Brakujące pliki</system:String>
+    <system:String x:Key="Downloading">Pobieranie</system:String>
+    <system:String x:Key="DownloadingMissingFilesDescriptionItems">Brakuje plików używanych przez okno wyboru przedmiotu, więc są teraz pobieranie.</system:String>
+    <system:String x:Key="DownloadingMissingFiles">Pobieranie</system:String>
+    <system:String x:Key="DownloadMissingFilesFailed">Pobieranie brakujących plików nie powiodło się. Spróbuj ponownie.</system:String>
+    <system:String x:Key="ClosingUnsavedFile">Masz w tym pliku niezapisane zmiany. Jesteś pewny, że chcesz go zamknąć?</system:String>
+    <system:String x:Key="ClosingFiles">Jesteś pewny, że chcesz zamknąć te pliki? Wszelkie niezapisane zmiany zostaną utracone.</system:String>
+    <system:String x:Key="ClosingProgramWithUnsavedFiles">Masz niezapisane zmiany w przynajmniej jednym pliku. Jesteś pewny, że chcesz zamknąć aplikację?</system:String>
+    <system:String x:Key="ChangesDetected">Ten plik został zmodyfikowany poza programem.\nCzy chcesz go przeładować i ewentualnie stracić zmiany dokonane w SkEditorze?</system:String>
+    <system:String x:Key="DownloadingUpdateTitle">Pobieranie aktualizacji</system:String>
+    <system:String x:Key="UpdateAvailable">Dostępna aktualizacja</system:String>
+    <system:String x:Key="UpdateAvailableMessage">Aktualizacja jest dostępna.\nCzy chciałbyś ją teraz pobrać?</system:String>
+    <system:String x:Key="UpdateFailed">Pobieranie aktualizacji nie powiodło się. Spróbuj ponownie.</system:String>
+    <system:String x:Key="BinaryFileFound">Wygląda na to, że próbujesz otworzyć plik o nieznanym formacie.\n\nCzy na pewno chcesz go otworzyć? SkEditor może go nie obsługiwać poprawnie.</system:String>
+    <system:String x:Key="BinaryFileTitle">Nieznany format</system:String>
 
-	<!-- Publish Window -->
-	<system:String x:Key="PublishWindowNoApiKey">Ustaw swój klucz API w ustawieniach</system:String>
-	<system:String x:Key="PublishWindowApiKeyHint">Kliknij tutaj by przejść na stronę z kluczem API. Nie zapomnij się zalogować!</system:String>
-	<system:String x:Key="PublishWindowAnonymously">Anonimowo</system:String>
-	<system:String x:Key="PublishWindowResultLink">Link do kodu</system:String>
-	<system:String x:Key="PublishWindowPublishButton">Publikuj</system:String>
-	<system:String x:Key="PublishWindowWarning">Your API Keys can now be managed in Settings -> Connections.</system:String>
 
-	<!-- Local Docs Manager Window -->
-	<system:String x:Key="LocalDocsManagerWindowTitle">Local Documentation Manager</system:String>
-	<system:String x:Key="LocalDocsManagerWindowInfo">Fom here you can manage the documentation elements you have downloaded.</system:String>
-	<system:String x:Key="LocalDocsManagerWindowDeleteEverything">Delete Everything</system:String>
-	<system:String x:Key="LocalDocsManagerWindowGroupBy">Group by</system:String>
-	<system:String x:Key="LocalDocsManagerWindowGroupByProvider">Provider</system:String>
-	<system:String x:Key="LocalDocsManagerWindowGroupByType">Type</system:String>
-	<system:String x:Key="LocalDocsManagerWindowGroupByAddon">Addon</system:String>
-	<system:String x:Key="LocalDocsManagerWindowEntryDescription">{0} provided by {1}</system:String>
+    <!-- Publish Window -->
+    <system:String x:Key="PublishWindowNoApiKey">Ustaw swój klucz API w ustawieniach</system:String>
+    <system:String x:Key="PublishWindowApiKeyHint">Kliknij tutaj by przejść na stronę z kluczem API. Nie zapomnij się zalogować!</system:String>
+    <system:String x:Key="PublishWindowAnonymously">Anonimowo</system:String>
+    <system:String x:Key="PublishWindowResultLink">Link do kodu</system:String>
+    <system:String x:Key="PublishWindowPublishButton">Publikuj</system:String>
+    <system:String x:Key="PublishWindowWarning">Your API Keys can now be managed in Settings -> Connections.</system:String>
 
-	<!-- (Element) Documentation Control -->
-	<system:String x:Key="DocumentationControlExamples">Examples</system:String>
-	<system:String x:Key="DocumentationControlActions">Actions</system:String>
-	<system:String x:Key="DocumentationControlEventValues">Event Values</system:String>
-	<system:String x:Key="DocumentationControlChangers">Changers</system:String>
+    <!-- Local Docs Manager Window -->
+    <system:String x:Key="LocalDocsManagerWindowTitle">Local Documentation Manager</system:String>
+    <system:String x:Key="LocalDocsManagerWindowInfo">Fom here you can manage the documentation elements you have downloaded.</system:String>
+    <system:String x:Key="LocalDocsManagerWindowDeleteEverything">Delete Everything</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupBy">Group by</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByProvider">Provider</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByType">Type</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByAddon">Addon</system:String>
+    <system:String x:Key="LocalDocsManagerWindowEntryDescription">{0} provided by {1}</system:String>
 
-	<system:String x:Key="DocumentationControlActionsFilter">Filter via this element'...</system:String>
-	<system:String x:Key="DocumentationControlType">Type</system:String>
-	<system:String x:Key="DocumentationControlAddon">Addon</system:String>
+    <!-- (Element) Documentation Control -->
+    <system:String x:Key="DocumentationControlExamples">Examples</system:String>
+    <system:String x:Key="DocumentationControlActions">Actions</system:String>
+    <system:String x:Key="DocumentationControlEventValues">Event Values</system:String>
+    <system:String x:Key="DocumentationControlChangers">Changers</system:String>
 
-	<system:String x:Key="DocumentationControlChangerHelp">click on the desired changer to copy its generated code.</system:String>
-	<system:String x:Key="DocumentationControlSince">Since v{0}</system:String>
-	<system:String x:Key="DocumentationControlDownload">Download</system:String>
-	<system:String x:Key="DocumentationControlRemove">Remove</system:String>
-	<system:String x:Key="DocumentationControlExampleAuthor">By {0}</system:String>
+    <system:String x:Key="DocumentationControlActionsFilter">Filter via this element'...</system:String>
+    <system:String x:Key="DocumentationControlType">Type</system:String>
+    <system:String x:Key="DocumentationControlAddon">Addon</system:String>
 
-	<system:String x:Key="DocumentationControlNoExamples">No examples were found for this element.</system:String>
-	<system:String x:Key="DocumentationControlNoEventValues">No event values were found for this element.</system:String>
-	<system:String x:Key="DocumentationControlNoChangers">No changers were found for this element.</system:String>
-	<system:String x:Key="DocumentationControlNoDescription">No description provided.</system:String>
+    <system:String x:Key="DocumentationControlChangerHelp">click on the desired changer to copy its generated code.</system:String>
+    <system:String x:Key="DocumentationControlSince">Since v{0}</system:String>
+    <system:String x:Key="DocumentationControlDownload">Download</system:String>
+    <system:String x:Key="DocumentationControlRemove">Remove</system:String>
+    <system:String x:Key="DocumentationControlExampleAuthor">By {0}</system:String>
 
-	<system:String x:Key="DocumentationControlErrorExamples">An error occurred while loading examples: {0}</system:String>
+    <system:String x:Key="DocumentationControlNoExamples">No examples were found for this element.</system:String>
+    <system:String x:Key="DocumentationControlNoEventValues">No event values were found for this element.</system:String>
+    <system:String x:Key="DocumentationControlNoChangers">No changers were found for this element.</system:String>
+    <system:String x:Key="DocumentationControlNoDescription">No description provided.</system:String>
 
-	<!-- Documentation Window -->
-	<system:String x:Key="DocumentationWindowTitle">Dokumentacja</system:String>
-	<system:String x:Key="DocumentationWindowSearchQuery">Wyszukiwanie</system:String>
-	<system:String x:Key="DocumentationWindowSearch">Szukaj</system:String>
-	<system:String x:Key="DocumentationWindowFilteredType">Filter typu</system:String>
-	<system:String x:Key="DocumentationWindowFilteredAddon">Filter dodatku</system:String>
-	<system:String x:Key="DocumentationWindowProvider">Dostawca</system:String>
-	<system:String x:Key="DocumentationWindowManageCached">Zarządzaj zachowanymi elementami</system:String>
-	<system:String x:Key="DocumentationWindowDownloadAll">Pobierz wszystko</system:String>
-	<system:String x:Key="DocumentationWindowLoading">Ładowanie...</system:String>
+    <system:String x:Key="DocumentationControlErrorExamples">An error occurred while loading examples: {0}</system:String>
 
-	<system:String x:Key="DocumentationWindowErrorGlobal">Wystąpił błąd podczas pobierania dokumentacji.\n\n{0}</system:String>
-	<system:String x:Key="DocumentationWindowErrorOffline">Żądanie do serwera dokumentacji przekroczyło limit czasu. Może serwis jest niedostępny?</system:String>
+    <!-- Documentation Window -->
+    <system:String x:Key="DocumentationWindowTitle">Dokumentacja</system:String>
+    <system:String x:Key="DocumentationWindowSearchQuery">Wyszukiwanie</system:String>
+    <system:String x:Key="DocumentationWindowSearch">Szukaj</system:String>
+    <system:String x:Key="DocumentationWindowFilteredType">Filter typu</system:String>
+    <system:String x:Key="DocumentationWindowFilteredAddon">Filter dodatku</system:String>
+    <system:String x:Key="DocumentationWindowProvider">Dostawca</system:String>
+    <system:String x:Key="DocumentationWindowManageCached">Zarządzaj zachowanymi elementami</system:String>
+    <system:String x:Key="DocumentationWindowDownloadAll">Pobierz wszystko</system:String>
+    <system:String x:Key="DocumentationWindowLoading">Ładowanie...</system:String>
 
-	<system:String x:Key="DocumentationWindowNoProvidersMessage">Nie wybrano dostawcy dokumentacji.\n\nMoże być konieczne połączenie kluczy API w ustawieniach, aby z nich korzystać.</system:String>
+    <system:String x:Key="DocumentationWindowErrorGlobal">Wystąpił błąd podczas pobierania dokumentacji.\n\n{0}</system:String>
+    <system:String x:Key="DocumentationWindowErrorOffline">Żądanie do serwera dokumentacji przekroczyło limit czasu. Może serwis jest niedostępny?</system:String>
 
-	<system:String x:Key="DocumentationWindowNoResults">Brak rezultatów</system:String>
-	<system:String x:Key="DocumentationWindowNoProviders">Brak dostawców</system:String>
-	<system:String x:Key="DocumentationWindowInvalidData">Nieprawidłowa fraza wyszukiwania.</system:String>
-	<system:String x:Key="DocumentationWindowAnErrorOccured">Wystąpił błąd.</system:String>
-	<system:String x:Key="DocumentationWindowTooManyResults">Zbyt wiele wyników.</system:String>
-	<system:String x:Key="DocumentationWindowTooManyResultsMessage">Wyszukiwanie zwróciło ponad 100 wyników. Czy na pewno chcesz wyświetlić je wszystkie?\n\nMoże to spowolnić aplikację!</system:String>
-	<system:String x:Key="DocumentationWindowInvalidDataQuery">Fraza wyszukiwania musi mieć co najmniej 3 znaki</system:String>
-	<system:String x:Key="DocumentationWindowSkriptMCBad">SkriptMC nie obsługuje wyszukiwania wszystkich typów.</system:String>
-	<system:String x:Key="DocumentationWindowSkriptMCBad2">SkriptMC jest obecnie niedostępne dla dokumentacji. Spróbuj ponownie później.</system:String>
+    <system:String x:Key="DocumentationWindowNoProvidersMessage">Nie wybrano dostawcy dokumentacji.\n\nMoże być konieczne połączenie kluczy API w ustawieniach, aby z nich korzystać.</system:String>
 
-	<system:String x:Key="DocumentationWindowNoEntries">Nie znaleziono wpisów dokumentacji. Może warto najpierw czegoś poszukać?</system:String>
-	<system:String x:Key="DocumentationWindowDownloadAllMessage">Czy na pewno chcesz pobrać wszystkie znalezione wpisy dokumentacji? (łącznie: {0})</system:String>
-	<system:String x:Key="DocumentationWindowDownloadingElements">Pobieranie elementów...</system:String>
-	<system:String x:Key="DocumentationWindowDownloading">Pobieranie</system:String>
-	<system:String x:Key="DocumentationWindowDownloadingMessage">Pobieramy dla Ciebie wpisy dokumentacji. Proszę czekać...</system:String>
-	
-	<system:String x:Key="DocumentationWindowCacheSkriptHub">Buforowanie elementów SkriptHub...</system:String>
-	<system:String x:Key="DocumentationWindowCacheSkriptHubMessage">Buforujemy dla Ciebie elementy SkriptHub. Proszę czekać...</system:String>
-	<system:String x:Key="DocumentationWindowSorting">Sortowanie pobranych elementów...</system:String>
-	
-	<system:String x:Key="DocumentationWindowFetchAgain">Pobierz dokumentację ponownie</system:String>
-	<system:String x:Key="DocumentationWindowFetchWarning">Spowoduje to ponowne pobranie wpisów dokumentacji ze SkriptHub. Prawdopodobnie nie musisz tego robić, chyba że chcesz wszystko zaktualizować. Jesteś pewien?</system:String>
-	<system:String x:Key="DocumentationWindowFetchSuccessMessage">Pamięć podręczna usunięta. Musisz ponownie wyszukać elementy, aby pobrać dokumentację SkriptHub.</system:String>
-	
-	<!-- Refactor Window -->
-	<system:String x:Key="RefactorWindowRemoveComments">Usuń komentarze</system:String>
-	<system:String x:Key="RefactorWindowTabsToSpaces">Zamień taby na spacje</system:String>
-	<system:String x:Key="RefactorWindowSpacesToTabs">Zamień spacje na taby</system:String>
-	<system:String x:Key="RefactorWindowRefactorBoxName">Zmiana nazwy '{0}' na...</system:String>
+    <system:String x:Key="DocumentationWindowNoResults">Brak rezultatów</system:String>
+    <system:String x:Key="DocumentationWindowNoProviders">Brak dostawców</system:String>
+    <system:String x:Key="DocumentationWindowInvalidData">Nieprawidłowa fraza wyszukiwania.</system:String>
+    <system:String x:Key="DocumentationWindowAnErrorOccured">Wystąpił błąd.</system:String>
+    <system:String x:Key="DocumentationWindowTooManyResults">Zbyt wiele wyników.</system:String>
+    <system:String x:Key="DocumentationWindowTooManyResultsMessage">Wyszukiwanie zwróciło ponad 100 wyników. Czy na pewno chcesz wyświetlić je wszystkie?\n\nMoże to spowolnić aplikację!</system:String>
+    <system:String x:Key="DocumentationWindowInvalidDataQuery">Fraza wyszukiwania musi mieć co najmniej 3 znaki</system:String>
+    <system:String x:Key="DocumentationWindowSkriptMCBad">SkriptMC nie obsługuje wyszukiwania wszystkich typów.</system:String>
+    <system:String x:Key="DocumentationWindowSkriptMCBad2">SkriptMC jest obecnie niedostępne dla dokumentacji. Spróbuj ponownie później.</system:String>
 
-	<!-- Color Selector -->
-	<system:String x:Key="ColorSelectorWindowHexResult">Rezultat w HEX</system:String>
-	
+    <system:String x:Key="DocumentationWindowNoEntries">Nie znaleziono wpisów dokumentacji. Może warto najpierw czegoś poszukać?</system:String>
+    <system:String x:Key="DocumentationWindowDownloadAllMessage">Czy na pewno chcesz pobrać wszystkie znalezione wpisy dokumentacji? (łącznie: {0})</system:String>
+    <system:String x:Key="DocumentationWindowDownloadingElements">Pobieranie elementów...</system:String>
+    <system:String x:Key="DocumentationWindowDownloading">Pobieranie</system:String>
+    <system:String x:Key="DocumentationWindowDownloadingMessage">Pobieramy dla Ciebie wpisy dokumentacji. Proszę czekać...</system:String>
 
-	<!-- Projects -->
-	<system:String x:Key="ProjectExplorerTitle">Eksplorator</system:String>
-	<system:String x:Key="ProjectExplorerInfoText">Nie masz otwartego żadnego folderu.</system:String>
-	<system:String x:Key="ProjectExplorerInfoButton">Otwórz folder</system:String>
-	<system:String x:Key="ProjectRenameText">Zmiana nazwy na...</system:String>
-	<system:String x:Key="ProjectRenameErrorNameEmpty">Nazwa nie może być pusta.</system:String>
-	<system:String x:Key="ProjectRenameErrorParentNull">Rodzic nie może być nullem.</system:String>
-	<system:String x:Key="ProjectErrorNameExists">Plik lub folder z tą nazwą już istnieje.</system:String>
-	<system:String x:Key="ProjectRenameErrorSameName">Nowa nazwa jest taka sama jak stara.</system:String>
-	<system:String x:Key="ProjectCreateFileName">Nazwa pliku</system:String>
-	<system:String x:Key="ProjectCreateFolderName">Nazwa folderu</system:String>
-	<system:String x:Key="ProjectCreateTemplate">Szablon</system:String>
+    <system:String x:Key="DocumentationWindowCacheSkriptHub">Buforowanie elementów SkriptHub...</system:String>
+    <system:String x:Key="DocumentationWindowCacheSkriptHubMessage">Buforujemy dla Ciebie elementy SkriptHub. Proszę czekać...</system:String>
+    <system:String x:Key="DocumentationWindowSorting">Sortowanie pobranych elementów...</system:String>
 
-	<!-- Code Parser -->
-	<system:String x:Key="CodeParserTitle">Analizowanie kodu</system:String>
-	<system:String x:Key="CodeParserWarning">Analizator kodu jest nadal w beta! Zgłaszaj wszelkie napotkane błędy na serwerze Discord.</system:String>
-	<system:String x:Key="CodeParserEnableInfo">Analizator kodu jest nadal w beta i mogą występować błędy. Jest on domyślnie wyłączony, ale możesz go włączyć, używając poniższego przycisku.</system:String>
-	<system:String x:Key="CodeParserSearch">Szukaj...</system:String>
-	<system:String x:Key="CodeParserFilterName">Filtruj przez nazwę</system:String>
-	<system:String x:Key="CodeParserFilterType">Fitruj przez typ</system:String>
-	<system:String x:Key="CodeParserFilterTypeAny">Dowolny</system:String>
-	<system:String x:Key="CodeParserFilterTypeFunctions">Funkcje</system:String>
-	<system:String x:Key="CodeParserFilterTypeEvents">Eventy</system:String>
-	<system:String x:Key="CodeParserFilterTypeOptions">Opcje</system:String>
-	<system:String x:Key="CodeParserFilterTypeCommands">Komendy</system:String>
-	<system:String x:Key="CodeParserClearFilters">Wyczyść filtry</system:String>
-	<system:String x:Key="CodeParserNavigate">Przejdź</system:String>
-	<system:String x:Key="CodeParserNavigateToDefinition">Przejdź do definicji</system:String>
-	<system:String x:Key="CodeParserRename">Zmień nazwę</system:String>
-	<system:String x:Key="CodeParserNoSections">Nie znaleziono żadnych sekcji w kodzie. Może powinieneś coś napisać? :)</system:String>
-	<system:String x:Key="CodeParserBadFormat">Nie można przeanalizować tego pliku, ponieważ nie wygląda on jak plik Skript.</system:String>
-	<system:String x:Key="CodeParserParseCode">Analizuj</system:String>
-	<system:String x:Key="CodeParserParsed">Przeanalizowany</system:String>
+    <system:String x:Key="DocumentationWindowFetchAgain">Pobierz dokumentację ponownie</system:String>
+    <system:String x:Key="DocumentationWindowFetchWarning">Spowoduje to ponowne pobranie wpisów dokumentacji ze SkriptHub. Prawdopodobnie nie musisz tego robić, chyba że chcesz wszystko zaktualizować. Jesteś pewien?</system:String>
+    <system:String x:Key="DocumentationWindowFetchSuccessMessage">Pamięć podręczna usunięta. Musisz ponownie wyszukać elementy, aby pobrać dokumentację SkriptHub.</system:String>
 
-	<!-- File Association Selection Window -->
-	<system:String x:Key="FileAssociationSelectionWindowTitle">Wybierz powiązanie pliku</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowInfo">Ten plik ma parę powiązań, wybierz jedno z nich.</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowOfficialItem">To oficjalny typ pliku.</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowUnofficialItem">To nieoficjalny typ pliku z dodatku '{0}'.</system:String>
-	<system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Zapamiętaj mój wybór</system:String>
+    <!-- Refactor Window -->
+    <system:String x:Key="RefactorWindowRemoveComments">Usuń komentarze</system:String>
+    <system:String x:Key="RefactorWindowTabsToSpaces">Zamień taby na spacje</system:String>
+    <system:String x:Key="RefactorWindowSpacesToTabs">Zamień spacje na taby</system:String>
+    <system:String x:Key="RefactorWindowRefactorBoxName">Zmiana nazwy '{0}' na...</system:String>
 
-	<!-- Settings -->
-	<system:String x:Key="SettingsEnabled">Włączone</system:String>
-	<system:String x:Key="SettingsDisabled">Wyłączone</system:String>
+    <!-- Color Selector -->
+    <system:String x:Key="ColorSelectorWindowHexResult">Rezultat w HEX</system:String>
 
-	<!-- Settings Home -->
-	<system:String x:Key="SettingsHomeTitle">Ustawienia</system:String>
-	<system:String x:Key="SettingsHomeGeneral">Ogólne</system:String>
-	<system:String x:Key="SettingsHomeGeneralDescription">Język, funkcje edytora tekstu</system:String>
-	<system:String x:Key="SettingsHomePersonalization">Personalizacja</system:String>
-	<system:String x:Key="SettingsHomePersonalizationDescription">Motyw, czcionka, podświetlanie składni</system:String>
-	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
-	<system:String x:Key="SettingsHomeDiscordDescription">Wyświetlaj SkEditora na swoim profilu Discord!</system:String>
-	<system:String x:Key="SettingsHomeExperiments">Eksperymenty</system:String>
-	<system:String x:Key="SettingsHomeExperimentsDescription">Testuj nadchodzące funkcje!</system:String>
-	<system:String x:Key="SettingsHomeConnections">Połączenia</system:String>
-	<system:String x:Key="SettingsHomeConnectionsDescription">Zarządzaj połączeniami z zewnętrznymi usługami.</system:String>
-	<system:String x:Key="SettingsHomeAddons">Dodatki</system:String>
-	<system:String x:Key="SettingsHomeAddonsDescription">Zwiększ możliwości programu dzięki potężnym dodatkom!</system:String>
-	<system:String x:Key="SettingsHomeAbout">O programie</system:String>
-	<system:String x:Key="SettingsHomeFileTypes">Typy plików</system:String>
-	<system:String x:Key="SettingsHomeFileTypesDescription">Zarządzaj typami plików i ich powiązaniami.</system:String>
-	
 
-	<!-- General Settings -->
-	<system:String x:Key="SettingsGeneralTitle">Ogólne</system:String>
-	<system:String x:Key="SettingsGeneralLanguage">Język</system:String>
-	<system:String x:Key="SettingsGeneralWrapping">Zawijanie</system:String>
-	<system:String x:Key="SettingsGeneralWrappingDescription">Wybierz, czy linie powinny zawijać się na szerokości widoku.</system:String>
-	<system:String x:Key="SettingsGeneralTabType">Typ wcięcia</system:String>
-	<system:String x:Key="SettingsGeneralTabTypeDescription">Wybierz pomiędzy tabami a spacjami oraz ustaw rozmiar taba.</system:String>
-	<system:String x:Key="SettingsGeneralTabTypeTabs">Taby</system:String>
-	<system:String x:Key="SettingsGeneralTabTypeSpaces">Spacje</system:String>
-	<system:String x:Key="SettingsGeneralAutoIndent">Autowcięcie</system:String>
-	<system:String x:Key="SettingsGeneralAutoIndentDescription">Automatycznie wstawia taba w nowej linii, jeśli poprzednia linia kończy się dwukropkiem.</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairing">Autoparowanie</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairingDescription">Automatycznie dodaje zamykający znak, gdy wprowadzasz otwierający znak dla określonych symboli.</system:String>
-	<system:String x:Key="SettingsGeneralAutoSave">Autozapis</system:String>
-	<system:String x:Key="SettingsGeneralAutoSaveDescription">Automatycznie zapisuje twój plik za każdym razem, gdy wprowadzasz zmiany.</system:String>
-	<system:String x:Key="SettingsGeneralChangeChecker">Wykrywaj modyfikacje plików poza programem</system:String>
-	<system:String x:Key="SettingsGeneralChangeCheckerDescription">Jeśli nastąpi jakakolwiek zmiana w zawartości pliku, zostaniesz zapytany o ponowne załadowanie pliku.</system:String>
-	<system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
-	<system:String x:Key="SettingsGeneralRpcDescription">Wyświetlaj SkEditor w swoim statusie na Discordzie.</system:String>
-	<system:String x:Key="SettingsGeneralPasteIndent">Autowcięcie wklejania</system:String>
-	<system:String x:Key="SettingsGeneralPasteIndentDescription">Automatycznie dostosowuje wcięcie wklejonego tekstu, aby pasowało do poprzedniej linii.</system:String>
-	<system:String x:Key="SettingsGeneralCheckForUpdates">Sprawdzaj aktualizacje</system:String>
-	<system:String x:Key="SettingsGeneralProjectSingleFolderClick">Otwórz folder projektu pojedynczym kliknięciem</system:String>
-	<system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Po włączeniu, otwiera folder pojedynczym kliknięciem zamiast podwójnym.</system:String>
+    <!-- Projects -->
+    <system:String x:Key="ProjectExplorerTitle">Eksplorator</system:String>
+    <system:String x:Key="ProjectExplorerInfoText">Nie masz otwartego żadnego folderu.</system:String>
+    <system:String x:Key="ProjectExplorerInfoButton">Otwórz folder</system:String>
+    <system:String x:Key="ProjectRenameText">Zmiana nazwy na...</system:String>
+    <system:String x:Key="ProjectRenameErrorNameEmpty">Nazwa nie może być pusta.</system:String>
+    <system:String x:Key="ProjectRenameErrorParentNull">Rodzic nie może być nullem.</system:String>
+    <system:String x:Key="ProjectErrorNameExists">Plik lub folder z tą nazwą już istnieje.</system:String>
+    <system:String x:Key="ProjectRenameErrorSameName">Nowa nazwa jest taka sama jak stara.</system:String>
+    <system:String x:Key="ProjectCreateFileName">Nazwa pliku</system:String>
+    <system:String x:Key="ProjectCreateFolderName">Nazwa folderu</system:String>
+    <system:String x:Key="ProjectCreateTemplate">Szablon</system:String>
 
-	<!-- About Settings -->
-	<system:String x:Key="SettingsAboutTitle">O programie</system:String>
-	<system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
-	<system:String x:Key="SettingsAboutSkEditorDescription">SkEditor jest aplikacją do edytowania plików Skript stworzoną przez Notro.</system:String>
-	<system:String x:Key="SettingsAboutVersion">Wersja</system:String>
-	<system:String x:Key="SettingsAboutVersionDescription">Używasz wersji: {0}</system:String>
-	<system:String x:Key="SettingsAboutGithub">GitHub</system:String>
-	<system:String x:Key="SettingsAboutGithubDescription">Kliknij, aby otworzyć repozytorium SkEditora na GitHubie!</system:String>
-	<system:String x:Key="SettingsAboutDiscord">Serwer Discord</system:String>
-	<system:String x:Key="SettingsAboutDiscordDescription">Kliknij, aby dołączyć do serwera Discord SkEditora!</system:String>
-	<system:String x:Key="SettingsAboutAppdata">Otwórz folder AppData</system:String>
-	<system:String x:Key="SettingsAboutDevMode">Tryb dewelopera</system:String>
-	<system:String x:Key="SettingsAboutDevModeDescription">Włącz tryb dewelopera, aby uzyskać dostęp do funkcji deweloperskich.</system:String>
+    <!-- Code Parser -->
+    <system:String x:Key="CodeParserTitle">Analizowanie kodu</system:String>
+    <system:String x:Key="CodeParserWarning">Analizator kodu jest nadal w beta! Zgłaszaj wszelkie napotkane błędy na serwerze Discord.</system:String>
+    <system:String x:Key="CodeParserEnableInfo">Analizator kodu jest nadal w beta i mogą występować błędy. Jest on domyślnie wyłączony, ale możesz go włączyć, używając poniższego przycisku.</system:String>
+    <system:String x:Key="CodeParserSearch">Szukaj...</system:String>
+    <system:String x:Key="CodeParserFilterName">Filtruj przez nazwę</system:String>
+    <system:String x:Key="CodeParserFilterType">Fitruj przez typ</system:String>
+    <system:String x:Key="CodeParserFilterTypeAny">Dowolny</system:String>
+    <system:String x:Key="CodeParserFilterTypeFunctions">Funkcje</system:String>
+    <system:String x:Key="CodeParserFilterTypeEvents">Eventy</system:String>
+    <system:String x:Key="CodeParserFilterTypeOptions">Opcje</system:String>
+    <system:String x:Key="CodeParserFilterTypeCommands">Komendy</system:String>
+    <system:String x:Key="CodeParserClearFilters">Wyczyść filtry</system:String>
+    <system:String x:Key="CodeParserNavigate">Przejdź</system:String>
+    <system:String x:Key="CodeParserNavigateToDefinition">Przejdź do definicji</system:String>
+    <system:String x:Key="CodeParserRename">Zmień nazwę</system:String>
+    <system:String x:Key="CodeParserNoSections">Nie znaleziono żadnych sekcji w kodzie. Może powinieneś coś napisać? :)</system:String>
+    <system:String x:Key="CodeParserBadFormat">Nie można przeanalizować tego pliku, ponieważ nie wygląda on jak plik Skript.</system:String>
+    <system:String x:Key="CodeParserParseCode">Analizuj</system:String>
+    <system:String x:Key="CodeParserParsed">Przeanalizowany</system:String>
 
-	<!-- Personalization Settings -->
-	<system:String x:Key="SettingsPersonalizationTitle">Personalizacja</system:String>
-	<system:String x:Key="SettingsPersonalizationTheme">Motyw</system:String>
-	<system:String x:Key="SettingsPersonalizationThemeDescription">Dostosuj kolory aplikacji.</system:String>
-	<system:String x:Key="SettingsPersonalizationSyntax">Podświetlanie składni</system:String>
-	<system:String x:Key="SettingsPersonalizationSyntaxDescription">Ustaw sposób wyświetlania określonego tekstu z podświetlaniem składni.</system:String>
-	<system:String x:Key="SettingsPersonalizationFont">Czcionka</system:String>
-	<system:String x:Key="SettingsPersonalizationFontDescription">Aktualnie: {0}</system:String>
-	<system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Podświetl bieżącą linię</system:String>
+    <!-- File Association Selection Window -->
+    <system:String x:Key="FileAssociationSelectionWindowTitle">Wybierz powiązanie pliku</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowInfo">Ten plik ma parę powiązań, wybierz jedno z nich.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowOfficialItem">To oficjalny typ pliku.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowUnofficialItem">To nieoficjalny typ pliku z dodatku '{0}'.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Zapamiętaj mój wybór</system:String>
 
-	<!-- Theme Settings -->
-	<system:String x:Key="SettingsThemeTitle">Motyw</system:String>
-	<system:String x:Key="SettingsThemeOpenFolder">Otwórz folder</system:String>
-	<system:String x:Key="SettingsThemeCurrentTheme">Aktualny motyw</system:String>
-	<system:String x:Key="SettingsThemeCurrentThemeDescription">Restart nie jest potrzebny, ale może być wymagany do przeładowania wszystkich kolorów.</system:String>
-	<system:String x:Key="SettingsThemeEditThemeDescription">Edytuj bieżący motyw i podglądaj zmiany w czasie rzeczywistym.</system:String>
-	<system:String x:Key="SettingsThemeNewThemeInfo">Jeśli chcesz utworzyć nowy motyw, musisz utworzyć plik w folderze Themes.</system:String>
-	<system:String x:Key="SettingsThemeEditTheme">Edytuj motyw</system:String>
+    <!-- Settings -->
+    <system:String x:Key="SettingsEnabled">Włączone</system:String>
+    <system:String x:Key="SettingsDisabled">Wyłączone</system:String>
 
-	<!-- Syntax Highlighting Settings -->
-	<system:String x:Key="SettingsSyntaxesTitle">Podświetlanie składni</system:String>
+    <!-- Settings Home -->
+    <system:String x:Key="SettingsHomeTitle">Ustawienia</system:String>
+    <system:String x:Key="SettingsHomeGeneral">Ogólne</system:String>
+    <system:String x:Key="SettingsHomeGeneralDescription">Język, funkcje edytora tekstu</system:String>
+    <system:String x:Key="SettingsHomePersonalization">Personalizacja</system:String>
+    <system:String x:Key="SettingsHomePersonalizationDescription">Motyw, czcionka, podświetlanie składni</system:String>
+    <system:String x:Key="SettingsHomeDiscord">Discord</system:String>
+    <system:String x:Key="SettingsHomeDiscordDescription">Wyświetlaj SkEditora na swoim profilu Discord!</system:String>
+    <system:String x:Key="SettingsHomeExperiments">Eksperymenty</system:String>
+    <system:String x:Key="SettingsHomeExperimentsDescription">Testuj nadchodzące funkcje!</system:String>
+    <system:String x:Key="SettingsHomeConnections">Połączenia</system:String>
+    <system:String x:Key="SettingsHomeConnectionsDescription">Zarządzaj połączeniami z zewnętrznymi usługami.</system:String>
+    <system:String x:Key="SettingsHomeAddons">Dodatki</system:String>
+    <system:String x:Key="SettingsHomeAddonsDescription">Zwiększ możliwości programu dzięki potężnym dodatkom!</system:String>
+    <system:String x:Key="SettingsHomeAbout">O programie</system:String>
+    <system:String x:Key="SettingsHomeFileTypes">Typy plików</system:String>
+    <system:String x:Key="SettingsHomeFileTypesDescription">Zarządzaj typami plików i ich powiązaniami.</system:String>
 
-	<!-- Addon Settings -->
-	<system:String x:Key="SettingsAddonsTitle">Dodatki</system:String>
-	<system:String x:Key="SettingsAddonsListTitle">Lista dodatków</system:String>
 
-	<!-- Connections Settings -->
-	<system:String x:Key="SettingsConnectionsTitle">Połączenia</system:String>
-	<system:String x:Key="SettingsConnectionsDashboardButton">Otwórz panel</system:String>
+    <!-- General Settings -->
+    <system:String x:Key="SettingsGeneralTitle">Ogólne</system:String>
+    <system:String x:Key="SettingsGeneralLanguage">Język</system:String>
+    <system:String x:Key="SettingsGeneralWrapping">Zawijanie</system:String>
+    <system:String x:Key="SettingsGeneralWrappingDescription">Wybierz, czy linie powinny zawijać się na szerokości widoku.</system:String>
+    <system:String x:Key="SettingsGeneralZoomSync">Synchronizuj powiększenie między kartami</system:String>
+    <system:String x:Key="SettingsGeneralZoomSyncDescription">Synchronizuje poziom powiększenia między wszystkimi otwartymi kartami.</system:String>
+    <system:String x:Key="SettingsGeneralTabType">Typ wcięcia</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeDescription">Wybierz pomiędzy tabami a spacjami oraz ustaw rozmiar taba.</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeTabs">Taby</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeSpaces">Spacje</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndent">Autowcięcie</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndentDescription">Automatycznie wstawia taba w nowej linii, jeśli poprzednia linia kończy się dwukropkiem.</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairing">Autoparowanie</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairingDescription">Automatycznie dodaje zamykający znak, gdy wprowadzasz otwierający znak dla określonych symboli.</system:String>
+    <system:String x:Key="SettingsGeneralAutoSave">Autozapis</system:String>
+    <system:String x:Key="SettingsGeneralAutoSaveDescription">Automatycznie zapisuje twój plik za każdym razem, gdy wprowadzasz zmiany.</system:String>
+    <system:String x:Key="SettingsGeneralChangeChecker">Wykrywaj modyfikacje plików poza programem</system:String>
+    <system:String x:Key="SettingsGeneralChangeCheckerDescription">Jeśli nastąpi jakakolwiek zmiana w zawartości pliku, zostaniesz zapytany o ponowne załadowanie pliku.</system:String>
+    <system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
+    <system:String x:Key="SettingsGeneralRpcDescription">Wyświetlaj SkEditor w swoim statusie na Discordzie.</system:String>
+    <system:String x:Key="SettingsGeneralPasteIndent">Autowcięcie wklejania</system:String>
+    <system:String x:Key="SettingsGeneralPasteIndentDescription">Automatycznie dostosowuje wcięcie wklejonego tekstu, aby pasowało do poprzedniej linii.</system:String>
+    <system:String x:Key="SettingsGeneralCheckForUpdates">Sprawdzaj aktualizacje</system:String>
+    <system:String x:Key="SettingsGeneralProjectSingleFolderClick">Otwórz folder projektu pojedynczym kliknięciem</system:String>
+    <system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Po włączeniu, otwiera folder pojedynczym kliknięciem zamiast podwójnym.</system:String>
+    <system:String x:Key="SettingsGeneralSidebarAnimations">Animacje paska bocznego</system:String>
+    <system:String x:Key="SettingsGeneralSidebarAnimationsDescription">Włącz lub wyłącz animacje podczas otwierania i zamykania paneli paska bocznego.</system:String>
 
-	<!-- File Types Settings -->
-	<system:String x:Key="SettingsFileTypesTitle">Typy plików</system:String>
-	<system:String x:Key="SettingsFileTypesWarning">Ta strona pozwala zarządzać tylko już utworzonymi powiązaniami. Dla innych typów plików zostanie wyświetlony monit.</system:String>
-	<system:String x:Key="SettingsFileTypesRemove">Usuń</system:String>
-	
-	<!-- File Views -->
-	<system:String x:Key="FileViewImageAA">Wygładzanie</system:String>
+    <!-- About Settings -->
+    <system:String x:Key="SettingsAboutTitle">O programie</system:String>
+    <system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
+    <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor jest aplikacją do edytowania plików Skript stworzoną przez Notro.</system:String>
+    <system:String x:Key="SettingsAboutVersion">Wersja</system:String>
+    <system:String x:Key="SettingsAboutVersionDescription">Używasz wersji: {0}</system:String>
+    <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">Kliknij, aby otworzyć repozytorium SkEditora na GitHubie!</system:String>
+    <system:String x:Key="SettingsAboutDiscord">Serwer Discord</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">Kliknij, aby dołączyć do serwera Discord SkEditora!</system:String>
+    <system:String x:Key="SettingsAboutAppdata">Otwórz folder AppData</system:String>
+    <system:String x:Key="SettingsAboutDevMode">Tryb dewelopera</system:String>
+    <system:String x:Key="SettingsAboutDevModeDescription">Włącz tryb dewelopera, aby uzyskać dostęp do funkcji deweloperskich.</system:String>
 
-	<!-- Discord RPC -->
-	<system:String x:Key="DiscordRpcEditing">Edytowanie: {0}</system:String>
+    <!-- Personalization Settings -->
+    <system:String x:Key="SettingsPersonalizationTitle">Personalizacja</system:String>
+    <system:String x:Key="SettingsPersonalizationTheme">Motyw</system:String>
+    <system:String x:Key="SettingsPersonalizationThemeDescription">Dostosuj kolory aplikacji.</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntax">Podświetlanie składni</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntaxDescription">Ustaw sposób wyświetlania określonego tekstu z podświetlaniem składni.</system:String>
+    <system:String x:Key="SettingsPersonalizationFont">Czcionka</system:String>
+    <system:String x:Key="SettingsPersonalizationFontDescription">Aktualnie: {0}</system:String>
+    <system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Podświetl bieżącą linię</system:String>
 
-	<!-- Bottom bar -->
-	<system:String x:Key="BottomBarLine">Wiersz {0}</system:String>
-	<system:String x:Key="BottomBarColumn">Kolumna {0}</system:String>
-	<system:String x:Key="BottomBarDocumentSize">Długość {0}</system:String>
-	
-	
-	<!-- GUI Generator -->
-	<system:String x:Key="GuiGeneratorTitle">Tytuł</system:String>
-	<system:String x:Key="GuiGeneratorFunctionName">Nazwa funkcji</system:String>
-	<system:String x:Key="GuiGeneratorRowQuantity">Ilość rzędów</system:String>
-	<system:String x:Key="GuiGeneratorBackgroundItem">Tło</system:String>
-	<system:String x:Key="GuiGeneratorPreviewButton">Podgląd</system:String>
-	<system:String x:Key="GuiGeneratorGenerateButton">Generuj</system:String>
-	<system:String x:Key="GuiGeneratorSkriptGui">Użyj skript-gui</system:String>
-	<system:String x:Key="GuiGeneratorDisplayName">Nazwa wyświetlana</system:String>
-	<system:String x:Key="GuiGeneratorLore">Opis (lore)</system:String>
-	<system:String x:Key="GuiGeneratorOptional">Opcjonalne</system:String>
-	<system:String x:Key="GuiGeneratorCustomModelData">Custom Model Data ID</system:String>
-	<system:String x:Key="GuiGeneratorLoreLineWatermark">PPM by dodać nową linijkę</system:String>
-	<system:String x:Key="GuiGeneratorAddLoreLine">Dodaj nową linijkę</system:String>
-	<system:String x:Key="GuiGeneratorAddExampleAction">Dodaj przykładową akcję</system:String>
-	
-	<!-- Command Generator -->
-	<system:String x:Key="CommandGeneratorName">Nazwa</system:String>
-	<system:String x:Key="CommandGeneratorPermission">Uprawnienie</system:String>
-	<system:String x:Key="CommandGeneratorNoPermissionMessage">Wiadomość o braku uprawnień</system:String>
-	<system:String x:Key="CommandGeneratorAliases">Aliasy</system:String>
-	<system:String x:Key="CommandGeneratorInvalidUsageMessage">Wiadomość o błędnym użyciu</system:String>
-	<system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Kto może użyć komendy</system:String>
-	<system:String x:Key="CommandGeneratorPlayer">Gracz</system:String>
-	<system:String x:Key="CommandGeneratorConsole">Konsola</system:String>
-	<system:String x:Key="CommandGeneratorCooldown">Cooldown</system:String>
-	<system:String x:Key="CommandGeneratorTicks">Tick</system:String>
-	<system:String x:Key="CommandGeneratorSeconds">Sekundy</system:String>
-	<system:String x:Key="CommandGeneratorMinutes">Minuty</system:String>
-	<system:String x:Key="CommandGeneratorHours">Godziny</system:String>
-	<system:String x:Key="CommandGeneratorDays">Dni</system:String>
-	<system:String x:Key="CommandGeneratorWeeks">Tygodnie</system:String>
-	<system:String x:Key="CommandGeneratorMonths">Miesiące</system:String>
-	<system:String x:Key="CommandGeneratorYears">Lata</system:String>
-	<system:String x:Key="CommandGeneratorGenerate">Generuj</system:String>
-	<system:String x:Key="CommandGeneratorPropertyMissing">Właściwość {0} jest wymagana!</system:String>
+    <!-- Theme Settings -->
+    <system:String x:Key="SettingsThemeTitle">Motyw</system:String>
+    <system:String x:Key="SettingsThemeOpenFolder">Otwórz folder</system:String>
+    <system:String x:Key="SettingsThemeCurrentTheme">Aktualny motyw</system:String>
+    <system:String x:Key="SettingsThemeCurrentThemeDescription">Restart nie jest potrzebny, ale może być wymagany do przeładowania wszystkich kolorów.</system:String>
+    <system:String x:Key="SettingsThemeEditThemeDescription">Edytuj bieżący motyw i podglądaj zmiany w czasie rzeczywistym.</system:String>
+    <system:String x:Key="SettingsThemeNewThemeInfo">Jeśli chcesz utworzyć nowy motyw, musisz utworzyć plik w folderze Themes.</system:String>
+    <system:String x:Key="SettingsThemeEditTheme">Edytuj motyw</system:String>
 
-	<!-- Marketplace -->
-	<system:String x:Key="MarketplaceSearch">Wyszukaj</system:String>
-	<system:String x:Key="MarketplaceEnableNow">Włącz teraz</system:String>
-	<system:String x:Key="MarketplaceInstallSuccess">Pomyślnie zainstalowano {0}!</system:String>
-	<system:String x:Key="MarketplaceInstallRestart">Zrestartuj program, by załadować.</system:String>
-	<system:String x:Key="MarketplaceInstallEnableNow">Czy chciałbyś to teraz włączyć?</system:String>
-	<system:String x:Key="MarketplaceInstallNoNeedToRestart">Dodatek powinien działać bez restartu, ale jeśli masz jakiekolwiek problemy, zrestartuj program.</system:String>
-	<system:String x:Key="MarketplaceInstallFailed">Pobieranie {0} nie powiodło się!</system:String>
-	<system:String x:Key="MarketplaceUninstallSuccess">Pomyślnie odinstalowano {0}!\nZrestartuj program, by zmiany zostały zastosowane.</system:String>
-	<system:String x:Key="MarketplaceUpdateSuccess">Pomyślnie zaktualizowano {0}!\nZrestartuj program, by zmiany zostały zastosowane.</system:String>
-	<system:String x:Key="MarketplaceUpdateFailed">Aktualizowanie {0} nie powiodło się!</system:String>
-	<system:String x:Key="MarketplaceLoadFailed">Nie można wczytać zawartości Rynku. Sprawdź połączenie z internetem.</system:String>
-	<system:String x:Key="MarketplaceInfo">To tylko prosty design Rynku, w przyszłości zostanie kompletnie ulepszony.</system:String>
-	<system:String x:Key="MarketplaceButtonInstall">Instaluj</system:String>
-	<system:String x:Key="MarketplaceButtonUpdate">Aktualizuj</system:String>
-	<system:String x:Key="MarketplaceButtonUninstall">Odinstaluj</system:String>
-	<system:String x:Key="MarketplaceButtonDisable">Wyłącz</system:String>
-	<system:String x:Key="MarketplaceButtonEnable">Włącz</system:String>
+    <!-- Syntax Highlighting Settings -->
+    <system:String x:Key="SettingsSyntaxesTitle">Podświetlanie składni</system:String>
 
-	<!-- Go to line -->
-	<system:String x:Key="GoToLine">Przejdź do linii</system:String>
-	<system:String x:Key="GoToLineButton">Idź</system:String>
+    <!-- Addon Settings -->
+    <system:String x:Key="SettingsAddonsTitle">Dodatki</system:String>
+    <system:String x:Key="SettingsAddonsListTitle">Lista dodatków</system:String>
 
-	<!-- Theme editor -->
-	<system:String x:Key="ThemeEditorWindowBackground">Tło okna</system:String>
-	<system:String x:Key="ThemeEditorSmallWindowBackground">Tło małego okna</system:String>
-	<system:String x:Key="ThemeEditorEditorBackground">Tło edytora</system:String>
-	<system:String x:Key="ThemeEditorEditorText">Tekst edytora</system:String>
-	<system:String x:Key="ThemeEditorLineNumber">Numer linii</system:String>
-	<system:String x:Key="ThemeEditorSelection">Zaznaczenie</system:String>
-	<system:String x:Key="ThemeEditorSelectedTabBackground">Tło wybranej karty</system:String>
-	<system:String x:Key="ThemeEditorSelectedTabBorder">Obramowanie wybranej karty</system:String>
-	<system:String x:Key="ThemeEditorMenuBackground">Tło menu</system:String>
-	<system:String x:Key="ThemeEditorMenuBorder">Obramowanie menu</system:String>
-	<system:String x:Key="ThemeEditorFocusedTextBoxBackground">Tło aktywnego pola tekstowego</system:String>
-	<system:String x:Key="ThemeEditorCurrentLineBackground">Tło aktualnej linii</system:String>
-	<system:String x:Key="ThemeEditorCurrentLineBorder">Obramowanie aktualnej linii</system:String>
-	<system:String x:Key="ThemeEditorAccentColor">Kolor wiodący</system:String>
+    <!-- Connections Settings -->
+    <system:String x:Key="SettingsConnectionsTitle">Połączenia</system:String>
+    <system:String x:Key="SettingsConnectionsDashboardButton">Otwórz panel</system:String>
 
-	<!-- Welcome Tab -->
-	<system:String x:Key="WelcomeTabTitle">Witaj</system:String>
-	<system:String x:Key="WelcomeTabGettingStarted">Pierwsze kroki</system:String>
-	<system:String x:Key="WelcomeTabNeedHelp">Potrzebna pomoc?</system:String>
-	<system:String x:Key="WelcomeGettingStartedNewFile">Nowy plik</system:String>
-	<system:String x:Key="WelcomeGettingStartedOpenFile">Otwórz plik</system:String>
-	<system:String x:Key="WelcomeGettingStartedOpenFolder">Otwórz folder</system:String>
-	<system:String x:Key="WelcomeGettingStartedSettings">Ustawienia</system:String>
-	<system:String x:Key="WelcomeNeedHelpDiscordServer">Serwer Discord</system:String>
-	<system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+    <!-- File Types Settings -->
+    <system:String x:Key="SettingsFileTypesTitle">Typy plików</system:String>
+    <system:String x:Key="SettingsFileTypesWarning">Ta strona pozwala zarządzać tylko już utworzonymi powiązaniami. Dla innych typów plików zostanie wyświetlony monit.</system:String>
+    <system:String x:Key="SettingsFileTypesRemove">Usuń</system:String>
+
+    <!-- File Views -->
+    <system:String x:Key="FileViewImageAA">Wygładzanie</system:String>
+
+    <!-- Discord RPC -->
+    <system:String x:Key="DiscordRpcEditing">Edytowanie: {0}</system:String>
+
+    <!-- Bottom bar -->
+    <system:String x:Key="BottomBarLine">Wiersz {0}</system:String>
+    <system:String x:Key="BottomBarColumn">Kolumna {0}</system:String>
+    <system:String x:Key="BottomBarDocumentSize">Długość {0}</system:String>
+
+
+    <!-- GUI Generator -->
+    <system:String x:Key="GuiGeneratorTitle">Tytuł</system:String>
+    <system:String x:Key="GuiGeneratorFunctionName">Nazwa funkcji</system:String>
+    <system:String x:Key="GuiGeneratorRowQuantity">Ilość rzędów</system:String>
+    <system:String x:Key="GuiGeneratorBackgroundItem">Tło</system:String>
+    <system:String x:Key="GuiGeneratorPreviewButton">Podgląd</system:String>
+    <system:String x:Key="GuiGeneratorGenerateButton">Generuj</system:String>
+    <system:String x:Key="GuiGeneratorSkriptGui">Użyj skript-gui</system:String>
+    <system:String x:Key="GuiGeneratorDisplayName">Nazwa wyświetlana</system:String>
+    <system:String x:Key="GuiGeneratorLore">Opis (lore)</system:String>
+    <system:String x:Key="GuiGeneratorOptional">Opcjonalne</system:String>
+    <system:String x:Key="GuiGeneratorCustomModelData">Custom Model Data ID</system:String>
+    <system:String x:Key="GuiGeneratorLoreLineWatermark">PPM by dodać nową linijkę</system:String>
+    <system:String x:Key="GuiGeneratorAddLoreLine">Dodaj nową linijkę</system:String>
+    <system:String x:Key="GuiGeneratorAddExampleAction">Dodaj przykładową akcję</system:String>
+
+    <!-- Command Generator -->
+    <system:String x:Key="CommandGeneratorName">Nazwa</system:String>
+    <system:String x:Key="CommandGeneratorPermission">Uprawnienie</system:String>
+    <system:String x:Key="CommandGeneratorNoPermissionMessage">Wiadomość o braku uprawnień</system:String>
+    <system:String x:Key="CommandGeneratorAliases">Aliasy</system:String>
+    <system:String x:Key="CommandGeneratorInvalidUsageMessage">Wiadomość o błędnym użyciu</system:String>
+    <system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Kto może użyć komendy</system:String>
+    <system:String x:Key="CommandGeneratorPlayer">Gracz</system:String>
+    <system:String x:Key="CommandGeneratorConsole">Konsola</system:String>
+    <system:String x:Key="CommandGeneratorCooldown">Cooldown</system:String>
+    <system:String x:Key="CommandGeneratorTicks">Tick</system:String>
+    <system:String x:Key="CommandGeneratorSeconds">Sekundy</system:String>
+    <system:String x:Key="CommandGeneratorMinutes">Minuty</system:String>
+    <system:String x:Key="CommandGeneratorHours">Godziny</system:String>
+    <system:String x:Key="CommandGeneratorDays">Dni</system:String>
+    <system:String x:Key="CommandGeneratorWeeks">Tygodnie</system:String>
+    <system:String x:Key="CommandGeneratorMonths">Miesiące</system:String>
+    <system:String x:Key="CommandGeneratorYears">Lata</system:String>
+    <system:String x:Key="CommandGeneratorGenerate">Generuj</system:String>
+    <system:String x:Key="CommandGeneratorPropertyMissing">Właściwość {0} jest wymagana!</system:String>
+
+    <!-- Marketplace -->
+    <system:String x:Key="MarketplaceSearch">Wyszukaj</system:String>
+    <system:String x:Key="MarketplaceEnableNow">Włącz teraz</system:String>
+    <system:String x:Key="MarketplaceInstallSuccess">Pomyślnie zainstalowano {0}!</system:String>
+    <system:String x:Key="MarketplaceInstallRestart">Zrestartuj program, by załadować.</system:String>
+    <system:String x:Key="MarketplaceInstallEnableNow">Czy chciałbyś to teraz włączyć?</system:String>
+    <system:String x:Key="MarketplaceInstallNoNeedToRestart">Dodatek powinien działać bez restartu, ale jeśli masz jakiekolwiek problemy, zrestartuj program.</system:String>
+    <system:String x:Key="MarketplaceInstallFailed">Pobieranie {0} nie powiodło się!</system:String>
+    <system:String x:Key="MarketplaceUninstallSuccess">Pomyślnie odinstalowano {0}!\nZrestartuj program, by zmiany zostały zastosowane.</system:String>
+    <system:String x:Key="MarketplaceUpdateSuccess">Pomyślnie zaktualizowano {0}!\nZrestartuj program, by zmiany zostały zastosowane.</system:String>
+    <system:String x:Key="MarketplaceUpdateFailed">Aktualizowanie {0} nie powiodło się!</system:String>
+    <system:String x:Key="MarketplaceLoadFailed">Nie można wczytać zawartości Rynku. Sprawdź połączenie z internetem.</system:String>
+    <system:String x:Key="MarketplaceInfo">To tylko prosty design Rynku, w przyszłości zostanie kompletnie ulepszony.</system:String>
+    <system:String x:Key="MarketplaceButtonInstall">Instaluj</system:String>
+    <system:String x:Key="MarketplaceButtonUpdate">Aktualizuj</system:String>
+    <system:String x:Key="MarketplaceButtonUninstall">Odinstaluj</system:String>
+    <system:String x:Key="MarketplaceButtonDisable">Wyłącz</system:String>
+    <system:String x:Key="MarketplaceButtonEnable">Włącz</system:String>
+
+    <!-- Go to line -->
+    <system:String x:Key="GoToLine">Przejdź do linii</system:String>
+    <system:String x:Key="GoToLineButton">Idź</system:String>
+
+    <!-- Theme editor -->
+    <system:String x:Key="ThemeEditorWindowBackground">Tło okna</system:String>
+    <system:String x:Key="ThemeEditorSmallWindowBackground">Tło małego okna</system:String>
+    <system:String x:Key="ThemeEditorEditorBackground">Tło edytora</system:String>
+    <system:String x:Key="ThemeEditorEditorText">Tekst edytora</system:String>
+    <system:String x:Key="ThemeEditorLineNumber">Numer linii</system:String>
+    <system:String x:Key="ThemeEditorSelection">Zaznaczenie</system:String>
+    <system:String x:Key="ThemeEditorSelectedTabBackground">Tło wybranej karty</system:String>
+    <system:String x:Key="ThemeEditorSelectedTabBorder">Obramowanie wybranej karty</system:String>
+    <system:String x:Key="ThemeEditorMenuBackground">Tło menu</system:String>
+    <system:String x:Key="ThemeEditorMenuBorder">Obramowanie menu</system:String>
+    <system:String x:Key="ThemeEditorFocusedTextBoxBackground">Tło aktywnego pola tekstowego</system:String>
+    <system:String x:Key="ThemeEditorCurrentLineBackground">Tło aktualnej linii</system:String>
+    <system:String x:Key="ThemeEditorCurrentLineBorder">Obramowanie aktualnej linii</system:String>
+    <system:String x:Key="ThemeEditorAccentColor">Kolor wiodący</system:String>
+
+    <!-- Welcome Tab -->
+    <system:String x:Key="WelcomeTabTitle">Witaj</system:String>
+    <system:String x:Key="WelcomeTabGettingStarted">Pierwsze kroki</system:String>
+    <system:String x:Key="WelcomeTabNeedHelp">Potrzebna pomoc?</system:String>
+    <system:String x:Key="WelcomeGettingStartedNewFile">Nowy plik</system:String>
+    <system:String x:Key="WelcomeGettingStartedOpenFile">Otwórz plik</system:String>
+    <system:String x:Key="WelcomeGettingStartedOpenFolder">Otwórz folder</system:String>
+    <system:String x:Key="WelcomeGettingStartedSettings">Ustawienia</system:String>
+    <system:String x:Key="WelcomeNeedHelpDiscordServer">Serwer Discord</system:String>
+    <system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
 
 </ResourceDictionary>

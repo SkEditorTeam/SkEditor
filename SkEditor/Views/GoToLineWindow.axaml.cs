@@ -1,26 +1,33 @@
+using System;
 using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
-using System;
 
 namespace SkEditor.Utilities.Editor;
+
 public partial class GoToLineWindow : AppWindow
 {
-
     public GoToLineWindow()
     {
         InitializeComponent();
-        GoToLineInput.Loaded += (sender, e) => GoToLineInput.Focus();
+        GoToLineInput.Loaded += (_, _) => GoToLineInput.Focus();
         GoToLineInput.TextChanged += (_, _) => UpdateInput();
         GoToLineButton.Command = new RelayCommand(Execute);
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Enter) Execute();
-            if (e.Key == Key.Escape) Close();
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    Execute();
+                    break;
+                case Key.Escape:
+                    Close();
+                    break;
+            }
         };
     }
 
@@ -33,10 +40,16 @@ public partial class GoToLineWindow : AppWindow
         }
 
         if (!SkEditorAPI.Files.IsEditorOpen())
+        {
             return;
+        }
 
         TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
-        if (!int.TryParse(GoToLineInput.Text, out int lineNumber)) return;
+        if (!int.TryParse(GoToLineInput.Text, out int lineNumber))
+        {
+            return;
+        }
+
         DocumentLine line = editor.Document.GetLineByNumber(lineNumber);
         editor.ScrollTo(line.LineNumber, 0);
         editor.Focus();
@@ -47,7 +60,9 @@ public partial class GoToLineWindow : AppWindow
     private void UpdateInput()
     {
         if (!SkEditorAPI.Files.IsEditorOpen())
+        {
             return;
+        }
 
         TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int documentLines = editor.Document.LineCount;
@@ -55,7 +70,8 @@ public partial class GoToLineWindow : AppWindow
         {
             GoToLineInput.Text = "";
             return;
-        };
+        }
+
         line = Math.Clamp(line, 1, documentLines);
         GoToLineInput.Text = line.ToString();
     }

@@ -1,34 +1,49 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SkEditor.Views;
+
 public partial class RefactorWindow : AppWindow
 {
-
     public RefactorWindow()
     {
         InitializeComponent();
         Focusable = true;
 
-        ApplyButton.Command = new RelayCommand(Apply);
+        ApplyButton.Command = new AsyncRelayCommand(Apply);
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
 
-    private async void Apply()
+    private async Task Apply()
     {
-        if (RemoveCommentsCheckBox.IsChecked == true) await RemoveComments();
-        if (TabsToSpacesCheckBox.IsChecked == true) await TabsToSpaces();
-        if (SpacesToTabsCheckBox.IsChecked == true) await SpacesToTabs();
+        if (RemoveCommentsCheckBox.IsChecked == true)
+        {
+            await RemoveComments();
+        }
+
+        if (TabsToSpacesCheckBox.IsChecked == true)
+        {
+            await TabsToSpaces();
+        }
+
+        if (SpacesToTabsCheckBox.IsChecked == true)
+        {
+            await SpacesToTabs();
+        }
 
         Close();
     }
@@ -38,7 +53,8 @@ public partial class RefactorWindow : AppWindow
     private static Task RemoveComments()
     {
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
-        var linesToStay = textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
+        List<DocumentLine> linesToStay =
+            textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
 
         StringBuilder builder = new();
         linesToStay.ForEach(x => builder.AppendLine(GetText(x)));
@@ -50,7 +66,7 @@ public partial class RefactorWindow : AppWindow
     private static Task TabsToSpaces()
     {
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
-        var lines = textEditor.Document.Lines;
+        IList<DocumentLine>? lines = textEditor.Document.Lines;
 
         lines.Where(line => GetText(line).StartsWith("\t")).ToList().ForEach(line =>
         {
@@ -64,7 +80,7 @@ public partial class RefactorWindow : AppWindow
     {
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
         int tabSize = GetTabSize();
-        var lines = textEditor.Document.Lines;
+        IList<DocumentLine>? lines = textEditor.Document.Lines;
         lines.Where(line => GetText(line).StartsWith(" ")).ToList().ForEach(line =>
         {
             int spaces = GetText(line).TakeWhile(x => x == ' ').Count();
@@ -80,12 +96,15 @@ public partial class RefactorWindow : AppWindow
     private static int GetTabSize()
     {
         TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
-        var lines = textEditor.Document.Lines;
+        IList<DocumentLine>? lines = textEditor.Document.Lines;
         int tabSize = 4;
 
-        var line = lines.FirstOrDefault(line => GetText(line).StartsWith(" "));
+        DocumentLine? line = lines.FirstOrDefault(line => GetText(line).StartsWith(" "));
 
-        if (line != null) tabSize = GetText(line).TakeWhile(x => x == ' ').Count();
+        if (line != null)
+        {
+            tabSize = GetText(line).TakeWhile(x => x == ' ').Count();
+        }
 
         return tabSize;
     }

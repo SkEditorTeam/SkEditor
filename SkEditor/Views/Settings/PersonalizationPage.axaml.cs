@@ -1,13 +1,17 @@
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Styling;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Views.Settings.Personalization;
-using System.Linq;
 
 namespace SkEditor.Views.Settings;
+
 public partial class PersonalizationPage : UserControl
 {
     public PersonalizationPage()
@@ -25,7 +29,7 @@ public partial class PersonalizationPage : UserControl
         SyntaxPageButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(FileSyntaxes)));
         Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
 
-        FontButton.Command = new RelayCommand(SelectFont);
+        FontButton.Command = new AsyncRelayCommand(SelectFont);
 
         HighlightCurrentLineSwitch.Command = new RelayCommand(() =>
         {
@@ -36,12 +40,14 @@ public partial class PersonalizationPage : UserControl
         });
     }
 
-    private async void SelectFont()
+    private async Task SelectFont()
     {
         FontSelectionWindow window = new();
         string result = await window.ShowDialog<string>(SkEditorAPI.Windows.GetMainWindow());
         if (result is null)
+        {
             return;
+        }
 
         SkEditorAPI.Core.GetAppConfig().Font = result;
         CurrentFont.Description = Translation.Get("SettingsPersonalizationFontDescription").Replace("{0}", result);
@@ -50,12 +56,12 @@ public partial class PersonalizationPage : UserControl
         {
             if (result.Equals("Default"))
             {
-                Application.Current.TryGetResource("JetBrainsFont", Avalonia.Styling.ThemeVariant.Default, out object font);
-                i.Editor.FontFamily = (Avalonia.Media.FontFamily)font;
+                Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object font);
+                i.Editor.FontFamily = (FontFamily)font;
             }
             else
             {
-                i.Editor.FontFamily = new(result);
+                i.Editor.FontFamily = new FontFamily(result);
             }
         });
     }

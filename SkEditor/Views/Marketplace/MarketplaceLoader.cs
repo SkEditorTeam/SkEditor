@@ -1,22 +1,23 @@
-﻿using ExCSS;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using SkEditor.Views.Marketplace.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 
 namespace SkEditor.Views.Marketplace;
+
 public class MarketplaceLoader
 {
-    private static readonly string[] supportedTypes = ["NewSyntax", "Theme", "Addon", "NewThemeWithSyntax", "ZipAddon"];
-    private static readonly string[] hiddenItems = [];
+    private static readonly string[] SupportedTypes = ["NewSyntax", "Theme", "Addon", "NewThemeWithSyntax", "ZipAddon"];
+    private static readonly string[] HiddenItems = [];
 
     public static async IAsyncEnumerable<MarketplaceItem> GetItems()
     {
-        string url = MarketplaceWindow.MarketplaceUrl + "/items.json";
+        const string url = MarketplaceWindow.MarketplaceUrl + "/items.json";
         using HttpClient client = new();
         HttpResponseMessage response = await client.GetAsync(url);
         if (response.IsSuccessStatusCode)
@@ -25,11 +26,22 @@ public class MarketplaceLoader
             string[] itemNames = JsonConvert.DeserializeObject<string[]>(json);
             foreach (string itemName in itemNames)
             {
-                if (hiddenItems.Contains(itemName)) continue;
+                if (HiddenItems.Contains(itemName))
+                {
+                    continue;
+                }
 
                 MarketplaceItem item = GetItem(itemName);
-                if (item.ItemName == null) continue;
-                if (!supportedTypes.Contains(item.ItemType)) continue;
+                if (item.ItemName == null)
+                {
+                    continue;
+                }
+
+                if (!SupportedTypes.Contains(item.ItemType))
+                {
+                    continue;
+                }
+
                 yield return item;
             }
         }
@@ -37,8 +49,6 @@ public class MarketplaceLoader
         {
             Log.Error("Failed to get items.json");
         }
-
-        yield break;
     }
 
     private static MarketplaceItem GetItem(string name)
@@ -54,16 +64,17 @@ public class MarketplaceLoader
             item = FormatUrls(url, item);
             return item;
         }
-        else
-        {
-            Log.Error("Failed to get manifest.json for item " + name);
-            return new MarketplaceItem();
-        }
+
+        Log.Error("Failed to get manifest.json for item " + name);
+        return new MarketplaceItem();
     }
 
     private static MarketplaceItem FormatUrls(string url, MarketplaceItem item)
     {
-        static string CombineUrls(string baseUrl, string relativeUrl) => baseUrl + "/" + relativeUrl;
+        static string CombineUrls(string baseUrl, string relativeUrl)
+        {
+            return baseUrl + "/" + relativeUrl;
+        }
 
         item.ItemImageUrl = CombineUrls(url, item.ItemImageUrl);
         if (item is AddonItem addonItem)
@@ -81,7 +92,8 @@ public class MarketplaceLoader
         else if (item is ThemeWithSyntaxItem themeWithSyntaxItem)
         {
             themeWithSyntaxItem.ThemeFileUrl = CombineUrls(url, themeWithSyntaxItem.ThemeFileUrl);
-            themeWithSyntaxItem.SyntaxFolders = themeWithSyntaxItem.SyntaxFolders.Select(x => CombineUrls(url, x)).ToArray();
+            themeWithSyntaxItem.SyntaxFolders =
+                themeWithSyntaxItem.SyntaxFolders.Select(x => CombineUrls(url, x)).ToArray();
         }
 
         return item;
@@ -90,45 +102,47 @@ public class MarketplaceLoader
 
 public class MarketplaceItem
 {
-    [JsonProperty("name")]
-    public string ItemName { get; set; }
-    [JsonProperty("type")]
-    public string ItemType { get; set; }
+    [JsonProperty("name")] public string ItemName { get; set; }
 
-    [JsonProperty("shortDescription")]
-    public string ItemShortDescription { get; set; }
+    [JsonProperty("type")] public string ItemType { get; set; }
 
-    [JsonProperty("icon")]
-    public string ItemImageUrl { get; set; }
+    [JsonProperty("shortDescription")] public string ItemShortDescription { get; set; }
 
-    [JsonProperty("longDescription")]
-    public string ItemLongDescription { get; set; }
+    [JsonProperty("icon")] public string ItemImageUrl { get; set; }
 
-    [JsonProperty("version")]
-    public string ItemVersion { get; set; }
+    [JsonProperty("longDescription")] public string ItemLongDescription { get; set; }
 
-    [JsonProperty("author")]
-    public string ItemAuthor { get; set; }
+    [JsonProperty("version")] public string ItemVersion { get; set; }
 
-    public virtual void Install() { }
-    public virtual void Uninstall() { }
+    [JsonProperty("author")] public string ItemAuthor { get; set; }
+
+    [JsonIgnore] public MarketplaceWindow Marketplace { get; set; }
+
+    public virtual Task Install()
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual Task Uninstall()
+    {
+        return Task.CompletedTask;
+    }
 
     public virtual bool IsInstalled()
     {
         return false;
     }
-
-    [JsonIgnore] public MarketplaceWindow Marketplace { get; set; }
 }
 
 public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
 {
-    public override MarketplaceItem ReadJson(JsonReader reader, Type objectType, MarketplaceItem? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override MarketplaceItem ReadJson(JsonReader reader, Type objectType, MarketplaceItem? existingValue,
+        bool hasExistingValue, JsonSerializer serializer)
     {
         JObject jsonObject = JObject.Load(reader);
         string itemType = jsonObject["type"]?.Value<string>();
 
-        var defaultSerializer = new JsonSerializer();
+        JsonSerializer defaultSerializer = new();
 
         return itemType switch
         {
@@ -137,7 +151,7 @@ public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
             "Addon" => jsonObject.ToObject<AddonItem>(defaultSerializer),
             "NewThemeWithSyntax" => jsonObject.ToObject<ThemeWithSyntaxItem>(defaultSerializer),
             "ZipAddon" => jsonObject.ToObject<ZipAddonItem>(defaultSerializer),
-            _ => new MarketplaceItem(),
+            _ => new MarketplaceItem()
         };
     }
 

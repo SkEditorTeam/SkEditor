@@ -1,30 +1,34 @@
-﻿using Avalonia;
+﻿using System;
+using System.IO;
+using System.IO.Compression;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
-using System;
-using System.IO;
-using System.IO.Compression;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities;
+
 public static class FileDownloader
 {
-    private static readonly string zipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
-    private static readonly string appDataFolderPath = AppConfig.AppDataFolderPath;
-    private static readonly string zipFilePath = Path.Combine(appDataFolderPath, "items.zip");
+    private const string ZipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
+    private static readonly string AppDataFolderPath = AppConfig.AppDataFolderPath;
+    private static readonly string ZipFilePath = Path.Combine(AppDataFolderPath, "items.zip");
 
     public static async Task CheckForMissingItemFiles(Window visual)
     {
         string itemsFile = Path.Combine(AppConfig.AppDataFolderPath, "items.json");
-        if (File.Exists(itemsFile)) return;
+        if (File.Exists(itemsFile))
+        {
+            return;
+        }
 
         TaskDialog td = CreateTaskDialog(visual);
-        var result = await td.ShowAsync();
+        object? result = await td.ShowAsync();
 
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
         if (standardResult == TaskDialogStandardResult.Cancel)
@@ -36,16 +40,16 @@ public static class FileDownloader
 
     private static TaskDialog CreateTaskDialog(Visual visual)
     {
-        var td = new TaskDialog
+        TaskDialog td = new()
         {
             Title = Translation.Get("DownloadingMissingFilesTitle"),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.Download },
             SubHeader = Translation.Get("Downloading"),
-            Content = Translation.Get("DownloadingMissingFilesDescriptionItems"),
+            Content = Translation.Get("DownloadingMissingFilesDescriptionItems")
         };
 
-        td.Opened += async (s, e) => await DownloadMissingFiles(td);
+        td.Opened += async (_, _) => await DownloadMissingFiles(td);
 
         td.XamlRoot = visual;
         return td;
@@ -53,22 +57,22 @@ public static class FileDownloader
 
     private static async Task DownloadMissingFiles(TaskDialog td)
     {
-        TaskDialogProgressState state = TaskDialogProgressState.Normal;
+        const TaskDialogProgressState state = TaskDialogProgressState.Normal;
         td.SetProgressBarState(0, state);
 
         try
         {
             using (HttpClient client = new())
             {
-                var progress = new Progress<float>();
-                progress.ProgressChanged += (e, sender) => td.SetProgressBarState(sender, state);
+                Progress<float> progress = new();
+                progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
 
-                using var file = new FileStream(zipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-                await client.DownloadDataAsync(zipUrl, file, progress);
+                await using FileStream file = new(ZipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await client.DownloadDataAsync(ZipUrl, file, progress);
             }
 
-            ZipFile.ExtractToDirectory(zipFilePath, appDataFolderPath);
-            File.Delete(zipFilePath);
+            ZipFile.ExtractToDirectory(ZipFilePath, AppDataFolderPath);
+            File.Delete(ZipFilePath);
 
             Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.OK); });
         }

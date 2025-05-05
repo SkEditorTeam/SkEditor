@@ -20,7 +20,7 @@
                     Name="ApiKeyTextBox"
                     PasswordChar="●"
                     Watermark="API Key"
-                    Width="200"/>
+                    Width="200" />
             </StackPanel>
         </controls:SettingsExpander.Footer>
     </controls:SettingsExpander>

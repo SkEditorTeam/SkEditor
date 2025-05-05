@@ -1,41 +1,42 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:ar="clr-namespace:SkEditor.Utilities.Projects"
              xmlns:elements="clr-namespace:SkEditor.Utilities.Projects.Elements"
              x:Class="SkEditor.Controls.Sidebar.ExplorerSidebarPanel">
-    
+
     <UserControl.Styles>
         <Style Selector="Button.barButton">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
         </Style>
         <Style Selector="Separator">
-            <Setter Property="Margin" Value="0,1"/>
+            <Setter Property="Margin" Value="0,1" />
         </Style>
         <Style Selector="TreeViewItem">
-            <Setter Property="FontWeight" Value="Regular"/>
+            <Setter Property="FontWeight" Value="Regular" />
         </Style>
     </UserControl.Styles>
-    
-    <Border MinWidth="250" Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
+
+    <Border MinWidth="250" Name="ExtendedSideBar" Background="{DynamicResource SkEditorBorderBackground}"
+            CornerRadius="7">
 
         <Grid RowDefinitions="auto,auto,auto,*">
-            <TextBlock Grid.Row="0" Text="{DynamicResource ProjectExplorerTitle}" FontWeight="DemiBold" Margin="20,10,20,10"/>
-            <Separator Grid.Row="1" Margin="0,0,0,10"/>
+            <TextBlock Grid.Row="0" Text="{DynamicResource ProjectExplorerTitle}" FontWeight="DemiBold"
+                       Margin="20,10,20,10" />
+            <Separator Grid.Row="1" Margin="0,0,0,10" />
             <TreeView Grid.Row="3" Name="FileTreeView">
                 <TreeView.Styles>
                     <Style Selector="TreeViewItem">
-                        <Setter Property="IsExpanded" x:DataType="elements:StorageElement" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                        <Setter Property="IsExpanded" x:DataType="elements:StorageElement"
+                                Value="{Binding IsExpanded, Mode=TwoWay}" />
                     </Style>
                 </TreeView.Styles>
                 <TreeView.ItemTemplate>
-					<TreeDataTemplate x:DataType="elements:StorageElement" ItemsSource="{Binding Children}">
-						<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
-							<Interaction.Behaviors>
+                    <TreeDataTemplate x:DataType="elements:StorageElement" ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch" Background="Transparent">
+                            <Interaction.Behaviors>
                                 <EventTriggerBehavior EventName="DoubleTapped">
                                     <EventTriggerBehavior.Actions>
                                         <InvokeCommandAction Command="{Binding DoubleClickCommand}" />
@@ -46,42 +47,71 @@
                                         <InvokeCommandAction Command="{Binding SingleClickCommand}" />
                                     </EventTriggerBehavior.Actions>
                                 </EventTriggerBehavior>
-							</Interaction.Behaviors>
-                            <ui:IconSourceElement HorizontalAlignment="Left" VerticalAlignment="Center" IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="18" Height="18" />
-                            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding Name}"/>
-                            
+                            </Interaction.Behaviors>
+                            <ui:IconSourceElement HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                  IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="18"
+                                                  Height="18" />
+                            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding Name}" />
+
                             <StackPanel.ContextFlyout>
                                 <MenuFlyout>
-                                    <MenuItem IsVisible="{Binding !IsFile}" Header="{DynamicResource MenuHeaderNewFile}" Command="{Binding CreateNewFileCommand}">
-                                        <MenuItem.Icon><ui:SymbolIcon Symbol="New" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    <MenuItem IsVisible="{Binding !IsFile}"
+                                              Header="{DynamicResource MenuHeaderNewFile}"
+                                              Command="{Binding CreateNewFileCommand}">
+                                        <MenuItem.Icon>
+                                            <ui:SymbolIcon Symbol="New" FontSize="20" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem IsVisible="{Binding !IsFile}" Header="{DynamicResource MenuHeaderNewFolder}" Command="{Binding CreateNewFolderCommand}">
-                                        <MenuItem.Icon><ui:SymbolIcon Symbol="NewFolder" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    <MenuItem IsVisible="{Binding !IsFile}"
+                                              Header="{DynamicResource MenuHeaderNewFolder}"
+                                              Command="{Binding CreateNewFolderCommand}">
+                                        <MenuItem.Icon>
+                                            <ui:SymbolIcon Symbol="NewFolder" FontSize="20" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem IsVisible="{Binding IsRootFolder}" Header="{DynamicResource MenuHeaderCloseProject}" Command="{Binding CloseProjectCommand}">
-                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Back" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    <MenuItem IsVisible="{Binding IsRootFolder}"
+                                              Header="{DynamicResource MenuHeaderCloseProject}"
+                                              Command="{Binding CloseProjectCommand}">
+                                        <MenuItem.Icon>
+                                            <ui:SymbolIcon Symbol="Back" FontSize="20" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
-                                    
+
                                     <Separator IsVisible="{Binding !IsFile}" />
-                                    
-                                    <MenuItem Header="{DynamicResource MenuHeaderCopyPath}" Command="{Binding CopyPathCommand}">
-                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Copy" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+
+                                    <MenuItem Header="{DynamicResource MenuHeaderCopyPath}"
+                                              Command="{Binding CopyPathCommand}">
+                                        <MenuItem.Icon>
+                                            <ui:SymbolIcon Symbol="Copy" FontSize="20" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
-                                    
-                                    <MenuItem Header="{DynamicResource MenuHeaderCopyAbsolutePath}" Command="{Binding CopyAbsolutePathCommand}">
-                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Copy" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+
+                                    <MenuItem Header="{DynamicResource MenuHeaderCopyAbsolutePath}"
+                                              Command="{Binding CopyAbsolutePathCommand}">
+                                        <MenuItem.Icon>
+                                            <ui:SymbolIcon Symbol="Copy" FontSize="20" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
-                                    
+
                                     <Separator />
 
-                                    <MenuItem Header="{DynamicResource MenuHeaderOpenInExplorer}" Command="{Binding OpenInExplorerCommand}">
-                                        <MenuItem.Icon><ui:SymbolIcon Symbol="OpenFolder" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    <MenuItem Header="{DynamicResource MenuHeaderOpenInExplorer}"
+                                              Command="{Binding OpenInExplorerCommand}">
+                                        <MenuItem.Icon>
+                                            <ui:SymbolIcon Symbol="OpenFolder" FontSize="20" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="{DynamicResource MenuHeaderRename}" Command="{Binding RenameCommand}">
-                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Rename" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    <MenuItem Header="{DynamicResource MenuHeaderRename}"
+                                              Command="{Binding RenameCommand}">
+                                        <MenuItem.Icon>
+                                            <ui:SymbolIcon Symbol="Rename" FontSize="20" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="{DynamicResource MenuHeaderDeleteFromDisk}" Command="{Binding DeleteCommand}">
-                                        <MenuItem.Icon><ui:SymbolIcon Symbol="Delete" FontSize="20"></ui:SymbolIcon></MenuItem.Icon>
+                                    <MenuItem Header="{DynamicResource MenuHeaderDeleteFromDisk}"
+                                              Command="{Binding DeleteCommand}">
+                                        <MenuItem.Icon>
+                                            <ui:SymbolIcon Symbol="Delete" FontSize="20" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                 </MenuFlyout>
                             </StackPanel.ContextFlyout>
@@ -90,11 +120,12 @@
                 </TreeView.ItemTemplate>
             </TreeView>
             <StackPanel Name="NoFolderMessage" VerticalAlignment="Center" Grid.Row="3" Margin="5" Spacing="10">
-                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Text="{DynamicResource ProjectExplorerInfoText}"/>
-                <Button Click="OpenFolder" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"
+                           Text="{DynamicResource ProjectExplorerInfoText}" />
+                <Button Name="OpenFolderButton" HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
-                        <ui:SymbolIcon Symbol="OpenFolder" FontSize="18"></ui:SymbolIcon>
-                        <TextBlock Text="{DynamicResource ProjectExplorerInfoButton}"/>
+                        <ui:SymbolIcon Symbol="OpenFolder" FontSize="18" />
+                        <TextBlock Text="{DynamicResource ProjectExplorerInfoButton}" />
                     </StackPanel>
                 </Button>
             </StackPanel>

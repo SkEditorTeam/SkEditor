@@ -22,15 +22,15 @@
                 <Setter Property="SelectionBrush" Value="{DynamicResource TextControlSelectionHighlightColor}" />
                 <Setter Property="SelectionForeground" Value="{DynamicResource TextOnAccentFillColorSelectedTextBrush}" />
             </Style>
-			
-			<Style Selector="^ Border">
+
+            <Style Selector="^ Border">
                 <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
             </Style>
         </Style>
     </Window.Styles>
 
     <Grid RowDefinitions="*,auto" Margin="15">
-        <ae:TextEditor Name="OutputTextBox" Grid.Row="0" IsReadOnly="True"/>
+        <ae:TextEditor Name="OutputTextBox" Grid.Row="0" IsReadOnly="True" />
 
         <TextBox Name="InputTextBox" Grid.Row="1" Margin="0,10,0,0" />
     </Grid>

@@ -1,11 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
-using Octokit;
-using SkEditor.API;
-using SkEditor.Utilities.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,30 +6,40 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
+using FluentAvalonia.UI.Controls;
+using Octokit;
+using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using Application = Avalonia.Application;
 using FileMode = System.IO.FileMode;
 
 namespace SkEditor.Utilities;
+
 public static class UpdateChecker
 {
-    private static readonly int _major = Assembly.GetExecutingAssembly().GetName().Version.Major;
-    private static readonly int _minor = Assembly.GetExecutingAssembly().GetName().Version.Minor;
-    private static readonly int _build = Assembly.GetExecutingAssembly().GetName().Version.Build;
-
     private const long RepoId = 679628726;
-    private static readonly GitHubClient _gitHubClient = new(new ProductHeaderValue("SkEditor"));
+    private static readonly int Major = Assembly.GetExecutingAssembly().GetName().Version.Major;
+    private static readonly int Minor = Assembly.GetExecutingAssembly().GetName().Version.Minor;
+    private static readonly int Build = Assembly.GetExecutingAssembly().GetName().Version.Build;
+    private static readonly GitHubClient GitHubClient = new(new ProductHeaderValue("SkEditor"));
 
-    private static readonly string _tempInstallerFile = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
+    private static readonly string TempInstallerFile = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
 
-    public static async void Check()
+    public static async Task Check()
     {
         try
         {
-            IReadOnlyList<Release> releases = await _gitHubClient.Repository.Release.GetAll(RepoId);
+            IReadOnlyList<Release> releases = await GitHubClient.Repository.Release.GetAll(RepoId);
             Release release = releases.FirstOrDefault(r => !r.Prerelease);
 
             (int, int, int) version = GetVersion(release.TagName);
-            if (!IsNewerVersion(version)) return;
+            if (!IsNewerVersion(version))
+            {
+                return;
+            }
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("UpdateAvailable"),
@@ -46,7 +49,10 @@ public static class UpdateChecker
                 cancelButtonText: "No"
             );
 
-            if (result != ContentDialogResult.Primary) return;
+            if (result != ContentDialogResult.Primary)
+            {
+                return;
+            }
 
             if (!OperatingSystem.IsWindows())
             {
@@ -59,15 +65,19 @@ public static class UpdateChecker
                 await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
                 return;
             }
-            DownloadMsi(msi.BrowserDownloadUrl);
+
+            await DownloadMsi(msi.BrowserDownloadUrl);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
-    private async static void DownloadMsi(string url)
+    private static async Task DownloadMsi(string url)
     {
         TaskDialog td = CreateTaskDialog(SkEditorAPI.Windows.GetMainWindow(), url);
-        var result = await td.ShowAsync();
+        object? result = await td.ShowAsync();
 
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
         if (standardResult == TaskDialogStandardResult.Cancel)
@@ -78,15 +88,15 @@ public static class UpdateChecker
 
     private static TaskDialog CreateTaskDialog(Visual visual, string url)
     {
-        var td = new TaskDialog
+        TaskDialog td = new()
         {
             Title = Translation.Get("DownloadingUpdateTitle"),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.Download },
-            SubHeader = Translation.Get("Downloading"),
+            SubHeader = Translation.Get("Downloading")
         };
 
-        td.Opened += async (s, e) => await DownloadUpdate(td, url);
+        td.Opened += async (_, _) => await DownloadUpdate(td, url);
 
         td.XamlRoot = visual;
         return td;
@@ -94,23 +104,23 @@ public static class UpdateChecker
 
     private static async Task DownloadUpdate(TaskDialog td, string url)
     {
-        TaskDialogProgressState state = TaskDialogProgressState.Normal;
+        const TaskDialogProgressState state = TaskDialogProgressState.Normal;
         td.SetProgressBarState(0, state);
 
         try
         {
             using (HttpClient client = new())
             {
-                var progress = new Progress<float>();
-                progress.ProgressChanged += (e, sender) => td.SetProgressBarState(sender, state);
+                Progress<float> progress = new();
+                progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
 
-                using var file = new FileStream(_tempInstallerFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                await using FileStream file = new(TempInstallerFile, FileMode.Create, FileAccess.Write, FileShare.None);
                 await client.DownloadDataAsync(url, file, progress);
             }
 
             Process.Start(new ProcessStartInfo
             {
-                FileName = _tempInstallerFile,
+                FileName = TempInstallerFile,
                 UseShellExecute = true
             });
 
@@ -135,8 +145,8 @@ public static class UpdateChecker
 
     private static bool IsNewerVersion((int, int, int) version)
     {
-        return version.Item1 > _major ||
-               (version.Item1 == _major && version.Item2 > _minor) ||
-               (version.Item1 == _major && version.Item2 == _minor && version.Item3 > _build);
+        return version.Item1 > Major ||
+               (version.Item1 == Major && version.Item2 > Minor) ||
+               (version.Item1 == Major && version.Item2 == Minor && version.Item3 > Build);
     }
 }

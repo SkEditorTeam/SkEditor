@@ -135,10 +135,10 @@ public partial class TerminalWindow : AppWindow
     private string ProcessText(string text)
     {
         bool escapeSequence = false;
-        var builder = new StringBuilder();
+        StringBuilder builder = new();
 
         string rawCodes = "";
-        foreach (var c in text)
+        foreach (char c in text)
         {
             if (c == EscapeChar)
             {
@@ -152,7 +152,7 @@ public partial class TerminalWindow : AppWindow
                 {
                     escapeSequence = false;
 
-                    var codes = rawCodes.Split(';').Select(int.Parse).ToArray();
+                    rawCodes.Split(';').Select(int.Parse).ToArray();
                     rawCodes = "";
 
                     //Console.WriteLine("Found codes: " + string.Join(", ", codes) + "; end char: " + c);

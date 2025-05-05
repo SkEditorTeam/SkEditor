@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using SkEditor.Utilities.Completion;
-using System.Collections.Generic;
 
 namespace SkEditor.Controls;
+
 public partial class CompletionMenu : UserControl
 {
     public CompletionMenu(IEnumerable<CompletionItem> completions)
@@ -17,7 +18,7 @@ public partial class CompletionMenu : UserControl
     {
         Dispatcher.UIThread.InvokeAsync(() =>
         {
-            foreach (var completion in completions)
+            foreach (CompletionItem completion in completions)
             {
                 ListBoxItem item = new()
                 {

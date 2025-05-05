@@ -1,16 +1,16 @@
-﻿using AvaloniaEdit.Highlighting;
+﻿using System.IO;
+using System.Threading.Tasks;
+using System.Xml;
+using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
 using Newtonsoft.Json;
 using Serilog;
-using System.IO;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace SkEditor.Utilities.Syntax;
 
 /// <summary>
-/// Represent a file type syntax, such as YAML, JSON, etc...
-/// It is split into the syntax file highlighting and the config file, containing extensions and some other stuff.
+///     Represent a file type syntax, such as YAML, JSON, etc...
+///     It is split into the syntax file highlighting and the config file, containing extensions and some other stuff.
 /// </summary>
 public class FileSyntax
 {
@@ -21,32 +21,6 @@ public class FileSyntax
         Extensions = [".sk", ".skript"],
         Version = "1.0"
     };
-
-    public static async Task<FileSyntax> LoadSyntax(string folder)
-    {
-        try
-        {
-            var configFile = Path.Combine(folder, "config.json");
-            var syntaxFile = Path.Combine(folder, "syntax.xshd");
-
-            if (!File.Exists(configFile) || !File.Exists(syntaxFile)) return new FileSyntax(null, null, folder);
-
-            var config = JsonConvert.DeserializeObject<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile));
-
-            StreamReader streamReader = new(syntaxFile);
-            var reader = XmlReader.Create(streamReader);
-            var highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            streamReader.Close();
-            reader.Close();
-
-            return new FileSyntax(highlightingDefinition, config, folder);
-        }
-        catch (IOException e)
-        {
-            Log.Error(e, "Failed to load syntax from {Folder}", folder);
-            return new FileSyntax(null, null, folder);
-        }
-    }
 
     private FileSyntax(IHighlightingDefinition? highlighting, FileSyntaxConfig? config,
         string folderName)
@@ -61,6 +35,37 @@ public class FileSyntax
     public FileSyntaxConfig Config { get; private set; }
 
     public string FolderName { get; set; }
+
+    public static async Task<FileSyntax> LoadSyntax(string folder)
+    {
+        try
+        {
+            string configFile = Path.Combine(folder, "config.json");
+            string syntaxFile = Path.Combine(folder, "syntax.xshd");
+
+            if (!File.Exists(configFile) || !File.Exists(syntaxFile))
+            {
+                return new FileSyntax(null, null, folder);
+            }
+
+            FileSyntaxConfig? config =
+                JsonConvert.DeserializeObject<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile));
+
+            StreamReader streamReader = new(syntaxFile);
+            XmlReader reader = XmlReader.Create(streamReader);
+            IHighlightingDefinition? highlightingDefinition =
+                HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            streamReader.Close();
+            reader.Close();
+
+            return new FileSyntax(highlightingDefinition, config, folder);
+        }
+        catch (IOException e)
+        {
+            Log.Error(e, "Failed to load syntax from {Folder}", folder);
+            return new FileSyntax(null, null, folder);
+        }
+    }
 
     public class FileSyntaxConfig
     {

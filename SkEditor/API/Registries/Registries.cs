@@ -3,11 +3,10 @@
 namespace SkEditor.API;
 
 /// <summary>
-/// Holds every registry used by the application.
+///     Holds every registry used by the application.
 /// </summary>
 public static class Registries
 {
-
     public static readonly Registry<ConnectionData> Connections = new();
     public static readonly Registry<IBottomIconElement> BottomIcons = new();
     public static readonly Registry<SidebarPanel> SidebarPanels = new();

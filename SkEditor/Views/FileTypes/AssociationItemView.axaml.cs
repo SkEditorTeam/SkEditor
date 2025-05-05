@@ -6,9 +6,18 @@ namespace SkEditor.Views.FileTypes;
 
 public partial class AssociationItemView : UserControl
 {
+    public static readonly AvaloniaProperty<string> AssociationSource =
+        AvaloniaProperty.Register<AssociationItemView, string>(nameof(AssociationSource));
 
-    public static readonly AvaloniaProperty<string> AssociationSource = AvaloniaProperty.Register<AssociationItemView, string>(nameof(AssociationSource));
-    public static readonly AvaloniaProperty<string> AssociationDescription = AvaloniaProperty.Register<AssociationItemView, string>(nameof(AssociationDescription));
+    public static readonly AvaloniaProperty<string> AssociationDescription =
+        AvaloniaProperty.Register<AssociationItemView, string>(nameof(AssociationDescription));
+
+    public AssociationItemView()
+    {
+        InitializeComponent();
+
+        DataContext = this;
+    }
 
     public string Source
     {
@@ -20,13 +29,6 @@ public partial class AssociationItemView : UserControl
     {
         get => GetValue(AssociationDescription)?.ToString();
         set => SetValue(AssociationDescription, value);
-    }
-
-    public AssociationItemView()
-    {
-        InitializeComponent();
-
-        DataContext = this;
     }
 
     public void UpdateIcon(Symbol symbol)

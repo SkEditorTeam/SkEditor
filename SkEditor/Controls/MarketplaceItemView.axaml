@@ -1,54 +1,54 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:ui="using:FluentAvalonia.UI.Controls"
-			 xmlns:controls="using:SkEditor.Controls"
-			 xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
-			 xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-			 x:Class="SkEditor.Controls.MarketplaceItemView" Design.Height="600" Design.Width="800">
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             x:Class="SkEditor.Controls.MarketplaceItemView" Design.Height="600" Design.Width="800">
 
-	<UserControl.Styles>
-		<Style Selector="Button">
-			<Setter Property="Padding" Value="6,3"/>
-			<Setter Property="Background" Value="#0dffffff"/>
-			<Setter Property="BorderThickness" Value="0"/>
-			<Setter Property="CornerRadius" Value="5"/>
-			<Setter Property="VerticalAlignment" Value="Stretch"/>
-			<Setter Property="Foreground" Value="#e6ffffff"/>
-		</Style>
-	</UserControl.Styles>
+    <UserControl.Styles>
+        <Style Selector="Button">
+            <Setter Property="Padding" Value="6,3" />
+            <Setter Property="Background" Value="#0dffffff" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="Foreground" Value="#e6ffffff" />
+        </Style>
+    </UserControl.Styles>
 
-	<Grid RowDefinitions="auto,*">
-		<StackPanel Orientation="Horizontal" Spacing="15" Grid.Row="0">
-			<Border Width="96" Height="96" CornerRadius="10" ClipToBounds="True" VerticalAlignment="Top">
-				<Image Name="IconImage" asyncImageLoader:ImageLoader.Source="{Binding ItemImageUrl}" />
-			</Border>
-			<StackPanel VerticalAlignment="Top">
-				<StackPanel Orientation="Horizontal" Spacing="5">
-					<TextBlock Name="DisplayNameTextBlock" Text="{Binding ItemName}" FontSize="22" FontWeight="Medium" VerticalAlignment="Center"/>
-					<TextBlock Name="VersionTextBlock" Text="{Binding ItemVersion}" FontSize="14" Foreground="#a3ffffff" VerticalAlignment="Center"/>
-				</StackPanel>
-				<TextBlock Name="Author" Text="{Binding ItemAuthor}" FontSize="12" Foreground="#a3ffffff"/>
-				<TextBlock Width="350" Foreground="#bfffffff" Text="{Binding ItemShortDescription}" FontSize="13" TextTrimming="CharacterEllipsis" Margin="0,10,0,0"/>
-				<StackPanel Orientation="Horizontal" Margin="0,5,0,0" Spacing="10">
-					<Button Name="InstallButton" Content="{DynamicResource MarketplaceButtonInstall}"/>
-					<Button Name="UpdateButton" Content="{DynamicResource MarketplaceButtonUpdate}" IsVisible="False"/>
-					<Button Name="UninstallButton" Content="{DynamicResource MarketplaceButtonUninstall}" IsVisible="False"/>
-					<Button Name="DisableButton" Content="{DynamicResource MarketplaceButtonDisable}" IsVisible="False"/>
-					<Button Name="EnableButton" Content="{DynamicResource MarketplaceButtonEnable}" IsVisible="False"/>
-					<Button Name="ManageButton" IsVisible="False" Classes="accent">
-						<StackPanel Orientation="Horizontal" Spacing="5">
-							<fluent:SymbolIcon Symbol="Settings"/>
-							<TextBlock Text="Manage"/>
-						</StackPanel>
-					</Button>
-				</StackPanel>
-			</StackPanel>
-		</StackPanel>
-		
-		<ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,25,0,0">
-			<TextBlock Text="{Binding ItemLongDescription}" FontSize="16" TextWrapping="Wrap" Foreground="#e6ffffff"/>
-		</ScrollViewer>
-	</Grid>
+    <Grid RowDefinitions="auto,*">
+        <StackPanel Orientation="Horizontal" Spacing="15" Grid.Row="0">
+            <Border Width="96" Height="96" CornerRadius="10" ClipToBounds="True" VerticalAlignment="Top">
+                <Image Name="IconImage" asyncImageLoader:ImageLoader.Source="{Binding ItemImageUrl}" />
+            </Border>
+            <StackPanel VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBlock Name="DisplayNameTextBlock" Text="{Binding ItemName}" FontSize="22" FontWeight="Medium"
+                               VerticalAlignment="Center" />
+                    <TextBlock Name="VersionTextBlock" Text="{Binding ItemVersion}" FontSize="14"
+                               Foreground="#a3ffffff" VerticalAlignment="Center" />
+                </StackPanel>
+                <TextBlock Name="Author" Text="{Binding ItemAuthor}" FontSize="12" Foreground="#a3ffffff" />
+                <TextBlock Width="350" Foreground="#bfffffff" Text="{Binding ItemShortDescription}" FontSize="13"
+                           TextTrimming="CharacterEllipsis" Margin="0,10,0,0" />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Spacing="10">
+                    <Button Name="InstallButton" Content="{DynamicResource MarketplaceButtonInstall}" />
+                    <Button Name="UpdateButton" Content="{DynamicResource MarketplaceButtonUpdate}" IsVisible="False" />
+                    <Button Name="UninstallButton" Content="{DynamicResource MarketplaceButtonUninstall}"
+                            IsVisible="False" />
+                    <Button Name="DisableButton" Content="{DynamicResource MarketplaceButtonDisable}" IsVisible="False" />
+                    <Button Name="EnableButton" Content="{DynamicResource MarketplaceButtonEnable}" IsVisible="False" />
+                    <Button Name="ManageButton" IsVisible="False" Classes="accent">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <fluent:SymbolIcon Symbol="Settings" />
+                            <TextBlock Text="Manage" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,25,0,0">
+            <TextBlock Text="{Binding ItemLongDescription}" FontSize="16" TextWrapping="Wrap" Foreground="#e6ffffff" />
+        </ScrollViewer>
+    </Grid>
 </UserControl>

@@ -1,6 +1,5 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
         <Border Padding="20">
             <StackPanel>
@@ -13,7 +12,7 @@
             </StackPanel>
         </Border>
     </Design.PreviewWith>
-    
+
     <Style Selector="Button.success">
         <Style Selector="^ /template/ Border#Root">
             <Setter Property="Background" Value="{DynamicResource ThemeGreenColor}" />
@@ -25,7 +24,7 @@
 
         <Style Selector="^:pointerover">
             <Style Selector="^ /template/ Border#Root">
-                <Setter Property="Background" Value="{DynamicResource ThemeDarkGreenColor}"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeDarkGreenColor}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeDarkGreenColor}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
@@ -48,12 +47,12 @@
                 <Setter Property="Background" Value="Purple" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
             </Style>
-			<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-				<Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
-			</Style>
-		</Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+            </Style>
+        </Style>
     </Style>
-    
+
     <!-- Danger -->
     <Style Selector="Button.danger">
         <Style Selector="^ /template/ Border#Root">
@@ -66,7 +65,7 @@
 
         <Style Selector="^:pointerover">
             <Style Selector="^ /template/ Border#Root">
-                <Setter Property="Background" Value="{DynamicResource ThemeDarkRedColor}"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeDarkRedColor}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeDarkRedColor}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
@@ -94,7 +93,7 @@
             </Style>
         </Style>
     </Style>
-    
+
     <!-- Info -->
     <Style Selector="Button.info">
         <Style Selector="^ /template/ Border#Root">
@@ -107,7 +106,7 @@
 
         <Style Selector="^:pointerover">
             <Style Selector="^ /template/ Border#Root">
-                <Setter Property="Background" Value="{DynamicResource ThemeBlueColor}"/>
+                <Setter Property="Background" Value="{DynamicResource ThemeBlueColor}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ThemeBlueColor}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
@@ -135,7 +134,7 @@
             </Style>
         </Style>
     </Style>
-    
+
     <!--Accent Button-->
     <Style Selector="Button.accent">
         <Style Selector="^ /template/ Border#Root">
@@ -176,7 +175,7 @@
             </Style>
         </Style>
     </Style>
-    
+
     <Style Selector="Button.link">
         <Setter Property="Foreground" Value="{DynamicResource AccentButtonForeground}" />
         <Setter Property="Padding" Value="0" />
@@ -188,9 +187,9 @@
                 <ContentPresenter Content="{TemplateBinding Content}">
                     <ContentPresenter.Styles>
                         <Style Selector="TextBlock">
-                            <Setter Property="Foreground" Value="{TemplateBinding Foreground}"/>
-                            <Setter Property="FontSize" Value="{TemplateBinding FontSize}"/>
-                            <Setter Property="TextDecorations" Value="Underline"/>
+                            <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+                            <Setter Property="FontSize" Value="{TemplateBinding FontSize}" />
+                            <Setter Property="TextDecorations" Value="Underline" />
                         </Style>
                     </ContentPresenter.Styles>
                 </ContentPresenter>

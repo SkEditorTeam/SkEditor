@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
-using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Controls.Sidebar;
@@ -19,7 +19,7 @@ namespace SkEditor.Utilities.Projects;
 
 public static class ProjectOpener
 {
-    public static Folder? ProjectRootFolder = null;
+    public static Folder? ProjectRootFolder;
 
     private static ExplorerSidebarPanel Panel => AddonLoader.GetCoreAddon().ProjectPanel.Panel;
 
@@ -27,9 +27,9 @@ public static class ProjectOpener
 
     private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
 
-    public static async void OpenProject(string? path = null)
+    public static async Task OpenProject(string? path = null)
     {
-        string folder = string.Empty;
+        string folder;
 
         if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
         {
@@ -79,7 +79,9 @@ public static class ProjectOpener
                         folder = rawPath;
 
                         if (folder.StartsWith("file:///"))
+                        {
                             folder = folder[8..];
+                        }
                     }
                 }
             }
@@ -89,14 +91,16 @@ public static class ProjectOpener
 
                 string rawString = folders[0].ToString();
 
-                int pathIndex = rawString.IndexOf("Path=");
+                int pathIndex = rawString.IndexOf("Path=", StringComparison.Ordinal);
 
                 if (pathIndex >= 0)
                 {
                     folder = rawString[(pathIndex + 5)..].Trim();
 
                     if (folder.StartsWith('\"') && folder.EndsWith('\"'))
+                    {
                         folder = folder[1..^1];
+                    }
                 }
                 else
                 {
@@ -120,59 +124,40 @@ public static class ProjectOpener
         static void HandleTapped(TappedEventArgs e)
         {
             if (e.Source is not Border border)
+            {
                 return;
+            }
 
-            var treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
+            TreeViewItem? treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
 
             if (treeViewItem is null)
+            {
                 return;
+            }
 
-            var storageElement = treeViewItem.DataContext as StorageElement;
+            StorageElement? storageElement = treeViewItem.DataContext as StorageElement;
 
             storageElement?.HandleClick();
         }
 
-        FileTreeView.DoubleTapped += (sender, e) =>
+        FileTreeView.DoubleTapped += (_, e) =>
         {
             if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            {
                 return;
+            }
 
             HandleTapped(e);
         };
 
-        FileTreeView.Tapped += (sender, e) =>
+        FileTreeView.Tapped += (_, e) =>
         {
             if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            {
                 return;
+            }
 
             HandleTapped(e);
         };
     }
-
-    #region Sorting
-
-
-
-    private static void SortTabItem(TreeViewItem parent)
-    {
-        var folders = parent
-            .Items.OfType<TabViewItem>()
-            .Where(item => item.Tag is IStorageFolder)
-            .OrderBy(item => item.Header);
-
-        var files = parent
-            .Items.OfType<TabViewItem>()
-            .Where(item => item.Tag is IStorageFile)
-            .OrderBy(item => item.Header);
-
-        parent.Items.Clear();
-
-        foreach (var folder in folders)
-            parent.Items.Add(folder);
-
-        foreach (var file in files)
-            parent.Items.Add(file);
-    }
-
-    #endregion
 }

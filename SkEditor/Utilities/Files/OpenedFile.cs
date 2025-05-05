@@ -1,14 +1,15 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using Avalonia.Controls;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Parser;
-using System.Collections.Generic;
 
 namespace SkEditor.Utilities.Files;
 
 public class OpenedFile
 {
+    public TabViewItem TabViewItem { get; set; }
 
     #region Text Files Properties
 
@@ -18,6 +19,7 @@ public class OpenedFile
     public bool IsNewFile { get; set; } = false;
 
     private bool _saved;
+
     public bool IsSaved
     {
         get => _saved;
@@ -25,7 +27,9 @@ public class OpenedFile
         {
             _saved = value;
             if (TabViewItem != null)
+            {
                 TabViewItem.Header = Header;
+            }
         }
     }
 
@@ -39,31 +43,35 @@ public class OpenedFile
 
     #endregion
 
-    public TabViewItem TabViewItem { get; set; }
-
     #region Accessors
 
     public bool IsEditor => Editor != null;
     public string? Name => Path == null ? CustomName : System.IO.Path.GetFileName(Path);
-    public string? Header => Name + (IsSaved || (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && Path != null) ? "" : " •");
+
+    public string Header =>
+        Name + (IsSaved || (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && Path != null) ? "" : " •");
 
     #endregion
 
     #region Custom Data
 
     public List<CustomFileData> CustomData { get; } = [];
+
     public object? this[string key]
     {
         get
         {
-            var data = CustomData.Find(d => d.Key == key);
+            CustomFileData? data = CustomData.Find(d => d.Key == key);
             return data?.Value;
         }
         set
         {
-            var data = CustomData.Find(d => d.Key == key);
+            CustomFileData? data = CustomData.Find(d => d.Key == key);
             if (data != null)
+            {
                 CustomData.Remove(data);
+            }
+
             CustomData.Add(new CustomFileData(key, value));
         }
     }

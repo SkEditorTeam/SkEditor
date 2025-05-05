@@ -3,110 +3,138 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-			 xmlns:controls="using:SkEditor.Controls"
+             xmlns:controls="using:SkEditor.Controls"
              xmlns:utilities="clr-namespace:SkEditor.Utilities"
-			 mc:Ignorable="d" d:DesignWidth="800"
+             mc:Ignorable="d" d:DesignWidth="800"
              x:DataType="utilities:AppConfig"
              x:Class="SkEditor.Views.Settings.GeneralPage">
 
-	<Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-		<controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsGeneralTitle}" Grid.Row="0"/>
-		<ScrollViewer Grid.Row="1">
-			<StackPanel Spacing="8">
-				<controls:SettingsCategorySeparator Title="Application" />
-				
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralLanguage}" IconSource="{StaticResource LanguageIcon}">
-					<ui:SettingsExpander.Footer>
-						<ComboBox Name="LanguageComboBox"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
-				
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralRpc}" IconSource="{StaticResource DiscordIcon}"
-				                     Description="{DynamicResource SettingsGeneralRpcDescription}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRpcEnabled, Mode=OneTime}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+    <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsGeneralTitle}" Grid.Row="0" />
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="8">
+                <controls:SettingsCategorySeparator Title="Application" />
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralCheckForUpdates}" IconSource="{StaticResource CheckForUpdatesIcon}"
-				                     Description="{DynamicResource SettingsGeneralCheckForUpdatesDescription}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="CheckForUpdatesToggleSwitch" IsChecked="{Binding CheckForUpdates}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
-				
-				<controls:SettingsCategorySeparator Title="Editor" />
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralLanguage}"
+                                     IconSource="{StaticResource LanguageIcon}">
+                    <ui:SettingsExpander.Footer>
+                        <ComboBox Name="LanguageComboBox" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralWrapping}" IconSource="{StaticResource WrappingIcon}"
-									Description="{DynamicResource SettingsGeneralWrappingDescription}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled, Mode=OneTime}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
-				
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralTabType}" IconSource="{StaticResource FunctionIcon}"
-				                     Description="{DynamicResource SettingsGeneralTabTypeDescription}">
-					<ui:SettingsExpander.Footer>
-						<StackPanel Orientation="Horizontal" Spacing="10">
-							<ComboBox Name="IndentationTypeComboBox">
-								<ComboBoxItem Tag="tabs" Content="{DynamicResource SettingsGeneralTabTypeTabs}" />
-								<ComboBoxItem Tag="spaces" Content="{DynamicResource SettingsGeneralTabTypeSpaces}" />
-							</ComboBox>
-							<ComboBox Name="IndentationAmountComboBox">
-								<ComboBoxItem Tag="1">1</ComboBoxItem> 
-								<ComboBoxItem Tag="2">2</ComboBoxItem>
-								<ComboBoxItem Tag="3">3</ComboBoxItem>
-								<ComboBoxItem Tag="4">4</ComboBoxItem>
-							</ComboBox>
-						</StackPanel>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralRpc}"
+                                     IconSource="{StaticResource DiscordIcon}"
+                                     Description="{DynamicResource SettingsGeneralRpcDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRpcEnabled, Mode=OneTime}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoIndent}" IconSource="{StaticResource AutoIndentIcon}"
-					Description="{DynamicResource SettingsGeneralAutoIndentDescription}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="AutoIndentToggleSwitch" IsChecked="{Binding IsAutoIndentEnabled}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralCheckForUpdates}"
+                                     IconSource="{StaticResource CheckForUpdatesIcon}"
+                                     Description="{DynamicResource SettingsGeneralCheckForUpdatesDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="CheckForUpdatesToggleSwitch" IsChecked="{Binding CheckForUpdates}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoPairing}" IconSource="{StaticResource AutoPairingIcon}"
-					Description="{DynamicResource SettingsGeneralAutoPairingDescription}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="AutoPairingToggleSwitch" IsChecked="{Binding IsAutoPairingEnabled}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+                <controls:SettingsCategorySeparator Title="Editor" />
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralPasteIndent}"
-				                     Description="{DynamicResource SettingsGeneralPasteIndentDescription}">
-					<ui:SettingsExpander.IconSource>
-						<ui:SymbolIconSource Symbol="Paste" />
-					</ui:SettingsExpander.IconSource>
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="PasteIndentToggleSwitch" IsChecked="{Binding IsPasteIndentationEnabled}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralWrapping}"
+                                     IconSource="{StaticResource WrappingIcon}"
+                                     Description="{DynamicResource SettingsGeneralWrappingDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled, Mode=OneTime}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoSave}" IconSource="{StaticResource AutoSaveIcon}"
-					Description="{DynamicResource SettingsGeneralAutoSaveDescription}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="AutoSaveToggleSwitch" IsChecked="{Binding IsAutoSaveEnabled}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralZoomSync}"
+                                     IconSource="{StaticResource ZoomIcon}"
+                                     Description="{DynamicResource SettingsGeneralZoomSyncDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="ZoomSyncToggleSwitch" IsChecked="{Binding IsZoomSyncEnabled, Mode=OneTime}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
 
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralChangeChecker}" IconSource="{StaticResource CheckForChangesIcon}"
-									Description="{DynamicResource SettingsGeneralChangeCheckerDescription}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="CheckForChangesToggleSwitch" IsChecked="{Binding CheckForChanges}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
-				
-				<ui:SettingsExpander Header="{DynamicResource SettingsGeneralProjectSingleFolderClick}" IconSource="{StaticResource Folder}"
-				                     Description="{DynamicResource SettingsGeneralProjectSingleFolderClickDescription}">
-					<ui:SettingsExpander.Footer>
-						<ToggleSwitch Name="ProjectSingleClickToggleSwitch" IsChecked="{Binding IsProjectSingleClickEnabled, Mode=OneTime}"/>
-					</ui:SettingsExpander.Footer>
-				</ui:SettingsExpander>
-			</StackPanel>
-		</ScrollViewer>
-	</Grid>
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralTabType}"
+                                     IconSource="{StaticResource FunctionIcon}"
+                                     Description="{DynamicResource SettingsGeneralTabTypeDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <ComboBox Name="IndentationTypeComboBox">
+                                <ComboBoxItem Tag="tabs" Content="{DynamicResource SettingsGeneralTabTypeTabs}" />
+                                <ComboBoxItem Tag="spaces" Content="{DynamicResource SettingsGeneralTabTypeSpaces}" />
+                            </ComboBox>
+                            <ComboBox Name="IndentationAmountComboBox">
+                                <ComboBoxItem Tag="1">1</ComboBoxItem>
+                                <ComboBoxItem Tag="2">2</ComboBoxItem>
+                                <ComboBoxItem Tag="3">3</ComboBoxItem>
+                                <ComboBoxItem Tag="4">4</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoIndent}"
+                                     IconSource="{StaticResource AutoIndentIcon}"
+                                     Description="{DynamicResource SettingsGeneralAutoIndentDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="AutoIndentToggleSwitch" IsChecked="{Binding IsAutoIndentEnabled}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoPairing}"
+                                     IconSource="{StaticResource AutoPairingIcon}"
+                                     Description="{DynamicResource SettingsGeneralAutoPairingDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="AutoPairingToggleSwitch" IsChecked="{Binding IsAutoPairingEnabled}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralPasteIndent}"
+                                     Description="{DynamicResource SettingsGeneralPasteIndentDescription}">
+                    <ui:SettingsExpander.IconSource>
+                        <ui:SymbolIconSource Symbol="Paste" />
+                    </ui:SettingsExpander.IconSource>
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="PasteIndentToggleSwitch" IsChecked="{Binding IsPasteIndentationEnabled}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoSave}"
+                                     IconSource="{StaticResource AutoSaveIcon}"
+                                     Description="{DynamicResource SettingsGeneralAutoSaveDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="AutoSaveToggleSwitch" IsChecked="{Binding IsAutoSaveEnabled}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralChangeChecker}"
+                                     IconSource="{StaticResource CheckForChangesIcon}"
+                                     Description="{DynamicResource SettingsGeneralChangeCheckerDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="CheckForChangesToggleSwitch" IsChecked="{Binding CheckForChanges}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralProjectSingleFolderClick}"
+                                     IconSource="{StaticResource Folder}"
+                                     Description="{DynamicResource SettingsGeneralProjectSingleFolderClickDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="ProjectSingleClickToggleSwitch"
+                                      IsChecked="{Binding IsProjectSingleClickEnabled, Mode=OneTime}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralSidebarAnimations}"
+                                     IconSource="{StaticResource SlideTransitionIcon}"
+                                     Description="{DynamicResource SettingsGeneralSidebarAnimationsDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="SidebarAnimationsToggleSwitch"
+                                      IsChecked="{Binding IsSidebarAnimationEnabled}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

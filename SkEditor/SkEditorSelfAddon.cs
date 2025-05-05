@@ -1,4 +1,6 @@
-﻿using Avalonia.Media.Imaging;
+﻿using System;
+using System.IO;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
@@ -6,30 +8,32 @@ using SkEditor.API;
 using SkEditor.Controls.Sidebar;
 using SkEditor.ViewModels;
 using SkEditor.Views.FileTypes;
-using System;
-using System.IO;
 
 namespace SkEditor;
 
 public class SkEditorSelfAddon : IAddon
 {
+    public readonly ParserSidebarPanel.ParserPanel ParserPanel = new();
+
+    public readonly ExplorerSidebarPanel.ExplorerPanel ProjectPanel = new();
+
+
+    private ImageIconSource _iconSource = null!;
     public string Name => "SkEditor Core";
     public string Version => SettingsViewModel.Version;
     public string Description => "The core of SkEditor, providing the base functionalities.";
     public string Identifier => "SkEditorCore";
 
-    public readonly ExplorerSidebarPanel.ExplorerPanel ProjectPanel = new();
-    public readonly ParserSidebarPanel.ParserPanel ParserPanel = new();
-
-
-    private ImageIconSource _iconSource = null!;
     public IconSource GetAddonIcon()
     {
         if (_iconSource is not null)
+        {
             return _iconSource;
+        }
 
         Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/SkEditor.svg"));
-        return _iconSource = new ImageIconSource() { Source = new SvgImage { Source = SvgSource.LoadFromStream(stream) } };
+        return _iconSource = new ImageIconSource
+            { Source = new SvgImage { Source = SvgSource.LoadFromStream(stream) } };
     }
 
     public void OnEnable()
@@ -39,7 +43,7 @@ public class SkEditorSelfAddon : IAddon
         static IconSource GetIcon(string fileName, bool svg)
         {
             Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Brands/" + fileName));
-            return new ImageIconSource()
+            return new ImageIconSource
             {
                 Source = svg
                     ? new SvgImage { Source = SvgSource.LoadFromStream(stream) }
@@ -92,8 +96,8 @@ public class SkEditorSelfAddon : IAddon
             {
                 try
                 {
-                    var fileStream = File.OpenRead(Uri.UnescapeDataString(path));
-                    var bitmap = new Bitmap(fileStream);
+                    FileStream fileStream = File.OpenRead(Uri.UnescapeDataString(path));
+                    Bitmap bitmap = new(fileStream);
                     fileStream.Close();
 
                     return new FileTypeResult(new ImageViewer(bitmap, path), Path.GetFileNameWithoutExtension(path));

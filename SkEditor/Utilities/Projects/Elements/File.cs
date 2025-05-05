@@ -1,19 +1,18 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
 public class File : StorageElement
 {
-    public string StorageFilePath { get; set; }
-
     public File(string file, Folder? parent = null)
     {
         file = Uri.UnescapeDataString(file).NormalizePathSeparators();
@@ -27,23 +26,28 @@ public class File : StorageElement
         UpdateIcon();
 
         OpenInExplorerCommand = new RelayCommand(OpenInExplorer);
-        DeleteCommand = new RelayCommand(DeleteFile);
+        DeleteCommand = new AsyncRelayCommand(DeleteFile);
         CopyAbsolutePathCommand = new RelayCommand(CopyAbsolutePath);
         CopyPathCommand = new RelayCommand(CopyPath);
     }
+
+    public string StorageFilePath { get; set; }
 
     public void OpenInExplorer()
     {
         Process.Start(new ProcessStartInfo(Parent.StorageFolderPath) { UseShellExecute = true });
     }
 
-    public async void DeleteFile()
+    public async Task DeleteFile()
     {
-        var result = await SkEditorAPI.Windows.ShowDialog("Delete File", 
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Delete File",
             $"Are you sure you want to delete {Name} from the file system?",
-            icon: Symbol.Delete, primaryButtonText: "Delete", cancelButtonText: "Cancel", translate: false);
+            Symbol.Delete, primaryButtonText: "Delete", cancelButtonText: "Cancel", translate: false);
 
-        if (result != ContentDialogResult.Primary) return;
+        if (result != ContentDialogResult.Primary)
+        {
+            return;
+        }
 
         System.IO.File.Delete(StorageFilePath);
         Parent.Children.Remove(this);
@@ -51,19 +55,27 @@ public class File : StorageElement
 
     public override string? ValidateName(string input)
     {
-        if (input == Name) return Translation.Get("ProjectRenameErrorSameName");
-        if (Parent is null) return Translation.Get("ProjectRenameErrorParentNull");
+        if (input == Name)
+        {
+            return Translation.Get("ProjectRenameErrorSameName");
+        }
 
-        var file = Parent.Children.FirstOrDefault(x => x.Name == input);
-        if (file is not null) return Translation.Get("ProjectErrorNameExists");
+        if (Parent is null)
+        {
+            return Translation.Get("ProjectRenameErrorParentNull");
+        }
 
-        return null;
+        StorageElement? file = Parent.Children.FirstOrDefault(x => x.Name == input);
+        return file is not null ? Translation.Get("ProjectErrorNameExists") : null;
     }
 
     public override void RenameElement(string newName, bool move = true)
     {
-        var newPath = Path.Combine(Parent.StorageFolderPath, newName);
-        if (move) System.IO.File.Move(StorageFilePath, newPath);
+        string newPath = Path.Combine(Parent.StorageFolderPath, newName);
+        if (move)
+        {
+            System.IO.File.Move(StorageFilePath, newPath);
+        }
 
         StorageFilePath = newPath;
         Name = newName;
@@ -72,12 +84,18 @@ public class File : StorageElement
         RefreshSelf();
     }
 
-    public override void HandleClick() => FileHandler.OpenFile(StorageFilePath);
+    public override void HandleClick()
+    {
+        FileHandler.OpenFile(StorageFilePath);
+    }
 
     public void UpdateIcon()
     {
-        var icon = Files.Icon.GetIcon(Path.GetExtension(StorageFilePath));
-        if (icon is not null) Icon = icon;
+        IconSource? icon = Files.Icon.GetIcon(Path.GetExtension(StorageFilePath));
+        if (icon is not null)
+        {
+            Icon = icon;
+        }
     }
 
     public void CopyAbsolutePath()
@@ -87,7 +105,7 @@ public class File : StorageElement
 
     public void CopyPath()
     {
-        var path = StorageFilePath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
+        string path = StorageFilePath.Replace(ProjectOpener.ProjectRootFolder.StorageFolderPath, "");
         SkEditorAPI.Windows.GetMainWindow().Clipboard.SetTextAsync(path);
     }
 }

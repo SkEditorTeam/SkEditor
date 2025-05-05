@@ -2,216 +2,216 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
-	<!-- Window Titles -->
-	<system:String x:Key="WindowTitlePublish">Publicar</system:String>
-	<system:String x:Key="WindowTitleRefactor">Refactorizar</system:String>
-	<system:String x:Key="WindowTitleSettings">Configuraciones</system:String>
-	<system:String x:Key="WindowTitleFontSelector">Seleccionar fuente</system:String>
-	<system:String x:Key="WindowTitleSaveFilePicker">Guardar archivo</system:String>
-	<system:String x:Key="WindowTitleOpenFilePicker">Abrir archivo</system:String>
-	<system:String x:Key="WindowTitleGuiGenerator">Generar GUI</system:String>
-	<system:String x:Key="WindowTitleCommandGenerator">Generar comando</system:String>
-	<system:String x:Key="WindowTitleItemSelector">Seleccionar ítem</system:String>
-	<system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
+    <!-- Window Titles -->
+    <system:String x:Key="WindowTitlePublish">Publicar</system:String>
+    <system:String x:Key="WindowTitleRefactor">Refactorizar</system:String>
+    <system:String x:Key="WindowTitleSettings">Configuraciones</system:String>
+    <system:String x:Key="WindowTitleFontSelector">Seleccionar fuente</system:String>
+    <system:String x:Key="WindowTitleSaveFilePicker">Guardar archivo</system:String>
+    <system:String x:Key="WindowTitleOpenFilePicker">Abrir archivo</system:String>
+    <system:String x:Key="WindowTitleGuiGenerator">Generar GUI</system:String>
+    <system:String x:Key="WindowTitleCommandGenerator">Generar comando</system:String>
+    <system:String x:Key="WindowTitleItemSelector">Seleccionar ítem</system:String>
+    <system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
 
-	<!-- Encabezados de Menú -->
-	<system:String x:Key="MenuHeaderFile">Archivo</system:String>
-	<system:String x:Key="MenuHeaderEdit">Editar</system:String>
-	<system:String x:Key="MenuHeaderTools">Herramientas</system:String>
-	<system:String x:Key="MenuHeaderOther">Otros</system:String>
+    <!-- Encabezados de Menú -->
+    <system:String x:Key="MenuHeaderFile">Archivo</system:String>
+    <system:String x:Key="MenuHeaderEdit">Editar</system:String>
+    <system:String x:Key="MenuHeaderTools">Herramientas</system:String>
+    <system:String x:Key="MenuHeaderOther">Otros</system:String>
 
-	<!-- Menú de Archivo -->
-	<system:String x:Key="MenuHeaderNew">Nuevo</system:String>
-	<system:String x:Key="MenuHeaderOpen">Abrir</system:String>
-	<system:String x:Key="MenuHeaderSave">Guardar</system:String>
-	<system:String x:Key="MenuHeaderSaveAs">Guardar como</system:String>
-	<system:String x:Key="MenuHeaderPublish">Publicar</system:String>
-	<system:String x:Key="MenuHeaderClose">Cerrar</system:String>
+    <!-- Menú de Archivo -->
+    <system:String x:Key="MenuHeaderNew">Nuevo</system:String>
+    <system:String x:Key="MenuHeaderOpen">Abrir</system:String>
+    <system:String x:Key="MenuHeaderSave">Guardar</system:String>
+    <system:String x:Key="MenuHeaderSaveAs">Guardar como</system:String>
+    <system:String x:Key="MenuHeaderPublish">Publicar</system:String>
+    <system:String x:Key="MenuHeaderClose">Cerrar</system:String>
 
-	<!-- Menú de Edición -->
-	<system:String x:Key="MenuHeaderCopy">Copiar</system:String>
-	<system:String x:Key="MenuHeaderPaste">Pegar</system:String>
-	<system:String x:Key="MenuHeaderCut">Cortar</system:String>
-	<system:String x:Key="MenuHeaderUndo">Deshacer</system:String>
-	<system:String x:Key="MenuHeaderRedo">Rehacer</system:String>
-	<system:String x:Key="MenuHeaderDuplicate">Duplicar</system:String>
-	<system:String x:Key="MenuHeaderComment">Comentar</system:String>
-	<system:String x:Key="MenuHeaderDelete">Eliminar</system:String>
+    <!-- Menú de Edición -->
+    <system:String x:Key="MenuHeaderCopy">Copiar</system:String>
+    <system:String x:Key="MenuHeaderPaste">Pegar</system:String>
+    <system:String x:Key="MenuHeaderCut">Cortar</system:String>
+    <system:String x:Key="MenuHeaderUndo">Deshacer</system:String>
+    <system:String x:Key="MenuHeaderRedo">Rehacer</system:String>
+    <system:String x:Key="MenuHeaderDuplicate">Duplicar</system:String>
+    <system:String x:Key="MenuHeaderComment">Comentar</system:String>
+    <system:String x:Key="MenuHeaderDelete">Eliminar</system:String>
 
-	<!-- Menú de Herramientas -->
-	<system:String x:Key="MenuHeaderDocumentation">Documentación</system:String>
-	<system:String x:Key="MenuHeaderGenerate">Generar</system:String>
-	<system:String x:Key="MenuHeaderGenerateGUI">Interfaz Gráfica (GUI)</system:String>
-	<system:String x:Key="MenuHeaderGenerateCommand">Comando</system:String>
-	<system:String x:Key="MenuHeaderRefactor">Refactorizar</system:String>
+    <!-- Menú de Herramientas -->
+    <system:String x:Key="MenuHeaderDocumentation">Documentación</system:String>
+    <system:String x:Key="MenuHeaderGenerate">Generar</system:String>
+    <system:String x:Key="MenuHeaderGenerateGUI">Interfaz Gráfica (GUI)</system:String>
+    <system:String x:Key="MenuHeaderGenerateCommand">Comando</system:String>
+    <system:String x:Key="MenuHeaderRefactor">Refactorizar</system:String>
 
-	<!-- Menú de Otros -->
-	<system:String x:Key="MenuHeaderMarketplace">Mercado</system:String>
-	<system:String x:Key="MenuHeaderRefreshSyntax">Actualizar sintaxis</system:String>
+    <!-- Menú de Otros -->
+    <system:String x:Key="MenuHeaderMarketplace">Mercado</system:String>
+    <system:String x:Key="MenuHeaderRefreshSyntax">Actualizar sintaxis</system:String>
 
-	<!-- Botones -->
-	<system:String x:Key="ApplyButton">Aplicar</system:String>
-	<system:String x:Key="ConfirmButton">Confirmar</system:String>
-	<system:String x:Key="CloseButton">Cerrar</system:String>
-	<system:String x:Key="SelectButton">Seleccionar</system:String>
-	<system:String x:Key="CancelButton">Cancelar</system:String>
-	<system:String x:Key="ContinueButton">Continuar</system:String>
-	<system:String x:Key="Error">Error</system:String>
-	<system:String x:Key="Success">Éxito</system:String>
-	<system:String x:Key="Attention">¡Atención!</system:String>
-	<system:String x:Key="Yes">Sí</system:String>
-	<system:String x:Key="No">No</system:String>
-	<system:String x:Key="Okay">Aceptar</system:String>
+    <!-- Botones -->
+    <system:String x:Key="ApplyButton">Aplicar</system:String>
+    <system:String x:Key="ConfirmButton">Confirmar</system:String>
+    <system:String x:Key="CloseButton">Cerrar</system:String>
+    <system:String x:Key="SelectButton">Seleccionar</system:String>
+    <system:String x:Key="CancelButton">Cancelar</system:String>
+    <system:String x:Key="ContinueButton">Continuar</system:String>
+    <system:String x:Key="Error">Error</system:String>
+    <system:String x:Key="Success">Éxito</system:String>
+    <system:String x:Key="Attention">¡Atención!</system:String>
+    <system:String x:Key="Yes">Sí</system:String>
+    <system:String x:Key="No">No</system:String>
+    <system:String x:Key="Okay">Aceptar</system:String>
 
-	<!-- Mensajes -->
-	<system:String x:Key="NewFileNameFormat">Nuevo archivo {0}</system:String>
-	<system:String x:Key="FailedToDownloadSyntax">¡Error al descargar el archivo de resaltado de sintaxis! Verifica tu conexión a internet. Sin ella, tu código no se resaltará.</system:String>
-	<system:String x:Key="DownloadingMissingFilesTitle">Archivos faltantes</system:String>
-	<system:String x:Key="Downloading">Descargando</system:String>
-	<system:String x:Key="DownloadingMissingFilesDescriptionItems">Los archivos utilizados por el selector de elementos faltan y se están descargando ahora.</system:String>
-	<system:String x:Key="DownloadMissingFilesFailed">Error al descargar archivos faltantes. Por favor, inténtalo de nuevo más tarde.</system:String>
-	<system:String x:Key="ClosingUnsavedFile">Tienes cambios sin guardar en este archivo. ¿Estás seguro de que quieres cerrarlo?</system:String>
-	<system:String x:Key="ClosingProgramWithUnsavedFiles">Tienes cambios sin guardar en al menos un archivo. ¿Estás seguro de que quieres cerrar la aplicación?</system:String>
-	<system:String x:Key="ChangesDetected">Este archivo ha sido modificado externamente.\n¿Quieres recargarlo y posiblemente perder cambios realizados en SkEditor?</system:String>
-	<system:String x:Key="DownloadingUpdateTitle">Descargando actualización</system:String>
-	<system:String x:Key="UpdateAvailable">Actualización disponible</system:String>
-	<system:String x:Key="UpdateAvailableMessage">Hay una actualización disponible.\n¿Te gustaría descargarla ahora?</system:String>
-	<system:String x:Key="UpdateFailed">Error al descargar la actualización. Por favor, inténtalo de nuevo más tarde.</system:String>
+    <!-- Mensajes -->
+    <system:String x:Key="NewFileNameFormat">Nuevo archivo {0}</system:String>
+    <system:String x:Key="FailedToDownloadSyntax">¡Error al descargar el archivo de resaltado de sintaxis! Verifica tu conexión a internet. Sin ella, tu código no se resaltará.</system:String>
+    <system:String x:Key="DownloadingMissingFilesTitle">Archivos faltantes</system:String>
+    <system:String x:Key="Downloading">Descargando</system:String>
+    <system:String x:Key="DownloadingMissingFilesDescriptionItems">Los archivos utilizados por el selector de elementos faltan y se están descargando ahora.</system:String>
+    <system:String x:Key="DownloadMissingFilesFailed">Error al descargar archivos faltantes. Por favor, inténtalo de nuevo más tarde.</system:String>
+    <system:String x:Key="ClosingUnsavedFile">Tienes cambios sin guardar en este archivo. ¿Estás seguro de que quieres cerrarlo?</system:String>
+    <system:String x:Key="ClosingProgramWithUnsavedFiles">Tienes cambios sin guardar en al menos un archivo. ¿Estás seguro de que quieres cerrar la aplicación?</system:String>
+    <system:String x:Key="ChangesDetected">Este archivo ha sido modificado externamente.\n¿Quieres recargarlo y posiblemente perder cambios realizados en SkEditor?</system:String>
+    <system:String x:Key="DownloadingUpdateTitle">Descargando actualización</system:String>
+    <system:String x:Key="UpdateAvailable">Actualización disponible</system:String>
+    <system:String x:Key="UpdateAvailableMessage">Hay una actualización disponible.\n¿Te gustaría descargarla ahora?</system:String>
+    <system:String x:Key="UpdateFailed">Error al descargar la actualización. Por favor, inténtalo de nuevo más tarde.</system:String>
 
-	<!-- Ventana de Publicación -->
-	<system:String x:Key="PublishWindowApiKeyHint">Haz clic aquí para abrir un sitio web con la clave API. ¡Asegúrate de iniciar sesión primero!</system:String>
-	<system:String x:Key="PublishWindowAnonymously">Anónimamente</system:String>
-	<system:String x:Key="PublishWindowResultLink">Enlace a tu código</system:String>
-	<system:String x:Key="PublishWindowPublishButton">Publicar</system:String>
+    <!-- Ventana de Publicación -->
+    <system:String x:Key="PublishWindowApiKeyHint">Haz clic aquí para abrir un sitio web con la clave API. ¡Asegúrate de iniciar sesión primero!</system:String>
+    <system:String x:Key="PublishWindowAnonymously">Anónimamente</system:String>
+    <system:String x:Key="PublishWindowResultLink">Enlace a tu código</system:String>
+    <system:String x:Key="PublishWindowPublishButton">Publicar</system:String>
 
-	<!-- Ventana de Refactorización -->
-	<system:String x:Key="RefactorWindowRemoveComments">Eliminar comentarios</system:String>
-	<system:String x:Key="RefactorWindowTabsToSpaces">Convertir tabulaciones a espacios</system:String>
-	<system:String x:Key="RefactorWindowSpacesToTabs">Convertir espacios a tabulaciones</system:String>
+    <!-- Ventana de Refactorización -->
+    <system:String x:Key="RefactorWindowRemoveComments">Eliminar comentarios</system:String>
+    <system:String x:Key="RefactorWindowTabsToSpaces">Convertir tabulaciones a espacios</system:String>
+    <system:String x:Key="RefactorWindowSpacesToTabs">Convertir espacios a tabulaciones</system:String>
 
-	<!-- Configuraciones -->
-	<system:String x:Key="SettingsEnabled">Activado</system:String>
-	<system:String x:Key="SettingsDisabled">Desactivado</system:String>
+    <!-- Configuraciones -->
+    <system:String x:Key="SettingsEnabled">Activado</system:String>
+    <system:String x:Key="SettingsDisabled">Desactivado</system:String>
 
-	<!-- Configuraciones Inicio -->
-	<system:String x:Key="SettingsHomeTitle">Configuraciones</system:String>
-	<system:String x:Key="SettingsHomeGeneral">General</system:String>
-	<system:String x:Key="SettingsHomeGeneralDescription">Idioma, características del editor de texto</system:String>
-	<system:String x:Key="SettingsHomePersonalization">Personalización</system:String>
-	<system:String x:Key="SettingsHomePersonalizationDescription">Tema, fuente, resaltado de sintaxis</system:String>
-	<system:String x:Key="SettingsHomeDiscord">Discord</system:String>
-	<system:String x:Key="SettingsHomeDiscordDescription">¡Muestra SkEditor en tu perfil de Discord!</system:String>
-	<system:String x:Key="SettingsHomeExperiments">Experimentos</system:String>
-	<system:String x:Key="SettingsHomeExperimentsDescription">¡Prueba funciones próximas!</system:String>
-	<system:String x:Key="SettingsHomeAddons">Complementos</system:String>
-	<system:String x:Key="SettingsHomeAddonsDescription">¡Mejora tu experiencia con potentes complementos!</system:String>
-	<system:String x:Key="SettingsHomeAbout">Acerca de</system:String>
+    <!-- Configuraciones Inicio -->
+    <system:String x:Key="SettingsHomeTitle">Configuraciones</system:String>
+    <system:String x:Key="SettingsHomeGeneral">General</system:String>
+    <system:String x:Key="SettingsHomeGeneralDescription">Idioma, características del editor de texto</system:String>
+    <system:String x:Key="SettingsHomePersonalization">Personalización</system:String>
+    <system:String x:Key="SettingsHomePersonalizationDescription">Tema, fuente, resaltado de sintaxis</system:String>
+    <system:String x:Key="SettingsHomeDiscord">Discord</system:String>
+    <system:String x:Key="SettingsHomeDiscordDescription">¡Muestra SkEditor en tu perfil de Discord!</system:String>
+    <system:String x:Key="SettingsHomeExperiments">Experimentos</system:String>
+    <system:String x:Key="SettingsHomeExperimentsDescription">¡Prueba funciones próximas!</system:String>
+    <system:String x:Key="SettingsHomeAddons">Complementos</system:String>
+    <system:String x:Key="SettingsHomeAddonsDescription">¡Mejora tu experiencia con potentes complementos!</system:String>
+    <system:String x:Key="SettingsHomeAbout">Acerca de</system:String>
 
-	<!-- Configuraciones Generales -->
-	<system:String x:Key="SettingsGeneralTitle">General</system:String>
-	<system:String x:Key="SettingsGeneralLanguage">Idioma</system:String>
-	<system:String x:Key="SettingsGeneralWrapping">Ajuste de línea</system:String>
-	<system:String x:Key="SettingsGeneralAutoIndent">Autoindentación</system:String>
-	<system:String x:Key="SettingsGeneralAutoIndentDescription">Inserta automáticamente una tabulación en una nueva línea si la línea anterior termina con dos puntos.</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairing">Emparejamiento automático</system:String>
-	<system:String x:Key="SettingsGeneralAutoPairingDescription">Añade automáticamente el carácter de cierre cuando ingreses el carácter de apertura para ciertos símbolos.</system:String>
-	<system:String x:Key="SettingsGeneralAutoSave">Autoguardado</system:String>
-	<system:String x:Key="SettingsGeneralAutoSaveDescription">Guarda automáticamente tu archivo cada vez que realizas un cambio.</system:String>
-	<system:String x:Key="SettingsGeneralRpc">Presencia en Discord</system:String>
-	<system:String x:Key="SettingsGeneralRpcDescription">Muestra SkEditor en tu estado de Discord.</system:String>
+    <!-- Configuraciones Generales -->
+    <system:String x:Key="SettingsGeneralTitle">General</system:String>
+    <system:String x:Key="SettingsGeneralLanguage">Idioma</system:String>
+    <system:String x:Key="SettingsGeneralWrapping">Ajuste de línea</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndent">Autoindentación</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndentDescription">Inserta automáticamente una tabulación en una nueva línea si la línea anterior termina con dos puntos.</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairing">Emparejamiento automático</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairingDescription">Añade automáticamente el carácter de cierre cuando ingreses el carácter de apertura para ciertos símbolos.</system:String>
+    <system:String x:Key="SettingsGeneralAutoSave">Autoguardado</system:String>
+    <system:String x:Key="SettingsGeneralAutoSaveDescription">Guarda automáticamente tu archivo cada vez que realizas un cambio.</system:String>
+    <system:String x:Key="SettingsGeneralRpc">Presencia en Discord</system:String>
+    <system:String x:Key="SettingsGeneralRpcDescription">Muestra SkEditor en tu estado de Discord.</system:String>
 
-	<!-- Configuraciones Acerca de -->
-	<system:String x:Key="SettingsAboutTitle">Acerca de</system:String>
-	<system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
-	<system:String x:Key="SettingsAboutSkEditorDescription">SkEditor es una aplicación para editar archivos Skript creada por Notro.</system:String>
-	<system:String x:Key="SettingsAboutVersion">Versión</system:String>
-	<system:String x:Key="SettingsAboutVersionDescription">Estás utilizando la versión: {0}</system:String>
-	<system:String x:Key="SettingsAboutGithub">GitHub</system:String>
-	<system:String x:Key="SettingsAboutGithubDescription">¡Haz clic para abrir el repositorio de GitHub de SkEditor!</system:String>
-	<system:String x:Key="SettingsAboutDiscord">Servidor de Discord</system:String>
-	<system:String x:Key="SettingsAboutDiscordDescription">¡Haz clic para unirte al servidor de Discord de SkEditor!</system:String>
+    <!-- Configuraciones Acerca de -->
+    <system:String x:Key="SettingsAboutTitle">Acerca de</system:String>
+    <system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
+    <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor es una aplicación para editar archivos Skript creada por Notro.</system:String>
+    <system:String x:Key="SettingsAboutVersion">Versión</system:String>
+    <system:String x:Key="SettingsAboutVersionDescription">Estás utilizando la versión: {0}</system:String>
+    <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">¡Haz clic para abrir el repositorio de GitHub de SkEditor!</system:String>
+    <system:String x:Key="SettingsAboutDiscord">Servidor de Discord</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">¡Haz clic para unirte al servidor de Discord de SkEditor!</system:String>
 
-	<!-- Configuraciones de Personalización -->
-	<system:String x:Key="SettingsPersonalizationTitle">Personalización</system:String>
-	<system:String x:Key="SettingsPersonalizationTheme">Tema</system:String>
-	<system:String x:Key="SettingsPersonalizationThemeDescription">Personaliza los colores de la aplicación.</system:String>
-	<system:String x:Key="SettingsPersonalizationSyntax">Resaltado de sintaxis</system:String>
-	<system:String x:Key="SettingsPersonalizationFont">Fuente</system:String>
-	<system:String x:Key="SettingsPersonalizationFontDescription">Fuente actual: {0}</system:String>
+    <!-- Configuraciones de Personalización -->
+    <system:String x:Key="SettingsPersonalizationTitle">Personalización</system:String>
+    <system:String x:Key="SettingsPersonalizationTheme">Tema</system:String>
+    <system:String x:Key="SettingsPersonalizationThemeDescription">Personaliza los colores de la aplicación.</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntax">Resaltado de sintaxis</system:String>
+    <system:String x:Key="SettingsPersonalizationFont">Fuente</system:String>
+    <system:String x:Key="SettingsPersonalizationFontDescription">Fuente actual: {0}</system:String>
 
-	<!-- Configuraciones de Tema -->
-	<system:String x:Key="SettingsThemeTitle">Tema</system:String>
-	<system:String x:Key="SettingsThemeInformation">En el futuro, podrás editar colores directamente desde aquí. Por ahora, crea y edita archivos en la carpeta de Temas.</system:String>
-	<system:String x:Key="SettingsThemeOpenFolder">Abrir carpeta</system:String>
-	<system:String x:Key="SettingsThemeCurrentTheme">Tema actual</system:String>
-	<system:String x:Key="SettingsThemeCurrentThemeDescription">No es necesario reiniciar, pero podría ser necesario para una actualización de color al 100%.</system:String>
+    <!-- Configuraciones de Tema -->
+    <system:String x:Key="SettingsThemeTitle">Tema</system:String>
+    <system:String x:Key="SettingsThemeInformation">En el futuro, podrás editar colores directamente desde aquí. Por ahora, crea y edita archivos en la carpeta de Temas.</system:String>
+    <system:String x:Key="SettingsThemeOpenFolder">Abrir carpeta</system:String>
+    <system:String x:Key="SettingsThemeCurrentTheme">Tema actual</system:String>
+    <system:String x:Key="SettingsThemeCurrentThemeDescription">No es necesario reiniciar, pero podría ser necesario para una actualización de color al 100%.</system:String>
 
-	<!-- Configuraciones de Complementos -->
-	<system:String x:Key="SettingsAddonsTitle">Complementos</system:String>
+    <!-- Configuraciones de Complementos -->
+    <system:String x:Key="SettingsAddonsTitle">Complementos</system:String>
 
-	<!-- RPC de Discord -->
-	<system:String x:Key="DiscordRpcEditing">Editando: {0}</system:String>
+    <!-- RPC de Discord -->
+    <system:String x:Key="DiscordRpcEditing">Editando: {0}</system:String>
 
-	<!-- Barra inferior -->
-	<system:String x:Key="BottomBarLine">Línea {0}</system:String>
-	<system:String x:Key="BottomBarColumn">Columna {0}</system:String>
-		
-	
-	<!-- Generador de GUI -->
-	<system:String x:Key="GuiGeneratorTitle">Título</system:String>
-	<system:String x:Key="GuiGeneratorFunctionName">Nombre de la función</system:String>
-	<system:String x:Key="GuiGeneratorRowQuantity">Cantidad de filas</system:String>
-	<system:String x:Key="GuiGeneratorBackgroundItem">Elemento de fondo</system:String>
-	<system:String x:Key="GuiGeneratorPreviewButton">Vista previa</system:String>
-	<system:String x:Key="GuiGeneratorGenerateButton">Generar</system:String>
-	<system:String x:Key="GuiGeneratorSkriptGui">Usar skript-gui</system:String>
-	<system:String x:Key="GuiGeneratorDisplayName">Nombre visible</system:String>
-	<system:String x:Key="GuiGeneratorLore">Descripción</system:String>
-	<system:String x:Key="GuiGeneratorOptional">Opcional</system:String>
-	<system:String x:Key="GuiGeneratorCustomModelData">ID de Datos de Modelo Personalizado</system:String>
-	<system:String x:Key="GuiGeneratorLoreLineWatermark">Haz clic derecho para agregar una nueva línea</system:String>
-	<system:String x:Key="GuiGeneratorAddLoreLine">Agregar una nueva línea de descripción</system:String>
-	<system:String x:Key="GuiGeneratorAddExampleAction">Agregar una acción de ejemplo</system:String>
+    <!-- Barra inferior -->
+    <system:String x:Key="BottomBarLine">Línea {0}</system:String>
+    <system:String x:Key="BottomBarColumn">Columna {0}</system:String>
 
-	<!-- Generador de Comandos -->
-	<system:String x:Key="CommandGeneratorName">Nombre</system:String>
-	<system:String x:Key="CommandGeneratorPermission">Permiso</system:String>
-	<system:String x:Key="CommandGeneratorNoPermissionMessage">Mensaje sin permiso</system:String>
-	<system:String x:Key="CommandGeneratorAliases">Alias</system:String>
-	<system:String x:Key="CommandGeneratorInvalidUsageMessage">Mensaje de uso inválido</system:String>
-	<system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Quién puede usar el comando</system:String>
-	<system:String x:Key="CommandGeneratorPlayer">Jugador</system:String>
-	<system:String x:Key="CommandGeneratorConsole">Consola</system:String>
-	<system:String x:Key="CommandGeneratorCooldown">Enfriamiento</system:String>
-	<system:String x:Key="CommandGeneratorTicks">Ticks</system:String>
-	<system:String x:Key="CommandGeneratorSeconds">Segundos</system:String>
-	<system:String x:Key="CommandGeneratorMinutes">Minutos</system:String>
-	<system:String x:Key="CommandGeneratorHours">Horas</system:String>
-	<system:String x:Key="CommandGeneratorDays">Días</system:String>
-	<system:String x:Key="CommandGeneratorWeeks">Semanas</system:String>
-	<system:String x:Key="CommandGeneratorMonths">Meses</system:String>
-	<system:String x:Key="CommandGeneratorYears">Años</system:String>
-	<system:String x:Key="CommandGeneratorGenerate">Generar</system:String>
-	<system:String x:Key="CommandGeneratorPropertyMissing">¡Se requiere la propiedad {0}!</system:String>
 
-	<!-- Marketplace -->
-	<system:String x:Key="MarketplaceSearch">Buscar</system:String>
-	<system:String x:Key="MarketplaceEnableNow">Habilitar ahora</system:String>
-	<system:String x:Key="MarketplaceInstallSuccess">¡{0} descargado con éxito!</system:String>
-	<system:String x:Key="MarketplaceInstallRestart">Por favor, reinicia la aplicación para cargar el complemento.</system:String>
-	<system:String x:Key="MarketplaceInstallEnableNow">¿Quieres habilitarlo ahora?</system:String>
-	<system:String x:Key="MarketplaceInstallNoNeedToRestart">El complemento debería funcionar sin reiniciar, pero si encuentras errores, reinicia la aplicación.</system:String>
-	<system:String x:Key="MarketplaceInstallFailed">Error al descargar {0}.</system:String>
-	<system:String x:Key="MarketplaceUninstallSuccess">¡{0} desinstalado con éxito!\nPor favor, reinicia la aplicación para descargar el complemento.</system:String>
-	<system:String x:Key="MarketplaceUpdateSuccess">¡{0} actualizado con éxito!\nPor favor, reinicia la aplicación para cargar el complemento.</system:String>
-	<system:String x:Key="MarketplaceUpdateFailed">Error al actualizar {0}.</system:String>
-	<system:String x:Key="MarketplaceLoadFailed">Algo salió mal al intentar cargar elementos del Marketplace. ¿Estás conectado a internet?</system:String>
-	<system:String x:Key="MarketplaceInfo">Este es un diseño muy simple del Marketplace, solo diseñado para permitir a los usuarios instalar complementos oficiales. Se mejorará significativamente en el futuro.</system:String>
-	<system:String x:Key="MarketplaceButtonInstall">Instalar</system:String>
-	<system:String x:Key="MarketplaceButtonUpdate">Actualizar</system:String>
-	<system:String x:Key="MarketplaceButtonUninstall">Desinstalar</system:String>
-	<system:String x:Key="MarketplaceButtonDisable">Desactivar</system:String>
-	<system:String x:Key="MarketplaceButtonEnable">Activar</system:String>
+    <!-- Generador de GUI -->
+    <system:String x:Key="GuiGeneratorTitle">Título</system:String>
+    <system:String x:Key="GuiGeneratorFunctionName">Nombre de la función</system:String>
+    <system:String x:Key="GuiGeneratorRowQuantity">Cantidad de filas</system:String>
+    <system:String x:Key="GuiGeneratorBackgroundItem">Elemento de fondo</system:String>
+    <system:String x:Key="GuiGeneratorPreviewButton">Vista previa</system:String>
+    <system:String x:Key="GuiGeneratorGenerateButton">Generar</system:String>
+    <system:String x:Key="GuiGeneratorSkriptGui">Usar skript-gui</system:String>
+    <system:String x:Key="GuiGeneratorDisplayName">Nombre visible</system:String>
+    <system:String x:Key="GuiGeneratorLore">Descripción</system:String>
+    <system:String x:Key="GuiGeneratorOptional">Opcional</system:String>
+    <system:String x:Key="GuiGeneratorCustomModelData">ID de Datos de Modelo Personalizado</system:String>
+    <system:String x:Key="GuiGeneratorLoreLineWatermark">Haz clic derecho para agregar una nueva línea</system:String>
+    <system:String x:Key="GuiGeneratorAddLoreLine">Agregar una nueva línea de descripción</system:String>
+    <system:String x:Key="GuiGeneratorAddExampleAction">Agregar una acción de ejemplo</system:String>
+
+    <!-- Generador de Comandos -->
+    <system:String x:Key="CommandGeneratorName">Nombre</system:String>
+    <system:String x:Key="CommandGeneratorPermission">Permiso</system:String>
+    <system:String x:Key="CommandGeneratorNoPermissionMessage">Mensaje sin permiso</system:String>
+    <system:String x:Key="CommandGeneratorAliases">Alias</system:String>
+    <system:String x:Key="CommandGeneratorInvalidUsageMessage">Mensaje de uso inválido</system:String>
+    <system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Quién puede usar el comando</system:String>
+    <system:String x:Key="CommandGeneratorPlayer">Jugador</system:String>
+    <system:String x:Key="CommandGeneratorConsole">Consola</system:String>
+    <system:String x:Key="CommandGeneratorCooldown">Enfriamiento</system:String>
+    <system:String x:Key="CommandGeneratorTicks">Ticks</system:String>
+    <system:String x:Key="CommandGeneratorSeconds">Segundos</system:String>
+    <system:String x:Key="CommandGeneratorMinutes">Minutos</system:String>
+    <system:String x:Key="CommandGeneratorHours">Horas</system:String>
+    <system:String x:Key="CommandGeneratorDays">Días</system:String>
+    <system:String x:Key="CommandGeneratorWeeks">Semanas</system:String>
+    <system:String x:Key="CommandGeneratorMonths">Meses</system:String>
+    <system:String x:Key="CommandGeneratorYears">Años</system:String>
+    <system:String x:Key="CommandGeneratorGenerate">Generar</system:String>
+    <system:String x:Key="CommandGeneratorPropertyMissing">¡Se requiere la propiedad {0}!</system:String>
+
+    <!-- Marketplace -->
+    <system:String x:Key="MarketplaceSearch">Buscar</system:String>
+    <system:String x:Key="MarketplaceEnableNow">Habilitar ahora</system:String>
+    <system:String x:Key="MarketplaceInstallSuccess">¡{0} descargado con éxito!</system:String>
+    <system:String x:Key="MarketplaceInstallRestart">Por favor, reinicia la aplicación para cargar el complemento.</system:String>
+    <system:String x:Key="MarketplaceInstallEnableNow">¿Quieres habilitarlo ahora?</system:String>
+    <system:String x:Key="MarketplaceInstallNoNeedToRestart">El complemento debería funcionar sin reiniciar, pero si encuentras errores, reinicia la aplicación.</system:String>
+    <system:String x:Key="MarketplaceInstallFailed">Error al descargar {0}.</system:String>
+    <system:String x:Key="MarketplaceUninstallSuccess">¡{0} desinstalado con éxito!\nPor favor, reinicia la aplicación para descargar el complemento.</system:String>
+    <system:String x:Key="MarketplaceUpdateSuccess">¡{0} actualizado con éxito!\nPor favor, reinicia la aplicación para cargar el complemento.</system:String>
+    <system:String x:Key="MarketplaceUpdateFailed">Error al actualizar {0}.</system:String>
+    <system:String x:Key="MarketplaceLoadFailed">Algo salió mal al intentar cargar elementos del Marketplace. ¿Estás conectado a internet?</system:String>
+    <system:String x:Key="MarketplaceInfo">Este es un diseño muy simple del Marketplace, solo diseñado para permitir a los usuarios instalar complementos oficiales. Se mejorará significativamente en el futuro.</system:String>
+    <system:String x:Key="MarketplaceButtonInstall">Instalar</system:String>
+    <system:String x:Key="MarketplaceButtonUpdate">Actualizar</system:String>
+    <system:String x:Key="MarketplaceButtonUninstall">Desinstalar</system:String>
+    <system:String x:Key="MarketplaceButtonDisable">Desactivar</system:String>
+    <system:String x:Key="MarketplaceButtonEnable">Activar</system:String>
 
 
 </ResourceDictionary>

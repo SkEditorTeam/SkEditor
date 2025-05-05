@@ -1,6 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
@@ -9,27 +15,13 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
 using SkEditor.ViewModels;
-using SkEditor.Views.Generators.Gui.Generator;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SkEditor.Views.Generators.Gui;
+
 public partial class GuiGenerator : AppWindow
 {
-    private RelayCommand<int> _buttonCommand;
-
-    public HashSet<Button> Buttons { get; } = [];
-    public Dictionary<int, Item> Items { get; set; } = [];
-    public Item? BackgroundItem { get; set; }
-    public int CurrentRows { get; set; } = 6;
-
-
-    public string _itemPath = Path.Combine(AppConfig.AppDataFolderPath, "Items");
-    public static GuiGenerator Instance { get; private set; }
-
+    public readonly string ItemPath = Path.Combine(AppConfig.AppDataFolderPath, "Items");
+    private IRelayCommand<int> _buttonCommand;
 
     public GuiGenerator()
     {
@@ -58,15 +50,27 @@ public partial class GuiGenerator : AppWindow
 
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape) Close();
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         };
     }
+
+    public HashSet<Button> Buttons { get; } = [];
+    public Dictionary<int, Item> Items { get; set; } = [];
+    public Item? BackgroundItem { get; set; }
+    public int CurrentRows { get; set; } = 6;
+    public static GuiGenerator Instance { get; private set; }
 
     public async Task<Item> SelectItem()
     {
         ItemSelector itemSelector = new();
         Item item = await itemSelector.ShowDialog<Item>(this);
-        if (item == null) return null;
+        if (item == null)
+        {
+            return null;
+        }
 
         ExtendedItemSelector extendedItemSelector = new(item);
         Item extendedItem = await extendedItemSelector.ShowDialog<Item>(this);
@@ -75,17 +79,23 @@ public partial class GuiGenerator : AppWindow
 
     private void AssignCommands()
     {
-        _buttonCommand = new RelayCommand<int>(async (slotId) =>
+        _buttonCommand = new AsyncRelayCommand<int>(async slotId =>
         {
             Item item = await SelectItem();
-            if (item == null) return;
+            if (item == null)
+            {
+                return;
+            }
 
             UpdateItem(slotId, item);
         });
-        BackgroundItemButton.Command = new RelayCommand(async () =>
+        BackgroundItemButton.Command = new AsyncRelayCommand(async () =>
         {
             Item item = await SelectItem();
-            if (item == null) return;
+            if (item == null)
+            {
+                return;
+            }
 
             BackgroundItem = item;
             BackgroundItemButton.Content = item.DisplayName;
@@ -93,12 +103,16 @@ public partial class GuiGenerator : AppWindow
 
         PreviewButton.Command = new RelayCommand(Preview.Show);
         GenerateButton.Command = new RelayCommand(Generation.Generate);
-        UseSkriptGuiCheckBox.IsCheckedChanged += (_, _) => SkEditorAPI.Core.GetAppConfig().UseSkriptGui = UseSkriptGuiCheckBox.IsChecked == true;
+        UseSkriptGuiCheckBox.IsCheckedChanged += (_, _) =>
+            SkEditorAPI.Core.GetAppConfig().UseSkriptGui = UseSkriptGuiCheckBox.IsChecked == true;
     }
 
     private void UpdateRows()
     {
-        if (!int.TryParse(RowQuantityTextBox.Text, out int rows)) return;
+        if (!int.TryParse(RowQuantityTextBox.Text, out int rows))
+        {
+            return;
+        }
 
         rows = Math.Clamp(rows, 1, 6);
         RowQuantityTextBox.Text = rows.ToString();
@@ -110,7 +124,7 @@ public partial class GuiGenerator : AppWindow
         {
             for (int column = 0; column < 9; column++)
             {
-                Button button = CreateButton(row * 9 + column);
+                Button button = CreateButton((row * 9) + column);
                 Grid.SetRow(button, row + 1);
                 Grid.SetColumn(button, column);
                 ItemGrid.Children.Add(button);
@@ -130,7 +144,7 @@ public partial class GuiGenerator : AppWindow
     {
         Button button = Buttons.FirstOrDefault(x => (int?)x.Tag == slotId);
 
-        string itemImagePath = Path.Combine(_itemPath, item.Name + ".png");
+        string itemImagePath = Path.Combine(ItemPath, item.Name + ".png");
 
         if (File.Exists(itemImagePath))
         {
@@ -139,7 +153,7 @@ public partial class GuiGenerator : AppWindow
                 Source = new Bitmap(itemImagePath),
                 Width = 32,
                 Height = 32,
-                Stretch = Stretch.Uniform,
+                Stretch = Stretch.Uniform
             };
         }
         else
@@ -158,7 +172,7 @@ public partial class GuiGenerator : AppWindow
         {
             for (int column = 0; column < columns; column++)
             {
-                Button button = CreateButton(row * columns + column);
+                Button button = CreateButton((row * columns) + column);
                 Grid.SetRow(button, row + 1);
                 Grid.SetColumn(button, column);
                 ItemGrid.Children.Add(button);
@@ -174,8 +188,8 @@ public partial class GuiGenerator : AppWindow
             Width = 48,
             Height = 48,
             Margin = new Thickness(3),
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
             Tag = slotId,
             Command = _buttonCommand,
             CommandParameter = slotId,

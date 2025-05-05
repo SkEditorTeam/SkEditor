@@ -1,6 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics;
+using Avalonia.Controls;
 using SkEditor.API;
-using System.Diagnostics;
 
 namespace SkEditor.Controls;
 
@@ -13,7 +13,7 @@ public partial class ConnectionEntryControl : UserControl
         Expander.Header = connectionData.Name;
         Expander.Description = connectionData.Description;
 
-        var dashboardUrl = connectionData.DashboardUrl;
+        string? dashboardUrl = connectionData.DashboardUrl;
         if (dashboardUrl == null)
         {
             OpenDashboardButton.IsVisible = false;
@@ -29,7 +29,7 @@ public partial class ConnectionEntryControl : UserControl
             };
         }
 
-        var key = connectionData.OptionKey;
+        string key = connectionData.OptionKey;
         ApiKeyTextBox.Text = SkEditorAPI.Core.GetAppConfig().GetOptionValue<string>(key);
         ApiKeyTextBox.TextChanged += (_, _) =>
         {

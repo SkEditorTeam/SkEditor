@@ -1,8 +1,9 @@
-﻿using SkEditor.API;
+﻿using System.Reflection;
+using SkEditor.API;
 using SkEditor.Utilities;
-using System.Reflection;
 
 namespace SkEditor.ViewModels;
+
 public class SettingsViewModel
 {
     public static bool IsDiscordRpcEnabled { get; set; } = SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled;
@@ -12,11 +13,15 @@ public class SettingsViewModel
     public static bool IsAutoSaveEnabled { get; set; } = SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled;
     public static bool CheckForUpdates { get; set; } = SkEditorAPI.Core.GetAppConfig().CheckForUpdates;
     public static bool CheckForChanges { get; set; } = SkEditorAPI.Core.GetAppConfig().CheckForChanges;
-    public static bool IsPasteIndentationEnabled { get; set; } = SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled;
+
+    public static bool IsPasteIndentationEnabled { get; set; } =
+        SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled;
 
     public static bool UseSkriptGui { get; set; } = SkEditorAPI.Core.GetAppConfig().UseSkriptGui;
 
-    public static string Version { get; set; } = Translation.Get("SettingsAboutVersionDescription").Replace("{0}", $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}");
+    public static string Version { get; set; } = Translation.Get("SettingsAboutVersionDescription").Replace("{0}",
+        $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}");
 
-    public static string CurrentFont { get; set; } = Translation.Get("SettingsPersonalizationFontDescription").Replace("{0}", SkEditorAPI.Core.GetAppConfig().Font);
+    public static string CurrentFont { get; set; } = Translation.Get("SettingsPersonalizationFontDescription")
+        .Replace("{0}", SkEditorAPI.Core.GetAppConfig().Font);
 }

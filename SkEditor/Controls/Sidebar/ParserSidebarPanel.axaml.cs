@@ -1,13 +1,14 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Parser.ViewModels;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 
@@ -15,35 +16,6 @@ namespace SkEditor.Controls.Sidebar;
 
 public partial class ParserSidebarPanel : UserControl
 {
-    public static bool CodeParserEnabled => SkEditorAPI.Core.GetAppConfig().EnableCodeParser;
-    public ObservableCollection<CodeSection> Sections { get; set; } = [];
-
-    public void Refresh(List<CodeSection> sections)
-    {
-        Sections.Clear();
-        sections.ForEach(Sections.Add);
-
-        var viewModel = (ParserFilterViewModel)DataContext;
-        var filteredSections = Sections
-            .Where(section => string.IsNullOrWhiteSpace(viewModel.SearchText) || section.Name.Contains(viewModel.SearchText))
-            .ToList();
-        if (viewModel.SelectedFilterIndex != 0)
-        {
-            var type = viewModel.SelectedFilterIndex switch
-            {
-                1 => CodeSection.SectionType.Function,
-                2 => CodeSection.SectionType.Event,
-                3 => CodeSection.SectionType.Options,
-                4 => CodeSection.SectionType.Command,
-                _ => throw new System.NotImplementedException()
-            };
-            filteredSections = filteredSections.Where(section => section.Type == type).ToList();
-        }
-        ItemsRepeater.ItemsSource = filteredSections;
-
-        UpdateInformationBox();
-    }
-
     public ParserSidebarPanel()
     {
         InitializeComponent();
@@ -77,11 +49,44 @@ public partial class ParserSidebarPanel : UserControl
         TypeFilterBox.SelectionChanged += (_, _) => UpdateSearchFilter();
     }
 
+    public static bool CodeParserEnabled => SkEditorAPI.Core.GetAppConfig().EnableCodeParser;
+    public ObservableCollection<CodeSection> Sections { get; set; } = [];
+
+    public void Refresh(List<CodeSection> sections)
+    {
+        Sections.Clear();
+        sections.ForEach(Sections.Add);
+
+        ParserFilterViewModel? viewModel = (ParserFilterViewModel)DataContext;
+        List<CodeSection> filteredSections = Sections
+            .Where(section =>
+                string.IsNullOrWhiteSpace(viewModel.SearchText) || section.Name.Contains(viewModel.SearchText))
+            .ToList();
+        if (viewModel.SelectedFilterIndex != 0)
+        {
+            CodeSection.SectionType type = viewModel.SelectedFilterIndex switch
+            {
+                1 => CodeSection.SectionType.Function,
+                2 => CodeSection.SectionType.Event,
+                3 => CodeSection.SectionType.Options,
+                4 => CodeSection.SectionType.Command,
+                _ => throw new NotImplementedException()
+            };
+            filteredSections = filteredSections.Where(section => section.Type == type).ToList();
+        }
+
+        ItemsRepeater.ItemsSource = filteredSections;
+
+        UpdateInformationBox();
+    }
+
     public void ParseCurrentFile()
     {
-        var parser = SkEditorAPI.Files.GetCurrentOpenedFile().Parser;
+        CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile().Parser;
         if (parser == null)
+        {
             return;
+        }
 
         ParseButton.IsEnabled = false;
         parser.Parse();
@@ -94,7 +99,7 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ClearSearchFilter()
     {
-        var viewModel = (ParserFilterViewModel)DataContext;
+        ParserFilterViewModel? viewModel = (ParserFilterViewModel)DataContext;
         viewModel.SearchText = "";
         viewModel.SelectedFilterIndex = 0;
         Refresh([.. Sections]);
@@ -122,7 +127,7 @@ public partial class ParserSidebarPanel : UserControl
             return;
         }
 
-        var parser = Sections[0].Parser;
+        CodeParser parser = Sections[0].Parser;
         if (!parser.IsValid())
         {
             Sections.Clear();
@@ -136,12 +141,14 @@ public partial class ParserSidebarPanel : UserControl
 
     public class ParserPanel : SidebarPanel
     {
-        public override UserControl Content => Panel;
-        public override IconSource Icon => new SymbolIconSource() { Symbol = Symbol.Code };
-        public override IconSource IconActive => new SymbolIconSource() { Symbol = Symbol.Code, IconVariant = IconVariant.Filled };
-        public override bool IsDisabled => false;
-
         public readonly ParserSidebarPanel Panel = new();
+        public override UserControl Content => Panel;
+        public override IconSource Icon => new SymbolIconSource { Symbol = Symbol.Code };
+
+        public override IconSource IconActive => new SymbolIconSource
+            { Symbol = Symbol.Code, IconVariant = IconVariant.Filled };
+
+        public override bool IsDisabled => false;
 
         public override int DesiredWidth { get; } = 350;
     }
