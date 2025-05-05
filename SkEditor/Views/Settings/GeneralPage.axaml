@@ -125,15 +125,6 @@
                                       IsChecked="{Binding IsProjectSingleClickEnabled, Mode=OneTime}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
-
-                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralSidebarAnimations}"
-                                     IconSource="{StaticResource SlideTransitionIcon}"
-                                     Description="{DynamicResource SettingsGeneralSidebarAnimationsDescription}">
-                    <ui:SettingsExpander.Footer>
-                        <ToggleSwitch Name="SidebarAnimationsToggleSwitch"
-                                      IsChecked="{Binding IsSidebarAnimationEnabled}" />
-                    </ui:SettingsExpander.Footer>
-                </ui:SettingsExpander>
             </StackPanel>
         </ScrollViewer>
     </Grid>

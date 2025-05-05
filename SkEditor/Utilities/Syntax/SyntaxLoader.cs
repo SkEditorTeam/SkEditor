@@ -192,7 +192,7 @@ public class SyntaxLoader
         FileSyntax? defaultSyntax = await GetDefaultSyntax();
 
         OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
-        if (!file.IsEditor)
+        if (file?.Editor is null)
         {
             return;
         }

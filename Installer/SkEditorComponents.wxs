@@ -5,10 +5,26 @@
 				<Exclude Files="..\SkEditor\bin\Release\publish\win\SkEditor.exe" />
 			</Files>
 
-			<Component>
-				<File Source="..\SkEditor\bin\Release\publish\win\SkEditor.exe"/>
-				<Shortcut Name="SkEditor" Directory="DesktopFolder" Advertise="yes" Icon="SkEditorIcon.exe" />
-				<Shortcut Name="SkEditor" Directory="ProgramMenuFolder" Advertise="yes" Icon="SkEditorIcon.exe" />
+			<Component Id="MainExecutable">
+				<File Id="SkEditorExe" Source="..\SkEditor\bin\Release\publish\win\SkEditor.exe"/>
+			</Component>
+
+			<Component Id="ApplicationShortcuts" Guid="{bf08e1b2-e449-4bf6-9e61-e80cd00d68ac}">
+				<RegistryValue Root="HKCU" Key="Software\Notro\SkEditor" Name="Installed" Type="integer" Value="1"/>
+
+				<Shortcut Id="DesktopShortcut"
+						  Name="SkEditor"
+						  Directory="DesktopFolder"
+						  Target="[#SkEditorExe]"
+						  WorkingDirectory="INSTALLFOLDER"
+						  Icon="SkEditorIcon.exe" />
+
+				<Shortcut Id="StartMenuShortcut"
+						  Name="SkEditor"
+						  Directory="ProgramMenuFolder"
+						  Target="[#SkEditorExe]"
+						  WorkingDirectory="INSTALLFOLDER"
+						  Icon="SkEditorIcon.exe" />
 			</Component>
 		</ComponentGroup>
 
