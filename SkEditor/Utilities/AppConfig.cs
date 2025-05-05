@@ -140,7 +140,12 @@ public partial class AppConfig : ObservableObject
     /// </summary>
     public T GetOptionValue<T>(string optionName)
     {
-        return (T)GetType().GetProperty(optionName).GetValue(this);
+        var property = GetType().GetProperty(optionName);
+        if (property == null)
+        {
+            return default;
+        }
+        return (T)property.GetValue(this);
     }
 
     /// <summary>
