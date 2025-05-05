@@ -214,6 +214,12 @@ public class ThemeEditor
 
         if (CurrentTheme.UseMicaEffect)
         {
+            Setter? existingSetter = smallWindow.Setters.OfType<Setter>()
+                .FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint");
+            if (existingSetter != null)
+            {
+                smallWindow.Setters.Remove(existingSetter);
+            }
             smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
             SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = levels;
         }
