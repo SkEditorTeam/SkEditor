@@ -13,26 +13,9 @@ internal class Program
     public static void Main(string[] args)
     {
         GC.KeepAlive(typeof(RelativeSource));
-        CheckTest(args);
 
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
-    }
-
-    private static void CheckTest(string[] args)
-    {
-        if (args.Length > 0 && args[0] == "--test")
-        {
-            try
-            {
-                Console.WriteLine("Test passed");
-            }
-            catch (Exception e)
-            {
-                Console.Error.WriteLine($"Test failed: {e.Message}");
-                Environment.Exit(1);
-            }
-        }
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
