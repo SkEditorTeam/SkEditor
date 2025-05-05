@@ -69,8 +69,6 @@ public partial class ItemSelector : AppWindow
                 case Key.Down:
                     ItemListBox.SelectedIndex++;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         };
     }
