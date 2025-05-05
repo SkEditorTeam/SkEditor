@@ -292,8 +292,6 @@
     <system:String x:Key="SettingsGeneralCheckForUpdates">Check for updates</system:String>
     <system:String x:Key="SettingsGeneralProjectSingleFolderClick">Open project folder on single click</system:String>
     <system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">When enabled, opens a folder with a single click instead of a double click.</system:String>
-    <system:String x:Key="SettingsGeneralSidebarAnimations">Sidebar Animations</system:String>
-    <system:String x:Key="SettingsGeneralSidebarAnimationsDescription">Enable or disable animations when opening and closing sidebar panels.</system:String>
 
     <!-- About Settings -->
     <system:String x:Key="SettingsAboutTitle">About</system:String>
@@ -318,6 +316,8 @@
     <system:String x:Key="SettingsPersonalizationFont">Font</system:String>
     <system:String x:Key="SettingsPersonalizationFontDescription">Current font: {0}</system:String>
     <system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Highlight current line</system:String>
+    <system:String x:Key="SettingsPersonalizationSidebarAnimations">Sidebar Animations</system:String>
+    <system:String x:Key="SettingsPersonalizationSidebarAnimationsDescription">Enable or disable animations when opening and closing sidebar panels.</system:String>
 
     <!-- Theme Settings -->
     <system:String x:Key="SettingsThemeTitle">Theme</system:String>

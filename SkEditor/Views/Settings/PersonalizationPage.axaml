@@ -36,6 +36,15 @@
                         <ToggleSwitch Name="HighlightCurrentLineSwitch" IsChecked="{Binding HighlightCurrentLine}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
+                
+                <ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationSidebarAnimations}"
+                                     IconSource="{StaticResource SlideTransitionIcon}"
+                                     Description="{DynamicResource SettingsPersonalizationSidebarAnimationsDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="SidebarAnimationsToggleSwitch"
+                                      IsChecked="{Binding IsSidebarAnimationEnabled}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
             </StackPanel>
         </ScrollViewer>
     </Grid>
