@@ -131,8 +131,7 @@ public class Windows : IWindows
     {
         Window topLevel = GetCurrentWindow();
         IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
-
-        return files[0]?.Path.AbsolutePath;
+        return files.Count == 0 ? null : files[0]?.Path.AbsolutePath;
     }
 
     public void ShowWindow(Window window)
