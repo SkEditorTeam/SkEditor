@@ -34,9 +34,16 @@ public class Files : IFiles
     public async Task Save(object entity, bool saveAs)
     {
         TabViewItem? tabItem = GetItem(entity);
-        if (tabItem == null) return;
+        if (tabItem == null)
+        {
+            return;
+        }
+
         OpenedFile? openedFile = GetOpenedFiles().Find(file => file.TabViewItem == tabItem);
-        if (openedFile == null) return;
+        if (openedFile == null)
+        {
+            return;
+        }
 
         if (openedFile.IsSaved && !saveAs)
         {
@@ -47,9 +54,12 @@ public class Files : IFiles
         if (path == null || saveAs)
         {
             IStorageFolder? suggestedFolder;
-            var storageProvider = SkEditorAPI.Windows.GetMainWindow()?.StorageProvider;
+            IStorageProvider? storageProvider = SkEditorAPI.Windows.GetMainWindow()?.StorageProvider;
 
-            if (storageProvider == null) return;
+            if (storageProvider == null)
+            {
+                return;
+            }
 
             if (string.IsNullOrEmpty(path))
             {
@@ -81,8 +91,11 @@ public class Files : IFiles
 
             string absolutePath = Uri.UnescapeDataString(file.Path.AbsolutePath);
             string? directory = Path.GetDirectoryName(absolutePath);
-            if (string.IsNullOrEmpty(directory)) return;
-            
+            if (string.IsNullOrEmpty(directory))
+            {
+                return;
+            }
+
             Directory.CreateDirectory(directory);
             path = absolutePath;
 
@@ -207,10 +220,13 @@ public class Files : IFiles
         {
             TabViewItem = tabItem
         });
-        
+
         TabView? tabView = GetTabView();
-        if (tabView == null) return;
-        
+        if (tabView == null)
+        {
+            return;
+        }
+
         (tabView.TabItems as IList)?.Add(tabItem);
         if (select)
         {
@@ -224,10 +240,18 @@ public class Files : IFiles
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", index.ToString());
 
         TabViewItem? tabItem = await FileBuilder.Build(header);
-        if (tabItem == null) return null;
+        if (tabItem == null)
+        {
+            return null;
+        }
+
         tabItem.Tag = path;
 
-        if (tabItem.Content is not TextEditor editor) return null;
+        if (tabItem.Content is not TextEditor editor)
+        {
+            return null;
+        }
+
         editor.Text = content;
 
         OpenedFile openedFile = new()
@@ -288,14 +312,14 @@ public class Files : IFiles
 
         switch (availableTypes.Count)
         {
-            case 1: 
+            case 1:
                 openedFile = BuildFromType(availableTypes[0], path);
                 break;
             case > 1:
             {
                 string? configuredTypeFullId =
                     SkEditorAPI.Core.GetAppConfig().FileTypeChoices.GetValueOrDefault(extension, null);
-                
+
                 if (configuredTypeFullId != null && !Registries.FileTypes.HasFullKey(configuredTypeFullId))
                 {
                     configuredTypeFullId = null;
@@ -313,7 +337,8 @@ public class Files : IFiles
                         FileTypes = availableTypes,
                         SelectedFileType = null
                     };
-                    await SkEditorAPI.Windows.ShowWindowAsDialog(new FileTypeSelectionWindow { DataContext = selectionVm });
+                    await SkEditorAPI.Windows.ShowWindowAsDialog(new FileTypeSelectionWindow
+                        { DataContext = selectionVm });
 
                     if (selectionVm.SelectedFileType == null)
                     {
@@ -355,7 +380,7 @@ public class Files : IFiles
         {
             return;
         }
-        
+
         Icon.SetIcon(openedFile);
 
         SkEditorAPI.Events.FileOpened(openedFile, false);
@@ -396,7 +421,10 @@ public class Files : IFiles
     private void RemoveWelcomeTab()
     {
         OpenedFile? welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem.Content is WelcomeTabControl);
-        if (welcomeTab == null) return;
+        if (welcomeTab == null)
+        {
+            return;
+        }
 
         (GetTabView()?.TabItems as IList)?.Remove(welcomeTab.TabViewItem);
         GetOpenedFiles().Remove(welcomeTab);
@@ -415,10 +443,17 @@ public class Files : IFiles
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             TabViewItem? tabViewItem = GetItem(entity);
-            if (tabViewItem == null) return;
+            if (tabViewItem == null)
+            {
+                return;
+            }
+
             OpenedFile? file = GetOpenedFiles().Find(source => source.TabViewItem == tabViewItem);
 
-            if (file == null) return;
+            if (file == null)
+            {
+                return;
+            }
 
             if (!file.IsSaved && file is { IsEditor: true })
             {
@@ -464,9 +499,10 @@ public class Files : IFiles
             case IFiles.FileCloseAction.AllExceptCurrent:
             {
                 OpenedFile? currentOpenedFile = GetCurrentOpenedFile();
-                var filesToClose = openedFiles.Where(openedFile => openedFile != currentOpenedFile).ToList();
+                List<OpenedFile> filesToClose =
+                    openedFiles.Where(openedFile => openedFile != currentOpenedFile).ToList();
 
-                foreach (var file in filesToClose)
+                foreach (OpenedFile file in filesToClose)
                 {
                     await Close(file);
                 }
@@ -475,9 +511,9 @@ public class Files : IFiles
             }
             case IFiles.FileCloseAction.Unsaved:
             {
-                var unsavedFiles = openedFiles.Where(openedFile => !openedFile.IsSaved).ToList();
+                List<OpenedFile> unsavedFiles = openedFiles.Where(openedFile => !openedFile.IsSaved).ToList();
 
-                foreach (var file in unsavedFiles)
+                foreach (OpenedFile file in unsavedFiles)
                 {
                     await Close(file);
                 }
@@ -489,7 +525,11 @@ public class Files : IFiles
             {
                 TabViewItem? currentTabViewItem = GetCurrentTabViewItem();
                 int? index = GetTabView()?.TabItems.IndexOf(currentTabViewItem);
-                if (index is null or < 0) return;
+                if (index is null or < 0)
+                {
+                    return;
+                }
+
                 List<TabViewItem> openedTabs = new(GetOpenedTabs());
 
                 List<TabViewItem> itemsToClose = closeAction == IFiles.FileCloseAction.AllRight
@@ -498,7 +538,7 @@ public class Files : IFiles
 
                 itemsToClose.RemoveAll(tab => tab == currentTabViewItem);
 
-                foreach (var tab in itemsToClose)
+                foreach (TabViewItem tab in itemsToClose)
                 {
                     await Close(tab);
                 }
@@ -507,12 +547,15 @@ public class Files : IFiles
             }
             case IFiles.FileCloseAction.All:
             {
-                foreach (var file in openedFiles)
+                foreach (OpenedFile file in openedFiles)
                 {
                     await Close(file);
                 }
 
-                if (GetOpenedFiles().Count == 0) AddWelcomeTab();
+                if (GetOpenedFiles().Count == 0)
+                {
+                    AddWelcomeTab();
+                }
 
                 break;
             }

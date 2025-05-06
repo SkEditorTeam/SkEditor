@@ -13,29 +13,29 @@ public static class SessionRestorer
 {
     public const string SessionFileExtension = ".skeditor";
     public const string LockFileName = "session.lock";
-    
+
     public static readonly string SessionFolder = Path.Combine(Path.GetTempPath(), "SkEditor", "Session");
     public static readonly string LockFilePath = Path.Combine(SessionFolder, LockFileName);
-    
+
     private static readonly SemaphoreSlim SessionSemaphore = new(1, 1);
-    
+
     public static async Task<bool> SaveSession(CancellationToken cancellationToken = default)
     {
         try
         {
             await SessionSemaphore.WaitAsync(cancellationToken);
-            
+
             try
             {
                 SessionFileHandler.EnsureSessionDirectoryExists();
-                
+
                 await SessionFileHandler.CreateLockFile();
-                
+
                 List<OpenedFile> openedFiles = SkEditorAPI.Files.GetOpenedFiles();
                 int savedCount = 0;
-                
+
                 await SessionFileHandler.SafelyClearSessionFolder();
-                
+
                 try
                 {
                     await SessionProjectHandler.SaveProjectFolder();
@@ -44,7 +44,7 @@ public static class SessionRestorer
                 {
                     Log.Warning(ex, "Failed to save project folder information");
                 }
-                
+
                 int index = 0;
                 foreach (OpenedFile openedFile in openedFiles)
                 {
@@ -53,7 +53,7 @@ public static class SessionRestorer
                         Log.Warning("Session save was cancelled");
                         return false;
                     }
-                    
+
                     if (!openedFile.IsEditor || string.IsNullOrEmpty(openedFile.Editor?.Text))
                     {
                         continue;
@@ -62,13 +62,13 @@ public static class SessionRestorer
                     try
                     {
                         string jsonData = SessionSerializer.BuildSavingData(openedFile);
-                        
+
                         if (Encoding.UTF8.GetByteCount(jsonData) > SessionCompresser.MaxCompressionSize)
                         {
                             Log.Warning("File too large to save in session: {Path}", openedFile.Path ?? "Untitled");
                             continue;
                         }
-                        
+
                         string compressed = await SessionCompresser.Compress(jsonData);
                         string path = Path.Combine(SessionFolder, $"file_{index}{SessionFileExtension}");
                         await SessionFileHandler.WriteFile(path, compressed);
@@ -80,7 +80,7 @@ public static class SessionRestorer
                         Log.Error(ex, "Failed to save session file {Index}", index);
                     }
                 }
-                
+
                 Log.Information("Session saved successfully. Saved {Count} files.", savedCount);
                 return savedCount > 0;
             }
@@ -97,7 +97,7 @@ public static class SessionRestorer
                 {
                     Log.Warning(ex, "Failed to delete lock file");
                 }
-                
+
                 SessionSemaphore.Release();
             }
         }
@@ -112,13 +112,13 @@ public static class SessionRestorer
             return false;
         }
     }
-    
+
     public static async Task<bool> RestoreSession(CancellationToken cancellationToken = default)
     {
         try
         {
             await SessionSemaphore.WaitAsync(cancellationToken);
-            
+
             try
             {
                 if (!Directory.Exists(SessionFolder))
@@ -134,7 +134,7 @@ public static class SessionRestorer
                         Log.Warning("Session is locked. Another instance might be saving.");
                         return false;
                     }
-                    
+
                     try
                     {
                         File.Delete(LockFilePath);
@@ -154,9 +154,9 @@ public static class SessionRestorer
 
                 int restoredCount = 0;
                 int failedCount = 0;
-                
+
                 await SessionFileHandler.CreateLockFile();
-                
+
                 try
                 {
                     bool projectRestored = await SessionProjectHandler.RestoreProjectFolder();
@@ -169,7 +169,7 @@ public static class SessionRestorer
                 {
                     Log.Warning(ex, "Failed to restore project folder");
                 }
-                
+
                 foreach (string file in files)
                 {
                     if (cancellationToken.IsCancellationRequested)
@@ -177,7 +177,7 @@ public static class SessionRestorer
                         Log.Warning("Session restore was cancelled");
                         return restoredCount > 0;
                     }
-                    
+
                     try
                     {
                         string compressed = await SessionFileHandler.ReadFile(file);
@@ -186,7 +186,7 @@ public static class SessionRestorer
                             Log.Warning("Empty session file: {File}", file);
                             continue;
                         }
-                        
+
                         string jsonData = await SessionCompresser.Decompress(compressed);
                         if (string.IsNullOrEmpty(jsonData))
                         {
@@ -200,18 +200,19 @@ public static class SessionRestorer
                             Log.Warning("Invalid session data in file: {File}", file);
                             continue;
                         }
-                        
+
                         if (!string.IsNullOrEmpty(fileData.Path) && !SessionFileHandler.IsPathValid(fileData.Path))
                         {
                             Log.Warning("Invalid file path in session: {Path}", fileData.Path);
                             fileData.Path = null;
                         }
-                        
-                        SkEditorAPI.Logs.Info($"Path: {fileData.Path}, hasUnsavedChanges: {fileData.HasUnsavedChanges}");
+
+                        SkEditorAPI.Logs.Info(
+                            $"Path: {fileData.Path}, hasUnsavedChanges: {fileData.HasUnsavedChanges}");
 
                         OpenedFile openedFile = await SkEditorAPI.Files.AddEditorTab(fileData.Content, fileData.Path);
                         openedFile.IsSaved = !fileData.HasUnsavedChanges;
-                        
+
                         restoredCount++;
                     }
                     catch (Exception ex) when (ex is not OperationCanceledException)
@@ -221,9 +222,9 @@ public static class SessionRestorer
                     }
                 }
 
-                Log.Information("Session restored. Opened {Success} files. Failed to open {Failed} files.", 
+                Log.Information("Session restored. Opened {Success} files. Failed to open {Failed} files.",
                     restoredCount, failedCount);
-                
+
                 return restoredCount > 0;
             }
             finally
@@ -239,7 +240,7 @@ public static class SessionRestorer
                 {
                     Log.Warning(ex, "Failed to delete lock file");
                 }
-                
+
                 SessionSemaphore.Release();
             }
         }
@@ -260,7 +261,7 @@ public static class SessionRestorer
         try
         {
             await SessionSemaphore.WaitAsync();
-            
+
             try
             {
                 await SessionFileHandler.SafelyClearSessionFolder();

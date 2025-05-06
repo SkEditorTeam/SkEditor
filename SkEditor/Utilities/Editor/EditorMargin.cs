@@ -32,6 +32,7 @@ public class EditorMargin : AbstractMargin
             file.Editor.TextArea.LeftMargins.Insert(0, this);
             file.Editor.TextChanged += (_, _) => Reload();
         }
+
         Reload();
     }
 
@@ -68,8 +69,11 @@ public class EditorMargin : AbstractMargin
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        if (File.Editor is null) return new Size(0, 0);
-        
+        if (File.Editor is null)
+        {
+            return new Size(0, 0);
+        }
+
         double scale = File.Editor.FontSize / 12;
 
         double totalWidth = Registries.MarginIcons
@@ -94,7 +98,10 @@ public class EditorMargin : AbstractMargin
     {
         context.DrawRectangle(SkEditorAPI.Core.GetApplicationResource("EditorBackgroundColor") as IBrush, null, Bounds);
 
-        if (File.Editor is null) return;
+        if (File.Editor is null)
+        {
+            return;
+        }
 
         List<int> hidden = FoldingCreator.GetHiddenLines(File);
         double lineHeight = File.Editor.FontSize;

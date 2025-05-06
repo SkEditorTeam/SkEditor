@@ -121,8 +121,12 @@ public partial class MainWindow : AppWindow
                 bool isSuccess = await SessionRestorer.SaveSession();
                 if (!isSuccess)
                 {
-                    if (await PromptForUnsavedChanges()) return;
+                    if (await PromptForUnsavedChanges())
+                    {
+                        return;
+                    }
                 }
+
                 AlreadyClosed = true;
                 Close();
             }

@@ -21,14 +21,14 @@ public static class ProjectOpener
 {
     public static Folder? ProjectRootFolder;
 
+    private static EventHandler<TappedEventArgs>? _doubleTappedHandler;
+    private static EventHandler<TappedEventArgs>? _tappedHandler;
+
     private static ExplorerSidebarPanel Panel => AddonLoader.GetCoreAddon().ProjectPanel.Panel;
 
     public static TreeView FileTreeView => Panel.FileTreeView;
 
     private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
-    
-    private static EventHandler<TappedEventArgs>? _doubleTappedHandler;
-    private static EventHandler<TappedEventArgs>? _tappedHandler;
 
     public static async Task OpenProject(string? path = null)
     {
@@ -42,13 +42,21 @@ public static class ProjectOpener
 
         _doubleTappedHandler = (_, e) =>
         {
-            if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled) return;
+            if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            {
+                return;
+            }
+
             HandleTapped(e);
         };
 
         _tappedHandler = (_, e) =>
         {
-            if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled) return;
+            if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            {
+                return;
+            }
+
             HandleTapped(e);
         };
 
@@ -175,7 +183,10 @@ public static class ProjectOpener
             _doubleTappedHandler = null;
         }
 
-        if (_tappedHandler == null) return;
+        if (_tappedHandler == null)
+        {
+            return;
+        }
 
         FileTreeView.Tapped -= _tappedHandler;
         _tappedHandler = null;

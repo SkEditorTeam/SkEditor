@@ -13,13 +13,13 @@ public static class SessionProjectHandler
 {
     private const string ProjectFileName = "project.json";
     private static readonly string ProjectFilePath = Path.Combine(SessionRestorer.SessionFolder, ProjectFileName);
-    
+
     public static async Task SaveProjectFolder()
     {
         try
         {
             string? projectPath = ProjectOpener.ProjectRootFolder?.StorageFolderPath;
-            
+
             if (!string.IsNullOrEmpty(projectPath))
             {
                 JObject projectData = new()
@@ -28,7 +28,7 @@ public static class SessionProjectHandler
                     ["ProjectPath"] = projectPath,
                     ["Timestamp"] = DateTime.UtcNow.ToString("o")
                 };
-                
+
                 string jsonData = projectData.ToString(Formatting.None);
                 await SessionFileHandler.WriteFile(ProjectFilePath, jsonData);
             }
@@ -38,14 +38,14 @@ public static class SessionProjectHandler
             Log.Warning(ex, "Failed to save project folder information");
         }
     }
-    
+
     public static async Task<bool> RestoreProjectFolder()
     {
         if (!File.Exists(ProjectFilePath))
         {
             return false;
         }
-        
+
         try
         {
             string jsonData = await SessionFileHandler.ReadFile(ProjectFilePath);
@@ -53,18 +53,18 @@ public static class SessionProjectHandler
             {
                 return false;
             }
-            
+
             JObject projectData = JObject.Parse(jsonData);
             string? projectPath = projectData["ProjectPath"]?.Value<string>();
 
             projectPath = projectPath?.NormalizePathSeparators();
-            
+
             if (string.IsNullOrEmpty(projectPath))
             {
                 Log.Warning("The project path is empty!");
                 return false;
             }
-            
+
             await ProjectOpener.OpenProject(projectPath);
             return true;
         }

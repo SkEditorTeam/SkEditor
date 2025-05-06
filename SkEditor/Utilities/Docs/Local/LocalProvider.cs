@@ -16,7 +16,7 @@ public class LocalProvider : IDocProvider
 {
     public DocProvider Provider => DocProvider.Local;
 
-    public async Task<IDocumentationEntry> FetchElement(string id)
+    public async Task<IDocumentationEntry?> FetchElement(string id)
     {
         if (!IsLoaded)
         {
@@ -60,7 +60,7 @@ public class LocalProvider : IDocProvider
         return null;
     }
 
-    public static LocalProvider Get()
+    public static LocalProvider? Get()
     {
         return IDocProvider.Providers[DocProvider.Local] as LocalProvider;
     }
@@ -103,8 +103,10 @@ public class LocalProvider : IDocProvider
         string file = GetLocalCachePath();
         string content = await File.ReadAllTextAsync(file);
 
-        _localDocs = new List<LocalDocEntry>();
-        _localDocs.AddRange(JsonConvert.DeserializeObject<List<LocalDocEntry>>(content));
+        _localDocs = [];
+        
+        var localDocs = JsonConvert.DeserializeObject<List<LocalDocEntry>>(content) ?? [];
+        _localDocs.AddRange(localDocs);
     }
 
     private async Task SaveLocalDocs()

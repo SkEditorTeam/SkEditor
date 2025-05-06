@@ -58,13 +58,6 @@ public interface IDocumentationEntry
 
     public static IconSource GetTypeIcon(Type type)
     {
-        static IBrush GetColor(string key)
-        {
-            return Application.Current.TryGetResource(key, out object? color) && color is Color parsedColor
-                ? new SolidColorBrush(parsedColor)
-                : new SolidColorBrush(Colors.Black);
-        }
-
         return type switch
         {
             Type.All => CreateIcon(Symbol.SelectAllOn, "ThemeGreyColor"),
@@ -78,6 +71,13 @@ public interface IDocumentationEntry
             Type.Function => CreateIcon(Symbol.MathFormula, "ThemeBlueGreyColor"),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
+
+        static IBrush GetColor(string key)
+        {
+            return Application.Current?.TryGetResource(key, out object? color) == true && color is Color parsedColor
+                ? new SolidColorBrush(parsedColor)
+                : new SolidColorBrush(Colors.Black);
+        }
 
         static SymbolIconSource CreateIcon(Symbol symbol, string? colorKey = null)
         {

@@ -42,7 +42,7 @@ public partial class ExperimentsPage : UserControl
     private void AddExperiments()
     {
         AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-        
+
         foreach (Experiment experiment in _experiments)
         {
             object? icon = null;

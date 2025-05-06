@@ -61,7 +61,7 @@ public partial class AppConfig : ObservableObject
     public bool EnableRealtimeCodeParser { get; set; }
 
     public string SkUnityApiKey { get; set; } = "";
-    public string SkriptMcapiKey { get; set; } = "";
+    public string SkriptMcApiKey { get; set; } = "";
 
     public static string AppDataFolderPath { get; set; } =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
@@ -181,8 +181,8 @@ public partial class AppConfig : ObservableObject
         {
             "PastebinApiKey" => PastebinApiKey,
             "CodeSkriptPlApiKey" => CodeSkriptPlApiKey,
-            "SkUnityApiKey" => SkUnityApiKey,
-            "SkriptMcapiKey" => SkriptMcapiKey,
+            "SkUnityAPIKey" => SkUnityApiKey,
+            "SkriptMCAPIKey" => SkriptMcApiKey,
             _ => string.Empty
         };
     }
@@ -196,8 +196,8 @@ public partial class AppConfig : ObservableObject
         {
             case "PastebinApiKey": PastebinApiKey = value; break;
             case "CodeSkriptPlApiKey": CodeSkriptPlApiKey = value; break;
-            case "SkUnityApiKey": SkUnityApiKey = value; break;
-            case "SkriptMcapiKey": SkriptMcapiKey = value; break;
+            case "SkUnityAPIKey": SkUnityApiKey = value; break;
+            case "SkriptMCAPIKey": SkriptMcApiKey = value; break;
         }
     }
 }

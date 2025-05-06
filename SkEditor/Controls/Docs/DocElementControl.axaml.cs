@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -17,6 +18,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkUnity;
+using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views;
@@ -115,7 +117,13 @@ public partial class DocElementControl : UserControl
                     _ => throw new NotImplementedException("Changer not implemented")
                 };
 
-                await MainWindow.Instance.Clipboard.SetTextAsync(format.Replace("%s", firstPattern));
+                IClipboard? clipboard = MainWindow.Instance?.Clipboard;
+                if (clipboard == null)
+                {
+                    return;
+                }
+
+                await clipboard.SetTextAsync(format.Replace("%s", firstPattern));
             };
 
             buttons.Children.Add(button);
@@ -153,7 +161,12 @@ public partial class DocElementControl : UserControl
         PatternsEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
         if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
-            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object? font);
+            object? font = FileBuilder.GetJetbrainsMonoFont();
+            if (font == null)
+            {
+                return;
+            }
+
             PatternsEditor.FontFamily = (FontFamily)font;
         }
         else
@@ -200,10 +213,14 @@ public partial class DocElementControl : UserControl
                 }
             }
         };
-        OutsideButton.Click += (_, _) => Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
+
         if (uri == null)
         {
             OutsideButton.IsVisible = false;
+        }
+        else
+        {
+            OutsideButton.Click += (_, _) => Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
         }
 
         await LoadAddonBadge(entry);
@@ -225,6 +242,11 @@ public partial class DocElementControl : UserControl
         if (entry.Provider == DocProvider.skUnity)
         {
             SkUnityProvider? skUnityProvider = IDocProvider.Providers[DocProvider.skUnity] as SkUnityProvider;
+            if (skUnityProvider == null)
+            {
+                return;
+            }
+
             SourceBadge.Tapped += (_, _) =>
             {
                 string uri = skUnityProvider.GetAddonLink(entry.Addon);
@@ -239,8 +261,8 @@ public partial class DocElementControl : UserControl
         {
             Margin = new Thickness(5),
             FontSize = 16,
-            Foreground = (IBrush)GetResource("EditorTextColor"),
-            Background = (IBrush)GetResource("EditorBackgroundColor"),
+            Foreground = (IBrush?)GetResource("EditorTextColor"),
+            Background = (IBrush?)GetResource("EditorBackgroundColor"),
             Padding = new Thickness(10),
             HorizontalScrollBarVisibility = ScrollBarVisibility.Visible,
             IsReadOnly = true,
@@ -253,8 +275,11 @@ public partial class DocElementControl : UserControl
 
         if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
-            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object? font);
-            editor.FontFamily = (FontFamily)font;
+            object? font = FileBuilder.GetJetbrainsMonoFont();
+            if (font is not null)
+            {
+                editor.FontFamily = (FontFamily)font;
+            }
         }
         else
         {
@@ -268,15 +293,18 @@ public partial class DocElementControl : UserControl
         };
     }
 
-    private static object GetResource(string key)
+    private static object? GetResource(string key)
     {
-        Application.Current.TryGetResource(key, ThemeVariant.Default, out object? resource);
+        object? resource = null;
+        Application.Current?.TryGetResource(key, ThemeVariant.Default, out resource);
         return resource;
     }
 
     public void DeleteElementFromCache(bool removeFromParent = false)
     {
-        LocalProvider localProvider = LocalProvider.Get();
+        LocalProvider? localProvider = LocalProvider.Get();
+        if (localProvider == null) return;
+        
         _ = localProvider.RemoveElement(_entry);
         if (removeFromParent)
         {
@@ -298,7 +326,8 @@ public partial class DocElementControl : UserControl
             await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
         }
 
-        LocalProvider localProvider = LocalProvider.Get();
+        LocalProvider? localProvider = LocalProvider.Get();
+        if (localProvider == null) return;
         await localProvider.DownloadElement(_entry, examples);
     }
 
@@ -313,7 +342,8 @@ public partial class DocElementControl : UserControl
             }
             else
             {
-                if (await LocalProvider.Get().IsElementDownloaded(_entry))
+                LocalProvider? localProvider = LocalProvider.Get();
+                if (localProvider != null && await localProvider.IsElementDownloaded(_entry))
                 {
                     DeleteElementFromCache();
                     EnableDownloadButton();
@@ -346,7 +376,8 @@ public partial class DocElementControl : UserControl
 
     public async Task ForceDownloadElement()
     {
-        if (await LocalProvider.Get().IsElementDownloaded(_entry))
+        LocalProvider? localProvider = LocalProvider.Get();
+        if (localProvider != null && await localProvider.IsElementDownloaded(_entry))
         {
             return;
         }
@@ -357,11 +388,11 @@ public partial class DocElementControl : UserControl
 
     public async Task LoadDownloadButton()
     {
-        LocalProvider localProvider = LocalProvider.Get();
+        LocalProvider? localProvider = LocalProvider.Get();
         DownloadElementButton.Click += DownloadButtonClicked;
         DownloadElementButton.Classes.Clear();
 
-        if (_entry.Provider == DocProvider.Local || await localProvider.IsElementDownloaded(_entry))
+        if (_entry.Provider == DocProvider.Local || localProvider != null && await localProvider.IsElementDownloaded(_entry))
         {
             DisableDownloadButton();
         }
@@ -437,8 +468,8 @@ public partial class DocElementControl : UserControl
 
                 TextEditor textEditor = new()
                 {
-                    Foreground = (IBrush)GetAppResource("EditorTextColor"),
-                    Background = (IBrush)GetAppResource("EditorBackgroundColor"),
+                    Foreground = (IBrush?)GetResource("EditorTextColor"),
+                    Background = (IBrush?)GetResource("EditorBackgroundColor"),
                     Padding = new Thickness(10),
                     Text = Format(example.Example),
                     IsReadOnly = true,
@@ -452,8 +483,11 @@ public partial class DocElementControl : UserControl
 
                 if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
                 {
-                    Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object? font);
-                    textEditor.FontFamily = (FontFamily)font;
+                    object? font = FileBuilder.GetJetbrainsMonoFont();
+                    if (font is not null)
+                    {
+                        textEditor.FontFamily = (FontFamily)font;
+                    }
                 }
                 else
                 {
@@ -464,13 +498,6 @@ public partial class DocElementControl : UserControl
                 stackPanel.Children.Add(textEditor);
 
                 ((StackPanel)ExamplesEntry.Content).Children.Add(stackPanel);
-                continue;
-
-                static object GetAppResource(string key)
-                {
-                    Application.Current.TryGetResource(key, ThemeVariant.Default, out object? resource);
-                    return resource;
-                }
             }
         }
         catch (Exception e)

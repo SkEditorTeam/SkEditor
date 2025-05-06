@@ -37,7 +37,7 @@ public partial class ConnectionEntryControl : UserControl
         ApiKeyTextBox.TextChanged += (_, _) =>
         {
             appConfig.SetApiKey(key, ApiKeyTextBox.Text);
-            appConfig.Save(); 
+            appConfig.Save();
         };
 
         Expander.IconSource = connectionData.IconSource;

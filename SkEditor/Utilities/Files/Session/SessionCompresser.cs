@@ -11,7 +11,7 @@ namespace SkEditor.Utilities.Files;
 public static class SessionCompresser
 {
     public const int MaxCompressionSize = 50 * 1024 * 1024; // 50 MB
-    
+
     public static async Task<string> Compress(string data)
     {
         if (string.IsNullOrEmpty(data))
@@ -41,7 +41,7 @@ public static class SessionCompresser
             throw;
         }
     }
-    
+
     public static async Task<string> Decompress(string data)
     {
         if (string.IsNullOrEmpty(data))
@@ -52,7 +52,7 @@ public static class SessionCompresser
         try
         {
             byte[] byteArray = Convert.FromBase64String(data);
-            
+
             if (byteArray.Length > MaxCompressionSize)
             {
                 throw new SecurityException("Compressed data exceeds maximum allowed size");
@@ -60,16 +60,16 @@ public static class SessionCompresser
 
             using MemoryStream ms = new(byteArray);
             await using GZipStream sr = new(ms, CompressionMode.Decompress);
-            
+
             using MemoryStream resultStream = new();
             await sr.CopyToAsync(resultStream);
             resultStream.Position = 0;
-            
+
             if (resultStream.Length > MaxCompressionSize)
             {
                 throw new SecurityException("Decompressed data exceeds maximum allowed size");
             }
-            
+
             using StreamReader reader = new(resultStream, Encoding.UTF8);
             return await reader.ReadToEndAsync();
         }

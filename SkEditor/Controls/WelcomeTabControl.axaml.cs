@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects;
 using SkEditor.Views;
@@ -76,7 +77,7 @@ public partial class WelcomeTabControl : UserControl
         };
     }
 
-    private static PathIconSource CreatePathIconSource(string name)
+    private static PathIconSource? CreatePathIconSource(string name)
     {
         return SkEditorAPI.Core.GetApplicationResource(name) as PathIconSource;
     }
@@ -154,6 +155,6 @@ public partial class WelcomeTabControl : UserControl
 
     private static async Task OpenSettings()
     {
-        await new SettingsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        await new SettingsWindow().ShowDialogOnMainWindow();
     }
 }

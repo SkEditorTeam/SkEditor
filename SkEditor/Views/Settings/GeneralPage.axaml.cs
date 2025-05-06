@@ -138,7 +138,11 @@ public partial class GeneralPage : UserControl
         }
 
         List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList();
-        if (textEditors.Count == 0) return;
+        if (textEditors.Count == 0)
+        {
+            return;
+        }
+
         double fontSize = textEditors.FirstOrDefault().FontSize;
         textEditors.ForEach(textEditor => { textEditor.FontSize = fontSize; });
     }

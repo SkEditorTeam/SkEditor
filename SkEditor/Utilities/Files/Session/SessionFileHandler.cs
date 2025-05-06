@@ -22,7 +22,7 @@ public class SessionFileHandler
             throw;
         }
     }
-    
+
     public static async Task CreateLockFile()
     {
         try
@@ -34,7 +34,7 @@ public class SessionFileHandler
             Log.Warning(ex, "Failed to create lock file");
         }
     }
-    
+
     public static async Task SafelyClearSessionFolder()
     {
         if (!Directory.Exists(SessionRestorer.SessionFolder))
@@ -51,7 +51,7 @@ public class SessionFileHandler
         catch (IOException ex)
         {
             Log.Warning(ex, "Could not clear session folder, trying to delete individual files");
-            
+
             try
             {
                 foreach (string file in Directory.GetFiles(SessionRestorer.SessionFolder))
@@ -81,12 +81,14 @@ public class SessionFileHandler
             throw;
         }
     }
-    
+
     public static string[] GetSessionFiles()
     {
         try
         {
-            return !Directory.Exists(SessionRestorer.SessionFolder) ? [] : Directory.GetFiles(SessionRestorer.SessionFolder, $"*{SessionRestorer.SessionFileExtension}");
+            return !Directory.Exists(SessionRestorer.SessionFolder)
+                ? []
+                : Directory.GetFiles(SessionRestorer.SessionFolder, $"*{SessionRestorer.SessionFileExtension}");
         }
         catch (Exception ex)
         {
@@ -94,7 +96,7 @@ public class SessionFileHandler
             return [];
         }
     }
-    
+
     public static async Task WriteFile(string path, string content)
     {
         if (string.IsNullOrEmpty(path))
@@ -106,12 +108,12 @@ public class SessionFileHandler
         {
             string tempPath = path + ".tmp";
             await File.WriteAllTextAsync(tempPath, content);
-            
+
             if (File.Exists(path))
             {
                 File.Delete(path);
             }
-            
+
             File.Move(tempPath, path);
         }
         catch (Exception ex)
@@ -120,7 +122,7 @@ public class SessionFileHandler
             throw;
         }
     }
-    
+
     public static async Task<string> ReadFile(string path)
     {
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
@@ -138,7 +140,7 @@ public class SessionFileHandler
             return string.Empty;
         }
     }
-    
+
     public static bool IsPathValid(string? path)
     {
         if (string.IsNullOrEmpty(path))
@@ -152,7 +154,7 @@ public class SessionFileHandler
             {
                 return false;
             }
-            
+
             string extension = Path.GetExtension(path);
             return !string.IsNullOrEmpty(extension);
         }

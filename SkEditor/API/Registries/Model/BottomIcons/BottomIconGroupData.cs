@@ -48,7 +48,10 @@ public class BottomIconGroupData : IBottomIconElement
         _initialized = true;
         _attachedButton = button;
 
-        if (_attachedButton == null) return;
+        if (_attachedButton == null)
+        {
+            return;
+        }
 
         _attachedButton.Click += (sender, _) =>
             AddonLoader.HandleAddonMethod(() => Clicked?.Invoke(sender, new BottomIconElementClickedEventArgs(this)));

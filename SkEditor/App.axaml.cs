@@ -37,7 +37,7 @@ public class App : Application
             return;
         }
 
-        if (!desktop.Args.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase))
+        if (desktop.Args?.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase) == false)
         {
             _splashScreen = new SplashScreen();
             desktop.MainWindow = _splashScreen;
@@ -164,7 +164,14 @@ public class App : Application
             string fullException = e.Exception.ToString();
             string encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(fullException));
             await Task.Delay(500);
-            Process.Start(Environment.ProcessPath, "--crash " + encodedMessage);
+
+            string? processPath = Environment.ProcessPath;
+            if (string.IsNullOrEmpty(processPath))
+            {
+                processPath = AppDomain.CurrentDomain.BaseDirectory;
+            }
+
+            Process.Start(processPath, "--crash " + encodedMessage);
             Environment.Exit(1);
         };
     }

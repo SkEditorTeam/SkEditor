@@ -18,7 +18,7 @@ public class TextSetting(string placeholder, int maxLength = -1, char? passwordC
     public int MaxLength { get; } = maxLength;
     public char? PasswordChar { get; } = passwordChar;
 
-    public object Deserialize(JToken value)
+    public object? Deserialize(JToken value)
     {
         return value.Value<string>();
     }

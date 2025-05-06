@@ -11,17 +11,10 @@ public class SessionSerializer
 {
     public const string Version = "1.0";
 
-    public class SessionFileData
-    {
-        public string? Content { get; init; }
-        public string? Path { get; set; }
-        public bool HasUnsavedChanges { get; init; }
-    }
-
     public static string BuildSavingData(OpenedFile openedFile)
     {
         SkEditorAPI.Logs.Info($"Path: {openedFile.Path}, is saved: {openedFile.IsSaved}");
-        
+
         JObject obj = new()
         {
             ["Version"] = Version,
@@ -96,5 +89,12 @@ public class SessionSerializer
             Log.Error(ex, "Error building session data");
             return new SessionFileData { Content = string.Empty };
         }
+    }
+
+    public class SessionFileData
+    {
+        public string? Content { get; init; }
+        public string? Path { get; set; }
+        public bool HasUnsavedChanges { get; init; }
     }
 }

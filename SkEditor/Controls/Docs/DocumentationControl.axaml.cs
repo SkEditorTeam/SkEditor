@@ -15,6 +15,7 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.SkriptHub;
+using SkEditor.Utilities.Extensions;
 using SkEditor.ViewModels;
 using SkEditor.Views;
 
@@ -37,7 +38,9 @@ public partial class DocumentationControl : UserControl
     public void AssignCommands()
     {
         OpenLocalManagementButton.Command = new AsyncRelayCommand(async () =>
-            await new LocalDocsManagerWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow()));
+        {
+            await new LocalDocsManagerWindow().ShowDialogOnMainWindow();
+        });
 
         RefreshProviderButton.Command = new RelayCommand(() =>
         {
@@ -53,7 +56,7 @@ public partial class DocumentationControl : UserControl
             if (response == ContentDialogResult.Primary)
             {
                 SkriptHubProvider? provider = IDocProvider.Providers[DocProvider.SkriptHub] as SkriptHubProvider;
-                provider.DeleteEverything();
+                provider?.DeleteEverything();
                 await SkEditorAPI.Windows.ShowMessage(Translation.Get("Success"),
                     Translation.Get("DocumentationWindowFetchSuccessMessage"));
             }
@@ -127,7 +130,10 @@ public partial class DocumentationControl : UserControl
 
             return addons;
         };
-        FilteredAddonBox.TextChanged += (_, _) => { ViewModel.SearchData.FilteredAddon = FilteredAddonBox.Text; };
+        FilteredAddonBox.TextChanged += (_, _) =>
+        {
+            ViewModel.SearchData.FilteredAddon = FilteredAddonBox?.Text?.Trim() ?? "";
+        };
     }
 
     private void InitializeProviderBox()
@@ -240,6 +246,8 @@ public partial class DocumentationControl : UserControl
             {
                 return;
             }
+
+            if (provider is null) return;
 
             SearchData searchData = ViewModel.SearchData;
             if (!ValidateSearchData(provider, searchData))

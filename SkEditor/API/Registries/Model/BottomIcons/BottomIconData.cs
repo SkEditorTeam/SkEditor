@@ -83,7 +83,10 @@ public class BottomIconData : IBottomIconElement
         set
         {
             _iconSource = value;
-            if (_attachedIconElement == null) return;
+            if (_attachedIconElement == null)
+            {
+                return;
+            }
 
             _attachedIconElement.IconSource = value;
             _attachedIconElement.IsVisible = value != null;
@@ -98,7 +101,10 @@ public class BottomIconData : IBottomIconElement
         set
         {
             _text = value;
-            if (_attachedTextBlock == null) return;
+            if (_attachedTextBlock == null)
+            {
+                return;
+            }
 
             _attachedTextBlock.Text = value;
             _attachedTextBlock.IsVisible = value != null;

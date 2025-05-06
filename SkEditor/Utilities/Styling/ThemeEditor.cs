@@ -43,14 +43,14 @@ public class ThemeEditor
         { "CurrentLineBorder", ["CurrentLineBorder"] }
     };
 
+    private static bool _defaultColorsCollected;
+
     public static List<Theme> Themes { get; set; } = [];
     public static Theme CurrentTheme { get; set; } = new();
 
     public static string ThemeFolderPath { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Themes");
 
     public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
-    
-    private static bool _defaultColorsCollected;
 
     public static ControlTheme SmallWindowTheme { get; private set; }
 
@@ -82,7 +82,7 @@ public class ThemeEditor
         try
         {
             string json = File.ReadAllText(path);
-            
+
             theme = JsonConvert.DeserializeObject<Theme>(json);
             if (theme == null)
             {
@@ -147,7 +147,7 @@ public class ThemeEditor
         {
             SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
         }
-        
+
         CurrentTheme = theme;
         SkEditorAPI.Core.GetAppConfig().CurrentTheme = theme.FileName;
 
@@ -220,6 +220,7 @@ public class ThemeEditor
             {
                 smallWindow.Setters.Remove(existingSetter);
             }
+
             smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
             SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = levels;
         }
@@ -237,7 +238,7 @@ public class ThemeEditor
 
         SmallWindowTheme = smallWindow;
     }
-    
+
     private static void CaptureNewDefaultColors(Theme themeToApply)
     {
         themeToApply.CustomColorChanges
@@ -259,7 +260,8 @@ public class ThemeEditor
                 }
                 else
                 {
-                    SkEditorAPI.Logs.Warning($"Could not find default resource for key '{kvp.Key}' introduced by theme '{themeToApply.Name}'. It might not reset correctly.");
+                    SkEditorAPI.Logs.Warning(
+                        $"Could not find default resource for key '{kvp.Key}' introduced by theme '{themeToApply.Name}'. It might not reset correctly.");
                 }
             });
     }
@@ -268,7 +270,7 @@ public class ThemeEditor
     private static void CollectDefaultColors()
     {
         DefaultColors.Clear();
-        
+
         foreach (string resourceKey in ThemeToResourceDictionary.SelectMany(item => item.Value))
         {
             if (DefaultColors.ContainsKey(resourceKey) ||
@@ -287,8 +289,8 @@ public class ThemeEditor
                     break;
             }
         }
-        
-        foreach (var key in CurrentTheme.CustomColorChanges.Keys)
+
+        foreach (string key in CurrentTheme.CustomColorChanges.Keys)
         {
             if (DefaultColors.ContainsKey(key) ||
                 !Application.Current.TryGetResource(key, ThemeVariant.Dark, out object? defaultColor))
@@ -306,13 +308,13 @@ public class ThemeEditor
                     break;
             }
         }
-        
+
         _defaultColorsCollected = true;
     }
 
     private static void RestoreDefaultColors()
     {
-        foreach (var kvp in DefaultColors)
+        foreach (KeyValuePair<string, ImmutableSolidColorBrush> kvp in DefaultColors)
         {
             Application.Current.Resources[kvp.Key] = kvp.Value;
         }

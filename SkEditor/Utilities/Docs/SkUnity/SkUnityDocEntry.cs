@@ -6,19 +6,19 @@ namespace SkEditor.Utilities.Docs.SkUnity;
 [Serializable]
 public class SkUnityDocEntry : IDocumentationEntry
 {
-    [JsonProperty("doc")] public string RawDoc { set; get; }
+    [JsonProperty("doc")] public required string RawDoc { set; get; }
 
-    [JsonProperty("name")] public string Name { set; get; }
+    [JsonProperty("name")] public required string Name { set; get; }
 
-    [JsonProperty("desc")] public string Description { set; get; }
+    [JsonProperty("desc")] public required string Description { set; get; }
 
-    [JsonProperty("pattern")] public string Patterns { set; get; }
+    [JsonProperty("pattern")] public required string Patterns { set; get; }
 
-    [JsonProperty("id")] public string Id { set; get; }
+    [JsonProperty("id")] public required string Id { set; get; }
 
-    [JsonProperty("addon")] public string Addon { set; get; }
+    [JsonProperty("addon")] public required string Addon { set; get; }
 
-    [JsonProperty("version")] public string Version { set; get; }
+    [JsonProperty("version")] public required string Version { set; get; }
 
     public IDocumentationEntry.Type DocType
     {

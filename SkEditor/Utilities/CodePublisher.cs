@@ -19,12 +19,12 @@ public class CodePublisher
         {
             HttpClient client = new();
             HttpRequestMessage request = new(HttpMethod.Post, "https://pastebin.com/api/api_post.php");
-            List<KeyValuePair<string, string>> collection = new()
-            {
-                new KeyValuePair<string, string>("api_dev_key", window.ApiKeyTextBox.Text),
-                new KeyValuePair<string, string>("api_paste_code", code),
-                new KeyValuePair<string, string>("api_option", "paste")
-            };
+            List<KeyValuePair<string, string>> collection =
+            [
+                new("api_dev_key", window.ApiKey ?? ""),
+                new("api_paste_code", code),
+                new("api_option", "paste")
+            ];
             FormUrlEncodedContent content = new(collection);
             request.Content = content;
             HttpResponseMessage response = await client.SendAsync(request);
@@ -42,13 +42,13 @@ public class CodePublisher
 
     public static async Task PublishCodeSkriptPl(string code, PublishWindow window)
     {
-        string language = (window.LanguageComboBox.SelectedItem as ComboBoxItem).Content.ToString().ToLower();
+        string? language = (window.LanguageComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString()?.ToLower();
 
         try
         {
             string json = JsonSerializer.Serialize(new
             {
-                key = window.ApiKeyTextBox.Text,
+                key = window.ApiKey,
                 language,
                 content = code,
                 anonymous = window.AnonymouslyCheckBox.IsChecked
@@ -60,7 +60,7 @@ public class CodePublisher
             string responseString = await response.Content.ReadAsStringAsync();
 
             JObject jsonResult = JObject.Parse(responseString);
-            string url = jsonResult["url"].ToString();
+            string? url = jsonResult["url"]?.ToString();
             window.ResultTextBox.Text = url;
         }
         catch (Exception e)
@@ -75,9 +75,9 @@ public class CodePublisher
     {
         try
         {
-            string apiKey = window.ApiKeyTextBox.Text;
+            string? apiKey = window.ApiKey;
             string json = JsonSerializer.Serialize(new { content = code });
-            string fileName = SkEditorAPI.Files.GetCurrentOpenedFile().Name;
+            string? fileName = SkEditorAPI.Files.GetCurrentOpenedFile()?.Name;
 
             HttpClient client = new();
             HttpRequestMessage request = new(HttpMethod.Post,
@@ -89,7 +89,7 @@ public class CodePublisher
             string responseString = await response.Content.ReadAsStringAsync();
 
             JObject jsonResult = JObject.Parse(responseString);
-            string url = "https://parser.skunity.com/" + jsonResult["result"]["share_code"];
+            string url = "https://parser.skunity.com/" + jsonResult["result"]?["share_code"];
             window.ResultTextBox.Text = url;
         }
         catch (Exception e)

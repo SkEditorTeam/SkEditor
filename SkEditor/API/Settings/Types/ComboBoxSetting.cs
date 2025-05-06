@@ -15,7 +15,7 @@ public class ComboBoxSetting(string[] items, int minWidth = 100) : ISettingType
     public List<string> Items { get; } = [.. items];
     public int MinWidth { get; } = minWidth;
 
-    public object Deserialize(JToken value)
+    public object? Deserialize(JToken value)
     {
         return value.ToObject<string>();
     }
@@ -25,7 +25,7 @@ public class ComboBoxSetting(string[] items, int minWidth = 100) : ISettingType
         return JToken.FromObject(value);
     }
 
-    public Control CreateControl(object value, Action<object> onChanged)
+    public Control CreateControl(object value, Action<object?> onChanged)
     {
         ComboBox comboBox = new() { MinWidth = MinWidth };
 
@@ -34,7 +34,7 @@ public class ComboBoxSetting(string[] items, int minWidth = 100) : ISettingType
             comboBox.Items.Add(new ComboBoxItem { Content = item, Tag = item });
         }
 
-        comboBox.SelectedItem = Items.Contains(value as string) ? value : Items[0];
+        comboBox.SelectedItem = Items.Contains(value as string ?? string.Empty) ? value : Items[0];
         comboBox.SelectionChanged += (_, _) => onChanged((comboBox.SelectedItem as ComboBoxItem)?.Tag);
 
         return comboBox;

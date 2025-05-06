@@ -28,7 +28,7 @@ public interface IDocProvider
 
     public IconSource Icon { get; }
 
-    public Task<IDocumentationEntry> FetchElement(string id);
+    public Task<IDocumentationEntry?> FetchElement(string id);
     public Task<List<IDocumentationEntry>> Search(SearchData searchData);
 
     public List<string> CanSearch(SearchData searchData);

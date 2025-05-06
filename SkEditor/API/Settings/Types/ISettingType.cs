@@ -24,7 +24,7 @@ public interface ISettingType
     /// </summary>
     /// <param name="value">The JSON object/array/value to deserialize.</param>
     /// <returns>The deserialized value.</returns>
-    public object Deserialize(JToken value);
+    public object? Deserialize(JToken value);
 
     /// <summary>
     ///     Serialize a setting value to a JSON object. The returned
@@ -40,7 +40,7 @@ public interface ISettingType
     /// <param name="value">The current value of the setting.</param>
     /// <param name="onChanged">The action to call when the value changes.</param>
     /// <returns>The created control.</returns>
-    public Control CreateControl(object value, Action<object> onChanged);
+    public Control CreateControl(object value, Action<object?> onChanged);
 
     /// <summary>
     ///     Make custom modifications to the displayed setting expander.
