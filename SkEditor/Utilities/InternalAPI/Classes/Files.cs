@@ -389,7 +389,9 @@ public class Files : IFiles
             TabViewItem tabViewItem = GetItem(entity);
             OpenedFile? file = GetOpenedFiles().Find(source => source.TabViewItem == tabViewItem);
 
-            if (!file.IsSaved && file is { IsEditor: true, IsNewFile: false })
+            if (file == null) return;
+
+            if (!file.IsSaved && file is { IsEditor: true })
             {
                 ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
                     "Unsaved File",
@@ -414,7 +416,7 @@ public class Files : IFiles
                 TextEditorEventHandler.ScrollViewers.Remove(editor);
             }
 
-            (GetTabView().TabItems as IList).Remove(tabViewItem);
+            (GetTabView().TabItems as IList)?.Remove(tabViewItem);
             OpenedFiles.RemoveAll(opFile => opFile.TabViewItem == tabViewItem);
 
             if (OpenedFiles.Count == 0)
