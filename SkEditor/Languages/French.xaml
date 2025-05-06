@@ -15,6 +15,7 @@
     <system:String x:Key="WindowTitleMarketplace">Place de marché</system:String>
     <system:String x:Key="WindowTitleElementRename">Renommer</system:String>
     <system:String x:Key="WindowTitleElementCreate">Créer</system:String>
+    <system:String x:Key="WindowTitleColorSelector">Sélecteur de couleur</system:String>
 
     <!-- En-têtes de menu -->
     <system:String x:Key="MenuHeaderFile">Fichier</system:String>
@@ -58,12 +59,16 @@
     <system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
     <system:String x:Key="MenuHeaderGenerateCommand">Commande</system:String>
     <system:String x:Key="MenuHeaderRefactor">Refactoriser</system:String>
+    <system:String x:Key="MenuHeaderColorSelector">Sélecteur de couleur</system:String>
 
     <!-- Autre Menu -->
     <system:String x:Key="MenuHeaderMarketplace">Place de marché</system:String>
+    <system:String x:Key="MenuHeaderDevTools">Outils développeur</system:String>
     <system:String x:Key="MenuHeaderRefreshSyntax">Actualiser la syntaxe</system:String>
+    <system:String x:Key="MenuHeaderRefreshTheme">Actualiser le thème</system:String>
 
     <!-- Menu Projet -->
+    <system:String x:Key="MenuHeaderDeleteFromDisk">Supprimer du disque</system:String>
     <system:String x:Key="MenuHeaderOpenInExplorer">Ouvrir dans l'explorateur</system:String>
     <system:String x:Key="MenuHeaderCopyPath">Copier le chemin relatif</system:String>
     <system:String x:Key="MenuHeaderCopyAbsolutePath">Copier le chemin absolu</system:String>
@@ -105,7 +110,7 @@
     <system:String x:Key="BinaryFileFound">Il semble que vous essayiez d'ouvrir un fichier binaire (ou un fichier non basé sur le texte).\n\nVoulez-vous l'ouvrir quand même ? SkEditor pourrait ne pas le gérer correctement.</system:String>
     <system:String x:Key="BinaryFileTitle">Fichier binaire trouvé</system:String>
 
-    <!-- Fenêtre de publication -->
+    <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Définissez votre clé API dans les paramètres</system:String>
     <system:String x:Key="PublishWindowApiKeyHint">Cliquez ici pour ouvrir un site Web avec la clé API. Assurez-vous de vous connecter d'abord !</system:String>
     <system:String x:Key="PublishWindowAnonymously">Anonymement</system:String>
@@ -186,11 +191,14 @@
     <system:String x:Key="DocumentationWindowFetchWarning">Cela rechargera la documentation depuis SkriptHub. Vous n'avez probablement pas besoin de le faire à moins que vous souhaitiez voir toutes les mises à jour. Êtes-vous sûr ?</system:String>
     <system:String x:Key="DocumentationWindowFetchSuccessMessage">Cache supprimé. Vous devrez rechercher les éléments à nouveau pour re-télécharger la documentation de SkriptHub.</system:String>
 
-    <!-- Fenêtre de refactoring -->
+    <!-- Refactor Window -->
     <system:String x:Key="RefactorWindowRemoveComments">Supprimer les commentaires</system:String>
     <system:String x:Key="RefactorWindowTabsToSpaces">Convertir les tabulations en espaces</system:String>
     <system:String x:Key="RefactorWindowSpacesToTabs">Convertir les espaces en tabulations</system:String>
     <system:String x:Key="RefactorWindowRefactorBoxName">Renommer '{0}' en...</system:String>
+
+    <!-- Color Selector -->
+    <system:String x:Key="ColorSelectorWindowHexResult">Résultat en hex</system:String>
 
     <!-- Projets -->
     <system:String x:Key="ProjectExplorerTitle">Explorateur</system:String>
@@ -260,6 +268,8 @@
     <system:String x:Key="SettingsGeneralLanguage">Langue</system:String>
     <system:String x:Key="SettingsGeneralWrapping">Retour à la ligne automatique</system:String>
     <system:String x:Key="SettingsGeneralWrappingDescription">Choisissez si  le text s'adapte a la taille de la fenêtre.</system:String>
+    <system:String x:Key="SettingsGeneralZoomSync">Synchronisation du zoom entre les onglets</system:String>
+    <system:String x:Key="SettingsGeneralZoomSyncDescription">Lorsque cette option est activée, la modification du niveau de zoom dans un onglet s'applique à tous les autres onglets.</system:String>
     <system:String x:Key="SettingsGeneralTabType">Type d'indentation</system:String>
     <system:String x:Key="SettingsGeneralTabTypeDescription">Choisissez entre les tabulations et les espaces, et définissez la taille de la tabulation.</system:String>
     <system:String x:Key="SettingsGeneralTabTypeTabs">Tabulations</system:String>
@@ -303,6 +313,8 @@
     <system:String x:Key="SettingsPersonalizationFont">Police de caractères</system:String>
     <system:String x:Key="SettingsPersonalizationFontDescription">Police actuelle : {0}</system:String>
     <system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Mets en surbrillance la ligne actuelle.</system:String>
+    <system:String x:Key="SettingsPersonalizationSidebarAnimations">Animations de la barre latérale</system:String>
+    <system:String x:Key="SettingsPersonalizationSidebarAnimationsDescription">Activer ou désactiver les animations lors de l'ouverture et de la fermeture des panneaux de la barre latérale.</system:String>
 
     <!-- Paramètres du thème -->
     <system:String x:Key="SettingsThemeTitle">Thème</system:String>
