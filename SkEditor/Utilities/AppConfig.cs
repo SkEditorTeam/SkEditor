@@ -26,7 +26,7 @@ public partial class AppConfig : ObservableObject
 
     [ObservableProperty] private bool _isDiscordRpcEnabled = true;
     [ObservableProperty] private bool _isPasteIndentationEnabled;
-    [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
+    [ObservableProperty] private bool _isProjectSingleClickEnabled;
     [ObservableProperty] private bool _isSidebarAnimationEnabled;
     [ObservableProperty] private bool _isWrappingEnabled;
     [ObservableProperty] private bool _isZoomSyncEnabled;

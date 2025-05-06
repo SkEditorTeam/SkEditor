@@ -26,8 +26,37 @@ public static class ProjectOpener
     public static TreeView FileTreeView => Panel.FileTreeView;
 
     private static StackPanel NoFolderMessage => Panel.NoFolderMessage;
+    
+    private static EventHandler<TappedEventArgs>? _doubleTappedHandler;
+    private static EventHandler<TappedEventArgs>? _tappedHandler;
 
     public static async Task OpenProject(string? path = null)
+    {
+        string folder = await ExtractFolderPath(path);
+
+        NoFolderMessage.IsVisible = false;
+        ProjectRootFolder = new Folder(folder) { IsExpanded = true };
+        FileTreeView.ItemsSource = new ObservableCollection<StorageElement> { ProjectRootFolder };
+
+        RemoveEventHandlers();
+
+        _doubleTappedHandler = (_, e) =>
+        {
+            if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled) return;
+            HandleTapped(e);
+        };
+
+        _tappedHandler = (_, e) =>
+        {
+            if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled) return;
+            HandleTapped(e);
+        };
+
+        FileTreeView.DoubleTapped += _doubleTappedHandler;
+        FileTreeView.Tapped += _tappedHandler;
+    }
+
+    private static async Task<string> ExtractFolderPath(string? path)
     {
         string folder;
 
@@ -43,7 +72,7 @@ public static class ProjectOpener
             if (folders.Count == 0)
             {
                 NoFolderMessage.IsVisible = ProjectRootFolder == null;
-                return;
+                return null;
             }
 
             try
@@ -106,7 +135,7 @@ public static class ProjectOpener
                 {
                     NoFolderMessage.IsVisible = ProjectRootFolder == null;
 
-                    return;
+                    return null;
                 }
             }
         }
@@ -116,48 +145,39 @@ public static class ProjectOpener
         }
 
         folder = folder.NormalizePathSeparators();
+        return folder;
+    }
 
-        NoFolderMessage.IsVisible = false;
-        ProjectRootFolder = new Folder(folder) { IsExpanded = true };
-        FileTreeView.ItemsSource = new ObservableCollection<StorageElement> { ProjectRootFolder };
-
-        static void HandleTapped(TappedEventArgs e)
+    private static void HandleTapped(TappedEventArgs e)
+    {
+        if (e.Source is not Border border)
         {
-            if (e.Source is not Border border)
-            {
-                return;
-            }
-
-            TreeViewItem? treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
-
-            if (treeViewItem is null)
-            {
-                return;
-            }
-
-            StorageElement? storageElement = treeViewItem.DataContext as StorageElement;
-
-            storageElement?.HandleClick();
+            return;
         }
 
-        FileTreeView.DoubleTapped += (_, e) =>
+        TreeViewItem? treeViewItem = border.GetVisualAncestors().OfType<TreeViewItem>().FirstOrDefault();
+
+        if (treeViewItem is null)
         {
-            if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
-            {
-                return;
-            }
+            return;
+        }
 
-            HandleTapped(e);
-        };
+        StorageElement? storageElement = treeViewItem.DataContext as StorageElement;
 
-        FileTreeView.Tapped += (_, e) =>
+        storageElement?.HandleClick();
+    }
+
+    private static void RemoveEventHandlers()
+    {
+        if (_doubleTappedHandler != null)
         {
-            if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
-            {
-                return;
-            }
+            FileTreeView.DoubleTapped -= _doubleTappedHandler;
+            _doubleTappedHandler = null;
+        }
 
-            HandleTapped(e);
-        };
+        if (_tappedHandler == null) return;
+
+        FileTreeView.Tapped -= _tappedHandler;
+        _tappedHandler = null;
     }
 }
