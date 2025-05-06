@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
@@ -383,63 +384,71 @@ public class Files : IFiles
 
     public async Task Close(object entity)
     {
-        TabViewItem tabViewItem = GetItem(entity);
-        OpenedFile? file = GetOpenedFiles().Find(source => source.TabViewItem == tabViewItem);
-
-        if (!file.IsSaved && file is { IsEditor: true, IsNewFile: false })
+        await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
-                "Unsaved File",
-                "The file '" + file.Name +
-                "' is not saved.\n\nAre you sure you want to close it and discard your changes?",
-                primaryButtonText: "Yes",
-                cancelButtonText: "Cancel", icon: FluentAvalonia.UI.Controls.Symbol.SaveLocal);
-            if (response != ContentDialogResult.Primary)
+            TabViewItem tabViewItem = GetItem(entity);
+            OpenedFile? file = GetOpenedFiles().Find(source => source.TabViewItem == tabViewItem);
+
+            if (!file.IsSaved && file is { IsEditor: true, IsNewFile: false })
+            {
+                ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
+                    "Unsaved File",
+                    "The file '" + file.Name +
+                    "' is not saved.\n\nAre you sure you want to close it and discard your changes?",
+                    primaryButtonText: "Yes",
+                    cancelButtonText: "Cancel", icon: FluentAvalonia.UI.Controls.Symbol.SaveLocal);
+                if (response != ContentDialogResult.Primary)
+                {
+                    return;
+                }
+            }
+
+            bool canClose = SkEditorAPI.Events.TabClosed(file);
+            if (!canClose)
             {
                 return;
             }
-        }
 
-        bool canClose = SkEditorAPI.Events.TabClosed(file);
-        if (!canClose)
-        {
-            return;
-        }
+            if (tabViewItem.Content is TextEditor editor)
+            {
+                TextEditorEventHandler.ScrollViewers.Remove(editor);
+            }
 
-        if (tabViewItem.Content is TextEditor editor)
-        {
-            TextEditorEventHandler.ScrollViewers.Remove(editor);
-        }
+            (GetTabView().TabItems as IList).Remove(tabViewItem);
+            OpenedFiles.RemoveAll(opFile => opFile.TabViewItem == tabViewItem);
 
-        (GetTabView().TabItems as IList).Remove(tabViewItem);
-        OpenedFiles.RemoveAll(opFile => opFile.TabViewItem == tabViewItem);
-
-        if (OpenedFiles.Count == 0)
-        {
-            AddWelcomeTab();
-        }
+            if (OpenedFiles.Count == 0)
+            {
+                AddWelcomeTab();
+            }
+        });
     }
 
     public async Task BatchClose(IFiles.FileCloseAction closeAction)
     {
+        List<OpenedFile> openedFiles = new(GetOpenedFiles());
+
         switch (closeAction)
         {
             case IFiles.FileCloseAction.AllExceptCurrent:
             {
                 OpenedFile currentOpenedFile = GetCurrentOpenedFile();
-                foreach (OpenedFile openedFile in OpenedFiles.Where(openedFile => openedFile != currentOpenedFile))
+                var filesToClose = openedFiles.Where(openedFile => openedFile != currentOpenedFile).ToList();
+
+                foreach (var file in filesToClose)
                 {
-                    await Close(openedFile);
+                    await Close(file);
                 }
 
                 break;
             }
             case IFiles.FileCloseAction.Unsaved:
             {
-                foreach (TabViewItem tabViewItem in GetOpenedTabs()
-                             .Where(tabItem => tabItem.Header.ToString().EndsWith('*')))
+                var unsavedFiles = openedFiles.Where(openedFile => !openedFile.IsSaved).ToList();
+
+                foreach (var file in unsavedFiles)
                 {
-                    await Close(tabViewItem);
+                    await Close(file);
                 }
 
                 break;
@@ -449,25 +458,29 @@ public class Files : IFiles
             {
                 TabViewItem currentTabViewItem = GetCurrentTabViewItem();
                 int index = GetTabView().TabItems.IndexOf(currentTabViewItem);
-                List<TabViewItem> openedTabs = GetOpenedTabs();
+                List<TabViewItem> openedTabs = new(GetOpenedTabs());
 
-                List<TabViewItem> items = closeAction == IFiles.FileCloseAction.AllRight
+                List<TabViewItem> itemsToClose = closeAction == IFiles.FileCloseAction.AllRight
                     ? openedTabs.GetRange(index + 1, openedTabs.Count - index - 1)
                     : openedTabs.GetRange(0, index);
 
-                items.RemoveAll(tab => tab == currentTabViewItem);
-                await Parallel.ForEachAsync(items, async (tab, _) => { await Close(tab); });
+                itemsToClose.RemoveAll(tab => tab == currentTabViewItem);
+
+                foreach (var tab in itemsToClose)
+                {
+                    await Close(tab);
+                }
 
                 break;
             }
             case IFiles.FileCloseAction.All:
             {
-                List<OpenedFile> tabsToClose = GetOpenedFiles().ToList();
-                await Parallel.ForEachAsync(tabsToClose, async (tab, _) => { await Close(tab); });
-                if (GetOpenedFiles().Count == 0)
+                foreach (var file in openedFiles)
                 {
-                    AddWelcomeTab();
+                    await Close(file);
                 }
+
+                if (GetOpenedFiles().Count == 0) AddWelcomeTab();
 
                 break;
             }
