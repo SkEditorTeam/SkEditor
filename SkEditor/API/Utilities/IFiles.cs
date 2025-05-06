@@ -50,17 +50,17 @@ public interface IFiles
     /// <summary>
     ///     Get the current opened file.
     /// </summary>
-    public OpenedFile GetCurrentOpenedFile();
+    public OpenedFile? GetCurrentOpenedFile();
 
     /// <summary>
     ///     Get the current opened file, as the currently selected tab view item
     /// </summary>
-    public TabViewItem GetCurrentTabViewItem();
+    public TabViewItem? GetCurrentTabViewItem();
 
     /// <summary>
     ///     Get the main tab view, used by SkEditor to displays opened files.
     /// </summary>
-    public TabView GetTabView();
+    public TabView? GetTabView();
 
     /// <summary>
     ///     Manually add a new tab/file into the opened files.
@@ -76,7 +76,7 @@ public interface IFiles
     /// <summary>
     ///     Add a new editor tab with the desired content.
     /// </summary>
-    public Task<OpenedFile> AddEditorTab(string content, string? path);
+    public Task<OpenedFile?> AddEditorTab(string content, string? path);
 
     /// <summary>
     ///     Select the desired opened file's tab item.

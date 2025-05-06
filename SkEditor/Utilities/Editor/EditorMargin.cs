@@ -27,8 +27,11 @@ public class EditorMargin : AbstractMargin
         Cursor = new Cursor(StandardCursorType.Arrow);
         File = file;
 
-        file.Editor.TextArea.LeftMargins.Insert(0, this);
-        file.Editor.TextChanged += (_, _) => Reload();
+        if (file.Editor is not null)
+        {
+            file.Editor.TextArea.LeftMargins.Insert(0, this);
+            file.Editor.TextChanged += (_, _) => Reload();
+        }
         Reload();
     }
 
@@ -65,23 +68,25 @@ public class EditorMargin : AbstractMargin
 
     protected override Size MeasureOverride(Size availableSize)
     {
+        if (File.Editor is null) return new Size(0, 0);
+        
         double scale = File.Editor.FontSize / 12;
-
-        double GetWidthSelector(MarginIconData icon)
-        {
-            return icon.GetWidth(scale);
-        }
-
-        string GroupByKeySelector(MarginIconData icon)
-        {
-            return icon.ColumnKey;
-        }
 
         double totalWidth = Registries.MarginIcons
             .GroupBy(GroupByKeySelector)
             .Sum(group => group.Max(GetWidthSelector));
 
         return new Size(totalWidth, 0);
+
+        string? GroupByKeySelector(MarginIconData icon)
+        {
+            return icon?.ColumnKey;
+        }
+
+        double GetWidthSelector(MarginIconData icon)
+        {
+            return icon.GetWidth(scale);
+        }
     }
 
 
@@ -89,10 +94,12 @@ public class EditorMargin : AbstractMargin
     {
         context.DrawRectangle(SkEditorAPI.Core.GetApplicationResource("EditorBackgroundColor") as IBrush, null, Bounds);
 
+        if (File.Editor is null) return;
+
         List<int> hidden = FoldingCreator.GetHiddenLines(File);
         double lineHeight = File.Editor.FontSize;
         double lineSpacing = lineHeight * 0.345;
-        ScrollViewer scrollViewer = TextEditorEventHandler.GetScrollViewer(File.Editor);
+        ScrollViewer scrollViewer = File.Editor.ScrollViewer;
         double scale = File.Editor.FontSize / 12;
 
         for (int line = 1; line <= File.Editor.LineCount; line++)
@@ -130,7 +137,7 @@ public class EditorMargin : AbstractMargin
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         Point position = e.GetPosition(this);
-        TextViewPosition? point = File.Editor.GetPositionFromPoint(position);
+        TextViewPosition? point = File.Editor?.GetPositionFromPoint(position);
         if (point == null)
         {
             return;
@@ -171,7 +178,7 @@ public class EditorMargin : AbstractMargin
         }
 
         Point position = e.GetPosition(this);
-        TextViewPosition? point = File.Editor.GetPositionFromPoint(position);
+        TextViewPosition? point = File.Editor?.GetPositionFromPoint(position);
         if (point == null)
         {
             return;

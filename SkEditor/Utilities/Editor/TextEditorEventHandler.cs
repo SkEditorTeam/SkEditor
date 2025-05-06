@@ -43,7 +43,8 @@ public partial class TextEditorEventHandler
 
         e.Handled = true;
 
-        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (editor == null) return;
 
         int zoom = e.Delta.Y > 0 && editor.FontSize < 200 ? 1 : -1;
 
@@ -57,15 +58,17 @@ public partial class TextEditorEventHandler
             return;
         }
 
-        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (editor == null) return;
 
-        if (e.Key == Key.OemPlus)
+        switch (e.Key)
         {
-            Zoom(editor, 5);
-        }
-        else if (e.Key == Key.OemMinus)
-        {
-            Zoom(editor, -5);
+            case Key.OemPlus:
+                Zoom(editor, 5);
+                break;
+            case Key.OemMinus:
+                Zoom(editor, -5);
+                break;
         }
     }
 
@@ -75,7 +78,7 @@ public partial class TextEditorEventHandler
         {
             foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
             {
-                ZoomEditor(value, openedFile.Editor);
+                ZoomEditor(value, openedFile.Editor!);
             }
         }
         else
@@ -90,35 +93,18 @@ public partial class TextEditorEventHandler
         {
             return;
         }
-
-        ScrollViewer scrollViewer = GetScrollViewer(editor);
+        
         double oldLineHeight = editor.TextArea.TextView.DefaultLineHeight;
         editor.FontSize += value;
         double lineHeight = editor.TextArea.TextView.DefaultLineHeight;
 
         double lineHeightChange = lineHeight / oldLineHeight;
+        
+        ScrollViewer? scrollViewer = editor.ScrollViewer;
+        if (scrollViewer == null) return;
         double newOffset = scrollViewer.Offset.Y * lineHeightChange;
 
         scrollViewer.SetCurrentValue(ScrollViewer.OffsetProperty, new Vector(scrollViewer.Offset.X, newOffset));
-    }
-
-    public static ScrollViewer GetScrollViewer(TextEditor editor)
-    {
-        if (ScrollViewers.TryGetValue(editor, out ScrollViewer? value))
-        {
-            return value;
-        }
-
-        Type type = editor.GetType();
-        PropertyInfo propInfo = type.GetProperty("ScrollViewer", BindingFlags.Instance | BindingFlags.NonPublic);
-        if (propInfo == null)
-        {
-            return null;
-        }
-
-        ScrollViewer scrollViewer = (ScrollViewer)propInfo.GetValue(editor);
-        ScrollViewers[editor] = scrollViewer;
-        return scrollViewer;
     }
 
     public static async void OnTextChanged(object sender, EventArgs e)

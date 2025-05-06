@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Avalonia.Controls;
 using SkEditor.API;
+using SkEditor.Utilities;
 
 namespace SkEditor.Controls;
 
@@ -22,7 +23,7 @@ public partial class ConnectionEntryControl : UserControl
         {
             OpenDashboardButton.Click += (_, _) =>
             {
-                Process.Start(new ProcessStartInfo(connectionData.DashboardUrl)
+                Process.Start(new ProcessStartInfo(dashboardUrl)
                 {
                     UseShellExecute = true
                 });
@@ -30,10 +31,13 @@ public partial class ConnectionEntryControl : UserControl
         }
 
         string key = connectionData.OptionKey;
-        ApiKeyTextBox.Text = SkEditorAPI.Core.GetAppConfig().GetOptionValue<string>(key);
+        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
+
+        ApiKeyTextBox.Text = appConfig.GetApiKey(key);
         ApiKeyTextBox.TextChanged += (_, _) =>
         {
-            SkEditorAPI.Core.GetAppConfig().SetOptionValue(key, ApiKeyTextBox.Text);
+            appConfig.SetApiKey(key, ApiKeyTextBox.Text);
+            appConfig.Save(); 
         };
 
         Expander.IconSource = connectionData.IconSource;
