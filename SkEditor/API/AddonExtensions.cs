@@ -4,7 +4,7 @@ namespace SkEditor.API;
 
 public static class AddonExtensions
 {
-    public static object GetSetting(this IAddon addon, string key)
+    public static object? GetSetting(this IAddon addon, string key)
     {
         return AddonSettingsManager.GetAddonValue(addon, key);
     }

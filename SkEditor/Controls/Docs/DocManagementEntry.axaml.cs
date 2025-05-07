@@ -30,16 +30,16 @@ public partial class DocManagementEntry : UserControl
     {
         DeleteButton.Command = new RelayCommand(() =>
         {
-            _ = LocalProvider.Get().RemoveElement(_entry);
+            _ = LocalProvider.Get()?.RemoveElement(_entry);
             SettingsExpander? parent = Parent as SettingsExpander;
-            parent.Items.Remove(this);
-            if (parent.Items.Count != 0)
+            parent?.Items.Remove(this);
+            if (parent?.Items.Count != 0)
             {
                 return;
             }
 
             StackPanel? parentParent = parent.Parent as StackPanel;
-            parentParent.Children.Remove(parent);
+            parentParent?.Children.Remove(parent);
         });
     }
 }

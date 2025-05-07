@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
@@ -32,21 +33,42 @@ public class Files : IFiles
 
     public async Task Save(object entity, bool saveAs)
     {
-        TabViewItem tabItem = GetItem(entity);
+        TabViewItem? tabItem = GetItem(entity);
+        if (tabItem == null)
+        {
+            return;
+        }
+
         OpenedFile? openedFile = GetOpenedFiles().Find(file => file.TabViewItem == tabItem);
+        if (openedFile == null)
+        {
+            return;
+        }
 
         if (openedFile.IsSaved && !saveAs)
         {
             return;
         }
 
-        string? path = GetFromTabViewItem(tabItem).Path;
+        string? path = GetFromTabViewItem(tabItem)?.Path;
         if (path == null || saveAs)
         {
-            IStorageFolder? suggestedFolder = string.IsNullOrEmpty(path)
-                ? await SkEditorAPI.Windows.GetMainWindow().StorageProvider
-                    .TryGetWellKnownFolderAsync(WellKnownFolder.Documents)
-                : await SkEditorAPI.Windows.GetMainWindow().StorageProvider.TryGetFolderFromPathAsync(path);
+            IStorageFolder? suggestedFolder;
+            IStorageProvider? storageProvider = SkEditorAPI.Windows.GetMainWindow()?.StorageProvider;
+
+            if (storageProvider == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(path))
+            {
+                suggestedFolder = await storageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Documents);
+            }
+            else
+            {
+                suggestedFolder = await storageProvider.TryGetFolderFromPathAsync(path);
+            }
 
             FilePickerFileType skriptFileType = new("Skript") { Patterns = ["*.sk"] };
             FilePickerFileType allFilesType = new("All Files") { Patterns = ["*"] };
@@ -60,15 +82,21 @@ public class Files : IFiles
                 SuggestedStartLocation = suggestedFolder
             };
 
-            IStorageFile? file =
-                await SkEditorAPI.Windows.GetMainWindow().StorageProvider.SaveFilePickerAsync(saveOptions);
+            IStorageFile? file = await storageProvider.SaveFilePickerAsync(saveOptions);
+
             if (file is null)
             {
                 return;
             }
 
             string absolutePath = Uri.UnescapeDataString(file.Path.AbsolutePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
+            string? directory = Path.GetDirectoryName(absolutePath);
+            if (string.IsNullOrEmpty(directory))
+            {
+                return;
+            }
+
+            Directory.CreateDirectory(directory);
             path = absolutePath;
 
             openedFile.Path = path;
@@ -106,18 +134,18 @@ public class Files : IFiles
         AddCustomTab(Translation.Get("WelcomeTabTitle"), new WelcomeTabControl(), icon: icon);
     }
 
-    private OpenedFile GetFromTabViewItem(TabViewItem tabViewItem)
+    private OpenedFile? GetFromTabViewItem(TabViewItem tabViewItem)
     {
         return OpenedFiles.FirstOrDefault(source => source.TabViewItem == tabViewItem);
     }
 
-    private TabViewItem GetItem(object entity)
+    private TabViewItem? GetItem(object entity)
     {
         return entity switch
         {
             OpenedFile openedFile => openedFile.TabViewItem,
             TabViewItem item => item,
-            string path => GetOpenedFiles().Find(item => item.Path == path).TabViewItem,
+            string path => GetOpenedFiles()?.Find(item => item.Path == path)?.TabViewItem,
             int index => GetOpenedTabs()[index],
             _ => throw new ArgumentException("Given entity is not an OpenedFile, TabViewItem, string or int")
         };
@@ -140,19 +168,23 @@ public class Files : IFiles
         return OpenedFiles;
     }
 
-    public OpenedFile GetCurrentOpenedFile()
+    public OpenedFile? GetCurrentOpenedFile()
     {
-        return GetFromTabViewItem(GetCurrentTabViewItem());
+        TabViewItem? tabViewItem = GetCurrentTabViewItem();
+        return tabViewItem == null ? null : GetFromTabViewItem(tabViewItem);
     }
 
-    public TabView GetTabView()
+    public TabView? GetTabView()
     {
-        return SkEditorAPI.Windows.GetMainWindow().TabControl;
+        return SkEditorAPI.Windows.GetMainWindow()?.TabControl;
     }
 
     public List<TabViewItem> GetOpenedTabs()
     {
-        return GetOpenedFiles().Select(source => source.TabViewItem).ToList();
+        return GetOpenedFiles()
+            .Select(source => source.TabViewItem)
+            .OfType<TabViewItem>()
+            .ToList();
     }
 
     public List<OpenedFile> GetOpenedEditors()
@@ -160,9 +192,9 @@ public class Files : IFiles
         return GetOpenedFiles().Where(source => source.IsEditor).ToList();
     }
 
-    public TabViewItem GetCurrentTabViewItem()
+    public TabViewItem? GetCurrentTabViewItem()
     {
-        return (TabViewItem)GetTabView().SelectedItem;
+        return (TabViewItem?)GetTabView()?.SelectedItem;
     }
 
     public OpenedFile? GetOpenedFileByPath(string path)
@@ -191,27 +223,43 @@ public class Files : IFiles
         {
             TabViewItem = tabItem
         });
-        (GetTabView().TabItems as IList)?.Add(tabItem);
+
+        TabView? tabView = GetTabView();
+        if (tabView == null)
+        {
+            return;
+        }
+
+        (tabView.TabItems as IList)?.Add(tabItem);
         if (select)
         {
-            GetTabView().SelectedItem = tabItem;
+            tabView.SelectedItem = tabItem;
         }
     }
 
-    public async Task<OpenedFile> AddEditorTab(string content, string? path)
+    public async Task<OpenedFile?> AddEditorTab(string content, string? path)
     {
         int index = GetOpenedEditors().Count + 1;
         string header = Translation.Get("NewFileNameFormat").Replace("{0}", index.ToString());
 
         TabViewItem? tabItem = await FileBuilder.Build(header);
+        if (tabItem == null)
+        {
+            return null;
+        }
+
         tabItem.Tag = path;
 
-        TextEditor editor = tabItem.Content as TextEditor;
+        if (tabItem.Content is not TextEditor editor)
+        {
+            return null;
+        }
+
         editor.Text = content;
 
         OpenedFile openedFile = new()
         {
-            Editor = tabItem.Content as TextEditor,
+            Editor = editor,
             Path = path,
             TabViewItem = tabItem,
             CustomName = header,
@@ -233,7 +281,7 @@ public class Files : IFiles
 
         RemoveWelcomeTab();
         GetOpenedFiles().Add(openedFile);
-        (GetTabView().TabItems as IList)?.Add(tabItem);
+        (GetTabView()?.TabItems as IList)?.Add(tabItem);
         await SyntaxLoader.RefreshSyntaxAsync();
         return openedFile;
     }
@@ -258,78 +306,89 @@ public class Files : IFiles
             return;
         }
 
-        OpenedFile? openedFile;
+        OpenedFile? openedFile = null;
 
         string extension = Path.GetExtension(path);
         List<FileTypeData> availableTypes = Registries.FileTypes
             .Where(fileType => fileType.SupportedExtensions.Contains(extension))
             .ToList();
 
-        if (availableTypes.Count == 1)
+        switch (availableTypes.Count)
         {
-            openedFile = BuildFromType(availableTypes[0], path);
-        }
-        else if (availableTypes.Count > 1)
-        {
-            string? configuredTypeFullId =
-                SkEditorAPI.Core.GetAppConfig().FileTypeChoices.GetValueOrDefault(extension, null);
-            if (configuredTypeFullId != null && !Registries.FileTypes.HasFullKey(configuredTypeFullId))
+            case 1:
+                openedFile = BuildFromType(availableTypes[0], path);
+                break;
+            case > 1:
             {
-                configuredTypeFullId = null;
-            }
+                string? configuredTypeFullId =
+                    SkEditorAPI.Core.GetAppConfig().FileTypeChoices.GetValueOrDefault(extension, null);
 
-            if (configuredTypeFullId != null)
-            {
-                RegistryKey key = RegistryKey.FromFullKey(configuredTypeFullId);
-                openedFile = BuildFromType(Registries.FileTypes.GetValue(key), path);
-            }
-            else
-            {
-                FileTypeSelectionViewModel selectionVm = new()
+                if (configuredTypeFullId != null && !Registries.FileTypes.HasFullKey(configuredTypeFullId))
                 {
-                    FileTypes = availableTypes,
-                    SelectedFileType = null
-                };
-                await SkEditorAPI.Windows.ShowWindowAsDialog(new FileTypeSelectionWindow { DataContext = selectionVm });
-
-                if (selectionVm.SelectedFileType == null)
-                {
-                    return;
+                    configuredTypeFullId = null;
                 }
 
-                if (selectionVm.RememberSelection)
+                if (configuredTypeFullId != null)
                 {
-                    SkEditorAPI.Core.GetAppConfig().FileTypeChoices[extension] =
-                        Registries.FileTypes.GetValueKey(selectionVm.SelectedFileType).FullKey;
+                    RegistryKey key = RegistryKey.FromFullKey(configuredTypeFullId);
+                    var fileType = Registries.FileTypes.GetValue(key);
+                    if (fileType != null)
+                    {
+                        openedFile = BuildFromType(fileType, path);
+                    }
+                }
+                else
+                {
+                    FileTypeSelectionViewModel selectionVm = new()
+                    {
+                        FileTypes = availableTypes,
+                        SelectedFileType = null
+                    };
+                    await SkEditorAPI.Windows.ShowWindowAsDialog(new FileTypeSelectionWindow
+                        { DataContext = selectionVm });
+
+                    if (selectionVm.SelectedFileType == null)
+                    {
+                        return;
+                    }
+
+                    if (selectionVm.RememberSelection)
+                    {
+                        SkEditorAPI.Core.GetAppConfig().FileTypeChoices[extension] =
+                            Registries.FileTypes.GetValueKey(selectionVm.SelectedFileType)?.FullKey;
+                    }
+
+                    openedFile = BuildFromType(selectionVm.SelectedFileType, path);
                 }
 
-                openedFile = BuildFromType(selectionVm.SelectedFileType, path);
+                break;
             }
-        }
-        else
-        {
-            string content = await File.ReadAllTextAsync(path);
-            // binary check
-            if (!force && content.Any(c => char.IsControl(c) && !char.IsWhiteSpace(c)))
+            default:
             {
-                ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog("BinaryFileTitle",
-                    "BinaryFileFound",
-                    cancelButtonText: "Cancel", icon: FluentAvalonia.UI.Controls.Symbol.Code);
-                if (response != ContentDialogResult.Primary)
+                string content = await File.ReadAllTextAsync(path);
+                // binary check
+                if (!force && content.Any(c => char.IsControl(c) && !char.IsWhiteSpace(c)))
                 {
-                    return;
+                    ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog("BinaryFileTitle",
+                        "BinaryFileFound",
+                        cancelButtonText: "Cancel", icon: FluentAvalonia.UI.Controls.Symbol.Code);
+                    if (response != ContentDialogResult.Primary)
+                    {
+                        return;
+                    }
                 }
+
+                openedFile = await AddEditorTab(content, path);
+                break;
             }
-
-            openedFile = await AddEditorTab(content, path);
         }
-
-        Icon.SetIcon(openedFile);
 
         if (openedFile == null)
         {
             return;
         }
+
+        Icon.SetIcon(openedFile);
 
         SkEditorAPI.Events.FileOpened(openedFile, false);
 
@@ -361,85 +420,109 @@ public class Files : IFiles
             };
 
             GetOpenedFiles().Add(openedFile);
-            (GetTabView().TabItems as IList)?.Add(tabViewItem);
+            (GetTabView()?.TabItems as IList)?.Add(tabViewItem);
             return openedFile;
         }
     }
 
     private void RemoveWelcomeTab()
     {
-        OpenedFile? welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem.Content is WelcomeTabControl);
-        if (welcomeTab != null)
-        {
-            (GetTabView().TabItems as IList)?.Remove(welcomeTab.TabViewItem);
-            GetOpenedFiles().Remove(welcomeTab);
-        }
-    }
-
-    public void Select(object entity)
-    {
-        GetTabView().SelectedItem = GetItem(entity);
-    }
-
-    public async Task Close(object entity)
-    {
-        TabViewItem tabViewItem = GetItem(entity);
-        OpenedFile? file = GetOpenedFiles().Find(source => source.TabViewItem == tabViewItem);
-
-        if (!file.IsSaved && file is { IsEditor: true, IsNewFile: false })
-        {
-            ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
-                "Unsaved File",
-                "The file '" + file.Name +
-                "' is not saved.\n\nAre you sure you want to close it and discard your changes?",
-                primaryButtonText: "Yes",
-                cancelButtonText: "Cancel", icon: FluentAvalonia.UI.Controls.Symbol.SaveLocal);
-            if (response != ContentDialogResult.Primary)
-            {
-                return;
-            }
-        }
-
-        bool canClose = SkEditorAPI.Events.TabClosed(file);
-        if (!canClose)
+        OpenedFile? welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem?.Content is WelcomeTabControl);
+        if (welcomeTab == null)
         {
             return;
         }
 
-        if (tabViewItem.Content is TextEditor editor)
-        {
-            TextEditorEventHandler.ScrollViewers.Remove(editor);
-        }
+        (GetTabView()?.TabItems as IList)?.Remove(welcomeTab.TabViewItem);
+        GetOpenedFiles().Remove(welcomeTab);
+    }
 
-        (GetTabView().TabItems as IList).Remove(tabViewItem);
-        OpenedFiles.RemoveAll(opFile => opFile.TabViewItem == tabViewItem);
-
-        if (OpenedFiles.Count == 0)
+    public void Select(object entity)
+    {
+        if (GetTabView() is { } tabView)
         {
-            AddWelcomeTab();
+            tabView.SelectedItem = GetItem(entity);
         }
+    }
+
+    public async Task Close(object entity)
+    {
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            TabViewItem? tabViewItem = GetItem(entity);
+            if (tabViewItem == null)
+            {
+                return;
+            }
+
+            OpenedFile? file = GetOpenedFiles().Find(source => source.TabViewItem == tabViewItem);
+
+            if (file == null)
+            {
+                return;
+            }
+
+            if (!file.IsSaved && file is { IsEditor: true })
+            {
+                ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
+                    "Unsaved File",
+                    "The file '" + file.Name +
+                    "' is not saved.\n\nAre you sure you want to close it and discard your changes?",
+                    primaryButtonText: "Yes",
+                    cancelButtonText: "Cancel", icon: FluentAvalonia.UI.Controls.Symbol.SaveLocal);
+                if (response != ContentDialogResult.Primary)
+                {
+                    return;
+                }
+            }
+
+            bool canClose = SkEditorAPI.Events.TabClosed(file);
+            if (!canClose)
+            {
+                return;
+            }
+
+            if (tabViewItem.Content is TextEditor editor)
+            {
+                TextEditorEventHandler.ScrollViewers.Remove(editor);
+            }
+
+            (GetTabView()?.TabItems as IList)?.Remove(tabViewItem);
+            OpenedFiles.RemoveAll(opFile => opFile.TabViewItem == tabViewItem);
+
+            if (OpenedFiles.Count == 0)
+            {
+                AddWelcomeTab();
+            }
+        });
     }
 
     public async Task BatchClose(IFiles.FileCloseAction closeAction)
     {
+        List<OpenedFile> openedFiles = new(GetOpenedFiles());
+
         switch (closeAction)
         {
             case IFiles.FileCloseAction.AllExceptCurrent:
             {
-                OpenedFile currentOpenedFile = GetCurrentOpenedFile();
-                foreach (OpenedFile openedFile in OpenedFiles.Where(openedFile => openedFile != currentOpenedFile))
+                OpenedFile? currentOpenedFile = GetCurrentOpenedFile();
+                List<OpenedFile> filesToClose =
+                    openedFiles.Where(openedFile => openedFile != currentOpenedFile).ToList();
+
+                foreach (OpenedFile file in filesToClose)
                 {
-                    await Close(openedFile);
+                    await Close(file);
                 }
 
                 break;
             }
             case IFiles.FileCloseAction.Unsaved:
             {
-                foreach (TabViewItem tabViewItem in GetOpenedTabs()
-                             .Where(tabItem => tabItem.Header.ToString().EndsWith('*')))
+                List<OpenedFile> unsavedFiles = openedFiles.Where(openedFile => !openedFile.IsSaved).ToList();
+
+                foreach (OpenedFile file in unsavedFiles)
                 {
-                    await Close(tabViewItem);
+                    await Close(file);
                 }
 
                 break;
@@ -447,23 +530,35 @@ public class Files : IFiles
             case IFiles.FileCloseAction.AllRight:
             case IFiles.FileCloseAction.AllLeft:
             {
-                TabViewItem currentTabViewItem = GetCurrentTabViewItem();
-                int index = GetTabView().TabItems.IndexOf(currentTabViewItem);
-                List<TabViewItem> openedTabs = GetOpenedTabs();
+                TabViewItem? currentTabViewItem = GetCurrentTabViewItem();
+                int? index = GetTabView()?.TabItems.IndexOf(currentTabViewItem);
+                if (index is null or < 0)
+                {
+                    return;
+                }
 
-                List<TabViewItem> items = closeAction == IFiles.FileCloseAction.AllRight
-                    ? openedTabs.GetRange(index + 1, openedTabs.Count - index - 1)
-                    : openedTabs.GetRange(0, index);
+                List<TabViewItem> openedTabs = new(GetOpenedTabs());
 
-                items.RemoveAll(tab => tab == currentTabViewItem);
-                await Parallel.ForEachAsync(items, async (tab, _) => { await Close(tab); });
+                List<TabViewItem> itemsToClose = closeAction == IFiles.FileCloseAction.AllRight
+                    ? openedTabs.GetRange(index.Value + 1, openedTabs.Count - index.Value - 1)
+                    : openedTabs.GetRange(0, index.Value);
+
+                itemsToClose.RemoveAll(tab => tab == currentTabViewItem);
+
+                foreach (TabViewItem tab in itemsToClose)
+                {
+                    await Close(tab);
+                }
 
                 break;
             }
             case IFiles.FileCloseAction.All:
             {
-                List<OpenedFile> tabsToClose = GetOpenedFiles().ToList();
-                await Parallel.ForEachAsync(tabsToClose, async (tab, _) => { await Close(tab); });
+                foreach (OpenedFile file in openedFiles)
+                {
+                    await Close(file);
+                }
+
                 if (GetOpenedFiles().Count == 0)
                 {
                     AddWelcomeTab();

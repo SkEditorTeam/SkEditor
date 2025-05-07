@@ -23,7 +23,7 @@ public class MarketplaceLoader
         if (response.IsSuccessStatusCode)
         {
             string json = await response.Content.ReadAsStringAsync();
-            string[] itemNames = JsonConvert.DeserializeObject<string[]>(json);
+            string[] itemNames = JsonConvert.DeserializeObject<string[]>(json) ?? [];
             foreach (string itemName in itemNames)
             {
                 if (HiddenItems.Contains(itemName))
@@ -31,8 +31,8 @@ public class MarketplaceLoader
                     continue;
                 }
 
-                MarketplaceItem item = GetItem(itemName);
-                if (item.ItemName == null)
+                MarketplaceItem? item = GetItem(itemName);
+                if (item?.ItemName == null)
                 {
                     continue;
                 }
@@ -51,7 +51,7 @@ public class MarketplaceLoader
         }
     }
 
-    private static MarketplaceItem GetItem(string name)
+    private static MarketplaceItem? GetItem(string name)
     {
         string url = MarketplaceWindow.MarketplaceUrl + "/items/" + name;
         string manifestUrl = url + "/manifest.json";
@@ -60,13 +60,18 @@ public class MarketplaceLoader
         if (response.IsSuccessStatusCode)
         {
             string json = response.Content.ReadAsStringAsync().Result;
-            MarketplaceItem item = JsonConvert.DeserializeObject<MarketplaceItem>(json, new MarketplaceItemConverter());
+            MarketplaceItem? item = JsonConvert.DeserializeObject<MarketplaceItem>(json, new MarketplaceItemConverter());
+            if (item == null)
+            {
+                Log.Error("Failed to deserialize manifest.json for item {Name}", name);
+                return null;
+            }
             item = FormatUrls(url, item);
             return item;
         }
 
-        Log.Error("Failed to get manifest.json for item " + name);
-        return new MarketplaceItem();
+        Log.Error("Failed to get manifest.json for item {Name}", name);
+        return null;
     }
 
     private static MarketplaceItem FormatUrls(string url, MarketplaceItem item)
@@ -102,21 +107,21 @@ public class MarketplaceLoader
 
 public class MarketplaceItem
 {
-    [JsonProperty("name")] public string ItemName { get; set; }
+    [JsonProperty("name")] public required string ItemName { get; set; }
 
-    [JsonProperty("type")] public string ItemType { get; set; }
+    [JsonProperty("type")] public required string ItemType { get; set; }
 
-    [JsonProperty("shortDescription")] public string ItemShortDescription { get; set; }
+    [JsonProperty("shortDescription")] public required string ItemShortDescription { get; set; }
 
-    [JsonProperty("icon")] public string ItemImageUrl { get; set; }
+    [JsonProperty("icon")] public required string ItemImageUrl { get; set; }
 
-    [JsonProperty("longDescription")] public string ItemLongDescription { get; set; }
+    [JsonProperty("longDescription")] public required string ItemLongDescription { get; set; }
 
-    [JsonProperty("version")] public string ItemVersion { get; set; }
+    [JsonProperty("version")] public required string ItemVersion { get; set; }
 
-    [JsonProperty("author")] public string ItemAuthor { get; set; }
+    [JsonProperty("author")] public required string ItemAuthor { get; set; }
 
-    [JsonIgnore] public MarketplaceWindow Marketplace { get; set; }
+    [JsonIgnore] public required MarketplaceWindow Marketplace { get; set; }
 
     public virtual Task Install()
     {
@@ -136,11 +141,11 @@ public class MarketplaceItem
 
 public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
 {
-    public override MarketplaceItem ReadJson(JsonReader reader, Type objectType, MarketplaceItem? existingValue,
+    public override MarketplaceItem? ReadJson(JsonReader reader, Type objectType, MarketplaceItem? existingValue,
         bool hasExistingValue, JsonSerializer serializer)
     {
         JObject jsonObject = JObject.Load(reader);
-        string itemType = jsonObject["type"]?.Value<string>();
+        string? itemType = jsonObject["type"]?.Value<string>();
 
         JsonSerializer defaultSerializer = new();
 
@@ -151,7 +156,7 @@ public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
             "Addon" => jsonObject.ToObject<AddonItem>(defaultSerializer),
             "NewThemeWithSyntax" => jsonObject.ToObject<ThemeWithSyntaxItem>(defaultSerializer),
             "ZipAddon" => jsonObject.ToObject<ZipAddonItem>(defaultSerializer),
-            _ => new MarketplaceItem()
+            _ => null
         };
     }
 

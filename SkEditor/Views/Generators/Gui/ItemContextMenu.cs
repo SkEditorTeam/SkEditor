@@ -42,10 +42,14 @@ internal class ItemContextMenu
 
     private static async Task EditItem(int slot)
     {
+        GuiGenerator? generator = GuiGenerator.Instance;
+        if (generator == null) return;
+        
         EditedItem = slot == -1
-            ? GuiGenerator.Instance.BackgroundItem
-            : GuiGenerator.Instance.Items.GetValueOrDefault(slot);
-        Item item = await GuiGenerator.Instance.SelectItem();
+            ? generator.BackgroundItem
+            : generator.Items.GetValueOrDefault(slot);
+        
+        Item? item = await generator.SelectItem();
         if (item == null)
         {
             return;
@@ -53,13 +57,13 @@ internal class ItemContextMenu
 
         if (slot == -1)
         {
-            GuiGenerator.Instance.BackgroundItem = item;
-            GuiGenerator.Instance.BackgroundItemButton.Content = item.DisplayName;
+            generator.BackgroundItem = item;
+            generator.BackgroundItemButton.Content = item.DisplayName;
         }
         else
         {
-            GuiGenerator.Instance.Items[slot] = item;
-            GuiGenerator.Instance.UpdateItem(slot, item);
+            generator.Items[slot] = item;
+            generator.UpdateItem(slot, item);
         }
 
         EditedItem = null;
@@ -68,15 +72,15 @@ internal class ItemContextMenu
     private static Task CopyItem(int slot)
     {
         _copiedItem = slot == -1
-            ? GuiGenerator.Instance.BackgroundItem
-            : GuiGenerator.Instance.Items.GetValueOrDefault(slot);
+            ? GuiGenerator.Instance?.BackgroundItem
+            : GuiGenerator.Instance?.Items.GetValueOrDefault(slot);
 
         return Task.CompletedTask;
     }
 
     private static Task PasteItem(int slot)
     {
-        if (_copiedItem == null)
+        if (GuiGenerator.Instance == null || _copiedItem == null)
         {
             return Task.CompletedTask;
         }
@@ -97,6 +101,11 @@ internal class ItemContextMenu
 
     private static Task DeleteItem(int slot)
     {
+        if (GuiGenerator.Instance == null)
+        {
+            return Task.CompletedTask;
+        }
+        
         if (slot == -1)
         {
             GuiGenerator.Instance.BackgroundItem = null;

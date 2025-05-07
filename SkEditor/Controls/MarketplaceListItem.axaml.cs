@@ -25,19 +25,19 @@ public partial class MarketplaceListItem : UserControl
         RenderOptions.SetBitmapInterpolationMode(IconImage, BitmapInterpolationMode.HighQuality);
     }
 
-    public string ItemName
+    public string? ItemName
     {
         get => GetValue(ItemNameProperty)?.ToString();
         set => SetValue(ItemNameProperty, value);
     }
 
-    public string ItemImageUrl
+    public string? ItemImageUrl
     {
         get => GetValue(ItemImageUrlProperty)?.ToString();
         set => SetValue(ItemImageUrlProperty, value);
     }
 
-    public string ItemShortDescription
+    public string? ItemShortDescription
     {
         get => GetValue(ItemShortDescriptionProperty)?.ToString();
         set => SetValue(ItemShortDescriptionProperty, value);

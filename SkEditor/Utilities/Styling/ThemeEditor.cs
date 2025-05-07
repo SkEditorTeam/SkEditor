@@ -12,6 +12,7 @@ using FluentAvalonia.Styling;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using SkEditor.Views;
 
 namespace SkEditor.Utilities.Styling;
 
@@ -43,16 +44,16 @@ public class ThemeEditor
         { "CurrentLineBorder", ["CurrentLineBorder"] }
     };
 
+    private static bool _defaultColorsCollected;
+
     public static List<Theme> Themes { get; set; } = [];
     public static Theme CurrentTheme { get; set; } = new();
 
     public static string ThemeFolderPath { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Themes");
 
     public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
-    
-    private static bool _defaultColorsCollected;
 
-    public static ControlTheme SmallWindowTheme { get; private set; }
+    public static ControlTheme? SmallWindowTheme { get; private set; }
 
     public static void LoadThemes()
     {
@@ -78,11 +79,11 @@ public class ThemeEditor
 
     public static Theme LoadTheme(string path)
     {
-        Theme theme;
+        Theme? theme;
         try
         {
             string json = File.ReadAllText(path);
-            
+
             theme = JsonConvert.DeserializeObject<Theme>(json);
             if (theme == null)
             {
@@ -107,7 +108,7 @@ public class ThemeEditor
 
         if (currentTheme != null && File.Exists(Path.Combine(ThemeFolderPath, currentTheme)))
         {
-            Theme selectedTheme = Themes.FirstOrDefault(x => x.FileName.Equals(currentTheme));
+            Theme? selectedTheme = Themes.FirstOrDefault(x => x.FileName.Equals(currentTheme));
             return selectedTheme ?? GetDefaultTheme();
         }
 
@@ -145,9 +146,13 @@ public class ThemeEditor
     {
         if (CurrentTheme.UseMicaEffect && !theme.UseMicaEffect)
         {
-            SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
+            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+            if (mainWindow is not null)
+            {
+                mainWindow.TransparencyLevelHint = [WindowTransparencyLevel.None];
+            }
         }
-        
+
         CurrentTheme = theme;
         SkEditorAPI.Core.GetAppConfig().CurrentTheme = theme.FileName;
 
@@ -169,6 +174,13 @@ public class ThemeEditor
         RestoreDefaultColors();
 
         List<Task> tasks = [];
+        
+        Application? currentApp = Application.Current;
+        if (currentApp == null)
+        {
+            SkEditorAPI.Logs.Error("Application.Current is null. Cannot apply theme.", true);
+            return;
+        }
 
         foreach (KeyValuePair<string, string[]> item in ThemeToResourceDictionary)
         {
@@ -176,7 +188,7 @@ public class ThemeEditor
 
             tasks.AddRange(item.Value.Select(resource =>
             {
-                Application.Current.Resources[resource] = brush;
+                currentApp.Resources[resource] = brush;
                 return Task.CompletedTask;
             }));
         }
@@ -185,11 +197,11 @@ public class ThemeEditor
 
         tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
         {
-            Application.Current.Resources[colorChange.Key] = colorChange.Value;
+            currentApp.Resources[colorChange.Key] = colorChange.Value;
             return Task.CompletedTask;
         }));
 
-        FluentAvaloniaTheme styles = Application.Current.Styles.OfType<FluentAvaloniaTheme>().First();
+        FluentAvaloniaTheme styles = currentApp.Styles.OfType<FluentAvaloniaTheme>().First();
         styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
         styles.PreferUserAccentColor = true;
 
@@ -201,43 +213,55 @@ public class ThemeEditor
 
     private static void ApplyMica()
     {
-        if (!Application.Current.Resources.TryGetResource("SmallWindowTheme", ThemeVariant.Default,
-                out object smallWindowTheme))
+        Application? currentApp = Application.Current;
+        if (currentApp == null)
+        {
+            SkEditorAPI.Logs.Error("Application.Current is null. Cannot apply Mica.", true);
+            return;
+        }
+        
+        if (!currentApp.Resources.TryGetResource("SmallWindowTheme", ThemeVariant.Default,
+                out object? smallWindowTheme))
         {
             SkEditorAPI.Logs.Error("Failed to get SmallWindowTheme resource.", true);
             return;
         }
 
-        ControlTheme smallWindow = (ControlTheme)smallWindowTheme;
+        ControlTheme? smallWindow = (ControlTheme?)smallWindowTheme;
         WindowTransparencyLevel[] levels =
             [WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur];
 
         if (CurrentTheme.UseMicaEffect)
         {
-            Setter? existingSetter = smallWindow.Setters.OfType<Setter>()
-                .FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint");
+            Setter? existingSetter = smallWindow?.Setters.OfType<Setter>()
+                .FirstOrDefault(x => x.Property?.Name == "TransparencyLevelHint");
             if (existingSetter != null)
             {
-                smallWindow.Setters.Remove(existingSetter);
+                smallWindow?.Setters.Remove(existingSetter);
             }
-            smallWindow.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
-            SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = levels;
+
+            smallWindow?.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
+            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+            if (mainWindow != null)
+            {
+                mainWindow.TransparencyLevelHint = levels;
+            }
         }
         else
         {
-            Setter? existingSetter = smallWindow.Setters.OfType<Setter>()
-                .FirstOrDefault(x => x.Property.Name == "TransparencyLevelHint");
+            Setter? existingSetter = smallWindow?.Setters.OfType<Setter>()
+                .FirstOrDefault(x => x.Property?.Name == "TransparencyLevelHint");
             if (existingSetter != null)
             {
-                smallWindow.Setters.Remove(existingSetter);
+                smallWindow?.Setters.Remove(existingSetter);
             }
 
-            SkEditorAPI.Windows.GetMainWindow().TransparencyLevelHint = [WindowTransparencyLevel.None];
+            SkEditorAPI.Windows.GetMainWindow()!.TransparencyLevelHint = [WindowTransparencyLevel.None];
         }
 
         SmallWindowTheme = smallWindow;
     }
-    
+
     private static void CaptureNewDefaultColors(Theme themeToApply)
     {
         themeToApply.CustomColorChanges
@@ -245,7 +269,7 @@ public class ThemeEditor
             .ToList()
             .ForEach(kvp =>
             {
-                if (Application.Current.TryGetResource(kvp.Key, ThemeVariant.Dark, out object? defaultColor))
+                if (Application.Current?.TryGetResource(kvp.Key, ThemeVariant.Dark, out object? defaultColor) == true)
                 {
                     switch (defaultColor)
                     {
@@ -259,7 +283,8 @@ public class ThemeEditor
                 }
                 else
                 {
-                    SkEditorAPI.Logs.Warning($"Could not find default resource for key '{kvp.Key}' introduced by theme '{themeToApply.Name}'. It might not reset correctly.");
+                    SkEditorAPI.Logs.Warning(
+                        $"Could not find default resource for key '{kvp.Key}' introduced by theme '{themeToApply.Name}'. It might not reset correctly.");
                 }
             });
     }
@@ -268,11 +293,12 @@ public class ThemeEditor
     private static void CollectDefaultColors()
     {
         DefaultColors.Clear();
-        
+
         foreach (string resourceKey in ThemeToResourceDictionary.SelectMany(item => item.Value))
         {
+            object? defaultColor = null;
             if (DefaultColors.ContainsKey(resourceKey) ||
-                !Application.Current.TryGetResource(resourceKey, ThemeVariant.Dark, out object? defaultColor))
+                Application.Current?.TryGetResource(resourceKey, ThemeVariant.Dark, out defaultColor) == false)
             {
                 continue;
             }
@@ -287,11 +313,12 @@ public class ThemeEditor
                     break;
             }
         }
-        
-        foreach (var key in CurrentTheme.CustomColorChanges.Keys)
+
+        foreach (string key in CurrentTheme.CustomColorChanges.Keys)
         {
+            object? defaultColor = null;
             if (DefaultColors.ContainsKey(key) ||
-                !Application.Current.TryGetResource(key, ThemeVariant.Dark, out object? defaultColor))
+                Application.Current?.TryGetResource(key, ThemeVariant.Dark, out defaultColor) == false)
             {
                 continue;
             }
@@ -306,22 +333,25 @@ public class ThemeEditor
                     break;
             }
         }
-        
+
         _defaultColorsCollected = true;
     }
 
     private static void RestoreDefaultColors()
     {
-        foreach (var kvp in DefaultColors)
+        foreach (KeyValuePair<string, ImmutableSolidColorBrush> kvp in DefaultColors)
         {
-            Application.Current.Resources[kvp.Key] = kvp.Value;
+            if (Application.Current != null)
+            {
+                Application.Current.Resources[kvp.Key] = kvp.Value;
+            }
         }
     }
 
     private static void UpdateTextEditorColors()
     {
         List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
-        foreach (TextEditor textEditor in files.Select(x => x.Editor))
+        foreach (TextEditor textEditor in files.Select(x => x.Editor).OfType<TextEditor>())
         {
             textEditor.Background = CurrentTheme.EditorBackgroundColor;
             textEditor.Foreground = CurrentTheme.EditorTextColor;
@@ -344,7 +374,10 @@ public class ThemeEditor
         // }
         string fontName = CurrentTheme.CustomFont ?? FontFamily.Default.Name;
 
-        Application.Current.Resources["ContentControlThemeFontFamily"] = new FontFamily(fontName);
+        if (Application.Current != null)
+        {
+            Application.Current.Resources["ContentControlThemeFontFamily"] = new FontFamily(fontName);
+        }
     }
 
     public static async Task ReloadCurrentTheme()

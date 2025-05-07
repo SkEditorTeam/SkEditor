@@ -8,9 +8,9 @@ public class AddonMeta
 {
     public IAddon Addon { get; set; } = null!;
     public IAddons.AddonState State { get; set; } = IAddons.AddonState.Installed;
-    public List<IAddonLoadingError> Errors { get; set; }
-    public string? DllFilePath { get; set; } = null;
-    public bool NeedsRestart { get; set; } = false;
+    public List<IAddonLoadingError> Errors { get; set; } = [];
+    public string? DllFilePath { get; set; }
+    public bool NeedsRestart { get; set; }
     public AddonLoadContext LoadContext { get; set; } = null!;
 
     public bool HasErrors => Errors.Count > 0;

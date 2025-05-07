@@ -59,9 +59,17 @@ public partial class CustomAddonSettingsPage : UserControl
             };
 
             object? value = setting.Type.IsSelfManaged ? null : AddonSettingsManager.GetValue(setting);
+            
+            if (value is null)
+            {
+                return;
+            }
+            
             Control control = setting.Type.CreateControl(value,
                 newValue =>
                 {
+                    if (newValue is null) return;
+                    
                     if (setting.Type.IsSelfManaged)
                     {
                         setting.OnChanged?.Invoke(newValue);

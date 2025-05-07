@@ -52,7 +52,9 @@ public partial class RefactorWindow : AppWindow
     // TODO: Support for comments starting after a line of code in the same line
     private static Task RemoveComments()
     {
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return Task.CompletedTask;
+        
         List<DocumentLine> linesToStay =
             textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
 
@@ -65,7 +67,9 @@ public partial class RefactorWindow : AppWindow
 
     private static Task TabsToSpaces()
     {
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return Task.CompletedTask;
+        
         IList<DocumentLine>? lines = textEditor.Document.Lines;
 
         lines.Where(line => GetText(line).StartsWith("\t")).ToList().ForEach(line =>
@@ -78,7 +82,9 @@ public partial class RefactorWindow : AppWindow
 
     private static Task SpacesToTabs()
     {
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return Task.CompletedTask;
+        
         int tabSize = GetTabSize();
         IList<DocumentLine>? lines = textEditor.Document.Lines;
         lines.Where(line => GetText(line).StartsWith(" ")).ToList().ForEach(line =>
@@ -95,7 +101,9 @@ public partial class RefactorWindow : AppWindow
 
     private static int GetTabSize()
     {
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return 4;
+        
         IList<DocumentLine>? lines = textEditor.Document.Lines;
         int tabSize = 4;
 
@@ -111,7 +119,7 @@ public partial class RefactorWindow : AppWindow
 
     private static string GetText(DocumentLine line)
     {
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
-        return textEditor.Document.GetText(line.Offset, line.Length);
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        return textEditor == null ? string.Empty : textEditor.Document.GetText(line.Offset, line.Length);
     }
 }

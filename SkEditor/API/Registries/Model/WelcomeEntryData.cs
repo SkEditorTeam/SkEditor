@@ -12,5 +12,5 @@ public class WelcomeEntryData(string name, IRelayCommand command, object? icon =
 {
     public string Name { get; } = name;
     public IRelayCommand Command { get; } = command;
-    public object Icon { get; } = icon;
+    public object? Icon { get; } = icon;
 }

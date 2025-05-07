@@ -15,7 +15,7 @@ public interface IDocProvider
     {
         { DocProvider.SkriptHub, new SkriptHubProvider() },
         { DocProvider.skUnity, new SkUnityProvider() },
-        { DocProvider.SkriptMC, new SkriptMCProvider() },
+        { DocProvider.SkriptMC, new SkriptMcProvider() },
         { DocProvider.Local, new LocalProvider() }
     };
 
@@ -28,7 +28,7 @@ public interface IDocProvider
 
     public IconSource Icon { get; }
 
-    public Task<IDocumentationEntry> FetchElement(string id);
+    public Task<IDocumentationEntry?> FetchElement(string id);
     public Task<List<IDocumentationEntry>> Search(SearchData searchData);
 
     public List<string> CanSearch(SearchData searchData);

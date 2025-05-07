@@ -16,9 +16,10 @@ public static class Translation
     private static readonly Dictionary<string, ResourceDictionary> Translations = [];
     public static string LanguagesFolder { get; } = $"{AppContext.BaseDirectory}/Languages";
 
-    public static string Get(string key, params string[] parameters)
+    public static string Get(string key, params string?[] parameters)
     {
-        Application.Current.TryGetResource(key, ThemeVariant.Default, out object translation);
+        object? translation = null;
+        Application.Current?.TryGetResource(key, ThemeVariant.Default, out translation);
         string translationString = translation?.ToString() ?? key;
         translationString = translationString.Replace("\\n", Environment.NewLine);
 
@@ -36,7 +37,7 @@ public static class Translation
         foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
                      translation.Key != "English"))
         {
-            Application.Current.Resources.MergedDictionaries.Remove(translation.Value);
+            Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
             Translations.Remove(translation.Key);
         }
 
@@ -54,7 +55,7 @@ public static class Translation
 
         if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
         {
-            Application.Current.Resources.MergedDictionaries.Add(dictionary);
+            Application.Current?.Resources.MergedDictionaries.Add(dictionary);
             Translations.Add(language, dictionary);
         }
 #endif

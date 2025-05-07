@@ -7,21 +7,19 @@ namespace SkEditor.Utilities.Docs.SkriptHub;
 [Serializable]
 public class SkriptHubDocEntry : IDocumentationEntry
 {
-    [JsonIgnore] private string _addon;
+    [JsonProperty("addon")] public required SkriptHubAddon? AddonObj { get; set; }
 
-    [JsonProperty("addon")] public SkriptHubAddon? AddonObj { get; set; }
+    [JsonProperty("syntax_type")] public required string RawDocType { get; set; }
 
-    [JsonProperty("syntax_type")] public string RawDocType { get; set; }
+    [JsonProperty("examples")] public required List<SkriptHubDocExample>? Examples { get; set; }
 
-    [JsonProperty("examples")] public List<SkriptHubDocExample>? Examples { get; set; }
+    [JsonProperty("title")] public required string Name { get; set; }
 
-    [JsonProperty("title")] public string Name { get; set; }
+    [JsonProperty("description")] public required string Description { get; set; }
 
-    [JsonProperty("description")] public string Description { get; set; }
+    [JsonProperty("syntax_pattern")] public required string Patterns { get; set; }
 
-    [JsonProperty("syntax_pattern")] public string Patterns { get; set; }
-
-    [JsonProperty("id")] public string Id { get; set; }
+    [JsonProperty("id")] public required string Id { get; set; }
 
     [JsonProperty("addon_name")]
     public string Addon
@@ -29,10 +27,12 @@ public class SkriptHubDocEntry : IDocumentationEntry
         get => AddonObj?.Name ?? _addon;
         set => _addon = value;
     }
+    
+    private string _addon = string.Empty;
 
 
     [JsonProperty("compatible_addon_version")]
-    public string Version { get; set; }
+    public required string Version { get; set; }
 
     [JsonIgnore]
     public IDocumentationEntry.Type DocType
@@ -51,7 +51,7 @@ public class SkriptHubDocEntry : IDocumentationEntry
 
     public bool DoMatch(SearchData searchData)
     {
-        if (!string.IsNullOrEmpty(searchData.FilteredAddon) && AddonObj.Name != searchData.FilteredAddon)
+        if (!string.IsNullOrEmpty(searchData.FilteredAddon) && AddonObj?.Name != searchData.FilteredAddon)
         {
             return false;
         }
@@ -68,7 +68,7 @@ public class SkriptHubDocEntry : IDocumentationEntry
 [Serializable]
 public class SkriptHubAddon
 {
-    [JsonProperty("name")] public string Name { get; set; }
+    [JsonProperty("name")] public required string Name { get; set; }
 
-    [JsonProperty("link_to_addon")] public string Link { get; set; }
+    [JsonProperty("link_to_addon")] public required string Link { get; set; }
 }

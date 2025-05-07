@@ -10,6 +10,7 @@ using AvaloniaEdit.Document;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
 
@@ -23,10 +24,20 @@ public partial class BottomBarControl : UserControl
 
         Loaded += (_, _) =>
         {
-            Application.Current.ResourcesChanged += (_, _) => UpdatePosition();
+            Application? current = Application.Current;
+            if (current is not null)
+            {
+                current.ResourcesChanged += (_, _) => UpdatePosition();
+            }
 
-            SkEditorAPI.Files.GetTabView().SelectionChanged += (_, _) => UpdatePosition();
-            SkEditorAPI.Files.GetTabView().SelectionChanged += (_, _) => FileHandler.TabSwitchAction();
+            TabView? tabView = SkEditorAPI.Files.GetTabView();
+            if (tabView is null)
+            {
+                return;
+            }
+
+            tabView.SelectionChanged += (_, _) => UpdatePosition();
+            tabView.SelectionChanged += (_, _) => FileHandler.TabSwitchAction();
         };
 
         ReloadBottomIcons();
@@ -101,7 +112,12 @@ public partial class BottomBarControl : UserControl
         }
 
         PositionInfo.IsVisible = true;
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor is null)
+        {
+            return;
+        }
+
         TextLocation location = textEditor.Document.GetLocation(textEditor.CaretOffset);
 
         LineText.Text = Translation.Get("BottomBarLine").Replace("{0}", location.Line.ToString());
@@ -122,6 +138,6 @@ public partial class BottomBarControl : UserControl
 
     private async void OpenLogsWindow(object? sender, TappedEventArgs e)
     {
-        await new LogsWindow().ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        await new LogsWindow().ShowDialogOnMainWindow();
     }
 }

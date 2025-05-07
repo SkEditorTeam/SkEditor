@@ -46,8 +46,6 @@ public static class AddonSettingsManager
         {
             if (!LoadedAddonSettings[addon].ContainsKey(setting.Key) && !setting.Type.IsSelfManaged)
             {
-                SkEditorAPI.Logs.Warning(
-                    $"Setting {setting.Key} not found in settings for addon {addon.Identifier}, using default value.");
                 LoadedAddonSettings[addon][setting.Key] = setting.Type.Serialize(setting.DefaultValue);
             }
         }
@@ -76,10 +74,16 @@ public static class AddonSettingsManager
         File.WriteAllText(path, json);
     }
 
-    public static object GetValue(Setting setting)
+    public static object? GetValue(Setting setting)
     {
         LoadSettings(setting.Addon);
-        return setting.Type.Deserialize(LoadedAddonSettings[setting.Addon][setting.Key]);
+        var addonSettings = LoadedAddonSettings[setting.Addon][setting.Key];
+        if (addonSettings == null)
+        {
+            return setting.DefaultValue;
+        }
+
+        return addonSettings.Type != JTokenType.Null ? setting.Type.Deserialize(addonSettings) : setting.DefaultValue;
     }
 
     public static void SetValue(Setting setting, object value)
@@ -94,22 +98,15 @@ public static class AddonSettingsManager
         Setting? setting = addon.GetSettings().Find(s => s.Key == key);
         if (setting == null)
         {
-            SkEditorAPI.Logs.Error($"Setting {key} not found in settings for addon {addon.Identifier}");
             return;
         }
 
         SetValue(setting, value);
     }
 
-    public static object GetAddonValue(IAddon addon, string key)
+    public static object? GetAddonValue(IAddon addon, string key)
     {
         Setting? setting = addon.GetSettings().Find(s => s.Key == key);
-        if (setting == null)
-        {
-            SkEditorAPI.Logs.Error($"Setting {key} not found in settings for addon {addon.Identifier}");
-            return null;
-        }
-
-        return GetValue(setting);
+        return setting != null ? GetValue(setting) : null;
     }
 }

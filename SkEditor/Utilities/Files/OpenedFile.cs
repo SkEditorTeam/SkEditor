@@ -9,14 +9,14 @@ namespace SkEditor.Utilities.Files;
 
 public class OpenedFile
 {
-    public TabViewItem TabViewItem { get; set; }
+    public TabViewItem? TabViewItem { get; set; }
 
     #region Text Files Properties
 
     public CodeParser? Parser => this["Parser"] as CodeParser;
     public TextEditor? Editor { get; set; }
     public string? Path { get; set; }
-    public bool IsNewFile { get; set; } = false;
+    public bool IsNewFile { get; set; }
 
     private bool _saved;
 
@@ -38,7 +38,7 @@ public class OpenedFile
     #region Custom Tabs Properties
 
     public bool IsCustomTab => Editor == null;
-    public Control? CustomControl => IsCustomTab ? TabViewItem.Content as Control : null;
+    public Control? CustomControl => IsCustomTab ? TabViewItem?.Content as Control : null;
     public string? CustomName = null;
 
     #endregion
@@ -71,7 +71,8 @@ public class OpenedFile
             {
                 CustomData.Remove(data);
             }
-
+            
+            if (value == null) return;
             CustomData.Add(new CustomFileData(key, value));
         }
     }

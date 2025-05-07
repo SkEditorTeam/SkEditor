@@ -6,6 +6,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Views;
@@ -16,13 +17,11 @@ public class CustomCommandsHandler
 {
     public static void OnCommentCommandExecuted(object target)
     {
-        OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
-        if (!file.IsEditor)
+        OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        if (file is not { Editor: { } editor })
         {
             return;
         }
-
-        TextEditor editor = file.Editor;
 
         TextDocument? document = editor.Document;
         int selectionStart = editor.SelectionStart;
@@ -80,7 +79,8 @@ public class CustomCommandsHandler
             return;
         }
 
-        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (editor == null) return;
         TextDocument? document = editor.Document;
         int selectionStart = editor.SelectionStart;
         int selectionLength = editor.SelectionLength;
@@ -142,7 +142,7 @@ public class CustomCommandsHandler
 
     public static async Task OnRefactorCommandExecuted(TextEditor editor)
     {
-        CodeParser? parser = SkEditorAPI.Files.GetOpenedFiles().Find(file => file.Editor == editor).Parser;
+        CodeParser? parser = SkEditorAPI.Files.GetOpenedFiles().Find(file => file.Editor == editor)?.Parser;
         if (parser == null)
         {
             return;
@@ -165,8 +165,11 @@ public class CustomCommandsHandler
         {
             return;
         }
+        
+        INameableCodeElement? nameableElement = (INameableCodeElement?)variable ?? option;
+        if (nameableElement == null) return;
 
-        SymbolRefactorWindow renameWindow = new((INameableCodeElement)variable ?? option);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        SymbolRefactorWindow renameWindow = new(nameableElement);
+        await renameWindow.ShowDialogOnMainWindow();
     }
 }

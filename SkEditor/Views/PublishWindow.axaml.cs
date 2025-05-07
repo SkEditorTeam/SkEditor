@@ -11,6 +11,8 @@ namespace SkEditor.Views;
 
 public partial class PublishWindow : AppWindow
 {
+    public string? ApiKey { get; private set; }
+    
     public PublishWindow()
     {
         InitializeComponent();
@@ -18,7 +20,7 @@ public partial class PublishWindow : AppWindow
         InitializeUi();
     }
 
-    private string CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string;
+    private string? CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem)?.Content as string;
 
     private void InitializeUi()
     {
@@ -27,7 +29,12 @@ public partial class PublishWindow : AppWindow
 
         PublishButton.Command = new AsyncRelayCommand(Publish);
 
-        CopyButton.Command = new AsyncRelayCommand(async () => await Clipboard.SetTextAsync(ResultTextBox.Text));
+        CopyButton.Command = new AsyncRelayCommand(async () =>
+        {
+            string? result = ResultTextBox.Text;
+            if (result is null || Clipboard is null) return;
+            await Clipboard.SetTextAsync(result);
+        });
 
         WebsiteComboBox.SelectedIndex = SkEditorAPI.Core.GetAppConfig().LastUsedPublishService switch
         {
@@ -53,7 +60,7 @@ public partial class PublishWindow : AppWindow
     private void UpdateServiceInfo()
     {
         AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-        ApiKeyTextBox.Text = CurrentService switch
+        ApiKey = CurrentService switch
         {
             "Pastebin" => appConfig.PastebinApiKey,
             "code.skript.pl" => appConfig.CodeSkriptPlApiKey,
@@ -61,9 +68,9 @@ public partial class PublishWindow : AppWindow
             _ => ""
         };
 
-        appConfig.LastUsedPublishService = CurrentService;
+        appConfig.LastUsedPublishService = CurrentService ?? string.Empty;
 
-        AnonymouslyCheckBox.IsVisible = LanguageComboBox.IsVisible = CurrentService.Equals("code.skript.pl");
+        AnonymouslyCheckBox.IsVisible = LanguageComboBox.IsVisible = CurrentService?.Equals("code.skript.pl") == true;
     }
 
     private async Task Publish()
@@ -81,13 +88,14 @@ public partial class PublishWindow : AppWindow
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(ApiKeyTextBox.Text))
+        if (string.IsNullOrWhiteSpace(ApiKey))
         {
-            await SkEditorAPI.Windows.ShowError("You need to enter the API key!");
+            await SkEditorAPI.Windows.ShowError(
+                "You didn't provide an API key for this service - set it in the Connections settings.");
             return;
         }
 
-        switch ((WebsiteComboBox.SelectedItem as ComboBoxItem).Content as string)
+        switch ((WebsiteComboBox.SelectedItem as ComboBoxItem)?.Content as string)
         {
             case "Pastebin":
                 await CodePublisher.PublishPastebin(code, this);

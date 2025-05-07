@@ -24,7 +24,7 @@ public class FileHandler
     {
         try
         {
-            string? folder = e.Data.GetFiles().FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path
+            string? folder = e.Data.GetFiles()?.FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path
                 .AbsolutePath;
             if (folder != null)
             {
@@ -32,7 +32,7 @@ public class FileHandler
                 return;
             }
 
-            e.Data.GetFiles().Where(f => !Directory.Exists(f.Path.AbsolutePath)).ToList().ForEach(file =>
+            e.Data.GetFiles()?.Where(f => !Directory.Exists(f.Path.AbsolutePath)).ToList().ForEach(file =>
             {
                 OpenFile(file.Path.AbsolutePath);
             });
@@ -78,24 +78,26 @@ public class FileHandler
 
     public static void SaveFile()
     {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-        {
-            return;
-        }
+        if (!SkEditorAPI.Files.IsEditorOpen()) return;
 
         QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
-            await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile())));
+        {
+            OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+            if (file == null) return;
+            await SkEditorAPI.Files.Save(file);
+        }));
     }
 
     public static void SaveAsFile()
     {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-        {
-            return;
-        }
+        if (!SkEditorAPI.Files.IsEditorOpen()) return;
 
         QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
-            await SkEditorAPI.Files.Save(SkEditorAPI.Files.GetCurrentOpenedFile(), true)));
+        {
+            OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+            if (file == null) return;
+            await SkEditorAPI.Files.Save(file, true);
+        }));
     }
 
     public static void SaveAllFiles()
@@ -115,7 +117,12 @@ public class FileHandler
             return;
         }
 
-        OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        if (file == null)
+        {
+            MainWindow.Instance.BottomBar.IsVisible = false;
+            return;
+        }
 
         FileTypes.FileType? fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header);
         MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
@@ -128,7 +135,10 @@ public class FileHandler
 
     public static async Task OpenFile()
     {
-        IReadOnlyList<IStorageFile> files = await SkEditorAPI.Windows.GetMainWindow().StorageProvider
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow == null) return;
+        
+        IReadOnlyList<IStorageFile> files = await mainWindow.StorageProvider
             .OpenFilePickerAsync(
                 new FilePickerOpenOptions
                 {

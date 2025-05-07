@@ -47,6 +47,13 @@ public partial class ParserSidebarPanel : UserControl
         ClearSearch.Click += (_, _) => ClearSearchFilter();
         SearchBox.KeyUp += (_, _) => UpdateSearchFilter();
         TypeFilterBox.SelectionChanged += (_, _) => UpdateSearchFilter();
+        SkEditorAPI.Events.OnTabChanged += (_, _) =>
+        {
+            CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser;
+            if (parser == null) return;
+
+            parser.Parse();
+        };
     }
 
     public static bool CodeParserEnabled => SkEditorAPI.Core.GetAppConfig().EnableCodeParser;
@@ -57,7 +64,9 @@ public partial class ParserSidebarPanel : UserControl
         Sections.Clear();
         sections.ForEach(Sections.Add);
 
-        ParserFilterViewModel? viewModel = (ParserFilterViewModel)DataContext;
+        ParserFilterViewModel? viewModel = (ParserFilterViewModel?)DataContext;
+        if (viewModel == null) return;
+        
         List<CodeSection> filteredSections = Sections
             .Where(section =>
                 string.IsNullOrWhiteSpace(viewModel.SearchText) || section.Name.Contains(viewModel.SearchText))
@@ -82,7 +91,7 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ParseCurrentFile()
     {
-        CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile().Parser;
+        CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser;
         if (parser == null)
         {
             return;
@@ -99,7 +108,9 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ClearSearchFilter()
     {
-        ParserFilterViewModel? viewModel = (ParserFilterViewModel)DataContext;
+        ParserFilterViewModel? viewModel = (ParserFilterViewModel?)DataContext;
+        if (viewModel == null) return;
+        
         viewModel.SearchText = "";
         viewModel.SelectedFilterIndex = 0;
         Refresh([.. Sections]);

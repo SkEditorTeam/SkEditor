@@ -12,7 +12,7 @@ using SkEditor.API;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 
-public class SkriptMCProvider : IDocProvider
+public class SkriptMcProvider : IDocProvider
 {
     private const string BaseUri = "https://skript-mc.fr/api/documentation/search?api_key=%s";
 
@@ -20,14 +20,14 @@ public class SkriptMCProvider : IDocProvider
 
     public DocProvider Provider => DocProvider.SkriptMC;
 
-    public Task<IDocumentationEntry> FetchElement(string id)
+    public Task<IDocumentationEntry?> FetchElement(string id)
     {
-        return null;
+        return Task.FromResult<IDocumentationEntry?>(null);
     }
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
-        string uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMcapiKey) + "&articleName=" +
+        string uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMcApiKey) + "&articleName=" +
                      searchData.Query;
 
         uri += "&categorySlug=" + searchData.FilteredType.ToString().ToLower() + "s";
@@ -55,7 +55,6 @@ public class SkriptMCProvider : IDocProvider
                 return [];
             }
 
-            //SkEditorAPI.Windows.ShowError($"An error occurred while fetching the documentation.\n\n{response.ReasonPhrase}");
             await SkEditorAPI.Windows.ShowError(
                 Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
             return [];
@@ -63,7 +62,8 @@ public class SkriptMCProvider : IDocProvider
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         List<SkriptMcDocEntry>? entries = JsonConvert.DeserializeObject<List<SkriptMcDocEntry>>(content);
-        return entries.Cast<IDocumentationEntry>().ToList();
+        return entries?.Cast<IDocumentationEntry>()?.ToList() 
+               ?? [];
     }
 
     public List<string> CanSearch(SearchData searchData)
@@ -84,7 +84,7 @@ public class SkriptMCProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkriptMcapiKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkriptMcApiKey);
     }
 
     public bool NeedsToLoadExamples => false;

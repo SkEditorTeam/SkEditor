@@ -26,10 +26,11 @@ public partial class AppConfig : ObservableObject
 
     [ObservableProperty] private bool _isDiscordRpcEnabled = true;
     [ObservableProperty] private bool _isPasteIndentationEnabled;
-    [ObservableProperty] private bool _isProjectSingleClickEnabled = true;
+    [ObservableProperty] private bool _isProjectSingleClickEnabled;
     [ObservableProperty] private bool _isSidebarAnimationEnabled;
     [ObservableProperty] private bool _isWrappingEnabled;
-    [ObservableProperty] private bool _isZoomSyncEnabled;
+    [ObservableProperty] private bool _isZoomSyncEnabled = true;
+    [ObservableProperty] private bool _isSidebarWidthSyncEnabled;
     [ObservableProperty] private string _language = "English";
     [ObservableProperty] private string _lastUsedPublishService = "Pastebin";
     [ObservableProperty] private string _pastebinApiKey = "";
@@ -46,22 +47,22 @@ public partial class AppConfig : ObservableObject
     /// <summary>
     ///     Represent the (saved) choices the user made for file types.
     /// </summary>
-    public Dictionary<string, string> FileTypeChoices { get; set; } = [];
+    public Dictionary<string, string?> FileTypeChoices { get; set; } = [];
 
     public Dictionary<string, object> CustomOptions { get; set; } = [];
     public Dictionary<string, string> PreferredFileAssociations { get; set; } = [];
 
-    public bool EnableAutoCompletionExperiment { get; set; } = false;
-    public bool EnableProjectsExperiment { get; set; } = false;
-    public bool EnableHexPreview { get; set; } = false;
+    public bool EnableAutoCompletionExperiment { get; set; }
+    public bool EnableProjectsExperiment { get; set; }
+    public bool EnableHexPreview { get; set; }
     public bool EnableCodeParser { get; set; }
-    public bool EnableFolding { get; set; } = false;
-    public bool EnableBetterPairing { get; set; } = false;
-    public bool EnableSessionRestoring { get; set; } = false;
-    public bool EnableRealtimeCodeParser { get; set; } = false;
+    public bool EnableFolding { get; set; }
+    public bool EnableBetterPairing { get; set; }
+    public bool EnableSessionRestoring { get; set; }
+    public bool EnableRealtimeCodeParser { get; set; }
 
     public string SkUnityApiKey { get; set; } = "";
-    public string SkriptMcapiKey { get; set; } = "";
+    public string SkriptMcApiKey { get; set; } = "";
 
     public static string AppDataFolderPath { get; set; } =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
@@ -130,29 +131,74 @@ public partial class AppConfig : ObservableObject
     /// <summary>
     ///     Get value of a custom option.
     /// </summary>
-    public object GetOption(string optionName)
+    public object? GetOption(string optionName)
     {
-        return CustomOptions.GetValueOrDefault(optionName);
+        return CustomOptions?.GetValueOrDefault(optionName);
     }
 
     /// <summary>
-    ///     Get value of an option by name.
+    ///     Get the value of an experiment flag.
     /// </summary>
-    public T GetOptionValue<T>(string optionName)
+    public bool GetExperimentFlag(string flagName)
     {
-        var property = GetType().GetProperty(optionName);
-        if (property == null)
+        return flagName switch
         {
-            return default;
-        }
-        return (T)property.GetValue(this);
+            "EnableAutoCompletionExperiment" => EnableAutoCompletionExperiment,
+            "EnableProjectsExperiment" => EnableProjectsExperiment,
+            "EnableHexPreview" => EnableHexPreview,
+            "EnableCodeParser" => EnableCodeParser,
+            "EnableRealtimeCodeParser" => EnableRealtimeCodeParser,
+            "EnableFolding" => EnableFolding,
+            "EnableBetterPairing" => EnableBetterPairing,
+            "EnableSessionRestoring" => EnableSessionRestoring,
+            _ => false
+        };
     }
 
     /// <summary>
-    ///     Set value of an option by name.
+    ///     Set the value of an experiment flag.
     /// </summary>
-    public void SetOptionValue<T>(string optionName, T value)
+    public void SetExperimentFlag(string flagName, bool value)
     {
-        GetType().GetProperty(optionName).SetValue(this, value);
+        switch (flagName)
+        {
+            case "EnableAutoCompletionExperiment": EnableAutoCompletionExperiment = value; break;
+            case "EnableProjectsExperiment": EnableProjectsExperiment = value; break;
+            case "EnableHexPreview": EnableHexPreview = value; break;
+            case "EnableCodeParser": EnableCodeParser = value; break;
+            case "EnableRealtimeCodeParser": EnableRealtimeCodeParser = value; break;
+            case "EnableFolding": EnableFolding = value; break;
+            case "EnableBetterPairing": EnableBetterPairing = value; break;
+            case "EnableSessionRestoring": EnableSessionRestoring = value; break;
+        }
+    }
+
+    /// <summary>
+    ///     Get the value of an API key.
+    /// </summary>
+    public string GetApiKey(string apiKeyName)
+    {
+        return apiKeyName switch
+        {
+            "PastebinApiKey" => PastebinApiKey,
+            "CodeSkriptPlApiKey" => CodeSkriptPlApiKey,
+            "SkUnityAPIKey" => SkUnityApiKey,
+            "SkriptMCAPIKey" => SkriptMcApiKey,
+            _ => string.Empty
+        };
+    }
+
+    /// <summary>
+    ///     Set the value of an API key.
+    /// </summary>
+    public void SetApiKey(string apiKeyName, string value)
+    {
+        switch (apiKeyName)
+        {
+            case "PastebinApiKey": PastebinApiKey = value; break;
+            case "CodeSkriptPlApiKey": CodeSkriptPlApiKey = value; break;
+            case "SkUnityAPIKey": SkUnityApiKey = value; break;
+            case "SkriptMCAPIKey": SkriptMcApiKey = value; break;
+        }
     }
 }

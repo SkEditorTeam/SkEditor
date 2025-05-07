@@ -22,8 +22,8 @@ public record FileTypeData(
 {
     #region UI Usages
 
-    public IconSource Icon => Registries.FileTypes.GetValueKey(this).Addon.GetAddonIcon();
-    public string AddonName => Registries.FileTypes.GetValueKey(this).Addon.Name;
+    public IconSource? Icon => Registries.FileTypes.GetValueKey(this)?.Addon.GetAddonIcon();
+    public string? AddonName => Registries.FileTypes.GetValueKey(this)?.Addon.Name;
     public string DisplayedDescription => Description ?? "No description provided.";
 
     #endregion

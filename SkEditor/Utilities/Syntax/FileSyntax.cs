@@ -14,7 +14,7 @@ namespace SkEditor.Utilities.Syntax;
 /// </summary>
 public class FileSyntax
 {
-    public static FileSyntaxConfig DefaultSkriptConfig = new()
+    public static readonly FileSyntaxConfig DefaultSkriptConfig = new()
     {
         SyntaxName = "Default",
         LanguageName = "Skript",
@@ -30,9 +30,9 @@ public class FileSyntax
         FolderName = folderName;
     }
 
-    public IHighlightingDefinition Highlighting { get; private set; }
+    public IHighlightingDefinition? Highlighting { get; private set; }
 
-    public FileSyntaxConfig Config { get; private set; }
+    public FileSyntaxConfig? Config { get; private set; }
 
     public string FolderName { get; set; }
 
@@ -50,6 +50,12 @@ public class FileSyntax
 
             FileSyntaxConfig? config =
                 JsonConvert.DeserializeObject<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile));
+
+            if (config == null)
+            {
+                Log.Error("Failed to deserialize syntax config from {ConfigFile}", configFile);
+                return new FileSyntax(null, null, folder);
+            }
 
             StreamReader streamReader = new(syntaxFile);
             XmlReader reader = XmlReader.Create(streamReader);
@@ -69,13 +75,13 @@ public class FileSyntax
 
     public class FileSyntaxConfig
     {
-        public string SyntaxName { get; set; }
+        public string SyntaxName { get; set; } = string.Empty;
 
-        public string LanguageName { get; set; }
+        public string LanguageName { get; set; } = string.Empty;
 
-        public string[] Extensions { get; set; }
+        public string[] Extensions { get; set; } = [];
 
-        public string Version { get; set; }
+        public string Version { get; set; } = string.Empty;
 
         public string FullIdName => $"{LanguageName}-{SyntaxName}";
     }

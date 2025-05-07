@@ -36,7 +36,7 @@
                         <ToggleSwitch Name="HighlightCurrentLineSwitch" IsChecked="{Binding HighlightCurrentLine}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
-                
+
                 <ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationSidebarAnimations}"
                                      IconSource="{StaticResource SlideTransitionIcon}"
                                      Description="{DynamicResource SettingsPersonalizationSidebarAnimationsDescription}">

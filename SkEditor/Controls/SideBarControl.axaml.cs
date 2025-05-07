@@ -33,6 +33,7 @@ public partial class SideBarControl : UserControl
     private SidebarPanel? _currentPanel;
     private bool _isAnimating;
     private DateTime _lastToggleTime = DateTime.MinValue;
+    private double _syncedPanelWidth = 300;
 
     public SideBarControl()
     {
@@ -63,6 +64,15 @@ public partial class SideBarControl : UserControl
 
         SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, ZeroWidth);
         mainWindow.SidebarContentBorder.Child = null;
+        
+        var panels = Registries.SidebarPanels;
+        if (!panels.Any()) return;
+
+        string? firstPanelId = panels.First().GetId();
+        if (firstPanelId != null)
+        {
+            _syncedPanelWidth = SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(firstPanelId, 300);
+        }
     }
 
     private void OnUnloaded(object? sender, RoutedEventArgs e)
@@ -84,7 +94,29 @@ public partial class SideBarControl : UserControl
         }
 
         double currentWidth = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width.Value;
-        SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] = (int)currentWidth;
+        string? currentPanelId = _currentPanel.GetId();
+        
+        if (currentPanelId == null)
+        {
+            throw new NullReferenceException();
+        }
+        
+        SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[currentPanelId] = (int)currentWidth;
+        
+        if (SkEditorAPI.Core.GetAppConfig().IsSidebarWidthSyncEnabled)
+        {
+            _syncedPanelWidth = currentWidth;
+            
+            foreach (SidebarPanel panel in Registries.SidebarPanels)
+            {
+                string? panelId = panel.GetId();
+                if (panelId != null)
+                {
+                    SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[panelId] = (int)currentWidth;
+                }
+            }
+        }
+        
         mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = _currentPanel.DesiredWidth;
     }
 
@@ -369,9 +401,15 @@ public partial class SideBarControl : UserControl
         control.HorizontalAlignment = HorizontalAlignment.Stretch;
     }
 
-    private static double GetPanelWidth(SidebarPanel panel)
+    private double GetPanelWidth(SidebarPanel panel)
     {
-        return SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(panel.GetId(), panel.DesiredWidth);
+        if (SkEditorAPI.Core.GetAppConfig().IsSidebarWidthSyncEnabled)
+        {
+            return _syncedPanelWidth;
+        }
+        
+        string? panelId = panel.GetId();
+        return panelId == null ? panel.DesiredWidth : SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(panelId, panel.DesiredWidth);
     }
 
     private static void SetButtonActive(Button button, bool isActive)

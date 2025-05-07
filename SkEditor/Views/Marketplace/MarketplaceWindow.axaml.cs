@@ -36,7 +36,7 @@ public partial class MarketplaceWindow : AppWindow
         };
     }
 
-    public static MarketplaceWindow Instance { get; private set; }
+    public static MarketplaceWindow Instance { get; private set; } = null!;
 
     private async Task LoadItems()
     {
@@ -67,17 +67,10 @@ public partial class MarketplaceWindow : AppWindow
     private void OnSelectedItemChanged(object? sender, SelectionChangedEventArgs e)
     {
         ItemView.IsVisible = false;
-        MarketplaceListItem listItem = (MarketplaceListItem)ItemListBox.SelectedItem;
-        if (listItem == null)
-        {
-            return;
-        }
+        MarketplaceListItem? listItem = (MarketplaceListItem?)ItemListBox.SelectedItem;
 
-        MarketplaceItem item = (MarketplaceItem)listItem.Tag;
-        if (item == null)
-        {
-            return;
-        }
+        MarketplaceItem? item = (MarketplaceItem?)listItem?.Tag;
+        if (item == null) return;
 
         item.Marketplace = this;
 

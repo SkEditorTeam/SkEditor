@@ -8,15 +8,15 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>
         <PublishSingleFile>true</PublishSingleFile>
-        <AssemblyVersion>2.8.8</AssemblyVersion>
-        <FileVersion>2.8.8</FileVersion>
-        <Version>2.8.8</Version>
-        <InformationalVersion>2.8.8</InformationalVersion>
+        <AssemblyVersion>2.8.9</AssemblyVersion>
+        <FileVersion>2.8.9</FileVersion>
+        <Version>2.8.9</Version>
+        <InformationalVersion>2.8.9</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup>
-        <NoWarn>CS8600;CS8604;CS8622;CS8603;CS8602;CA2211;CS8619;CS8629;CS8601;CS8618;CS8620</NoWarn>
+        <NoWarn>CA2211</NoWarn>
         <DebugType>portable</DebugType>
     </PropertyGroup>
 
@@ -61,10 +61,10 @@
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5"/>
         <PackageReference Include="Avalonia.Desktop" Version="11.3.0"/>
         <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.0"/>
-        <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.7.1"/>
+        <PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0"/>
-        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.7.3"/>
+        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.3.0" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -77,10 +77,10 @@
         <PackageReference Include="NuGet.Protocol" Version="6.13.2"/>
         <PackageReference Include="Octokit" Version="14.0.0"/>
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
-        <PackageReference Include="SkAvaloniaEdit" Version="11.1.2"/>
+        <PackageReference Include="SkAvaloniaEdit" Version="11.3.1"/>
         <PackageReference Include="SkFluentAvalonia" Version="2.2.1"/>
         <PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0"/>
-        <PackageReference Include="Svg.Skia" Version="3.0.0"/>
+        <PackageReference Include="Svg.Skia" Version="3.0.2" />
         <PackageReference Include="System.Threading.AccessControl" Version="9.0.4"/>
 
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'"/>

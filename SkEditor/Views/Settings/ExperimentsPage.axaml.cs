@@ -6,6 +6,7 @@ using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities;
 
 namespace SkEditor.Views.Settings;
 
@@ -40,13 +41,16 @@ public partial class ExperimentsPage : UserControl
 
     private void AddExperiments()
     {
+        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
+
         foreach (Experiment experiment in _experiments)
         {
-            Application.Current.TryGetResource(experiment.Icon, ThemeVariant.Default, out object icon);
+            object? icon = null;
+            Application.Current?.TryGetResource(experiment.Icon, ThemeVariant.Default, out icon);
 
             ToggleSwitch toggleSwitch = new()
             {
-                IsChecked = SkEditorAPI.Core.GetAppConfig().GetOptionValue<bool>(experiment.Option)
+                IsChecked = appConfig.GetExperimentFlag(experiment.Option)
             };
 
             toggleSwitch.IsCheckedChanged += (_, _) => Switch(experiment, toggleSwitch);
@@ -65,22 +69,26 @@ public partial class ExperimentsPage : UserControl
 
     private void Switch(Experiment experiment, ToggleSwitch toggleSwitch)
     {
-        if (toggleSwitch.IsChecked.Value && experiment.Dependency is not null)
+        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
+        if (toggleSwitch.IsChecked == true && experiment.Dependency is not null)
         {
             Experiment? dependency = _experiments.Find(e => e.Option == experiment.Dependency);
             if (dependency is not null)
             {
                 if (ExperimentsStackPanel.Children.OfType<SettingsExpander>()
-                        .FirstOrDefault(e => e.Header.ToString() == dependency.Name)
+                        .FirstOrDefault(e => e.Header?.ToString() == dependency.Name)
                         ?.Footer is ToggleSwitch dependencySwitch)
                 {
-                    dependencySwitch.IsChecked = true;
+                    if (dependencySwitch.IsChecked != true)
+                    {
+                        dependencySwitch.IsChecked = true;
+                    }
                 }
             }
         }
 
-        SkEditorAPI.Core.GetAppConfig().SetOptionValue(experiment.Option, toggleSwitch.IsChecked.Value);
-        SkEditorAPI.Core.GetAppConfig().Save();
+        appConfig.SetExperimentFlag(experiment.Option, toggleSwitch.IsChecked == true);
+        appConfig.Save();
     }
 }
 

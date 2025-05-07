@@ -17,9 +17,9 @@ namespace SkEditor.Views.Marketplace.Types;
 
 public class ThemeWithSyntaxItem : MarketplaceItem
 {
-    [JsonProperty("themeFile")] public string ThemeFileUrl { get; set; }
+    [JsonProperty("themeFile")] public required string ThemeFileUrl { get; set; }
 
-    [JsonProperty("syntaxFolders")] public string[] SyntaxFolders { get; set; }
+    [JsonProperty("syntaxFolders")] public required string[] SyntaxFolders { get; set; }
 
     public override async Task Install()
     {
@@ -129,8 +129,15 @@ public class ThemeWithSyntaxItem : MarketplaceItem
             await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ??
                                        ThemeEditor.GetDefaultTheme());
         }
+        
+        Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName));
+        if (theme == null)
+        {
+            await SkEditorAPI.Windows.ShowError("The theme is not installed.");
+            return;
+        }
 
-        ThemeEditor.Themes.Remove(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName)));
+        ThemeEditor.Themes.Remove(theme);
         ThemeEditor.SaveAllThemes();
         File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "Themes", fileName));
     }

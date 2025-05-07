@@ -28,8 +28,12 @@ public static class DiscordRpcUpdater
                 LargeImageText = "SkEditor"
             }
         });
+        
+        TabView? tabView = SkEditorAPI.Files.GetTabView();
 
-        SkEditorAPI.Files.GetTabView().SelectionChanged += (_, _) =>
+        if (tabView == null) return;
+
+        tabView.SelectionChanged += (_, _) =>
         {
             if (!_client.IsInitialized)
             {
@@ -38,9 +42,9 @@ public static class DiscordRpcUpdater
 
             if (SkEditorAPI.Files.IsFileOpen())
             {
-                TabViewItem tab = SkEditorAPI.Files.GetTabView().SelectedItem as TabViewItem;
+                if (tabView.SelectedItem is not TabViewItem tab) return;
                 _client.UpdateDetails(Translation.Get("DiscordRpcEditing")
-                    .Replace("{0}", tab.Header.ToString().TrimEnd('*')));
+                    .Replace("{0}", tab.Header?.ToString()?.TrimEnd('*')));
             }
             else
             {

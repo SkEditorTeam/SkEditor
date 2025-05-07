@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Avalonia;
@@ -34,7 +33,7 @@ public partial class TextEditorEventHandler
 
     public static Dictionary<TextEditor, ScrollViewer> ScrollViewers { get; } = [];
 
-    public static void OnZoom(object sender, PointerWheelEventArgs e)
+    public static void OnZoom(object? sender, PointerWheelEventArgs e)
     {
         if (e.KeyModifiers != KeyUtility.GetControlModifier())
         {
@@ -43,29 +42,38 @@ public partial class TextEditorEventHandler
 
         e.Handled = true;
 
-        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (editor == null)
+        {
+            return;
+        }
 
         int zoom = e.Delta.Y > 0 && editor.FontSize < 200 ? 1 : -1;
 
         Zoom(editor, zoom);
     }
 
-    public static void OnKeyDown(object sender, KeyEventArgs e)
+    public static void OnKeyDown(object? sender, KeyEventArgs e)
     {
         if (e.KeyModifiers != KeyUtility.GetControlModifier())
         {
             return;
         }
 
-        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
-
-        if (e.Key == Key.OemPlus)
+        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (editor == null)
         {
-            Zoom(editor, 5);
+            return;
         }
-        else if (e.Key == Key.OemMinus)
+
+        switch (e.Key)
         {
-            Zoom(editor, -5);
+            case Key.OemPlus:
+                Zoom(editor, 5);
+                break;
+            case Key.OemMinus:
+                Zoom(editor, -5);
+                break;
         }
     }
 
@@ -75,7 +83,7 @@ public partial class TextEditorEventHandler
         {
             foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
             {
-                ZoomEditor(value, openedFile.Editor);
+                ZoomEditor(value, openedFile.Editor!);
             }
         }
         else
@@ -91,37 +99,24 @@ public partial class TextEditorEventHandler
             return;
         }
 
-        ScrollViewer scrollViewer = GetScrollViewer(editor);
         double oldLineHeight = editor.TextArea.TextView.DefaultLineHeight;
         editor.FontSize += value;
         double lineHeight = editor.TextArea.TextView.DefaultLineHeight;
 
         double lineHeightChange = lineHeight / oldLineHeight;
+
+        ScrollViewer? scrollViewer = editor.ScrollViewer;
+        if (scrollViewer == null)
+        {
+            return;
+        }
+
         double newOffset = scrollViewer.Offset.Y * lineHeightChange;
 
         scrollViewer.SetCurrentValue(ScrollViewer.OffsetProperty, new Vector(scrollViewer.Offset.X, newOffset));
     }
 
-    public static ScrollViewer GetScrollViewer(TextEditor editor)
-    {
-        if (ScrollViewers.TryGetValue(editor, out ScrollViewer? value))
-        {
-            return value;
-        }
-
-        Type type = editor.GetType();
-        PropertyInfo propInfo = type.GetProperty("ScrollViewer", BindingFlags.Instance | BindingFlags.NonPublic);
-        if (propInfo == null)
-        {
-            return null;
-        }
-
-        ScrollViewer scrollViewer = (ScrollViewer)propInfo.GetValue(editor);
-        ScrollViewers[editor] = scrollViewer;
-        return scrollViewer;
-    }
-
-    public static async void OnTextChanged(object sender, EventArgs e)
+    public static async void OnTextChanged(object? sender, EventArgs e)
     {
         try
         {
@@ -146,7 +141,7 @@ public partial class TextEditorEventHandler
 
             if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
             {
-                await Dispatcher.UIThread.InvokeAsync(() => openedFile.Parser.Parse());
+                await Dispatcher.UIThread.InvokeAsync(() => openedFile.Parser?.Parse());
             }
 
             openedFile.IsSaved = false;
@@ -170,7 +165,8 @@ public partial class TextEditorEventHandler
             return;
         }
 
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return;
 
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
         if (!string.IsNullOrWhiteSpace(textEditor.Document.GetText(line)))
@@ -204,13 +200,17 @@ public partial class TextEditorEventHandler
             return;
         }
 
-        char symbol = e.Text[0];
-        if (!SymbolPairs.TryGetValue(symbol, out char value))
+        char? symbol = e.Text?[0];
+        if (symbol == null) return;
+        
+        if (!SymbolPairs.TryGetValue(symbol.Value, out char value))
         {
             return;
         }
 
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return;
+        
         if (textEditor.Document.TextLength > textEditor.CaretOffset)
         {
             string nextChar = textEditor.Document.GetText(textEditor.CaretOffset, 1);
@@ -275,7 +275,7 @@ public partial class TextEditorEventHandler
 
                 HighlightingSpan span = new()
                 {
-                    StartExpression = new Regex(@"<[#]?" + hex + @">"),
+                    StartExpression = new Regex("<[#]?" + hex + ">"),
                     EndExpression = EmptyRegex(),
                     SpanColor = new HighlightingColor { Foreground = new SimpleHighlightingBrush(color) },
                     RuleSet = ruleSet,
@@ -299,7 +299,8 @@ public partial class TextEditorEventHandler
 
         e.Handled = true;
 
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return;
 
         Point pos = e.GetPosition(textEditor.TextArea.TextView) + textEditor.TextArea.TextView.ScrollOffset;
         SimpleSegment word = TextEditorUtilities.GetWordAtMousePosition(pos, textEditor.TextArea);
@@ -324,7 +325,9 @@ public partial class TextEditorEventHandler
             return;
         }
 
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return;
+        
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
 
         string lineText = textEditor.Document.GetText(line);

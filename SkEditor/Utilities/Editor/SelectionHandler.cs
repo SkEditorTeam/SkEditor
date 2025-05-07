@@ -14,7 +14,9 @@ public class SelectionHandler
 {
     public static void OnSelectionChanged(object? sender, EventArgs e)
     {
-        TextEditor textEditor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (textEditor == null) return;
+        
         textEditor.TextArea.TextView.LineTransformers
             .Where(x => x is OccurenceBackgroundTransformer)
             .ToList()

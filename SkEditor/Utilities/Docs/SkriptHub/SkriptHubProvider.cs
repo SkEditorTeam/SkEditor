@@ -25,7 +25,7 @@ public class SkriptHubProvider : IDocProvider
 
     public DocProvider Provider => DocProvider.SkriptHub;
 
-    public Task<IDocumentationEntry> FetchElement(string id)
+    public Task<IDocumentationEntry?> FetchElement(string id)
     {
         throw new NotImplementedException();
     }
@@ -98,7 +98,13 @@ public class SkriptHubProvider : IDocProvider
         }
 
         string content = await File.ReadAllTextAsync(cacheFile);
-        _cachedElements.AddRange(JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content));
+        List<SkriptHubDocEntry>? elements = JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content);
+        if (elements == null)
+        {
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", "Invalid cache file"));
+            return [];
+        }
+        _cachedElements.AddRange(elements);
         await SaveCache();
 
         List<SkriptHubDocEntry> foundElements2 = _cachedElements.Where(e => e.DoMatch(searchData)).ToList();
@@ -162,8 +168,8 @@ public class SkriptHubProvider : IDocProvider
         List<SkriptHubDocExample>? elements = JsonConvert.DeserializeObject<List<SkriptHubDocExample>>(content);
         foundEntry.Examples = elements;
         await SaveCache();
-        List<IDocumentationExample> examples = elements.Cast<IDocumentationExample>().ToList();
-        return examples;
+        List<IDocumentationExample>? examples = elements?.Cast<IDocumentationExample>()?.ToList();
+        return examples ?? [];
     }
 
     public bool HasAddons => false;
@@ -182,7 +188,13 @@ public class SkriptHubProvider : IDocProvider
         }
 
         string content = await File.ReadAllTextAsync(cacheFile);
-        _cachedElements.AddRange(JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content));
+        List<SkriptHubDocEntry>? elements = JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content);
+        if (elements == null)
+        {
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", "Invalid cache file"));
+            return [];
+        }
+        _cachedElements.AddRange(elements);
         await SaveCache();
 
         return _cachedElements.Select(e => e.Addon).Distinct().ToList();

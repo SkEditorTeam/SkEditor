@@ -41,7 +41,7 @@ public partial class MainWindow : AppWindow
         Instance = this;
     }
 
-    public static MainWindow Instance { get; private set; }
+    public static MainWindow Instance { get; private set; } = null!;
 
     public bool AlreadyClosed { get; set; }
 
@@ -86,7 +86,7 @@ public partial class MainWindow : AppWindow
         SideBar.ReloadPanels();
     }
 
-    private async void OnClosing(object sender, WindowClosingEventArgs e)
+    private async void OnClosing(object? sender, WindowClosingEventArgs e)
     {
         try
         {
@@ -108,11 +108,7 @@ public partial class MainWindow : AppWindow
                     return;
                 }
 
-                ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-                    Translation.Get("ClosingProgramWithUnsavedFiles"), Symbol.ImportantFilled,
-                    primaryButtonText: "Yes", cancelButtonText: "No");
-
-                if (result != ContentDialogResult.Primary)
+                if (await PromptForUnsavedChanges())
                 {
                     return;
                 }
@@ -122,7 +118,15 @@ public partial class MainWindow : AppWindow
             }
             else
             {
-                await SessionRestorer.SaveSession();
+                bool isSuccess = await SessionRestorer.SaveSession();
+                if (!isSuccess)
+                {
+                    if (await PromptForUnsavedChanges())
+                    {
+                        return;
+                    }
+                }
+
                 AlreadyClosed = true;
                 Close();
             }
@@ -139,7 +143,16 @@ public partial class MainWindow : AppWindow
         }
     }
 
-    private async void OnWindowLoaded(object sender, RoutedEventArgs e)
+    private static async Task<bool> PromptForUnsavedChanges()
+    {
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
+            Translation.Get("ClosingProgramWithUnsavedFiles"), Symbol.ImportantFilled,
+            primaryButtonText: "Yes", cancelButtonText: "No");
+
+        return result != ContentDialogResult.Primary;
+    }
+
+    private async void OnWindowLoaded(object? sender, RoutedEventArgs e)
     {
         try
         {

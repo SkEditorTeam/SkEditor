@@ -27,7 +27,7 @@ public class Registry<TValue> : IEnumerable<TValue>
     /// </summary>
     /// <param name="key">The key to look for.</param>
     /// <returns>The value associated with the key, or the default value if the key is not found.</returns>
-    public TValue GetValue(RegistryKey key)
+    public TValue? GetValue(RegistryKey key)
     {
         return _registry.GetValueOrDefault(key);
     }
@@ -88,9 +88,9 @@ public class Registry<TValue> : IEnumerable<TValue>
     /// </summary>
     /// <param name="value">The value to look for.</param>
     /// <returns>The key associated with the value, or null if the value is not found.</returns>
-    public RegistryKey GetValueKey(TValue value)
+    public RegistryKey? GetValueKey(TValue value)
     {
-        return _registry.FirstOrDefault(pair => pair.Value.Equals(value)).Key;
+        return _registry.FirstOrDefault(pair => pair.Value?.Equals(value) == true).Key;
     }
 
     public void Unload(IAddon addon)

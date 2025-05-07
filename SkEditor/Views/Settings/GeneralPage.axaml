@@ -55,6 +55,13 @@
                         <ToggleSwitch Name="ZoomSyncToggleSwitch" IsChecked="{Binding IsZoomSyncEnabled, Mode=OneTime}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralSidebarWidthSync}"
+                                     IconSource="{StaticResource SidebarWidthSyncIcon}"
+                                     Description="{DynamicResource SettingsGeneralSidebarWidthSyncDescription}">
+                    <ui:SettingsExpander.Footer>
+                        <ToggleSwitch Name="SidebarWidthSyncToggleSwitch" IsChecked="{Binding IsSidebarWidthSyncEnabled}" />
+                    </ui:SettingsExpander.Footer>
+                </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralTabType}"
                                      IconSource="{StaticResource FunctionIcon}"

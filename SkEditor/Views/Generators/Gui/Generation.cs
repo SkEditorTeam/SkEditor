@@ -11,11 +11,12 @@ namespace SkEditor.Views.Generators.Gui;
 public class Generation
 {
     private const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static GuiGenerator _guiGen;
+    private static GuiGenerator? _guiGen;
 
     public static void Generate()
     {
         _guiGen = GuiGenerator.Instance;
+        if (_guiGen == null) return;
 
         StringBuilder code = new();
 
@@ -28,7 +29,7 @@ public class Generation
             _guiGen.TitleTextBox.Text = "GUI";
         }
 
-        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
         if (editor == null)
         {
             return;
@@ -52,7 +53,9 @@ public class Generation
 
     private static string GetSkriptCode()
     {
-        int rowQuantity = GuiGenerator.Instance.CurrentRows;
+        if (_guiGen == null) return string.Empty;
+        
+        int rowQuantity = _guiGen.CurrentRows;
 
         StringBuilder code = new();
         code.Append(
@@ -97,6 +100,8 @@ public class Generation
 
     private static string GetSkriptGuiCode()
     {
+        if (_guiGen == null) return string.Empty;
+        
         int rowQuantity = _guiGen.CurrentRows;
 
         StringBuilder code = new();
@@ -183,6 +188,8 @@ public class Generation
 
     private static string GetBackgroundCode()
     {
+        if (_guiGen == null) return string.Empty;
+        
         int rowQuantity = _guiGen.CurrentRows;
         int slots = rowQuantity * 9;
 

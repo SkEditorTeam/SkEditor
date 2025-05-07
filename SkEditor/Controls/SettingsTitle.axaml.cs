@@ -22,7 +22,7 @@ public partial class SettingsTitle : UserControl
         set => SetValue(TitleProperty, value);
     }
 
-    public Button GetBackButton()
+    public Button? GetBackButton()
     {
         return this.FindControl<Button>("BackButton");
     }

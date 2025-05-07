@@ -36,21 +36,24 @@ public partial class GeneralPage : UserControl
         LanguageComboBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Language;
         LanguageComboBox.SelectionChanged += (_, _) =>
         {
-            string language = LanguageComboBox.SelectedItem.ToString();
+            string? language = LanguageComboBox.SelectedItem.ToString();
+            if (string.IsNullOrEmpty(language)) return;
+            
             SkEditorAPI.Core.GetAppConfig().Language = language;
             Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 await Translation.ChangeLanguage(language);
 
                 // Regenerate the text editor context menu
-                // TODO: Context menu language doesn't change, when user has documentation tab opened.
                 if (!SkEditorAPI.Files.IsEditorOpen())
                 {
                     return;
                 }
 
-                TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
-                editor.ContextFlyout = FileBuilder.GetContextMenu(editor);
+                foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
+                {
+                    openedFile.Editor!.ContextFlyout = FileBuilder.GetContextMenu(openedFile.Editor);
+                }
             });
         };
     }
@@ -63,20 +66,18 @@ public partial class GeneralPage : UserControl
 
         foreach (object? item in IndentationTypeComboBox.Items)
         {
-            if ((item as ComboBoxItem).Tag.ToString() == tag)
-            {
-                IndentationTypeComboBox.SelectedItem = item;
-                break;
-            }
+            if ((item as ComboBoxItem)?.Tag?.ToString() != tag) continue;
+
+            IndentationTypeComboBox.SelectedItem = item;
+            break;
         }
 
         foreach (object? item in IndentationAmountComboBox.Items)
         {
-            if ((item as ComboBoxItem).Tag.ToString() == amount.ToString())
-            {
-                IndentationAmountComboBox.SelectedItem = item;
-                break;
-            }
+            if ((item as ComboBoxItem)?.Tag?.ToString() != amount.ToString()) continue;
+
+            IndentationAmountComboBox.SelectedItem = item;
+            break;
         }
     }
 
@@ -91,17 +92,23 @@ public partial class GeneralPage : UserControl
         IndentationAmountComboBox.SelectionChanged += (_, _) =>
         {
             AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-            appConfig.TabSize = int.Parse((IndentationAmountComboBox.SelectedItem as ComboBoxItem).Tag.ToString());
+            bool success = int.TryParse((IndentationAmountComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString(), out int result);
+            if (!success)
+            {
+                return;
+            }
+
+            appConfig.TabSize = result;
             SkEditorAPI.Files.GetOpenedEditors()
-                .ForEach(file => file.Editor.Options.IndentationSize = appConfig.TabSize);
+                .ForEach(file => file.Editor!.Options.IndentationSize = appConfig.TabSize);
         };
         IndentationTypeComboBox.SelectionChanged += (_, _) =>
         {
             AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
             appConfig.UseSpacesInsteadOfTabs =
-                (IndentationTypeComboBox.SelectedItem as ComboBoxItem).Tag.ToString() == "spaces";
+                (IndentationTypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() == "spaces";
             SkEditorAPI.Files.GetOpenedEditors().ForEach(file =>
-                file.Editor.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
+                file.Editor!.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
         };
     }
 
@@ -123,7 +130,7 @@ public partial class GeneralPage : UserControl
     {
         ToggleSetting("IsWrappingEnabled");
 
-        List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList();
+        List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
 
         textEditors.ForEach(textEditor => textEditor.WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled);
     }
@@ -137,9 +144,10 @@ public partial class GeneralPage : UserControl
             return;
         }
 
-        List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList();
+        List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
         if (textEditors.Count == 0) return;
-        double fontSize = textEditors.FirstOrDefault().FontSize;
+
+        double fontSize = textEditors.First().FontSize;
         textEditors.ForEach(textEditor => { textEditor.FontSize = fontSize; });
     }
 

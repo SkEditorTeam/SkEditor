@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
 
 namespace SkEditor.Utilities.Parser;
@@ -9,13 +9,13 @@ namespace SkEditor.Utilities.Parser;
 /// <summary>
 ///     Represent a function argument in a function declaration.
 /// </summary>
-public class CodeFunctionArgument : INameableCodeElement
+public partial class CodeFunctionArgument : INameableCodeElement
 {
-    public static readonly string FunctionArgumentPattern = "([a-zA-Z0-9_]+):( )?([a-zA-Z0-9_]+)";
+    public const string FunctionArgumentPattern = "([a-zA-Z0-9_]+):( )?([a-zA-Z0-9_]+)";
 
     public CodeFunctionArgument(CodeSection function, string raw, int line = -1, int column = -1)
     {
-        Match match = Regex.Match(raw, FunctionArgumentPattern);
+        Match match = FunctionArgumentRegex().Match(raw);
         Name = match.Groups[1].Value;
         Type = match.Groups[3].Value;
 
@@ -54,7 +54,7 @@ public class CodeFunctionArgument : INameableCodeElement
     public async Task Rename()
     {
         SymbolRefactorWindow renameWindow = new(this);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        await renameWindow.ShowDialogOnMainWindow();
         Function.Parser.Parse();
     }
 
@@ -62,4 +62,7 @@ public class CodeFunctionArgument : INameableCodeElement
     {
         return variable.Name == Name && variable.IsLocal;
     }
+
+    [GeneratedRegex(FunctionArgumentPattern)]
+    private static partial Regex FunctionArgumentRegex();
 }

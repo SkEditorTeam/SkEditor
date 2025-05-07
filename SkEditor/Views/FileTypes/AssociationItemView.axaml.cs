@@ -19,13 +19,13 @@ public partial class AssociationItemView : UserControl
         DataContext = this;
     }
 
-    public string Source
+    public string? Source
     {
         get => GetValue(AssociationSource)?.ToString();
         set => SetValue(AssociationSource, value);
     }
 
-    public string Description
+    public string? Description
     {
         get => GetValue(AssociationDescription)?.ToString();
         set => SetValue(AssociationDescription, value);

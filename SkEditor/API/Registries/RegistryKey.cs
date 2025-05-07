@@ -28,6 +28,13 @@ public record RegistryKey(IAddon Addon, string Key)
             throw new ArgumentException("Invalid full key format.");
         }
 
-        return new RegistryKey(SkEditorAPI.Addons.GetAddon(parts[0]), parts[1]);
+        IAddon? addon = SkEditorAPI.Addons.GetAddon(parts[0]);
+
+        if (addon is null)
+        {
+            throw new ArgumentException($"Addon '{parts[0]}' not found.");
+        }
+
+        return new RegistryKey(addon, parts[1]);
     }
 }

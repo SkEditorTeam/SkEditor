@@ -21,7 +21,7 @@ public interface IWindows
     ///     Get the current top-level window. This may not be the main window.
     /// </summary>
     /// <returns>The current top-level window.</returns>
-    Window GetCurrentWindow();
+    Window? GetCurrentWindow();
 
     /// <summary>
     ///     Show a dialog to the user, and waits for its answer. In this method, we'll

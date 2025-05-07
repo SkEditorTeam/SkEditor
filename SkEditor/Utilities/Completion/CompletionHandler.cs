@@ -16,7 +16,7 @@ namespace SkEditor.Utilities.Completion;
 
 public static partial class CompletionHandler
 {
-    private static TextEditor _currentTextEditor;
+    private static TextEditor? _currentTextEditor;
 
     public static CompletionFlyout CompletionPopup { get; } = new()
     {
@@ -25,9 +25,11 @@ public static partial class CompletionHandler
         ShowMode = FlyoutShowMode.Transient
     };
 
-    public static async void OnTextChanged(object sender, EventArgs e)
+    public static async void OnTextChanged(object? sender, EventArgs e)
     {
-        TextEditor textEditor = (TextEditor)sender;
+        TextEditor? textEditor = (TextEditor?)sender;
+        if (textEditor == null) return;
+        
         _currentTextEditor = textEditor;
         TextDocument document = textEditor.Document;
 
@@ -48,14 +50,21 @@ public static partial class CompletionHandler
             return;
         }
 
-        CompletionMenu completionMenu;
+        CompletionMenu? completionMenu;
 
         if (CompletionPopup.IsOpen)
         {
-            completionMenu = (CompletionMenu)CompletionPopup.Content;
-            completionMenu.CompletionListBox.ItemsSource = null;
-            completionMenu.CompletionListBox.Items.Clear();
-            completionMenu.SetItems(completionItems);
+            completionMenu = (CompletionMenu?)CompletionPopup.Content;
+            if (completionMenu == null)
+            {
+                completionMenu = new CompletionMenu(completionItems);
+            }
+            else
+            {
+                completionMenu.CompletionListBox.ItemsSource = null;
+                completionMenu.CompletionListBox.Items.Clear();
+                completionMenu.SetItems(completionItems);
+            }
         }
         else
         {
@@ -82,7 +91,7 @@ public static partial class CompletionHandler
         await Dispatcher.UIThread.InvokeAsync(() => completionMenu.CompletionListBox.SelectedIndex = 0);
     }
 
-    public static void OnKeyDown(object sender, KeyEventArgs e)
+    public static void OnKeyDown(object? sender, KeyEventArgs e)
     {
         if (!CompletionPopup.IsOpen)
         {
@@ -108,19 +117,20 @@ public static partial class CompletionHandler
             case Key.Enter:
             case Key.Tab:
                 e.Handled = true;
-                CompletionMenu completionMenu = (CompletionMenu)CompletionPopup.Content;
-                ListBox? listBox = completionMenu.CompletionListBox;
-                ListBoxItem? selectedItem = (ListBoxItem)listBox.SelectedItem;
-                CompletionItem? completionItem = (CompletionItem)selectedItem.Tag;
+                CompletionMenu? completionMenu = (CompletionMenu?)CompletionPopup.Content;
+                ListBox? listBox = completionMenu?.CompletionListBox;
+                ListBoxItem? selectedItem = (ListBoxItem?)listBox?.SelectedItem;
+                CompletionItem? completionItem = (CompletionItem?)selectedItem?.Tag;
                 CompletionPopup.Hide();
-                OnCompletion(completionItem);
+                if (completionItem is not null) OnCompletion(completionItem);
                 break;
         }
     }
 
     private static void HandleArrowKey(bool isUpKey)
     {
-        CompletionMenu? completionMenu = (CompletionMenu)CompletionPopup.Content;
+        CompletionMenu? completionMenu = (CompletionMenu?)CompletionPopup.Content;
+        if (completionMenu == null) return;
         ListBox? listBox = completionMenu.CompletionListBox;
 
         int selectedIndex = listBox.SelectedIndex;
@@ -132,6 +142,8 @@ public static partial class CompletionHandler
 
     private static void OnCompletion(CompletionItem completionItem)
     {
+        if (_currentTextEditor == null) return;
+        
         int offset = _currentTextEditor.TextArea.Caret.Offset;
         SimpleSegment segment = TextEditorUtilities.GetSegmentBeforeOffset(offset, _currentTextEditor.Document);
         if (segment == SimpleSegment.Invalid)

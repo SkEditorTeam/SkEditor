@@ -1,8 +1,8 @@
 ﻿namespace SkEditor.Utilities.Docs.SkriptMC;
 
-public class SkriptMCDocExample : IDocumentationExample
+public class SkriptMcDocExample : IDocumentationExample
 {
-    public string Example { get; set; }
+    public required string Example { get; set; }
 
     public string Author
     {

@@ -7,10 +7,6 @@ namespace SkEditor.Utilities.Docs.Local;
 [Serializable]
 public class LocalDocEntry : IDocumentationEntry
 {
-    public LocalDocEntry()
-    {
-    }
-
     public LocalDocEntry(IDocumentationEntry other, List<IDocumentationExample> examples)
     {
         Name = other.Name;
@@ -30,7 +26,7 @@ public class LocalDocEntry : IDocumentationEntry
 
     public DocProvider OriginalProvider { get; set; }
 
-    public List<LocalDocExample> Examples { get; set; } = new();
+    public List<LocalDocExample> Examples { get; set; }
 
     public string Name { get; set; }
     public string Description { get; set; }

@@ -9,7 +9,6 @@ public partial class DocSyntaxColorizer
 {
     public static IHighlightingDefinition CreatePatternHighlighting()
     {
-        EmptyHighlighting highlighting = new();
         HighlightingRuleSet ruleSet = new();
 
         foreach (HighlightingSpan span in CreateSyntaxRules(ruleSet))
@@ -17,28 +16,33 @@ public partial class DocSyntaxColorizer
             ruleSet.Spans.Add(span);
         }
 
-        highlighting.MainRuleSet = ruleSet;
+        EmptyHighlighting highlighting = new()
+        {
+            MainRuleSet = ruleSet,
+        };
+
         return highlighting;
     }
 
     private static List<HighlightingSpan> CreateSyntaxRules(HighlightingRuleSet ruleSet)
     {
-        List<HighlightingSpan> spans = [];
+        List<HighlightingSpan> spans =
+        [
+            CreateSimpleCharRule(BarCharRegex(),
+                Color.FromRgb(255, 204, 153), ruleSet),
 
-        spans.Add(CreateSimpleCharRule(BarCharRegex(),
-            Color.FromRgb(255, 204, 153), ruleSet));
+            CreateSimpleCharRule(ColonCharRegex(),
+                Color.FromRgb(204, 153, 255), ruleSet),
 
-        spans.Add(CreateSimpleCharRule(ColonCharRegex(),
-            Color.FromRgb(204, 153, 255), ruleSet));
+            CreateSurroundingRule(PercentCharRegex(), PercentCharRegex(),
+                Color.FromRgb(153, 255, 204), Color.FromRgb(153, 204, 153), ruleSet),
 
-        spans.Add(CreateSurroundingRule(PercentCharRegex(), PercentCharRegex(),
-            Color.FromRgb(153, 255, 204), Color.FromRgb(153, 204, 153), ruleSet));
+            CreateSurroundingRule(OpeningBracketRegex(), ClosingBracketRegex(),
+                Color.FromRgb(255, 255, 153), Color.FromRgb(255, 204, 102), ruleSet),
 
-        spans.Add(CreateSurroundingRule(OpeningBracketRegex(), ClosingBracketRegex(),
-            Color.FromRgb(255, 255, 153), Color.FromRgb(255, 204, 102), ruleSet));
-
-        spans.Add(CreateSurroundingRule(OpeningSquareBracketRegex(), ClosingSquareBracketRegex(),
-            Color.FromRgb(204, 229, 255), Color.FromRgb(153, 204, 255), ruleSet));
+            CreateSurroundingRule(OpeningSquareBracketRegex(), ClosingSquareBracketRegex(),
+                Color.FromRgb(204, 229, 255), Color.FromRgb(153, 204, 255), ruleSet)
+        ];
 
         return spans;
     }
@@ -98,7 +102,7 @@ public partial class DocSyntaxColorizer
     public class EmptyHighlighting : IHighlightingDefinition
     {
         public string Name => "Empty";
-        public HighlightingRuleSet MainRuleSet { get; set; }
+        public required HighlightingRuleSet MainRuleSet { get; set; }
 
         public HighlightingRuleSet GetNamedRuleSet(string name)
         {

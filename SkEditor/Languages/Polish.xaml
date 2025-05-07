@@ -208,6 +208,7 @@
     <system:String x:Key="ProjectExplorerInfoButton">Otwórz folder</system:String>
     <system:String x:Key="ProjectRenameText">Zmiana nazwy na...</system:String>
     <system:String x:Key="ProjectRenameErrorNameEmpty">Nazwa nie może być pusta.</system:String>
+    <system:String x:Key="ProjectRenameErrorNameInvalid">Nazwa zawiera niedozwolone znaki.</system:String>
     <system:String x:Key="ProjectRenameErrorParentNull">Rodzic nie może być nullem.</system:String>
     <system:String x:Key="ProjectErrorNameExists">Plik lub folder z tą nazwą już istnieje.</system:String>
     <system:String x:Key="ProjectRenameErrorSameName">Nowa nazwa jest taka sama jak stara.</system:String>
@@ -273,6 +274,8 @@
     <system:String x:Key="SettingsGeneralWrappingDescription">Wybierz, czy linie powinny zawijać się na szerokości widoku.</system:String>
     <system:String x:Key="SettingsGeneralZoomSync">Synchronizuj powiększenie między kartami</system:String>
     <system:String x:Key="SettingsGeneralZoomSyncDescription">Synchronizuje poziom powiększenia między wszystkimi otwartymi kartami.</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSync">Synchronizuj szerokość paneli bocznych</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSyncDescription">Synchronizuje szerokość między wszystkimi panelami paska bocznego.</system:String>
     <system:String x:Key="SettingsGeneralTabType">Typ wcięcia</system:String>
     <system:String x:Key="SettingsGeneralTabTypeDescription">Wybierz pomiędzy tabami a spacjami oraz ustaw rozmiar taba.</system:String>
     <system:String x:Key="SettingsGeneralTabTypeTabs">Taby</system:String>

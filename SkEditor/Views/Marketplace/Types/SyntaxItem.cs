@@ -17,7 +17,7 @@ public class SyntaxItem : MarketplaceItem
 {
     [JsonIgnore] public const string FolderName = "Syntax Highlighting";
 
-    [JsonProperty("syntaxFolders")] public string[] ItemSyntaxFolders { get; set; }
+    [JsonProperty("syntaxFolders")] public required string[] ItemSyntaxFolders { get; set; }
 
     public override async Task Install()
     {

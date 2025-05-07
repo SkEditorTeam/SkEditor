@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AvaloniaEdit;
 using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
 
 namespace SkEditor.Utilities.Parser;
@@ -57,7 +58,7 @@ public class CodeOptionReference : INameableCodeElement
     public async Task Rename()
     {
         SymbolRefactorWindow renameWindow = new(this);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        await renameWindow.ShowDialogOnMainWindow();
         Section.Parser.Parse();
     }
 

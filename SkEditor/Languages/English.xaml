@@ -208,6 +208,7 @@
     <system:String x:Key="ProjectExplorerInfoButton">Open Folder</system:String>
     <system:String x:Key="ProjectRenameText">Renaming into...</system:String>
     <system:String x:Key="ProjectRenameErrorNameEmpty">Name cannot be empty.</system:String>
+    <system:String x:Key="ProjectRenameErrorNameInvalid">Name is invalid.</system:String>
     <system:String x:Key="ProjectRenameErrorParentNull">Parent cannot be null.</system:String>
     <system:String x:Key="ProjectErrorNameExists">A file or folder with this name already exists.</system:String>
     <system:String x:Key="ProjectRenameErrorSameName">The new name is the same as the old name.</system:String>
@@ -273,6 +274,8 @@
     <system:String x:Key="SettingsGeneralWrappingDescription">Choose whether lines should wrap at the viewport width.</system:String>
     <system:String x:Key="SettingsGeneralZoomSync">Synchronize zoom between tabs</system:String>
     <system:String x:Key="SettingsGeneralZoomSyncDescription">When enabled, changing zoom level in one tab will apply the same zoom to all other tabs.</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSync">Synchronize sidebar width</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSyncDescription">When enabled, changing the width of one sidebar panel will apply the same width to all other panels.</system:String>
     <system:String x:Key="SettingsGeneralTabType">Indentation Type</system:String>
     <system:String x:Key="SettingsGeneralTabTypeDescription">Choose between tabs and spaces, and set the size of the tab.</system:String>
     <system:String x:Key="SettingsGeneralTabTypeTabs">Tabs</system:String>

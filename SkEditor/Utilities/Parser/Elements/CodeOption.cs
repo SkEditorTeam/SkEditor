@@ -1,7 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AvaloniaEdit.Editing;
-using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
 
 namespace SkEditor.Utilities.Parser;
@@ -37,15 +38,10 @@ public class CodeOption : INameableCodeElement
         Section.RefreshCode();
 
         // Then rename all references
-        foreach (CodeSection section in Section.Parser.Sections)
+        foreach (CodeOptionReference reference in Section.Parser.Sections
+                     .SelectMany(section => section.OptionReferences.Where(reference => reference.IsSimilar(this))))
         {
-            foreach (CodeOptionReference reference in section.OptionReferences)
-            {
-                if (reference.IsSimilar(this))
-                {
-                    reference.Replace(newName);
-                }
-            }
+            reference.Replace(newName);
         }
     }
 
@@ -57,7 +53,7 @@ public class CodeOption : INameableCodeElement
     public async Task Rename()
     {
         SymbolRefactorWindow renameWindow = new(this);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        await renameWindow.ShowDialogOnMainWindow();
         Section.Parser.Parse();
     }
 }

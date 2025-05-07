@@ -24,12 +24,21 @@ public partial class FileSyntaxes : UserControl
     private void LoadSyntaxes()
     {
         List<FileSyntax> syntaxes = SyntaxLoader.FileSyntaxes;
-        List<string> availableLangNames = syntaxes.Select(x => x.Config.LanguageName).Distinct().ToList();
+        List<string> availableLangNames = syntaxes
+            .Where(x => x.Config != null)
+            .Select(x => x.Config!.LanguageName)
+            .Distinct()
+            .ToList();
 
         foreach (string langName in availableLangNames)
         {
             string? selectedSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes
                 .FirstOrDefault(x => x.Key.Equals(langName)).Value ?? null;
+
+            if (string.IsNullOrEmpty(selectedSyntax))
+            {
+                continue;
+            }
 
             SettingsExpander expander = GenerateExpander(langName, selectedSyntax);
             SyntaxesStackPanel.Children.Add(expander);
@@ -47,17 +56,17 @@ public partial class FileSyntaxes : UserControl
         };
 
         List<FileSyntax> fileSyntaxes =
-            SyntaxLoader.FileSyntaxes.Where(x => x.Config.LanguageName.Equals(language)).ToList();
+            SyntaxLoader.FileSyntaxes.Where(x => x.Config != null && x.Config.LanguageName.Equals(language)).ToList();
 
         foreach (FileSyntax syntax in fileSyntaxes)
         {
             ComboBoxItem newItem = new()
             {
-                Content = syntax.Config.SyntaxName,
-                Tag = syntax.Config.FullIdName
+                Content = syntax.Config?.SyntaxName,
+                Tag = syntax.Config?.FullIdName
             };
             comboBox.Items.Add(newItem);
-            if (syntax.Config.FullIdName.Equals(selectedSyntaxFullIdName))
+            if (syntax.Config?.FullIdName.Equals(selectedSyntaxFullIdName) == true)
             {
                 comboBox.SelectedItem = newItem;
             }
@@ -71,26 +80,28 @@ public partial class FileSyntaxes : UserControl
         comboBox.SelectionChanged += (_, _) =>
         {
             AppConfig config = SkEditorAPI.Core.GetAppConfig();
-            string? selectedFullIdName = (comboBox.SelectedValue as ComboBoxItem).Tag.ToString();
+            string? selectedFullIdName = (comboBox.SelectedValue as ComboBoxItem)?.Tag?.ToString();
             FileSyntax? selectedFileSyntax =
-                SyntaxLoader.FileSyntaxes.FirstOrDefault(x => x.Config.FullIdName.Equals(selectedFullIdName));
+                SyntaxLoader.FileSyntaxes.FirstOrDefault(x => x.Config != null && x.Config.FullIdName.Equals(selectedFullIdName));
 
-            config.FileSyntaxes[selectedFileSyntax.Config.LanguageName] = selectedFileSyntax.Config.FullIdName;
+            var selectedFileSyntaxConfig = selectedFileSyntax?.Config;
+            if (selectedFileSyntaxConfig == null) return;
+            config.FileSyntaxes[language] = selectedFileSyntaxConfig.FullIdName;
+            config.FileSyntaxes[selectedFileSyntaxConfig.LanguageName] = selectedFileSyntaxConfig.FullIdName;
 
-            List<TabViewItem> tabs = SkEditorAPI.Files.GetOpenedFiles()
-                .Where(o => o.IsEditor)
+            List<TabViewItem?> tabs = SkEditorAPI.Files.GetOpenedEditors()
                 .Where(o =>
                 {
                     string ext = Path.GetExtension(o.Path?.ToLower() ?? "");
-                    return selectedFileSyntax.Config.Extensions.Contains(ext);
+                    return selectedFileSyntaxConfig.Extensions.Contains(ext);
                 })
                 .Select(o => o.TabViewItem)
                 .ToList();
 
-            foreach (TabViewItem tab in tabs)
+            foreach (TabViewItem? tab in tabs)
             {
-                TextEditor? editor = tab.Content as TextEditor;
-                editor.SyntaxHighlighting = selectedFileSyntax.Highlighting;
+                if (tab?.Content is not TextEditor editor) continue;
+                editor.SyntaxHighlighting = selectedFileSyntax?.Highlighting;
             }
         };
 

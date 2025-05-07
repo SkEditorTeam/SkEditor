@@ -13,7 +13,9 @@ internal static class FileCloser
 
     public static async Task CloseCurrentFile()
     {
-        await SkEditorAPI.Files.Close(SkEditorAPI.Files.GetCurrentOpenedFile());
+        OpenedFile? currentOpenedFile = SkEditorAPI.Files.GetCurrentOpenedFile();
+        if (currentOpenedFile == null) return;
+        await SkEditorAPI.Files.Close(currentOpenedFile);
     }
 
     public static async Task CloseAllFiles()

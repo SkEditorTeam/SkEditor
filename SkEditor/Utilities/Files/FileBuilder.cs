@@ -59,10 +59,8 @@ public class FileBuilder
             ToolTip.SetTip(tabViewItem, toolTip);
         }
 
-        if (fileType.IsEditor)
+        if (fileType is { IsEditor: true, Display: TextEditor editor })
         {
-            TextEditor? editor = fileType.Display as TextEditor;
-
             SkEditorAPI.Events.FileCreated(editor);
             Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
         }
@@ -75,60 +73,65 @@ public class FileBuilder
     private static async Task<FileTypes.FileType?> GetFileDisplay(string path, string? content)
     {
         FileTypes.FileType? fileType = null;
-        if (FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
+        if (!FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
         {
-            List<FileTypes.FileAssociation> handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
-            if (handlers.Count == 1)
+            return fileType ?? await GetDefaultEditor(path, content);
+        }
+
+        List<FileTypes.FileAssociation> handlers = FileTypes.RegisteredFileTypes[Path.GetExtension(path)];
+        if (handlers.Count == 1)
+        {
+            fileType = handlers[0].Handle(path);
+        }
+        else
+        {
+            string ext = Path.GetExtension(path);
+            if (SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
             {
-                fileType = handlers[0].Handle(path);
-            }
-            else
-            {
-                string ext = Path.GetExtension(path);
-                if (SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
+                if (value == "SkEditor")
                 {
-                    string pref = value;
-                    if (pref == "SkEditor")
+                    fileType = handlers.Find(association => !association.IsFromAddon)?.Handle(path);
+                }
+                else
+                {
+                    FileTypes.FileAssociation? preferred = handlers.Find(association => association.IsFromAddon &&
+                        association.Addon?.Name == value);
+                    if (preferred != null)
                     {
-                        fileType = handlers.Find(association => !association.IsFromAddon).Handle(path);
+                        fileType = preferred.Handle(path);
                     }
                     else
                     {
-                        FileTypes.FileAssociation? preferred = handlers.Find(association => association.IsFromAddon &&
-                            association.Addon.Name == value);
-                        if (preferred != null)
-                        {
-                            fileType = preferred.Handle(path);
-                        }
-                        else
-                        {
-                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
-                        }
-                    }
-                }
-
-                if (fileType == null)
-                {
-                    AssociationSelectionWindow window = new(handlers);
-                    await window.ShowDialog(MainWindow.Instance);
-                    FileTypes.FileAssociation? selected = window.SelectedAssociation;
-                    if (selected != null)
-                    {
-                        fileType = selected.Handle(path);
-                        if (window.RememberCheck.IsChecked == true)
-                        {
-                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations[ext] =
-                                selected.IsFromAddon ? selected.Addon.Name : "SkEditor";
-                        }
-                        else
-                        {
-                            SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
-                        }
-
-                        SkEditorAPI.Core.GetAppConfig().Save();
+                        SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
                     }
                 }
             }
+
+            if (fileType != null)
+            {
+                return fileType;
+            }
+
+            AssociationSelectionWindow window = new(handlers);
+            await window.ShowDialog(MainWindow.Instance);
+            FileTypes.FileAssociation? selected = window.SelectedAssociation;
+            if (selected == null)
+            {
+                return fileType ?? await GetDefaultEditor(path, content);
+            }
+
+            fileType = selected.Handle(path);
+            if (window.RememberCheck.IsChecked == true)
+            {
+                SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations[ext] =
+                    selected.IsFromAddon ? selected.Addon?.Name ?? "Addon" : "SkEditor";
+            }
+            else
+            {
+                SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
+            }
+
+            SkEditorAPI.Core.GetAppConfig().Save();
         }
 
         return fileType ?? await GetDefaultEditor(path, content);
@@ -136,7 +139,7 @@ public class FileBuilder
 
     private static async Task<FileTypes.FileType?> GetDefaultEditor(string path, string? content)
     {
-        string fileContent = null;
+        string? fileContent = null;
         if (!string.IsNullOrWhiteSpace(path))
         {
             path = Uri.UnescapeDataString(path);
@@ -174,12 +177,14 @@ public class FileBuilder
 
     public static TextEditor CreateEditor(string content = "")
     {
+        Application? application = Application.Current;
+
         TextEditor editor = new()
         {
             ShowLineNumbers = true,
-            Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor"),
-            Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor"),
-            LineNumbersForeground = (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor"),
+            Foreground = (ImmutableSolidColorBrush?)application?.FindResource("EditorTextColor"),
+            Background = (ImmutableSolidColorBrush?)application?.FindResource("EditorBackgroundColor"),
+            LineNumbersForeground = (ImmutableSolidColorBrush?)application?.FindResource("LineNumbersColor"),
             FontSize = 16,
             WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled
         };
@@ -188,8 +193,15 @@ public class FileBuilder
 
         if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
         {
-            Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object font);
-            editor.FontFamily = (FontFamily)font;
+            object? font = GetJetbrainsMonoFont();
+            if (font != null)
+            {
+                editor.FontFamily = (FontFamily)font;
+            }
+            else
+            {
+                editor.FontFamily = new FontFamily("JetBrains Mono");
+            }
         }
         else
         {
@@ -201,6 +213,13 @@ public class FileBuilder
         editor = SetOptions(editor);
 
         return editor;
+    }
+
+    public static object? GetJetbrainsMonoFont()
+    {
+        object? font = null;
+        Application.Current?.TryGetResource("JetBrainsFont", ThemeVariant.Default, out font);
+        return font;
     }
 
     private static TextEditor AddEventHandlers(TextEditor editor)
@@ -222,7 +241,7 @@ public class FileBuilder
 
         editor.TextArea.Caret.PositionChanged += (_, _) =>
         {
-            SkEditorAPI.Windows.GetMainWindow().BottomBar.UpdatePosition();
+            SkEditorAPI.Windows.GetMainWindow()?.BottomBar.UpdatePosition();
         };
         editor.TextArea.KeyDown += TextEditorEventHandler.OnKeyDown;
         editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
@@ -244,10 +263,15 @@ public class FileBuilder
     {
         editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));
         editor.TextArea.TextView.LinkTextUnderline = true;
-        editor.TextArea.SelectionBrush = (ImmutableSolidColorBrush)Application.Current.FindResource("SelectionColor");
+        editor.TextArea.SelectionBrush = (ImmutableSolidColorBrush?)Application.Current?.FindResource("SelectionColor");
         editor.TextArea.RightClickMovesCaret = true;
 
-        editor.TextArea.LeftMargins.OfType<LineNumberMargin>().FirstOrDefault().Margin = new Thickness(10, 0);
+        LineNumberMargin? lineNumberMargin = editor.TextArea.LeftMargins.OfType<LineNumberMargin>().FirstOrDefault();
+
+        if (lineNumberMargin is not null)
+        {
+            lineNumberMargin.Margin = new Thickness(10, 0);
+        }
 
         editor.Options.AllowScrollBelowDocument = true;
         editor.Options.CutCopyWholeLine = true;
@@ -264,8 +288,8 @@ public class FileBuilder
 
     public static MenuFlyout GetContextMenu(TextEditor editor)
     {
-        object[] commands = new object[]
-        {
+        object[] commands =
+        [
             new { Header = "MenuHeaderCopy", Command = new RelayCommand(editor.Copy), Icon = Symbol.Copy },
             new { Header = "MenuHeaderPaste", Command = new RelayCommand(editor.Paste), Icon = Symbol.Paste },
             new { Header = "MenuHeaderCut", Command = new RelayCommand(editor.Cut), Icon = Symbol.Cut },
@@ -304,7 +328,7 @@ public class FileBuilder
                     await CustomCommandsHandler.OnRefactorCommandExecuted(editor)),
                 Icon = Symbol.Rename
             }
-        };
+        ];
 
         MenuFlyout contextMenu = new();
         foreach (dynamic item in commands)

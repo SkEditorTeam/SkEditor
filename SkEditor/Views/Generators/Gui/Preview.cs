@@ -20,6 +20,11 @@ public class Preview
 
     public static void Show()
     {
+        if (GuiGenerator.Instance is null)
+        {
+            return;
+        }
+        
         int rows = GuiGenerator.Instance.CurrentRows;
 
         Bitmap guiBitmap = new(AssetLoader.Open(new Uri("avares://SkEditor/Assets/GUI/" + rows + ".png")));
@@ -73,9 +78,11 @@ public class Preview
         int slotX = 18 + (column * 41);
         int slotY = 41 * (row + 1);
 
+        if (GuiGenerator.Instance is null) return;
+
         string itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, item.Name + ".png");
 
-        if (!CachedImages.TryGetValue(itemImagePath, out Bitmap itemBitmap))
+        if (!CachedImages.TryGetValue(itemImagePath, out Bitmap? itemBitmap))
         {
             itemBitmap = new Bitmap(itemImagePath);
             CachedImages[itemImagePath] = itemBitmap;

@@ -14,18 +14,18 @@ public abstract class SidebarPanel
     public abstract IconSource IconActive { get; }
     public abstract bool IsDisabled { get; }
 
-    public virtual int DesiredWidth { get; } = 250;
+    public virtual int DesiredWidth => 250;
 
-    public virtual void OnOpen()
+    public void OnOpen()
     {
     }
 
-    public virtual void OnClose()
+    public void OnClose()
     {
     }
 
-    public string GetId()
+    public string? GetId()
     {
-        return Registries.SidebarPanels.GetValueKey(this).Key;
+        return Registries.SidebarPanels.GetValueKey(this)?.Key;
     }
 }

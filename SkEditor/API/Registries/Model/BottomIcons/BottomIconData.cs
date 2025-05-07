@@ -43,7 +43,7 @@ public class BottomIconData : IBottomIconElement
         return _attachedButton;
     }
 
-    public TextBlock GetTextBlock()
+    public TextBlock? GetTextBlock()
     {
         return _attachedTextBlock;
     }
@@ -83,11 +83,13 @@ public class BottomIconData : IBottomIconElement
         set
         {
             _iconSource = value;
-            if (_attachedIconElement != null)
+            if (_attachedIconElement == null)
             {
-                _attachedIconElement.IconSource = value;
-                _attachedIconElement.IsVisible = value != null;
+                return;
             }
+
+            _attachedIconElement.IconSource = value;
+            _attachedIconElement.IsVisible = value != null;
         }
     }
 
@@ -99,11 +101,13 @@ public class BottomIconData : IBottomIconElement
         set
         {
             _text = value;
-            if (_attachedTextBlock != null)
+            if (_attachedTextBlock == null)
             {
-                _attachedTextBlock.Text = value;
-                _attachedTextBlock.IsVisible = value != null;
+                return;
             }
+
+            _attachedTextBlock.Text = value;
+            _attachedTextBlock.IsVisible = value != null;
         }
     }
 
@@ -125,7 +129,7 @@ public class BottomIconData : IBottomIconElement
     }
 
     public int Order { get; set; } = 0;
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     #endregion
 }
