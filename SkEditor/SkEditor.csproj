@@ -61,10 +61,10 @@
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5"/>
         <PackageReference Include="Avalonia.Desktop" Version="11.3.0"/>
         <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.0"/>
-        <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.7.1"/>
+        <PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0"/>
-        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.7.3"/>
+        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.3.0" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -80,7 +80,7 @@
         <PackageReference Include="SkAvaloniaEdit" Version="11.3.1"/>
         <PackageReference Include="SkFluentAvalonia" Version="2.2.1"/>
         <PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0"/>
-        <PackageReference Include="Svg.Skia" Version="3.0.0"/>
+        <PackageReference Include="Svg.Skia" Version="3.0.2" />
         <PackageReference Include="System.Threading.AccessControl" Version="9.0.4"/>
 
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'"/>
