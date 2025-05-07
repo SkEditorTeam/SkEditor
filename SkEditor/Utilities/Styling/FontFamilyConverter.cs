@@ -6,7 +6,7 @@ namespace SkEditor.Utilities.Styling;
 
 public class FontFamilyConverter : JsonConverter<FontFamily?>
 {
-    public override FontFamily ReadJson(JsonReader reader, Type objectType, FontFamily? existingValue,
+    public override FontFamily? ReadJson(JsonReader reader, Type objectType, FontFamily? existingValue,
         bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType != JsonToken.String)
@@ -14,8 +14,8 @@ public class FontFamilyConverter : JsonConverter<FontFamily?>
             return null;
         }
 
-        string? fontFamilyName = reader.Value.ToString();
-        return new FontFamily(fontFamilyName);
+        string? fontFamilyName = reader.Value?.ToString();
+        return fontFamilyName != null ? new FontFamily(fontFamilyName) : null;
     }
 
     public override void WriteJson(JsonWriter writer, FontFamily? value, JsonSerializer serializer)

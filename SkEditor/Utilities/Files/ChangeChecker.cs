@@ -34,11 +34,8 @@ public class ChangeChecker
 
         try
         {
-            OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
-            if (file == null)
-            {
-                return;
-            }
+            OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+            if (file == null) return;
 
             if (!file.IsEditor || string.IsNullOrWhiteSpace(file.Path))
             {
@@ -62,7 +59,7 @@ public class ChangeChecker
                 return;
             }
 
-            string textToWrite = file.Editor.Document.Text;
+            string textToWrite = file.Editor?.Document?.Text ?? string.Empty;
             using StreamReader reader = new(path);
             string textToRead = await reader.ReadToEndAsync();
 
@@ -91,6 +88,8 @@ public class ChangeChecker
     private static async Task ShowMessage(OpenedFile file, string textToRead)
     {
         OpenedFile? openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(f => f == file);
+        if (openedFile is not { Editor: not null }) return;
+        
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
             Translation.Get("Attention"),
             Translation.Get("ChangesDetected"),
@@ -101,7 +100,7 @@ public class ChangeChecker
         if (result == ContentDialogResult.Primary)
         {
             openedFile.Editor.Document.Text = textToRead;
-            SetLastKnownContent(SkEditorAPI.Files.GetCurrentOpenedFile(), textToRead);
+            SetLastKnownContent(openedFile, textToRead);
             openedFile.IsSaved = true;
         }
         else

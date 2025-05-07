@@ -24,16 +24,16 @@ public abstract class StorageElement
 
     public IconSource Icon { get; set; } = new SymbolIconSource { Symbol = Symbol.Document, FontSize = 18 };
 
-    public IRelayCommand OpenInExplorerCommand { get; set; }
+    public IRelayCommand? OpenInExplorerCommand { get; set; }
     public IRelayCommand RenameCommand => new AsyncRelayCommand(OpenRenameWindow);
-    public IRelayCommand DeleteCommand { get; set; }
+    public IRelayCommand? DeleteCommand { get; set; }
     public IRelayCommand DoubleClickCommand => new RelayCommand(HandleDoubleClick);
     public IRelayCommand SingleClickCommand => new RelayCommand(HandleSingleClick);
-    public IRelayCommand CopyPathCommand { get; set; }
-    public IRelayCommand CopyAbsolutePathCommand { get; set; }
-    public IRelayCommand CreateNewFileCommand { get; set; }
-    public IRelayCommand CreateNewFolderCommand { get; set; }
-    public IRelayCommand CloseProjectCommand { get; set; }
+    public IRelayCommand? CopyPathCommand { get; set; }
+    public IRelayCommand? CopyAbsolutePathCommand { get; set; }
+    public IRelayCommand? CreateNewFileCommand { get; set; }
+    public IRelayCommand? CreateNewFolderCommand { get; set; }
+    public IRelayCommand? CloseProjectCommand { get; set; }
 
     public abstract string? ValidateName(string input);
 
@@ -65,6 +65,8 @@ public abstract class StorageElement
 
     protected void RefreshSelf()
     {
+        if (Parent?.Children == null) return;
+        
         Parent.Children[Parent.Children.IndexOf(this)] = this;
         Sort(Parent);
     }

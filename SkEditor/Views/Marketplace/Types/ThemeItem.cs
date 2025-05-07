@@ -17,7 +17,7 @@ public class ThemeItem : MarketplaceItem
 {
     [JsonIgnore] public const string FolderName = "Themes";
 
-    [JsonProperty("file")] public string ItemFileUrl { get; set; }
+    [JsonProperty("file")] public required string ItemFileUrl { get; set; }
 
     public override async Task Install()
     {
@@ -67,8 +67,14 @@ public class ThemeItem : MarketplaceItem
             await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ??
                                        ThemeEditor.GetDefaultTheme());
         }
+        Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName));
+        if (theme == null)
+        {
+            await SkEditorAPI.Windows.ShowError("The theme is not installed.");
+            return;
+        }
 
-        ThemeEditor.Themes.Remove(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName)));
+        ThemeEditor.Themes.Remove(theme);
         ThemeEditor.SaveAllThemes();
         File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "Themes", fileName));
 

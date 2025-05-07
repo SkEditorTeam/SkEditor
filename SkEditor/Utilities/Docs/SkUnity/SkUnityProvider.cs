@@ -35,7 +35,7 @@ public class SkUnityProvider : IDocProvider
         return [];
     }
 
-    public Task<IDocumentationEntry> FetchElement(string id)
+    public Task<IDocumentationEntry?> FetchElement(string id)
     {
         throw new NotImplementedException();
     }
@@ -44,7 +44,7 @@ public class SkUnityProvider : IDocProvider
     {
         // First build the URI
         string uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityApiKey) + "search/";
-        List<string> queryElements = new();
+        List<string> queryElements = [];
 
         if (!string.IsNullOrEmpty(searchData.Query))
         {
@@ -86,15 +86,15 @@ public class SkUnityProvider : IDocProvider
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         JObject responseObject = JObject.Parse(content);
-        if (responseObject["response"].ToString() != "success")
+        if (responseObject["response"]?.ToString() != "success")
         {
             await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
-                responseObject["response"].ToString()));
+                responseObject["response"]?.ToString()));
             return [];
         }
 
-        List<SkUnityDocEntry>? entries = responseObject["result"].ToObject<List<SkUnityDocEntry>>();
-        return [.. entries];
+        List<SkUnityDocEntry>? entries = responseObject["result"]?.ToObject<List<SkUnityDocEntry>>();
+        return [.. entries ?? []];
     }
 
     public bool IsAvailable()
@@ -141,18 +141,16 @@ public class SkUnityProvider : IDocProvider
             return [];
         }
 
-        JObject? resultObject = responseObject["result"].ToObject<JObject>();
+        JObject? resultObject = responseObject["result"]?.ToObject<JObject>();
+        if (resultObject == null) return [];
 
-        List<string> keys = new();
-        foreach (JProperty key in resultObject.Properties())
-        {
-            if (int.TryParse(key.Name, out _))
-            {
-                keys.Add(key.Name);
-            }
-        }
+        List<string> keys = [];
+        keys.AddRange(from key in resultObject.Properties() where int.TryParse(key.Name, out _) select key.Name);
 
-        return keys.Select(key => resultObject[key].ToObject<SkUnityDocExample>()).ToList<IDocumentationExample>();
+        return keys
+            .Select(key => resultObject[key]?.ToObject<SkUnityDocExample>())
+            .OfType<IDocumentationExample>()
+            .ToList();
     }
 
     public bool HasAddons => true;
@@ -189,15 +187,22 @@ public class SkUnityProvider : IDocProvider
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         JObject responseObject = JObject.Parse(content);
-        JObject? addonsObj = responseObject["result"].ToObject<JObject>();
+        JObject? addonsObj = responseObject["result"]?.ToObject<JObject>();
+        if (addonsObj == null) return [];
+        
         List<string> addons = addonsObj.Properties().Select(prop => prop.Name).ToList();
 
         foreach (string key in addons)
         {
             JToken? obj = addonsObj[key];
-            Color color = Color.Parse("#" + obj["colour"].ToObject<string>());
-            string? forumResourceId = obj["forums_resource_id"].ToObject<string>();
-            CachedAddons[key] = new AddonData(key, color, forumResourceId);
+            Color color = Color.Parse("#" + obj?["colour"]?.ToObject<string>());
+            string? forumResourceId = obj?["forums_resource_id"]?.ToObject<string>();
+            if (forumResourceId == null)
+            {
+                Log.Warning("Addon {Addon} does not have a forum resource ID", key);
+                continue;
+            }
+            CachedAddons[key] = new AddonData(color, forumResourceId);
         }
 
         return addons;
@@ -213,23 +218,26 @@ public class SkUnityProvider : IDocProvider
 
     public async Task<Color?> GetAddonColor(string addonName)
     {
-        if (CachedAddons.Count == 0)
+        AddonData? addon;
+        if (CachedAddons.Count != 0)
         {
-            try
-            {
-                await GetAddons();
-            }
-            catch (Exception e)
-            {
-                await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                    ? Translation.Get("DocumentationWindowErrorOffline")
-                    : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
-                Log.Error(e, "Failed to fetch addons");
-                return null;
-            }
+            return CachedAddons.TryGetValue(addonName, out addon) ? addon.Color : null;
         }
 
-        return CachedAddons.TryGetValue(addonName, out AddonData? addon) ? addon.Color : null;
+        try
+        {
+            await GetAddons();
+        }
+        catch (Exception e)
+        {
+            await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
+                ? Translation.Get("DocumentationWindowErrorOffline")
+                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+            Log.Error(e, "Failed to fetch addons");
+            return null;
+        }
+
+        return CachedAddons.TryGetValue(addonName, out addon) ? addon.Color : null;
     }
 
     public string GetLink(IDocumentationEntry entry)
@@ -242,10 +250,10 @@ public class SkUnityProvider : IDocProvider
         return (SkUnityProvider)IDocProvider.Providers[DocProvider.skUnity];
     }
 
-    public string GetAddonLink(string addonName)
+    public static string GetAddonLink(string addonName)
     {
         return "https://forums.skunity.com/resources/" + CachedAddons[addonName].ForumResourceId + "/";
     }
 
-    private record AddonData(string Name, Color Color, string ForumResourceId);
+    private record AddonData(Color Color, string ForumResourceId);
 }

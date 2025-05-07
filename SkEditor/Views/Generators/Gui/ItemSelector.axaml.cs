@@ -35,14 +35,14 @@ public partial class ItemSelector : AppWindow
 
         SelectButton.Command = new RelayCommand(() =>
         {
-            ComboBoxItem comboBoxItem = (ComboBoxItem)ItemListBox.SelectedItem;
+            ComboBoxItem? comboBoxItem = (ComboBoxItem?)ItemListBox.SelectedItem;
             if (comboBoxItem == null)
             {
                 Close();
                 return;
             }
 
-            Item item = _itemBindings.Items.First(x => x.Name.Equals(comboBoxItem.Tag.ToString()));
+            Item item = _itemBindings.Items.First(x => x.Name.Equals(comboBoxItem.Tag?.ToString()));
             Close(item);
         });
         CancelButton.Command = new RelayCommand(Close);
@@ -83,11 +83,11 @@ public partial class ItemSelector : AppWindow
         SearchBox.Text = ItemContextMenu.EditedItem.DisplayName;
     }
 
-    private void OnSearchChanged(object sender, TextChangedEventArgs e)
+    private void OnSearchChanged(object? sender, TextChangedEventArgs e)
     {
         string? searchText = SearchBox.Text;
         List<Item> filteredItems = _itemBindings.Items
-            .Where(x => x.DisplayName.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase))
+            .Where(x => searchText != null && x.DisplayName.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
         if (filteredItems.Any(item =>
@@ -115,7 +115,8 @@ public partial class ItemSelector : AppWindow
             return;
         }
 
-        List<Item> items = JsonConvert.DeserializeObject<List<Item>>(await File.ReadAllTextAsync(itemsFile));
+        List<Item>? items = JsonConvert.DeserializeObject<List<Item>>(await File.ReadAllTextAsync(itemsFile));
+        if (items == null) return;
 
         foreach (Item item in items)
         {
@@ -124,7 +125,7 @@ public partial class ItemSelector : AppWindow
         }
     }
 
-    private ComboBoxItem CreateItem(Item item)
+    private static ComboBoxItem CreateItem(Item item)
     {
         return new ComboBoxItem
         {
@@ -162,9 +163,9 @@ public class Item
 
     [JsonIgnore] public bool HaveCustomName { get; set; }
 
-    [JsonIgnore] public string CustomName { get; set; }
+    [JsonIgnore] public string CustomName { get; set; } = string.Empty;
 
-    [JsonIgnore] public List<string> Lore { get; set; }
+    [JsonIgnore] public List<string> Lore { get; set; } = [];
 
     [JsonIgnore] public bool HaveCustomModelData { get; set; }
 
@@ -173,26 +174,26 @@ public class Item
     [JsonIgnore] public bool HaveExampleAction { get; set; }
 
     [JsonIgnore]
-    public Bitmap Icon
+    public Bitmap? Icon
     {
         get
         {
-            if (_image == null!)
-            {
-                string itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, Name + ".png");
-                if (!File.Exists(itemImagePath))
-                {
-                    itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, "barrier.png");
-                }
+            if (_image != null!) return _image;
+            if (GuiGenerator.Instance == null) return null;
 
-                _image = new Bitmap(itemImagePath);
+            string itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, Name + ".png");
+            if (!File.Exists(itemImagePath))
+            {
+                itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, "barrier.png");
             }
+
+            _image = new Bitmap(itemImagePath);
 
             return _image;
         }
     }
 
-    public async Task<Bitmap> GetIcon()
+    public async Task<Bitmap?> GetIcon()
     {
         return await Task.Run(() => Icon);
     }

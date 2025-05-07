@@ -181,7 +181,10 @@ public class Files : IFiles
 
     public List<TabViewItem> GetOpenedTabs()
     {
-        return GetOpenedFiles().Select(source => source.TabViewItem).ToList();
+        return GetOpenedFiles()
+            .Select(source => source.TabViewItem)
+            .OfType<TabViewItem>()
+            .ToList();
     }
 
     public List<OpenedFile> GetOpenedEditors()
@@ -303,7 +306,7 @@ public class Files : IFiles
             return;
         }
 
-        OpenedFile? openedFile;
+        OpenedFile? openedFile = null;
 
         string extension = Path.GetExtension(path);
         List<FileTypeData> availableTypes = Registries.FileTypes
@@ -328,7 +331,11 @@ public class Files : IFiles
                 if (configuredTypeFullId != null)
                 {
                     RegistryKey key = RegistryKey.FromFullKey(configuredTypeFullId);
-                    openedFile = BuildFromType(Registries.FileTypes.GetValue(key), path);
+                    var fileType = Registries.FileTypes.GetValue(key);
+                    if (fileType != null)
+                    {
+                        openedFile = BuildFromType(fileType, path);
+                    }
                 }
                 else
                 {
@@ -348,7 +355,7 @@ public class Files : IFiles
                     if (selectionVm.RememberSelection)
                     {
                         SkEditorAPI.Core.GetAppConfig().FileTypeChoices[extension] =
-                            Registries.FileTypes.GetValueKey(selectionVm.SelectedFileType).FullKey;
+                            Registries.FileTypes.GetValueKey(selectionVm.SelectedFileType)?.FullKey;
                     }
 
                     openedFile = BuildFromType(selectionVm.SelectedFileType, path);
@@ -420,7 +427,7 @@ public class Files : IFiles
 
     private void RemoveWelcomeTab()
     {
-        OpenedFile? welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem.Content is WelcomeTabControl);
+        OpenedFile? welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem?.Content is WelcomeTabControl);
         if (welcomeTab == null)
         {
             return;

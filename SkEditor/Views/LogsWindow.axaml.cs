@@ -35,10 +35,10 @@ public partial class LogsWindow : AppWindow
     public void RenderDocument()
     {
         LogsEditor.ShowLineNumbers = false;
-        LogsEditor.Foreground = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorTextColor");
-        LogsEditor.Background = (ImmutableSolidColorBrush)Application.Current.FindResource("EditorBackgroundColor");
+        LogsEditor.Foreground = (ImmutableSolidColorBrush?)Application.Current?.FindResource("EditorTextColor");
+        LogsEditor.Background = (ImmutableSolidColorBrush?)Application.Current?.FindResource("EditorBackgroundColor");
         LogsEditor.LineNumbersForeground =
-            (ImmutableSolidColorBrush)Application.Current.FindResource("LineNumbersColor");
+            (ImmutableSolidColorBrush?)Application.Current?.FindResource("LineNumbersColor");
         LogsEditor.FontSize = 14;
         LogsEditor.WordWrap = true;
         LogsEditor.Margin = new Thickness(5);

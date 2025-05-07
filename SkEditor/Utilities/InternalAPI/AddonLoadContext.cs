@@ -8,7 +8,7 @@ public class AddonLoadContext(string pluginPath) : AssemblyLoadContext(true)
 {
     private readonly AssemblyDependencyResolver _resolver = new(pluginPath);
 
-    protected override Assembly Load(AssemblyName assemblyName)
+    protected override Assembly? Load(AssemblyName assemblyName)
     {
         string? assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
         return assemblyPath != null ? LoadFromAssemblyPath(assemblyPath) : null;

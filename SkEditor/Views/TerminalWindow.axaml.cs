@@ -21,8 +21,8 @@ public partial class TerminalWindow : AppWindow
     private const string CrSplitPattern = "(?=\r)";
 
     private readonly object _lock = new();
-    private StreamWriter _inputWriter;
-    private Process _process;
+    private StreamWriter _inputWriter = null!;
+    private Process _process = null!;
 
     public TerminalWindow()
     {
@@ -152,6 +152,7 @@ public partial class TerminalWindow : AppWindow
                 {
                     escapeSequence = false;
 
+                    // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
                     rawCodes.Split(';').Select(int.Parse).ToArray();
                     rawCodes = "";
 

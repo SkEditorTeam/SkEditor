@@ -6,7 +6,7 @@ namespace SkEditor.ViewModels;
 
 public partial class FileTypeSelectionViewModel : ObservableObject
 {
-    [ObservableProperty] private List<FileTypeData> _fileTypes;
+    [ObservableProperty] private List<FileTypeData> _fileTypes = [];
 
     [ObservableProperty] private bool _isFileTypeSelected;
     [ObservableProperty] private bool _rememberSelection;

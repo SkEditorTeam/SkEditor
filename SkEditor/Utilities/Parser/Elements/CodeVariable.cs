@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Media;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
 
 namespace SkEditor.Utilities.Parser;
@@ -96,15 +96,14 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
             {
                 bool lineAdded = false;
                 MatchCollection matches = VariableRegex().Matches(line);
-                foreach (object? m in matches)
+                foreach (Match m in matches)
                 {
                     CodeVariable variable = new(Section, m.ToString(), Line, Column);
-                    if (variable.IsSimilar(this))
-                    {
-                        string newLine = line.Replace(variable.ToString(), $"{{_{newName}}}");
-                        newLines.Add(newLine);
-                        lineAdded = true;
-                    }
+                    if (!variable.IsSimilar(this)) continue;
+
+                    string newLine = line.Replace(variable.ToString(), $"{{_{newName}}}");
+                    newLines.Add(newLine);
+                    lineAdded = true;
                 }
 
                 if (!lineAdded)
@@ -122,20 +121,19 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
             foreach (CodeSection section in Section.Parser.Sections)
             {
                 List<string> current = section.Lines;
-                List<string> newLines = new();
+                List<string> newLines = [];
                 foreach (string line in current)
                 {
                     bool lineAdded = false;
                     MatchCollection matches = VariableRegex().Matches(line);
-                    foreach (object? m in matches)
+                    foreach (Match m in matches)
                     {
                         CodeVariable variable = new(Section, m.ToString(), Line, Column);
-                        if (variable.IsSimilar(this))
-                        {
-                            string newLine = line.Replace(variable.ToString(), $"{{{newName}}}");
-                            newLines.Add(newLine);
-                            lineAdded = true;
-                        }
+                        if (!variable.IsSimilar(this)) continue;
+
+                        string newLine = line.Replace(variable.ToString(), $"{{{newName}}}");
+                        newLines.Add(newLine);
+                        lineAdded = true;
                     }
 
                     if (!lineAdded)
@@ -154,7 +152,7 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
     public async Task Rename()
     {
         SymbolRefactorWindow renameWindow = new(this);
-        await renameWindow.ShowDialog(SkEditorAPI.Windows.GetMainWindow());
+        await renameWindow.ShowDialogOnMainWindow();
         Section.Parser.Parse();
     }
 

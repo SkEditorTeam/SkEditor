@@ -17,7 +17,7 @@ public class AddonItem : MarketplaceItem
 {
     [JsonIgnore] private const string FolderName = "Addons";
     [JsonProperty("requiresRestart")] public bool ItemRequiresRestart { get; set; }
-    [JsonProperty("file")] public string ItemFileUrl { get; set; }
+    [JsonProperty("file")] public required string ItemFileUrl { get; set; }
 
     public override async Task Install()
     {

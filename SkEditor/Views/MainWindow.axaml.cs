@@ -41,7 +41,7 @@ public partial class MainWindow : AppWindow
         Instance = this;
     }
 
-    public static MainWindow Instance { get; private set; }
+    public static MainWindow Instance { get; private set; } = null!;
 
     public bool AlreadyClosed { get; set; }
 
@@ -86,7 +86,7 @@ public partial class MainWindow : AppWindow
         SideBar.ReloadPanels();
     }
 
-    private async void OnClosing(object sender, WindowClosingEventArgs e)
+    private async void OnClosing(object? sender, WindowClosingEventArgs e)
     {
         try
         {
@@ -152,7 +152,7 @@ public partial class MainWindow : AppWindow
         return result != ContentDialogResult.Primary;
     }
 
-    private async void OnWindowLoaded(object sender, RoutedEventArgs e)
+    private async void OnWindowLoaded(object? sender, RoutedEventArgs e)
     {
         try
         {

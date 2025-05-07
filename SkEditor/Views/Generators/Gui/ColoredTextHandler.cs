@@ -39,7 +39,7 @@ public static class ColoredTextHandler
         { "r", Color.FromRgb(255, 255, 255) }
     };
 
-    private static FontFamily _cachedFont = null!;
+    private static FontFamily? _cachedFont;
 
     public static void SetupBox(TextBox textBox)
     {
@@ -49,6 +49,8 @@ public static class ColoredTextHandler
         textBox.TextChanged += (_, _) =>
         {
             string? text = textBox.Text;
+            if (string.IsNullOrEmpty(text)) return;
+            
             List<FormattedText> formattedTexts = ParseFormattedText(text);
             StackPanel panel = new() { Orientation = Orientation.Horizontal };
             foreach (TextBlock block in formattedTexts.Select(formattedText => new TextBlock
@@ -58,7 +60,7 @@ public static class ColoredTextHandler
                          FontWeight = formattedText.FontWeight,
                          FontStyle = formattedText.FontStyle,
                          TextDecorations = new TextDecorationCollection(formattedText.TextDecorations),
-                         FontFamily = GetMinecraftFont()
+                         FontFamily = GetMinecraftFont() ?? new FontFamily("Arial"),
                      }))
             {
                 panel.Children.Add(block);
@@ -147,15 +149,16 @@ public static class ColoredTextHandler
         return formattedTexts;
     }
 
-    private static FontFamily GetMinecraftFont()
+    private static FontFamily? GetMinecraftFont()
     {
         if (_cachedFont != null!)
         {
             return _cachedFont;
         }
 
-        Application.Current.TryGetResource("MinecraftFont", ThemeVariant.Default, out object? font);
-        _cachedFont = (FontFamily)font;
+        object? font = null;
+        Application.Current?.TryGetResource("MinecraftFont", ThemeVariant.Default, out font);
+        _cachedFont = (FontFamily?)font;
         return _cachedFont;
     }
 

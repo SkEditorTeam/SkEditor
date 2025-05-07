@@ -81,7 +81,9 @@ public static class NamedPipeServer
 
     private static void BringMainWindowToFront()
     {
-        MainWindow mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow == null) return;
+        
         if (mainWindow.WindowState == WindowState.Minimized)
         {
             mainWindow.WindowState = WindowState.Normal;

@@ -14,7 +14,7 @@ public partial class ExtendedItemSelector : AppWindow
 {
     private readonly Item _item;
 
-    private MenuFlyout contextFlyout;
+    private MenuFlyout? _contextFlyout;
 
     public ExtendedItemSelector(Item item)
     {
@@ -41,7 +41,13 @@ public partial class ExtendedItemSelector : AppWindow
                 .OfType<LoreLineEditor>()
                 .Where(x => !string.IsNullOrWhiteSpace(x.LineTextBox.Text))
                 .ToList()
-                .ForEach(x => _item.Lore.Add(x.LineTextBox.Text));
+                .ForEach(x =>
+                {
+                    if (x.LineTextBox.Text != null)
+                    {
+                        _item.Lore.Add(x.LineTextBox.Text);
+                    }
+                });
 
             if (!string.IsNullOrWhiteSpace(DisplayNameTextBox.Text))
             {
@@ -77,11 +83,8 @@ public partial class ExtendedItemSelector : AppWindow
 
     private void CheckForEditing()
     {
-        Item editedItem = ItemContextMenu.EditedItem;
-        if (editedItem == null)
-        {
-            return;
-        }
+        Item? editedItem = ItemContextMenu.EditedItem;
+        if (editedItem == null) return;
 
         if (editedItem.HaveCustomName)
         {
@@ -93,22 +96,24 @@ public partial class ExtendedItemSelector : AppWindow
             CustomModelDataTextBox.Text = editedItem.CustomModelData.ToString();
         }
 
-        if (editedItem.Lore.Count > 0)
-        {
-            FirstLoreLine.LineTextBox.Text = editedItem.Lore[0];
+        if (editedItem.Lore.Count <= 0) return;
 
-            for (int i = 1; i < editedItem.Lore.Count; i++)
+        FirstLoreLine.LineTextBox.Text = editedItem.Lore[0];
+
+        for (int i = 1; i < editedItem.Lore.Count; i++)
+        {
+            LoreLineEditor lineEditor = new()
             {
-                LoreLineEditor lineEditor = new()
+                IsDeleteButtonVisible = true,
+                LineTextBox =
                 {
-                    IsDeleteButtonVisible = true
-                };
-                lineEditor.LineTextBox.ContextFlyout = contextFlyout;
-                lineEditor.DeleteButton.Command =
-                    new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
-                lineEditor.LineTextBox.Text = editedItem.Lore[i];
-                LoreLineStackPanel.Children.Add(lineEditor);
-            }
+                    ContextFlyout = _contextFlyout
+                }
+            };
+            lineEditor.DeleteButton.Command =
+                new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
+            lineEditor.LineTextBox.Text = editedItem.Lore[i];
+            LoreLineStackPanel.Children.Add(lineEditor);
         }
     }
 
@@ -122,9 +127,12 @@ public partial class ExtendedItemSelector : AppWindow
             {
                 LoreLineEditor lineEditor = new()
                 {
-                    IsDeleteButtonVisible = true
+                    IsDeleteButtonVisible = true,
+                    LineTextBox =
+                    {
+                        ContextFlyout = _contextFlyout
+                    }
                 };
-                lineEditor.LineTextBox.ContextFlyout = contextFlyout;
                 lineEditor.DeleteButton.Command =
                     new RelayCommand(() => LoreLineStackPanel.Children.Remove(lineEditor));
                 LoreLineStackPanel.Children.Add(lineEditor);
@@ -136,7 +144,7 @@ public partial class ExtendedItemSelector : AppWindow
             Items = { addMenuItem }
         };
 
-        contextFlyout = menuFlyout;
+        _contextFlyout = menuFlyout;
 
         FirstLoreLine.LineTextBox.ContextFlyout = menuFlyout;
         FirstLoreLine.LineTextBox.Watermark = Translation.Get("GuiGeneratorLoreLineWatermark");

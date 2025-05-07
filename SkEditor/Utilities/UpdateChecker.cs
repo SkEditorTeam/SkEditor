@@ -13,6 +13,7 @@ using FluentAvalonia.UI.Controls;
 using Octokit;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Views;
 using Application = Avalonia.Application;
 using FileMode = System.IO.FileMode;
 
@@ -21,9 +22,9 @@ namespace SkEditor.Utilities;
 public static class UpdateChecker
 {
     private const long RepoId = 679628726;
-    private static readonly int Major = Assembly.GetExecutingAssembly().GetName().Version.Major;
-    private static readonly int Minor = Assembly.GetExecutingAssembly().GetName().Version.Minor;
-    private static readonly int Build = Assembly.GetExecutingAssembly().GetName().Version.Build;
+    public static readonly int Major = Assembly.GetExecutingAssembly().GetName().Version?.Major ?? 0;
+    public static readonly int Minor = Assembly.GetExecutingAssembly().GetName().Version?.Minor ?? 0;
+    public static readonly int Build = Assembly.GetExecutingAssembly().GetName().Version?.Build ?? 0;
     private static readonly GitHubClient GitHubClient = new(new ProductHeaderValue("SkEditor"));
 
     private static readonly string TempInstallerFile = Path.Combine(Path.GetTempPath(), "SkEditorInstaller.msi");
@@ -33,7 +34,11 @@ public static class UpdateChecker
         try
         {
             IReadOnlyList<Release> releases = await GitHubClient.Repository.Release.GetAll(RepoId);
-            Release release = releases.FirstOrDefault(r => !r.Prerelease);
+            Release? release = releases.FirstOrDefault(r => !r.Prerelease);
+            if (release is null)
+            {
+                return;
+            }
 
             (int, int, int) version = GetVersion(release.TagName);
             if (!IsNewerVersion(version))
@@ -59,7 +64,7 @@ public static class UpdateChecker
                 await SkEditorAPI.Windows.ShowError("Automatic updates are only available on Windows for now.");
             }
 
-            ReleaseAsset msi = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorInstaller.msi"));
+            ReleaseAsset? msi = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorInstaller.msi"));
             if (msi is null)
             {
                 await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
@@ -76,7 +81,10 @@ public static class UpdateChecker
 
     private static async Task DownloadMsi(string url)
     {
-        TaskDialog td = CreateTaskDialog(SkEditorAPI.Windows.GetMainWindow(), url);
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow is null) return;
+        
+        TaskDialog td = CreateTaskDialog(mainWindow, url);
         object? result = await td.ShowAsync();
 
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
@@ -124,7 +132,7 @@ public static class UpdateChecker
                 UseShellExecute = true
             });
 
-            (Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime).Shutdown();
+            (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
         }
         catch (Exception e)
         {

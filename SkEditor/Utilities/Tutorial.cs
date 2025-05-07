@@ -18,8 +18,9 @@ public static class Tutorial
         SkEditorAPI.Core.GetAppConfig().FirstTime = false;
         SkEditorAPI.Core.GetAppConfig().Save();
 
-        Application.Current.TryGetResource("SkEditorIcon", ThemeVariant.Default, out object icon);
-        PathIconSource iconSource = icon as PathIconSource;
+        object? icon = null;
+        Application.Current?.TryGetResource("SkEditorIcon", ThemeVariant.Default, out icon);
+        PathIconSource? iconSource = icon as PathIconSource;
 
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Welcome to the SkEditor!",
             "Do you want to read a quick intro?\nIf you're new to the app, it's a good idea ;)",
@@ -43,7 +44,7 @@ public static class Tutorial
         }
     }
 
-    private static async Task ShowTutorialMessage(string title, string message, PathIconSource iconSource)
+    private static async Task ShowTutorialMessage(string title, string message, PathIconSource? iconSource)
     {
         await SkEditorAPI.Windows.ShowDialog(title, message, iconSource, translate: false);
     }

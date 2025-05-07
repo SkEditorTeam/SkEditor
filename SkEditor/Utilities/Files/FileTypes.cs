@@ -35,14 +35,17 @@ public static class FileTypes
 
     private static void RegisterAssociation(FileAssociation association)
     {
+        if (association.SupportedExtensions == null) return;
+
         foreach (string extension in association.SupportedExtensions)
         {
-            if (!RegisteredFileTypes.ContainsKey(extension))
+            if (!RegisteredFileTypes.TryGetValue(extension, out List<FileAssociation>? value))
             {
-                RegisteredFileTypes.Add(extension, new List<FileAssociation>());
+                value = [];
+                RegisteredFileTypes.Add(extension, value);
             }
 
-            RegisteredFileTypes[extension].Add(association);
+            value.Add(association);
         }
     }
 
@@ -87,7 +90,7 @@ public static class FileTypes
 
     public abstract class FileAssociation
     {
-        public List<string> SupportedExtensions { get; protected set; }
+        public List<string>? SupportedExtensions { get; protected set; }
         public bool IsFromAddon { get; set; }
 
         public IAddon? Addon { get; set; } = null;

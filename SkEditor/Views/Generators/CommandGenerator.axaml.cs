@@ -39,7 +39,12 @@ public partial class CommandGenerator : AppWindow
 
         StringBuilder code = new();
 
-        TextEditor editor = SkEditorAPI.Files.GetCurrentOpenedFile().Editor;
+        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        if (editor == null)
+        {
+            SkEditorAPI.Windows.ShowError("The editor is not available.");
+            return;
+        }
         int offset = editor.CaretOffset;
         DocumentLine line = editor.Document.GetLineByOffset(offset);
 
@@ -56,11 +61,11 @@ public partial class CommandGenerator : AppWindow
         AppendIfExists(ref code, "\n\tusage: {0}", InvalidUsageMessageTextBox.Text);
         AppendIfExists(ref code, "\n\texecutable by: {0}",
             ExecutorComboBox.SelectedItem != null
-                ? ((ComboBoxItem)ExecutorComboBox.SelectedItem).Tag.ToString()
+                ? ((ComboBoxItem)ExecutorComboBox.SelectedItem).Tag?.ToString()
                 : string.Empty);
 
         AppendIfExists(ref code, "\n\tcooldown: {0} {1}", CooldownQuantityTextBox.Text,
-            ((ComboBoxItem)CooldownUnitComboBox.SelectedItem).Tag.ToString());
+            ((ComboBoxItem?)CooldownUnitComboBox.SelectedItem)?.Tag?.ToString());
 
         code.Append("\n\ttrigger:\n\t\t");
 
@@ -68,7 +73,7 @@ public partial class CommandGenerator : AppWindow
         Close();
     }
 
-    private static void AppendIfExists(ref StringBuilder code, string template, params string[] values)
+    private static void AppendIfExists(ref StringBuilder code, string template, params string?[] values)
     {
         if (values.Any(string.IsNullOrWhiteSpace))
         {

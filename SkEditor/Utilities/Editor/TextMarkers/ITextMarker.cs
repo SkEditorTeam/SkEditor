@@ -14,7 +14,7 @@ public interface ITextMarker
     Color? ForegroundColor { get; set; }
     TextMarkerTypes MarkerTypes { get; set; }
     Color MarkerColor { get; set; }
-    Func<UserControl> Tooltip { get; set; }
+    Func<UserControl>? Tooltip { get; set; }
     void Delete();
 }
 
@@ -29,7 +29,7 @@ public enum TextMarkerTypes
 public interface ITextMarkerService
 {
     IEnumerable<ITextMarker> TextMarkers { get; }
-    ITextMarker Create(int startOffset, int length);
+    ITextMarker? Create(int startOffset, int length);
 
     void Remove(ITextMarker marker);
 

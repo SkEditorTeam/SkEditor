@@ -22,11 +22,11 @@ public partial class AssociationSelectionWindow : AppWindow
         {
             AssociationItemView item = new()
             {
-                Source = association.IsFromAddon ? association.Addon.Name : "SkEditor",
+                Source = association.IsFromAddon ? association.Addon?.Name : "SkEditor",
                 Description = association.IsFromAddon
-                    ? Translation.Get("FileAssociationSelectionWindowAddonItem", association.Addon.Name)
+                    ? Translation.Get("FileAssociationSelectionWindowAddonItem", association.Addon?.Name)
                     : Translation.Get("FileAssociationSelectionWindowOfficialItem"),
-                Tag = association.IsFromAddon ? association.Addon.Name : "SkEditor"
+                Tag = association.IsFromAddon ? association.Addon?.Name : "SkEditor"
             };
             item.UpdateIcon(association.IsFromAddon ? Symbol.Edit : Symbol.Checkmark);
             Associations.Items.Add(item);
@@ -45,7 +45,7 @@ public partial class AssociationSelectionWindow : AppWindow
             }
 
             SelectedAssociation = fileTypes.Find(association =>
-                association.IsFromAddon && association.Addon.Name == item.Tag.ToString());
+                association.IsFromAddon && association.Addon?.Name == item.Tag?.ToString());
         };
 
         ConfirmButton.Click += (_, _) => Close();

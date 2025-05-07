@@ -15,7 +15,7 @@ public interface IDocProvider
     {
         { DocProvider.SkriptHub, new SkriptHubProvider() },
         { DocProvider.skUnity, new SkUnityProvider() },
-        { DocProvider.SkriptMC, new SkriptMCProvider() },
+        { DocProvider.SkriptMC, new SkriptMcProvider() },
         { DocProvider.Local, new LocalProvider() }
     };
 

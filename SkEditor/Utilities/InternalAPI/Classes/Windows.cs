@@ -15,17 +15,16 @@ namespace SkEditor.API;
 
 public class Windows : IWindows
 {
-    public MainWindow GetMainWindow()
+    public MainWindow? GetMainWindow()
     {
-        return (MainWindow)(Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime)
-            .MainWindow;
+        return (MainWindow?)(Application.Current?.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime)?.MainWindow;
     }
 
-    public Window GetCurrentWindow()
+    public Window? GetCurrentWindow()
     {
-        IReadOnlyList<Window> windows =
-            (Application.Current.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime).Windows;
-        return windows.Count > 0 ? windows[^1] : GetMainWindow();
+        IReadOnlyList<Window>? windows =
+            (Application.Current?.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime)?.Windows;
+        return windows is { Count: > 0 } ? windows[^1] : GetMainWindow();
     }
 
     public async Task<ContentDialogResult> ShowDialog(string title,
@@ -34,18 +33,8 @@ public class Windows : IWindows
         string? cancelButtonText = null,
         string primaryButtonText = "Okay", bool translate = true)
     {
-        static string? TryGetTranslation(string? input)
-        {
-            if (input == null)
-            {
-                return null;
-            }
-
-            string translation = Translation.Get(input);
-            return translation == input ? input : translation;
-        }
-
-        Application.Current.TryGetResource("MessageBoxBackground", out object? background);
+        object? background = null;
+        Application.Current?.TryGetResource("MessageBoxBackground", out background);
         ContentDialog dialog = new()
         {
             Title = translate ? TryGetTranslation(title) : title,
@@ -61,7 +50,8 @@ public class Windows : IWindows
             _ => icon
         };
 
-        if (icon is not IconSource source)
+        IconSource? source = null;
+        if (icon is not IconSource)
         {
             if (icon is null)
             {
@@ -73,13 +63,14 @@ public class Windows : IWindows
             }
         }
 
-        if (source is FontIconSource fontIconSource)
+        switch (source)
         {
-            fontIconSource.FontSize = 40;
-        }
-        else if (source is SymbolIconSource symbolIconSource)
-        {
-            symbolIconSource.FontSize = 40;
+            case FontIconSource fontIconSource:
+                fontIconSource.FontSize = 40;
+                break;
+            case SymbolIconSource symbolIconSource:
+                symbolIconSource.FontSize = 40;
+                break;
         }
 
         IconSourceElement iconElement = new()
@@ -115,6 +106,17 @@ public class Windows : IWindows
         dialog.Content = grid;
 
         return await dialog.ShowAsync(GetCurrentWindow());
+
+        static string? TryGetTranslation(string? input)
+        {
+            if (input == null)
+            {
+                return null;
+            }
+
+            string translation = Translation.Get(input);
+            return translation == input ? input : translation;
+        }
     }
 
     public async Task ShowMessage(string title, string message)
@@ -129,18 +131,22 @@ public class Windows : IWindows
 
     public async Task<string?> AskForFile(FilePickerOpenOptions options)
     {
-        Window topLevel = GetCurrentWindow();
+        Window? topLevel = GetCurrentWindow();
+        if (topLevel is null) return null;
         IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
         return files.Count == 0 ? null : files[0]?.Path.AbsolutePath;
     }
 
     public void ShowWindow(Window window)
     {
-        window.Show(GetCurrentWindow());
+        Window? topLevel = GetCurrentWindow();
+        if (topLevel is null) return;
+        window.Show(topLevel);
     }
 
     public Task ShowWindowAsDialog(Window window)
     {
-        return window.ShowDialog(GetCurrentWindow());
+        Window? topLevel = GetCurrentWindow();
+        return topLevel is null ? Task.CompletedTask : window.ShowDialog(topLevel);
     }
 }

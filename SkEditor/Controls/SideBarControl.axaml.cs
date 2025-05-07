@@ -84,7 +84,7 @@ public partial class SideBarControl : UserControl
         }
 
         double currentWidth = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width.Value;
-        SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId()] = (int)currentWidth;
+        SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[_currentPanel.GetId() ?? throw new NullReferenceException()] = (int)currentWidth;
         mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = _currentPanel.DesiredWidth;
     }
 
@@ -371,7 +371,8 @@ public partial class SideBarControl : UserControl
 
     private static double GetPanelWidth(SidebarPanel panel)
     {
-        return SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(panel.GetId(), panel.DesiredWidth);
+        string? panelId = panel.GetId();
+        return panelId == null ? panel.DesiredWidth : SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(panelId, panel.DesiredWidth);
     }
 
     private static void SetButtonActive(Button button, bool isActive)

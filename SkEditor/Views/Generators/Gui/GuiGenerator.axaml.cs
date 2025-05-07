@@ -21,7 +21,7 @@ namespace SkEditor.Views.Generators.Gui;
 public partial class GuiGenerator : AppWindow
 {
     public readonly string ItemPath = Path.Combine(AppConfig.AppDataFolderPath, "Items");
-    private IRelayCommand<int> _buttonCommand;
+    private IRelayCommand<int>? _buttonCommand;
 
     public GuiGenerator()
     {
@@ -61,9 +61,9 @@ public partial class GuiGenerator : AppWindow
     public Dictionary<int, Item> Items { get; set; } = [];
     public Item? BackgroundItem { get; set; }
     public int CurrentRows { get; set; } = 6;
-    public static GuiGenerator Instance { get; private set; }
+    public static GuiGenerator? Instance { get; private set; }
 
-    public async Task<Item> SelectItem()
+    public async Task<Item?> SelectItem()
     {
         ItemSelector itemSelector = new();
         Item item = await itemSelector.ShowDialog<Item>(this);
@@ -81,21 +81,15 @@ public partial class GuiGenerator : AppWindow
     {
         _buttonCommand = new AsyncRelayCommand<int>(async slotId =>
         {
-            Item item = await SelectItem();
-            if (item == null)
-            {
-                return;
-            }
+            Item? item = await SelectItem();
+            if (item == null) return;
 
             UpdateItem(slotId, item);
         });
         BackgroundItemButton.Command = new AsyncRelayCommand(async () =>
         {
-            Item item = await SelectItem();
-            if (item == null)
-            {
-                return;
-            }
+            Item? item = await SelectItem();
+            if (item == null) return;
 
             BackgroundItem = item;
             BackgroundItemButton.Content = item.DisplayName;
@@ -142,7 +136,8 @@ public partial class GuiGenerator : AppWindow
 
     public void UpdateItem(int slotId, Item item)
     {
-        Button button = Buttons.FirstOrDefault(x => (int?)x.Tag == slotId);
+        Button? button = Buttons.FirstOrDefault(x => (int?)x.Tag == slotId);
+        if (button == null) return;
 
         string itemImagePath = Path.Combine(ItemPath, item.Name + ".png");
 

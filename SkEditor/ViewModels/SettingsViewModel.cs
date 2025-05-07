@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using SkEditor.API;
+﻿using SkEditor.API;
 using SkEditor.Utilities;
 
 namespace SkEditor.ViewModels;
@@ -20,7 +19,7 @@ public class SettingsViewModel
     public static bool UseSkriptGui { get; set; } = SkEditorAPI.Core.GetAppConfig().UseSkriptGui;
 
     public static string Version { get; set; } = Translation.Get("SettingsAboutVersionDescription").Replace("{0}",
-        $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}");
+        $"{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}");
 
     public static string CurrentFont { get; set; } = Translation.Get("SettingsPersonalizationFontDescription")
         .Replace("{0}", SkEditorAPI.Core.GetAppConfig().Font);

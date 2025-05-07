@@ -28,7 +28,7 @@ public partial class FontSelectionWindow : AppWindow
     {
         SelectButton.Command = new RelayCommand(() =>
         {
-            string fontName = _selectedFont?.Name;
+            string? fontName = _selectedFont?.Name;
             Close(fontName);
         });
 
@@ -36,7 +36,7 @@ public partial class FontSelectionWindow : AppWindow
         {
             FontListBox.SelectedItem = FontListBox.Items
                 .Cast<FontInfo>()
-                .FirstOrDefault(x => x.Name.StartsWith(SearchBox.Text, StringComparison.CurrentCultureIgnoreCase));
+                .FirstOrDefault(x => SearchBox.Text != null && x.Name != null && x.Name.StartsWith(SearchBox.Text, StringComparison.CurrentCultureIgnoreCase));
         };
 
         FontListBox.SelectionChanged += (_, _) => { _selectedFont = FontListBox.SelectedItem as FontInfo; };
@@ -56,8 +56,9 @@ public partial class FontSelectionWindow : AppWindow
             .Select(fontInfo => new FontInfo { Name = fontInfo.Name, Font = fontInfo })
             .ToList();
 
-        Application.Current.TryGetResource("JetBrainsFont", ThemeVariant.Default, out object font);
-        fonts.Insert(0, new FontInfo { Name = "Default", Font = (FontFamily)font });
+        object? font = null;
+        Application.Current?.TryGetResource("JetBrainsFont", ThemeVariant.Default, out font);
+        fonts.Insert(0, new FontInfo { Name = "Default", Font = (FontFamily?)font });
 
         FontListBox.ItemsSource = fonts;
 
@@ -68,6 +69,6 @@ public partial class FontSelectionWindow : AppWindow
 
 public class FontInfo
 {
-    public string Name { get; set; }
-    public FontFamily Font { get; set; }
+    public string? Name { get; set; }
+    public FontFamily? Font { get; set; }
 }

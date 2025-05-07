@@ -33,7 +33,7 @@ public partial class ColorSelectionWindow : AppWindow
 
         ResultTextBox.KeyDown += (_, e) =>
         {
-            if (e.Key != Key.Enter || ResultTextBox.Text.Length != 7)
+            if (e.Key != Key.Enter || ResultTextBox.Text?.Length != 7)
             {
                 return;
             }
@@ -47,6 +47,10 @@ public partial class ColorSelectionWindow : AppWindow
             ColorPicker.Color = color;
         };
 
-        CopyButton.Command = new AsyncRelayCommand(() => Clipboard.SetTextAsync(ResultTextBox.Text));
+        CopyButton.Command = new AsyncRelayCommand(async () =>
+        {
+            if (Clipboard is null) return;
+            await Clipboard.SetTextAsync(ResultTextBox.Text);
+        });
     }
 }

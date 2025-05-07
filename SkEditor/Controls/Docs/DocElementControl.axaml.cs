@@ -249,7 +249,7 @@ public partial class DocElementControl : UserControl
 
             SourceBadge.Tapped += (_, _) =>
             {
-                string uri = skUnityProvider.GetAddonLink(entry.Addon);
+                string uri = SkUnityProvider.GetAddonLink(entry.Addon);
                 Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
             };
         }

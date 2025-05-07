@@ -46,7 +46,7 @@ public partial class RenameElementWindow : AppWindow
             return;
         }
 
-        Element.RenameElement(NameBox.Text);
+        Element.RenameElement(input);
         Close();
     }
 

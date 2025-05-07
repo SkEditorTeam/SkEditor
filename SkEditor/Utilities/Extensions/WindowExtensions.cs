@@ -20,4 +20,11 @@ public static class WindowExtensions
         if (mainWindow == null) return;
         window.Show(mainWindow);
     }
+    
+    public static async Task<T> ShowDialogOnMainWindow<T>(this AppWindow window)
+    {
+        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        if (mainWindow == null) return default!;
+        return await window.ShowDialog<T>(mainWindow);
+    }
 }

@@ -88,8 +88,9 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
                             }
                         }
 
-                        double fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
-                        float strokeThickness = (float)Math.Max(fontSize / 15, 1);
+                        double? fontSize = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.FontSize;
+                        if (fontSize == null) return;
+                        float strokeThickness = (float)Math.Max(fontSize.Value / 15, 1);
 
                         Pen usedPen = new(usedBrush, strokeThickness);
                         drawingContext.DrawGeometry(Brushes.Transparent, usedPen, geometry);
@@ -105,7 +106,7 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
         }
     }
 
-    public ITextMarker Create(int startOffset, int length)
+    public ITextMarker? Create(int startOffset, int length)
     {
         if (_markers == null)
         {
@@ -139,12 +140,7 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
     public void Remove(ITextMarker marker)
     {
-        if (marker == null)
-        {
-            return;
-        }
-
-        TextMarker? m = marker as TextMarker;
+        if (marker is not TextMarker m || m.IsDeleted) return;
 
         _markers.Remove(m);
         Redraw(m);
@@ -153,10 +149,10 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
     public void Redraw(ISegment segment)
     {
         RedrawRequested?.Invoke(this, EventArgs.Empty);
-        SkEditorAPI.Files.GetCurrentOpenedFile().Editor.TextArea.TextView.Redraw(segment);
+        SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea.TextView.Redraw(segment);
     }
 
-    public event EventHandler RedrawRequested;
+    public event EventHandler? RedrawRequested;
 
     protected override void ColorizeLine(DocumentLine line)
     {
@@ -164,9 +160,10 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
     private static IEnumerable<Point> CreatePoints(Point start, Point end, double offset, int count)
     {
-        double fontSize = SkEditorAPI.Files.GetCurrentOpenedFile().Editor.FontSize;
-        double multiplier = fontSize * 0.075;
-
+        double? fontSize = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.FontSize;
+        if (fontSize == null) yield break;
+        
+        double multiplier = fontSize.Value * 0.075;
 
         for (int i = 0; i < count; i++)
         {
@@ -202,7 +199,7 @@ public sealed class TextMarker : TextSegment, ITextMarker
     public TextMarkerTypes MarkerTypes { get; set; }
     public Color MarkerColor { get; set; }
 
-    public Func<UserControl> Tooltip { get; set; }
+    public Func<UserControl>? Tooltip { get; set; }
 
     public void Delete()
     {

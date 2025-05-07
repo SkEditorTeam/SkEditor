@@ -8,7 +8,7 @@ namespace SkEditor.Utilities.Files;
 
 public class Icon
 {
-    public static Dictionary<string, string> IconDictionary = new()
+    public static readonly Dictionary<string, string?> IconDictionary = new()
     {
         { ".sk", "SkriptIcon" }
     };
@@ -20,30 +20,32 @@ public class Icon
             return;
         }
 
-        IconSource iconSource = null;
+        IconSource? iconSource = null;
 
         string extension = Path.GetExtension(openedFile.Path);
-        string iconName = IconDictionary.GetValueOrDefault(extension);
+        string? iconName = IconDictionary.GetValueOrDefault(extension);
 
         if (iconName is not null)
         {
-            Application.Current.TryGetResource(iconName, ThemeVariant.Default, out object icon);
+            object? icon = null;
+            Application.Current?.TryGetResource(iconName, ThemeVariant.Default, out icon);
             iconSource = icon as PathIconSource;
         }
 
-        openedFile.TabViewItem.IconSource = iconSource;
+        if (openedFile.TabViewItem != null)
+        {
+            openedFile.TabViewItem.IconSource = iconSource;
+        }
     }
 
     public static IconSource? GetIcon(string extension)
     {
-        string iconName = IconDictionary.GetValueOrDefault(extension);
+        string? iconName = IconDictionary.GetValueOrDefault(extension);
 
-        if (iconName is not null)
-        {
-            Application.Current.TryGetResource(iconName, ThemeVariant.Default, out object icon);
-            return icon as PathIconSource;
-        }
+        if (iconName is null) return null;
 
-        return null;
+        object? icon = null;
+        Application.Current?.TryGetResource(iconName, ThemeVariant.Default, out icon);
+        return icon as PathIconSource;
     }
 }

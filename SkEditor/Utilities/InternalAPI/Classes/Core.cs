@@ -24,14 +24,23 @@ public class Core : ICore
     public Version GetAppVersion()
     {
         Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+        if (version == null)
+        {
+            throw new InvalidOperationException("Version is null");
+        }
         return new Version(version.Major, version.Minor, version.Build);
     }
 
     public string GetInformationalVersion()
     {
         Assembly assembly = Assembly.GetExecutingAssembly();
-        string informationVersion =
-            assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        string? informationVersion =
+            assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        
+        if (informationVersion == null)
+        {
+            throw new InvalidOperationException("Informational version is null");
+        }
 
         return informationVersion;
     }
@@ -48,7 +57,8 @@ public class Core : ICore
 
     public object? GetApplicationResource(string key)
     {
-        Application.Current.TryGetResource(key, ThemeVariant.Dark, out object? resource);
+        object? resource = null;
+        Application.Current?.TryGetResource(key, ThemeVariant.Dark, out resource);
         return resource;
     }
 
@@ -82,7 +92,7 @@ public class Core : ICore
     {
         foreach (OpenedFile file in SkEditorAPI.Files.GetOpenedEditors())
         {
-            string path = file.Path;
+            string? path = file.Path;
             if (string.IsNullOrEmpty(path))
             {
                 string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
@@ -90,7 +100,7 @@ public class Core : ICore
                 path = Path.Combine(tempPath, file.Header);
             }
 
-            string textToWrite = file.Editor?.Text;
+            string? textToWrite = file.Editor?.Text;
             if (string.IsNullOrEmpty(textToWrite))
             {
                 continue;

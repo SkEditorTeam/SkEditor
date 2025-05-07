@@ -32,7 +32,12 @@ public static class ProjectOpener
 
     public static async Task OpenProject(string? path = null)
     {
-        string folder = await ExtractFolderPath(path);
+        string? folder = await ExtractFolderPath(path);
+        if (string.IsNullOrEmpty(folder))
+        {
+            NoFolderMessage.IsVisible = true;
+            return;
+        }
 
         NoFolderMessage.IsVisible = false;
         ProjectRootFolder = new Folder(folder) { IsExpanded = true };
@@ -64,13 +69,18 @@ public static class ProjectOpener
         FileTreeView.Tapped += _tappedHandler;
     }
 
-    private static async Task<string> ExtractFolderPath(string? path)
+    private static async Task<string?> ExtractFolderPath(string? path)
     {
         string folder;
 
         if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
         {
-            TopLevel topLevel = TopLevel.GetTopLevel(SkEditorAPI.Windows.GetMainWindow());
+            TopLevel? topLevel = TopLevel.GetTopLevel(SkEditorAPI.Windows.GetMainWindow());
+            if (topLevel == null)
+            {
+                NoFolderMessage.IsVisible = ProjectRootFolder == null;
+                return string.Empty;
+            }
 
             IReadOnlyList<IStorageFolder> folders =
                 await topLevel.StorageProvider.OpenFolderPickerAsync(
@@ -95,8 +105,8 @@ public static class ProjectOpener
 
                     if (firstSlash >= 0)
                     {
-                        string server = serverPart.Substring(0, firstSlash);
-                        string sharePath = serverPart.Substring(firstSlash);
+                        string server = serverPart[..firstSlash];
+                        string sharePath = serverPart[firstSlash..];
 
                         folder = $@"\\{server}{sharePath}";
                     }
@@ -126,7 +136,12 @@ public static class ProjectOpener
             {
                 Log.Error(ex, "Error processing folder path");
 
-                string rawString = folders[0].ToString();
+                string? rawString = folders[0].ToString();
+                if (string.IsNullOrEmpty(rawString))
+                {
+                    NoFolderMessage.IsVisible = ProjectRootFolder == null;
+                    return null;
+                }
 
                 int pathIndex = rawString.IndexOf("Path=", StringComparison.Ordinal);
 

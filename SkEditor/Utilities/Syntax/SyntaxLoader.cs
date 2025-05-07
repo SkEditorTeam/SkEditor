@@ -59,6 +59,11 @@ public class SyntaxLoader
 
     private static void RegisterSyntax(FileSyntax syntax)
     {
+        if (syntax.Config == null)
+        {
+            return;
+        }
+
         FileSyntaxes.Add(syntax);
         foreach (string extension in syntax.Config.Extensions)
         {
@@ -76,22 +81,30 @@ public class SyntaxLoader
     public static void CheckConfiguredFileSyntaxes()
     {
         FileSyntaxes
-            .Where(s => !SkEditorAPI.Core.GetAppConfig().FileSyntaxes.ContainsKey(s.Config.LanguageName))
+            .Where(s => s.Config != null && !string.IsNullOrEmpty(s.Config.LanguageName))
             .ToList()
-            .ForEach(s => SkEditorAPI.Core.GetAppConfig().FileSyntaxes.Add(s.Config.LanguageName, s.Config.FullIdName));
+            .ForEach(s => SkEditorAPI.Core.GetAppConfig().FileSyntaxes.Add(s.Config!.LanguageName, s.Config.FullIdName));
     }
 
     public static async Task<FileSyntax> LoadSyntax(string folder)
     {
         FileSyntax fileSyntax = await FileSyntax.LoadSyntax(folder);
-        RegisterSyntax(fileSyntax);
+        if (fileSyntax.Config != null)
+        {
+            RegisterSyntax(fileSyntax);
+        }
         return fileSyntax;
     }
 
     public static async Task<bool> UnloadSyntax(string folder)
     {
         FileSyntax fileSyntax = await FileSyntax.LoadSyntax(folder);
-        FileSyntaxes.RemoveAll(x => x.Config.FullIdName.Equals(fileSyntax.Config.FullIdName));
+        if (fileSyntax.Config == null)
+        {
+            return false;
+        }
+
+        FileSyntaxes.RemoveAll(x => x.Config != null && x.Config.FullIdName.Equals(fileSyntax.Config.FullIdName));
         foreach (string extension in fileSyntax.Config.Extensions)
         {
             if (SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? value))
@@ -107,6 +120,11 @@ public class SyntaxLoader
 
     public static async Task SelectSyntax(FileSyntax syntax, bool refresh = true)
     {
+        if (syntax.Config == null)
+        {
+            return;
+        }
+
         SkEditorAPI.Core.GetAppConfig().FileSyntaxes[syntax.Config.LanguageName] = syntax.Config.FullIdName;
         if (refresh)
         {
@@ -133,20 +151,20 @@ public class SyntaxLoader
         }
 
         string? configuredSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(language);
-        return FileSyntaxes.FirstOrDefault(x => configuredSyntax == null
+        return FileSyntaxes.FirstOrDefault(x => x?.Config != null && (configuredSyntax == null
             ? x.Config.LanguageName == language
-            : x.Config.FullIdName == configuredSyntax, FileSyntaxes.FirstOrDefault());
+            : x.Config.FullIdName == configuredSyntax), FileSyntaxes.FirstOrDefault());
     }
 
     public static async Task<FileSyntax?> GetDefaultSyntax()
     {
-        if (FileSyntaxes.Count == 0 && !await SetupDefaultSyntax())
+        if (FileSyntaxes.Count != 0 || await SetupDefaultSyntax())
         {
-            _enableChecking = false;
-            return null;
+            return GetConfiguredSyntaxForLanguage("Skript");
         }
 
-        return GetConfiguredSyntaxForLanguage("Skript");
+        _enableChecking = false;
+        return null;
     }
 
     public static async Task<bool> SetupDefaultSyntax()
@@ -168,7 +186,11 @@ public class SyntaxLoader
             string json = JsonConvert.SerializeObject(config, Formatting.Indented);
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "config.json"), json);
 
-            FileSyntaxes.Add(await FileSyntax.LoadSyntax(defaultSyntaxPath));
+            FileSyntax syntax = await FileSyntax.LoadSyntax(defaultSyntaxPath);
+            if (syntax.Config != null)
+            {
+                FileSyntaxes.Add(syntax);
+            }
 
             return true;
         }
@@ -191,7 +213,7 @@ public class SyntaxLoader
 
         FileSyntax? defaultSyntax = await GetDefaultSyntax();
 
-        OpenedFile file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
         if (file?.Editor is null)
         {
             return;
@@ -202,7 +224,7 @@ public class SyntaxLoader
             extension = Path.GetExtension(file.Path);
             if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
             {
-                if (defaultSyntax == null)
+                if (defaultSyntax == null || defaultSyntax.Highlighting == null)
                 {
                     return;
                 }
@@ -214,7 +236,7 @@ public class SyntaxLoader
 
         if (!SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? fileSyntax))
         {
-            if (defaultSyntax == null)
+            if (defaultSyntax == null || defaultSyntax.Highlighting == null)
             {
                 return;
             }
@@ -223,9 +245,10 @@ public class SyntaxLoader
             return;
         }
 
-        FileSyntax? syntax = fileSyntax.FirstOrDefault(x =>
+        FileSyntax? syntax = fileSyntax.FirstOrDefault(x => x.Config != null &&
             x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
             && x.Config.Extensions.Contains(extension));
+        
         if (syntax == null && fileSyntax.Count > 0)
         {
             syntax = fileSyntax[0];
@@ -233,7 +256,7 @@ public class SyntaxLoader
 
         if (syntax == null)
         {
-            if (defaultSyntax == null)
+            if (defaultSyntax == null || defaultSyntax.Highlighting == null)
             {
                 return;
             }
@@ -243,7 +266,10 @@ public class SyntaxLoader
         }
 
         syntax = await FileSyntax.LoadSyntax(syntax.FolderName);
-        file.Editor.SyntaxHighlighting = syntax.Highlighting;
+        if (syntax.Highlighting != null)
+        {
+            file.Editor.SyntaxHighlighting = syntax.Highlighting;
+        }
     }
 
     public static void RefreshAllOpenedEditors()
@@ -252,22 +278,28 @@ public class SyntaxLoader
 
         foreach (OpenedFile file in openedFiles)
         {
-            string ext = Path.GetExtension(file.Path?.TrimEnd('*').ToLower() ?? "");
+            if (file.Editor == null || file.Path == null)
+            {
+                continue;
+            }
+
+            string ext = Path.GetExtension(file.Path.TrimEnd('*').ToLower());
             if (string.IsNullOrWhiteSpace(ext) || !SortedFileSyntaxes.ContainsKey(ext))
             {
                 continue;
             }
 
-            FileSyntax? syntax = SortedFileSyntaxes[ext].FirstOrDefault(x =>
+            FileSyntax? syntax = SortedFileSyntaxes[ext].FirstOrDefault(x => x.Config != null &&
                 x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes
                     .GetValueOrDefault(x.Config.LanguageName)
                 && x.Config.Extensions.Contains(ext));
+                
             if (syntax == null && SortedFileSyntaxes[ext].Count > 0)
             {
                 syntax = SortedFileSyntaxes[ext][0];
             }
 
-            if (syntax == null)
+            if (syntax?.Highlighting == null)
             {
                 continue;
             }
@@ -276,9 +308,9 @@ public class SyntaxLoader
         }
     }
 
-    public static IHighlightingDefinition GetCurrentSkriptHighlighting()
+    public static IHighlightingDefinition? GetCurrentSkriptHighlighting()
     {
         FileSyntax? syntax = GetConfiguredSyntaxForLanguage("Skript");
-        return syntax.Highlighting;
+        return syntax?.Highlighting;
     }
 }

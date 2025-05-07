@@ -25,7 +25,7 @@ public partial class CodeSection
         Function
     }
 
-    public LineColorizer Colorizer;
+    public readonly LineColorizer Colorizer;
 
     public CodeSection(CodeParser parser, int currentLineIndex, List<string> lines)
     {
@@ -57,9 +57,9 @@ public partial class CodeSection
         }
     }
 
-    public HashSet<CodeVariable> Variables { get; private set; } // Case of any section other than options
-    public HashSet<CodeOptionReference> OptionReferences { get; private set; } // Case of any section other than options
-    public HashSet<CodeOption> Options { get; private set; } // Case of options section
+    public HashSet<CodeVariable> Variables { get; private set; } = []; // Case of any section other than options
+    public HashSet<CodeOptionReference> OptionReferences { get; private set; } = []; // Case of any section other than options
+    public HashSet<CodeOption> Options { get; private set; } = []; // Case of options section
 
     public HashSet<CodeVariable> UniqueVariables => GetUniqueVariables();
     public HashSet<CodeOptionReference> UniqueOptionReferences => GetUniqueOptionReferences();
@@ -76,7 +76,7 @@ public partial class CodeSection
 
     public string Name => GetSectionName();
 
-    public IconSource Icon => Type switch
+    public IconSource? Icon => Type switch
     {
         SectionType.Command => GetIconFromName("MagicWandIcon"),
         SectionType.Event => GetIconFromName("LightingIcon"),
@@ -139,8 +139,7 @@ public partial class CodeSection
                 MatchCollection matches = OptionRegex().Matches(line);
                 foreach (object? m in matches)
                 {
-                    Match? match = m as Match;
-                    if (!match.Success)
+                    if (m is not Match { Success: true } match)
                     {
                         continue;
                     }
@@ -163,8 +162,7 @@ public partial class CodeSection
                 // Parse variables
                 foreach (object? m in variableMatches)
                 {
-                    Match? match = m as Match;
-                    if (!match.Success)
+                    if (m is not Match { Success: true } match)
                     {
                         continue;
                     }
@@ -177,8 +175,7 @@ public partial class CodeSection
                 // Parse option references
                 foreach (object? m in optionReferenceMatches)
                 {
-                    Match? match = m as Match;
-                    if (!match.Success)
+                    if (m is not Match { Success: true } match)
                     {
                         continue;
                     }
@@ -198,8 +195,7 @@ public partial class CodeSection
                     Regex.Matches(Lines[0], CodeFunctionArgument.FunctionArgumentPattern);
                 foreach (object? m in functionArguments)
                 {
-                    Match? match = m as Match;
-                    if (!match.Success)
+                    if (m is not Match { Success: true } match)
                     {
                         continue;
                     }
@@ -264,9 +260,10 @@ public partial class CodeSection
             EndingLineIndex == document.LineCount ? 0 : 1), sectionCode);
     }
 
-    private static IconSource GetIconFromName(string iconName)
+    private static IconSource? GetIconFromName(string iconName)
     {
-        Application.Current.TryGetResource(iconName, ThemeVariant.Default, out object icon);
+        object? icon = null;
+        Application.Current?.TryGetResource(iconName, ThemeVariant.Default, out icon);
         return icon as IconSource;
     }
 
@@ -285,13 +282,16 @@ public partial class CodeSection
 
     private HashSet<CodeVariable> GetUniqueVariables()
     {
-        return new HashSet<CodeVariable>(Variables.Where(v => !Variables.Any(x => x != v && x.IsSimilar(v))));
+        return [..Variables.Where(v => !Variables.Any(x => x != v && x.IsSimilar(v)))];
     }
 
     private HashSet<CodeOptionReference> GetUniqueOptionReferences()
     {
-        return new HashSet<CodeOptionReference>(OptionReferences.Where(o =>
-            !OptionReferences.Any(x => x != o && x.IsSimilar(o))));
+        return
+        [
+            ..OptionReferences.Where(o =>
+                !OptionReferences.Any(x => x != o && x.IsSimilar(o)))
+        ];
     }
 
 

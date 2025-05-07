@@ -40,7 +40,11 @@ public partial class LocalDocsManagerWindow : AppWindow
         };
         DeleteEverythingButton.Command = new AsyncRelayCommand(async () =>
         {
-            await LocalProvider.Get().DeleteAll();
+            var provider = LocalProvider.Get();
+            if (provider != null)
+            {
+                await provider.DeleteAll();
+            }
             await LoadCategories(GroupBy.Provider);
         });
 
@@ -74,7 +78,13 @@ public partial class LocalDocsManagerWindow : AppWindow
 
     public async Task LoadByProviders()
     {
-        List<LocalDocEntry> elements = await LocalProvider.Get().GetElements();
+        LocalProvider? localProvider = LocalProvider.Get();
+        if (localProvider == null)
+        {
+            return;
+        }
+        
+        List<LocalDocEntry> elements = await localProvider.GetElements();
         List<DocProvider> providers = elements.Select(x => x.OriginalProvider).Distinct().ToList();
         List<List<LocalDocEntry>> providerGroups =
             providers.Select(x => elements.FindAll(y => y.OriginalProvider == x)).ToList();
@@ -98,7 +108,12 @@ public partial class LocalDocsManagerWindow : AppWindow
 
     public async Task LoadByTypes()
     {
-        List<LocalDocEntry> elements = await LocalProvider.Get().GetElements();
+        LocalProvider? localProvider = LocalProvider.Get();
+        if (localProvider == null)
+        {
+            return;
+        }
+        List<LocalDocEntry> elements = await localProvider.GetElements();
         List<IDocumentationEntry.Type> types = elements.Select(x => x.DocType).Distinct().ToList();
         List<List<LocalDocEntry>> typeGroups = types.Select(x => elements.FindAll(y => y.DocType == x)).ToList();
 
@@ -121,7 +136,12 @@ public partial class LocalDocsManagerWindow : AppWindow
 
     public async Task LoadByAddons()
     {
-        List<LocalDocEntry> elements = await LocalProvider.Get().GetElements();
+        LocalProvider? localProvider = LocalProvider.Get();
+        if (localProvider == null)
+        {
+            return;
+        }
+        List<LocalDocEntry> elements = await localProvider.GetElements();
         List<string> addons = elements.Select(x => x.Addon).Distinct().ToList();
         List<List<LocalDocEntry>> addonGroups = addons.Select(x => elements.FindAll(y => y.Addon == x)).ToList();
 

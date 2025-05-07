@@ -9,8 +9,8 @@ namespace SkEditor.Views.Projects;
 
 public partial class CreateStorageElementWindow : AppWindow
 {
-    public Folder Folder;
-    public bool IsFile;
+    public Folder Folder { get; }
+    public bool IsFile { get; }
 
     public CreateStorageElementWindow(Folder folder, bool isFile)
     {
@@ -37,6 +37,11 @@ public partial class CreateStorageElementWindow : AppWindow
     private void Create()
     {
         string? input = NameTextBox.Text;
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            ErrorBox.Text = "The name cannot be empty.";
+            return;
+        }
         string? error = Folder.ValidateCreationName(input);
         if (error != null)
         {

@@ -33,6 +33,12 @@ public partial class SymbolRefactorWindow : AppWindow
 
     private void Refactor()
     {
+        if (string.IsNullOrWhiteSpace(NameBox.Text))
+        {
+            NameBox.Focus();
+            return;
+        }
+        
         Element.Rename(NameBox.Text);
         Close();
 

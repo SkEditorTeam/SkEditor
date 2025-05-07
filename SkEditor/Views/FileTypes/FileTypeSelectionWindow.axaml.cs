@@ -19,7 +19,10 @@ public partial class FileTypeSelectionWindow : AppWindow
     {
         CancelButton.Command = new RelayCommand(() =>
         {
-            ((FileTypeSelectionViewModel)DataContext).SelectedFileType = null;
+            FileTypeSelectionViewModel? viewModel = (FileTypeSelectionViewModel?)DataContext;
+            if (viewModel == null)
+                return;
+            viewModel.SelectedFileType = null;
             Close();
         });
         OpenButton.Command = new RelayCommand(Close);

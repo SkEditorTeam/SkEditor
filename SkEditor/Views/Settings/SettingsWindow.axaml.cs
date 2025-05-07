@@ -42,7 +42,7 @@ public partial class SettingsWindow : AppWindow
         Closed += (_, _) => SkEditorAPI.Core.GetAppConfig().Save();
     }
 
-    public static SettingsWindow Instance { get; private set; }
+    public static SettingsWindow Instance { get; private set; } = null!;
 
     public Frame GetFrameView()
     {
