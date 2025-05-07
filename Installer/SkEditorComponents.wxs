@@ -1,12 +1,12 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 	<Fragment>
 		<ComponentGroup Id="SkEditorComponents" Directory="INSTALLFOLDER">
-			<Files Include="..\SkEditor\bin\Release\publish\win\**">
-				<Exclude Files="..\SkEditor\bin\Release\publish\win\SkEditor.exe" />
+			<Files Include="$(var.PublishDir)\**">
+				<Exclude Files="$(var.PublishDir)\SkEditor.exe" />
 			</Files>
 
 			<Component Id="MainExecutable">
-				<File Id="SkEditorExe" Source="..\SkEditor\bin\Release\publish\win\SkEditor.exe"/>
+				<File Id="SkEditorExe" Source="$(var.PublishDir)\SkEditor.exe"/>
 			</Component>
 
 			<Component Id="ApplicationShortcuts" Guid="{bf08e1b2-e449-4bf6-9e61-e80cd00d68ac}">
