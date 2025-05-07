@@ -13,12 +13,12 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const issueNumber = context.payload.issue.number;
-            const repo = context.repo;
+            const { owner, repo } = context.repo;
 
             try {
               const labels = await github.rest.issues.listLabelsOnIssue({
-                owner: repo.owner,
-                repo: repo.name,
+                owner,
+                repo,
                 issue_number: issueNumber
               });
               
@@ -29,8 +29,8 @@ jobs:
 
               if (labelNames.includes(labelToRemove)) {
                 await github.rest.issues.removeLabel({
-                  owner: repo.owner,
-                  repo: repo.name,
+                  owner,
+                  repo,
                   issue_number: issueNumber,
                   name: labelToRemove
                 });
