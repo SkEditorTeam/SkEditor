@@ -47,6 +47,13 @@ public partial class ParserSidebarPanel : UserControl
         ClearSearch.Click += (_, _) => ClearSearchFilter();
         SearchBox.KeyUp += (_, _) => UpdateSearchFilter();
         TypeFilterBox.SelectionChanged += (_, _) => UpdateSearchFilter();
+        SkEditorAPI.Events.OnTabChanged += (_, _) =>
+        {
+            CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser;
+            if (parser == null) return;
+
+            parser.Parse();
+        };
     }
 
     public static bool CodeParserEnabled => SkEditorAPI.Core.GetAppConfig().EnableCodeParser;
