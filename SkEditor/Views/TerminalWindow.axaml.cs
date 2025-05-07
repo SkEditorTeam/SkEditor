@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -21,8 +22,8 @@ public partial class TerminalWindow : AppWindow
     private const string CrSplitPattern = "(?=\r)";
 
     private readonly object _lock = new();
-    private StreamWriter _inputWriter = null!;
-    private Process _process = null!;
+    private StreamWriter _inputWriter;
+    private Process _process;
 
     public TerminalWindow()
     {
@@ -46,6 +47,8 @@ public partial class TerminalWindow : AppWindow
         return Encoding.GetEncoding(CultureInfo.CurrentCulture.TextInfo.OEMCodePage);
     }
 
+    [MemberNotNull(nameof(_process))]
+    [MemberNotNull(nameof(_inputWriter))]
     private void LoadTerminal()
     {
         InitializeProcess();
@@ -54,6 +57,7 @@ public partial class TerminalWindow : AppWindow
         SetupProcessHandlers();
     }
 
+    [MemberNotNull(nameof(_process))] 
     private void InitializeProcess()
     {
         Encoding encoding = GetTerminalEncoding();
@@ -88,6 +92,7 @@ public partial class TerminalWindow : AppWindow
         };
     }
 
+    [MemberNotNull(nameof(_inputWriter))]
     private void SetupProcessHandlers()
     {
         Task.Run(() => ReadAsync(_process.StandardOutput));
