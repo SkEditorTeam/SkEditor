@@ -14,23 +14,31 @@ jobs:
           script: |
             const issueNumber = context.payload.issue.number;
             const repo = context.repo;
-            
+
             try {
               const labels = await github.rest.issues.listLabelsOnIssue({
                 owner: repo.owner,
                 repo: repo.name,
                 issue_number: issueNumber
               });
-              console.log("Current labels:", labels.data.map(l => l.name));
+              
+              const labelNames = labels.data.map(l => l.name);
+              console.log(`Labels on issue #${issueNumber}:`, labelNames);
 
-              await github.rest.issues.removeLabel({
-                owner: repo.owner,
-                repo: repo.name,
-                issue_number: issueNumber,
-                name: 'done in a future version'
-              });
-              console.log(`Removed "done in a future version" label from issue #${issueNumber}`);
+              const labelToRemove = 'done in a future version';
+
+              if (labelNames.includes(labelToRemove)) {
+                await github.rest.issues.removeLabel({
+                  owner: repo.owner,
+                  repo: repo.name,
+                  issue_number: issueNumber,
+                  name: labelToRemove
+                });
+                console.log(`✅ Removed "${labelToRemove}" label from issue #${issueNumber}`);
+              } else {
+                console.log(`⚠️ Label "${labelToRemove}" not found on issue #${issueNumber}`);
+              }
+
             } catch (error) {
-              // Label might not exist on this issue
-              console.log(`Note: couldn't remove label from #${issueNumber}, it may not have had the label`);
+              console.error(`❌ Error processing issue #${issueNumber}:`, error);
             }
