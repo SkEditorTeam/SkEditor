@@ -29,7 +29,8 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private bool _isProjectSingleClickEnabled;
     [ObservableProperty] private bool _isSidebarAnimationEnabled;
     [ObservableProperty] private bool _isWrappingEnabled;
-    [ObservableProperty] private bool _isZoomSyncEnabled;
+    [ObservableProperty] private bool _isZoomSyncEnabled = true;
+    [ObservableProperty] private bool _isSidebarWidthSyncEnabled;
     [ObservableProperty] private string _language = "English";
     [ObservableProperty] private string _lastUsedPublishService = "Pastebin";
     [ObservableProperty] private string _pastebinApiKey = "";

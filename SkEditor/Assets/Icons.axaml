@@ -107,4 +107,5 @@
     <ui:SymbolIconSource x:Key="Settings" Symbol="Settings" />
     <ui:SymbolIconSource x:Key="ZoomIcon" Symbol="ZoomIn" />
     <fluenticons:SymbolIconSource x:Key="SlideTransitionIcon" Symbol="SlideTransition" />
+    <fluenticons:SymbolIconSource x:Key="SidebarWidthSyncIcon" Symbol="ArrowAutofitWidth" />
 </ResourceDictionary>
