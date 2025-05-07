@@ -1,7 +1,7 @@
 <Project Sdk="WixToolset.Sdk/6.0.0">
   <PropertyGroup>
     <OutputName>SkEditor</OutputName>
-    <DefineConstants>PublishDir=..\SkEditor\bin\Release\publish\win</DefineConstants>
+    <DefineConstants>PublishDir=..\SkEditor\bin\Release\net8.0\win-x64\publish</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
