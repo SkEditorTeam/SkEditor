@@ -48,6 +48,7 @@ internal class ItemContextMenu
         EditedItem = slot == -1
             ? generator.BackgroundItem
             : generator.Items.GetValueOrDefault(slot);
+        
         Item? item = await generator.SelectItem();
         if (item == null)
         {
