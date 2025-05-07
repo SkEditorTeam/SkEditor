@@ -16,6 +16,13 @@ jobs:
             const repo = context.repo;
             
             try {
+              const labels = await github.rest.issues.listLabelsOnIssue({
+                owner: repo.owner,
+                repo: repo.name,
+                issue_number: issueNumber
+              });
+              console.log("Current labels:", labels.data.map(l => l.name));
+
               await github.rest.issues.removeLabel({
                 owner: repo.owner,
                 repo: repo.name,
