@@ -1,0 +1,29 @@
+name: Remove Future Version Label on Close
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  remove-label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const repo = context.repo;
+            
+            try {
+              await github.rest.issues.removeLabel({
+                owner: repo.owner,
+                repo: repo.name,
+                issue_number: issueNumber,
+                name: 'done in a future version'
+              });
+              console.log(`Removed "done in a future version" label from issue #${issueNumber}`);
+            } catch (error) {
+              // Label might not exist on this issue
+              console.log(`Note: couldn't remove label from #${issueNumber}, it may not have had the label`);
+            }
