@@ -70,6 +70,8 @@ public class Windows : IWindows
         IconSourceElement iconElement = new()
         {
             IconSource = source,
+            MinWidth = 40,
+            MinHeight = 40,
         };
 
         Grid grid = new() { ColumnDefinitions = new ColumnDefinitions("Auto,*") };
