@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Platform.Storage;
@@ -45,23 +46,16 @@ public class Windows : IWindows
 
         icon = icon switch
         {
-            IconSource iconSource => iconSource,
             Symbol symbol => new SymbolIconSource { Symbol = symbol, FontSize = 40 },
             _ => icon
         };
 
-        IconSource? source = null;
-        if (icon is not IconSource)
+        IconSource? source = icon switch
         {
-            if (icon is null)
-            {
-                source = null;
-            }
-            else
-            {
-                throw new ArgumentException("Icon must be of type IconSource, Symbol or SymbolIconSource.");
-            }
-        }
+            IconSource iconSource => iconSource,
+            null => null,
+            _ => throw new ArgumentException("Icon must be of type IconSource, Symbol or SymbolIconSource.")
+        };
 
         switch (source)
         {
@@ -76,8 +70,6 @@ public class Windows : IWindows
         IconSourceElement iconElement = new()
         {
             IconSource = source,
-            Height = 40,
-            Width = 40
         };
 
         Grid grid = new() { ColumnDefinitions = new ColumnDefinitions("Auto,*") };
@@ -88,7 +80,8 @@ public class Windows : IWindows
         {
             Text = TryGetTranslation(message),
             FontSize = 16,
-            Margin = new Thickness(Math.Max(10, iconMargin), 10, 0, 0),
+            Margin = new Thickness(Math.Max(10, iconMargin), 0, 0, 0),
+            VerticalAlignment = VerticalAlignment.Center,
             TextWrapping = TextWrapping.Wrap,
             MaxWidth = 400
         };
