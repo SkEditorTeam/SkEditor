@@ -208,6 +208,7 @@
     <system:String x:Key="ProjectExplorerInfoButton">Open Folder</system:String>
     <system:String x:Key="ProjectRenameText">Renaming into...</system:String>
     <system:String x:Key="ProjectRenameErrorNameEmpty">Name cannot be empty.</system:String>
+    <system:String x:Key="ProjectRenameErrorNameInvalid">Name is invalid.</system:String>
     <system:String x:Key="ProjectRenameErrorParentNull">Parent cannot be null.</system:String>
     <system:String x:Key="ProjectErrorNameExists">A file or folder with this name already exists.</system:String>
     <system:String x:Key="ProjectRenameErrorSameName">The new name is the same as the old name.</system:String>
