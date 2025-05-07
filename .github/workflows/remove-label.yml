@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |
             const issueNumber = context.payload.issue.number;
             const { owner, repo } = context.repo;
