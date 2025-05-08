@@ -16,7 +16,7 @@ using static SkEditor.Controls.Sidebar.ExplorerSidebarPanel;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
-public class Folder : StorageElement
+public partial class Folder : StorageElement
 {
     public Folder(string folder, Folder? parent = null)
     {
@@ -155,6 +155,11 @@ public class Folder : StorageElement
             return Translation.Get("ProjectRenameErrorParentNull");
         }
 
+        if (!ValidFolderNameRegex().IsMatch(input))
+        {
+            return Translation.Get("ProjectRenameErrorNameInvalid");
+        }
+        
         StorageElement? folder = Parent?.Children?.FirstOrDefault(x => x.Name == input);
 
         return folder is not null ? Translation.Get("ProjectErrorNameExists") : null;
@@ -165,6 +170,11 @@ public class Folder : StorageElement
         if (string.IsNullOrWhiteSpace(input))
         {
             return Translation.Get("ProjectCreateErrorNameEmpty");
+        }
+        
+        if (!ValidFolderNameRegex().IsMatch(input))
+        {
+            return Translation.Get("ProjectRenameErrorNameInvalid");
         }
 
         return Children?.Any(x => x.Name == input) == true ? Translation.Get("ProjectErrorNameExists") : null;
@@ -254,4 +264,7 @@ public class Folder : StorageElement
 
         return null;
     }
+    
+    [System.Text.RegularExpressions.GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[a-zA-Z0-9][\w\-. ]{0,254}$")]
+    private static partial System.Text.RegularExpressions.Regex ValidFolderNameRegex();
 }

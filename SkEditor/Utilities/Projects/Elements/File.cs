@@ -12,7 +12,7 @@ using SkEditor.Views;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
-public class File : StorageElement
+public partial class File : StorageElement
 {
     public File(string file, Folder? parent = null)
     {
@@ -67,6 +67,11 @@ public class File : StorageElement
             return Translation.Get("ProjectRenameErrorParentNull");
         }
 
+        if (!ValidFileNameRegex().IsMatch(input))
+        {
+            return Translation.Get("ProjectRenameErrorNameInvalid");
+        }
+
         StorageElement? file = Parent?.Children?.FirstOrDefault(x => x.Name == input);
         return file is not null ? Translation.Get("ProjectErrorNameExists") : null;
     }
@@ -116,4 +121,7 @@ public class File : StorageElement
         string path = StorageFilePath.Replace(root.StorageFolderPath, "");
         SkEditorAPI.Windows.GetMainWindow()?.Clipboard?.SetTextAsync(path);
     }
+    
+    [System.Text.RegularExpressions.GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[a-zA-Z0-9][\w\-. ]{0,254}$")]
+    private static partial System.Text.RegularExpressions.Regex ValidFileNameRegex();
 }
