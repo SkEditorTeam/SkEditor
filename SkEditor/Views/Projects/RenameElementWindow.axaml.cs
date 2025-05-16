@@ -39,12 +39,6 @@ public partial class RenameElementWindow : AppWindow
             ErrorBox.Text = Translation.Get("ProjectRenameErrorNameEmpty");
             return;
         }
-        
-        if (!ValidFileNameRegex().IsMatch(input))
-        {
-            ErrorBox.Text = Translation.Get("ProjectRenameErrorNameInvalid");
-            return;
-        }
 
         string? error = Element.ValidateName(input);
         if (error != null)
@@ -62,6 +56,5 @@ public partial class RenameElementWindow : AppWindow
         Close();
     }
     
-    [System.Text.RegularExpressions.GeneratedRegex(@"^[\w\-. ]+$")]
-    private static partial System.Text.RegularExpressions.Regex ValidFileNameRegex();
+    
 }
