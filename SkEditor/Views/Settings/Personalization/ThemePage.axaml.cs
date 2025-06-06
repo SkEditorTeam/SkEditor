@@ -57,8 +57,6 @@ public partial class ThemePage : UserControl
 
     private void AssignCommands()
     {
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(PersonalizationPage)));
-
         OpenThemesFolderButton.Command = new RelayCommand(() => Process.Start(new ProcessStartInfo
         {
             FileName = ThemeEditor.ThemeFolderPath,

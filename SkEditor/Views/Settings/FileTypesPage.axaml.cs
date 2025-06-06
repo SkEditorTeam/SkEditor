@@ -15,7 +15,6 @@ public partial class FileTypesPage : UserControl
     public FileTypesPage()
     {
         InitializeComponent();
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
 
         LoadTypes();
     }

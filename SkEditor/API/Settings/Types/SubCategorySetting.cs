@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using SkEditor.Views;
 using SkEditor.Views.Settings;
 using Symbol = FluentIcons.Common.Symbol;
@@ -37,11 +39,11 @@ public class SubCategorySetting(List<Setting> settings) : ISettingType
     public void SetupExpander(SettingsExpander expander, Setting setting)
     {
         expander.IsClickEnabled = true;
-        expander.Click += (_, _) =>
+        expander.Command = new RelayCommand((() =>
         {
             CustomAddonSettingsPage.Load(setting.Addon, settings);
             SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
-        };
+        }));
     }
 
     public bool IsSelfManaged => true;

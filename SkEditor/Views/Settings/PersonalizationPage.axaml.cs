@@ -26,8 +26,7 @@ public partial class PersonalizationPage : UserControl
     private void AssignCommands()
     {
         ThemePageButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(ThemePage)));
-        SyntaxPageButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(FileSyntaxes)));
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
+        SyntaxPageButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(SyntaxRulesPage)));
 
         FontButton.Command = new AsyncRelayCommand(SelectFont);
 

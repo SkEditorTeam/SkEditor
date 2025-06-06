@@ -18,8 +18,6 @@ public partial class AboutPage : UserControl
 
     private void AssignCommands()
     {
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
-
         GitHubItem.Command =
             new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor"));
         DiscordItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/"));

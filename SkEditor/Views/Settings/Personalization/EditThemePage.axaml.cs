@@ -15,13 +15,7 @@ public partial class EditThemePage : UserControl
     {
         InitializeComponent();
 
-        AssignCommands();
         SetUpColorPickers();
-    }
-
-    private void AssignCommands()
-    {
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(ThemePage)));
     }
 
     private void SetUpColorPickers()

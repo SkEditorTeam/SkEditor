@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using Serilog;
 using SkEditor.API;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.InternalAPI;
@@ -35,14 +36,10 @@ public partial class CustomAddonSettingsPage : UserControl
         Title.Title = _parent == null ? addon.Name : $"{addon.Name} - {_parent.Name}";
         Title.BackButton.Command = new RelayCommand(() =>
         {
-            if (_parent == null)
+            if (SettingsWindow.Instance.FrameView.CanGoBack)
             {
-                SettingsWindow.NavigateToPage(typeof(AddonsPage));
-                return;
+                SettingsWindow.Instance.FrameView.GoBack();
             }
-
-            SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
-            Load(addon, _parent.Settings);
         });
     }
 

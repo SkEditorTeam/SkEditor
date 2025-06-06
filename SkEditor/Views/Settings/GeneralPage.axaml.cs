@@ -83,7 +83,6 @@ public partial class GeneralPage : UserControl
 
     private void AssignCommands()
     {
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
         RpcToggleSwitch.Command = new RelayCommand(ToggleRpc);
         WrappingToggleSwitch.Command = new RelayCommand(ToggleWrapping);
         ZoomSyncToggleSwitch.Command = new RelayCommand(ToggleZoomSync);

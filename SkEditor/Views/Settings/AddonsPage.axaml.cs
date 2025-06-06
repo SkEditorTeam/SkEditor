@@ -34,8 +34,6 @@ public partial class AddonsPage : UserControl
 
     private void AssignCommands()
     {
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
-
         LoadFromFileButton.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
         LoadFromFileButton.Command = new AsyncRelayCommand(async () =>
         {
