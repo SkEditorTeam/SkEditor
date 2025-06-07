@@ -89,7 +89,10 @@ public class App : Application
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                     _splashScreen?.UpdateStatus("Starting named pipe server..."));
+                
                 NamedPipeServer.Start();
+                
+                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Initializing main window..."));
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
