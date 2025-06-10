@@ -83,7 +83,9 @@
         <PackageReference Include="Svg.Skia" Version="3.0.2" />
         <PackageReference Include="System.Threading.AccessControl" Version="9.0.4"/>
 
-        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'"/>
+        <PackageReference Include="HotAvalonia" Version="3.0.0" PrivateAssets="All" />
+
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'" />
     </ItemGroup>
 
     <ItemGroup>
