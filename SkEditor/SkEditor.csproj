@@ -79,7 +79,6 @@
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
         <PackageReference Include="SkAvaloniaEdit" Version="11.3.1"/>
         <PackageReference Include="SkFluentAvalonia" Version="2.2.1"/>
-        <PackageReference Include="SpacedGrid-Avalonia" Version="11.0.0"/>
         <PackageReference Include="Svg.Skia" Version="3.0.2" />
         <PackageReference Include="System.Threading.AccessControl" Version="9.0.4"/>
 
@@ -188,6 +187,10 @@
         <Compile Update="Views\SplashScreen.axaml.cs">
             <DependentUpon>SplashScreen.axaml</DependentUpon>
             <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\CheckForUpdateWindow.axaml.cs">
+          <DependentUpon>CheckForUpdateWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 

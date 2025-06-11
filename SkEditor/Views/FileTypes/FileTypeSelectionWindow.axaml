@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
         xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
         xmlns:api="clr-namespace:SkEditor.API"
         xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
@@ -14,7 +13,7 @@
         x:DataType="viewModels:FileTypeSelectionViewModel"
         WindowStartupLocation="CenterOwner"
         Theme="{StaticResource SmallWindowTheme}">
-    <avalonia:SpacedGrid RowDefinitions="Auto,*,Auto,Auto"
+    <Grid RowDefinitions="Auto,*,Auto,Auto"
                          ColumnDefinitions="*,*"
                          RowSpacing="10" ColumnSpacing="10" Margin="10">
 
@@ -26,7 +25,7 @@
                  ItemsSource="{Binding FileTypes}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="api:FileTypeData">
-                    <avalonia:SpacedGrid RowDefinitions="*,*" ColumnDefinitions="Auto,*"
+                    <Grid RowDefinitions="*,*" ColumnDefinitions="Auto,*"
                                          RowSpacing="10" ColumnSpacing="10">
 
                         <controls:IconSourceElement Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
@@ -36,7 +35,7 @@
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding AddonName}" FontWeight="Bold" />
                         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DisplayedDescription}" />
 
-                    </avalonia:SpacedGrid>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -48,5 +47,5 @@
                 IsEnabled="{Binding IsFileTypeSelected}" Name="OpenButton" />
         <Button HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="1" Content="Cancel" Name="CancelButton" />
 
-    </avalonia:SpacedGrid>
+    </Grid>
 </Window>
