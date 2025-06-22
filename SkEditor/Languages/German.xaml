@@ -102,7 +102,7 @@
     <system:String x:Key="ClosingUnsavedFile">Sie haben ungespeicherte Änderungen in dieser Datei. Möchten Sie sie wirklich schließen?</system:String>
     <system:String x:Key="ClosingFiles">Sind Sie sich sicher, dass Sie diese Datei schließen wollen? Alle ungespeicherten Änderungen werden verloren gehen.</system:String>
     <system:String x:Key="ClosingProgramWithUnsavedFiles">Sie haben in mindestens einer Datei ungespeicherte Änderungen. Möchten Sie die Anwendung wirklich schließen?</system:String>
-    <system:String x:Key="ChangesDetected">Diese Datei wurde extern geändert. Wollen Sie die Datei neuladen und möglicherweise Änderungen verlieren, die im SkEdior getätigt wurden?</system:String>
+    <system:String x:Key="ChangesDetected">Diese Datei wurde extern geändert. Wollen Sie die Datei neuladen und möglicherweise Änderungen verlieren, die im SkEditor getätigt wurden?</system:String>
     <system:String x:Key="DownloadingUpdateTitle">Update wird heruntergeladen</system:String>
     <system:String x:Key="UpdateAvailable">Update verfügbar</system:String>
     <system:String x:Key="UpdateAvailableMessage">Ein Update ist verfügbar. Wollen sie es jetzt installieren?</system:String>
@@ -117,13 +117,13 @@
     <system:String x:Key="PublishWindowAnonymously">Anonym</system:String>
     <system:String x:Key="PublishWindowResultLink">Link zu Ihrem Code</system:String>
     <system:String x:Key="PublishWindowPublishButton">Veröffentlichen</system:String>
-    <system:String x:Key="PublishWindowWarning">Ihr API-Schlüssel kann absofort in Einstellungen -> Verbindungen verwaltet werden.</system:String>
+    <system:String x:Key="PublishWindowWarning">Ihr API-Schlüssel kann ab sofort in Einstellungen -> Verbindungen verwaltet werden.</system:String>
 
     <!-- Local Docs Manager Window -->
-    <system:String x:Key="LocalDocsManagerWindowTitle">Localer Dokumentations Manager</system:String>
+    <system:String x:Key="LocalDocsManagerWindowTitle">Lokaler Dokumentationsmanager</system:String>
     <system:String x:Key="LocalDocsManagerWindowInfo">Von hier können Sie die Dokumentationselemente, die Sie heruntergeladen haben verwalten.</system:String>
     <system:String x:Key="LocalDocsManagerWindowDeleteEverything">Alles Löschen</system:String>
-    <system:String x:Key="LocalDocsManagerWindowGroupBy">Grupieren anhand von</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupBy">Gruppieren anhand von</system:String>
     <system:String x:Key="LocalDocsManagerWindowGroupByProvider">Anbieter</system:String>
     <system:String x:Key="LocalDocsManagerWindowGroupByType">Typ</system:String>
     <system:String x:Key="LocalDocsManagerWindowGroupByAddon">Erweiterung</system:String>
@@ -164,9 +164,9 @@
     <system:String x:Key="DocumentationWindowLoading">Läd...</system:String>
 
     <system:String x:Key="DocumentationWindowErrorGlobal">Ein Fehler ist aufgetreten beim laden der Dokumentation.\n\n{0}</system:String>
-    <system:String x:Key="DocumentationWindowErrorOffline">Die Anfrage an den Dokumentation Server at das Zeitlimit errreicht. Sind die Dokumentationsserver online?</system:String>
+    <system:String x:Key="DocumentationWindowErrorOffline">Die Anfrage an den Dokumentation Server at das Zeitlimit erreicht. Sind die Dokumentationsserver online?</system:String>
 
-    <system:String x:Key="DocumentationWindowNoProvidersMessage">Keinen Dokumentations Anbieter ausgewählt.\n\nSie müssen eventuell Ihren API-Schlüssel in den Einstellungen hinufügen, um auszuwählen.</system:String>
+    <system:String x:Key="DocumentationWindowNoProvidersMessage">Kein Dokumentationsanbieter ausgewählt.\n\nSie müssen eventuell Ihren API-Schlüssel in den Einstellungen hinzufügen, um auszuwählen.</system:String>
 
     <system:String x:Key="DocumentationWindowNoResults">Keiner Ergebnisse gefunden.</system:String>
     <system:String x:Key="DocumentationWindowNoProviders">Keine Anbieter gefunden.</system:String>
@@ -179,7 +179,7 @@
     <system:String x:Key="DocumentationWindowSkriptMCBad2">SkriptMC ist derzeit nicht verfügbar für die Dokumentation. Bitte versuchen Sie es später.</system:String>
 
     <system:String x:Key="DocumentationWindowNoEntries">Keine Einträge gefunden. Warum nicht erstmal nach welche suchen?</system:String>
-    <system:String x:Key="DocumentationWindowDownloadAllMessage">Sind Sie sicher, dass Sie alle gefundenen Dokumentationeinträge herunterladen wollen? (Gesamt: {0})</system:String>
+    <system:String x:Key="DocumentationWindowDownloadAllMessage">Sind Sie sicher, dass Sie alle gefundenen Dokumentationseinträge herunterladen wollen? (Gesamt: {0})</system:String>
     <system:String x:Key="DocumentationWindowDownloadingElements">Elemente herunterladen...</system:String>
     <system:String x:Key="DocumentationWindowDownloading">Läd herunter</system:String>
     <system:String x:Key="DocumentationWindowDownloadingMessage">Wir laden die Dokumentationseinträge für Sie herunter. Bitter warten...</system:String>
@@ -217,8 +217,8 @@
 
     <!-- Code parser -->
     <system:String x:Key="CodeParserTitle">Code-Parsing</system:String>
-    <system:String x:Key="CodeParserWarning">Der Code-Parser ist immernoch in der Beta! Bitte melden Sie all Fehler, die Sie finden auf dem Discord Server.</system:String>
-    <system:String x:Key="CodeParserEnableInfo">Der Code-Parser ist immernoch in der Beta, und Fehler können auftreten. Der Code-Parser ist Standardmäßig deaktiviert, aber Sie können in aktivieren mit dem Button untenrunter.</system:String>
+    <system:String x:Key="CodeParserWarning">Der Code-Parser ist immer noch in der Beta! Bitte melden Sie all Fehler, die Sie finden auf dem Discord Server.</system:String>
+    <system:String x:Key="CodeParserEnableInfo">Der Code-Parser ist immer noch in der Beta, und Fehler können auftreten. Der Code-Parser ist Standardmäßig deaktiviert, aber Sie können in aktivieren mit dem Button untendrunter.</system:String>
     <system:String x:Key="CodeParserSearch">Suche...</system:String>
     <system:String x:Key="CodeParserFilterName">Filtern nach Name</system:String>
     <system:String x:Key="CodeParserFilterType">Filtern nach Typ</system:String>
@@ -231,7 +231,7 @@
     <system:String x:Key="CodeParserNavigate">Navigieren</system:String>
     <system:String x:Key="CodeParserNavigateToDefinition">Zur Definition navigieren</system:String>
     <system:String x:Key="CodeParserRename">Umbenennen</system:String>
-    <system:String x:Key="CodeParserNoSections">Kein Sectionen wurden gefunden im Code. Vielleiht sollten Sie einbischen Code schreiben? :)</system:String>
+    <system:String x:Key="CodeParserNoSections">Keine Sektionen im Code gefunden. Vielleicht sollten Sie ein paar Zeilen schreiben? :)</system:String>
     <system:String x:Key="CodeParserBadFormat">Diese Datei kann nicht analysiert werden, da sie nicht wie eine Skript-Datei aussieht.</system:String>
     <system:String x:Key="CodeParserParseCode">Code parsen</system:String>
     <system:String x:Key="CodeParserParsed">Aktuellen Code geparst</system:String>
@@ -240,7 +240,7 @@
     <system:String x:Key="FileAssociationSelectionWindowTitle">Datei verknüpfung auswählen</system:String>
     <system:String x:Key="FileAssociationSelectionWindowInfo">Es gibt mehrere Anbieter für diesen Dateityp. Bitte wählen Sie einen aus.</system:String>
     <system:String x:Key="FileAssociationSelectionWindowOfficialItem">Dies ist ein offizieller Dateityp von SkEditor.</system:String>
-    <system:String x:Key="FileAssociationSelectionWindowUnofficialItem">Dies ist ein unoffizieller Dateityp von einer Erweiterung, {0}.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowUnofficialItem">Dies ist ein inoffizieller Dateityp von einer Erweiterung, {0}.</system:String>
     <system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Auswahl merken</system:String>
 
 
@@ -271,9 +271,9 @@
     <system:String x:Key="SettingsGeneralLanguage">Sprache</system:String>
     <system:String x:Key="SettingsGeneralWrapping">Umbruch</system:String>
     <system:String x:Key="SettingsGeneralWrappingDescription">Wählen Sie, ob die Zeilen an der Breite des Ansichtsfensters umgebrochen werden sollen.</system:String>
-    <system:String x:Key="SettingsGeneralZoomSync">Zoom zwischen Tabs syncronisieren</system:String>
-    <system:String x:Key="SettingsGeneralZoomSyncDescription">Wenn aktiviert, Zoomleveländerungen werden auf alle Tabs angewendet.</system:String>
-    <system:String x:Key="SettingsGeneralTabType">Einrückungstype</system:String>
+    <system:String x:Key="SettingsGeneralZoomSync">Zoom zwischen Tabs synchronisieren</system:String>
+    <system:String x:Key="SettingsGeneralZoomSyncDescription">Wenn aktiviert, Zoom-Leveländerungen werden auf alle Tabs angewendet.</system:String>
+    <system:String x:Key="SettingsGeneralTabType">Einrückungstyp</system:String>
     <system:String x:Key="SettingsGeneralTabTypeDescription">Wählen Sie zwischen Tabs und Leerzeichen und setzen Sie die Größe der Tabs</system:String>
     <system:String x:Key="SettingsGeneralTabTypeTabs">Tabs</system:String>
     <system:String x:Key="SettingsGeneralTabTypeSpaces">Leerzeichen</system:String>
@@ -290,7 +290,7 @@
     <system:String x:Key="SettingsGeneralPasteIndent">Auto-indent kopieren</system:String>
     <system:String x:Key="SettingsGeneralPasteIndentDescription">Passt automatisch die indention des eingefügten Textes ein, sodass es mit dem vorherigen Format übereinstimmt</system:String>
     <system:String x:Key="SettingsGeneralCheckForUpdates">Auf Updated prüfen</system:String>
-    <system:String x:Key="SettingsGeneralProjectSingleFolderClick">Projectordner mit einem Klick öffnen</system:String>
+    <system:String x:Key="SettingsGeneralProjectSingleFolderClick">Projektordner mit einem Klick öffnen</system:String>
     <system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Wenn aktiviert, werden Ordner mit einem Klick anstatt einem Doppelklick geöffnet.</system:String>
 
     <!-- About Settings -->
@@ -303,16 +303,16 @@
     <system:String x:Key="SettingsAboutGithubDescription">Klicken Sie, um das GitHub-Repository von SkEditor zu öffnen!</system:String>
     <system:String x:Key="SettingsAboutDiscord">Discord-Server</system:String>
     <system:String x:Key="SettingsAboutDiscordDescription">Klicken Sie, um dem Discord-Server von SkEditor beizutreten!</system:String>
-    <system:String x:Key="SetingsAboutAppdate">AppData-Ordner öffnen</system:String>
-    <system:String x:Key="SetingsAboutDevMode">Entwicklermodus</system:String>
-    <system:String x:Key="SetingsAboutDevModeDescription">Aktivieren Sie den Entwicklermodus, um Entwicklerfeatures zu nutzen.</system:String>
+    <system:String x:Key="SettingsAboutAppdata">AppData-Ordner öffnen</system:String>
+    <system:String x:Key="SettingsAboutDevMode">Entwicklermodus</system:String>
+    <system:String x:Key="SettingsAboutDevModeDescription">Aktivieren Sie den Entwicklermodus, um Entwicklerfeatures zu nutzen.</system:String>
 
     <!-- Personalization -->
     <system:String x:Key="SettingsPersonalizationTitle">Personalisierung</system:String>
     <system:String x:Key="SettingsPersonalizationTheme">Design</system:String>
     <system:String x:Key="SettingsPersonalizationThemeDescription">Passe die Farben der App an.</system:String>
     <system:String x:Key="SettingsPersonalizationSyntax">Syntax-Hervorhebung</system:String>
-    <system:String x:Key="SettingsPersonalizationSyntaxDescription">Ändere wie spzifischer Text mit Syntax highlighting angezeigt wird.</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntaxDescription">Ändere wie spezifischer Text mit Syntax highlighting angezeigt wird.</system:String>
     <system:String x:Key="SettingsPersonalizationFont">Schriftart</system:String>
     <system:String x:Key="SettingsPersonalizationFontDescription">Aktuelle Schriftart: {0}</system:String>
     <system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Aktuelle Zeile hervorheben</system:String>
@@ -323,9 +323,9 @@
     <system:String x:Key="SettingsThemeTitle">Design</system:String>
     <system:String x:Key="SettingsThemeOpenFolder">Ordner öffnen</system:String>
     <system:String x:Key="SettingsThemeCurrentTheme">Aktuelles Design</system:String>
-    <system:String x:Key="SettingsThemeCurrentThemeDescription">Ein Neustart ist nicht notwendig, könnte aber für ein 100%iges Farbupdate erforderlich sein.</system:String>
+    <system:String x:Key="SettingsThemeCurrentThemeDescription">Ein Neustart ist nicht notwendig, könnte aber für ein 100 prozentiges Farbupdate erforderlich sein.</system:String>
     <system:String x:Key="SettingsThemeEditThemeDescription">Aktuelles Theme bearbeiten mit Echtzeitvorschau.</system:String>
-    <system:String x:Key="SettingsThemeNewThemeInfo">Wenn Sie ein Desgin erstellen wollen, müssen Sie eine Datei im "Themes" Ordner erstellen.</system:String>
+    <system:String x:Key="SettingsThemeNewThemeInfo">Wenn Sie ein Design erstellen wollen, müssen Sie eine Datei im "Themes" Ordner erstellen.</system:String>
     <system:String x:Key="SettingsThemeEditTheme">Design bearbeiten</system:String>
 
     <!-- Syntax Highlighting Settings -->
@@ -375,7 +375,7 @@
     <!-- Command Generator -->
     <system:String x:Key="CommandGeneratorName">Name</system:String>
     <system:String x:Key="CommandGeneratorPermission">Berechtigung</system:String>
-    <system:String x:Key="CommandGeneratorNoPermissionMessage">Keine Berehtigungsnachricht</system:String>
+    <system:String x:Key="CommandGeneratorNoPermissionMessage">Keine Berechtigungsnachricht</system:String>
     <system:String x:Key="CommandGeneratorAliases">Aliase</system:String>
     <system:String x:Key="CommandGeneratorInvalidUsageMessage">Inkorrekte Nutzungsnachricht</system:String>
     <system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Wer kann den Befehl nutzen</system:String>
