@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -121,6 +122,7 @@ public class Files : IFiles
 
         openedFile.IsSaved = true;
         openedFile.IsNewFile = false;
+        SkEditorAPI.Events.FileSaved(path);
     }
 
     #endregion

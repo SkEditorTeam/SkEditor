@@ -118,6 +118,8 @@ public partial class Folder : StorageElement
         ProjectOpener.FileTreeView.ItemsSource = null;
 
         Folder? projectRootFolder = null;
+        
+        SkEditorAPI.Events.ProjectClosed();
 
         ExplorerPanel? panel =
             Registries.SidebarPanels.FirstOrDefault(x => x is ExplorerPanel) as ExplorerPanel;

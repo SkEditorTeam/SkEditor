@@ -42,6 +42,7 @@ public static class ProjectOpener
         NoFolderMessage.IsVisible = false;
         ProjectRootFolder = new Folder(folder) { IsExpanded = true };
         FileTreeView.ItemsSource = new ObservableCollection<StorageElement> { ProjectRootFolder };
+        SkEditorAPI.Events.ProjectOpened(ProjectRootFolder);
 
         RemoveEventHandlers();
 
