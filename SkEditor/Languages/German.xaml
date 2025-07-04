@@ -4,7 +4,7 @@
 
     <!-- Window Titles -->
     <system:String x:Key="WindowTitlePublish">Veröffentlichen</system:String>
-    <system:String x:Key="WindowTitleRefactor">Umbenennen</system:String>
+    <system:String x:Key="WindowTitleRefactor">Refaktorisieren</system:String>
     <system:String x:Key="WindowTitleSettings">Einstellungen</system:String>
     <system:String x:Key="WindowTitleFontSelector">Schriftart auswählen</system:String>
     <system:String x:Key="WindowTitleSaveFilePicker">Datei speichern</system:String>
@@ -58,7 +58,7 @@
     <system:String x:Key="MenuHeaderGenerate">Generieren</system:String>
     <system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
     <system:String x:Key="MenuHeaderGenerateCommand">Befehl</system:String>
-    <system:String x:Key="MenuHeaderRefactor">Umbenennen</system:String>
+    <system:String x:Key="MenuHeaderRefactor">Refaktorisieren</system:String>
     <system:String x:Key="MenuHeaderColorSelector">Farbwähler</system:String>
 
     <!-- Other Menu -->
@@ -82,6 +82,7 @@
     <system:String x:Key="ConfirmButton">Bestätigen</system:String>
     <system:String x:Key="CloseButton">Schließen</system:String>
     <system:String x:Key="SelectButton">Auswählen</system:String>
+    <system:String x:Key="DeleteButton">Löschen</system:String>
     <system:String x:Key="CancelButton">Abbrechen</system:String>
     <system:String x:Key="ContinueButton">Fortfahren</system:String>
     <system:String x:Key="Error">Fehler</system:String>
@@ -109,7 +110,11 @@
     <system:String x:Key="UpdateFailed">Update fehlgeschlagen. Bitte versuchen Sie es später erneut.</system:String>
     <system:String x:Key="BinaryFileFound">Es sieht so aus, als würdest du versuchen eine binäre Datei (oder eine nicht Text-Basierte Datei) zu öffnen. Trotzdem öffnen? SkEditor kann diese möglicherweise nicht richtig laden.</system:String>
     <system:String x:Key="BinaryFileTitle">Binäre Datei gefunden</system:String>
-
+    <system:String x:Key="DeleteFileTitle">Datei Löschen</system:String>
+    <system:String x:Key="DeleteFolderTitle">Ordner Löschen</system:String>
+    <system:String x:Key="DeleteStorageElement">Bist du dir sicher, dass du {0} von dem Dateisystem löschen willst?</system:String>
+    <system:String x:Key="UnsavedFileTitle">Ungespeicherte Datei</system:String>
+    <system:String x:Key="UnsavedFileMessage">Die Datei '{0}' ist nicht gespeichert.\n\nBist du dir sicher, dass die Datei schließen und alle Änderungen verlieren willst?</system:String>
 
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Setzen Sie Ihren API-Schlüssel in den Einstellungen</system:String>
@@ -141,9 +146,11 @@
 
     <system:String x:Key="DocumentationControlChangerHelp">Klicke auf den zugehörigen Änderer um dessen generierten Code zu kopieren.</system:String>
     <system:String x:Key="DocumentationControlSince">Seit v{0}</system:String>
+    <system:String x:Key="DocumentationControlSeeOn">Auf {0} zeigen</system:String>
     <system:String x:Key="DocumentationControlDownload">Herunterladen</system:String>
     <system:String x:Key="DocumentationControlRemove">Entfernen</system:String>
     <system:String x:Key="DocumentationControlExampleAuthor">Von {0}</system:String>
+    <system:String x:Key="DocumentationControlTypeFromProvider">{0} von {1}</system:String>
 
     <system:String x:Key="DocumentationControlNoExamples">Keine Beispiele gefunden für dieses Element.</system:String>
     <system:String x:Key="DocumentationControlNoEventValues">Keine Eventwerte für dieses Element gefunden.</system:String>
@@ -178,7 +185,7 @@
     <system:String x:Key="DocumentationWindowSkriptMCBad">SkriptMC unterstützt die Suche nach allen Typen nicht.</system:String>
     <system:String x:Key="DocumentationWindowSkriptMCBad2">SkriptMC ist derzeit nicht verfügbar für die Dokumentation. Bitte versuchen Sie es später.</system:String>
 
-    <system:String x:Key="DocumentationWindowNoEntries">Keine Einträge gefunden. Warum nicht erstmal nach welche suchen?</system:String>
+    <system:String x:Key="DocumentationWindowNoEntries">Keine Einträge gefunden. Warum nicht erstmal nach ein paar suchen?</system:String>
     <system:String x:Key="DocumentationWindowDownloadAllMessage">Sind Sie sicher, dass Sie alle gefundenen Dokumentationseinträge herunterladen wollen? (Gesamt: {0})</system:String>
     <system:String x:Key="DocumentationWindowDownloadingElements">Elemente herunterladen...</system:String>
     <system:String x:Key="DocumentationWindowDownloading">Läd herunter</system:String>
@@ -200,14 +207,14 @@
 
     <!-- Color Selector -->
     <system:String x:Key="ColorSelectorWindowHexResult">Ergebnis in hex</system:String>
-
-
+    
     <!-- Projects -->
     <system:String x:Key="ProjectExplorerTitle">Explorer</system:String>
     <system:String x:Key="ProjectExplorerInfoText">Du hast noch keine Ordner offen.</system:String>
     <system:String x:Key="ProjectExplorerInfoButton">Ordner öffnen</system:String>
     <system:String x:Key="ProjectRenameText">Umbenennen zu...</system:String>
     <system:String x:Key="ProjectRenameErrorNameEmpty">Name kann nicht leer sein.</system:String>
+    <system:String x:Key="ProjectRenameErrorNameInvalid">Ungültiger Name</system:String>
     <system:String x:Key="ProjectRenameErrorParentNull">Übergeordneter Ordner kann nicht leer sein.</system:String>
     <system:String x:Key="ProjectErrorNameExists">Eine Datei oder Ordner mit diesem Namen existiert bereits.</system:String>
     <system:String x:Key="ProjectRenameErrorSameName">Der neue Name ist der selbe als der alte Name.</system:String>
@@ -273,6 +280,8 @@
     <system:String x:Key="SettingsGeneralWrappingDescription">Wählen Sie, ob die Zeilen an der Breite des Ansichtsfensters umgebrochen werden sollen.</system:String>
     <system:String x:Key="SettingsGeneralZoomSync">Zoom zwischen Tabs synchronisieren</system:String>
     <system:String x:Key="SettingsGeneralZoomSyncDescription">Wenn aktiviert, Zoom-Leveländerungen werden auf alle Tabs angewendet.</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSync">Seitenleisten-Breite synchronisieren</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSyncDescription">Wenn aktiviert, ändern der Breite eines Tabs ändert die Breite aller andern Tabs ebenfalls. </system:String>
     <system:String x:Key="SettingsGeneralTabType">Einrückungstyp</system:String>
     <system:String x:Key="SettingsGeneralTabTypeDescription">Wählen Sie zwischen Tabs und Leerzeichen und setzen Sie die Größe der Tabs</system:String>
     <system:String x:Key="SettingsGeneralTabTypeTabs">Tabs</system:String>
@@ -336,8 +345,8 @@
     <system:String x:Key="SettingsAddonsListTitle">Liste der Erweiterungen</system:String>
 
     <!-- Connections Settings -->
-    <system:String x:Key="SettingsConnectionTitle">Verbindungen</system:String>
-    <system:String x:Key="SettingsConnectionDashboardButton">Dashboard öffnen</system:String>
+    <system:String x:Key="SettingsConnectionsTitle">Verbindungen</system:String>
+    <system:String x:Key="SettingsConnectionsDashboardButton">Dashboard öffnen</system:String>
 
     <!-- File Types Settings -->
     <system:String x:Key="SettingsFileTypesTitle">Dateitypen</system:String>
@@ -411,6 +420,7 @@
     <system:String x:Key="MarketplaceButtonUninstall">Deinstallieren</system:String>
     <system:String x:Key="MarketplaceButtonDisable">Deaktivieren</system:String>
     <system:String x:Key="MarketplaceButtonEnable">Aktivieren</system:String>
+    <system:String x:Key="MarketplaceButtonLoadFromFile">Von Datei laden</system:String>
 
     <!-- Go to line -->
     <system:String x:Key="GoToLine">Zur Zeile gehen</system:String>

@@ -183,6 +183,7 @@ public partial class DocElementControl : UserControl
     {
         NameText.Text = entry.Name;
         Expander.Description = entry.DocType + " from " + entry.Addon;
+        Expander.Description = Translation.Get("DocumentationControlTypeFromProvider", entry.DocType.ToString(), entry.Addon);
         Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
         DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description)
             ? Translation.Get("DocumentationControlNoDescription")
@@ -202,7 +203,7 @@ public partial class DocElementControl : UserControl
             {
                 new TextBlock
                 {
-                    Text = "See on " + entry.Provider,
+                    Text = Translation.Get("DocumentationControlSeeOn", entry.Provider.ToString()),
                     VerticalAlignment = VerticalAlignment.Center
                 },
                 new SymbolIcon

@@ -42,9 +42,12 @@ public partial class File : StorageElement
 
     public async Task DeleteFile()
     {
-        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Delete File",
-            $"Are you sure you want to delete {Name} from the file system?",
-            Symbol.Delete, primaryButtonText: "Delete", cancelButtonText: "Cancel", translate: false);
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
+            Translation.Get("DeleteFileTitle"),
+            Translation.Get("DeleteStorageElement", Name),
+            Symbol.Delete,
+            primaryButtonText: Translation.Get("DeleteButton"),
+            cancelButtonText: Translation.Get("CancelButton"));
 
         if (result != ContentDialogResult.Primary)
         {
