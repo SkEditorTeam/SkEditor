@@ -37,7 +37,7 @@ public class App : Application
             return;
         }
 
-        if (desktop.Args?.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase) == false)
+        if (desktop.Args?.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase) != true)
         {
             _splashScreen = new SplashScreen();
             desktop.MainWindow = _splashScreen;
