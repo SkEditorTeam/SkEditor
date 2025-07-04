@@ -467,11 +467,11 @@ public class Files : IFiles
             if (!file.IsSaved && file is { IsEditor: true })
             {
                 ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
-                    "Unsaved File",
-                    "The file '" + file.Name +
-                    "' is not saved.\n\nAre you sure you want to close it and discard your changes?",
-                    primaryButtonText: "Yes",
-                    cancelButtonText: "Cancel", icon: FluentAvalonia.UI.Controls.Symbol.SaveLocal);
+                    Translation.Get("UnsavedFileTitle"),
+                    Translation.Get("UnsavedFileMessage", file.Name),
+                    primaryButtonText: Translation.Get("Yes"),
+                    cancelButtonText: Translation.Get("CancelButton"), 
+                    icon: FluentAvalonia.UI.Controls.Symbol.SaveLocal, translate: false);
                 if (response != ContentDialogResult.Primary)
                 {
                     return;

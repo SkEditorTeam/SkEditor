@@ -175,8 +175,8 @@ public partial class DocumentationControl : UserControl
                 new IconSourceElement
                 {
                     IconSource = icon,
-                    Width = 16,
-                    Height = 16
+                    Width = 20,
+                    Height = 20,
                 },
                 new TextBlock
                 {
