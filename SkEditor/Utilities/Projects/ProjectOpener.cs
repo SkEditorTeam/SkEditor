@@ -35,7 +35,10 @@ public static class ProjectOpener
         string? folder = await ExtractFolderPath(path);
         if (string.IsNullOrEmpty(folder))
         {
-            NoFolderMessage.IsVisible = true;
+            if (ProjectRootFolder == null)
+            {
+                NoFolderMessage.IsVisible = true;
+            }
             return;
         }
 
