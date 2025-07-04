@@ -8,10 +8,10 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>
         <PublishSingleFile>true</PublishSingleFile>
-        <AssemblyVersion>2.9.0</AssemblyVersion>
-        <FileVersion>2.9.0</FileVersion>
-        <Version>2.9.0</Version>
-        <InformationalVersion>2.9.0</InformationalVersion>
+        <AssemblyVersion>2.9.1</AssemblyVersion>
+        <FileVersion>2.9.1</FileVersion>
+        <Version>2.9.1</Version>
+        <InformationalVersion>2.9.1</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
