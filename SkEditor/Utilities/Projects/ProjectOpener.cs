@@ -35,13 +35,17 @@ public static class ProjectOpener
         string? folder = await ExtractFolderPath(path);
         if (string.IsNullOrEmpty(folder))
         {
-            NoFolderMessage.IsVisible = true;
+            if (ProjectRootFolder == null)
+            {
+                NoFolderMessage.IsVisible = true;
+            }
             return;
         }
 
         NoFolderMessage.IsVisible = false;
         ProjectRootFolder = new Folder(folder) { IsExpanded = true };
         FileTreeView.ItemsSource = new ObservableCollection<StorageElement> { ProjectRootFolder };
+        SkEditorAPI.Events.ProjectOpened(ProjectRootFolder);
 
         RemoveEventHandlers();
 

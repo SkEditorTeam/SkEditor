@@ -82,6 +82,7 @@
     <system:String x:Key="ConfirmButton">Confirm</system:String>
     <system:String x:Key="CloseButton">Close</system:String>
     <system:String x:Key="SelectButton">Select</system:String>
+    <system:String x:Key="DeleteButton">Delete</system:String>
     <system:String x:Key="CancelButton">Cancel</system:String>
     <system:String x:Key="ContinueButton">Continue</system:String>
     <system:String x:Key="Error">Error</system:String>
@@ -109,7 +110,11 @@
     <system:String x:Key="UpdateFailed">Failed to download the update. Please try again later.</system:String>
     <system:String x:Key="BinaryFileFound">It seems you're trying to open a binary file (or a non text-based file).\n\nDo you want to open it anyway? SkEditor may not handle it correctly.</system:String>
     <system:String x:Key="BinaryFileTitle">Binary File Found</system:String>
-
+    <system:String x:Key="DeleteFileTitle">Delete File</system:String>
+    <system:String x:Key="DeleteFolderTitle">Delete Folder</system:String>
+    <system:String x:Key="DeleteStorageElement">Are you sure you want to delete {0} from the file system?</system:String>
+    <system:String x:Key="UnsavedFileTitle">Unsaved File</system:String>
+    <system:String x:Key="UnsavedFileMessage">The File '{0}' is not saved.\n\nAre you sure you want to close it and discard your changes?</system:String>
 
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Set your API key in the settings</system:String>
@@ -141,9 +146,11 @@
 
     <system:String x:Key="DocumentationControlChangerHelp">click on the desired changer to copy its generated code.</system:String>
     <system:String x:Key="DocumentationControlSince">Since v{0}</system:String>
+    <system:String x:Key="DocumentationControlSeeOn">See on {0}</system:String>
     <system:String x:Key="DocumentationControlDownload">Download</system:String>
     <system:String x:Key="DocumentationControlRemove">Remove</system:String>
     <system:String x:Key="DocumentationControlExampleAuthor">By {0}</system:String>
+    <system:String x:Key="DocumentationControlTypeFromProvider">{0} from {1}</system:String>
 
     <system:String x:Key="DocumentationControlNoExamples">No examples were found for this element.</system:String>
     <system:String x:Key="DocumentationControlNoEventValues">No event values were found for this element.</system:String>
@@ -200,8 +207,7 @@
 
     <!-- Color Selector -->
     <system:String x:Key="ColorSelectorWindowHexResult">Result in hex</system:String>
-
-
+    
     <!-- Projects -->
     <system:String x:Key="ProjectExplorerTitle">Explorer</system:String>
     <system:String x:Key="ProjectExplorerInfoText">You don't have any folders opened yet.</system:String>
@@ -414,6 +420,7 @@
     <system:String x:Key="MarketplaceButtonUninstall">Uninstall</system:String>
     <system:String x:Key="MarketplaceButtonDisable">Disable</system:String>
     <system:String x:Key="MarketplaceButtonEnable">Enable</system:String>
+    <system:String x:Key="MarketplaceButtonLoadFromFile">Load from file</system:String>
 
     <!-- Go to line -->
     <system:String x:Key="GoToLine">Go to line</system:String>

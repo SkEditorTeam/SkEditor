@@ -44,7 +44,15 @@ public partial class TerminalWindow : AppWindow
 
     private static Encoding GetTerminalEncoding()
     {
-        return Encoding.GetEncoding(CultureInfo.CurrentCulture.TextInfo.OEMCodePage);
+        try
+        {
+            int codePage = CultureInfo.CurrentCulture.TextInfo.OEMCodePage;
+            return Encoding.GetEncoding(codePage);
+        }
+        catch (ArgumentException)
+        {
+            return Encoding.UTF8;
+        }
     }
 
     [MemberNotNull(nameof(_process))]

@@ -7,6 +7,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using SkEditor.API;
 
 namespace SkEditor.Utilities;
@@ -47,6 +48,7 @@ public static class Translation
         {
             SkEditorAPI.Core.GetAppConfig().Language = "English";
             SkEditorAPI.Core.GetAppConfig().Save();
+            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
             return;
         }
 
@@ -56,8 +58,11 @@ public static class Translation
         if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
         {
             Application.Current?.Resources.MergedDictionaries.Add(dictionary);
-            Translations.Add(language, dictionary);
+            Translations.TryAdd(language, dictionary);
         }
+        SkEditorAPI.Core.GetAppConfig().Language = language;
+        SkEditorAPI.Core.GetAppConfig().Save();
+        Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
 #endif
     }
 }
