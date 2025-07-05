@@ -115,11 +115,49 @@ public partial class MarketplaceWindow : AppWindow
         ItemView.IsVisible = true;
 
         ItemView.ItemName = item.ItemName;
-        ItemView.ItemVersion = item.ItemVersion;
         ItemView.ItemAuthor = item.ItemAuthor;
         ItemView.ItemShortDescription = item.ItemShortDescription;
         ItemView.ItemLongDescription = item.ItemLongDescription;
         ItemView.ItemImageUrl = item.ItemImageUrl;
+        
+        if (item is AddonItem addonItem)
+        {
+            var currentVersion = addonItem.GetAddon()?.Version;
+            var latestVersion = item.ItemVersion;
+            
+            ItemView.CurrentAddonVersion = currentVersion;
+    
+            if (string.IsNullOrEmpty(currentVersion))
+            {
+                ItemView.NotInstalledBorder.IsVisible = true;
+                ItemView.UpdateAvailableBorder.IsVisible = false;
+                ItemView.UpToDateBorder.IsVisible = false;
+                ItemView.VersionBorder.IsVisible = true;
+            }
+            else if (currentVersion == latestVersion)
+            {
+                ItemView.NotInstalledBorder.IsVisible = false;
+                ItemView.UpdateAvailableBorder.IsVisible = false;
+                ItemView.UpToDateBorder.IsVisible = true;
+                ItemView.VersionBorder.IsVisible = false;
+            }
+            else
+            {
+                ItemView.NotInstalledBorder.IsVisible = false;
+                ItemView.UpdateAvailableBorder.IsVisible = true;
+                ItemView.UpToDateBorder.IsVisible = false;
+                ItemView.VersionBorder.IsVisible = false;
+            }
+        }
+        else
+        {
+            ItemView.NotInstalledBorder.IsVisible = !item.IsInstalled();
+            ItemView.UpdateAvailableBorder.IsVisible = false;
+            ItemView.UpToDateBorder.IsVisible = false;
+            ItemView.VersionBorder.IsVisible = true;
+        }
+        
+        ItemView.ItemVersion = item.ItemVersion;
 
         ItemView.InstallButton.CommandParameter = ItemView.DisableButton.CommandParameter =
             ItemView.UninstallButton.CommandParameter
@@ -138,8 +176,10 @@ public partial class MarketplaceWindow : AppWindow
             case AddonItem addonItem2:
                 ItemView.DisableButton.IsVisible = false;
                 ItemView.EnableButton.IsVisible = false;
-                ItemView.UpdateButton.IsVisible = false;
                 ItemView.UninstallButton.IsVisible = false;
+                
+                ItemView.UpdateButton.IsVisible = addonItem2.GetAddon()?.Version != item.ItemVersion;
+                ItemView.UpdateButton.Command = new AsyncRelayCommand(addonItem2.Update);
 
                 ItemView.ManageButton.IsVisible = addonItem2.IsInstalled();
                 ItemView.ManageButton.Command = new RelayCommand(() =>
