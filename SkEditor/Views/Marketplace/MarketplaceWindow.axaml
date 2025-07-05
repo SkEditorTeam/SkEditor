@@ -22,7 +22,7 @@
                 <ListBox Name="ItemListBox" VerticalAlignment="Stretch" />
             </Border>
 
-            <Grid Grid.Column="1" Width="500" VerticalAlignment="Top" Margin="15,0,0,0">
+            <Grid Grid.Column="1" Width="550" VerticalAlignment="Top" Margin="15,0,0,0">
                 <controls:MarketplaceItemView Name="ItemView" IsVisible="False" />
             </Grid>
         </Grid>

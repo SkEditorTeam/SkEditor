@@ -82,6 +82,7 @@
     <system:String x:Key="ConfirmButton">Potwierdź</system:String>
     <system:String x:Key="CloseButton">Zamknij</system:String>
     <system:String x:Key="SelectButton">Wybierz</system:String>
+    <system:String x:Key="DeleteButton">Usuń</system:String>
     <system:String x:Key="CancelButton">Anuluj</system:String>
     <system:String x:Key="ContinueButton">Kontynuuj</system:String>
     <system:String x:Key="Error">Błąd</system:String>
@@ -109,7 +110,13 @@
     <system:String x:Key="UpdateFailed">Pobieranie aktualizacji nie powiodło się. Spróbuj ponownie.</system:String>
     <system:String x:Key="BinaryFileFound">Wygląda na to, że próbujesz otworzyć plik o nieznanym formacie.\n\nCzy na pewno chcesz go otworzyć? SkEditor może go nie obsługiwać poprawnie.</system:String>
     <system:String x:Key="BinaryFileTitle">Nieznany format</system:String>
-
+    <system:String x:Key="DeleteFileTitle">Usuń plik</system:String>
+    <system:String x:Key="DeleteFolderTitle">Usuń folder</system:String>
+    <system:String x:Key="DeleteStorageElement">Jesteś pewny, że chcesz usunąć {0} z systemu plików?</system:String>
+    <system:String x:Key="UnsavedFileTitle">Niezapisany plik</system:String>
+    <system:String x:Key="UnsavedFileMessage">Plik '{0}' nie został zapisany.\n\nJesteś pewny, że chcesz wyjść i odrzucić niezapisane zmiany?</system:String>
+    <system:String x:Key="AddonUpdateAvailableTitle">Dostępna aktualizacja dodatku</system:String>
+    <system:String x:Key="AddonUpdateAvailableMessage">Dodatek '{0}' ma dostępną aktualizację.\n\nOdwiedź Rynek, by zaktualizować dla najnowszych poprawek i kompatybilności.</system:String>
 
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Ustaw swój klucz API w ustawieniach</system:String>
@@ -144,6 +151,7 @@
     <system:String x:Key="DocumentationControlDownload">Download</system:String>
     <system:String x:Key="DocumentationControlRemove">Remove</system:String>
     <system:String x:Key="DocumentationControlExampleAuthor">By {0}</system:String>
+    <system:String x:Key="DocumentationControlTypeFromProvider">{0} od {1}</system:String>
 
     <system:String x:Key="DocumentationControlNoExamples">No examples were found for this element.</system:String>
     <system:String x:Key="DocumentationControlNoEventValues">No event values were found for this element.</system:String>

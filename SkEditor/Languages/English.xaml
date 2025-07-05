@@ -115,6 +115,8 @@
     <system:String x:Key="DeleteStorageElement">Are you sure you want to delete {0} from the file system?</system:String>
     <system:String x:Key="UnsavedFileTitle">Unsaved File</system:String>
     <system:String x:Key="UnsavedFileMessage">The File '{0}' is not saved.\n\nAre you sure you want to close it and discard your changes?</system:String>
+    <system:String x:Key="AddonUpdateAvailableTitle">Addon Update Available</system:String>
+    <system:String x:Key="AddonUpdateAvailableMessage">An update is available for '{0}'.\n\nVisit the Marketplace to update it for the latest fixes and SkEditor compatibility.</system:String>
 
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Set your API key in the settings</system:String>

@@ -7,22 +7,25 @@ namespace SkEditor.Controls;
 
 public partial class MarketplaceItemView : UserControl
 {
-    public static AvaloniaProperty<string> ItemNameProperty =
+    public static readonly AvaloniaProperty<string> ItemNameProperty =
         AvaloniaProperty.Register<MarketplaceItemView, string>(nameof(ItemName));
 
-    public static AvaloniaProperty<string> ItemVersionProperty =
+    public static readonly AvaloniaProperty<string> ItemVersionProperty =
         AvaloniaProperty.Register<MarketplaceItemView, string>(nameof(ItemVersion));
+    
+    public static readonly AvaloniaProperty<string?> CurrentAddonVersionProperty =
+        AvaloniaProperty.Register<MarketplaceItemView, string?>(nameof(CurrentAddonVersion));
 
-    public static AvaloniaProperty<string> ItemAuthorProperty =
+    public static readonly AvaloniaProperty<string> ItemAuthorProperty =
         AvaloniaProperty.Register<MarketplaceItemView, string>(nameof(ItemAuthor));
 
-    public static AvaloniaProperty<string> ItemImageUrlProperty =
+    public static readonly AvaloniaProperty<string> ItemImageUrlProperty =
         AvaloniaProperty.Register<MarketplaceItemView, string>(nameof(ItemImageUrl));
 
-    public static AvaloniaProperty<string> ItemShortDescriptionProperty =
+    public static readonly AvaloniaProperty<string> ItemShortDescriptionProperty =
         AvaloniaProperty.Register<MarketplaceItemView, string>(nameof(ItemShortDescription));
 
-    public static AvaloniaProperty<string> ItemLongDescriptionProperty =
+    public static readonly AvaloniaProperty<string> ItemLongDescriptionProperty =
         AvaloniaProperty.Register<MarketplaceItemView, string>(nameof(ItemLongDescription));
 
 
@@ -45,6 +48,12 @@ public partial class MarketplaceItemView : UserControl
     {
         get => GetValue(ItemVersionProperty)?.ToString() ?? "";
         set => SetValue(ItemVersionProperty, value);
+    }
+    
+    public string? CurrentAddonVersion
+    {
+        get => GetValue(CurrentAddonVersionProperty)?.ToString();
+        set => SetValue(CurrentAddonVersionProperty, value);
     }
 
     public string ItemAuthor

@@ -229,6 +229,8 @@ public partial class MainWindow : AppWindow
                         await ChangelogChecker.Check();
 
                         await CrashChecker.CheckForCrash();
+
+                        await AddonUpdateChecker.CheckForUpdates();
                     }
                     catch (Exception exc)
                     {

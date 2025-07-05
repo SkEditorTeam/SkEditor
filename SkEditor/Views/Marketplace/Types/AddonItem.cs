@@ -89,9 +89,27 @@ public class AddonItem : MarketplaceItem
 
     public override bool IsInstalled()
     {
+        return GetAddon() != null;
+    }
+    
+    public IAddon? GetAddon()
+    {
         string fileName = ItemFileUrl.Split('/').Last();
         string addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
 
-        return SkEditorAPI.Addons.GetAddon(addonIdentifier) != null;
+        return SkEditorAPI.Addons.GetAddon(addonIdentifier);
+    }
+
+    public async Task Update()
+    {
+        IAddon? addon = GetAddon();
+        if (addon == null)
+        {
+            await Install();
+            return;
+        }
+
+        await AddonLoader.DeleteAddon(addon);
+        await Install();
     }
 }
