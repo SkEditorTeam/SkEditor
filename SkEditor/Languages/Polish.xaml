@@ -115,6 +115,8 @@
     <system:String x:Key="DeleteStorageElement">Jesteś pewny, że chcesz usunąć {0} z systemu plików?</system:String>
     <system:String x:Key="UnsavedFileTitle">Niezapisany plik</system:String>
     <system:String x:Key="UnsavedFileMessage">Plik '{0}' nie został zapisany.\n\nJesteś pewny, że chcesz wyjść i odrzucić niezapisane zmiany?</system:String>
+    <system:String x:Key="AddonUpdateAvailableTitle">Dostępna aktualizacja dodatku</system:String>
+    <system:String x:Key="AddonUpdateAvailableMessage">Dodatek '{0}' ma dostępną aktualizację.\n\nOdwiedź Rynek, by zaktualizować dla najnowszych poprawek i kompatybilności.</system:String>
 
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Ustaw swój klucz API w ustawieniach</system:String>
