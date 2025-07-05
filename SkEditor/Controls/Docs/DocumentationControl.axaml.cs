@@ -52,7 +52,7 @@ public partial class DocumentationControl : UserControl
         {
             ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
                 Translation.Get("DocumentationWindowFetchWarning"),
-                new SymbolIconSource { Symbol = Symbol.ImportantFilled });
+                new SymbolIconSource { Symbol = Symbol.ImportantFilled }, Translation.Get("CancelButton"), Translation.Get("Okay"));
             if (response == ContentDialogResult.Primary)
             {
                 SkriptHubProvider? provider = IDocProvider.Providers[DocProvider.SkriptHub] as SkriptHubProvider;
@@ -175,8 +175,8 @@ public partial class DocumentationControl : UserControl
                 new IconSourceElement
                 {
                     IconSource = icon,
-                    Width = 16,
-                    Height = 16
+                    Width = 20,
+                    Height = 20,
                 },
                 new TextBlock
                 {

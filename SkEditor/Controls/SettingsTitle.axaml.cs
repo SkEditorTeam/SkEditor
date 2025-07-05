@@ -1,5 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.Input;
+using SkEditor.Views;
 
 namespace SkEditor.Controls;
 
@@ -12,6 +14,11 @@ public partial class SettingsTitle : UserControl
     {
         InitializeComponent();
         DataContext = this;
+
+        Loaded += (_, _) =>
+        {
+            BackButton.Command = new RelayCommand(SettingsWindow.Instance.FrameView.GoBack);
+        };
     }
 
     public bool HasBackButton { get; set; } = true;
@@ -22,6 +29,10 @@ public partial class SettingsTitle : UserControl
         set => SetValue(TitleProperty, value);
     }
 
+    /// <summary>
+    /// Gets the back button control.
+    /// </summary>
+    /// <returns>The back button control, or null if it does not exist.</returns>
     public Button? GetBackButton()
     {
         return this.FindControl<Button>("BackButton");

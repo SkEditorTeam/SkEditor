@@ -37,7 +37,7 @@ public class App : Application
             return;
         }
 
-        if (desktop.Args?.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase) == false)
+        if (desktop.Args?.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase) != true)
         {
             _splashScreen = new SplashScreen();
             desktop.MainWindow = _splashScreen;
@@ -89,7 +89,10 @@ public class App : Application
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                     _splashScreen?.UpdateStatus("Starting named pipe server..."));
+                
                 NamedPipeServer.Start();
+                
+                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Initializing main window..."));
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {

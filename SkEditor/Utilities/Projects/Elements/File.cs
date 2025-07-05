@@ -42,9 +42,12 @@ public partial class File : StorageElement
 
     public async Task DeleteFile()
     {
-        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Delete File",
-            $"Are you sure you want to delete {Name} from the file system?",
-            Symbol.Delete, primaryButtonText: "Delete", cancelButtonText: "Cancel", translate: false);
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
+            Translation.Get("DeleteFileTitle"),
+            Translation.Get("DeleteStorageElement", Name),
+            Symbol.Delete,
+            primaryButtonText: Translation.Get("DeleteButton"),
+            cancelButtonText: Translation.Get("CancelButton"));
 
         if (result != ContentDialogResult.Primary)
         {
@@ -122,6 +125,6 @@ public partial class File : StorageElement
         SkEditorAPI.Windows.GetMainWindow()?.Clipboard?.SetTextAsync(path);
     }
     
-    [System.Text.RegularExpressions.GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[a-zA-Z0-9][\w\-. ]{0,254}$")]
+    [System.Text.RegularExpressions.GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$")]
     private static partial System.Text.RegularExpressions.Regex ValidFileNameRegex();
 }

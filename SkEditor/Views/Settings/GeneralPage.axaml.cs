@@ -39,7 +39,6 @@ public partial class GeneralPage : UserControl
             string? language = LanguageComboBox.SelectedItem.ToString();
             if (string.IsNullOrEmpty(language)) return;
             
-            SkEditorAPI.Core.GetAppConfig().Language = language;
             Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 await Translation.ChangeLanguage(language);
@@ -83,7 +82,6 @@ public partial class GeneralPage : UserControl
 
     private void AssignCommands()
     {
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
         RpcToggleSwitch.Command = new RelayCommand(ToggleRpc);
         WrappingToggleSwitch.Command = new RelayCommand(ToggleWrapping);
         ZoomSyncToggleSwitch.Command = new RelayCommand(ToggleZoomSync);

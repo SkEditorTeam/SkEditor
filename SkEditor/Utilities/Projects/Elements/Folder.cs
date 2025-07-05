@@ -91,12 +91,11 @@ public partial class Folder : StorageElement
     public async Task DeleteFolder()
     {
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
-            "Delete File",
-            $"Are you sure you want to delete {Name} from the file system?",
+            Translation.Get("DeleteFolderTitle"),
+            Translation.Get("DeleteStorageElement", Name),
             Symbol.Delete,
-            primaryButtonText: "Delete",
-            cancelButtonText: "Cancel",
-            translate: false
+            primaryButtonText: Translation.Get("DeleteButton"),
+            cancelButtonText: Translation.Get("CancelButton")
         );
 
         if (result != ContentDialogResult.Primary)
@@ -118,6 +117,8 @@ public partial class Folder : StorageElement
         ProjectOpener.FileTreeView.ItemsSource = null;
 
         Folder? projectRootFolder = null;
+        
+        SkEditorAPI.Events.ProjectClosed();
 
         ExplorerPanel? panel =
             Registries.SidebarPanels.FirstOrDefault(x => x is ExplorerPanel) as ExplorerPanel;
@@ -265,6 +266,6 @@ public partial class Folder : StorageElement
         return null;
     }
     
-    [System.Text.RegularExpressions.GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[a-zA-Z0-9][\w\-. ]{0,254}$")]
+    [System.Text.RegularExpressions.GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$")]
     private static partial System.Text.RegularExpressions.Regex ValidFolderNameRegex();
 }

@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
         xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.CrashWindow"
@@ -11,7 +10,7 @@
         Height="600" Width="800"
         WindowStartupLocation="CenterOwner"
         Theme="{StaticResource SmallWindowTheme}">
-    <avalonia:SpacedGrid Margin="25"
+    <Grid Margin="25"
                          RowDefinitions="Auto,*,Auto" RowSpacing="20"
                          ColumnDefinitions="*,*" ColumnSpacing="10">
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
@@ -40,5 +39,5 @@ If you can, please report this on the Discord server.</TextBlock>
 
         <Button Name="CloseButton" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center" Content="Close" />
-    </avalonia:SpacedGrid>
+    </Grid>
 </Window>

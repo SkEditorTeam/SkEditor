@@ -34,7 +34,6 @@ public partial class ExperimentsPage : UserControl
     public ExperimentsPage()
     {
         InitializeComponent();
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(HomePage)));
 
         AddExperiments();
     }
