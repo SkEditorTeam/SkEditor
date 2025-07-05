@@ -94,8 +94,8 @@ public partial class Folder : StorageElement
             Translation.Get("DeleteFolderTitle"),
             Translation.Get("DeleteStorageElement", Name),
             Symbol.Delete,
-            primaryButtonText: Translation.Get("DeleteButton"),
-            cancelButtonText: Translation.Get("CancelButton")
+            primaryButtonText: "DeleteButton",
+            cancelButtonText: "CancelButton", translate: true
         );
 
         if (result != ContentDialogResult.Primary)

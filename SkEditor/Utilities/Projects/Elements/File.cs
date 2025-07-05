@@ -46,8 +46,8 @@ public partial class File : StorageElement
             Translation.Get("DeleteFileTitle"),
             Translation.Get("DeleteStorageElement", Name),
             Symbol.Delete,
-            primaryButtonText: Translation.Get("DeleteButton"),
-            cancelButtonText: Translation.Get("CancelButton"));
+            primaryButtonText: "DeleteButton",
+            cancelButtonText: "CancelButton", translate: true);
 
         if (result != ContentDialogResult.Primary)
         {
@@ -119,12 +119,13 @@ public partial class File : StorageElement
     {
         Folder? root = ProjectOpener.ProjectRootFolder;
         if (root is null) return;
-        
-        
+
+
         string path = StorageFilePath.Replace(root.StorageFolderPath, "");
         SkEditorAPI.Windows.GetMainWindow()?.Clipboard?.SetTextAsync(path);
     }
-    
-    [System.Text.RegularExpressions.GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$")]
+
+    [System.Text.RegularExpressions.GeneratedRegex(
+        @"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$")]
     private static partial System.Text.RegularExpressions.Regex ValidFileNameRegex();
 }
