@@ -127,13 +127,14 @@ public static class AddonLoader
         }
         catch (Exception e)
         {
-            SkEditorAPI.Logs.Warning(
-                $"Failed to load addon from \"{dllFile}\": {e.Message}, maybe it's the wrong architecture?");
-            _ = Task.Run(async () =>
-            {
-                await SkEditorAPI.Windows.ShowError(
-                    $"Failed to load addon from \"{dllFile}\": {e.Message}, maybe it's the wrong architecture?");
-            });
+            string name = Path.GetFileNameWithoutExtension(dllFile);
+            
+            SkEditorAPI.Logs.Error($"Failed to load addon from \"{dllFile}\": {e.Message}\n{e.StackTrace}");
+            
+            await SkEditorAPI.Windows.ShowError(
+                $"Failed to load addon '{name}'.\n\n" +
+                "Check the application logs for detailed error information. " +
+                "Visit the Marketplace to see if an update is available for this addon.");
             return;
         }
 
