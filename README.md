@@ -1,5 +1,5 @@
 <p align='center'>
-  <img src="SkEditor.png?raw=true" width=40% height=40%>
+  <img src="SkEditor.png?raw=true" width="300">
 </p>
 
 <div align='center'>
