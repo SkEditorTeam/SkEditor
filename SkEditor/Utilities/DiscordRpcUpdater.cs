@@ -1,10 +1,12 @@
-﻿using DiscordRPC;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
+using DiscordRPC;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 
 namespace SkEditor.Utilities;
 
-public static class DiscordRpcUpdater
+public static partial class DiscordRpcUpdater
 {
     private const string ApplicationId = "1152625623777431662";
     private static DiscordRpcClient? _client;
@@ -43,8 +45,14 @@ public static class DiscordRpcUpdater
             if (SkEditorAPI.Files.IsFileOpen())
             {
                 if (tabView.SelectedItem is not TabViewItem tab) return;
-                _client.UpdateDetails(Translation.Get("DiscordRpcEditing")
-                    .Replace("{0}", tab.Header?.ToString()?.TrimEnd('*')));
+                var tabName = tab.Header?.ToString()?.TrimEnd('*') ?? "";
+                tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
+                var translation = Translation.Get("DiscordRpcEditing", tabName);
+                if (translation.Length > 128)
+                {
+                    translation = translation[..125] + "...";
+                }
+                _client.UpdateDetails(translation);
             }
             else
             {
@@ -63,4 +71,7 @@ public static class DiscordRpcUpdater
         _client.ClearPresence();
         _client.Dispose();
     }
+
+    [GeneratedRegex(@"[^\P{C}\n]+")]
+    private static partial Regex UnicodeControlCharacterFilter();
 }
