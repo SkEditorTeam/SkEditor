@@ -6,28 +6,14 @@
 
 # SkEditor
   
-<a href='https://github.com/SkEditorTeam/SkEditor/releases'>
-  <img src='https://img.shields.io/github/v/release/SkEditorTeam/SkEditor?color=%237a34eb&label=version&style=flat-square'>
-</a>
-  
-<a href='https://github.com//SkEditorPlus/SkEditor/blob/main/LICENSE'>
-  <img src='https://img.shields.io/github/license/SkEditorTeam/SkEditor?color=%230fa685&label=license&style=flat-square'>
-</a>
-
-<a href='https://github.com//SkEditorPlus/SkEditor/releases/latest'>
-  <img src='https://img.shields.io/github/downloads/SkEditorTeam/SkEditor/total?color=%230fa621&style=flat-square'>
-</a>
+<a href='https://github.com/SkEditorTeam/SkEditor/releases'><img src='https://img.shields.io/github/v/release/SkEditorTeam/SkEditor?color=%237a34eb&label=version&style=flat-square'></a>
+<a href='https://github.com//SkEditorPlus/SkEditor/blob/main/LICENSE'><img src='https://img.shields.io/github/license/SkEditorTeam/SkEditor?color=%230fa685&label=license&style=flat-square'></a>
+<a href='https://github.com//SkEditorPlus/SkEditor/releases/latest'><img src='https://img.shields.io/github/downloads/SkEditorTeam/SkEditor/total?color=%230fa621&style=flat-square'></a>
 
 <br />
-<br />
 
-<a href='https://skeditor.notro.me'>
-  <img src='https://img.shields.io/badge/Documentation-4CAF50?style=for-the-badge'>
-</a>
-
-<a href='https://skeditordc.notro.me'>
-  <img src='https://img.shields.io/badge/Discord-%235562ea?style=for-the-badge'>
-</a>
+<a href='https://skeditor.notro.me'><img src='https://img.shields.io/badge/Documentation-4CAF50?style=for-the-badge'></a>
+<a href='https://skeditordc.notro.me'><img src='https://img.shields.io/badge/Discord-%235562ea?style=for-the-badge'></a>
   
 </div>
 
