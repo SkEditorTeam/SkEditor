@@ -21,6 +21,10 @@
 <br />
 <br />
 
+<a href='https://skeditor.notro.me'>
+  <img src='https://img.shields.io/badge/Documentation-4CAF50?style=for-the-badge'>
+</a>
+
 <a href='https://skeditordc.notro.me'>
   <img src='https://img.shields.io/badge/Discord-%235562ea?style=for-the-badge'>
 </a>
