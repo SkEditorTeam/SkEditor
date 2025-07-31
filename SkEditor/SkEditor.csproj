@@ -8,13 +8,18 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>
         <PublishSingleFile>true</PublishSingleFile>
-        <AssemblyVersion>2.9.3</AssemblyVersion>
-        <FileVersion>2.9.3</FileVersion>
-        <Version>2.9.3</Version>
-        <InformationalVersion>2.9.3</InformationalVersion>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <BaseVersion>2.9.3</BaseVersion>
+        <Version>$(BaseVersion)$(BuildSuffix)</Version>
+        <InformationalVersion>$(BaseVersion)$(BuildSuffix)</InformationalVersion>
+        <AssemblyVersion>$(BaseVersion)</AssemblyVersion>
+        <FileVersion>$(BaseVersion)</FileVersion>
+    </PropertyGroup>
+    
     <PropertyGroup>
         <NoWarn>CA2211</NoWarn>
         <DebugType>portable</DebugType>
