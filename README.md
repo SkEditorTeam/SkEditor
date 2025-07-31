@@ -12,8 +12,9 @@
 
 <br />
 
-<a href='https://skeditor.notro.me'><img src='https://img.shields.io/badge/Documentation-4CAF50?style=for-the-badge'></a>
-<a href='https://skeditordc.notro.me'><img src='https://img.shields.io/badge/Discord-%235562ea?style=for-the-badge'></a>
+<a href='https://skeditor.notro.me'>![ghpages](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/ghpages_vector.svg)</a>
+<a href='https://ko-fi.com/notro'>![kofi-singular](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/kofi-singular_vector.svg)</a>
+<a href='https://skeditordc.notro.me'>![discord-plural](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg)</a>
   
 </div>
 
