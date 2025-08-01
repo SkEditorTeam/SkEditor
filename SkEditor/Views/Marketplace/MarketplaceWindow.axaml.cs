@@ -178,7 +178,7 @@ public partial class MarketplaceWindow : AppWindow
                 ItemView.EnableButton.IsVisible = false;
                 ItemView.UninstallButton.IsVisible = false;
                 
-                ItemView.UpdateButton.IsVisible = addonItem2.GetAddon()?.Version != item.ItemVersion;
+                ItemView.UpdateButton.IsVisible = !ItemView.InstallButton.IsVisible && addonItem2.GetAddon()?.Version != item.ItemVersion;
                 ItemView.UpdateButton.Command = new AsyncRelayCommand(addonItem2.Update);
 
                 ItemView.ManageButton.IsVisible = addonItem2.IsInstalled();
