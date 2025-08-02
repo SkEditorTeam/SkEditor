@@ -16,6 +16,8 @@
     <system:String x:Key="WindowTitleElementRename">Umbenennen</system:String>
     <system:String x:Key="WindowTitleElementCreate">Erstellen</system:String>
     <system:String x:Key="WindowTitleColorSelector">Farbwähler</system:String>
+    <system:String x:Key="AddonUpdateAvailableTitle">Addon-Update verfügbar</system:String>
+    
 
     <!-- Menu Headers -->
     <system:String x:Key="MenuHeaderFile">Datei</system:String>
@@ -116,8 +118,8 @@
     <system:String x:Key="UnsavedFileTitle">Ungespeicherte Datei</system:String>
     <system:String x:Key="UnsavedFileMessage">Die Datei '{0}' ist nicht gespeichert.\n\nBist du dir sicher, dass die Datei schließen und alle Änderungen verlieren willst?</system:String>
     <system:String x:Key="AddonUpdateAvailableTitle">Addon Update verfügbar</system:String>
-    <system:String x:Key="AddonUpdateAvailableMessage">Ein Update für '{0}' ist verfügbar.\n\nBesuche den Marktplatz um es für die neusten Fehlerbehebungen und SkEditor Kompatibilität zu updaten.</system:String>
-    
+    <system:String x:Key="AddonUpdateAvailableMessage">Ein Update ist für '{0}' verfügbar.\n\nBesuche den Marktplatz, um es für die neuesten Fehlerbehebungen und SkEditor-Kompatibilität zu aktualisieren.</system:String>
+
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Setzen Sie Ihren API-Schlüssel in den Einstellungen</system:String>
     <system:String x:Key="PublishWindowApiKeyHint">Klicken Sie hier, um eine Website mit dem API-Schlüssel zu öffnen. Stellen Sie sicher, dass Sie sich zuerst anmelden!</system:String>
