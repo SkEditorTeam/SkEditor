@@ -30,12 +30,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaXaml Remove="Assets\*.axaml"/>
-        <AvaloniaResource Include="Assets\**"/>
+        <AvaloniaXaml Remove="Assets\*.axaml" />
+        <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Styles\**"/>
+        <AvaloniaResource Include="Styles\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,9 +45,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf"/>
-        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf"/>
-        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf"/>
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf" />
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf" />
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf" />
     </ItemGroup>
 
     <ItemGroup>
@@ -57,32 +57,32 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Languages\English.xaml"/>
+        <AvaloniaResource Include="Languages\English.xaml" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.3.0"/>
+        <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.3.0" />
         <PackageReference Include="Avalonia" Version="11.3.0" />
-        <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5"/>
+        <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
         <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
         <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.0" />
         <PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.0" />
-        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0"/>
-        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0"/>
+        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
+        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0" />
         <PackageReference Include="DiscordRichPresence" Version="1.3.0.28" />
         <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.303" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="NuGet.Protocol" Version="6.14.0" />
-        <PackageReference Include="Octokit" Version="14.0.0"/>
-        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
-        <PackageReference Include="SkAvaloniaEdit" Version="11.3.1"/>
-        <PackageReference Include="SkFluentAvalonia" Version="2.2.1"/>
+        <PackageReference Include="Octokit" Version="14.0.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+        <PackageReference Include="SkAvaloniaEdit" Version="11.3.1" />
+        <PackageReference Include="SkFluentAvalonia" Version="2.2.2" />
         <PackageReference Include="Svg.Skia" Version="3.0.3" />
         <PackageReference Include="System.Threading.AccessControl" Version="9.0.6" />
 
@@ -94,7 +94,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Update="Assets\Icons.axaml"/>
+        <AvaloniaResource Update="Assets\Icons.axaml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -201,7 +201,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Assets\GUI\"/>
+        <Folder Include="Assets\GUI\" />
     </ItemGroup>
 
     <ItemGroup>
