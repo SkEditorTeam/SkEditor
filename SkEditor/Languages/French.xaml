@@ -90,6 +90,7 @@
     <system:String x:Key="Yes">Oui</system:String>
     <system:String x:Key="No">Non</system:String>
     <system:String x:Key="Okay">D'accord</system:String>
+    <system:String x:Key="DeleteButton">Supprimer</system:String>
 
     <!-- Messages -->
     <system:String x:Key="NewFileNameFormat">Nouveau fichier {0}</system:String>
@@ -109,6 +110,11 @@
     <system:String x:Key="UpdateFailed">Échec du téléchargement de la mise à jour. Veuillez réessayer ultérieurement.</system:String>
     <system:String x:Key="BinaryFileFound">Il semble que vous essayiez d'ouvrir un fichier binaire (ou un fichier non basé sur le texte).\n\nVoulez-vous l'ouvrir quand même ? SkEditor pourrait ne pas le gérer correctement.</system:String>
     <system:String x:Key="BinaryFileTitle">Fichier binaire trouvé</system:String>
+    <system:String x:Key="AddonUpdateAvailableMessage">Une mise à jour est disponible pour '{0}'.\n\nVisitez la Place de marché pour la mettre à jour avec les derniers correctifs et la compatibilité SkEditor.</system:String>
+    <system:String x:Key="DeleteFolderTitle">Supprimer le dossier</system:String>
+    <system:String x:Key="DeleteStorageElement">Êtes-vous sûr de vouloir supprimer {0} du système de fichiers ?</system:String>
+    <system:String x:Key="UnsavedFileTitle">Fichier non enregistré</system:String>
+    <system:String x:Key="UnsavedFileMessage">Le fichier '{0}' n'est pas enregistré.\n\nÊtes-vous sûr de vouloir le fermer et perdre vos modifications ?</system:String>
 
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Définissez votre clé API dans les paramètres</system:String>
@@ -150,6 +156,8 @@
     <system:String x:Key="DocumentationControlNoDescription">Aucune description fournie.</system:String>
 
     <system:String x:Key="DocumentationControlErrorExamples">Une erreur est survenue lors du chargement des exemples : {0}</system:String>
+    <system:String x:Key="DocumentationControlTypeFromProvider">{0} de {1}</system:String>
+    <system:String x:Key="DocumentationControlSeeOn">Voir sur {0}</system:String>
 
     <!-- Documentation Window -->
     <system:String x:Key="DocumentationWindowTitle">Documentation</system:String>

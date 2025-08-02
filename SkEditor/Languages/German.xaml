@@ -117,6 +117,7 @@
     <system:String x:Key="DeleteStorageElement">Bist du dir sicher, dass du {0} von dem Dateisystem löschen willst?</system:String>
     <system:String x:Key="UnsavedFileTitle">Ungespeicherte Datei</system:String>
     <system:String x:Key="UnsavedFileMessage">Die Datei '{0}' ist nicht gespeichert.\n\nBist du dir sicher, dass die Datei schließen und alle Änderungen verlieren willst?</system:String>
+    <system:String x:Key="AddonUpdateAvailableTitle">Addon Update verfügbar</system:String>
     <system:String x:Key="AddonUpdateAvailableMessage">Ein Update ist für '{0}' verfügbar.\n\nBesuche den Marktplatz, um es für die neuesten Fehlerbehebungen und SkEditor-Kompatibilität zu aktualisieren.</system:String>
 
     <!-- Publish Window -->
