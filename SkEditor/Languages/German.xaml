@@ -16,8 +16,6 @@
     <system:String x:Key="WindowTitleElementRename">Umbenennen</system:String>
     <system:String x:Key="WindowTitleElementCreate">Erstellen</system:String>
     <system:String x:Key="WindowTitleColorSelector">Farbwähler</system:String>
-    <system:String x:Key="AddonUpdateAvailableTitle">Addon-Update verfügbar</system:String>
-    
 
     <!-- Menu Headers -->
     <system:String x:Key="MenuHeaderFile">Datei</system:String>
