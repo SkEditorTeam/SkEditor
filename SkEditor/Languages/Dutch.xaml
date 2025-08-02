@@ -1,0 +1,458 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Window Titles -->
+    <system:String x:Key="WindowTitlePublish">Publiceren</system:String>
+    <system:String x:Key="WindowTitleRefactor">Refactoren</system:String>
+    <system:String x:Key="WindowTitleSettings">Instellingen</system:String>
+    <system:String x:Key="WindowTitleFontSelector">Lettertype kiezen</system:String>
+    <system:String x:Key="WindowTitleSaveFilePicker">Bestand opslaan</system:String>
+    <system:String x:Key="WindowTitleOpenFilePicker">Bestand openen</system:String>
+    <system:String x:Key="WindowTitleGuiGenerator">GUI genereren</system:String>
+    <system:String x:Key="WindowTitleCommandGenerator">Commando genereren</system:String>
+    <system:String x:Key="WindowTitleItemSelector">Item kiezen</system:String>
+    <system:String x:Key="WindowTitleMarketplace">Marktplaats</system:String>
+    <system:String x:Key="WindowTitleElementRename">Hernoemen</system:String>
+    <system:String x:Key="WindowTitleElementCreate">Aanmaken</system:String>
+    <system:String x:Key="WindowTitleColorSelector">Kleurkiezer</system:String>
+    <system:String x:Key="AddonUpdateAvailableTitle">Add-on update beschikbaar</system:String>
+
+    <!-- Menu Headers -->
+    <system:String x:Key="MenuHeaderFile">Bestand</system:String>
+    <system:String x:Key="MenuHeaderEdit">Bewerken</system:String>
+    <system:String x:Key="MenuHeaderTools">Hulpmiddelen</system:String>
+    <system:String x:Key="MenuHeaderOther">Overig</system:String>
+    <system:String x:Key="MenuHeaderAddons">Add-ons</system:String>
+    <system:String x:Key="MenuHeaderManageAddons">Add-ons beheren</system:String>
+
+    <!-- File Menu -->
+    <system:String x:Key="MenuHeaderNew">Nieuw</system:String>
+    <system:String x:Key="MenuHeaderOpen">Openen</system:String>
+    <system:String x:Key="MenuHeaderOpenFolder">Map openen</system:String>
+    <system:String x:Key="MenuHeaderSave">Opslaan</system:String>
+    <system:String x:Key="MenuHeaderSaveAs">Opslaan als</system:String>
+    <system:String x:Key="MenuHeaderSaveAll">Alles opslaan</system:String>
+    <system:String x:Key="MenuHeaderPublish">Publiceren</system:String>
+    <system:String x:Key="MenuHeaderClose">Sluiten</system:String>
+    <system:String x:Key="MenuHeaderCloseCurrentFile">Huidig bestand</system:String>
+    <system:String x:Key="MenuHeaderCloseAll">Alles</system:String>
+    <system:String x:Key="MenuHeaderCloseAllButCurrent">Alles behalve huidig bestand</system:String>
+    <system:String x:Key="MenuHeaderCloseUnsaved">Alle onopgeslagen</system:String>
+    <system:String x:Key="MenuHeaderCloseLeft">Alles naar links</system:String>
+    <system:String x:Key="MenuHeaderCloseRight">Alles naar rechts</system:String>
+
+    <!-- Edit Menu -->
+    <system:String x:Key="MenuHeaderCopy">Kopiëren</system:String>
+    <system:String x:Key="MenuHeaderPaste">Plakken</system:String>
+    <system:String x:Key="MenuHeaderCut">Knippen</system:String>
+    <system:String x:Key="MenuHeaderUndo">Ongedaan maken</system:String>
+    <system:String x:Key="MenuHeaderRedo">Opnieuw</system:String>
+    <system:String x:Key="MenuHeaderDuplicate">Dupliceren</system:String>
+    <system:String x:Key="MenuHeaderComment">Commentaar geven</system:String>
+    <system:String x:Key="MenuHeaderDelete">Verwijderen</system:String>
+    <system:String x:Key="MenuHeaderGoToLine">Ga naar regel</system:String>
+    <system:String x:Key="MenuHeaderTrimWhitespaces">Witte ruimtes trimmen</system:String>
+
+    <!-- Tools Menu -->
+    <system:String x:Key="MenuHeaderDocumentation">Documentatie</system:String>
+    <system:String x:Key="MenuHeaderGenerate">Genereren</system:String>
+    <system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
+    <system:String x:Key="MenuHeaderGenerateCommand">Commando</system:String>
+    <system:String x:Key="MenuHeaderRefactor">Refactoren</system:String>
+    <system:String x:Key="MenuHeaderColorSelector">Kleurkiezer</system:String>
+
+    <!-- Other Menu -->
+    <system:String x:Key="MenuHeaderMarketplace">Marktplaats</system:String>
+    <system:String x:Key="MenuHeaderDevTools">Ontwikkelaarshulpmiddelen</system:String>
+    <system:String x:Key="MenuHeaderRefreshSyntax">Vernieuw syntaxis</system:String>
+    <system:String x:Key="MenuHeaderRefreshTheme">Herlaad thema</system:String>
+
+    <!-- Project Menu -->
+    <system:String x:Key="MenuHeaderDeleteFromDisk">Verwijderen</system:String>
+    <system:String x:Key="MenuHeaderOpenInExplorer">Openen in Verkenner</system:String>
+    <system:String x:Key="MenuHeaderCopyPath">Pad kopiëren</system:String>
+    <system:String x:Key="MenuHeaderCopyAbsolutePath">Absolute pad kopiëren</system:String>
+    <system:String x:Key="MenuHeaderRename">Hernoemen</system:String>
+    <system:String x:Key="MenuHeaderNewFile">Nieuw bestand</system:String>
+    <system:String x:Key="MenuHeaderNewFolder">Nieuwe map</system:String>
+    <system:String x:Key="MenuHeaderCloseProject">Project sluiten</system:String>
+
+    <!-- Buttons -->
+    <system:String x:Key="ApplyButton">Toepassen</system:String>
+    <system:String x:Key="ConfirmButton">Bevestigen</system:String>
+    <system:String x:Key="CloseButton">Sluiten</system:String>
+    <system:String x:Key="SelectButton">Selecteren</system:String>
+    <system:String x:Key="DeleteButton">Verwijderen</system:String>
+    <system:String x:Key="CancelButton">Annuleren</system:String>
+    <system:String x:Key="ContinueButton">Doorgaan</system:String>
+    <system:String x:Key="Error">Fout</system:String>
+    <system:String x:Key="Success">Succes</system:String>
+    <system:String x:Key="Attention">Let op!</system:String>
+    <system:String x:Key="Yes">Ja</system:String>
+    <system:String x:Key="No">Nee</system:String>
+    <system:String x:Key="Okay">Oké</system:String>
+
+    <!-- Messages -->
+    <system:String x:Key="NewFileNameFormat">Nieuw bestand {0}</system:String>
+    <system:String x:Key="FailedToDownloadSyntax">Fout bij het downloaden van het syntaxis-highlighting bestand! Controleer uw internetverbinding. Zonder deze wordt uw code niet gemarkeerd.</system:String>
+    <system:String x:Key="DownloadingMissingFilesTitle">Ontbrekende bestanden</system:String>
+    <system:String x:Key="Downloading">Bezig met downloaden</system:String>
+    <system:String x:Key="DownloadingMissingFilesDescriptionItems">Bestanden die door het itemselectietool worden gebruikt, ontbreken en worden nu gedownload.</system:String>
+    <system:String x:Key="DownloadingMissingFiles">Downloaden</system:String>
+    <system:String x:Key="DownloadMissingFilesFailed">Het downloaden van ontbrekende bestanden is mislukt. Probeer het later opnieuw.</system:String>
+    <system:String x:Key="ClosingUnsavedFile">U heeft onopgeslagen wijzigingen in dit bestand. Wilt u het echt sluiten?</system:String>
+    <system:String x:Key="ClosingFiles">Weet u zeker dat u dit bestand wilt sluiten? Alle onopgeslagen wijzigingen gaan verloren.</system:String>
+    <system:String x:Key="ClosingProgramWithUnsavedFiles">U heeft onopgeslagen wijzigingen in ten minste één bestand. Wilt u de applicatie echt sluiten?</system:String>
+    <system:String x:Key="ChangesDetected">Dit bestand is extern gewijzigd. Wilt u het bestand opnieuw laden en mogelijk wijzigingen verliezen die in de SkEditor zijn aangebracht?</system:String>
+    <system:String x:Key="DownloadingUpdateTitle">Update wordt gedownload</system:String>
+    <system:String x:Key="UpdateAvailable">Update beschikbaar</system:String>
+    <system:String x:Key="UpdateAvailableMessage">Er is een update beschikbaar. Wilt u deze nu installeren?</system:String>
+    <system:String x:Key="UpdateFailed">Update mislukt. Probeer het later opnieuw.</system:String>
+    <system:String x:Key="BinaryFileFound">Het lijkt erop dat u probeert een binaire (of niet-tekstgebaseerde) bestand te openen. Toch openen? SkEditor kan deze mogelijk niet correct laden.</system:String>
+    <system:String x:Key="BinaryFileTitle">Binaire bestand gevonden</system:String>
+    <system:String x:Key="DeleteFileTitle">Bestand verwijderen</system:String>
+    <system:String x:Key="DeleteFolderTitle">Map verwijderen</system:String>
+    <system:String x:Key="DeleteStorageElement">Weet u zeker dat u {0} van het bestandssysteem wilt verwijderen?</system:String>
+    <system:String x:Key="UnsavedFileTitle">Onopgeslagen bestand</system:String>
+    <system:String x:Key="UnsavedFileMessage">Het bestand '{0}' is niet opgeslagen.\n\nWeet u zeker dat u het bestand wilt sluiten en alle wijzigingen wilt verliezen?</system:String>
+    <system:String x:Key="AddonUpdateAvailableMessage">Er is een update beschikbaar voor '{0}'.\n\nBezoek de Marktplaats om deze bij te werken voor de nieuwste fixes en SkEditor-compatibiliteit.</system:String>
+
+    <!-- Publish Window -->
+    <system:String x:Key="PublishWindowNoApiKey">Stel uw API-sleutel in de instellingen in</system:String>
+    <system:String x:Key="PublishWindowApiKeyHint">Klik hier om een website te openen met de API-sleutel. Zorg ervoor dat u zich eerst aanmeldt!</system:String>
+    <system:String x:Key="PublishWindowAnonymously">Anoniem</system:String>
+    <system:String x:Key="PublishWindowResultLink">Link naar uw code</system:String>
+    <system:String x:Key="PublishWindowPublishButton">Publiceren</system:String>
+    <system:String x:Key="PublishWindowWarning">Uw API-sleutel kan vanaf nu worden beheerd in Instellingen -> Verbindingen.</system:String>
+
+    <!-- Local Docs Manager Window -->
+    <system:String x:Key="LocalDocsManagerWindowTitle">Lokale documentatiebeheerder</system:String>
+    <system:String x:Key="LocalDocsManagerWindowInfo">Hier kunt u de documentatie-elementen beheren die u hebt gedownload.</system:String>
+    <system:String x:Key="LocalDocsManagerWindowDeleteEverything">Alles verwijderen</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupBy">Groeperen op</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByProvider">Aanbieder</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByType">Type</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByAddon">Addon</system:String>
+    <system:String x:Key="LocalDocsManagerWindowEntryDescription">{0} ter beschikking gesteld door {1}</system:String>
+
+    <!-- (Element) Documentation Control -->
+    <system:String x:Key="DocumentationControlExamples">Voorbeelden</system:String>
+    <system:String x:Key="DocumentationControlActions">Acties</system:String>
+    <system:String x:Key="DocumentationControlEventValues">Evenementwaarden</system:String>
+    <system:String x:Key="DocumentationControlChangers">Wijzigers</system:String>
+
+    <system:String x:Key="DocumentationControlActionsFilter">Filteren op ... van het element</system:String>
+    <system:String x:Key="DocumentationControlType">Type</system:String>
+    <system:String x:Key="DocumentationControlAddon">Addon</system:String>
+
+    <system:String x:Key="DocumentationControlChangerHelp">Klik op de bijbehorende wijzer om de gegenereerde code te kopiëren.</system:String>
+    <system:String x:Key="DocumentationControlSince">Sinds v{0}</system:String>
+    <system:String x:Key="DocumentationControlSeeOn">Bekijk op {0}</system:String>
+    <system:String x:Key="DocumentationControlDownload">Downloaden</system:String>
+    <system:String x:Key="DocumentationControlRemove">Verwijderen</system:String>
+    <system:String x:Key="DocumentationControlExampleAuthor">Van {0}</system:String>
+    <system:String x:Key="DocumentationControlTypeFromProvider">{0} van {1}</system:String>
+
+    <system:String x:Key="DocumentationControlNoExamples">Geen voorbeelden gevonden voor dit element.</system:String>
+    <system:String x:Key="DocumentationControlNoEventValues">Geen evenementwaarden voor dit element gevonden.</system:String>
+    <system:String x:Key="DocumentationControlNoChangers">Geen wijzers voor dit element gevonden.</system:String>
+    <system:String x:Key="DocumentationControlNoDescription">Geen beschrijving opgegeven.</system:String>
+
+    <system:String x:Key="DocumentationControlErrorExamples">Er is een fout opgetreden bij het laden van de voorbeelden: {0}</system:String>
+
+    <!-- Documentation Window -->
+    <system:String x:Key="DocumentationWindowTitle">Documentatie</system:String>
+    <system:String x:Key="DocumentationWindowSearchQuery">Zoeken</system:String>
+    <system:String x:Key="DocumentationWindowSearch">Zoeken</system:String>
+    <system:String x:Key="DocumentationWindowFilteredType">Gefilterd type</system:String>
+    <system:String x:Key="DocumentationWindowFilteredAddon">Gefilterde addon</system:String>
+    <system:String x:Key="DocumentationWindowProvider">Aanbieder</system:String>
+    <system:String x:Key="DocumentationWindowManageCached">Beheer opgeslagen elementen</system:String>
+    <system:String x:Key="DocumentationWindowDownloadAll">Alle gevonden downloaden</system:String>
+    <system:String x:Key="DocumentationWindowLoading">Bezig met laden...</system:String>
+
+    <system:String x:Key="DocumentationWindowErrorGlobal">Er is een fout opgetreden bij het laden van de documentatie.\n\n{0}</system:String>
+    <system:String x:Key="DocumentationWindowErrorOffline">De aanvraag aan de documentatieserver heeft time-out bereikt. Zijn de documentatieservers online?</system:String>
+
+    <system:String x:Key="DocumentationWindowNoProvidersMessage">Geen documentatieaanbieder geselecteerd.\n\nU moet mogelijk uw API-sleutel in de instellingen toevoegen om te kunnen selecteren.</system:String>
+
+    <system:String x:Key="DocumentationWindowNoResults">Geen resultaten gevonden.</system:String>
+    <system:String x:Key="DocumentationWindowNoProviders">Geen aanbieders gevonden.</system:String>
+    <system:String x:Key="DocumentationWindowInvalidData">Ongeldige zoekgegevens.</system:String>
+    <system:String x:Key="DocumentationWindowAnErrorOccured">Er is een fout opgetreden.</system:String>
+    <system:String x:Key="DocumentationWindowTooManyResults">Te veel resultaten.</system:String>
+    <system:String x:Key="DocumentationWindowTooManyResultsMessage">De zoekopdracht heeft meer dan 100 resultaten opgeleverd. Weet u zeker dat u alles wilt weergeven?\n\nDit kan de app vertragen!</system:String>
+    <system:String x:Key="DocumentationWindowInvalidDataQuery">De zoekopdracht moet minimaal 3 tekens lang zijn</system:String>
+    <system:String x:Key="DocumentationWindowSkriptMCBad">SkriptMC ondersteunt de zoekopdracht naar alle typen niet.</system:String>
+    <system:String x:Key="DocumentationWindowSkriptMCBad2">SkriptMC is momenteel niet beschikbaar voor de documentatie. Probeer het later opnieuw.</system:String>
+
+    <system:String x:Key="DocumentationWindowNoEntries">Geen vermeldingen gevonden. Waarom niet eerst naar een paar zoeken?</system:String>
+    <system:String x:Key="DocumentationWindowDownloadAllMessage">Weet u zeker dat u alle gevonden documentatie-items wilt downloaden? (Totaal: {0})</system:String>
+    <system:String x:Key="DocumentationWindowDownloadingElements">Elementen downloaden...</system:String>
+    <system:String x:Key="DocumentationWindowDownloading">Bezig met downloaden</system:String>
+    <system:String x:Key="DocumentationWindowDownloadingMessage">We zijn bezig met het downloaden van de documentatie-items voor u. Even geduld...</system:String>
+
+    <system:String x:Key="DocumentationWindowCacheSkriptHub">Tussentijdse opslag van elementen van SkriptHub</system:String>
+    <system:String x:Key="DocumentationWindowCacheSkriptHubMessage">We slaan de elementen van SkriptHub tussentijds voor u op. Even geduld.</system:String>
+    <system:String x:Key="DocumentationWindowSorting">Gedownloade elementen worden gesorteerd...</system:String>
+
+    <system:String x:Key="DocumentationWindowFetchAgain">Documentatie opnieuw downloaden</system:String>
+    <system:String x:Key="DocumentationWindowFetchWarning">Hierdoor worden de documentatie-items van SkriptHub opnieuw opgehaald. U hoeft dit waarschijnlijk niet te doen, tenzij u alles bijgewerkt wilt zien. Weet u het zeker?</system:String>
+    <system:String x:Key="DocumentationWindowFetchSuccessMessage">Tussentijdse opslag gewist. U moet opnieuw naar de elementen zoeken om de documentatie van SkriptHub opnieuw te downloaden.</system:String>
+
+    <!-- Refactor Window -->
+    <system:String x:Key="RefactorWindowRemoveComments">Opmerkingen verwijderen</system:String>
+    <system:String x:Key="RefactorWindowTabsToSpaces">Tabs omzetten naar spaties</system:String>
+    <system:String x:Key="RefactorWindowSpacesToTabs">Spaties omzetten naar tabs</system:String>
+    <system:String x:Key="RefactorWindowRefactorBoxName">'{0}' hernoemen naar...</system:String>
+
+    <!-- Color Selector -->
+    <system:String x:Key="ColorSelectorWindowHexResult">Resultaat in hex</system:String>
+    
+    <!-- Projects -->
+    <system:String x:Key="ProjectExplorerTitle">Verkenner</system:String>
+    <system:String x:Key="ProjectExplorerInfoText">U heeft nog geen mappen geopend.</system:String>
+    <system:String x:Key="ProjectExplorerInfoButton">Map openen</system:String>
+    <system:String x:Key="ProjectRenameText">Hernoemen naar...</system:String>
+    <system:String x:Key="ProjectRenameErrorNameEmpty">Naam mag niet leeg zijn.</system:String>
+    <system:String x:Key="ProjectRenameErrorNameInvalid">Ongeldige naam</system:String>
+    <system:String x:Key="ProjectRenameErrorParentNull">Bovenliggende map kan niet leeg zijn.</system:String>
+    <system:String x:Key="ProjectErrorNameExists">Er bestaat al een bestand of map met deze naam.</system:String>
+    <system:String x:Key="ProjectRenameErrorSameName">De nieuwe naam is dezelfde als de oude naam.</system:String>
+    <system:String x:Key="ProjectCreateFileName">Bestandsnaam</system:String>
+    <system:String x:Key="ProjectCreateFolderName">Mapnaam</system:String>
+    <system:String x:Key="ProjectCreateTemplate">Sjabloon</system:String>
+
+    <!-- Code parser -->
+    <system:String x:Key="CodeParserTitle">Code-analyse</system:String>
+    <system:String x:Key="CodeParserWarning">De code-analyse bevindt zich nog in de bèta! Meld alle fouten die u vindt op de Discord-server.</system:String>
+    <system:String x:Key="CodeParserEnableInfo">De code-analyse bevindt zich nog in de bèta, en er kunnen fouten optreden. De code-analyse is standaard uitgeschakeld, maar u kunt deze inschakelen met de knop hieronder.</system:String>
+    <system:String x:Key="CodeParserSearch">Zoeken...</system:String>
+    <system:String x:Key="CodeParserFilterName">Filteren op naam</system:String>
+    <system:String x:Key="CodeParserFilterType">Filteren op type</system:String>
+    <system:String x:Key="CodeParserFilterTypeAny">Alles</system:String>
+    <system:String x:Key="CodeParserFilterTypeFunctions">Functies</system:String>
+    <system:String x:Key="CodeParserFilterTypeEvents">Evenementen</system:String>
+    <system:String x:Key="CodeParserFilterTypeOptions">Opties</system:String>
+    <system:String x:Key="CodeParserFilterTypeCommands">Commando's</system:String>
+    <system:String x:Key="CodeParserClearFilters">Huidige filters resetten</system:String>
+    <system:String x:Key="CodeParserNavigate">Navigeren</system:String>
+    <system:String x:Key="CodeParserNavigateToDefinition">Naar definitie navigeren</system:String>
+    <system:String x:Key="CodeParserRename">Hernoemen</system:String>
+    <system:String x:Key="CodeParserNoSections">Geen secties in de code gevonden. Misschien moet u een paar regels schrijven? :)</system:String>
+    <system:String x:Key="CodeParserBadFormat">Dit bestand kan niet worden geanalyseerd, omdat het niet lijkt op een scriptbestand.</system:String>
+    <system:String x:Key="CodeParserParseCode">Code parseren</system:String>
+    <system:String x:Key="CodeParserParsed">Huidige code geparsed</system:String>
+
+    <!-- File Association Selection Window -->
+    <system:String x:Key="FileAssociationSelectionWindowTitle">Bestand koppeling selecteren</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowInfo">Er zijn meerdere aanbieders voor dit bestandstype. Kies er een.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowOfficialItem">Dit is een officiële bestandstype van SkEditor.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowUnofficialItem">Dit is een onofficieel bestandstype van een uitbreiding, {0}.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Keuze onthouden</system:String>
+
+
+    <!-- Settings -->
+    <system:String x:Key="SettingsEnabled">Ingeschakeld</system:String>
+    <system:String x:Key="SettingsDisabled">Uitgeschakeld</system:String>
+
+    <!-- Settings Home -->
+    <system:String x:Key="SettingsHomeTitle">Instellingen</system:String>
+    <system:String x:Key="SettingsHomeGeneral">Algemeen</system:String>
+    <system:String x:Key="SettingsHomeGeneralDescription">Taal, teksteditor-functies</system:String>
+    <system:String x:Key="SettingsHomePersonalization">Personalisatie</system:String>
+    <system:String x:Key="SettingsHomePersonalizationDescription">Thema, lettertype, syntaxis-highlighting</system:String>
+    <system:String x:Key="SettingsHomeDiscord">Discord</system:String>
+    <system:String x:Key="SettingsHomeDiscordDescription">Toon SkEditor op je Discord-profiel!</system:String>
+    <system:String x:Key="SettingsHomeExperiments">Experimenten</system:String>
+    <system:String x:Key="SettingsHomeExperimentsDescription">Test komende functies!</system:String>
+    <system:String x:Key="SettingsHomeConnections">Verbinden</system:String>
+    <system:String x:Key="SettingsHomeConnectionsDescription">Beheer je verbindingen met derden.</system:String>
+    <system:String x:Key="SettingsHomeAddons">Uitbreidingen</system:String>
+    <system:String x:Key="SettingsHomeAddonsDescription">Verbeter je ervaring met krachtige uitbreidingen!</system:String>
+    <system:String x:Key="SettingsHomeAbout">Over</system:String>
+    <system:String x:Key="SettingsHomeFileTypes">Bestandstypen</system:String>
+    <system:String x:Key="SettingsHomeFileTypesDescription">Beheer bestandstypen en hun koppelingen</system:String>
+
+    <!-- General Settings -->
+    <system:String x:Key="SettingsGeneralTitle">Algemeen</system:String>
+    <system:String x:Key="SettingsGeneralLanguage">Taal</system:String>
+    <system:String x:Key="SettingsGeneralWrapping">Terugloop</system:String>
+    <system:String x:Key="SettingsGeneralWrappingDescription">Kies of de regels moeten worden afgebroken aan de breedte van het weergavevenster.</system:String>
+    <system:String x:Key="SettingsGeneralZoomSync">Zoom tussen tabs synchroniseren</system:String>
+    <system:String x:Key="SettingsGeneralZoomSyncDescription">Wanneer ingeschakeld, worden zoomniveau-wijzigingen op alle tabs toegepast.</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSync">Zijbalkbreedte synchroniseren</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSyncDescription">Wanneer ingeschakeld, wijzigt het wijzigen van de breedte van een tab de breedte van alle andere tabs ook.</system:String>
+    <system:String x:Key="SettingsGeneralTabType">Inspringtype</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeDescription">Kies tussen tabs en spaties en stel de grootte van de tabs in</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeTabs">Tabs</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeSpaces">Spaties</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndent">Automatische tab</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndentDescription">Voegt automatisch een tab toe in een nieuwe regel als de vorige regel eindigt met een dubbele punt.</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairing">Automatische paarvorming</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairingDescription">Voegt automatisch het sluitende teken toe wanneer u het openings teken voor bepaalde symbolen invoert.</system:String>
+    <system:String x:Key="SettingsGeneralAutoSave">Automatisch opslaan</system:String>
+    <system:String x:Key="SettingsGeneralAutoSaveDescription">Slaat uw bestand automatisch op bij elke wijziging.</system:String>
+    <system:String x:Key="SettingsGeneralChangeChecker">Controleren op externe wijzigingen</system:String>
+    <system:String x:Key="SettingsGeneralChangeCheckerDescription">Wanneer externe bestandwijzigingen plaatsvinden, wordt u gevraagd of u het bestand opnieuw wilt laden.</system:String>
+    <system:String x:Key="SettingsGeneralRpc">Discord Rich Presence</system:String>
+    <system:String x:Key="SettingsGeneralRpcDescription">Toon SkEditor in uw Discord-status.</system:String>
+    <system:String x:Key="SettingsGeneralPasteIndent">Auto-inspringen bij kopiëren</system:String>
+    <system:String x:Key="SettingsGeneralPasteIndentDescription">Past automatisch de inspringing van de ingevoegde tekst aan, zodat deze overeenkomt met het vorige formaat</system:String>
+    <system:String x:Key="SettingsGeneralCheckForUpdates">Controleren op updates</system:String>
+    <system:String x:Key="SettingsGeneralProjectSingleFolderClick">Projectmap met één klik openen</system:String>
+    <system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Wanneer ingeschakeld, worden mappen met één klik in plaats van met een dubbele klik geopend.</system:String>
+
+    <!-- About Settings -->
+    <system:String x:Key="SettingsAboutTitle">Over</system:String>
+    <system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
+    <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor is een app voor het bewerken van scriptbestanden, gemaakt door Notro.</system:String>
+    <system:String x:Key="SettingsAboutVersion">Versie</system:String>
+    <system:String x:Key="SettingsAboutVersionDescription">U gebruikt versie: {0}</system:String>
+    <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">Klik om de GitHub-repository van SkEditor te openen!</system:String>
+    <system:String x:Key="SettingsAboutDiscord">Discord-server</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">Klik om lid te worden van de Discord-server van SkEditor!</system:String>
+    <system:String x:Key="SettingsAboutAppdata">AppData-map openen</system:String>
+    <system:String x:Key="SettingsAboutDevMode">Ontwikkelaarsmodus</system:String>
+    <system:String x:Key="SettingsAboutDevModeDescription">Schakel de ontwikkelaarsmodus in om ontwikkelaarsfuncties te gebruiken.</system:String>
+
+    <!-- Personalization -->
+    <system:String x:Key="SettingsPersonalizationTitle">Personalisatie</system:String>
+    <system:String x:Key="SettingsPersonalizationTheme">Thema</system:String>
+    <system:String x:Key="SettingsPersonalizationThemeDescription">Pas de kleuren van de app aan.</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntax">Syntax-highlighting</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntaxDescription">Wijzig hoe specifieke tekst met syntaxis-highlighting wordt weergegeven.</system:String>
+    <system:String x:Key="SettingsPersonalizationFont">Lettertype</system:String>
+    <system:String x:Key="SettingsPersonalizationFontDescription">Huidig lettertype: {0}</system:String>
+    <system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Huidige regel markeren</system:String>
+    <system:String x:Key="SettingsPersonalizationSidebarAnimations">Zijbalkanimaties</system:String>
+    <system:String x:Key="SettingsPersonalizationSidebarAnimationsDescription">Schakel animaties in of uit bij het openen en sluiten van zijbalken</system:String>
+
+    <!-- Theme Settings -->
+    <system:String x:Key="SettingsThemeTitle">Thema</system:String>
+    <system:String x:Key="SettingsThemeOpenFolder">Map openen</system:String>
+    <system:String x:Key="SettingsThemeCurrentTheme">Huidig thema</system:String>
+    <system:String x:Key="SettingsThemeCurrentThemeDescription">Een herstart is niet nodig, maar kan vereist zijn voor een 100 procent kleurupdate.</system:String>
+    <system:String x:Key="SettingsThemeEditThemeDescription">Huidig thema bewerken met realtime voorbeeld.</system:String>
+    <system:String x:Key="SettingsThemeNewThemeInfo">Als u een thema wilt maken, moet u een bestand maken in de map "Themes".</system:String>
+    <system:String x:Key="SettingsThemeEditTheme">Thema bewerken</system:String>
+
+    <!-- Syntax Highlighting Settings -->
+    <system:String x:Key="SettingsSyntaxesTitle">Syntax highlighting</system:String>
+
+    <!-- Addon Settings -->
+    <system:String x:Key="SettingsAddonsTitle">Uitbreidingen</system:String>
+    <system:String x:Key="SettingsAddonsListTitle">Lijst van uitbreidingen</system:String>
+
+    <!-- Connections Settings -->
+    <system:String x:Key="SettingsConnectionsTitle">Verbinden</system:String>
+    <system:String x:Key="SettingsConnectionsDashboardButton">Dashboard openen</system:String>
+
+    <!-- File Types Settings -->
+    <system:String x:Key="SettingsFileTypesTitle">Bestandstypen</system:String>
+    <system:String x:Key="SettingsFileTypesWarning">Deze site laat u alleen de koppelingen bewerken die u al heeft gemaakt. Er verschijnt een prompt voor verdere bestandstypen.</system:String>
+    <system:String x:Key="SettingsFileTypesRemove">Verwijderen</system:String>
+
+    <!-- File Views -->
+    <system:String x:Key="FileViewImageAA">Antialiasing</system:String>
+
+    <!-- Discord RPC -->
+    <system:String x:Key="DiscordRpcEditing">Bewerkt: {0}</system:String>
+
+    <!-- Bottom bar -->
+    <system:String x:Key="BottomBarLine">Regel {0}</system:String>
+    <system:String x:Key="BottomBarColumn">Kolom {0}</system:String>
+    <system:String x:Key="BottomBarDocumentSize">Lengte {0}</system:String>
+
+
+    <!-- GUI Generator -->
+    <system:String x:Key="GuiGeneratorTitle">Titel</system:String>
+    <system:String x:Key="GuiGeneratorFunctionName">Functienaam</system:String>
+    <system:String x:Key="GuiGeneratorRowQuantity">Aantal rijen</system:String>
+    <system:String x:Key="GuiGeneratorBackgroundItem">Achtergronditem</system:String>
+    <system:String x:Key="GuiGeneratorPreviewButton">Voorbeeld</system:String>
+    <system:String x:Key="GuiGeneratorGenerateButton">Genereren</system:String>
+    <system:String x:Key="GuiGeneratorSkriptGui">Skript-GUI gebruiken</system:String>
+    <system:String x:Key="GuiGeneratorDisplayName">Weergavenaam</system:String>
+    <system:String x:Key="GuiGeneratorLore">Lore</system:String>
+    <system:String x:Key="GuiGeneratorOptional">Optioneel</system:String>
+    <system:String x:Key="GuiGeneratorCustomModelData">Aangepaste modelgegevens-ID</system:String>
+    <system:String x:Key="GuiGeneratorLoreLineWatermark">Klik met de rechtermuisknop om een nieuwe regel toe te voegen</system:String>
+    <system:String x:Key="GuiGeneratorAddLoreLine">Nieuwe lore-regel toevoegen</system:String>
+    <system:String x:Key="GuiGeneratorAddExampleAction">Voorbeeldfunctie toevoegen</system:String>
+
+    <!-- Command Generator -->
+    <system:String x:Key="CommandGeneratorName">Naam</system:String>
+    <system:String x:Key="CommandGeneratorPermission">Toestemming</system:String>
+    <system:String x:Key="CommandGeneratorNoPermissionMessage">Geen toestemmingsbericht</system:String>
+    <system:String x:Key="CommandGeneratorAliases">Aliassen</system:String>
+    <system:String x:Key="CommandGeneratorInvalidUsageMessage">Ongeldige gebruiksbericht</system:String>
+    <system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Wie kan het commando gebruiken</system:String>
+    <system:String x:Key="CommandGeneratorPlayer">Speler</system:String>
+    <system:String x:Key="CommandGeneratorConsole">Console</system:String>
+    <system:String x:Key="CommandGeneratorCooldown">Afkoeltijd</system:String>
+    <system:String x:Key="CommandGeneratorTicks">Ticks</system:String>
+    <system:String x:Key="CommandGeneratorSeconds">Seconden</system:String>
+    <system:String x:Key="CommandGeneratorMinutes">Minuten</system:String>
+    <system:String x:Key="CommandGeneratorHours">Uren</system:String>
+    <system:String x:Key="CommandGeneratorDays">Dagen</system:String>
+    <system:String x:Key="CommandGeneratorWeeks">Weken</system:String>
+    <system:String x:Key="CommandGeneratorMonths">Maanden</system:String>
+    <system:String x:Key="CommandGeneratorYears">Jaren</system:String>
+    <system:String x:Key="CommandGeneratorGenerate">Genereren</system:String>
+    <system:String x:Key="CommandGeneratorPropertyMissing">{0} is vereist!</system:String>
+
+    <!-- Marketplace -->
+    <system:String x:Key="MarketplaceSearch">Zoeken</system:String>
+    <system:String x:Key="MarketplaceEnableNow">Nu inschakelen</system:String>
+    <system:String x:Key="MarketplaceInstallSuccess">Succesvol gedownload: {0}!</system:String>
+    <system:String x:Key="MarketplaceInstallRestart">Start de app opnieuw om de add-on te laden.</system:String>
+    <system:String x:Key="MarketplaceInstallEnableNow">Wilt u het nu inschakelen?</system:String>
+    <system:String x:Key="MarketplaceInstallNoNeedToRestart">De add-on zou zonder herstart moeten werken, maar als u fouten tegenkomt, start dan de app opnieuw.</system:String>
+    <system:String x:Key="MarketplaceInstallFailed">Downloaden van {0} mislukt!</system:String>
+    <system:String x:Key="MarketplaceUninstallSuccess">Succesvol verwijderd: {0}!\nStart de app opnieuw om de add-on te verwijderen.</system:String>
+    <system:String x:Key="MarketplaceUpdateSuccess">Succesvol bijgewerkt: {0}!\nStart de app opnieuw om de add-on te laden.</system:String>
+    <system:String x:Key="MarketplaceUpdateFailed">Bijwerken van {0} mislukt!</system:String>
+    <system:String x:Key="MarketplaceLoadFailed">Er is iets misgegaan bij het laden van marktplaatsartikelen. Bent u verbonden met het internet?</system:String>
+    <system:String x:Key="MarketplaceInfo">Dit is een zeer eenvoudig marktplaatsthema, dat alleen bedoeld is om gebruikers in staat te stellen officiële uitbreidingen te installeren. Het zal in de toekomst aanzienlijk worden verbeterd.</system:String>
+    <system:String x:Key="MarketplaceButtonInstall">Installeren</system:String>
+    <system:String x:Key="MarketplaceButtonUpdate">Bijwerken</system:String>
+    <system:String x:Key="MarketplaceButtonUninstall">Deinstalleren</system:String>
+    <system:String x:Key="MarketplaceButtonDisable">Deactiveren</system:String>
+    <system:String x:Key="MarketplaceButtonEnable">Inschakelen</system:String>
+    <system:String x:Key="MarketplaceButtonLoadFromFile">Van bestand laden</system:String>
+
+    <!-- Go to line -->
+    <system:String x:Key="GoToLine">Ga naar regel</system:String>
+    <system:String x:Key="GoToLineButton">Ga naar regel</system:String>
+
+    <!-- Theme editor -->
+    <system:String x:Key="ThemeEditorWindowBackground">Venster-achtergrond</system:String>
+    <system:String x:Key="ThemeEditorSmallWindowBackground">Kleine venster achtergrond</system:String>
+    <system:String x:Key="ThemeEditorEditorBackground">Editor achtergrond</system:String>
+    <system:String x:Key="ThemeEditorEditorText">Editor tekst</system:String>
+    <system:String x:Key="ThemeEditorLineNumber">Regel nummer</system:String>
+    <system:String x:Key="ThemeEditorSelection">Selectie</system:String>
+    <system:String x:Key="ThemeEditorSelectedTabBackground">Aangekruist tab achtergrond</system:String>
+    <system:String x:Key="ThemeEditorSelectedTabBorder">Aangekruist tab rand</system:String>
+    <system:String x:Key="ThemeEditorMenuBackground">Menu achtergrond</system:String>
+    <system:String x:Key="ThemeEditorMenuBorder">Menu rand</system:String>
+    <system:String x:Key="ThemeEditorFocusedTextBoxBackground">Gefocuste tekstvak-achtergrond</system:String>
+    <system:String x:Key="ThemeEditorCurrentLineBackground">Achtergrond huidige regel</system:String>
+    <system:String x:Key="ThemeEditorCurrentLineBorder">Rand huidige regel</system:String>
+    <system:String x:Key="ThemeEditorAccentColor">Accentkleur</system:String>
+
+    <!-- Welcome Tab -->
+    <system:String x:Key="WelcomeTabTitle">Welkom</system:String>
+    <system:String x:Key="WelcomeTabGettingStarted">Aan de slag</system:String>
+    <system:String x:Key="WelcomeTabNeedHelp">Hulp nodig?</system:String>
+    <system:String x:Key="WelcomeGettingStartedNewFile">Nieuw bestand</system:String>
+    <system:String x:Key="WelcomeGettingStartedOpenFile">Bestand openen</system:String>
+    <system:String x:Key="WelcomeGettingStartedOpenFolder">Map openen</system:String>
+    <system:String x:Key="WelcomeGettingStartedSettings">Instellingen</system:String>
+    <system:String x:Key="WelcomeNeedHelpDiscordServer">Discord-server</system:String>
+    <system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+
+</ResourceDictionary>
