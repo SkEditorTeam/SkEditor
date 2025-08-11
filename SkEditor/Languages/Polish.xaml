@@ -385,6 +385,7 @@
 
     <!-- Command Generator -->
     <system:String x:Key="CommandGeneratorName">Nazwa</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">Prefiks</system:String>
     <system:String x:Key="CommandGeneratorPermission">Uprawnienie</system:String>
     <system:String x:Key="CommandGeneratorNoPermissionMessage">Wiadomość o braku uprawnień</system:String>
     <system:String x:Key="CommandGeneratorAliases">Aliasy</system:String>

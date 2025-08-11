@@ -368,6 +368,7 @@
 
     <!-- Генератор команд -->
     <system:String x:Key="CommandGeneratorName">Имя</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">Префикс</system:String>
     <system:String x:Key="CommandGeneratorPermission">Разрешение</system:String>
     <system:String x:Key="CommandGeneratorNoPermissionMessage">Сообщение об отсутствии разрешения</system:String>
     <system:String x:Key="CommandGeneratorAliases">Псевдонимы</system:String>
