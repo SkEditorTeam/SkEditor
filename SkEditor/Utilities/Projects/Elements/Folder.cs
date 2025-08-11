@@ -41,7 +41,7 @@ public partial class Folder : StorageElement
         if (string.IsNullOrEmpty(Name))
         {
             string[] segments = folder.Split(
-                new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
+                [Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar],
                 StringSplitOptions.RemoveEmptyEntries
             );
 
