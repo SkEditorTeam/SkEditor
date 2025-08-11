@@ -221,6 +221,7 @@
 
     <!-- Command Generator -->
     <system:String x:Key="CommandGeneratorName">이름</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">접두사</system:String>
     <system:String x:Key="CommandGeneratorPermission">권한</system:String>
     <system:String x:Key="CommandGeneratorNoPermissionMessage">권한 오류 메세지 없음</system:String>
     <system:String x:Key="CommandGeneratorAliases">별칭</system:String>

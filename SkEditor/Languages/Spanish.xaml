@@ -175,6 +175,7 @@
 
     <!-- Generador de Comandos -->
     <system:String x:Key="CommandGeneratorName">Nombre</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">Prefijo</system:String>
     <system:String x:Key="CommandGeneratorPermission">Permiso</system:String>
     <system:String x:Key="CommandGeneratorNoPermissionMessage">Mensaje sin permiso</system:String>
     <system:String x:Key="CommandGeneratorAliases">Alias</system:String>

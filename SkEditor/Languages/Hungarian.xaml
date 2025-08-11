@@ -363,6 +363,7 @@
 
     <!-- Command Generator (Parancs Generátor) -->
     <system:String x:Key="CommandGeneratorName">Név</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">Prefix</system:String>
     <system:String x:Key="CommandGeneratorPermission">Jogosultság</system:String>
     <system:String x:Key="CommandGeneratorNoPermissionMessage">Nincs jogosultság üzenet</system:String>
     <system:String x:Key="CommandGeneratorAliases">Aliasok</system:String>

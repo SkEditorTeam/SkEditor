@@ -370,6 +370,7 @@
 
     <!-- Command Generator -->
     <system:String x:Key="CommandGeneratorName">Nome</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">Prefisso</system:String>
     <system:String x:Key="CommandGeneratorPermission">Permesso</system:String>
     <system:String x:Key="CommandGeneratorNoPermissionMessage">Messaggio di Nessun permesso</system:String>
     <system:String x:Key="CommandGeneratorAliases">Alias</system:String>
