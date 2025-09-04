@@ -44,7 +44,7 @@
 
 </div>
 
-> **Note for Linux & macOS Users**: Please follow the detailed instructions in our [Linux and macOS installation guide](https://github.com/SkEditorTeam/SkEditor/wiki/How-to-Use-SkEditor-on-Linux-and-macOS).
+> **Note for Linux & macOS Users**: Please follow the detailed instructions in our [installation guide](https://skeditor.notro.me/first-steps/installation).
 
 Official Linux app store packages are currently in development and will be available on Flathub soon!
 
