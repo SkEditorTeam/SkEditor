@@ -55,6 +55,7 @@ public partial class CommandGenerator : AppWindow
 
         code.Append($"command /{NameTextBox.Text}:");
 
+        AppendIfExists(ref code, "\n\tprefix: {0}", PrefixTextBox.Text);
         AppendIfExists(ref code, "\n\tpermission: {0}", PermissionTextBox.Text);
         AppendIfExists(ref code, "\n\tpermission message: {0}", NoPermissionMessageTextBox.Text);
         AppendIfExists(ref code, "\n\taliases: {0}", AliasesTextBox.Text);

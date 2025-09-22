@@ -12,9 +12,9 @@
 
 <br />
 
-<a href='https://skeditor.notro.me'>![ghpages](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/ghpages_vector.svg)</a>
+<a href='https://docs.skeditor.dev'>![ghpages](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/ghpages_vector.svg)</a>
 <a href='https://ko-fi.com/notro'>![kofi-singular](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/kofi-singular_vector.svg)</a>
-<a href='https://skeditordc.notro.me'>![discord-plural](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg)</a>
+<a href='https://discord.skeditor.dev'>![discord-plural](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg)</a>
   
 </div>
 
@@ -44,7 +44,7 @@
 
 </div>
 
-> **Note for Linux & macOS Users**: Please follow the detailed instructions in our [Linux and macOS installation guide](https://github.com/SkEditorTeam/SkEditor/wiki/How-to-Use-SkEditor-on-Linux-and-macOS).
+> **Note for Linux & macOS Users**: Please follow the detailed instructions in our [installation guide](https://docs.skeditor.dev/first-steps/installation).
 
 Official Linux app store packages are currently in development and will be available on Flathub soon!
 

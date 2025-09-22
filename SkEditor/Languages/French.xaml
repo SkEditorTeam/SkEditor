@@ -378,6 +378,7 @@
 
     <!-- Générateur de commande -->
     <system:String x:Key="CommandGeneratorName">Nom</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">Préfixe</system:String>
     <system:String x:Key="CommandGeneratorPermission">Permission</system:String>
     <system:String x:Key="CommandGeneratorNoPermissionMessage">Message en cas d'absence de permission</system:String>
     <system:String x:Key="CommandGeneratorAliases">Alias</system:String>

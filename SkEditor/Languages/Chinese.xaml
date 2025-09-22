@@ -176,6 +176,7 @@
 
     <!-- 命令生成器 -->
     <system:String x:Key="CommandGeneratorName">名称</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">前缀</system:String>
     <system:String x:Key="CommandGeneratorPermission">权限</system:String>
     <system:String x:Key="CommandGeneratorNoPermissionMessage">无权限消息</system:String>
     <system:String x:Key="CommandGeneratorAliases">别名</system:String>
