@@ -6,6 +6,7 @@ using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
+using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
 namespace SkEditor.Utilities.Parser;
 

@@ -1,0 +1,64 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SkEditor.Views.Windows.Generators.Gui.GuiGenerator" Icon="/Assets/SkEditor.ico"
+        Title="{DynamicResource WindowTitleGuiGenerator}" Height="500" Width="900" CanResize="False"
+        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+
+    <Grid RowDefinitions="auto, *, auto">
+        <Grid Grid.Row="0" ColumnDefinitions="auto,auto,auto,auto" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="0" Spacing="4" Margin="10">
+                <TextBlock Text="{DynamicResource GuiGeneratorTitle}" />
+                <TextBox Name="TitleTextBox" Width="175" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="4" Margin="10">
+                <TextBlock Text="{DynamicResource GuiGeneratorFunctionName}" />
+                <TextBox Name="FunctionNameTextBox" Width="175" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="4" Margin="10">
+                <TextBlock Text="{DynamicResource GuiGeneratorRowQuantity}" />
+                <TextBox Name="RowQuantityTextBox" Width="175" Text="6" />
+            </StackPanel>
+            <StackPanel Grid.Column="3" Spacing="4" Margin="10">
+                <TextBlock Text="{DynamicResource GuiGeneratorBackgroundItem}" />
+                <Button Name="BackgroundItemButton" Width="175" Content="{DynamicResource SelectButton}" />
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="ItemGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <CheckBox Name="UseSkriptGuiCheckBox" Content="{DynamicResource GuiGeneratorSkriptGui}" Margin="10"
+                      Grid.Column="0" IsChecked="{Binding UseSkriptGui}" />
+        </Grid>
+        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" ColumnDefinitions="auto,auto">
+            <Button Name="PreviewButton" Width="100" Content="{DynamicResource GuiGeneratorPreviewButton}" Margin="10"
+                    HorizontalAlignment="Center" Grid.Column="0" />
+            <Button Name="GenerateButton" Width="100" Content="{DynamicResource GuiGeneratorGenerateButton}"
+                    Margin="10" HorizontalAlignment="Center" Grid.Column="1" />
+        </Grid>
+    </Grid>
+</Window>

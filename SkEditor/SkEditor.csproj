@@ -98,118 +98,149 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="Controls\SideBarControl.axaml.cs">
-            <DependentUpon>SideBarControl.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\CompletionMenu.axaml.cs">
-            <DependentUpon>CompletionMenu.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\MarketplaceItemView.axaml.cs">
-            <DependentUpon>MarketplaceItemView.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\MarketplaceListItem.axaml.cs">
-            <DependentUpon>MarketplaceListItem.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\BottomBarControl.axaml.cs">
-            <DependentUpon>BottomBarControl.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\SettingsTitle.axaml.cs">
-            <DependentUpon>SettingsTitle.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\ColorPickerSettingsExpander.axaml.cs">
-            <DependentUpon>ColorPickerSettingsExpander.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\LoreLineEditor.axaml.cs">
-            <DependentUpon>LoreLineEditor.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\EnchantSelector.axaml.cs">
-            <DependentUpon>EnchantSelector.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\TerminalWindow.axaml.cs">
-            <SubType>Code</SubType>
-            <DependentUpon>TerminalWindow.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\GoToLineWindow.axaml.cs">
-            <DependentUpon>GoToLineWindow.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Generators\Gui\ExtendedItemSelector.axaml.cs">
-            <DependentUpon>ExtendedItemSelector.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Generators\Gui\ItemSelector.axaml.cs">
-            <DependentUpon>ItemSelector.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\FontSelectionWindow.axaml.cs">
-            <DependentUpon>FontSelectionWindow.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Generators\CommandGenerator.axaml.cs">
-            <DependentUpon>CommandGenerator.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Marketplace\MarketplaceWindow.axaml.cs">
-            <DependentUpon>MarketplaceWindow.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\ColorSelectionWindow.axaml.cs">
-            <SubType>Code</SubType>
-            <DependentUpon>ColorSelectionWindow.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\RefactorWindow.axaml.cs">
-            <DependentUpon>RefactorWindow.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\PublishWindow.axaml.cs">
-            <DependentUpon>PublishWindow.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Settings\AddonsPage.axaml.cs">
-            <DependentUpon>AddonsPage.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Settings\ExperimentsPage.axaml.cs">
-            <DependentUpon>ExperimentsPage.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Settings\GeneralPage.axaml.cs">
-            <DependentUpon>GeneralPage.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Settings\AboutPage.axaml.cs">
-            <DependentUpon>AboutPage.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Settings\PersonalizationPage.axaml.cs">
-            <DependentUpon>PersonalizationPage.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Settings\ConnectionsPage.axaml.cs">
-            <DependentUpon>ConnectionsPage.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Generators\Gui\GuiGenerator.axaml.cs">
-            <DependentUpon>GuiGenerator.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Settings\Personalization\EditThemePage.axaml.cs">
-            <DependentUpon>EditThemePage.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\Settings\Personalization\ThemePage.axaml.cs">
-            <DependentUpon>ThemePage.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\FileTypes\Images\ImageViewer.axaml.cs">
-            <DependentUpon>ImageViewer.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Controls\Sidebar\ParserSidebarPanel.axaml.cs">
-            <DependentUpon>ParserSidebarPanel.axaml</DependentUpon>
-        </Compile>
-        <Compile Update="Views\SplashScreen.axaml.cs">
-            <DependentUpon>SplashScreen.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
         <Compile Update="Views\CheckForUpdateWindow.axaml.cs">
           <DependentUpon>CheckForUpdateWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\ColorSelectionWindow.axaml.cs">
+          <SubType>Code</SubType>
+          <DependentUpon>ColorSelectionWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Windows\CrashWindow.axaml.cs">
+          <DependentUpon>CrashWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\FontSelectionWindow.axaml.cs">
+          <DependentUpon>FontSelectionWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\GoToLineWindow.axaml.cs">
+          <DependentUpon>GoToLineWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\LocalDocsManagerWindow.axaml.cs">
+          <DependentUpon>LocalDocsManagerWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\LogsWindow.axaml.cs">
+          <DependentUpon>LogsWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\MainWindow.axaml.cs">
+          <DependentUpon>MainWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\PublishWindow.axaml.cs">
+          <DependentUpon>PublishWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\RefactorWindow.axaml.cs">
+          <DependentUpon>RefactorWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\SplashScreen.axaml.cs">
+          <DependentUpon>SplashScreen.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\SymbolRefactorWindow.axaml.cs">
+          <DependentUpon>SymbolRefactorWindow.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Windows\TerminalWindow.axaml.cs">
+          <SubType>Code</SubType>
+          <DependentUpon>TerminalWindow.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Views\Controls\BottomBarControl.axaml.cs">
+          <DependentUpon>BottomBarControl.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\ColorPickerSettingsExpander.axaml.cs">
+          <DependentUpon>ColorPickerSettingsExpander.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\CompletionMenu.axaml.cs">
+          <DependentUpon>CompletionMenu.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\ConnectionEntryControl.axaml.cs">
+          <DependentUpon>ConnectionEntryControl.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\EnchantSelector.axaml.cs">
+          <DependentUpon>EnchantSelector.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\LoreLineEditor.axaml.cs">
+          <DependentUpon>LoreLineEditor.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\MainMenuControl.axaml.cs">
+          <DependentUpon>MainMenuControl.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\MarketplaceItemView.axaml.cs">
+          <DependentUpon>MarketplaceItemView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\MarketplaceListItem.axaml.cs">
+          <DependentUpon>MarketplaceListItem.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\SettingsCategorySeparator.axaml.cs">
+          <DependentUpon>SettingsCategorySeparator.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\SettingsTitle.axaml.cs">
+          <DependentUpon>SettingsTitle.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\SideBarControl.axaml.cs">
+          <DependentUpon>SideBarControl.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\WelcomeTabControl.axaml.cs">
+          <DependentUpon>WelcomeTabControl.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Assets\GUI\" />
+        <Folder Include="Controls\" />
+        <Folder Include="Views\Pages\" />
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaXaml Update="Views\TerminalWindow.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Update="Views\ColorSelectionWindow.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
+      <AdditionalFiles Include="Views\Controls\Addons\AddonEntryControl.axaml" />
+      <AdditionalFiles Include="Views\Controls\Docs\DocElementControl.axaml" />
+      <AdditionalFiles Include="Views\Controls\Docs\DocManagementEntry.axaml" />
+      <AdditionalFiles Include="Views\Controls\Docs\DocumentationControl.axaml" />
+      <AdditionalFiles Include="Views\Controls\Sidebar\ExplorerSidebarPanel.axaml" />
+      <AdditionalFiles Include="Views\Controls\Sidebar\ParserSidebarPanel.axaml" />
+      <AdditionalFiles Include="Views\Windows\FileTypes\AssociationItemView.axaml" />
+      <AdditionalFiles Include="Views\Windows\FileTypes\AssociationSelectionWindow.axaml" />
+      <AdditionalFiles Include="Views\Windows\FileTypes\FileTypeSelectionWindow.axaml" />
+      <AdditionalFiles Include="Views\Windows\FileTypes\Images\AdvancedImageBox.axaml" />
+      <AdditionalFiles Include="Views\Windows\FileTypes\Images\ImageViewer.axaml" />
+      <AdditionalFiles Include="Views\Windows\Generators\CommandGenerator.axaml" />
+      <AdditionalFiles Include="Views\Windows\Generators\Gui\ExtendedItemSelector.axaml" />
+      <AdditionalFiles Include="Views\Windows\Generators\Gui\GuiGenerator.axaml" />
+      <AdditionalFiles Include="Views\Windows\Generators\Gui\ItemSelector.axaml" />
+      <AdditionalFiles Include="Views\Windows\Marketplace\MarketplaceWindow.axaml" />
+      <AdditionalFiles Include="Views\Windows\Projects\CreateStorageElementWindow.axaml" />
+      <AdditionalFiles Include="Views\Windows\Projects\RenameElementWindow.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\AboutPage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\AddonsPage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\ConnectionsPage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\CustomAddonSettingsPage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\ExperimentsPage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\FileTypesPage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\GeneralPage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\HomePage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\PersonalizationPage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\Personalization\EditThemePage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\Personalization\FileSyntaxes.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\Personalization\ThemePage.axaml" />
+      <AdditionalFiles Include="Views\Windows\Settings\SettingsWindow.axaml" />
     </ItemGroup>
 </Project>

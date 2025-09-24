@@ -2,6 +2,7 @@
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Views;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Extensions;
 

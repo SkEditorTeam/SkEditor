@@ -6,8 +6,8 @@ using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Views;
-using SkEditor.Views.Projects;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
+using RenameElementWindow = SkEditor.Views.Windows.Projects.RenameElementWindow;
 
 namespace SkEditor.Utilities.Projects.Elements;
 

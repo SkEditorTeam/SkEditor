@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:SkEditor.Views.Controls"
+             mc:Ignorable="d" d:DesignWidth="800"
+             x:Class="SkEditor.Views.Windows.Settings.Personalization.EditThemePage"
+             x:CompileBindings="True">
+
+    <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+        <controls:SettingsTitle Name="Title" Title="Edit theme" Grid.Row="0" />
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="8">
+                <controls:ColorPickerSettingsExpander Name="WindowBackgroundExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorWindowBackground}"
+                                                      IsAlphaEnabled="False" />
+                <controls:ColorPickerSettingsExpander Name="SmallWindowBackgroundExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorSmallWindowBackground}"
+                                                      IsAlphaEnabled="False" />
+                <controls:ColorPickerSettingsExpander Name="EditorBackgroundExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorEditorBackground}" />
+                <controls:ColorPickerSettingsExpander Name="EditorForegroundExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorEditorText}" />
+                <controls:ColorPickerSettingsExpander Name="LineNumbersExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorLineNumber}" />
+                <controls:ColorPickerSettingsExpander Name="SelectionExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorSelection}" />
+                <controls:ColorPickerSettingsExpander Name="SelectedTabItemBackgroundExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorSelectedTabBackground}" />
+                <controls:ColorPickerSettingsExpander Name="SelectedTabItemBorderExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorSelectedTabBorder}" />
+                <controls:ColorPickerSettingsExpander Name="MenuBackgroundExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorMenuBackground}" />
+                <controls:ColorPickerSettingsExpander Name="MenuBorderExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorMenuBorder}" />
+                <controls:ColorPickerSettingsExpander Name="TextBoxFocusedBackgroundExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorFocusedTextBoxBackground}" />
+                <controls:ColorPickerSettingsExpander Name="CurrentLineBackgroundExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorCurrentLineBackground}" />
+                <controls:ColorPickerSettingsExpander Name="CurrentLineBorderExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorCurrentLineBorder}" />
+                <controls:ColorPickerSettingsExpander Name="AccentColorExpander"
+                                                      ExpanderHeader="{DynamicResource ThemeEditorAccentColor}" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

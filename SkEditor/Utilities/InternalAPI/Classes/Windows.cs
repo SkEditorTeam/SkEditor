@@ -13,6 +13,8 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
 using SkEditor.Views;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
+using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 
 namespace SkEditor.API;
 

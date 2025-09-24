@@ -3,6 +3,7 @@ using Serilog.Core;
 using Serilog.Events;
 using SkEditor.API;
 using SkEditor.Views;
+using LogsWindow = SkEditor.Views.Windows.LogsWindow;
 
 namespace SkEditor.Utilities;
 

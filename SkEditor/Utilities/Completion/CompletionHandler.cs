@@ -9,8 +9,9 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
-using SkEditor.Controls;
 using SkEditor.Utilities.Editor;
+using SkEditor.Views.Controls;
+using CompletionMenu = SkEditor.Views.Controls.CompletionMenu;
 
 namespace SkEditor.Utilities.Completion;
 

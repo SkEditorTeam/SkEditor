@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using SkEditor.Views;
+using PublishWindow = SkEditor.Views.Windows.PublishWindow;
 
 namespace SkEditor.Utilities;
 

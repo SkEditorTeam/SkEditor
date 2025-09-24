@@ -9,8 +9,8 @@ using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.InternalAPI.Classes;
-using SkEditor.Views;
-using SkEditor.Views.Settings;
+using AddonsPage = SkEditor.Views.Windows.Settings.AddonsPage;
+using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 
 namespace SkEditor.Utilities.InternalAPI;
 

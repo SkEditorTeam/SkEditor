@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Views.Marketplace;
-using SkEditor.Views.Marketplace.Types;
+using SkEditor.Views.Windows.Marketplace;
+using SkEditor.Views.Windows.Marketplace.Types;
 
 namespace SkEditor.Utilities;
 

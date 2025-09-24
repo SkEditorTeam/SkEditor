@@ -1,0 +1,27 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SkEditor.Views.Windows.LogsWindow"
+        Icon="/Assets/SkEditor.ico"
+        Title="Logs"
+        Height="600" Width="800"
+        CanResize="True"
+        WindowStartupLocation="CenterOwner"
+        Theme="{StaticResource SmallWindowTheme}">
+    <Grid Margin="20" RowDefinitions="Auto,*" RowSpacing="20">
+        <TextBlock Text="Logs" FontSize="28" FontWeight="SemiBold" />
+
+        <Border Background="#4d000000" Grid.Row="1" CornerRadius="10" ClipToBounds="True">
+            <avaloniaEdit:TextEditor Name="LogsEditor" Background="{DynamicResource EditorBackgroundColor}"
+                                     Foreground="{DynamicResource EditorTextColor}"
+                                     Padding="10"
+                                     HorizontalScrollBarVisibility="Visible"
+                                     FontFamily="{DynamicResource JetBrainsFont}"
+                                     FontSize="14"
+                                     IsReadOnly="True" />
+        </Border>
+    </Grid>
+</Window>

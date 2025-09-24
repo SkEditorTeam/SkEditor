@@ -4,7 +4,7 @@ using System.IO;
 using Avalonia.Media.Imaging;
 using AvaloniaEdit;
 using SkEditor.API;
-using SkEditor.Views.FileTypes;
+using ImageViewer = SkEditor.Views.Windows.FileTypes.Images.ImageViewer;
 
 namespace SkEditor.Utilities.Files;
 

@@ -16,6 +16,7 @@ using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
 using Application = Avalonia.Application;
 using FileMode = System.IO.FileMode;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities;
 

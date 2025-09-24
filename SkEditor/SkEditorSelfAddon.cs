@@ -5,9 +5,9 @@ using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Controls.Sidebar;
 using SkEditor.ViewModels;
-using SkEditor.Views.FileTypes;
+using SkEditor.Views.Controls.Sidebar;
+using ImageViewer = SkEditor.Views.Windows.FileTypes.Images.ImageViewer;
 
 namespace SkEditor;
 

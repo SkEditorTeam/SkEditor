@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using AvaloniaEdit;
 using SkEditor.API;
-using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Views.Controls.Sidebar;
 
 namespace SkEditor.Utilities.Parser;
 

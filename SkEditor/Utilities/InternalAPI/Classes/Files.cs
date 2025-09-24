@@ -11,7 +11,6 @@ using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Controls;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Extensions;
@@ -19,10 +18,11 @@ using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Syntax;
 using SkEditor.ViewModels;
-using SkEditor.Views.FileTypes;
 using File = System.IO.File;
+using FileTypeSelectionWindow = SkEditor.Views.Windows.FileTypes.FileTypeSelectionWindow;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
+using WelcomeTabControl = SkEditor.Views.Controls.WelcomeTabControl;
 
 namespace SkEditor.API;
 

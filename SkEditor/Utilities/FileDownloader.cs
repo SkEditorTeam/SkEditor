@@ -10,6 +10,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
+using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
 
 namespace SkEditor.Utilities;
 

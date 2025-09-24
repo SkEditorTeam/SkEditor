@@ -19,8 +19,9 @@ using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Styling;
-using SkEditor.Views;
-using SkEditor.Views.FileTypes;
+using AssociationSelectionWindow = SkEditor.Views.Windows.FileTypes.AssociationSelectionWindow;
+using GoToLineWindow = SkEditor.Views.Windows.GoToLineWindow;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Files;
 

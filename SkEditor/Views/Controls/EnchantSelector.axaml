@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
+             x:Class="SkEditor.Views.Controls.EnchantSelector">
+
+    <Grid Width="280" ColumnDefinitions="*,auto,auto">
+        <ComboBox Name="EnchantComboBox" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,5,0">
+            <ComboBoxItem Content="Protection" />
+            <ComboBoxItem Content="Unbreaking" />
+            <ComboBoxItem Content="Sharpness" />
+        </ComboBox>
+        <TextBox Watermark="Level" Grid.Column="1" Margin="5,0" />
+        <Button Width="30" Height="30" FontSize="18" Padding="0" Grid.Column="2" Margin="5,0,0,0">
+            <Button.Content>
+                <ui:SymbolIcon Symbol="Remove" />
+            </Button.Content>
+        </Button>
+    </Grid>
+</UserControl>

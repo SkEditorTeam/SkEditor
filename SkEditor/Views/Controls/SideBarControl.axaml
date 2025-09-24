@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SkEditor.Views.Controls.SideBarControl">
+
+    <UserControl.Styles>
+        <Style Selector="Button.barButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="Separator">
+            <Setter Property="Margin" Value="0,1" />
+        </Style>
+        <Style Selector="TreeViewItem">
+            <Setter Property="FontWeight" Value="Regular" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Name="GridPanels" ColumnDefinitions="auto,auto" RowDefinitions="*">
+        <Border Grid.Column="0" Width="48" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7">
+            <StackPanel Name="Buttons" Spacing="10" HorizontalAlignment="Center" />
+        </Border>
+    </Grid>
+</UserControl>

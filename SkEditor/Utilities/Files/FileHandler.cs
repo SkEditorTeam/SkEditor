@@ -12,6 +12,7 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities.Projects;
 using SkEditor.Views;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Files;
 

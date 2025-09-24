@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
+using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities.Syntax;

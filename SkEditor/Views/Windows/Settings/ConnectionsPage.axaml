@@ -1,0 +1,14 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:SkEditor.Views.Controls"
+             mc:Ignorable="d" d:DesignWidth="800"
+             x:Class="SkEditor.Views.Windows.Settings.ConnectionsPage">
+    <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
+        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsConnectionsTitle}" Grid.Row="0" />
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="8" Name="ElementsPanel" />
+        </ScrollViewer>
+    </Grid>
+</UserControl>

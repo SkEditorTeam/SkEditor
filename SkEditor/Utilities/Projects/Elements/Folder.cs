@@ -10,9 +10,9 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
-using SkEditor.Views;
-using SkEditor.Views.Projects;
-using static SkEditor.Controls.Sidebar.ExplorerSidebarPanel;
+using static SkEditor.Views.Controls.Sidebar.ExplorerSidebarPanel;
+using CreateStorageElementWindow = SkEditor.Views.Windows.Projects.CreateStorageElementWindow;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Projects.Elements;
 

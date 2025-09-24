@@ -10,6 +10,7 @@ using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
 using SkEditor.Views;
+using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
 namespace SkEditor.Utilities.Editor;
 

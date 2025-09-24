@@ -16,6 +16,8 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
+using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 
 namespace SkEditor;
 

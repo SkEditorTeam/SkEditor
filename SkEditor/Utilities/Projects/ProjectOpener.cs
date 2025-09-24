@@ -10,10 +10,10 @@ using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Controls.Sidebar;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Projects.Elements;
+using SkEditor.Views.Controls.Sidebar;
 
 namespace SkEditor.Utilities.Projects;
 

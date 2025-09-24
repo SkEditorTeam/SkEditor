@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AvaloniaEdit.Editing;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Views;
+using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
 namespace SkEditor.Utilities.Parser;
 

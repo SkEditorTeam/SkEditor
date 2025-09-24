@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Views.Generators.Gui;
+using SkEditor.Views.Windows.Generators.Gui;
 
 namespace SkEditor.Data;
 

@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Views;
+using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Styling;
 
