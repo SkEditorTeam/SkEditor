@@ -111,7 +111,13 @@ public class App : Application
                     return;
                 }
 
-                Log.Error(t.Exception, "Error creating SkEditor");
+                var flattenedException = t.Exception.Flatten();
+                var innermost = flattenedException.InnerExceptions.FirstOrDefault() ?? flattenedException;
+    
+                Log.Error(t.Exception, "Error creating SkEditor: {ExceptionMessage}\nStack Trace: {StackTrace}", 
+                    innermost.Message, 
+                    innermost.StackTrace);
+                
                 Dispatcher.UIThread.Post(() =>
                 {
                     _splashScreen?.UpdateStatus(
@@ -125,6 +131,7 @@ public class App : Application
         }
         catch (Exception ex)
         {
+            
             Log.Error(ex, "Error creating SkEditor");
             _splashScreen?.UpdateStatus($"Error: {ex.Message}");
 
