@@ -314,6 +314,8 @@
     <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor is an app for editing Skript files created by Notro.</system:String>
     <system:String x:Key="SettingsAboutVersion">Version</system:String>
     <system:String x:Key="SettingsAboutVersionDescription">You are running version: {0}</system:String>
+    <system:String x:Key="SettingsAboutDocumentation">Documentation</system:String>
+    <system:String x:Key="SettingsAboutDocumentationDescription">Click to open SkEditor's Documentation!</system:String>
     <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
     <system:String x:Key="SettingsAboutGithubDescription">Click to open SkEditor's GitHub repository!</system:String>
     <system:String x:Key="SettingsAboutDiscord">Discord server</system:String>
