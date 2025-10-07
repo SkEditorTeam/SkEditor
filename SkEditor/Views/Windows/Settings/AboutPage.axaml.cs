@@ -14,6 +14,8 @@ public partial class AboutPage : UserControl
         AssignCommands();
 
         DataContext = SkEditorAPI.Core.GetAppConfig();
+        
+        VersionItem.Description = Translation.Get("SettingsAboutVersionDescription", [SkEditorAPI.Core.GetInformationalVersion()]);
     }
 
     private void AssignCommands()

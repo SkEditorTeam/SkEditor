@@ -315,12 +315,12 @@
     <system:String x:Key="SettingsAboutDocumentation">Dokumentation</system:String>
     <system:String x:Key="SettingsAboutDocumentationDescription">Klicke, um die Dokumentation von SkEditor zu öffnen.</system:String>
     <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
-    <system:String x:Key="SettingsAboutGithubDescription">Klicken Sie, um das GitHub-Repository von SkEditor zu öffnen!</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">Klicke, um das GitHub-Repository von SkEditor zu öffnen.</system:String>
     <system:String x:Key="SettingsAboutDiscord">Discord-Server</system:String>
-    <system:String x:Key="SettingsAboutDiscordDescription">Klicken Sie, um dem Discord-Server von SkEditor beizutreten!</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">Klicke, um dem Discord-Server von SkEditor beizutreten.</system:String>
     <system:String x:Key="SettingsAboutAppdata">AppData-Ordner öffnen</system:String>
     <system:String x:Key="SettingsAboutDevMode">Entwicklermodus</system:String>
-    <system:String x:Key="SettingsAboutDevModeDescription">Aktivieren Sie den Entwicklermodus, um Entwicklerfeatures zu nutzen.</system:String>
+    <system:String x:Key="SettingsAboutDevModeDescription">Aktiviere den Entwicklermodus, um Entwicklerfeatures zu nutzen.</system:String>
 
     <!-- Personalization -->
     <system:String x:Key="SettingsPersonalizationTitle">Personalisierung</system:String>
