@@ -13,7 +13,7 @@
         <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsGeneralTitle}" Grid.Row="0" />
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="8">
-                <controls:SettingsCategorySeparator Title="Application" />
+                <controls:SettingsCategorySeparator TitleKey="SettingsGeneralCategoryTitleApplication" />
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralLanguage}"
                                      IconSource="{StaticResource LanguageIcon}">
@@ -38,7 +38,7 @@
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
-                <controls:SettingsCategorySeparator Title="Editor" />
+                <controls:SettingsCategorySeparator TitleKey="SettingsGeneralCategoryTitleEditor" />
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralWrapping}"
                                      IconSource="{StaticResource WrappingIcon}"

@@ -276,6 +276,8 @@
     <system:String x:Key="SettingsHomeFileTypesDescription">Verwalte Dateitypen und deren Verknüpfungen</system:String>
 
     <!-- General Settings -->
+    <system:String x:Key="SettingsGeneralCategoryTitleApplication">Anwendung</system:String>
+    <system:String x:Key="SettingsGeneralCategoryTitleEditor">Editor</system:String>
     <system:String x:Key="SettingsGeneralTitle">Allgemein</system:String>
     <system:String x:Key="SettingsGeneralLanguage">Sprache</system:String>
     <system:String x:Key="SettingsGeneralWrapping">Umbruch</system:String>

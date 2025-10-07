@@ -278,6 +278,8 @@
     <system:String x:Key="SettingsHomeFileTypesDescription">Manage file types and their associations.</system:String>
 
     <!-- General Settings -->
+    <system:String x:Key="SettingsGeneralCategoryTitleApplication">Application</system:String>
+    <system:String x:Key="SettingsGeneralCategoryTitleEditor">Editor</system:String>
     <system:String x:Key="SettingsGeneralTitle">General</system:String>
     <system:String x:Key="SettingsGeneralLanguage">Language</system:String>
     <system:String x:Key="SettingsGeneralWrapping">Wrapping</system:String>
