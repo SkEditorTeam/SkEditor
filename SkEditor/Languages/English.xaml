@@ -457,5 +457,6 @@
     <system:String x:Key="WelcomeGettingStartedSettings">Settings</system:String>
     <system:String x:Key="WelcomeNeedHelpDiscordServer">Discord Server</system:String>
     <system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+    <system:String x:Key="WelcomeNeedHelpDocumentation">Documentation</system:String>
 
 </ResourceDictionary>
