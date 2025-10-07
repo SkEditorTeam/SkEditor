@@ -28,9 +28,14 @@ public partial class CreateStorageElementWindow : AppWindow
         CreateButton.Command = new RelayCommand(Create);
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape)
+            switch (e.Key)
             {
-                Close();
+                case Key.Escape:
+                    Close();
+                    break;
+                case Key.Enter:
+                    Create();
+                    break;
             }
         };
         

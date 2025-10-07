@@ -1,5 +1,6 @@
 ﻿using Avalonia.Input;
-using Avalonia.Interactivity;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Projects.Elements;
@@ -19,11 +20,19 @@ public partial class RenameElementWindow : AppWindow
 
         WindowStyler.Style(this);
 
+        RenameButton.Command = new RelayCommand(Rename);
+        CancelButton.Command = new RelayCommand(Close);
+
         KeyDown += (_, e) =>
         {
-            if (e.Key == Key.Escape)
+            switch (e.Key)
             {
-                Close();
+                case Key.Escape:
+                    Close();
+                    break;
+                case Key.Enter:
+                    Rename();
+                    break;
             }
         };
 
@@ -40,7 +49,7 @@ public partial class RenameElementWindow : AppWindow
 
     public StorageElement Element { get; }
 
-    private void RenameButtonClick(object? sender, RoutedEventArgs e)
+    private void Rename()
     {
         string? input = NameBox.Text;
         if (string.IsNullOrWhiteSpace(input))
@@ -59,11 +68,4 @@ public partial class RenameElementWindow : AppWindow
         Element.RenameElement(input);
         Close();
     }
-
-    private void Cancel(object? sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-    
-    
 }
