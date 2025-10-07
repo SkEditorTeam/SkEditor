@@ -302,7 +302,7 @@
     <system:String x:Key="SettingsGeneralRpcDescription">Zeigen Sie SkEditor in Ihrem Discord-Status an.</system:String>
     <system:String x:Key="SettingsGeneralPasteIndent">Auto-indent kopieren</system:String>
     <system:String x:Key="SettingsGeneralPasteIndentDescription">Passt automatisch die indention des eingefügten Textes ein, sodass es mit dem vorherigen Format übereinstimmt</system:String>
-    <system:String x:Key="SettingsGeneralCheckForUpdates">Auf Updated prüfen</system:String>
+    <system:String x:Key="SettingsGeneralCheckForUpdates">Auf Updates prüfen</system:String>
     <system:String x:Key="SettingsGeneralProjectSingleFolderClick">Projektordner mit einem Klick öffnen</system:String>
     <system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Wenn aktiviert, werden Ordner mit einem Klick anstatt einem Doppelklick geöffnet.</system:String>
 
