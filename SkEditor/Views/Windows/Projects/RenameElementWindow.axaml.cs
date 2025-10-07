@@ -26,6 +26,16 @@ public partial class RenameElementWindow : AppWindow
                 Close();
             }
         };
+
+        Opened += (_, _) =>
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                NameBox.Focus();
+                NameBox.SelectionStart = 0;
+                NameBox.SelectionEnd = element.Name.Length;
+            });
+        };
     }
 
     public StorageElement Element { get; }

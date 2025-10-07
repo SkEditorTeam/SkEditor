@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
@@ -31,6 +32,21 @@ public partial class CreateStorageElementWindow : AppWindow
             {
                 Close();
             }
+        };
+        
+        var placeholder =
+            Translation.Get(isFile ? "ProjectCreatePlaceholderFileName" : "ProjectCreatePlaceholderFolderName");
+
+        NameTextBox.Text = placeholder + (isFile ? ".sk" : "");
+        
+        Opened += (_, _) =>
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                NameTextBox.Focus();
+                NameTextBox.SelectionStart = 0;
+                NameTextBox.SelectionEnd = placeholder.Length;
+            });
         };
     }
 

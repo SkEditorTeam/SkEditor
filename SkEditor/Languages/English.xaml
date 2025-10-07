@@ -223,6 +223,8 @@
     <system:String x:Key="ProjectCreateFileName">File Name</system:String>
     <system:String x:Key="ProjectCreateFolderName">Folder Name</system:String>
     <system:String x:Key="ProjectCreateTemplate">Template</system:String>
+    <system:String x:Key="ProjectCreatePlaceholderFileName">New File</system:String>
+    <system:String x:Key="ProjectCreatePlaceholderFolderName">New Folder</system:String>
 
     <!-- Code Parser -->
     <system:String x:Key="CodeParserTitle">Code Parsing</system:String>
