@@ -223,6 +223,8 @@
     <system:String x:Key="ProjectCreateFileName">Datei Name</system:String>
     <system:String x:Key="ProjectCreateFolderName">Ordner Name</system:String>
     <system:String x:Key="ProjectCreateTemplate">Vorlage</system:String>
+    <system:String x:Key="ProjectCreatePlaceholderFileName">Neue Datei</system:String>
+    <system:String x:Key="ProjectCreatePlaceholderFolderName">Neuer Ordner</system:String>
 
     <!-- Code parser -->
     <system:String x:Key="CodeParserTitle">Code-Parsing</system:String>
@@ -356,7 +358,7 @@
 
     <!-- File Types Settings -->
     <system:String x:Key="SettingsFileTypesTitle">Dateitypen</system:String>
-    <system:String x:Key="SettingsFileTypesWarning">Diese Site lässt Sie nur die verknüpfungen bearbeiten, die Sie bereits erstellt habe. Eine Eingabeaufforderung wird angezeigt für weiter Dateitypen.</system:String>
+    <system:String x:Key="SettingsFileTypesWarning">Diese Seite lässt Sie nur die verknüpfungen bearbeiten, die Sie bereits erstellt habe. Eine Eingabeaufforderung wird angezeigt für weiter Dateitypen.</system:String>
     <system:String x:Key="SettingsFileTypesRemove">Entfernen</system:String>
 
     <!-- File Views -->
