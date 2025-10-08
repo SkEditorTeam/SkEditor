@@ -14,12 +14,15 @@ public partial class AboutPage : UserControl
         AssignCommands();
 
         DataContext = SkEditorAPI.Core.GetAppConfig();
+        
+        VersionItem.Description = Translation.Get("SettingsAboutVersionDescription", [SkEditorAPI.Core.GetInformationalVersion()]);
     }
 
     private void AssignCommands()
     {
         GitHubItem.Command =
             new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor"));
+        DocumentationItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev"));
         DiscordItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/"));
         AppDataItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenFolder(AppConfig.AppDataFolderPath));
     }

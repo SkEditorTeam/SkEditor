@@ -16,9 +16,13 @@
                                      IconSource="{StaticResource AppIcon}"
                                      Description="{DynamicResource SettingsAboutSkEditorDescription}" />
 
-                <ui:SettingsExpander Header="{DynamicResource SettingsAboutVersion}"
-                                     IconSource="{StaticResource WrenchIcon}"
-                                     Description="{Binding Version}" />
+                <ui:SettingsExpander Name="VersionItem" Header="{DynamicResource SettingsAboutVersion}"
+                                     IconSource="{StaticResource WrenchIcon}" />
+                
+                <ui:SettingsExpander Name="DocumentationItem" Header="{DynamicResource SettingsAboutDocumentation}"
+                                     IconSource="{StaticResource DocumentationIcon}"
+                                     Description="{DynamicResource SettingsAboutDocumentationDescription}"
+                                     IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="GitHubItem" Header="{DynamicResource SettingsAboutGithub}"
                                      IconSource="{StaticResource GitHubIcon}"

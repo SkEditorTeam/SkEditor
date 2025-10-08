@@ -117,7 +117,9 @@
     <system:String x:Key="UnsavedFileMessage">The File '{0}' is not saved.\n\nAre you sure you want to close it and discard your changes?</system:String>
     <system:String x:Key="AddonUpdateAvailableTitle">Addon Update Available</system:String>
     <system:String x:Key="AddonUpdateAvailableMessage">An update is available for '{0}'.\n\nVisit the Marketplace to update it for the latest fixes and SkEditor compatibility.</system:String>
-
+    <system:String x:Key="AddonLoadErrorsTitle">Addons with errors!</system:String>
+    <system:String x:Key="AddonLoadErrors">Some addons ({0}) have errors. Do you want to see them?</system:String>
+    
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Set your API key in the settings</system:String>
     <system:String x:Key="PublishWindowApiKeyHint">Click here to open a website with the API key. Make sure to log in first!</system:String>
@@ -223,6 +225,8 @@
     <system:String x:Key="ProjectCreateFileName">File Name</system:String>
     <system:String x:Key="ProjectCreateFolderName">Folder Name</system:String>
     <system:String x:Key="ProjectCreateTemplate">Template</system:String>
+    <system:String x:Key="ProjectCreatePlaceholderFileName">New File</system:String>
+    <system:String x:Key="ProjectCreatePlaceholderFolderName">New Folder</system:String>
 
     <!-- Code Parser -->
     <system:String x:Key="CodeParserTitle">Code Parsing</system:String>
@@ -276,6 +280,8 @@
     <system:String x:Key="SettingsHomeFileTypesDescription">Manage file types and their associations.</system:String>
 
     <!-- General Settings -->
+    <system:String x:Key="SettingsGeneralCategoryTitleApplication">Application</system:String>
+    <system:String x:Key="SettingsGeneralCategoryTitleEditor">Editor</system:String>
     <system:String x:Key="SettingsGeneralTitle">General</system:String>
     <system:String x:Key="SettingsGeneralLanguage">Language</system:String>
     <system:String x:Key="SettingsGeneralWrapping">Wrapping</system:String>
@@ -310,6 +316,8 @@
     <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor is an app for editing Skript files created by Notro.</system:String>
     <system:String x:Key="SettingsAboutVersion">Version</system:String>
     <system:String x:Key="SettingsAboutVersionDescription">You are running version: {0}</system:String>
+    <system:String x:Key="SettingsAboutDocumentation">Documentation</system:String>
+    <system:String x:Key="SettingsAboutDocumentationDescription">Click to open SkEditor's Documentation!</system:String>
     <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
     <system:String x:Key="SettingsAboutGithubDescription">Click to open SkEditor's GitHub repository!</system:String>
     <system:String x:Key="SettingsAboutDiscord">Discord server</system:String>
@@ -455,5 +463,6 @@
     <system:String x:Key="WelcomeGettingStartedSettings">Settings</system:String>
     <system:String x:Key="WelcomeNeedHelpDiscordServer">Discord Server</system:String>
     <system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+    <system:String x:Key="WelcomeNeedHelpDocumentation">Documentation</system:String>
 
 </ResourceDictionary>

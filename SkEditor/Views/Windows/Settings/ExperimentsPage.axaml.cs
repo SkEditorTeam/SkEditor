@@ -29,10 +29,14 @@ public partial class ExperimentsPage : UserControl
         new("Session restoring", "Automatically saves your files and reopens it next time you start the app.",
             "EnableSessionRestoring", "SessionRestoringIcon")
     ];
+    private readonly Dictionary<string, Experiment> _experimentsByOption;
+    private readonly Dictionary<string, ToggleSwitch> _switches = new();
 
     public ExperimentsPage()
     {
         InitializeComponent();
+        
+        _experimentsByOption = _experiments.ToDictionary(e => e.Option);
 
         AddExperiments();
     }
@@ -60,7 +64,8 @@ public partial class ExperimentsPage : UserControl
                 Footer = toggleSwitch,
                 IconSource = icon as IconSource
             };
-
+            
+            _switches[experiment.Option] = toggleSwitch;
             ExperimentsStackPanel.Children.Add(expander);
         }
     }
@@ -68,19 +73,28 @@ public partial class ExperimentsPage : UserControl
     private void Switch(Experiment experiment, ToggleSwitch toggleSwitch)
     {
         AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-        if (toggleSwitch.IsChecked == true && experiment.Dependency is not null)
+        
+        if (toggleSwitch.IsChecked == true)
         {
-            Experiment? dependency = _experiments.Find(e => e.Option == experiment.Dependency);
-            if (dependency is not null)
+            if (experiment.Dependency is not null &&
+                _experimentsByOption.TryGetValue(experiment.Dependency, out var dependency) &&
+                _switches.TryGetValue(dependency.Option, out var dependencySwitch) &&
+                dependencySwitch.IsChecked != true)
             {
-                if (Enumerable.OfType<SettingsExpander>(ExperimentsStackPanel.Children)
-                        .FirstOrDefault(e => e.Header?.ToString() == dependency.Name)
-                        ?.Footer is ToggleSwitch dependencySwitch)
+                dependencySwitch.IsChecked = true;
+                appConfig.SetExperimentFlag(dependency.Option, true);
+            }
+        }
+        else
+        {
+            var dependentExperiments = _experiments.Where(e => e.Dependency == experiment.Option);
+            
+            foreach (var dependent in dependentExperiments)
+            {
+                if (_switches.TryGetValue(dependent.Option, out var dependentSwitch) && dependentSwitch.IsChecked == true)
                 {
-                    if (dependencySwitch.IsChecked != true)
-                    {
-                        dependencySwitch.IsChecked = true;
-                    }
+                    dependentSwitch.IsChecked = false;
+                    appConfig.SetExperimentFlag(dependent.Option, false);
                 }
             }
         }

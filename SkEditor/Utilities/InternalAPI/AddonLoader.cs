@@ -55,16 +55,21 @@ public static class AddonLoader
 
     private static async Task CheckForAddonsErrors(int errorCount)
     {
-        ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
-            "Addons with errors", $"Some addons ({errorCount}) have errors. Do you want to see them?",
-            Symbol.AlertUrgent, "Cancel");
-
-        if (response == ContentDialogResult.Primary)
+        await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            SettingsWindow window = new();
-            SettingsWindow.NavigateToPage(typeof(AddonsPage));
-            await window.ShowDialogOnMainWindow();
-        }
+            ContentDialogResult response =
+                await SkEditorAPI.Windows.ShowDialog(Translation.Get("AddonLoadErrorsTitle"),
+                                                     Translation.Get("AddonLoadErrors", [errorCount.ToString()]),
+                                                     Symbol.AlertUrgent, Translation.Get("CancelButton"),
+                                                     Translation.Get("Yes"));
+
+            if (response == ContentDialogResult.Primary)
+            {
+                SettingsWindow window = new();
+                SettingsWindow.NavigateToPage(typeof(AddonsPage));
+                await window.ShowDialogOnMainWindow();
+            }
+        });
     }
 
     private static void LoadMeta()

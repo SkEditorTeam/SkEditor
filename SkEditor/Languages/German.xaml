@@ -117,7 +117,9 @@
     <system:String x:Key="UnsavedFileMessage">Die Datei '{0}' ist nicht gespeichert.\n\nBist du dir sicher, dass die Datei schließen und alle Änderungen verlieren willst?</system:String>
     <system:String x:Key="AddonUpdateAvailableTitle">Addon Update verfügbar</system:String>
     <system:String x:Key="AddonUpdateAvailableMessage">Ein Update ist für '{0}' verfügbar.\n\nBesuche den Marktplatz, um es für die neuesten Fehlerbehebungen und SkEditor-Kompatibilität zu aktualisieren.</system:String>
-
+    <system:String x:Key="AddonLoadErrorsTitle">Erweiterungen mit Fehlern!</system:String>
+    <system:String x:Key="AddonLoadErrors">Manche Erweiterungen ({0}) haben Fehler. Erweiterungen anzeigen?</system:String>
+    
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Setzen Sie Ihren API-Schlüssel in den Einstellungen</system:String>
     <system:String x:Key="PublishWindowApiKeyHint">Klicken Sie hier, um eine Website mit dem API-Schlüssel zu öffnen. Stellen Sie sicher, dass Sie sich zuerst anmelden!</system:String>
@@ -223,6 +225,8 @@
     <system:String x:Key="ProjectCreateFileName">Datei Name</system:String>
     <system:String x:Key="ProjectCreateFolderName">Ordner Name</system:String>
     <system:String x:Key="ProjectCreateTemplate">Vorlage</system:String>
+    <system:String x:Key="ProjectCreatePlaceholderFileName">Neue Datei</system:String>
+    <system:String x:Key="ProjectCreatePlaceholderFolderName">Neuer Ordner</system:String>
 
     <!-- Code parser -->
     <system:String x:Key="CodeParserTitle">Code-Parsing</system:String>
@@ -276,6 +280,8 @@
     <system:String x:Key="SettingsHomeFileTypesDescription">Verwalte Dateitypen und deren Verknüpfungen</system:String>
 
     <!-- General Settings -->
+    <system:String x:Key="SettingsGeneralCategoryTitleApplication">Anwendung</system:String>
+    <system:String x:Key="SettingsGeneralCategoryTitleEditor">Editor</system:String>
     <system:String x:Key="SettingsGeneralTitle">Allgemein</system:String>
     <system:String x:Key="SettingsGeneralLanguage">Sprache</system:String>
     <system:String x:Key="SettingsGeneralWrapping">Umbruch</system:String>
@@ -300,7 +306,7 @@
     <system:String x:Key="SettingsGeneralRpcDescription">Zeigen Sie SkEditor in Ihrem Discord-Status an.</system:String>
     <system:String x:Key="SettingsGeneralPasteIndent">Auto-indent kopieren</system:String>
     <system:String x:Key="SettingsGeneralPasteIndentDescription">Passt automatisch die indention des eingefügten Textes ein, sodass es mit dem vorherigen Format übereinstimmt</system:String>
-    <system:String x:Key="SettingsGeneralCheckForUpdates">Auf Updated prüfen</system:String>
+    <system:String x:Key="SettingsGeneralCheckForUpdates">Auf Updates prüfen</system:String>
     <system:String x:Key="SettingsGeneralProjectSingleFolderClick">Projektordner mit einem Klick öffnen</system:String>
     <system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Wenn aktiviert, werden Ordner mit einem Klick anstatt einem Doppelklick geöffnet.</system:String>
 
@@ -310,13 +316,15 @@
     <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor ist eine App zum Bearbeiten von Skriptdateien, erstellt von Notro.</system:String>
     <system:String x:Key="SettingsAboutVersion">Version</system:String>
     <system:String x:Key="SettingsAboutVersionDescription">Sie verwenden Version: {0}</system:String>
+    <system:String x:Key="SettingsAboutDocumentation">Dokumentation</system:String>
+    <system:String x:Key="SettingsAboutDocumentationDescription">Klicke, um die Dokumentation von SkEditor zu öffnen.</system:String>
     <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
-    <system:String x:Key="SettingsAboutGithubDescription">Klicken Sie, um das GitHub-Repository von SkEditor zu öffnen!</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">Klicke, um das GitHub-Repository von SkEditor zu öffnen.</system:String>
     <system:String x:Key="SettingsAboutDiscord">Discord-Server</system:String>
-    <system:String x:Key="SettingsAboutDiscordDescription">Klicken Sie, um dem Discord-Server von SkEditor beizutreten!</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">Klicke, um dem Discord-Server von SkEditor beizutreten.</system:String>
     <system:String x:Key="SettingsAboutAppdata">AppData-Ordner öffnen</system:String>
     <system:String x:Key="SettingsAboutDevMode">Entwicklermodus</system:String>
-    <system:String x:Key="SettingsAboutDevModeDescription">Aktivieren Sie den Entwicklermodus, um Entwicklerfeatures zu nutzen.</system:String>
+    <system:String x:Key="SettingsAboutDevModeDescription">Aktiviere den Entwicklermodus, um Entwicklerfeatures zu nutzen.</system:String>
 
     <!-- Personalization -->
     <system:String x:Key="SettingsPersonalizationTitle">Personalisierung</system:String>
@@ -352,7 +360,7 @@
 
     <!-- File Types Settings -->
     <system:String x:Key="SettingsFileTypesTitle">Dateitypen</system:String>
-    <system:String x:Key="SettingsFileTypesWarning">Diese Site lässt Sie nur die verknüpfungen bearbeiten, die Sie bereits erstellt habe. Eine Eingabeaufforderung wird angezeigt für weiter Dateitypen.</system:String>
+    <system:String x:Key="SettingsFileTypesWarning">Diese Seite lässt Sie nur die verknüpfungen bearbeiten, die Sie bereits erstellt habe. Eine Eingabeaufforderung wird angezeigt für weiter Dateitypen.</system:String>
     <system:String x:Key="SettingsFileTypesRemove">Entfernen</system:String>
 
     <!-- File Views -->
@@ -455,5 +463,6 @@
     <system:String x:Key="WelcomeGettingStartedSettings">Einstellungen</system:String>
     <system:String x:Key="WelcomeNeedHelpDiscordServer">Discord Server</system:String>
     <system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+    <system:String x:Key="WelcomeNeedHelpDocumentation">Dokumentation</system:String>
 
 </ResourceDictionary>
