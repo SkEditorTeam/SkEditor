@@ -120,6 +120,8 @@ public class MarketplaceItem
     [JsonProperty("version")] public required string ItemVersion { get; set; }
 
     [JsonProperty("author")] public required string ItemAuthor { get; set; }
+    
+    [JsonProperty("links")] public MarketplaceLinksItem? ItemLinks { get; set; }
 
     [JsonIgnore] public required MarketplaceWindow Marketplace { get; set; }
 
@@ -137,6 +139,17 @@ public class MarketplaceItem
     {
         return false;
     }
+}
+
+public class MarketplaceLinksItem
+{
+    [JsonProperty("issuesUrl")] public string? ItemIssuesUrl { get; set; }
+    
+    [JsonProperty("repositoryUrl")] public string? ItemRepositoryUrl { get; set; }
+    
+    [JsonProperty("changelogUrl")] public string? ItemChangelogUrl { get; set; }
+    
+    [JsonProperty("documentationUrl")] public string? ItemDocumentationUrl { get; set; }
 }
 
 public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>

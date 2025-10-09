@@ -188,6 +188,36 @@ public partial class MarketplaceWindow : AppWindow
                 });
                 break;
         }
+
+        if (item.ItemLinks?.ItemIssuesUrl != null)
+        {
+            ItemView.LinksBar.IsVisible = true;
+            ItemView.IssuesButton.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink(item.ItemLinks.ItemIssuesUrl));
+            ItemView.IssuesButton.IsVisible = true;
+        }
+        
+        if (item.ItemLinks?.ItemDocumentationUrl != null)
+        {
+            ItemView.LinksBar.IsVisible = true;
+            ItemView.DocumentationButton.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink(item.ItemLinks.ItemDocumentationUrl));
+            ItemView.DocumentationButton.IsVisible = true;
+        }
+        
+        if (item.ItemLinks?.ItemRepositoryUrl != null)
+        {
+            ItemView.LinksBar.IsVisible = true;
+            ItemView.RepositoryButton.Command =
+                new RelayCommand(() => SkEditorAPI.Core.OpenLink(item.ItemLinks.ItemRepositoryUrl));
+            ItemView.RepositoryButton.IsVisible = true;
+        }
+
+        if (item.ItemLinks?.ItemChangelogUrl != null)
+        {
+            ItemView.LinksBar.IsVisible = true;
+            ItemView.ChangelogButton.Command =
+                new RelayCommand(() => SkEditorAPI.Core.OpenLink(item.ItemLinks.ItemChangelogUrl));
+            ItemView.ChangelogButton.IsVisible = true;
+        }
     }
 
     public void RefreshCurrentSelection()
