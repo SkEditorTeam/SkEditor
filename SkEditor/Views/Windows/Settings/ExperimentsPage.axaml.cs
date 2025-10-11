@@ -6,6 +6,8 @@ using Avalonia.Styling;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Views.Windows.Settings;
 
@@ -14,20 +16,20 @@ public partial class ExperimentsPage : UserControl
     private readonly List<Experiment> _experiments =
     [
         new("Auto Completion", "Early prototype of auto completion, not very helpful.",
-            "EnableAutoCompletionExperiment", "MagicWandIcon"),
-        new("Projects", "Adds a sidebar for managing projects.", "EnableProjectsExperiment", "Folder"),
-        new("Hex Preview", "Preview hex colors in the editor.", "EnableHexPreview", "ColorIcon"),
+            "EnableAutoCompletionExperiment",  Symbol.TextGrammarWand),
+        new("Projects", "Adds a sidebar for managing projects.", "EnableProjectsExperiment", Symbol.Briefcase),
+        new("Hex Preview", "Preview hex colors in the editor.", "EnableHexPreview", Symbol.Color),
         new("Code Parser",
             "Parse code for informations. Doesn't contain error checking, see Analyzer addon instead. Requires Projects experiment.",
-            "EnableCodeParser", "SearchIcon", "EnableProjectsExperiment"),
+            "EnableCodeParser", Symbol.DocumentSearch, "EnableProjectsExperiment"),
         new("Real-Time Code Parser",
             "Automatically parses your code with every change you make. Requires Code Parser experiment.",
-            "EnableRealtimeCodeParser", "SearchIcon", "EnableCodeParser"),
-        new("Folding", "Folding code blocks. Requires Code Parser experiment.", "EnableFolding", "FoldingIcon",
+            "EnableRealtimeCodeParser", Symbol.ArrowSync, "EnableCodeParser"),
+        new("Folding", "Folding code blocks. Requires Code Parser experiment.", "EnableFolding", Symbol.TextCollapse,
             "EnableCodeParser"),
         //new Experiment("Better pairing", "Experimental better version of auto pairing.", "EnableBetterPairing", "AutoPairingIcon"),
         new("Session restoring", "Automatically saves your files and reopens it next time you start the app.",
-            "EnableSessionRestoring", "SessionRestoringIcon")
+            "EnableSessionRestoring", Symbol.History)
     ];
     private readonly Dictionary<string, Experiment> _experimentsByOption;
     private readonly Dictionary<string, ToggleSwitch> _switches = new();
@@ -47,9 +49,6 @@ public partial class ExperimentsPage : UserControl
 
         foreach (Experiment experiment in _experiments)
         {
-            object? icon = null;
-            Application.Current?.TryGetResource(experiment.Icon, ThemeVariant.Default, out icon);
-
             ToggleSwitch toggleSwitch = new()
             {
                 IsChecked = appConfig.GetExperimentFlag(experiment.Option)
@@ -62,7 +61,7 @@ public partial class ExperimentsPage : UserControl
                 Header = experiment.Name,
                 Description = experiment.Description,
                 Footer = toggleSwitch,
-                IconSource = icon as IconSource
+                IconSource = new SymbolIconSource { Symbol = experiment.Icon}
             };
             
             _switches[experiment.Option] = toggleSwitch;
@@ -108,5 +107,5 @@ public record Experiment(
     string Name,
     string Description,
     string Option,
-    string Icon = "Settings",
+    Symbol Icon,
     string? Dependency = null);

@@ -3,8 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Windows.Settings.HomePage"
              x:CompileBindings="True">
@@ -15,40 +15,37 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel Name="ItemStackPanel" Spacing="8">
                 <ui:SettingsExpander Name="GeneralItem" Header="{DynamicResource SettingsHomeGeneral}"
-                                     IconSource="{StaticResource HomeIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=Wrench}"
                                      Description="{DynamicResource SettingsHomeGeneralDescription}"
                                      IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="PersonalizationItem" Header="{DynamicResource SettingsHomePersonalization}"
-                                     IconSource="{StaticResource PersonalizeIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=PaintBrush}"
                                      Description="{DynamicResource SettingsHomePersonalizationDescription}"
                                      IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="ExperimentsItem" Header="{DynamicResource SettingsHomeExperiments}"
-                                     IconSource="{StaticResource ExperimentsIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=Beaker}"
                                      Description="{DynamicResource SettingsHomeExperimentsDescription}"
                                      IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="ConnectionsItem" Header="{DynamicResource SettingsHomeConnections}"
-                                     IconSource="{StaticResource ConnectionsIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=PlugConnected}"
                                      Description="{DynamicResource SettingsHomeConnectionsDescription}"
                                      IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="AddonsItem" Header="{DynamicResource SettingsHomeAddons}"
-                                     IconSource="{StaticResource AddonIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=PuzzlePiece}"
                                      Description="{DynamicResource SettingsHomeAddonsDescription}"
                                      IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="FileTypesItem" Header="{DynamicResource SettingsHomeFileTypes}"
+                                     IconSource="{icons:SymbolIconSource Symbol=DocumentSettings}"
                                      Description="{DynamicResource SettingsHomeFileTypesDescription}"
-                                     IsClickEnabled="True">
-                    <ui:SettingsExpander.IconSource>
-                        <fluent:SymbolIconSource Symbol="DocumentPill" />
-                    </ui:SettingsExpander.IconSource>
-                </ui:SettingsExpander>
+                                     IsClickEnabled="True"/>
 
                 <ui:SettingsExpander Name="AboutItem" Header="{DynamicResource SettingsHomeAbout}"
-                                     IconSource="{StaticResource InfoIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=Info}"
                                      IsClickEnabled="True" />
             </StackPanel>
         </ScrollViewer>

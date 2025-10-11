@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Utilities;
 

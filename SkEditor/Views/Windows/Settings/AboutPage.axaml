@@ -6,12 +6,13 @@
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              xmlns:vms="clr-namespace:SkEditor.ViewModels"
              xmlns:utils="clr-namespace:SkEditor.Utilities"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="utils:AppConfig"
              DataContext="{x:Static vms:ViewModelLocator.AppConfig}"
              x:Class="SkEditor.Views.Windows.Settings.AboutPage">
-    
+
     <UserControl.Resources>
         <vms:SettingsViewModel x:Key="SettingsViewModel" />
     </UserControl.Resources>
@@ -26,14 +27,14 @@
                                      Description="{DynamicResource SettingsAboutSkEditorDescription}" />
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsAboutVersion}"
-                                     IconSource="{StaticResource WrenchIcon}">
+                                     IconSource="{icons:SymbolIconSource Symbol=Wrench}">
                     <ui:SettingsExpander.Description>
                         <Binding Source="{StaticResource SettingsViewModel}" Path="Version" />
                     </ui:SettingsExpander.Description>
                 </ui:SettingsExpander>
-                
+
                 <ui:SettingsExpander Name="DocumentationItem" Header="{DynamicResource SettingsAboutDocumentation}"
-                                     IconSource="{StaticResource DocumentationIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=Book}"
                                      Description="{DynamicResource SettingsAboutDocumentationDescription}"
                                      IsClickEnabled="True" />
 
@@ -49,14 +50,14 @@
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsAboutDevMode}"
                                      Description="{DynamicResource SettingsAboutDevModeDescription}"
-                                     IconSource="{StaticResource LightingIcon}">
+                                     IconSource="{icons:SymbolIconSource Symbol=Flash}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="DevModeToggleSwitch" IsChecked="{Binding IsDevModeEnabled}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Name="AppDataItem" Header="{DynamicResource SettingsAboutAppdata}"
-                                     IconSource="{StaticResource Folder}"
+                                     IconSource="{icons:SymbolIconSource Symbol=Folder}"
                                      IsClickEnabled="True" />
             </StackPanel>
         </ScrollViewer>

@@ -8,6 +8,8 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Syntax;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows.Settings.Personalization;
 
@@ -45,13 +47,13 @@ public partial class FileSyntaxes : UserControl
         }
     }
 
-    private SettingsExpander GenerateExpander(string language, string selectedSyntaxFullIdName)
+    private static SettingsExpander GenerateExpander(string language, string selectedSyntaxFullIdName)
     {
         ComboBox comboBox = new() { Name = language };
         SettingsExpander expander = new()
         {
             Header = language,
-            IconSource = new SymbolIconSource { Symbol = Symbol.Code },
+            IconSource = new SymbolIconSource() { Symbol = Symbol.Code },
             Footer = comboBox
         };
 

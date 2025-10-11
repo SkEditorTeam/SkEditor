@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              xmlns:vms="clr-namespace:SkEditor.ViewModels"
              xmlns:utils="clr-namespace:SkEditor.Utilities"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="utils:AppConfig"
@@ -21,17 +22,17 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="8">
                 <ui:SettingsExpander Name="ThemePageButton" Header="{DynamicResource SettingsPersonalizationTheme}"
-                                     IconSource="{StaticResource PaintIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=Color}"
                                      Description="{DynamicResource SettingsPersonalizationThemeDescription}"
                                      IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="SyntaxPageButton" Header="{DynamicResource SettingsPersonalizationSyntax}"
-                                     IconSource="{StaticResource CodeIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=Code}"
                                      Description="{DynamicResource SettingsPersonalizationSyntaxDescription}"
                                      IsClickEnabled="True" />
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationFont}"
-                                     IconSource="{StaticResource TextFontIcon}">
+                                     IconSource="{icons:SymbolIconSource Symbol=TextFont}">
                     <ui:SettingsExpander.Description>
                         <Binding Source="{StaticResource SettingsViewModel}" Path="CurrentFont" />
                     </ui:SettingsExpander.Description>
@@ -41,14 +42,14 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationHighlightCurrentLine}"
-                                     IconSource="{StaticResource HighlightCurrentLineIcon}">
+                                     IconSource="{icons:SymbolIconSource Symbol=Highlight}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="HighlightCurrentLineSwitch" IsChecked="{Binding HighlightCurrentLine}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationSidebarAnimations}"
-                                     IconSource="{StaticResource SlideTransitionIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=SlideTransition}"
                                      Description="{DynamicResource SettingsPersonalizationSidebarAnimationsDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="SidebarAnimationsToggleSwitch"

@@ -6,6 +6,7 @@
              xmlns:utilities="clr-namespace:SkEditor.Utilities"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              xmlns:vms="clr-namespace:SkEditor.ViewModels"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="utilities:AppConfig"
@@ -19,7 +20,7 @@
                 <controls:SettingsCategorySeparator TitleKey="SettingsGeneralCategoryTitleApplication" />
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralLanguage}"
-                                     IconSource="{StaticResource LanguageIcon}">
+                                     IconSource="{icons:SymbolIconSource Symbol=Earth}">
                     <ui:SettingsExpander.Footer>
                         <ComboBox Name="LanguageComboBox" />
                     </ui:SettingsExpander.Footer>
@@ -34,7 +35,7 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralCheckForUpdates}"
-                                     IconSource="{StaticResource CheckForUpdatesIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=CloudSync}"
                                      Description="{DynamicResource SettingsGeneralCheckForUpdatesDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="CheckForUpdatesToggleSwitch" IsChecked="{Binding CheckForUpdates}" />
@@ -44,7 +45,7 @@
                 <controls:SettingsCategorySeparator TitleKey="SettingsGeneralCategoryTitleEditor" />
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralWrapping}"
-                                     IconSource="{StaticResource WrappingIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=TextWrap}"
                                      Description="{DynamicResource SettingsGeneralWrappingDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWrappingEnabled, Mode=OneTime}" />
@@ -52,14 +53,14 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralZoomSync}"
-                                     IconSource="{StaticResource ZoomIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=ZoomIn}"
                                      Description="{DynamicResource SettingsGeneralZoomSyncDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="ZoomSyncToggleSwitch" IsChecked="{Binding IsZoomSyncEnabled, Mode=OneTime}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralSidebarWidthSync}"
-                                     IconSource="{StaticResource SidebarWidthSyncIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=ColumnArrowRight}"
                                      Description="{DynamicResource SettingsGeneralSidebarWidthSyncDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="SidebarWidthSyncToggleSwitch" IsChecked="{Binding IsSidebarWidthSyncEnabled}" />
@@ -67,7 +68,7 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralTabType}"
-                                     IconSource="{StaticResource FunctionIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=TextIndentIncrease}"
                                      Description="{DynamicResource SettingsGeneralTabTypeDescription}">
                     <ui:SettingsExpander.Footer>
                         <StackPanel Orientation="Horizontal" Spacing="10">
@@ -86,7 +87,7 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoIndent}"
-                                     IconSource="{StaticResource AutoIndentIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=ArrowAutofitWidth}"
                                      Description="{DynamicResource SettingsGeneralAutoIndentDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="AutoIndentToggleSwitch" IsChecked="{Binding IsAutoIndentEnabled}" />
@@ -94,7 +95,7 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoPairing}"
-                                     IconSource="{StaticResource AutoPairingIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=TextQuote}"
                                      Description="{DynamicResource SettingsGeneralAutoPairingDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="AutoPairingToggleSwitch" IsChecked="{Binding IsAutoPairingEnabled}" />
@@ -102,17 +103,15 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralPasteIndent}"
+                                     IconSource="{icons:SymbolIconSource Symbol=ClipboardTextEdit}"
                                      Description="{DynamicResource SettingsGeneralPasteIndentDescription}">
-                    <ui:SettingsExpander.IconSource>
-                        <ui:SymbolIconSource Symbol="Paste" />
-                    </ui:SettingsExpander.IconSource>
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="PasteIndentToggleSwitch" IsChecked="{Binding IsPasteIndentationEnabled}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralAutoSave}"
-                                     IconSource="{StaticResource AutoSaveIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=SaveSync}"
                                      Description="{DynamicResource SettingsGeneralAutoSaveDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="AutoSaveToggleSwitch" IsChecked="{Binding IsAutoSaveEnabled}" />
@@ -120,7 +119,7 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralChangeChecker}"
-                                     IconSource="{StaticResource CheckForChangesIcon}"
+                                     IconSource="{icons:SymbolIconSource Symbol=DocumentSync}"
                                      Description="{DynamicResource SettingsGeneralChangeCheckerDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="CheckForChangesToggleSwitch" IsChecked="{Binding CheckForChanges}" />
@@ -128,7 +127,7 @@
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralProjectSingleFolderClick}"
-                                     IconSource="{StaticResource Folder}"
+                                     IconSource="{icons:SymbolIconSource Symbol=FolderArrowRight}"
                                      Description="{DynamicResource SettingsGeneralProjectSingleFolderClickDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="ProjectSingleClickToggleSwitch"
