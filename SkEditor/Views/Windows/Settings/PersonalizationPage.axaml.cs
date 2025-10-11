@@ -18,8 +18,6 @@ public partial class PersonalizationPage : UserControl
     {
         InitializeComponent();
 
-        DataContext = SkEditorAPI.Core.GetAppConfig();
-
         AssignCommands();
     }
 
@@ -37,6 +35,8 @@ public partial class PersonalizationPage : UserControl
                 textEditor!.Options.HighlightCurrentLine = !textEditor.Options.HighlightCurrentLine;
             }
         });
+        
+        
     }
 
     private async Task SelectFont()
@@ -49,7 +49,6 @@ public partial class PersonalizationPage : UserControl
         }
 
         SkEditorAPI.Core.GetAppConfig().Font = result;
-        CurrentFont.Description = Translation.Get("SettingsPersonalizationFontDescription").Replace("{0}", result);
 
         SkEditorAPI.Files.GetOpenedEditors().ForEach(i =>
         {

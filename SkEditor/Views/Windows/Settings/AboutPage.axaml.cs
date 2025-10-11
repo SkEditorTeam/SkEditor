@@ -10,10 +10,7 @@ public partial class AboutPage : UserControl
     public AboutPage()
     {
         InitializeComponent();
-
         AssignCommands();
-
-        DataContext = SkEditorAPI.Core.GetAppConfig();
     }
 
     private void AssignCommands()

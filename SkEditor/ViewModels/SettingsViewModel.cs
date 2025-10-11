@@ -1,26 +1,57 @@
-﻿using SkEditor.API;
+﻿using System;
+using System.ComponentModel;
+using Avalonia.Utilities;
+using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.API;
 using SkEditor.Utilities;
 
 namespace SkEditor.ViewModels;
 
-public class SettingsViewModel
+public partial class SettingsViewModel : ObservableObject
 {
-    public static bool IsDiscordRpcEnabled { get; set; } = SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled;
-    public static bool IsWrappingEnabled { get; set; } = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled;
-    public static bool IsAutoIndentEnabled { get; set; } = SkEditorAPI.Core.GetAppConfig().IsAutoIndentEnabled;
-    public static bool IsAutoPairingEnabled { get; set; } = SkEditorAPI.Core.GetAppConfig().IsAutoPairingEnabled;
-    public static bool IsAutoSaveEnabled { get; set; } = SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled;
-    public static bool CheckForUpdates { get; set; } = SkEditorAPI.Core.GetAppConfig().CheckForUpdates;
-    public static bool CheckForChanges { get; set; } = SkEditorAPI.Core.GetAppConfig().CheckForChanges;
+    [ObservableProperty] private string _version = string.Empty;
 
-    public static bool IsPasteIndentationEnabled { get; set; } =
-        SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled;
+    [ObservableProperty] private string _currentFont = string.Empty;
 
-    public static bool UseSkriptGui { get; set; } = SkEditorAPI.Core.GetAppConfig().UseSkriptGui;
+    public SettingsViewModel()
+    {
+        UpdateProperties();
+        SubscribeToEvents();
+    }
 
-    public static string Version { get; set; } = Translation.Get("SettingsAboutVersionDescription").Replace("{0}",
-        $"{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}");
+    private void SubscribeToEvents()
+    {
+        // Use weak event handlers to avoid memory leaks
+        WeakEventHandlerManager.Subscribe<AppConfig, PropertyChangedEventArgs, SettingsViewModel>(
+            SkEditorAPI.Core.GetAppConfig(),
+            nameof(INotifyPropertyChanged.PropertyChanged),
+            OnAppConfigPropertyChanged);
 
-    public static string CurrentFont { get; set; } = Translation.Get("SettingsPersonalizationFontDescription")
-        .Replace("{0}", SkEditorAPI.Core.GetAppConfig().Font);
+        WeakEventHandlerManager.Subscribe<IEvents, LanguageChangedEventArgs, SettingsViewModel>(
+            SkEditorAPI.Events,
+            nameof(SkEditorAPI.Events.OnLanguageChanged),
+            OnLanguageChanged);
+    }
+
+    private void OnAppConfigPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AppConfig.Font))
+        {
+            UpdateProperties();
+        }
+    }
+
+    private void OnLanguageChanged(object? sender, EventArgs e)
+    {
+        UpdateProperties();
+    }
+
+    private void UpdateProperties()
+    {
+        CurrentFont = Translation.Get("SettingsPersonalizationFontDescription")
+            .Replace("{0}", SkEditorAPI.Core.GetAppConfig().Font);
+        
+        Version = Translation.Get("SettingsAboutVersionDescription").Replace("{0}",
+            $"{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}");
+    }
 }

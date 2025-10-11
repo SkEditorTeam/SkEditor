@@ -5,6 +5,7 @@ using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities;
 using SkEditor.ViewModels;
 using SkEditor.Views.Controls.Sidebar;
 using ImageViewer = SkEditor.Views.Windows.FileTypes.Images.ImageViewer;
@@ -20,7 +21,7 @@ public class SkEditorSelfAddon : IAddon
 
     private ImageIconSource _iconSource = null!;
     public string Name => "SkEditor Core";
-    public string Version => SettingsViewModel.Version;
+    public string Version => $"{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}";
     public string Description => "The core of SkEditor, providing the base functionalities.";
     public string Identifier => "SkEditorCore";
 
