@@ -32,15 +32,32 @@ public static class Translation
         return translationString;
     }
 
-    public static async Task ChangeLanguage(string language)
+    public static async Task ChangeLanguage(string language, bool startup = false)
     {
-#if !AOT
+        bool isEnglish = language == "English";
+        
+        if (startup && isEnglish)
+        {
+            // English is a built-in ResourceDictionary, so we don't need to load it at startup.
+            return;
+        }
+
         foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
                      translation.Key != "English"))
         {
             Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
             Translations.Remove(translation.Key);
         }
+            
+        if (isEnglish)
+        {
+            SkEditorAPI.Core.GetAppConfig().Language = "English";
+            SkEditorAPI.Core.GetAppConfig().Save();
+            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
+            return;
+        }
+
+#if !AOT
 
         Uri languageXaml = new(Path.Combine(LanguagesFolder, $"{language}.xaml"));
 

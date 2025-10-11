@@ -35,8 +35,8 @@ public partial class MainWindow : AppWindow
 
         ThemeEditor.LoadThemes();
         AddEvents();
-
-        Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language).Wait();
+        
+        Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language, true).Wait();
 
         Instance = this;
     }
