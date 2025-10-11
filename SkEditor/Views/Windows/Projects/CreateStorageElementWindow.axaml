@@ -14,16 +14,31 @@
                 <TextBlock Name="FileNameTextBlock" HorizontalAlignment="Stretch">File Name</TextBlock>
                 <TextBox Name="NameTextBox" HorizontalAlignment="Stretch" />
             </StackPanel>
-            <StackPanel Grid.Row="1" Spacing="5" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0 5 0 0">
+            <StackPanel
+                Grid.Row="1"
+                Spacing="5"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Stretch"
+                Margin="0 5 0 0">
                 <TextBlock Name="FileTemplateTextBlock" HorizontalAlignment="Stretch">File Template</TextBlock>
                 <ComboBox HorizontalAlignment="Stretch" IsEnabled="False" SelectedIndex="0">
                     <ComboBoxItem Content="Coming soon!" />
                 </ComboBox>
             </StackPanel>
         </Grid>
-        <TextBlock Grid.Row="1" TextAlignment="Center" Name="ErrorBox" FontSize="18" TextWrapping="Wrap"
-                   HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <Button Name="CreateButton" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Stretch"
-                Content="{DynamicResource WindowTitleElementCreate}" />
+        <TextBlock
+            Name="ErrorBox"
+            Grid.Row="1"
+            FontSize="18"
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center" />
+        <Button
+            Name="CreateButton"
+            Grid.Row="2"
+            Content="{DynamicResource WindowTitleElementCreate}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch" />
     </Grid>
 </Window>

@@ -13,11 +13,32 @@
             <TextBlock Text="{DynamicResource ProjectRenameText}" />
             <TextBox Name="NameBox" />
         </StackPanel>
-        <TextBlock TextAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="ErrorBox"
-                   FontSize="18" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <Button Grid.Column="0" Margin="0 0 5 0" Click="Cancel" Grid.Row="2" HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch" Content="{DynamicResource CancelButton}" />
-        <Button Grid.Column="1" Margin="5 0 0 0" Click="RenameButtonClick" Classes="accent" Grid.Row="2"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Content="{DynamicResource MenuHeaderRename}" />
+        <TextBlock
+            Name="ErrorBox"
+            Grid.Column="0"
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            FontSize="18"
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center" />
+        <Button
+            Name="CancelButton"
+            Grid.Column="0"
+            Grid.Row="2"
+            Content="{DynamicResource CancelButton}"
+            Margin="0 0 5 0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch" />
+        <Button
+            Name="RenameButton"
+            Grid.Column="1"
+            Grid.Row="2"
+            Content="{DynamicResource MenuHeaderRename}"
+            Margin="5 0 0 0"
+            Classes="accent"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch" />
     </Grid>
 </Window>
