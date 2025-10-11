@@ -9,7 +9,6 @@ public partial class ConnectionsPage : UserControl
     public ConnectionsPage()
     {
         InitializeComponent();
-
         AssignCommands();
     }
 

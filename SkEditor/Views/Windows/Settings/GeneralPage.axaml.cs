@@ -18,8 +18,6 @@ public partial class GeneralPage : UserControl
     {
         InitializeComponent();
 
-        DataContext = SkEditorAPI.Core.GetAppConfig();
-
         AssignCommands();
         LoadLanguages();
         LoadIndentation();

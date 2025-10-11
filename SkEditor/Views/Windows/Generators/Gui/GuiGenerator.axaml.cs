@@ -29,7 +29,6 @@ public partial class GuiGenerator : AppWindow
         Focusable = true;
 
         Instance = this;
-        DataContext = new SettingsViewModel();
 
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;

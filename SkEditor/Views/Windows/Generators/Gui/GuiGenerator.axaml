@@ -2,8 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:utils="clr-namespace:SkEditor.Utilities"
+        xmlns:vms="clr-namespace:SkEditor.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.Generators.Gui.GuiGenerator" Icon="/Assets/SkEditor.ico"
+        x:CompileBindings="True"
+        x:DataType="utils:AppConfig"
+        DataContext="{x:Static vms:ViewModelLocator.AppConfig}"
         Title="{DynamicResource WindowTitleGuiGenerator}" Height="500" Width="900" CanResize="False"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
@@ -26,28 +31,9 @@
                 <Button Name="BackgroundItemButton" Width="175" Content="{DynamicResource SelectButton}" />
             </StackPanel>
         </Grid>
-        <Grid x:Name="ItemGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Grid x:Name="ItemGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+              ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
         </Grid>
 
         <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom">

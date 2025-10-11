@@ -6,7 +6,6 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
-using SkEditor.ViewModels;
 using SkEditor.Views.Controls.Addons;
 
 namespace SkEditor.Views.Windows.Settings;
@@ -19,8 +18,6 @@ public partial class AddonsPage : UserControl
 
         LoadAddons();
         AssignCommands();
-
-        DataContext = new SettingsViewModel();
     }
 
     public void LoadAddons()

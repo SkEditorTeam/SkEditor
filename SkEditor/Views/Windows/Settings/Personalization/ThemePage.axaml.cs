@@ -35,7 +35,7 @@ public partial class ThemePage : UserControl
         }
 
         ThemeComboBox.SelectedItem = 
-            Enumerable.FirstOrDefault<object?>(ThemeComboBox.Items, x => 
+            ThemeComboBox.Items.FirstOrDefault(x => 
                 x is ComboBoxItem { Tag: not null } item && 
                 item.Tag.Equals(ThemeEditor.CurrentTheme.FileName));
 
