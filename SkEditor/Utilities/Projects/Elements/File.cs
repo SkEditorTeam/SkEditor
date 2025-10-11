@@ -10,6 +10,7 @@ using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Utilities.Projects.Elements;
 
