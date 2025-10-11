@@ -5,11 +5,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Views.Windows.Marketplace.Types;
 
@@ -45,7 +46,7 @@ public class ZipAddonItem : AddonItem
             }
 
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
-                new SymbolIconSource { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
+                new SymbolIconSource { Symbol = Symbol.CheckmarkCircle }, primaryButtonText: "Okay");
 
             MarketplaceWindow.Instance.HideAllButtons();
             MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
@@ -107,7 +108,7 @@ public class ZipAddonItem : AddonItem
 
         await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
             Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            new SymbolIconSource { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
+            new SymbolIconSource { Symbol = Symbol.CheckmarkCircle }, primaryButtonText: "Okay");
     }
 
     public async Task Update()
@@ -129,7 +130,7 @@ public class ZipAddonItem : AddonItem
 
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
                 Translation.Get("MarketplaceUpdateSuccess", ItemName),
-                new SymbolIconSource { Symbol = Symbol.Accept }, primaryButtonText: "Okay");
+                new SymbolIconSource { Symbol = Symbol.CheckmarkCircle }, primaryButtonText: "Okay");
         }
         catch
         {

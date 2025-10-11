@@ -15,6 +15,8 @@ using SkEditor.Utilities;
 using SkEditor.Views;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.API;
 
@@ -151,7 +153,7 @@ public class Windows : IWindows
 
     public Task ShowMessage(string title, string message)
     {
-        EnqueueDialogFireAndForget(async () => { await ShowDialogInternal(title, message, Symbol.FlagFilled); });
+        EnqueueDialogFireAndForget(async () => { await ShowDialogInternal(title, message, Symbol.Flag); });
         return Task.CompletedTask;
     }
 
@@ -159,7 +161,7 @@ public class Windows : IWindows
     {
         EnqueueDialogFireAndForget(async () =>
         {
-            await ShowDialogInternal(Translation.Get("Error"), error, Symbol.AlertFilled);
+            await ShowDialogInternal(Translation.Get("Error"), error, Symbol.Alert);
         });
         return Task.CompletedTask;
     }
@@ -185,6 +187,11 @@ public class Windows : IWindows
             Symbol symbol => new SymbolIconSource { Symbol = symbol, FontSize = 40 },
             _ => icon
         };
+        
+        if (icon is SymbolIconSource symbolIconSource)
+        {
+            symbolIconSource.FontSize = 40;
+        }
 
         IconSource? source = icon switch
         {
@@ -197,9 +204,6 @@ public class Windows : IWindows
         {
             case FontIconSource fontIconSource:
                 fontIconSource.FontSize = 40;
-                break;
-            case SymbolIconSource symbolIconSource:
-                symbolIconSource.FontSize = 40;
                 break;
         }
 

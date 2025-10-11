@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using SkEditor.API;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Files;
 
@@ -71,6 +74,6 @@ internal static class FileCloser
     private static async Task<ContentDialogResult> ShowConfirmationDialog()
     {
         return await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-            Translation.Get("ClosingFiles"), new SymbolIconSource { Symbol = Symbol.ImportantFilled });
+            Translation.Get("ClosingFiles"), new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled});
     }
 }

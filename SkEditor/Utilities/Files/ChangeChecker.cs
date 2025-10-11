@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using Serilog;
 using SkEditor.API;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Files;
 
@@ -93,7 +96,7 @@ public class ChangeChecker
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
             Translation.Get("Attention"),
             Translation.Get("ChangesDetected"),
-            new SymbolIconSource { Symbol = Symbol.ImportantFilled },
+            new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled},
             primaryButtonText: "Yes",
             cancelButtonText: "No");
 

@@ -10,6 +10,8 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Views.Windows.Marketplace.Types;
 
@@ -37,7 +39,7 @@ public class ThemeItem : MarketplaceItem
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message,
                 primaryButtonText: "MarketplaceEnableNow", cancelButtonText: "Okay",
-                icon: new SymbolIconSource { Symbol = Symbol.Accept });
+                icon: new SymbolIconSource { Symbol = Symbol.CheckmarkCircle });
 
             if (result == ContentDialogResult.Primary)
             {
@@ -83,7 +85,7 @@ public class ThemeItem : MarketplaceItem
 
         await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
             Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            new SymbolIconSource { Symbol = Symbol.Accept });
+            new SymbolIconSource { Symbol = Symbol.CheckmarkCircle });
     }
 
     public override bool IsInstalled()

@@ -199,8 +199,8 @@ public partial class MainMenuControl : UserControl
                     }),
                     Icon = new IconSourceElement
                     {
-                        IconSource = new FluentAvalonia.UI.Controls.SymbolIconSource
-                            { Symbol = FluentAvalonia.UI.Controls.Symbol.Setting, FontSize = 20 },
+                        IconSource = new SymbolIconSource
+                            { Symbol = Symbol.Settings, FontSize = 20 },
                         Width = 20,
                         Height = 20
                     }
@@ -227,9 +227,9 @@ public partial class MainMenuControl : UserControl
             }),
             Icon = new IconSourceElement
             {
-                IconSource = new FluentAvalonia.UI.Controls.SymbolIconSource
+                IconSource = new SymbolIconSource
                 {
-                    Symbol = FluentAvalonia.UI.Controls.Symbol.Manage,
+                    Symbol = Symbol.Wrench,
                     FontSize = 20
                 },
                 Width = 20,

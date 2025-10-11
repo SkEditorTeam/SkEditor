@@ -8,6 +8,8 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using RenameElementWindow = SkEditor.Views.Windows.Projects.RenameElementWindow;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Projects.Elements;
 

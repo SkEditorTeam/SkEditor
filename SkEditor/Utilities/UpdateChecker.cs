@@ -13,10 +13,11 @@ using FluentAvalonia.UI.Controls;
 using Octokit;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Views;
 using Application = Avalonia.Application;
 using FileMode = System.IO.FileMode;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities;
 
@@ -50,7 +51,7 @@ public static class UpdateChecker
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("UpdateAvailable"),
                 Translation.Get("UpdateAvailableMessage"),
-                Symbol.ImportantFilled,
+                new SymbolIconSource { Symbol = Symbol.ArrowSync },
                 primaryButtonText: "Yes",
                 cancelButtonText: "No"
             );
@@ -101,7 +102,7 @@ public static class UpdateChecker
         {
             Title = Translation.Get("DownloadingUpdateTitle"),
             ShowProgressBar = true,
-            IconSource = new SymbolIconSource { Symbol = Symbol.Download },
+            IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
             SubHeader = Translation.Get("Downloading")
         };
 

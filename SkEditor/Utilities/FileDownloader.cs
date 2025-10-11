@@ -9,8 +9,9 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Views;
 using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities;
 
@@ -45,7 +46,7 @@ public static class FileDownloader
         {
             Title = Translation.Get("DownloadingMissingFilesTitle"),
             ShowProgressBar = true,
-            IconSource = new SymbolIconSource { Symbol = Symbol.Download },
+            IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
             SubHeader = Translation.Get("Downloading"),
             Content = Translation.Get("DownloadingMissingFilesDescriptionItems")
         };

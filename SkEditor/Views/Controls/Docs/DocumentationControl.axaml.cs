@@ -10,6 +10,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
@@ -19,6 +20,8 @@ using SkEditor.Utilities.Extensions;
 using SkEditor.ViewModels;
 using LocalDocsManagerWindow = SkEditor.Views.Windows.LocalDocsManagerWindow;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Views.Controls.Docs;
 
@@ -53,7 +56,7 @@ public partial class DocumentationControl : UserControl
         {
             ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
                 Translation.Get("DocumentationWindowFetchWarning"),
-                new SymbolIconSource { Symbol = Symbol.ImportantFilled }, Translation.Get("CancelButton"), Translation.Get("Okay"));
+                new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled}, Translation.Get("CancelButton"), Translation.Get("Okay"));
             if (response == ContentDialogResult.Primary)
             {
                 SkriptHubProvider? provider = IDocProvider.Providers[DocProvider.SkriptHub] as SkriptHubProvider;
@@ -345,7 +348,7 @@ public partial class DocumentationControl : UserControl
         {
             Title = Translation.Get("DocumentationWindowDownloadingElements"),
             ShowProgressBar = true,
-            IconSource = new SymbolIconSource { Symbol = Symbol.Download },
+            IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
             SubHeader = Translation.Get("DocumentationWindowDownloading"),
             Content = Translation.Get("DocumentationWindowDownloadingMessage")
         };

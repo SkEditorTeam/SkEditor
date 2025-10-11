@@ -12,6 +12,8 @@ using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 
@@ -58,7 +60,7 @@ public class SkriptHubProvider : IDocProvider
             {
                 Title = Translation.Get("DocumentationWindowCacheSkriptHub"),
                 ShowProgressBar = true,
-                IconSource = new SymbolIconSource { Symbol = Symbol.Download },
+                IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
                 SubHeader = Translation.Get("DocumentationWindowDownloading"),
                 Content = Translation.Get("DocumentationWindowCacheSkriptHubMessage")
             };

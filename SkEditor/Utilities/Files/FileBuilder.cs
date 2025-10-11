@@ -22,6 +22,9 @@ using SkEditor.Utilities.Styling;
 using AssociationSelectionWindow = SkEditor.Views.Windows.FileTypes.AssociationSelectionWindow;
 using GoToLineWindow = SkEditor.Views.Windows.GoToLineWindow;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
 namespace SkEditor.Utilities.Files;
 
@@ -154,7 +157,7 @@ public class FileBuilder
         {
             ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
-                new SymbolIconSource { Symbol = Symbol.Alert });
+                new SymbolIconSource() { Symbol = Symbol.Alert });
             if (response != ContentDialogResult.Primary)
             {
                 return null;
@@ -292,10 +295,10 @@ public class FileBuilder
         object[] commands =
         [
             new { Header = "MenuHeaderCopy", Command = new RelayCommand(editor.Copy), Icon = Symbol.Copy },
-            new { Header = "MenuHeaderPaste", Command = new RelayCommand(editor.Paste), Icon = Symbol.Paste },
+            new { Header = "MenuHeaderPaste", Command = new RelayCommand(editor.Paste), Icon = Symbol.Clipboard },
             new { Header = "MenuHeaderCut", Command = new RelayCommand(editor.Cut), Icon = Symbol.Cut },
-            new { Header = "MenuHeaderUndo", Command = new RelayCommand(() => editor.Undo()), Icon = Symbol.Undo },
-            new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.Redo },
+            new { Header = "MenuHeaderUndo", Command = new RelayCommand(() => editor.Undo()), Icon = Symbol.ArrowUndo },
+            new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.ArrowRedo },
             new
             {
                 Header = "MenuHeaderDuplicate",
@@ -312,14 +315,14 @@ public class FileBuilder
             {
                 Header = "MenuHeaderGoToLine",
                 Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())),
-                Icon = Symbol.Find
+                Icon = Symbol.TextNumberList
             },
             new
             {
                 Header = "MenuHeaderTrimWhitespaces",
                 Command =
                     new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)),
-                Icon = Symbol.Remove
+                Icon = Symbol.Eraser
             },
             new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
             new

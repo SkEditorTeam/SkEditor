@@ -5,13 +5,14 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AvaloniaEdit.Highlighting;
-using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
-using SkEditor.Views;
 using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
 using Path = System.IO.Path;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Syntax;
 
@@ -50,7 +51,7 @@ public class SyntaxLoader
                 {
                     await SkEditorAPI.Windows.ShowDialog("Error",
                         $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}",
-                        new SymbolIconSource { Symbol = Symbol.ImportantFilled });
+                        new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled});
                 }
             }
         }
@@ -198,7 +199,7 @@ public class SyntaxLoader
         catch
         {
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Error"),
-                Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource { Symbol = Symbol.ImportantFilled },
+                Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled},
                 primaryButtonText: "Ok");
 
             return false;
