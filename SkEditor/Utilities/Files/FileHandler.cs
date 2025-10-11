@@ -24,7 +24,7 @@ public class FileHandler
     {
         try
         {
-            string? folder = e.Data.GetFiles()?.FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path
+            string? folder = e.DataTransfer.TryGetFiles()?.FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path
                 .AbsolutePath;
             if (folder != null)
             {
@@ -32,7 +32,7 @@ public class FileHandler
                 return;
             }
 
-            e.Data.GetFiles()?.Where(f => !Directory.Exists(f.Path.AbsolutePath)).ToList().ForEach(file =>
+            e.DataTransfer.TryGetFiles()?.Where(f => !Directory.Exists(f.Path.AbsolutePath)).ToList().ForEach(file =>
             {
                 OpenFile(file.Path.AbsolutePath);
             });
