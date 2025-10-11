@@ -14,6 +14,7 @@ using SkEditor.Utilities.Files;
 using static SkEditor.Views.Controls.Sidebar.ExplorerSidebarPanel;
 using CreateStorageElementWindow = SkEditor.Views.Windows.Projects.CreateStorageElementWindow;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Utilities.Projects.Elements;
 

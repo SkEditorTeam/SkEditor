@@ -16,6 +16,7 @@ using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using BottomBarControl = SkEditor.Views.Controls.BottomBarControl;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows;
 
@@ -146,7 +147,7 @@ public partial class MainWindow : AppWindow
     private static async Task<bool> PromptForUnsavedChanges()
     {
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-            Translation.Get("ClosingProgramWithUnsavedFiles"), Symbol.ImportantFilled,
+            Translation.Get("ClosingProgramWithUnsavedFiles"), Symbol.Warning,
             primaryButtonText: "Yes", cancelButtonText: "No");
 
         return result != ContentDialogResult.Primary;

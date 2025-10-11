@@ -19,6 +19,7 @@ using SkEditor.Utilities.Syntax;
 using SkEditor.ViewModels;
 using File = System.IO.File;
 using FileTypeSelectionWindow = SkEditor.Views.Windows.FileTypes.FileTypeSelectionWindow;
+using Icon = SkEditor.Utilities.Files.Icon;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using WelcomeTabControl = SkEditor.Views.Controls.WelcomeTabControl;
@@ -470,7 +471,7 @@ public class Files : IFiles
                     Translation.Get("UnsavedFileMessage", file.Name),
                     primaryButtonText: Translation.Get("Yes"),
                     cancelButtonText: Translation.Get("CancelButton"),
-                    icon: FluentAvalonia.UI.Controls.Symbol.SaveLocal, translate: false);
+                    icon: Symbol.SaveArrowRight, translate: false);
                 if (response != ContentDialogResult.Primary)
                 {
                     return;
