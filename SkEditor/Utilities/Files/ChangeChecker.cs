@@ -38,7 +38,10 @@ public class ChangeChecker
         try
         {
             OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
-            if (file == null) return;
+            if (file == null)
+            {
+                return;
+            }
 
             if (!file.IsEditor || string.IsNullOrWhiteSpace(file.Path))
             {
@@ -91,12 +94,15 @@ public class ChangeChecker
     private static async Task ShowMessage(OpenedFile file, string textToRead)
     {
         OpenedFile? openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(f => f == file);
-        if (openedFile is not { Editor: not null }) return;
-        
+        if (openedFile is not { Editor: not null })
+        {
+            return;
+        }
+
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
             Translation.Get("Attention"),
             Translation.Get("ChangesDetected"),
-            new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled},
+            new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
             primaryButtonText: "Yes",
             cancelButtonText: "No");
 

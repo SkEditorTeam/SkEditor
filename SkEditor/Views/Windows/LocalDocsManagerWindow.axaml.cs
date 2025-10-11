@@ -40,11 +40,12 @@ public partial class LocalDocsManagerWindow : AppWindow
         };
         DeleteEverythingButton.Command = new AsyncRelayCommand(async () =>
         {
-            var provider = LocalProvider.Get();
+            LocalProvider? provider = LocalProvider.Get();
             if (provider != null)
             {
                 await provider.DeleteAll();
             }
+
             await LoadCategories(GroupBy.Provider);
         });
 
@@ -83,7 +84,7 @@ public partial class LocalDocsManagerWindow : AppWindow
         {
             return;
         }
-        
+
         List<LocalDocEntry> elements = await localProvider.GetElements();
         List<DocProvider> providers = elements.Select(x => x.OriginalProvider).Distinct().ToList();
         List<List<LocalDocEntry>> providerGroups =
@@ -113,6 +114,7 @@ public partial class LocalDocsManagerWindow : AppWindow
         {
             return;
         }
+
         List<LocalDocEntry> elements = await localProvider.GetElements();
         List<IDocumentationEntry.Type> types = elements.Select(x => x.DocType).Distinct().ToList();
         List<List<LocalDocEntry>> typeGroups = types.Select(x => elements.FindAll(y => y.DocType == x)).ToList();
@@ -141,6 +143,7 @@ public partial class LocalDocsManagerWindow : AppWindow
         {
             return;
         }
+
         List<LocalDocEntry> elements = await localProvider.GetElements();
         List<string> addons = elements.Select(x => x.Addon).Distinct().ToList();
         List<List<LocalDocEntry>> addonGroups = addons.Select(x => elements.FindAll(y => y.Addon == x)).ToList();

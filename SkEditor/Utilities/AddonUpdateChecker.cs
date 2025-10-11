@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
@@ -18,12 +17,18 @@ public static class AddonUpdateChecker
 
             await foreach (MarketplaceItem item in items)
             {
-                if (item is not AddonItem addonItem) continue;
+                if (item is not AddonItem addonItem)
+                {
+                    continue;
+                }
 
-                var currentVersion = addonItem.GetAddon()?.Version;
-                var latestVersion = item.ItemVersion;
+                string? currentVersion = addonItem.GetAddon()?.Version;
+                string? latestVersion = item.ItemVersion;
 
-                if (currentVersion == null || latestVersion == null) continue;
+                if (currentVersion == null || latestVersion == null)
+                {
+                    continue;
+                }
 
                 if (currentVersion != latestVersion)
                 {

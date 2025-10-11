@@ -42,7 +42,10 @@ public class Icon
     {
         string? iconName = IconDictionary.GetValueOrDefault(extension);
 
-        if (iconName is null) return null;
+        if (iconName is null)
+        {
+            return null;
+        }
 
         object? icon = null;
         Application.Current?.TryGetResource(iconName, ThemeVariant.Default, out icon);

@@ -51,9 +51,9 @@ public partial class WelcomeTabControl : UserControl
                 SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/")), CreatePathIconSource("DiscordIcon")),
 
             new WelcomeEntryData(Translation.Get("WelcomeNeedHelpGitHub"), new RelayCommand(() =>
-                SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
+                    SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
                 CreatePathIconSource("GitHubIcon")),
-            
+
             new WelcomeEntryData(Translation.Get("WelcomeNeedHelpDocumentation"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
                 CreateSymbolIcon(Symbol.Book))

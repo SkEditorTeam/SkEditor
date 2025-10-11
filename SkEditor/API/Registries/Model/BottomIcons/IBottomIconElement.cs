@@ -9,7 +9,7 @@ namespace SkEditor.API;
 /// </summary>
 public interface IBottomIconElement
 {
-    public int Order { get; }
+    int Order { get; }
 }
 
 public class BottomIconElementClickedEventArgs(IBottomIconElement icon) : EventArgs

@@ -69,7 +69,10 @@ public partial class MarketplaceWindow : AppWindow
         MarketplaceListItem? listItem = (MarketplaceListItem?)ItemListBox.SelectedItem;
 
         MarketplaceItem? item = (MarketplaceItem?)listItem?.Tag;
-        if (item == null) return;
+        if (item == null)
+        {
+            return;
+        }
 
         item.Marketplace = this;
 
@@ -118,14 +121,14 @@ public partial class MarketplaceWindow : AppWindow
         ItemView.ItemShortDescription = item.ItemShortDescription;
         ItemView.ItemLongDescription = item.ItemLongDescription;
         ItemView.ItemImageUrl = item.ItemImageUrl;
-        
+
         if (item is AddonItem addonItem)
         {
-            var currentVersion = addonItem.GetAddon()?.Version;
-            var latestVersion = item.ItemVersion;
-            
+            string? currentVersion = addonItem.GetAddon()?.Version;
+            string latestVersion = item.ItemVersion;
+
             ItemView.CurrentAddonVersion = currentVersion;
-    
+
             if (string.IsNullOrEmpty(currentVersion))
             {
                 ItemView.NotInstalledBorder.IsVisible = true;
@@ -155,7 +158,7 @@ public partial class MarketplaceWindow : AppWindow
             ItemView.UpToDateBorder.IsVisible = false;
             ItemView.VersionBorder.IsVisible = true;
         }
-        
+
         ItemView.ItemVersion = item.ItemVersion;
 
         ItemView.InstallButton.CommandParameter = ItemView.DisableButton.CommandParameter =
@@ -176,8 +179,9 @@ public partial class MarketplaceWindow : AppWindow
                 ItemView.DisableButton.IsVisible = false;
                 ItemView.EnableButton.IsVisible = false;
                 ItemView.UninstallButton.IsVisible = false;
-                
-                ItemView.UpdateButton.IsVisible = !ItemView.InstallButton.IsVisible && addonItem2.GetAddon()?.Version != item.ItemVersion;
+
+                ItemView.UpdateButton.IsVisible = !ItemView.InstallButton.IsVisible &&
+                                                  addonItem2.GetAddon()?.Version != item.ItemVersion;
                 ItemView.UpdateButton.Command = new AsyncRelayCommand(addonItem2.Update);
 
                 ItemView.ManageButton.IsVisible = addonItem2.IsInstalled();

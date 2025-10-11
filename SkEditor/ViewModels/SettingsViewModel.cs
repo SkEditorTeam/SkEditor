@@ -9,9 +9,8 @@ namespace SkEditor.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
-    [ObservableProperty] private string _version = string.Empty;
-
     [ObservableProperty] private string _currentFont = string.Empty;
+    [ObservableProperty] private string _version = string.Empty;
 
     public SettingsViewModel()
     {
@@ -50,7 +49,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         CurrentFont = Translation.Get("SettingsPersonalizationFontDescription")
             .Replace("{0}", SkEditorAPI.Core.GetAppConfig().Font);
-        
+
         Version = Translation.Get("SettingsAboutVersionDescription").Replace("{0}",
             $"{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}");
     }

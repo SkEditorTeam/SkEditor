@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -12,7 +12,6 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
-using SkEditor.Views;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
@@ -22,6 +21,8 @@ namespace SkEditor.API;
 
 public class Windows : IWindows
 {
+    private const int DialogIconSize = 32;
+    
     private readonly Queue<Func<Task>> _dialogQueue = new();
     private readonly SemaphoreSlim _dialogSemaphore = new(1, 1);
     private volatile bool _isProcessingQueue;
@@ -39,6 +40,74 @@ public class Windows : IWindows
         return windows is { Count: > 0 } ? windows[^1] : GetMainWindow();
     }
 
+    public async Task<ContentDialogResult> ShowDialog(string title,
+        string message,
+        object? icon = null,
+        string? cancelButtonText = null,
+        string primaryButtonText = "Okay", bool translate = true)
+    {
+        return await EnqueueDialog(async () =>
+            await ShowDialogInternal(title, message, icon, cancelButtonText, primaryButtonText, translate));
+    }
+
+    public Task ShowMessage(string title, string message)
+    {
+        EnqueueDialogFireAndForget(async () => { await ShowDialogInternal(title, message, Symbol.Flag); });
+        return Task.CompletedTask;
+    }
+
+    public Task ShowError(string error)
+    {
+        EnqueueDialogFireAndForget(async () =>
+        {
+            await ShowDialogInternal(Translation.Get("Error"), error, Symbol.Alert);
+        });
+        return Task.CompletedTask;
+    }
+
+    public async Task<string?> AskForFile(FilePickerOpenOptions options)
+    {
+        await WaitForMainWindow();
+
+        return await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            Window? topLevel = GetCurrentWindow();
+            if (topLevel is null)
+            {
+                return null;
+            }
+
+            IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
+            return files.Count == 0 ? null : files[0]?.Path.AbsolutePath;
+        });
+    }
+
+    public void ShowWindow(Window window)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            Window? topLevel = GetCurrentWindow();
+            if (topLevel is not null)
+            {
+                window.Show(topLevel);
+            }
+        });
+    }
+
+    public async Task ShowWindowAsDialog(Window window)
+    {
+        await WaitForMainWindow();
+
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            Window? topLevel = GetCurrentWindow();
+            if (topLevel is not null)
+            {
+                await window.ShowDialog(topLevel);
+            }
+        });
+    }
+
     private async Task WaitForMainWindow()
     {
         const int maxWaitTime = 10000;
@@ -47,7 +116,7 @@ public class Windows : IWindows
 
         while (waitedTime < maxWaitTime)
         {
-            var currentWindow = GetCurrentWindow();
+            Window? currentWindow = GetCurrentWindow();
 
             if (currentWindow != null && currentWindow is not SplashScreen)
             {
@@ -65,7 +134,11 @@ public class Windows : IWindows
 
         try
         {
-            if (_isProcessingQueue) return;
+            if (_isProcessingQueue)
+            {
+                return;
+            }
+
             _isProcessingQueue = true;
 
             while (true)
@@ -74,7 +147,11 @@ public class Windows : IWindows
 
                 lock (_dialogQueue)
                 {
-                    if (_dialogQueue.Count == 0) break;
+                    if (_dialogQueue.Count == 0)
+                    {
+                        break;
+                    }
+
                     dialogTask = _dialogQueue.Dequeue();
                 }
 
@@ -115,7 +192,7 @@ public class Windows : IWindows
 
     private async Task<T> EnqueueDialog<T>(Func<Task<T>> dialogFunc)
     {
-        var tcs = new TaskCompletionSource<T>();
+        TaskCompletionSource<T> tcs = new();
 
         lock (_dialogQueue)
         {
@@ -125,7 +202,7 @@ public class Windows : IWindows
                 {
                     await WaitForMainWindow();
 
-                    var result = await Dispatcher.UIThread.InvokeAsync(async () => await dialogFunc());
+                    T result = await Dispatcher.UIThread.InvokeAsync(async () => await dialogFunc());
 
                     tcs.SetResult(result);
                 }
@@ -139,31 +216,6 @@ public class Windows : IWindows
         _ = Task.Run(ProcessDialogQueue);
 
         return await tcs.Task;
-    }
-
-    public async Task<ContentDialogResult> ShowDialog(string title,
-        string message,
-        object? icon = null,
-        string? cancelButtonText = null,
-        string primaryButtonText = "Okay", bool translate = true)
-    {
-        return await EnqueueDialog(async () =>
-            await ShowDialogInternal(title, message, icon, cancelButtonText, primaryButtonText, translate));
-    }
-
-    public Task ShowMessage(string title, string message)
-    {
-        EnqueueDialogFireAndForget(async () => { await ShowDialogInternal(title, message, Symbol.Flag); });
-        return Task.CompletedTask;
-    }
-
-    public Task ShowError(string error)
-    {
-        EnqueueDialogFireAndForget(async () =>
-        {
-            await ShowDialogInternal(Translation.Get("Error"), error, Symbol.Alert);
-        });
-        return Task.CompletedTask;
     }
 
     private async Task<ContentDialogResult> ShowDialogInternal(string title,
@@ -184,13 +236,13 @@ public class Windows : IWindows
 
         icon = icon switch
         {
-            Symbol symbol => new SymbolIconSource { Symbol = symbol, FontSize = 40 },
+            Symbol symbol => new SymbolIconSource { Symbol = symbol, FontSize = DialogIconSize },
             _ => icon
         };
-        
+
         if (icon is SymbolIconSource symbolIconSource)
         {
-            symbolIconSource.FontSize = 40;
+            symbolIconSource.FontSize = DialogIconSize;
         }
 
         IconSource? source = icon switch
@@ -203,15 +255,15 @@ public class Windows : IWindows
         switch (source)
         {
             case FontIconSource fontIconSource:
-                fontIconSource.FontSize = 40;
+                fontIconSource.FontSize = DialogIconSize;
                 break;
         }
 
         IconSourceElement iconElement = new()
         {
             IconSource = source,
-            MinWidth = 40,
-            MinHeight = 40,
+            MinWidth = DialogIconSize,
+            MinHeight = DialogIconSize
         };
 
         Grid grid = new() { ColumnDefinitions = new ColumnDefinitions("Auto,*") };
@@ -252,44 +304,5 @@ public class Windows : IWindows
             string translation = Translation.Get(input);
             return translation == input ? input : translation;
         }
-    }
-
-    public async Task<string?> AskForFile(FilePickerOpenOptions options)
-    {
-        await WaitForMainWindow();
-
-        return await Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            Window? topLevel = GetCurrentWindow();
-            if (topLevel is null) return null;
-            IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
-            return files.Count == 0 ? null : files[0]?.Path.AbsolutePath;
-        });
-    }
-
-    public void ShowWindow(Window window)
-    {
-        Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            Window? topLevel = GetCurrentWindow();
-            if (topLevel is not null)
-            {
-                window.Show(topLevel);
-            }
-        });
-    }
-
-    public async Task ShowWindowAsDialog(Window window)
-    {
-        await WaitForMainWindow();
-
-        await Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            Window? topLevel = GetCurrentWindow();
-            if (topLevel is not null)
-            {
-                await window.ShowDialog(topLevel);
-            }
-        });
     }
 }

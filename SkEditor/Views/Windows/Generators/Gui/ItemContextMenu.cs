@@ -43,12 +43,15 @@ internal class ItemContextMenu
     private static async Task EditItem(int slot)
     {
         GuiGenerator? generator = GuiGenerator.Instance;
-        if (generator == null) return;
-        
+        if (generator == null)
+        {
+            return;
+        }
+
         EditedItem = slot == -1
             ? generator.BackgroundItem
             : generator.Items.GetValueOrDefault(slot);
-        
+
         Item? item = await generator.SelectItem();
         if (item == null)
         {
@@ -105,7 +108,7 @@ internal class ItemContextMenu
         {
             return Task.CompletedTask;
         }
-        
+
         if (slot == -1)
         {
             GuiGenerator.Instance.BackgroundItem = null;

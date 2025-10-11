@@ -129,7 +129,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
             await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ??
                                        ThemeEditor.GetDefaultTheme());
         }
-        
+
         Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName));
         if (theme == null)
         {

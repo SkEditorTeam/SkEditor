@@ -166,7 +166,10 @@ public partial class TextEditorEventHandler
         }
 
         TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null) return;
+        if (textEditor == null)
+        {
+            return;
+        }
 
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
         if (!string.IsNullOrWhiteSpace(textEditor.Document.GetText(line)))
@@ -201,16 +204,22 @@ public partial class TextEditorEventHandler
         }
 
         char? symbol = e.Text?[0];
-        if (symbol == null) return;
-        
+        if (symbol == null)
+        {
+            return;
+        }
+
         if (!SymbolPairs.TryGetValue(symbol.Value, out char value))
         {
             return;
         }
 
         TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null) return;
-        
+        if (textEditor == null)
+        {
+            return;
+        }
+
         if (textEditor.Document.TextLength > textEditor.CaretOffset)
         {
             string nextChar = textEditor.Document.GetText(textEditor.CaretOffset, 1);
@@ -300,7 +309,10 @@ public partial class TextEditorEventHandler
         e.Handled = true;
 
         TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null) return;
+        if (textEditor == null)
+        {
+            return;
+        }
 
         Point pos = e.GetPosition(textEditor.TextArea.TextView) + textEditor.TextArea.TextView.ScrollOffset;
         SimpleSegment word = TextEditorUtilities.GetWordAtMousePosition(pos, textEditor.TextArea);
@@ -326,8 +338,11 @@ public partial class TextEditorEventHandler
         }
 
         TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null) return;
-        
+        if (textEditor == null)
+        {
+            return;
+        }
+
         DocumentLine line = textEditor.Document.GetLineByOffset(textEditor.CaretOffset);
 
         string lineText = textEditor.Document.GetText(line);

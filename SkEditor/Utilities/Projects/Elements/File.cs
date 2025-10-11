@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
-using SkEditor.Views;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Projects.Elements;
@@ -37,7 +37,11 @@ public partial class File : StorageElement
 
     public void OpenInExplorer()
     {
-        if (Parent is null) return;
+        if (Parent is null)
+        {
+            return;
+        }
+
         Process.Start(new ProcessStartInfo(Parent.StorageFolderPath) { UseShellExecute = true });
     }
 
@@ -82,7 +86,11 @@ public partial class File : StorageElement
 
     public override void RenameElement(string newName, bool move = true)
     {
-        if (Parent is null) return;
+        if (Parent is null)
+        {
+            return;
+        }
+
         string newPath = Path.Combine(Parent.StorageFolderPath, newName);
         if (move)
         {
@@ -119,14 +127,17 @@ public partial class File : StorageElement
     public void CopyPath()
     {
         Folder? root = ProjectOpener.ProjectRootFolder;
-        if (root is null) return;
+        if (root is null)
+        {
+            return;
+        }
 
 
         string path = StorageFilePath.Replace(root.StorageFolderPath, "");
         SkEditorAPI.Windows.GetMainWindow()?.Clipboard?.SetTextAsync(path);
     }
 
-    [System.Text.RegularExpressions.GeneratedRegex(
+    [GeneratedRegex(
         @"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$")]
-    private static partial System.Text.RegularExpressions.Regex ValidFileNameRegex();
+    private static partial Regex ValidFileNameRegex();
 }

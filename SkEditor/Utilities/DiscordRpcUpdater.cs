@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using DiscordRPC;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
@@ -30,10 +29,13 @@ public static partial class DiscordRpcUpdater
                 LargeImageText = "SkEditor"
             }
         });
-        
+
         TabView? tabView = SkEditorAPI.Files.GetTabView();
 
-        if (tabView == null) return;
+        if (tabView == null)
+        {
+            return;
+        }
 
         tabView.SelectionChanged += (_, _) =>
         {
@@ -44,14 +46,19 @@ public static partial class DiscordRpcUpdater
 
             if (SkEditorAPI.Files.IsFileOpen())
             {
-                if (tabView.SelectedItem is not TabViewItem tab) return;
-                var tabName = tab.Header?.ToString()?.TrimEnd('*') ?? "";
+                if (tabView.SelectedItem is not TabViewItem tab)
+                {
+                    return;
+                }
+
+                string tabName = tab.Header?.ToString()?.TrimEnd('*') ?? "";
                 tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
-                var translation = Translation.Get("DiscordRpcEditing", tabName);
+                string translation = Translation.Get("DiscordRpcEditing", tabName);
                 if (translation.Length > 128)
                 {
                     translation = translation[..125] + "...";
                 }
+
                 _client.UpdateDetails(translation);
             }
             else

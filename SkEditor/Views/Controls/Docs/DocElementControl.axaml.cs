@@ -183,7 +183,8 @@ public partial class DocElementControl : UserControl
     {
         NameText.Text = entry.Name;
         Expander.Description = entry.DocType + " from " + entry.Addon;
-        Expander.Description = Translation.Get("DocumentationControlTypeFromProvider", entry.DocType.ToString(), entry.Addon);
+        Expander.Description =
+            Translation.Get("DocumentationControlTypeFromProvider", entry.DocType.ToString(), entry.Addon);
         Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
         DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description)
             ? Translation.Get("DocumentationControlNoDescription")
@@ -304,8 +305,11 @@ public partial class DocElementControl : UserControl
     public void DeleteElementFromCache(bool removeFromParent = false)
     {
         LocalProvider? localProvider = LocalProvider.Get();
-        if (localProvider == null) return;
-        
+        if (localProvider == null)
+        {
+            return;
+        }
+
         _ = localProvider.RemoveElement(_entry);
         if (removeFromParent)
         {
@@ -328,7 +332,11 @@ public partial class DocElementControl : UserControl
         }
 
         LocalProvider? localProvider = LocalProvider.Get();
-        if (localProvider == null) return;
+        if (localProvider == null)
+        {
+            return;
+        }
+
         await localProvider.DownloadElement(_entry, examples);
     }
 
@@ -393,7 +401,8 @@ public partial class DocElementControl : UserControl
         DownloadElementButton.Click += DownloadButtonClicked;
         DownloadElementButton.Classes.Clear();
 
-        if (_entry.Provider == DocProvider.Local || localProvider != null && await localProvider.IsElementDownloaded(_entry))
+        if (_entry.Provider == DocProvider.Local ||
+            (localProvider != null && await localProvider.IsElementDownloaded(_entry)))
         {
             DisableDownloadButton();
         }

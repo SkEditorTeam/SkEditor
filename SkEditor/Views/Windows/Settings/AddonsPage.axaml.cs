@@ -7,6 +7,7 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views.Controls.Addons;
+using SkEditor.Views.Windows.Marketplace;
 
 namespace SkEditor.Views.Windows.Settings;
 
@@ -79,7 +80,7 @@ public partial class AddonsPage : UserControl
         OpenMarketplaceButton.Command = new AsyncRelayCommand(async () =>
         {
             SettingsWindow.Instance.Close();
-            await SkEditorAPI.Windows.ShowWindowAsDialog(new Marketplace.MarketplaceWindow());
+            await SkEditorAPI.Windows.ShowWindowAsDialog(new MarketplaceWindow());
         });
     }
 }

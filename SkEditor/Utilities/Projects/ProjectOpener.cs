@@ -39,6 +39,7 @@ public static class ProjectOpener
             {
                 NoFolderMessage.IsVisible = true;
             }
+
             return;
         }
 

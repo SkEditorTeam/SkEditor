@@ -7,6 +7,7 @@ namespace SkEditor.Utilities.Docs.SkriptHub;
 [Serializable]
 public class SkriptHubDocEntry : IDocumentationEntry
 {
+    private string _addon = string.Empty;
     [JsonProperty("addon")] public required SkriptHubAddon? AddonObj { get; set; }
 
     [JsonProperty("syntax_type")] public required string RawDocType { get; set; }
@@ -27,8 +28,6 @@ public class SkriptHubDocEntry : IDocumentationEntry
         get => AddonObj?.Name ?? _addon;
         set => _addon = value;
     }
-    
-    private string _addon = string.Empty;
 
 
     [JsonProperty("compatible_addon_version")]

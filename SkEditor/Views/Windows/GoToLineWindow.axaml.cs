@@ -45,7 +45,11 @@ public partial class GoToLineWindow : AppWindow
         }
 
         TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (editor == null) return;
+        if (editor == null)
+        {
+            return;
+        }
+
         if (!int.TryParse((string?)GoToLineInput.Text, out int lineNumber))
         {
             return;
@@ -61,7 +65,11 @@ public partial class GoToLineWindow : AppWindow
     private void UpdateInput()
     {
         TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (editor == null) return;
+        if (editor == null)
+        {
+            return;
+        }
+
         int documentLines = editor.Document.LineCount;
         if (!int.TryParse((string?)GoToLineInput.Text, out int line))
         {

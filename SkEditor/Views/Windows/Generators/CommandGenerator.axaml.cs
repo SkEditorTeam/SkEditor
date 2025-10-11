@@ -45,6 +45,7 @@ public partial class CommandGenerator : AppWindow
             SkEditorAPI.Windows.ShowError("The editor is not available.");
             return;
         }
+
         int offset = editor.CaretOffset;
         DocumentLine line = editor.Document.GetLineByOffset(offset);
 

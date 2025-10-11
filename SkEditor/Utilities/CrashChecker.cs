@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SkEditor.API;
-using SkEditor.Views;
 using CrashWindow = SkEditor.Views.Windows.CrashWindow;
 using Path = System.IO.Path;
 

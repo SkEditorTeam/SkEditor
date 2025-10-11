@@ -119,7 +119,7 @@
     <system:String x:Key="AddonUpdateAvailableMessage">An update is available for '{0}'.\n\nVisit the Marketplace to update it for the latest fixes and SkEditor compatibility.</system:String>
     <system:String x:Key="AddonLoadErrorsTitle">Addons with errors!</system:String>
     <system:String x:Key="AddonLoadErrors">Some addons ({0}) have errors. Do you want to see them?</system:String>
-    
+
     <!-- Publish Window -->
     <system:String x:Key="PublishWindowNoApiKey">Set your API key in the settings</system:String>
     <system:String x:Key="PublishWindowApiKeyHint">Click here to open a website with the API key. Make sure to log in first!</system:String>
@@ -211,7 +211,7 @@
 
     <!-- Color Selector -->
     <system:String x:Key="ColorSelectorWindowHexResult">Result in hex</system:String>
-    
+
     <!-- Projects -->
     <system:String x:Key="ProjectExplorerTitle">Explorer</system:String>
     <system:String x:Key="ProjectExplorerInfoText">You don't have any folders opened yet.</system:String>

@@ -11,14 +11,14 @@ namespace SkEditor.Views.Windows;
 
 public partial class PublishWindow : AppWindow
 {
-    public string? ApiKey { get; private set; }
-    
     public PublishWindow()
     {
         InitializeComponent();
         Focusable = true;
         InitializeUi();
     }
+
+    public string? ApiKey { get; private set; }
 
     private string? CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem)?.Content as string;
 
@@ -32,7 +32,11 @@ public partial class PublishWindow : AppWindow
         CopyButton.Command = new AsyncRelayCommand(async () =>
         {
             string? result = ResultTextBox.Text;
-            if (result is null || Clipboard is null) return;
+            if (result is null || Clipboard is null)
+            {
+                return;
+            }
+
             await Clipboard.SetTextAsync(result);
         });
 

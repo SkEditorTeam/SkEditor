@@ -64,9 +64,12 @@ public partial class SideBarControl : UserControl
 
         SetColumnWidths(mainWindow, ZeroWidth, ZeroWidth, ZeroWidth);
         mainWindow.SidebarContentBorder.Child = null;
-        
-        var panels = Registries.SidebarPanels;
-        if (!panels.Any()) return;
+
+        Registry<SidebarPanel> panels = Registries.SidebarPanels;
+        if (!panels.Any())
+        {
+            return;
+        }
 
         string? firstPanelId = panels.First().GetId();
         if (firstPanelId != null)
@@ -95,18 +98,18 @@ public partial class SideBarControl : UserControl
 
         double currentWidth = mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].Width.Value;
         string? currentPanelId = _currentPanel.GetId();
-        
+
         if (currentPanelId == null)
         {
             throw new NullReferenceException();
         }
-        
+
         SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[currentPanelId] = (int)currentWidth;
-        
+
         if (SkEditorAPI.Core.GetAppConfig().IsSidebarWidthSyncEnabled)
         {
             _syncedPanelWidth = currentWidth;
-            
+
             foreach (SidebarPanel panel in Registries.SidebarPanels)
             {
                 string? panelId = panel.GetId();
@@ -116,7 +119,7 @@ public partial class SideBarControl : UserControl
                 }
             }
         }
-        
+
         mainWindow.CoreGrid.ColumnDefinitions[ContentColumnIndex].MinWidth = _currentPanel.DesiredWidth;
     }
 
@@ -407,9 +410,11 @@ public partial class SideBarControl : UserControl
         {
             return _syncedPanelWidth;
         }
-        
+
         string? panelId = panel.GetId();
-        return panelId == null ? panel.DesiredWidth : SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(panelId, panel.DesiredWidth);
+        return panelId == null
+            ? panel.DesiredWidth
+            : SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(panelId, panel.DesiredWidth);
     }
 
     private static void SetButtonActive(Button button, bool isActive)

@@ -42,7 +42,7 @@
                 <ui:SettingsExpander Name="FileTypesItem" Header="{DynamicResource SettingsHomeFileTypes}"
                                      IconSource="{icons:SymbolIconSource Symbol=DocumentSettings}"
                                      Description="{DynamicResource SettingsHomeFileTypesDescription}"
-                                     IsClickEnabled="True"/>
+                                     IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="AboutItem" Header="{DynamicResource SettingsHomeAbout}"
                                      IconSource="{icons:SymbolIconSource Symbol=Info}"

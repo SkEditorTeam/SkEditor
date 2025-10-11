@@ -84,8 +84,11 @@ public static class UpdateChecker
     private static async Task DownloadMsi(string url)
     {
         MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow is null) return;
-        
+        if (mainWindow is null)
+        {
+            return;
+        }
+
         TaskDialog td = CreateTaskDialog(mainWindow, url);
         object? result = await td.ShowAsync();
 

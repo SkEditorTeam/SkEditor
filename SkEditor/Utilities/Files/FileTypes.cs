@@ -35,7 +35,10 @@ public static class FileTypes
 
     private static void RegisterAssociation(FileAssociation association)
     {
-        if (association.SupportedExtensions == null) return;
+        if (association.SupportedExtensions == null)
+        {
+            return;
+        }
 
         foreach (string extension in association.SupportedExtensions)
         {

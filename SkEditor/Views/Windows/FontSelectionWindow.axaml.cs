@@ -34,9 +34,11 @@ public partial class FontSelectionWindow : AppWindow
 
         SearchBox.TextChanged += (_, _) =>
         {
-            FontListBox.SelectedItem = Enumerable
-                .Cast<FontInfo>(FontListBox.Items)
-                .FirstOrDefault(x => SearchBox.Text != null && x.Name != null && x.Name.StartsWith(SearchBox.Text, StringComparison.CurrentCultureIgnoreCase));
+            FontListBox.SelectedItem = FontListBox.Items
+                .Cast<FontInfo>()
+                .FirstOrDefault(x =>
+                    SearchBox.Text != null && x.Name != null &&
+                    x.Name.StartsWith(SearchBox.Text, StringComparison.CurrentCultureIgnoreCase));
         };
 
         FontListBox.SelectionChanged += (_, _) => { _selectedFont = FontListBox.SelectedItem as FontInfo; };

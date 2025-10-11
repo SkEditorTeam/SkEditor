@@ -89,7 +89,11 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
                         }
 
                         double? fontSize = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.FontSize;
-                        if (fontSize == null) return;
+                        if (fontSize == null)
+                        {
+                            return;
+                        }
+
                         float strokeThickness = (float)Math.Max(fontSize.Value / 15, 1);
 
                         Pen usedPen = new(usedBrush, strokeThickness);
@@ -140,7 +144,10 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
     public void Remove(ITextMarker marker)
     {
-        if (marker is not TextMarker m || m.IsDeleted) return;
+        if (marker is not TextMarker m || m.IsDeleted)
+        {
+            return;
+        }
 
         _markers.Remove(m);
         Redraw(m);
@@ -161,8 +168,11 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
     private static IEnumerable<Point> CreatePoints(Point start, Point end, double offset, int count)
     {
         double? fontSize = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.FontSize;
-        if (fontSize == null) yield break;
-        
+        if (fontSize == null)
+        {
+            yield break;
+        }
+
         double multiplier = fontSize.Value * 0.075;
 
         for (int i = 0; i < count; i++)

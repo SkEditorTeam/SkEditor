@@ -10,9 +10,6 @@ namespace SkEditor.Views.Windows.Projects;
 
 public partial class CreateStorageElementWindow : AppWindow
 {
-    public Folder Folder { get; }
-    public bool IsFile { get; }
-
     public CreateStorageElementWindow(Folder folder, bool isFile)
     {
         Folder = folder;
@@ -38,12 +35,12 @@ public partial class CreateStorageElementWindow : AppWindow
                     break;
             }
         };
-        
-        var placeholder =
+
+        string placeholder =
             Translation.Get(isFile ? "ProjectCreatePlaceholderFileName" : "ProjectCreatePlaceholderFolderName");
 
         NameTextBox.Text = placeholder + (isFile ? ".sk" : "");
-        
+
         Opened += (_, _) =>
         {
             Dispatcher.UIThread.Post(() =>
@@ -55,6 +52,9 @@ public partial class CreateStorageElementWindow : AppWindow
         };
     }
 
+    public Folder Folder { get; }
+    public bool IsFile { get; }
+
     private void Create()
     {
         string? input = NameTextBox.Text;
@@ -63,6 +63,7 @@ public partial class CreateStorageElementWindow : AppWindow
             ErrorBox.Text = "The name cannot be empty.";
             return;
         }
+
         string? error = Folder.ValidateCreationName(input);
         if (error != null)
         {

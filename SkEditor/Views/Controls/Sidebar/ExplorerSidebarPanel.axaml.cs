@@ -26,20 +26,8 @@ public partial class ExplorerSidebarPanel : UserControl
         AddSelectedCommandBinding(Key.N, KeyModifiers.Control | KeyModifiers.Shift, e => e.CreateNewFolderCommand);
     }
 
-    public class ExplorerPanel : SidebarPanel
-    {
-        public readonly ExplorerSidebarPanel Panel = new();
-        public override UserControl Content => Panel;
-        public override IconSource Icon => new SymbolIconSource { Symbol = Symbol.Folder };
-
-        public override IconSource IconActive =>
-            new SymbolIconSource { Symbol = Symbol.Folder, IconVariant = IconVariant.Filled };
-
-        public override bool IsDisabled => false;
-    }
-
     private void AddSelectedCommandBinding(Key key, KeyModifiers modifiers,
-                                           Func<StorageElement, IRelayCommand?> getCommand)
+        Func<StorageElement, IRelayCommand?> getCommand)
     {
         FileTreeView.KeyBindings.Add(new KeyBinding
         {
@@ -52,5 +40,17 @@ public partial class ExplorerSidebarPanel : UserControl
                 }
             })
         });
+    }
+
+    public class ExplorerPanel : SidebarPanel
+    {
+        public readonly ExplorerSidebarPanel Panel = new();
+        public override UserControl Content => Panel;
+        public override IconSource Icon => new SymbolIconSource { Symbol = Symbol.Folder };
+
+        public override IconSource IconActive =>
+            new SymbolIconSource { Symbol = Symbol.Folder, IconVariant = IconVariant.Filled };
+
+        public override bool IsDisabled => false;
     }
 }

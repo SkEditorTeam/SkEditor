@@ -9,7 +9,6 @@ using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
-using SkEditor.Views;
 using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
 namespace SkEditor.Utilities.Editor;
@@ -81,7 +80,11 @@ public class CustomCommandsHandler
         }
 
         TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (editor == null) return;
+        if (editor == null)
+        {
+            return;
+        }
+
         TextDocument? document = editor.Document;
         int selectionStart = editor.SelectionStart;
         int selectionLength = editor.SelectionLength;
@@ -166,9 +169,12 @@ public class CustomCommandsHandler
         {
             return;
         }
-        
+
         INameableCodeElement? nameableElement = (INameableCodeElement?)variable ?? option;
-        if (nameableElement == null) return;
+        if (nameableElement == null)
+        {
+            return;
+        }
 
         SymbolRefactorWindow renameWindow = new(nameableElement);
         await renameWindow.ShowDialogOnMainWindow();

@@ -209,7 +209,7 @@
 
     <!-- Color Selector -->
     <system:String x:Key="ColorSelectorWindowHexResult">Resultaat in hex</system:String>
-    
+
     <!-- Projects -->
     <system:String x:Key="ProjectExplorerTitle">Verkenner</system:String>
     <system:String x:Key="ProjectExplorerInfoText">U heeft nog geen mappen geopend.</system:String>

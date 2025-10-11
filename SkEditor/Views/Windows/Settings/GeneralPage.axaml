@@ -63,7 +63,8 @@
                                      IconSource="{icons:SymbolIconSource Symbol=ColumnArrowRight}"
                                      Description="{DynamicResource SettingsGeneralSidebarWidthSyncDescription}">
                     <ui:SettingsExpander.Footer>
-                        <ToggleSwitch Name="SidebarWidthSyncToggleSwitch" IsChecked="{Binding IsSidebarWidthSyncEnabled}" />
+                        <ToggleSwitch Name="SidebarWidthSyncToggleSwitch"
+                                      IsChecked="{Binding IsSidebarWidthSyncEnabled}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 

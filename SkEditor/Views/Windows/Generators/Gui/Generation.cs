@@ -16,7 +16,10 @@ public class Generation
     public static void Generate()
     {
         _guiGen = GuiGenerator.Instance;
-        if (_guiGen == null) return;
+        if (_guiGen == null)
+        {
+            return;
+        }
 
         StringBuilder code = new();
 
@@ -53,8 +56,11 @@ public class Generation
 
     private static string GetSkriptCode()
     {
-        if (_guiGen == null) return string.Empty;
-        
+        if (_guiGen == null)
+        {
+            return string.Empty;
+        }
+
         int rowQuantity = _guiGen.CurrentRows;
 
         StringBuilder code = new();
@@ -100,8 +106,11 @@ public class Generation
 
     private static string GetSkriptGuiCode()
     {
-        if (_guiGen == null) return string.Empty;
-        
+        if (_guiGen == null)
+        {
+            return string.Empty;
+        }
+
         int rowQuantity = _guiGen.CurrentRows;
 
         StringBuilder code = new();
@@ -188,8 +197,11 @@ public class Generation
 
     private static string GetBackgroundCode()
     {
-        if (_guiGen == null) return string.Empty;
-        
+        if (_guiGen == null)
+        {
+            return string.Empty;
+        }
+
         int rowQuantity = _guiGen.CurrentRows;
         int slots = rowQuantity * 9;
 

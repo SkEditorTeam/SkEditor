@@ -33,8 +33,7 @@
         </Grid>
         <Grid x:Name="ItemGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"
               RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-              ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-        </Grid>
+              ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" />
 
         <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <CheckBox Name="UseSkriptGuiCheckBox" Content="{DynamicResource GuiGeneratorSkriptGui}" Margin="10"

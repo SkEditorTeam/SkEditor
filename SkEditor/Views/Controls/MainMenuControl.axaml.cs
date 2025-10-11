@@ -79,24 +79,36 @@ public partial class MainMenuControl : UserControl
         MenuItemRedo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Redo());
         MenuItemDelete.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Delete());
         MenuItemGoToLine.Command = new AsyncRelayCommand(() => ShowDialogIfEditorIsOpen(new GoToLineWindow()));
-        
+
         MenuItemTrimWhitespaces.Command = new RelayCommand(() =>
         {
             TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
-            if (textArea == null) return;
+            if (textArea == null)
+            {
+                return;
+            }
+
             CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(textArea);
         });
 
         MenuItemDuplicate.Command = new RelayCommand(() =>
         {
             TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
-            if (textArea == null) return;
+            if (textArea == null)
+            {
+                return;
+            }
+
             CustomCommandsHandler.OnDuplicateCommandExecuted(textArea);
         });
         MenuItemComment.Command = new RelayCommand(() =>
         {
             TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
-            if (textArea == null) return;
+            if (textArea == null)
+            {
+                return;
+            }
+
             CustomCommandsHandler.OnCommentCommandExecuted(textArea);
         });
 
@@ -120,7 +132,10 @@ public partial class MainMenuControl : UserControl
 
     private static async Task ShowDialogIfEditorIsOpen(AppWindow window, bool openAsDialog = true)
     {
-        if (SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor == null) return;
+        if (SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor == null)
+        {
+            return;
+        }
 
         if (openAsDialog)
         {
@@ -137,8 +152,11 @@ public partial class MainMenuControl : UserControl
         Loaded += (_, _) =>
         {
             MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-            if (mainWindow == null) return;
-            
+            if (mainWindow == null)
+            {
+                return;
+            }
+
             mainWindow.KeyDown += (_, e) =>
             {
                 if (e is not { PhysicalKey: PhysicalKey.S, KeyModifiers: (KeyModifiers.Control | KeyModifiers.Alt) }
@@ -159,7 +177,8 @@ public partial class MainMenuControl : UserControl
         {
             Symbol = Symbol.Book
         };
-        SkEditorAPI.Files.AddCustomTab(Translation.Get("DocumentationWindowTitle"), new DocumentationControl(), icon: icon);
+        SkEditorAPI.Files.AddCustomTab(Translation.Get("DocumentationWindowTitle"), new DocumentationControl(),
+            icon: icon);
     }
 
     public void ReloadAddonsMenus()

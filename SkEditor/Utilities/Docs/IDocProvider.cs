@@ -11,7 +11,7 @@ namespace SkEditor.Utilities.Docs;
 
 public interface IDocProvider
 {
-    public static readonly Dictionary<DocProvider, IDocProvider> Providers = new()
+    static readonly Dictionary<DocProvider, IDocProvider> Providers = new()
     {
         { DocProvider.SkriptHub, new SkriptHubProvider() },
         { DocProvider.skUnity, new SkUnityProvider() },
@@ -19,23 +19,23 @@ public interface IDocProvider
         { DocProvider.Local, new LocalProvider() }
     };
 
-    public DocProvider Provider { get; }
-    public string Name => Provider.ToString();
+    DocProvider Provider { get; }
+    string Name => Provider.ToString();
 
-    public bool NeedsToLoadExamples { get; }
+    bool NeedsToLoadExamples { get; }
 
-    public bool HasAddons { get; }
+    bool HasAddons { get; }
 
-    public IconSource Icon { get; }
+    IconSource Icon { get; }
 
-    public Task<IDocumentationEntry?> FetchElement(string id);
-    public Task<List<IDocumentationEntry>> Search(SearchData searchData);
+    Task<IDocumentationEntry?> FetchElement(string id);
+    Task<List<IDocumentationEntry>> Search(SearchData searchData);
 
-    public List<string> CanSearch(SearchData searchData);
-    public bool IsAvailable();
-    public Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry);
-    public Task<List<string>> GetAddons();
+    List<string> CanSearch(SearchData searchData);
+    bool IsAvailable();
+    Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry);
+    Task<List<string>> GetAddons();
 
-    public Task<Color?> GetAddonColor(string addonName);
-    public string? GetLink(IDocumentationEntry entry);
+    Task<Color?> GetAddonColor(string addonName);
+    string? GetLink(IDocumentationEntry entry);
 }

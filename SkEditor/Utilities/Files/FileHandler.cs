@@ -11,7 +11,6 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities.Projects;
-using SkEditor.Views;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Files;
@@ -79,24 +78,38 @@ public class FileHandler
 
     public static void SaveFile()
     {
-        if (!SkEditorAPI.Files.IsEditorOpen()) return;
+        if (!SkEditorAPI.Files.IsEditorOpen())
+        {
+            return;
+        }
 
         QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
-            if (file == null) return;
+            if (file == null)
+            {
+                return;
+            }
+
             await SkEditorAPI.Files.Save(file);
         }));
     }
 
     public static void SaveAsFile()
     {
-        if (!SkEditorAPI.Files.IsEditorOpen()) return;
+        if (!SkEditorAPI.Files.IsEditorOpen())
+        {
+            return;
+        }
 
         QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
-            if (file == null) return;
+            if (file == null)
+            {
+                return;
+            }
+
             await SkEditorAPI.Files.Save(file, true);
         }));
     }
@@ -137,8 +150,11 @@ public class FileHandler
     public static async Task OpenFile()
     {
         MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow == null) return;
-        
+        if (mainWindow == null)
+        {
+            return;
+        }
+
         IReadOnlyList<IStorageFile> files = await mainWindow.StorageProvider
             .OpenFilePickerAsync(
                 new FilePickerOpenOptions

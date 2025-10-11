@@ -108,7 +108,11 @@ public partial class FileTypesPage : UserControl
                 }
 
                 FileTypeData? type = (FileTypeData?)item.Tag;
-                if (type is null) return;
+                if (type is null)
+                {
+                    return;
+                }
+
                 SkEditorAPI.Core.GetAppConfig().FileTypeChoices[ext] = Registries.FileTypes.GetValueKey(type)?.FullKey;
             };
 

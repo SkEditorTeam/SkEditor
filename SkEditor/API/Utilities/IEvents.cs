@@ -27,13 +27,13 @@ public interface IEvents
 
     event EventHandler<FileOpenedEventArgs> OnFileOpened;
     internal void FileOpened(OpenedFile openedFile, bool causedByRestore);
-    
+
     event EventHandler<FileSavedEventArgs> OnFileSaved;
     internal void FileSaved(string path);
 
     event EventHandler<ProjectOpenedEventArgs> OnProjectOpened;
     internal void ProjectOpened(Folder openedFolder);
-    
+
     event EventHandler OnProjectClosed;
     internal void ProjectClosed();
 

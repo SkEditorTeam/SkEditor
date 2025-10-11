@@ -79,12 +79,15 @@ public partial class CustomAddonSettingsPage : UserControl
                 {
                     if (!setting.Type.IsSelfManaged)
                     {
-                        if (Equals(capturedValueForLambda, newValue)) return;
+                        if (Equals(capturedValueForLambda, newValue))
+                        {
+                            return;
+                        }
 
                         AddonSettingsManager.SetValue(setting, newValue ?? setting.DefaultValue);
 
                         SkEditorAPI.Events.AddonSettingChanged(setting,
-                                                               capturedValueForLambda ?? setting.DefaultValue);
+                            capturedValueForLambda ?? setting.DefaultValue);
                     }
 
                     setting.OnChanged?.Invoke(newValue ?? setting.DefaultValue);

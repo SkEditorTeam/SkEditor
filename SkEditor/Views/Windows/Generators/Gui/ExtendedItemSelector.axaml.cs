@@ -37,8 +37,8 @@ public partial class ExtendedItemSelector : AppWindow
         ContinueButton.Command = new RelayCommand(() =>
         {
             _item.Lore = [];
-            Enumerable
-                .OfType<LoreLineEditor>(LoreLineStackPanel.Children)
+            LoreLineStackPanel.Children
+                .OfType<LoreLineEditor>()
                 .Where(x => !string.IsNullOrWhiteSpace(x.LineTextBox.Text))
                 .ToList()
                 .ForEach(x =>
@@ -84,7 +84,10 @@ public partial class ExtendedItemSelector : AppWindow
     private void CheckForEditing()
     {
         Item? editedItem = ItemContextMenu.EditedItem;
-        if (editedItem == null) return;
+        if (editedItem == null)
+        {
+            return;
+        }
 
         if (editedItem.HaveCustomName)
         {
@@ -96,7 +99,10 @@ public partial class ExtendedItemSelector : AppWindow
             CustomModelDataTextBox.Text = editedItem.CustomModelData.ToString();
         }
 
-        if (editedItem.Lore.Count <= 0) return;
+        if (editedItem.Lore.Count <= 0)
+        {
+            return;
+        }
 
         FirstLoreLine.LineTextBox.Text = editedItem.Lore[0];
 

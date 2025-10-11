@@ -38,7 +38,7 @@ public partial class SymbolRefactorWindow : AppWindow
             NameBox.Focus();
             return;
         }
-        
+
         Element.Rename(NameBox.Text);
         Close();
 

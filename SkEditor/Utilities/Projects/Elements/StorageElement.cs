@@ -67,8 +67,11 @@ public abstract class StorageElement
 
     protected void RefreshSelf()
     {
-        if (Parent?.Children == null) return;
-        
+        if (Parent?.Children == null)
+        {
+            return;
+        }
+
         Parent.Children[Parent.Children.IndexOf(this)] = this;
         Sort(Parent);
     }

@@ -46,7 +46,7 @@ public class ZipAddonItem : AddonItem
             }
 
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
-                new SymbolIconSource { Symbol = Symbol.CheckmarkCircle }, primaryButtonText: "Okay");
+                new SymbolIconSource { Symbol = Symbol.Checkmark }, primaryButtonText: "Okay");
 
             MarketplaceWindow.Instance.HideAllButtons();
             MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
@@ -108,7 +108,7 @@ public class ZipAddonItem : AddonItem
 
         await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
             Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            new SymbolIconSource { Symbol = Symbol.CheckmarkCircle }, primaryButtonText: "Okay");
+            new SymbolIconSource { Symbol = Symbol.Checkmark }, primaryButtonText: "Okay");
     }
 
     public async Task Update()
@@ -130,7 +130,7 @@ public class ZipAddonItem : AddonItem
 
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
                 Translation.Get("MarketplaceUpdateSuccess", ItemName),
-                new SymbolIconSource { Symbol = Symbol.CheckmarkCircle }, primaryButtonText: "Okay");
+                new SymbolIconSource { Symbol = Symbol.Checkmark }, primaryButtonText: "Okay");
         }
         catch
         {

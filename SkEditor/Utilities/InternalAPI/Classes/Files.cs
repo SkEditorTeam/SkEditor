@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -333,7 +332,7 @@ public class Files : IFiles
                 if (configuredTypeFullId != null)
                 {
                     RegistryKey key = RegistryKey.FromFullKey(configuredTypeFullId);
-                    var fileType = Registries.FileTypes.GetValue(key);
+                    FileTypeData? fileType = Registries.FileTypes.GetValue(key);
                     if (fileType != null)
                     {
                         openedFile = BuildFromType(fileType, path);
@@ -470,7 +469,7 @@ public class Files : IFiles
                     Translation.Get("UnsavedFileTitle"),
                     Translation.Get("UnsavedFileMessage", file.Name),
                     primaryButtonText: Translation.Get("Yes"),
-                    cancelButtonText: Translation.Get("CancelButton"), 
+                    cancelButtonText: Translation.Get("CancelButton"),
                     icon: FluentAvalonia.UI.Controls.Symbol.SaveLocal, translate: false);
                 if (response != ContentDialogResult.Primary)
                 {

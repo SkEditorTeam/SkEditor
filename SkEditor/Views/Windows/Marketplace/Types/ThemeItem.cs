@@ -39,7 +39,7 @@ public class ThemeItem : MarketplaceItem
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message,
                 primaryButtonText: "MarketplaceEnableNow", cancelButtonText: "Okay",
-                icon: new SymbolIconSource { Symbol = Symbol.CheckmarkCircle });
+                icon: new SymbolIconSource { Symbol = Symbol.Checkmark });
 
             if (result == ContentDialogResult.Primary)
             {
@@ -69,6 +69,7 @@ public class ThemeItem : MarketplaceItem
             await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ??
                                        ThemeEditor.GetDefaultTheme());
         }
+
         Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName));
         if (theme == null)
         {
@@ -85,7 +86,7 @@ public class ThemeItem : MarketplaceItem
 
         await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
             Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            new SymbolIconSource { Symbol = Symbol.CheckmarkCircle });
+            new SymbolIconSource { Symbol = Symbol.Checkmark });
     }
 
     public override bool IsInstalled()

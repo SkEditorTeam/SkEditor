@@ -35,8 +35,11 @@ public partial class GeneralPage : UserControl
         LanguageComboBox.SelectionChanged += (_, _) =>
         {
             string? language = LanguageComboBox.SelectedItem.ToString();
-            if (string.IsNullOrEmpty(language)) return;
-            
+            if (string.IsNullOrEmpty(language))
+            {
+                return;
+            }
+
             Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 await Translation.ChangeLanguage(language);
@@ -63,7 +66,10 @@ public partial class GeneralPage : UserControl
 
         foreach (object? item in IndentationTypeComboBox.Items)
         {
-            if ((item as ComboBoxItem)?.Tag?.ToString() != tag) continue;
+            if ((item as ComboBoxItem)?.Tag?.ToString() != tag)
+            {
+                continue;
+            }
 
             IndentationTypeComboBox.SelectedItem = item;
             break;
@@ -71,7 +77,10 @@ public partial class GeneralPage : UserControl
 
         foreach (object? item in IndentationAmountComboBox.Items)
         {
-            if ((item as ComboBoxItem)?.Tag?.ToString() != amount.ToString()) continue;
+            if ((item as ComboBoxItem)?.Tag?.ToString() != amount.ToString())
+            {
+                continue;
+            }
 
             IndentationAmountComboBox.SelectedItem = item;
             break;
@@ -88,7 +97,8 @@ public partial class GeneralPage : UserControl
         IndentationAmountComboBox.SelectionChanged += (_, _) =>
         {
             AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-            bool success = int.TryParse((IndentationAmountComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString(), out int result);
+            bool success = int.TryParse((IndentationAmountComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString(),
+                out int result);
             if (!success)
             {
                 return;
@@ -141,7 +151,10 @@ public partial class GeneralPage : UserControl
         }
 
         List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
-        if (textEditors.Count == 0) return;
+        if (textEditors.Count == 0)
+        {
+            return;
+        }
 
         double fontSize = textEditors.First().FontSize;
         textEditors.ForEach(textEditor => { textEditor.FontSize = fontSize; });

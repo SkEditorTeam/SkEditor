@@ -87,11 +87,12 @@ public partial class ItemSelector : AppWindow
             {
                 UpdateFilteredItems(null);
             }
+
             return;
         }
 
         SearchBox.Text = ItemContextMenu.EditedItem.DisplayName;
-        
+
         UpdateFilteredItems(SearchBox.Text);
     }
 
@@ -115,7 +116,7 @@ public partial class ItemSelector : AppWindow
                 .Where(x => x.DisplayName.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            var exactMatch = filteredItemsResult.FirstOrDefault(item =>
+            Item? exactMatch = filteredItemsResult.FirstOrDefault(item =>
                 item.DisplayName.ToString().Equals(searchText, StringComparison.OrdinalIgnoreCase));
 
             if (exactMatch != null)
@@ -151,7 +152,10 @@ public partial class ItemSelector : AppWindow
         try
         {
             List<Item>? items = JsonConvert.DeserializeObject<List<Item>>(await File.ReadAllTextAsync(itemsFile));
-            if (items == null) return;
+            if (items == null)
+            {
+                return;
+            }
 
             _itemBindings.Items.Clear();
             _itemBindings.FilteredItems.Clear();
@@ -179,7 +183,7 @@ public partial class ItemSelector : AppWindow
                 {
                     new Image
                     {
-                        Source = item.Icon, 
+                        Source = item.Icon,
                         Width = 24,
                         Height = 24
                     },
@@ -220,8 +224,15 @@ public class Item
     {
         get
         {
-            if (_image != null!) return _image;
-            if (GuiGenerator.Instance == null) return null;
+            if (_image != null!)
+            {
+                return _image;
+            }
+
+            if (GuiGenerator.Instance == null)
+            {
+                return null;
+            }
 
             string itemImagePath = Path.Combine(GuiGenerator.Instance.ItemPath, Name + ".png");
             if (!File.Exists(itemImagePath))

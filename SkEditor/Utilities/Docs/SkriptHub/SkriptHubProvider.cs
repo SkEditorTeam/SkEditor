@@ -103,9 +103,11 @@ public class SkriptHubProvider : IDocProvider
         List<SkriptHubDocEntry>? elements = JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content);
         if (elements == null)
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", "Invalid cache file"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
+                "Invalid cache file"));
             return [];
         }
+
         _cachedElements.AddRange(elements);
         await SaveCache();
 
@@ -193,9 +195,11 @@ public class SkriptHubProvider : IDocProvider
         List<SkriptHubDocEntry>? elements = JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content);
         if (elements == null)
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", "Invalid cache file"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
+                "Invalid cache file"));
             return [];
         }
+
         _cachedElements.AddRange(elements);
         await SaveCache();
 

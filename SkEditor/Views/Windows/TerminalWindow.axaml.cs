@@ -65,7 +65,7 @@ public partial class TerminalWindow : AppWindow
         SetupProcessHandlers();
     }
 
-    [MemberNotNull(nameof(_process))] 
+    [MemberNotNull(nameof(_process))]
     private void InitializeProcess()
     {
         Encoding encoding = GetTerminalEncoding();

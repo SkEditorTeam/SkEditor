@@ -5,7 +5,6 @@ using Avalonia.Media;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Views.Windows.Settings.Personalization;
@@ -35,8 +34,6 @@ public partial class PersonalizationPage : UserControl
                 textEditor!.Options.HighlightCurrentLine = !textEditor.Options.HighlightCurrentLine;
             }
         });
-        
-        
     }
 
     private async Task SelectFont()

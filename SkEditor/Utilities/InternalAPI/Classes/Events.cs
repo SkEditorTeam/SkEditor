@@ -29,20 +29,23 @@ public class Events : IEvents
     {
         OnFileOpened?.Invoke(this, new FileOpenedEventArgs(openedFile, causedByRestore));
     }
-    
+
     public event EventHandler<FileSavedEventArgs>? OnFileSaved;
+
     void IEvents.FileSaved(string path)
     {
         OnFileSaved?.Invoke(this, new FileSavedEventArgs(path));
     }
-    
+
     public event EventHandler<ProjectOpenedEventArgs>? OnProjectOpened;
+
     void IEvents.ProjectOpened(Folder openedFolder)
     {
         OnProjectOpened?.Invoke(this, new ProjectOpenedEventArgs(openedFolder));
     }
-    
+
     public event EventHandler? OnProjectClosed;
+
     void IEvents.ProjectClosed()
     {
         OnProjectClosed?.Invoke(this, EventArgs.Empty);
@@ -77,8 +80,9 @@ public class Events : IEvents
     {
         OnSettingsOpened?.Invoke(this, EventArgs.Empty);
     }
-    
+
     public event EventHandler<LanguageChangedEventArgs>? OnLanguageChanged;
+
     void IEvents.LanguageChanged(string language)
     {
         OnLanguageChanged?.Invoke(this, new LanguageChangedEventArgs(language));

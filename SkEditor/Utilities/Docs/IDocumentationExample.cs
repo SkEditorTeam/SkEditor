@@ -2,7 +2,7 @@
 
 public interface IDocumentationExample
 {
-    public string Example { set; get; }
-    public string Author { set; get; }
-    public string Votes { set; get; }
+    string Example { set; get; }
+    string Author { set; get; }
+    string Votes { set; get; }
 }

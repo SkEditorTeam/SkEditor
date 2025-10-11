@@ -18,7 +18,7 @@ namespace SkEditor.Utilities.Docs;
 /// </summary>
 public interface IDocumentationEntry
 {
-    public enum Changer
+    enum Changer
     {
         Set,
         Add,
@@ -29,7 +29,7 @@ public interface IDocumentationEntry
         Delete
     }
 
-    public enum Type
+    enum Type
     {
         All,
         Event,
@@ -42,21 +42,21 @@ public interface IDocumentationEntry
         Function
     }
 
-    public static List<Type> AllTypes => Enum.GetValues<Type>().ToList();
+    static List<Type> AllTypes => Enum.GetValues<Type>().ToList();
 
     #region Events Properties
 
-    public string? EventValues { set; get; }
+    string? EventValues { set; get; }
 
     #endregion
 
     #region Visual Utilities
 
-    [JsonIgnore] public string Since => $"Since v{Version}";
+    [JsonIgnore] string Since => $"Since v{Version}";
 
     #endregion
 
-    public static IconSource GetTypeIcon(Type type)
+    static IconSource GetTypeIcon(Type type)
     {
         return type switch
         {
@@ -92,21 +92,21 @@ public interface IDocumentationEntry
 
     #region Common Properties
 
-    public string Name { set; get; }
-    public string Description { set; get; }
-    public string Patterns { set; get; }
-    public string Id { set; get; }
-    public string Addon { set; get; }
-    public string Version { set; get; }
-    public Type DocType { set; get; }
-    public DocProvider Provider { get; }
+    string Name { set; get; }
+    string Description { set; get; }
+    string Patterns { set; get; }
+    string Id { set; get; }
+    string Addon { set; get; }
+    string Version { set; get; }
+    Type DocType { set; get; }
+    DocProvider Provider { get; }
 
     #endregion
 
     #region Expressions Properties
 
-    public string? ReturnType { set; get; }
-    public string? Changers { set; get; }
+    string? ReturnType { set; get; }
+    string? Changers { set; get; }
 
     #endregion
 }

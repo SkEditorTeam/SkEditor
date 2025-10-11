@@ -50,7 +50,10 @@ public partial class ParserSidebarPanel : UserControl
         SkEditorAPI.Events.OnTabChanged += (_, _) =>
         {
             CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser;
-            if (parser == null) return;
+            if (parser == null)
+            {
+                return;
+            }
 
             parser.Parse();
         };
@@ -65,8 +68,11 @@ public partial class ParserSidebarPanel : UserControl
         sections.ForEach(Sections.Add);
 
         ParserFilterViewModel? viewModel = (ParserFilterViewModel?)DataContext;
-        if (viewModel == null) return;
-        
+        if (viewModel == null)
+        {
+            return;
+        }
+
         List<CodeSection> filteredSections = Sections
             .Where(section =>
                 string.IsNullOrWhiteSpace(viewModel.SearchText) || section.Name.Contains(viewModel.SearchText))
@@ -109,8 +115,11 @@ public partial class ParserSidebarPanel : UserControl
     public void ClearSearchFilter()
     {
         ParserFilterViewModel? viewModel = (ParserFilterViewModel?)DataContext;
-        if (viewModel == null) return;
-        
+        if (viewModel == null)
+        {
+            return;
+        }
+
         viewModel.SearchText = "";
         viewModel.SelectedFilterIndex = 0;
         Refresh([.. Sections]);

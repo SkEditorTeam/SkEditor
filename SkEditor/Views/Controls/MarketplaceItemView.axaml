@@ -55,9 +55,9 @@
                             IsVisible="False">
                         <StackPanel Orientation="Horizontal" Spacing="4">
                             <fluent:SymbolIcon Symbol="Warning"
-                                           FontSize="14"
-                                           Foreground="#d29922"
-                                           VerticalAlignment="Center" />
+                                               FontSize="14"
+                                               Foreground="#d29922"
+                                               VerticalAlignment="Center" />
                             <TextBlock Name="AddonCurrentVersionTextBlock"
                                        Text="{Binding CurrentAddonVersion}"
                                        FontSize="12"
@@ -87,9 +87,9 @@
                             IsVisible="False">
                         <StackPanel Orientation="Horizontal" Spacing="4">
                             <fluent:SymbolIcon Symbol="CheckmarkCircle"
-                                           FontSize="14"
-                                           Foreground="#3fb950"
-                                           VerticalAlignment="Center" />
+                                               FontSize="14"
+                                               Foreground="#3fb950"
+                                               VerticalAlignment="Center" />
                             <TextBlock Text="{Binding CurrentAddonVersion}"
                                        FontSize="12"
                                        Foreground="#3fb950"
@@ -108,9 +108,9 @@
                             IsVisible="False">
                         <StackPanel Orientation="Horizontal" Spacing="4">
                             <fluent:SymbolIcon Symbol="Cloud"
-                                           FontSize="14"
-                                           Foreground="#656d76"
-                                           VerticalAlignment="Center" />
+                                               FontSize="14"
+                                               Foreground="#656d76"
+                                               VerticalAlignment="Center" />
                             <TextBlock Text="Not Installed"
                                        FontSize="12"
                                        Foreground="#656d76"

@@ -60,6 +60,7 @@ public static class Translation
             Application.Current?.Resources.MergedDictionaries.Add(dictionary);
             Translations.TryAdd(language, dictionary);
         }
+
         SkEditorAPI.Core.GetAppConfig().Language = language;
         SkEditorAPI.Core.GetAppConfig().Save();
         Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));

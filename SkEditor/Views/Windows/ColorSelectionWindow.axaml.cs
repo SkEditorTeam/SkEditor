@@ -49,7 +49,11 @@ public partial class ColorSelectionWindow : AppWindow
 
         CopyButton.Command = new AsyncRelayCommand(async () =>
         {
-            if (Clipboard is null) return;
+            if (Clipboard is null)
+            {
+                return;
+            }
+
             await Clipboard.SetTextAsync(ResultTextBox.Text);
         });
     }

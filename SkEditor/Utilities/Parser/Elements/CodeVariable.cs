@@ -5,7 +5,6 @@ using Avalonia.Media;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Views;
 using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
 namespace SkEditor.Utilities.Parser;
@@ -100,7 +99,10 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
                 foreach (Match m in matches)
                 {
                     CodeVariable variable = new(Section, m.ToString(), Line, Column);
-                    if (!variable.IsSimilar(this)) continue;
+                    if (!variable.IsSimilar(this))
+                    {
+                        continue;
+                    }
 
                     string newLine = line.Replace(variable.ToString(), $"{{_{newName}}}");
                     newLines.Add(newLine);
@@ -130,7 +132,10 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
                     foreach (Match m in matches)
                     {
                         CodeVariable variable = new(Section, m.ToString(), Line, Column);
-                        if (!variable.IsSimilar(this)) continue;
+                        if (!variable.IsSimilar(this))
+                        {
+                            continue;
+                        }
 
                         string newLine = line.Replace(variable.ToString(), $"{{{newName}}}");
                         newLines.Add(newLine);

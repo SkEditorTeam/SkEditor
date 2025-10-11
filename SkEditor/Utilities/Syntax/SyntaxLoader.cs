@@ -51,7 +51,7 @@ public class SyntaxLoader
                 {
                     await SkEditorAPI.Windows.ShowDialog("Error",
                         $"Failed to load syntax {directory}\n\n{e.Message}\n{e.StackTrace}",
-                        new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled});
+                        new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled });
                 }
             }
         }
@@ -85,7 +85,8 @@ public class SyntaxLoader
         FileSyntaxes
             .Where(s => s.Config != null && !string.IsNullOrEmpty(s.Config.LanguageName))
             .ToList()
-            .ForEach(s => SkEditorAPI.Core.GetAppConfig().FileSyntaxes.Add(s.Config!.LanguageName, s.Config.FullIdName));
+            .ForEach(s =>
+                SkEditorAPI.Core.GetAppConfig().FileSyntaxes.Add(s.Config!.LanguageName, s.Config.FullIdName));
     }
 
     public static async Task<FileSyntax> LoadSyntax(string folder)
@@ -95,6 +96,7 @@ public class SyntaxLoader
         {
             RegisterSyntax(fileSyntax);
         }
+
         return fileSyntax;
     }
 
@@ -199,7 +201,8 @@ public class SyntaxLoader
         catch
         {
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Error"),
-                Translation.Get("FailedToDownloadSyntax"), new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled},
+                Translation.Get("FailedToDownloadSyntax"),
+                new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
                 primaryButtonText: "Ok");
 
             return false;
@@ -248,9 +251,10 @@ public class SyntaxLoader
         }
 
         FileSyntax? syntax = fileSyntax.FirstOrDefault(x => x.Config != null &&
-            x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
-            && x.Config.Extensions.Contains(extension));
-        
+                                                            x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig()
+                                                                .FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
+                                                            && x.Config.Extensions.Contains(extension));
+
         if (syntax == null && fileSyntax.Count > 0)
         {
             syntax = fileSyntax[0];
@@ -292,10 +296,12 @@ public class SyntaxLoader
             }
 
             FileSyntax? syntax = SortedFileSyntaxes[ext].FirstOrDefault(x => x.Config != null &&
-                x.Config.FullIdName == SkEditorAPI.Core.GetAppConfig().FileSyntaxes
-                    .GetValueOrDefault(x.Config.LanguageName)
-                && x.Config.Extensions.Contains(ext));
-                
+                                                                             x.Config.FullIdName == SkEditorAPI.Core
+                                                                                 .GetAppConfig().FileSyntaxes
+                                                                                 .GetValueOrDefault(
+                                                                                     x.Config.LanguageName)
+                                                                             && x.Config.Extensions.Contains(ext));
+
             if (syntax == null && SortedFileSyntaxes[ext].Count > 0)
             {
                 syntax = SortedFileSyntaxes[ext][0];

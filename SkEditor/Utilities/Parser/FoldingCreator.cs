@@ -53,8 +53,11 @@ public static class FoldingCreator
     private static void StyleMarkers(TextEditor editor)
     {
         FoldingMargin? margin = editor.TextArea.LeftMargins.OfType<FoldingMargin>().FirstOrDefault();
-        if (margin == null) return;
-        
+        if (margin == null)
+        {
+            return;
+        }
+
         margin.SetValue(FoldingMargin.FoldingMarkerBackgroundBrushProperty,
             new SolidColorBrush(Color.Parse("#27282a")));
         margin.SetValue(FoldingMargin.FoldingMarkerBrushProperty, new SolidColorBrush(Color.Parse("#313234")));

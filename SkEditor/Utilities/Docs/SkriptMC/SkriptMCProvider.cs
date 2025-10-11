@@ -62,7 +62,7 @@ public class SkriptMcProvider : IDocProvider
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         List<SkriptMcDocEntry>? entries = JsonConvert.DeserializeObject<List<SkriptMcDocEntry>>(content);
-        return entries?.Cast<IDocumentationEntry>()?.ToList() 
+        return entries?.Cast<IDocumentationEntry>()?.ToList()
                ?? [];
     }
 

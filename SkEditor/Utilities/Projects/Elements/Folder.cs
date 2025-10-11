@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
@@ -117,21 +118,29 @@ public partial class Folder : StorageElement
         ProjectOpener.FileTreeView.ItemsSource = null;
 
         Folder? projectRootFolder = null;
-        
+
         SkEditorAPI.Events.ProjectClosed();
 
         ExplorerPanel? panel =
             Registries.SidebarPanels.FirstOrDefault(x => x is ExplorerPanel) as ExplorerPanel;
 
         StackPanel? noFolderMessage = panel?.Panel.NoFolderMessage;
-        if (noFolderMessage is null) return;
+        if (noFolderMessage is null)
+        {
+            return;
+        }
+
         noFolderMessage.IsVisible = projectRootFolder == null;
     }
 
     public override void RenameElement(string newName, bool move = true)
     {
         Folder? parent = Parent;
-        if (parent is null) return;
+        if (parent is null)
+        {
+            return;
+        }
+
         string newPath = Path.Combine(parent.StorageFolderPath, newName);
 
         if (move)
@@ -160,7 +169,7 @@ public partial class Folder : StorageElement
         {
             return Translation.Get("ProjectRenameErrorNameInvalid");
         }
-        
+
         StorageElement? folder = Parent?.Children?.FirstOrDefault(x => x.Name == input);
 
         return folder is not null ? Translation.Get("ProjectErrorNameExists") : null;
@@ -172,7 +181,7 @@ public partial class Folder : StorageElement
         {
             return Translation.Get("ProjectCreateErrorNameEmpty");
         }
-        
+
         if (!ValidFolderNameRegex().IsMatch(input))
         {
             return Translation.Get("ProjectRenameErrorNameInvalid");
@@ -199,8 +208,11 @@ public partial class Folder : StorageElement
     public void CopyPath()
     {
         Folder? root = ProjectOpener.ProjectRootFolder;
-        if (root is null) return;
-        
+        if (root is null)
+        {
+            return;
+        }
+
         string path = StorageFolderPath.Replace(root.StorageFolderPath, "");
         SkEditorAPI.Windows.GetMainWindow()?.Clipboard?.SetTextAsync(path);
     }
@@ -238,6 +250,7 @@ public partial class Folder : StorageElement
         {
             return this;
         }
+
         if (Children is null)
         {
             return null;
@@ -265,7 +278,7 @@ public partial class Folder : StorageElement
 
         return null;
     }
-    
-    [System.Text.RegularExpressions.GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$")]
-    private static partial System.Text.RegularExpressions.Regex ValidFolderNameRegex();
+
+    [GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$")]
+    private static partial Regex ValidFolderNameRegex();
 }

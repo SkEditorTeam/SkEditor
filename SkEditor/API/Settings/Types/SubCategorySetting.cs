@@ -38,11 +38,11 @@ public class SubCategorySetting(List<Setting> settings) : ISettingType
     public void SetupExpander(SettingsExpander expander, Setting setting)
     {
         expander.IsClickEnabled = true;
-        expander.Command = new RelayCommand((() =>
+        expander.Command = new RelayCommand(() =>
         {
             CustomAddonSettingsPage.Load(setting.Addon, settings);
             SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
-        }));
+        });
     }
 
     public bool IsSelfManaged => true;

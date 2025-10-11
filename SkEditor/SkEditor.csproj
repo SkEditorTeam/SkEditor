@@ -11,7 +11,7 @@
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <BaseVersion>2.9.3</BaseVersion>
         <Version>$(BaseVersion)$(BuildSuffix)</Version>
@@ -19,7 +19,7 @@
         <AssemblyVersion>$(BaseVersion)</AssemblyVersion>
         <FileVersion>$(BaseVersion)</FileVersion>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <NoWarn>CA2211</NoWarn>
         <DebugType>portable</DebugType>
@@ -30,12 +30,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaXaml Remove="Assets\*.axaml" />
-        <AvaloniaResource Include="Assets\**" />
+        <AvaloniaXaml Remove="Assets\*.axaml"/>
+        <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Styles\**" />
+        <AvaloniaResource Include="Styles\**"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -45,9 +45,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf" />
-        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf" />
-        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf" />
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf"/>
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf"/>
+        <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -57,189 +57,189 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Languages\English.xaml" />
+        <AvaloniaResource Include="Languages\English.xaml"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.4.3" />
-        <PackageReference Include="Avalonia" Version="11.3.7" />
-        <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.7" />
-        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.7" />
-        <PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.7" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.7" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.4.3"/>
+        <PackageReference Include="Avalonia" Version="11.3.7"/>
+        <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.7"/>
+        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.7"/>
+        <PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.7"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.7"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.7" />
-        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
-        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0" />
-        <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
-        <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.311" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-        <PackageReference Include="NuGet.Protocol" Version="6.14.0" />
-        <PackageReference Include="Octokit" Version="14.0.0" />
-        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-        <PackageReference Include="SkAvaloniaEdit" Version="11.3.3" />
-        <PackageReference Include="SkFluentAvalonia" Version="2.2.3" />
-        <PackageReference Include="Svg.Skia" Version="3.2.1" />
-        <PackageReference Include="System.Threading.AccessControl" Version="10.0.0-rc.1.25451.107" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.7"/>
+        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0"/>
+        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0"/>
+        <PackageReference Include="DiscordRichPresence" Version="1.6.1.70"/>
+        <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.311"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4"/>
+        <PackageReference Include="NuGet.Protocol" Version="6.14.0"/>
+        <PackageReference Include="Octokit" Version="14.0.0"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
+        <PackageReference Include="SkAvaloniaEdit" Version="11.3.3"/>
+        <PackageReference Include="SkFluentAvalonia" Version="2.2.3"/>
+        <PackageReference Include="Svg.Skia" Version="3.2.1"/>
+        <PackageReference Include="System.Threading.AccessControl" Version="10.0.0-rc.1.25451.107"/>
 
-        <PackageReference Include="HotAvalonia" Version="3.0.0" PrivateAssets="All" />
+        <PackageReference Include="HotAvalonia" Version="3.0.0" PrivateAssets="All"/>
 
-        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(TargetFramework)' == 'net8.0' and '$(RuntimeIdentifier)' == 'linux-x64'"/>
 
-        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.6.4" />
+        <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.6.4"/>
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Update="Assets\Icons.axaml" />
+        <AvaloniaResource Update="Assets\Icons.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
         <Compile Update="Views\CheckForUpdateWindow.axaml.cs">
-          <DependentUpon>CheckForUpdateWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>CheckForUpdateWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\ColorSelectionWindow.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>ColorSelectionWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
+            <DependentUpon>ColorSelectionWindow.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Windows\CrashWindow.axaml.cs">
-          <DependentUpon>CrashWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>CrashWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\FontSelectionWindow.axaml.cs">
-          <DependentUpon>FontSelectionWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>FontSelectionWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\GoToLineWindow.axaml.cs">
-          <DependentUpon>GoToLineWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>GoToLineWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\LocalDocsManagerWindow.axaml.cs">
-          <DependentUpon>LocalDocsManagerWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>LocalDocsManagerWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\LogsWindow.axaml.cs">
-          <DependentUpon>LogsWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>LogsWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\MainWindow.axaml.cs">
-          <DependentUpon>MainWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>MainWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\PublishWindow.axaml.cs">
-          <DependentUpon>PublishWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>PublishWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\RefactorWindow.axaml.cs">
-          <DependentUpon>RefactorWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>RefactorWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\SplashScreen.axaml.cs">
-          <DependentUpon>SplashScreen.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>SplashScreen.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\SymbolRefactorWindow.axaml.cs">
-          <DependentUpon>SymbolRefactorWindow.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>SymbolRefactorWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Windows\TerminalWindow.axaml.cs">
-          <SubType>Code</SubType>
-          <DependentUpon>TerminalWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
+            <DependentUpon>TerminalWindow.axaml</DependentUpon>
         </Compile>
         <Compile Update="Views\Controls\BottomBarControl.axaml.cs">
-          <DependentUpon>BottomBarControl.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>BottomBarControl.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\ColorPickerSettingsExpander.axaml.cs">
-          <DependentUpon>ColorPickerSettingsExpander.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ColorPickerSettingsExpander.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\CompletionMenu.axaml.cs">
-          <DependentUpon>CompletionMenu.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>CompletionMenu.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\ConnectionEntryControl.axaml.cs">
-          <DependentUpon>ConnectionEntryControl.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ConnectionEntryControl.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\EnchantSelector.axaml.cs">
-          <DependentUpon>EnchantSelector.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>EnchantSelector.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\LoreLineEditor.axaml.cs">
-          <DependentUpon>LoreLineEditor.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>LoreLineEditor.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\MainMenuControl.axaml.cs">
-          <DependentUpon>MainMenuControl.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>MainMenuControl.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\MarketplaceItemView.axaml.cs">
-          <DependentUpon>MarketplaceItemView.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>MarketplaceItemView.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\MarketplaceListItem.axaml.cs">
-          <DependentUpon>MarketplaceListItem.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>MarketplaceListItem.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\SettingsCategorySeparator.axaml.cs">
-          <DependentUpon>SettingsCategorySeparator.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>SettingsCategorySeparator.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\SettingsTitle.axaml.cs">
-          <DependentUpon>SettingsTitle.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>SettingsTitle.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\SideBarControl.axaml.cs">
-          <DependentUpon>SideBarControl.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>SideBarControl.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Controls\WelcomeTabControl.axaml.cs">
-          <DependentUpon>WelcomeTabControl.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>WelcomeTabControl.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Assets\GUI\" />
-        <Folder Include="Views\Pages\" />
+        <Folder Include="Assets\GUI\"/>
+        <Folder Include="Views\Pages\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Controls\Addons\AddonEntryControl.axaml" />
-      <AdditionalFiles Include="Views\Controls\Docs\DocElementControl.axaml" />
-      <AdditionalFiles Include="Views\Controls\Docs\DocManagementEntry.axaml" />
-      <AdditionalFiles Include="Views\Controls\Docs\DocumentationControl.axaml" />
-      <AdditionalFiles Include="Views\Controls\Sidebar\ExplorerSidebarPanel.axaml" />
-      <AdditionalFiles Include="Views\Controls\Sidebar\ParserSidebarPanel.axaml" />
-      <AdditionalFiles Include="Views\Windows\FileTypes\AssociationItemView.axaml" />
-      <AdditionalFiles Include="Views\Windows\FileTypes\AssociationSelectionWindow.axaml" />
-      <AdditionalFiles Include="Views\Windows\FileTypes\FileTypeSelectionWindow.axaml" />
-      <AdditionalFiles Include="Views\Windows\FileTypes\Images\AdvancedImageBox.axaml" />
-      <AdditionalFiles Include="Views\Windows\FileTypes\Images\ImageViewer.axaml" />
-      <AdditionalFiles Include="Views\Windows\Generators\CommandGenerator.axaml" />
-      <AdditionalFiles Include="Views\Windows\Generators\Gui\ExtendedItemSelector.axaml" />
-      <AdditionalFiles Include="Views\Windows\Generators\Gui\GuiGenerator.axaml" />
-      <AdditionalFiles Include="Views\Windows\Generators\Gui\ItemSelector.axaml" />
-      <AdditionalFiles Include="Views\Windows\Marketplace\MarketplaceWindow.axaml" />
-      <AdditionalFiles Include="Views\Windows\Projects\CreateStorageElementWindow.axaml" />
-      <AdditionalFiles Include="Views\Windows\Projects\RenameElementWindow.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\AboutPage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\AddonsPage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\ConnectionsPage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\CustomAddonSettingsPage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\ExperimentsPage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\FileTypesPage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\GeneralPage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\HomePage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\PersonalizationPage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\Personalization\EditThemePage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\Personalization\FileSyntaxes.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\Personalization\ThemePage.axaml" />
-      <AdditionalFiles Include="Views\Windows\Settings\SettingsWindow.axaml" />
+        <AdditionalFiles Include="Views\Controls\Addons\AddonEntryControl.axaml"/>
+        <AdditionalFiles Include="Views\Controls\Docs\DocElementControl.axaml"/>
+        <AdditionalFiles Include="Views\Controls\Docs\DocManagementEntry.axaml"/>
+        <AdditionalFiles Include="Views\Controls\Docs\DocumentationControl.axaml"/>
+        <AdditionalFiles Include="Views\Controls\Sidebar\ExplorerSidebarPanel.axaml"/>
+        <AdditionalFiles Include="Views\Controls\Sidebar\ParserSidebarPanel.axaml"/>
+        <AdditionalFiles Include="Views\Windows\FileTypes\AssociationItemView.axaml"/>
+        <AdditionalFiles Include="Views\Windows\FileTypes\AssociationSelectionWindow.axaml"/>
+        <AdditionalFiles Include="Views\Windows\FileTypes\FileTypeSelectionWindow.axaml"/>
+        <AdditionalFiles Include="Views\Windows\FileTypes\Images\AdvancedImageBox.axaml"/>
+        <AdditionalFiles Include="Views\Windows\FileTypes\Images\ImageViewer.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Generators\CommandGenerator.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Generators\Gui\ExtendedItemSelector.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Generators\Gui\GuiGenerator.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Generators\Gui\ItemSelector.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Marketplace\MarketplaceWindow.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Projects\CreateStorageElementWindow.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Projects\RenameElementWindow.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\AboutPage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\AddonsPage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\ConnectionsPage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\CustomAddonSettingsPage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\ExperimentsPage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\FileTypesPage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\GeneralPage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\HomePage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\PersonalizationPage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\Personalization\EditThemePage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\Personalization\FileSyntaxes.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\Personalization\ThemePage.axaml"/>
+        <AdditionalFiles Include="Views\Windows\Settings\SettingsWindow.axaml"/>
     </ItemGroup>
 </Project>

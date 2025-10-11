@@ -8,12 +8,12 @@ using SkEditor.Utilities.InternalAPI;
 namespace SkEditor.API;
 
 /// <summary>
-/// Provides logging capabilities for SkEditor and its addons
+///     Provides logging capabilities for SkEditor and its addons
 /// </summary>
 public class Logs : ILogs
 {
     /// <summary>
-    /// Logs a debug message
+    ///     Logs a debug message
     /// </summary>
     /// <param name="message">The message to log</param>
     public void Debug(string message)
@@ -23,7 +23,7 @@ public class Logs : ILogs
     }
 
     /// <summary>
-    /// Logs an informational message
+    ///     Logs an informational message
     /// </summary>
     /// <param name="message">The message to log</param>
     public void Info(string message)
@@ -33,7 +33,7 @@ public class Logs : ILogs
     }
 
     /// <summary>
-    /// Logs a warning message
+    ///     Logs a warning message
     /// </summary>
     /// <param name="message">The message to log</param>
     public void Warning(string message)
@@ -43,7 +43,7 @@ public class Logs : ILogs
     }
 
     /// <summary>
-    /// Logs an error message
+    ///     Logs an error message
     /// </summary>
     /// <param name="message">The message to log</param>
     /// <param name="informUser">Whether to show an error dialog to the user</param>
@@ -51,7 +51,7 @@ public class Logs : ILogs
     {
         string source = GetSourceName();
         Log.Error("[{Source}] {Message}", source, message);
-        
+
         if (informUser)
         {
             Dispatcher.UIThread.InvokeAsync(async () => await SkEditorAPI.Windows.ShowError(message));
@@ -59,7 +59,7 @@ public class Logs : ILogs
     }
 
     /// <summary>
-    /// Logs a fatal message
+    ///     Logs a fatal message
     /// </summary>
     /// <param name="message">The message to log</param>
     public void Fatal(string message)
@@ -69,7 +69,7 @@ public class Logs : ILogs
     }
 
     /// <summary>
-    /// Logs a fatal exception
+    ///     Logs a fatal exception
     /// </summary>
     /// <param name="exception">The exception to log</param>
     public void Fatal(Exception exception)
@@ -80,7 +80,7 @@ public class Logs : ILogs
     }
 
     /// <summary>
-    /// Logs an error message from an addon
+    ///     Logs an error message from an addon
     /// </summary>
     /// <param name="message">The message to log</param>
     /// <param name="informUser">Whether to show an error dialog to the user</param>
@@ -90,7 +90,7 @@ public class Logs : ILogs
         addon ??= DetectAddonFromStackTrace();
 
         Log.Error("[{Source}] {Message}", addon?.Name ?? "Addon not Found", message);
-        
+
         if (informUser)
         {
             Dispatcher.UIThread.InvokeAsync(async () => await SkEditorAPI.Windows.ShowError(message));
@@ -98,7 +98,7 @@ public class Logs : ILogs
     }
 
     /// <summary>
-    /// Returns the name of the source of the log message (addon name or "SkEditor")
+    ///     Returns the name of the source of the log message (addon name or "SkEditor")
     /// </summary>
     private static string GetSourceName()
     {
@@ -113,13 +113,13 @@ public class Logs : ILogs
     }
 
     /// <summary>
-    /// Detects the addon that caused the error from the stack trace
+    ///     Detects the addon that caused the error from the stack trace
     /// </summary>
     private IAddon? DetectAddonFromStackTrace()
     {
         StackFrame[] frames = new StackTrace().GetFrames();
         string? addonNamespace = null;
-        
+
         foreach (StackFrame frame in frames)
         {
             MethodBase? method = frame.GetMethod();

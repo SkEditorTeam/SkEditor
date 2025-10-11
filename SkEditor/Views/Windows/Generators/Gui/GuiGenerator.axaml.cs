@@ -14,7 +14,6 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
-using SkEditor.ViewModels;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
@@ -81,14 +80,20 @@ public partial class GuiGenerator : AppWindow
         _buttonCommand = new AsyncRelayCommand<int>(async slotId =>
         {
             Item? item = await SelectItem();
-            if (item == null) return;
+            if (item == null)
+            {
+                return;
+            }
 
             UpdateItem(slotId, item);
         });
         BackgroundItemButton.Command = new AsyncRelayCommand(async () =>
         {
             Item? item = await SelectItem();
-            if (item == null) return;
+            if (item == null)
+            {
+                return;
+            }
 
             BackgroundItem = item;
             BackgroundItemButton.Content = item.DisplayName;
@@ -136,7 +141,10 @@ public partial class GuiGenerator : AppWindow
     public void UpdateItem(int slotId, Item item)
     {
         Button? button = Buttons.FirstOrDefault(x => (int?)x.Tag == slotId);
-        if (button == null) return;
+        if (button == null)
+        {
+            return;
+        }
 
         string itemImagePath = Path.Combine(ItemPath, item.Name + ".png");
 

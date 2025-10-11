@@ -53,7 +53,7 @@ public partial class FileSyntaxes : UserControl
         SettingsExpander expander = new()
         {
             Header = language,
-            IconSource = new SymbolIconSource() { Symbol = Symbol.Code },
+            IconSource = new SymbolIconSource { Symbol = Symbol.Code },
             Footer = comboBox
         };
 
@@ -84,10 +84,15 @@ public partial class FileSyntaxes : UserControl
             AppConfig config = SkEditorAPI.Core.GetAppConfig();
             string? selectedFullIdName = (comboBox.SelectedValue as ComboBoxItem)?.Tag?.ToString();
             FileSyntax? selectedFileSyntax =
-                SyntaxLoader.FileSyntaxes.FirstOrDefault(x => x.Config != null && x.Config.FullIdName.Equals(selectedFullIdName));
+                SyntaxLoader.FileSyntaxes.FirstOrDefault(x =>
+                    x.Config != null && x.Config.FullIdName.Equals(selectedFullIdName));
 
-            var selectedFileSyntaxConfig = selectedFileSyntax?.Config;
-            if (selectedFileSyntaxConfig == null) return;
+            FileSyntax.FileSyntaxConfig? selectedFileSyntaxConfig = selectedFileSyntax?.Config;
+            if (selectedFileSyntaxConfig == null)
+            {
+                return;
+            }
+
             config.FileSyntaxes[language] = selectedFileSyntaxConfig.FullIdName;
             config.FileSyntaxes[selectedFileSyntaxConfig.LanguageName] = selectedFileSyntaxConfig.FullIdName;
 
@@ -102,7 +107,11 @@ public partial class FileSyntaxes : UserControl
 
             foreach (TabViewItem? tab in tabs)
             {
-                if (tab?.Content is not TextEditor editor) continue;
+                if (tab?.Content is not TextEditor editor)
+                {
+                    continue;
+                }
+
                 editor.SyntaxHighlighting = selectedFileSyntax?.Highlighting;
             }
         };

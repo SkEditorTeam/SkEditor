@@ -12,7 +12,7 @@ public partial class MarketplaceItemView : UserControl
 
     public static readonly AvaloniaProperty<string> ItemVersionProperty =
         AvaloniaProperty.Register<MarketplaceItemView, string>(nameof(ItemVersion));
-    
+
     public static readonly AvaloniaProperty<string?> CurrentAddonVersionProperty =
         AvaloniaProperty.Register<MarketplaceItemView, string?>(nameof(CurrentAddonVersion));
 
@@ -49,7 +49,7 @@ public partial class MarketplaceItemView : UserControl
         get => GetValue(ItemVersionProperty)?.ToString() ?? "";
         set => SetValue(ItemVersionProperty, value);
     }
-    
+
     public string? CurrentAddonVersion
     {
         get => GetValue(CurrentAddonVersionProperty)?.ToString();

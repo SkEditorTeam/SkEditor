@@ -17,7 +17,11 @@ internal static class FileCloser
     public static async Task CloseCurrentFile()
     {
         OpenedFile? currentOpenedFile = SkEditorAPI.Files.GetCurrentOpenedFile();
-        if (currentOpenedFile == null) return;
+        if (currentOpenedFile == null)
+        {
+            return;
+        }
+
         await SkEditorAPI.Files.Close(currentOpenedFile);
     }
 
@@ -74,6 +78,7 @@ internal static class FileCloser
     private static async Task<ContentDialogResult> ShowConfirmationDialog()
     {
         return await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-            Translation.Get("ClosingFiles"), new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled});
+            Translation.Get("ClosingFiles"),
+            new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled });
     }
 }

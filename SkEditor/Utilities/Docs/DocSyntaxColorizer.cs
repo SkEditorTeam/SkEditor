@@ -18,7 +18,7 @@ public partial class DocSyntaxColorizer
 
         EmptyHighlighting highlighting = new()
         {
-            MainRuleSet = ruleSet,
+            MainRuleSet = ruleSet
         };
 
         return highlighting;

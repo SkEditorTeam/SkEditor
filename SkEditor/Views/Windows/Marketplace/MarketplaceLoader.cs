@@ -60,12 +60,14 @@ public class MarketplaceLoader
         if (response.IsSuccessStatusCode)
         {
             string json = response.Content.ReadAsStringAsync().Result;
-            MarketplaceItem? item = JsonConvert.DeserializeObject<MarketplaceItem>(json, new MarketplaceItemConverter());
+            MarketplaceItem? item =
+                JsonConvert.DeserializeObject<MarketplaceItem>(json, new MarketplaceItemConverter());
             if (item == null)
             {
                 Log.Error("Failed to deserialize manifest.json for item {Name}", name);
                 return null;
             }
+
             item = FormatUrls(url, item);
             return item;
         }

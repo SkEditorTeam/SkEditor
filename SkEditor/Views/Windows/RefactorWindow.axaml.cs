@@ -53,8 +53,11 @@ public partial class RefactorWindow : AppWindow
     private static Task RemoveComments()
     {
         TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null) return Task.CompletedTask;
-        
+        if (textEditor == null)
+        {
+            return Task.CompletedTask;
+        }
+
         List<DocumentLine> linesToStay =
             textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
 
@@ -68,8 +71,11 @@ public partial class RefactorWindow : AppWindow
     private static Task TabsToSpaces()
     {
         TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null) return Task.CompletedTask;
-        
+        if (textEditor == null)
+        {
+            return Task.CompletedTask;
+        }
+
         IList<DocumentLine>? lines = textEditor.Document.Lines;
 
         lines.Where(line => GetText(line).StartsWith("\t")).ToList().ForEach(line =>
@@ -83,8 +89,11 @@ public partial class RefactorWindow : AppWindow
     private static Task SpacesToTabs()
     {
         TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null) return Task.CompletedTask;
-        
+        if (textEditor == null)
+        {
+            return Task.CompletedTask;
+        }
+
         int tabSize = GetTabSize();
         IList<DocumentLine>? lines = textEditor.Document.Lines;
         lines.Where(line => GetText(line).StartsWith(" ")).ToList().ForEach(line =>
@@ -102,8 +111,11 @@ public partial class RefactorWindow : AppWindow
     private static int GetTabSize()
     {
         TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null) return 4;
-        
+        if (textEditor == null)
+        {
+            return 4;
+        }
+
         IList<DocumentLine>? lines = textEditor.Document.Lines;
         int tabSize = 4;
 

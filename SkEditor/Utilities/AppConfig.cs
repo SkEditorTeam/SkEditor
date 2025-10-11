@@ -28,9 +28,9 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty] private bool _isPasteIndentationEnabled;
     [ObservableProperty] private bool _isProjectSingleClickEnabled;
     [ObservableProperty] private bool _isSidebarAnimationEnabled;
+    [ObservableProperty] private bool _isSidebarWidthSyncEnabled;
     [ObservableProperty] private bool _isWrappingEnabled;
     [ObservableProperty] private bool _isZoomSyncEnabled = true;
-    [ObservableProperty] private bool _isSidebarWidthSyncEnabled;
     [ObservableProperty] private string _language = "English";
     [ObservableProperty] private string _lastUsedPublishService = "Pastebin";
     [ObservableProperty] private string _pastebinApiKey = "";
@@ -63,8 +63,7 @@ public partial class AppConfig : ObservableObject
 
     public string SkUnityApiKey { get; set; } = "";
     public string SkriptMcApiKey { get; set; } = "";
-    
-    
+
 
     public static string AppDataFolderPath { get; set; } =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");

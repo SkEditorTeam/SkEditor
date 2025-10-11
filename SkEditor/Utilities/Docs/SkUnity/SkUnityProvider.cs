@@ -142,7 +142,10 @@ public class SkUnityProvider : IDocProvider
         }
 
         JObject? resultObject = responseObject["result"]?.ToObject<JObject>();
-        if (resultObject == null) return [];
+        if (resultObject == null)
+        {
+            return [];
+        }
 
         List<string> keys = [];
         keys.AddRange(from key in resultObject.Properties() where int.TryParse(key.Name, out _) select key.Name);
@@ -188,8 +191,11 @@ public class SkUnityProvider : IDocProvider
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
         JObject responseObject = JObject.Parse(content);
         JObject? addonsObj = responseObject["result"]?.ToObject<JObject>();
-        if (addonsObj == null) return [];
-        
+        if (addonsObj == null)
+        {
+            return [];
+        }
+
         List<string> addons = addonsObj.Properties().Select(prop => prop.Name).ToList();
 
         foreach (string key in addons)
@@ -202,6 +208,7 @@ public class SkUnityProvider : IDocProvider
                 Log.Warning("Addon {Addon} does not have a forum resource ID", key);
                 continue;
             }
+
             CachedAddons[key] = new AddonData(color, forumResourceId);
         }
 

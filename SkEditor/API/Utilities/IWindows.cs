@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Views;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.API;

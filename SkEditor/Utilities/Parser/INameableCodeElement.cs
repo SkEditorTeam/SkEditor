@@ -5,11 +5,11 @@
 /// </summary>
 public interface INameableCodeElement
 {
-    public string Name { get; }
+    string Name { get; }
 
-    public void Rename(string newName);
+    void Rename(string newName);
 
-    public string GetNameDisplay()
+    string GetNameDisplay()
     {
         return Name;
     }

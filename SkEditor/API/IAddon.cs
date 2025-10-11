@@ -17,29 +17,29 @@ public interface IAddon
     /// <summary>
     ///     The name of the addon.
     /// </summary>
-    public string Name { get; }
+    string Name { get; }
 
     /// <summary>
     ///     Get the unique identifier of the addon. Must be alphanumeric!
     /// </summary>
-    public string Identifier { get; }
+    string Identifier { get; }
 
     /// <summary>
     ///     The version of the addon. Should follow <see href="https://semver.org/">Semantic Versioning,</see>
     ///     so it can be parsed into a <see cref="System.Version" />.
     /// </summary>
-    public string Version { get; }
+    string Version { get; }
 
     /// <summary>
     ///     A short description of the addon.
     /// </summary>
-    public string? Description { get; }
+    string? Description { get; }
 
     /// <summary>
     ///     The icon of the addon.
     /// </summary>
     /// <returns>The icon of the addon.</returns>
-    public IconSource GetAddonIcon()
+    IconSource GetAddonIcon()
     {
         return new SymbolIconSource { Symbol = Symbol.AppsAddIn };
     }
@@ -49,7 +49,7 @@ public interface IAddon
     ///     menu by SkEditor, so you don't have to worry about conflicts.
     /// </summary>
     /// <returns>The menu items of the addon.</returns>
-    public List<MenuItem> GetMenuItems()
+    List<MenuItem> GetMenuItems()
     {
         return [];
     }
@@ -59,7 +59,7 @@ public interface IAddon
     ///     yet, but mainly <see cref="Registries" /> will be available,
     ///     so you can register your own stuff there.
     /// </summary>
-    public void OnEnable();
+    void OnEnable();
 
     /// <summary>
     ///     Called when the addon is enabled. Some stuff might not be available
@@ -67,7 +67,7 @@ public interface IAddon
     ///     so you can register your own stuff there.
     ///     Use this method if you need to do async stuff when enabling the addon.
     /// </summary>
-    public Task OnEnableAsync()
+    Task OnEnableAsync()
     {
         return Task.CompletedTask;
     }
@@ -77,7 +77,7 @@ public interface IAddon
     ///     unregister your stuff from <see cref="Registries" />, as
     ///     SkEditor will do that for you!
     /// </summary>
-    public void OnDisable()
+    void OnDisable()
     {
     }
 
@@ -85,14 +85,14 @@ public interface IAddon
     ///     Get the minimal version of SkEditor that is required for this addon.
     /// </summary>
     /// <returns>The minimal version of SkEditor that is required for this addon.</returns>
-    public Version GetMinimalSkEditorVersion();
+    Version GetMinimalSkEditorVersion();
 
     /// <summary>
     ///     Get the maximal version of SkEditor that is required for this addon.
     ///     If null, there is no maximal version.
     /// </summary>
     /// <returns>The maximal version of SkEditor that is required for this addon, or null if there is no maximal version.</returns>
-    public Version? GetMaximalSkEditorVersion()
+    Version? GetMaximalSkEditorVersion()
     {
         return null;
     }
@@ -102,7 +102,7 @@ public interface IAddon
     ///     <see cref="AddonDependency" />s or <see cref="NuGetDependency" />s.
     /// </summary>
     /// <returns>All the dependencies of this addon.</returns>
-    public List<IDependency> GetDependencies()
+    List<IDependency> GetDependencies()
     {
         return [];
     }
@@ -111,7 +111,7 @@ public interface IAddon
     ///     Get all the settings of this addon.
     /// </summary>
     /// <returns>All the settings of this addon.</returns>
-    public List<Setting> GetSettings()
+    List<Setting> GetSettings()
     {
         return [];
     }

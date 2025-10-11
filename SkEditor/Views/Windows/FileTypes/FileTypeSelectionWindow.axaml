@@ -14,8 +14,8 @@
         WindowStartupLocation="CenterOwner"
         Theme="{StaticResource SmallWindowTheme}">
     <Grid RowDefinitions="Auto,*,Auto,Auto"
-                         ColumnDefinitions="*,*"
-                         RowSpacing="10" ColumnSpacing="10" Margin="10">
+          ColumnDefinitions="*,*"
+          RowSpacing="10" ColumnSpacing="10" Margin="10">
 
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextAlignment="Center" TextWrapping="Wrap">
             We found multiple file types that can be used to open this file. Please select one.
@@ -26,7 +26,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="api:FileTypeData">
                     <Grid RowDefinitions="*,*" ColumnDefinitions="Auto,*"
-                                         RowSpacing="10" ColumnSpacing="10">
+                          RowSpacing="10" ColumnSpacing="10">
 
                         <controls:IconSourceElement Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
                                                     IconSource="{Binding Icon}"

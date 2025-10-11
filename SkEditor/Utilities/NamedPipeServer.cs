@@ -8,7 +8,6 @@ using Avalonia.Threading;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
-using SkEditor.Views;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities;
@@ -83,8 +82,11 @@ public static class NamedPipeServer
     private static void BringMainWindowToFront()
     {
         MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow == null) return;
-        
+        if (mainWindow == null)
+        {
+            return;
+        }
+
         if (mainWindow.WindowState == WindowState.Minimized)
         {
             mainWindow.WindowState = WindowState.Normal;

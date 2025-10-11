@@ -12,7 +12,6 @@ using FluentAvalonia.Styling;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
-using SkEditor.Views;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Styling;
@@ -175,7 +174,7 @@ public class ThemeEditor
         RestoreDefaultColors();
 
         List<Task> tasks = [];
-        
+
         Application? currentApp = Application.Current;
         if (currentApp == null)
         {
@@ -220,7 +219,7 @@ public class ThemeEditor
             SkEditorAPI.Logs.Error("Application.Current is null. Cannot apply Mica.", true);
             return;
         }
-        
+
         if (!currentApp.Resources.TryGetResource("SmallWindowTheme", ThemeVariant.Default,
                 out object? smallWindowTheme))
         {

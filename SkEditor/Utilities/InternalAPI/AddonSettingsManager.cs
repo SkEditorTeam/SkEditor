@@ -77,7 +77,7 @@ public static class AddonSettingsManager
     public static object? GetValue(Setting setting)
     {
         LoadSettings(setting.Addon);
-        var addonSettings = LoadedAddonSettings[setting.Addon][setting.Key];
+        JToken? addonSettings = LoadedAddonSettings[setting.Addon][setting.Key];
         if (addonSettings == null)
         {
             return setting.DefaultValue;

@@ -14,10 +14,7 @@ public partial class SettingsTitle : UserControl
     {
         InitializeComponent();
 
-        Loaded += (_, _) =>
-        {
-            BackButton.Command = new RelayCommand(SettingsWindow.Instance.FrameView.GoBack);
-        };
+        Loaded += (_, _) => { BackButton.Command = new RelayCommand(SettingsWindow.Instance.FrameView.GoBack); };
     }
 
     public bool HasBackButton { get; set; } = true;
@@ -29,7 +26,7 @@ public partial class SettingsTitle : UserControl
     }
 
     /// <summary>
-    /// Gets the back button control.
+    ///     Gets the back button control.
     /// </summary>
     /// <returns>The back button control, or null if it does not exist.</returns>
     public Button? GetBackButton()

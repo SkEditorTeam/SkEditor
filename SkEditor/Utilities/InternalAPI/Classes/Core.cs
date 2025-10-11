@@ -28,6 +28,7 @@ public class Core : ICore
         {
             throw new InvalidOperationException("Version is null");
         }
+
         return new Version(version.Major, version.Minor, version.Build);
     }
 
@@ -36,7 +37,7 @@ public class Core : ICore
         Assembly assembly = Assembly.GetExecutingAssembly();
         string? informationVersion =
             assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-        
+
         if (informationVersion == null)
         {
             throw new InvalidOperationException("Informational version is null");

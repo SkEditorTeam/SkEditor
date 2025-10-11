@@ -157,7 +157,7 @@ public class FileBuilder
         {
             ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
                 Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
-                new SymbolIconSource() { Symbol = Symbol.Alert });
+                new SymbolIconSource { Symbol = Symbol.Alert });
             if (response != ContentDialogResult.Primary)
             {
                 return null;

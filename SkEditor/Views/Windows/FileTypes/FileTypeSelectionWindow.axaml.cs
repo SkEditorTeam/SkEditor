@@ -21,7 +21,10 @@ public partial class FileTypeSelectionWindow : AppWindow
         {
             FileTypeSelectionViewModel? viewModel = (FileTypeSelectionViewModel?)DataContext;
             if (viewModel == null)
+            {
                 return;
+            }
+
             viewModel.SelectedFileType = null;
             Close();
         });

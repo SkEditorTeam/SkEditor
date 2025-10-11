@@ -29,8 +29,11 @@ public static partial class CompletionHandler
     public static async void OnTextChanged(object? sender, EventArgs e)
     {
         TextEditor? textEditor = (TextEditor?)sender;
-        if (textEditor == null) return;
-        
+        if (textEditor == null)
+        {
+            return;
+        }
+
         _currentTextEditor = textEditor;
         TextDocument document = textEditor.Document;
 
@@ -123,7 +126,11 @@ public static partial class CompletionHandler
                 ListBoxItem? selectedItem = (ListBoxItem?)listBox?.SelectedItem;
                 CompletionItem? completionItem = (CompletionItem?)selectedItem?.Tag;
                 CompletionPopup.Hide();
-                if (completionItem is not null) OnCompletion(completionItem);
+                if (completionItem is not null)
+                {
+                    OnCompletion(completionItem);
+                }
+
                 break;
         }
     }
@@ -131,7 +138,11 @@ public static partial class CompletionHandler
     private static void HandleArrowKey(bool isUpKey)
     {
         CompletionMenu? completionMenu = (CompletionMenu?)CompletionPopup.Content;
-        if (completionMenu == null) return;
+        if (completionMenu == null)
+        {
+            return;
+        }
+
         ListBox? listBox = completionMenu.CompletionListBox;
 
         int selectedIndex = listBox.SelectedIndex;
@@ -143,8 +154,11 @@ public static partial class CompletionHandler
 
     private static void OnCompletion(CompletionItem completionItem)
     {
-        if (_currentTextEditor == null) return;
-        
+        if (_currentTextEditor == null)
+        {
+            return;
+        }
+
         int offset = _currentTextEditor.TextArea.Caret.Offset;
         SimpleSegment segment = TextEditorUtilities.GetSegmentBeforeOffset(offset, _currentTextEditor.Document);
         if (segment == SimpleSegment.Invalid)

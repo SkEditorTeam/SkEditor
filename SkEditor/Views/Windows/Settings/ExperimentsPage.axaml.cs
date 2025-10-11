@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Styling;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
@@ -16,7 +14,7 @@ public partial class ExperimentsPage : UserControl
     private readonly List<Experiment> _experiments =
     [
         new("Auto Completion", "Early prototype of auto completion, not very helpful.",
-            "EnableAutoCompletionExperiment",  Symbol.TextGrammarWand),
+            "EnableAutoCompletionExperiment", Symbol.TextGrammarWand),
         new("Projects", "Adds a sidebar for managing projects.", "EnableProjectsExperiment", Symbol.Briefcase),
         new("Hex Preview", "Preview hex colors in the editor.", "EnableHexPreview", Symbol.Color),
         new("Code Parser",
@@ -31,13 +29,14 @@ public partial class ExperimentsPage : UserControl
         new("Session restoring", "Automatically saves your files and reopens it next time you start the app.",
             "EnableSessionRestoring", Symbol.History)
     ];
+
     private readonly Dictionary<string, Experiment> _experimentsByOption;
     private readonly Dictionary<string, ToggleSwitch> _switches = new();
 
     public ExperimentsPage()
     {
         InitializeComponent();
-        
+
         _experimentsByOption = _experiments.ToDictionary(e => e.Option);
 
         AddExperiments();
@@ -61,9 +60,9 @@ public partial class ExperimentsPage : UserControl
                 Header = experiment.Name,
                 Description = experiment.Description,
                 Footer = toggleSwitch,
-                IconSource = new SymbolIconSource { Symbol = experiment.Icon}
+                IconSource = new SymbolIconSource { Symbol = experiment.Icon }
             };
-            
+
             _switches[experiment.Option] = toggleSwitch;
             ExperimentsStackPanel.Children.Add(expander);
         }
@@ -72,12 +71,12 @@ public partial class ExperimentsPage : UserControl
     private void Switch(Experiment experiment, ToggleSwitch toggleSwitch)
     {
         AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-        
+
         if (toggleSwitch.IsChecked == true)
         {
             if (experiment.Dependency is not null &&
-                _experimentsByOption.TryGetValue(experiment.Dependency, out var dependency) &&
-                _switches.TryGetValue(dependency.Option, out var dependencySwitch) &&
+                _experimentsByOption.TryGetValue(experiment.Dependency, out Experiment? dependency) &&
+                _switches.TryGetValue(dependency.Option, out ToggleSwitch? dependencySwitch) &&
                 dependencySwitch.IsChecked != true)
             {
                 dependencySwitch.IsChecked = true;
@@ -86,11 +85,12 @@ public partial class ExperimentsPage : UserControl
         }
         else
         {
-            var dependentExperiments = _experiments.Where(e => e.Dependency == experiment.Option);
-            
-            foreach (var dependent in dependentExperiments)
+            IEnumerable<Experiment> dependentExperiments = _experiments.Where(e => e.Dependency == experiment.Option);
+
+            foreach (Experiment dependent in dependentExperiments)
             {
-                if (_switches.TryGetValue(dependent.Option, out var dependentSwitch) && dependentSwitch.IsChecked == true)
+                if (_switches.TryGetValue(dependent.Option, out ToggleSwitch? dependentSwitch) &&
+                    dependentSwitch.IsChecked == true)
                 {
                     dependentSwitch.IsChecked = false;
                     appConfig.SetExperimentFlag(dependent.Option, false);

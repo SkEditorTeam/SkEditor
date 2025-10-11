@@ -104,8 +104,8 @@ public class LocalProvider : IDocProvider
         string content = await File.ReadAllTextAsync(file);
 
         _localDocs = [];
-        
-        var localDocs = JsonConvert.DeserializeObject<List<LocalDocEntry>>(content) ?? [];
+
+        List<LocalDocEntry> localDocs = JsonConvert.DeserializeObject<List<LocalDocEntry>>(content) ?? [];
         _localDocs.AddRange(localDocs);
     }
 

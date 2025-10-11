@@ -34,9 +34,9 @@ public partial class ThemePage : UserControl
             ThemeComboBox.Items.Add(item);
         }
 
-        ThemeComboBox.SelectedItem = 
-            ThemeComboBox.Items.FirstOrDefault(x => 
-                x is ComboBoxItem { Tag: not null } item && 
+        ThemeComboBox.SelectedItem =
+            ThemeComboBox.Items.FirstOrDefault(x =>
+                x is ComboBoxItem { Tag: not null } item &&
                 item.Tag.Equals(ThemeEditor.CurrentTheme.FileName));
 
         ThemeComboBox.SelectionChanged += (_, _) =>
@@ -45,8 +45,11 @@ public partial class ThemePage : UserControl
             {
                 ComboBoxItem? item = (ComboBoxItem?)ThemeComboBox.SelectedItem;
                 Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(item?.Tag));
-                if (theme == null) return;
-                
+                if (theme == null)
+                {
+                    return;
+                }
+
                 _ = ThemeEditor.SetTheme(theme);
                 SettingsWindow.Instance.Theme = ThemeEditor.SmallWindowTheme;
             });

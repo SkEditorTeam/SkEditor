@@ -59,9 +59,9 @@ public static class AddonLoader
         {
             ContentDialogResult response =
                 await SkEditorAPI.Windows.ShowDialog(Translation.Get("AddonLoadErrorsTitle"),
-                                                     Translation.Get("AddonLoadErrors", [errorCount.ToString()]),
-                                                     Symbol.AlertUrgent, Translation.Get("CancelButton"),
-                                                     Translation.Get("Yes"));
+                    Translation.Get("AddonLoadErrors", errorCount.ToString()),
+                    Symbol.AlertUrgent, Translation.Get("CancelButton"),
+                    Translation.Get("Yes"));
 
             if (response == ContentDialogResult.Primary)
             {
@@ -133,9 +133,9 @@ public static class AddonLoader
         catch (Exception e)
         {
             string name = Path.GetFileNameWithoutExtension(dllFile);
-            
+
             SkEditorAPI.Logs.Error($"Failed to load addon from \"{dllFile}\": {e.Message}\n{e.StackTrace}");
-            
+
             await SkEditorAPI.Windows.ShowError(
                 $"Failed to load addon '{name}'.\n\n" +
                 "Check the application logs for detailed error information. " +
@@ -153,9 +153,9 @@ public static class AddonLoader
                 SkEditorAPI.Logs.Warning($"Failed to load addon from \"{dllFile}\": Multiple addon classes found.");
                 return;
         }
-        
+
         IAddon? addonInstance = addonInstances[0];
-        
+
         if (addonInstance is null)
         {
             SkEditorAPI.Logs.Warning(
@@ -209,7 +209,7 @@ public static class AddonLoader
         {
             addon = (IAddon?)Activator.CreateInstance(addonClass);
         }
-        
+
         if (addon == null)
         {
             SkEditorAPI.Logs.Error($"Failed to load addon \"{addonClass.Name}\": The addon class is null.");

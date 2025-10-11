@@ -49,8 +49,11 @@ public static class ColoredTextHandler
         textBox.TextChanged += (_, _) =>
         {
             string? text = textBox.Text;
-            if (string.IsNullOrEmpty(text)) return;
-            
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
             List<FormattedText> formattedTexts = ParseFormattedText(text);
             StackPanel panel = new() { Orientation = Orientation.Horizontal };
             foreach (TextBlock block in formattedTexts.Select(formattedText => new TextBlock
@@ -60,7 +63,7 @@ public static class ColoredTextHandler
                          FontWeight = formattedText.FontWeight,
                          FontStyle = formattedText.FontStyle,
                          TextDecorations = new TextDecorationCollection(formattedText.TextDecorations),
-                         FontFamily = GetMinecraftFont() ?? new FontFamily("Arial"),
+                         FontFamily = GetMinecraftFont() ?? new FontFamily("Arial")
                      }))
             {
                 panel.Children.Add(block);

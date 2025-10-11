@@ -71,8 +71,12 @@ public class OpenedFile
             {
                 CustomData.Remove(data);
             }
-            
-            if (value == null) return;
+
+            if (value == null)
+            {
+                return;
+            }
+
             CustomData.Add(new CustomFileData(key, value));
         }
     }

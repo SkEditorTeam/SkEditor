@@ -60,7 +60,10 @@ public partial class CodeSection
     }
 
     public HashSet<CodeVariable> Variables { get; private set; } = []; // Case of any section other than options
-    public HashSet<CodeOptionReference> OptionReferences { get; private set; } = []; // Case of any section other than options
+
+    public HashSet<CodeOptionReference> OptionReferences { get; private set; } =
+        []; // Case of any section other than options
+
     public HashSet<CodeOption> Options { get; private set; } = []; // Case of options section
 
     public HashSet<CodeVariable> UniqueVariables => GetUniqueVariables();

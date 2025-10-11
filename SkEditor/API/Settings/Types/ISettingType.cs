@@ -16,7 +16,7 @@ public interface ISettingType
     ///     Check if this type is self-managed, meaning SkEditor
     ///     will not handle setting save and change events.
     /// </summary>
-    public bool IsSelfManaged { get; }
+    bool IsSelfManaged { get; }
 
     /// <summary>
     ///     Deserialize a setting value from a JSON object. The given
@@ -24,7 +24,7 @@ public interface ISettingType
     /// </summary>
     /// <param name="value">The JSON object/array/value to deserialize.</param>
     /// <returns>The deserialized value.</returns>
-    public object? Deserialize(JToken value);
+    object? Deserialize(JToken value);
 
     /// <summary>
     ///     Serialize a setting value to a JSON object. The returned
@@ -32,7 +32,7 @@ public interface ISettingType
     /// </summary>
     /// <param name="value">The value to serialize.</param>
     /// <returns>The serialized JSON object/array/value.</returns>
-    public JToken Serialize(object value);
+    JToken Serialize(object value);
 
     /// <summary>
     ///     Create a user control to edit the setting value.
@@ -40,7 +40,7 @@ public interface ISettingType
     /// <param name="value">The current value of the setting.</param>
     /// <param name="onChanged">The action to call when the value changes.</param>
     /// <returns>The created control.</returns>
-    public Control CreateControl(object value, Action<object?> onChanged);
+    Control CreateControl(object value, Action<object?> onChanged);
 
     /// <summary>
     ///     Make custom modifications to the displayed setting expander.
@@ -49,7 +49,7 @@ public interface ISettingType
     /// </summary>
     /// <param name="expander">The expander to modify.</param>
     /// <param name="setting">The setting that the expander represents.</param>
-    public void SetupExpander(SettingsExpander expander, Setting setting)
+    void SetupExpander(SettingsExpander expander, Setting setting)
     {
     }
 }

@@ -15,7 +15,6 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
-using SkEditor.Views;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 
@@ -91,9 +90,9 @@ public class App : Application
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                     _splashScreen?.UpdateStatus("Starting named pipe server..."));
-                
+
                 NamedPipeServer.Start();
-                
+
                 await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Initializing main window..."));
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
@@ -111,13 +110,13 @@ public class App : Application
                     return;
                 }
 
-                var flattenedException = t.Exception.Flatten();
-                var innermost = flattenedException.InnerExceptions.FirstOrDefault() ?? flattenedException;
-    
-                Log.Error(t.Exception, "Error creating SkEditor: {ExceptionMessage}\nStack Trace: {StackTrace}", 
-                    innermost.Message, 
+                AggregateException flattenedException = t.Exception.Flatten();
+                Exception innermost = flattenedException.InnerExceptions.FirstOrDefault() ?? flattenedException;
+
+                Log.Error(t.Exception, "Error creating SkEditor: {ExceptionMessage}\nStack Trace: {StackTrace}",
+                    innermost.Message,
                     innermost.StackTrace);
-                
+
                 Dispatcher.UIThread.Post(() =>
                 {
                     _splashScreen?.UpdateStatus(
@@ -131,7 +130,6 @@ public class App : Application
         }
         catch (Exception ex)
         {
-            
             Log.Error(ex, "Error creating SkEditor");
             _splashScreen?.UpdateStatus($"Error: {ex.Message}");
 

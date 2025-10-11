@@ -11,8 +11,8 @@
         WindowStartupLocation="CenterOwner"
         Theme="{StaticResource SmallWindowTheme}">
     <Grid Margin="25"
-                         RowDefinitions="Auto,*,Auto" RowSpacing="20"
-                         ColumnDefinitions="*,*" ColumnSpacing="10">
+          RowDefinitions="Auto,*,Auto" RowSpacing="20"
+          ColumnDefinitions="*,*" ColumnSpacing="10">
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
                     Spacing="5" Orientation="Vertical">
             <TextBlock TextAlignment="Center" HorizontalAlignment="Stretch" Text="Application Crash"
