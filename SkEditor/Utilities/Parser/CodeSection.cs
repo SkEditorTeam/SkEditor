@@ -12,6 +12,8 @@ using AvaloniaEdit.Rendering;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.Styling;
+using Symbol = FluentIcons.Common.Symbol;
+using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Parser;
 
@@ -78,10 +80,10 @@ public partial class CodeSection
 
     public IconSource? Icon => Type switch
     {
-        SectionType.Command => GetIconFromName("MagicWandIcon"),
-        SectionType.Event => GetIconFromName("LightingIcon"),
-        SectionType.Function => GetIconFromName("FunctionIcon"),
-        SectionType.Options => new SymbolIconSource { Symbol = Symbol.Setting, FontSize = 22 },
+        SectionType.Command => new SymbolIconSource { Symbol = Symbol.Wand, FontSize = 22 },
+        SectionType.Event => new SymbolIconSource { Symbol = Symbol.Flash, FontSize = 22 },
+        SectionType.Function => new SymbolIconSource { Symbol = Symbol.MathFormula, FontSize = 22 },
+        SectionType.Options => new SymbolIconSource { Symbol = Symbol.Settings, FontSize = 22 },
         _ => throw new NotImplementedException()
     };
 

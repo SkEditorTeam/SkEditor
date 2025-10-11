@@ -13,7 +13,6 @@ public partial class SettingsTitle : UserControl
     public SettingsTitle()
     {
         InitializeComponent();
-        DataContext = this;
 
         Loaded += (_, _) =>
         {

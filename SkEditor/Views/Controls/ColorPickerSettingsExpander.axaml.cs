@@ -11,8 +11,6 @@ public partial class ColorPickerSettingsExpander : UserControl
     public ColorPickerSettingsExpander()
     {
         InitializeComponent();
-
-        DataContext = this;
     }
 
     public string ExpanderHeader
