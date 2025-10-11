@@ -13,7 +13,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <BaseVersion>2.9.3</BaseVersion>
+        <BaseVersion>2.9.4</BaseVersion>
         <Version>$(BaseVersion)$(BuildSuffix)</Version>
         <InformationalVersion>$(BaseVersion)$(BuildSuffix)</InformationalVersion>
         <AssemblyVersion>$(BaseVersion)</AssemblyVersion>
