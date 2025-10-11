@@ -88,6 +88,8 @@ public partial class CustomAddonSettingsPage : UserControl
 
                         SkEditorAPI.Events.AddonSettingChanged(setting,
                             capturedValueForLambda ?? setting.DefaultValue);
+
+                        capturedValueForLambda = newValue;
                     }
 
                     setting.OnChanged?.Invoke(newValue ?? setting.DefaultValue);
