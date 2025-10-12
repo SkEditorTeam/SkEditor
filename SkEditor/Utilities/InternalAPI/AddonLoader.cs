@@ -11,6 +11,7 @@ using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.InternalAPI.Classes;
 using AddonsPage = SkEditor.Views.Windows.Settings.AddonsPage;
 using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Utilities.InternalAPI;
 

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Views.Windows.Marketplace;
 using SkEditor.Views.Windows.Marketplace.Types;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Utilities;
 

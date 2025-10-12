@@ -2,11 +2,12 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
 using LoreLineEditor = SkEditor.Views.Controls.LoreLineEditor;
+using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 

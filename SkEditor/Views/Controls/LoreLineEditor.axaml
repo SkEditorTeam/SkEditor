@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
              x:Class="SkEditor.Views.Controls.LoreLineEditor">
 
     <Grid Width="280" ColumnDefinitions="*,auto">

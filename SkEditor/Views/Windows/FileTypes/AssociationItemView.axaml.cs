@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using FluentAvalonia.UI.Controls;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows.FileTypes;
 
@@ -15,8 +15,6 @@ public partial class AssociationItemView : UserControl
     public AssociationItemView()
     {
         InitializeComponent();
-
-        DataContext = this;
     }
 
     public string? Source

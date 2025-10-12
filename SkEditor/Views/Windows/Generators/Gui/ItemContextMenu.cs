@@ -6,6 +6,8 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
+using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
@@ -20,7 +22,7 @@ internal class ItemContextMenu
 
         MenuItem copyItem = CreateMenuItem("MenuHeaderCopy", Symbol.Copy, () => CopyItem(slot));
 
-        MenuItem pasteItem = CreateMenuItem("MenuHeaderPaste", Symbol.Paste, () => PasteItem(slot));
+        MenuItem pasteItem = CreateMenuItem("MenuHeaderPaste", Symbol.Clipboard, () => PasteItem(slot));
 
         MenuItem deleteItem = CreateMenuItem("MenuHeaderDelete", Symbol.Delete, () => DeleteItem(slot));
 

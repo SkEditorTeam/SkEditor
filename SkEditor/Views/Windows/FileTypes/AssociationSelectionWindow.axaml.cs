@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Input;
-using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows.FileTypes;
 

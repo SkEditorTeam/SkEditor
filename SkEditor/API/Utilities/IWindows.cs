@@ -29,7 +29,7 @@ public interface IWindows
     /// </summary>
     /// <param name="title">The dialog's title.</param>
     /// <param name="message">The dialog's message.</param>
-    /// <param name="icon">The dialog's icon. Can be null.</param>
+    /// <param name="icon">The dialog's icon. Can be null. Use FluentIcons for best results.</param>
     /// <param name="cancelButtonText">The text of the cancel button. If null, no cancel button will be shown.</param>
     /// <param name="primaryButtonText">The text of the primary button. Default is "Okay", <b>cannot be null</b></param>
     /// <param name="translate">Whether to try translate the title</param>

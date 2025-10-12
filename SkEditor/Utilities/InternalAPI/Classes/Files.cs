@@ -373,7 +373,7 @@ public class Files : IFiles
                 {
                     ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog("BinaryFileTitle",
                         "BinaryFileFound",
-                        cancelButtonText: "Cancel", icon: FluentAvalonia.UI.Controls.Symbol.Code);
+                        cancelButtonText: "Cancel", icon: Symbol.Code);
                     if (response != ContentDialogResult.Primary)
                     {
                         return;

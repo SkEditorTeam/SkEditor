@@ -13,7 +13,6 @@ public partial class LoreLineEditor : UserControl
     {
         InitializeComponent();
 
-        DataContext = this;
         ColoredTextHandler.SetupBox(LineTextBox);
     }
 
