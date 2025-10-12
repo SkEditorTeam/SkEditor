@@ -240,6 +240,24 @@ public class Windows : IWindows
             _ => icon
         };
 
+        if (icon is FluentAvalonia.UI.Controls.Symbol fluentAvaloniaSymbol)
+        {
+            string name = fluentAvaloniaSymbol.ToString();
+            Symbol? symbol = Enum.TryParse(name, out Symbol parsedSymbol) ? parsedSymbol : null;
+            if (symbol is not null)
+            {
+                icon = new SymbolIconSource { Symbol = symbol.Value, FontSize = DialogIconSize };
+            }
+            else
+            {
+                icon = new FluentAvalonia.UI.Controls.SymbolIconSource
+                {
+                    Symbol = fluentAvaloniaSymbol,
+                    FontSize = DialogIconSize
+                };
+            }
+        }
+
         if (icon is SymbolIconSource symbolIconSource)
         {
             symbolIconSource.FontSize = DialogIconSize;
