@@ -64,13 +64,26 @@ public static class AddonSettingsManager
 
     private static void SaveSettings(IAddon addon)
     {
-        if (!LoadedAddonSettings.TryGetValue(addon, out JObject? value))
+        if (!LoadedAddonSettings.TryGetValue(addon, out JObject? addonSettings))
         {
             return;
         }
 
         string path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
-        string json = value.ToString();
+
+        string currentJson = File.ReadAllText(path);
+        
+        JObject currentSettings = JObject.Parse(currentJson);
+
+        foreach (Setting setting in addon.GetSettings())
+        {
+            if (!setting.Type.IsSelfManaged && addonSettings.TryGetValue(setting.Key, out JToken? value))
+            {
+                currentSettings[setting.Key] = value;
+            }
+        }
+        
+        string json = currentSettings.ToString();
         File.WriteAllText(path, json);
     }
 
