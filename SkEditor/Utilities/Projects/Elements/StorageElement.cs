@@ -24,7 +24,7 @@ public abstract class StorageElement
     public bool IsFile { get; set; }
     public bool IsRootFolder { get; set; }
 
-    public IconSource Icon { get; set; } = new SymbolIconSource { Symbol = Symbol.Document, FontSize = 18 };
+    public IconSource Icon { get; set; } = new SymbolIconSource { Symbol = Symbol.Document, FontSize = 20 };
 
     public IRelayCommand? OpenInExplorerCommand { get; set; }
     public IRelayCommand RenameCommand => new AsyncRelayCommand(OpenRenameWindow);

@@ -49,8 +49,8 @@
                                 </EventTriggerBehavior>
                             </Interaction.Behaviors>
                             <ui:IconSourceElement HorizontalAlignment="Left" VerticalAlignment="Center"
-                                                  IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="18"
-                                                  Height="18" />
+                                                  IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="20"
+                                                  Height="20" />
                             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding Name}" />
 
                             <StackPanel.ContextFlyout>
