@@ -24,6 +24,7 @@ public partial class MainWindow : AppWindow
 {
     private readonly SplashScreen? _splashScreen;
     private bool _isFullyLoaded;
+    private WindowState _preFullScreenState;
 
     public MainWindow(SplashScreen? splashScreen = null)
     {
@@ -72,6 +73,30 @@ public partial class MainWindow : AppWindow
                 {
                     TerminalWindow terminal = new();
                     terminal.Show();
+                    break;
+                }
+                case { Key: Key.F11 }:
+                {
+                    Dispatcher.UIThread.InvokeAsync(async () =>
+                    {
+                        if (WindowState == WindowState.FullScreen)
+                        {
+                            WindowState = WindowState.Normal;
+                            await Task.Delay(10); 
+                            WindowState = _preFullScreenState;
+                        }
+                        else
+                        {
+                            _preFullScreenState = WindowState;
+                            if (_preFullScreenState == WindowState.Maximized)
+                            {
+                                WindowState = WindowState.Normal;
+                                await Task.Delay(10);
+                            }
+                            WindowState = WindowState.FullScreen;
+                        }
+                    });
+                    
                     break;
                 }
             }
