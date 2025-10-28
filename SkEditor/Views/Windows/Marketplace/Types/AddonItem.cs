@@ -101,7 +101,7 @@ public class AddonItem : MarketplaceItem
         return SkEditorAPI.Addons.GetAddon(addonIdentifier);
     }
 
-    public async Task Update()
+    public virtual async Task Update()
     {
         IAddon? addon = GetAddon();
         if (addon == null)

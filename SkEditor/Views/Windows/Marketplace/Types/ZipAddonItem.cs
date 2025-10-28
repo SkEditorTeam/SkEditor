@@ -4,11 +4,11 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.InternalAPI;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -22,16 +22,19 @@ public class ZipAddonItem : AddonItem
     {
         string fileName = ItemFileUrl.Split('/').Last();
         string filePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, fileName);
-
-        using HttpClient client = new();
-        HttpResponseMessage response = await client.GetAsync(ItemFileUrl);
+        
         try
         {
+            using HttpClient client = new();
+            HttpResponseMessage response = await client.GetAsync(ItemFileUrl);
             await using Stream stream = await response.Content.ReadAsStreamAsync();
             await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
+            fileStream.Close();
+            stream.Close();
 
-            ZipFile.ExtractToDirectory(filePath, Path.Combine(AppConfig.AppDataFolderPath, FolderName));
+            var addonFolderName = Path.GetFileNameWithoutExtension(filePath);
+            ZipFile.ExtractToDirectory(filePath, Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonFolderName));
             File.Delete(filePath);
 
             string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
@@ -48,10 +51,7 @@ public class ZipAddonItem : AddonItem
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
                 new SymbolIconSource { Symbol = Symbol.Checkmark }, primaryButtonText: "Okay");
 
-            MarketplaceWindow.Instance.HideAllButtons();
-            MarketplaceWindow.Instance.ItemView.UninstallButton.IsVisible = true;
-            MarketplaceWindow.Instance.ItemView.DisableButton.IsVisible = true;
-            RunAddon();
+            await EnableAddon();
         }
         catch (Exception e)
         {
@@ -59,9 +59,11 @@ public class ZipAddonItem : AddonItem
             await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"),
                 Translation.Get("MarketplaceInstallFailed", ItemName));
         }
+        
+        Marketplace.RefreshCurrentSelection();
     }
 
-    private void RunAddon()
+    private async Task EnableAddon()
     {
         if (ItemRequiresRestart)
         {
@@ -77,66 +79,45 @@ public class ZipAddonItem : AddonItem
             return;
         }
 
-        Dispatcher.UIThread.Post(() =>
+        await AddonLoader.LoadAddonFromFile(addonDirectory);
+    }
+
+    public override Task Uninstall()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override bool IsInstalled()
+    {
+        return GetAddon() != null;
+    }
+    
+    public new IAddon? GetAddon()
+    {
+        string fileName = ItemFileUrl.Split('/').Last();
+        string addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
+
+        return SkEditorAPI.Addons.GetAddon(addonIdentifier);
+    }
+
+    public override async Task Update()
+    {
+        var addon = GetAddon();
+
+        if (addon == null)
         {
-            string packagesFolder = Path.Combine(addonDirectory, "Packages");
-            if (Directory.Exists(packagesFolder))
-            {
-                //AddonLoader.LoadAddonsFromFolder(packagesFolder);
-            }
-            /*List<Assembly> assemblies = AddonLoader.LoadAddonsFromFolder(addonDirectory);
+            return;
+        }
 
-            assemblies.ForEach(assembly =>
-            {
-                if (assembly.GetTypes().FirstOrDefault(p => typeof(IAddon).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract) is Type addonType)
-                {
-                    IAddon addon = (IAddon)Activator.CreateInstance(addonType);
-                    AddonLoader.EnabledAddons.Add(addon);
-                    addon.OnEnable();
-                }
-                else
-                {
-                    Log.Error($"Failed to enable addon '{ItemName}'!");
-                }
-            });*/
-        });
-    }
+        await AddonLoader.DeleteAddon(addon);
 
-    public override async Task Uninstall()
-    {
-        MarketplaceWindow.Instance.ItemView.UninstallButton.IsEnabled = false;
+        var addonFolderPath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, addon.Identifier);
 
-        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
-            Translation.Get("MarketplaceUninstallSuccess", ItemName),
-            new SymbolIconSource { Symbol = Symbol.Checkmark }, primaryButtonText: "Okay");
-    }
+        Directory.Delete(addonFolderPath, true);
 
-    public async Task Update()
-    {
-        string fileName = "updated-" + ItemFileUrl.Split('/').Last();
+        await Install();
+
         SkEditorAPI.Core.GetAppConfig().Save();
-        MarketplaceWindow.Instance.ItemView.UpdateButton.IsEnabled = false;
-
-        string filePath = Path.Combine(AppConfig.AppDataFolderPath, "Addons", fileName);
-
-        using HttpClient client = new();
-        HttpResponseMessage response = await client.GetAsync(ItemFileUrl);
-
-        try
-        {
-            await using Stream stream = await response.Content.ReadAsStreamAsync();
-            await using FileStream fileStream = File.Create(filePath);
-            await stream.CopyToAsync(fileStream);
-
-            await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
-                Translation.Get("MarketplaceUpdateSuccess", ItemName),
-                new SymbolIconSource { Symbol = Symbol.Checkmark }, primaryButtonText: "Okay");
-        }
-        catch
-        {
-            await SkEditorAPI.Windows.ShowMessage(Translation.Get("Error"),
-                Translation.Get("MarketplaceUpdateFailed", ItemName));
-        }
     }
 
     public void Disable()
@@ -152,6 +133,6 @@ public class ZipAddonItem : AddonItem
         MarketplaceWindow.Instance.ItemView.DisableButton.IsVisible = true;
         MarketplaceWindow.Instance.ItemView.EnableButton.IsVisible = false;
 
-        RunAddon();
+        _ = EnableAddon();
     }
 }
