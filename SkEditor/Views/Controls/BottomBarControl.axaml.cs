@@ -82,11 +82,16 @@ public partial class BottomBarControl : UserControl
 
         StackPanel CreatePanel(BottomIconData iconData, Button? button)
         {
-            IconSourceElement iconElement = new()
+            Viewbox viewbox = new()
             {
                 Width = 18,
-                Height = 18
+                Height = 18,
+                IsVisible = iconData.IconSource != null
             };
+            IconSourceElement iconElement = new();
+            
+            viewbox.Child = iconElement;
+            
             TextBlock textElement = new();
             iconData.Setup(button, textElement, iconElement);
 
@@ -96,7 +101,7 @@ public partial class BottomBarControl : UserControl
                 Spacing = 5,
                 Children =
                 {
-                    iconElement,
+                    viewbox,
                     textElement
                 }
             };

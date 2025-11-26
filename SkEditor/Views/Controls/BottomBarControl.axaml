@@ -26,7 +26,6 @@
         <Style Selector="ui|IconSourceElement">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Foreground" Value="#ceffffff" />
-            <Setter Property="Height" Value="16" />
 
             <Style Selector="^:disabled">
                 <Setter Property="OpacityMask" Value="White" />
