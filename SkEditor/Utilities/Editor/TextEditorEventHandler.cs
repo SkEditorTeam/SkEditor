@@ -260,7 +260,7 @@ public partial class TextEditorEventHandler
 
             foreach (Match match in matches.Cast<Match>())
             {
-                string hex = match.Value.Contains("##") ? match.Value[2..^1] : match.Value[1..^1];
+                string hex = match.Value.Contains("color:#") ? match.Value[7..^1] : match.Value.Contains("##") ? match.Value[2..^1] : match.Value[1..^1];
                 bool parsed = Color.TryParse(hex, out Color color);
                 if (!parsed)
                 {
@@ -275,7 +275,7 @@ public partial class TextEditorEventHandler
 
                 HighlightingSpan span = new()
                 {
-                    StartExpression = new Regex("<[#]?" + hex + ">"),
+                    StartExpression = new Regex("<(color:|#)?" + hex + ">"),
                     EndExpression = EmptyRegex(),
                     SpanColor = new HighlightingColor { Foreground = new SimpleHighlightingBrush(color) },
                     RuleSet = ruleSet,
@@ -361,7 +361,7 @@ public partial class TextEditorEventHandler
         e.Text = sb.ToString().Trim();
     }
 
-    [GeneratedRegex(@"<#[#]?(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
+    [GeneratedRegex(@"<(color:|#)?#?(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();
 
     [GeneratedRegex("")]
