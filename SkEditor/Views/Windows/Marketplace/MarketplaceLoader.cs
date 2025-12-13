@@ -31,7 +31,7 @@ public class MarketplaceLoader
                     continue;
                 }
 
-                MarketplaceItem? item = GetItem(itemName);
+                MarketplaceItem? item = await GetItem(itemName);
                 if (item?.ItemName == null)
                 {
                     continue;
@@ -51,15 +51,15 @@ public class MarketplaceLoader
         }
     }
 
-    private static MarketplaceItem? GetItem(string name)
+    private static async Task<MarketplaceItem?> GetItem(string name)
     {
         string url = MarketplaceWindow.MarketplaceUrl + "/items/" + name;
         string manifestUrl = url + "/manifest.json";
         using HttpClient client = new();
-        HttpResponseMessage response = client.GetAsync(manifestUrl).Result;
+        HttpResponseMessage response = await client.GetAsync(manifestUrl);
         if (response.IsSuccessStatusCode)
         {
-            string json = response.Content.ReadAsStringAsync().Result;
+            string json = await response.Content.ReadAsStringAsync();
             MarketplaceItem? item =
                 JsonConvert.DeserializeObject<MarketplaceItem>(json, new MarketplaceItemConverter());
             if (item == null)
