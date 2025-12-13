@@ -37,23 +37,24 @@
         </Style>
     </UserControl.Styles>
 
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="200" Width="200" />
-            <StackPanel Margin="30">
-                <TextBlock Text="SkEditor" FontSize="40" FontWeight="DemiBold" />
-                <TextBlock Name="VersionText" FontSize="26" FontWeight="Normal" Foreground="#ccffffff" />
+    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="8">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="200" Width="200" />
+                <StackPanel Margin="30">
+                    <TextBlock Text="SkEditor" FontSize="40" FontWeight="DemiBold" />
+                    <TextBlock Name="VersionText" FontSize="26" FontWeight="Normal" Foreground="#ccffffff" />
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
 
-        <Grid
-            VerticalAlignment="Center" HorizontalAlignment="Center"
-            Margin="50"
-            Name="WelcomeGrid"
-            ColumnSpacing="100"
-            RowSpacing="15"
-            RowDefinitions="*,*"
-            ColumnDefinitions="*,*" />
-    </StackPanel>
+            <Grid
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                Margin="50"
+                Name="WelcomeGrid"
+                ColumnSpacing="100"
+                RowSpacing="15"
+                RowDefinitions="*,*"
+                ColumnDefinitions="*,*" />
+        </StackPanel>
+    </Viewbox>
 </UserControl>
