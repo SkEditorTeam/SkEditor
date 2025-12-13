@@ -48,7 +48,7 @@ public partial class WelcomeTabControl : UserControl
         StackPanel help = CreateActionSection(Translation.Get("WelcomeTabNeedHelp"),
         [
             new WelcomeEntryData(Translation.Get("WelcomeNeedHelpDiscordServer"), new RelayCommand(() =>
-                SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/")), CreatePathIconSource("DiscordIcon")),
+                SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev")), CreatePathIconSource("DiscordIcon")),
 
             new WelcomeEntryData(Translation.Get("WelcomeNeedHelpGitHub"), new RelayCommand(() =>
                     SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),

@@ -30,6 +30,6 @@ public partial class CrashWindow : AppWindow
 
     public static void OpenDiscord()
     {
-        SkEditorAPI.Core.OpenLink("https://skeditordc.notro.me/");
+        SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev");
     }
 }
