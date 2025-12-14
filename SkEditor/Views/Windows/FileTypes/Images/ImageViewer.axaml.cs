@@ -20,7 +20,7 @@ public partial class ImageViewer : UserControl
 
         AssignCommands();
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public ImageViewer()
     {

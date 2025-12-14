@@ -24,7 +24,8 @@ public class FileHandler
     {
         try
         {
-            string? folder = e.DataTransfer.TryGetFiles()?.FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))?.Path
+            string? folder = e.DataTransfer.TryGetFiles()?.FirstOrDefault(f => Directory.Exists(f.Path.AbsolutePath))
+                ?.Path
                 .AbsolutePath;
             if (folder != null)
             {

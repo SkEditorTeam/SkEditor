@@ -33,7 +33,7 @@ public partial class ExtendedItemSelector : AppWindow
         AssignCommands(item);
         SetContextMenu();
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public ExtendedItemSelector()
     {

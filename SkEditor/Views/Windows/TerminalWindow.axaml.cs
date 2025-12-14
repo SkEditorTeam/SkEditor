@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -21,7 +22,7 @@ public partial class TerminalWindow : AppWindow
     private const char EscapeChar = '\x1b';
     private const string CrSplitPattern = "(?=\r)";
 
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
     private StreamWriter _inputWriter;
     private Process _process;
 
@@ -228,7 +229,7 @@ public partial class TerminalWindow : AppWindow
                 return;
             }
 
-            _inputWriter.WriteLine((string?)InputTextBox.Text);
+            _inputWriter.WriteLine(InputTextBox.Text);
             InputTextBox.Text = string.Empty;
         };
 

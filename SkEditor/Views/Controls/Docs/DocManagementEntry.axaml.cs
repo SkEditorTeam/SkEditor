@@ -19,7 +19,7 @@ public partial class DocManagementEntry : UserControl
         LoadVisuals();
         AssignCommands();
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public DocManagementEntry()
     {

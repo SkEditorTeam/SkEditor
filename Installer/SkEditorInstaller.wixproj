@@ -1,20 +1,20 @@
 <Project Sdk="WixToolset.Sdk/6.0.0">
-  <PropertyGroup>
-    <OutputName>SkEditor</OutputName>
-    <DefineConstants>PublishDir=..\SkEditor\bin\Release\net8.0\win-x64\publish</DefineConstants>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputName>SkEditor</OutputName>
+        <DefineConstants>PublishDir=..\SkEditor\bin\Release\net8.0\win-x64\publish</DefineConstants>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="Assets\Info.ico" />
-    <Content Include="Assets\Warning.ico" />
-  </ItemGroup>
+    <ItemGroup>
+        <Content Include="Assets\Info.ico"/>
+        <Content Include="Assets\Warning.ico"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="WixToolset.UI.wixext" Version="6.0.0"/>
+    </ItemGroup>
 
-  <Target Name="PublishSkEditor" BeforeTargets="BeforeBuild">
-    <Message Importance="high" Text="Publishing SkEditor application..." />
-    <Exec Command="dotnet publish ..\SkEditor\SkEditor.csproj -c Release -r win-x64 /p:PublishReadyToRun=true -p:PublishSingleFile=true --self-contained false" />
-  </Target>
+    <Target Name="PublishSkEditor" BeforeTargets="BeforeBuild">
+        <Message Importance="high" Text="Publishing SkEditor application..."/>
+        <Exec Command="dotnet publish ..\SkEditor\SkEditor.csproj -c Release -r win-x64 /p:PublishReadyToRun=true -p:PublishSingleFile=true --self-contained false"/>
+    </Target>
 </Project>

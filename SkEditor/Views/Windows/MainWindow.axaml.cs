@@ -22,8 +22,8 @@ namespace SkEditor.Views.Windows;
 
 public partial class MainWindow : AppWindow
 {
-    private readonly SplashScreen? _splashScreen;
     private readonly KeyboardShortcutHandler? _shortcutHandler;
+    private readonly SplashScreen? _splashScreen;
 
     private bool _isFullyLoaded;
 

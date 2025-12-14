@@ -107,7 +107,7 @@ public partial class GuiGenerator : AppWindow
 
     private void UpdateRows()
     {
-        if (!int.TryParse((string?)RowQuantityTextBox.Text, out int rows))
+        if (!int.TryParse(RowQuantityTextBox.Text, out int rows))
         {
             return;
         }

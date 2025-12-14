@@ -249,19 +249,13 @@ public partial class TextEditorEventHandler
 
     public static void CheckForHex(TextEditor textEditor)
     {
-        Regex regex = HexRegex();
-
         Dispatcher.UIThread.Post(() =>
         {
-            MatchCollection matches = regex.Matches(textEditor.Text);
+            MatchCollection matches = HexRegex().Matches(textEditor.Text);
 
-            if (textEditor.SyntaxHighlighting == null)
-            {
-                return;
-            }
+            HighlightingRuleSet? ruleSet =
+                textEditor.SyntaxHighlighting?.GetNamedRuleSet("BracedExpressionAndColorsRuleSet");
 
-            HighlightingRuleSet ruleSet =
-                textEditor.SyntaxHighlighting.GetNamedRuleSet("BracedExpressionAndColorsRuleSet");
             if (ruleSet == null)
             {
                 return;
@@ -269,7 +263,8 @@ public partial class TextEditorEventHandler
 
             foreach (Match match in matches.Cast<Match>())
             {
-                string hex = match.Value.Contains("color:#") ? match.Value[7..^1] : match.Value.Contains("##") ? match.Value[2..^1] : match.Value[1..^1];
+                string hex = match.Value.Contains("color:#") ? match.Value[7..^1] :
+                    match.Value.Contains("##") ? match.Value[2..^1] : match.Value[1..^1];
                 bool parsed = Color.TryParse(hex, out Color color);
                 if (!parsed)
                 {
@@ -293,6 +288,8 @@ public partial class TextEditorEventHandler
                 };
 
                 ruleSet.Spans.Add(span);
+
+                SkEditorAPI.Logs.Info($"Added new hex color span for {hex}");
 
                 textEditor.TextArea.TextView.Redraw(match.Index, match.Length);
             }

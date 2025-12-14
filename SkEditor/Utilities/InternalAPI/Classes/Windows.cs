@@ -22,7 +22,7 @@ namespace SkEditor.API;
 public class Windows : IWindows
 {
     private const int DialogIconSize = 32;
-    
+
     private readonly Queue<Func<Task>> _dialogQueue = new();
     private readonly SemaphoreSlim _dialogSemaphore = new(1, 1);
     private volatile bool _isProcessingQueue;

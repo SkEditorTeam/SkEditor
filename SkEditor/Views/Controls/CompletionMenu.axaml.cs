@@ -14,7 +14,7 @@ public partial class CompletionMenu : UserControl
 
         SetItems(completions);
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public CompletionMenu()
     {

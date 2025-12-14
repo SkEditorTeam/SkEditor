@@ -89,9 +89,9 @@ public partial class BottomBarControl : UserControl
                 IsVisible = iconData.IconSource != null
             };
             IconSourceElement iconElement = new();
-            
+
             viewbox.Child = iconElement;
-            
+
             TextBlock textElement = new();
             iconData.Setup(button, textElement, iconElement);
 

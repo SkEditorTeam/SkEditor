@@ -15,7 +15,7 @@ public partial class CrashWindow : AppWindow
         CrashStackTrace.Text = exception;
         AssignCommands();
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public CrashWindow()
     {

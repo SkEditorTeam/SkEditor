@@ -36,63 +36,63 @@ public static class Translation
     public static async Task ChangeLanguage(string language, bool startup = false)
     {
         bool isEnglish = language == "English";
-        
-            if (startup && isEnglish)
-            {
-                // English is a built-in ResourceDictionary, so we don't need to load it at startup.
-                return;
-            }
 
-            foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
-                         translation.Key != "English"))
-            {
-                Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
-                Translations.Remove(translation.Key);
-            }
-            
-            if (isEnglish)
-            {
-                SkEditorAPI.Core.GetAppConfig().Language = "English";
-                SkEditorAPI.Core.GetAppConfig().Save();
-                Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
-                return;
-            }
-        
-            string languageFile = Path.Combine(LanguagesFolder, $"{language}.json").NormalizePathSeparators();
+        if (startup && isEnglish)
+        {
+            // English is a built-in ResourceDictionary, so we don't need to load it at startup.
+            return;
+        }
 
-            if (!File.Exists(languageFile))
-            {
-                SkEditorAPI.Core.GetAppConfig().Language = "English";
-                SkEditorAPI.Core.GetAppConfig().Save();
-                Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
-                return;
-            }
+        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
+                     translation.Key != "English"))
+        {
+            Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
+            Translations.Remove(translation.Key);
+        }
 
-            var bytes = await File.ReadAllBytesAsync(languageFile);
-            
-            var languageDictionary = new ResourceDictionary();
-            LoadToResourceDictionary(bytes, languageDictionary);
-
-            Application.Current?.Resources.MergedDictionaries.Add(languageDictionary);
-            Translations.TryAdd(language, languageDictionary);
-
-            SkEditorAPI.Core.GetAppConfig().Language = language;
+        if (isEnglish)
+        {
+            SkEditorAPI.Core.GetAppConfig().Language = "English";
             SkEditorAPI.Core.GetAppConfig().Save();
-            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
+            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
+            return;
+        }
+
+        string languageFile = Path.Combine(LanguagesFolder, $"{language}.json").NormalizePathSeparators();
+
+        if (!File.Exists(languageFile))
+        {
+            SkEditorAPI.Core.GetAppConfig().Language = "English";
+            SkEditorAPI.Core.GetAppConfig().Save();
+            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
+            return;
+        }
+
+        byte[] bytes = await File.ReadAllBytesAsync(languageFile);
+
+        ResourceDictionary languageDictionary = new();
+        LoadToResourceDictionary(bytes, languageDictionary);
+
+        Application.Current?.Resources.MergedDictionaries.Add(languageDictionary);
+        Translations.TryAdd(language, languageDictionary);
+
+        SkEditorAPI.Core.GetAppConfig().Language = language;
+        SkEditorAPI.Core.GetAppConfig().Save();
+        Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
     }
-    
+
     public static void LoadToResourceDictionary(ReadOnlySpan<byte> jsonUtf8, ResourceDictionary dict)
     {
-        var reader = new Utf8JsonReader(jsonUtf8);
-    
+        Utf8JsonReader reader = new(jsonUtf8);
+
         reader.Read();
-    
+
         while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
         {
-            var key = reader.GetString()!;
+            string key = reader.GetString()!;
             reader.Read();
-            var value = reader.GetString()!;
-        
+            string value = reader.GetString()!;
+
             dict[key] = value;
         }
     }

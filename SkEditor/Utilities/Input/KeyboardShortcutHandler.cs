@@ -10,7 +10,7 @@ namespace SkEditor.Utilities.Input;
 public class KeyboardShortcutHandler(Window window)
 {
     private WindowState _preFullScreenState = WindowState.Normal;
-    
+
     public void Initialize()
     {
         window.KeyDown += OnKeyDown;
@@ -18,7 +18,7 @@ public class KeyboardShortcutHandler(Window window)
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
-        var shortcut = new KeyboardShortcut(e.KeyModifiers, e.Key);
+        KeyboardShortcut shortcut = new(e.KeyModifiers, e.Key);
 
         if (TryExecuteShortcut(shortcut, e))
         {
@@ -52,7 +52,7 @@ public class KeyboardShortcutHandler(Window window)
 
     private static void OpenTerminal()
     {
-        var terminal = new TerminalWindow();
+        TerminalWindow terminal = new();
         terminal.Show();
     }
 

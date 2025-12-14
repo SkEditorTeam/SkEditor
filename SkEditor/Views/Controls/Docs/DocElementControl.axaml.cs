@@ -55,7 +55,7 @@ public partial class DocElementControl : UserControl
                     : entry.EventValues)));
         }
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public DocElementControl()
     {

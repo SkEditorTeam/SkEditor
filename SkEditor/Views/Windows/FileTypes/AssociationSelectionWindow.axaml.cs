@@ -59,7 +59,7 @@ public partial class AssociationSelectionWindow : AppWindow
             }
         };
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public AssociationSelectionWindow()
     {

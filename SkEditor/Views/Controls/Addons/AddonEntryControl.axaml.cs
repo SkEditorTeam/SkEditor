@@ -20,7 +20,7 @@ public partial class AddonEntryControl : UserControl
     private static readonly Color ErrorColor = Color.Parse("#FFFF1C0B");
     private static readonly Color WarningColor = Color.Parse("#FFFFDE5F");
     private static readonly Color InfoColor = Color.Parse("#FFD6E0E6");
-    
+
     private readonly AddonsPage _addonsPage;
 
     public AddonEntryControl(AddonMeta addonMeta, AddonsPage addonsPage)
@@ -32,7 +32,7 @@ public partial class AddonEntryControl : UserControl
         LoadVisuals(addonMeta);
         AssignCommands(addonMeta);
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public AddonEntryControl()
     {
@@ -137,7 +137,7 @@ public partial class AddonEntryControl : UserControl
             {
                 panels.Children.Add(textBlock);
             }
-            
+
             panels.Children.Add(new TextBlock
             {
                 Text = "• Check for updates in the Marketplace or contact the addon developer.",

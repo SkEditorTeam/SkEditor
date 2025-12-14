@@ -6,10 +6,10 @@ namespace SkEditor.Utilities.Styling;
 
 public static class WindowStyler
 {
+    private const int TitleBarHeight = 50;
     private static readonly Color ButtonHoverColor = Color.Parse("#25ffffff");
     private static readonly Color ButtonPressedColor = Color.Parse("#20ffffff");
     private static readonly Color ButtonInactiveColor = Color.Parse("#99ffffff");
-    private const int TitleBarHeight = 50;
 
     public static void Style(AppWindow window)
     {

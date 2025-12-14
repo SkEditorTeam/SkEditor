@@ -47,7 +47,7 @@ public partial class RenameElementWindow : AppWindow
             });
         };
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public RenameElementWindow()
     {

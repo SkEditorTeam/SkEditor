@@ -71,7 +71,7 @@ public partial class GoToLineWindow : AppWindow
         }
 
         int documentLines = editor.Document.LineCount;
-        if (!int.TryParse((string?)GoToLineInput.Text, out int line))
+        if (!int.TryParse(GoToLineInput.Text, out int line))
         {
             GoToLineInput.Text = "";
             return;

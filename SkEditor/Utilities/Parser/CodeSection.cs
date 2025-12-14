@@ -81,7 +81,7 @@ public partial class CodeSection
 
     public string Name => GetSectionName();
 
-    public IconSource? Icon => Type switch
+    public IconSource Icon => Type switch
     {
         SectionType.Command => new SymbolIconSource { Symbol = Symbol.Wand, FontSize = 22 },
         SectionType.Event => new SymbolIconSource { Symbol = Symbol.Flash, FontSize = 22 },

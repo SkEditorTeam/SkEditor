@@ -52,7 +52,7 @@ public partial class CreateStorageElementWindow : AppWindow
             });
         };
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public CreateStorageElementWindow()
     {

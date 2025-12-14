@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 using Symbol = FluentIcons.Common.Symbol;

@@ -43,7 +43,7 @@ public partial class ConnectionEntryControl : UserControl
 
         Expander.IconSource = connectionData.IconSource;
     }
-    
+
     [Obsolete("This constructor is for designer use only.", true)]
     public ConnectionEntryControl()
     {
