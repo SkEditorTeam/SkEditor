@@ -37,7 +37,6 @@ public partial class MainWindow : AppWindow
         _shortcutHandler.Initialize();
 
         WindowStyler.Style(this);
-        TitleBar.Height = 50;
 
         ThemeEditor.LoadThemes();
         AddEvents();
