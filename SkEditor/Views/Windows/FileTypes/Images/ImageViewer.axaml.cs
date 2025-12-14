@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -18,6 +19,12 @@ public partial class ImageViewer : UserControl
             $"{Path.GetExtension(path).ToUpper()} Image ({image.Size.Width}x{image.Size.Height} pixels)";
 
         AssignCommands();
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public ImageViewer()
+    {
+        InitializeComponent();
     }
 
     private void AssignCommands()

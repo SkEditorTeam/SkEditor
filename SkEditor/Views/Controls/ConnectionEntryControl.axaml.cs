@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Avalonia.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
@@ -41,5 +42,11 @@ public partial class ConnectionEntryControl : UserControl
         };
 
         Expander.IconSource = connectionData.IconSource;
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public ConnectionEntryControl()
+    {
+        InitializeComponent();
     }
 }

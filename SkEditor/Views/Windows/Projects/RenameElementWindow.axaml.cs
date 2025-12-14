@@ -1,4 +1,5 @@
-﻿using Avalonia.Input;
+﻿using System;
+using Avalonia.Input;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
@@ -45,6 +46,13 @@ public partial class RenameElementWindow : AppWindow
                 NameBox.SelectionEnd = element.Name.Length;
             });
         };
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public RenameElementWindow()
+    {
+        InitializeComponent();
+        Element = null!;
     }
 
     public StorageElement Element { get; }

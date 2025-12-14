@@ -31,7 +31,7 @@ public class ZipAddonItem : AddonItem
             await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
 
-            ZipFile.ExtractToDirectory(filePath, Path.Combine(AppConfig.AppDataFolderPath, FolderName));
+            await ZipFile.ExtractToDirectoryAsync(filePath, Path.Combine(AppConfig.AppDataFolderPath, FolderName));
             File.Delete(filePath);
 
             string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
@@ -111,7 +111,7 @@ public class ZipAddonItem : AddonItem
             new SymbolIconSource { Symbol = Symbol.Checkmark }, primaryButtonText: "Okay");
     }
 
-    public async Task Update()
+    public new async Task Update()
     {
         string fileName = "updated-" + ItemFileUrl.Split('/').Last();
         SkEditorAPI.Core.GetAppConfig().Save();

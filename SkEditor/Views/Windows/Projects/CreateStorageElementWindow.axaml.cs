@@ -1,4 +1,5 @@
-﻿using Avalonia.Input;
+﻿using System;
+using Avalonia.Input;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
@@ -50,6 +51,13 @@ public partial class CreateStorageElementWindow : AppWindow
                 NameTextBox.SelectionEnd = placeholder.Length;
             });
         };
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public CreateStorageElementWindow()
+    {
+        InitializeComponent();
+        Folder = null!;
     }
 
     public Folder Folder { get; }

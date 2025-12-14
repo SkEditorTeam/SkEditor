@@ -1,4 +1,5 @@
-﻿using Avalonia.Input;
+﻿using System;
+using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
@@ -27,6 +28,13 @@ public partial class SymbolRefactorWindow : AppWindow
                 Close();
             }
         };
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public SymbolRefactorWindow()
+    {
+        InitializeComponent();
+        Element = null!;
     }
 
     public INameableCodeElement Element { get; }

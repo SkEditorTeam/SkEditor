@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -31,6 +32,13 @@ public partial class ExtendedItemSelector : AppWindow
 
         AssignCommands(item);
         SetContextMenu();
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public ExtendedItemSelector()
+    {
+        InitializeComponent();
+        _item = null!;
     }
 
     private void AssignCommands(Item item)

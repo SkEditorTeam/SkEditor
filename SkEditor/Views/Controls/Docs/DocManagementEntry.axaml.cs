@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
@@ -17,6 +18,13 @@ public partial class DocManagementEntry : UserControl
 
         LoadVisuals();
         AssignCommands();
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public DocManagementEntry()
+    {
+        InitializeComponent();
+        _entry = null!;
     }
 
     public void LoadVisuals()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Avalonia.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
@@ -57,6 +58,12 @@ public partial class AssociationSelectionWindow : AppWindow
                 Close();
             }
         };
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public AssociationSelectionWindow()
+    {
+        InitializeComponent();
     }
 
     public Utilities.Files.FileTypes.FileAssociation? SelectedAssociation { get; set; }

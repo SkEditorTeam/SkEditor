@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -30,6 +31,13 @@ public partial class AddonEntryControl : UserControl
 
         LoadVisuals(addonMeta);
         AssignCommands(addonMeta);
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public AddonEntryControl()
+    {
+        InitializeComponent();
+        _addonsPage = null!;
     }
 
     public void AssignCommands(AddonMeta addonMeta)

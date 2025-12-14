@@ -24,15 +24,19 @@ public partial class MainWindow : AppWindow
 {
     private readonly SplashScreen? _splashScreen;
     private readonly KeyboardShortcutHandler? _shortcutHandler;
-    
+
     private bool _isFullyLoaded;
+
+    public MainWindow() : this(null)
+    {
+    }
 
     public MainWindow(SplashScreen? splashScreen = null)
     {
         _splashScreen = splashScreen;
 
         InitializeComponent();
-        
+
         _shortcutHandler = new KeyboardShortcutHandler(this);
         _shortcutHandler.Initialize();
 
@@ -124,7 +128,7 @@ public partial class MainWindow : AppWindow
             SkEditorAPI.Core.GetAppConfig().Save();
         }
     }
-    
+
     protected override void OnClosed(EventArgs e)
     {
         _shortcutHandler?.Dispose();
@@ -145,7 +149,7 @@ public partial class MainWindow : AppWindow
         try
         {
             await Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language, true);
-            
+
             _splashScreen?.UpdateStatus("Loading themes and addons...");
 
             Task themeTask = ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);

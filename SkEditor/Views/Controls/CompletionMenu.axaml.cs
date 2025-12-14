@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Threading;
@@ -12,6 +13,12 @@ public partial class CompletionMenu : UserControl
         InitializeComponent();
 
         SetItems(completions);
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public CompletionMenu()
+    {
+        InitializeComponent();
     }
 
     public void SetItems(IEnumerable<CompletionItem> completions)

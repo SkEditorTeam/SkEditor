@@ -1,4 +1,5 @@
-﻿using Avalonia.Input;
+﻿using System;
+using Avalonia.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 
@@ -13,6 +14,12 @@ public partial class CrashWindow : AppWindow
 
         CrashStackTrace.Text = exception;
         AssignCommands();
+    }
+    
+    [Obsolete("This constructor is for designer use only.", true)]
+    public CrashWindow()
+    {
+        InitializeComponent();
     }
 
     public void AssignCommands()
