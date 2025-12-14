@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 
 namespace SkEditor.Utilities;
 
 public static class Translation
 {
     private static readonly Dictionary<string, ResourceDictionary> Translations = [];
-    public static string LanguagesFolder { get; } = $"{AppContext.BaseDirectory}/Languages";
+    public static string LanguagesFolder { get; } = Path.Combine(AppContext.BaseDirectory, "Languages");
 
     public static string Get(string key, params string?[] parameters)
     {
@@ -36,51 +37,63 @@ public static class Translation
     {
         bool isEnglish = language == "English";
         
-        if (startup && isEnglish)
-        {
-            // English is a built-in ResourceDictionary, so we don't need to load it at startup.
-            return;
-        }
+            if (startup && isEnglish)
+            {
+                // English is a built-in ResourceDictionary, so we don't need to load it at startup.
+                return;
+            }
 
-        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
-                     translation.Key != "English"))
-        {
-            Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
-            Translations.Remove(translation.Key);
-        }
+            foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
+                         translation.Key != "English"))
+            {
+                Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
+                Translations.Remove(translation.Key);
+            }
             
-        if (isEnglish)
-        {
-            SkEditorAPI.Core.GetAppConfig().Language = "English";
+            if (isEnglish)
+            {
+                SkEditorAPI.Core.GetAppConfig().Language = "English";
+                SkEditorAPI.Core.GetAppConfig().Save();
+                Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
+                return;
+            }
+        
+            string languageFile = Path.Combine(LanguagesFolder, $"{language}.json").NormalizePathSeparators();
+
+            if (!File.Exists(languageFile))
+            {
+                SkEditorAPI.Core.GetAppConfig().Language = "English";
+                SkEditorAPI.Core.GetAppConfig().Save();
+                Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
+                return;
+            }
+
+            var bytes = await File.ReadAllBytesAsync(languageFile);
+            
+            var languageDictionary = new ResourceDictionary();
+            LoadToResourceDictionary(bytes, languageDictionary);
+
+            Application.Current?.Resources.MergedDictionaries.Add(languageDictionary);
+            Translations.TryAdd(language, languageDictionary);
+
+            SkEditorAPI.Core.GetAppConfig().Language = language;
             SkEditorAPI.Core.GetAppConfig().Save();
-            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
-            return;
-        }
-
-#if !AOT
-
-        Uri languageXaml = new(Path.Combine(LanguagesFolder, $"{language}.xaml"));
-
-        if (!File.Exists(languageXaml.OriginalString))
+            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
+    }
+    
+    public static void LoadToResourceDictionary(ReadOnlySpan<byte> jsonUtf8, ResourceDictionary dict)
+    {
+        var reader = new Utf8JsonReader(jsonUtf8);
+    
+        reader.Read();
+    
+        while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
         {
-            SkEditorAPI.Core.GetAppConfig().Language = "English";
-            SkEditorAPI.Core.GetAppConfig().Save();
-            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
-            return;
+            var key = reader.GetString()!;
+            reader.Read();
+            var value = reader.GetString()!;
+        
+            dict[key] = value;
         }
-
-        await using FileStream languageStream = new(languageXaml.OriginalString, FileMode.Open, FileAccess.Read,
-            FileShare.ReadWrite, 16384, FileOptions.Asynchronous);
-
-        if (AvaloniaRuntimeXamlLoader.Load(languageStream) is ResourceDictionary dictionary)
-        {
-            Application.Current?.Resources.MergedDictionaries.Add(dictionary);
-            Translations.TryAdd(language, dictionary);
-        }
-
-        SkEditorAPI.Core.GetAppConfig().Language = language;
-        SkEditorAPI.Core.GetAppConfig().Save();
-        Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
-#endif
     }
 }

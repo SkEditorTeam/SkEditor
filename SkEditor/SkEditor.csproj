@@ -39,25 +39,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Languages\**">
+        <Content Include="Languages\**" Exclude="Languages\English.xaml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+
+        <AvaloniaResource Include="Languages\English.xaml"/>
     </ItemGroup>
 
     <ItemGroup>
         <None Remove="Assets\JetBrainsMono\JetBrainsMono-Bold.ttf"/>
         <None Remove="Assets\JetBrainsMono\JetBrainsMono-Italic.ttf"/>
         <None Remove="Assets\JetBrainsMono\JetBrainsMono-Regular.ttf"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Update="Languages\*">
-            <Generator>MSBuild:Compile</Generator>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <AvaloniaResource Include="Languages\English.xaml"/>
     </ItemGroup>
 
     <ItemGroup>

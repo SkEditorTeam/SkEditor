@@ -37,8 +37,6 @@ public partial class MainWindow : AppWindow
 
         ThemeEditor.LoadThemes();
         AddEvents();
-        
-        Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language, true).Wait();
 
         Instance = this;
     }
@@ -182,6 +180,8 @@ public partial class MainWindow : AppWindow
     {
         try
         {
+            await Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language, true);
+            
             _splashScreen?.UpdateStatus("Loading themes and addons...");
 
             Task themeTask = ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
