@@ -12,10 +12,10 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Input;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
-using BottomBarControl = SkEditor.Views.Controls.BottomBarControl;
 using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows;
@@ -23,14 +23,18 @@ namespace SkEditor.Views.Windows;
 public partial class MainWindow : AppWindow
 {
     private readonly SplashScreen? _splashScreen;
+    private readonly KeyboardShortcutHandler? _shortcutHandler;
+    
     private bool _isFullyLoaded;
-    private WindowState _preFullScreenState;
 
     public MainWindow(SplashScreen? splashScreen = null)
     {
         _splashScreen = splashScreen;
 
         InitializeComponent();
+        
+        _shortcutHandler = new KeyboardShortcutHandler(this);
+        _shortcutHandler.Initialize();
 
         WindowStyler.Style(this);
         TitleBar.Height = 50;
@@ -45,11 +49,6 @@ public partial class MainWindow : AppWindow
 
     public bool AlreadyClosed { get; set; }
 
-    public BottomBarControl GetBottomBar()
-    {
-        return BottomBar;
-    }
-
     private void AddEvents()
     {
         TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
@@ -59,46 +58,6 @@ public partial class MainWindow : AppWindow
         Closing += OnClosing;
 
         Activated += (_, _) => _ = ChangeChecker.Check();
-
-        KeyDown += (_, e) =>
-        {
-            switch (e)
-            {
-                case { KeyModifiers: KeyModifiers.Control, Key: >= Key.D1 and <= Key.D9 }:
-                    FileHandler.SwitchTab((int)e.Key - 35);
-                    break;
-                case { KeyModifiers: KeyModifiers.Control | KeyModifiers.Shift, Key: Key.Oem3 }:
-                {
-                    TerminalWindow terminal = new();
-                    terminal.Show();
-                    break;
-                }
-                case { Key: Key.F11 }:
-                {
-                    Dispatcher.UIThread.InvokeAsync(async () =>
-                    {
-                        if (WindowState == WindowState.FullScreen)
-                        {
-                            WindowState = WindowState.Normal;
-                            await Task.Delay(10); 
-                            WindowState = _preFullScreenState;
-                        }
-                        else
-                        {
-                            _preFullScreenState = WindowState;
-                            if (_preFullScreenState == WindowState.Maximized)
-                            {
-                                WindowState = WindowState.Normal;
-                                await Task.Delay(10);
-                            }
-                            WindowState = WindowState.FullScreen;
-                        }
-                    });
-                    
-                    break;
-                }
-            }
-        };
 
         AddHandler(DragDrop.DropEvent, FileHandler.FileDropAction);
     }
@@ -165,6 +124,12 @@ public partial class MainWindow : AppWindow
         {
             SkEditorAPI.Core.GetAppConfig().Save();
         }
+    }
+    
+    protected override void OnClosed(EventArgs e)
+    {
+        _shortcutHandler?.Dispose();
+        base.OnClosed(e);
     }
 
     private static async Task<bool> PromptForUnsavedChanges()

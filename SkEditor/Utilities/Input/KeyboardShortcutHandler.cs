@@ -1,0 +1,89 @@
+﻿using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Threading;
+using SkEditor.Utilities.Files;
+using SkEditor.Views.Windows;
+
+namespace SkEditor.Utilities.Input;
+
+public class KeyboardShortcutHandler(Window window)
+{
+    private WindowState _preFullScreenState = WindowState.Normal;
+    
+    public void Initialize()
+    {
+        window.KeyDown += OnKeyDown;
+    }
+
+    private void OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        var shortcut = new KeyboardShortcut(e.KeyModifiers, e.Key);
+
+        if (TryExecuteShortcut(shortcut, e))
+        {
+            e.Handled = true;
+        }
+    }
+
+    private bool TryExecuteShortcut(KeyboardShortcut shortcut, KeyEventArgs e)
+    {
+        if (shortcut is { Modifiers: KeyModifiers.Control, Key: >= Key.D1 and <= Key.D9 })
+        {
+            int tabIndex = (int)e.Key - 35;
+            FileHandler.SwitchTab(tabIndex);
+            return true;
+        }
+
+        if (shortcut is { Modifiers: (KeyModifiers.Control | KeyModifiers.Shift), Key: Key.Oem3 })
+        {
+            OpenTerminal();
+            return true;
+        }
+
+        if (shortcut is { Key: Key.F11, Modifiers: KeyModifiers.None })
+        {
+            ToggleFullScreen();
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void OpenTerminal()
+    {
+        var terminal = new TerminalWindow();
+        terminal.Show();
+    }
+
+    private void ToggleFullScreen()
+    {
+        Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            if (window.WindowState == WindowState.FullScreen)
+            {
+                window.WindowState = WindowState.Normal;
+                await Task.Delay(10);
+                window.WindowState = _preFullScreenState;
+            }
+            else
+            {
+                _preFullScreenState = window.WindowState;
+                if (_preFullScreenState == WindowState.Maximized)
+                {
+                    window.WindowState = WindowState.Normal;
+                    await Task.Delay(10);
+                }
+
+                window.WindowState = WindowState.FullScreen;
+            }
+        });
+    }
+
+    public void Dispose()
+    {
+        window.KeyDown -= OnKeyDown;
+    }
+
+    public readonly record struct KeyboardShortcut(KeyModifiers Modifiers, Key Key);
+}
