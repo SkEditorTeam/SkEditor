@@ -12,7 +12,7 @@
     <system:String x:Key="WindowTitleGuiGenerator">Generar GUI</system:String>
     <system:String x:Key="WindowTitleCommandGenerator">Generar comando</system:String>
     <system:String x:Key="WindowTitleItemSelector">Seleccionar ítem</system:String>
-    <system:String x:Key="WindowTitleMarketplace">Marketplace</system:String>
+    <system:String x:Key="WindowTitleMarketplace">Mercado</system:String>
 
     <!-- Encabezados de Menú -->
     <system:String x:Key="MenuHeaderFile">Archivo</system:String>
