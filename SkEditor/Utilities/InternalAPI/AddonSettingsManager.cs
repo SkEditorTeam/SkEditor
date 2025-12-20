@@ -22,7 +22,7 @@ public static class AddonSettingsManager
             return;
         }
 
-        string path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
+        string path = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         if (!File.Exists(path))
         {
@@ -69,7 +69,7 @@ public static class AddonSettingsManager
             return;
         }
 
-        string path = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
+        string path = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", addon.Identifier, "settings.json");
 
         string currentJson = File.ReadAllText(path);
 

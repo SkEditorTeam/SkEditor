@@ -16,6 +16,7 @@ using SkEditor.API;
 using SkEditor.Data;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 

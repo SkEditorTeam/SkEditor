@@ -49,7 +49,7 @@ public class ThemeEditor
     public static List<Theme> Themes { get; set; } = [];
     public static Theme CurrentTheme { get; set; } = new();
 
-    public static string ThemeFolderPath { get; set; } = Path.Combine(AppConfig.AppDataFolderPath, "Themes");
+    public static string ThemeFolderPath { get; set; } = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Themes");
 
     public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 

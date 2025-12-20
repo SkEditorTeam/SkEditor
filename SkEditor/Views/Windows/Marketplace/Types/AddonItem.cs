@@ -8,7 +8,9 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Utilities.Localization;
 using SkEditor.Views.Windows.Settings;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 

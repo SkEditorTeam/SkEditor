@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SkEditor.Utilities.InternalAPI;
+using SkEditor.API;
 
-namespace SkEditor.API;
+namespace SkEditor.Utilities.InternalAPI.Classes;
 
 public class Addons : IAddons
 {

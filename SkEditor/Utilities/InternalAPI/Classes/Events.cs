@@ -1,11 +1,12 @@
 ﻿using System;
 using Avalonia.Controls;
 using AvaloniaEdit;
+using SkEditor.API;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Projects.Elements;
 
-namespace SkEditor.API;
+namespace SkEditor.Utilities.InternalAPI.Classes;
 
 public class Events : IEvents
 {

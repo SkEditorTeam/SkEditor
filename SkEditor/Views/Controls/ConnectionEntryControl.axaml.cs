@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Avalonia.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Controls;
 

@@ -6,7 +6,7 @@ using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
-namespace SkEditor.Utilities.Parser;
+namespace SkEditor.Utilities.Parser.Elements;
 
 /// <summary>
 ///     This represent an option reference, e.g. '{@optionName}' and not its declaration, that is <see cref="CodeOption" />

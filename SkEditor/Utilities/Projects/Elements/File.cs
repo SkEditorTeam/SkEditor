@@ -9,6 +9,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Localization;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using Symbol = FluentIcons.Common.Symbol;
 

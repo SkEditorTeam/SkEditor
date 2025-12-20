@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Styling;
 using Serilog;
-using SkEditor.Utilities;
+using SkEditor.API;
 using SkEditor.Utilities.Files;
 
-namespace SkEditor.API;
+namespace SkEditor.Utilities.InternalAPI.Classes;
 
 public class Core : ICore
 {
-    private AppConfig? _appConfig;
+    private Settings.AppConfig? _appConfig;
     private string[] _startupArguments = null!;
 
-    public AppConfig GetAppConfig()
+    public Settings.AppConfig GetAppConfig()
     {
-        return _appConfig ??= AppConfig.Load();
+        return _appConfig ??= Settings.AppConfig.Load();
     }
 
     public Version GetAppVersion()

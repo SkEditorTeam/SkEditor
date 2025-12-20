@@ -14,6 +14,7 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Styling;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 

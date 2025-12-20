@@ -2,8 +2,9 @@
 using DiscordRPC;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Utilities.Discord;
 
 public static partial class DiscordRpcUpdater
 {

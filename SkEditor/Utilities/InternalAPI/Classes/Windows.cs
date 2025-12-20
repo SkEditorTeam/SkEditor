@@ -11,13 +11,14 @@ using Avalonia.Media.Immutable;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities;
+using SkEditor.API;
+using SkEditor.Utilities.Localization;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 
-namespace SkEditor.API;
+namespace SkEditor.Utilities.InternalAPI.Classes;
 
 public class Windows : IWindows
 {

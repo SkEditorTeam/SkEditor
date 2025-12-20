@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Avalonia.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using Symbol = FluentIcons.Common.Symbol;
 

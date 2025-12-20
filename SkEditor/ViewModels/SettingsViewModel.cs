@@ -4,6 +4,9 @@ using Avalonia.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Updating;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.ViewModels;
 

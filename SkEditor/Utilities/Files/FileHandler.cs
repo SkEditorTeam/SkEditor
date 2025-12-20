@@ -10,6 +10,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 

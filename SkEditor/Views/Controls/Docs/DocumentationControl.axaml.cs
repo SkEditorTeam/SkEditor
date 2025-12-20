@@ -17,6 +17,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.SkriptHub;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels;
 using LocalDocsManagerWindow = SkEditor.Views.Windows.LocalDocsManagerWindow;
 using MainWindow = SkEditor.Views.Windows.MainWindow;

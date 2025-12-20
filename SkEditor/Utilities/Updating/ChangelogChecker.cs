@@ -2,7 +2,7 @@
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Utilities.Updating;
 
 public static class ChangelogChecker
 {

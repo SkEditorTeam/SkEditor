@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Localization;
 using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
@@ -18,12 +19,12 @@ namespace SkEditor.Utilities;
 public static class FileDownloader
 {
     private const string ZipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
-    private static readonly string AppDataFolderPath = AppConfig.AppDataFolderPath;
+    private static readonly string AppDataFolderPath = Settings.AppConfig.AppDataFolderPath;
     private static readonly string ZipFilePath = Path.Combine(AppDataFolderPath, "items.zip");
 
     public static async Task CheckForMissingItemFiles(Window visual)
     {
-        string itemsFile = Path.Combine(AppConfig.AppDataFolderPath, "items.json");
+        string itemsFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "items.json");
         if (File.Exists(itemsFile))
         {
             return;

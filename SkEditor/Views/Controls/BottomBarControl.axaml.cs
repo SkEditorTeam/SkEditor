@@ -12,6 +12,7 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Localization;
 using LogsWindow = SkEditor.Views.Windows.LogsWindow;
 
 namespace SkEditor.Views.Controls;

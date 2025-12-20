@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Windows.Settings;
 

@@ -18,6 +18,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using AssociationSelectionWindow = SkEditor.Views.Windows.FileTypes.AssociationSelectionWindow;
 using GoToLineWindow = SkEditor.Views.Windows.GoToLineWindow;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SkEditor.Utilities;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.API;
 

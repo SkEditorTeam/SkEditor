@@ -7,7 +7,7 @@ using Serilog;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Projects;
 
-namespace SkEditor.Utilities.Files;
+namespace SkEditor.Utilities.Files.Session;
 
 public static class SessionProjectHandler
 {

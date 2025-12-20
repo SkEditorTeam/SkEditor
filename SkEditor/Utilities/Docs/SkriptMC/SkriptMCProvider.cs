@@ -9,6 +9,7 @@ using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using SkEditor.API;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 

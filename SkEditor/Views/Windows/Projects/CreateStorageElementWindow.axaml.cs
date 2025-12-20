@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects.Elements;
 using SkEditor.Utilities.Styling;
 

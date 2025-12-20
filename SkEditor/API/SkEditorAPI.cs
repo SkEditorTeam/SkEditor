@@ -1,4 +1,7 @@
-﻿namespace SkEditor.API;
+﻿using SkEditor.Utilities.InternalAPI.Classes;
+using Windows = SkEditor.Utilities.InternalAPI.Classes.Windows;
+
+namespace SkEditor.API;
 
 /// <summary>
 ///     The main API class for SkEditor, that regroups all the API classes.

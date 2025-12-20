@@ -7,6 +7,7 @@ using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Parser.ViewModels;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;

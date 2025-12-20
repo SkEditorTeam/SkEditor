@@ -8,7 +8,8 @@ using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.InternalAPI.Classes;
+using SkEditor.Utilities.InternalAPI.Errors;
+using SkEditor.Utilities.Localization;
 using AddonsPage = SkEditor.Views.Windows.Settings.AddonsPage;
 using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 using Symbol = FluentIcons.Common.Symbol;
@@ -27,7 +28,7 @@ public static class AddonLoader
 
     public static async Task Load()
     {
-        string addonsFolder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
+        string addonsFolder = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons");
         Directory.CreateDirectory(addonsFolder);
 
         Addons.Clear();
@@ -75,7 +76,7 @@ public static class AddonLoader
 
     private static void LoadMeta()
     {
-        string metaFile = Path.Combine(AppConfig.AppDataFolderPath, "Addons", "meta.json");
+        string metaFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", "meta.json");
         if (!File.Exists(metaFile))
         {
             File.WriteAllText(metaFile, "{}");
@@ -88,7 +89,7 @@ public static class AddonLoader
 
     private static async Task LoadAddonsFromFiles()
     {
-        string folder = Path.Combine(AppConfig.AppDataFolderPath, "Addons");
+        string folder = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons");
         string[] folders = Directory.GetDirectories(folder);
         List<string> dllFiles = folders
             .Select(sub => Path.Combine(sub, Path.GetFileName(sub) + ".dll"))
@@ -380,7 +381,7 @@ public static class AddonLoader
 
         addonMeta.LoadContext?.Unload();
 
-        string addonFile = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addonMeta.Addon.Identifier,
+        string addonFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", addonMeta.Addon.Identifier,
             addonMeta.Addon.Identifier + ".dll");
         if (File.Exists(addonFile))
         {
@@ -405,7 +406,7 @@ public static class AddonLoader
 
     public static async Task SaveMeta()
     {
-        string metaFile = Path.Combine(AppConfig.AppDataFolderPath, "Addons", "meta.json");
+        string metaFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", "meta.json");
         _metaCache = new JObject();
         foreach (AddonMeta addonMeta in Addons)
         {

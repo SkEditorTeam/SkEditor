@@ -5,7 +5,7 @@ using AvaloniaEdit.Editing;
 using SkEditor.Utilities.Extensions;
 using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
-namespace SkEditor.Utilities.Parser;
+namespace SkEditor.Utilities.Parser.Elements;
 
 public class CodeOption : INameableCodeElement
 {

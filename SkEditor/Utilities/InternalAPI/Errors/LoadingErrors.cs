@@ -2,7 +2,7 @@
 using NuGet.Versioning;
 using SkEditor.API;
 
-namespace SkEditor.Utilities.InternalAPI.Classes;
+namespace SkEditor.Utilities.InternalAPI.Errors;
 
 public static class LoadingErrors
 {

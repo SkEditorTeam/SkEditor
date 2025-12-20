@@ -6,6 +6,7 @@ using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
 using Serilog;
 using SkEditor.API;
+using SkEditor.Utilities.Localization;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 

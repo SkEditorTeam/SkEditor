@@ -87,7 +87,7 @@ public class LocalProvider : IDocProvider
 
     private string GetLocalCachePath()
     {
-        string folder = Path.Combine(AppConfig.AppDataFolderPath, "Docs");
+        string folder = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Docs");
         Directory.CreateDirectory(folder);
         string file = Path.Combine(folder, "local.json");
         if (!File.Exists(file))

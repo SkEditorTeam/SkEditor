@@ -19,6 +19,7 @@ using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkUnity;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using MainWindow = SkEditor.Views.Windows.MainWindow;

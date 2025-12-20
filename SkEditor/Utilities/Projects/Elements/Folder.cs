@@ -11,6 +11,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Localization;
 using static SkEditor.Views.Controls.Sidebar.ExplorerSidebarPanel;
 using CreateStorageElementWindow = SkEditor.Views.Windows.Projects.CreateStorageElementWindow;
 using MainWindow = SkEditor.Views.Windows.MainWindow;

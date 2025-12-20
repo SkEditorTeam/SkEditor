@@ -9,7 +9,7 @@ using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 using SkEditor.API;
-using SkEditor.Utilities.InternalAPI.Classes;
+using SkEditor.Utilities.InternalAPI.Errors;
 using FileMode = System.IO.FileMode;
 using Repository = NuGet.Protocol.Core.Types.Repository;
 
@@ -27,7 +27,7 @@ public static class LocalDependencyManager
             .Where(x => x is NuGetDependency)
             .Cast<NuGetDependency>().ToList();
 
-        string addonFolder = Path.Combine(AppConfig.AppDataFolderPath, "Addons", addonMeta.Addon.Identifier);
+        string addonFolder = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", addonMeta.Addon.Identifier);
         if (Directory.Exists(addonFolder))
         {
             Directory.CreateDirectory(addonFolder);

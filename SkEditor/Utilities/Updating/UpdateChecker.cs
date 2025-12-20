@@ -13,13 +13,14 @@ using FluentAvalonia.UI.Controls;
 using Octokit;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Localization;
 using Application = Avalonia.Application;
 using FileMode = System.IO.FileMode;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Utilities.Updating;
 
 public static class UpdateChecker
 {

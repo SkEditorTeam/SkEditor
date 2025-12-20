@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using AvaloniaEdit;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Utilities.Localization;
 using SkEditor.Views.Controls.Sidebar;
 
 namespace SkEditor.Utilities.Parser;

@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 

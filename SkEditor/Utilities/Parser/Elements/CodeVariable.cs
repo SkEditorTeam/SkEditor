@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Extensions;
 using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
-namespace SkEditor.Utilities.Parser;
+namespace SkEditor.Utilities.Parser.Elements;
 
 public partial class CodeVariable : ObservableObject, INameableCodeElement
 {

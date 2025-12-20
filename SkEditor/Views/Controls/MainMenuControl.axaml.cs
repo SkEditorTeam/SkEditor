@@ -11,6 +11,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;

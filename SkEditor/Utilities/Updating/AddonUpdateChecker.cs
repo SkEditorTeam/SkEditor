@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SkEditor.API;
+using SkEditor.Utilities.Localization;
 using SkEditor.Views.Windows.Marketplace;
 using SkEditor.Views.Windows.Marketplace.Types;
 using Symbol = FluentIcons.Common.Symbol;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Utilities.Updating;
 
 public static class AddonUpdateChecker
 {

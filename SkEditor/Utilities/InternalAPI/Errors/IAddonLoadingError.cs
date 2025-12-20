@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Utilities.InternalAPI;
+﻿namespace SkEditor.Utilities.InternalAPI.Errors;
 
 public interface IAddonLoadingError
 {

@@ -8,6 +8,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views.Controls.Addons;
 using SkEditor.Views.Windows.Marketplace;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Windows.Settings;
 

@@ -9,6 +9,7 @@ using FluentIcons.Common;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Localization;
 using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
 using Path = System.IO.Path;
 using Symbol = FluentIcons.Common.Symbol;
@@ -19,7 +20,7 @@ namespace SkEditor.Utilities.Syntax;
 public class SyntaxLoader
 {
     private static bool _enableChecking = true;
-    private static string SyntaxFolder { get; } = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+    private static string SyntaxFolder { get; } = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Syntax Highlighting");
 
     public static List<FileSyntax> FileSyntaxes { get; set; } = [];
 

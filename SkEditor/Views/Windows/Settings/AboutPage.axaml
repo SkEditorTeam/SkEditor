@@ -7,9 +7,10 @@
              xmlns:vms="clr-namespace:SkEditor.ViewModels"
              xmlns:utils="clr-namespace:SkEditor.Utilities"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:settings="clr-namespace:SkEditor.Utilities.Settings"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
-             x:DataType="utils:AppConfig"
+             x:DataType="settings:AppConfig"
              DataContext="{x:Static vms:ViewModelLocator.AppConfig}"
              x:Class="SkEditor.Views.Windows.Settings.AboutPage">
 

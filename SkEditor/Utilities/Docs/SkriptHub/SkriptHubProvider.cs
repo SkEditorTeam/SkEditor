@@ -12,6 +12,7 @@ using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Localization;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -53,7 +54,7 @@ public class SkriptHubProvider : IDocProvider
             return foundElements.Cast<IDocumentationEntry>().ToList();
         }
 
-        string cacheFile = Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json");
+        string cacheFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "SkriptHubCache.json");
         if (!File.Exists(cacheFile))
         {
             TaskDialog taskDialog = new()
@@ -185,7 +186,7 @@ public class SkriptHubProvider : IDocProvider
             return _cachedElements.Select(e => e.Addon).Distinct().ToList();
         }
 
-        string cacheFile = Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json");
+        string cacheFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "SkriptHubCache.json");
         if (!File.Exists(cacheFile))
         {
             return [];
@@ -232,7 +233,7 @@ public class SkriptHubProvider : IDocProvider
 
     public async Task SaveCache()
     {
-        string cacheFile = Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json");
+        string cacheFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "SkriptHubCache.json");
         string content = JsonConvert.SerializeObject(_cachedElements);
         await File.WriteAllTextAsync(cacheFile, content);
     }
@@ -240,6 +241,6 @@ public class SkriptHubProvider : IDocProvider
     public void DeleteEverything()
     {
         _cachedElements.Clear();
-        File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "SkriptHubCache.json"));
+        File.Delete(Path.Combine(Settings.AppConfig.AppDataFolderPath, "SkriptHubCache.json"));
     }
 }

@@ -9,6 +9,8 @@ using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Parser;
+using SkEditor.Utilities.Parser.Elements;
+using CodeVariable = SkEditor.Utilities.Parser.Elements.CodeVariable;
 using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
 namespace SkEditor.Utilities.Editor;

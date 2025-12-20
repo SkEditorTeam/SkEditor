@@ -11,7 +11,7 @@ using Avalonia.Threading;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Utilities.Localization;
 
 public static class Translation
 {

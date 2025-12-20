@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Reflection;
 using Avalonia.Threading;
 using Serilog;
-using SkEditor.Utilities.InternalAPI;
+using SkEditor.API;
 
-namespace SkEditor.API;
+namespace SkEditor.Utilities.InternalAPI.Classes;
 
 /// <summary>
 ///     Provides logging capabilities for SkEditor and its addons

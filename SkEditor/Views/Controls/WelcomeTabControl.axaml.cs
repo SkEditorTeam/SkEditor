@@ -12,6 +12,7 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
 using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 using Symbol = FluentIcons.Common.Symbol;

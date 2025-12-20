@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -12,10 +15,15 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Files.Session;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
+using SkEditor.Utilities.Updating;
+using DiscordRpcUpdater = SkEditor.Utilities.Discord.DiscordRpcUpdater;
+using Path = System.IO.Path;
 using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows;
@@ -232,6 +240,26 @@ public partial class MainWindow : AppWindow
                     }
                 }, DispatcherPriority.Background);
             }, DispatcherPriority.Background);
+
+            SkEditorAPI.Logs.Info("Main window loaded successfully.");
+            
+            Stopwatch stopwatch  = Stopwatch.StartNew();
+            string baseDirectory = AppContext.BaseDirectory;
+            string binaryFile = Path.Combine(baseDirectory, "settings.bin");
+            File.WriteAllBytes(binaryFile, [1]);
+            
+            stopwatch.Stop();
+            long nanoSeconds = stopwatch.ElapsedTicks * (1_000_000_000L / Stopwatch.Frequency);
+            SkEditorAPI.Logs.Info($"Settings.bin created in: {stopwatch.ElapsedMilliseconds} ms ({nanoSeconds} ns)");
+
+            await Task.Delay(2500);
+            
+            stopwatch.Restart();
+            byte[] fileBytes = File.ReadAllBytes(binaryFile);
+            bool isValid = fileBytes is [1];
+            stopwatch.Stop();
+            nanoSeconds = stopwatch.ElapsedTicks * (1_000_000_000L / Stopwatch.Frequency);
+            SkEditorAPI.Logs.Info($"Settings.bin read in: {stopwatch.ElapsedMilliseconds} ms ({nanoSeconds} ns), isValid: {isValid}");
         }
         catch (Exception exc)
         {

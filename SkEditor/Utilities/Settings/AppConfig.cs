@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Newtonsoft.Json;
 using SkEditor.API;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Utilities.Settings;
 
 public partial class AppConfig : ObservableObject
 {

@@ -14,6 +14,7 @@ using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Input;
 
 namespace SkEditor.Utilities.Editor;
 

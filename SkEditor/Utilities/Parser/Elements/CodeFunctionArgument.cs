@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SkEditor.Utilities.Extensions;
 using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
-namespace SkEditor.Utilities.Parser;
+namespace SkEditor.Utilities.Parser.Elements;
 
 /// <summary>
 ///     Represent a function argument in a function declaration.

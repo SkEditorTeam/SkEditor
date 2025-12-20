@@ -10,8 +10,10 @@ using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
+using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Windows.Marketplace.Types;
 

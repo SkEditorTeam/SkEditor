@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Serilog;
 
-namespace SkEditor.Utilities.Files;
+namespace SkEditor.Utilities.Files.Session;
 
 public class SessionFileHandler
 {

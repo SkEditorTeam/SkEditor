@@ -6,6 +6,7 @@ using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Updating;
 using SkEditor.Views.Controls.Sidebar;
 using ImageViewer = SkEditor.Views.Windows.FileTypes.Images.ImageViewer;
 
