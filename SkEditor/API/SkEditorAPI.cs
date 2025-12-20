@@ -1,5 +1,5 @@
 ﻿using SkEditor.Utilities.InternalAPI.Classes;
-using Windows = SkEditor.Utilities.InternalAPI.Classes.Windows;
+using WindowsAPI = SkEditor.Utilities.InternalAPI.Classes.Windows;
 
 namespace SkEditor.API;
 
@@ -16,7 +16,7 @@ public static class SkEditorAPI
     /// <summary>
     ///     Get the Windows API.
     /// </summary>
-    public static IWindows Windows { get; } = new Windows();
+    public static IWindows Windows { get; } = new WindowsAPI();
 
     /// <summary>
     ///     Get the Core API.
