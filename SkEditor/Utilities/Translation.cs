@@ -44,7 +44,7 @@ public static class Translation
         }
 
         foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
-                     translation.Key != "English"))
+                     translation.Key != "English").ToList())
         {
             Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
             Translations.Remove(translation.Key);
