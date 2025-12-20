@@ -15,6 +15,7 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Utilities.Settings;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 
@@ -22,11 +23,19 @@ namespace SkEditor;
 
 public class App : Application
 {
+    public static BinarySettings? BinarySettings { get; private set; }
+    
     private SplashScreen? _splashScreen;
 
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+    }
+    
+    public App()
+    {
+        BinarySettings = new BinarySettings();
+        BinarySettings.Load();
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -38,7 +47,7 @@ public class App : Application
             return;
         }
 
-        if (desktop.Args?.Contains("--hideSplashScreen", StringComparer.OrdinalIgnoreCase) != true)
+        if (BinarySettings?.IsSplashScreenEnabled == true)
         {
             _splashScreen = new SplashScreen();
             desktop.MainWindow = _splashScreen;
