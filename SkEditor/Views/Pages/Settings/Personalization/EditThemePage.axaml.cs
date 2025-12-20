@@ -6,7 +6,7 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.Styling;
 using ColorPickerSettingsExpander = SkEditor.Views.Controls.ColorPickerSettingsExpander;
 
-namespace SkEditor.Views.Windows.Settings.Personalization;
+namespace SkEditor.Views.Pages.Settings.Personalization;
 
 public partial class EditThemePage : UserControl
 {

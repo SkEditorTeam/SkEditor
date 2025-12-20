@@ -9,8 +9,8 @@ using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
-using AddonsPage = SkEditor.Views.Windows.Settings.AddonsPage;
-using CustomAddonSettingsPage = SkEditor.Views.Windows.Settings.CustomAddonSettingsPage;
+using AddonsPage = SkEditor.Views.Pages.Settings.AddonsPage;
+using CustomAddonSettingsPage = SkEditor.Views.Pages.Settings.CustomAddonSettingsPage;
 using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 
 namespace SkEditor.Views.Controls.Addons;

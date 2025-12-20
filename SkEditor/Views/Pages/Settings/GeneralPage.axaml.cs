@@ -7,13 +7,12 @@ using Avalonia.Threading;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
 using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 using DiscordRpcUpdater = SkEditor.Utilities.Discord.DiscordRpcUpdater;
 
-namespace SkEditor.Views.Windows.Settings;
+namespace SkEditor.Views.Pages.Settings;
 
 public partial class GeneralPage : UserControl
 {

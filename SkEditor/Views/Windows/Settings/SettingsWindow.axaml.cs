@@ -56,14 +56,14 @@ public partial class SettingsWindow : AppWindow
             { TransitionInfoOverride = transitionInfo, IsNavigationStackEnabled = true };
         Instance.FrameView.NavigateToType(page, null, navOpt);
 
-        if (page == typeof(HomePage))
+        if (page == typeof(Pages.Settings.HomePage))
         {
             Instance.FrameView.BackStack.Clear();
             Instance.FrameView.ForwardStack.Clear();
         }
         else if (Instance.FrameView.BackStack.Count == 0)
         {
-            Instance.FrameView.BackStack.Add(new PageStackEntry(typeof(HomePage), null, transitionInfo));
+            Instance.FrameView.BackStack.Add(new PageStackEntry(typeof(Pages.Settings.HomePage), null, transitionInfo));
         }
     }
 }

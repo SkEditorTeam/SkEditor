@@ -193,11 +193,46 @@
             <DependentUpon>WelcomeTabControl.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Pages\Settings\AboutPage.axaml.cs">
+          <DependentUpon>AboutPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Settings\AddonsPage.axaml.cs">
+          <DependentUpon>AddonsPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Settings\ConnectionsPage.axaml.cs">
+          <DependentUpon>ConnectionsPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Settings\CustomAddonSettingsPage.axaml.cs">
+          <DependentUpon>CustomAddonSettingsPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Settings\ExperimentsPage.axaml.cs">
+          <DependentUpon>ExperimentsPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Settings\FileTypesPage.axaml.cs">
+          <DependentUpon>FileTypesPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Settings\GeneralPage.axaml.cs">
+          <DependentUpon>GeneralPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Settings\HomePage.axaml.cs">
+          <DependentUpon>HomePage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\Settings\PersonalizationPage.axaml.cs">
+          <DependentUpon>PersonalizationPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Assets\GUI\"/>
-        <Folder Include="Views\Pages\"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -228,9 +263,6 @@
         <AdditionalFiles Include="Views\Windows\Settings\GeneralPage.axaml"/>
         <AdditionalFiles Include="Views\Windows\Settings\HomePage.axaml"/>
         <AdditionalFiles Include="Views\Windows\Settings\PersonalizationPage.axaml"/>
-        <AdditionalFiles Include="Views\Windows\Settings\Personalization\EditThemePage.axaml"/>
-        <AdditionalFiles Include="Views\Windows\Settings\Personalization\FileSyntaxes.axaml"/>
-        <AdditionalFiles Include="Views\Windows\Settings\Personalization\ThemePage.axaml"/>
         <AdditionalFiles Include="Views\Windows\Settings\SettingsWindow.axaml"/>
     </ItemGroup>
 </Project>

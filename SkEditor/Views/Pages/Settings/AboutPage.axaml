@@ -12,7 +12,7 @@
              x:CompileBindings="True"
              x:DataType="settings:AppConfig"
              DataContext="{x:Static vms:ViewModelLocator.AppConfig}"
-             x:Class="SkEditor.Views.Windows.Settings.AboutPage">
+             x:Class="SkEditor.Views.Pages.Settings.AboutPage">
 
     <UserControl.Resources>
         <vms:SettingsViewModel x:Key="SettingsViewModel" />

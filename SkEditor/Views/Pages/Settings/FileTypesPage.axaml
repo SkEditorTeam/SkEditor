@@ -5,7 +5,7 @@
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SkEditor.Views.Windows.Settings.FileTypesPage">
+             x:Class="SkEditor.Views.Pages.Settings.FileTypesPage">
     <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
         <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsFileTypesTitle}" Grid.Row="0" />
         <ScrollViewer Grid.Row="1">

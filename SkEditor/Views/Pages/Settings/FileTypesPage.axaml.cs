@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 
-namespace SkEditor.Views.Windows.Settings;
+namespace SkEditor.Views.Pages.Settings;
 
 public partial class FileTypesPage : UserControl
 {

@@ -7,9 +7,11 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
-using SkEditor.Views.Windows.Settings.Personalization;
+using SkEditor.Views.Pages.Settings.Personalization;
+using SkEditor.Views.Windows;
+using SkEditor.Views.Windows.Settings;
 
-namespace SkEditor.Views.Windows.Settings;
+namespace SkEditor.Views.Pages.Settings;
 
 public partial class PersonalizationPage : UserControl
 {

@@ -1,10 +1,9 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
-using SkEditor.Utilities;
 using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
-namespace SkEditor.Views.Windows.Settings;
+namespace SkEditor.Views.Pages.Settings;
 
 public partial class AboutPage : UserControl
 {

@@ -6,13 +6,13 @@ using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Syntax;
+using SkEditor.Views.Windows.Settings;
 using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 
-namespace SkEditor.Views.Windows.Settings.Personalization;
+namespace SkEditor.Views.Pages.Settings.Personalization;
 
 public partial class FileSyntaxes : UserControl
 {

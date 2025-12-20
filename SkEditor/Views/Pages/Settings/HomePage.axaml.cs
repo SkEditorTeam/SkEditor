@@ -1,7 +1,8 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Views.Windows.Settings;
 
-namespace SkEditor.Views.Windows.Settings;
+namespace SkEditor.Views.Pages.Settings;
 
 public partial class HomePage : UserControl
 {

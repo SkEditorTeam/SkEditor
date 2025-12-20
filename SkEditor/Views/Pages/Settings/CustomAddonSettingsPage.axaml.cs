@@ -5,8 +5,9 @@ using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.API.Settings;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Views.Windows.Settings;
 
-namespace SkEditor.Views.Windows.Settings;
+namespace SkEditor.Views.Pages.Settings;
 
 public partial class CustomAddonSettingsPage : UserControl
 {

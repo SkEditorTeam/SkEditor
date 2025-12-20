@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json.Linq;
-using CustomAddonSettingsPage = SkEditor.Views.Windows.Settings.CustomAddonSettingsPage;
+using CustomAddonSettingsPage = SkEditor.Views.Pages.Settings.CustomAddonSettingsPage;
 using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;

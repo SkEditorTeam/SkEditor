@@ -10,6 +10,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Localization;
 using SkEditor.Views.Windows.Settings;
+using AddonsPage = SkEditor.Views.Pages.Settings.AddonsPage;
 using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;

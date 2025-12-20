@@ -10,7 +10,7 @@ using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.InternalAPI.Errors;
 using SkEditor.Utilities.Localization;
-using AddonsPage = SkEditor.Views.Windows.Settings.AddonsPage;
+using AddonsPage = SkEditor.Views.Pages.Settings.AddonsPage;
 using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 using Symbol = FluentIcons.Common.Symbol;
 

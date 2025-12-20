@@ -4,13 +4,13 @@ using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views.Controls.Addons;
 using SkEditor.Views.Windows.Marketplace;
+using SkEditor.Views.Windows.Settings;
 using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
-namespace SkEditor.Views.Windows.Settings;
+namespace SkEditor.Views.Pages.Settings;
 
 public partial class AddonsPage : UserControl
 {

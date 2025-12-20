@@ -5,9 +5,10 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Utilities.Styling;
+using SkEditor.Views.Windows.Settings;
 using ColorPickerSettingsExpander = SkEditor.Views.Controls.ColorPickerSettingsExpander;
 
-namespace SkEditor.Views.Windows.Settings.Personalization;
+namespace SkEditor.Views.Pages.Settings.Personalization;
 
 public partial class ThemePage : UserControl
 {
@@ -35,7 +36,7 @@ public partial class ThemePage : UserControl
         }
 
         ThemeComboBox.SelectedItem =
-            ThemeComboBox.Items.FirstOrDefault(x =>
+            Enumerable.FirstOrDefault<object?>(ThemeComboBox.Items, x =>
                 x is ComboBoxItem { Tag: not null } item &&
                 item.Tag.Equals(ThemeEditor.CurrentTheme.FileName));
 

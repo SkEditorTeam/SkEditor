@@ -2,7 +2,7 @@
 using SkEditor.API;
 using ConnectionEntryControl = SkEditor.Views.Controls.ConnectionEntryControl;
 
-namespace SkEditor.Views.Windows.Settings;
+namespace SkEditor.Views.Pages.Settings;
 
 public partial class ConnectionsPage : UserControl
 {

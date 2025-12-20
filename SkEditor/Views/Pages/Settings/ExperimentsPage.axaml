@@ -5,7 +5,7 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800"
-             x:Class="SkEditor.Views.Windows.Settings.ExperimentsPage">
+             x:Class="SkEditor.Views.Pages.Settings.ExperimentsPage">
 
     <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
         <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsHomeExperiments}" Grid.Row="0" />
