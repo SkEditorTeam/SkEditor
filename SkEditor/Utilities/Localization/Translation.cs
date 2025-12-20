@@ -15,6 +15,8 @@ namespace SkEditor.Utilities.Localization;
 
 public static class Translation
 {
+    private const string DefaultLanguage = "English";
+    
     private static readonly Dictionary<string, ResourceDictionary> Translations = [];
     public static string LanguagesFolder { get; } = Path.Combine(AppContext.BaseDirectory, "Languages");
 
@@ -25,67 +27,98 @@ public static class Translation
         string translationString = translation?.ToString() ?? key;
         translationString = translationString.Replace("\\n", Environment.NewLine);
 
-        for (int i = 0; i < parameters.Length; i++)
+        if (parameters.Length <= 0)
         {
-            translationString = translationString.Replace($"{{{i}}}", parameters[i]);
+            return translationString;
         }
 
-        return translationString;
+        try
+        {
+            return string.Format(translationString, parameters);
+        }
+        catch (FormatException)
+        {
+            return translationString;
+        }
     }
 
     public static async Task ChangeLanguage(string language, bool startup = false)
     {
-        bool isEnglish = language == "English";
+        ClearOldLanguages();
 
-        if (startup && isEnglish)
+        ResourceDictionary newLanguageDict = await CreateLanguageDictionary(language);
+
+        AddDictionary(language, newLanguageDict);
+
+        if (!startup)
         {
-            // English is a built-in ResourceDictionary, so we don't need to load it at startup.
-            return;
+            PropagateLanguageChange(language);
         }
+    }
 
-        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(translation =>
-                     translation.Key != "English").ToList())
+    private static void ClearOldLanguages()
+    {
+        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(t => t.Key != DefaultLanguage)
+                     .ToList())
         {
             Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
             Translations.Remove(translation.Key);
         }
+    }
 
-        if (isEnglish)
+    private static async Task<ResourceDictionary> CreateLanguageDictionary(string language)
+    {
+        ResourceDictionary languageDict = new();
+
+        bool isDefault = language == DefaultLanguage;
+        bool isDefaultLoaded = Application.Current?.Resources.MergedDictionaries
+            .Any(d => Translations.TryGetValue(DefaultLanguage, out ResourceDictionary? dict) && Equals(d, dict)) ?? false;
+
+        if (!isDefaultLoaded)
         {
-            SkEditorAPI.Core.GetAppConfig().Language = "English";
-            SkEditorAPI.Core.GetAppConfig().Save();
-            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
-            return;
+            await LoadDefault(languageDict);
         }
 
+        if (!isDefault)
+        {
+            await LoadLanguage(language, languageDict);
+        }
+
+        return languageDict;
+    }
+
+    private static async Task LoadDefault(ResourceDictionary newLanguageDict)
+    {
+        var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+        const string resourceName = $"SkEditor.Languages.{DefaultLanguage}.json";
+
+        await using Stream stream = assembly.GetManifestResourceStream(resourceName)!;
+        using MemoryStream ms = new();
+        await stream.CopyToAsync(ms);
+        LoadToResourceDictionary(ms.ToArray(), newLanguageDict);
+    }
+
+    private static async Task LoadLanguage(string language, ResourceDictionary newLanguageDict)
+    {
         string languageFile = Path.Combine(LanguagesFolder, $"{language}.json").NormalizePathSeparators();
 
         if (!File.Exists(languageFile))
         {
-            SkEditorAPI.Core.GetAppConfig().Language = "English";
-            SkEditorAPI.Core.GetAppConfig().Save();
-            Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged("English"));
             return;
         }
 
         byte[] bytes = await File.ReadAllBytesAsync(languageFile);
-
-        ResourceDictionary languageDictionary = new();
-        LoadToResourceDictionary(bytes, languageDictionary);
-
-        Application.Current?.Resources.MergedDictionaries.Add(languageDictionary);
-        Translations.TryAdd(language, languageDictionary);
-
-        SkEditorAPI.Core.GetAppConfig().Language = language;
-        SkEditorAPI.Core.GetAppConfig().Save();
-        Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
+        LoadToResourceDictionary(bytes, newLanguageDict);
     }
 
-    public static void LoadToResourceDictionary(ReadOnlySpan<byte> jsonUtf8, ResourceDictionary dict)
+    private static void LoadToResourceDictionary(ReadOnlySpan<byte> jsonUtf8, ResourceDictionary dict)
     {
         Utf8JsonReader reader = new(jsonUtf8);
 
         reader.Read();
+        
+        if (reader.TokenType != JsonTokenType.StartObject)
+            throw new JsonException("Expected start of JSON object");
 
         while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
         {
@@ -95,5 +128,18 @@ public static class Translation
 
             dict[key] = value;
         }
+    }
+
+    private static void AddDictionary(string language, ResourceDictionary newLanguageDict)
+    {
+        Application.Current?.Resources.MergedDictionaries.Add(newLanguageDict);
+        Translations.TryAdd(language, newLanguageDict);
+    }
+
+    private static void PropagateLanguageChange(string language)
+    {
+        SkEditorAPI.Core.GetAppConfig().Language = language;
+        SkEditorAPI.Core.GetAppConfig().Save();
+        Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
     }
 }

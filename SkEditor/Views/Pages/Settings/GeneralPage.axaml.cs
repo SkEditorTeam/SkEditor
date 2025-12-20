@@ -16,6 +16,8 @@ namespace SkEditor.Views.Pages.Settings;
 
 public partial class GeneralPage : UserControl
 {
+    public List<string> AvailableLanguages { get; } = [];
+    
     public GeneralPage()
     {
         InitializeComponent();
@@ -30,8 +32,13 @@ public partial class GeneralPage : UserControl
         string[] files = Directory.GetFiles(Translation.LanguagesFolder);
         foreach (string file in files)
         {
-            LanguageComboBox.Items.Add(Path.GetFileNameWithoutExtension(file));
+            AvailableLanguages.Add(Path.GetFileNameWithoutExtension(file));
         }
+        
+        AvailableLanguages.Add("English");
+        AvailableLanguages.Sort();
+        
+        LanguageComboBox.ItemsSource = AvailableLanguages;
 
         LanguageComboBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Language;
         LanguageComboBox.SelectionChanged += (_, _) =>

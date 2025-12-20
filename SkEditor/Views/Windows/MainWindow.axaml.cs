@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -154,7 +155,10 @@ public partial class MainWindow : AppWindow
     {
         try
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             await Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language, true);
+            stopwatch.Stop();
+            SkEditorAPI.Logs.Info($"Language change took {stopwatch.ElapsedMilliseconds} ms");
 
             _splashScreen?.UpdateStatus("Loading themes and addons...");
 

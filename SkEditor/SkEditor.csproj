@@ -39,11 +39,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Languages\**" Exclude="Languages\English.xaml">
+        <Content Include="Languages\**" Exclude="Languages\English.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-
-        <AvaloniaResource Include="Languages\English.xaml"/>
+        <EmbeddedResource Include="Languages\English.json"/>
     </ItemGroup>
 
     <ItemGroup>

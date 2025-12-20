@@ -14,7 +14,6 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="avares://SkEditor/Languages/English.xaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/CustomMenuItemStyle.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/ToggleSwitchStyle.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
