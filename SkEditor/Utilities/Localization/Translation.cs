@@ -13,13 +13,25 @@ using SkEditor.Utilities.Extensions;
 
 namespace SkEditor.Utilities.Localization;
 
+/// <summary>
+///     Provides functionality for translating strings based on the current language setting.
+/// </summary>
 public static class Translation
 {
-    private const string DefaultLanguage = "English";
-    
-    private static readonly Dictionary<string, ResourceDictionary> Translations = [];
+    /// <summary>
+    ///    The folder where language files are stored.
+    /// </summary>
     public static string LanguagesFolder { get; } = Path.Combine(AppContext.BaseDirectory, "Languages");
 
+    private const string DefaultLanguage = "English";
+    private static readonly Dictionary<string, ResourceDictionary> Translations = [];
+
+    /// <summary>
+    ///    Retrieves the translated string for the given key, formatting it with the provided parameters if any.
+    /// </summary>
+    /// <param name="key">The translation key.</param>
+    /// <param name="parameters">Optional parameters to format the translated string.</param>
+    /// <returns>>The translated and formatted string.</returns>
     public static string Get(string key, params string?[] parameters)
     {
         object? translation = null;
@@ -42,6 +54,11 @@ public static class Translation
         }
     }
 
+    /// <summary>
+    ///   Changes the application's language to the specified language.
+    /// </summary>
+    /// <param name="language">The language to change to.</param>
+    /// <param name="startup">Whether this change is occurring during application startup.</param>
     public static async Task ChangeLanguage(string language, bool startup = false)
     {
         ClearOldLanguages();
@@ -58,7 +75,8 @@ public static class Translation
 
     private static void ClearOldLanguages()
     {
-        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations.Where(t => t.Key != DefaultLanguage)
+        foreach (KeyValuePair<string, ResourceDictionary> translation in Translations
+                     .Where(t => t.Key != DefaultLanguage)
                      .ToList())
         {
             Application.Current?.Resources.MergedDictionaries.Remove(translation.Value);
@@ -72,7 +90,9 @@ public static class Translation
 
         bool isDefault = language == DefaultLanguage;
         bool isDefaultLoaded = Application.Current?.Resources.MergedDictionaries
-            .Any(d => Translations.TryGetValue(DefaultLanguage, out ResourceDictionary? dict) && Equals(d, dict)) ?? false;
+                                   .Any(d => Translations.TryGetValue(DefaultLanguage, out ResourceDictionary? dict) &&
+                                             Equals(d, dict)) ??
+                               false;
 
         if (!isDefaultLoaded)
         {
@@ -116,7 +136,7 @@ public static class Translation
         Utf8JsonReader reader = new(jsonUtf8);
 
         reader.Read();
-        
+
         if (reader.TokenType != JsonTokenType.StartObject)
             throw new JsonException("Expected start of JSON object");
 
