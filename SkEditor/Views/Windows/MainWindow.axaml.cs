@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -17,6 +16,7 @@ using SkEditor.Utilities.Files.Session;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Utilities.Updating;
@@ -207,6 +207,9 @@ public partial class MainWindow : AppWindow
             });
 
             _isFullyLoaded = true;
+            
+            App.Stopwatch.Stop();
+            SplashScreenHandler.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
 
             Dispatcher.UIThread.Post(() =>
             {

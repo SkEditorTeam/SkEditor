@@ -16,6 +16,7 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Settings;
+using SkEditor.Utilities.Startup;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 
@@ -24,6 +25,7 @@ namespace SkEditor;
 public class App : Application
 {
     public static BinarySettings? BinarySettings { get; private set; }
+    public static Stopwatch Stopwatch { get; } = new();
     
     private SplashScreen? _splashScreen;
 
@@ -41,13 +43,15 @@ public class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
+        
+        Stopwatch.Start();
 
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
         {
             return;
         }
 
-        if (BinarySettings?.IsSplashScreenEnabled == true)
+        if (SplashScreenHandler.ShouldShowSplash())
         {
             _splashScreen = new SplashScreen();
             desktop.MainWindow = _splashScreen;

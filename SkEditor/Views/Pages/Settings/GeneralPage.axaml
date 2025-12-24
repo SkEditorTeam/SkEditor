@@ -136,13 +136,17 @@
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
-                <ui:SettingsExpander Header="Use splash screen on startup"
+                <ui:SettingsExpander Header="{DynamicResource SettingsGeneralUseSplashScreen}"
                                      IconSource="{icons:SymbolIconSource Symbol=Image}"
-                                     Description="Dd">
+                                     Description="{DynamicResource SettingsGeneralUseSplashScreenDescription}">
                     <ui:SettingsExpander.Footer>
-                        <ToggleSwitch
-                            IsChecked="{Binding IsSplashScreenEnabled, 
-                          Source={x:Static vms:ViewModelLocator.BinarySettings}}" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <ComboBox SelectedIndex="{Binding SplashScreenModeIndex, Source={x:Static vms:ViewModelLocator.BinarySettings}}">
+                                <ComboBoxItem Content="{DynamicResource SettingsGeneralUseSplashScreenAuto}" />
+                                <ComboBoxItem Content="{DynamicResource SettingsGeneralUseSplashScreenEnabled}" />
+                                <ComboBoxItem Content="{DynamicResource SettingsGeneralUseSplashScreenDisabled}" />
+                            </ComboBox>
+                        </StackPanel>
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
             </StackPanel>
