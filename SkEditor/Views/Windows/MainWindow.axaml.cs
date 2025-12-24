@@ -155,11 +155,7 @@ public partial class MainWindow : AppWindow
     {
         try
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             await Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language, true);
-            stopwatch.Stop();
-            SkEditorAPI.Logs.Info($"Language change took {stopwatch.ElapsedMilliseconds} ms");
-
             _splashScreen?.UpdateStatus("Loading themes and addons...");
 
             Task themeTask = ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
