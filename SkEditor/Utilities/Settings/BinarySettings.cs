@@ -7,6 +7,9 @@ using SkEditor.Utilities.Startup;
 
 namespace SkEditor.Utilities.Settings;
 
+/// <summary>
+///    Manages application settings stored in a binary file next to the executable.
+/// </summary>
 public partial class BinarySettings : ObservableObject
 {
     public int SplashScreenModeIndex
@@ -34,6 +37,9 @@ public partial class BinarySettings : ObservableObject
         ];
     }
 
+    /// <summary>
+    ///     Loads the settings if the file exists.
+    /// </summary>
     public void Load()
     {
         if (!File.Exists(_binaryFilePath)) return;
@@ -51,6 +57,9 @@ public partial class BinarySettings : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Saves the settings to the file.
+    /// </summary>
     public void Save()
     {
         try
