@@ -116,7 +116,7 @@ public class ZipAddonItem : AddonItem
     public new async Task Update()
     {
         string fileName = "updated-" + ItemFileUrl.Split('/').Last();
-        // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
+        await SkEditorAPI.Configs.GetAppSettings().Save();
         MarketplaceWindow.Instance.ItemView.UpdateButton.IsEnabled = false;
 
         string filePath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons", fileName);
@@ -143,14 +143,14 @@ public class ZipAddonItem : AddonItem
 
     public void Disable()
     {
-        // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
+        _ = SkEditorAPI.Configs.GetAppSettings().Save();
         MarketplaceWindow.Instance.ItemView.DisableButton.IsVisible = false;
         MarketplaceWindow.Instance.ItemView.EnableButton.IsVisible = true;
     }
 
     public void Enable()
     {
-        // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
+        _ = SkEditorAPI.Configs.GetAppSettings().Save();
         MarketplaceWindow.Instance.ItemView.DisableButton.IsVisible = true;
         MarketplaceWindow.Instance.ItemView.EnableButton.IsVisible = false;
 

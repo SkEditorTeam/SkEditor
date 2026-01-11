@@ -40,7 +40,7 @@ public partial class SettingsWindow : AppWindow
         };
         Closed += (_, _) =>
         {
-            // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
+            _ = SkEditorAPI.Configs.SaveAllConfigsAsync();
         };
     }
 

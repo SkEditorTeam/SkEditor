@@ -136,7 +136,7 @@ public class FileBuilder
                 SkEditorAPI.Configs.GetStateConfig().FileTypeChoices.Remove(ext);
             }
 
-            // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
+            _ = SkEditorAPI.Configs.GetStateConfig().Save();
         }
 
         return fileType ?? await GetDefaultEditor(path, content);

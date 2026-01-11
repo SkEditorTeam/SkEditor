@@ -104,6 +104,6 @@ public class Core : ICore
             }
         }
 
-        // TODO: save settings
+        await SkEditorAPI.Configs.SaveAllConfigsAsync();
     }
 }

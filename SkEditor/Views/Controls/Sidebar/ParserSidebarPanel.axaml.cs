@@ -39,7 +39,7 @@ public partial class ParserSidebarPanel : UserControl
         EnableParser.Click += (_, _) =>
         {
             SkEditorAPI.Configs.GetExperimentsConfig().CodeParserEnabled = true;
-            // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
+            _ = SkEditorAPI.Configs.GetExperimentsConfig().Save();
 
             ParserDisabled.IsVisible = false;
             ScrollViewer.IsVisible = true;
