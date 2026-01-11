@@ -13,7 +13,7 @@ public static partial class DiscordRpcUpdater
 
     public static void Initialize()
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled)
+        if (!SkEditorAPI.Configs.GetAppSettings().IsDiscordRichPresenceEnabled)
         {
             return;
         }

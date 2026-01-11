@@ -64,7 +64,7 @@ public partial class FontSelectionWindow : AppWindow
 
         FontListBox.ItemsSource = fonts;
 
-        FontListBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Font;
+        FontListBox.SelectedItem = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily ?? "Default";
         FontListBox.ScrollIntoView(FontListBox.SelectedItem);
     }
 }

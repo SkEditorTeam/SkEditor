@@ -11,9 +11,9 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Windows.Marketplace.Types;
 
@@ -26,8 +26,8 @@ public class ThemeWithSyntaxItem : MarketplaceItem
     public override async Task Install()
     {
         string themeFileName = ThemeFileUrl.Split('/').Last();
-        string themeFilePath = Path.Combine(AppConfig.AppDataFolderPath, "Themes", themeFileName);
-        string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+        string themeFilePath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Themes", themeFileName);
+        string baseLocalSyntaxPath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Syntax Highlighting");
         //string syntaxFilePath = Path.Combine(AppConfig.AppDataFolderPath, "Syntax highlighting", syntaxFileName);
 
         List<FileSyntax> installedSyntaxes = [];
@@ -141,13 +141,13 @@ public class ThemeWithSyntaxItem : MarketplaceItem
 
         ThemeEditor.Themes.Remove(theme);
         ThemeEditor.SaveAllThemes();
-        File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "Themes", fileName));
+        File.Delete(Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Themes", fileName));
     }
 
     private async Task UninstallSyntax()
     {
         List<string> folders = SyntaxFolders.ToList();
-        string syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+        string syntaxFolder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Syntax Highlighting");
         foreach (string localSyntaxPath in folders
                      .Select(folder => folder.Split('/').Last())
                      .Select(folderName => Path.Combine(syntaxFolder, folderName)))
@@ -162,7 +162,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
 
     public override bool IsInstalled()
     {
-        string syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, "Syntax Highlighting");
+        string syntaxFolder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Syntax Highlighting");
         foreach (string folder in SyntaxFolders)
         {
             string folderName = folder.Split('/').Last();
@@ -175,7 +175,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         }
 
         // Also check if theme is installed
-        string themePath = Path.Combine(AppConfig.AppDataFolderPath, ThemeItem.FolderName,
+        string themePath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), ThemeItem.FolderName,
             Path.GetFileName(ThemeFileUrl));
         if (!File.Exists(themePath))
         {

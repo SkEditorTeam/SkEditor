@@ -9,7 +9,8 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
+using SkEditor.Utilities.Settings;
+using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using DiscordRpcUpdater = SkEditor.Utilities.Discord.DiscordRpcUpdater;
 
 namespace SkEditor.Views.Pages.Settings;
@@ -40,7 +41,7 @@ public partial class GeneralPage : UserControl
         
         LanguageComboBox.ItemsSource = AvailableLanguages;
 
-        LanguageComboBox.SelectedItem = SkEditorAPI.Core.GetAppConfig().Language;
+        LanguageComboBox.SelectedItem = SkEditorAPI.Configs.GetAppSettings().Language;
         LanguageComboBox.SelectionChanged += (_, _) =>
         {
             string? language = LanguageComboBox.SelectedItem.ToString();
@@ -69,9 +70,9 @@ public partial class GeneralPage : UserControl
 
     private void LoadIndentation()
     {
-        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-        string tag = appConfig.UseSpacesInsteadOfTabs ? "spaces" : "tabs";
-        int amount = appConfig.TabSize;
+        AppSettings appSettings = SkEditorAPI.Configs.GetAppSettings();
+        string tag = appSettings.UseEditorTabsForIndentation ? "tabs" : "spaces";
+        int amount = appSettings.EditorTabSize;
 
         foreach (object? item in IndentationTypeComboBox.Items)
         {
@@ -105,7 +106,7 @@ public partial class GeneralPage : UserControl
 
         IndentationAmountComboBox.SelectionChanged += (_, _) =>
         {
-            AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
+            AppSettings oldAppConfig = SkEditorAPI.Configs.GetAppSettings();
             bool success = int.TryParse((IndentationAmountComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString(),
                 out int result);
             if (!success)
@@ -113,17 +114,17 @@ public partial class GeneralPage : UserControl
                 return;
             }
 
-            appConfig.TabSize = result;
+            oldAppConfig.EditorTabSize = result;
             SkEditorAPI.Files.GetOpenedEditors()
-                .ForEach(file => file.Editor!.Options.IndentationSize = appConfig.TabSize);
+                .ForEach(file => file.Editor!.Options.IndentationSize = oldAppConfig.EditorTabSize);
         };
         IndentationTypeComboBox.SelectionChanged += (_, _) =>
         {
-            AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-            appConfig.UseSpacesInsteadOfTabs =
-                (IndentationTypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() == "spaces";
+            AppSettings oldAppConfig = SkEditorAPI.Configs.GetAppSettings();
+            oldAppConfig.UseEditorTabsForIndentation =
+                (IndentationTypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() == "tabs";
             SkEditorAPI.Files.GetOpenedEditors().ForEach(file =>
-                file.Editor!.Options.ConvertTabsToSpaces = appConfig.UseSpacesInsteadOfTabs);
+                file.Editor!.Options.ConvertTabsToSpaces = !oldAppConfig.UseEditorTabsForIndentation);
         };
     }
 
@@ -131,7 +132,7 @@ public partial class GeneralPage : UserControl
     {
         ToggleSetting("IsDiscordRpcEnabled");
 
-        if (SkEditorAPI.Core.GetAppConfig().IsDiscordRpcEnabled)
+        if (SkEditorAPI.Configs.GetAppSettings().IsDiscordRichPresenceEnabled)
         {
             DiscordRpcUpdater.Initialize();
         }
@@ -147,14 +148,14 @@ public partial class GeneralPage : UserControl
 
         List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
 
-        textEditors.ForEach(textEditor => textEditor.WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled);
+        textEditors.ForEach(textEditor => textEditor.WordWrap = SkEditorAPI.Configs.GetAppSettings().IsWordWrapEnabled);
     }
 
     private void ToggleZoomSync()
     {
         ToggleSetting("IsZoomSyncEnabled");
 
-        if (!SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled)
+        if (!SkEditorAPI.Configs.GetAppSettings().IsEditorZoomLevelSyncEnabled)
         {
             return;
         }
@@ -171,15 +172,15 @@ public partial class GeneralPage : UserControl
 
     private static void ToggleSetting(string propertyName)
     {
-        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
-        PropertyInfo? property = appConfig.GetType().GetProperty(propertyName);
+        AppSettings appSettings = SkEditorAPI.Configs.GetAppSettings();
+        PropertyInfo? property = appSettings.GetType().GetProperty(propertyName);
 
         if (property == null || property.PropertyType != typeof(bool))
         {
             return;
         }
 
-        bool? currentValue = (bool?)property.GetValue(appConfig);
-        property.SetValue(appConfig, !currentValue);
+        bool? currentValue = (bool?)property.GetValue(appSettings);
+        property.SetValue(appSettings, !currentValue);
     }
 }

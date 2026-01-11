@@ -17,6 +17,7 @@ using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Startup;
+using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 
@@ -24,9 +25,8 @@ namespace SkEditor;
 
 public class App : Application
 {
-    public static BinarySettings? BinarySettings { get; private set; }
     public static Stopwatch Stopwatch { get; } = new();
-    
+
     private SplashScreen? _splashScreen;
 
     public override void Initialize()
@@ -36,8 +36,9 @@ public class App : Application
     
     public App()
     {
-        BinarySettings = new BinarySettings();
-        BinarySettings.Load();
+        BinarySettings binarySettings = new();
+        SkEditorAPI.Configs.AddConfig(binarySettings);
+        binarySettings.Load();
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -93,8 +94,10 @@ public class App : Application
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     AppWindow.AlwaysFallback =
-                        SkEditorAPI.Core.GetAppConfig().ForceNativeTitleBar;
+                        SkEditorAPI.Configs.GetAppSettings().ForceNativeTitleBar;
                 });
+                
+                await SkEditorAPI.Configs.LoadAllConfigsAsync();
 
                 await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Creating main window..."));
 

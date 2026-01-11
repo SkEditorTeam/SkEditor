@@ -10,8 +10,8 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Syntax;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Windows.Marketplace.Types;
 
@@ -23,7 +23,7 @@ public class SyntaxItem : MarketplaceItem
 
     public override async Task Install()
     {
-        string baseLocalSyntaxPath = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        string baseLocalSyntaxPath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName);
 
         List<FileSyntax> installedSyntaxes = [];
         bool allInstalled = true;
@@ -103,7 +103,7 @@ public class SyntaxItem : MarketplaceItem
     public override async Task Uninstall()
     {
         List<string> folders = ItemSyntaxFolders.ToList();
-        string syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        string syntaxFolder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName);
         foreach (string localSyntaxPath in folders
                      .Select(folder => folder.Split('/').Last())
                      .Select(folderName => Path.Combine(syntaxFolder,
@@ -125,7 +125,7 @@ public class SyntaxItem : MarketplaceItem
 
     public override bool IsInstalled()
     {
-        string syntaxFolder = Path.Combine(AppConfig.AppDataFolderPath, FolderName);
+        string syntaxFolder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName);
         return ItemSyntaxFolders
             .Select(folder => folder.Split('/').Last())
             .Select(folderName => Path.Combine(syntaxFolder, folderName))

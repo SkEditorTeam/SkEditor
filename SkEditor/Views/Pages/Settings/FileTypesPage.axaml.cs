@@ -23,7 +23,7 @@ public partial class FileTypesPage : UserControl
     {
         TypeContainer.Children.Clear();
 
-        foreach ((string ext, string? fullId) in SkEditorAPI.Core.GetAppConfig().FileTypeChoices)
+        foreach ((string ext, string? fullId) in SkEditorAPI.Configs.GetStateConfig().FileTypeChoices)
         {
             List<FileTypeData> availableTypes = Registries.FileTypes.GetValues().ToList()
                 .Where(x => x.SupportedExtensions.Contains(ext)).ToList();
@@ -113,7 +113,7 @@ public partial class FileTypesPage : UserControl
                     return;
                 }
 
-                SkEditorAPI.Core.GetAppConfig().FileTypeChoices[ext] = Registries.FileTypes.GetValueKey(type)?.FullKey;
+                SkEditorAPI.Configs.GetStateConfig().FileTypeChoices[ext] = Registries.FileTypes.GetValueKey(type)?.FullKey;
             };
 
             Button removeBtn = new()
@@ -121,7 +121,7 @@ public partial class FileTypesPage : UserControl
                 Content = "Remove",
                 Command = new RelayCommand(() =>
                 {
-                    SkEditorAPI.Core.GetAppConfig().FileTypeChoices.Remove(ext);
+                    SkEditorAPI.Configs.GetStateConfig().FileTypeChoices.Remove(ext);
                     LoadTypes();
                 }),
                 VerticalContentAlignment = VerticalAlignment.Center,

@@ -28,7 +28,7 @@ public class SkriptMcProvider : IDocProvider
 
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
-        string uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkriptMcApiKey) + "&articleName=" +
+        string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkriptMcApiKey) + "&articleName=" +
                      searchData.Query;
 
         uri += "&categorySlug=" + searchData.FilteredType.ToString().ToLower() + "s";
@@ -85,7 +85,7 @@ public class SkriptMcProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkriptMcApiKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Configs.GetSecretsConfig().SkriptMcApiKey);
     }
 
     public bool NeedsToLoadExamples => false;

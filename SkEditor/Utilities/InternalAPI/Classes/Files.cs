@@ -270,7 +270,7 @@ public class Files : IFiles
             IsNewFile = path == null
         };
 
-        if (SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled &&
+        if (SkEditorAPI.Configs.GetAppSettings().IsEditorZoomLevelSyncEnabled &&
             GetOpenedEditors()?.FirstOrDefault()?.Editor is { } firstEditor)
         {
             editor.FontSize = firstEditor.FontSize;
@@ -324,7 +324,7 @@ public class Files : IFiles
             case > 1:
             {
                 string? configuredTypeFullId =
-                    SkEditorAPI.Core.GetAppConfig().FileTypeChoices.GetValueOrDefault(extension, null);
+                    SkEditorAPI.Configs.GetStateConfig().FileTypeChoices.GetValueOrDefault(extension, null);
 
                 if (configuredTypeFullId != null && !Registries.FileTypes.HasFullKey(configuredTypeFullId))
                 {
@@ -357,7 +357,7 @@ public class Files : IFiles
 
                     if (selectionVm.RememberSelection)
                     {
-                        SkEditorAPI.Core.GetAppConfig().FileTypeChoices[extension] =
+                        SkEditorAPI.Configs.GetStateConfig().FileTypeChoices[extension] =
                             Registries.FileTypes.GetValueKey(selectionVm.SelectedFileType)?.FullKey;
                     }
 

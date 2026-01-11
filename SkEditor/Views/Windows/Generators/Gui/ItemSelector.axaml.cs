@@ -15,8 +15,8 @@ using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Data;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Styling;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
@@ -143,7 +143,7 @@ public partial class ItemSelector : AppWindow
 
     private async Task CheckForFile()
     {
-        string itemsFile = Path.Combine(AppConfig.AppDataFolderPath, "items.json");
+        string itemsFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "items.json");
 
         if (!File.Exists(itemsFile))
         {

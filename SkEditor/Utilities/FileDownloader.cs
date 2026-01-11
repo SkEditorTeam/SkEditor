@@ -19,12 +19,12 @@ namespace SkEditor.Utilities;
 public static class FileDownloader
 {
     private const string ZipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
-    private static readonly string AppDataFolderPath = Settings.AppConfig.AppDataFolderPath;
+    private static readonly string AppDataFolderPath = SkEditorAPI.Configs.GetAppDataPath();
     private static readonly string ZipFilePath = Path.Combine(AppDataFolderPath, "items.zip");
 
     public static async Task CheckForMissingItemFiles(Window visual)
     {
-        string itemsFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "items.json");
+        string itemsFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "items.json");
         if (File.Exists(itemsFile))
         {
             return;

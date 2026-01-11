@@ -49,7 +49,7 @@ public class ThemeEditor
     public static List<Theme> Themes { get; set; } = [];
     public static Theme CurrentTheme { get; set; } = new();
 
-    public static string ThemeFolderPath { get; set; } = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Themes");
+    public static string ThemeFolderPath { get; set; } = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Themes");
 
     public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 
@@ -104,7 +104,7 @@ public class ThemeEditor
 
     private static Theme GetUsedTheme()
     {
-        string currentTheme = SkEditorAPI.Core.GetAppConfig().CurrentTheme;
+        string currentTheme = SkEditorAPI.Configs.GetAppSettings().CurrentTheme;
 
         if (currentTheme != null && File.Exists(Path.Combine(ThemeFolderPath, currentTheme)))
         {
@@ -154,7 +154,7 @@ public class ThemeEditor
         }
 
         CurrentTheme = theme;
-        SkEditorAPI.Core.GetAppConfig().CurrentTheme = theme.FileName;
+        SkEditorAPI.Configs.GetAppSettings().CurrentTheme = theme.FileName;
 
         await ApplyTheme();
     }

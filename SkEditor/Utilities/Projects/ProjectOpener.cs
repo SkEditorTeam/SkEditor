@@ -52,7 +52,7 @@ public static class ProjectOpener
 
         _doubleTappedHandler = (_, e) =>
         {
-            if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            if (SkEditorAPI.Configs.GetAppSettings().IsProjectSingleClickEnabled)
             {
                 return;
             }
@@ -62,7 +62,7 @@ public static class ProjectOpener
 
         _tappedHandler = (_, e) =>
         {
-            if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+            if (!SkEditorAPI.Configs.GetAppSettings().IsProjectSingleClickEnabled)
             {
                 return;
             }

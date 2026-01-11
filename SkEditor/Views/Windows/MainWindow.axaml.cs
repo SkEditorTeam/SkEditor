@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -16,6 +17,7 @@ using SkEditor.Utilities.Files.Session;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
@@ -86,13 +88,11 @@ public partial class MainWindow : AppWindow
                 return;
             }
             
-            App.BinarySettings?.Save();
-
             ThemeEditor.SaveAllThemes();
-            SkEditorAPI.Core.GetAppConfig().Save();
+            await SkEditorAPI.Configs.SaveAllConfigsAsync();
 
             e.Cancel = true;
-            if (!SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
+            if (!SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
             {
                 bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
                 if (!anyUnsaved)
@@ -130,10 +130,6 @@ public partial class MainWindow : AppWindow
             AlreadyClosed = true;
             Close();
         }
-        finally
-        {
-            SkEditorAPI.Core.GetAppConfig().Save();
-        }
     }
 
     protected override void OnClosed(EventArgs e)
@@ -155,7 +151,7 @@ public partial class MainWindow : AppWindow
     {
         try
         {
-            await Translation.ChangeLanguage(SkEditorAPI.Core.GetAppConfig().Language, true);
+            await Translation.ChangeLanguage(SkEditorAPI.Configs.GetAppSettings().Language, true);
             _splashScreen?.UpdateStatus("Loading themes and addons...");
 
             Task themeTask = ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
@@ -166,11 +162,11 @@ public partial class MainWindow : AppWindow
             Utilities.Files.FileTypes.RegisterDefaultAssociations();
             SideBar.ReloadPanels();
 
-            double scale = SkEditorAPI.Core.GetAppConfig().CustomUiScale;
+            double scale = SkEditorAPI.Configs.GetAppSettings().CustomUiScale;
             LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
 
             bool sessionFilesAdded = false;
-            if (SkEditorAPI.Core.GetAppConfig().EnableSessionRestoring)
+            if (SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
             {
                 _splashScreen?.UpdateStatus("Restoring session...");
                 sessionFilesAdded = await SessionRestorer.RestoreSession();
@@ -223,7 +219,7 @@ public partial class MainWindow : AppWindow
                 {
                     try
                     {
-                        if (SkEditorAPI.Core.GetAppConfig().CheckForUpdates)
+                        if (SkEditorAPI.Configs.GetAppSettings().CheckForAppUpdates)
                         {
                             await UpdateChecker.Check();
                         }

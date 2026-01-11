@@ -27,7 +27,7 @@ public static class LocalDependencyManager
             .Where(x => x is NuGetDependency)
             .Cast<NuGetDependency>().ToList();
 
-        string addonFolder = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", addonMeta.Addon.Identifier);
+        string addonFolder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons", addonMeta.Addon.Identifier);
         if (Directory.Exists(addonFolder))
         {
             Directory.CreateDirectory(addonFolder);

@@ -13,23 +13,14 @@ namespace SkEditor.Utilities.InternalAPI.Classes;
 
 public class Core : ICore
 {
-    private Settings.AppConfig? _appConfig;
     private string[] _startupArguments = null!;
-
-    public Settings.AppConfig GetAppConfig()
-    {
-        return _appConfig ??= Settings.AppConfig.Load();
-    }
 
     public Version GetAppVersion()
     {
         Version? version = Assembly.GetExecutingAssembly().GetName().Version;
-        if (version == null)
-        {
-            throw new InvalidOperationException("Version is null");
-        }
-
-        return new Version(version.Major, version.Minor, version.Build);
+        return version == null
+            ? throw new InvalidOperationException("Version is null")
+            : new Version(version.Major, version.Minor, version.Build);
     }
 
     public string GetInformationalVersion()
@@ -38,12 +29,7 @@ public class Core : ICore
         string? informationVersion =
             assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
-        if (informationVersion == null)
-        {
-            throw new InvalidOperationException("Informational version is null");
-        }
-
-        return informationVersion;
+        return informationVersion ?? throw new InvalidOperationException("Informational version is null");
     }
 
     public string[] GetStartupArguments()
@@ -85,7 +71,7 @@ public class Core : ICore
         return true;
 #endif
         // ReSharper disable once HeuristicUnreachableCode
-        return GetAppConfig().IsDevModeEnabled;
+        return SkEditorAPI.Configs.GetAppSettings().IsDevModeEnabled;
 #pragma warning restore 162
     }
 
@@ -114,10 +100,10 @@ public class Core : ICore
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to save file: {path}");
+                Log.Error(ex, "Failed to save file: {Path}", path);
             }
         }
 
-        GetAppConfig().Save();
+        // TODO: save settings
     }
 }

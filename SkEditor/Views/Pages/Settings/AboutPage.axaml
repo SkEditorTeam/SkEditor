@@ -8,10 +8,11 @@
              xmlns:utils="clr-namespace:SkEditor.Utilities"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:settings="clr-namespace:SkEditor.Utilities.Settings"
+             xmlns:configs="clr-namespace:SkEditor.Utilities.Settings.Configs"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
-             x:DataType="settings:AppConfig"
-             DataContext="{x:Static vms:ViewModelLocator.AppConfig}"
+             x:DataType="configs:AppSettings"
+             DataContext="{x:Static vms:ViewModelLocator.AppSettings}"
              x:Class="SkEditor.Views.Pages.Settings.AboutPage">
 
     <UserControl.Resources>

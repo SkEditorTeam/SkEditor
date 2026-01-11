@@ -10,8 +10,8 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Styling;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -26,7 +26,7 @@ public class ThemeItem : MarketplaceItem
     public override async Task Install()
     {
         string fileName = ItemFileUrl.Split('/').Last();
-        string filePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, fileName);
+        string filePath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName, fileName);
 
         using HttpClient client = new();
         HttpResponseMessage response = await client.GetAsync(ItemFileUrl);
@@ -81,7 +81,7 @@ public class ThemeItem : MarketplaceItem
 
         ThemeEditor.Themes.Remove(theme);
         ThemeEditor.SaveAllThemes();
-        File.Delete(Path.Combine(AppConfig.AppDataFolderPath, "Themes", fileName));
+        File.Delete(Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Themes", fileName));
 
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
@@ -93,7 +93,7 @@ public class ThemeItem : MarketplaceItem
 
     public override bool IsInstalled()
     {
-        string themePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, Path.GetFileName(ItemFileUrl));
+        string themePath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName, Path.GetFileName(ItemFileUrl));
         return File.Exists(themePath);
     }
 }

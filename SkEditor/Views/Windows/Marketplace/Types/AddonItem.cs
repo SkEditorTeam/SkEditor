@@ -9,9 +9,9 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.Views.Windows.Settings;
 using AddonsPage = SkEditor.Views.Pages.Settings.AddonsPage;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -28,8 +28,8 @@ public class AddonItem : MarketplaceItem
         string fileName = ItemFileUrl.Split('/').Last();
         string addonIdentifier = Path.GetFileNameWithoutExtension(fileName);
 
-        Directory.CreateDirectory(Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier));
-        string filePath = Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier,
+        Directory.CreateDirectory(Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName, addonIdentifier));
+        string filePath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName, addonIdentifier,
             addonIdentifier + ".dll");
 
         try
@@ -75,7 +75,7 @@ public class AddonItem : MarketplaceItem
             return;
         }
 
-        string folder = Path.Combine(AppConfig.AppDataFolderPath, FolderName, addonIdentifier);
+        string folder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName, addonIdentifier);
 
         await AddonLoader.LoadAddonFromFile(folder);
     }

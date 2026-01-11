@@ -19,7 +19,8 @@ public static class ChangelogChecker
 
     public static async Task Check()
     {
-        string version = SkEditorAPI.Core.GetAppConfig().Version;
+        string version = SkEditorAPI.Configs.GetAppSettings().Version;
+
         if (version == GetVersion())
         {
             return;
@@ -29,6 +30,6 @@ public static class ChangelogChecker
 
         await SkEditorAPI.Windows.ShowDialog($"v{GetVersion()}", string.Join('\n', changelog), rocketIcon);
 
-        SkEditorAPI.Core.GetAppConfig().Version = GetVersion();
+        SkEditorAPI.Configs.GetAppSettings().Version = GetVersion();
     }
 }

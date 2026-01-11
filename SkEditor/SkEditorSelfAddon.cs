@@ -5,10 +5,10 @@ using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Updating;
 using SkEditor.Views.Controls.Sidebar;
 using ImageViewer = SkEditor.Views.Windows.FileTypes.Images.ImageViewer;
+using SecretsConfig = SkEditor.Utilities.Settings.Configs.SecretsConfig;
 
 namespace SkEditor;
 
@@ -51,32 +51,38 @@ public class SkEditorSelfAddon : IAddon
                     : new Bitmap(stream)
             };
         }
+        
+        SecretsConfig secrets = SkEditorAPI.Configs.GetSecretsConfig();
 
         Registries.Connections.Register(new RegistryKey(this, "skUnityConnection"),
             new ConnectionData("skUnity",
                 "Used as a documentation provider and a script host (via skUnity Parser)",
-                "SkUnityAPIKey",
+                () => secrets.SkUnityApiKey,
+                value => secrets.SkUnityApiKey = value,
                 GetIcon("skUnity.svg", true),
                 "https://skunity.com/dashboard/skunity-api"));
 
         Registries.Connections.Register(new RegistryKey(this, "SkriptMCConnection"),
             new ConnectionData("SkriptMC",
                 "Used as a documentation provider",
-                "SkriptMCAPIKey",
+                () => secrets.SkriptMcApiKey,
+                value => secrets.SkriptMcApiKey = value,
                 GetIcon("SkriptMC.png", false),
                 "https://skript-mc.fr/developer/"));
 
         Registries.Connections.Register(new RegistryKey(this, "CodeSkriptPlConnection"),
             new ConnectionData("skript.pl",
                 "Used as a script host",
-                "CodeSkriptPlApiKey",
+                () => secrets.CodeSkriptPlApiKey,
+                value => secrets.CodeSkriptPlApiKey = value,
                 GetIcon("skriptpl.svg", true),
                 "https://code.skript.pl/api-key"));
 
         Registries.Connections.Register(new RegistryKey(this, "PastebinConnection"),
             new ConnectionData("Pastebin",
                 "Used as a script host",
-                "PastebinApiKey",
+                () => secrets.PastebinApiKey,
+                value => secrets.PastebinApiKey = value,
                 GetIcon("Pastebin.svg", true),
                 "https://pastebin.com/doc_api"));
 

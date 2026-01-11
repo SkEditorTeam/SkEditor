@@ -5,10 +5,10 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Utilities.Settings;
 using SkEditor.Views.Controls.Addons;
 using SkEditor.Views.Windows.Marketplace;
 using SkEditor.Views.Windows.Settings;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
 
 namespace SkEditor.Views.Pages.Settings;
 
@@ -58,7 +58,7 @@ public partial class AddonsPage : UserControl
                 return;
             }
 
-            string folder = Path.Combine(AppConfig.AppDataFolderPath, "Addons", name);
+            string folder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons", name);
             string addonFile = Path.Combine(folder, Path.GetFileName(file));
             if (File.Exists(addonFile))
             {

@@ -6,9 +6,10 @@ using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views.Windows.Settings;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
+using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 
@@ -35,7 +36,7 @@ public partial class FileSyntaxes : UserControl
 
         foreach (string langName in availableLangNames)
         {
-            string? selectedSyntax = SkEditorAPI.Core.GetAppConfig().FileSyntaxes
+            string? selectedSyntax = SkEditorAPI.Configs.GetAppSettings().FileSyntaxes
                 .FirstOrDefault(x => x.Key.Equals(langName)).Value ?? null;
 
             if (string.IsNullOrEmpty(selectedSyntax))
@@ -82,7 +83,7 @@ public partial class FileSyntaxes : UserControl
 
         comboBox.SelectionChanged += (_, _) =>
         {
-            AppConfig config = SkEditorAPI.Core.GetAppConfig();
+            AppSettings config = SkEditorAPI.Configs.GetAppSettings();
             string? selectedFullIdName = (comboBox.SelectedValue as ComboBoxItem)?.Tag?.ToString();
             FileSyntax? selectedFileSyntax =
                 SyntaxLoader.FileSyntaxes.FirstOrDefault(x =>

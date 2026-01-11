@@ -46,7 +46,7 @@ public partial class MainMenuControl : UserControl
     private void ConfigureMenu()
     {
         SetVisibility();
-        SkEditorAPI.Core.GetAppConfig().PropertyChanged += (_, _) => SetVisibility();
+        SkEditorAPI.Configs.GetAppSettings().PropertyChanged += (_, _) => SetVisibility();
         return;
 
         void SetVisibility()

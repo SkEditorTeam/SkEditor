@@ -10,13 +10,13 @@ public static class Tutorial
 {
     public static async Task ShowTutorial()
     {
-        if (!SkEditorAPI.Core.GetAppConfig().FirstTime)
+        if (!SkEditorAPI.Configs.GetBinarySettings().IsFirstRun)
         {
             return;
         }
 
-        SkEditorAPI.Core.GetAppConfig().FirstTime = false;
-        SkEditorAPI.Core.GetAppConfig().Save();
+        SkEditorAPI.Configs.GetBinarySettings().IsFirstRun = false;
+        _ = SkEditorAPI.Configs.GetBinarySettings().Save();
 
         object? icon = null;
         Application.Current?.TryGetResource("SkEditorIcon", ThemeVariant.Default, out icon);

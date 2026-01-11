@@ -3,7 +3,8 @@ using System.Diagnostics;
 using Avalonia.Controls;
 using SkEditor.API;
 using SkEditor.Utilities;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
+using SkEditor.Utilities.Settings;
+using SecretsConfig = SkEditor.Utilities.Settings.Configs.SecretsConfig;
 
 namespace SkEditor.Views.Controls;
 
@@ -32,14 +33,13 @@ public partial class ConnectionEntryControl : UserControl
             };
         }
 
-        string key = connectionData.OptionKey;
-        AppConfig appConfig = SkEditorAPI.Core.GetAppConfig();
+        SecretsConfig secretsConfig = SkEditorAPI.Configs.GetSecretsConfig();
 
-        ApiKeyTextBox.Text = appConfig.GetApiKey(key);
-        ApiKeyTextBox.TextChanged += (_, _) =>
+        ApiKeyTextBox.Text = connectionData.GetApiKey();
+        ApiKeyTextBox.TextChanged += async (_, _) =>
         {
-            appConfig.SetApiKey(key, ApiKeyTextBox.Text);
-            appConfig.Save();
+            connectionData.SetApiKey(ApiKeyTextBox.Text);
+            await secretsConfig.Save();
         };
 
         Expander.IconSource = connectionData.IconSource;

@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
+using SkEditor.Utilities.Settings;
 
 namespace SkEditor.Views.Pages.Settings;
 
@@ -19,6 +19,6 @@ public partial class AboutPage : UserControl
             new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor"));
         DocumentationItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev"));
         DiscordItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev"));
-        AppDataItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenFolder(AppConfig.AppDataFolderPath));
+        AppDataItem.Command = new RelayCommand(() => SkEditorAPI.Core.OpenFolder(SkEditorAPI.Configs.GetAppDataPath()));
     }
 }

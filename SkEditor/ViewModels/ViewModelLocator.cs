@@ -1,10 +1,14 @@
 ﻿using SkEditor.API;
 using SkEditor.Utilities.Settings;
+using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
+using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
+using StateConfig = SkEditor.Utilities.Settings.Configs.StateConfig;
 
 namespace SkEditor.ViewModels;
 
 public static class ViewModelLocator
 {
-    public static AppConfig AppConfig => SkEditorAPI.Core.GetAppConfig();
-    public static BinarySettings? BinarySettings => App.BinarySettings;
+    public static AppSettings AppSettings => SkEditorAPI.Configs.GetAppSettings();
+    public static StateConfig StateConfig => SkEditorAPI.Configs.GetStateConfig();
+    public static BinarySettings BinarySettings => SkEditorAPI.Configs.GetBinarySettings();
 }

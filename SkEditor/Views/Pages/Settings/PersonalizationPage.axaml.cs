@@ -47,7 +47,7 @@ public partial class PersonalizationPage : UserControl
             return;
         }
 
-        SkEditorAPI.Core.GetAppConfig().Font = result;
+        SkEditorAPI.Configs.GetAppSettings().EditorFontFamily = result;
 
         SkEditorAPI.Files.GetOpenedEditors().ForEach(i =>
         {

@@ -45,7 +45,7 @@ public abstract class StorageElement
 
     public void HandleDoubleClick()
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+        if (!SkEditorAPI.Configs.GetAppSettings().IsProjectSingleClickEnabled)
         {
             HandleClick();
         }
@@ -53,7 +53,7 @@ public abstract class StorageElement
 
     public void HandleSingleClick()
     {
-        if (SkEditorAPI.Core.GetAppConfig().IsProjectSingleClickEnabled)
+        if (SkEditorAPI.Configs.GetAppSettings().IsProjectSingleClickEnabled)
         {
             HandleClick();
         }

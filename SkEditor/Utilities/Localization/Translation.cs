@@ -31,7 +31,7 @@ public static class Translation
     /// </summary>
     /// <param name="key">The translation key.</param>
     /// <param name="parameters">Optional parameters to format the translated string.</param>
-    /// <returns>>The translated and formatted string.</returns>
+    /// <returns>The translated and formatted string.</returns>
     public static string Get(string key, params string?[] parameters)
     {
         object? translation = null;
@@ -158,8 +158,8 @@ public static class Translation
 
     private static void PropagateLanguageChange(string language)
     {
-        SkEditorAPI.Core.GetAppConfig().Language = language;
-        SkEditorAPI.Core.GetAppConfig().Save();
+        SkEditorAPI.Configs.GetAppSettings().Language = language;
+        // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
         Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
     }
 }

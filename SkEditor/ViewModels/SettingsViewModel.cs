@@ -5,8 +5,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Updating;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
+using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 
 namespace SkEditor.ViewModels;
 
@@ -24,8 +25,8 @@ public partial class SettingsViewModel : ObservableObject
     private void SubscribeToEvents()
     {
         // Use weak event handlers to avoid memory leaks
-        WeakEventHandlerManager.Subscribe<AppConfig, PropertyChangedEventArgs, SettingsViewModel>(
-            SkEditorAPI.Core.GetAppConfig(),
+        WeakEventHandlerManager.Subscribe<AppSettings, PropertyChangedEventArgs, SettingsViewModel>(
+            SkEditorAPI.Configs.GetAppSettings(),
             nameof(INotifyPropertyChanged.PropertyChanged),
             OnAppConfigPropertyChanged);
 
@@ -37,7 +38,7 @@ public partial class SettingsViewModel : ObservableObject
 
     private void OnAppConfigPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AppConfig.Font))
+        if (e.PropertyName == nameof(AppSettings.EditorFontFamily))
         {
             UpdateProperties();
         }
@@ -51,7 +52,7 @@ public partial class SettingsViewModel : ObservableObject
     private void UpdateProperties()
     {
         CurrentFont = Translation.Get("SettingsPersonalizationFontDescription")
-            .Replace("{0}", SkEditorAPI.Core.GetAppConfig().Font);
+            .Replace("{0}", SkEditorAPI.Configs.GetAppSettings().EditorFontFamily);
 
         Version = Translation.Get("SettingsAboutVersionDescription").Replace("{0}",
             $"{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}");

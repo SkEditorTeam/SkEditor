@@ -110,7 +110,7 @@ public partial class CodeParser : INotifyPropertyChanged
             Sections.Add(new CodeSection(this, lastSectionLine, linesToParse));
         }
 
-        if (SkEditorAPI.Core.GetAppConfig().EnableFolding)
+        if (SkEditorAPI.Configs.GetExperimentsConfig().FoldingEnabled)
         {
             FoldingCreator.CreateFoldings(Editor, Sections);
         }

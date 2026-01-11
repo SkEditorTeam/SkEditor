@@ -1,4 +1,5 @@
-﻿using FluentAvalonia.UI.Controls;
+﻿using System;
+using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.API;
 
@@ -10,12 +11,14 @@ namespace SkEditor.API;
 /// </summary>
 /// <param name="Name">The name of the connection.</param>
 /// <param name="Description">A description of the connection.</param>
-/// <param name="OptionKey">The key used for saving the connection in SkEditor's settings.</param>
+/// <param name="GetApiKey">A function to get the API key for the connection.</param>
+/// <param name="SetApiKey">An action to set the API key for the connection.</param>
 /// <param name="IconSource">The icon source for the connection. Can be null.</param>
 /// <param name="DashboardUrl">The URL of the dashboard for the connection. Can be null.</param>
 public record ConnectionData(
     string Name,
     string Description,
-    string OptionKey,
+    Func<string> GetApiKey,
+    Action<string> SetApiKey,
     IconSource? IconSource,
     string? DashboardUrl);

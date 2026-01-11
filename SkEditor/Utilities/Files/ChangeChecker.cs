@@ -31,7 +31,7 @@ public class ChangeChecker
 
     public static async Task Check()
     {
-        if (!SkEditorAPI.Core.GetAppConfig().CheckForChanges)
+        if (!SkEditorAPI.Configs.GetAppSettings().CheckForExternalFileChanges)
         {
             return;
         }

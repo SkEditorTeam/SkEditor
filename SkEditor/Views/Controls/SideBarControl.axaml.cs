@@ -74,7 +74,7 @@ public partial class SideBarControl : UserControl
         string? firstPanelId = panels.First().GetId();
         if (firstPanelId != null)
         {
-            _syncedPanelWidth = SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(firstPanelId, 300);
+            _syncedPanelWidth = SkEditorAPI.Configs.GetStateConfig().SidebarPanelSizes.GetValueOrDefault(firstPanelId, 300);
         }
     }
 
@@ -104,9 +104,9 @@ public partial class SideBarControl : UserControl
             throw new NullReferenceException();
         }
 
-        SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[currentPanelId] = (int)currentWidth;
+        SkEditorAPI.Configs.GetStateConfig().SidebarPanelSizes[currentPanelId] = (int)currentWidth;
 
-        if (SkEditorAPI.Core.GetAppConfig().IsSidebarWidthSyncEnabled)
+        if (SkEditorAPI.Configs.GetAppSettings().IsSidebarWidthSyncEnabled)
         {
             _syncedPanelWidth = currentWidth;
 
@@ -115,7 +115,7 @@ public partial class SideBarControl : UserControl
                 string? panelId = panel.GetId();
                 if (panelId != null)
                 {
-                    SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes[panelId] = (int)currentWidth;
+                    SkEditorAPI.Configs.GetStateConfig().SidebarPanelSizes[panelId] = (int)currentWidth;
                 }
             }
         }
@@ -204,7 +204,7 @@ public partial class SideBarControl : UserControl
             return;
         }
 
-        bool useAnimation = SkEditorAPI.Core.GetAppConfig().IsSidebarAnimationEnabled;
+        bool useAnimation = SkEditorAPI.Configs.GetAppSettings().IsSidebarAnimationEnabled;
 
         if (useAnimation)
         {
@@ -406,7 +406,7 @@ public partial class SideBarControl : UserControl
 
     private double GetPanelWidth(SidebarPanel panel)
     {
-        if (SkEditorAPI.Core.GetAppConfig().IsSidebarWidthSyncEnabled)
+        if (SkEditorAPI.Configs.GetAppSettings().IsSidebarWidthSyncEnabled)
         {
             return _syncedPanelWidth;
         }
@@ -414,7 +414,7 @@ public partial class SideBarControl : UserControl
         string? panelId = panel.GetId();
         return panelId == null
             ? panel.DesiredWidth
-            : SkEditorAPI.Core.GetAppConfig().SidebarPanelSizes.GetValueOrDefault(panelId, panel.DesiredWidth);
+            : SkEditorAPI.Configs.GetStateConfig().SidebarPanelSizes.GetValueOrDefault(panelId, panel.DesiredWidth);
     }
 
     private static void SetButtonActive(Button button, bool isActive)

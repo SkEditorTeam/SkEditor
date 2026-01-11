@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using SkEditor.Utilities;
-using AppConfig = SkEditor.Utilities.Settings.AppConfig;
+using SkEditor.Utilities.Settings;
 
 namespace SkEditor.API;
 
@@ -10,12 +10,6 @@ namespace SkEditor.API;
 /// </summary>
 public interface ICore
 {
-    /// <summary>
-    ///     Get the application's configuration.
-    /// </summary>
-    /// <returns>The application's configuration.</returns>
-    AppConfig GetAppConfig();
-
     /// <summary>
     ///     Get the application's version in a Version object.
     /// </summary>

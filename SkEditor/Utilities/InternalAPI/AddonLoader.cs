@@ -28,7 +28,7 @@ public static class AddonLoader
 
     public static async Task Load()
     {
-        string addonsFolder = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons");
+        string addonsFolder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons");
         Directory.CreateDirectory(addonsFolder);
 
         Addons.Clear();
@@ -76,7 +76,7 @@ public static class AddonLoader
 
     private static void LoadMeta()
     {
-        string metaFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", "meta.json");
+        string metaFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons", "meta.json");
         if (!File.Exists(metaFile))
         {
             File.WriteAllText(metaFile, "{}");
@@ -89,7 +89,7 @@ public static class AddonLoader
 
     private static async Task LoadAddonsFromFiles()
     {
-        string folder = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons");
+        string folder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons");
         string[] folders = Directory.GetDirectories(folder);
         List<string> dllFiles = folders
             .Select(sub => Path.Combine(sub, Path.GetFileName(sub) + ".dll"))
@@ -381,7 +381,7 @@ public static class AddonLoader
 
         addonMeta.LoadContext?.Unload();
 
-        string addonFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", addonMeta.Addon.Identifier,
+        string addonFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons", addonMeta.Addon.Identifier,
             addonMeta.Addon.Identifier + ".dll");
         if (File.Exists(addonFile))
         {
@@ -406,7 +406,7 @@ public static class AddonLoader
 
     public static async Task SaveMeta()
     {
-        string metaFile = Path.Combine(Settings.AppConfig.AppDataFolderPath, "Addons", "meta.json");
+        string metaFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons", "meta.json");
         _metaCache = new JObject();
         foreach (AddonMeta addonMeta in Addons)
         {

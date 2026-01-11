@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Startup;
 
-namespace SkEditor.Utilities.Settings;
+namespace SkEditor.Utilities.Settings.Configs;
 
 /// <summary>
 ///    Manages application settings stored in a binary file next to the executable.
 /// </summary>
-public partial class BinarySettings : ObservableObject
+public partial class BinarySettings : ObservableObject, IConfig
 {
+    private const string ConfigFileName = "settings.bin";
+    public string FileName => ConfigFileName;
+
     public int SplashScreenModeIndex
     {
         get => (int)SplashScreenMode;
@@ -19,10 +23,11 @@ public partial class BinarySettings : ObservableObject
     }
     
     [ObservableProperty] private StartupMode _splashScreenMode = StartupMode.Auto;
-    
     [ObservableProperty] private int _averageStartupTime;
+    
+    [ObservableProperty] private bool _isFirstRun = true;
 
-    private readonly string _binaryFilePath = Path.Combine(AppContext.BaseDirectory, "settings.bin");
+    private readonly string _binaryFilePath = Path.Combine(AppContext.BaseDirectory, ConfigFileName);
     private readonly List<IBinarySettingHandler> _registry;
 
     public BinarySettings()
@@ -33,6 +38,9 @@ public partial class BinarySettings : ObservableObject
                 r => r.ReadByte(), (w, v) => w.Write(v)),
 
             new BinarySettingHandler<int>(() => AverageStartupTime, v => AverageStartupTime = v, r => r.ReadInt32(),
+                (w, v) => w.Write(v)),
+            
+            new BinarySettingHandler<bool>(() => IsFirstRun, v => IsFirstRun = v, r => r.ReadBoolean(),
                 (w, v) => w.Write(v))
         ];
     }
@@ -40,9 +48,9 @@ public partial class BinarySettings : ObservableObject
     /// <summary>
     ///     Loads the settings if the file exists.
     /// </summary>
-    public void Load()
+    public Task Load()
     {
-        if (!File.Exists(_binaryFilePath)) return;
+        if (!File.Exists(_binaryFilePath)) return Task.CompletedTask;
         try
         {
             using BinaryReader reader = new(File.OpenRead(_binaryFilePath));
@@ -55,12 +63,14 @@ public partial class BinarySettings : ObservableObject
         {
             // ignored
         }
+        
+        return Task.CompletedTask;
     }
 
     /// <summary>
     ///     Saves the settings to the file.
     /// </summary>
-    public void Save()
+    public Task Save()
     {
         try
         {
@@ -74,5 +84,7 @@ public partial class BinarySettings : ObservableObject
         {
             // ignored
         }
+        
+        return Task.CompletedTask;
     }
 }

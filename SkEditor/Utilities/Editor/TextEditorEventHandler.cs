@@ -80,7 +80,7 @@ public partial class TextEditorEventHandler
 
     private static void Zoom(TextEditor editor, int value)
     {
-        if (SkEditorAPI.Core.GetAppConfig().IsZoomSyncEnabled)
+        if (SkEditorAPI.Configs.GetAppSettings().IsEditorZoomLevelSyncEnabled)
         {
             foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
             {
@@ -133,14 +133,14 @@ public partial class TextEditorEventHandler
                 return;
             }
 
-            if (SkEditorAPI.Core.GetAppConfig().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
+            if (SkEditorAPI.Configs.GetAppSettings().IsAutoSaveEnabled && !string.IsNullOrEmpty(openedFile.Path))
             {
                 openedFile.IsSaved = false;
                 await Dispatcher.UIThread.InvokeAsync(FileHandler.SaveFile);
                 return;
             }
 
-            if (SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
+            if (SkEditorAPI.Configs.GetExperimentsConfig().RealtimeCodeParserEnabled)
             {
                 await Dispatcher.UIThread.InvokeAsync(() => openedFile.Parser?.Parse());
             }
@@ -156,7 +156,7 @@ public partial class TextEditorEventHandler
 
     public static void DoAutoIndent(object? sender, TextInputEventArgs e)
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsAutoIndentEnabled)
+        if (!SkEditorAPI.Configs.GetAppSettings().IsAutoIndentEnabled)
         {
             return;
         }
@@ -199,7 +199,7 @@ public partial class TextEditorEventHandler
 
     public static void DoAutoPairing(object? sender, TextInputEventArgs e)
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsAutoPairingEnabled)
+        if (!SkEditorAPI.Configs.GetAppSettings().IsAutoPairingEnabled)
         {
             return;
         }
@@ -323,7 +323,7 @@ public partial class TextEditorEventHandler
 
     public static void OnTextPasting(object? sender, TextEventArgs e)
     {
-        if (!SkEditorAPI.Core.GetAppConfig().IsPasteIndentationEnabled)
+        if (!SkEditorAPI.Configs.GetAppSettings().IsPasteIndentationEnabled)
         {
             return;
         }

@@ -91,7 +91,7 @@ public class FileBuilder
         else
         {
             string ext = Path.GetExtension(path);
-            if (SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.TryGetValue(ext, out string? value))
+            if (SkEditorAPI.Configs.GetStateConfig().FileTypeChoices.TryGetValue(ext, out string? value))
             {
                 if (value == "SkEditor")
                 {
@@ -107,7 +107,7 @@ public class FileBuilder
                     }
                     else
                     {
-                        SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
+                        SkEditorAPI.Configs.GetStateConfig().FileTypeChoices.Remove(ext);
                     }
                 }
             }
@@ -128,15 +128,15 @@ public class FileBuilder
             fileType = selected.Handle(path);
             if (window.RememberCheck.IsChecked == true)
             {
-                SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations[ext] =
+                SkEditorAPI.Configs.GetStateConfig().FileTypeChoices[ext] =
                     selected.IsFromAddon ? selected.Addon?.Name ?? "Addon" : "SkEditor";
             }
             else
             {
-                SkEditorAPI.Core.GetAppConfig().PreferredFileAssociations.Remove(ext);
+                SkEditorAPI.Configs.GetStateConfig().FileTypeChoices.Remove(ext);
             }
 
-            SkEditorAPI.Core.GetAppConfig().Save();
+            // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
         }
 
         return fileType ?? await GetDefaultEditor(path, content);
@@ -191,12 +191,13 @@ public class FileBuilder
             Background = (ImmutableSolidColorBrush?)application?.FindResource("EditorBackgroundColor"),
             LineNumbersForeground = (ImmutableSolidColorBrush?)application?.FindResource("LineNumbersColor"),
             FontSize = 16,
-            WordWrap = SkEditorAPI.Core.GetAppConfig().IsWrappingEnabled
+            WordWrap = SkEditorAPI.Configs.GetAppSettings().IsWordWrapEnabled
         };
 
         editor.ContextFlyout = GetContextMenu(editor);
 
-        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
+        string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+        if (fontFamily is null)
         {
             object? font = GetJetbrainsMonoFont();
             if (font != null)
@@ -210,7 +211,7 @@ public class FileBuilder
         }
         else
         {
-            editor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
+            editor.FontFamily = new FontFamily(fontFamily);
         }
 
         editor.Text = content;
@@ -234,12 +235,12 @@ public class FileBuilder
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
-        if (!SkEditorAPI.Core.GetAppConfig().EnableRealtimeCodeParser)
+        if (!SkEditorAPI.Configs.GetExperimentsConfig().RealtimeCodeParserEnabled)
         {
             editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser?.SetUnparsed();
         }
 
-        if (SkEditorAPI.Core.GetAppConfig().EnableHexPreview)
+        if (SkEditorAPI.Configs.GetExperimentsConfig().HexPreviewEnabled)
         {
             editor.Document.TextChanged += (_, _) => TextEditorEventHandler.CheckForHex(editor);
         }
@@ -252,7 +253,7 @@ public class FileBuilder
         editor.TextArea.TextView.PointerPressed += TextEditorEventHandler.OnPointerPressed;
         editor.TextArea.SelectionChanged += SelectionHandler.OnSelectionChanged;
 
-        if (SkEditorAPI.Core.GetAppConfig().EnableAutoCompletionExperiment)
+        if (SkEditorAPI.Configs.GetExperimentsConfig().AutoCompletionPrototypeEnabled)
         {
             editor.TextChanged += CompletionHandler.OnTextChanged;
             editor.TextArea.AddHandler(InputElement.KeyDownEvent, CompletionHandler.OnKeyDown, handledEventsToo: true,
@@ -281,12 +282,12 @@ public class FileBuilder
         editor.Options.AllowScrollBelowDocument = true;
         editor.Options.CutCopyWholeLine = true;
 
-        editor.Options.ConvertTabsToSpaces = SkEditorAPI.Core.GetAppConfig().UseSpacesInsteadOfTabs;
-        editor.Options.IndentationSize = SkEditorAPI.Core.GetAppConfig().TabSize;
+        editor.Options.ConvertTabsToSpaces = !SkEditorAPI.Configs.GetAppSettings().UseEditorTabsForIndentation;
+        editor.Options.IndentationSize = SkEditorAPI.Configs.GetAppSettings().EditorTabSize;
 
         editor.TextArea.TextView.CurrentLineBackground = ThemeEditor.CurrentTheme.CurrentLineBackground;
         editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(ThemeEditor.CurrentTheme.CurrentLineBorder, 2);
-        editor.Options.HighlightCurrentLine = SkEditorAPI.Core.GetAppConfig().HighlightCurrentLine;
+        editor.Options.HighlightCurrentLine = SkEditorAPI.Configs.GetAppSettings().HighlightCurrentLine;
 
         return editor;
     }

@@ -44,7 +44,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
         // First build the URI
-        string uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityApiKey) + "search/";
+        string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "search/";
         List<string> queryElements = [];
 
         if (!string.IsNullOrEmpty(searchData.Query))
@@ -100,7 +100,7 @@ public class SkUnityProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(SkEditorAPI.Core.GetAppConfig().SkUnityApiKey);
+        return !string.IsNullOrEmpty(SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey);
     }
 
     public bool NeedsToLoadExamples => true;
@@ -108,7 +108,7 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
         string elementId = entry.Id;
-        string uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityApiKey) + "getExamplesByID/" +
+        string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "getExamplesByID/" +
                      elementId;
 
         CancellationTokenSource cancellationToken = new(new TimeSpan(0, 0, 5));
@@ -166,7 +166,7 @@ public class SkUnityProvider : IDocProvider
             return [.. CachedAddons.Keys];
         }
 
-        string uri = BaseUri.Replace("%s", SkEditorAPI.Core.GetAppConfig().SkUnityApiKey) + "getAllAddons/";
+        string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "getAllAddons/";
 
         CancellationTokenSource cancellationToken = new(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;

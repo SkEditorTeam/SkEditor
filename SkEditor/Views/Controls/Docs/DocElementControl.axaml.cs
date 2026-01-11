@@ -14,7 +14,6 @@ using Avalonia.Styling;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkUnity;
@@ -168,7 +167,9 @@ public partial class DocElementControl : UserControl
     private void LoadPatternsEditor(IDocumentationEntry entry)
     {
         PatternsEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
-        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
+        
+        string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+        if (fontFamily is null)
         {
             object? font = FileBuilder.GetJetbrainsMonoFont();
             if (font == null)
@@ -180,7 +181,7 @@ public partial class DocElementControl : UserControl
         }
         else
         {
-            PatternsEditor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
+            PatternsEditor.FontFamily = new FontFamily(fontFamily);
         }
 
         PatternsEditor.Text = Format(entry.Patterns);
@@ -283,8 +284,9 @@ public partial class DocElementControl : UserControl
                 SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor
             }
         };
-
-        if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
+        
+        string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+        if (fontFamily is null)
         {
             object? font = FileBuilder.GetJetbrainsMonoFont();
             if (font is not null)
@@ -294,7 +296,7 @@ public partial class DocElementControl : UserControl
         }
         else
         {
-            editor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
+            editor.FontFamily = new FontFamily(fontFamily);
         }
 
         return new Expander
@@ -500,7 +502,8 @@ public partial class DocElementControl : UserControl
                     }
                 };
 
-                if (SkEditorAPI.Core.GetAppConfig().Font.Equals("Default"))
+                string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+                if (fontFamily is null)
                 {
                     object? font = FileBuilder.GetJetbrainsMonoFont();
                     if (font is not null)
@@ -510,7 +513,7 @@ public partial class DocElementControl : UserControl
                 }
                 else
                 {
-                    textEditor.FontFamily = new FontFamily(SkEditorAPI.Core.GetAppConfig().Font);
+                    textEditor.FontFamily = new FontFamily(fontFamily);
                 }
 
                 textEditor.SyntaxHighlighting = SyntaxLoader.GetCurrentSkriptHighlighting();

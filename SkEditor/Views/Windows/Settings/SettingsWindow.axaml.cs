@@ -38,7 +38,10 @@ public partial class SettingsWindow : AppWindow
                 Close();
             }
         };
-        Closed += (_, _) => SkEditorAPI.Core.GetAppConfig().Save();
+        Closed += (_, _) =>
+        {
+            // TODO: fix SkEditorAPI.Configs.GetAppSettings().Save();
+        };
     }
 
     public static SettingsWindow Instance { get; private set; } = null!;
