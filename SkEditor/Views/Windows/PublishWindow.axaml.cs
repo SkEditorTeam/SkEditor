@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Styling;
 using SecretsConfig = SkEditor.Utilities.Settings.Configs.SecretsConfig;
 

@@ -60,18 +60,18 @@ public partial class CodeSection
         }
     }
 
-    public HashSet<Elements.CodeVariable> Variables { get; private set; } = []; // Case of any section other than options
+    public HashSet<CodeVariable> Variables { get; private set; } = []; // Case of any section other than options
 
     public HashSet<CodeOptionReference> OptionReferences { get; private set; } =
         []; // Case of any section other than options
 
     public HashSet<CodeOption> Options { get; private set; } = []; // Case of options section
 
-    public HashSet<Elements.CodeVariable> UniqueVariables => GetUniqueVariables();
+    public HashSet<CodeVariable> UniqueVariables => GetUniqueVariables();
     public HashSet<CodeOptionReference> UniqueOptionReferences => GetUniqueOptionReferences();
     public bool IsLocalFunction => Type == SectionType.Function && Lines[0].StartsWith("local ");
 
-    public HashSet<Elements.CodeFunctionArgument> FunctionArguments { get; set; } = []; // Case of function section
+    public HashSet<CodeFunctionArgument> FunctionArguments { get; set; } = []; // Case of function section
 
     public string LinesDisplay => $"From {StartingLineIndex + 1} to {EndingLineIndex}";
 
@@ -106,7 +106,7 @@ public partial class CodeSection
         return line >= StartingLineIndex && line <= EndingLineIndex;
     }
 
-    public Elements.CodeVariable? GetVariableFromCaret(Caret caret)
+    public CodeVariable? GetVariableFromCaret(Caret caret)
     {
         return Variables.FirstOrDefault(v => v.ContainsCaret(caret));
     }
@@ -175,7 +175,7 @@ public partial class CodeSection
 
                     int column = match.Index + 1;
                     string raw = match.Value;
-                    Variables.Add(new Elements.CodeVariable(this, raw, lineIndex + 1, column));
+                    Variables.Add(new CodeVariable(this, raw, lineIndex + 1, column));
                 }
 
                 // Parse option references
@@ -198,7 +198,7 @@ public partial class CodeSection
             {
                 // Parse function arguments
                 MatchCollection functionArguments =
-                    Regex.Matches(Lines[0], Elements.CodeFunctionArgument.FunctionArgumentPattern);
+                    Regex.Matches(Lines[0], CodeFunctionArgument.FunctionArgumentPattern);
                 foreach (object? m in functionArguments)
                 {
                     if (m is not Match { Success: true } match)
@@ -208,7 +208,7 @@ public partial class CodeSection
 
                     string raw = match.Value;
                     int column = match.Index + 1;
-                    FunctionArguments.Add(new Elements.CodeFunctionArgument(this, raw, StartingLineIndex + 1, column));
+                    FunctionArguments.Add(new CodeFunctionArgument(this, raw, StartingLineIndex + 1, column));
                 }
             }
         }
@@ -273,7 +273,7 @@ public partial class CodeSection
         return icon as IconSource;
     }
 
-    public Elements.CodeFunctionArgument? GetVariableDefinition(Elements.CodeVariable variable)
+    public CodeFunctionArgument? GetVariableDefinition(CodeVariable variable)
     {
         return FunctionArguments.FirstOrDefault(a => a.IsDefinitionOf(variable));
     }
@@ -286,7 +286,7 @@ public partial class CodeSection
         editor.Focus();
     }
 
-    private HashSet<Elements.CodeVariable> GetUniqueVariables()
+    private HashSet<CodeVariable> GetUniqueVariables()
     {
         return [..Variables.Where(v => !Variables.Any(x => x != v && x.IsSimilar(v)))];
     }

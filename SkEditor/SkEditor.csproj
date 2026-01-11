@@ -10,7 +10,7 @@
         <PublishSingleFile>true</PublishSingleFile>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-<!--        <PublishAot>true</PublishAot>-->
+        <!--        <PublishAot>true</PublishAot>-->
     </PropertyGroup>
 
     <PropertyGroup>
@@ -53,18 +53,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.4.4" />
-        <PackageReference Include="Avalonia" Version="11.3.10" />
+        <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.4.4"/>
+        <PackageReference Include="Avalonia" Version="11.3.10"/>
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5"/>
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.10" />
-        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.10" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.10"/>
+        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.10"/>
         <PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0"/>
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.10" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.10" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.10"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.10"/>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
 
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.10" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.10"/>
         <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0"/>
         <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0"/>
         <PackageReference Include="DiscordRichPresence" Version="1.6.1.70"/>
@@ -194,40 +194,40 @@
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\AboutPage.axaml.cs">
-          <DependentUpon>AboutPage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>AboutPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\AddonsPage.axaml.cs">
-          <DependentUpon>AddonsPage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>AddonsPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\ConnectionsPage.axaml.cs">
-          <DependentUpon>ConnectionsPage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ConnectionsPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\CustomAddonSettingsPage.axaml.cs">
-          <DependentUpon>CustomAddonSettingsPage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>CustomAddonSettingsPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\ExperimentsPage.axaml.cs">
-          <DependentUpon>ExperimentsPage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>ExperimentsPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\FileTypesPage.axaml.cs">
-          <DependentUpon>FileTypesPage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>FileTypesPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\GeneralPage.axaml.cs">
-          <DependentUpon>GeneralPage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>GeneralPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\HomePage.axaml.cs">
-          <DependentUpon>HomePage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>HomePage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\Pages\Settings\PersonalizationPage.axaml.cs">
-          <DependentUpon>PersonalizationPage.axaml</DependentUpon>
-          <SubType>Code</SubType>
+            <DependentUpon>PersonalizationPage.axaml</DependentUpon>
+            <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 

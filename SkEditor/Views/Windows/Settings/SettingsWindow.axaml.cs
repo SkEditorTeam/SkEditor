@@ -6,6 +6,7 @@ using FluentAvalonia.UI.Navigation;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities.Styling;
+using SkEditor.Views.Pages.Settings;
 
 namespace SkEditor.Views.Windows.Settings;
 
@@ -38,10 +39,7 @@ public partial class SettingsWindow : AppWindow
                 Close();
             }
         };
-        Closed += (_, _) =>
-        {
-            _ = SkEditorAPI.Configs.SaveAllConfigsAsync();
-        };
+        Closed += (_, _) => { _ = SkEditorAPI.Configs.SaveAllConfigsAsync(); };
     }
 
     public static SettingsWindow Instance { get; private set; } = null!;
@@ -59,14 +57,14 @@ public partial class SettingsWindow : AppWindow
             { TransitionInfoOverride = transitionInfo, IsNavigationStackEnabled = true };
         Instance.FrameView.NavigateToType(page, null, navOpt);
 
-        if (page == typeof(Pages.Settings.HomePage))
+        if (page == typeof(HomePage))
         {
             Instance.FrameView.BackStack.Clear();
             Instance.FrameView.ForwardStack.Clear();
         }
         else if (Instance.FrameView.BackStack.Count == 0)
         {
-            Instance.FrameView.BackStack.Add(new PageStackEntry(typeof(Pages.Settings.HomePage), null, transitionInfo));
+            Instance.FrameView.BackStack.Add(new PageStackEntry(typeof(HomePage), null, transitionInfo));
         }
     }
 }

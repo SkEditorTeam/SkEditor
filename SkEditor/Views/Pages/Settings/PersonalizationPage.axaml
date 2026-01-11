@@ -6,7 +6,6 @@
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              xmlns:vms="clr-namespace:SkEditor.ViewModels"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:settings="clr-namespace:SkEditor.Utilities.Settings"
              xmlns:configs="clr-namespace:SkEditor.Utilities.Settings.Configs"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"

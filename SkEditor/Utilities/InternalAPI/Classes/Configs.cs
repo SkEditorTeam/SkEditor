@@ -14,16 +14,19 @@ namespace SkEditor.Utilities.InternalAPI.Classes;
 
 public class Configs : IConfigs
 {
-    private readonly List<IConfig> _configs = 
-    [ 
-        new AppSettings(), 
+    private readonly List<IConfig> _configs =
+    [
+        new AppSettings(),
         new SecretsConfig(),
         new ExperimentsConfig(),
         new StateConfig()
     ];
-    
-    public string GetAppDataPath() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
-    
+
+    public string GetAppDataPath()
+    {
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
+    }
+
     public async Task LoadAllConfigsAsync()
     {
         await Task.WhenAll(_configs.Select(config => config.Load()));
@@ -34,11 +37,30 @@ public class Configs : IConfigs
         await Task.WhenAll(_configs.Select(config => config.Save()));
     }
 
-    public AppSettings GetAppSettings() => GetConfig<AppSettings>();
-    public SecretsConfig GetSecretsConfig() => GetConfig<SecretsConfig>();
-    public ExperimentsConfig GetExperimentsConfig() => GetConfig<ExperimentsConfig>();
-    public StateConfig GetStateConfig() => GetConfig<StateConfig>();
-    public BinarySettings GetBinarySettings() => GetConfig<BinarySettings>();
+    public AppSettings GetAppSettings()
+    {
+        return GetConfig<AppSettings>();
+    }
+
+    public SecretsConfig GetSecretsConfig()
+    {
+        return GetConfig<SecretsConfig>();
+    }
+
+    public ExperimentsConfig GetExperimentsConfig()
+    {
+        return GetConfig<ExperimentsConfig>();
+    }
+
+    public StateConfig GetStateConfig()
+    {
+        return GetConfig<StateConfig>();
+    }
+
+    public BinarySettings GetBinarySettings()
+    {
+        return GetConfig<BinarySettings>();
+    }
 
     public T? GetConfig<T>() where T : IConfig
     {
@@ -51,13 +73,13 @@ public class Configs : IConfigs
         {
             throw new InvalidOperationException($"Config of type {typeof(T).Name} already exists.");
         }
-    
+
         _configs.Add(config);
     }
 
     public void RemoveConfig<T>() where T : IConfig
     {
-        var config = _configs.FirstOrDefault(c => c is T);
+        IConfig? config = _configs.FirstOrDefault(c => c is T);
         if (config != null)
         {
             _configs.Remove(config);

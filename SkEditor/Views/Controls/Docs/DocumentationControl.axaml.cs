@@ -13,7 +13,6 @@ using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.SkriptHub;
 using SkEditor.Utilities.Extensions;

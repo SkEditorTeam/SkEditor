@@ -10,7 +10,7 @@ public class AppSettings : BaseConfig<AppSettings>
     [JsonIgnore] public override string FileName => "options.json";
 
     /// <summary>
-    /// The application version.
+    ///     The application version.
     /// </summary>
     public string Version
     {
@@ -19,7 +19,7 @@ public class AppSettings : BaseConfig<AppSettings>
     } = string.Empty;
 
     /// <summary>
-    /// Whether to enable the developer mode.
+    ///     Whether to enable the developer mode.
     /// </summary>
     public bool IsDevModeEnabled
     {
@@ -28,196 +28,196 @@ public class AppSettings : BaseConfig<AppSettings>
     } = false;
 
     /// <summary>
-    /// The application language code.
+    ///     The application language code.
     /// </summary>
     public string Language
     {
         get;
         set => SetProperty(ref field, value);
     } = "en-US";
-    
+
     /// <summary>
-    /// The current application theme file name.
+    ///     The current application theme file name.
     /// </summary>
     public string CurrentTheme
     {
         get;
         set => SetProperty(ref field, value);
     } = "Default.json";
-    
+
     /// <summary>
-    /// A dictionary mapping file extensions to their associated syntax highlighting themes.
+    ///     A dictionary mapping file extensions to their associated syntax highlighting themes.
     /// </summary>
     public Dictionary<string, string> FileSyntaxes
     {
         get;
         set => SetProperty(ref field, value);
     } = new();
-    
+
     /// <summary>
-    /// Whether to check for application updates on startup.
+    ///     Whether to check for application updates on startup.
     /// </summary>
     public bool CheckForAppUpdates
     {
         get;
         set => SetProperty(ref field, value);
     } = true;
-    
+
     /// <summary>
-    /// Whether to enable automatic checks if the file was modified by an external program.
+    ///     Whether to enable automatic checks if the file was modified by an external program.
     /// </summary>
     public bool CheckForExternalFileChanges
     {
         get;
         set => SetProperty(ref field, value);
     } = true;
-    
+
     /// <summary>
-    /// The UI scale factor.
+    ///     The UI scale factor.
     /// </summary>
     public double CustomUiScale
     {
         get;
         set => SetProperty(ref field, value);
     } = 1.0;
-    
+
     /// <summary>
-    /// Whether to force the native window title bar on Windows.
+    ///     Whether to force the native window title bar on Windows.
     /// </summary>
     public bool ForceNativeTitleBar
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Whether to use Discord Rich Presence integration.
+    ///     Whether to use Discord Rich Presence integration.
     /// </summary>
     public bool IsDiscordRichPresenceEnabled
     {
         get;
         set => SetProperty(ref field, value);
     } = true;
-    
+
     /// <summary>
-    /// Whether to enable single-click to open project folders in the Project Sidebar.
+    ///     Whether to enable single-click to open project folders in the Project Sidebar.
     /// </summary>
     public bool IsProjectSingleClickEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Whether to enable sidebar animations.
+    ///     Whether to enable sidebar animations.
     /// </summary>
     public bool IsSidebarAnimationEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Whether to synchronize the width of all panels in the sidebar.
+    ///     Whether to synchronize the width of all panels in the sidebar.
     /// </summary>
     public bool IsSidebarWidthSyncEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Automatically saves the user files after every change if enabled.
+    ///     Automatically saves the user files after every change if enabled.
     /// </summary>
     public bool IsAutoSaveEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Whether to automatically insert closing brackets, quotes, etc. when typing opening ones.
+    ///     Whether to automatically insert closing brackets, quotes, etc. when typing opening ones.
     /// </summary>
     public bool IsAutoPairingEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Whether to automatically increment indentation on new lines if the previous line ends with a colon.
+    ///     Whether to automatically increment indentation on new lines if the previous line ends with a colon.
     /// </summary>
     public bool IsAutoIndentEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Whether to make editor try to adapt pasted code indentation to the current line indentation.
+    ///     Whether to make editor try to adapt pasted code indentation to the current line indentation.
     /// </summary>
     public bool IsPasteIndentationEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Whether to highlight the current line in the editor.
+    ///     Whether to highlight the current line in the editor.
     /// </summary>
     public bool HighlightCurrentLine
     {
         get;
         set => SetProperty(ref field, value);
     } = true;
-    
+
     /// <summary>
-    /// Whether to enable word wrap in the editor.
+    ///     Whether to enable word wrap in the editor.
     /// </summary>
     public bool IsWordWrapEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// Whether to synchronize the zoom level across all open editor tabs.
+    ///     Whether to synchronize the zoom level across all open editor tabs.
     /// </summary>
     public bool IsEditorZoomLevelSyncEnabled
     {
         get;
         set => SetProperty(ref field, value);
     }
-    
+
     /// <summary>
-    /// The font size used in the code editor.
+    ///     The font size used in the code editor.
     /// </summary>
     public int EditorFontSize
     {
         get;
         set => SetProperty(ref field, value);
     } = 14;
-    
+
     /// <summary>
-    /// The font family used in the code editor. If null, the default font is used.
+    ///     The font family used in the code editor. If null, the default font is used.
     /// </summary>
     public string? EditorFontFamily
     {
         get;
         set => SetProperty(ref field, value);
     } = null;
-    
+
     /// <summary>
-    /// The number of spaces per tab in the code editor.
+    ///     The number of spaces per tab in the code editor.
     /// </summary>
     public int EditorTabSize
     {
         get;
         set => SetProperty(ref field, value);
     } = 4;
-    
+
     /// <summary>
-    /// Whether to use tabs for indentation in the code editor. If false, spaces are used.
+    ///     Whether to use tabs for indentation in the code editor. If false, spaces are used.
     /// </summary>
     public bool UseEditorTabsForIndentation
     {

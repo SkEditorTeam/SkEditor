@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
-using SkEditor.Utilities.Settings;
 
 namespace SkEditor.Views.Pages.Settings;
 

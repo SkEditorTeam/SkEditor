@@ -167,7 +167,7 @@ public partial class DocElementControl : UserControl
     private void LoadPatternsEditor(IDocumentationEntry entry)
     {
         PatternsEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
-        
+
         string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
         if (fontFamily is null)
         {
@@ -284,7 +284,7 @@ public partial class DocElementControl : UserControl
                 SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor
             }
         };
-        
+
         string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
         if (fontFamily is null)
         {

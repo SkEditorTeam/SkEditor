@@ -8,68 +8,68 @@ public class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     public override string FileName => "experiments.json";
 
     /// <summary>
-    /// Enables the Auto-Completion Prototype feature.
+    ///     Enables the Auto-Completion Prototype feature.
     /// </summary>
     public bool AutoCompletionPrototypeEnabled
     {
         get;
         set => SetProperty(ref field, value);
     } = false;
-    
+
     /// <summary>
-    /// Enables the Projects feature.
+    ///     Enables the Projects feature.
     /// </summary>
     public bool ProjectsEnabled
     {
         get;
         set => SetProperty(ref field, value);
     } = false;
-    
+
     /// <summary>
-    /// Enables the Hex Preview feature.
+    ///     Enables the Hex Preview feature.
     /// </summary>
     public bool HexPreviewEnabled
     {
         get;
         set => SetProperty(ref field, value);
     } = false;
-    
+
     /// <summary>
-    /// Enables the Code Parser feature.
+    ///     Enables the Code Parser feature.
     /// </summary>
     public bool CodeParserEnabled
     {
         get;
         set => SetProperty(ref field, value);
     } = false;
-    
+
     /// <summary>
-    /// Makes the Code Parser run in real-time as you type.
+    ///     Makes the Code Parser run in real-time as you type.
     /// </summary>
     public bool RealtimeCodeParserEnabled
     {
         get;
         set => SetProperty(ref field, value);
     } = false;
-    
+
     /// <summary>
-    /// Enables the Folding feature.
+    ///     Enables the Folding feature.
     /// </summary>
     public bool FoldingEnabled
     {
         get;
         set => SetProperty(ref field, value);
     } = false;
-    
+
     /// <summary>
-    /// Enables the Session Restoring feature.
+    ///     Enables the Session Restoring feature.
     /// </summary>
     public bool SessionRestoringEnabled
     {
         get;
         set => SetProperty(ref field, value);
     } = false;
-    
+
     protected override void CopyFrom(ExperimentsConfig other)
     {
         AutoCompletionPrototypeEnabled = other.AutoCompletionPrototypeEnabled;

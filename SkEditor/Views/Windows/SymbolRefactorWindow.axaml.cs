@@ -2,7 +2,6 @@
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Parser;

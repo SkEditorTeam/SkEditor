@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia;
@@ -18,16 +19,16 @@ namespace SkEditor.Utilities.Localization;
 /// </summary>
 public static class Translation
 {
-    /// <summary>
-    ///    The folder where language files are stored.
-    /// </summary>
-    public static string LanguagesFolder { get; } = Path.Combine(AppContext.BaseDirectory, "Languages");
-
     private const string DefaultLanguage = "English";
     private static readonly Dictionary<string, ResourceDictionary> Translations = [];
 
     /// <summary>
-    ///    Retrieves the translated string for the given key, formatting it with the provided parameters if any.
+    ///     The folder where language files are stored.
+    /// </summary>
+    public static string LanguagesFolder { get; } = Path.Combine(AppContext.BaseDirectory, "Languages");
+
+    /// <summary>
+    ///     Retrieves the translated string for the given key, formatting it with the provided parameters if any.
     /// </summary>
     /// <param name="key">The translation key.</param>
     /// <param name="parameters">Optional parameters to format the translated string.</param>
@@ -55,7 +56,7 @@ public static class Translation
     }
 
     /// <summary>
-    ///   Changes the application's language to the specified language.
+    ///     Changes the application's language to the specified language.
     /// </summary>
     /// <param name="language">The language to change to.</param>
     /// <param name="startup">Whether this change is occurring during application startup.</param>
@@ -109,7 +110,7 @@ public static class Translation
 
     private static async Task LoadDefault(ResourceDictionary newLanguageDict)
     {
-        var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+        Assembly assembly = Assembly.GetExecutingAssembly();
         const string resourceName = $"SkEditor.Languages.{DefaultLanguage}.json";
 
         await using Stream stream = assembly.GetManifestResourceStream(resourceName)!;
@@ -138,7 +139,9 @@ public static class Translation
         reader.Read();
 
         if (reader.TokenType != JsonTokenType.StartObject)
+        {
             throw new JsonException("Expected start of JSON object");
+        }
 
         while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
         {

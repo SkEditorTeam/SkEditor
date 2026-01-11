@@ -6,7 +6,6 @@ using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views.Windows.Settings;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;

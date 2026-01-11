@@ -3,7 +3,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vms="clr-namespace:SkEditor.ViewModels"
-        xmlns:settings="clr-namespace:SkEditor.Utilities.Settings"
         xmlns:configs="clr-namespace:SkEditor.Utilities.Settings.Configs"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.Generators.Gui.GuiGenerator" Icon="/Assets/SkEditor.ico"

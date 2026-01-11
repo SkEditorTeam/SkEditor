@@ -4,7 +4,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using LoreLineEditor = SkEditor.Views.Controls.LoreLineEditor;

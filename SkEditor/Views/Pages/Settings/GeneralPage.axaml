@@ -6,7 +6,6 @@
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              xmlns:vms="clr-namespace:SkEditor.ViewModels"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:settings="clr-namespace:SkEditor.Utilities.Settings"
              xmlns:configs="clr-namespace:SkEditor.Utilities.Settings.Configs"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
@@ -31,7 +30,8 @@
                                      IconSource="{StaticResource DiscordIcon}"
                                      Description="{DynamicResource SettingsGeneralRpcDescription}">
                     <ui:SettingsExpander.Footer>
-                        <ToggleSwitch Name="RpcToggleSwitch" IsChecked="{Binding IsDiscordRichPresenceEnabled, Mode=OneTime}" />
+                        <ToggleSwitch Name="RpcToggleSwitch"
+                                      IsChecked="{Binding IsDiscordRichPresenceEnabled, Mode=OneTime}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
@@ -57,7 +57,8 @@
                                      IconSource="{icons:SymbolIconSource Symbol=ZoomIn}"
                                      Description="{DynamicResource SettingsGeneralZoomSyncDescription}">
                     <ui:SettingsExpander.Footer>
-                        <ToggleSwitch Name="ZoomSyncToggleSwitch" IsChecked="{Binding IsEditorZoomLevelSyncEnabled, Mode=OneTime}" />
+                        <ToggleSwitch Name="ZoomSyncToggleSwitch"
+                                      IsChecked="{Binding IsEditorZoomLevelSyncEnabled, Mode=OneTime}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralSidebarWidthSync}"
@@ -124,7 +125,8 @@
                                      IconSource="{icons:SymbolIconSource Symbol=DocumentSync}"
                                      Description="{DynamicResource SettingsGeneralChangeCheckerDescription}">
                     <ui:SettingsExpander.Footer>
-                        <ToggleSwitch Name="CheckForChangesToggleSwitch" IsChecked="{Binding CheckForExternalFileChanges}" />
+                        <ToggleSwitch Name="CheckForChangesToggleSwitch"
+                                      IsChecked="{Binding CheckForExternalFileChanges}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
@@ -142,7 +144,8 @@
                                      Description="{DynamicResource SettingsGeneralUseSplashScreenDescription}">
                     <ui:SettingsExpander.Footer>
                         <StackPanel Orientation="Horizontal" Spacing="10">
-                            <ComboBox SelectedIndex="{Binding SplashScreenModeIndex, Source={x:Static vms:ViewModelLocator.BinarySettings}}">
+                            <ComboBox
+                                SelectedIndex="{Binding SplashScreenModeIndex, Source={x:Static vms:ViewModelLocator.BinarySettings}}">
                                 <ComboBoxItem Content="{DynamicResource SettingsGeneralUseSplashScreenAuto}" />
                                 <ComboBoxItem Content="{DynamicResource SettingsGeneralUseSplashScreenEnabled}" />
                                 <ComboBoxItem Content="{DynamicResource SettingsGeneralUseSplashScreenDisabled}" />

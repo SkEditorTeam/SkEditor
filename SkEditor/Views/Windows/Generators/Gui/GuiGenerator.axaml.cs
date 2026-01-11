@@ -13,7 +13,6 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
@@ -103,7 +102,8 @@ public partial class GuiGenerator : AppWindow
         PreviewButton.Command = new RelayCommand(Preview.Show);
         GenerateButton.Command = new RelayCommand(Generation.Generate);
         UseSkriptGuiCheckBox.IsCheckedChanged += (_, _) =>
-            SkEditorAPI.Configs.GetStateConfig().GuiGeneratorSkriptGuiAddonUsed = UseSkriptGuiCheckBox.IsChecked == true;
+            SkEditorAPI.Configs.GetStateConfig().GuiGeneratorSkriptGuiAddonUsed =
+                UseSkriptGuiCheckBox.IsChecked == true;
     }
 
     private void UpdateRows()

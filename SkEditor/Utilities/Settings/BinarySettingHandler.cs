@@ -9,6 +9,13 @@ internal class BinarySettingHandler<T>(
     Func<BinaryReader, T> readerFunc,
     Action<BinaryWriter, T> writerFunc) : IBinarySettingHandler
 {
-    public void Load(BinaryReader reader) => setter(readerFunc(reader));
-    public void Save(BinaryWriter writer) => writerFunc(writer, getter());
+    public void Load(BinaryReader reader)
+    {
+        setter(readerFunc(reader));
+    }
+
+    public void Save(BinaryWriter writer)
+    {
+        writerFunc(writer, getter());
+    }
 }

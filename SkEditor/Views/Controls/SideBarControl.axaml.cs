@@ -74,7 +74,8 @@ public partial class SideBarControl : UserControl
         string? firstPanelId = panels.First().GetId();
         if (firstPanelId != null)
         {
-            _syncedPanelWidth = SkEditorAPI.Configs.GetStateConfig().SidebarPanelSizes.GetValueOrDefault(firstPanelId, 300);
+            _syncedPanelWidth = SkEditorAPI.Configs.GetStateConfig().SidebarPanelSizes
+                .GetValueOrDefault(firstPanelId, 300);
         }
     }
 

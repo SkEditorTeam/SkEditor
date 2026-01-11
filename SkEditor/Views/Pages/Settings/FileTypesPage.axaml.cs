@@ -113,7 +113,8 @@ public partial class FileTypesPage : UserControl
                     return;
                 }
 
-                SkEditorAPI.Configs.GetStateConfig().FileTypeChoices[ext] = Registries.FileTypes.GetValueKey(type)?.FullKey;
+                SkEditorAPI.Configs.GetStateConfig().FileTypeChoices[ext] =
+                    Registries.FileTypes.GetValueKey(type)?.FullKey;
             };
 
             Button removeBtn = new()

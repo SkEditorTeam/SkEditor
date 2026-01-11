@@ -15,7 +15,6 @@ using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Startup;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
@@ -25,15 +24,8 @@ namespace SkEditor;
 
 public class App : Application
 {
-    public static Stopwatch Stopwatch { get; } = new();
-
     private SplashScreen? _splashScreen;
 
-    public override void Initialize()
-    {
-        AvaloniaXamlLoader.Load(this);
-    }
-    
     public App()
     {
         BinarySettings binarySettings = new();
@@ -41,10 +33,17 @@ public class App : Application
         binarySettings.Load();
     }
 
+    public static Stopwatch Stopwatch { get; } = new();
+
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
+
     public override void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
-        
+
         Stopwatch.Start();
 
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
@@ -96,7 +95,7 @@ public class App : Application
                     AppWindow.AlwaysFallback =
                         SkEditorAPI.Configs.GetAppSettings().ForceNativeTitleBar;
                 });
-                
+
                 await SkEditorAPI.Configs.LoadAllConfigsAsync();
 
                 await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Creating main window..."));

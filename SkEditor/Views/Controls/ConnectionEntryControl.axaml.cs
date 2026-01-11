@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using Avalonia.Controls;
 using SkEditor.API;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Settings;
 using SecretsConfig = SkEditor.Utilities.Settings.Configs.SecretsConfig;
 
 namespace SkEditor.Views.Controls;

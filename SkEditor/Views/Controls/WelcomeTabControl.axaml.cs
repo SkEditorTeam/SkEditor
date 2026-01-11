@@ -9,7 +9,6 @@ using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;

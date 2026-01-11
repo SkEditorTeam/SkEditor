@@ -3,9 +3,7 @@ using System.ComponentModel;
 using Avalonia.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Updating;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 

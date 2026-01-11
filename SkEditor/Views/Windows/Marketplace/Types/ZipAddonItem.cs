@@ -8,9 +8,7 @@ using Avalonia.Threading;
 using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -33,7 +31,8 @@ public class ZipAddonItem : AddonItem
             await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
 
-            await ZipFile.ExtractToDirectoryAsync(filePath, Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName));
+            await ZipFile.ExtractToDirectoryAsync(filePath,
+                Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName));
             File.Delete(filePath);
 
             string message = Translation.Get("MarketplaceInstallSuccess", ItemName);

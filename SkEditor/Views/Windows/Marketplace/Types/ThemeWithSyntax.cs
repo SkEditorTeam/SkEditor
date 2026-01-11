@@ -9,9 +9,7 @@ using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 

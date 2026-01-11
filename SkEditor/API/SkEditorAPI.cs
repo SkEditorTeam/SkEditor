@@ -37,7 +37,7 @@ public static class SkEditorAPI
     ///     Get the Files API.
     /// </summary>
     public static IFiles Files { get; } = new Files();
-    
+
     /// <summary>
     ///     Get the Configs API.
     /// </summary>

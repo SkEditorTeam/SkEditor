@@ -5,7 +5,6 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
-using SkEditor.Utilities.Settings;
 using SkEditor.Views.Controls.Addons;
 using SkEditor.Views.Windows.Marketplace;
 using SkEditor.Views.Windows.Settings;

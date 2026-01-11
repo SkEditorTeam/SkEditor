@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 using SkEditor.Views.Windows.Marketplace.Types;
 using MarketplaceListItem = SkEditor.Views.Controls.MarketplaceListItem;

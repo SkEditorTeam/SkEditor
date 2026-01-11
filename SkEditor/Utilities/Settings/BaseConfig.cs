@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
@@ -11,24 +10,27 @@ namespace SkEditor.Utilities.Settings;
 
 public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseConfig<T>, IConfig, new()
 {
-    protected abstract JsonTypeInfo<T> TypeInfo { get; }
-    public abstract string FileName { get; }
-    
     // ReSharper disable once ReplaceWithFieldKeyword
     private readonly string _appDataFolderPath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
-    
+
+    protected abstract JsonTypeInfo<T> TypeInfo { get; }
+
     private string ConfigPath => Path.Combine(_appDataFolderPath, FileName);
-    
+    public abstract string FileName { get; }
+
     public async Task Load()
     {
-        if (!File.Exists(ConfigPath)) return;
+        if (!File.Exists(ConfigPath))
+        {
+            return;
+        }
 
-        try 
+        try
         {
             string json = await File.ReadAllTextAsync(ConfigPath);
-            
-            var loadedData = JsonSerializer.Deserialize(json, TypeInfo);
+
+            T? loadedData = JsonSerializer.Deserialize(json, TypeInfo);
 
             if (loadedData != null)
             {
@@ -43,13 +45,16 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
 
     public async Task Save()
     {
-        var json = JsonSerializer.Serialize((T)this, TypeInfo);
-        
-        var directory = Path.GetDirectoryName(ConfigPath);
-        if (directory != null) Directory.CreateDirectory(directory);
-        
+        string json = JsonSerializer.Serialize((T)this, TypeInfo);
+
+        string? directory = Path.GetDirectoryName(ConfigPath);
+        if (directory != null)
+        {
+            Directory.CreateDirectory(directory);
+        }
+
         await File.WriteAllTextAsync(ConfigPath, json);
     }
-    
+
     protected abstract void CopyFrom(T other);
 }

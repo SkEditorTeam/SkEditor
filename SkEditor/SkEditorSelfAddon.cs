@@ -51,7 +51,7 @@ public class SkEditorSelfAddon : IAddon
                     : new Bitmap(stream)
             };
         }
-        
+
         SecretsConfig secrets = SkEditorAPI.Configs.GetSecretsConfig();
 
         Registries.Connections.Register(new RegistryKey(this, "skUnityConnection"),

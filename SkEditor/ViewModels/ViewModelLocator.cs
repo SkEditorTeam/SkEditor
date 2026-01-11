@@ -1,5 +1,4 @@
 ﻿using SkEditor.API;
-using SkEditor.Utilities.Settings;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using StateConfig = SkEditor.Utilities.Settings.Configs.StateConfig;

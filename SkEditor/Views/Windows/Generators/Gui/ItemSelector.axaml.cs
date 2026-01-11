@@ -14,8 +14,6 @@ using FluentAvalonia.UI.Windowing;
 using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Data;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.Windows.Generators.Gui;

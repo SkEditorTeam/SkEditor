@@ -31,7 +31,8 @@ public partial class ExperimentsPage : UserControl
             new Experiment("Projects", "Adds a sidebar for managing projects.",
                 () => experimentsConfig.ProjectsEnabled,
                 flag => experimentsConfig.ProjectsEnabled = flag, Symbol.Briefcase),
-            new Experiment("Hex Preview", "Preview hex colors in the editor.", () => experimentsConfig.HexPreviewEnabled,
+            new Experiment("Hex Preview", "Preview hex colors in the editor.",
+                () => experimentsConfig.HexPreviewEnabled,
                 flag => experimentsConfig.HexPreviewEnabled = flag, Symbol.Color),
             new Experiment("Code Parser",
                 "Parse code for informations. Doesn't contain error checking, see Analyzer addon instead. Requires Projects experiment.",
@@ -45,7 +46,8 @@ public partial class ExperimentsPage : UserControl
                 () => experimentsConfig.FoldingEnabled, flag => experimentsConfig.FoldingEnabled = flag,
                 Symbol.TextCollapse,
                 "Code Parser"),
-            new Experiment("Session restoring", "Automatically saves your files and reopens it next time you start the app."
+            new Experiment("Session restoring",
+                "Automatically saves your files and reopens it next time you start the app."
                 , () => experimentsConfig.SessionRestoringEnabled,
                 flag => experimentsConfig.SessionRestoringEnabled = flag, Symbol.History)
         ];

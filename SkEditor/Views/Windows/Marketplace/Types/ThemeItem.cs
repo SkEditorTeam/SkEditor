@@ -8,9 +8,7 @@ using FluentAvalonia.UI.Controls;
 using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Styling;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
@@ -93,7 +91,8 @@ public class ThemeItem : MarketplaceItem
 
     public override bool IsInstalled()
     {
-        string themePath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName, Path.GetFileName(ItemFileUrl));
+        string themePath =
+            Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), FolderName, Path.GetFileName(ItemFileUrl));
         return File.Exists(themePath);
     }
 }

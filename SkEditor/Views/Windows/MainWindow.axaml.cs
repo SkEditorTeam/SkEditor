@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -17,7 +16,6 @@ using SkEditor.Utilities.Files.Session;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
@@ -87,7 +85,7 @@ public partial class MainWindow : AppWindow
             {
                 return;
             }
-            
+
             ThemeEditor.SaveAllThemes();
             await SkEditorAPI.Configs.SaveAllConfigsAsync();
 
@@ -203,7 +201,7 @@ public partial class MainWindow : AppWindow
             });
 
             _isFullyLoaded = true;
-            
+
             App.Stopwatch.Stop();
             SplashScreenHandler.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
 

@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using DiscordRpcUpdater = SkEditor.Utilities.Discord.DiscordRpcUpdater;
 
@@ -17,8 +16,6 @@ namespace SkEditor.Views.Pages.Settings;
 
 public partial class GeneralPage : UserControl
 {
-    public List<string> AvailableLanguages { get; } = [];
-    
     public GeneralPage()
     {
         InitializeComponent();
@@ -28,6 +25,8 @@ public partial class GeneralPage : UserControl
         LoadIndentation();
     }
 
+    public List<string> AvailableLanguages { get; } = [];
+
     private void LoadLanguages()
     {
         string[] files = Directory.GetFiles(Translation.LanguagesFolder);
@@ -35,10 +34,10 @@ public partial class GeneralPage : UserControl
         {
             AvailableLanguages.Add(Path.GetFileNameWithoutExtension(file));
         }
-        
+
         AvailableLanguages.Add("English");
         AvailableLanguages.Sort();
-        
+
         LanguageComboBox.ItemsSource = AvailableLanguages;
 
         LanguageComboBox.SelectedItem = SkEditorAPI.Configs.GetAppSettings().Language;
