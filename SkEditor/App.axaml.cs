@@ -96,6 +96,7 @@ public class App : Application
                         SkEditorAPI.Configs.GetAppSettings().ForceNativeTitleBar;
                 });
 
+                await SkEditorAPI.Configs.MigrateConfigsAsync();
                 await SkEditorAPI.Configs.LoadAllConfigsAsync();
 
                 await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Creating main window..."));

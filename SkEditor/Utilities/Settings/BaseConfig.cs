@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
@@ -18,6 +19,10 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
 
     private string ConfigPath => Path.Combine(_appDataFolderPath, FileName);
     public abstract string FileName { get; }
+    
+    private readonly SemaphoreSlim _saveLock = new(1, 1);
+    private CancellationTokenSource? _saveCts;
+    private const int SaveDebounceMs = 300;
 
     public async Task Load()
     {
@@ -45,15 +50,41 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
 
     public async Task Save()
     {
-        string json = JsonSerializer.Serialize((T)this, TypeInfo);
-
-        string? directory = Path.GetDirectoryName(ConfigPath);
-        if (directory != null)
+        if (_saveCts != null)
         {
-            Directory.CreateDirectory(directory);
+            await _saveCts.CancelAsync();
         }
+        _saveCts = new CancellationTokenSource();
+        var token = _saveCts.Token;
 
-        await File.WriteAllTextAsync(ConfigPath, json);
+        try
+        {
+            await Task.Delay(SaveDebounceMs, token);
+            await SaveInternal();
+        }
+        catch (TaskCanceledException)
+        {
+            // ignore
+        }
+    }
+
+    private async Task SaveInternal()
+    {
+        await _saveLock.WaitAsync();
+        try
+        {
+            string json = JsonSerializer.Serialize((T)this, TypeInfo);
+            string? directory = Path.GetDirectoryName(ConfigPath);
+            if (directory != null)
+            {
+                Directory.CreateDirectory(directory);
+            }
+            await File.WriteAllTextAsync(ConfigPath, json);
+        }
+        finally
+        {
+            _saveLock.Release();
+        }
     }
 
     protected abstract void CopyFrom(T other);

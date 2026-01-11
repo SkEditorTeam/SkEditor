@@ -34,7 +34,7 @@ public class AppSettings : BaseConfig<AppSettings>
     {
         get;
         set => SetProperty(ref field, value);
-    } = "en-US";
+    } = "English";
 
     /// <summary>
     ///     The current application theme file name.

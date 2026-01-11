@@ -30,7 +30,7 @@ public class StateConfig : BaseConfig<StateConfig>
     /// <summary>
     ///     The file type choices made by the user when opening files.
     /// </summary>
-    // TODO: reconsider this entire system and whether this option should belong in state config
+    // TODO: reconsider this entire system (i'm a bit lost, wasn't that the same as PreferredFileAssociations?) and whether this option should belong in state config
     public Dictionary<string, string?> FileTypeChoices
     {
         get;

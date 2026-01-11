@@ -12,7 +12,7 @@ using StateConfig = SkEditor.Utilities.Settings.Configs.StateConfig;
 
 namespace SkEditor.Utilities.InternalAPI.Classes;
 
-public class Configs : IConfigs
+public partial class Configs : IConfigs
 {
     private readonly List<IConfig> _configs =
     [
