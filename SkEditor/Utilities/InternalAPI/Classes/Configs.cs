@@ -39,27 +39,27 @@ public class Configs : IConfigs
 
     public AppSettings GetAppSettings()
     {
-        return GetConfig<AppSettings>();
+        return GetConfig<AppSettings>() ?? throw new InvalidOperationException("AppSettings config not found.");
     }
 
     public SecretsConfig GetSecretsConfig()
     {
-        return GetConfig<SecretsConfig>();
+        return GetConfig<SecretsConfig>() ?? throw new InvalidOperationException("SecretsConfig config not found.");
     }
 
     public ExperimentsConfig GetExperimentsConfig()
     {
-        return GetConfig<ExperimentsConfig>();
+        return GetConfig<ExperimentsConfig>() ?? throw new InvalidOperationException("ExperimentsConfig config not found.");
     }
 
     public StateConfig GetStateConfig()
     {
-        return GetConfig<StateConfig>();
+        return GetConfig<StateConfig>() ?? throw new InvalidOperationException("StateConfig config not found.");
     }
 
     public BinarySettings GetBinarySettings()
     {
-        return GetConfig<BinarySettings>();
+        return GetConfig<BinarySettings>() ?? throw new InvalidOperationException("BinarySettings config not found.");
     }
 
     public T? GetConfig<T>() where T : IConfig
