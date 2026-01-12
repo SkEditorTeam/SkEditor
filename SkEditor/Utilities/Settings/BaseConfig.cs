@@ -28,6 +28,9 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
     {
         if (!File.Exists(ConfigPath))
         {
+            T defaultData = new();
+            CopyFrom(defaultData);
+            await SaveInternal();
             return;
         }
 
