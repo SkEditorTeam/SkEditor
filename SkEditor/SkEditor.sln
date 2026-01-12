@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkEditor", "SkEditor.csproj
 EndProject
 Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "SkEditorInstaller", "..\Installer\SkEditorInstaller.wixproj", "{C392EB62-4537-40F4-A466-AA2D0F70DDF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkEditor.SourceGenerators", "SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj", "{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,22 @@ Global
 		{C392EB62-4537-40F4-A466-AA2D0F70DDF0}.Release|x64.Build.0 = Release|x64
 		{C392EB62-4537-40F4-A466-AA2D0F70DDF0}.Release|x86.ActiveCfg = Release|x86
 		{C392EB62-4537-40F4-A466-AA2D0F70DDF0}.Release|x86.Build.0 = Release|x86
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Debug|x64.Build.0 = Debug|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Debug|x86.Build.0 = Debug|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Release|ARM64.Build.0 = Release|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Release|x64.ActiveCfg = Release|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Release|x64.Build.0 = Release|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Release|x86.ActiveCfg = Release|Any CPU
+		{EFA85D72-F8FC-43DA-83F3-225A23E9AFF8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
