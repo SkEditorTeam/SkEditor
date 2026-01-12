@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using Newtonsoft.Json.Linq;
 using Timer = System.Timers.Timer;
