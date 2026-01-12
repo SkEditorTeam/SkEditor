@@ -1,8 +1,7 @@
-﻿using System;
-using System.Timers;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using Newtonsoft.Json.Linq;
+using Timer = System.Timers.Timer;
 
 namespace SkEditor.API.Settings.Types;
 
