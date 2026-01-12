@@ -7,7 +7,7 @@ namespace SkEditor.Utilities.Updating;
 public static class ChangelogChecker
 {
     // This changelog system is pretty lame, will be improved in the future
-    private static readonly string[] changelog =
+    private static readonly string[] Changelog =
     [
         "Welcome to the new version of SkEditor!"
     ];
@@ -28,8 +28,9 @@ public static class ChangelogChecker
 
         FontIconSource rocketIcon = new() { Glyph = "🚀" };
 
-        await SkEditorAPI.Windows.ShowDialog($"v{GetVersion()}", string.Join('\n', changelog), rocketIcon);
+        await SkEditorAPI.Windows.ShowDialog($"v{GetVersion()}", string.Join('\n', Changelog), rocketIcon);
 
         SkEditorAPI.Configs.GetAppSettings().Version = GetVersion();
+        await SkEditorAPI.Configs.GetAppSettings().Save();
     }
 }
