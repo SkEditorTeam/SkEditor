@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization.Metadata;
+using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings.Configs;
 
-public class StateConfig : BaseConfig<StateConfig>
+[SettingsConfig]
+public partial class StateConfig : BaseConfig<StateConfig>
 {
     protected override JsonTypeInfo<StateConfig> TypeInfo => AppJsonContext.Default.StateConfig;
 
@@ -45,12 +47,4 @@ public class StateConfig : BaseConfig<StateConfig>
         get;
         set => SetProperty(ref field, value);
     } = false;
-
-    protected override void CopyFrom(StateConfig other)
-    {
-        LastUsedPublishService = other.LastUsedPublishService;
-        SidebarPanelSizes = new Dictionary<string, int>(other.SidebarPanelSizes);
-        FileTypeChoices = new Dictionary<string, string?>(other.FileTypeChoices);
-        GuiGeneratorSkriptGuiAddonUsed = other.GuiGeneratorSkriptGuiAddonUsed;
-    }
 }

@@ -1,8 +1,10 @@
 ﻿using System.Text.Json.Serialization.Metadata;
+using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings;
 
-public class ExperimentsConfig : BaseConfig<ExperimentsConfig>
+[SettingsConfig]
+public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
 {
     protected override JsonTypeInfo<ExperimentsConfig> TypeInfo => AppJsonContext.Default.ExperimentsConfig;
     public override string FileName => "experiments.json";
@@ -69,15 +71,4 @@ public class ExperimentsConfig : BaseConfig<ExperimentsConfig>
         get;
         set => SetProperty(ref field, value);
     } = false;
-
-    protected override void CopyFrom(ExperimentsConfig other)
-    {
-        AutoCompletionPrototypeEnabled = other.AutoCompletionPrototypeEnabled;
-        ProjectsEnabled = other.ProjectsEnabled;
-        HexPreviewEnabled = other.HexPreviewEnabled;
-        CodeParserEnabled = other.CodeParserEnabled;
-        RealtimeCodeParserEnabled = other.RealtimeCodeParserEnabled;
-        FoldingEnabled = other.FoldingEnabled;
-        SessionRestoringEnabled = other.SessionRestoringEnabled;
-    }
 }

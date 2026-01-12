@@ -256,4 +256,10 @@
         <AdditionalFiles Include="Views\Windows\Projects\RenameElementWindow.axaml"/>
         <AdditionalFiles Include="Views\Windows\Settings\SettingsWindow.axaml"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj"
+                        OutputItemType="Analyzer"
+                        ReferenceOutputAssembly="false"/>
+    </ItemGroup>
 </Project>

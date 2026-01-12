@@ -1,8 +1,10 @@
 ﻿using System.Text.Json.Serialization.Metadata;
+using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings.Configs;
 
-public class SecretsConfig : BaseConfig<SecretsConfig>
+[SettingsConfig]
+public partial class SecretsConfig : BaseConfig<SecretsConfig>
 {
     protected override JsonTypeInfo<SecretsConfig> TypeInfo => AppJsonContext.Default.SecretsConfig;
 
@@ -43,12 +45,4 @@ public class SecretsConfig : BaseConfig<SecretsConfig>
         get;
         set => SetProperty(ref field, value);
     } = string.Empty;
-
-    protected override void CopyFrom(SecretsConfig other)
-    {
-        SkUnityApiKey = other.SkUnityApiKey;
-        PastebinApiKey = other.PastebinApiKey;
-        SkriptMcApiKey = other.SkriptMcApiKey;
-        CodeSkriptPlApiKey = other.CodeSkriptPlApiKey;
-    }
 }

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings.Configs;
 
-public class AppSettings : BaseConfig<AppSettings>
+[SettingsConfig]
+public partial class AppSettings : BaseConfig<AppSettings>
 {
     protected override JsonTypeInfo<AppSettings> TypeInfo => AppJsonContext.Default.AppSettings;
     [JsonIgnore] public override string FileName => "options.json";
@@ -223,33 +225,5 @@ public class AppSettings : BaseConfig<AppSettings>
     {
         get;
         set => SetProperty(ref field, value);
-    }
-
-    protected override void CopyFrom(AppSettings other)
-    {
-        Version = other.Version;
-        IsDevModeEnabled = other.IsDevModeEnabled;
-        Language = other.Language;
-        CurrentTheme = other.CurrentTheme;
-        FileSyntaxes = new Dictionary<string, string>(other.FileSyntaxes);
-        CheckForAppUpdates = other.CheckForAppUpdates;
-        CheckForExternalFileChanges = other.CheckForExternalFileChanges;
-        CustomUiScale = other.CustomUiScale;
-        ForceNativeTitleBar = other.ForceNativeTitleBar;
-        IsDiscordRichPresenceEnabled = other.IsDiscordRichPresenceEnabled;
-        IsProjectSingleClickEnabled = other.IsProjectSingleClickEnabled;
-        IsSidebarAnimationEnabled = other.IsSidebarAnimationEnabled;
-        IsSidebarWidthSyncEnabled = other.IsSidebarWidthSyncEnabled;
-        IsAutoSaveEnabled = other.IsAutoSaveEnabled;
-        IsAutoPairingEnabled = other.IsAutoPairingEnabled;
-        IsAutoIndentEnabled = other.IsAutoIndentEnabled;
-        IsPasteIndentationEnabled = other.IsPasteIndentationEnabled;
-        HighlightCurrentLine = other.HighlightCurrentLine;
-        IsWordWrapEnabled = other.IsWordWrapEnabled;
-        IsEditorZoomLevelSyncEnabled = other.IsEditorZoomLevelSyncEnabled;
-        EditorFontSize = other.EditorFontSize;
-        EditorFontFamily = other.EditorFontFamily;
-        EditorTabSize = other.EditorTabSize;
-        UseEditorTabsForIndentation = other.UseEditorTabsForIndentation;
     }
 }
