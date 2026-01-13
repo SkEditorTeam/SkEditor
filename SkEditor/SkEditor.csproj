@@ -193,10 +193,6 @@
             <DependentUpon>WelcomeTabControl.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Pages\Settings\AboutPage.axaml.cs">
-            <DependentUpon>AboutPage.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
         <Compile Update="Views\Pages\Settings\AddonsPage.axaml.cs">
             <DependentUpon>AddonsPage.axaml</DependentUpon>
             <SubType>Code</SubType>
@@ -228,6 +224,10 @@
         <Compile Update="Views\Pages\Settings\PersonalizationPage.axaml.cs">
             <DependentUpon>PersonalizationPage.axaml</DependentUpon>
             <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Pages\SettingsPage.axaml.cs">
+          <DependentUpon>AboutPage.axaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 

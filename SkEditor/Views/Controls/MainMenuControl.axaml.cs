@@ -15,6 +15,7 @@ using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views.Controls.Docs;
+using SkEditor.Views.Pages;
 using AddonsPage = SkEditor.Views.Pages.Settings.AddonsPage;
 using ColorSelectionWindow = SkEditor.Views.Windows.ColorSelectionWindow;
 using CommandGenerator = SkEditor.Views.Windows.Generators.CommandGenerator;
@@ -126,8 +127,7 @@ public partial class MainMenuControl : UserControl
         MenuItemMarketplace.Command =
             new AsyncRelayCommand(() => new MarketplaceWindow().ShowDialogOnMainWindow());
 
-        MenuItemSettings.Command =
-            new AsyncRelayCommand(() => new SettingsWindow().ShowDialogOnMainWindow());
+        MenuItemSettings.Command = new RelayCommand(AddSettingsTab);
     }
 
     private static async Task ShowDialogIfEditorIsOpen(AppWindow window, bool openAsDialog = true)
@@ -178,6 +178,16 @@ public partial class MainMenuControl : UserControl
             Symbol = Symbol.Book
         };
         SkEditorAPI.Files.AddCustomTab(Translation.Get("DocumentationWindowTitle"), new DocumentationControl(),
+            icon: icon);
+    }
+    
+    public static void AddSettingsTab()
+    {
+        SymbolIconSource icon = new()
+        {
+            Symbol = Symbol.Settings
+        };
+        SkEditorAPI.Files.AddCustomTab(Translation.Get("WindowTitleSettings"), new SettingsPage(),
             icon: icon);
     }
 

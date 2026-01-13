@@ -34,7 +34,6 @@ public class SettingsGenerator : IIncrementalGenerator
                 ImmutableArray<IPropertySymbol> properties = [..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p => p.SetMethod != null)];
                 
                 var copyFromCode = $$"""
-
                                      namespace {{namespaceName}}
                                      {
                                          public partial class {{className}}

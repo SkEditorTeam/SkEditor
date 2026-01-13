@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800"
+             x:CompileBindings="True"
+             x:Class="SkEditor.Views.Pages.SettingsPage">
+
+    <controls:NavigationView VerticalAlignment="Stretch" PaneDisplayMode="Left" IsSettingsVisible="False" IsPaneToggleButtonVisible="False" Margin="16">
+        <controls:NavigationView.MenuItems>
+            <controls:NavigationViewItem Content="{DynamicResource SettingsHomeGeneral}"
+                                         IconSource="{icons:SymbolIconSource Symbol=Wrench}" />
+            <controls:NavigationViewItem Content="{DynamicResource SettingsHomePersonalization}"
+                                         IconSource="{icons:SymbolIconSource Symbol=PaintBrush}" />
+            <controls:NavigationViewItem Content="{DynamicResource SettingsHomeExperiments}"
+                                         IconSource="{icons:SymbolIconSource Symbol=Beaker}" />
+            <controls:NavigationViewItem Content="{DynamicResource SettingsHomeConnections}"
+                                         IconSource="{icons:SymbolIconSource Symbol=PlugConnected}" />
+            <controls:NavigationViewItem Content="{DynamicResource SettingsHomeAddons}"
+                                         IconSource="{icons:SymbolIconSource Symbol=PuzzlePiece}" />
+            <controls:NavigationViewItem Content="{DynamicResource SettingsHomeFileTypes}"
+                                         IconSource="{icons:SymbolIconSource Symbol=DocumentSettings}" />
+            <controls:NavigationViewItem Content="{DynamicResource SettingsHomeAbout}"
+                                         IconSource="{icons:SymbolIconSource Symbol=Info}" />
+        </controls:NavigationView.MenuItems>
+    </controls:NavigationView>
+</UserControl>
