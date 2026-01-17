@@ -13,14 +13,18 @@
              x:Class="SkEditor.Views.Pages.SettingsPage">
 
     <UserControl.Resources>
-        <Brush x:Key="NavigationViewContentBackground">#00FFFFFF</Brush>
+        <!-- ReSharper disable Xaml.RedundantResource -->
+        <SolidColorBrush x:Key="NavigationViewContentBackground">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush">Transparent</SolidColorBrush>
+        <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
+        <!-- ReSharper restore Xaml.RedundantResource -->
     </UserControl.Resources>
 
-    <controls:NavigationView VerticalAlignment="Stretch" PaneDisplayMode="Left" IsSettingsVisible="False"
-                             BorderBrush="Red"
+    <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" PaneDisplayMode="Auto" IsSettingsVisible="False"
+                             BorderBrush="Red" OpenPaneLength="280"
                              IsPaneToggleButtonVisible="False" Margin="16,16,0,16">
         <controls:NavigationView.MenuItems>
-            <controls:NavigationViewItem Content="{DynamicResource SettingsHomeGeneral}"
+            <controls:NavigationViewItem Content="{DynamicResource SettingsHomeGeneral}" IsSelected="True"
                                          IconSource="{icons:SymbolIconSource Symbol=Wrench}" />
             <controls:NavigationViewItem Content="{DynamicResource SettingsHomePersonalization}"
                                          IconSource="{icons:SymbolIconSource Symbol=PaintBrush}" />
@@ -37,7 +41,7 @@
         </controls:NavigationView.MenuItems>
 
         <controls:NavigationView.Content>
-            <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="24">
+            <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="24,4,24,24">
                 <StackPanel Spacing="8">
                     <controls:SettingsExpander Header="{DynamicResource SettingsGeneralLanguage}"
                                                IconSource="{icons:SymbolIconSource Symbol=Earth}">
