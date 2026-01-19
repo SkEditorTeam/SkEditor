@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
+using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
@@ -103,6 +104,28 @@ public partial class MainWindow : AppWindow
         };
 
         AddHandler(DragDrop.DropEvent, FileHandler.FileDropAction);
+        
+        AddHandler(KeyUpEvent, (_, e) =>
+        {
+            if (e.Key is not (Key.LeftAlt or Key.RightAlt))
+            {
+                return;
+            }
+            
+            TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+            if (editor == null)
+            {
+                return;
+            }
+            
+
+            if (editor.TextArea.IsFocused || editor.IsFocused)
+            {
+                e.Handled = true;
+
+                Dispatcher.UIThread.Post(() => editor.TextArea.Focus());
+            }
+        }, RoutingStrategies.Tunnel);
     }
 
     public void ReloadUiOfAddons()
