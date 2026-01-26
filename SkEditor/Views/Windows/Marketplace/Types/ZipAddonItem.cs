@@ -16,6 +16,7 @@ namespace SkEditor.Views.Windows.Marketplace.Types;
 
 public class ZipAddonItem : AddonItem
 {
+    public override string ItemType => "ZipAddon";
     [JsonIgnore] private const string FolderName = "Addons";
 
     public override async Task Install()

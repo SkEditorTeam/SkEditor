@@ -17,6 +17,7 @@ namespace SkEditor.Views.Windows.Marketplace.Types;
 
 public class ThemeWithSyntaxItem : MarketplaceItem
 {
+    public override string ItemType => "ThemeWithSyntax";
     [JsonPropertyName("themeFile")] public required string ThemeFileUrl { get; set; }
 
     [JsonPropertyName("syntaxFolders")] public required string[] SyntaxFolders { get; set; }

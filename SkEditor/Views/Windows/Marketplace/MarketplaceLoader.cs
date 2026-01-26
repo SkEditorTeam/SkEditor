@@ -95,7 +95,7 @@ public class MarketplaceItem
 {
     [JsonPropertyName("name")] public required string ItemName { get; set; }
 
-    [JsonPropertyName("type")] public required string ItemType { get; set; }
+    [JsonIgnore] public virtual string ItemType => "Unknown";
 
     [JsonPropertyName("shortDescription")] public required string ItemShortDescription { get; set; }
 
@@ -107,13 +107,17 @@ public class MarketplaceItem
 
     [JsonPropertyName("author")] public required string ItemAuthor { get; set; }
 
-    [JsonIgnore] public required MarketplaceWindow Marketplace { get; set; }
+    [JsonIgnore] public MarketplaceWindow? Marketplace { get; set; }
 
     public virtual Task Install() => Task.CompletedTask;
     public virtual Task Uninstall() => Task.CompletedTask;
     public virtual bool IsInstalled() => false;
 }
 
+[JsonSourceGenerationOptions(
+    WriteIndented = true, 
+    AllowOutOfOrderMetadataProperties = true
+)]
 [JsonSerializable(typeof(string[]))]
 [JsonSerializable(typeof(MarketplaceItem))]
 [JsonSerializable(typeof(SyntaxItem))]
