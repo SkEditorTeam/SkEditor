@@ -27,7 +27,7 @@ public class Theme
     public ImmutableSolidColorBrush CurrentLineBorder { get; set; } = new(Color.Parse("#0DFFFFFF"));
     public ImmutableSolidColorBrush AccentColor { get; set; } = new(Colors.White);
     public string? CustomFont { get; set; }
-    public bool UseMicaEffect { get; set; } = false;
+    public bool UseMicaEffect { get; set; }
 
     public Dictionary<string, ImmutableSolidColorBrush> CustomColorChanges { get; set; } = new()
     {
@@ -60,5 +60,10 @@ public class Theme
     }
 }
 
+[JsonSourceGenerationOptions(
+    WriteIndented = true,
+    AllowTrailingCommas = true,
+    Converters = [typeof(ImmutableSolidColorBrushConverter)]
+)]
 [JsonSerializable(typeof(Theme))]
 public partial class ThemeJsonContext : JsonSerializerContext;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -83,8 +84,8 @@ public class ThemeEditor
         try
         {
             string json = File.ReadAllText(path);
-
             theme = JsonSerializer.Deserialize<Theme>(json, ThemeJsonContext.Default.Theme);
+
             if (theme == null)
             {
                 File.Delete(path);
@@ -94,8 +95,9 @@ public class ThemeEditor
             theme.FileName = Path.GetFileName(path);
             Themes.Add(theme);
         }
-        catch
+        catch (Exception ex)
         {
+            SkEditorAPI.Logs.Error($"Failed to load theme from {path}: {ex.Message}");
             theme = GetDefaultTheme();
         }
 

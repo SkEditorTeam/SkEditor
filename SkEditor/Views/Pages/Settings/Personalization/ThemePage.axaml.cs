@@ -4,6 +4,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.API;
 using SkEditor.Utilities.Styling;
 using SkEditor.Views.Windows.Settings;
 using ColorPickerSettingsExpander = SkEditor.Views.Controls.ColorPickerSettingsExpander;
