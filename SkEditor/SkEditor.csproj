@@ -261,6 +261,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\External\DiscordRPC\DiscordRPC.csproj" />
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 </Project>
