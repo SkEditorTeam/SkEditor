@@ -20,17 +20,27 @@ public class MarketplaceLoader
     {
         const string url = MarketplaceWindow.MarketplaceUrl + "/items.json";
         using HttpClient client = new();
-        var json = await client.GetStringAsync(url);
+        string json = await client.GetStringAsync(url);
 
         string[] itemNames = JsonSerializer.Deserialize(json, MarketplaceContext.Default.StringArray) ?? [];
 
         foreach (string itemName in itemNames)
         {
-            if (HiddenItems.Contains(itemName)) continue;
+            if (HiddenItems.Contains(itemName))
+            {
+                continue;
+            }
 
             MarketplaceItem? item = await GetItem(itemName);
-            if (item?.ItemName == null) continue;
-            if (!SupportedTypes.Contains(item.ItemType)) continue;
+            if (item?.ItemName == null)
+            {
+                continue;
+            }
+
+            if (!SupportedTypes.Contains(item.ItemType))
+            {
+                continue;
+            }
 
             yield return item;
         }
@@ -109,13 +119,24 @@ public class MarketplaceItem
 
     [JsonIgnore] public MarketplaceWindow? Marketplace { get; set; }
 
-    public virtual Task Install() => Task.CompletedTask;
-    public virtual Task Uninstall() => Task.CompletedTask;
-    public virtual bool IsInstalled() => false;
+    public virtual Task Install()
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual Task Uninstall()
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual bool IsInstalled()
+    {
+        return false;
+    }
 }
 
 [JsonSourceGenerationOptions(
-    WriteIndented = true, 
+    WriteIndented = true,
     AllowOutOfOrderMetadataProperties = true
 )]
 [JsonSerializable(typeof(string[]))]

@@ -88,6 +88,6 @@ public class FileSyntaxConfig
 
     public string FullIdName => $"{LanguageName}-{SyntaxName}";
 }
-    
+
 [JsonSerializable(typeof(FileSyntaxConfig))]
 public partial class FileSyntaxConfigJsonContext : JsonSerializerContext;

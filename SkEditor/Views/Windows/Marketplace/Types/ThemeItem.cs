@@ -17,8 +17,8 @@ namespace SkEditor.Views.Windows.Marketplace.Types;
 
 public class ThemeItem : MarketplaceItem
 {
-    public override string ItemType => "Theme";
     [JsonIgnore] public const string FolderName = "Themes";
+    public override string ItemType => "Theme";
 
     [JsonPropertyName("file")] public required string ItemFileUrl { get; set; }
 

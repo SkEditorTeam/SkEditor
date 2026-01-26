@@ -24,10 +24,10 @@ namespace SkEditor.Utilities.InternalAPI;
 public static class AddonLoader
 {
     private static JsonObject _metaCache = new();
-    public static List<AddonMeta> Addons { get; } = [];
-    public static HashSet<string> DllNames { get; } = [];
 
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+    public static List<AddonMeta> Addons { get; } = [];
+    public static HashSet<string> DllNames { get; } = [];
 
     public static async Task Load()
     {
@@ -89,7 +89,7 @@ public static class AddonLoader
 
         try
         {
-            var node = JsonNode.Parse(File.ReadAllText(metaFile));
+            JsonNode? node = JsonNode.Parse(File.ReadAllText(metaFile));
             _metaCache = node?.AsObject() ?? new JsonObject();
         }
         catch

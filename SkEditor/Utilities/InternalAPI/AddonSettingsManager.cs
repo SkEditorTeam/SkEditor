@@ -35,7 +35,7 @@ public static class AddonSettingsManager
         string json = File.ReadAllText(path);
         try
         {
-            var node = JsonNode.Parse(json);
+            JsonNode? node = JsonNode.Parse(json);
             LoadedAddonSettings[addon] = node?.AsObject() ?? new JsonObject();
         }
         catch (Exception e)
@@ -56,7 +56,7 @@ public static class AddonSettingsManager
     private static JsonObject CreateDefaultSettings(IAddon addon)
     {
         JsonObject obj = new();
-        foreach (var setting in addon.GetSettings().Where(s => !s.Type.IsSelfManaged))
+        foreach (Setting setting in addon.GetSettings().Where(s => !s.Type.IsSelfManaged))
         {
             obj[setting.Key] = setting.Type.Serialize(setting.DefaultValue);
         }

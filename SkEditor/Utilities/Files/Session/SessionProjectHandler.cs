@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Serilog;
 using SkEditor.Utilities.Extensions;
@@ -29,7 +28,8 @@ public static class SessionProjectHandler
                     Timestamp = DateTime.UtcNow
                 };
 
-                string jsonData = JsonSerializer.Serialize(sessionProjectData, SessionJsonContext.Default.SessionProjectData);
+                string jsonData =
+                    JsonSerializer.Serialize(sessionProjectData, SessionJsonContext.Default.SessionProjectData);
                 await SessionFileHandler.WriteFile(ProjectFilePath, jsonData);
             }
         }

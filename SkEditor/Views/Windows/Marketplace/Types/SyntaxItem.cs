@@ -15,8 +15,8 @@ namespace SkEditor.Views.Windows.Marketplace.Types;
 
 public class SyntaxItem : MarketplaceItem
 {
-    public override string ItemType => "NewSyntax";
     [JsonIgnore] public const string FolderName = "Syntax Highlighting";
+    public override string ItemType => "NewSyntax";
 
     [JsonPropertyName("syntaxFolders")] public required string[] ItemSyntaxFolders { get; set; }
 

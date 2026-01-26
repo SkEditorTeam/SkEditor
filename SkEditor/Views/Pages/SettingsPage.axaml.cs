@@ -1,7 +1,7 @@
 ﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
-using SkEditor.API;
 
 namespace SkEditor.Views.Pages;
 
@@ -11,9 +11,9 @@ public partial class SettingsPage : UserControl
     {
         InitializeComponent();
 
-        this.SizeChanged += (_, e) =>
+        SizeChanged += (_, e) =>
         {
-            var newSize = e.NewSize;
+            Size newSize = e.NewSize;
 
             double paneWidth = newSize.Width / 4;
 

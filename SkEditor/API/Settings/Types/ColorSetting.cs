@@ -22,7 +22,7 @@ public class ColorSetting : ISettingType
         );
     }
 
-    public JsonNode? Serialize(object value)
+    public JsonNode Serialize(object value)
     {
         if (value is not Color color)
         {

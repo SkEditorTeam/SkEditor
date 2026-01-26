@@ -15,10 +15,11 @@ public partial class Configs
         {
             return;
         }
-        
+
         string json = await File.ReadAllTextAsync(oldSettings);
 
-        OldAppConfig? oldAppConfig = JsonSerializer.Deserialize<OldAppConfig>(json, OldAppJsonContext.Default.OldAppConfig);
+        OldAppConfig? oldAppConfig =
+            JsonSerializer.Deserialize<OldAppConfig>(json, OldAppJsonContext.Default.OldAppConfig);
 
         if (oldAppConfig != null)
         {
@@ -45,13 +46,13 @@ public partial class Configs
             appSettings.Language = oldAppConfig.Language;
             appSettings.EditorTabSize = oldAppConfig.TabSize;
             appSettings.UseEditorTabsForIndentation = !oldAppConfig.UseSpacesInsteadOfTabs;
-            
+
             StateConfig stateConfig = GetStateConfig();
             stateConfig.LastUsedPublishService = oldAppConfig.LastUsedPublishService;
             stateConfig.GuiGeneratorSkriptGuiAddonUsed = oldAppConfig.UseSkriptGui;
             stateConfig.SidebarPanelSizes = oldAppConfig.SidebarPanelSizes;
             stateConfig.FileTypeChoices = oldAppConfig.FileTypeChoices;
-            
+
             ExperimentsConfig experimentsConfig = GetExperimentsConfig();
             experimentsConfig.AutoCompletionPrototypeEnabled = oldAppConfig.EnableAutoCompletionExperiment;
             experimentsConfig.ProjectsEnabled = oldAppConfig.EnableProjectsExperiment;
@@ -60,13 +61,13 @@ public partial class Configs
             experimentsConfig.FoldingEnabled = oldAppConfig.EnableFolding;
             experimentsConfig.SessionRestoringEnabled = oldAppConfig.EnableSessionRestoring;
             experimentsConfig.RealtimeCodeParserEnabled = oldAppConfig.EnableRealtimeCodeParser;
-            
+
             SecretsConfig secretsConfig = GetSecretsConfig();
             secretsConfig.SkUnityApiKey = oldAppConfig.SkUnityApiKey;
             secretsConfig.SkriptMcApiKey = oldAppConfig.SkriptMcApiKey;
             secretsConfig.PastebinApiKey = oldAppConfig.PastebinApiKey;
             secretsConfig.CodeSkriptPlApiKey = oldAppConfig.CodeSkriptPlApiKey;
-            
+
             await SaveAllConfigsAsync();
             File.Delete(oldSettings);
         }

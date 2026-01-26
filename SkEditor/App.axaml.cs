@@ -199,8 +199,7 @@ public class App : Application
                 processPath = AppDomain.CurrentDomain.BaseDirectory;
             }
 
-            // TODO: Re-enable crash reporter
-            // Process.Start(processPath, "--crash " + encodedMessage);
+            Process.Start(processPath, "--crash " + encodedMessage);
             Environment.Exit(1);
         };
     }

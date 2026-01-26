@@ -20,7 +20,8 @@
         <!-- ReSharper restore Xaml.RedundantResource -->
     </UserControl.Resources>
 
-    <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" PaneDisplayMode="Auto" IsSettingsVisible="False"
+    <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" PaneDisplayMode="Auto"
+                             IsSettingsVisible="False"
                              BorderBrush="Red" OpenPaneLength="280"
                              IsPaneToggleButtonVisible="False" Margin="16,16,0,16">
         <controls:NavigationView.MenuItems>

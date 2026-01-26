@@ -49,7 +49,8 @@ public partial class Configs : IConfigs
 
     public ExperimentsConfig GetExperimentsConfig()
     {
-        return GetConfig<ExperimentsConfig>() ?? throw new InvalidOperationException("ExperimentsConfig config not found.");
+        return GetConfig<ExperimentsConfig>() ??
+               throw new InvalidOperationException("ExperimentsConfig config not found.");
     }
 
     public StateConfig GetStateConfig()

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace SkEditor.Utilities.Settings.Configs;
 
 /// <summary>
-///    Represents the old application configuration structure for migration purposes.
+///     Represents the old application configuration structure for migration purposes.
 /// </summary>
 public class OldAppConfig
 {
@@ -29,7 +29,7 @@ public class OldAppConfig
     public required bool IsSidebarWidthSyncEnabled { get; set; }
     public required string Language { get; set; }
     public required string LastUsedPublishService { get; set; }
-    
+
     public required int TabSize { get; set; }
     public required bool UseSkriptGui { get; set; }
     public required bool UseSpacesInsteadOfTabs { get; set; }

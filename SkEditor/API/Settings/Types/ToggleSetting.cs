@@ -14,7 +14,7 @@ public class ToggleSetting : ISettingType
         return value?.GetValue<bool>() ?? false;
     }
 
-    public JsonNode? Serialize(object value)
+    public JsonNode Serialize(object value)
     {
         return JsonValue.Create((bool)value);
     }

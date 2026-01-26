@@ -17,8 +17,8 @@ namespace SkEditor.Views.Windows.Marketplace.Types;
 
 public class AddonItem : MarketplaceItem
 {
-    public override string ItemType => "Addon";
     [JsonIgnore] private const string FolderName = "Addons";
+    public override string ItemType => "Addon";
     [JsonPropertyName("requiresRestart")] public bool ItemRequiresRestart { get; set; }
     [JsonPropertyName("file")] public required string ItemFileUrl { get; set; }
 

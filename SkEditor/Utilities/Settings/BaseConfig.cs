@@ -11,18 +11,19 @@ namespace SkEditor.Utilities.Settings;
 
 public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseConfig<T>, IConfig, new()
 {
+    private const int SaveDebounceMs = 300;
+
     // ReSharper disable once ReplaceWithFieldKeyword
     private readonly string _appDataFolderPath =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
+
+    private readonly SemaphoreSlim _saveLock = new(1, 1);
+    private CancellationTokenSource? _saveCts;
 
     protected abstract JsonTypeInfo<T> TypeInfo { get; }
 
     private string ConfigPath => Path.Combine(_appDataFolderPath, FileName);
     public abstract string FileName { get; }
-    
-    private readonly SemaphoreSlim _saveLock = new(1, 1);
-    private CancellationTokenSource? _saveCts;
-    private const int SaveDebounceMs = 300;
 
     public async Task Load()
     {
@@ -57,8 +58,9 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
         {
             await _saveCts.CancelAsync();
         }
+
         _saveCts = new CancellationTokenSource();
-        var token = _saveCts.Token;
+        CancellationToken token = _saveCts.Token;
 
         try
         {
@@ -82,6 +84,7 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
             {
                 Directory.CreateDirectory(directory);
             }
+
             await File.WriteAllTextAsync(ConfigPath, json);
         }
         finally

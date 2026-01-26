@@ -29,9 +29,9 @@ public interface IConfigs
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     Task SaveAllConfigsAsync();
-    
+
     /// <summary>
-    ///    Check and migrate old configuration files to the new format asynchronously.
+    ///     Check and migrate old configuration files to the new format asynchronously.
     /// </summary>
     /// <returns>>A task representing the asynchronous operation.</returns>
     Task MigrateConfigsAsync();

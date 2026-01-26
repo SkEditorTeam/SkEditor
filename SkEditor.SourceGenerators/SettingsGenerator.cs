@@ -1,16 +1,17 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SkEditor.SourceGenerators;
 
 [Generator]
 public class SettingsGenerator : IIncrementalGenerator
 {
-    private const string SettingsConfigAttributeFullName = "SkEditor.Utilities.Settings.Attributes.SettingsConfigAttribute";
-    
+    private const string SettingsConfigAttributeFullName =
+        "SkEditor.Utilities.Settings.Attributes.SettingsConfigAttribute";
+
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         IncrementalValueProvider<ImmutableArray<INamedTypeSymbol?>> classesWithAttribute = context.SyntaxProvider
@@ -21,7 +22,8 @@ public class SettingsGenerator : IIncrementalGenerator
             .Where(symbol => symbol != null && symbol.DeclaringSyntaxReferences.Any(syntaxRef =>
             {
                 SyntaxNode syntax = syntaxRef.GetSyntax();
-                return syntax is ClassDeclarationSyntax classDecl && classDecl.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword));
+                return syntax is ClassDeclarationSyntax classDecl &&
+                       classDecl.Modifiers.Any(mod => mod.IsKind(SyntaxKind.PartialKeyword));
             }))
             .Collect();
 
@@ -31,22 +33,23 @@ public class SettingsGenerator : IIncrementalGenerator
             {
                 string className = classSymbol!.Name;
                 string namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
-                ImmutableArray<IPropertySymbol> properties = [..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p => p.SetMethod != null)];
-                
-                var copyFromCode = $$"""
-                                     namespace {{namespaceName}}
-                                     {
-                                         public partial class {{className}}
-                                         {
-                                             protected override void CopyFrom({{className}} other)
-                                             {
-                                                 if (other == null) return;
-                                                 {{string.Join("\n            ", properties.Select(p => $"{p.Name} = other.{p.Name};"))}}
-                                             }
-                                         }
-                                     }
+                ImmutableArray<IPropertySymbol> properties =
+                    [..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p => p.SetMethod != null)];
 
-                                     """;
+                string copyFromCode = $$"""
+                                        namespace {{namespaceName}}
+                                        {
+                                            public partial class {{className}}
+                                            {
+                                                protected override void CopyFrom({{className}} other)
+                                                {
+                                                    if (other == null) return;
+                                                    {{string.Join("\n            ", properties.Select(p => $"{p.Name} = other.{p.Name};"))}}
+                                                }
+                                            }
+                                        }
+
+                                        """;
                 ctx.AddSource($"{className}_CopyFrom.g.cs", copyFromCode);
             }
         });

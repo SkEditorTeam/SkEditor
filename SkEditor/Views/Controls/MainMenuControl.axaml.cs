@@ -180,7 +180,7 @@ public partial class MainMenuControl : UserControl
         SkEditorAPI.Files.AddCustomTab(Translation.Get("DocumentationWindowTitle"), new DocumentationControl(),
             icon: icon);
     }
-    
+
     public static void AddSettingsTab()
     {
         SymbolIconSource icon = new()

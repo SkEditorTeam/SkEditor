@@ -20,7 +20,7 @@ public static partial class DiscordRpcUpdater
 
         _client = new DiscordRpcClient(ApplicationId);
         _client.Initialize();
-        
+
         _client.SetPresence(new RichPresence
         {
             Timestamps = Timestamps.Now,

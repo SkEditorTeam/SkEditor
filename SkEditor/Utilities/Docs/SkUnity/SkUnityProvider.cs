@@ -87,7 +87,7 @@ public class SkUnityProvider : IDocProvider
         }
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        var responseObject = JsonNode.Parse(content);
+        JsonNode? responseObject = JsonNode.Parse(content);
         if (responseObject?["response"]?.GetValue<string>() != "success")
         {
             await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
@@ -95,7 +95,8 @@ public class SkUnityProvider : IDocProvider
             return [];
         }
 
-        var entries = responseObject["result"]?.Deserialize(SkUnityContext.Default.ListSkUnityDocEntry);
+        List<SkUnityDocEntry>? entries =
+            responseObject["result"]?.Deserialize(SkUnityContext.Default.ListSkUnityDocEntry);
         return [.. entries ?? []];
     }
 
@@ -134,26 +135,29 @@ public class SkUnityProvider : IDocProvider
         }
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        var responseObject = JsonNode.Parse(content);
-        var resultNode = responseObject?["result"];
+        JsonNode? responseObject = JsonNode.Parse(content);
+        JsonNode? resultNode = responseObject?["result"];
 
         if (resultNode is JsonArray or null)
         {
             return [];
         }
 
-        var resultObject = resultNode.AsObject();
+        JsonObject resultObject = resultNode.AsObject();
         List<IDocumentationExample> examples = [];
 
-        foreach (var property in resultObject)
+        foreach (KeyValuePair<string, JsonNode?> property in resultObject)
         {
             if (!int.TryParse(property.Key, out _))
             {
                 continue;
             }
 
-            var example = property.Value.Deserialize(SkUnityContext.Default.SkUnityDocExample);
-            if (example != null) examples.Add(example);
+            SkUnityDocExample? example = property.Value.Deserialize(SkUnityContext.Default.SkUnityDocExample);
+            if (example != null)
+            {
+                examples.Add(example);
+            }
         }
 
         return examples;
@@ -192,19 +196,22 @@ public class SkUnityProvider : IDocProvider
         }
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        var responseObject = JsonNode.Parse(content);
-        var addonsObj = responseObject?["result"]?.AsObject();
-    
-        if (addonsObj == null) return [];
+        JsonNode? responseObject = JsonNode.Parse(content);
+        JsonObject? addonsObj = responseObject?["result"]?.AsObject();
+
+        if (addonsObj == null)
+        {
+            return [];
+        }
 
         List<string> addons = [];
         foreach ((string key, JsonNode? obj) in addonsObj)
         {
             addons.Add(key);
-        
+
             string? hexColor = obj?["colour"]?.GetValue<string>();
             string? forumResourceId = obj?["forums_resource_id"]?.GetValue<string>();
-        
+
             if (forumResourceId == null)
             {
                 Log.Warning("Addon {Addon} does not have a forum resource ID", key);

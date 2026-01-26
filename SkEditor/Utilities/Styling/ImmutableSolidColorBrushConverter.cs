@@ -8,11 +8,15 @@ namespace SkEditor.Utilities.Styling;
 
 public class ImmutableSolidColorBrushConverter : JsonConverter<ImmutableSolidColorBrush>
 {
-    public override ImmutableSolidColorBrush? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override ImmutableSolidColorBrush? Read(ref Utf8JsonReader reader, Type typeToConvert,
+        JsonSerializerOptions options)
     {
         string? hex = reader.GetString();
-        if (string.IsNullOrWhiteSpace(hex)) return null;
-        
+        if (string.IsNullOrWhiteSpace(hex))
+        {
+            return null;
+        }
+
         try
         {
             return new ImmutableSolidColorBrush(Color.Parse(hex));

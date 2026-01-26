@@ -34,7 +34,7 @@ public class SessionSerializer
                 Log.Error("Deserialized session data is null");
                 return new SessionFileData { Content = string.Empty };
             }
-            
+
             string? version = sessionData.Version;
             string? path = sessionData.Path;
             string? content = sessionData.Content;

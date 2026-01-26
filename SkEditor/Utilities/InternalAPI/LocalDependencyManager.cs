@@ -12,7 +12,7 @@ public static class LocalDependencyManager
     public static async Task<bool> CheckAddonDependencies(AddonMeta addonMeta)
     {
         throw new NotImplementedException("Local dependency is being reworked.");
-        
+
         // List<NuGetDependency> nugetDependencies = addonMeta.Addon.GetDependencies()
         //     .Where(x => x is NuGetDependency)
         //     .Cast<NuGetDependency>().ToList();
