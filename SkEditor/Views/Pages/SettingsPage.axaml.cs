@@ -10,8 +10,8 @@ public partial class SettingsPage : UserControl
     public SettingsPage()
     {
         InitializeComponent();
-
-        SizeChanged += (_, e) =>
+        
+        NavigationView.SizeChanged += (_, e) =>
         {
             Size newSize = e.NewSize;
 

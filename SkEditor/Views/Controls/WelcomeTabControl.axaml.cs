@@ -131,7 +131,7 @@ public partial class WelcomeTabControl : UserControl
             };
 
             TextBlock textBlock = new() { Text = entry.Name, FontSize = TextSize };
-            StackPanel buttonPanel = new() { Orientation = Orientation.Horizontal, Spacing = 10 };
+            StackPanel buttonPanel = new() { Orientation = Orientation.Horizontal, Spacing = 12 };
 
             switch (entry.Icon)
             {

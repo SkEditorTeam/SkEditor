@@ -21,6 +21,7 @@
     </UserControl.Resources>
 
     <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" PaneDisplayMode="Auto"
+                             MaxWidth="1080"
                              IsSettingsVisible="False"
                              BorderBrush="Red" OpenPaneLength="280"
                              IsPaneToggleButtonVisible="False" Margin="16,16,0,16">
