@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Localization;
 
@@ -62,7 +62,8 @@ public class SkriptMcProvider : IDocProvider
         }
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        List<SkriptMcDocEntry>? entries = JsonConvert.DeserializeObject<List<SkriptMcDocEntry>>(content);
+        List<SkriptMcDocEntry>? entries = JsonSerializer.Deserialize<List<SkriptMcDocEntry>>(content,
+            SkriptMcDocJsonContext.Default.ListSkriptMcDocEntry);
         return entries?.Cast<IDocumentationEntry>()?.ToList()
                ?? [];
     }

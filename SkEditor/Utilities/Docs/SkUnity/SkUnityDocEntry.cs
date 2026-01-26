@@ -1,24 +1,24 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
 [Serializable]
 public class SkUnityDocEntry : IDocumentationEntry
 {
-    [JsonProperty("doc")] public required string RawDoc { set; get; }
+    [JsonPropertyName("doc")] public required string RawDoc { set; get; }
 
-    [JsonProperty("name")] public required string Name { set; get; }
+    [JsonPropertyName("name")] public required string Name { set; get; }
 
-    [JsonProperty("desc")] public required string Description { set; get; }
+    [JsonPropertyName("desc")] public required string Description { set; get; }
 
-    [JsonProperty("pattern")] public required string Patterns { set; get; }
+    [JsonPropertyName("pattern")] public required string Patterns { set; get; }
 
-    [JsonProperty("id")] public required string Id { set; get; }
+    [JsonPropertyName("id")] public required string Id { set; get; }
 
-    [JsonProperty("addon")] public required string Addon { set; get; }
+    [JsonPropertyName("addon")] public required string Addon { set; get; }
 
-    [JsonProperty("version")] public required string Version { set; get; }
+    [JsonPropertyName("version")] public required string Version { set; get; }
 
     public IDocumentationEntry.Type DocType
     {
@@ -41,11 +41,11 @@ public class SkUnityDocEntry : IDocumentationEntry
         set => RawDoc = value.ToString();
     }
 
-    [JsonProperty("returntype")] public string? ReturnType { set; get; }
+    [JsonPropertyName("returntype")] public string? ReturnType { set; get; }
 
-    [JsonProperty("changers")] public string? Changers { set; get; }
+    [JsonPropertyName("changers")] public string? Changers { set; get; }
 
-    [JsonProperty("eventvalues")] public string? EventValues { set; get; }
+    [JsonPropertyName("eventvalues")] public string? EventValues { set; get; }
 
     public DocProvider Provider => DocProvider.skUnity;
 }

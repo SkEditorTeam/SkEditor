@@ -1,27 +1,28 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace SkEditor.Utilities.Docs.SkriptMC;
 
 public class SkriptMcDocEntry : IDocumentationEntry
 {
-    [JsonProperty("example")] public required string RawExample;
+    [JsonPropertyName("example")] public required string RawExample;
 
     public IDocumentationExample Example => new SkriptMcDocExample { Example = RawExample };
 
-    [JsonProperty("category")] public required string RawType { get; set; }
+    [JsonPropertyName("category")] public required string RawType { get; set; }
 
-    [JsonProperty("name")] public required string Name { get; set; }
+    [JsonPropertyName("name")] public required string Name { get; set; }
 
-    [JsonProperty("content")] public required string Description { get; set; }
+    [JsonPropertyName("content")] public required string Description { get; set; }
 
-    [JsonProperty("pattern")] public required string Patterns { get; set; }
+    [JsonPropertyName("pattern")] public required string Patterns { get; set; }
 
-    [JsonProperty("id")] public required string Id { get; set; }
+    [JsonPropertyName("id")] public required string Id { get; set; }
 
-    [JsonProperty("addon")] public required string Addon { get; set; }
+    [JsonPropertyName("addon")] public required string Addon { get; set; }
 
-    [JsonProperty("version")] public required string Version { get; set; }
+    [JsonPropertyName("version")] public required string Version { get; set; }
 
     public IDocumentationEntry.Type DocType
     {
@@ -35,3 +36,7 @@ public class SkriptMcDocEntry : IDocumentationEntry
     public string? Changers { get; set; }
     public string? EventValues { get; set; }
 }
+
+[JsonSerializable(typeof(SkriptMcDocEntry))]
+[JsonSerializable(typeof(List<SkriptMcDocEntry>))]
+public partial class SkriptMcDocJsonContext : JsonSerializerContext;

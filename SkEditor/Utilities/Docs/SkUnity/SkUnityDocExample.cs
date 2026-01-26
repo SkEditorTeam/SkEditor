@@ -1,14 +1,14 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SkEditor.Utilities.Docs.SkUnity;
 
 [Serializable]
 public class SkUnityDocExample : IDocumentationExample
 {
-    [JsonProperty("example")] public required string Example { get; set; }
+    [JsonPropertyName("example")] public required string Example { get; set; }
 
-    [JsonProperty("username")] public required string Author { get; set; }
+    [JsonPropertyName("username")] public required string Author { get; set; }
 
-    [JsonProperty("votes")] public required string Votes { get; set; }
+    [JsonPropertyName("votes")] public required string Votes { get; set; }
 }

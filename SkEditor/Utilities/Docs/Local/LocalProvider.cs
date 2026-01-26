@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
@@ -105,14 +106,16 @@ public class LocalProvider : IDocProvider
 
         _localDocs = [];
 
-        List<LocalDocEntry> localDocs = JsonConvert.DeserializeObject<List<LocalDocEntry>>(content) ?? [];
+        List<LocalDocEntry> localDocs =
+            JsonSerializer.Deserialize<List<LocalDocEntry>>(content, LocalDocJsonContext.Default.ListLocalDocEntry)
+            ?? [];
         _localDocs.AddRange(localDocs);
     }
 
     private async Task SaveLocalDocs()
     {
         string file = GetLocalCachePath();
-        string content = JsonConvert.SerializeObject(_localDocs);
+        string content = JsonSerializer.Serialize(_localDocs, LocalDocJsonContext.Default.ListLocalDocEntry);
         await File.WriteAllTextAsync(file, content);
     }
 

@@ -54,14 +54,16 @@ public class LocalDocEntry : IDocumentationEntry
             return false;
         }
 
-        if (!string.IsNullOrEmpty(searchData.Query) && !Name.Contains(searchData.Query,
-                                                        StringComparison.OrdinalIgnoreCase)
-                                                    && !Description.Contains(searchData.Query,
-                                                        StringComparison.OrdinalIgnoreCase))
-        {
-            return false;
-        }
+        bool empty = string.IsNullOrEmpty(searchData.Query);
+        bool nameContains = Name.Contains(searchData.Query,
+            StringComparison.OrdinalIgnoreCase);
+        bool descriptionContains = Description.Contains(searchData.Query,
+            StringComparison.OrdinalIgnoreCase);
 
-        return true;
+        return empty || nameContains || descriptionContains;
     }
 }
+
+[JsonSerializable(typeof(LocalDocEntry))]
+[JsonSerializable(typeof(List<LocalDocEntry>))]
+public partial class LocalDocJsonContext : JsonSerializerContext;

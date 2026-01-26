@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Localization;
@@ -86,15 +87,15 @@ public class SkUnityProvider : IDocProvider
         }
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        JObject responseObject = JObject.Parse(content);
-        if (responseObject["response"]?.ToString() != "success")
+        var responseObject = JsonNode.Parse(content);
+        if (responseObject?["response"]?.GetValue<string>() != "success")
         {
             await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
-                responseObject["response"]?.ToString()));
+                responseObject?["response"]?.GetValue<string>()));
             return [];
         }
 
-        List<SkUnityDocEntry>? entries = responseObject["result"]?.ToObject<List<SkUnityDocEntry>>();
+        var entries = responseObject["result"]?.Deserialize(SkUnityContext.Default.ListSkUnityDocEntry);
         return [.. entries ?? []];
     }
 
@@ -133,28 +134,29 @@ public class SkUnityProvider : IDocProvider
         }
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        JObject responseObject = JObject.Parse(content);
-        JToken? result = responseObject["result"];
+        var responseObject = JsonNode.Parse(content);
+        var resultNode = responseObject?["result"];
 
-        // if result is a JArray, it means there are no examples
-        if (result is JArray)
+        if (resultNode is JsonArray or null)
         {
             return [];
         }
 
-        JObject? resultObject = responseObject["result"]?.ToObject<JObject>();
-        if (resultObject == null)
+        var resultObject = resultNode.AsObject();
+        List<IDocumentationExample> examples = [];
+
+        foreach (var property in resultObject)
         {
-            return [];
+            if (!int.TryParse(property.Key, out _))
+            {
+                continue;
+            }
+
+            var example = property.Value.Deserialize(SkUnityContext.Default.SkUnityDocExample);
+            if (example != null) examples.Add(example);
         }
 
-        List<string> keys = [];
-        keys.AddRange(from key in resultObject.Properties() where int.TryParse(key.Name, out _) select key.Name);
-
-        return keys
-            .Select(key => resultObject[key]?.ToObject<SkUnityDocExample>())
-            .OfType<IDocumentationExample>()
-            .ToList();
+        return examples;
     }
 
     public bool HasAddons => true;
@@ -190,26 +192,26 @@ public class SkUnityProvider : IDocProvider
         }
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        JObject responseObject = JObject.Parse(content);
-        JObject? addonsObj = responseObject["result"]?.ToObject<JObject>();
-        if (addonsObj == null)
-        {
-            return [];
-        }
+        var responseObject = JsonNode.Parse(content);
+        var addonsObj = responseObject?["result"]?.AsObject();
+    
+        if (addonsObj == null) return [];
 
-        List<string> addons = addonsObj.Properties().Select(prop => prop.Name).ToList();
-
-        foreach (string key in addons)
+        List<string> addons = [];
+        foreach ((string key, JsonNode? obj) in addonsObj)
         {
-            JToken? obj = addonsObj[key];
-            Color color = Color.Parse("#" + obj?["colour"]?.ToObject<string>());
-            string? forumResourceId = obj?["forums_resource_id"]?.ToObject<string>();
+            addons.Add(key);
+        
+            string? hexColor = obj?["colour"]?.GetValue<string>();
+            string? forumResourceId = obj?["forums_resource_id"]?.GetValue<string>();
+        
             if (forumResourceId == null)
             {
                 Log.Warning("Addon {Addon} does not have a forum resource ID", key);
                 continue;
             }
 
+            Color color = Color.Parse("#" + hexColor);
             CachedAddons[key] = new AddonData(color, forumResourceId);
         }
 
@@ -265,3 +267,8 @@ public class SkUnityProvider : IDocProvider
 
     private record AddonData(Color Color, string ForumResourceId);
 }
+
+[JsonSerializable(typeof(List<SkUnityDocEntry>))]
+[JsonSerializable(typeof(SkUnityDocEntry))]
+[JsonSerializable(typeof(SkUnityDocExample))]
+internal partial class SkUnityContext : JsonSerializerContext;

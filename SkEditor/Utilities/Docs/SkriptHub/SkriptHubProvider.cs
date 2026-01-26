@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
@@ -101,7 +101,8 @@ public class SkriptHubProvider : IDocProvider
         }
 
         string content = await File.ReadAllTextAsync(cacheFile);
-        List<SkriptHubDocEntry>? elements = JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content);
+        List<SkriptHubDocEntry>? elements = JsonSerializer.Deserialize<List<SkriptHubDocEntry>>(content,
+            SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
         if (elements == null)
         {
             await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
@@ -170,7 +171,8 @@ public class SkriptHubProvider : IDocProvider
         }
 
         string content = await response.Content.ReadAsStringAsync(cancellationToken.Token);
-        List<SkriptHubDocExample>? elements = JsonConvert.DeserializeObject<List<SkriptHubDocExample>>(content);
+        List<SkriptHubDocExample>? elements = JsonSerializer.Deserialize<List<SkriptHubDocExample>>(content,
+            SkriptHubDocJsonContext.Default.ListSkriptHubDocExample);
         foundEntry.Examples = elements;
         await SaveCache();
         List<IDocumentationExample>? examples = elements?.Cast<IDocumentationExample>()?.ToList();
@@ -193,7 +195,8 @@ public class SkriptHubProvider : IDocProvider
         }
 
         string content = await File.ReadAllTextAsync(cacheFile);
-        List<SkriptHubDocEntry>? elements = JsonConvert.DeserializeObject<List<SkriptHubDocEntry>>(content);
+        List<SkriptHubDocEntry>? elements = JsonSerializer.Deserialize<List<SkriptHubDocEntry>>(content,
+            SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
         if (elements == null)
         {
             await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
@@ -234,7 +237,8 @@ public class SkriptHubProvider : IDocProvider
     public async Task SaveCache()
     {
         string cacheFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json");
-        string content = JsonConvert.SerializeObject(_cachedElements);
+        string content =
+            JsonSerializer.Serialize(_cachedElements, SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
         await File.WriteAllTextAsync(cacheFile, content);
     }
 
