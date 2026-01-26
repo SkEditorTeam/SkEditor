@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Localization;
@@ -17,9 +17,9 @@ namespace SkEditor.Views.Windows.Marketplace.Types;
 
 public class ThemeWithSyntaxItem : MarketplaceItem
 {
-    [JsonProperty("themeFile")] public required string ThemeFileUrl { get; set; }
+    [JsonPropertyName("themeFile")] public required string ThemeFileUrl { get; set; }
 
-    [JsonProperty("syntaxFolders")] public required string[] SyntaxFolders { get; set; }
+    [JsonPropertyName("syntaxFolders")] public required string[] SyntaxFolders { get; set; }
 
     public override async Task Install()
     {

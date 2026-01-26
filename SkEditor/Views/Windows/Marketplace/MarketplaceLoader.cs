@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using SkEditor.Views.Windows.Marketplace.Types;
 
@@ -15,65 +15,43 @@ public class MarketplaceLoader
     private static readonly string[] SupportedTypes = ["NewSyntax", "Theme", "Addon", "NewThemeWithSyntax", "ZipAddon"];
     private static readonly string[] HiddenItems = [];
 
+
     public static async IAsyncEnumerable<MarketplaceItem> GetItems()
     {
         const string url = MarketplaceWindow.MarketplaceUrl + "/items.json";
         using HttpClient client = new();
-        HttpResponseMessage response = await client.GetAsync(url);
-        if (response.IsSuccessStatusCode)
+        var json = await client.GetStringAsync(url);
+
+        string[] itemNames = JsonSerializer.Deserialize(json, MarketplaceContext.Default.StringArray) ?? [];
+
+        foreach (string itemName in itemNames)
         {
-            string json = await response.Content.ReadAsStringAsync();
-            string[] itemNames = JsonConvert.DeserializeObject<string[]>(json) ?? [];
-            foreach (string itemName in itemNames)
-            {
-                if (HiddenItems.Contains(itemName))
-                {
-                    continue;
-                }
+            if (HiddenItems.Contains(itemName)) continue;
 
-                MarketplaceItem? item = await GetItem(itemName);
-                if (item?.ItemName == null)
-                {
-                    continue;
-                }
+            MarketplaceItem? item = await GetItem(itemName);
+            if (item?.ItemName == null) continue;
+            if (!SupportedTypes.Contains(item.ItemType)) continue;
 
-                if (!SupportedTypes.Contains(item.ItemType))
-                {
-                    continue;
-                }
-
-                yield return item;
-            }
-        }
-        else
-        {
-            Log.Error("Failed to get items.json");
+            yield return item;
         }
     }
 
     private static async Task<MarketplaceItem?> GetItem(string name)
     {
-        string url = MarketplaceWindow.MarketplaceUrl + "/items/" + name;
-        string manifestUrl = url + "/manifest.json";
+        string url = $"{MarketplaceWindow.MarketplaceUrl}/items/{name}/manifest.json";
         using HttpClient client = new();
-        HttpResponseMessage response = await client.GetAsync(manifestUrl);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            string json = await response.Content.ReadAsStringAsync();
-            MarketplaceItem? item =
-                JsonConvert.DeserializeObject<MarketplaceItem>(json, new MarketplaceItemConverter());
-            if (item == null)
-            {
-                Log.Error("Failed to deserialize manifest.json for item {Name}", name);
-                return null;
-            }
+            string json = await client.GetStringAsync(url);
+            MarketplaceItem? item = JsonSerializer.Deserialize(json, MarketplaceContext.Default.MarketplaceItem);
 
-            item = FormatUrls(url, item);
-            return item;
+            return item == null ? null : FormatUrls($"{MarketplaceWindow.MarketplaceUrl}/items/{name}", item);
         }
-
-        Log.Error("Failed to get manifest.json for item {Name}", name);
-        return null;
+        catch (Exception e)
+        {
+            Log.Error(e, "Failed to get manifest.json for item {Name}", name);
+            return null;
+        }
     }
 
     private static MarketplaceItem FormatUrls(string url, MarketplaceItem item)
@@ -107,63 +85,40 @@ public class MarketplaceLoader
     }
 }
 
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(SyntaxItem), "NewSyntax")]
+[JsonDerivedType(typeof(ThemeItem), "Theme")]
+[JsonDerivedType(typeof(AddonItem), "Addon")]
+[JsonDerivedType(typeof(ThemeWithSyntaxItem), "NewThemeWithSyntax")]
+[JsonDerivedType(typeof(ZipAddonItem), "ZipAddon")]
 public class MarketplaceItem
 {
-    [JsonProperty("name")] public required string ItemName { get; set; }
+    [JsonPropertyName("name")] public required string ItemName { get; set; }
 
-    [JsonProperty("type")] public required string ItemType { get; set; }
+    [JsonPropertyName("type")] public required string ItemType { get; set; }
 
-    [JsonProperty("shortDescription")] public required string ItemShortDescription { get; set; }
+    [JsonPropertyName("shortDescription")] public required string ItemShortDescription { get; set; }
 
-    [JsonProperty("icon")] public required string ItemImageUrl { get; set; }
+    [JsonPropertyName("icon")] public required string ItemImageUrl { get; set; }
 
-    [JsonProperty("longDescription")] public required string ItemLongDescription { get; set; }
+    [JsonPropertyName("longDescription")] public required string ItemLongDescription { get; set; }
 
-    [JsonProperty("version")] public required string ItemVersion { get; set; }
+    [JsonPropertyName("version")] public required string ItemVersion { get; set; }
 
-    [JsonProperty("author")] public required string ItemAuthor { get; set; }
+    [JsonPropertyName("author")] public required string ItemAuthor { get; set; }
 
     [JsonIgnore] public required MarketplaceWindow Marketplace { get; set; }
 
-    public virtual Task Install()
-    {
-        return Task.CompletedTask;
-    }
-
-    public virtual Task Uninstall()
-    {
-        return Task.CompletedTask;
-    }
-
-    public virtual bool IsInstalled()
-    {
-        return false;
-    }
+    public virtual Task Install() => Task.CompletedTask;
+    public virtual Task Uninstall() => Task.CompletedTask;
+    public virtual bool IsInstalled() => false;
 }
 
-public class MarketplaceItemConverter : JsonConverter<MarketplaceItem>
-{
-    public override MarketplaceItem? ReadJson(JsonReader reader, Type objectType, MarketplaceItem? existingValue,
-        bool hasExistingValue, JsonSerializer serializer)
-    {
-        JObject jsonObject = JObject.Load(reader);
-        string? itemType = jsonObject["type"]?.Value<string>();
-
-        JsonSerializer defaultSerializer = new();
-
-        return itemType switch
-        {
-            "NewSyntax" => jsonObject.ToObject<SyntaxItem>(defaultSerializer),
-            "Theme" => jsonObject.ToObject<ThemeItem>(defaultSerializer),
-            "Addon" => jsonObject.ToObject<AddonItem>(defaultSerializer),
-            "NewThemeWithSyntax" => jsonObject.ToObject<ThemeWithSyntaxItem>(defaultSerializer),
-            "ZipAddon" => jsonObject.ToObject<ZipAddonItem>(defaultSerializer),
-            _ => null
-        };
-    }
-
-    public override void WriteJson(JsonWriter writer, MarketplaceItem? value, JsonSerializer serializer)
-    {
-        throw new NotImplementedException();
-    }
-}
+[JsonSerializable(typeof(string[]))]
+[JsonSerializable(typeof(MarketplaceItem))]
+[JsonSerializable(typeof(SyntaxItem))]
+[JsonSerializable(typeof(ThemeItem))]
+[JsonSerializable(typeof(AddonItem))]
+[JsonSerializable(typeof(ThemeWithSyntaxItem))]
+[JsonSerializable(typeof(ZipAddonItem))]
+internal partial class MarketplaceContext : JsonSerializerContext;

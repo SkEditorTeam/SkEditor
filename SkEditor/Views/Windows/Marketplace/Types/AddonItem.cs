@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
@@ -18,8 +18,8 @@ namespace SkEditor.Views.Windows.Marketplace.Types;
 public class AddonItem : MarketplaceItem
 {
     [JsonIgnore] private const string FolderName = "Addons";
-    [JsonProperty("requiresRestart")] public bool ItemRequiresRestart { get; set; }
-    [JsonProperty("file")] public required string ItemFileUrl { get; set; }
+    [JsonPropertyName("requiresRestart")] public bool ItemRequiresRestart { get; set; }
+    [JsonPropertyName("file")] public required string ItemFileUrl { get; set; }
 
     public override async Task Install()
     {

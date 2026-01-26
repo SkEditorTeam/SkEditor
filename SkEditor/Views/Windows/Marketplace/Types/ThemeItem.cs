@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Localization;
@@ -19,7 +19,7 @@ public class ThemeItem : MarketplaceItem
 {
     [JsonIgnore] public const string FolderName = "Themes";
 
-    [JsonProperty("file")] public required string ItemFileUrl { get; set; }
+    [JsonPropertyName("file")] public required string ItemFileUrl { get; set; }
 
     public override async Task Install()
     {

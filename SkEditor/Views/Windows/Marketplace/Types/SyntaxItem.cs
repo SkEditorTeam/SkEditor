@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.Localization;
@@ -17,7 +17,7 @@ public class SyntaxItem : MarketplaceItem
 {
     [JsonIgnore] public const string FolderName = "Syntax Highlighting";
 
-    [JsonProperty("syntaxFolders")] public required string[] ItemSyntaxFolders { get; set; }
+    [JsonPropertyName("syntaxFolders")] public required string[] ItemSyntaxFolders { get; set; }
 
     public override async Task Install()
     {

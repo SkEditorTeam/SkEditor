@@ -88,7 +88,7 @@ public partial class FileSyntaxes : UserControl
                 SyntaxLoader.FileSyntaxes.FirstOrDefault(x =>
                     x.Config != null && x.Config.FullIdName.Equals(selectedFullIdName));
 
-            FileSyntax.FileSyntaxConfig? selectedFileSyntaxConfig = selectedFileSyntax?.Config;
+            FileSyntaxConfig? selectedFileSyntaxConfig = selectedFileSyntax?.Config;
             if (selectedFileSyntaxConfig == null)
             {
                 return;
