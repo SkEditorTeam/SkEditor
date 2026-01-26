@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using Avalonia.Threading;
 using Serilog;
 using SkEditor.API;
