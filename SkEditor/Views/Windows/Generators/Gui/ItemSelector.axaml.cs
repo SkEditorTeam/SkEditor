@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -11,7 +13,6 @@ using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Data;
 using SkEditor.Utilities.Styling;
@@ -150,7 +151,9 @@ public partial class ItemSelector : AppWindow
 
         try
         {
-            List<Item>? items = JsonConvert.DeserializeObject<List<Item>>(await File.ReadAllTextAsync(itemsFile));
+            List<Item>? items = JsonSerializer.Deserialize<List<Item>>(await File.ReadAllTextAsync(itemsFile),
+                ItemJsonContext.Default.ListItem);
+
             if (items == null)
             {
                 return;
@@ -198,13 +201,17 @@ public partial class ItemSelector : AppWindow
     }
 }
 
+[JsonSerializable(typeof(Item))]
+[JsonSerializable(typeof(List<Item>))]
+public partial class ItemJsonContext : JsonSerializerContext;
+
 public class Item
 {
     [JsonIgnore] private Bitmap _image = null!;
 
-    [JsonProperty("name")] public required string Name { get; set; }
+    [JsonPropertyName("name")] public required string Name { get; set; }
 
-    [JsonProperty("displayName")] public required string DisplayName { get; set; }
+    [JsonPropertyName("displayName")] public required string DisplayName { get; set; }
 
     [JsonIgnore] public bool HaveCustomName { get; set; }
 

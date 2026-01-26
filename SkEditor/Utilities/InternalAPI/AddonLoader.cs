@@ -268,10 +268,11 @@ public static class AddonLoader
             return false;
         }
 
-        if (!await LocalDependencyManager.CheckAddonDependencies(addonMeta))
-        {
-            return false;
-        }
+        // TODO: Rework local dependency manager
+        // if (!await LocalDependencyManager.CheckAddonDependencies(addonMeta))
+        // {
+        //     return false;
+        // }
 
         if (!addonMeta.NeedsRestart)
         {

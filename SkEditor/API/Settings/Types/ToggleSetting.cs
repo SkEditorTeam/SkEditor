@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Text.Json.Nodes;
 using Avalonia.Controls;
-using Newtonsoft.Json.Linq;
 
 namespace SkEditor.API.Settings.Types;
 
@@ -9,14 +9,14 @@ namespace SkEditor.API.Settings.Types;
 /// </summary>
 public class ToggleSetting : ISettingType
 {
-    public object Deserialize(JToken value)
+    public object Deserialize(JsonNode? value)
     {
-        return value.Value<bool>();
+        return value?.GetValue<bool>() ?? false;
     }
 
-    public JToken Serialize(object value)
+    public JsonNode? Serialize(object value)
     {
-        return new JValue(value);
+        return JsonValue.Create((bool)value);
     }
 
     public Control CreateControl(object raw, Action<object> onChanged)

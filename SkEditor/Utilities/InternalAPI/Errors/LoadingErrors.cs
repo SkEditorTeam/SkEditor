@@ -1,5 +1,4 @@
 ﻿using System;
-using NuGet.Versioning;
 using SkEditor.API;
 
 namespace SkEditor.Utilities.InternalAPI.Errors;
@@ -21,7 +20,7 @@ public static class LoadingErrors
         return new LoadingExceptionError(exception);
     }
 
-    public static IAddonLoadingError OutdatedDependency(string dependencyName, NuGetVersion target, NuGetVersion found)
+    public static IAddonLoadingError OutdatedDependency(string dependencyName, string target, string found)
     {
         return new OutdatedDependencyError(dependencyName, target, found);
     }
@@ -65,7 +64,7 @@ public static class LoadingErrors
         public string Message => "The addon requires the addon '" + addonIdentifier + "' to be loaded.";
     }
 
-    private class OutdatedDependencyError(string dependencyName, NuGetVersion target, NuGetVersion found)
+    private class OutdatedDependencyError(string dependencyName, string target, string found)
         : IAddonLoadingError
     {
         public bool IsCritical => true;

@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using PublishWindow = SkEditor.Views.Windows.PublishWindow;
 

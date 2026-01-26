@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text.Json.Nodes;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json.Linq;
 
 namespace SkEditor.API.Settings.Types;
 
@@ -20,19 +20,21 @@ public interface ISettingType
 
     /// <summary>
     ///     Deserialize a setting value from a JSON object. The given
-    ///     object is either a <see cref="JObject" />, a <see cref="JArray" /> or a <see cref="JValue" />.
+    ///     object is either a <see cref="JsonObject" />, <see cref="JsonArray" />,
+    ///     or a <see cref="JsonValue" />.
     /// </summary>
     /// <param name="value">The JSON object/array/value to deserialize.</param>
     /// <returns>The deserialized value.</returns>
-    object? Deserialize(JToken value);
+    object? Deserialize(JsonNode? value);
 
     /// <summary>
     ///     Serialize a setting value to a JSON object. The returned
-    ///     value must be either a <see cref="JObject" />, a <see cref="JArray" /> or a <see cref="JValue" />.
+    ///     object is either a <see cref="JsonObject" />, <see cref="JsonArray" />,
+    ///     or a <see cref="JsonValue" />.
     /// </summary>
     /// <param name="value">The value to serialize.</param>
     /// <returns>The serialized JSON object/array/value.</returns>
-    JToken Serialize(object value);
+    JsonNode? Serialize(object value);
 
     /// <summary>
     ///     Create a user control to edit the setting value.

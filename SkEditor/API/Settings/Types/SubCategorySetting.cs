@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Nodes;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json.Linq;
 using CustomAddonSettingsPage = SkEditor.Views.Pages.Settings.CustomAddonSettingsPage;
 using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 using Symbol = FluentIcons.Common.Symbol;
@@ -17,12 +17,12 @@ namespace SkEditor.API.Settings.Types;
 /// <param name="settings">The settings that are contained in this subcategory.</param>
 public class SubCategorySetting(List<Setting> settings) : ISettingType
 {
-    public object Deserialize(JToken value)
+    public object Deserialize(JsonNode? value)
     {
         throw new NotImplementedException();
     }
 
-    public JToken Serialize(object value)
+    public JsonNode Serialize(object value)
     {
         throw new NotImplementedException();
     }

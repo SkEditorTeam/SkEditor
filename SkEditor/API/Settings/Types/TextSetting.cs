@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Text.Json.Nodes;
 using Avalonia.Controls;
-using Newtonsoft.Json.Linq;
 
 namespace SkEditor.API.Settings.Types;
 
@@ -18,14 +18,14 @@ public class TextSetting(string placeholder, int maxLength = -1, char? passwordC
     public int MaxLength { get; } = maxLength;
     public char? PasswordChar { get; } = passwordChar;
 
-    public object? Deserialize(JToken value)
+    public object? Deserialize(JsonNode? value)
     {
-        return value.Value<string>();
+        return value?.GetValue<string>();
     }
 
-    public JToken Serialize(object value)
+    public JsonNode Serialize(object value)
     {
-        return new JValue(value);
+        return JsonValue.Create((string)value);
     }
 
     public Control CreateControl(object raw, Action<object> onChanged)

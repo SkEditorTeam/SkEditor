@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Nodes;
 using Avalonia.Controls;
-using Newtonsoft.Json.Linq;
 
 namespace SkEditor.API.Settings.Types;
 
@@ -15,14 +15,14 @@ public class ComboBoxSetting(string[] items, int minWidth = 100) : ISettingType
     public List<string> Items { get; } = [.. items];
     public int MinWidth { get; } = minWidth;
 
-    public object? Deserialize(JToken value)
+    public object? Deserialize(JsonNode? value)
     {
-        return value.ToObject<string>();
+        return value?.GetValue<string>();
     }
 
-    public JToken Serialize(object value)
+    public JsonNode Serialize(object value)
     {
-        return JToken.FromObject(value);
+        return JsonValue.Create((string)value);
     }
 
     public Control CreateControl(object value, Action<object?> onChanged)

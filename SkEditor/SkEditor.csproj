@@ -10,7 +10,7 @@
         <PublishSingleFile>true</PublishSingleFile>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-<!--        <PublishAot>true</PublishAot>-->
+        <PublishAot>true</PublishAot>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -73,7 +73,6 @@
         <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
         <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0" />
         <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.0.317" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="Octokit" Version="14.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
         <PackageReference Include="SkAvaloniaEdit" Version="11.3.3" />

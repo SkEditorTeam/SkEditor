@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text.Json.Nodes;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using Newtonsoft.Json.Linq;
 using Timer = System.Timers.Timer;
 
 namespace SkEditor.API.Settings.Types;
@@ -22,14 +22,14 @@ public class SliderSetting(
     public bool IsSnapToTickEnabled { get; } = isSnapToTickEnabled;
     public bool Debounce { get; } = debounce;
 
-    public object Deserialize(JToken value)
+    public object? Deserialize(JsonNode? value)
     {
-        return value.Value<double>();
+        return value?.GetValue<double>();
     }
 
-    public JToken Serialize(object value)
+    public JsonNode Serialize(object value)
     {
-        return new JValue(value);
+        return JsonValue.Create((double)value);
     }
 
     public Control CreateControl(object raw, Action<object> onChanged)
