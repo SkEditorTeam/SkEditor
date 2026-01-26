@@ -10,12 +10,12 @@
         <PublishSingleFile>true</PublishSingleFile>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <PublishAot>true</PublishAot>
+<!--        <PublishAot>true</PublishAot>-->
     </PropertyGroup>
 
     <PropertyGroup>
         <VersionPrefix>2.9.4</VersionPrefix>
-        <VersionSuffix>beta.1</VersionSuffix>
+        <VersionSuffix>alpha.1</VersionSuffix>
     </PropertyGroup>
 
     <PropertyGroup>

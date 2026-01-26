@@ -120,7 +120,7 @@
                     </TreeDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <StackPanel Name="NoFolderMessage" VerticalAlignment="Center" Grid.Row="3" Margin="5" Spacing="10">
+            <StackPanel Name="NoFolderMessage" VerticalAlignment="Center" Grid.Row="3" Margin="8" Spacing="16">
                 <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"
                            Text="{DynamicResource ProjectExplorerInfoText}" />
                 <Button Name="OpenFolderButton" HorizontalAlignment="Center">
