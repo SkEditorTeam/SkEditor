@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using SkEditor.API;
 using PublishWindow = SkEditor.Views.Windows.PublishWindow;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Utilities.Publishing;
 
 public class CodePublisher
 {
@@ -45,21 +46,23 @@ public class CodePublisher
 
         try
         {
-            string json = JsonSerializer.Serialize(new
+            string json = JsonSerializer.Serialize(new CodeSkriptPlCreateRequest
             {
-                key = window.ApiKey,
-                language,
-                content = code,
-                anonymous = window.AnonymouslyCheckBox.IsChecked
-            });
+                Key = window.ApiKey ?? "",
+                Language = language,
+                Content = code,
+                Anonymous = window.AnonymouslyCheckBox.IsChecked ?? false
+            }, PublishingJsonContext.Default.CodeSkriptPlCreateRequest);
 
             HttpClient client = new();
             HttpResponseMessage response = await client.PostAsync("https://code.skript.pl/api/v1/codes/create",
                 new StringContent(json, Encoding.UTF8, "application/json"));
             string responseString = await response.Content.ReadAsStringAsync();
 
-            JObject jsonResult = JObject.Parse(responseString);
-            string? url = jsonResult["url"]?.ToString();
+            CodeSkriptPlCreateResponse? result = JsonSerializer.Deserialize<CodeSkriptPlCreateResponse>(responseString,
+                PublishingJsonContext.Default.CodeSkriptPlCreateResponse);
+
+            string? url = result?.Url;
             window.ResultTextBox.Text = url;
         }
         catch (Exception e)
@@ -75,7 +78,9 @@ public class CodePublisher
         try
         {
             string? apiKey = window.ApiKey;
-            string json = JsonSerializer.Serialize(new { content = code });
+
+            string json = JsonSerializer.Serialize(new SkUnityCreateRequest { Content = code },
+                PublishingJsonContext.Default.SkUnityCreateRequest);
             string? fileName = SkEditorAPI.Files.GetCurrentOpenedFile()?.Name;
 
             HttpClient client = new();
@@ -87,8 +92,9 @@ public class CodePublisher
             HttpResponseMessage response = await client.SendAsync(request);
             string responseString = await response.Content.ReadAsStringAsync();
 
-            JObject jsonResult = JObject.Parse(responseString);
-            string url = "https://parser.skunity.com/" + jsonResult["result"]?["share_code"];
+            SkUnityCreateResponse? jsonResult = JsonSerializer.Deserialize<SkUnityCreateResponse>(responseString,
+                PublishingJsonContext.Default.SkUnityCreateResponse);
+            string url = "https://parser.skunity.com/" + jsonResult?.Result.ShareCode;
             window.ResultTextBox.Text = url;
         }
         catch (Exception e)
@@ -98,4 +104,38 @@ public class CodePublisher
                 e.Message);
         }
     }
+}
+
+[JsonSerializable(typeof(CodeSkriptPlCreateRequest))]
+[JsonSerializable(typeof(CodeSkriptPlCreateResponse))]
+[JsonSerializable(typeof(SkUnityCreateRequest))]
+[JsonSerializable(typeof(SkUnityCreateResponse))]
+public partial class PublishingJsonContext : JsonSerializerContext;
+
+public class CodeSkriptPlCreateRequest
+{
+    [JsonPropertyName("key")] public required string Key { get; set; }
+    [JsonPropertyName("language")] public string? Language { get; set; }
+    [JsonPropertyName("content")] public required string Content { get; set; }
+    [JsonPropertyName("anonymous")] public required bool Anonymous { get; set; }
+}
+
+public class CodeSkriptPlCreateResponse
+{
+    [JsonPropertyName("url")] public required string Url { get; set; }
+}
+
+public class SkUnityCreateRequest
+{
+    [JsonPropertyName("content")] public required string Content { get; set; }
+}
+
+public class SkUnityCreateResponse
+{
+    [JsonPropertyName("result")] public required SkUnityCreateResult Result { get; set; }
+}
+
+public class SkUnityCreateResult
+{
+    [JsonPropertyName("share_code")] public required string ShareCode { get; set; }
 }
