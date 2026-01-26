@@ -73,8 +73,10 @@ public partial class AddonsPage : UserControl
 
             File.Copy(file, Path.Combine(folder, Path.GetFileName(file)));
 
+#if !AOT
             await AddonLoader.LoadAddonFromFile(folder);
             LoadAddons();
+#endif
         });
 
         OpenMarketplaceButton.Command = new AsyncRelayCommand(async () =>

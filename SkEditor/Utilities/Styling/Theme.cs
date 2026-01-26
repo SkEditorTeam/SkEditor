@@ -58,6 +58,57 @@ public class Theme
             _ => throw new ArgumentException($"Property {propertyName} not found in Theme")
         };
     }
+
+    public void SetBrush(string propertyName, ImmutableSolidColorBrush brush)
+    {
+        switch (propertyName)
+        {
+            case "BackgroundColor":
+                BackgroundColor = brush;
+                break;
+            case "SmallWindowBackgroundColor":
+                SmallWindowBackgroundColor = brush;
+                break;
+            case "EditorBackgroundColor":
+                EditorBackgroundColor = brush;
+                break;
+            case "EditorTextColor":
+                EditorTextColor = brush;
+                break;
+            case "LineNumbersColor":
+                LineNumbersColor = brush;
+                break;
+            case "SelectionColor":
+                SelectionColor = brush;
+                break;
+            case "SelectedTabItemBackground":
+                SelectedTabItemBackground = brush;
+                break;
+            case "SelectedTabItemBorder":
+                SelectedTabItemBorder = brush;
+                break;
+            case "MenuBackground":
+                MenuBackground = brush;
+                break;
+            case "MenuBorder":
+                MenuBorder = brush;
+                break;
+            case "TextBoxFocusedBackground":
+                TextBoxFocusedBackground = brush;
+                break;
+            case "CurrentLineBackground":
+                CurrentLineBackground = brush;
+                break;
+            case "CurrentLineBorder":
+                CurrentLineBorder = brush;
+                break;
+            case "AccentColor":
+                AccentColor = brush;
+                break;
+            default:
+                throw new ArgumentException($"Property {propertyName} not found in Theme");
+        }
+    }
 }
 
 [JsonSourceGenerationOptions(

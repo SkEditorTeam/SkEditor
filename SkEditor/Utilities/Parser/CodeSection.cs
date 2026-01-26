@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Styling;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
@@ -264,13 +262,6 @@ public partial class CodeSection
 
         document.Replace(startOffset, endOffset - startOffset + (
             EndingLineIndex == document.LineCount ? 0 : 1), sectionCode);
-    }
-
-    private static IconSource? GetIconFromName(string iconName)
-    {
-        object? icon = null;
-        Application.Current?.TryGetResource(iconName, ThemeVariant.Default, out icon);
-        return icon as IconSource;
     }
 
     public CodeFunctionArgument? GetVariableDefinition(CodeVariable variable)

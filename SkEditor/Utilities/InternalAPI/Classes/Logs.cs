@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Reflection;
 using Avalonia.Threading;
 using Serilog;
 using SkEditor.API;
@@ -117,6 +115,7 @@ public class Logs : ILogs
     /// </summary>
     private IAddon? DetectAddonFromStackTrace()
     {
+#if !AOT
         StackFrame[] frames = new StackTrace().GetFrames();
         string? addonNamespace = null;
 
@@ -133,5 +132,8 @@ public class Logs : ILogs
         }
 
         return AddonLoader.GetAddonByNamespace(addonNamespace);
+#else
+        return null;
+#endif
     }
 }

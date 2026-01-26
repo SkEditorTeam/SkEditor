@@ -31,7 +31,7 @@
                                      Description="{DynamicResource SettingsGeneralRpcDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="RpcToggleSwitch"
-                                      IsChecked="{Binding IsDiscordRichPresenceEnabled, Mode=OneTime}" />
+                                      IsChecked="{Binding IsDiscordRichPresenceEnabled}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
@@ -49,7 +49,7 @@
                                      IconSource="{icons:SymbolIconSource Symbol=TextWrap}"
                                      Description="{DynamicResource SettingsGeneralWrappingDescription}">
                     <ui:SettingsExpander.Footer>
-                        <ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWordWrapEnabled, Mode=OneTime}" />
+                        <ToggleSwitch Name="WrappingToggleSwitch" IsChecked="{Binding IsWordWrapEnabled}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
@@ -58,7 +58,7 @@
                                      Description="{DynamicResource SettingsGeneralZoomSyncDescription}">
                     <ui:SettingsExpander.Footer>
                         <ToggleSwitch Name="ZoomSyncToggleSwitch"
-                                      IsChecked="{Binding IsEditorZoomLevelSyncEnabled, Mode=OneTime}" />
+                                      IsChecked="{Binding IsEditorZoomLevelSyncEnabled}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
                 <ui:SettingsExpander Header="{DynamicResource SettingsGeneralSidebarWidthSync}"
@@ -134,8 +134,7 @@
                                      IconSource="{icons:SymbolIconSource Symbol=FolderArrowRight}"
                                      Description="{DynamicResource SettingsGeneralProjectSingleFolderClickDescription}">
                     <ui:SettingsExpander.Footer>
-                        <ToggleSwitch Name="ProjectSingleClickToggleSwitch"
-                                      IsChecked="{Binding IsProjectSingleClickEnabled, Mode=OneTime}" />
+                        <ToggleSwitch IsChecked="{Binding IsProjectSingleClickEnabled, Mode=TwoWay}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 

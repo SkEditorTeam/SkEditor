@@ -9,7 +9,9 @@ namespace SkEditor.Utilities.InternalAPI;
 /// </summary>
 public static class LocalDependencyManager
 {
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public static async Task<bool> CheckAddonDependencies(AddonMeta addonMeta)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
         throw new NotImplementedException("Local dependency is being reworked.");
 

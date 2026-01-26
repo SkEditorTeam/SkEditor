@@ -98,6 +98,7 @@ public static class AddonLoader
         }
     }
 
+#if !AOT
     private static async Task LoadAddonsFromFiles()
     {
         string folder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons");
@@ -238,6 +239,7 @@ public static class AddonLoader
 
         await EnableAddon(addon);
     }
+#endif
 
     private static bool CanEnable(AddonMeta addonMeta)
     {
@@ -272,7 +274,9 @@ public static class AddonLoader
     /// </summary>
     /// <param name="addonMeta">The addon to preload.</param>
     /// <returns>True if the addon can be enabled, false otherwise.</returns>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
     public static async Task<bool> PreLoad(AddonMeta addonMeta)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
     {
         if (!CanEnable(addonMeta))
         {

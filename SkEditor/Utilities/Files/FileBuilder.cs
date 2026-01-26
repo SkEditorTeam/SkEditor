@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -294,54 +295,36 @@ public class FileBuilder
 
     public static MenuFlyout GetContextMenu(TextEditor editor)
     {
-        object[] commands =
+        MenuCommand[] commands =
         [
-            new { Header = "MenuHeaderCopy", Command = new RelayCommand(editor.Copy), Icon = Symbol.Copy },
-            new { Header = "MenuHeaderPaste", Command = new RelayCommand(editor.Paste), Icon = Symbol.Clipboard },
-            new { Header = "MenuHeaderCut", Command = new RelayCommand(editor.Cut), Icon = Symbol.Cut },
-            new { Header = "MenuHeaderUndo", Command = new RelayCommand(() => editor.Undo()), Icon = Symbol.ArrowUndo },
-            new { Header = "MenuHeaderRedo", Command = new RelayCommand(() => editor.Redo()), Icon = Symbol.ArrowRedo },
-            new
-            {
-                Header = "MenuHeaderDuplicate",
-                Command = new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)),
-                Icon = Symbol.Copy
-            },
-            new
-            {
-                Header = "MenuHeaderComment",
-                Command = new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)),
-                Icon = Symbol.Comment
-            },
-            new
-            {
-                Header = "MenuHeaderGoToLine",
-                Command = new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())),
-                Icon = Symbol.TextNumberList
-            },
-            new
-            {
-                Header = "MenuHeaderTrimWhitespaces",
-                Command =
-                    new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)),
-                Icon = Symbol.Eraser
-            },
-            new { Header = "MenuHeaderDelete", Command = new RelayCommand(editor.Delete), Icon = Symbol.Delete },
-            new
-            {
-                Header = "MenuHeaderRefactor",
-                Command = new AsyncRelayCommand(async () =>
-                    await CustomCommandsHandler.OnRefactorCommandExecuted(editor)),
-                Icon = Symbol.Rename
-            }
+            new("MenuHeaderCopy", new RelayCommand(editor.Copy), Symbol.Copy),
+            new("MenuHeaderPaste", new RelayCommand(editor.Paste), Symbol.Clipboard),
+            new("MenuHeaderCut", new RelayCommand(editor.Cut), Symbol.Cut),
+            new("MenuHeaderUndo", new RelayCommand(() => editor.Undo()), Symbol.ArrowUndo),
+            new("MenuHeaderRedo", new RelayCommand(() => editor.Redo()), Symbol.ArrowRedo),
+            new("MenuHeaderDuplicate",
+                new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Symbol.Copy),
+            new("MenuHeaderComment",
+                new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)),
+                Symbol.Comment),
+            new("MenuHeaderGoToLine", new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())),
+                Symbol.TextNumberList),
+            new("MenuHeaderTrimWhitespaces",
+                new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)),
+                Symbol.Eraser),
+            new("MenuHeaderDelete", new RelayCommand(editor.Delete), Symbol.Delete),
+            new("MenuHeaderRefactor",
+                new AsyncRelayCommand(async () => await CustomCommandsHandler.OnRefactorCommandExecuted(editor)),
+                Symbol.Rename)
         ];
 
         MenuFlyout contextMenu = new();
-        foreach (dynamic item in commands)
+
+        foreach (MenuCommand item in commands)
         {
             contextMenu.Items.Add(new MenuItem
             {
-                Header = Translation.Get(item.Header),
+                Header = Translation.Get(item.HeaderKey),
                 Command = item.Command,
                 Icon = new SymbolIcon { Symbol = item.Icon, FontSize = 20 }
             });
@@ -349,4 +332,6 @@ public class FileBuilder
 
         return contextMenu;
     }
+
+    private record MenuCommand(string HeaderKey, ICommand Command, Symbol Icon);
 }

@@ -10,8 +10,12 @@ public class AddonLoadContext(string pluginPath) : AssemblyLoadContext(true)
 
     protected override Assembly? Load(AssemblyName assemblyName)
     {
+#if !AOT
         string? assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
         return assemblyPath != null ? LoadFromAssemblyPath(assemblyPath) : null;
+#else
+        return null;
+#endif
     }
 
     protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)

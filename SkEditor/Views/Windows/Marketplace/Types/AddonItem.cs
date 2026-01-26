@@ -55,7 +55,9 @@ public class AddonItem : MarketplaceItem
             await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"), message,
                 new SymbolIconSource { Symbol = Symbol.Checkmark }, primaryButtonText: "Okay");
 
+#if !AOT
             await RunAddon(addonIdentifier);
+#endif
         }
         catch (Exception e)
         {
@@ -64,11 +66,13 @@ public class AddonItem : MarketplaceItem
                 Translation.Get("MarketplaceInstallFailed", ItemName));
         }
 
-        Marketplace.RefreshCurrentSelection();
+        Marketplace?.RefreshCurrentSelection();
     }
 
+#if !AOT
     private async Task RunAddon(string addonIdentifier)
     {
+
         if (ItemRequiresRestart)
         {
             return;
@@ -78,6 +82,7 @@ public class AddonItem : MarketplaceItem
 
         await AddonLoader.LoadAddonFromFile(folder);
     }
+#endif
 
     public override Task Uninstall()
     {

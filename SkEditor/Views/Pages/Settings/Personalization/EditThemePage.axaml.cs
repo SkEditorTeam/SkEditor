@@ -38,9 +38,7 @@ public partial class EditThemePage : UserControl
     private static void SetUpColorPicker(ColorPickerSettingsExpander expander, string propertyName)
     {
         ColorPickerButton? colorPicker = expander.ColorPicker;
-        colorPicker.Color =
-            (ThemeEditor.CurrentTheme.GetType().GetProperty(propertyName)?.GetValue(ThemeEditor.CurrentTheme) as
-                ImmutableSolidColorBrush)?.Color;
+        colorPicker.Color = ThemeEditor.CurrentTheme.GetBrushByName(propertyName).Color;
         colorPicker.ColorChanged += async (_, e) => await ChangeColor(propertyName, e.NewColor);
     }
 
@@ -51,8 +49,7 @@ public partial class EditThemePage : UserControl
             return;
         }
 
-        ThemeEditor.CurrentTheme.GetType().GetProperty(name)
-            ?.SetValue(ThemeEditor.CurrentTheme, new ImmutableSolidColorBrush(color.Value));
+        ThemeEditor.CurrentTheme.SetBrush(name, new ImmutableSolidColorBrush(color.Value));
         await ThemeEditor.ApplyTheme();
     }
 }

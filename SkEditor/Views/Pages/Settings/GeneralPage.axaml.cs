@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -101,7 +100,6 @@ public partial class GeneralPage : UserControl
         RpcToggleSwitch.Command = new RelayCommand(ToggleRpc);
         WrappingToggleSwitch.Command = new RelayCommand(ToggleWrapping);
         ZoomSyncToggleSwitch.Command = new RelayCommand(ToggleZoomSync);
-        ProjectSingleClickToggleSwitch.Command = new RelayCommand(() => ToggleSetting("IsProjectSingleClickEnabled"));
 
         IndentationAmountComboBox.SelectionChanged += (_, _) =>
         {
@@ -127,10 +125,8 @@ public partial class GeneralPage : UserControl
         };
     }
 
-    private void ToggleRpc()
+    private static void ToggleRpc()
     {
-        ToggleSetting("IsDiscordRpcEnabled");
-
         if (SkEditorAPI.Configs.GetAppSettings().IsDiscordRichPresenceEnabled)
         {
             DiscordRpcUpdater.Initialize();
@@ -141,19 +137,15 @@ public partial class GeneralPage : UserControl
         }
     }
 
-    private void ToggleWrapping()
+    private static void ToggleWrapping()
     {
-        ToggleSetting("IsWrappingEnabled");
-
         List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
 
         textEditors.ForEach(textEditor => textEditor.WordWrap = SkEditorAPI.Configs.GetAppSettings().IsWordWrapEnabled);
     }
 
-    private void ToggleZoomSync()
+    private static void ToggleZoomSync()
     {
-        ToggleSetting("IsZoomSyncEnabled");
-
         if (!SkEditorAPI.Configs.GetAppSettings().IsEditorZoomLevelSyncEnabled)
         {
             return;
@@ -167,19 +159,5 @@ public partial class GeneralPage : UserControl
 
         double fontSize = textEditors.First().FontSize;
         textEditors.ForEach(textEditor => { textEditor.FontSize = fontSize; });
-    }
-
-    private static void ToggleSetting(string propertyName)
-    {
-        AppSettings appSettings = SkEditorAPI.Configs.GetAppSettings();
-        PropertyInfo? property = appSettings.GetType().GetProperty(propertyName);
-
-        if (property == null || property.PropertyType != typeof(bool))
-        {
-            return;
-        }
-
-        bool? currentValue = (bool?)property.GetValue(appSettings);
-        property.SetValue(appSettings, !currentValue);
     }
 }
