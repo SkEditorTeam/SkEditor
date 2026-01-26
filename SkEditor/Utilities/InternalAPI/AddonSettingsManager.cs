@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using SkEditor.API;
 using SkEditor.API.Settings;
 
@@ -13,7 +14,8 @@ namespace SkEditor.Utilities.InternalAPI;
 /// </summary>
 public static class AddonSettingsManager
 {
-    private static readonly Dictionary<IAddon, JObject> LoadedAddonSettings = new();
+    private static readonly Dictionary<IAddon, JsonObject> LoadedAddonSettings = new();
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
     public static void LoadSettings(IAddon addon)
     {
@@ -33,7 +35,8 @@ public static class AddonSettingsManager
         string json = File.ReadAllText(path);
         try
         {
-            LoadedAddonSettings[addon] = JObject.Parse(json);
+            var node = JsonNode.Parse(json);
+            LoadedAddonSettings[addon] = node?.AsObject() ?? new JsonObject();
         }
         catch (Exception e)
         {
@@ -42,61 +45,48 @@ public static class AddonSettingsManager
             return;
         }
 
-        foreach (Setting setting in addon.GetSettings())
+        foreach (Setting setting in addon.GetSettings()
+                     .Where(setting =>
+                         !LoadedAddonSettings[addon].ContainsKey(setting.Key) && !setting.Type.IsSelfManaged))
         {
-            if (!LoadedAddonSettings[addon].ContainsKey(setting.Key) && !setting.Type.IsSelfManaged)
-            {
-                LoadedAddonSettings[addon][setting.Key] = setting.Type.Serialize(setting.DefaultValue);
-            }
+            LoadedAddonSettings[addon][setting.Key] = setting.Type.Serialize(setting.DefaultValue);
         }
     }
 
-    private static JObject CreateDefaultSettings(IAddon addon)
+    private static JsonObject CreateDefaultSettings(IAddon addon)
     {
-        JObject obj = new();
-        addon.GetSettings()
-            .Where(s => !s.Type.IsSelfManaged)
-            .ToList()
-            .ForEach(setting => obj[setting.Key] = setting.Type.Serialize(setting.DefaultValue));
+        JsonObject obj = new();
+        foreach (var setting in addon.GetSettings().Where(s => !s.Type.IsSelfManaged))
+        {
+            obj[setting.Key] = setting.Type.Serialize(setting.DefaultValue);
+        }
 
         return obj;
     }
 
     private static void SaveSettings(IAddon addon)
     {
-        if (!LoadedAddonSettings.TryGetValue(addon, out JObject? addonSettings))
+        if (!LoadedAddonSettings.TryGetValue(addon, out JsonObject? addonSettings))
         {
             return;
         }
 
         string path = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons", addon.Identifier, "settings.json");
 
-        string currentJson = File.ReadAllText(path);
-
-        JObject currentSettings = JObject.Parse(currentJson);
-
-        foreach (Setting setting in addon.GetSettings())
-        {
-            if (!setting.Type.IsSelfManaged && addonSettings.TryGetValue(setting.Key, out JToken? value))
-            {
-                currentSettings[setting.Key] = value;
-            }
-        }
-
-        string json = currentSettings.ToString();
+        string json = addonSettings.ToJsonString(JsonOptions);
         File.WriteAllText(path, json);
     }
 
     public static object? GetValue(Setting setting)
     {
         LoadSettings(setting.Addon);
-        JToken? addonSettings = LoadedAddonSettings[setting.Addon][setting.Key];
-        if (addonSettings == null)
+
+        if (!LoadedAddonSettings[setting.Addon].TryGetPropertyValue(setting.Key, out JsonNode? value) || value == null)
         {
             return setting.DefaultValue;
         }
 
-        return addonSettings.Type != JTokenType.Null ? setting.Type.Deserialize(addonSettings) : setting.DefaultValue;
+        return setting.Type.Deserialize(value);
     }
 
     public static void SetValue(Setting setting, object value)

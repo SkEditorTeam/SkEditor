@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
-using Newtonsoft.Json;
 using SkEditor.API;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AvaloniaEdit.Highlighting;
 using FluentIcons.Common;
-using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
@@ -179,7 +179,7 @@ public class SyntaxLoader
         try
         {
             string defaultSyntaxPath = Path.Combine(SyntaxFolder, "Default");
-            FileSyntax.FileSyntaxConfig config = FileSyntax.DefaultSkriptConfig;
+            FileSyntaxConfig config = FileSyntax.DefaultSkriptConfig;
 
             Directory.CreateDirectory(SyntaxFolder);
             Directory.CreateDirectory(defaultSyntaxPath);
@@ -190,7 +190,7 @@ public class SyntaxLoader
             string content = await response.Content.ReadAsStringAsync();
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "syntax.xshd"), content);
 
-            string json = JsonConvert.SerializeObject(config, Formatting.Indented);
+            string json = JsonSerializer.Serialize(config, FileSyntaxConfigJsonContext.Default.FileSyntaxConfig);
             await File.WriteAllTextAsync(Path.Combine(defaultSyntaxPath, "config.json"), json);
 
             FileSyntax syntax = await FileSyntax.LoadSyntax(defaultSyntaxPath);

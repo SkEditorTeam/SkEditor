@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -9,7 +10,6 @@ using Avalonia.Media.Immutable;
 using Avalonia.Styling;
 using AvaloniaEdit;
 using FluentAvalonia.Styling;
-using Newtonsoft.Json;
 using SkEditor.API;
 using SkEditor.Utilities.Files;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
@@ -84,7 +84,7 @@ public class ThemeEditor
         {
             string json = File.ReadAllText(path);
 
-            theme = JsonConvert.DeserializeObject<Theme>(json);
+            theme = JsonSerializer.Deserialize<Theme>(json, ThemeJsonContext.Default.Theme);
             if (theme == null)
             {
                 File.Delete(path);
@@ -133,7 +133,7 @@ public class ThemeEditor
     {
         string path = Path.Combine(ThemeFolderPath, theme.FileName);
 
-        string serializedTheme = JsonConvert.SerializeObject(theme, Formatting.Indented);
+        string serializedTheme = JsonSerializer.Serialize(theme, ThemeJsonContext.Default.Theme);
         File.WriteAllText(path, serializedTheme);
     }
 
@@ -147,10 +147,7 @@ public class ThemeEditor
         if (CurrentTheme.UseMicaEffect && !theme.UseMicaEffect)
         {
             MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-            if (mainWindow is not null)
-            {
-                mainWindow.TransparencyLevelHint = [WindowTransparencyLevel.None];
-            }
+            mainWindow?.TransparencyLevelHint = [WindowTransparencyLevel.None];
         }
 
         CurrentTheme = theme;

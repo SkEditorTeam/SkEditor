@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
-using Newtonsoft.Json.Linq;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.InternalAPI.Errors;
@@ -22,9 +23,11 @@ namespace SkEditor.Utilities.InternalAPI;
 /// </summary>
 public static class AddonLoader
 {
-    private static JObject _metaCache = new();
+    private static JsonObject _metaCache = new();
     public static List<AddonMeta> Addons { get; } = [];
     public static HashSet<string> DllNames { get; } = [];
+
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
     public static async Task Load()
     {
@@ -80,11 +83,19 @@ public static class AddonLoader
         if (!File.Exists(metaFile))
         {
             File.WriteAllText(metaFile, "{}");
-            _metaCache = new JObject();
+            _metaCache = new JsonObject();
             return;
         }
 
-        _metaCache = JObject.Parse(File.ReadAllText(metaFile));
+        try
+        {
+            var node = JsonNode.Parse(File.ReadAllText(metaFile));
+            _metaCache = node?.AsObject() ?? new JsonObject();
+        }
+        catch
+        {
+            _metaCache = new JsonObject();
+        }
     }
 
     private static async Task LoadAddonsFromFiles()
@@ -190,8 +201,8 @@ public static class AddonLoader
 
         Addons.Add(addonMeta);
 
-        bool shouldBeDisabled = _metaCache.TryGetValue(addonInstance.Identifier, out JToken? enabledToken) &&
-                                enabledToken?.Value<bool>() == false;
+        bool shouldBeDisabled = _metaCache.TryGetPropertyValue(addonInstance.Identifier, out JsonNode? enabledNode) &&
+                                enabledNode?.GetValue<bool>() == false;
 
         if (!shouldBeDisabled)
         {
@@ -408,13 +419,13 @@ public static class AddonLoader
     public static async Task SaveMeta()
     {
         string metaFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Addons", "meta.json");
-        _metaCache = new JObject();
+        _metaCache = new JsonObject();
         foreach (AddonMeta addonMeta in Addons)
         {
             _metaCache[addonMeta.Addon.Identifier] = addonMeta.State == IAddons.AddonState.Enabled;
         }
 
-        await File.WriteAllTextAsync(metaFile, _metaCache.ToString());
+        await File.WriteAllTextAsync(metaFile, _metaCache.ToJsonString(JsonOptions));
     }
 
     public static IAddons.AddonState GetAddonState(IAddon addon)

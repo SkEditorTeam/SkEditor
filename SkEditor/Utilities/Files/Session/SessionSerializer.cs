@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Serilog;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Files.Session;
 
@@ -13,30 +12,33 @@ public class SessionSerializer
 
     public static string BuildSavingData(OpenedFile openedFile)
     {
-        SkEditorAPI.Logs.Info($"Path: {openedFile.Path}, is saved: {openedFile.IsSaved}");
-
-        JObject obj = new()
+        SessionData data = new()
         {
-            ["Version"] = Version,
-            ["Path"] = openedFile.Path,
-            ["Content"] = openedFile.Editor?.Text,
-            ["HasUnsavedChanges"] = !openedFile.IsSaved,
-            ["Timestamp"] = DateTime.UtcNow.ToString("o")
+            Version = Version,
+            Path = openedFile.Path,
+            Content = openedFile.Editor?.Text,
+            HasUnsavedChanges = !openedFile.IsSaved,
+            Timestamp = DateTime.UtcNow
         };
 
-        return obj.ToString(Formatting.None);
+        return JsonSerializer.Serialize(data, SessionJsonContext.Default.SessionData);
     }
 
     public static SessionFileData BuildOpeningData(string data)
     {
         try
         {
-            JObject obj = JObject.Parse(data);
-
-            string? version = obj["Version"]?.Value<string>();
-            string? path = obj["Path"]?.Value<string>();
-            string? content = obj["Content"]?.Value<string>();
-            bool hasUnsavedChanges = obj["HasUnsavedChanges"]?.Value<bool>() ?? false;
+            SessionData? sessionData = JsonSerializer.Deserialize(data, SessionJsonContext.Default.SessionData);
+            if (sessionData == null)
+            {
+                Log.Error("Deserialized session data is null");
+                return new SessionFileData { Content = string.Empty };
+            }
+            
+            string? version = sessionData.Version;
+            string? path = sessionData.Path;
+            string? content = sessionData.Content;
+            bool hasUnsavedChanges = sessionData.HasUnsavedChanges;
 
             if (version != Version && version != null)
             {
@@ -98,3 +100,16 @@ public class SessionSerializer
         public bool HasUnsavedChanges { get; init; }
     }
 }
+
+public class SessionData
+{
+    public string? Version { get; set; }
+    public string? Path { get; set; }
+    public string? Content { get; set; }
+    public bool HasUnsavedChanges { get; set; }
+    public DateTime? Timestamp { get; set; }
+}
+
+[JsonSerializable(typeof(SessionData))]
+[JsonSerializable(typeof(SessionProjectData))]
+public partial class SessionJsonContext : JsonSerializerContext;

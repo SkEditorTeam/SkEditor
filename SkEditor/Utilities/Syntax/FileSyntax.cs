@@ -1,9 +1,10 @@
 ﻿using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
 using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace SkEditor.Utilities.Syntax;
@@ -49,7 +50,8 @@ public class FileSyntax
             }
 
             FileSyntaxConfig? config =
-                JsonConvert.DeserializeObject<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile));
+                JsonSerializer.Deserialize<FileSyntaxConfig>(await File.ReadAllTextAsync(configFile),
+                    FileSyntaxConfigJsonContext.Default.FileSyntaxConfig);
 
             if (config == null)
             {
@@ -72,17 +74,20 @@ public class FileSyntax
             return new FileSyntax(null, null, folder);
         }
     }
-
-    public class FileSyntaxConfig
-    {
-        public string SyntaxName { get; set; } = string.Empty;
-
-        public string LanguageName { get; set; } = string.Empty;
-
-        public string[] Extensions { get; set; } = [];
-
-        public string Version { get; set; } = string.Empty;
-
-        public string FullIdName => $"{LanguageName}-{SyntaxName}";
-    }
 }
+
+public class FileSyntaxConfig
+{
+    public string SyntaxName { get; set; } = string.Empty;
+
+    public string LanguageName { get; set; } = string.Empty;
+
+    public string[] Extensions { get; set; } = [];
+
+    public string Version { get; set; } = string.Empty;
+
+    public string FullIdName => $"{LanguageName}-{SyntaxName}";
+}
+    
+[JsonSerializable(typeof(FileSyntaxConfig))]
+public partial class FileSyntaxConfigJsonContext : JsonSerializerContext;

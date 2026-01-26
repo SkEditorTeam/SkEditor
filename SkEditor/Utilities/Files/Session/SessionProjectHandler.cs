@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Projects;
@@ -22,14 +22,14 @@ public static class SessionProjectHandler
 
             if (!string.IsNullOrEmpty(projectPath))
             {
-                JObject projectData = new()
+                SessionProjectData sessionProjectData = new()
                 {
-                    ["Version"] = SessionSerializer.Version,
-                    ["ProjectPath"] = projectPath,
-                    ["Timestamp"] = DateTime.UtcNow.ToString("o")
+                    Version = SessionSerializer.Version,
+                    ProjectPath = projectPath,
+                    Timestamp = DateTime.UtcNow
                 };
 
-                string jsonData = projectData.ToString(Formatting.None);
+                string jsonData = JsonSerializer.Serialize(sessionProjectData, SessionJsonContext.Default.SessionProjectData);
                 await SessionFileHandler.WriteFile(ProjectFilePath, jsonData);
             }
         }
@@ -54,8 +54,9 @@ public static class SessionProjectHandler
                 return false;
             }
 
-            JObject projectData = JObject.Parse(jsonData);
-            string? projectPath = projectData["ProjectPath"]?.Value<string>();
+            SessionProjectData? projectData =
+                JsonSerializer.Deserialize<SessionProjectData>(jsonData, SessionJsonContext.Default.SessionProjectData);
+            string? projectPath = projectData?.ProjectPath;
 
             projectPath = projectPath?.NormalizePathSeparators();
 
@@ -74,4 +75,11 @@ public static class SessionProjectHandler
             return false;
         }
     }
+}
+
+public class SessionProjectData
+{
+    public string? Version { get; set; }
+    public string? ProjectPath { get; set; }
+    public DateTime? Timestamp { get; set; }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using Newtonsoft.Json;
 
 namespace SkEditor.Utilities.Styling;
 
@@ -59,3 +59,6 @@ public class Theme
         };
     }
 }
+
+[JsonSerializable(typeof(Theme))]
+public partial class ThemeJsonContext : JsonSerializerContext;
