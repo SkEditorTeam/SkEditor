@@ -370,3 +370,6 @@ FodyWeavers.xsd
 
 # nix
 .direnv
+
+# lock file
+External/DiscordRPC/packages.lock.json
