@@ -27,7 +27,7 @@ public partial class ColorSelectionWindow : AppWindow
 
         ColorPicker.ColorChanged += (_, e) =>
         {
-            string hex = e.NewColor.ToHexString(false);
+            string hex = ToHexString(e.NewColor);
             ResultTextBox.Text = hex;
         };
 
@@ -57,4 +57,6 @@ public partial class ColorSelectionWindow : AppWindow
             await Clipboard.SetTextAsync(ResultTextBox.Text);
         });
     }
+
+    private static string ToHexString(Color color) => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
 }

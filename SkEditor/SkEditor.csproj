@@ -73,10 +73,10 @@
         <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0"/>
         <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0"/>
         <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.0.317"/>
+        <PackageReference Include="FluentAvaloniaUI" Version="2.0.0" ExcludeAssets="All" />
         <PackageReference Include="Octokit" Version="14.0.0"/>
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
         <PackageReference Include="SkAvaloniaEdit" Version="11.3.3"/>
-        <PackageReference Include="SkFluentAvalonia" Version="2.2.3"/>
         <PackageReference Include="Svg.Skia" Version="3.4.1"/>
 
         <PackageReference Include="HotAvalonia" Version="3.0.2" PrivateAssets="All"/>
@@ -261,6 +261,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\External\DiscordRPC\DiscordRPC.csproj"/>
+        <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj"/>
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 </Project>

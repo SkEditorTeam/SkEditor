@@ -37,7 +37,7 @@ public partial class EditThemePage : UserControl
 
     private static void SetUpColorPicker(ColorPickerSettingsExpander expander, string propertyName)
     {
-        ColorPickerButton? colorPicker = expander.ColorPicker;
+        ColorPicker? colorPicker = expander.ColorPicker;
         colorPicker.Color = ThemeEditor.CurrentTheme.GetBrushByName(propertyName).Color;
         colorPicker.ColorChanged += async (_, e) => await ChangeColor(propertyName, e.NewColor);
     }

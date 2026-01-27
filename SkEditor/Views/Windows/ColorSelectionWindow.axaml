@@ -5,11 +5,11 @@
         xmlns:ui="using:FluentAvalonia.UI.Controls"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.ColorSelectionWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleColorSelector}" Height="450" Width="350" CanResize="False"
+        Title="{DynamicResource WindowTitleColorSelector}" Height="475" Width="375" CanResize="False"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
     <Grid RowDefinitions="auto,*" Margin="20">
-        <ui:FAColorPicker Name="ColorPicker" Grid.Row="0" Margin="0,0,0,6" IsCompact="True" IsAlphaEnabled="False" />
+        <ColorView Name="ColorPicker" Grid.Row="0" Margin="0,0,0,6" IsAlphaEnabled="False" IsAlphaVisible="False" />
 
         <Grid Grid.Row="1" ColumnDefinitions="*,auto" Margin="0,6" VerticalAlignment="Bottom">
             <TextBox Name="ResultTextBox" Watermark="{DynamicResource ColorSelectorWindowHexResult}" Grid.Column="0"

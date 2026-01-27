@@ -1,21 +1,22 @@
 <Solution>
     <Configurations>
-        <Platform Name="Any CPU"/>
-        <Platform Name="ARM64"/>
-        <Platform Name="x64"/>
-        <Platform Name="x86"/>
+        <Platform Name="Any CPU" />
+        <Platform Name="ARM64" />
+        <Platform Name="x64" />
+        <Platform Name="x86" />
     </Configurations>
     <Folder Name="/External/">
         <Project Path="External/DiscordRPC/DiscordRPC.csproj">
-            <Platform Solution="*|Any CPU" Project="x64"/>
-            <Platform Solution="*|ARM64" Project="x64"/>
-            <Platform Solution="*|x86" Project="x64"/>
+            <Platform Solution="*|Any CPU" Project="x64" />
+            <Platform Solution="*|ARM64" Project="x64" />
+            <Platform Solution="*|x86" Project="x64" />
         </Project>
+        <Project Path="External/SkFluentAvalonia/src/FluentAvalonia/FluentAvalonia.csproj" />
     </Folder>
     <Project Path="Installer/SkEditorInstaller.wixproj" Type="b7dd6f7e-def8-4e67-b5b7-07ef123db6f0">
-        <BuildType Solution="Debug|Any CPU" Project="Release"/>
-        <Platform Solution="*|Any CPU" Project="x64"/>
+        <BuildType Solution="Debug|Any CPU" Project="Release" />
+        <Platform Solution="*|Any CPU" Project="x64" />
     </Project>
-    <Project Path="SkEditor/SkEditor.csproj"/>
-    <Project Path="SkEditor.SourceGenerators/SkEditor.SourceGenerators.csproj"/>
+    <Project Path="SkEditor/SkEditor.csproj" />
+    <Project Path="SkEditor.SourceGenerators/SkEditor.SourceGenerators.csproj" />
 </Solution>

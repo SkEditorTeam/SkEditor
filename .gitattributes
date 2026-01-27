@@ -62,4 +62,4 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 
-External/DiscordRPC/** linguist-vendored
+External/** linguist-vendored
