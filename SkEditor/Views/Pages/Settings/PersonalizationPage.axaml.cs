@@ -46,7 +46,7 @@ public partial class PersonalizationPage : UserControl
         {
             return;
         }
-        
+
         bool isDefault = result.Equals("Default");
         SkEditorAPI.Configs.GetAppSettings().EditorFontFamily = isDefault ? null : result;
 

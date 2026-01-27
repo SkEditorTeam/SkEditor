@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.Styling;
 using ColorPickerSettingsExpander = SkEditor.Views.Controls.ColorPickerSettingsExpander;
 

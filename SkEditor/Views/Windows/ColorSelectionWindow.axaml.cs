@@ -58,5 +58,8 @@ public partial class ColorSelectionWindow : AppWindow
         });
     }
 
-    private static string ToHexString(Color color) => $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+    private static string ToHexString(Color color)
+    {
+        return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+    }
 }

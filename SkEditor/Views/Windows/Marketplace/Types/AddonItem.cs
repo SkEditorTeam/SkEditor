@@ -72,7 +72,6 @@ public class AddonItem : MarketplaceItem
 #if !AOT
     private async Task RunAddon(string addonIdentifier)
     {
-
         if (ItemRequiresRestart)
         {
             return;
