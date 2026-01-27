@@ -46,12 +46,13 @@ public partial class PersonalizationPage : UserControl
         {
             return;
         }
-
-        SkEditorAPI.Configs.GetAppSettings().EditorFontFamily = result;
+        
+        bool isDefault = result.Equals("Default");
+        SkEditorAPI.Configs.GetAppSettings().EditorFontFamily = isDefault ? null : result;
 
         SkEditorAPI.Files.GetOpenedEditors().ForEach(i =>
         {
-            if (!result.Equals("Default"))
+            if (!isDefault)
             {
                 i.Editor!.FontFamily = new FontFamily(result);
                 return;

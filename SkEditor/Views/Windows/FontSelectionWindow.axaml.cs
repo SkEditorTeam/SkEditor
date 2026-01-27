@@ -11,6 +11,7 @@ using SkEditor.API;
 
 namespace SkEditor.Views.Windows;
 
+// TODO: rework the entire font selection window
 public partial class FontSelectionWindow : AppWindow
 {
     private static FontInfo? _selectedFont;

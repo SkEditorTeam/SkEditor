@@ -29,7 +29,9 @@ public partial class Configs
             appSettings.CurrentTheme = oldAppConfig.CurrentTheme;
             appSettings.CustomUiScale = oldAppConfig.CustomUiScale;
             appSettings.FileSyntaxes = oldAppConfig.FileSyntaxes;
-            appSettings.EditorFontFamily = oldAppConfig.Font;
+            appSettings.EditorFontFamily = oldAppConfig.Font == "Default"
+                ? null
+                : oldAppConfig.Font;
             appSettings.ForceNativeTitleBar = oldAppConfig.ForceNativeTitleBar;
             appSettings.HighlightCurrentLine = oldAppConfig.HighlightCurrentLine;
             appSettings.IsAutoIndentEnabled = oldAppConfig.IsAutoIndentEnabled;
