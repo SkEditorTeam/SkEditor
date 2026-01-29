@@ -9,6 +9,7 @@
         <ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>
         <PublishSingleFile>true</PublishSingleFile>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+        <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
         <VersionPrefix>2.9.4</VersionPrefix>
@@ -43,8 +44,7 @@
         <PackageReference Include="Avalonia.Desktop" Version="11.3.11"/>
         <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.11"/>
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5"/>
-        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.DataGrid" Version="11.3.0"/>
-        <PackageReference Condition="'$(Configuration)' == 'Release'" Include="Avalonia.Controls.ColorPicker" Version="11.3.0"/>
+        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.11"/>
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.11"/>
 
         <!-- UI, styling -->
@@ -79,4 +79,8 @@
         <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj"/>
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
+
+    <PropertyGroup>
+        <AllowedReferenceRelatedFileExtensions>.dll;.exe</AllowedReferenceRelatedFileExtensions>
+    </PropertyGroup>
 </Project>

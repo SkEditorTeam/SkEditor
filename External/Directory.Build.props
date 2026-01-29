@@ -1,0 +1,6 @@
+﻿<Project>
+    <PropertyGroup>
+        <WarningLevel>0</WarningLevel>
+        <AnalysisLevel>none</AnalysisLevel>
+    </PropertyGroup>
+</Project>
