@@ -43,7 +43,7 @@
         </controls:NavigationView.MenuItems>
 
         <controls:NavigationView.Content>
-            <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="24,4,24,24">
+            <ScrollViewer Name="ScrollViewer" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="24,4,24,24" VerticalScrollBarVisibility="Hidden">
                 <StackPanel Spacing="8">
                     <controls:SettingsExpander Header="{DynamicResource SettingsGeneralLanguage}"
                                                IconSource="{icons:SymbolIconSource Symbol=Earth}">

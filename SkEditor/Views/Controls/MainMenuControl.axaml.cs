@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using AvaloniaEdit.Editing;
@@ -181,14 +182,22 @@ public partial class MainMenuControl : UserControl
             icon: icon);
     }
 
-    public static void AddSettingsTab()
+    public void AddSettingsTab()
     {
-        SymbolIconSource icon = new()
-        {
-            Symbol = Symbol.Settings
-        };
-        SkEditorAPI.Files.AddCustomTab(Translation.Get("WindowTitleSettings"), new SettingsPage(),
-            icon: icon);
+        SettingsPage page = new();
+
+        var tabView = SkEditorAPI.Windows.GetMainWindow()!.TabControl;
+        var availableSize = new Size(
+            tabView.Bounds.Width - 32,
+            tabView.Bounds.Height - 32
+        );
+
+        page.Measure(availableSize);
+        page.Arrange(new Rect(page.DesiredSize));
+        page.UpdateLayout();
+
+        SymbolIconSource icon = new() { Symbol = Symbol.Settings };
+        SkEditorAPI.Files.AddCustomTab(Translation.Get("WindowTitleSettings"), page, icon: icon);
     }
 
     public void ReloadAddonsMenus()

@@ -1,6 +1,8 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using FluentAvalonia.UI.Controls;
 
 namespace SkEditor.Views.Pages;
@@ -11,17 +13,27 @@ public partial class SettingsPage : UserControl
     {
         InitializeComponent();
 
-        NavigationView.SizeChanged += (_, e) =>
-        {
-            Size newSize = e.NewSize;
+        Loaded += OnLoaded;
+    }
 
-            double paneWidth = newSize.Width / 4;
+    private void OnLoaded(object? sender, RoutedEventArgs e)
+    {
+        Loaded -= OnLoaded;
 
-            NavigationView.PaneDisplayMode = paneWidth < 180
-                ? NavigationViewPaneDisplayMode.LeftCompact
-                : NavigationViewPaneDisplayMode.Left;
+        NavigationView.SizeChanged += (_, ev) => UpdateViewSize(ev.NewSize);
 
-            NavigationView.OpenPaneLength = Math.Min(paneWidth, 280);
-        };
+        UpdateViewSize(NavigationView.Bounds.Size);
+        ScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+    }
+
+    private void UpdateViewSize(Size paneSize)
+    {
+        double paneWidth = paneSize.Width / 4;
+
+        NavigationView.PaneDisplayMode = paneWidth < 180
+            ? NavigationViewPaneDisplayMode.LeftCompact
+            : NavigationViewPaneDisplayMode.Left;
+
+        NavigationView.OpenPaneLength = Math.Min(paneWidth, 280);
     }
 }
