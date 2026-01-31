@@ -54,7 +54,7 @@
                     <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeOptions}" Tag="options" />
                     <ComboBoxItem Content="{DynamicResource CodeParserFilterTypeCommands}" Tag="commands" />
                 </ComboBox>
-                <Button Grid.Column="2" Height="30" Width="30" Padding="0" Name="ClearSearch"
+                <Button Grid.Column="2" Height="32" Width="32" Padding="0" Name="ClearSearch"
                         ToolTip.Tip="{DynamicResource CodeParserClearFilters}">
                     <ui:SymbolIcon Symbol="Clear" FontSize="20" Margin="0" />
                 </Button>
