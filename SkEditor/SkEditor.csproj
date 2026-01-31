@@ -11,6 +11,7 @@
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <PublishAot>true</PublishAot>
 
         <VersionPrefix>2.9.4</VersionPrefix>
         <VersionSuffix>alpha.1</VersionSuffix>
