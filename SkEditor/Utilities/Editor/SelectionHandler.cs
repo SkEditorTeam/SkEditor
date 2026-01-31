@@ -7,6 +7,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using SkEditor.API;
+using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Utilities.Editor;
 
@@ -75,10 +76,24 @@ public class OccurenceBackgroundTransformer : DocumentColorizingTransformer
         }
     }
 
-    private void ApplyChanges(VisualLineElement element)
+    private static void ApplyChanges(VisualLineElement element)
     {
-        Color color = new(100, 50, 211, 240);
-        ImmutableSolidColorBrush brush = new(color);
+        Color selectionColor = ThemeEditor.CurrentTheme.SelectionColor.Color;
+        Color accentColor = ThemeEditor.CurrentTheme.AccentColor.Color;
+
+        Color occurrenceColor = BlendColors(selectionColor, accentColor, 0.3);
+
+        ImmutableSolidColorBrush brush = new(occurrenceColor);
         element.TextRunProperties.SetBackgroundBrush(brush);
+    }
+
+    private static Color BlendColors(Color baseColor, Color blend, double blendAmount)
+    {
+        byte r = (byte)(baseColor.R * (1 - blendAmount) + blend.R * blendAmount);
+        byte g = (byte)(baseColor.G * (1 - blendAmount) + blend.G * blendAmount);
+        byte b = (byte)(baseColor.B * (1 - blendAmount) + blend.B * blendAmount);
+        byte a = (byte)(baseColor.A * (1 - blendAmount) + blend.A * blendAmount);
+
+        return new Color(a, r, g, b);
     }
 }
