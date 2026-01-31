@@ -22,6 +22,14 @@
         <InformationalVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</InformationalVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>full</TrimMode>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <OptimizationPreference>Speed</OptimizationPreference>
+        <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(PublishAot)' == 'true'">
         <DefineConstants>$(DefineConstants);AOT</DefineConstants>
     </PropertyGroup>
