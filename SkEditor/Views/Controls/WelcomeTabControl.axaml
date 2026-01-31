@@ -3,7 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:local="clr-namespace:SkEditor.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="1800" d:DesignHeight="900"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             x:CompileBindings="True"
              x:Class="SkEditor.Views.Controls.WelcomeTabControl">
 
     <UserControl.Styles>
@@ -14,6 +17,11 @@
             <Setter Property="CornerRadius" Value="7" />
             <Setter Property="VerticalAlignment" Value="Stretch" />
             <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackground}" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#7C000000" BlurRadius="5" />
+                </Setter.Value>
+            </Setter>
 
             <Style Selector="^:pointerover">
                 <Setter Property="Padding" Value="10,0" />
@@ -21,18 +29,21 @@
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="CornerRadius" Value="7" />
                 <Setter Property="VerticalAlignment" Value="Stretch" />
-                <Setter Property="Foreground" Value="red" />
+                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
+
+            </Style>
+
+            <Style Selector="^:pointerover TextBlock, ^:pressed TextBlock, ^:disabled TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
+            </Style>
+
+            <Style
+                Selector="^:pointerover ui|IconSourceElement, ^:pressed ui|IconSourceElement, ^:disabled ui|IconSourceElement">
+                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
             </Style>
 
             <Style Selector="^ TextBlock">
                 <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackground}" />
-            </Style>
-
-            <Style Selector="^ ui|IconSourceElement">
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackground}" />
-                <Setter Property="Height" Value="16" />
             </Style>
         </Style>
     </UserControl.Styles>
@@ -42,19 +53,51 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="200" Width="200" />
                 <StackPanel Margin="30">
-                    <TextBlock Text="SkEditor" FontSize="40" FontWeight="DemiBold" />
-                    <TextBlock Name="VersionText" FontSize="26" FontWeight="Normal" Foreground="#ccffffff" />
+                    <TextBlock Text="SkEditor" FontSize="40" FontWeight="DemiBold">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="#7C000000" BlurRadius="5" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <TextBlock Text="{Binding Version}" FontSize="26" FontWeight="Normal" Foreground="#ccffffff" />
                 </StackPanel>
             </StackPanel>
 
-            <Grid
-                VerticalAlignment="Center" HorizontalAlignment="Center"
-                Margin="50"
-                Name="WelcomeGrid"
-                ColumnSpacing="100"
-                RowSpacing="15"
-                RowDefinitions="*,*"
-                ColumnDefinitions="*,*" />
+            <ItemsRepeater ItemsSource="{Binding WelcomeSections}" VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="50">
+                <ItemsRepeater.Layout>
+                    <StackLayout Spacing="100" Orientation="Horizontal" />
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate DataType="local:WelcomeTabControl+WelcomeScreenSection">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,5">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Color="#7C000000" BlurRadius="5" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <ItemsRepeater ItemsSource="{Binding Entries}">
+                                <ItemsRepeater.Layout>
+                                    <StackLayout Spacing="4" />
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="local:WelcomeTabControl+WelcomeScreenElement">
+                                        <Button Command="{Binding Command}" Padding="5" HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Left">
+                                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                                <Viewbox Width="24" Height="24">
+                                                    <ui:IconSourceElement IconSource="{Binding Icon}" />
+                                                </Viewbox>
+                                                <TextBlock Text="{Binding Name}" FontSize="16" />
+                                            </StackPanel>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
         </StackPanel>
     </Viewbox>
 </UserControl>
