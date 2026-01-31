@@ -8,6 +8,10 @@
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              x:CompileBindings="True"
              x:Class="SkEditor.Views.Controls.WelcomeTabControl">
+    
+    <UserControl.Resources>
+        <DropShadowEffect x:Key="WelcomeScreenTextShadowEffect" Color="#64000000" BlurRadius="6" />
+    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="Button">
@@ -17,11 +21,7 @@
             <Setter Property="CornerRadius" Value="7" />
             <Setter Property="VerticalAlignment" Value="Stretch" />
             <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackground}" />
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="#7C000000" BlurRadius="5" />
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Effect" Value="{StaticResource WelcomeScreenTextShadowEffect}" />
 
             <Style Selector="^:pointerover">
                 <Setter Property="Padding" Value="10,0" />
@@ -53,11 +53,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="200" Width="200" />
                 <StackPanel Margin="30">
-                    <TextBlock Text="SkEditor" FontSize="40" FontWeight="DemiBold">
-                        <TextBlock.Effect>
-                            <DropShadowEffect Color="#7C000000" BlurRadius="5" />
-                        </TextBlock.Effect>
-                    </TextBlock>
+                    <TextBlock Text="SkEditor" FontSize="40" FontWeight="DemiBold" Effect="{StaticResource WelcomeScreenTextShadowEffect}" />
                     <TextBlock Text="{Binding Version}" FontSize="26" FontWeight="Normal" Foreground="#ccffffff" />
                 </StackPanel>
             </StackPanel>
@@ -71,11 +67,7 @@
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate DataType="local:WelcomeTabControl+WelcomeScreenSection">
                         <StackPanel>
-                            <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,5">
-                                <TextBlock.Effect>
-                                    <DropShadowEffect Color="#7C000000" BlurRadius="5" />
-                                </TextBlock.Effect>
-                            </TextBlock>
+                            <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,5" Effect="{StaticResource WelcomeScreenTextShadowEffect}" />
                             <ItemsRepeater ItemsSource="{Binding Entries}">
                                 <ItemsRepeater.Layout>
                                     <StackLayout Spacing="4" />
