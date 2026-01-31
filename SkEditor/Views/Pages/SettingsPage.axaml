@@ -17,7 +17,7 @@
         <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
         <!-- ReSharper restore Xaml.RedundantResource -->
     </UserControl.Resources>
-    
+
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type local:ToggleSetting}">
             <ToggleSwitch IsChecked="{Binding IsEnabled}" />
@@ -28,11 +28,10 @@
         </DataTemplate>
     </UserControl.DataTemplates>
 
-    <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" PaneDisplayMode="Auto"
+    <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,16,0,16"
+                             PaneDisplayMode="Auto" OpenPaneLength="280"
                              MaxWidth="1080"
-                             IsSettingsVisible="False"
-                             BorderBrush="Red" OpenPaneLength="280"
-                             IsPaneToggleButtonVisible="False" Margin="16,16,0,16">
+                             IsSettingsVisible="False" IsPaneToggleButtonVisible="False">
         <controls:NavigationView.MenuItems>
             <controls:NavigationViewItem Content="{DynamicResource SettingsHomeGeneral}" IsSelected="True"
                                          IconSource="{icons:SymbolIconSource Symbol=Wrench}" />

@@ -31,14 +31,11 @@
                                      Description="{DynamicResource SettingsPersonalizationSyntaxDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationFont}"
-                                     IconSource="{icons:SymbolIconSource Symbol=TextFont}">
+                <ui:SettingsExpander Name="FontButton" Header="{DynamicResource SettingsPersonalizationFont}"
+                                     IconSource="{icons:SymbolIconSource Symbol=TextFont}" IsClickEnabled="True">
                     <ui:SettingsExpander.Description>
                         <Binding Source="{StaticResource SettingsViewModel}" Path="CurrentFont" />
                     </ui:SettingsExpander.Description>
-                    <ui:SettingsExpander.Footer>
-                        <Button Name="FontButton" Content="{DynamicResource SelectButton}" />
-                    </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
                 <ui:SettingsExpander Header="{DynamicResource SettingsPersonalizationHighlightCurrentLine}"
