@@ -20,24 +20,23 @@ public partial class WelcomeTabControl : UserControl
     // This is just a little, funny thing serving no real purpose... But it's nice, right?
     private readonly string[] _tooltips = ["Hey!", "Hi!", "How are you?", "What will you code today?"];
 
-    public List<WelcomeScreenSection> WelcomeSections { get; } = [];
-    public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
-
     public WelcomeTabControl()
     {
         InitializeComponent();
-        
+
         WelcomeScreenSection gettingStarted = new(
             Translation.Get("WelcomeTabGettingStarted"),
             [
-                new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedNewFile"), new RelayCommand(FileHandler.NewFile),
+                new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedNewFile"),
+                    new RelayCommand(FileHandler.NewFile),
                     CreateSymbolIcon(Symbol.DocumentAdd)),
                 new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedOpenFile"),
                     new AsyncRelayCommand(FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
                 new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedOpenFolder"),
                     new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()),
                     CreateSymbolIcon(Symbol.FolderOpen)),
-                new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedSettings"), new AsyncRelayCommand(OpenSettings),
+                new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedSettings"),
+                    new AsyncRelayCommand(OpenSettings),
                     CreateSymbolIcon(Symbol.Settings))
             ]
         );
@@ -55,7 +54,7 @@ public partial class WelcomeTabControl : UserControl
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
                 CreateSymbolIcon(Symbol.Book))
         ]);
-        
+
         WelcomeSections.Add(gettingStarted);
         WelcomeSections.Add(help);
 
@@ -66,6 +65,9 @@ public partial class WelcomeTabControl : UserControl
             ToolTip.SetTip(SkEditorIcon, _tooltips[index]);
         };
     }
+
+    public List<WelcomeScreenSection> WelcomeSections { get; } = [];
+    public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
 
     private static SymbolIconSource CreateSymbolIcon(Symbol symbol)
     {
@@ -84,7 +86,8 @@ public partial class WelcomeTabControl : UserControl
     {
         await new SettingsWindow().ShowDialogOnMainWindow();
     }
-    
+
     public record WelcomeScreenSection(string Title, List<WelcomeScreenElement> Entries);
+
     public record WelcomeScreenElement(string Name, IRelayCommand Command, IconSource? Icon);
 }

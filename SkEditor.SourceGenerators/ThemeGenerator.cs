@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -45,13 +46,13 @@ public class ThemeGenerator : IIncrementalGenerator
                 ];
 
                 StringBuilder getBrushSwitchArms = new();
-                foreach (var prop in properties)
+                foreach (IPropertySymbol? prop in properties)
                 {
                     getBrushSwitchArms.AppendLine($"\"{prop.Name}\" => {prop.Name},");
                 }
 
                 StringBuilder setBrushCases = new();
-                foreach (var prop in properties)
+                foreach (IPropertySymbol? prop in properties)
                 {
                     setBrushCases.AppendLine($"""
                                                   case "{prop.Name}":
@@ -61,18 +62,19 @@ public class ThemeGenerator : IIncrementalGenerator
                 }
 
                 StringBuilder themeToResourceDictEntries = new();
-                foreach (var prop in properties)
+                foreach (IPropertySymbol? prop in properties)
                 {
-                    var attr = prop.GetAttributes().First(a =>
+                    AttributeData attr = prop.GetAttributes().First(a =>
                         a.AttributeClass?.ToDisplayString() ==
                         "SkEditor.Utilities.Styling.Attributes.ThemeResourceAttribute");
 
-                    var keys = attr.ConstructorArguments.Length > 0
+                    List<string> keys = attr.ConstructorArguments.Length > 0
                         ? attr.ConstructorArguments[0].Values.Select(v => v.Value?.ToString() ?? "").ToList()
                         : [];
 
                     bool mapPropertyName = true;
-                    var namedArg = attr.NamedArguments.FirstOrDefault(kv => kv.Key == "MapPropertyName");
+                    KeyValuePair<string, TypedConstant> namedArg =
+                        attr.NamedArguments.FirstOrDefault(kv => kv.Key == "MapPropertyName");
 
                     if (namedArg.Key is not null && namedArg.Value.Value is bool explicitValue)
                     {
@@ -84,7 +86,7 @@ public class ThemeGenerator : IIncrementalGenerator
                         keys.Add(prop.Name);
                     }
 
-                    var finalKeys = keys.Distinct();
+                    IEnumerable<string> finalKeys = keys.Distinct();
 
                     themeToResourceDictEntries.AppendLine(
                         $"{{ \"{prop.Name}\", [ {string.Join(", ", finalKeys.Select(k => $"\"{k}\""))} ] }},");
@@ -125,7 +127,7 @@ public class ThemeGenerator : IIncrementalGenerator
                                    }
                                    """;
 
-                var formattedCode = CSharpSyntaxTree.ParseText(rawCode)
+                string formattedCode = CSharpSyntaxTree.ParseText(rawCode)
                     .GetRoot()
                     .NormalizeWhitespace()
                     .ToFullString();

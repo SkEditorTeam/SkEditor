@@ -114,28 +114,39 @@ public partial class PublishingJsonContext : JsonSerializerContext;
 
 public class CodeSkriptPlCreateRequest
 {
-    [JsonPropertyName("key")] public required string Key { get; set; }
-    [JsonPropertyName("language")] public string? Language { get; set; }
-    [JsonPropertyName("content")] public required string Content { get; set; }
-    [JsonPropertyName("anonymous")] public required bool Anonymous { get; set; }
+    [JsonPropertyName("key")]
+    public required string Key { get; set; }
+
+    [JsonPropertyName("language")]
+    public string? Language { get; set; }
+
+    [JsonPropertyName("content")]
+    public required string Content { get; set; }
+
+    [JsonPropertyName("anonymous")]
+    public required bool Anonymous { get; set; }
 }
 
 public class CodeSkriptPlCreateResponse
 {
-    [JsonPropertyName("url")] public required string Url { get; set; }
+    [JsonPropertyName("url")]
+    public required string Url { get; set; }
 }
 
 public class SkUnityCreateRequest
 {
-    [JsonPropertyName("content")] public required string Content { get; set; }
+    [JsonPropertyName("content")]
+    public required string Content { get; set; }
 }
 
 public class SkUnityCreateResponse
 {
-    [JsonPropertyName("result")] public required SkUnityCreateResult Result { get; set; }
+    [JsonPropertyName("result")]
+    public required SkUnityCreateResult Result { get; set; }
 }
 
 public class SkUnityCreateResult
 {
-    [JsonPropertyName("share_code")] public required string ShareCode { get; set; }
+    [JsonPropertyName("share_code")]
+    public required string ShareCode { get; set; }
 }

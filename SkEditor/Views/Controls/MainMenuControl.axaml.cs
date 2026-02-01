@@ -186,8 +186,8 @@ public partial class MainMenuControl : UserControl
     {
         SettingsPage page = new();
 
-        var tabView = SkEditorAPI.Windows.GetMainWindow()!.TabControl;
-        var availableSize = new Size(
+        TabView? tabView = SkEditorAPI.Windows.GetMainWindow()!.TabControl;
+        Size availableSize = new(
             tabView.Bounds.Width - 32,
             tabView.Bounds.Height - 32
         );

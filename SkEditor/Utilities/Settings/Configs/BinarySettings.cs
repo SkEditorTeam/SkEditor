@@ -17,11 +17,15 @@ public partial class BinarySettings : ObservableObject, IConfig
 
     private readonly string _binaryFilePath = Path.Combine(AppContext.BaseDirectory, ConfigFileName);
     private readonly List<IBinarySettingHandler> _registry;
-    [ObservableProperty] private int _averageStartupTime;
 
-    [ObservableProperty] private bool _isFirstRun = true;
+    [ObservableProperty]
+    private int _averageStartupTime;
 
-    [ObservableProperty] private StartupMode _splashScreenMode = StartupMode.Auto;
+    [ObservableProperty]
+    private bool _isFirstRun = true;
+
+    [ObservableProperty]
+    private StartupMode _splashScreenMode = StartupMode.Auto;
 
     public BinarySettings()
     {

@@ -36,7 +36,8 @@ public class LocalDocEntry : IDocumentationEntry
     public string Version { get; set; }
     public IDocumentationEntry.Type DocType { get; set; }
 
-    [JsonIgnore] public DocProvider Provider => DocProvider.Local;
+    [JsonIgnore]
+    public DocProvider Provider => DocProvider.Local;
 
     public string? ReturnType { get; set; }
     public string? Changers { get; set; }

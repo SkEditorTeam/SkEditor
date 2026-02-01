@@ -14,6 +14,24 @@ namespace SkEditor.Views.Pages;
 
 public partial class SettingsPage : UserControl
 {
+    public SettingsPage()
+    {
+        InitializeComponent();
+
+        Loaded += OnLoaded;
+        NavigationView.SelectionChanged += (_, _) =>
+        {
+            int index = NavigationView.MenuItems.IndexOf(NavigationView.SelectedItem);
+            if (!SettingsSections.TryGetValue(index, out List<SettingElement>? section))
+            {
+                return;
+            }
+
+            CurrentSection.Clear();
+            CurrentSection.AddRange(section);
+        };
+    }
+
     public Dictionary<int, List<SettingElement>> SettingsSections { get; } = new()
     {
         {
@@ -47,22 +65,6 @@ public partial class SettingsPage : UserControl
     };
 
     public ObservableCollection<SettingElement> CurrentSection { get; } = [];
-
-    public SettingsPage()
-    {
-        InitializeComponent();
-
-        Loaded += OnLoaded;
-        NavigationView.SelectionChanged += (_, _) =>
-        {
-            int index = NavigationView.MenuItems.IndexOf(NavigationView.SelectedItem);
-            if (!SettingsSections.TryGetValue(index, out List<SettingElement>? section))
-                return;
-
-            CurrentSection.Clear();
-            CurrentSection.AddRange(section);
-        };
-    }
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
@@ -99,7 +101,7 @@ public class ToggleSetting(string name, IconSource icon, string description, boo
     public bool IsEnabled { get; set; } = isEnabled;
 }
 
-public class ActionSetting(string name, IconSource icon, string description, string buttonText) 
+public class ActionSetting(string name, IconSource icon, string description, string buttonText)
     : SettingElement(name, icon, description)
 {
     public string ButtonText { get; set; } = buttonText;

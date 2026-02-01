@@ -7,14 +7,14 @@
         <Border Padding="10">
             <ui:ContentDialog Title="Title"
                               Content="Content goes here"
-                              core:VisualStateHelper.ForcedClassesProperty=":open"/>
+                              core:VisualStateHelper.ForcedClassesProperty=":open" />
         </Border>
     </Design.PreviewWith>
 
     <ControlTheme x:Key="{x:Type ui:ContentDialog}" TargetType="ui:ContentDialog">
-        <Setter Property="Foreground" Value="{DynamicResource ContentDialogForeground}"/>
-        <Setter Property="Background" Value="{DynamicResource DialogBackgroundColor}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource ContentDialogBorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ContentDialogForeground}" />
+        <Setter Property="Background" Value="{DynamicResource DialogBackgroundColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ContentDialogBorderBrush}" />
         <Setter Property="BorderThickness" Value="{DynamicResource ContentDialogBorderWidth}" />
         <Setter Property="CornerRadius" Value="{DynamicResource OverlayCornerRadius}" />
         <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
@@ -43,7 +43,7 @@
                             <Border ClipToBounds="True"
                                     CornerRadius="{TemplateBinding CornerRadius}">
                                 <Grid Name="DialogSpace" ClipToBounds="True"
-                                  RowDefinitions="*,Auto">
+                                      RowDefinitions="*,Auto">
                                     <ScrollViewer Name="ContentScrollViewer"
                                                   HorizontalScrollBarVisibility="Disabled"
                                                   VerticalScrollBarVisibility="Auto">
@@ -51,11 +51,11 @@
                                                 Padding="{DynamicResource ContentDialogPadding}"
                                                 BorderThickness="{StaticResource ContentDialogSeparatorThickness}"
                                                 BorderBrush="{DynamicResource DialogTopBorderColor}">
-                                            <Grid RowDefinitions="Auto,*" >
+                                            <Grid RowDefinitions="Auto,*">
                                                 <Grid.Styles>
                                                     <!--Make sure text wrapping is on-->
                                                     <Style Selector="TextBlock">
-                                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                                        <Setter Property="TextWrapping" Value="Wrap" />
                                                     </Style>
                                                 </Grid.Styles>
                                                 <ContentControl Name="Title"
@@ -74,7 +74,7 @@
                                                                               ContentTemplate="{TemplateBinding ContentTemplate}"
                                                                               Margin="{TemplateBinding Padding}"
                                                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                                                         </ControlTemplate>
                                                     </ContentControl.Template>
                                                 </ContentControl>
@@ -85,7 +85,7 @@
                                                                   FontSize="{StaticResource ControlContentThemeFontSize}"
                                                                   FontFamily="{StaticResource ContentControlThemeFontFamily}"
                                                                   Foreground="{TemplateBinding Foreground}"
-                                                                  Grid.Row="1"/>
+                                                                  Grid.Row="1" />
                                             </Grid>
                                         </Border>
                                     </ScrollViewer>
@@ -122,7 +122,7 @@
                                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                                     HorizontalContentAlignment="Center"
                                                     VerticalContentAlignment="Center"
-                                                    IsVisible="False"  />
+                                                    IsVisible="False" />
 
                                             <Button Name="CloseButton"
                                                     Content="{TemplateBinding CloseButtonText}"
@@ -146,10 +146,10 @@
             <Style.Animations>
                 <Animation Duration="00:00:00.167" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="1.0"/>
+                        <Setter Property="Opacity" Value="1.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="Opacity" Value="0.0"/>
+                        <Setter Property="Opacity" Value="0.0" />
                         <Setter Property="IsVisible" Value="False" />
                     </KeyFrame>
                 </Animation>
@@ -159,12 +159,12 @@
             <Style.Animations>
                 <Animation Duration="00:00:00.167" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.0"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.0"/>
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.0" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%" KeySpline="0,0 0,1">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.05"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.05"/>
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.05" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.05" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -172,19 +172,19 @@
 
         <!--Handle open dialog-->
         <Style Selector="^:open /template/ Panel#LayoutRoot">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Style.Animations>
-                 <!--Animation applies with priority of LocalValue
+                <!--Animation applies with priority of LocalValue
                  To overrule the IsVisible=False in :hidden, set
-                 IsVisible=True in BOTH KeyFrames here--> 
+                 IsVisible=True in BOTH KeyFrames here-->
                 <Animation Duration="00:00:00.250" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="IsVisible" Value="True"/>
-                        <Setter Property="Opacity" Value="0.0"/>
+                        <Setter Property="IsVisible" Value="True" />
+                        <Setter Property="Opacity" Value="0.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="IsVisible" Value="True"/>
-                        <Setter Property="Opacity" Value="1.0"/>
+                        <Setter Property="IsVisible" Value="True" />
+                        <Setter Property="Opacity" Value="1.0" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -193,12 +193,12 @@
             <Style.Animations>
                 <Animation Duration="00:00:00.250" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.05"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.05"/>
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.05" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.05" />
                     </KeyFrame>
                     <KeyFrame Cue="100%" KeySpline="0,0 0,1">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.00"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.00"/>
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.00" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.00" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -206,50 +206,50 @@
 
         <!--Handle showing smoke layer-->
         <Style Selector="^:nosmokelayer /template/ Panel#LayoutRoot">
-            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="Background" Value="{x:Null}" />
         </Style>
 
         <!--Handle FullDialogSizing-->
         <Style Selector="^:fullsize /template/ Border#BackgroundElement">
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch" />
         </Style>
 
-        
+
         <!-- Primary Button Only -->
         <Style Selector="^:primary /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
         </Style>
         <Style Selector="^:primary /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:primary /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
 
         <!-- Secondary Button Only -->
         <Style Selector="^:secondary /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:secondary /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
         </Style>
         <Style Selector="^:secondary /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
 
         <!-- Close Button Only -->
         <Style Selector="^:close /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:close /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:close /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
         </Style>
@@ -258,33 +258,33 @@
 
         <!-- Primary and Secondary -->
         <Style Selector="^:primary:secondary /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:primary:secondary /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 0 0" />
         </Style>
         <Style Selector="^:primary:secondary /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
 
         <!-- Primary and Close Buttons -->
         <Style Selector="^:primary:close /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:primary:close /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:primary:close /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 0 0" />
@@ -292,16 +292,16 @@
 
         <!-- Primary and Secondary Buttons -->
         <Style Selector="^:primary:secondary /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:primary:secondary /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:primary:secondary /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 0 0" />
@@ -309,16 +309,16 @@
 
         <!-- Secondary and Close Buttons -->
         <Style Selector="^:secondary:close /template/ Button#Secondary">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:secondary:close /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:secondary:close /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 0 0" />
@@ -327,19 +327,19 @@
 
         <!-- All Buttons -->
         <Style Selector="^:primary:secondary:close /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="1" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:primary:secondary:close /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="1" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 4 0" />
         </Style>
         <Style Selector="^:primary:secondary:close /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="3" />
             <Setter Property="Grid.ColumnSpan" Value="1" />
             <Setter Property="Margin" Value="4 0 0 0" />

@@ -207,23 +207,32 @@ public partial class ItemJsonContext : JsonSerializerContext;
 
 public class Item
 {
-    [JsonIgnore] private Bitmap _image = null!;
+    [JsonIgnore]
+    private Bitmap _image = null!;
 
-    [JsonPropertyName("name")] public required string Name { get; set; }
+    [JsonPropertyName("name")]
+    public required string Name { get; set; }
 
-    [JsonPropertyName("displayName")] public required string DisplayName { get; set; }
+    [JsonPropertyName("displayName")]
+    public required string DisplayName { get; set; }
 
-    [JsonIgnore] public bool HaveCustomName { get; set; }
+    [JsonIgnore]
+    public bool HaveCustomName { get; set; }
 
-    [JsonIgnore] public string CustomName { get; set; } = string.Empty;
+    [JsonIgnore]
+    public string CustomName { get; set; } = string.Empty;
 
-    [JsonIgnore] public List<string> Lore { get; set; } = [];
+    [JsonIgnore]
+    public List<string> Lore { get; set; } = [];
 
-    [JsonIgnore] public bool HaveCustomModelData { get; set; }
+    [JsonIgnore]
+    public bool HaveCustomModelData { get; set; }
 
-    [JsonIgnore] public int CustomModelData { get; set; }
+    [JsonIgnore]
+    public int CustomModelData { get; set; }
 
-    [JsonIgnore] public bool HaveExampleAction { get; set; }
+    [JsonIgnore]
+    public bool HaveExampleAction { get; set; }
 
     [JsonIgnore]
     public Bitmap? Icon

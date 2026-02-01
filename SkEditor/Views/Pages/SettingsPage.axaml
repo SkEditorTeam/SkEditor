@@ -62,8 +62,7 @@
                             <controls:SettingsExpander Header="{Binding Name}"
                                                        IconSource="{Binding Icon}"
                                                        Description="{Binding Description}"
-                                                       Footer="{Binding}">
-                            </controls:SettingsExpander>
+                                                       Footer="{Binding}" />
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>

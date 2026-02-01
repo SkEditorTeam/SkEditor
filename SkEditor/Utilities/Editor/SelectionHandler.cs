@@ -89,10 +89,10 @@ public class OccurenceBackgroundTransformer : DocumentColorizingTransformer
 
     private static Color BlendColors(Color baseColor, Color blend, double blendAmount)
     {
-        byte r = (byte)(baseColor.R * (1 - blendAmount) + blend.R * blendAmount);
-        byte g = (byte)(baseColor.G * (1 - blendAmount) + blend.G * blendAmount);
-        byte b = (byte)(baseColor.B * (1 - blendAmount) + blend.B * blendAmount);
-        byte a = (byte)(baseColor.A * (1 - blendAmount) + blend.A * blendAmount);
+        byte r = (byte)((baseColor.R * (1 - blendAmount)) + (blend.R * blendAmount));
+        byte g = (byte)((baseColor.G * (1 - blendAmount)) + (blend.G * blendAmount));
+        byte b = (byte)((baseColor.B * (1 - blendAmount)) + (blend.B * blendAmount));
+        byte a = (byte)((baseColor.A * (1 - blendAmount)) + (blend.A * blendAmount));
 
         return new Color(a, r, g, b);
     }

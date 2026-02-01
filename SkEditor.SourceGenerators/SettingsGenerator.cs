@@ -49,7 +49,7 @@ public class SettingsGenerator : IIncrementalGenerator
                                    """;
 
 
-                var formattedCode = CSharpSyntaxTree.ParseText(rawCode)
+                string formattedCode = CSharpSyntaxTree.ParseText(rawCode)
                     .GetRoot()
                     .NormalizeWhitespace()
                     .ToFullString();

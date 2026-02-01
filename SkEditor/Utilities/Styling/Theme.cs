@@ -78,7 +78,10 @@ public partial class Theme
         { "ToggleButtonBackgroundCheckedPointerOver", C("#40ffffff") }
     };
 
-    private static Brush C(string hex) => new(Color.Parse(hex));
+    private static Brush C(string hex)
+    {
+        return new Brush(Color.Parse(hex));
+    }
 }
 
 [JsonSourceGenerationOptions(

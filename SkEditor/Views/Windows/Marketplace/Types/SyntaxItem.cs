@@ -15,10 +15,13 @@ namespace SkEditor.Views.Windows.Marketplace.Types;
 
 public class SyntaxItem : MarketplaceItem
 {
-    [JsonIgnore] public const string FolderName = "Syntax Highlighting";
+    [JsonIgnore]
+    public const string FolderName = "Syntax Highlighting";
+
     public override string ItemType => "NewSyntax";
 
-    [JsonPropertyName("syntaxFolders")] public required string[] ItemSyntaxFolders { get; set; }
+    [JsonPropertyName("syntaxFolders")]
+    public required string[] ItemSyntaxFolders { get; set; }
 
     public override async Task Install()
     {

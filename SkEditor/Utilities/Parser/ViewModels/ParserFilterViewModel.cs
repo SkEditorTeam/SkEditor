@@ -4,6 +4,9 @@ namespace SkEditor.Utilities.Parser.ViewModels;
 
 public partial class ParserFilterViewModel : ObservableObject
 {
-    [ObservableProperty] private string _searchText = "";
-    [ObservableProperty] private int _selectedFilterIndex;
+    [ObservableProperty]
+    private string _searchText = "";
+
+    [ObservableProperty]
+    private int _selectedFilterIndex;
 }

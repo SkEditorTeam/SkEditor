@@ -3,7 +3,6 @@
 namespace SkEditor.Utilities.Styling.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-
 public class ThemeResourceAttribute(params string[] keys) : Attribute
 {
     public string[] Keys { get; } = keys;

@@ -6,23 +6,31 @@ namespace SkEditor.Utilities.Docs.SkriptMC;
 
 public class SkriptMcDocEntry : IDocumentationEntry
 {
-    [JsonPropertyName("example")] public required string RawExample;
+    [JsonPropertyName("example")]
+    public required string RawExample;
 
     public IDocumentationExample Example => new SkriptMcDocExample { Example = RawExample };
 
-    [JsonPropertyName("category")] public required string RawType { get; set; }
+    [JsonPropertyName("category")]
+    public required string RawType { get; set; }
 
-    [JsonPropertyName("name")] public required string Name { get; set; }
+    [JsonPropertyName("name")]
+    public required string Name { get; set; }
 
-    [JsonPropertyName("content")] public required string Description { get; set; }
+    [JsonPropertyName("content")]
+    public required string Description { get; set; }
 
-    [JsonPropertyName("pattern")] public required string Patterns { get; set; }
+    [JsonPropertyName("pattern")]
+    public required string Patterns { get; set; }
 
-    [JsonPropertyName("id")] public required string Id { get; set; }
+    [JsonPropertyName("id")]
+    public required string Id { get; set; }
 
-    [JsonPropertyName("addon")] public required string Addon { get; set; }
+    [JsonPropertyName("addon")]
+    public required string Addon { get; set; }
 
-    [JsonPropertyName("version")] public required string Version { get; set; }
+    [JsonPropertyName("version")]
+    public required string Version { get; set; }
 
     public IDocumentationEntry.Type DocType
     {

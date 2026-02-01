@@ -8,19 +8,27 @@ namespace SkEditor.Utilities.Docs.SkriptHub;
 public class SkriptHubDocEntry : IDocumentationEntry
 {
     private string _addon = string.Empty;
-    [JsonPropertyName("addon")] public required SkriptHubAddon? AddonObj { get; set; }
 
-    [JsonPropertyName("syntax_type")] public required string RawDocType { get; set; }
+    [JsonPropertyName("addon")]
+    public required SkriptHubAddon? AddonObj { get; set; }
 
-    [JsonPropertyName("examples")] public required List<SkriptHubDocExample>? Examples { get; set; }
+    [JsonPropertyName("syntax_type")]
+    public required string RawDocType { get; set; }
 
-    [JsonPropertyName("title")] public required string Name { get; set; }
+    [JsonPropertyName("examples")]
+    public required List<SkriptHubDocExample>? Examples { get; set; }
 
-    [JsonPropertyName("description")] public required string Description { get; set; }
+    [JsonPropertyName("title")]
+    public required string Name { get; set; }
 
-    [JsonPropertyName("syntax_pattern")] public required string Patterns { get; set; }
+    [JsonPropertyName("description")]
+    public required string Description { get; set; }
 
-    [JsonPropertyName("id")] public required string Id { get; set; }
+    [JsonPropertyName("syntax_pattern")]
+    public required string Patterns { get; set; }
+
+    [JsonPropertyName("id")]
+    public required string Id { get; set; }
 
     [JsonPropertyName("addon_name")]
     public string Addon
@@ -39,11 +47,14 @@ public class SkriptHubDocEntry : IDocumentationEntry
         set => RawDocType = value.ToString().ToLower();
     }
 
-    [JsonPropertyName("return_type")] public string? ReturnType { get; set; }
+    [JsonPropertyName("return_type")]
+    public string? ReturnType { get; set; }
 
-    [JsonPropertyName("type_usage")] public string? Changers { get; set; }
+    [JsonPropertyName("type_usage")]
+    public string? Changers { get; set; }
 
-    [JsonPropertyName("event_values")] public string? EventValues { get; set; }
+    [JsonPropertyName("event_values")]
+    public string? EventValues { get; set; }
 
     public DocProvider Provider => DocProvider.SkriptHub;
 
@@ -66,9 +77,11 @@ public class SkriptHubDocEntry : IDocumentationEntry
 [Serializable]
 public class SkriptHubAddon
 {
-    [JsonPropertyName("name")] public required string Name { get; set; }
+    [JsonPropertyName("name")]
+    public required string Name { get; set; }
 
-    [JsonPropertyName("link_to_addon")] public required string Link { get; set; }
+    [JsonPropertyName("link_to_addon")]
+    public required string Link { get; set; }
 }
 
 [JsonSerializable(typeof(SkriptHubDocEntry))]

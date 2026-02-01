@@ -52,7 +52,8 @@ public interface IDocumentationEntry
 
     #region Visual Utilities
 
-    [JsonIgnore] string Since => $"Since v{Version}";
+    [JsonIgnore]
+    string Since => $"Since v{Version}";
 
     #endregion
 

@@ -103,21 +103,29 @@ public class MarketplaceLoader
 [JsonDerivedType(typeof(ZipAddonItem), "ZipAddon")]
 public class MarketplaceItem
 {
-    [JsonPropertyName("name")] public required string ItemName { get; set; }
+    [JsonPropertyName("name")]
+    public required string ItemName { get; set; }
 
-    [JsonIgnore] public virtual string ItemType => "Unknown";
+    [JsonIgnore]
+    public virtual string ItemType => "Unknown";
 
-    [JsonPropertyName("shortDescription")] public required string ItemShortDescription { get; set; }
+    [JsonPropertyName("shortDescription")]
+    public required string ItemShortDescription { get; set; }
 
-    [JsonPropertyName("icon")] public required string ItemImageUrl { get; set; }
+    [JsonPropertyName("icon")]
+    public required string ItemImageUrl { get; set; }
 
-    [JsonPropertyName("longDescription")] public required string ItemLongDescription { get; set; }
+    [JsonPropertyName("longDescription")]
+    public required string ItemLongDescription { get; set; }
 
-    [JsonPropertyName("version")] public required string ItemVersion { get; set; }
+    [JsonPropertyName("version")]
+    public required string ItemVersion { get; set; }
 
-    [JsonPropertyName("author")] public required string ItemAuthor { get; set; }
+    [JsonPropertyName("author")]
+    public required string ItemAuthor { get; set; }
 
-    [JsonIgnore] public MarketplaceWindow? Marketplace { get; set; }
+    [JsonIgnore]
+    public MarketplaceWindow? Marketplace { get; set; }
 
     public virtual Task Install()
     {
