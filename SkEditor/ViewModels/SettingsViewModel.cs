@@ -15,7 +15,7 @@ public partial class SettingsViewModel : ObservableObject
     private string _currentFont = string.Empty;
 
     [ObservableProperty]
-    private string _version = string.Empty;
+    private string _skEditorString = string.Empty;
 
     public SettingsViewModel()
     {
@@ -55,7 +55,6 @@ public partial class SettingsViewModel : ObservableObject
         CurrentFont = Translation.Get("SettingsPersonalizationFontDescription")
             .Replace("{0}", SkEditorAPI.Configs.GetAppSettings().EditorFontFamily ?? "Default (JetBrains Mono)");
 
-        Version = Translation.Get("SettingsAboutVersionDescription").Replace("{0}",
-            $"{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}");
+        SkEditorString = $"SkEditor v{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}";
     }
 }

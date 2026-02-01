@@ -50,9 +50,10 @@
 
     <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="8">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="200" Width="200" />
-                <StackPanel Margin="30">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="48">
+                <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="200" Width="200"/>
+                <!-- <ui:IconSourceElement Name="SkEditorIcon" IconSource="{StaticResource SkEditorIcon}" Height="200" Width="200" /> -->
+                <StackPanel Margin="0,0,0,20" VerticalAlignment="Center">
                     <TextBlock Text="SkEditor" FontSize="40" FontWeight="DemiBold"
                                Effect="{StaticResource WelcomeScreenTextShadowEffect}" />
                     <TextBlock Text="{Binding Version}" FontSize="26" FontWeight="Normal" Foreground="#ccffffff" />
@@ -67,8 +68,8 @@
                 </ItemsRepeater.Layout>
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate DataType="local:WelcomeTabControl+WelcomeScreenSection">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,5"
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="SemiBold"
                                        Effect="{StaticResource WelcomeScreenTextShadowEffect}" />
                             <ItemsRepeater ItemsSource="{Binding Entries}">
                                 <ItemsRepeater.Layout>

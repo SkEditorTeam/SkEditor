@@ -52,7 +52,11 @@ public partial class WelcomeTabControl : UserControl
 
             new WelcomeScreenElement(Translation.Get("WelcomeNeedHelpDocumentation"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
-                CreateSymbolIcon(Symbol.Book))
+                CreateSymbolIcon(Symbol.Book)),
+            
+            new WelcomeScreenElement("Support SkEditor",
+                new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://ko-fi.com/notro")),
+                CreateSymbolIcon(Symbol.Heart))
         ]);
 
         WelcomeSections.Add(gettingStarted);

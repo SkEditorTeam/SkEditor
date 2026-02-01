@@ -22,16 +22,17 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="8">
 
-                <ui:SettingsExpander Header="{DynamicResource SettingsAboutSkEditor}"
-                                     IconSource="{StaticResource AppIcon}"
-                                     Description="{DynamicResource SettingsAboutSkEditorDescription}" />
-
-                <ui:SettingsExpander Header="{DynamicResource SettingsAboutVersion}"
-                                     IconSource="{icons:SymbolIconSource Symbol=Wrench}">
-                    <ui:SettingsExpander.Description>
-                        <Binding Source="{StaticResource SettingsViewModel}" Path="Version" />
-                    </ui:SettingsExpander.Description>
+                <ui:SettingsExpander IconSource="{StaticResource AppIcon}"
+                                     Description="{DynamicResource SettingsAboutSkEditorDescription}">
+                    <ui:SettingsExpander.Header>
+                        <Binding Source="{StaticResource SettingsViewModel}" Path="SkEditorString" />
+                    </ui:SettingsExpander.Header>
                 </ui:SettingsExpander>
+
+                <ui:SettingsExpander Name="SupportSkEditorItem" Header="Support SkEditor"
+                                     IconSource="{icons:SymbolIconSource Symbol=Heart}"
+                                     Description="If you enjoy using SkEditor, consider supporting its development by buying me a coffee! Your support helps keep the project alive and thriving."
+                                     IsClickEnabled="True" />
 
                 <ui:SettingsExpander Name="DocumentationItem" Header="{DynamicResource SettingsAboutDocumentation}"
                                      IconSource="{icons:SymbolIconSource Symbol=Book}"
