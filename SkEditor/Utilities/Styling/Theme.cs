@@ -14,6 +14,9 @@ public class Theme
 
     public ImmutableSolidColorBrush BackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
     public ImmutableSolidColorBrush SmallWindowBackgroundColor { get; set; } = new(Color.Parse("#ff0f0f0f"));
+    public ImmutableSolidColorBrush DialogTopBackgroundColor { get; set; } = new(Color.Parse("#121212"));
+    public ImmutableSolidColorBrush DialogTopBorderColor { get; set; } = new(Color.Parse("#75161616"));
+    public ImmutableSolidColorBrush DialogBackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
     public ImmutableSolidColorBrush EditorBackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
     public ImmutableSolidColorBrush EditorTextColor { get; set; } = new(Color.Parse("#ffcdcaca"));
     public ImmutableSolidColorBrush LineNumbersColor { get; set; } = new(Color.Parse("#ff8a8a8a"));
@@ -43,6 +46,9 @@ public class Theme
         {
             "BackgroundColor" => BackgroundColor,
             "SmallWindowBackgroundColor" => SmallWindowBackgroundColor,
+            "DialogTopBackgroundColor" => DialogTopBackgroundColor,
+            "DialogTopBorderColor" => DialogTopBorderColor,
+            "DialogBackgroundColor" => DialogBackgroundColor,
             "EditorBackgroundColor" => EditorBackgroundColor,
             "EditorTextColor" => EditorTextColor,
             "LineNumbersColor" => LineNumbersColor,
@@ -68,6 +74,15 @@ public class Theme
                 break;
             case "SmallWindowBackgroundColor":
                 SmallWindowBackgroundColor = brush;
+                break;
+            case "DialogTopBackgroundColor":
+                DialogTopBackgroundColor = brush;
+                break;
+            case "DialogTopBorderColor":
+                DialogTopBorderColor = brush;
+                break;
+            case "DialogBackgroundColor":
+                DialogBackgroundColor = brush;
                 break;
             case "EditorBackgroundColor":
                 EditorBackgroundColor = brush;

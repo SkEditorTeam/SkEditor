@@ -26,6 +26,9 @@ public class ThemeEditor
             "SmallWindowBackgroundColor",
             ["SmallWindowBackgroundColor", "ContentDialogBackground", "TaskDialogButtonAreaBackground"]
         },
+        { "DialogTopBackgroundColor", ["DialogTopBackgroundColor"] },
+        { "DialogTopBorderColor", ["DialogTopBorderColor"] },
+        { "DialogBackgroundColor", ["DialogBackgroundColor"] },
         { "EditorBackgroundColor", ["EditorBackgroundColor"] },
         { "EditorTextColor", ["EditorTextColor"] },
         { "LineNumbersColor", ["LineNumbersColor"] },
