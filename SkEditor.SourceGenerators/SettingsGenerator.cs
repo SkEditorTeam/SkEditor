@@ -36,21 +36,25 @@ public class SettingsGenerator : IIncrementalGenerator
                 ImmutableArray<IPropertySymbol> properties =
                     [..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p => p.SetMethod != null)];
 
-                string copyFromCode = $$"""
-                                        namespace {{namespaceName}}
-                                        {
-                                            public partial class {{className}}
-                                            {
-                                                protected override void CopyFrom({{className}} other)
-                                                {
-                                                    if (other == null) return;
-                                                    {{string.Join("\n            ", properties.Select(p => $"{p.Name} = other.{p.Name};"))}}
-                                                }
-                                            }
-                                        }
+                string rawCode = $$"""
+                                   namespace {{namespaceName}};
+                                   public partial class {{className}}
+                                   {
+                                       protected override void CopyFrom({{className}} other)
+                                       {
+                                           if (other == null) return;
+                                           {{string.Join("\n", properties.Select(p => $"{p.Name} = other.{p.Name};"))}}
+                                       }
+                                   }
+                                   """;
 
-                                        """;
-                ctx.AddSource($"{className}_CopyFrom.g.cs", copyFromCode);
+
+                var formattedCode = CSharpSyntaxTree.ParseText(rawCode)
+                    .GetRoot()
+                    .NormalizeWhitespace()
+                    .ToFullString();
+
+                ctx.AddSource($"{className}_CopyFrom.g.cs", formattedCode);
             }
         });
     }
