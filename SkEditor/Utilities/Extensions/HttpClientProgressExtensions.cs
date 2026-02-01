@@ -26,10 +26,7 @@ public static class HttpClientProgressExtensions
             new(totalBytes => progress.Report(GetProgressPercentage(totalBytes, contentLength.Value)));
         await download.CopyToAsync(destination, 81920, progressWrapper, cancellationToken);
 
-        static float GetProgressPercentage(float totalBytes, float currentBytes)
-        {
-            return totalBytes / currentBytes * 100f;
-        }
+        static float GetProgressPercentage(float totalBytes, float currentBytes) => totalBytes / currentBytes * 100f;
     }
 
     private static async Task CopyToAsync(this Stream source, Stream destination, int bufferSize,

@@ -22,10 +22,7 @@ public partial class ImageViewer : UserControl
     }
 
     [Obsolete("This constructor is for designer use only.", true)]
-    public ImageViewer()
-    {
-        InitializeComponent();
-    }
+    public ImageViewer() => InitializeComponent();
 
     private void AssignCommands()
     {

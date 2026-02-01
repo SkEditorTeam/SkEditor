@@ -39,12 +39,14 @@ public partial class Configs : IConfigs
 
     public AppSettings GetAppSettings()
     {
-        return GetConfig<AppSettings>() ?? throw new InvalidOperationException("AppSettings config not found.");
+        return GetConfig<AppSettings>() ??
+               throw new InvalidOperationException("AppSettings config not found.");
     }
 
     public SecretsConfig GetSecretsConfig()
     {
-        return GetConfig<SecretsConfig>() ?? throw new InvalidOperationException("SecretsConfig config not found.");
+        return GetConfig<SecretsConfig>() ??
+               throw new InvalidOperationException("SecretsConfig config not found.");
     }
 
     public ExperimentsConfig GetExperimentsConfig()
@@ -55,12 +57,15 @@ public partial class Configs : IConfigs
 
     public StateConfig GetStateConfig()
     {
-        return GetConfig<StateConfig>() ?? throw new InvalidOperationException("StateConfig config not found.");
+        return GetConfig<StateConfig>() ??
+               throw new InvalidOperationException("StateConfig config not found.");
     }
 
     public BinarySettings GetBinarySettings()
     {
-        return GetConfig<BinarySettings>() ?? throw new InvalidOperationException("BinarySettings config not found.");
+        return GetConfig<BinarySettings>() ??
+               throw new InvalidOperationException(
+                   "BinarySettings config not found.");
     }
 
     public T? GetConfig<T>() where T : IConfig

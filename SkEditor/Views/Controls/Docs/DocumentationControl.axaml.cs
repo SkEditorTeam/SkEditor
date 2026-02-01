@@ -165,10 +165,12 @@ public partial class DocumentationControl : UserControl
 
     private static List<DocProvider> GetAvailableProviders()
     {
-        return IDocProvider.Providers.Where(pair => pair.Value.IsAvailable()).Select(pair => pair.Key).ToList();
+        return IDocProvider.Providers
+            .Where(pair => pair.Value.IsAvailable()).Select(pair => pair.Key).ToList();
     }
 
-    private StackPanel CreateEntryWithIcon(IconSource icon, string content, FontWeight fontWeight = FontWeight.Normal)
+    private StackPanel CreateEntryWithIcon(IconSource icon, string content,
+        FontWeight fontWeight = FontWeight.Normal)
     {
         return new StackPanel
         {
@@ -194,11 +196,9 @@ public partial class DocumentationControl : UserControl
 
     private void PopulateProviderBox(List<DocProvider> availableProviders)
     {
-        StackPanel CreatePanel(DocProvider provider, string content)
-        {
-            return CreateEntryWithIcon(IDocProvider.Providers[provider].Icon, content,
+        StackPanel CreatePanel(DocProvider provider, string content) =>
+            CreateEntryWithIcon(IDocProvider.Providers[provider].Icon, content,
                 provider == DocProvider.SkriptHub ? FontWeight.SemiBold : FontWeight.Normal);
-        }
 
         ProviderBox.Items.Clear();
         foreach (DocProvider provider in availableProviders)

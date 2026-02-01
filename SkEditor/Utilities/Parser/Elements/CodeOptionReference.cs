@@ -37,7 +37,8 @@ public class CodeOptionReference : INameableCodeElement
 
     public void Rename(string newName)
     {
-        Section.Parser.GetOptionsSection()?.Options.ToList().Find(o => o.Name == Name)?.Rename(newName);
+        Section.Parser.GetOptionsSection()?.Options.ToList().Find(o => o.Name == Name)
+            ?.Rename(newName);
     }
 
     public override string ToString()

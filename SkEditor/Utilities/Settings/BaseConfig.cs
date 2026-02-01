@@ -20,6 +20,9 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
     private readonly SemaphoreSlim _saveLock = new(1, 1);
     private CancellationTokenSource? _saveCts;
 
+    /// <summary>
+    ///     Type information for JSON serialization and deserialization.
+    /// </summary>
     protected abstract JsonTypeInfo<T> TypeInfo { get; }
 
     private string ConfigPath => Path.Combine(_appDataFolderPath, FileName);

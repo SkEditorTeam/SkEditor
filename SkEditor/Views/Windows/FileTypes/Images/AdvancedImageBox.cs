@@ -144,10 +144,7 @@ public sealed class AdvancedImageBox : TemplatedControl
         /// <summary>
         ///     Initializes a new instance of the <see cref="ZoomLevelCollection" /> class.
         /// </summary>
-        public ZoomLevelCollection()
-        {
-            List = new SortedList<int, int>();
-        }
+        public ZoomLevelCollection() => List = new SortedList<int, int>();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ZoomLevelCollection" /> class.

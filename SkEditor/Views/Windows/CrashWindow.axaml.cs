@@ -17,10 +17,7 @@ public partial class CrashWindow : AppWindow
     }
 
     [Obsolete("This constructor is for designer use only.", true)]
-    public CrashWindow()
-    {
-        InitializeComponent();
-    }
+    public CrashWindow() => InitializeComponent();
 
     public void AssignCommands()
     {

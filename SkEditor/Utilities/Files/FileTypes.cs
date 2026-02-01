@@ -56,10 +56,8 @@ public static class FileTypes
 
     public class ImageAssociation : FileAssociation
     {
-        public ImageAssociation()
-        {
-            SupportedExtensions = [".png", ".jpg", ".ico", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"];
-        }
+        public ImageAssociation() => SupportedExtensions =
+            [".png", ".jpg", ".ico", ".jpeg", ".gif", ".bmp", ".tiff", ".webp"];
 
         public override FileType? Handle(string path)
         {

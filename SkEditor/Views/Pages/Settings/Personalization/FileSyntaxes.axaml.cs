@@ -122,6 +122,7 @@ public partial class FileSyntaxes : UserControl
 
     private void AssignCommands()
     {
-        Title.BackButton.Command = new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(PersonalizationPage)));
+        Title.BackButton.Command =
+            new RelayCommand(() => SettingsWindow.NavigateToPage(typeof(PersonalizationPage)));
     }
 }

@@ -12,10 +12,7 @@ public partial class AssociationItemView : UserControl
     public static readonly AvaloniaProperty<string> AssociationDescription =
         AvaloniaProperty.Register<AssociationItemView, string>(nameof(AssociationDescription));
 
-    public AssociationItemView()
-    {
-        InitializeComponent();
-    }
+    public AssociationItemView() => InitializeComponent();
 
     public string? Source
     {

@@ -45,10 +45,7 @@ public class FileHandler
         }
     };
 
-    static FileHandler()
-    {
-        _ = ProcessSaveQueueAsync();
-    }
+    static FileHandler() => _ = ProcessSaveQueueAsync();
 
     private static async Task ProcessSaveQueueAsync()
     {

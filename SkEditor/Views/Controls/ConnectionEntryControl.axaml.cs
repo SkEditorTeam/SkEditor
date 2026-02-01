@@ -44,8 +44,5 @@ public partial class ConnectionEntryControl : UserControl
     }
 
     [Obsolete("This constructor is for designer use only.", true)]
-    public ConnectionEntryControl()
-    {
-        InitializeComponent();
-    }
+    public ConnectionEntryControl() => InitializeComponent();
 }

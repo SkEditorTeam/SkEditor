@@ -73,22 +73,18 @@ public interface IDocumentationEntry
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
-        static IBrush GetColor(string key)
-        {
-            return Application.Current?.TryGetResource(key, out object? color) == true && color is Color parsedColor
+        static IBrush GetColor(string key) =>
+            Application.Current?.TryGetResource(key, out object? color) == true && color is Color parsedColor
                 ? new SolidColorBrush(parsedColor)
                 : new SolidColorBrush(Colors.Black);
-        }
 
-        static SymbolIconSource CreateIcon(Symbol symbol, string? colorKey = null)
-        {
-            return new SymbolIconSource
+        static SymbolIconSource CreateIcon(Symbol symbol, string? colorKey = null) =>
+            new()
             {
                 IconVariant = IconVariant.Filled,
                 Symbol = symbol,
                 Foreground = colorKey != null ? GetColor(colorKey) : null
             };
-        }
     }
 
     #region Common Properties

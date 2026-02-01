@@ -50,10 +50,7 @@ public partial class MainMenuControl : UserControl
         SkEditorAPI.Configs.GetAppSettings().PropertyChanged += (_, _) => SetVisibility();
         return;
 
-        void SetVisibility()
-        {
-            MenuItemDevTools.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
-        }
+        void SetVisibility() => MenuItemDevTools.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
     }
 
     private void AssignCommands()

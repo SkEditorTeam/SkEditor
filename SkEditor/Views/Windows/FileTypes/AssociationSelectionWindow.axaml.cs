@@ -61,10 +61,7 @@ public partial class AssociationSelectionWindow : AppWindow
     }
 
     [Obsolete("This constructor is for designer use only.", true)]
-    public AssociationSelectionWindow()
-    {
-        InitializeComponent();
-    }
+    public AssociationSelectionWindow() => InitializeComponent();
 
     public Utilities.Files.FileTypes.FileAssociation? SelectedAssociation { get; set; }
 }

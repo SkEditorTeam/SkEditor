@@ -15,10 +15,7 @@ public partial class SettingsCategorySeparator : UserControl
     public static readonly StyledProperty<string?> TitleKeyProperty =
         AvaloniaProperty.Register<SettingsCategorySeparator, string?>(nameof(TitleKey));
 
-    public SettingsCategorySeparator()
-    {
-        InitializeComponent();
-    }
+    public SettingsCategorySeparator() => InitializeComponent();
 
     public string? Title
     {

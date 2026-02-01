@@ -82,15 +82,9 @@ public class EditorMargin : AbstractMargin
 
         return new Size(totalWidth, 0);
 
-        string? GroupByKeySelector(MarginIconData icon)
-        {
-            return icon?.ColumnKey;
-        }
+        string? GroupByKeySelector(MarginIconData icon) => icon?.ColumnKey;
 
-        double GetWidthSelector(MarginIconData icon)
-        {
-            return icon.GetWidth(scale);
-        }
+        double GetWidthSelector(MarginIconData icon) => icon.GetWidth(scale);
     }
 
 

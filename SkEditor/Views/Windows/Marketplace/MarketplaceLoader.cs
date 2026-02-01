@@ -66,29 +66,25 @@ public class MarketplaceLoader
 
     private static MarketplaceItem FormatUrls(string url, MarketplaceItem item)
     {
-        static string CombineUrls(string baseUrl, string relativeUrl)
-        {
-            return baseUrl + "/" + relativeUrl;
-        }
+        static string CombineUrls(string baseUrl, string relativeUrl) => baseUrl + "/" + relativeUrl;
 
         item.ItemImageUrl = CombineUrls(url, item.ItemImageUrl);
-        if (item is AddonItem addonItem)
+        switch (item)
         {
-            addonItem.ItemFileUrl = CombineUrls(url, addonItem.ItemFileUrl);
-        }
-        else if (item is ThemeItem themeItem)
-        {
-            themeItem.ItemFileUrl = CombineUrls(url, themeItem.ItemFileUrl);
-        }
-        else if (item is SyntaxItem syntaxItem)
-        {
-            syntaxItem.ItemSyntaxFolders = syntaxItem.ItemSyntaxFolders.Select(x => CombineUrls(url, x)).ToArray();
-        }
-        else if (item is ThemeWithSyntaxItem themeWithSyntaxItem)
-        {
-            themeWithSyntaxItem.ThemeFileUrl = CombineUrls(url, themeWithSyntaxItem.ThemeFileUrl);
-            themeWithSyntaxItem.SyntaxFolders =
-                themeWithSyntaxItem.SyntaxFolders.Select(x => CombineUrls(url, x)).ToArray();
+            case AddonItem addonItem:
+                addonItem.ItemFileUrl = CombineUrls(url, addonItem.ItemFileUrl);
+                break;
+            case ThemeItem themeItem:
+                themeItem.ItemFileUrl = CombineUrls(url, themeItem.ItemFileUrl);
+                break;
+            case SyntaxItem syntaxItem:
+                syntaxItem.ItemSyntaxFolders = syntaxItem.ItemSyntaxFolders.Select(x => CombineUrls(url, x)).ToArray();
+                break;
+            case ThemeWithSyntaxItem themeWithSyntaxItem:
+                themeWithSyntaxItem.ThemeFileUrl = CombineUrls(url, themeWithSyntaxItem.ThemeFileUrl);
+                themeWithSyntaxItem.SyntaxFolders =
+                    themeWithSyntaxItem.SyntaxFolders.Select(x => CombineUrls(url, x)).ToArray();
+                break;
         }
 
         return item;

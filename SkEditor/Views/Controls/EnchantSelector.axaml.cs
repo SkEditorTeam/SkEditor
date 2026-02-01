@@ -4,8 +4,5 @@ namespace SkEditor.Views.Controls;
 
 public partial class EnchantSelector : UserControl
 {
-    public EnchantSelector()
-    {
-        InitializeComponent();
-    }
+    public EnchantSelector() => InitializeComponent();
 }

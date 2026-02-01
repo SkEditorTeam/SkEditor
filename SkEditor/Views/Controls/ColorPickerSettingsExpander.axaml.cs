@@ -8,10 +8,7 @@ public partial class ColorPickerSettingsExpander : UserControl
     public static readonly StyledProperty<string> ExpanderHeaderProperty =
         AvaloniaProperty.Register<ColorPickerSettingsExpander, string>(nameof(ExpanderHeader));
 
-    public ColorPickerSettingsExpander()
-    {
-        InitializeComponent();
-    }
+    public ColorPickerSettingsExpander() => InitializeComponent();
 
     public string ExpanderHeader
     {
