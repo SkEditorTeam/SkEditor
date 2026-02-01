@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -33,46 +34,103 @@ public class ThemeGenerator : IIncrementalGenerator
             {
                 string className = classSymbol!.Name;
                 string namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
+
                 ImmutableArray<IPropertySymbol> properties =
                 [
                     ..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p =>
                         p.SetMethod != null && p.Type.ToDisplayString() ==
-                        "Avalonia.Media.Immutable.ImmutableSolidColorBrush")
+                        "Avalonia.Media.Immutable.ImmutableSolidColorBrush" && p.GetAttributes().Any(attr =>
+                            attr.AttributeClass?.ToDisplayString() ==
+                            "SkEditor.Utilities.Styling.Attributes.ThemeResourceAttribute"))
                 ];
 
-                string copyFromCode = $$"""
-                                        using System;
-                                        using Avalonia.Media.Immutable;
+                StringBuilder getBrushSwitchArms = new();
+                foreach (var prop in properties)
+                {
+                    getBrushSwitchArms.AppendLine($"\"{prop.Name}\" => {prop.Name},");
+                }
 
-                                        namespace {{namespaceName}};
-                                        public partial class {{className}}
-                                        {
-                                            public ImmutableSolidColorBrush GetBrushByName(string propertyName)
-                                            {
-                                                return propertyName switch
-                                                {
-                                                    {{string.Join("\n            ", properties.Select(p => $"\"{p.Name}\" => {p.Name},"))}}
-                                                    _ => throw new ArgumentException($"Property {propertyName} not found in Theme")
-                                                };
-                                            }
-                                            
-                                            public void SetBrush(string propertyName, ImmutableSolidColorBrush brush)
-                                            {
-                                                switch (propertyName)
-                                                {
-                                                    {{string.Join("\n            ", properties.Select(p => $"""
-                                                         case "{p.Name}":
-                                                                        {p.Name} = brush;
-                                                                        break;
-                                                         """))}}
-                                                    default:
-                                                        throw new ArgumentException($"Property {propertyName} not found in Theme");
-                                                }
-                                            }
-                                        }
+                StringBuilder setBrushCases = new();
+                foreach (var prop in properties)
+                {
+                    setBrushCases.AppendLine($"""
+                                                  case "{prop.Name}":
+                                                      {prop.Name} = brush;
+                                                      break;
+                                              """);
+                }
 
-                                        """;
-                ctx.AddSource($"{className}_Bindings.g.cs", copyFromCode);
+                StringBuilder themeToResourceDictEntries = new();
+                foreach (var prop in properties)
+                {
+                    var attr = prop.GetAttributes().First(a =>
+                        a.AttributeClass?.ToDisplayString() ==
+                        "SkEditor.Utilities.Styling.Attributes.ThemeResourceAttribute");
+
+                    var keys = attr.ConstructorArguments.Length > 0
+                        ? attr.ConstructorArguments[0].Values.Select(v => v.Value?.ToString() ?? "").ToList()
+                        : [];
+
+                    bool mapPropertyName = true;
+                    var namedArg = attr.NamedArguments.FirstOrDefault(kv => kv.Key == "MapPropertyName");
+
+                    if (namedArg.Key is not null && namedArg.Value.Value is bool explicitValue)
+                    {
+                        mapPropertyName = explicitValue;
+                    }
+
+                    if (mapPropertyName)
+                    {
+                        keys.Add(prop.Name);
+                    }
+
+                    var finalKeys = keys.Distinct();
+
+                    themeToResourceDictEntries.AppendLine(
+                        $"{{ \"{prop.Name}\", [ {string.Join(", ", finalKeys.Select(k => $"\"{k}\""))} ] }},");
+                }
+
+                string rawCode = $$"""
+                                   using System;
+                                   using System.Collections.Generic;
+                                   using Avalonia.Media.Immutable;
+
+                                   namespace {{namespaceName}};
+
+                                   public partial class {{className}}
+                                   {
+                                       public ImmutableSolidColorBrush GetBrushByName(string propertyName)
+                                       {
+                                           return propertyName switch
+                                           {
+                                   {{getBrushSwitchArms}}
+                                               _ => throw new ArgumentException($"Property {propertyName} not found in Theme")
+                                           };
+                                       }
+                                       
+                                       public void SetBrush(string propertyName, ImmutableSolidColorBrush brush)
+                                       {
+                                           switch (propertyName)
+                                           {
+                                   {{setBrushCases}}
+                                               default:
+                                                   throw new ArgumentException($"Property {propertyName} not found in Theme");
+                                           }
+                                       }
+                                       
+                                       public static readonly Dictionary<string, string[]> ThemeToResourceDictionary = new()
+                                       {
+                                       {{themeToResourceDictEntries}}
+                                       };
+                                   }
+                                   """;
+
+                var formattedCode = CSharpSyntaxTree.ParseText(rawCode)
+                    .GetRoot()
+                    .NormalizeWhitespace()
+                    .ToFullString();
+
+                ctx.AddSource($"{className}_Bindings.g.cs", formattedCode);
             }
         });
     }

@@ -13,23 +13,49 @@ public partial class Theme
 
     public string Name { get; set; } = string.Empty;
 
-    public ImmutableSolidColorBrush BackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
+    [ThemeResource] public ImmutableSolidColorBrush BackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
+
+    [ThemeResource("ContentDialogBackground", "TaskDialogButtonAreaBackground")]
     public ImmutableSolidColorBrush SmallWindowBackgroundColor { get; set; } = new(Color.Parse("#ff0f0f0f"));
+
+    [ThemeResource]
     public ImmutableSolidColorBrush DialogTopBackgroundColor { get; set; } = new(Color.Parse("#121212"));
-    public ImmutableSolidColorBrush DialogTopBorderColor { get; set; } = new(Color.Parse("#75161616"));
-    public ImmutableSolidColorBrush DialogBackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
-    public ImmutableSolidColorBrush EditorBackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
-    public ImmutableSolidColorBrush EditorTextColor { get; set; } = new(Color.Parse("#ffcdcaca"));
-    public ImmutableSolidColorBrush LineNumbersColor { get; set; } = new(Color.Parse("#ff8a8a8a"));
-    public ImmutableSolidColorBrush SelectionColor { get; set; } = new(Color.Parse("#641a6096"));
+
+    [ThemeResource] public ImmutableSolidColorBrush DialogTopBorderColor { get; set; } = new(Color.Parse("#75161616"));
+
+    [ThemeResource] public ImmutableSolidColorBrush DialogBackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
+
+    [ThemeResource] public ImmutableSolidColorBrush EditorBackgroundColor { get; set; } = new(Color.Parse("#ff0d0d0d"));
+
+    [ThemeResource] public ImmutableSolidColorBrush EditorTextColor { get; set; } = new(Color.Parse("#ffcdcaca"));
+
+    [ThemeResource] public ImmutableSolidColorBrush LineNumbersColor { get; set; } = new(Color.Parse("#ff8a8a8a"));
+
+    [ThemeResource] public ImmutableSolidColorBrush SelectionColor { get; set; } = new(Color.Parse("#641a6096"));
+
+    [ThemeResource("TabViewItemHeaderBackgroundSelected", MapPropertyName = false)]
     public ImmutableSolidColorBrush SelectedTabItemBackground { get; set; } = new(Color.Parse("#ff161616"));
+
+    [ThemeResource("TabViewSelectedItemBorderBrush", MapPropertyName = false)]
     public ImmutableSolidColorBrush SelectedTabItemBorder { get; set; } = new(Color.Parse("#00181818"));
+
+    [ThemeResource("MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground",
+        MapPropertyName = false)]
     public ImmutableSolidColorBrush MenuBackground { get; set; } = new(Color.Parse("#ff151515"));
+
+    [ThemeResource("MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush",
+        MapPropertyName = false)]
     public ImmutableSolidColorBrush MenuBorder { get; set; } = new(Color.Parse("#ff262626"));
+
+    [ThemeResource("TextControlBackgroundFocused", MapPropertyName = false)]
     public ImmutableSolidColorBrush TextBoxFocusedBackground { get; set; } = new(Color.Parse("#ff191919"));
-    public ImmutableSolidColorBrush CurrentLineBackground { get; set; } = new(Color.Parse("#05FFFFFF"));
-    public ImmutableSolidColorBrush CurrentLineBorder { get; set; } = new(Color.Parse("#0DFFFFFF"));
-    public ImmutableSolidColorBrush AccentColor { get; set; } = new(Colors.White);
+
+    [ThemeResource] public ImmutableSolidColorBrush CurrentLineBackground { get; set; } = new(Color.Parse("#05FFFFFF"));
+
+    [ThemeResource] public ImmutableSolidColorBrush CurrentLineBorder { get; set; } = new(Color.Parse("#0DFFFFFF"));
+
+    [ThemeResource] public ImmutableSolidColorBrush AccentColor { get; set; } = new(Colors.White);
+
     public string? CustomFont { get; set; }
     public bool UseMicaEffect { get; set; }
 

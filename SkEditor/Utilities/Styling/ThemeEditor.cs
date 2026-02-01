@@ -19,35 +19,6 @@ namespace SkEditor.Utilities.Styling;
 
 public class ThemeEditor
 {
-    public static readonly Dictionary<string, string[]> ThemeToResourceDictionary = new()
-    {
-        { "BackgroundColor", ["BackgroundColor"] },
-        {
-            "SmallWindowBackgroundColor",
-            ["SmallWindowBackgroundColor", "ContentDialogBackground", "TaskDialogButtonAreaBackground"]
-        },
-        { "DialogTopBackgroundColor", ["DialogTopBackgroundColor"] },
-        { "DialogTopBorderColor", ["DialogTopBorderColor"] },
-        { "DialogBackgroundColor", ["DialogBackgroundColor"] },
-        { "EditorBackgroundColor", ["EditorBackgroundColor"] },
-        { "EditorTextColor", ["EditorTextColor"] },
-        { "LineNumbersColor", ["LineNumbersColor"] },
-        { "SelectionColor", ["SelectionColor"] },
-        { "SelectedTabItemBackground", ["TabViewItemHeaderBackgroundSelected"] },
-        { "SelectedTabItemBorder", ["TabViewSelectedItemBorderBrush"] },
-        {
-            "MenuBackground",
-            ["MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground"]
-        },
-        {
-            "MenuBorder",
-            ["MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush"]
-        },
-        { "TextBoxFocusedBackground", ["TextControlBackgroundFocused"] },
-        { "CurrentLineBackground", ["CurrentLineBackground"] },
-        { "CurrentLineBorder", ["CurrentLineBorder"] }
-    };
-
     private static bool _defaultColorsCollected;
 
     public static List<Theme> Themes { get; set; } = [];
@@ -184,7 +155,7 @@ public class ThemeEditor
             return;
         }
 
-        foreach (KeyValuePair<string, string[]> item in ThemeToResourceDictionary)
+        foreach (KeyValuePair<string, string[]> item in Theme.ThemeToResourceDictionary)
         {
             ImmutableSolidColorBrush brush = CurrentTheme.GetBrushByName(item.Key);
 
@@ -296,7 +267,7 @@ public class ThemeEditor
     {
         DefaultColors.Clear();
 
-        foreach (string resourceKey in ThemeToResourceDictionary.SelectMany(item => item.Value))
+        foreach (string resourceKey in Theme.ThemeToResourceDictionary.SelectMany(item => item.Value))
         {
             object? defaultColor = null;
             if (DefaultColors.ContainsKey(resourceKey) ||
