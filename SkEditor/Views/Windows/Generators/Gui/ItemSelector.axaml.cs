@@ -11,23 +11,22 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
+using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
-using SkEditor.Data;
 using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
 public partial class ItemSelector : AppWindow
 {
-    private readonly ItemBindings _itemBindings = new();
+    public ObservableCollection<ComboBoxItem> FilteredItems { get; } = [];
+    public ObservableCollection<Item> Items { get; } = [];
 
     public ItemSelector()
     {
         InitializeComponent();
-
-        DataContext = _itemBindings;
 
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;
@@ -41,7 +40,7 @@ public partial class ItemSelector : AppWindow
                 return;
             }
 
-            Item item = _itemBindings.Items.First(x => x.Name.Equals(comboBoxItem.Tag?.ToString()));
+            Item item = Items.First(x => x.Name.Equals(comboBoxItem.Tag?.ToString()));
             Close(item);
         });
         CancelButton.Command = new RelayCommand(Close);
@@ -103,7 +102,7 @@ public partial class ItemSelector : AppWindow
 
     private void UpdateFilteredItems(string? searchText)
     {
-        ObservableCollection<Item> itemsToFilter = _itemBindings.Items;
+        ObservableCollection<Item> itemsToFilter = Items;
         List<Item> filteredItemsResult;
 
         if (string.IsNullOrWhiteSpace(searchText))
@@ -125,12 +124,11 @@ public partial class ItemSelector : AppWindow
                 filteredItemsResult.Insert(0, exactMatch);
             }
         }
+        
+        FilteredItems.Clear();
+        FilteredItems.AddRange(filteredItemsResult.Select(CreateItem));
 
-        _itemBindings.FilteredItems = new ObservableCollection<ComboBoxItem>(
-            filteredItemsResult.Select(CreateItem)
-        );
-
-        if (_itemBindings.FilteredItems.Any())
+        if (FilteredItems.Any())
         {
             ItemListBox.SelectedIndex = 0;
         }
@@ -148,28 +146,24 @@ public partial class ItemSelector : AppWindow
         {
             return;
         }
-
+        
         try
         {
             List<Item>? items = JsonSerializer.Deserialize<List<Item>>(await File.ReadAllTextAsync(itemsFile),
                 ItemJsonContext.Default.ListItem);
-
+            
             if (items == null)
             {
                 return;
             }
+            Items.Clear();
+            FilteredItems.Clear();
 
-            _itemBindings.Items.Clear();
-            _itemBindings.FilteredItems.Clear();
-
-            foreach (Item item in items)
-            {
-                _itemBindings.Items.Add(item);
-            }
+            Items.AddRange(items);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading items.json: {ex.Message}");
+            SkEditorAPI.Logs.Error($"Error loading items.json: {ex.Message}");
         }
     }
 

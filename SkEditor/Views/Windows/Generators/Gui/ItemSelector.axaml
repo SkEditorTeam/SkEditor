@@ -4,6 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.Generators.Gui.ItemSelector" Icon="/Assets/SkEditor.ico"
+        x:CompileBindings="True"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
         WindowStartupLocation="CenterOwner"
         Title="{DynamicResource WindowTitleItemSelector}" Height="400" Width="450" CanResize="False"
         Theme="{StaticResource SmallWindowTheme}">

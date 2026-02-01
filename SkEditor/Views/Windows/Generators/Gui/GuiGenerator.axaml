@@ -13,37 +13,37 @@
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
     <Grid RowDefinitions="auto, *, auto">
-        <Grid Grid.Row="0" ColumnDefinitions="auto,auto,auto,auto" HorizontalAlignment="Center">
-            <StackPanel Grid.Column="0" Spacing="4" Margin="10">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Spacing="4" Margin="10">
                 <TextBlock Text="{DynamicResource GuiGeneratorTitle}" />
                 <TextBox Name="TitleTextBox" Width="175" />
             </StackPanel>
-            <StackPanel Grid.Column="1" Spacing="4" Margin="10">
+            <StackPanel Spacing="4" Margin="10">
                 <TextBlock Text="{DynamicResource GuiGeneratorFunctionName}" />
                 <TextBox Name="FunctionNameTextBox" Width="175" />
             </StackPanel>
-            <StackPanel Grid.Column="2" Spacing="4" Margin="10">
+            <StackPanel Spacing="4" Margin="10">
                 <TextBlock Text="{DynamicResource GuiGeneratorRowQuantity}" />
                 <TextBox Name="RowQuantityTextBox" Width="175" Text="6" />
             </StackPanel>
-            <StackPanel Grid.Column="3" Spacing="4" Margin="10">
+            <StackPanel Spacing="4" Margin="10">
                 <TextBlock Text="{DynamicResource GuiGeneratorBackgroundItem}" />
                 <Button Name="BackgroundItemButton" Width="175" Content="{DynamicResource SelectButton}" />
             </StackPanel>
-        </Grid>
+        </StackPanel>
         <Grid x:Name="ItemGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"
               RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto"
               ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" />
 
-        <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-            <CheckBox Name="UseSkriptGuiCheckBox" Content="{DynamicResource GuiGeneratorSkriptGui}" Margin="10"
-                      Grid.Column="0" IsChecked="{Binding GuiGeneratorSkriptGuiAddonUsed}" />
-        </Grid>
-        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" ColumnDefinitions="auto,auto">
-            <Button Name="PreviewButton" Width="100" Content="{DynamicResource GuiGeneratorPreviewButton}" Margin="10"
-                    HorizontalAlignment="Center" Grid.Column="0" />
+        <CheckBox Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                  Name="UseSkriptGuiCheckBox" Content="{DynamicResource GuiGeneratorSkriptGui}" Margin="20,0,0,10"
+                  IsChecked="{Binding GuiGeneratorSkriptGuiAddonUsed}" />
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,12" Spacing="12">
+            <Button Name="PreviewButton" Width="100" Content="{DynamicResource GuiGeneratorPreviewButton}"
+                    HorizontalAlignment="Center" />
             <Button Name="GenerateButton" Width="100" Content="{DynamicResource GuiGeneratorGenerateButton}"
-                    Margin="10" HorizontalAlignment="Center" Grid.Column="1" />
-        </Grid>
+                    HorizontalAlignment="Center" />
+        </StackPanel>
     </Grid>
 </Window>

@@ -4,10 +4,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.Generators.CommandGenerator" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleCommandGenerator}" Height="600" Width="400" CanResize="False"
+        Title="{DynamicResource WindowTitleCommandGenerator}" Height="615" Width="400" CanResize="False"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
-    <Grid Margin="20">
+    <Panel Margin="20">
         <StackPanel Spacing="10">
             <StackPanel Spacing="5">
                 <TextBlock Text="{DynamicResource CommandGeneratorName}" />
@@ -58,7 +58,8 @@
                 </Grid>
             </StackPanel>
         </StackPanel>
-        <Button Name="GenerateButton" Content="{DynamicResource CommandGeneratorGenerate}" HorizontalAlignment="Right"
+        
+        <Button Name="GenerateButton" Content="{DynamicResource CommandGeneratorGenerate}" HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom" />
-    </Grid>
+    </Panel>
 </Window>

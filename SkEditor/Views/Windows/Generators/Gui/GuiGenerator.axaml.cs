@@ -169,7 +169,7 @@ public partial class GuiGenerator : AppWindow
 
     private void CreateGrid(int rows)
     {
-        int columns = 9;
+        const int columns = 9;
 
         for (int row = 0; row < rows; row++)
         {
