@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using SkEditor.Utilities.Styling.Attributes;
 
 namespace SkEditor.Utilities.Styling;
 
-public class Theme
+[Theme]
+public partial class Theme
 {
     [JsonIgnore] public string FileName { get; set; } = string.Empty;
 
@@ -39,91 +40,6 @@ public class Theme
         { "ToggleButtonBackgroundChecked", new ImmutableSolidColorBrush(Color.Parse("#40ffffff")) },
         { "ToggleButtonBackgroundCheckedPointerOver", new ImmutableSolidColorBrush(Color.Parse("#40ffffff")) }
     };
-
-    public ImmutableSolidColorBrush GetBrushByName(string propertyName)
-    {
-        return propertyName switch
-        {
-            "BackgroundColor" => BackgroundColor,
-            "SmallWindowBackgroundColor" => SmallWindowBackgroundColor,
-            "DialogTopBackgroundColor" => DialogTopBackgroundColor,
-            "DialogTopBorderColor" => DialogTopBorderColor,
-            "DialogBackgroundColor" => DialogBackgroundColor,
-            "EditorBackgroundColor" => EditorBackgroundColor,
-            "EditorTextColor" => EditorTextColor,
-            "LineNumbersColor" => LineNumbersColor,
-            "SelectionColor" => SelectionColor,
-            "SelectedTabItemBackground" => SelectedTabItemBackground,
-            "SelectedTabItemBorder" => SelectedTabItemBorder,
-            "MenuBackground" => MenuBackground,
-            "MenuBorder" => MenuBorder,
-            "TextBoxFocusedBackground" => TextBoxFocusedBackground,
-            "CurrentLineBackground" => CurrentLineBackground,
-            "CurrentLineBorder" => CurrentLineBorder,
-            "AccentColor" => AccentColor,
-            _ => throw new ArgumentException($"Property {propertyName} not found in Theme")
-        };
-    }
-
-    public void SetBrush(string propertyName, ImmutableSolidColorBrush brush)
-    {
-        switch (propertyName)
-        {
-            case "BackgroundColor":
-                BackgroundColor = brush;
-                break;
-            case "SmallWindowBackgroundColor":
-                SmallWindowBackgroundColor = brush;
-                break;
-            case "DialogTopBackgroundColor":
-                DialogTopBackgroundColor = brush;
-                break;
-            case "DialogTopBorderColor":
-                DialogTopBorderColor = brush;
-                break;
-            case "DialogBackgroundColor":
-                DialogBackgroundColor = brush;
-                break;
-            case "EditorBackgroundColor":
-                EditorBackgroundColor = brush;
-                break;
-            case "EditorTextColor":
-                EditorTextColor = brush;
-                break;
-            case "LineNumbersColor":
-                LineNumbersColor = brush;
-                break;
-            case "SelectionColor":
-                SelectionColor = brush;
-                break;
-            case "SelectedTabItemBackground":
-                SelectedTabItemBackground = brush;
-                break;
-            case "SelectedTabItemBorder":
-                SelectedTabItemBorder = brush;
-                break;
-            case "MenuBackground":
-                MenuBackground = brush;
-                break;
-            case "MenuBorder":
-                MenuBorder = brush;
-                break;
-            case "TextBoxFocusedBackground":
-                TextBoxFocusedBackground = brush;
-                break;
-            case "CurrentLineBackground":
-                CurrentLineBackground = brush;
-                break;
-            case "CurrentLineBorder":
-                CurrentLineBorder = brush;
-                break;
-            case "AccentColor":
-                AccentColor = brush;
-                break;
-            default:
-                throw new ArgumentException($"Property {propertyName} not found in Theme");
-        }
-    }
 }
 
 [JsonSourceGenerationOptions(
