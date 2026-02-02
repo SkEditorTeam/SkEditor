@@ -69,7 +69,7 @@
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate DataType="local:WelcomeTabControl+WelcomeScreenSection">
                         <StackPanel Spacing="8">
-                            <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="SemiBold"
+                            <TextBlock Text="{Binding Title.Value}" FontSize="28" FontWeight="SemiBold"
                                        Effect="{StaticResource WelcomeScreenTextShadowEffect}" />
                             <ItemsRepeater ItemsSource="{Binding Entries}">
                                 <ItemsRepeater.Layout>
@@ -83,7 +83,7 @@
                                                 <Viewbox Width="24" Height="24">
                                                     <ui:IconSourceElement IconSource="{Binding Icon}" />
                                                 </Viewbox>
-                                                <TextBlock Text="{Binding Name}" FontSize="16" />
+                                                <TextBlock Text="{Binding Name.Value}" FontSize="16" />
                                             </StackPanel>
                                         </Button>
                                     </DataTemplate>

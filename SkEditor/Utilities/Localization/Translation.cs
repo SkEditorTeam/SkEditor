@@ -54,6 +54,11 @@ public static class Translation
             return translationString;
         }
     }
+    
+    public static TranslatableString GetObservable(string key)
+    {
+        return new TranslatableString(key);
+    }
 
     /// <summary>
     ///     Changes the application's language to the specified language.

@@ -25,32 +25,32 @@ public partial class WelcomeTabControl : UserControl
         InitializeComponent();
 
         WelcomeScreenSection gettingStarted = new(
-            Translation.Get("WelcomeTabGettingStarted"),
+            Translation.GetObservable("WelcomeTabGettingStarted"),
             [
-                new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedNewFile"),
+                new WelcomeScreenElement(Translation.GetObservable("WelcomeGettingStartedNewFile"),
                     new RelayCommand(FileHandler.NewFile),
                     CreateSymbolIcon(Symbol.DocumentAdd)),
-                new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedOpenFile"),
+                new WelcomeScreenElement(Translation.GetObservable("WelcomeGettingStartedOpenFile"),
                     new AsyncRelayCommand(FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
-                new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedOpenFolder"),
+                new WelcomeScreenElement(Translation.GetObservable("WelcomeGettingStartedOpenFolder"),
                     new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()),
                     CreateSymbolIcon(Symbol.FolderOpen)),
-                new WelcomeScreenElement(Translation.Get("WelcomeGettingStartedSettings"),
+                new WelcomeScreenElement(Translation.GetObservable("WelcomeGettingStartedSettings"),
                     new AsyncRelayCommand(OpenSettings),
                     CreateSymbolIcon(Symbol.Settings))
             ]
         );
 
-        WelcomeScreenSection help = new(Translation.Get("WelcomeTabNeedHelp"),
+        WelcomeScreenSection help = new(Translation.GetObservable("WelcomeTabNeedHelp"),
         [
-            new WelcomeScreenElement(Translation.Get("WelcomeNeedHelpDiscordServer"), new RelayCommand(() =>
+            new WelcomeScreenElement(Translation.GetObservable("WelcomeNeedHelpDiscordServer"), new RelayCommand(() =>
                 SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev")), CreatePathIconSource("DiscordIcon")),
 
-            new WelcomeScreenElement(Translation.Get("WelcomeNeedHelpGitHub"), new RelayCommand(() =>
+            new WelcomeScreenElement(Translation.GetObservable("WelcomeNeedHelpGitHub"), new RelayCommand(() =>
                     SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
                 CreatePathIconSource("GitHubIcon")),
 
-            new WelcomeScreenElement(Translation.Get("WelcomeNeedHelpDocumentation"),
+            new WelcomeScreenElement(Translation.GetObservable("WelcomeNeedHelpDocumentation"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
                 CreateSymbolIcon(Symbol.Book)),
             
@@ -91,7 +91,7 @@ public partial class WelcomeTabControl : UserControl
         await new SettingsWindow().ShowDialogOnMainWindow();
     }
 
-    public record WelcomeScreenSection(string Title, List<WelcomeScreenElement> Entries);
+    public record WelcomeScreenSection(TranslatableString Title, List<WelcomeScreenElement> Entries);
 
-    public record WelcomeScreenElement(string Name, IRelayCommand Command, IconSource? Icon);
+    public record WelcomeScreenElement(TranslatableString Name, IRelayCommand Command, IconSource? Icon);
 }

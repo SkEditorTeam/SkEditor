@@ -48,7 +48,7 @@
                              IsSettingsVisible="False" IsPaneToggleButtonVisible="False">
         <controls:NavigationView.MenuItemTemplate>
             <DataTemplate DataType="vms:SettingSection">
-                <controls:NavigationViewItem Content="{Binding Name}" IconSource="{Binding Icon}"
+                <controls:NavigationViewItem Content="{Binding Name.Value}" IconSource="{Binding Icon}"
                                              MenuItemsSource="{Binding Subsections}" />
             </DataTemplate>
         </controls:NavigationView.MenuItemTemplate>
