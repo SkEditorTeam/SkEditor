@@ -1,4 +1,5 @@
 using System;
+using Avalonia.Controls;
 using Avalonia.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Media.Animation;
@@ -7,6 +8,7 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities.Styling;
 using SkEditor.Views.Pages.Settings;
+using SkEditor.Views.Pages.Settings.Personalization;
 
 namespace SkEditor.Views.Windows.Settings;
 
@@ -22,6 +24,8 @@ public partial class SettingsWindow : AppWindow
 
         Instance = this;
         SkEditorAPI.Events.SettingsOpened();
+
+        FrameView.NavigationPageFactory = new SettingsPageFactory();
 
         KeyDown += (_, e) =>
         {
@@ -66,5 +70,54 @@ public partial class SettingsWindow : AppWindow
         {
             Instance.FrameView.BackStack.Add(new PageStackEntry(typeof(HomePage), null, transitionInfo));
         }
+    }
+}
+
+public class SettingsPageFactory : INavigationPageFactory
+{
+    public Control? GetPage(Type sourcePageType)
+    {
+        if (sourcePageType == typeof(HomePage))
+            return new HomePage();
+        
+        if (sourcePageType == typeof(GeneralPage))
+            return new GeneralPage();
+        
+        if (sourcePageType == typeof(PersonalizationPage))
+            return new PersonalizationPage();
+        
+        if (sourcePageType == typeof(ExperimentsPage))
+            return new ExperimentsPage();
+        
+        if (sourcePageType == typeof(AboutPage))
+            return new AboutPage();
+        
+        if (sourcePageType == typeof(AddonsPage))
+            return new AddonsPage();
+        
+        if (sourcePageType == typeof(ConnectionsPage))
+            return new ConnectionsPage();
+        
+        if (sourcePageType == typeof(FileTypesPage))
+            return new FileTypesPage();
+        
+        if (sourcePageType == typeof(CustomAddonSettingsPage))
+            return new CustomAddonSettingsPage();
+        
+        if (sourcePageType == typeof(EditThemePage))
+            return new EditThemePage();
+        
+        if (sourcePageType == typeof(ThemePage))
+            return new ThemePage();
+        
+        if (sourcePageType == typeof(FileSyntaxes))
+            return new FileSyntaxes();
+        
+        return null;
+    }
+    
+    public Control? GetPageFromObject(object target)
+    {
+        return null;
     }
 }

@@ -3,6 +3,7 @@
              xmlns:sty="using:FluentAvalonia.Styling"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              x:Class="SkEditor.App"
+             x:CompileBindings="True"
              RequestedThemeVariant="Dark">
 
     <Application.Styles>

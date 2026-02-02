@@ -20,8 +20,6 @@ public partial class MarketplaceListItem : UserControl
     {
         InitializeComponent();
 
-        DataContext = this;
-
         RenderOptions.SetBitmapInterpolationMode(IconImage, BitmapInterpolationMode.HighQuality);
     }
 
