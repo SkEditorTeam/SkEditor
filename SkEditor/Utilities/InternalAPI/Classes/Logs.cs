@@ -101,7 +101,7 @@ public class Logs : ILogs
     private static string GetSourceName()
     {
 #if !AOT
-        MethodBase? methodInfo = new StackTrace().GetFrame(2)?.GetMethod();
+        System.Reflection.MethodBase? methodInfo = new System.Diagnostics.StackTrace().GetFrame(2)?.GetMethod();
         string? callerNamespace = methodInfo?.ReflectedType?.Namespace;
         IAddon? addon = AddonLoader.GetAddonByNamespace(callerNamespace);
         return addon?.Name ?? "SkEditor";
@@ -116,12 +116,12 @@ public class Logs : ILogs
     private IAddon? DetectAddonFromStackTrace()
     {
 #if !AOT
-        StackFrame[] frames = new StackTrace().GetFrames();
+        System.Diagnostics.StackFrame[] frames = new System.Diagnostics.StackTrace().GetFrames();
         string? addonNamespace = null;
 
-        foreach (StackFrame frame in frames)
+        foreach (System.Diagnostics.StackFrame frame in frames)
         {
-            MethodBase? method = frame.GetMethod();
+            System.Reflection.MethodBase? method = frame.GetMethod();
             if (method?.ReflectedType?.Namespace?.StartsWith("SkEditor") != false)
             {
                 continue;
