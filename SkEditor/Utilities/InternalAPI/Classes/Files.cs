@@ -134,7 +134,7 @@ public class Files : IFiles
         {
             Symbol = Symbol.Home
         };
-        AddCustomTab(Translation.Get("WelcomeTabTitle"), new WelcomeTabControl(), icon: icon);
+        AddCustomTab(Translation.GetObservable("WelcomeTabTitle"), new WelcomeTabControl(), icon: icon);
     }
 
     private OpenedFile? GetFromTabViewItem(TabViewItem tabViewItem)
@@ -210,7 +210,7 @@ public class Files : IFiles
 
     #region Tab Manipulation
 
-    public void AddCustomTab(object header, Control content, bool select = true, IconSource? icon = null)
+    public void AddCustomTab(TranslatableString header, Control content, bool select = true, IconSource? icon = null)
     {
         TabViewItem tabItem = new()
         {

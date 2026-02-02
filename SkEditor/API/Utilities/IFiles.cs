@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.API;
 
@@ -68,10 +69,10 @@ public interface IFiles
     ///     a new <see cref="OpenedFile" /> to the registry.
     /// </summary>
     /// <param name="content">The control that represent the tab view item's content</param>
-    /// <param name="header">The (mainly text) header of the created tab view item</param>
+    /// <param name="header">The header of the created tab view item</param>
     /// <param name="select">Should the new created tab be selected right after its creation or not.</param>
     /// <param name="icon">Icon to be shown in the tab view item</param>
-    void AddCustomTab(object header, Control content, bool select = true, IconSource? icon = null);
+    void AddCustomTab(TranslatableString header, Control content, bool select = true, IconSource? icon = null);
 
     /// <summary>
     ///     Add a new editor tab with the desired content.

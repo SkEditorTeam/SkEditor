@@ -175,7 +175,7 @@ public partial class MainMenuControl : UserControl
         {
             Symbol = Symbol.Book
         };
-        SkEditorAPI.Files.AddCustomTab(Translation.Get("DocumentationWindowTitle"), new DocumentationControl(),
+        SkEditorAPI.Files.AddCustomTab(Translation.GetObservable("DocumentationWindowTitle"), new DocumentationControl(),
             icon: icon);
     }
 
@@ -194,7 +194,7 @@ public partial class MainMenuControl : UserControl
         page.UpdateLayout();
 
         SymbolIconSource icon = new() { Symbol = Symbol.Settings };
-        SkEditorAPI.Files.AddCustomTab(Translation.Get("WindowTitleSettings"), page, icon: icon);
+        SkEditorAPI.Files.AddCustomTab(Translation.GetObservable("WindowTitleSettings"), page, icon: icon);
     }
 
     public void ReloadAddonsMenus()
