@@ -21,10 +21,6 @@
         <Thickness x:Key="SettingsExpanderPadding">16</Thickness>
         <!-- ReSharper restore Xaml.RedundantResource -->
     </UserControl.Resources>
-    
-    <UserControl.Styles>
-        
-    </UserControl.Styles>
 
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type types:ToggleSetting}">

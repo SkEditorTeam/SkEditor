@@ -11,4 +11,7 @@ public class ChoiceSettingAttribute(
     Type providerType,
     string? categoryId = null,
     string? descriptionKey = null)
-    : BaseSettingAttribute(titleKey, categoryId, descriptionKey);
+    : BaseSettingAttribute(titleKey, categoryId, descriptionKey)
+{
+    public Type ProviderType { get; } = providerType;
+}

@@ -1,7 +1,4 @@
 ﻿using System;
-using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities.Localization;
-using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Utilities.Settings.Attributes;
 

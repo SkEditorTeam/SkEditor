@@ -6,4 +6,7 @@ namespace SkEditor.Utilities.Settings.Attributes;
 ///     Specifies the path icon for a setting.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class SettingPathIconAttribute(string iconName) : Attribute;
+public class SettingPathIconAttribute(string iconName) : Attribute
+{
+    public string IconName { get; } = iconName;
+}

@@ -361,7 +361,7 @@ public partial class DocumentationControl : UserControl
         MainWindow? window = SkEditorAPI.Windows.GetMainWindow();
         taskDialog.XamlRoot = window;
 
-        Task<object>? dialogTask = taskDialog.ShowAsync();
+        Task<object> dialogTask = taskDialog.ShowAsync();
 
         for (int index = 0; index < EntriesContainer.Children.Count; index++)
         {

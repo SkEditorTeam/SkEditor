@@ -95,18 +95,12 @@
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Bottom"
                                             Background="{DynamicResource DialogBackgroundColor}">
-                                        <Grid Name="CommandSpace">
+                                        <Grid Name="CommandSpace" ColumnDefinitions="*,0.5*,0.5*,*">
                                             <!--
                                             B/C we can't target Row/Column defs in Styles like WinUI
                                             this still uses the old Col defs, but it works the same
                                             way in the end...
                                             -->
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="0.5*" />
-                                                <ColumnDefinition Width="0.5*" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
                                             <Button Name="PrimaryButton"
                                                     Content="{TemplateBinding PrimaryButtonText}"
                                                     IsEnabled="{TemplateBinding IsPrimaryButtonEnabled}"
@@ -116,7 +110,7 @@
                                                     VerticalContentAlignment="Center"
                                                     IsVisible="False" />
 
-                                            <Button Name="SecondaryButton"
+                                            <Button Grid.Column="0" Name="SecondaryButton"
                                                     Content="{TemplateBinding SecondaryButtonText}"
                                                     IsEnabled="{TemplateBinding IsSecondaryButtonEnabled}"
                                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -124,7 +118,7 @@
                                                     VerticalContentAlignment="Center"
                                                     IsVisible="False" />
 
-                                            <Button Name="CloseButton"
+                                            <Button Grid.Column="0" Name="CloseButton"
                                                     Content="{TemplateBinding CloseButtonText}"
                                                     HorizontalAlignment="Stretch"
                                                     VerticalAlignment="Stretch"
