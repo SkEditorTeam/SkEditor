@@ -19,15 +19,10 @@
         <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
         <Thickness x:Key="SettingsExpanderPadding">16</Thickness>
         <!-- ReSharper restore Xaml.RedundantResource -->
-        
-        <system:Double x:Key="SettingsExpanderHeight">78</system:Double>
     </UserControl.Resources>
     
     <UserControl.Styles>
-        <Style Selector="controls|SettingsExpander /template/ Expander">
-            <Setter Property="Height" Value="{StaticResource SettingsExpanderHeight}"/>
-            <Setter Property="MinHeight" Value="{StaticResource SettingsExpanderHeight}"/>
-        </Style>
+        
     </UserControl.Styles>
 
     <UserControl.DataTemplates>
@@ -35,9 +30,13 @@
             <ToggleSwitch IsChecked="{Binding IsEnabled}" />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vms:ActionSetting}">
-            <Button Content="{Binding ButtonText}" />
-        </DataTemplate>
+        <!-- <DataTemplate DataType="{x:Type vms:ActionSetting}"> -->
+        <!--     <Button Content="{Binding ButtonText}" /> -->
+        <!-- </DataTemplate> -->
+        <!-- -->
+        <!-- <DataTemplate DataType="{x:Type vms:ListSetting}"> -->
+        <!--     <ComboBox ItemsSource="{Binding Options}" SelectedIndex="{Binding SelectedIndex}" /> -->
+        <!-- </DataTemplate> -->
     </UserControl.DataTemplates>
 
     <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,16,0,16"
@@ -66,9 +65,7 @@
                             <controls:SettingsExpander Header="{Binding Name}"
                                                        IconSource="{Binding Icon}"
                                                        Description="{Binding Description}"
-                                                       Footer="{Binding}"
-                                                       Height="{StaticResource {StaticResource SettingsExpanderHeight}}"
-                                                       MinHeight="{StaticResource {StaticResource SettingsExpanderHeight}}" />
+                                                       Footer="{Binding}" />
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>

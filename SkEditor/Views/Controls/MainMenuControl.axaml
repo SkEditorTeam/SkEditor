@@ -1,6 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
+             xmlns:configs="clr-namespace:SkEditor.Utilities.Settings.Configs"
              x:Class="SkEditor.Views.Controls.MainMenuControl">
 
     <UserControl.Styles>
@@ -207,6 +209,7 @@
                 </MenuItem>
             </MenuItem>
         </MenuItem>
+        <MenuItem Header="Dev" DataContext="{x:Static viewModels:ViewModelLocator.AppSettings}" x:DataType="configs:AppSettings" IsVisible="{Binding IsDevModeEnabled}"></MenuItem>
         <MenuItem Name="MenuItemSettings" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
             <MenuItem.Header>
                 <icons:SymbolIcon Symbol="Settings" FontSize="18" />

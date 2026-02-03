@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.API;
 
@@ -9,14 +10,14 @@ public partial class TranslatableString : ObservableObject
 {
     private static readonly HashSet<WeakReference<TranslatableString>> Instances = [];
     private static bool _eventSubscribed;
-    
+
     [ObservableProperty]
     private string _key;
 
     public TranslatableString(string key)
     {
         _key = key;
-        
+
         lock (Instances)
         {
             Instances.Add(new WeakReference<TranslatableString>(this));
@@ -38,7 +39,7 @@ public partial class TranslatableString : ObservableObject
         lock (Instances)
         {
             Instances.RemoveWhere(wr => !wr.TryGetTarget(out _));
-            
+
             foreach (var weakRef in Instances)
             {
                 if (weakRef.TryGetTarget(out var instance))
@@ -49,6 +50,12 @@ public partial class TranslatableString : ObservableObject
         }
     }
 
-    public static implicit operator string(TranslatableString t) => t.Value;
-    public static implicit operator TranslatableString(string key) => new(key);
+    [return: NotNullIfNotNull("t")]
+    public static implicit operator string?(TranslatableString? t) => t?.Value;
+
+    [return: NotNullIfNotNull("key")]
+    public static implicit operator TranslatableString?(string? key) =>
+        key == null
+            ? null
+            : new TranslatableString(key);
 }

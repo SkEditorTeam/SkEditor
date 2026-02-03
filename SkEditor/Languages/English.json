@@ -252,6 +252,7 @@
   "SettingsGeneralPasteIndent": "Auto-indent Paste",
   "SettingsGeneralPasteIndentDescription": "Automatically adjusts the indentation of pasted text to match the previous line's format.",
   "SettingsGeneralCheckForUpdates": "Check for updates",
+  "SettingsGeneralCheckForUpdatesDescription": "Automatically checks for SkEditor updates on startup.",
   "SettingsGeneralProjectSingleFolderClick": "Open project folder on single click",
   "SettingsGeneralProjectSingleFolderClickDescription": "When enabled, opens a folder with a single click instead of a double click.",
   "SettingsGeneralUseSplashScreen": "Startup Splash Screen",

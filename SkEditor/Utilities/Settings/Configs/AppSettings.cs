@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using FluentIcons.Common;
 using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings.Configs;
@@ -25,6 +26,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     Whether to enable the developer mode.
     /// </summary>
+    [ToggleSetting("SettingsAboutDevMode", Symbol.Flash, "SettingsGeneralTitle", "SettingsAboutDevModeDescription")]
     public bool IsDevModeEnabled
     {
         get;
@@ -61,6 +63,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     Whether to check for application updates on startup.
     /// </summary>
+    [ToggleSetting("SettingsGeneralCheckForUpdates", Symbol.CloudSync, "SettingsGeneralTitle", "SettingsGeneralCheckForUpdatesDescription")]
     public bool CheckForAppUpdates
     {
         get;
