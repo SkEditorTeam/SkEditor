@@ -64,9 +64,9 @@
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate DataType="vms:SettingElement">
-                            <controls:SettingsExpander Header="{Binding NameValue}"
+                            <controls:SettingsExpander Header="{Binding Name.Value}"
                                                        IconSource="{Binding Icon}"
-                                                       Description="{Binding DescriptionValue}"
+                                                       Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                                        Footer="{Binding}" />
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>

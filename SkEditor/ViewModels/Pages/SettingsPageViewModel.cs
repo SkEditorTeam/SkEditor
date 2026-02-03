@@ -49,34 +49,12 @@ public class SettingSection(
     public List<SettingSection> Subsections { get; set; } = subsections ?? [];
 }
 
-public abstract class SettingElement : ObservableObject
+public abstract class SettingElement(TranslatableString name, IconSource icon, TranslatableString? description = null)
+    : ObservableObject
 {
-    public TranslatableString Name { get; set; }
-    public IconSource Icon { get; set; }
-    public TranslatableString? Description { get; set; }
-
-    public string NameValue => Name.Value;
-    public string? DescriptionValue => Description?.Value;
-
-    protected SettingElement(TranslatableString name, IconSource icon, TranslatableString? description = null)
-    {
-        Name = name;
-        Icon = icon;
-        Description = description;
-        
-
-        Name.PropertyChanged += (_, _) =>
-        {
-            SkEditorAPI.Logs.Info($"PropertyChanged: SettingElement.Name changed to '{Name.Value}'");
-            OnPropertyChanged(nameof(NameValue));
-        };
-        if (Description != null)
-            Description.PropertyChanged += (_, _) =>
-            {
-                SkEditorAPI.Logs.Info($"PropertyChanged: SettingElement.Description changed to '{Description.Value}'");
-                OnPropertyChanged(nameof(DescriptionValue));
-            };
-    }
+    public TranslatableString Name { get; set; } = name;
+    public IconSource Icon { get; set; } = icon;
+    public TranslatableString? Description { get; set; } = description;
 }
 
 public partial class ToggleSetting : SettingElement
