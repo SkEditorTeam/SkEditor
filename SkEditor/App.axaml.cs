@@ -201,8 +201,8 @@ public class App : Application
             }
 
             Process.Start(processPath, "--crash " + encodedMessage);
-            Environment.Exit(1);
 #endif
+            Environment.Exit(1);
         };
     }
 
