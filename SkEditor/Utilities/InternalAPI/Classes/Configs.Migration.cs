@@ -28,12 +28,7 @@ public partial class Configs
             AppSettings appSettings = GetAppSettings();
             appSettings.CheckForAppUpdates = oldAppConfig.CheckForUpdates;
             appSettings.CheckForExternalFileChanges = oldAppConfig.CheckForChanges;
-
-            string oldCurrentTheme = oldAppConfig.CurrentTheme;
-            Theme? theme = ThemeEditor.Themes.FirstOrDefault(x =>
-                x.Name.Equals(oldCurrentTheme) || x.FileName.Equals(oldCurrentTheme));
-            appSettings.CurrentTheme = theme == null ? "Default" : theme.Name;
-
+            appSettings.CurrentTheme = oldAppConfig.CurrentTheme;
             appSettings.CustomUiScale = oldAppConfig.CustomUiScale;
             appSettings.FileSyntaxes = oldAppConfig.FileSyntaxes;
             appSettings.EditorFontFamily = oldAppConfig.Font == "Default"

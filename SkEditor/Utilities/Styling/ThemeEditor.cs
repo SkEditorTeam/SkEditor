@@ -135,7 +135,7 @@ public class ThemeEditor
         }
 
         CurrentTheme = theme;
-        SkEditorAPI.Configs.GetAppSettings().CurrentTheme = theme.FileName;
+        SkEditorAPI.Configs.GetAppSettings().CurrentTheme = theme.Name;
 
         await ApplyTheme();
     }
