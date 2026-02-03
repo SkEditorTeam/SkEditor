@@ -82,10 +82,18 @@ public class ThemeEditor
     {
         string currentTheme = SkEditorAPI.Configs.GetAppSettings().CurrentTheme;
 
-        if (currentTheme != null && File.Exists(Path.Combine(ThemeFolderPath, currentTheme)))
+        if (currentTheme != null)
         {
-            Theme? selectedTheme = Themes.FirstOrDefault(x => x.FileName.Equals(currentTheme));
-            return selectedTheme ?? GetDefaultTheme();
+            Theme? selectedTheme = Themes.FirstOrDefault(x =>
+                x.Name.Equals(currentTheme) || x.FileName.Equals(currentTheme));
+
+            if (selectedTheme == null)
+            {
+                return GetDefaultTheme();
+            }
+            
+            SkEditorAPI.Configs.GetAppSettings().CurrentTheme = selectedTheme.Name;
+            return selectedTheme;
         }
 
         if (File.Exists(Path.Combine(ThemeFolderPath, "Default.json")))

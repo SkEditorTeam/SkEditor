@@ -111,8 +111,10 @@ public class SettingsGenerator : IIncrementalGenerator
 
                 string rawCode = $$"""
                                    using System.Collections.Generic;
-                                   using SkEditor.Utilities.Localization;
                                    using SkEditor.ViewModels.Pages;
+                                   using SkEditor.Utilities.Localization;
+                                   using SkEditor.Utilities.Settings.Models;
+                                   using SkEditor.Utilities.Settings.Models.Types;
                                    
                                    namespace {{namespaceName}};
                                    public partial class {{className}}

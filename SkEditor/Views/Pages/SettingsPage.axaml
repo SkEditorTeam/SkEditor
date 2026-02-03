@@ -6,6 +6,8 @@
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
              xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:types="clr-namespace:SkEditor.Utilities.Settings.Models.Types"
+             xmlns:models="clr-namespace:SkEditor.Utilities.Settings.Models"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              DataContext="{x:Static viewModels:ViewModelLocator.SettingsPageViewModel}"
@@ -26,11 +28,11 @@
     </UserControl.Styles>
 
     <UserControl.DataTemplates>
-        <DataTemplate DataType="{x:Type vms:ToggleSetting}">
+        <DataTemplate DataType="{x:Type types:ToggleSetting}">
             <ToggleSwitch IsChecked="{Binding IsEnabled}" />
         </DataTemplate>
         
-        <DataTemplate DataType="{x:Type vms:IChoiceSetting}">
+        <DataTemplate DataType="{x:Type types:IChoiceSetting}">
             <ComboBox ItemsSource="{Binding Options}" 
                       SelectedItem="{Binding SelectedItem}" />
         </DataTemplate>
@@ -48,7 +50,7 @@
                              SelectedItem="{Binding CurrentSection, Mode=TwoWay}"
                              IsSettingsVisible="False" IsPaneToggleButtonVisible="False">
         <controls:NavigationView.MenuItemTemplate>
-            <DataTemplate DataType="vms:SettingSection">
+            <DataTemplate DataType="models:SettingSection">
                 <controls:NavigationViewItem Content="{Binding Name.Value}" IconSource="{Binding Icon}"
                                              MenuItemsSource="{Binding Subsections}" />
             </DataTemplate>
@@ -63,7 +65,7 @@
                                      Orientation="Vertical" />
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
-                        <DataTemplate DataType="vms:SettingElement">
+                        <DataTemplate DataType="models:SettingElement">
                             <controls:SettingsExpander Header="{Binding Name.Value}"
                                                        IconSource="{Binding Icon}"
                                                        Description="{Binding Description.Value, FallbackValue='{x:Null}'}"

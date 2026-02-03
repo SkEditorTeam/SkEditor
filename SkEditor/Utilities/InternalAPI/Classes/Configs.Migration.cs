@@ -1,8 +1,10 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Utilities.InternalAPI.Classes;
 
@@ -26,7 +28,12 @@ public partial class Configs
             AppSettings appSettings = GetAppSettings();
             appSettings.CheckForAppUpdates = oldAppConfig.CheckForUpdates;
             appSettings.CheckForExternalFileChanges = oldAppConfig.CheckForChanges;
-            appSettings.CurrentTheme = oldAppConfig.CurrentTheme;
+
+            string oldCurrentTheme = oldAppConfig.CurrentTheme;
+            Theme? theme = ThemeEditor.Themes.FirstOrDefault(x =>
+                x.Name.Equals(oldCurrentTheme) || x.FileName.Equals(oldCurrentTheme));
+            appSettings.CurrentTheme = theme == null ? "Default" : theme.Name;
+
             appSettings.CustomUiScale = oldAppConfig.CustomUiScale;
             appSettings.FileSyntaxes = oldAppConfig.FileSyntaxes;
             appSettings.EditorFontFamily = oldAppConfig.Font == "Default"

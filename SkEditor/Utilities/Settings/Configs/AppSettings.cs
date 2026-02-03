@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Attributes;
 using SkEditor.Utilities.Settings.Providers;
+using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Utilities.Settings.Configs;
 
@@ -54,10 +56,17 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     The current application theme file name.
     /// </summary>
+    [ChoiceSetting("SettingsThemeCurrentTheme", Symbol.PaintBrush, "SettingsThemeTitle", typeof(ThemeSettingsProvider), "SettingsThemeCurrentThemeDescription")]
     public string CurrentTheme
     {
         get;
-        set => SetProperty(ref field, value);
+        set
+        {
+            if (!SetProperty(ref field, value)) return;
+            Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.Name.Equals(value));
+            if (theme == null) return;
+            _ = ThemeEditor.SetTheme(theme);
+        }
     } = "Default.json";
 
     /// <summary>
