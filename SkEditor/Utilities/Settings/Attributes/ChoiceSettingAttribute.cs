@@ -1,8 +1,4 @@
 ﻿using System;
-using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Providers;
-using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Utilities.Settings.Attributes;
 
@@ -11,7 +7,8 @@ namespace SkEditor.Utilities.Settings.Attributes;
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
 public class ChoiceSettingAttribute(
-    string titleKey, 
-    Symbol icon, 
-    string categoryId, Type providerType, string? descriptionKey = null)
-    : BaseSettingAttribute(titleKey, icon, categoryId, descriptionKey);
+    string titleKey,
+    Type providerType,
+    string? categoryId = null,
+    string? descriptionKey = null)
+    : BaseSettingAttribute(titleKey, categoryId, descriptionKey);

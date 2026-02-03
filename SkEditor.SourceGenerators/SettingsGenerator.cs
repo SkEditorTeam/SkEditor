@@ -16,9 +16,15 @@ public class SettingsGenerator : IIncrementalGenerator
 
     private const string ToggleSettingAttributeFullName =
         "SkEditor.Utilities.Settings.Attributes.ToggleSettingAttribute";
-    
+
     private const string ChoiceSettingAttributeFullName =
         "SkEditor.Utilities.Settings.Attributes.ChoiceSettingAttribute";
+
+    private const string SettingSymbolIconAttributeFullName =
+        "SkEditor.Utilities.Settings.Attributes.SettingSymbolIconAttribute";
+
+    private const string SettingPathIconAttributeFullName =
+        "SkEditor.Utilities.Settings.Attributes.SettingPathIconAttribute";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -50,7 +56,7 @@ public class SettingsGenerator : IIncrementalGenerator
                         p.GetAttributes().Any(attr =>
                             attr.AttributeClass?.ToDisplayString() == ToggleSettingAttributeFullName))
                 ];
-                
+
                 ImmutableArray<IPropertySymbol> choiceProperties =
                 [
                     ..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p =>
@@ -64,49 +70,52 @@ public class SettingsGenerator : IIncrementalGenerator
                     AttributeData attr = toggleProperty.GetAttributes().First(a =>
                         a.AttributeClass?.ToDisplayString() == ToggleSettingAttributeFullName);
 
+                    string icon = GetIconString(toggleProperty);
+
                     var args = attr.ConstructorArguments;
 
-                     string? titleKey = args[0].Value?.ToString();
-                     string? icon = args[1].Value?.ToString();
-                     string? categoryKey = args.Length > 2 ? args[2].Value?.ToString() : "SettingsGeneralTitle";
-                     string? descriptionKey = args.Length > 3 ? args[3].Value?.ToString() : null;
+                    string? titleKey = args[0].Value?.ToString();
+                    string? categoryKey = args.Length > 1 ? args[1].Value?.ToString() : "SettingsGeneralTitle";
+                    string? descriptionKey = args.Length > 2 ? args[2].Value?.ToString() : null;
 
-                     settingsSectionsBuilder.AppendLine($$"""
-                                                          new ToggleSetting(
-                                                              Translation.GetObservable("{{titleKey}}"),
-                                                              new FluentIcons.Avalonia.Fluent.SymbolIconSource() { Symbol = (FluentIcons.Common.Symbol){{icon}} },
-                                                              {{(descriptionKey != null ? $"Translation.GetObservable(\"{descriptionKey}\")" : "null")}},
-                                                              () => {{toggleProperty.Name}},
-                                                              (value) => {{toggleProperty.Name}} = value
-                                                          ),
-                                                          """);
+
+                    settingsSectionsBuilder.AppendLine($"""
+                                                         new ToggleSetting(
+                                                             Translation.GetObservable("{titleKey}"),
+                                                             {icon},
+                                                             {(descriptionKey != null ? $"Translation.GetObservable(\"{descriptionKey}\")" : "null")},
+                                                             () => {toggleProperty.Name},
+                                                             (value) => {toggleProperty.Name} = value
+                                                         ),
+                                                         """);
                 }
-                
+
                 foreach (IPropertySymbol choiceProperty in choiceProperties)
                 {
                     AttributeData attr = choiceProperty.GetAttributes().First(a =>
                         a.AttributeClass?.ToDisplayString() == ChoiceSettingAttributeFullName);
-                    
+
                     var args = attr.ConstructorArguments;
 
-                     string? titleKey = args[0].Value?.ToString();
-                     string? icon = args[1].Value?.ToString();
-                     string? categoryKey = args[2].Value?.ToString();
-                     string? providerType = args[3].Value?.ToString();
-                     string? descriptionKey = args.Length > 4 ? args[4].Value?.ToString() : null;
-                     
-                     string propertyType = choiceProperty.Type.ToDisplayString();
+                    string? titleKey = args[0].Value?.ToString();
+                    string? providerType = args[1].Value?.ToString();
+                    string? categoryKey = args[2].Value?.ToString();
+                    string? descriptionKey = args.Length > 3 ? args[3].Value?.ToString() : null;
 
-                     settingsSectionsBuilder.AppendLine($$"""
-                                                          new ChoiceSetting<{{propertyType}}>(
-                                                              Translation.GetObservable("{{titleKey}}"),
-                                                              new FluentIcons.Avalonia.Fluent.SymbolIconSource() { Symbol = (FluentIcons.Common.Symbol){{icon}} },
-                                                              {{(descriptionKey != null ? $"Translation.GetObservable(\"{descriptionKey}\")" : "null")}},
-                                                              new {{providerType}}(),
-                                                              () => {{choiceProperty.Name}},
-                                                              (value) => {{choiceProperty.Name}} = value
-                                                          ),
-                                                          """);
+                    string propertyType = choiceProperty.Type.ToDisplayString();
+                    
+                    string icon = GetIconString(choiceProperty);
+
+                    settingsSectionsBuilder.AppendLine($"""
+                                                         new ChoiceSetting<{propertyType}>(
+                                                             Translation.GetObservable("{titleKey}"),
+                                                             {icon},
+                                                             {(descriptionKey != null ? $"Translation.GetObservable(\"{descriptionKey}\")" : "null")},
+                                                             new {providerType}(),
+                                                             () => {choiceProperty.Name},
+                                                             (value) => {choiceProperty.Name} = value
+                                                         ),
+                                                         """);
                 }
 
                 string rawCode = $$"""
@@ -115,7 +124,7 @@ public class SettingsGenerator : IIncrementalGenerator
                                    using SkEditor.Utilities.Localization;
                                    using SkEditor.Utilities.Settings.Models;
                                    using SkEditor.Utilities.Settings.Models.Types;
-                                   
+
                                    namespace {{namespaceName}};
                                    public partial class {{className}}
                                    {
@@ -144,5 +153,33 @@ public class SettingsGenerator : IIncrementalGenerator
                 ctx.AddSource($"{className}_Generated.g.cs", formattedCode);
             }
         });
+    }
+
+    private static string GetIconString(IPropertySymbol toggleProperty)
+    {
+        AttributeData? symbolIconAttr = toggleProperty.GetAttributes().FirstOrDefault(a =>
+            a.AttributeClass?.ToDisplayString() == SettingSymbolIconAttributeFullName);
+
+        AttributeData? pathIconAttr = toggleProperty.GetAttributes().FirstOrDefault(a =>
+            a.AttributeClass?.ToDisplayString() == SettingPathIconAttributeFullName);
+                    
+        string? icon =
+            "new FluentIcons.Avalonia.Fluent.SymbolIconSource() { Symbol = FluentIcons.Common.Symbol.QuestionCircle }";
+
+        if (symbolIconAttr != null)
+        {
+            var iconArgs = symbolIconAttr.ConstructorArguments;
+            string? symbol = iconArgs[0].Value?.ToString();
+            icon =
+                $"new FluentIcons.Avalonia.Fluent.SymbolIconSource() {{ Symbol = (FluentIcons.Common.Symbol){symbol} }}";
+        }
+        else if (pathIconAttr != null)
+        {
+            var iconArgs = pathIconAttr.ConstructorArguments;
+            string? iconName = iconArgs[0].Value?.ToString();
+            icon = $"SkEditor.Utilities.Icons.Icons.GetPathIcon(\"{iconName}\")";
+        }
+
+        return icon;
     }
 }

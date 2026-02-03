@@ -9,5 +9,8 @@ namespace SkEditor.Utilities.Settings.Attributes;
 ///     Marks a property as a toggleable setting in the settings UI.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class ToggleSettingAttribute(string titleKey, Symbol icon, string categoryId = "General", string? descriptionKey = null)
-    : BaseSettingAttribute(titleKey, icon, categoryId, descriptionKey);
+public class ToggleSettingAttribute(
+    string titleKey,
+    string categoryId = "General",
+    string? descriptionKey = null)
+    : BaseSettingAttribute(titleKey, categoryId, descriptionKey);

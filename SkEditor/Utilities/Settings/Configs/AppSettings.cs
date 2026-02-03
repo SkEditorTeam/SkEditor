@@ -30,7 +30,8 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     Whether to enable the developer mode.
     /// </summary>
-    [ToggleSetting("SettingsAboutDevMode", Symbol.Flash, "SettingsGeneralTitle", "SettingsAboutDevModeDescription")]
+    [ToggleSetting("SettingsAboutDevMode", "SettingsGeneralTitle", "SettingsAboutDevModeDescription")]
+    [SettingSymbolIcon(Symbol.Flash)]
     public bool IsDevModeEnabled
     {
         get;
@@ -40,7 +41,8 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     The application language code.
     /// </summary>
-    [ChoiceSetting("SettingsGeneralLanguage", Symbol.Globe, "SettingsGeneralTitle", typeof(LanguageSettingsProvider))]
+    [ChoiceSetting("SettingsGeneralLanguage", typeof(LanguageSettingsProvider), "SettingsGeneralTitle")]
+    [SettingSymbolIcon(Symbol.Globe)]
     public string Language
     {
         get;
@@ -56,7 +58,9 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     The current application theme file name.
     /// </summary>
-    [ChoiceSetting("SettingsThemeCurrentTheme", Symbol.PaintBrush, "SettingsThemeTitle", typeof(ThemeSettingsProvider), "SettingsThemeCurrentThemeDescription")]
+    [ChoiceSetting("SettingsThemeCurrentTheme", typeof(ThemeSettingsProvider), "SettingsThemeTitle",
+        "SettingsThemeCurrentThemeDescription")]
+    [SettingSymbolIcon(Symbol.PaintBrush)]
     public string CurrentTheme
     {
         get;
@@ -81,7 +85,9 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     Whether to check for application updates on startup.
     /// </summary>
-    [ToggleSetting("SettingsGeneralCheckForUpdates", Symbol.CloudSync, "SettingsGeneralTitle", "SettingsGeneralCheckForUpdatesDescription")]
+    [ToggleSetting("SettingsGeneralCheckForUpdates", "SettingsGeneralTitle",
+        "SettingsGeneralCheckForUpdatesDescription")]
+    [SettingSymbolIcon(Symbol.CloudSync)]
     public bool CheckForAppUpdates
     {
         get;
@@ -118,6 +124,8 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     Whether to use Discord Rich Presence integration.
     /// </summary>
+    [ToggleSetting("SettingsGeneralRpc", "SettingsGeneralTitle", "SettingsGeneralRpcDescription")]
+    [SettingPathIcon("DiscordIcon")]
     public bool IsDiscordRichPresenceEnabled
     {
         get;

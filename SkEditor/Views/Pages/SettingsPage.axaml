@@ -5,7 +5,6 @@
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
              xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:types="clr-namespace:SkEditor.Utilities.Settings.Models.Types"
              xmlns:models="clr-namespace:SkEditor.Utilities.Settings.Models"
              mc:Ignorable="d" d:DesignWidth="800"
