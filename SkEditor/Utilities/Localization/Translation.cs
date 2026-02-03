@@ -11,6 +11,7 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Files;
 
 namespace SkEditor.Utilities.Localization;
 
@@ -77,6 +78,24 @@ public static class Translation
         {
             PropagateLanguageChange(language);
         }
+    }
+    
+    public static async Task ChangeAndRefreshLanguage(string language)
+    {
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            await ChangeLanguage(language);
+
+            if (!SkEditorAPI.Files.IsEditorOpen())
+            {
+                return;
+            }
+
+            foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
+            {
+                openedFile.Editor!.ContextFlyout = FileBuilder.GetContextMenu(openedFile.Editor);
+            }
+        });
     }
 
     private static void ClearOldLanguages()

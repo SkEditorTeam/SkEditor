@@ -189,6 +189,7 @@ public class App : Application
             await SkEditorAPI.Core.SaveData();
             await AddonLoader.SaveMeta();
 
+#if !DEBUG
             string fullException = e.Exception.ToString();
             string encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(fullException));
             await Task.Delay(500);
@@ -201,6 +202,7 @@ public class App : Application
 
             Process.Start(processPath, "--crash " + encodedMessage);
             Environment.Exit(1);
+#endif
         };
     }
 

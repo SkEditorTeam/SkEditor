@@ -29,14 +29,16 @@
         <DataTemplate DataType="{x:Type vms:ToggleSetting}">
             <ToggleSwitch IsChecked="{Binding IsEnabled}" />
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vms:IChoiceSetting}">
+            <ComboBox ItemsSource="{Binding Options}" 
+                      SelectedItem="{Binding SelectedItem}" />
+        </DataTemplate>
 
         <!-- <DataTemplate DataType="{x:Type vms:ActionSetting}"> -->
         <!--     <Button Content="{Binding ButtonText}" /> -->
         <!-- </DataTemplate> -->
         <!-- -->
-        <!-- <DataTemplate DataType="{x:Type vms:ListSetting}"> -->
-        <!--     <ComboBox ItemsSource="{Binding Options}" SelectedIndex="{Binding SelectedIndex}" /> -->
-        <!-- </DataTemplate> -->
     </UserControl.DataTemplates>
 
     <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,16,0,16"
@@ -61,10 +63,10 @@
                                      Orientation="Vertical" />
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
-                        <DataTemplate>
-                            <controls:SettingsExpander Header="{Binding Name}"
+                        <DataTemplate DataType="vms:SettingElement">
+                            <controls:SettingsExpander Header="{Binding NameValue}"
                                                        IconSource="{Binding Icon}"
-                                                       Description="{Binding Description}"
+                                                       Description="{Binding DescriptionValue}"
                                                        Footer="{Binding}" />
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>

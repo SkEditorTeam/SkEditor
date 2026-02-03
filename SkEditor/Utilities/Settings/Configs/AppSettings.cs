@@ -2,7 +2,9 @@
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using FluentIcons.Common;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Attributes;
+using SkEditor.Utilities.Settings.Providers;
 
 namespace SkEditor.Utilities.Settings.Configs;
 
@@ -36,10 +38,17 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     The application language code.
     /// </summary>
+    [ChoiceSetting("SettingsGeneralLanguage", Symbol.Globe, "SettingsGeneralTitle", typeof(LanguageSettingsProvider))]
     public string Language
     {
         get;
-        set => SetProperty(ref field, value);
+        set
+        {
+            if (SetProperty(ref field, value))
+            {
+                _ = Translation.ChangeAndRefreshLanguage(value);
+            }
+        }
     } = "English";
 
     /// <summary>

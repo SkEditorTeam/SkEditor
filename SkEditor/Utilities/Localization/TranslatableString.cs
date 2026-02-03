@@ -49,13 +49,4 @@ public partial class TranslatableString : ObservableObject
             }
         }
     }
-
-    [return: NotNullIfNotNull("t")]
-    public static implicit operator string?(TranslatableString? t) => t?.Value;
-
-    [return: NotNullIfNotNull("key")]
-    public static implicit operator TranslatableString?(string? key) =>
-        key == null
-            ? null
-            : new TranslatableString(key);
 }

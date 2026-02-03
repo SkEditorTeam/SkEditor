@@ -16,6 +16,9 @@ public class SettingsGenerator : IIncrementalGenerator
 
     private const string ToggleSettingAttributeFullName =
         "SkEditor.Utilities.Settings.Attributes.ToggleSettingAttribute";
+    
+    private const string ChoiceSettingAttributeFullName =
+        "SkEditor.Utilities.Settings.Attributes.ChoiceSettingAttribute";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -47,6 +50,13 @@ public class SettingsGenerator : IIncrementalGenerator
                         p.GetAttributes().Any(attr =>
                             attr.AttributeClass?.ToDisplayString() == ToggleSettingAttributeFullName))
                 ];
+                
+                ImmutableArray<IPropertySymbol> choiceProperties =
+                [
+                    ..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p =>
+                        p.GetAttributes().Any(attr =>
+                            attr.AttributeClass?.ToDisplayString() == ChoiceSettingAttributeFullName))
+                ];
 
                 StringBuilder settingsSectionsBuilder = new();
                 foreach (IPropertySymbol toggleProperty in toggleProperties)
@@ -71,6 +81,33 @@ public class SettingsGenerator : IIncrementalGenerator
                                                           ),
                                                           """);
                 }
+                
+                foreach (IPropertySymbol choiceProperty in choiceProperties)
+                {
+                    AttributeData attr = choiceProperty.GetAttributes().First(a =>
+                        a.AttributeClass?.ToDisplayString() == ChoiceSettingAttributeFullName);
+                    
+                    var args = attr.ConstructorArguments;
+
+                     string? titleKey = args[0].Value?.ToString();
+                     string? icon = args[1].Value?.ToString();
+                     string? categoryKey = args[2].Value?.ToString();
+                     string? providerType = args[3].Value?.ToString();
+                     string? descriptionKey = args.Length > 4 ? args[4].Value?.ToString() : null;
+                     
+                     string propertyType = choiceProperty.Type.ToDisplayString();
+
+                     settingsSectionsBuilder.AppendLine($$"""
+                                                          new ChoiceSetting<{{propertyType}}>(
+                                                              Translation.GetObservable("{{titleKey}}"),
+                                                              new FluentIcons.Avalonia.Fluent.SymbolIconSource() { Symbol = (FluentIcons.Common.Symbol){{icon}} },
+                                                              {{(descriptionKey != null ? $"Translation.GetObservable(\"{descriptionKey}\")" : "null")}},
+                                                              new {{providerType}}(),
+                                                              () => {{choiceProperty.Name}},
+                                                              (value) => {{choiceProperty.Name}} = value
+                                                          ),
+                                                          """);
+                }
 
                 string rawCode = $$"""
                                    using System.Collections.Generic;
@@ -86,11 +123,11 @@ public class SettingsGenerator : IIncrementalGenerator
                                            {{string.Join("\n", properties.Select(p => $"{p.Name} = other.{p.Name};"))}}
                                         }
                                         
-                                        public List<ToggleSetting> GetToggleSettingsSections()
+                                        public List<SettingElement> GetToggleSettingsSections()
                                         {
-                                            return new List<ToggleSetting>
+                                            return new List<SettingElement>
                                             {
-                                                {{settingsSectionsBuilder.ToString()}}
+                                                {{settingsSectionsBuilder}}
                                             };
                                         }
                                    }

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Providers;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
@@ -21,13 +23,13 @@ public partial class SettingsPageViewModel : ObservableObject
     public SettingsPageViewModel()
     {
         AppSettings appSettings = SkEditorAPI.Configs.GetAppSettings();
-        List<ToggleSetting> toggleSettings = appSettings.GetToggleSettingsSections();
+        List<SettingElement> settings = appSettings.GetToggleSettingsSections();
         SettingsCategories =
         [
             new SettingSection(
                 Translation.GetObservable("SettingsGeneralTitle"),
                 new SymbolIconSource { Symbol = Symbol.Settings },
-                toggleSettings
+                settings
             )
         ];
 
@@ -47,19 +49,41 @@ public class SettingSection(
     public List<SettingSection> Subsections { get; set; } = subsections ?? [];
 }
 
-public abstract class SettingElement(string name, IconSource icon, string? description = null)
+public abstract class SettingElement : ObservableObject
 {
-    public string Name { get; set; } = name;
-    public IconSource Icon { get; set; } = icon;
-    public string? Description { get; set; } = description;
+    public TranslatableString Name { get; set; }
+    public IconSource Icon { get; set; }
+    public TranslatableString? Description { get; set; }
+
+    public string NameValue => Name.Value;
+    public string? DescriptionValue => Description?.Value;
+
+    protected SettingElement(TranslatableString name, IconSource icon, TranslatableString? description = null)
+    {
+        Name = name;
+        Icon = icon;
+        Description = description;
+        
+
+        Name.PropertyChanged += (_, _) =>
+        {
+            SkEditorAPI.Logs.Info($"PropertyChanged: SettingElement.Name changed to '{Name.Value}'");
+            OnPropertyChanged(nameof(NameValue));
+        };
+        if (Description != null)
+            Description.PropertyChanged += (_, _) =>
+            {
+                SkEditorAPI.Logs.Info($"PropertyChanged: SettingElement.Description changed to '{Description.Value}'");
+                OnPropertyChanged(nameof(DescriptionValue));
+            };
+    }
 }
 
-[ObservableObject]
 public partial class ToggleSetting : SettingElement
 {
     private readonly Action<bool> _set;
 
-    public ToggleSetting(string name, IconSource icon, string? desc, Func<bool> get, Action<bool> set)
+    public ToggleSetting(TranslatableString name, IconSource icon, TranslatableString? desc, Func<bool> get, Action<bool> set)
         : base(name, icon, desc)
     {
         _set = set;
@@ -70,6 +94,43 @@ public partial class ToggleSetting : SettingElement
     private bool _isEnabled;
 
     partial void OnIsEnabledChanged(bool oldValue, bool newValue)
+    {
+        _set(newValue);
+    }
+}
+
+public interface IChoiceSetting
+{
+    IEnumerable Options { get; }
+    object? SelectedItem { get; set; }
+}
+
+public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
+{
+    private readonly Action<T> _set;
+    public List<T> Options { get; }
+
+    IEnumerable IChoiceSetting.Options => Options;
+
+    object? IChoiceSetting.SelectedItem
+    {
+        get => SelectedOption;
+        set => SelectedOption = (T)value!;
+    }
+
+    public ChoiceSetting(TranslatableString name, IconSource icon, TranslatableString? desc,
+        ISettingsProvider provider, Func<T> get, Action<T> set)
+        : base(name, icon, desc)
+    {
+        _set = set;
+        Options = provider.GetValues().Cast<T>().ToList();
+        SelectedOption = get();
+    }
+
+    [ObservableProperty]
+    private T _selectedOption;
+
+    partial void OnSelectedOptionChanged(T? oldValue, T newValue)
     {
         _set(newValue);
     }
