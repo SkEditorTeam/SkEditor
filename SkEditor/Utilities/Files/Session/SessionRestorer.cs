@@ -211,10 +211,7 @@ public static class SessionRestorer
                             $"Path: {fileData.Path}, hasUnsavedChanges: {fileData.HasUnsavedChanges}");
 
                         OpenedFile? openedFile = await SkEditorAPI.Files.AddEditorTab(fileData.Content, fileData.Path);
-                        if (openedFile != null)
-                        {
-                            openedFile.IsSaved = !fileData.HasUnsavedChanges;
-                        }
+                        openedFile?.IsSaved = !fileData.HasUnsavedChanges;
 
                         restoredCount++;
                     }

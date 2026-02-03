@@ -119,10 +119,7 @@ internal class ItemContextMenu
         {
             GuiGenerator.Instance.Items.Remove(slot);
             Button? button = GuiGenerator.Instance.Buttons.FirstOrDefault(x => (int?)x.Tag == slot);
-            if (button != null)
-            {
-                button.Content = "";
-            }
+            button?.Content = "";
         }
 
         return Task.CompletedTask;

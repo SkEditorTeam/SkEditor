@@ -127,12 +127,8 @@ public partial class Folder : StorageElement
             Registries.SidebarPanels.FirstOrDefault(x => x is ExplorerPanel) as ExplorerPanel;
 
         StackPanel? noFolderMessage = panel?.Panel.NoFolderMessage;
-        if (noFolderMessage is null)
-        {
-            return;
-        }
 
-        noFolderMessage.IsVisible = projectRootFolder == null;
+        noFolderMessage?.IsVisible = projectRootFolder == null;
     }
 
     public override void RenameElement(string newName, bool move = true)

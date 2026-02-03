@@ -32,10 +32,7 @@ public class Icon
             iconSource = icon as PathIconSource;
         }
 
-        if (openedFile.TabViewItem != null)
-        {
-            openedFile.TabViewItem.IconSource = iconSource;
-        }
+        openedFile.TabViewItem?.IconSource = iconSource;
     }
 
     public static IconSource? GetIcon(string extension)

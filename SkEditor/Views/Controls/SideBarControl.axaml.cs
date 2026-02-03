@@ -134,12 +134,8 @@ public partial class SideBarControl : UserControl
     private void UpdateSplitterVisibility()
     {
         MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow?.Splitter == null)
-        {
-            return;
-        }
 
-        mainWindow.Splitter.IsEnabled = _currentPanel != null && !_isAnimating;
+        mainWindow?.Splitter?.IsEnabled = _currentPanel != null && !_isAnimating;
     }
 
     public void ReloadPanels()

@@ -275,10 +275,7 @@ public class FileBuilder
 
         LineNumberMargin? lineNumberMargin = editor.TextArea.LeftMargins.OfType<LineNumberMargin>().FirstOrDefault();
 
-        if (lineNumberMargin is not null)
-        {
-            lineNumberMargin.Margin = new Thickness(10, 0);
-        }
+        lineNumberMargin?.Margin = new Thickness(10, 0);
 
         editor.Options.AllowScrollBelowDocument = true;
         editor.Options.CutCopyWholeLine = true;

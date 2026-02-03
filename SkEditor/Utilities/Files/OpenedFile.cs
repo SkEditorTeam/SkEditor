@@ -26,10 +26,7 @@ public class OpenedFile
         set
         {
             _saved = value;
-            if (TabViewItem != null)
-            {
-                TabViewItem.Header = Header;
-            }
+            TabViewItem?.Header = Header;
         }
     }
 

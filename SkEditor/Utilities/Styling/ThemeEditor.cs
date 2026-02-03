@@ -223,10 +223,7 @@ public class ThemeEditor
 
             smallWindow?.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
             MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-            if (mainWindow != null)
-            {
-                mainWindow.TransparencyLevelHint = levels;
-            }
+            mainWindow?.TransparencyLevelHint = levels;
         }
         else
         {

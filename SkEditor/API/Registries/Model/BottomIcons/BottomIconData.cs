@@ -68,10 +68,7 @@ public class BottomIconData : IBottomIconElement
         set
         {
             _isEnabled = value;
-            if (_attachedButton != null)
-            {
-                _attachedButton.IsEnabled = value;
-            }
+            _attachedButton?.IsEnabled = value;
         }
     }
 
