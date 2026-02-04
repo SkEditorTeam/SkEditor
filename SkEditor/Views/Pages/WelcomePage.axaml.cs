@@ -13,61 +13,51 @@ using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
-namespace SkEditor.Views.Controls;
+namespace SkEditor.Views.Pages;
 
-public partial class WelcomeTabControl : UserControl
+public partial class WelcomePage : UserControl
 {
-    // This is just a little, funny thing serving no real purpose... But it's nice, right?
-    private readonly string[] _tooltips = ["Hey!", "Hi!", "How are you?", "What will you code today?"];
-
-    public WelcomeTabControl()
+    public WelcomePage()
     {
         InitializeComponent();
 
         WelcomeScreenSection gettingStarted = new(
-            Translation.GetObservable("WelcomeTabGettingStarted"),
+            Translation.GetObservable("WelcomePageGettingStarted"),
             [
-                new WelcomeScreenElement(Translation.GetObservable("WelcomeGettingStartedNewFile"),
+                new WelcomeScreenElement(Translation.GetObservable("WelcomePageGettingStartedNewFile"),
                     new RelayCommand(FileHandler.NewFile),
                     CreateSymbolIcon(Symbol.DocumentAdd)),
-                new WelcomeScreenElement(Translation.GetObservable("WelcomeGettingStartedOpenFile"),
+                new WelcomeScreenElement(Translation.GetObservable("WelcomePageGettingStartedOpenFile"),
                     new AsyncRelayCommand(FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
-                new WelcomeScreenElement(Translation.GetObservable("WelcomeGettingStartedOpenFolder"),
+                new WelcomeScreenElement(Translation.GetObservable("WelcomePageGettingStartedOpenFolder"),
                     new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()),
                     CreateSymbolIcon(Symbol.FolderOpen)),
-                new WelcomeScreenElement(Translation.GetObservable("WelcomeGettingStartedSettings"),
+                new WelcomeScreenElement(Translation.GetObservable("WelcomePageGettingStartedSettings"),
                     new AsyncRelayCommand(OpenSettings),
                     CreateSymbolIcon(Symbol.Settings))
             ]
         );
 
-        WelcomeScreenSection help = new(Translation.GetObservable("WelcomeTabNeedHelp"),
+        WelcomeScreenSection help = new(Translation.GetObservable("WelcomePageUsefulLinks"),
         [
-            new WelcomeScreenElement(Translation.GetObservable("WelcomeNeedHelpDiscordServer"), new RelayCommand(() =>
+            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksDiscordServer"), new RelayCommand(() =>
                 SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev")), CreatePathIconSource("DiscordIcon")),
 
-            new WelcomeScreenElement(Translation.GetObservable("WelcomeNeedHelpGitHub"), new RelayCommand(() =>
+            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksGitHub"), new RelayCommand(() =>
                     SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
                 CreatePathIconSource("GitHubIcon")),
 
-            new WelcomeScreenElement(Translation.GetObservable("WelcomeNeedHelpDocumentation"),
+            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksDocumentation"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
                 CreateSymbolIcon(Symbol.Book)),
             
-            new WelcomeScreenElement(new TranslatableString("Support SkEditor"),
+            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksSupportUs"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://ko-fi.com/notro")),
                 CreateSymbolIcon(Symbol.Heart))
         ]);
 
         WelcomeSections.Add(gettingStarted);
         WelcomeSections.Add(help);
-
-        ToolTip.SetShowDelay(SkEditorIcon, 500);
-        SkEditorIcon.PointerEntered += (_, _) =>
-        {
-            int index = new Random().Next(_tooltips.Length);
-            ToolTip.SetTip(SkEditorIcon, _tooltips[index]);
-        };
     }
 
     public List<WelcomeScreenSection> WelcomeSections { get; } = [];

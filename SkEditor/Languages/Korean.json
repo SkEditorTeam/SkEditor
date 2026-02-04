@@ -198,5 +198,16 @@
   "MarketplaceButtonUpdate": "업데이트",
   "MarketplaceButtonUninstall": "제거",
   "MarketplaceButtonDisable": "비활성화",
-  "MarketplaceButtonEnable": "활성화"
+  "MarketplaceButtonEnable": "활성화",
+  "WelcomePageTitle": "환영합니다",
+  "WelcomePageGettingStarted": "시작하기",
+  "WelcomePageUsefulLinks": "유용한 링크",
+  "WelcomePageGettingStartedNewFile": "새 파일",
+  "WelcomePageGettingStartedOpenFile": "파일 열기",
+  "WelcomePageGettingStartedOpenFolder": "폴더 열기",
+  "WelcomePageGettingStartedSettings": "설정",
+  "WelcomePageUsefulLinksDiscordServer": "Discord 서버",
+  "WelcomePageUsefulLinksGitHub": "GitHub",
+  "WelcomePageUsefulLinksDocumentation": "문서",
+  "WelcomePageUsefulLinksSupportUs": "SkEditor 후원"
 }

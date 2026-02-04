@@ -165,5 +165,16 @@
   "MarketplaceButtonUpdate": "Actualizar",
   "MarketplaceButtonUninstall": "Desinstalar",
   "MarketplaceButtonDisable": "Desactivar",
-  "MarketplaceButtonEnable": "Activar"
+  "MarketplaceButtonEnable": "Activar",
+  "WelcomePageTitle": "Bienvenido",
+  "WelcomePageGettingStarted": "Primeros pasos",
+  "WelcomePageUsefulLinks": "Enlaces útiles",
+  "WelcomePageGettingStartedNewFile": "Nuevo archivo",
+  "WelcomePageGettingStartedOpenFile": "Abrir archivo",
+  "WelcomePageGettingStartedOpenFolder": "Abrir carpeta",
+  "WelcomePageGettingStartedSettings": "Configuración",
+  "WelcomePageUsefulLinksDiscordServer": "Servidor de Discord",
+  "WelcomePageUsefulLinksGitHub": "GitHub",
+  "WelcomePageUsefulLinksDocumentation": "Documentación",
+  "WelcomePageUsefulLinksSupportUs": "Apoyar a SkEditor"
 }

@@ -18,12 +18,13 @@ using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Syntax;
 using SkEditor.ViewModels;
+using SkEditor.Views.Controls;
+using SkEditor.Views.Pages;
 using File = System.IO.File;
 using FileTypeSelectionWindow = SkEditor.Views.Windows.FileTypes.FileTypeSelectionWindow;
 using Icon = SkEditor.Utilities.Files.Icon;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
-using WelcomeTabControl = SkEditor.Views.Controls.WelcomeTabControl;
 
 namespace SkEditor.Utilities.InternalAPI.Classes;
 
@@ -134,7 +135,7 @@ public class Files : IFiles
         {
             Symbol = Symbol.Home
         };
-        AddCustomTab(Translation.GetObservable("WelcomeTabTitle"), new WelcomeTabControl(), icon: icon);
+        AddCustomTab(Translation.GetObservable("WelcomePageTitle"), new WelcomePage(), icon: icon);
     }
 
     private OpenedFile? GetFromTabViewItem(TabViewItem tabViewItem)
@@ -431,7 +432,7 @@ public class Files : IFiles
 
     private void RemoveWelcomeTab()
     {
-        OpenedFile? welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem?.Content is WelcomeTabControl);
+        OpenedFile? welcomeTab = GetOpenedFiles().Find(file => file.TabViewItem?.Content is WelcomePage);
         if (welcomeTab == null)
         {
             return;

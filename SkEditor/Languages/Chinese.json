@@ -165,5 +165,16 @@
   "MarketplaceButtonUpdate": "更新",
   "MarketplaceButtonUninstall": "卸载",
   "MarketplaceButtonDisable": "禁用",
-  "MarketplaceButtonEnable": "启用"
+  "MarketplaceButtonEnable": "启用",
+  "WelcomePageTitle": "欢迎",
+  "WelcomePageGettingStarted": "入门",
+  "WelcomePageUsefulLinks": "实用链接",
+  "WelcomePageGettingStartedNewFile": "新建文件",
+  "WelcomePageGettingStartedOpenFile": "打开文件",
+  "WelcomePageGettingStartedOpenFolder": "打开文件夹",
+  "WelcomePageGettingStartedSettings": "设置",
+  "WelcomePageUsefulLinksDiscordServer": "Discord 服务器",
+  "WelcomePageUsefulLinksGitHub": "GitHub",
+  "WelcomePageUsefulLinksDocumentation": "文档",
+  "WelcomePageUsefulLinksSupportUs": "支持 SkEditor"
 }
