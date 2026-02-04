@@ -156,6 +156,7 @@
                                     Width="34" Height="34"
                                     Command="{x:Static search:SearchCommands.ReplaceNext}">
                                 <ToolTip.Tip>
+                                    <!-- TODO: replace all these strings with skeditor translations -->
                                     <TextBlock Text="{x:Static search:SR.SearchReplaceNext}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
