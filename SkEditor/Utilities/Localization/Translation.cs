@@ -153,7 +153,14 @@ public static class Translation
         }
 
         byte[] bytes = await File.ReadAllBytesAsync(languageFile);
-        LoadToResourceDictionary(bytes, newLanguageDict);
+        try
+        {
+            LoadToResourceDictionary(bytes, newLanguageDict);
+        }
+        catch (JsonException ex)
+        {
+            SkEditorAPI.Logs.Error($"Failed to load language file '{Path.GetFileName(languageFile)}': {ex.Message}", true);
+        }
     }
 
     private static void LoadToResourceDictionary(ReadOnlySpan<byte> jsonUtf8, ResourceDictionary dict)
