@@ -48,10 +48,12 @@ public partial class Theme
     public Brush SelectedTabItemBorder { get; set; } = C("#00181818");
 
     [ThemeResource("MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground",
+        "SearchPanelBackgroundBrush",
         MapPropertyName = false)]
     public Brush MenuBackground { get; set; } = C("#ff151515");
 
     [ThemeResource("MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush",
+        "SearchPanelBorderBrush",
         MapPropertyName = false)]
     public Brush MenuBorder { get; set; } = C("#ff262626");
 

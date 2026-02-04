@@ -21,6 +21,7 @@
                 <ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/SearchBoxStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/DialogStyles.axaml" />
+                <ResourceInclude Source="avares://SkEditor/Styles/SearchPanelStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -51,7 +52,6 @@
 
         <Brush x:Key="TextControlPlaceholderForegroundFocused">#26FFFFFF</Brush>
         <Brush x:Key="SearchPanelBackgroundBrush">#161616</Brush>
-
 
         <Brush x:Key="CurrentLineBackground">#05FFFFFF</Brush>
         <Brush x:Key="CurrentLineBorder">#0DFFFFFF</Brush>
