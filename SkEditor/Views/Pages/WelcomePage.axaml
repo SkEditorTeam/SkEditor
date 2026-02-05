@@ -4,86 +4,70 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:pages="clr-namespace:SkEditor.Views.Pages"
-             mc:Ignorable="d" d:DesignWidth="1800" d:DesignHeight="900"
+             xmlns:markup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              x:CompileBindings="True"
              x:Class="SkEditor.Views.Pages.WelcomePage">
 
-    <UserControl.Resources>
-        <DropShadowEffect x:Key="WelcomeScreenTextShadowEffect" Color="#64000000" BlurRadius="6" />
-    </UserControl.Resources>
-
     <UserControl.Styles>
         <Style Selector="Button">
-            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="Padding" Value="12,8" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="CornerRadius" Value="7" />
-            <Setter Property="VerticalAlignment" Value="Stretch" />
-            <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackground}" />
-            <Setter Property="Effect" Value="{StaticResource WelcomeScreenTextShadowEffect}" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
 
             <Style Selector="^:pointerover">
-                <Setter Property="Padding" Value="10,0" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="CornerRadius" Value="7" />
-                <Setter Property="VerticalAlignment" Value="Stretch" />
-                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
-
-            </Style>
-
-            <Style Selector="^:pointerover TextBlock, ^:pressed TextBlock, ^:disabled TextBlock">
-                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
-            </Style>
-
-            <Style
-                Selector="^:pointerover ui|IconSourceElement, ^:pressed ui|IconSourceElement, ^:disabled ui|IconSourceElement">
-                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
-            </Style>
-
-            <Style Selector="^ TextBlock">
-                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
             </Style>
         </Style>
     </UserControl.Styles>
 
-    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Margin="8">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="48">
-                <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="200" Width="200"/>
-                <!-- <ui:IconSourceElement Name="SkEditorIcon" IconSource="{StaticResource SkEditorIcon}" Height="200" Width="200" /> -->
-                <StackPanel Margin="0,0,0,20" VerticalAlignment="Center">
-                    <TextBlock Text="SkEditor" FontSize="40" FontWeight="DemiBold"
+    <Grid ColumnDefinitions="450, *" Margin="24">
+        <StackPanel Grid.Column="0" Margin="16" Spacing="48" VerticalAlignment="Top">
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="24">
+                <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="100" Width="100"/>
+                <StackPanel VerticalAlignment="Center" Margin="0,0,0,8">
+                    <TextBlock Text="SkEditor" FontSize="36" FontWeight="DemiBold"
                                Effect="{StaticResource WelcomeScreenTextShadowEffect}" />
-                    <TextBlock Text="{Binding Version}" FontSize="26" FontWeight="Normal" Foreground="#ccffffff" />
+                    <TextBlock TextAlignment="Center" Text="{Binding Version}" FontSize="18" FontWeight="Normal" Foreground="#ccffffff" />
                 </StackPanel>
             </StackPanel>
 
-            <ItemsRepeater ItemsSource="{Binding WelcomeSections}" VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Margin="50">
+            <ItemsRepeater ItemsSource="{Binding WelcomeSections}">
                 <ItemsRepeater.Layout>
-                    <StackLayout Spacing="100" Orientation="Horizontal" />
+                    <StackLayout Spacing="32"/>
                 </ItemsRepeater.Layout>
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate DataType="pages:WelcomePage+WelcomeScreenSection">
-                        <StackPanel Spacing="8">
-                            <TextBlock Text="{Binding Title.Value}" FontSize="28" FontWeight="SemiBold"
-                                       Effect="{StaticResource WelcomeScreenTextShadowEffect}" />
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="{Binding Title.Value}" 
+                                       TextAlignment="Center"
+                                       FontSize="20" 
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,0"/>
+                            
                             <ItemsRepeater ItemsSource="{Binding Entries}">
                                 <ItemsRepeater.Layout>
-                                    <StackLayout Spacing="4" />
+                                    <StackLayout Spacing="6" />
                                 </ItemsRepeater.Layout>
                                 <ItemsRepeater.ItemTemplate>
                                     <DataTemplate DataType="pages:WelcomePage+WelcomeScreenElement">
-                                        <Button Command="{Binding Command}" Padding="5" HorizontalAlignment="Stretch"
-                                                HorizontalContentAlignment="Left">
-                                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <Button HorizontalContentAlignment="Stretch" Padding="12" Command="{Binding Command}"
+                                                Background="#08FFFFFF">
+                                            <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
                                                 <Viewbox Width="24" Height="24">
                                                     <ui:IconSourceElement IconSource="{Binding Icon}" />
                                                 </Viewbox>
-                                                <TextBlock Text="{Binding Name.Value}" FontSize="16" />
+    
+                                                <TextBlock Text="{Binding Name.Value}" 
+                                                           VerticalAlignment="Center"
+                                                           Margin="4,0,0,0"
+                                                           FontSize="16" 
+                                                           FontWeight="Normal"/>
                                             </StackPanel>
                                         </Button>
                                     </DataTemplate>
@@ -94,5 +78,25 @@
                 </ItemsRepeater.ItemTemplate>
             </ItemsRepeater>
         </StackPanel>
-    </Viewbox>
+
+        <Border Grid.Column="1" 
+                Margin="48,16,16,16" 
+                Background="#08FFFFFF"
+                CornerRadius="8"
+                Padding="24"
+                VerticalAlignment="Stretch">
+            <Grid RowDefinitions="Auto, *">
+                <TextBlock Text="Recent Projects" 
+                           FontSize="20" 
+                           FontWeight="SemiBold" 
+                           Grid.Row="0"
+                           Margin="0,0,0,24"/>
+                
+                <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5" Spacing="10">
+                    <markup:SymbolIcon Symbol="FolderOpen" FontSize="48"/>
+                    <TextBlock Text="No recent projects found" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>
