@@ -5,23 +5,42 @@
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:pages="clr-namespace:SkEditor.Views.Pages"
              xmlns:markup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              x:CompileBindings="True"
              x:Class="SkEditor.Views.Pages.WelcomePage">
+    
+    <UserControl.Resources>
+        <system:TimeSpan x:Key="ButtonTransitionDuration">0:0:0.1</system:TimeSpan>
+    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="Button">
-            <Setter Property="Padding" Value="12,8" />
-            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="Background" Value="#08FFFFFF" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="CornerRadius" Value="8" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="Foreground" Value="#E8E8E8" />
+            
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <BrushTransition Duration="{StaticResource ButtonTransitionDuration}" Property="Background" />
+                        <BrushTransition Duration="{StaticResource ButtonTransitionDuration}" Property="Foreground" />
+                    </Transitions>
+                </Setter>
+            </Style>
+            
+            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#15FFFFFF" />
+                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackground}" />
+            </Style>
 
-            <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#20FFFFFF" />
             </Style>
         </Style>
     </UserControl.Styles>
@@ -29,45 +48,46 @@
     <Grid ColumnDefinitions="450, *" Margin="24">
         <StackPanel Grid.Column="0" Margin="16" Spacing="48" VerticalAlignment="Top">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="24">
-                <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="100" Width="100"/>
+                <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="100" Width="100" />
                 <StackPanel VerticalAlignment="Center" Margin="0,0,0,8">
                     <TextBlock Text="SkEditor" FontSize="36" FontWeight="DemiBold"
                                Effect="{StaticResource WelcomeScreenTextShadowEffect}" />
-                    <TextBlock TextAlignment="Center" Text="{Binding Version}" FontSize="18" FontWeight="Normal" Foreground="#ccffffff" />
+                    <TextBlock TextAlignment="Center" Text="{Binding Version}" FontSize="18" FontWeight="Normal"
+                               Foreground="#ccffffff" />
                 </StackPanel>
             </StackPanel>
 
             <ItemsRepeater ItemsSource="{Binding WelcomeSections}">
                 <ItemsRepeater.Layout>
-                    <StackLayout Spacing="32"/>
+                    <StackLayout Spacing="32" />
                 </ItemsRepeater.Layout>
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate DataType="pages:WelcomePage+WelcomeScreenSection">
                         <StackPanel Spacing="12">
-                            <TextBlock Text="{Binding Title.Value}" 
+                            <TextBlock Text="{Binding Title.Value}"
                                        TextAlignment="Center"
-                                       FontSize="20" 
+                                       FontSize="20"
                                        FontWeight="SemiBold"
-                                       Margin="0,0,0,0"/>
-                            
+                                       Margin="0,0,0,0" />
+
                             <ItemsRepeater ItemsSource="{Binding Entries}">
                                 <ItemsRepeater.Layout>
                                     <StackLayout Spacing="6" />
                                 </ItemsRepeater.Layout>
                                 <ItemsRepeater.ItemTemplate>
                                     <DataTemplate DataType="pages:WelcomePage+WelcomeScreenElement">
-                                        <Button HorizontalContentAlignment="Stretch" Padding="12" Command="{Binding Command}"
-                                                Background="#08FFFFFF">
-                                            <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                                        <Button HorizontalContentAlignment="Stretch" Command="{Binding Command}">
+                                            <StackPanel Orientation="Horizontal" Spacing="16"
+                                                        VerticalAlignment="Center">
                                                 <Viewbox Width="24" Height="24">
                                                     <ui:IconSourceElement IconSource="{Binding Icon}" />
                                                 </Viewbox>
-    
-                                                <TextBlock Text="{Binding Name.Value}" 
+
+                                                <TextBlock Text="{Binding Name.Value}"
                                                            VerticalAlignment="Center"
                                                            Margin="4,0,0,0"
-                                                           FontSize="16" 
-                                                           FontWeight="Normal"/>
+                                                           FontSize="16"
+                                                           FontWeight="Normal" />
                                             </StackPanel>
                                         </Button>
                                     </DataTemplate>
@@ -79,21 +99,22 @@
             </ItemsRepeater>
         </StackPanel>
 
-        <Border Grid.Column="1" 
-                Margin="48,16,16,16" 
+        <Border Grid.Column="1"
+                Margin="48,16,16,16"
                 Background="#08FFFFFF"
                 CornerRadius="8"
                 Padding="24"
                 VerticalAlignment="Stretch">
             <Grid RowDefinitions="Auto, *">
-                <TextBlock Text="Recent Projects" 
-                           FontSize="20" 
-                           FontWeight="SemiBold" 
+                <TextBlock Text="Recent Projects"
+                           FontSize="20"
+                           FontWeight="SemiBold"
                            Grid.Row="0"
-                           Margin="0,0,0,24"/>
-                
-                <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5" Spacing="10">
-                    <markup:SymbolIcon Symbol="FolderOpen" FontSize="48"/>
+                           Margin="0,0,0,24" />
+
+                <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5"
+                            Spacing="10">
+                    <markup:SymbolIcon Symbol="FolderOpen" FontSize="48" />
                     <TextBlock Text="No recent projects found" />
                 </StackPanel>
             </Grid>
