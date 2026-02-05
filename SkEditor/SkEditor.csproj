@@ -26,7 +26,7 @@
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>full</TrimMode>
-        <InvariantGlobalization>true</InvariantGlobalization>
+        <InvariantGlobalization>false</InvariantGlobalization>
         <OptimizationPreference>Speed</OptimizationPreference>
         <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
     </PropertyGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
@@ -60,7 +61,7 @@ public partial class WelcomePage : UserControl
         WelcomeSections.Add(gettingStarted);
         WelcomeSections.Add(help);
 
-        RecentItems =
+        List<WelcomeScreenRecentItem> recentItems =
         [
             new WelcomeScreenRecentItem("core.sk", @"C:\Users\NotroDev\Documents\Server\plugins\Skript\scripts\core.sk",
                 false, DateTime.Now.AddMinutes(-12)),
@@ -80,12 +81,12 @@ public partial class WelcomePage : UserControl
             new WelcomeScreenRecentItem("ChatManager", @"C:\Users\NotroDev\AppData\Roaming\SkEditor\temp\ChatManager",
                 true, DateTime.Now.AddSeconds(-30))
         ];
-
-        RecentItems.Sort((a, b) => b.LastOpened.CompareTo(a.LastOpened));
+        recentItems.Sort((a, b) => b.LastOpened.CompareTo(a.LastOpened));
+        RecentItems.AddRange(recentItems);
     }
 
     public List<WelcomeScreenSection> WelcomeSections { get; } = [];
-    public List<WelcomeScreenRecentItem> RecentItems { get; }
+    public List<WelcomeScreenRecentItem> RecentItems { get; } = [];
     public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
 
     private static SymbolIconSource CreateSymbolIcon(Symbol symbol)
@@ -117,6 +118,8 @@ public partial class WelcomePage : UserControl
 
         public static TranslatableString ToPrettyDate(DateTime date)
         {
+            var appCulture = CultureInfo.CurrentCulture;
+            
             var span = DateTime.Now - date;
 
             if (span.TotalMinutes < 1)
@@ -131,8 +134,8 @@ public partial class WelcomePage : UserControl
             if (!(span.TotalDays < 1))
             {
                 return date.Date == DateTime.Today.AddDays(-1)
-                    ? Translation.GetObservable("WelcomePageRecentYesterdayAt", date.ToString("HH:mm"))
-                    : new TranslatableString(date.ToString("dd.MM.yyyy HH:mm"));
+                    ? Translation.GetObservable("WelcomePageRecentYesterdayAt", date.ToString("t", appCulture))
+                    : new TranslatableString(date.ToString("g", appCulture));
             }
 
             int hours = (int)span.TotalHours;
