@@ -12,6 +12,8 @@ public partial class TranslatableString : ObservableObject
 
     [ObservableProperty]
     private string _key;
+    
+    private readonly string[] _parameters = [];
 
     public TranslatableString(string key)
     {
@@ -30,8 +32,15 @@ public partial class TranslatableString : ObservableObject
             _eventSubscribed = true;
         }
     }
+    
+    public TranslatableString(string key, params string[]? parameters) : this(key)
+    {
+        _parameters = parameters ?? [];
+    }
 
-    public string Value => Translation.Get(Key);
+    public string Value => _parameters == null || _parameters.Length == 0
+        ? Translation.Get(Key)
+        : Translation.Get(Key, _parameters);
 
     private static void OnGlobalLanguageChanged(object? sender, EventArgs e)
     {

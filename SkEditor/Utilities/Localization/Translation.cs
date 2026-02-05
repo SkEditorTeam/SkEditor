@@ -60,6 +60,11 @@ public static class Translation
     {
         return new TranslatableString(key);
     }
+    
+    public static TranslatableString GetObservable(string key, params string[]? parameters)
+    {
+        return new TranslatableString(key, parameters);
+    }
 
     /// <summary>
     ///     Changes the application's language to the specified language.

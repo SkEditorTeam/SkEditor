@@ -40,8 +40,9 @@ public partial class WelcomePage : UserControl
 
         WelcomeScreenSection help = new(Translation.GetObservable("WelcomePageUsefulLinks"),
         [
-            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksDiscordServer"), new RelayCommand(() =>
-                SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev")), CreatePathIconSource("DiscordIcon")),
+            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksDiscordServer"),
+                new RelayCommand(() =>
+                    SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev")), CreatePathIconSource("DiscordIcon")),
 
             new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksGitHub"), new RelayCommand(() =>
                     SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
@@ -50,7 +51,7 @@ public partial class WelcomePage : UserControl
             new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksDocumentation"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
                 CreateSymbolIcon(Symbol.Book)),
-            
+
             new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksSupportUs"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://ko-fi.com/notro")),
                 CreateSymbolIcon(Symbol.Heart))
@@ -58,9 +59,33 @@ public partial class WelcomePage : UserControl
 
         WelcomeSections.Add(gettingStarted);
         WelcomeSections.Add(help);
+
+        RecentItems =
+        [
+            new WelcomeScreenRecentItem("core.sk", @"C:\Users\NotroDev\Documents\Server\plugins\Skript\scripts\core.sk",
+                false, DateTime.Now.AddMinutes(-12)),
+            new WelcomeScreenRecentItem("SurvivalCore", @"D:\Projects\Minecraft\SurvivalCore", true,
+                DateTime.Now.AddHours(-3)),
+            new WelcomeScreenRecentItem("economy.sk", @"C:\Users\Admin\Desktop\OLD_PROJECTS\backup_2025\economy.sk",
+                false, DateTime.Now.AddDays(-1).AddHours(2)),
+            new WelcomeScreenRecentItem("scripts", @"Z:\NetworkDrive\Public\ServerFiles\Skript\scripts", true,
+                DateTime.Now.AddDays(-4)),
+            new WelcomeScreenRecentItem("very_long_name_of_a_script_that_can_destroy_your_beautiful_ui_test.sk",
+                @"C:\Temp\very_long_name_of_a_script_that_can_destroy_your_beautiful_ui_test.sk", false, DateTime.Now.AddDays(-10)),
+            new WelcomeScreenRecentItem("MiniGames", @"E:\Work\Java\SpigotServer\plugins\Skript\scripts\MiniGames",
+                true, DateTime.Now.AddMinutes(-45)),
+            new WelcomeScreenRecentItem("adminchat_final_version.sk",
+                @"C:\Users\NotroDev\Desktop\syf\adminchat_final_version.sk", false,
+                new DateTime(2025, 03, 24, 10, 30, 0)),
+            new WelcomeScreenRecentItem("ChatManager", @"C:\Users\NotroDev\AppData\Roaming\SkEditor\temp\ChatManager",
+                true, DateTime.Now.AddSeconds(-30))
+        ];
+
+        RecentItems.Sort((a, b) => b.LastOpened.CompareTo(a.LastOpened));
     }
 
     public List<WelcomeScreenSection> WelcomeSections { get; } = [];
+    public List<WelcomeScreenRecentItem> RecentItems { get; }
     public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
 
     private static SymbolIconSource CreateSymbolIcon(Symbol symbol)
@@ -84,4 +109,46 @@ public partial class WelcomePage : UserControl
     public record WelcomeScreenSection(TranslatableString Title, List<WelcomeScreenElement> Entries);
 
     public record WelcomeScreenElement(TranslatableString Name, IRelayCommand Command, IconSource? Icon);
+
+    public record WelcomeScreenRecentItem(string Name, string Path, bool IsFolder, DateTime LastOpened)
+    {
+        public Symbol IconSymbol => IsFolder ? Symbol.Folder : Symbol.Document;
+        public TranslatableString PrettyLastOpened => ToPrettyDate(LastOpened);
+
+        public static TranslatableString ToPrettyDate(DateTime date)
+        {
+            var span = DateTime.Now - date;
+
+            if (span.TotalMinutes < 1)
+                return Translation.GetObservable("WelcomePageRecentJustNow");
+
+            if (span.TotalHours < 1)
+            {
+                int minutes = (int)span.TotalMinutes;
+                return Translation.GetObservable($"WelcomePageRecentMinutes{GetPluralKey(minutes)}", minutes.ToString());
+            }
+
+            if (!(span.TotalDays < 1))
+            {
+                return date.Date == DateTime.Today.AddDays(-1)
+                    ? Translation.GetObservable("WelcomePageRecentYesterdayAt", date.ToString("HH:mm"))
+                    : new TranslatableString(date.ToString("dd.MM.yyyy HH:mm"));
+            }
+
+            int hours = (int)span.TotalHours;
+            return Translation.GetObservable($"WelcomePageRecentHours{GetPluralKey(hours)}", hours.ToString());
+        }
+
+        public static string GetPluralKey(int n)
+        {
+            if (n == 1) return "One";
+
+            if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20))
+            {
+                return "Few";
+            }
+
+            return "Many";
+        }
+    }
 }

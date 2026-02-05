@@ -381,5 +381,13 @@
   "WelcomePageUsefulLinksDiscordServer": "Serwer Discord",
   "WelcomePageUsefulLinksGitHub": "GitHub",
   "WelcomePageUsefulLinksDocumentation": "Dokumentacja",
-  "WelcomePageUsefulLinksSupportUs": "Wesprzyj SkEditor"
+  "WelcomePageUsefulLinksSupportUs": "Wesprzyj SkEditor",
+  "WelcomePageRecentJustNow": "Przed chwilą",
+  "WelcomePageRecentMinutesOne": "1 minutę temu",
+  "WelcomePageRecentMinutesFew": "{0} minuty temu",
+  "WelcomePageRecentMinutesMany": "{0} minut temu",
+  "WelcomePageRecentHoursOne": "1 godzinę temu",
+  "WelcomePageRecentHoursFew": "{0} godziny temu",
+  "WelcomePageRecentHoursMany": "{0} godzin temu",
+  "WelcomePageRecentYesterdayAt": "Wczoraj o {0}"
 }
