@@ -17,7 +17,7 @@
 
     <UserControl.Styles>
         <Style Selector="Button">
-            <Setter Property="Padding" Value="12" />
+            <Setter Property="Padding" Value="16,12" />
             <Setter Property="Background" Value="#08FFFFFF" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="CornerRadius" Value="8" />
@@ -85,7 +85,6 @@
 
                                                 <TextBlock Text="{Binding Name.Value}"
                                                            VerticalAlignment="Center"
-                                                           Margin="4,0,0,0"
                                                            FontSize="16"
                                                            FontWeight="Normal" />
                                             </StackPanel>
@@ -119,21 +118,21 @@
                 <!--     <markup:SymbolIcon Symbol="History" FontSize="48" /> -->
                 <!--     <TextBlock Text="No recent files or folders found" /> -->
                 <!-- </StackPanel> -->
-                <ItemsRepeater Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center"  ItemsSource="{Binding RecentItems}">
+                <ItemsRepeater Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" ItemsSource="{Binding RecentItems}">
                     <ItemsRepeater.Layout>
                         <StackLayout Spacing="8" />
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate DataType="pages:WelcomePage+WelcomeScreenRecentItem">
                             <Button HorizontalContentAlignment="Stretch">
-                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <StackPanel Orientation="Horizontal" Spacing="16">
                                         <Viewbox Width="20" Height="20">
                                             <icons:SymbolIcon Symbol="{Binding IconSymbol}"/>
                                         </Viewbox>
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
-                                            <TextBlock Text="{Binding Path}" Opacity="0.5" VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding Path}" FontSize="12" Opacity="0.5" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </StackPanel>
                                     <TextBlock Grid.Column="1" Text="{Binding PrettyLastOpened.Value}" Opacity="0.8" VerticalAlignment="Center" TextAlignment="Right" />
