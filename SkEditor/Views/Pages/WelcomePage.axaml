@@ -7,6 +7,7 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
              xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
+             xmlns:converters="clr-namespace:SkEditor.Converters"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              DataContext="{x:Static viewModels:ViewModelLocator.WelcomePageViewModel}"
              x:DataType="vms:WelcomePageViewModel"
@@ -15,6 +16,8 @@
 
     <UserControl.Resources>
         <system:TimeSpan x:Key="ButtonTransitionDuration">0:0:0.1</system:TimeSpan>
+        
+        <converters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -128,22 +131,42 @@
                         </ItemsRepeater.Layout>
                         <ItemsRepeater.ItemTemplate>
                             <DataTemplate DataType="vms:WelcomePageViewModel+WelcomeScreenRecentItem">
-                                <Button HorizontalContentAlignment="Stretch">
-                                    <Grid ColumnDefinitions="Auto,*">
-                                        <StackPanel Orientation="Horizontal" Spacing="16">
-                                            <Viewbox Width="20" Height="20">
-                                                <icons:SymbolIcon Symbol="{Binding IconSymbol}" />
-                                            </Viewbox>
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding Name}" FontSize="14"
+                                <Button HorizontalContentAlignment="Stretch"
+                                        VerticalContentAlignment="Center">
+                                    <DockPanel LastChildFill="True">
+                                        <Viewbox Width="20" Height="20"
+                                                 DockPanel.Dock="Left"
+                                                 Margin="0,0,16,0">
+                                            <icons:SymbolIcon Symbol="{Binding IconSymbol}" />
+                                        </Viewbox>
+
+                                        <TextBlock Text="{Binding PrettyLastOpened.Value}"
+                                                   DockPanel.Dock="Right"
+                                                   Opacity="0.8"
+                                                   VerticalAlignment="Center"
+                                                   TextAlignment="Right"
+                                                   IsVisible="{Binding Bounds.Width, 
+                                                       RelativeSource={RelativeSource AncestorType={x:Type Button}}, 
+                                                       Converter={StaticResource WidthToVisibilityConverter}, 
+                                                       ConverterParameter=450}" />
+
+                                        <Grid>
+                                            <Grid RowDefinitions="Auto,Auto">
+                                                <TextBlock Grid.Row="0"
+                                                           Text="{Binding Name}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           FontSize="14"
                                                            VerticalAlignment="Center" />
-                                                <TextBlock Text="{Binding DisplayPath}" FontSize="12" Opacity="0.5"
+
+                                                <TextBlock Grid.Row="1"
+                                                           Text="{Binding DisplayPath}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           FontSize="12"
+                                                           Opacity="0.5"
                                                            VerticalAlignment="Center" />
-                                            </StackPanel>
-                                        </StackPanel>
-                                        <TextBlock Grid.Column="1" Text="{Binding PrettyLastOpened.Value}"
-                                                   Opacity="0.8" VerticalAlignment="Center" TextAlignment="Right" />
-                                    </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </DockPanel>
                                 </Button>
                             </DataTemplate>
                         </ItemsRepeater.ItemTemplate>
