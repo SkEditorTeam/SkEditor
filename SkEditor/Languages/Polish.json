@@ -252,6 +252,7 @@
   "SettingsGeneralPasteIndent": "Autowcięcie wklejania",
   "SettingsGeneralPasteIndentDescription": "Automatycznie dostosowuje wcięcie wklejonego tekstu, aby pasowało do poprzedniej linii.",
   "SettingsGeneralCheckForUpdates": "Sprawdzaj aktualizacje",
+  "SettingsGeneralCheckForUpdatesDescription": "Sprawdza dostępność aktualizacji przy każdym uruchomieniu programu.",
   "SettingsGeneralProjectSingleFolderClick": "Otwórz folder projektu pojedynczym kliknięciem",
   "SettingsGeneralProjectSingleFolderClickDescription": "Po włączeniu, otwiera folder pojedynczym kliknięciem zamiast podwójnym.",
   "SettingsGeneralUseSplashScreen": "Ekran powitalny",
