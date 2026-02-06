@@ -59,7 +59,7 @@ public partial class WelcomePageViewModel : ObservableObject
             new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksDocumentation"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
                 CreateSymbolIcon(Symbol.Book)),
-            
+
             new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksSupportUs"),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://ko-fi.com/notro")),
                 CreateSymbolIcon(Symbol.Heart))
@@ -124,8 +124,15 @@ public partial class WelcomePageViewModel : ObservableObject
         public static TranslatableString ToPrettyDate(DateTime date)
         {
             var appCulture = CultureInfo.CurrentCulture;
-
             var span = DateTime.Now - date;
+
+            switch (span.TotalDays)
+            {
+                case < 0:
+                    return Translation.GetObservable("WelcomePageRecentInTheFuture");
+                case >= 365 * 50:
+                    return Translation.GetObservable("WelcomePageRecentTimeTraveler");
+            }
 
             if (span.TotalMinutes < 1)
                 return Translation.GetObservable("WelcomePageRecentJustNow");

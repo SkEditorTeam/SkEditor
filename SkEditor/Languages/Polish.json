@@ -389,5 +389,7 @@
   "WelcomePageRecentHoursOne": "1 godzinę temu",
   "WelcomePageRecentHoursFew": "{0} godziny temu",
   "WelcomePageRecentHoursMany": "{0} godzin temu",
-  "WelcomePageRecentYesterdayAt": "Wczoraj o {0}"
+  "WelcomePageRecentYesterdayAt": "Wczoraj o {0}",
+  "WelcomePageRecentTimeTraveler": "Na długo zanim czas uzyskał imię...",
+  "WelcomePageRecentInTheFuture": "Wróciłeś z przyszłości?"
 }
