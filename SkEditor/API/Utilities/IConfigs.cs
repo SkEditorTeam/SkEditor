@@ -29,6 +29,12 @@ public interface IConfigs
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     Task SaveAllConfigsAsync();
+    
+    /// <summary>
+    ///     Save all configuration files immediately asynchronously.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task SaveAllConfigsImmediateAsync();
 
     /// <summary>
     ///     Check and migrate old configuration files to the new format asynchronously.

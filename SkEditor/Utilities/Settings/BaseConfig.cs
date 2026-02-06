@@ -76,6 +76,16 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
         }
     }
 
+    public async Task SaveImmediate()
+    {
+        if (_saveCts != null)
+        {
+            await _saveCts.CancelAsync();
+        }
+    
+        await SaveInternal();
+    }
+
     private async Task SaveInternal()
     {
         await _saveLock.WaitAsync();

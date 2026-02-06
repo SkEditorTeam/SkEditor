@@ -36,6 +36,11 @@ public partial class Configs : IConfigs
     {
         await Task.WhenAll(_configs.Select(config => config.Save()));
     }
+    
+    public async Task SaveAllConfigsImmediateAsync()
+    {
+        await Task.WhenAll(_configs.Select(config => config.SaveImmediate()));
+    }
 
     public AppSettings GetAppSettings()
     {

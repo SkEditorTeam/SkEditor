@@ -87,7 +87,7 @@ public partial class MainWindow : AppWindow
             }
 
             ThemeEditor.SaveAllThemes();
-            await SkEditorAPI.Configs.SaveAllConfigsAsync();
+            await SkEditorAPI.Configs.SaveAllConfigsImmediateAsync();
 
             e.Cancel = true;
             if (!SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)

@@ -97,4 +97,9 @@ public partial class BinarySettings : ObservableObject, IConfig
 
         return Task.CompletedTask;
     }
+    
+    public Task SaveImmediate()
+    {
+        return Save();
+    }
 }

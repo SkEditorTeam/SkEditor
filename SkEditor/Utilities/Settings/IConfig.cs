@@ -7,4 +7,5 @@ public interface IConfig
     string FileName { get; }
     Task Load();
     Task Save();
+    Task SaveImmediate();
 }
