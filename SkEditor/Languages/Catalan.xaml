@@ -1,0 +1,457 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- Window Titles -->
+    <system:String x:Key="WindowTitlePublish">Publicar</system:String>
+    <system:String x:Key="WindowTitleRefactor">Refactoritzar</system:String>
+    <system:String x:Key="WindowTitleSettings">Configuració</system:String>
+    <system:String x:Key="WindowTitleFontSelector">Selecciona la font</system:String>
+    <system:String x:Key="WindowTitleSaveFilePicker">Desar fitxer</system:String>
+    <system:String x:Key="WindowTitleOpenFilePicker">Obrir fitxer</system:String>
+    <system:String x:Key="WindowTitleGuiGenerator">Generar GUI</system:String>
+    <system:String x:Key="WindowTitleCommandGenerator">Generar comanda</system:String>
+    <system:String x:Key="WindowTitleItemSelector">Selecciona objecte</system:String>
+    <system:String x:Key="WindowTitleMarketplace">Mercat</system:String>
+    <system:String x:Key="WindowTitleElementRename">Canviar el nom</system:String>
+    <system:String x:Key="WindowTitleElementCreate">Crear</system:String>
+    <system:String x:Key="WindowTitleColorSelector">Selector de color</system:String>
+
+    <!-- Menu Headers -->
+    <system:String x:Key="MenuHeaderFile">Fitxer</system:String>
+    <system:String x:Key="MenuHeaderEdit">Edita</system:String>
+    <system:String x:Key="MenuHeaderTools">Eines</system:String>
+    <system:String x:Key="MenuHeaderOther">Altres</system:String>
+    <system:String x:Key="MenuHeaderAddons">Complements</system:String>
+    <system:String x:Key="MenuHeaderManageAddons">Gestiona complements</system:String>
+
+    <!-- File Menu -->
+    <system:String x:Key="MenuHeaderNew">Nou</system:String>
+    <system:String x:Key="MenuHeaderOpen">Obre</system:String>
+    <system:String x:Key="MenuHeaderOpenFolder">Obre carpeta</system:String>
+    <system:String x:Key="MenuHeaderSave">Desa</system:String>
+    <system:String x:Key="MenuHeaderSaveAs">Desa com</system:String>
+    <system:String x:Key="MenuHeaderSaveAll">Desa-ho tot</system:String>
+    <system:String x:Key="MenuHeaderPublish">Publica</system:String>
+    <system:String x:Key="MenuHeaderClose">Tanca</system:String>
+    <system:String x:Key="MenuHeaderCloseCurrentFile">Fitxer actual</system:String>
+    <system:String x:Key="MenuHeaderCloseAll">Tots</system:String>
+    <system:String x:Key="MenuHeaderCloseAllButCurrent">Tots excepte l’actual</system:String>
+    <system:String x:Key="MenuHeaderCloseUnsaved">Tots els no desats</system:String>
+    <system:String x:Key="MenuHeaderCloseLeft">Tots a l’esquerra</system:String>
+    <system:String x:Key="MenuHeaderCloseRight">Tots a la dreta</system:String>
+
+    <!-- Edit Menu -->
+    <system:String x:Key="MenuHeaderCopy">Copia</system:String>
+    <system:String x:Key="MenuHeaderPaste">Enganxa</system:String>
+    <system:String x:Key="MenuHeaderCut">Retalla</system:String>
+    <system:String x:Key="MenuHeaderUndo">Desfés</system:String>
+    <system:String x:Key="MenuHeaderRedo">Refés</system:String>
+    <system:String x:Key="MenuHeaderDuplicate">Duplica</system:String>
+    <system:String x:Key="MenuHeaderComment">Comenta</system:String>
+    <system:String x:Key="MenuHeaderDelete">Suprimeix</system:String>
+    <system:String x:Key="MenuHeaderGoToLine">Ves a la línia</system:String>
+    <system:String x:Key="MenuHeaderTrimWhitespaces">Retalla espais en blanc</system:String>
+
+    <!-- Tools Menu -->
+    <system:String x:Key="MenuHeaderDocumentation">Documentació</system:String>
+    <system:String x:Key="MenuHeaderGenerate">Genera</system:String>
+    <system:String x:Key="MenuHeaderGenerateGUI">GUI</system:String>
+    <system:String x:Key="MenuHeaderGenerateCommand">Comanda</system:String>
+    <system:String x:Key="MenuHeaderRefactor">Refactoritza</system:String>
+    <system:String x:Key="MenuHeaderColorSelector">Selector de color</system:String>
+
+    <!-- Other Menu -->
+    <system:String x:Key="MenuHeaderMarketplace">Mercat</system:String>
+    <system:String x:Key="MenuHeaderDevTools">Eines de desenvolupador</system:String>
+    <system:String x:Key="MenuHeaderRefreshSyntax">Actualitza la sintaxi</system:String>
+    <system:String x:Key="MenuHeaderRefreshTheme">Actualitza el tema</system:String>
+
+    <!-- Project Menu -->
+    <system:String x:Key="MenuHeaderDeleteFromDisk">Suprimeix del disc</system:String>
+    <system:String x:Key="MenuHeaderOpenInExplorer">Obre a l’explorador</system:String>
+    <system:String x:Key="MenuHeaderCopyPath">Copia el camí relatiu</system:String>
+    <system:String x:Key="MenuHeaderCopyAbsolutePath">Copia el camí absolut</system:String>
+    <system:String x:Key="MenuHeaderRename">Canvia el nom</system:String>
+    <system:String x:Key="MenuHeaderNewFile">Nou fitxer</system:String>
+    <system:String x:Key="MenuHeaderNewFolder">Nova carpeta</system:String>
+    <system:String x:Key="MenuHeaderCloseProject">Tanca el projecte</system:String>
+
+    <!-- Buttons -->
+    <system:String x:Key="ApplyButton">Aplica</system:String>
+    <system:String x:Key="ConfirmButton">Confirma</system:String>
+    <system:String x:Key="CloseButton">Tanca</system:String>
+    <system:String x:Key="SelectButton">Selecciona</system:String>
+    <system:String x:Key="DeleteButton">Suprimeix</system:String>
+    <system:String x:Key="CancelButton">Cancel·la</system:String>
+    <system:String x:Key="ContinueButton">Continua</system:String>
+    <system:String x:Key="Error">Error</system:String>
+    <system:String x:Key="Success">Èxit</system:String>
+    <system:String x:Key="Attention">Atenció!</system:String>
+    <system:String x:Key="Yes">Sí</system:String>
+    <system:String x:Key="No">No</system:String>
+    <system:String x:Key="Okay">D’acord</system:String>
+
+    <!-- Messages -->
+    <system:String x:Key="NewFileNameFormat">Nou fitxer {0}</system:String>
+    <system:String x:Key="FailedToDownloadSyntax">No s’ha pogut descarregar el fitxer de ressaltat de sintaxi. Comprova la teva connexió a internet. Sense això, el codi no es ressaltarà.</system:String>
+    <system:String x:Key="DownloadingMissingFilesTitle">Fitxers que falten</system:String>
+    <system:String x:Key="Downloading">Descarregant</system:String>
+    <system:String x:Key="DownloadingMissingFilesDescriptionItems">Falten fitxers utilitzats pel selector d’objectes i s’estan descarregant ara.</system:String>
+    <system:String x:Key="DownloadingMissingFiles">Descarregant</system:String>
+    <system:String x:Key="DownloadMissingFilesFailed">No s’han pogut descarregar els fitxers que falten. Torna-ho a provar més tard.</system:String>
+    <system:String x:Key="ClosingUnsavedFile">Tens canvis sense desar en aquest fitxer. Segur que vols tancar-lo?</system:String>
+    <system:String x:Key="ClosingFiles">Segur que vols tancar els fitxers? Qualsevol canvi no desat es perdrà.</system:String>
+    <system:String x:Key="ClosingProgramWithUnsavedFiles">Tens canvis sense desar en almenys un fitxer. Segur que vols tancar l’aplicació?</system:String>
+    <system:String x:Key="ChangesDetected">Aquest fitxer s’ha modificat externament.\nVols tornar-lo a carregar i possiblement perdre els canvis fets a SkEditor?</system:String>
+    <system:String x:Key="DownloadingUpdateTitle">Descarregant actualització</system:String>
+    <system:String x:Key="UpdateAvailable">Actualització disponible</system:String>
+    <system:String x:Key="UpdateAvailableMessage">Hi ha una actualització disponible.\nVols descarregar-la ara?</system:String>
+    <system:String x:Key="UpdateFailed">No s’ha pogut descarregar l’actualització. Torna-ho a provar més tard.</system:String>
+    <system:String x:Key="BinaryFileFound">Sembla que estàs intentant obrir un fitxer binari (o un fitxer no basat en text).\n\nVols obrir-lo igualment? SkEditor pot no gestionar-lo correctament.</system:String>
+    <system:String x:Key="BinaryFileTitle">Fitxer binari trobat</system:String>
+    <system:String x:Key="DeleteFileTitle">Suprimeix fitxer</system:String>
+    <system:String x:Key="DeleteFolderTitle">Suprimeix carpeta</system:String>
+    <system:String x:Key="DeleteStorageElement">Segur que vols suprimir {0} del sistema de fitxers?</system:String>
+    <system:String x:Key="UnsavedFileTitle">Fitxer no desat</system:String>
+    <system:String x:Key="UnsavedFileMessage">El fitxer «{0}» no està desat.\n\nSegur que vols tancar-lo i descartar els canvis?</system:String>
+    <system:String x:Key="AddonUpdateAvailableTitle">Actualització de complement disponible</system:String>
+    <system:String x:Key="AddonUpdateAvailableMessage">Hi ha una actualització disponible per a «{0}».\n\nVisita el Mercat per actualitzar-lo amb les darreres correccions i compatibilitat amb SkEditor.</system:String>
+
+    <!-- Publish Window -->
+    <system:String x:Key="PublishWindowNoApiKey">Configura la teva clau API a la configuració</system:String>
+    <system:String x:Key="PublishWindowApiKeyHint">Fes clic aquí per obrir un lloc web amb la clau API. Assegura’t d’iniciar sessió primer!</system:String>
+    <system:String x:Key="PublishWindowAnonymously">Anònimament</system:String>
+    <system:String x:Key="PublishWindowResultLink">Enllaç al teu codi</system:String>
+    <system:String x:Key="PublishWindowPublishButton">Publica</system:String>
+    <system:String x:Key="PublishWindowWarning">Ara pots gestionar les teves claus API a Configuració → Connexions.</system:String>
+
+    <!-- Local Docs Manager Window -->
+    <system:String x:Key="LocalDocsManagerWindowTitle">Gestor de documentació local</system:String>
+    <system:String x:Key="LocalDocsManagerWindowInfo">Des d’aquí pots gestionar els elements de documentació que has descarregat.</system:String>
+    <system:String x:Key="LocalDocsManagerWindowDeleteEverything">Suprimeix-ho tot</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupBy">Agrupa per</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByProvider">Proveïdor</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByType">Tipus</system:String>
+    <system:String x:Key="LocalDocsManagerWindowGroupByAddon">Complement</system:String>
+    <system:String x:Key="LocalDocsManagerWindowEntryDescription">{0} proporcionat per {1}</system:String>
+
+    <!-- (Element) Documentation Control -->
+    <system:String x:Key="DocumentationControlExamples">Exemples</system:String>
+    <system:String x:Key="DocumentationControlActions">Accions</system:String>
+    <system:String x:Key="DocumentationControlEventValues">Valors d’esdeveniment</system:String>
+    <system:String x:Key="DocumentationControlChangers">Canviadors</system:String>
+
+    <system:String x:Key="DocumentationControlActionsFilter">Filtra mitjançant aquest element...</system:String>
+    <system:String x:Key="DocumentationControlType">Tipus</system:String>
+    <system:String x:Key="DocumentationControlAddon">Complement</system:String>
+
+    <system:String x:Key="DocumentationControlChangerHelp">fes clic al canviador desitjat per copiar el seu codi generat.</system:String>
+    <system:String x:Key="DocumentationControlSince">Des de v{0}</system:String>
+    <system:String x:Key="DocumentationControlSeeOn">Veure a {0}</system:String>
+    <system:String x:Key="DocumentationControlDownload">Descarrega</system:String>
+    <system:String x:Key="DocumentationControlRemove">Elimina</system:String>
+    <system:String x:Key="DocumentationControlExampleAuthor">Per {0}</system:String>
+    <system:String x:Key="DocumentationControlTypeFromProvider">{0} de {1}</system:String>
+
+    <system:String x:Key="DocumentationControlNoExamples">No s’han trobat exemples per a aquest element.</system:String>
+    <system:String x:Key="DocumentationControlNoEventValues">No s’han trobat valors d’esdeveniment per a aquest element.</system:String>
+    <system:String x:Key="DocumentationControlNoChangers">No s’han trobat canviadors per a aquest element.</system:String>
+    <system:String x:Key="DocumentationControlNoDescription">No s’ha proporcionat cap descripció.</system:String>
+
+    <system:String x:Key="DocumentationControlErrorExamples">S’ha produït un error en carregar els exemples: {0}</system:String>
+
+    <!-- Documentation Window -->
+    <system:String x:Key="DocumentationWindowTitle">Documentació</system:String>
+    <system:String x:Key="DocumentationWindowSearchQuery">Consulta de cerca</system:String>
+    <system:String x:Key="DocumentationWindowSearch">Cerca</system:String>
+    <system:String x:Key="DocumentationWindowFilteredType">Tipus filtrat</system:String>
+    <system:String x:Key="DocumentationWindowFilteredAddon">Complement filtrat</system:String>
+    <system:String x:Key="DocumentationWindowProvider">Proveïdor</system:String>
+    <system:String x:Key="DocumentationWindowManageCached">Gestiona els elements en memòria cau</system:String>
+    <system:String x:Key="DocumentationWindowDownloadAll">Descarrega tots els trobats</system:String>
+    <system:String x:Key="DocumentationWindowLoading">Carregant...</system:String>
+
+    <system:String x:Key="DocumentationWindowErrorGlobal">S’ha produït un error en obtenir la documentació.\n\n{0}</system:String>
+    <system:String x:Key="DocumentationWindowErrorOffline">La sol·licitud al servidor de documentació ha esgotat el temps. Els documents estan caiguts?</system:String>
+
+    <system:String x:Key="DocumentationWindowNoProvidersMessage">No s’ha seleccionat cap proveïdor de documentació.\n\nPotser necessites connectar les teves claus API des de la configuració per utilitzar-los.</system:String>
+
+    <system:String x:Key="DocumentationWindowNoResults">No s’han trobat resultats.</system:String>
+    <system:String x:Key="DocumentationWindowNoProviders">No s’han trobat proveïdors.</system:String>
+    <system:String x:Key="DocumentationWindowInvalidData">Dades de cerca no vàlides.</system:String>
+    <system:String x:Key="DocumentationWindowAnErrorOccured">S’ha produït un error.</system:String>
+    <system:String x:Key="DocumentationWindowTooManyResults">Massa resultats.</system:String>
+    <system:String x:Key="DocumentationWindowTooManyResultsMessage">La cerca ha retornat més de 100 resultats. Segur que vols mostrar-los tots?\n\nPot alentir l’aplicació!</system:String>
+    <system:String x:Key="DocumentationWindowInvalidDataQuery">La consulta ha de tenir com a mínim 3 caràcters</system:String>
+    <system:String x:Key="DocumentationWindowSkriptMCBad">SkriptMC no admet la cerca de tots els tipus.</system:String>
+    <system:String x:Key="DocumentationWindowSkriptMCBad2">SkriptMC no està disponible actualment per a la documentació. Torna-ho a provar més tard.</system:String>
+
+    <system:String x:Key="DocumentationWindowNoEntries">No s’han trobat entrades de documentació. Per què no en cerques primer?</system:String>
+    <system:String x:Key="DocumentationWindowDownloadAllMessage">Segur que vols descarregar totes les entrades de documentació trobades? (total: {0})</system:String>
+    <system:String x:Key="DocumentationWindowDownloadingElements">Descarregant elements...</system:String>
+    <system:String x:Key="DocumentationWindowDownloading">Descarregant</system:String>
+    <system:String x:Key="DocumentationWindowDownloadingMessage">Estem descarregant les entrades de documentació per a tu. Espera, si us plau...</system:String>
+
+    <system:String x:Key="DocumentationWindowCacheSkriptHub">Emmagatzemant en memòria cau els elements de SkriptHub...</system:String>
+    <system:String x:Key="DocumentationWindowCacheSkriptHubMessage">Estem emmagatzemant en memòria cau els elements de SkriptHub. Espera, si us plau...</system:String>
+    <system:String x:Key="DocumentationWindowSorting">Ordenant els elements descarregats...</system:String>
+
+    <system:String x:Key="DocumentationWindowFetchAgain">Torna a obtenir la documentació</system:String>
+    <system:String x:Key="DocumentationWindowFetchWarning">Això tornarà a obtenir les entrades de documentació de SkriptHub. Probablement no cal fer-ho tret que vulguis veure-ho tot actualitzat. N’estàs segur?</system:String>
+    <system:String x:Key="DocumentationWindowFetchSuccessMessage">Memòria cau eliminada. Hauràs de tornar a cercar els elements per tornar a descarregar la documentació de SkriptHub.</system:String>
+
+    <!-- Refactor Window -->
+    <system:String x:Key="RefactorWindowRemoveComments">Elimina comentaris</system:String>
+    <system:String x:Key="RefactorWindowTabsToSpaces">Converteix tabulacions a espais</system:String>
+    <system:String x:Key="RefactorWindowSpacesToTabs">Converteix espais a tabulacions</system:String>
+    <system:String x:Key="RefactorWindowRefactorBoxName">Canviant «{0}» a...</system:String>
+
+    <!-- Color Selector -->
+    <system:String x:Key="ColorSelectorWindowHexResult">Resultat en hexadecimal</system:String>
+    
+    <!-- Projects -->
+    <system:String x:Key="ProjectExplorerTitle">Explorador</system:String>
+    <system:String x:Key="ProjectExplorerInfoText">Encara no tens cap carpeta oberta.</system:String>
+    <system:String x:Key="ProjectExplorerInfoButton">Obre carpeta</system:String>
+    <system:String x:Key="ProjectRenameText">Canviant el nom a...</system:String>
+    <system:String x:Key="ProjectRenameErrorNameEmpty">El nom no pot estar buit.</system:String>
+    <system:String x:Key="ProjectRenameErrorNameInvalid">El nom no és vàlid.</system:String>
+    <system:String x:Key="ProjectRenameErrorParentNull">El pare no pot ser nul.</system:String>
+    <system:String x:Key="ProjectErrorNameExists">Ja existeix un fitxer o carpeta amb aquest nom.</system:String>
+    <system:String x:Key="ProjectRenameErrorSameName">El nom nou és el mateix que l’antic.</system:String>
+    <system:String x:Key="ProjectCreateFileName">Nom del fitxer</system:String>
+    <system:String x:Key="ProjectCreateFolderName">Nom de la carpeta</system:String>
+    <system:String x:Key="ProjectCreateTemplate">Plantilla</system:String>
+
+    <!-- Code Parser -->
+    <system:String x:Key="CodeParserTitle">Anàlisi de codi</system:String>
+    <system:String x:Key="CodeParserWarning">L’analitzador de codi encara està en beta. Si us plau, informa de qualsevol error que trobis al servidor de Discord.</system:String>
+    <system:String x:Key="CodeParserEnableInfo">L’analitzador de codi encara està en beta i poden produir-se errors. Està desactivat per defecte, però el pots activar amb el botó de sota.</system:String>
+    <system:String x:Key="CodeParserSearch">Cerca...</system:String>
+    <system:String x:Key="CodeParserFilterName">Filtra per nom</system:String>
+    <system:String x:Key="CodeParserFilterType">Filtra per tipus</system:String>
+    <system:String x:Key="CodeParserFilterTypeAny">Qualsevol</system:String>
+    <system:String x:Key="CodeParserFilterTypeFunctions">Funcions</system:String>
+    <system:String x:Key="CodeParserFilterTypeEvents">Esdeveniments</system:String>
+    <system:String x:Key="CodeParserFilterTypeOptions">Opcions</system:String>
+    <system:String x:Key="CodeParserFilterTypeCommands">Comandes</system:String>
+    <system:String x:Key="CodeParserClearFilters">Neteja els filtres actuals</system:String>
+    <system:String x:Key="CodeParserNavigate">Navega</system:String>
+    <system:String x:Key="CodeParserNavigateToDefinition">Ves a la definició</system:String>
+    <system:String x:Key="CodeParserRename">Canvia el nom</system:String>
+    <system:String x:Key="CodeParserNoSections">No s’han trobat seccions al codi. Potser hauries d’escriure alguna cosa? :)</system:String>
+    <system:String x:Key="CodeParserBadFormat">Aquest fitxer no es pot analitzar, ja que no sembla un fitxer Skript.</system:String>
+    <system:String x:Key="CodeParserParseCode">Analitza el codi</system:String>
+    <system:String x:Key="CodeParserParsed">Codi actual analitzat</system:String>
+
+    <!-- File Association Selection Window -->
+    <system:String x:Key="FileAssociationSelectionWindowTitle">Selecciona l’associació de fitxer</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowInfo">Hi ha diversos proveïdors per a aquest tipus de fitxer. Selecciona’n un.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowOfficialItem">Aquest és un tipus de fitxer oficial de SkEditor.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowUnofficialItem">Aquest és un tipus de fitxer no oficial d’un complement, {0}.</system:String>
+    <system:String x:Key="FileAssociationSelectionWindowRememberMyChoice">Recorda la meva elecció</system:String>
+
+    <!-- Settings -->
+    <system:String x:Key="SettingsEnabled">Activat</system:String>
+    <system:String x:Key="SettingsDisabled">Desactivat</system:String>
+
+    <!-- Settings Home -->
+    <system:String x:Key="SettingsHomeTitle">Configuració</system:String>
+    <system:String x:Key="SettingsHomeGeneral">General</system:String>
+    <system:String x:Key="SettingsHomeGeneralDescription">Idioma, funcions de l’editor de text</system:String>
+    <system:String x:Key="SettingsHomePersonalization">Personalització</system:String>
+    <system:String x:Key="SettingsHomePersonalizationDescription">Tema, font, ressaltat de sintaxi</system:String>
+    <system:String x:Key="SettingsHomeDiscord">Discord</system:String>
+    <system:String x:Key="SettingsHomeDiscordDescription">Mostra SkEditor al teu perfil de Discord!</system:String>
+    <system:String x:Key="SettingsHomeExperiments">Experiments</system:String>
+    <system:String x:Key="SettingsHomeExperimentsDescription">Prova funcions properes!</system:String>
+    <system:String x:Key="SettingsHomeConnections">Connexions</system:String>
+    <system:String x:Key="SettingsHomeConnectionsDescription">Gestiona les teves connexions de tercers.</system:String>
+    <system:String x:Key="SettingsHomeAddons">Complements</system:String>
+    <system:String x:Key="SettingsHomeAddonsDescription">Millora la teva experiència amb complements potents!</system:String>
+    <system:String x:Key="SettingsHomeAbout">Quant a</system:String>
+    <system:String x:Key="SettingsHomeFileTypes">Tipus de fitxer</system:String>
+    <system:String x:Key="SettingsHomeFileTypesDescription">Gestiona els tipus de fitxer i les seves associacions.</system:String>
+
+    <!-- General Settings -->
+    <system:String x:Key="SettingsGeneralTitle">General</system:String>
+    <system:String x:Key="SettingsGeneralLanguage">Idioma</system:String>
+    <system:String x:Key="SettingsGeneralWrapping">Ajust de línia</system:String>
+    <system:String x:Key="SettingsGeneralWrappingDescription">Tria si les línies s’han d’ajustar a l’amplada de la vista.</system:String>
+    <system:String x:Key="SettingsGeneralZoomSync">Sincronitza el zoom entre pestanyes</system:String>
+    <system:String x:Key="SettingsGeneralZoomSyncDescription">Quan està activat, canviar el nivell de zoom en una pestanya s’aplicarà a totes les altres.</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSync">Sincronitza l’amplada de la barra lateral</system:String>
+    <system:String x:Key="SettingsGeneralSidebarWidthSyncDescription">Quan està activat, canviar l’amplada d’una barra lateral s’aplicarà a totes les altres.</system:String>
+    <system:String x:Key="SettingsGeneralTabType">Tipus de sagnat</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeDescription">Tria entre tabulacions i espais i estableix la mida de la tabulació.</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeTabs">Tabulacions</system:String>
+    <system:String x:Key="SettingsGeneralTabTypeSpaces">Espais</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndent">Sagnat automàtic</system:String>
+    <system:String x:Key="SettingsGeneralAutoIndentDescription">Insereix automàticament una tabulació en una línia nova si la línia anterior acaba amb dos punts.</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairing">Aparellament automàtic</system:String>
+    <system:String x:Key="SettingsGeneralAutoPairingDescription">Afegeix automàticament el caràcter de tancament en introduir el caràcter d’obertura per a certs símbols.</system:String>
+    <system:String x:Key="SettingsGeneralAutoSave">Desat automàtic</system:String>
+    <system:String x:Key="SettingsGeneralAutoSaveDescription">Desa automàticament el fitxer cada vegada que fas un canvi.</system:String>
+    <system:String x:Key="SettingsGeneralChangeChecker">Comprova canvis externs del fitxer</system:String>
+    <system:String x:Key="SettingsGeneralChangeCheckerDescription">Si es produeix qualsevol canvi en el contingut d’un fitxer, se’t demanarà tornar-lo a carregar.</system:String>
+    <system:String x:Key="SettingsGeneralRpc">Presència rica de Discord</system:String>
+    <system:String x:Key="SettingsGeneralRpcDescription">Mostra SkEditor al teu estat de Discord.</system:String>
+    <system:String x:Key="SettingsGeneralPasteIndent">Sagnat automàtic en enganxar</system:String>
+    <system:String x:Key="SettingsGeneralPasteIndentDescription">Ajusta automàticament el sagnat del text enganxat per coincidir amb el format de la línia anterior.</system:String>
+    <system:String x:Key="SettingsGeneralCheckForUpdates">Comprova actualitzacions</system:String>
+    <system:String x:Key="SettingsGeneralProjectSingleFolderClick">Obre la carpeta del projecte amb un sol clic</system:String>
+    <system:String x:Key="SettingsGeneralProjectSingleFolderClickDescription">Quan està activat, obre una carpeta amb un sol clic en lloc d’un doble clic.</system:String>
+
+    <!-- About Settings -->
+    <system:String x:Key="SettingsAboutTitle">Quant a</system:String>
+    <system:String x:Key="SettingsAboutSkEditor">SkEditor</system:String>
+    <system:String x:Key="SettingsAboutSkEditorDescription">SkEditor és una aplicació per editar fitxers Skript creada per Notro.</system:String>
+    <system:String x:Key="SettingsAboutVersion">Versió</system:String>
+    <system:String x:Key="SettingsAboutVersionDescription">Estàs executant la versió: {0}</system:String>
+    <system:String x:Key="SettingsAboutGithub">GitHub</system:String>
+    <system:String x:Key="SettingsAboutGithubDescription">Fes clic per obrir el repositori de GitHub de SkEditor!</system:String>
+    <system:String x:Key="SettingsAboutDiscord">Servidor de Discord</system:String>
+    <system:String x:Key="SettingsAboutDiscordDescription">Fes clic per unir-te al servidor de Discord de SkEditor!</system:String>
+    <system:String x:Key="SettingsAboutAppdata">Obre la carpeta AppData</system:String>
+    <system:String x:Key="SettingsAboutDevMode">Mode desenvolupador</system:String>
+    <system:String x:Key="SettingsAboutDevModeDescription">Activa el mode desenvolupador per accedir a funcions de desenvolupador.</system:String>
+
+    <!-- Personalization Settings -->
+    <system:String x:Key="SettingsPersonalizationTitle">Personalització</system:String>
+    <system:String x:Key="SettingsPersonalizationTheme">Tema</system:String>
+    <system:String x:Key="SettingsPersonalizationThemeDescription">Personalitza els colors de l’aplicació.</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntax">Ressaltat de sintaxi</system:String>
+    <system:String x:Key="SettingsPersonalizationSyntaxDescription">Estableix com es mostra el text específic amb el ressaltat de sintaxi.</system:String>
+    <system:String x:Key="SettingsPersonalizationFont">Font</system:String>
+    <system:String x:Key="SettingsPersonalizationFontDescription">Font actual: {0}</system:String>
+    <system:String x:Key="SettingsPersonalizationHighlightCurrentLine">Ressalta la línia actual</system:String>
+    <system:String x:Key="SettingsPersonalizationSidebarAnimations">Animacions de la barra lateral</system:String>
+    <system:String x:Key="SettingsPersonalizationSidebarAnimationsDescription">Activa o desactiva les animacions en obrir i tancar els panells laterals.</system:String>
+
+    <!-- Theme Settings -->
+    <system:String x:Key="SettingsThemeTitle">Tema</system:String>
+    <system:String x:Key="SettingsThemeOpenFolder">Obre carpeta</system:String>
+    <system:String x:Key="SettingsThemeCurrentTheme">Tema actual</system:String>
+    <system:String x:Key="SettingsThemeCurrentThemeDescription">No cal reiniciar, però pot ser necessari per a una actualització de color del 100%.</system:String>
+    <system:String x:Key="SettingsThemeEditThemeDescription">Edita el tema actual i previsualitza els canvis en temps real.</system:String>
+    <system:String x:Key="SettingsThemeNewThemeInfo">Si vols crear un tema nou, has de crear un fitxer a la carpeta Themes.</system:String>
+    <system:String x:Key="SettingsThemeEditTheme">Edita el tema</system:String>
+
+    <!-- Syntax Highlighting Settings -->
+    <system:String x:Key="SettingsSyntaxesTitle">Ressaltat de sintaxi</system:String>
+
+    <!-- Addon Settings -->
+    <system:String x:Key="SettingsAddonsTitle">Complements</system:String>
+    <system:String x:Key="SettingsAddonsListTitle">Llista de complements</system:String>
+
+    <!-- Connections Settings -->
+    <system:String x:Key="SettingsConnectionsTitle">Connexions</system:String>
+    <system:String x:Key="SettingsConnectionsDashboardButton">Obre el tauler</system:String>
+
+    <!-- File Types Settings -->
+    <system:String x:Key="SettingsFileTypesTitle">Tipus de fitxer</system:String>
+    <system:String x:Key="SettingsFileTypesWarning">Aquesta pàgina només et permet gestionar les associacions que ja has fet. Es mostrarà un avís per a altres tipus de fitxer.</system:String>
+    <system:String x:Key="SettingsFileTypesRemove">Elimina</system:String>
+
+    <!-- File Views -->
+    <system:String x:Key="FileViewImageAA">Antialiàsing</system:String>
+
+    <!-- Discord RPC -->
+    <system:String x:Key="DiscordRpcEditing">Editant: {0}</system:String>
+
+    <!-- Bottom bar -->
+    <system:String x:Key="BottomBarLine">Línia {0}</system:String>
+    <system:String x:Key="BottomBarColumn">Columna {0}</system:String>
+    <system:String x:Key="BottomBarDocumentSize">Longitud {0}</system:String>
+
+    <!-- GUI Generator -->
+    <system:String x:Key="GuiGeneratorTitle">Títol</system:String>
+    <system:String x:Key="GuiGeneratorFunctionName">Nom de la funció</system:String>
+    <system:String x:Key="GuiGeneratorRowQuantity">Quantitat de files</system:String>
+    <system:String x:Key="GuiGeneratorBackgroundItem">Objecte de fons</system:String>
+    <system:String x:Key="GuiGeneratorPreviewButton">Previsualitza</system:String>
+    <system:String x:Key="GuiGeneratorGenerateButton">Genera</system:String>
+    <system:String x:Key="GuiGeneratorSkriptGui">Utilitza skript-gui</system:String>
+    <system:String x:Key="GuiGeneratorDisplayName">Nom a mostrar</system:String>
+    <system:String x:Key="GuiGeneratorLore">Descripció</system:String>
+    <system:String x:Key="GuiGeneratorOptional">Opcional</system:String>
+    <system:String x:Key="GuiGeneratorCustomModelData">ID de dades de model personalitzat</system:String>
+    <system:String x:Key="GuiGeneratorLoreLineWatermark">Clic dret per afegir una línia nova</system:String>
+    <system:String x:Key="GuiGeneratorAddLoreLine">Afegeix una línia de descripció nova</system:String>
+    <system:String x:Key="GuiGeneratorAddExampleAction">Afegeix una acció d’exemple</system:String>
+
+    <!-- Command Generator -->
+    <system:String x:Key="CommandGeneratorName">Nom</system:String>
+    <system:String x:Key="CommandGeneratorPrefix">Prefix</system:String>
+    <system:String x:Key="CommandGeneratorPermission">Permís</system:String>
+    <system:String x:Key="CommandGeneratorNoPermissionMessage">Missatge sense permís</system:String>
+    <system:String x:Key="CommandGeneratorAliases">Àlies</system:String>
+    <system:String x:Key="CommandGeneratorInvalidUsageMessage">Missatge d’ús no vàlid</system:String>
+    <system:String x:Key="CommandGeneratorWhoCanUseTheCommand">Qui pot utilitzar la comanda</system:String>
+    <system:String x:Key="CommandGeneratorPlayer">Jugador</system:String>
+    <system:String x:Key="CommandGeneratorConsole">Consola</system:String>
+    <system:String x:Key="CommandGeneratorCooldown">Temps de reutilització</system:String>
+    <system:String x:Key="CommandGeneratorTicks">Ticks</system:String>
+    <system:String x:Key="CommandGeneratorSeconds">Segons</system:String>
+    <system:String x:Key="CommandGeneratorMinutes">Minuts</system:String>
+    <system:String x:Key="CommandGeneratorHours">Hores</system:String>
+    <system:String x:Key="CommandGeneratorDays">Dies</system:String>
+    <system:String x:Key="CommandGeneratorWeeks">Setmanes</system:String>
+    <system:String x:Key="CommandGeneratorMonths">Mesos</system:String>
+    <system:String x:Key="CommandGeneratorYears">Anys</system:String>
+    <system:String x:Key="CommandGeneratorGenerate">Genera</system:String>
+    <system:String x:Key="CommandGeneratorPropertyMissing">La propietat {0} és obligatòria!</system:String>
+
+    <!-- Marketplace -->
+    <system:String x:Key="MarketplaceSearch">Cerca</system:String>
+    <system:String x:Key="MarketplaceEnableNow">Activa-ho ara</system:String>
+    <system:String x:Key="MarketplaceInstallSuccess">S’ha descarregat correctament {0}!</system:String>
+    <system:String x:Key="MarketplaceInstallRestart">Si us plau, reinicia l’aplicació per carregar el complement.</system:String>
+    <system:String x:Key="MarketplaceInstallEnableNow">Vols activar-lo ara?</system:String>
+    <system:String x:Key="MarketplaceInstallNoNeedToRestart">El complement hauria de funcionar sense reiniciar, però si trobes errors, reinicia l’aplicació.</system:String>
+    <system:String x:Key="MarketplaceInstallFailed">No s’ha pogut descarregar {0}!</system:String>
+    <system:String x:Key="MarketplaceUninstallSuccess">S’ha desinstal·lat correctament {0}!\nSi us plau, reinicia l’aplicació per descarregar el complement.</system:String>
+    <system:String x:Key="MarketplaceUpdateSuccess">S’ha actualitzat correctament {0}!\nSi us plau, reinicia l’aplicació per carregar el complement.</system:String>
+    <system:String x:Key="MarketplaceUpdateFailed">No s’ha pogut actualitzar {0}!</system:String>
+    <system:String x:Key="MarketplaceLoadFailed">Alguna cosa ha anat malament en intentar carregar els elements del Mercat. Tens connexió a internet?</system:String>
+    <system:String x:Key="MarketplaceInfo">Aquest és un disseny de Mercat molt simple que es redissenyarà completament en el futur.</system:String>
+    <system:String x:Key="MarketplaceButtonInstall">Instal·la</system:String>
+    <system:String x:Key="MarketplaceButtonUpdate">Actualitza</system:String>
+    <system:String x:Key="MarketplaceButtonUninstall">Desinstal·la</system:String>
+    <system:String x:Key="MarketplaceButtonDisable">Desactiva</system:String>
+    <system:String x:Key="MarketplaceButtonEnable">Activa</system:String>
+    <system:String x:Key="MarketplaceButtonLoadFromFile">Carrega des d’un fitxer</system:String>
+
+    <!-- Go to line -->
+    <system:String x:Key="GoToLine">Ves a la línia</system:String>
+    <system:String x:Key="GoToLineButton">Ves-hi</system:String>
+
+    <!-- Theme editor -->
+    <system:String x:Key="ThemeEditorWindowBackground">Fons de la finestra</system:String>
+    <system:String x:Key="ThemeEditorSmallWindowBackground">Fons de finestra petita</system:String>
+    <system:String x:Key="ThemeEditorEditorBackground">Fons de l’editor</system:String>
+    <system:String x:Key="ThemeEditorEditorText">Text de l’editor</system:String>
+    <system:String x:Key="ThemeEditorLineNumber">Número de línia</system:String>
+    <system:String x:Key="ThemeEditorSelection">Selecció</system:String>
+    <system:String x:Key="ThemeEditorSelectedTabBackground">Fons de la pestanya seleccionada</system:String>
+    <system:String x:Key="ThemeEditorSelectedTabBorder">Vora de la pestanya seleccionada</system:String>
+    <system:String x:Key="ThemeEditorMenuBackground">Fons del menú</system:String>
+    <system:String x:Key="ThemeEditorMenuBorder">Vora del menú</system:String>
+    <system:String x:Key="ThemeEditorFocusedTextBoxBackground">Fons del quadre de text enfocat</system:String>
+    <system:String x:Key="ThemeEditorCurrentLineBackground">Fons de la línia actual</system:String>
+    <system:String x:Key="ThemeEditorCurrentLineBorder">Vora de la línia actual</system:String>
+    <system:String x:Key="ThemeEditorAccentColor">Color d’accent</system:String>
+
+    <!-- Welcome Tab -->
+    <system:String x:Key="WelcomeTabTitle">Benvingut</system:String>
+    <system:String x:Key="WelcomeTabGettingStarted">Primers passos</system:String>
+    <system:String x:Key="WelcomeTabNeedHelp">Necessites ajuda?</system:String>
+    <system:String x:Key="WelcomeGettingStartedNewFile">Nou fitxer</system:String>
+    <system:String x:Key="WelcomeGettingStartedOpenFile">Obre fitxer</system:String>
+    <system:String x:Key="WelcomeGettingStartedOpenFolder">Obre carpeta</system:String>
+    <system:String x:Key="WelcomeGettingStartedSettings">Configuració</system:String>
+    <system:String x:Key="WelcomeNeedHelpDiscordServer">Servidor de Discord</system:String>
+    <system:String x:Key="WelcomeNeedHelpGitHub">GitHub</system:String>
+
+</ResourceDictionary>
