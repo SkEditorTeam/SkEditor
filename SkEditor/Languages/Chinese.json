@@ -176,5 +176,17 @@
   "WelcomePageUsefulLinksDiscordServer": "Discord 服务器",
   "WelcomePageUsefulLinksGitHub": "GitHub",
   "WelcomePageUsefulLinksDocumentation": "文档",
-  "WelcomePageUsefulLinksSupportUs": "支持 SkEditor"
+  "WelcomePageUsefulLinksSupportUs": "支持 SkEditor",
+  "WelcomePageRecentJustNow": "刚刚",
+  "WelcomePageRecentMinutesOne": "1 分钟前",
+  "WelcomePageRecentMinutesFew": "{0} 分钟前",
+  "WelcomePageRecentMinutesMany": "{0} 分钟前",
+  "WelcomePageRecentHoursOne": "1 小时前",
+  "WelcomePageRecentHoursFew": "{0} 小时前",
+  "WelcomePageRecentHoursMany": "{0} 小时前",
+  "WelcomePageRecentYesterdayAt": "昨天 {0}",
+  "WelcomePageRecentTimeTraveler": "在时间还没有名字很久以前...",
+  "WelcomePageRecentInTheFuture": "从未来回来的？",
+  "WelcomePageRecentTitle": "最近",
+  "WelcomePageRecentEmpty": "暂无最近文件或文件夹"
 }

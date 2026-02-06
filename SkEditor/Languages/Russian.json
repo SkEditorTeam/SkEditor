@@ -367,5 +367,17 @@
   "WelcomePageUsefulLinksDiscordServer": "Сервер Discord",
   "WelcomePageUsefulLinksGitHub": "GitHub",
   "WelcomePageUsefulLinksDocumentation": "Документация",
-  "WelcomePageUsefulLinksSupportUs": "Поддержать SkEditor"
+  "WelcomePageUsefulLinksSupportUs": "Поддержать SkEditor",
+  "WelcomePageRecentJustNow": "Только что",
+  "WelcomePageRecentMinutesOne": "1 минуту назад",
+  "WelcomePageRecentMinutesFew": "{0} минуты назад",
+  "WelcomePageRecentMinutesMany": "{0} минут назад",
+  "WelcomePageRecentHoursOne": "1 час назад",
+  "WelcomePageRecentHoursFew": "{0} часа назад",
+  "WelcomePageRecentHoursMany": "{0} часов назад",
+  "WelcomePageRecentYesterdayAt": "Вчера в {0}",
+  "WelcomePageRecentTimeTraveler": "Задолго до того, как время получило имя",
+  "WelcomePageRecentInTheFuture": "Назад из будущего?",
+  "WelcomePageRecentTitle": "Последние",
+  "WelcomePageRecentEmpty": "Нет недавних файлов или папок"
 }

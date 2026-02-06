@@ -112,7 +112,7 @@
                 Padding="24,24,6,24"
                 VerticalAlignment="Stretch">
             <Grid RowDefinitions="Auto,*" RowSpacing="24">
-                <TextBlock Text="Recent"
+                <TextBlock Text="{DynamicResource WelcomePageRecentTitle}"
                            FontSize="20"
                            FontWeight="SemiBold"
                            Grid.Row="0"
@@ -121,7 +121,7 @@
                 <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5"
                             Spacing="10" IsVisible="{Binding !RecentItems.Count}">
                     <icons:SymbolIcon Symbol="History" FontSize="48" />
-                    <TextBlock Text="No recent files or folders found" />
+                    <TextBlock Text="{DynamicResource WelcomePageRecentEmpty}" />
                 </StackPanel>
                 <ScrollViewer Grid.Row="1" Padding="0,0,18,0" VerticalAlignment="Stretch" HorizontalAlignment="Center"
                               VerticalScrollBarVisibility="Auto" IsVisible="{Binding !!RecentItems.Count}">

@@ -350,5 +350,17 @@
   "WelcomePageUsefulLinksDiscordServer": "Server Discord",
   "WelcomePageUsefulLinksGitHub": "GitHub",
   "WelcomePageUsefulLinksDocumentation": "Documentazione",
-  "WelcomePageUsefulLinksSupportUs": "Sostieni SkEditor"
+  "WelcomePageUsefulLinksSupportUs": "Sostieni SkEditor",
+  "WelcomePageRecentJustNow": "Proprio ora",
+  "WelcomePageRecentMinutesOne": "1 minuto fa",
+  "WelcomePageRecentMinutesFew": "{0} minuti fa",
+  "WelcomePageRecentMinutesMany": "{0} minuti fa",
+  "WelcomePageRecentHoursOne": "1 ora fa",
+  "WelcomePageRecentHoursFew": "{0} ore fa",
+  "WelcomePageRecentHoursMany": "{0} ore fa",
+  "WelcomePageRecentYesterdayAt": "Ieri alle {0}",
+  "WelcomePageRecentTimeTraveler": "Molto prima che il tempo avesse un nome...",
+  "WelcomePageRecentInTheFuture": "Ritorno dal futuro?",
+  "WelcomePageRecentTitle": "Recenti",
+  "WelcomePageRecentEmpty": "Nessun elemento recente"
 }

@@ -376,5 +376,17 @@
   "WelcomePageUsefulLinksDiscordServer": "Discord Server",
   "WelcomePageUsefulLinksGitHub": "GitHub",
   "WelcomePageUsefulLinksDocumentation": "Dokumentation",
-  "WelcomePageUsefulLinksSupportUs": "SkEditor unterstützen"
+  "WelcomePageUsefulLinksSupportUs": "SkEditor unterstützen",
+  "WelcomePageRecentJustNow": "Gerade eben",
+  "WelcomePageRecentMinutesOne": "Vor 1 Minute",
+  "WelcomePageRecentMinutesFew": "Vor {0} Minuten",
+  "WelcomePageRecentMinutesMany": "Vor {0} Minuten",
+  "WelcomePageRecentHoursOne": "Vor 1 Stunde",
+  "WelcomePageRecentHoursFew": "Vor {0} Stunden",
+  "WelcomePageRecentHoursMany": "Vor {0} Stunden",
+  "WelcomePageRecentYesterdayAt": "Gestern um {0}",
+  "WelcomePageRecentTimeTraveler": "Lange bevor die Zeit einen Namen hatte...",
+  "WelcomePageRecentInTheFuture": "Zurück aus der Zukunft?",
+  "WelcomePageRecentTitle": "Zuletzt verwendet",
+  "WelcomePageRecentEmpty": "Bisher keine Dateien oder Ordner geöffnet"
 }

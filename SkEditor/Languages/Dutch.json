@@ -367,5 +367,17 @@
   "WelcomePageUsefulLinksDiscordServer": "Discord-server",
   "WelcomePageUsefulLinksGitHub": "GitHub",
   "WelcomePageUsefulLinksDocumentation": "Documentatie",
-  "WelcomePageUsefulLinksSupportUs": "Steun SkEditor"
+  "WelcomePageUsefulLinksSupportUs": "Steun SkEditor",
+  "WelcomePageRecentJustNow": "Zojuist",
+  "WelcomePageRecentMinutesOne": "1 minuut geleden",
+  "WelcomePageRecentMinutesFew": "{0} minuten geleden",
+  "WelcomePageRecentMinutesMany": "{0} minuten geleden",
+  "WelcomePageRecentHoursOne": "1 uur geleden",
+  "WelcomePageRecentHoursFew": "{0} uur geleden",
+  "WelcomePageRecentHoursMany": "{0} uur geleden",
+  "WelcomePageRecentYesterdayAt": "Gisteren om {0}",
+  "WelcomePageRecentTimeTraveler": "Lang voordat tijd een naam had...",
+  "WelcomePageRecentInTheFuture": "Terug uit de toekomst?",
+  "WelcomePageRecentTitle": "Recent",
+  "WelcomePageRecentEmpty": "Geen recente bestanden of mappen"
 }

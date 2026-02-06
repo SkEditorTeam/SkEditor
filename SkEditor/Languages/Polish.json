@@ -391,5 +391,7 @@
   "WelcomePageRecentHoursMany": "{0} godzin temu",
   "WelcomePageRecentYesterdayAt": "Wczoraj o {0}",
   "WelcomePageRecentTimeTraveler": "Na długo zanim czas uzyskał imię...",
-  "WelcomePageRecentInTheFuture": "Wróciłeś z przyszłości?"
+  "WelcomePageRecentInTheFuture": "Wróciłeś z przyszłości?",
+  "WelcomePageRecentTitle": "Ostatnie",
+  "WelcomePageRecentEmpty": "Nie ma tu jeszcze żadnych plików ani folderów"
 }

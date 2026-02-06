@@ -357,5 +357,17 @@
   "WelcomePageUsefulLinksDiscordServer": "Discord szerver",
   "WelcomePageUsefulLinksGitHub": "GitHub",
   "WelcomePageUsefulLinksDocumentation": "Dokumentáció",
-  "WelcomePageUsefulLinksSupportUs": "SkEditor támogatása"
+  "WelcomePageUsefulLinksSupportUs": "SkEditor támogatása",
+  "WelcomePageRecentJustNow": "Éppen most",
+  "WelcomePageRecentMinutesOne": "1 perce",
+  "WelcomePageRecentMinutesFew": "{0} perce",
+  "WelcomePageRecentMinutesMany": "{0} perce",
+  "WelcomePageRecentHoursOne": "1 órája",
+  "WelcomePageRecentHoursFew": "{0} órája",
+  "WelcomePageRecentHoursMany": "{0} órája",
+  "WelcomePageRecentYesterdayAt": "Tegnap {0}-kor",
+  "WelcomePageRecentTimeTraveler": "Jóval azelőtt, hogy az időnek neve lett volna...",
+  "WelcomePageRecentInTheFuture": "Vissza a jövőből?",
+  "WelcomePageRecentTitle": "Legutóbbiak",
+  "WelcomePageRecentEmpty": "Nincsenek legutóbbi elemek"
 }

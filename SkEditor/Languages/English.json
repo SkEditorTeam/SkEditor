@@ -392,5 +392,7 @@
   "WelcomePageRecentHoursMany": "{0} hours ago",
   "WelcomePageRecentYesterdayAt": "Yesterday at {0}",
   "WelcomePageRecentTimeTraveler": "Long before time had a name...",
-  "WelcomePageRecentInTheFuture": "Back from the future?"
+  "WelcomePageRecentInTheFuture": "Back from the future?",
+  "WelcomePageRecentTitle": "Recent",
+  "WelcomePageRecentEmpty": "No recent files or folders found"
 }

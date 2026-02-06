@@ -90,7 +90,7 @@ public partial class WelcomePageViewModel : ObservableObject
                 true, DateTime.Now.AddSeconds(-30))
         ];
         recentItems.Sort((a, b) => b.LastOpened.CompareTo(a.LastOpened));
-        _recentItems.AddRange(recentItems);
+        // _recentItems.AddRange(recentItems);
     }
 
     private static SymbolIconSource CreateSymbolIcon(Symbol symbol)

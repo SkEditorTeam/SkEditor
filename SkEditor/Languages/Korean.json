@@ -209,5 +209,17 @@
   "WelcomePageUsefulLinksDiscordServer": "Discord 서버",
   "WelcomePageUsefulLinksGitHub": "GitHub",
   "WelcomePageUsefulLinksDocumentation": "문서",
-  "WelcomePageUsefulLinksSupportUs": "SkEditor 후원"
+  "WelcomePageUsefulLinksSupportUs": "SkEditor 후원",
+  "WelcomePageRecentJustNow": "방금 전",
+  "WelcomePageRecentMinutesOne": "1분 전",
+  "WelcomePageRecentMinutesFew": "{0}분 전",
+  "WelcomePageRecentMinutesMany": "{0}분 전",
+  "WelcomePageRecentHoursOne": "1시간 전",
+  "WelcomePageRecentHoursFew": "{0}시간 전",
+  "WelcomePageRecentHoursMany": "{0}시간 전",
+  "WelcomePageRecentYesterdayAt": "어제 {0}",
+  "WelcomePageRecentTimeTraveler": "시간에 이름이 생기기 아주 오래전...",
+  "WelcomePageRecentInTheFuture": "미래에서 오셨나요?",
+  "WelcomePageRecentTitle": "최근 항목",
+  "WelcomePageRecentEmpty": "최근 항목이 없습니다"
 }
