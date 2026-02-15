@@ -16,7 +16,7 @@
 
     <UserControl.Resources>
         <system:TimeSpan x:Key="ButtonTransitionDuration">0:0:0.1</system:TimeSpan>
-        
+
         <converters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
     </UserControl.Resources>
 
@@ -46,11 +46,12 @@
 
             <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
                 <Setter Property="Background" Value="#20FFFFFF" />
+                <Setter Property="Foreground" Value="{DynamicResource AccentButtonBackground}" />
             </Style>
         </Style>
     </UserControl.Styles>
 
-    <Grid ColumnDefinitions="450, *" Margin="24">
+    <Grid Name="MainGrid" ColumnDefinitions="450, *" Margin="24">
         <StackPanel Grid.Column="0" Margin="16" Spacing="48" VerticalAlignment="Top">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="24">
                 <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="100" Width="100" />
@@ -104,13 +105,18 @@
         </StackPanel>
 
         <Border Grid.Column="1"
+                Name="RecentItemsPanel"
                 Margin="24,16,16,16"
                 Background="#01FFFFFF"
                 BorderBrush="#0CFFFFFF"
                 BorderThickness="2"
                 CornerRadius="8"
                 Padding="24,24,6,24"
-                VerticalAlignment="Stretch">
+                VerticalAlignment="Stretch"
+                IsVisible="{Binding Bounds.Width, 
+                                   RelativeSource={RelativeSource AncestorType=Grid}, 
+                                   Converter={StaticResource WidthToVisibilityConverter}, 
+                                   ConverterParameter=650}">
             <Grid RowDefinitions="Auto,*" RowSpacing="24">
                 <TextBlock Text="{DynamicResource WelcomePageRecentTitle}"
                            FontSize="20"
@@ -150,21 +156,19 @@
                                                        Converter={StaticResource WidthToVisibilityConverter}, 
                                                        ConverterParameter=450}" />
 
-                                        <Grid>
-                                            <Grid RowDefinitions="Auto,Auto">
-                                                <TextBlock Grid.Row="0"
-                                                           Text="{Binding Name}"
-                                                           TextTrimming="CharacterEllipsis"
-                                                           FontSize="14"
-                                                           VerticalAlignment="Center" />
+                                        <Grid RowDefinitions="Auto,Auto" Margin="0,0,12,0">
+                                            <TextBlock Grid.Row="0"
+                                                       Text="{Binding Name}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       FontSize="14"
+                                                       VerticalAlignment="Center" />
 
-                                                <TextBlock Grid.Row="1"
-                                                           Text="{Binding DisplayPath}"
-                                                           TextTrimming="CharacterEllipsis"
-                                                           FontSize="12"
-                                                           Opacity="0.5"
-                                                           VerticalAlignment="Center" />
-                                            </Grid>
+                                            <TextBlock Grid.Row="1"
+                                                       Text="{Binding DisplayPath}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       FontSize="12"
+                                                       Opacity="0.5"
+                                                       VerticalAlignment="Center" />
                                         </Grid>
                                     </DockPanel>
                                 </Button>
