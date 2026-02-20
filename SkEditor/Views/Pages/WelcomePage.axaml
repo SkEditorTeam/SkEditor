@@ -8,6 +8,7 @@
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
              xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
              xmlns:converters="clr-namespace:SkEditor.Converters"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              DataContext="{x:Static viewModels:ViewModelLocator.WelcomePageViewModel}"
              x:DataType="vms:WelcomePageViewModel"
@@ -118,7 +119,7 @@
                                    Converter={StaticResource WidthToVisibilityConverter}, 
                                    ConverterParameter=650}">
             <Grid RowDefinitions="Auto,*" RowSpacing="24">
-                <TextBlock Text="{DynamicResource WelcomePageRecentTitle}"
+                <TextBlock Text="{localization:Translate WelcomePageRecentTitle}"
                            FontSize="20"
                            FontWeight="SemiBold"
                            Grid.Row="0"
