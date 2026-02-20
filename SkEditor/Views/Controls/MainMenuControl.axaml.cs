@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -17,17 +16,14 @@ using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views.Controls.Docs;
 using SkEditor.Views.Pages;
-using AddonsPage = SkEditor.Views.Pages.Settings.AddonsPage;
 using ColorSelectionWindow = SkEditor.Views.Windows.ColorSelectionWindow;
 using CommandGenerator = SkEditor.Views.Windows.Generators.CommandGenerator;
-using CustomAddonSettingsPage = SkEditor.Views.Pages.Settings.CustomAddonSettingsPage;
 using GoToLineWindow = SkEditor.Views.Windows.GoToLineWindow;
 using GuiGenerator = SkEditor.Views.Windows.Generators.Gui.GuiGenerator;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
 using PublishWindow = SkEditor.Views.Windows.PublishWindow;
 using RefactorWindow = SkEditor.Views.Windows.RefactorWindow;
-using SettingsWindow = SkEditor.Views.Windows.Settings.SettingsWindow;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -39,18 +35,8 @@ public partial class MainMenuControl : UserControl
     {
         InitializeComponent();
 
-        ConfigureMenu();
         AssignCommands();
         AddMissingHotkeys();
-    }
-
-    private void ConfigureMenu()
-    {
-        SetVisibility();
-        SkEditorAPI.Configs.GetAppSettings().PropertyChanged += (_, _) => SetVisibility();
-        return;
-
-        void SetVisibility() => MenuItemDevTools.IsVisible = SkEditorAPI.Core.IsDeveloperMode();
     }
 
     private void AssignCommands()
@@ -76,7 +62,6 @@ public partial class MainMenuControl : UserControl
         MenuItemCut.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Cut());
         MenuItemUndo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Undo());
         MenuItemRedo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Redo());
-        MenuItemDelete.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Delete());
         MenuItemGoToLine.Command = new AsyncRelayCommand(() => ShowDialogIfEditorIsOpen(new GoToLineWindow()));
 
         MenuItemTrimWhitespaces.Command = new RelayCommand(() =>
@@ -195,83 +180,5 @@ public partial class MainMenuControl : UserControl
 
         SymbolIconSource icon = new() { Symbol = Symbol.Settings };
         SkEditorAPI.Files.AddCustomTab(Translation.GetObservable("WindowTitleSettings"), page, icon: icon);
-    }
-
-    public void ReloadAddonsMenus()
-    {
-        bool hasAnyMenu = false;
-        AddonsMenuItem.Items.Clear();
-        foreach (IAddon addon in SkEditorAPI.Addons.GetAddons(IAddons.AddonState.Enabled))
-        {
-            List<MenuItem> items = addon.GetMenuItems();
-            if (items.Count <= 0)
-            {
-                continue;
-            }
-
-            hasAnyMenu = true;
-            MenuItem menuItem = new()
-            {
-                Header = addon.Name,
-                Icon = new IconSourceElement
-                {
-                    IconSource = addon.GetAddonIcon(),
-                    Width = 20,
-                    Height = 20
-                }
-            };
-
-            if (addon.GetSettings().Count > 0)
-            {
-                menuItem.Items.Add(new MenuItem
-                {
-                    Header = Translation.Get("WindowTitleSettings"),
-                    Command = new RelayCommand(() =>
-                    {
-                        new SettingsWindow().ShowDialog(MainWindow.Instance);
-                        SettingsWindow.NavigateToPage(typeof(CustomAddonSettingsPage));
-                        CustomAddonSettingsPage.Load(addon);
-                    }),
-                    Icon = new IconSourceElement
-                    {
-                        IconSource = new SymbolIconSource
-                            { Symbol = Symbol.Settings, FontSize = 20 },
-                        Width = 20,
-                        Height = 20
-                    }
-                });
-                menuItem.Items.Add(new Separator());
-            }
-
-            foreach (MenuItem sub in items)
-            {
-                menuItem.Items.Add(sub);
-            }
-
-            AddonsMenuItem.Items.Add(menuItem);
-        }
-
-        AddonsMenuItem.Items.Add(new Separator());
-        AddonsMenuItem.Items.Add(new MenuItem
-        {
-            Header = Translation.Get("MenuHeaderManageAddons"),
-            Command = new RelayCommand(() =>
-            {
-                new SettingsWindow().ShowDialog(MainWindow.Instance);
-                SettingsWindow.NavigateToPage(typeof(AddonsPage));
-            }),
-            Icon = new IconSourceElement
-            {
-                IconSource = new SymbolIconSource
-                {
-                    Symbol = Symbol.Wrench,
-                    FontSize = 20
-                },
-                Width = 20,
-                Height = 20
-            }
-        });
-
-        AddonsMenuItem.IsVisible = hasAnyMenu;
     }
 }

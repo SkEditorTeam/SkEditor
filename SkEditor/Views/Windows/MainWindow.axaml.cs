@@ -72,7 +72,6 @@ public partial class MainWindow : AppWindow
 
     public void ReloadUiOfAddons()
     {
-        MainMenu.ReloadAddonsMenus();
         BottomBar.ReloadBottomIcons();
         SideBar.ReloadPanels();
     }

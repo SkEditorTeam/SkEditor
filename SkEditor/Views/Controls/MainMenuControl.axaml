@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
+             xmlns:iconsMarkup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
              xmlns:configs="clr-namespace:SkEditor.Utilities.Settings.Configs"
              x:Class="SkEditor.Views.Controls.MainMenuControl">
@@ -8,6 +9,10 @@
     <UserControl.Styles>
         <Style Selector="icons|SymbolIcon">
             <Setter Property="FontSize" Value="18" />
+        </Style>
+
+        <Style Selector="Separator">
+            <Setter Property="Margin" Value="8,4" />
         </Style>
     </UserControl.Styles>
 
@@ -30,6 +35,7 @@
                     <icons:SymbolIcon Symbol="Folder" />
                 </MenuItem.Icon>
             </MenuItem>
+            <Separator />
             <MenuItem Header="{DynamicResource MenuHeaderSave}" Name="MenuItemSave" HotKey="Ctrl+S"
                       InputGesture="Ctrl+S">
                 <MenuItem.Icon>
@@ -47,6 +53,7 @@
                     <icons:SymbolIcon Symbol="SaveMultiple" />
                 </MenuItem.Icon>
             </MenuItem>
+            <Separator />
             <MenuItem Header="{DynamicResource MenuHeaderPublish}" Name="MenuItemPublish" HotKey="Ctrl+Shift+P"
                       InputGesture="Ctrl+Shift+P">
                 <MenuItem.Icon>
@@ -123,10 +130,11 @@
                     <icons:SymbolIcon Symbol="ArrowRedo" />
                 </MenuItem.Icon>
             </MenuItem>
+            <Separator />
             <MenuItem Header="{DynamicResource MenuHeaderDuplicate}" Name="MenuItemDuplicate" InputGesture="Ctrl+D"
                       HotKey="Ctrl+D">
                 <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Copy" />
+                    <icons:SymbolIcon Symbol="CopySelect" />
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="{DynamicResource MenuHeaderComment}" Name="MenuItemComment"
@@ -135,21 +143,29 @@
                     <icons:SymbolIcon Symbol="Comment" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="{DynamicResource MenuHeaderGoToLine}" Name="MenuItemGoToLine" InputGesture="Ctrl+G"
-                      HotKey="Ctrl+G">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Search" />
-                </MenuItem.Icon>
-            </MenuItem>
             <MenuItem Header="{DynamicResource MenuHeaderTrimWhitespaces}" Name="MenuItemTrimWhitespaces"
                       InputGesture="Ctrl+T" HotKey="Ctrl+T">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="Eraser" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="{DynamicResource MenuHeaderDelete}" Name="MenuItemDelete" InputGesture="Delete">
+            <Separator />
+            <MenuItem Header="{DynamicResource MenuHeaderGoToLine}" Name="MenuItemGoToLine" InputGesture="Ctrl+G"
+                      HotKey="Ctrl+G">
                 <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Delete" />
+                    <icons:SymbolIcon Symbol="NumberSymbol" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuHeaderFind}" Name="MenuItemFind" InputGesture="Ctrl+F"
+                      HotKey="Ctrl+F">
+                <MenuItem.Icon>
+                    <icons:SymbolIcon Symbol="Search" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuHeaderReplace}" Name="MenuItemFindAndReplace" InputGesture="Ctrl+H"
+                      HotKey="Ctrl+H">
+                <MenuItem.Icon>
+                    <icons:SymbolIcon Symbol="ArrowSwap" />
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
@@ -170,14 +186,14 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="{DynamicResource MenuHeaderDocumentation}" Name="MenuItemDocs">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Library" />
-                </MenuItem.Icon>
-            </MenuItem>
             <MenuItem Header="{DynamicResource MenuHeaderRefactor}" Name="MenuItemRefactor">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="Beaker" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuHeaderDocumentation}" Name="MenuItemDocs">
+                <MenuItem.Icon>
+                    <icons:SymbolIcon Symbol="Library" />
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="{DynamicResource MenuHeaderColorSelector}" Name="MenuItemColorSelector">
@@ -185,32 +201,35 @@
                     <icons:SymbolIcon Symbol="Color" />
                 </MenuItem.Icon>
             </MenuItem>
-        </MenuItem>
-        <MenuItem Name="AddonsMenuItem" Header="{DynamicResource MenuHeaderAddons}" IsVisible="False" />
-        <MenuItem Header="{DynamicResource MenuHeaderOther}">
             <MenuItem Header="{DynamicResource MenuHeaderMarketplace}" Name="MenuItemMarketplace">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="ShoppingBag" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="{DynamicResource MenuHeaderDevTools}" Name="MenuItemDevTools">
+        </MenuItem>
+        
+        <MenuItem Header="{DynamicResource MenuHeaderHelp}">
+            <MenuItem Header="{DynamicResource MenuHeaderCheckForUpdates}" Icon="{iconsMarkup:SymbolIcon Symbol=ArrowSync}"/>
+            <MenuItem Header="{DynamicResource MenuHeaderAppWiki}" Icon="{iconsMarkup:SymbolIcon Symbol=BookQuestionMark}"/>
+            <MenuItem Header="{DynamicResource MenuHeaderCommunitySupport}" Icon="{iconsMarkup:SymbolIcon Symbol=ChatHelp}"/>
+            <MenuItem Header="{DynamicResource MenuHeaderAbout}" Icon="{iconsMarkup:SymbolIcon Symbol=Info}"/>
+        </MenuItem>
+        
+        <MenuItem Header="{DynamicResource MenuHeaderDevTools}"
+                  DataContext="{x:Static viewModels:ViewModelLocator.AppSettings}" x:DataType="configs:AppSettings"
+                  IsVisible="{Binding IsDevModeEnabled}">
+            <MenuItem Header="{DynamicResource MenuHeaderRefreshSyntax}" Name="MenuItemRefreshSyntax">
                 <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="WindowDevTools" />
+                    <icons:SymbolIcon Symbol="Color" />
                 </MenuItem.Icon>
-                <MenuItem Header="{DynamicResource MenuHeaderRefreshSyntax}" Name="MenuItemRefreshSyntax">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="Color" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{DynamicResource MenuHeaderRefreshTheme}" Name="MenuItemRefreshTheme">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="PaintBucket" />
-                    </MenuItem.Icon>
-                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource MenuHeaderRefreshTheme}" Name="MenuItemRefreshTheme">
+                <MenuItem.Icon>
+                    <icons:SymbolIcon Symbol="PaintBucket" />
+                </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
-        <MenuItem Header="Dev" DataContext="{x:Static viewModels:ViewModelLocator.AppSettings}" x:DataType="configs:AppSettings" IsVisible="{Binding IsDevModeEnabled}"></MenuItem>
-        <MenuItem Name="MenuItemSettings" HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
+        <MenuItem Name="MenuItemSettings" HotKey="Ctrl+," InputGesture="Ctrl+,">
             <MenuItem.Header>
                 <icons:SymbolIcon Symbol="Settings" FontSize="18" />
             </MenuItem.Header>
