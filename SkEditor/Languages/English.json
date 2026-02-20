@@ -94,7 +94,7 @@
   "DeleteFolderTitle": "Delete Folder",
   "DeleteStorageElement": "Are you sure you want to delete {0} from the file system?",
   "UnsavedFileTitle": "Unsaved File",
-  "UnsavedFileMessage": "The File '{0}' is not saved.\\n\\nAre you sure you want to close it and discard your changes?",
+  "UnsavedFileMessage": "The file '{0}' is not saved.\\n\\nAre you sure you want to close it and discard your changes?",
   "AddonUpdateAvailableTitle": "Addon Update Available",
   "AddonUpdateAvailableMessage": "An update is available for '{0}'.\\n\\nVisit the Marketplace to update it for the latest fixes and SkEditor compatibility.",
   "AddonLoadErrorsTitle": "Addons with errors!",

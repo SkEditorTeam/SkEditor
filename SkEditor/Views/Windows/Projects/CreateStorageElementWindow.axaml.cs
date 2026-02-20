@@ -21,7 +21,6 @@ public partial class CreateStorageElementWindow : AppWindow
         Focusable = true;
 
         FileNameTextBlock.Text = Translation.Get(isFile ? "ProjectCreateFileName" : "ProjectCreateFolderName");
-        FileTemplateTextBlock.Text = Translation.Get("ProjectCreateTemplate");
 
         CreateButton.Command = new RelayCommand(Create);
         KeyDown += (_, e) =>
