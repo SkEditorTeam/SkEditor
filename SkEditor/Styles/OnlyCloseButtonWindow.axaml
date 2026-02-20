@@ -33,40 +33,41 @@
             <Border Background="{DynamicResource SmallWindowBackgroundColor}"
                     Padding="{TemplateBinding Padding}"
                     Name="RootBorder">
-                <Panel>
-                    <Panel Name="DefaultTitleBar"
-                           Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}"
-                           Background="{DynamicResource FATitle_TitleBarBackground}"
-                           TextElement.Foreground="{DynamicResource FATitle_TitleBarForeground}"
-                           VerticalAlignment="Top">
+                <Grid RowDefinitions="Auto,*">
+                    <Grid Name="DefaultTitleBar"
+                                ColumnDefinitions="Auto,*"
+                                Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}"
+                                Background="{DynamicResource FATitle_TitleBarBackground}"
+                                TextElement.Foreground="{DynamicResource FATitle_TitleBarForeground}"
+                                VerticalAlignment="Top">
 
-                        <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="20" Width="20"
-                             HorizontalAlignment="Left" Margin="8" />
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="8,6,4,2" Spacing="8">
+                            <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="18" Width="18"
+                                 HorizontalAlignment="Left" />
 
-                        <TextBlock Name="TitleText"
-                                   Text="{TemplateBinding Title}"
-                                   Padding="5,0,0,0"
-                                   FontSize="12"
-                                   IsVisible="{Binding TemplateSettings.IsTitleBarContentVisible, RelativeSource={RelativeSource TemplatedParent}}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left" />
-                    </Panel>
+                            <TextBlock Name="TitleText"
+                                       Text="{TemplateBinding Title}"
+                                       FontSize="11.5"
+                                       IsVisible="{Binding TemplateSettings.IsTitleBarContentVisible, RelativeSource={RelativeSource TemplatedParent}}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left" />
+                        </StackPanel>
+                        
+                        <wnd:MinMaxCloseControl Grid.Column="1"
+                                                HorizontalAlignment="Right"
+                                                Name="SystemCaptionButtons"
+                                                Theme="{StaticResource OnlyCloseButtonTheme}"
+                                                Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}" />
+                    </Grid>
 
-                    <ContentPresenter Name="PART_ContentPresenter"
+                    <ContentPresenter Grid.Row="1" Name="PART_ContentPresenter"
                                       ClipToBounds="False"
-                                      Margin="{Binding TemplateSettings.ContentMargin, RelativeSource={RelativeSource TemplatedParent}}"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Stretch"
                                       Content="{TemplateBinding Content}"
                                       ContentTemplate="{TemplateBinding ContentTemplate}" />
 
-                    <wnd:MinMaxCloseControl HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            Name="SystemCaptionButtons"
-                                            Theme="{StaticResource OnlyCloseButtonTheme}"
-                                            Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}" />
-
-                </Panel>
+                </Grid>
             </Border>
         </VisualLayerManager>
     </ControlTemplate>
@@ -85,13 +86,10 @@
                 <Style Selector="^ /template/ Image#Icon">
                     <Setter Property="IsVisible" Value="True" />
                 </Style>
-                <Style Selector="^ /template/ TextBlock#TitleText">
-                    <Setter Property="Margin" Value="32 0 0 0" />
-                </Style>
             </Style>
 
             <Style Selector="^[WindowState=FullScreen]">
-                <Style Selector="^ /template/ Panel#DefaultTitleBar">
+                <Style Selector="^ /template/ Grid#DefaultTitleBar">
                     <Setter Property="IsVisible" Value="False" />
                 </Style>
                 <Style Selector="^ /template/ wnd|MinMaxCloseControl#SystemCaptionButtons">
@@ -100,7 +98,7 @@
             </Style>
 
             <Style Selector="^[IsActive=False]">
-                <Style Selector="^ /template/ Panel#DefaultTitleBar">
+                <Style Selector="^ /template/ Grid#DefaultTitleBar">
                     <Setter Property="Background" Value="{DynamicResource FATitle_TitleBarBackgroundInactive}" />
                     <Setter Property="TextElement.Foreground"
                             Value="{DynamicResource FATitle_TitleBarForegroundInactive}" />
