@@ -1,7 +1,6 @@
 <p align='center'>
-  <img src="SkEditor.png?raw=true" width="300">
+  <img src="SkEditor.png?raw=true" width="350">
 </p>
-
 <div align='center'>
 
 # SkEditor
