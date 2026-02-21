@@ -26,9 +26,9 @@
         <DataTemplate DataType="{x:Type types:ToggleSetting}">
             <ToggleSwitch IsChecked="{Binding IsEnabled}" />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type types:IChoiceSetting}">
-            <ComboBox ItemsSource="{Binding Options}" 
+            <ComboBox ItemsSource="{Binding Options}"
                       SelectedItem="{Binding SelectedItem}" />
         </DataTemplate>
 

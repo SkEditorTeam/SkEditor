@@ -15,7 +15,7 @@
             <ControlTemplate>
                 <Border Background="Transparent" Padding="5">
                     <Viewbox Height="16" Width="16">
-                        <fluent:SymbolIcon Symbol="ChevronRight" Foreground="{TemplateBinding Foreground}"/>
+                        <fluent:SymbolIcon Symbol="ChevronRight" Foreground="{TemplateBinding Foreground}" />
                     </Viewbox>
                 </Border>
             </ControlTemplate>
@@ -27,9 +27,9 @@
 
     <ControlTheme x:Key="SearchPanelTextBoxButton" TargetType="ToggleButton"
                   BasedOn="{StaticResource {x:Type ToggleButton}}">
-        <Setter Property="Padding" Value="4"></Setter>
-        <Setter Property="MinWidth" Value="22"></Setter>
-        <Setter Property="MinHeight" Value="20"></Setter>
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="MinWidth" Value="22" />
+        <Setter Property="MinHeight" Value="20" />
     </ControlTheme>
 
     <ControlTheme x:Key="{x:Type search:SearchPanel}" TargetType="search:SearchPanel">
@@ -82,7 +82,8 @@
                                                       ToolTip.Tip="{x:Static search:SR.SearchMatchCaseText}"
                                                       VerticalAlignment="Center">
                                             <Viewbox Height="12" Width="12">
-                                                <fluent:SymbolIcon Symbol="TextCaseTitle" Foreground="{Binding $parent[ToggleButton].Foreground}"/>
+                                                <fluent:SymbolIcon Symbol="TextCaseTitle"
+                                                                   Foreground="{Binding $parent[ToggleButton].Foreground}" />
                                             </Viewbox>
                                         </ToggleButton>
                                         <ToggleButton Theme="{StaticResource SearchPanelTextBoxButton}"
@@ -91,7 +92,8 @@
                                                       Margin="3,0,0,0"
                                                       VerticalAlignment="Center">
                                             <Viewbox Height="12" Width="12">
-                                                <fluent:SymbolIcon Symbol="TextWholeWord" Foreground="{Binding $parent[ToggleButton].Foreground}"/>
+                                                <fluent:SymbolIcon Symbol="TextWholeWord"
+                                                                   Foreground="{Binding $parent[ToggleButton].Foreground}" />
                                             </Viewbox>
                                         </ToggleButton>
                                         <ToggleButton Theme="{StaticResource SearchPanelTextBoxButton}"
@@ -100,7 +102,8 @@
                                                       Margin="3,0,5,0"
                                                       VerticalAlignment="Center">
                                             <Viewbox Height="12" Width="12">
-                                                <fluent:SymbolIcon Symbol="TextPeriodAsterisk" Foreground="{Binding $parent[ToggleButton].Foreground}"/>
+                                                <fluent:SymbolIcon Symbol="TextPeriodAsterisk"
+                                                                   Foreground="{Binding $parent[ToggleButton].Foreground}" />
                                             </Viewbox>
                                         </ToggleButton>
                                     </StackPanel>
@@ -114,7 +117,8 @@
                                     <TextBlock Text="{x:Static search:SR.SearchFindPreviousText}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
-                                    <fluent:SymbolIcon Symbol="ChevronUp" Foreground="{Binding $parent[Button].Foreground}"/>
+                                    <fluent:SymbolIcon Symbol="ChevronUp"
+                                                       Foreground="{Binding $parent[Button].Foreground}" />
                                 </Viewbox>
                             </Button>
                             <Button Margin="3,0,0,0"
@@ -125,7 +129,8 @@
                                     <TextBlock Text="{x:Static search:SR.SearchFindNextText}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
-                                    <fluent:SymbolIcon Symbol="ChevronDown" Foreground="{Binding $parent[Button].Foreground}"/>
+                                    <fluent:SymbolIcon Symbol="ChevronDown"
+                                                       Foreground="{Binding $parent[Button].Foreground}" />
                                 </Viewbox>
                             </Button>
                             <Button Margin="3,0,0,0"
@@ -134,7 +139,8 @@
                                     Command="{x:Static search:SearchCommands.CloseSearchPanel}"
                                     Focusable="True">
                                 <Viewbox Height="16" Width="16">
-                                    <fluent:SymbolIcon Symbol="Dismiss" Foreground="{Binding $parent[Button].Foreground}"/>
+                                    <fluent:SymbolIcon Symbol="Dismiss"
+                                                       Foreground="{Binding $parent[Button].Foreground}" />
                                 </Viewbox>
                             </Button>
                         </StackPanel>
@@ -160,7 +166,8 @@
                                     <TextBlock Text="{x:Static search:SR.SearchReplaceNext}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
-                                    <fluent:SymbolIcon Symbol="ArrowForward" Foreground="{Binding $parent[Button].Foreground}"/>
+                                    <fluent:SymbolIcon Symbol="ArrowForward"
+                                                       Foreground="{Binding $parent[Button].Foreground}" />
                                 </Viewbox>
                             </Button>
                             <Button Margin="3, 0, 0, 0"
@@ -171,7 +178,8 @@
                                     <TextBlock Text="{x:Static search:SR.SearchReplaceAll}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
-                                    <fluent:SymbolIcon Symbol="ArrowRepeatAll" Foreground="{Binding $parent[Button].Foreground}"/>
+                                    <fluent:SymbolIcon Symbol="ArrowRepeatAll"
+                                                       Foreground="{Binding $parent[Button].Foreground}" />
                                 </Viewbox>
                             </Button>
                         </StackPanel>

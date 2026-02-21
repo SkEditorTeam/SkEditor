@@ -10,12 +10,10 @@ public partial class TranslatableString : ObservableObject
     private static readonly HashSet<WeakReference<TranslatableString>> Instances = [];
     private static bool _eventSubscribed;
 
+    private readonly string[] _parameters = [];
+
     [ObservableProperty]
     private string _key;
-    
-    private TranslationKey EnumKey => Enum.Parse<TranslationKey>(Key);
-    
-    private readonly string[] _parameters = [];
 
     public TranslatableString(TranslationKey key)
     {
@@ -34,13 +32,15 @@ public partial class TranslatableString : ObservableObject
             _eventSubscribed = true;
         }
     }
-    
-    public TranslatableString(string key) : this(Enum.Parse<TranslationKey>(key)) { }
-    
-    public TranslatableString(TranslationKey key, params string[]? parameters) : this(key)
+
+    public TranslatableString(string key) : this(Enum.Parse<TranslationKey>(key))
     {
-        _parameters = parameters ?? [];
     }
+
+    public TranslatableString(TranslationKey key, params string[]? parameters) : this(key) =>
+        _parameters = parameters ?? [];
+
+    private TranslationKey EnumKey => Enum.Parse<TranslationKey>(Key);
 
     public string Value => _parameters == null || _parameters.Length == 0
         ? Translation.Get(EnumKey)
@@ -52,9 +52,9 @@ public partial class TranslatableString : ObservableObject
         {
             Instances.RemoveWhere(wr => !wr.TryGetTarget(out _));
 
-            foreach (var weakRef in Instances)
+            foreach (WeakReference<TranslatableString> weakRef in Instances)
             {
-                if (weakRef.TryGetTarget(out var instance))
+                if (weakRef.TryGetTarget(out TranslatableString? instance))
                 {
                     instance.OnPropertyChanged(nameof(Value));
                 }

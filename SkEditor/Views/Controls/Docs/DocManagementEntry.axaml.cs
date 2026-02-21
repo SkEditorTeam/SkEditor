@@ -30,7 +30,8 @@ public partial class DocManagementEntry : UserControl
     public void LoadVisuals()
     {
         NameBlock.Text = _entry.Name;
-        Description.Text = Translation.Get(TranslationKey.LocalDocsManagerWindowEntryDescription, _entry.DocType.ToString(),
+        Description.Text = Translation.Get(TranslationKey.LocalDocsManagerWindowEntryDescription,
+            _entry.DocType.ToString(),
             _entry.OriginalProvider.ToString());
     }
 

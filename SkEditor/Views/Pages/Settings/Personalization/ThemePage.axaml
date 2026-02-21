@@ -18,7 +18,8 @@
                 <ui:SettingsExpander Header="{localization:Translate SettingsThemeNewThemeInfo}"
                                      IconSource="{icons:SymbolIconSource Symbol=Important}">
                     <ui:SettingsExpander.Footer>
-                        <Button Name="OpenThemesFolderButton" Content="{localization:Translate SettingsThemeOpenFolder}" />
+                        <Button Name="OpenThemesFolderButton"
+                                Content="{localization:Translate SettingsThemeOpenFolder}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 

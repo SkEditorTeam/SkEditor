@@ -13,7 +13,7 @@ public partial class WelcomePage : UserControl
         RecentItemsPanel.GetObservable(IsVisibleProperty)
             .Subscribe(UpdateGridLayout);
     }
-    
+
     private void UpdateGridLayout(bool panelVisible)
     {
         if (panelVisible)

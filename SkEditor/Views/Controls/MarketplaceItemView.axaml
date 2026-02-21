@@ -126,11 +126,14 @@
                            TextTrimming="CharacterEllipsis" Margin="0,10,0,0" />
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Spacing="10">
                     <Button Name="InstallButton" Content="{localization:Translate MarketplaceButtonInstall}" />
-                    <Button Name="UpdateButton" Content="{localization:Translate MarketplaceButtonUpdate}" IsVisible="False" />
+                    <Button Name="UpdateButton" Content="{localization:Translate MarketplaceButtonUpdate}"
+                            IsVisible="False" />
                     <Button Name="UninstallButton" Content="{localization:Translate MarketplaceButtonUninstall}"
                             IsVisible="False" />
-                    <Button Name="DisableButton" Content="{localization:Translate MarketplaceButtonDisable}" IsVisible="False" />
-                    <Button Name="EnableButton" Content="{localization:Translate MarketplaceButtonEnable}" IsVisible="False" />
+                    <Button Name="DisableButton" Content="{localization:Translate MarketplaceButtonDisable}"
+                            IsVisible="False" />
+                    <Button Name="EnableButton" Content="{localization:Translate MarketplaceButtonEnable}"
+                            IsVisible="False" />
                     <Button Name="ManageButton" IsVisible="False" Classes="accent">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                             <fluent:SymbolIcon Symbol="Settings" />

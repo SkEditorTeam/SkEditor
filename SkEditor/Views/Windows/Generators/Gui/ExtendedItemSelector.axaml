@@ -15,7 +15,8 @@
             <StackPanel Spacing="10" Orientation="Horizontal">
                 <StackPanel Spacing="4">
                     <TextBlock Text="{localization:Translate GuiGeneratorDisplayName}" />
-                    <TextBox Name="DisplayNameTextBox" Width="300" Watermark="{localization:Translate GuiGeneratorOptional}" />
+                    <TextBox Name="DisplayNameTextBox" Width="300"
+                             Watermark="{localization:Translate GuiGeneratorOptional}" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">

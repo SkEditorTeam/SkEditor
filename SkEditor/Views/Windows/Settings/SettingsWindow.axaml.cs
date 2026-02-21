@@ -78,44 +78,68 @@ public class SettingsPageFactory : INavigationPageFactory
     public Control? GetPage(Type sourcePageType)
     {
         if (sourcePageType == typeof(HomePage))
+        {
             return new HomePage();
-        
+        }
+
         if (sourcePageType == typeof(GeneralPage))
+        {
             return new GeneralPage();
-        
+        }
+
         if (sourcePageType == typeof(PersonalizationPage))
+        {
             return new PersonalizationPage();
-        
+        }
+
         if (sourcePageType == typeof(ExperimentsPage))
+        {
             return new ExperimentsPage();
-        
+        }
+
         if (sourcePageType == typeof(AboutPage))
+        {
             return new AboutPage();
-        
+        }
+
         if (sourcePageType == typeof(AddonsPage))
+        {
             return new AddonsPage();
-        
+        }
+
         if (sourcePageType == typeof(ConnectionsPage))
+        {
             return new ConnectionsPage();
-        
+        }
+
         if (sourcePageType == typeof(FileTypesPage))
+        {
             return new FileTypesPage();
-        
+        }
+
         if (sourcePageType == typeof(CustomAddonSettingsPage))
+        {
             return new CustomAddonSettingsPage();
-        
+        }
+
         if (sourcePageType == typeof(EditThemePage))
+        {
             return new EditThemePage();
-        
+        }
+
         if (sourcePageType == typeof(ThemePage))
+        {
             return new ThemePage();
-        
+        }
+
         if (sourcePageType == typeof(FileSyntaxes))
+        {
             return new FileSyntaxes();
-        
+        }
+
         return null;
     }
-    
+
     public Control? GetPageFromObject(object target)
     {
         return null;

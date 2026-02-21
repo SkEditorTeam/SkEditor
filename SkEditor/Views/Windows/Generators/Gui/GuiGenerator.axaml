@@ -37,10 +37,12 @@
               ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" />
 
         <CheckBox Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                  Name="UseSkriptGuiCheckBox" Content="{localization:Translate GuiGeneratorSkriptGui}" Margin="20,0,0,10"
+                  Name="UseSkriptGuiCheckBox" Content="{localization:Translate GuiGeneratorSkriptGui}"
+                  Margin="20,0,0,10"
                   IsChecked="{Binding GuiGeneratorSkriptGuiAddonUsed}" />
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,12" Spacing="12">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Margin="0,0,0,12" Spacing="12">
             <Button Name="PreviewButton" Width="100" Content="{localization:Translate GuiGeneratorPreviewButton}"
                     HorizontalAlignment="Center" />
             <Button Name="GenerateButton" Width="100" Content="{localization:Translate GuiGeneratorGenerateButton}"

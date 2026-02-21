@@ -49,7 +49,8 @@ public partial class DocElementControl : UserControl
 
         if (entry.DocType == IDocumentationEntry.Type.Event)
         {
-            OtherElementPanel.Children.Add(CreateExpander(Translation.Get(TranslationKey.DocumentationControlEventValues),
+            OtherElementPanel.Children.Add(CreateExpander(
+                Translation.Get(TranslationKey.DocumentationControlEventValues),
                 Format(string.IsNullOrEmpty(entry.EventValues)
                     ? Translation.Get(TranslationKey.DocumentationControlNoEventValues)
                     : entry.EventValues)));
@@ -339,7 +340,8 @@ public partial class DocElementControl : UserControl
         {
             SkEditorAPI.Logs.Error($"Failed to fetch examples for {_entry.Name}: {e.Message}");
             examples = [];
-            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationControlErrorExamples, e.Message));
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationControlErrorExamples,
+                e.Message));
         }
 
         LocalProvider? localProvider = LocalProvider.Get();
@@ -384,13 +386,15 @@ public partial class DocElementControl : UserControl
 
     public void EnableDownloadButton()
     {
-        DownloadElementButton.Content = new TextBlock { Text = Translation.Get(TranslationKey.DocumentationControlDownload) };
+        DownloadElementButton.Content = new TextBlock
+            { Text = Translation.Get(TranslationKey.DocumentationControlDownload) };
         DownloadElementButton.Classes.Add("accent");
     }
 
     public void DisableDownloadButton()
     {
-        DownloadElementButton.Content = new TextBlock { Text = Translation.Get(TranslationKey.DocumentationControlRemove) };
+        DownloadElementButton.Content = new TextBlock
+            { Text = Translation.Get(TranslationKey.DocumentationControlRemove) };
         DownloadElementButton.Classes.Remove("accent");
     }
 

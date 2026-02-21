@@ -94,9 +94,9 @@ public class ThemeEditor
 
             if (!selectedTheme.Name.Equals(currentTheme))
             {
-                SkEditorAPI.Configs.GetAppSettings().CurrentTheme = selectedTheme.Name;    
+                SkEditorAPI.Configs.GetAppSettings().CurrentTheme = selectedTheme.Name;
             }
-            
+
             return selectedTheme;
         }
 

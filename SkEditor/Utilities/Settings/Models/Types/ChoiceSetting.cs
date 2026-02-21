@@ -18,15 +18,9 @@ public interface IChoiceSetting
 public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
 {
     private readonly Action<T> _set;
-    public List<T> Options { get; }
 
-    IEnumerable IChoiceSetting.Options => Options;
-
-    object? IChoiceSetting.SelectedItem
-    {
-        get => SelectedOption;
-        set => SelectedOption = (T)value!;
-    }
+    [ObservableProperty]
+    private T _selectedOption;
 
     public ChoiceSetting(TranslatableString name, IconSource icon, TranslatableString? desc,
         ISettingsProvider provider, Func<T> get, Action<T> set)
@@ -37,8 +31,15 @@ public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
         SelectedOption = get();
     }
 
-    [ObservableProperty]
-    private T _selectedOption;
+    public List<T> Options { get; }
+
+    IEnumerable IChoiceSetting.Options => Options;
+
+    object? IChoiceSetting.SelectedItem
+    {
+        get => SelectedOption;
+        set => SelectedOption = (T)value!;
+    }
 
     partial void OnSelectedOptionChanged(T? oldValue, T newValue)
     {

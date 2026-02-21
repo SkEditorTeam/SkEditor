@@ -121,7 +121,8 @@ public class SyntaxItem : MarketplaceItem
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await SkEditorAPI.Windows.ShowDialog("Success", Translation.Get(TranslationKey.MarketplaceUninstallSuccess, ItemName),
+        await SkEditorAPI.Windows.ShowDialog("Success",
+            Translation.Get(TranslationKey.MarketplaceUninstallSuccess, ItemName),
             primaryButtonText: "Okay");
     }
 

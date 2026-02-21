@@ -21,9 +21,6 @@ namespace SkEditor.Views.Windows.Generators.Gui;
 
 public partial class ItemSelector : AppWindow
 {
-    public ObservableCollection<ComboBoxItem> FilteredItems { get; } = [];
-    public ObservableCollection<Item> Items { get; } = [];
-
     public ItemSelector()
     {
         InitializeComponent();
@@ -62,6 +59,9 @@ public partial class ItemSelector : AppWindow
             }
         };
     }
+
+    public ObservableCollection<ComboBoxItem> FilteredItems { get; } = [];
+    public ObservableCollection<Item> Items { get; } = [];
 
     private async void OnItemSelectorLoaded(object? sender, RoutedEventArgs e)
     {
@@ -124,7 +124,7 @@ public partial class ItemSelector : AppWindow
                 filteredItemsResult.Insert(0, exactMatch);
             }
         }
-        
+
         FilteredItems.Clear();
         FilteredItems.AddRange(filteredItemsResult.Select(CreateItem));
 
@@ -146,16 +146,17 @@ public partial class ItemSelector : AppWindow
         {
             return;
         }
-        
+
         try
         {
             List<Item>? items = JsonSerializer.Deserialize<List<Item>>(await File.ReadAllTextAsync(itemsFile),
                 ItemJsonContext.Default.ListItem);
-            
+
             if (items == null)
             {
                 return;
             }
+
             Items.Clear();
             FilteredItems.Clear();
 

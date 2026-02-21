@@ -24,13 +24,15 @@
             CornerRadius="7">
 
         <Grid RowDefinitions="auto,auto,auto,auto,*,auto">
-            <TextBlock Grid.Row="0" Text="{localization:Translate CodeParserTitle}" FontWeight="DemiBold" Margin="20,10,20,10" />
+            <TextBlock Grid.Row="0" Text="{localization:Translate CodeParserTitle}" FontWeight="DemiBold"
+                       Margin="20,10,20,10" />
             <Separator Grid.Row="1" Margin="0,0,0,10" />
             <ui:InfoBar Margin="8,0" Grid.Row="2" IsOpen="True" IsClosable="False" Severity="Warning"
                         Message="{localization:Translate CodeParserWarning}" />
             <StackPanel Margin="10" Name="ParserDisabled" Grid.Row="4" VerticalAlignment="Center"
                         HorizontalAlignment="Stretch" IsVisible="False" Spacing="10">
-                <TextBlock TextAlignment="Center" TextWrapping="Wrap" Text="{localization:Translate CodeParserEnableInfo}" />
+                <TextBlock TextAlignment="Center" TextWrapping="Wrap"
+                           Text="{localization:Translate CodeParserEnableInfo}" />
                 <Button Name="EnableParser" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="accent"
                         Content="{localization:Translate ConfirmButton}" />
             </StackPanel>
@@ -211,7 +213,8 @@
                 <TextBlock Name="CannotParseInfoText" TextAlignment="Center" TextWrapping="Wrap" />
             </StackPanel>
             <StackPanel Grid.Row="5" HorizontalAlignment="Stretch" Margin="10">
-                <Button Name="ParseButton" HorizontalAlignment="Center" Content="{localization:Translate CodeParserParseCode}" />
+                <Button Name="ParseButton" HorizontalAlignment="Center"
+                        Content="{localization:Translate CodeParserParseCode}" />
             </StackPanel>
         </Grid>
     </Border>

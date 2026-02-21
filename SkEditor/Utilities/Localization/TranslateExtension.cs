@@ -6,17 +6,18 @@ namespace SkEditor.Utilities.Localization;
 
 public class TranslateExtension : MarkupExtension
 {
-    public TranslateExtension() { }
-    public TranslateExtension(TranslationKey key)
+    public TranslateExtension()
     {
-        Key = key;
     }
+
+    public TranslateExtension(TranslationKey key) => Key = key;
 
     public TranslationKey? Key { get; set; }
 
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
-        var dynamicResource = new DynamicResourceExtension(Key.ToString() ?? throw new InvalidOperationException("TranslationKey cannot be null."));
+        DynamicResourceExtension dynamicResource =
+            new(Key.ToString() ?? throw new InvalidOperationException("TranslationKey cannot be null."));
         return dynamicResource.ProvideValue(serviceProvider);
     }
 }

@@ -160,7 +160,8 @@ public partial class MainMenuControl : UserControl
         {
             Symbol = Symbol.Book
         };
-        SkEditorAPI.Files.AddCustomTab(Translation.GetObservable(TranslationKey.DocumentationWindowTitle), new DocumentationControl(),
+        SkEditorAPI.Files.AddCustomTab(Translation.GetObservable(TranslationKey.DocumentationWindowTitle),
+            new DocumentationControl(),
             icon: icon);
     }
 

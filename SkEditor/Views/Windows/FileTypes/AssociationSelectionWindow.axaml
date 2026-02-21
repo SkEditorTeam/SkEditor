@@ -18,7 +18,8 @@
             <ListBox Name="Associations" />
         </ScrollViewer>
         <Grid Grid.Row="2" ColumnDefinitions="*,*" VerticalAlignment="Center" Margin="0 10 0 0">
-            <CheckBox Name="RememberCheck" Content="{localization:Translate FileAssociationSelectionWindowRememberMyChoice}" />
+            <CheckBox Name="RememberCheck"
+                      Content="{localization:Translate FileAssociationSelectionWindowRememberMyChoice}" />
             <Button Name="ConfirmButton" Grid.Column="1" HorizontalAlignment="Right"
                     Content="{localization:Translate ConfirmButton}" />
         </Grid>

@@ -22,12 +22,14 @@
         <controls:SettingsTitle Name="Title" Title="{localization:Translate SettingsPersonalizationTitle}" Grid.Row="0" />
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="8">
-                <ui:SettingsExpander Name="ThemePageButton" Header="{localization:Translate SettingsPersonalizationTheme}"
+                <ui:SettingsExpander Name="ThemePageButton"
+                                     Header="{localization:Translate SettingsPersonalizationTheme}"
                                      IconSource="{icons:SymbolIconSource Symbol=Color}"
                                      Description="{localization:Translate SettingsPersonalizationThemeDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="SyntaxPageButton" Header="{localization:Translate SettingsPersonalizationSyntax}"
+                <ui:SettingsExpander Name="SyntaxPageButton"
+                                     Header="{localization:Translate SettingsPersonalizationSyntax}"
                                      IconSource="{icons:SymbolIconSource Symbol=Code}"
                                      Description="{localization:Translate SettingsPersonalizationSyntaxDescription}"
                                      IsClickEnabled="True" />

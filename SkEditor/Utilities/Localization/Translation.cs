@@ -55,12 +55,12 @@ public static class Translation
             return translationString;
         }
     }
-    
+
     public static TranslatableString GetObservable(TranslationKey key)
     {
         return new TranslatableString(key);
     }
-    
+
     public static TranslatableString GetObservable(TranslationKey key, params string[]? parameters)
     {
         return new TranslatableString(key, parameters);
@@ -84,7 +84,7 @@ public static class Translation
             PropagateLanguageChange(language);
         }
     }
-    
+
     public static async Task ChangeAndRefreshLanguage(string language)
     {
         await Dispatcher.UIThread.InvokeAsync(async () =>
@@ -164,7 +164,8 @@ public static class Translation
         }
         catch (JsonException ex)
         {
-            SkEditorAPI.Logs.Error($"Failed to load language file '{Path.GetFileName(languageFile)}': {ex.Message}", true);
+            SkEditorAPI.Logs.Error($"Failed to load language file '{Path.GetFileName(languageFile)}': {ex.Message}",
+                true);
         }
     }
 

@@ -15,7 +15,7 @@ public partial class SettingsPage : UserControl
 
         Loaded += OnLoaded;
     }
-    
+
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {

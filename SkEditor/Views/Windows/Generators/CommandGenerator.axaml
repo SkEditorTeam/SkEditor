@@ -59,8 +59,9 @@
                 </Grid>
             </StackPanel>
         </StackPanel>
-        
-        <Button Name="GenerateButton" Content="{localization:Translate CommandGeneratorGenerate}" HorizontalAlignment="Stretch"
+
+        <Button Name="GenerateButton" Content="{localization:Translate CommandGeneratorGenerate}"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom" />
     </Panel>
 </Window>

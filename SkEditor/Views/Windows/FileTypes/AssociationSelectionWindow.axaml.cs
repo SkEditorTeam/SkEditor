@@ -25,7 +25,8 @@ public partial class AssociationSelectionWindow : AppWindow
             {
                 Source = association.IsFromAddon ? association.Addon?.Name : "SkEditor",
                 Description = association.IsFromAddon
-                    ? Translation.Get(TranslationKey.FileAssociationSelectionWindowUnofficialItem, association.Addon?.Name)
+                    ? Translation.Get(TranslationKey.FileAssociationSelectionWindowUnofficialItem,
+                        association.Addon?.Name)
                     : Translation.Get(TranslationKey.FileAssociationSelectionWindowOfficialItem),
                 Tag = association.IsFromAddon ? association.Addon?.Name : "SkEditor"
             };

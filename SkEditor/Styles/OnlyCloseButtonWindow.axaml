@@ -35,11 +35,11 @@
                     Name="RootBorder">
                 <Grid RowDefinitions="Auto,*">
                     <Grid Name="DefaultTitleBar"
-                                ColumnDefinitions="Auto,*"
-                                Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}"
-                                Background="{DynamicResource FATitle_TitleBarBackground}"
-                                TextElement.Foreground="{DynamicResource FATitle_TitleBarForeground}"
-                                VerticalAlignment="Top">
+                          ColumnDefinitions="Auto,*"
+                          Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}"
+                          Background="{DynamicResource FATitle_TitleBarBackground}"
+                          TextElement.Foreground="{DynamicResource FATitle_TitleBarForeground}"
+                          VerticalAlignment="Top">
 
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="8,6,4,2" Spacing="8">
                             <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="18" Width="18"
@@ -52,7 +52,7 @@
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left" />
                         </StackPanel>
-                        
+
                         <wnd:MinMaxCloseControl Grid.Column="1"
                                                 HorizontalAlignment="Right"
                                                 Name="SystemCaptionButtons"

@@ -61,7 +61,7 @@
         <FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/JetBrainsMono#JetBrains Mono</FontFamily>
         <FontFamily x:Key="MinecraftFont">avares://SkEditor/Assets/MinecraftFont#Minecraft</FontFamily>
     </Application.Resources>
-    
+
     <Application.DataTemplates>
         <DataTemplate DataType="localization:TranslatableString">
             <TextBlock Text="{Binding Value}" />

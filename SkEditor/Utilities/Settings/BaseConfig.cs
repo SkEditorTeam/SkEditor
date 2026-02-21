@@ -82,7 +82,7 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
         {
             await _saveCts.CancelAsync();
         }
-    
+
         await SaveInternal();
     }
 

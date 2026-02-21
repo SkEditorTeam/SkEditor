@@ -30,7 +30,8 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     Whether to enable the developer mode.
     /// </summary>
-    [ToggleSetting(TranslationKey.SettingsAboutDevMode, TranslationKey.SettingsGeneralTitle, TranslationKey.SettingsAboutDevModeDescription)]
+    [ToggleSetting(TranslationKey.SettingsAboutDevMode, TranslationKey.SettingsGeneralTitle,
+        TranslationKey.SettingsAboutDevModeDescription)]
     [SettingSymbolIcon(Symbol.Flash)]
     public bool IsDevModeEnabled
     {
@@ -41,7 +42,8 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     The application language code.
     /// </summary>
-    [ChoiceSetting(TranslationKey.SettingsGeneralLanguage, typeof(LanguageSettingsProvider), TranslationKey.SettingsGeneralTitle)]
+    [ChoiceSetting(TranslationKey.SettingsGeneralLanguage, typeof(LanguageSettingsProvider),
+        TranslationKey.SettingsGeneralTitle)]
     [SettingSymbolIcon(Symbol.Globe)]
     public string Language
     {
@@ -58,16 +60,25 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     The current application theme file name.
     /// </summary>
-    [ChoiceSetting(TranslationKey.SettingsThemeCurrentTheme, typeof(ThemeSettingsProvider), TranslationKey.SettingsThemeTitle, TranslationKey.SettingsThemeCurrentThemeDescription)]
+    [ChoiceSetting(TranslationKey.SettingsThemeCurrentTheme, typeof(ThemeSettingsProvider),
+        TranslationKey.SettingsThemeTitle, TranslationKey.SettingsThemeCurrentThemeDescription)]
     [SettingSymbolIcon(Symbol.PaintBrush)]
     public string CurrentTheme
     {
         get;
         set
         {
-            if (!SetProperty(ref field, value)) return;
+            if (!SetProperty(ref field, value))
+            {
+                return;
+            }
+
             Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.Name.Equals(value));
-            if (theme == null) return;
+            if (theme == null)
+            {
+                return;
+            }
+
             _ = ThemeEditor.SetTheme(theme);
         }
     } = "Default.json";
@@ -84,7 +95,8 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     Whether to check for application updates on startup.
     /// </summary>
-    [ToggleSetting(TranslationKey.SettingsGeneralCheckForUpdates, TranslationKey.SettingsGeneralTitle, TranslationKey.SettingsGeneralCheckForUpdatesDescription)]
+    [ToggleSetting(TranslationKey.SettingsGeneralCheckForUpdates, TranslationKey.SettingsGeneralTitle,
+        TranslationKey.SettingsGeneralCheckForUpdatesDescription)]
     [SettingSymbolIcon(Symbol.CloudSync)]
     public bool CheckForAppUpdates
     {
@@ -122,7 +134,8 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     Whether to use Discord Rich Presence integration.
     /// </summary>
-    [ToggleSetting(TranslationKey.SettingsGeneralRpc, TranslationKey.SettingsGeneralTitle, TranslationKey.SettingsGeneralRpcDescription)]
+    [ToggleSetting(TranslationKey.SettingsGeneralRpc, TranslationKey.SettingsGeneralTitle,
+        TranslationKey.SettingsGeneralRpcDescription)]
     [SettingPathIcon("DiscordIcon")]
     public bool IsDiscordRichPresenceEnabled
     {

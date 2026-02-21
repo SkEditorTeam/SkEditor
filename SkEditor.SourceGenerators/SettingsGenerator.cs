@@ -41,12 +41,13 @@ public class SettingsGenerator : IIncrementalGenerator
             }))
             .Collect();
 
-        var combined = classesWithAttribute.Combine(context.CompilationProvider);
+        IncrementalValueProvider<(ImmutableArray<INamedTypeSymbol?> Left, Compilation Right)> combined =
+            classesWithAttribute.Combine(context.CompilationProvider);
 
         context.RegisterSourceOutput(combined, (ctx, tuple) =>
         {
             (ImmutableArray<INamedTypeSymbol?> classes, Compilation? compilation) = tuple;
-            
+
             foreach (INamedTypeSymbol classSymbol in classes.Where(c => c is not null)!)
             {
                 string className = classSymbol!.Name;
@@ -160,28 +161,37 @@ public class SettingsGenerator : IIncrementalGenerator
     private static List<string> GetAttributeConstructorArgumentsFromSyntax(AttributeData attr)
     {
         if (attr.ApplicationSyntaxReference is null)
+        {
             return [];
+        }
 
         SyntaxNode syntaxNode = attr.ApplicationSyntaxReference.GetSyntax();
         if (syntaxNode is not AttributeSyntax attributeSyntax)
+        {
             return [];
+        }
 
-        var argList = attributeSyntax.ArgumentList;
+        AttributeArgumentListSyntax? argList = attributeSyntax.ArgumentList;
         if (argList is null)
+        {
             return [];
+        }
 
         return argList.Arguments
             .Select(a => a.Expression.ToString())
             .ToList();
     }
 
-    private static string GetFullyQualifiedTypeName(AttributeSyntax attributeSyntax, int argumentIndex, Compilation compilation)
+    private static string GetFullyQualifiedTypeName(AttributeSyntax attributeSyntax, int argumentIndex,
+        Compilation compilation)
     {
-        var argList = attributeSyntax.ArgumentList;
+        AttributeArgumentListSyntax? argList = attributeSyntax.ArgumentList;
         if (argList is null || argList.Arguments.Count <= argumentIndex)
+        {
             return "object";
+        }
 
-        var expression = argList.Arguments[argumentIndex].Expression;
+        ExpressionSyntax expression = argList.Arguments[argumentIndex].Expression;
         if (expression is not TypeOfExpressionSyntax typeOfExpr)
         {
             return expression.ToString().Replace("typeof(", "").TrimEnd(')');
@@ -210,14 +220,14 @@ public class SettingsGenerator : IIncrementalGenerator
 
         if (symbolIconAttr != null)
         {
-            var iconArgs = symbolIconAttr.ConstructorArguments;
+            ImmutableArray<TypedConstant> iconArgs = symbolIconAttr.ConstructorArguments;
             string? symbol = iconArgs[0].Value?.ToString();
             icon =
                 $"new FluentIcons.Avalonia.Fluent.SymbolIconSource() {{ Symbol = (FluentIcons.Common.Symbol){symbol} }}";
         }
         else if (pathIconAttr != null)
         {
-            var iconArgs = pathIconAttr.ConstructorArguments;
+            ImmutableArray<TypedConstant> iconArgs = pathIconAttr.ConstructorArguments;
             string? iconName = iconArgs[0].Value?.ToString();
             icon = $"SkEditor.Utilities.Icons.Icons.GetPathIcon(\"{iconName}\")";
         }

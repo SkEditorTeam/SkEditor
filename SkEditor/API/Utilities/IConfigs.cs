@@ -29,7 +29,7 @@ public interface IConfigs
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
     Task SaveAllConfigsAsync();
-    
+
     /// <summary>
     ///     Save all configuration files immediately asynchronously.
     /// </summary>

@@ -19,7 +19,8 @@
 
     <Menu Name="MainMenu">
         <MenuItem Header="{localization:Translate MenuHeaderFile}">
-            <MenuItem Header="{localization:Translate MenuHeaderNew}" Name="MenuItemNew" HotKey="Ctrl+N" InputGesture="Ctrl+N">
+            <MenuItem Header="{localization:Translate MenuHeaderNew}" Name="MenuItemNew" HotKey="Ctrl+N"
+                      InputGesture="Ctrl+N">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="Document" />
                 </MenuItem.Icon>
@@ -49,7 +50,8 @@
                     <icons:SymbolIcon Symbol="SaveEdit" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderSaveAll}" Name="MenuItemSaveAll" InputGesture="Ctrl+Alt+S">
+            <MenuItem Header="{localization:Translate MenuHeaderSaveAll}" Name="MenuItemSaveAll"
+                      InputGesture="Ctrl+Alt+S">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="SaveMultiple" />
                 </MenuItem.Icon>
@@ -67,20 +69,23 @@
                     <icons:SymbolIcon Symbol="Dismiss" />
                 </MenuItem.Icon>
 
-                <MenuItem Header="{localization:Translate MenuHeaderCloseCurrentFile}" Name="MenuItemClose" HotKey="Ctrl+W"
+                <MenuItem Header="{localization:Translate MenuHeaderCloseCurrentFile}" Name="MenuItemClose"
+                          HotKey="Ctrl+W"
                           InputGesture="Ctrl+W">
                     <MenuItem.Icon>
                         <icons:SymbolIcon Symbol="Document" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{localization:Translate MenuHeaderCloseAll}" Name="MenuItemCloseAll" HotKey="Ctrl+Shift+W"
+                <MenuItem Header="{localization:Translate MenuHeaderCloseAll}" Name="MenuItemCloseAll"
+                          HotKey="Ctrl+Shift+W"
                           InputGesture="Ctrl+Shift+W">
                     <MenuItem.Icon>
                         <icons:SymbolIcon Symbol="DocumentMultiple" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <MenuItem Header="{localization:Translate MenuHeaderCloseAllButCurrent}" Name="MenuItemCloseAllExceptCurrent">
+                <MenuItem Header="{localization:Translate MenuHeaderCloseAllButCurrent}"
+                          Name="MenuItemCloseAllExceptCurrent">
                     <MenuItem.Icon>
                         <icons:SymbolIcon Symbol="DocumentMultiple" />
                     </MenuItem.Icon>
@@ -132,7 +137,8 @@
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
-            <MenuItem Header="{localization:Translate MenuHeaderDuplicate}" Name="MenuItemDuplicate" InputGesture="Ctrl+D"
+            <MenuItem Header="{localization:Translate MenuHeaderDuplicate}" Name="MenuItemDuplicate"
+                      InputGesture="Ctrl+D"
                       HotKey="Ctrl+D">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="CopySelect" />
@@ -151,7 +157,8 @@
                 </MenuItem.Icon>
             </MenuItem>
             <Separator />
-            <MenuItem Header="{localization:Translate MenuHeaderGoToLine}" Name="MenuItemGoToLine" InputGesture="Ctrl+G"
+            <MenuItem Header="{localization:Translate MenuHeaderGoToLine}" Name="MenuItemGoToLine"
+                      InputGesture="Ctrl+G"
                       HotKey="Ctrl+G">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="NumberSymbol" />
@@ -163,7 +170,8 @@
                     <icons:SymbolIcon Symbol="Search" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderReplace}" Name="MenuItemFindAndReplace" InputGesture="Ctrl+H"
+            <MenuItem Header="{localization:Translate MenuHeaderReplace}" Name="MenuItemFindAndReplace"
+                      InputGesture="Ctrl+H"
                       HotKey="Ctrl+H">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="ArrowSwap" />
@@ -208,14 +216,17 @@
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
-        
+
         <MenuItem Header="{localization:Translate MenuHeaderHelp}">
-            <MenuItem Header="{localization:Translate MenuHeaderCheckForUpdates}" Icon="{iconsMarkup:SymbolIcon Symbol=ArrowSync}"/>
-            <MenuItem Header="{localization:Translate MenuHeaderAppWiki}" Icon="{iconsMarkup:SymbolIcon Symbol=BookQuestionMark}"/>
-            <MenuItem Header="{localization:Translate MenuHeaderCommunitySupport}" Icon="{iconsMarkup:SymbolIcon Symbol=ChatHelp}"/>
-            <MenuItem Header="{localization:Translate MenuHeaderAbout}" Icon="{iconsMarkup:SymbolIcon Symbol=Info}"/>
+            <MenuItem Header="{localization:Translate MenuHeaderCheckForUpdates}"
+                      Icon="{iconsMarkup:SymbolIcon Symbol=ArrowSync}" />
+            <MenuItem Header="{localization:Translate MenuHeaderAppWiki}"
+                      Icon="{iconsMarkup:SymbolIcon Symbol=BookQuestionMark}" />
+            <MenuItem Header="{localization:Translate MenuHeaderCommunitySupport}"
+                      Icon="{iconsMarkup:SymbolIcon Symbol=ChatHelp}" />
+            <MenuItem Header="{localization:Translate MenuHeaderAbout}" Icon="{iconsMarkup:SymbolIcon Symbol=Info}" />
         </MenuItem>
-        
+
         <MenuItem Header="{localization:Translate MenuHeaderDevTools}"
                   DataContext="{x:Static viewModels:ViewModelLocator.AppSettings}" x:DataType="configs:AppSettings"
                   IsVisible="{Binding IsDevModeEnabled}">

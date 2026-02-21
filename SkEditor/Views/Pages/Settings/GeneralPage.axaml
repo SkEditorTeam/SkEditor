@@ -78,7 +78,8 @@
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <ComboBox Name="IndentationTypeComboBox">
                                 <ComboBoxItem Tag="tabs" Content="{localization:Translate SettingsGeneralTabTypeTabs}" />
-                                <ComboBoxItem Tag="spaces" Content="{localization:Translate SettingsGeneralTabTypeSpaces}" />
+                                <ComboBoxItem Tag="spaces"
+                                              Content="{localization:Translate SettingsGeneralTabTypeSpaces}" />
                             </ComboBox>
                             <ComboBox Name="IndentationAmountComboBox">
                                 <ComboBoxItem Tag="1">1</ComboBoxItem>

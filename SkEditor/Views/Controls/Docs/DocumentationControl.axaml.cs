@@ -54,7 +54,8 @@ public partial class DocumentationControl : UserControl
         DownloadAllButton.Command = new AsyncRelayCommand(DownloadAllEntries);
         RetrieveSkriptHubDocsButton.Command = new AsyncRelayCommand(async () =>
         {
-            ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.Attention),
+            ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
+                Translation.Get(TranslationKey.Attention),
                 Translation.Get(TranslationKey.DocumentationWindowFetchWarning),
                 new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
                 Translation.Get(TranslationKey.CancelButton), Translation.Get(TranslationKey.Okay));
@@ -410,7 +411,8 @@ public partial class DocumentationControl : UserControl
 
     private void HandleError(Exception exception)
     {
-        SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, exception.Message));
+        SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal,
+            exception.Message));
         Log.Error(exception, "An error occurred while fetching the documentation.");
         OtherInformation.Text = Translation.Get(TranslationKey.DocumentationWindowAnErrorOccured);
     }

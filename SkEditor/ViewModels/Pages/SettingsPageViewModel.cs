@@ -14,8 +14,6 @@ public partial class SettingsPageViewModel : ObservableObject
     [ObservableProperty]
     private SettingSection _currentSection;
 
-    public List<SettingSection> SettingsCategories { get; }
-
     public SettingsPageViewModel()
     {
         AppSettings appSettings = SkEditorAPI.Configs.GetAppSettings();
@@ -31,4 +29,6 @@ public partial class SettingsPageViewModel : ObservableObject
 
         _currentSection = SettingsCategories[0];
     }
+
+    public List<SettingSection> SettingsCategories { get; }
 }

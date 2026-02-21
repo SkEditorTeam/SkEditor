@@ -185,7 +185,9 @@ public partial class Folder : StorageElement
             return Translation.Get(TranslationKey.ProjectRenameErrorNameInvalid);
         }
 
-        return Children?.Any(x => x.Name == input) == true ? Translation.Get(TranslationKey.ProjectErrorNameExists) : null;
+        return Children?.Any(x => x.Name == input) == true
+            ? Translation.Get(TranslationKey.ProjectErrorNameExists)
+            : null;
     }
 
     public override void HandleClick()

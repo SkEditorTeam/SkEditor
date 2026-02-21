@@ -20,12 +20,8 @@ namespace SkEditor.ViewModels.Pages;
 
 public partial class WelcomePageViewModel : ObservableObject
 {
-    public List<WelcomeScreenSection> WelcomeSections { get; } = [];
-
     [ObservableProperty]
     private ObservableCollection<WelcomeScreenRecentItem> _recentItems = [];
-
-    public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
 
     public WelcomePageViewModel()
     {
@@ -94,6 +90,10 @@ public partial class WelcomePageViewModel : ObservableObject
         _recentItems.AddRange(recentItems);
     }
 
+    public List<WelcomeScreenSection> WelcomeSections { get; } = [];
+
+    public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
+
     private static SymbolIconSource CreateSymbolIcon(Symbol symbol)
     {
         return new SymbolIconSource
@@ -124,8 +124,8 @@ public partial class WelcomePageViewModel : ObservableObject
 
         public static TranslatableString ToPrettyDate(DateTime date)
         {
-            var appCulture = CultureInfo.CurrentCulture;
-            var span = DateTime.Now - date;
+            CultureInfo appCulture = CultureInfo.CurrentCulture;
+            TimeSpan span = DateTime.Now - date;
 
             switch (span.TotalDays)
             {
@@ -136,7 +136,9 @@ public partial class WelcomePageViewModel : ObservableObject
             }
 
             if (span.TotalMinutes < 1)
+            {
                 return Translation.GetObservable(TranslationKey.WelcomePageRecentJustNow);
+            }
 
             if (span.TotalHours < 1)
             {
@@ -160,7 +162,10 @@ public partial class WelcomePageViewModel : ObservableObject
 
         public static string GetPluralKey(int n)
         {
-            if (n == 1) return "One";
+            if (n == 1)
+            {
+                return "One";
+            }
 
             if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20))
             {
@@ -173,7 +178,7 @@ public partial class WelcomePageViewModel : ObservableObject
         public static TranslationKey GetKey(string prefix, string pluralKey)
         {
             string keyName = $"{prefix}{pluralKey}";
-            return Enum.TryParse<TranslationKey>(keyName, out var key)
+            return Enum.TryParse<TranslationKey>(keyName, out TranslationKey key)
                 ? key
                 : throw new ArgumentException($"No translation key found for {keyName}");
         }

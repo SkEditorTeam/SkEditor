@@ -20,7 +20,8 @@
                                      Description="{localization:Translate SettingsHomeGeneralDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="PersonalizationItem" Header="{localization:Translate SettingsHomePersonalization}"
+                <ui:SettingsExpander Name="PersonalizationItem"
+                                     Header="{localization:Translate SettingsHomePersonalization}"
                                      IconSource="{icons:SymbolIconSource Symbol=PaintBrush}"
                                      Description="{localization:Translate SettingsHomePersonalizationDescription}"
                                      IsClickEnabled="True" />

@@ -27,8 +27,7 @@ public partial class BinarySettings : ObservableObject, IConfig
     [ObservableProperty]
     private StartupMode _splashScreenMode = StartupMode.Auto;
 
-    public BinarySettings()
-    {
+    public BinarySettings() =>
         _registry =
         [
             new BinarySettingHandler<byte>(() => (byte)SplashScreenMode, v => SplashScreenMode = (StartupMode)v,
@@ -40,7 +39,6 @@ public partial class BinarySettings : ObservableObject, IConfig
             new BinarySettingHandler<bool>(() => IsFirstRun, v => IsFirstRun = v, r => r.ReadBoolean(),
                 (w, v) => w.Write(v))
         ];
-    }
 
     public int SplashScreenModeIndex
     {
@@ -97,7 +95,7 @@ public partial class BinarySettings : ObservableObject, IConfig
 
         return Task.CompletedTask;
     }
-    
+
     public Task SaveImmediate()
     {
         return Save();

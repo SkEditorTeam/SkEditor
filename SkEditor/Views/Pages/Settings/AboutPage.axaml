@@ -35,7 +35,8 @@
                                      Description="If you enjoy using SkEditor, consider supporting its development by buying me a coffee! Your support helps keep the project alive and thriving."
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="DocumentationItem" Header="{localization:Translate SettingsAboutDocumentation}"
+                <ui:SettingsExpander Name="DocumentationItem"
+                                     Header="{localization:Translate SettingsAboutDocumentation}"
                                      IconSource="{icons:SymbolIconSource Symbol=Book}"
                                      Description="{localization:Translate SettingsAboutDocumentationDescription}"
                                      IsClickEnabled="True" />
