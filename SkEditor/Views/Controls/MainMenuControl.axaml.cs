@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -179,17 +180,14 @@ public partial class MainMenuControl : UserControl
 
     public void AddSettingsTab()
     {
+        TabViewItem? existingTab = SkEditorAPI.Files.GetOpenedTabs().FirstOrDefault(tab => tab.Content is SettingsPage);
+        if (existingTab is not null)
+        {
+            SkEditorAPI.Windows.GetMainWindow()?.TabControl?.SelectedItem = existingTab;
+            return;
+        }
+        
         SettingsPage page = new();
-
-        TabView? tabView = SkEditorAPI.Windows.GetMainWindow()!.TabControl;
-        Size availableSize = new(
-            tabView.Bounds.Width - 32,
-            tabView.Bounds.Height - 32
-        );
-
-        page.Measure(availableSize);
-        page.Arrange(new Rect(page.DesiredSize));
-        page.UpdateLayout();
 
         SymbolIconSource icon = new() { Symbol = Symbol.Settings };
         SkEditorAPI.Files.AddCustomTab(Translation.GetObservable(TranslationKey.WindowTitleSettings), page, icon: icon);
