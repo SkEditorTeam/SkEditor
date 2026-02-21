@@ -3,6 +3,7 @@ using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Utilities.Localization;
+using SkEditor.Views.Pages;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -12,6 +13,9 @@ internal static class FileCloser
 {
     public static async Task CloseFile(TabViewTabCloseRequestedEventArgs e)
     {
+        if (e.Tab.Content is WelcomePage && SkEditorAPI.Files.GetOpenedTabs().Count == 1)
+            return;
+
         await SkEditorAPI.Files.Close(e.Tab);
     }
 
