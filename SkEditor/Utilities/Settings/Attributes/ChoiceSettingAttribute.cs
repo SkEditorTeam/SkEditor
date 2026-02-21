@@ -1,7 +1,9 @@
 ﻿using System;
 using SkEditor.Utilities.Localization;
 
+
 namespace SkEditor.Utilities.Settings.Attributes;
+#pragma warning disable CS9113 // Parameter is unread.
 
 /// <summary>
 ///     Marks a property as a choice setting with a specific provider.
@@ -12,7 +14,4 @@ public class ChoiceSettingAttribute(
     Type providerType,
     TranslationKey categoryKey = TranslationKey.None,
     TranslationKey descriptionKey = TranslationKey.None)
-    : BaseSettingAttribute(titleKey, categoryKey, descriptionKey)
-{
-    public Type ProviderType { get; } = providerType;
-}
+    : BaseSettingAttribute(titleKey, categoryKey, descriptionKey);

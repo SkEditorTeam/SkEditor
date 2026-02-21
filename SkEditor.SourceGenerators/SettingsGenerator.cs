@@ -81,13 +81,14 @@ public class SettingsGenerator : IIncrementalGenerator
 
                     string titleKey = args.Count > 0 ? args[0] : "TranslationKey.None";
                     string categoryKey = args.Count > 1 ? args[1] : "TranslationKey.SettingsGeneralTitle";
-                    string descriptionKey = args.Count > 2 ? args[2] : "TranslationKey.None";
+                    string? descriptionKey = args.Count > 2 ? args[2] : null;
+                    string descriptionPart = descriptionKey != null ? $"new TranslatableString({descriptionKey})" : "null";
 
                     settingsSectionsBuilder.AppendLine($"""
                                                         new ToggleSetting(
                                                             new TranslatableString({titleKey}),
                                                             {icon},
-                                                            new TranslatableString({descriptionKey}),
+                                                            {descriptionPart},
                                                             () => {toggleProperty.Name},
                                                             (value) => {toggleProperty.Name} = value
                                                         ),
@@ -107,13 +108,15 @@ public class SettingsGenerator : IIncrementalGenerator
                     AttributeSyntax attributeSyntax = (AttributeSyntax)attr.ApplicationSyntaxReference!.GetSyntax();
                     string providerTypeName = GetFullyQualifiedTypeName(attributeSyntax, 1, compilation);
                     string categoryKey = args.Count > 2 ? args[2] : "TranslationKey.None";
-                    string descriptionKey = args.Count > 3 ? args[3] : "TranslationKey.None";
+                    string? descriptionKey = args.Count > 3 ? args[3] : null;
+                    
+                    string descriptionPart = descriptionKey != null ? $"new TranslatableString({descriptionKey})" : "null";
 
                     settingsSectionsBuilder.AppendLine($"""
                                                         new ChoiceSetting<{propertyType}>(
                                                             new TranslatableString({titleKey}),
                                                             {icon},
-                                                            new TranslatableString({descriptionKey}),
+                                                            {descriptionPart},
                                                             new {providerTypeName}(),
                                                             () => {choiceProperty.Name},
                                                             (value) => {choiceProperty.Name} = value
