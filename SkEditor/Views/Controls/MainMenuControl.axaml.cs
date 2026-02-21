@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using AvaloniaEdit.Editing;
@@ -17,14 +16,11 @@ using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views.Controls.Docs;
 using SkEditor.Views.Pages;
-using ColorSelectionWindow = SkEditor.Views.Windows.ColorSelectionWindow;
-using CommandGenerator = SkEditor.Views.Windows.Generators.CommandGenerator;
-using GoToLineWindow = SkEditor.Views.Windows.GoToLineWindow;
-using GuiGenerator = SkEditor.Views.Windows.Generators.Gui.GuiGenerator;
-using MainWindow = SkEditor.Views.Windows.MainWindow;
-using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
-using PublishWindow = SkEditor.Views.Windows.PublishWindow;
-using RefactorWindow = SkEditor.Views.Windows.RefactorWindow;
+using SkEditor.Views.Windows;
+using SkEditor.Views.Windows.Generators;
+using SkEditor.Views.Windows.Generators.Gui;
+using SkEditor.Views.Windows.Marketplace;
+using SkEditor.Views.Windows.Settings;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -123,7 +119,8 @@ public partial class MainMenuControl : UserControl
         MenuItemMarketplace.Command =
             new AsyncRelayCommand(() => new MarketplaceWindow().ShowDialogOnMainWindow());
 
-        MenuItemSettings.Command = new RelayCommand(AddSettingsTab);
+        // MenuItemSettings.Command = new RelayCommand(AddSettingsTab);
+        MenuItemSettings.Command = new AsyncRelayCommand(() => new SettingsWindow().ShowDialogOnMainWindow());
     }
 
     private static async Task ShowDialogIfEditorIsOpen(AppWindow window, bool openAsDialog = true)
