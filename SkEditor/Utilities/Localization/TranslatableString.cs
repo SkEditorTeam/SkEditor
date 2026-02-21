@@ -5,6 +5,10 @@ using SkEditor.API;
 
 namespace SkEditor.Utilities.Localization;
 
+/// <summary>
+///     Represents a string that can be translated based on a translation key.
+///     It listens for global language changes and updates its value accordingly.
+/// </summary>
 public partial class TranslatableString : ObservableObject
 {
     private static readonly HashSet<WeakReference<TranslatableString>> Instances = [];
@@ -15,6 +19,10 @@ public partial class TranslatableString : ObservableObject
     [ObservableProperty]
     private string _key;
 
+    /// <summary>
+    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key.
+    /// </summary>
+    /// <param name="key">The translation key to use for retrieving the translated string.</param>
     public TranslatableString(TranslationKey key)
     {
         _key = key.ToString();
@@ -33,18 +41,55 @@ public partial class TranslatableString : ObservableObject
         }
     }
 
+    // ReSharper disable once UnusedParameter.Local
+    private TranslatableString(string rawValue, bool _)
+    {
+        _key = string.Empty;
+        Value = rawValue;
+    }
+
+    /// <summary>
+    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key as a string.
+    /// </summary>
+    /// <param name="key">The translation key as a string to use for retrieving the translated string.</param>
+    /// <remarks>This constructor should NOT be used for raw string values. Use <see cref="FromRawString(string)" /> instead.</remarks>
     public TranslatableString(string key) : this(Enum.Parse<TranslationKey>(key))
     {
     }
 
+    /// <summary>
+    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key and parameters.
+    /// </summary>
+    /// <param name="key">The translation key to use for retrieving the translated string.</param>
+    /// <param name="parameters">
+    ///     The parameters to use for formatting the translated string. These parameters will be passed to
+    ///     the translation system and can be used in the translation templates.
+    /// </param>
     public TranslatableString(TranslationKey key, params string[]? parameters) : this(key) =>
         _parameters = parameters ?? [];
 
     private TranslationKey EnumKey => Enum.Parse<TranslationKey>(Key);
 
-    public string Value => _parameters == null || _parameters.Length == 0
+    /// <summary>
+    ///     Gets the translated value of this instance based on the current language and the translation key. If the instance
+    ///     was created with a raw string value, that value will be returned instead.
+    /// </summary>
+    public string Value => field ?? (_parameters == null || _parameters.Length == 0
         ? Translation.Get(EnumKey)
-        : Translation.Get(EnumKey, _parameters);
+        : Translation.Get(EnumKey, _parameters));
+
+    /// <summary>
+    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified raw string value.
+    /// </summary>
+    /// <param name="value">
+    ///     The raw string value to use for this instance. This value will not be translated and will be
+    ///     returned as-is.
+    /// </param>
+    /// <returns>A new instance of <see cref="TranslatableString" /> with the specified raw string value.</returns>
+    public static TranslatableString FromRawString(string value)
+    {
+        return new TranslatableString(value, true);
+    }
 
     private static void OnGlobalLanguageChanged(object? sender, EventArgs e)
     {

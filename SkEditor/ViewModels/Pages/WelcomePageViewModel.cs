@@ -153,7 +153,7 @@ public partial class WelcomePageViewModel : ObservableObject
                 return date.Date == DateTime.Today.AddDays(-1)
                     ? Translation.GetObservable(GetKey("WelcomePageRecentYesterdayAt", GetPluralKey(1)),
                         date.ToString("t", appCulture))
-                    : new TranslatableString(date.ToString("g", appCulture));
+                    : TranslatableString.FromRawString(date.ToString("g", appCulture));
             }
 
             int hours = (int)span.TotalHours;
@@ -178,7 +178,7 @@ public partial class WelcomePageViewModel : ObservableObject
         public static TranslationKey GetKey(string prefix, string pluralKey)
         {
             string keyName = $"{prefix}{pluralKey}";
-            return Enum.TryParse<TranslationKey>(keyName, out TranslationKey key)
+            return Enum.TryParse(keyName, out TranslationKey key)
                 ? key
                 : throw new ArgumentException($"No translation key found for {keyName}");
         }
