@@ -63,6 +63,18 @@ public partial class MainMenuControl : UserControl
         MenuItemUndo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Undo());
         MenuItemRedo.Command = new RelayCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Redo());
         MenuItemGoToLine.Command = new AsyncRelayCommand(() => ShowDialogIfEditorIsOpen(new GoToLineWindow()));
+        MenuItemFind.Command = new RelayCommand(() =>
+        {
+            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.IsReplaceMode = false;
+            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.Close();
+            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.Open();
+        });
+        MenuItemReplace.Command = new RelayCommand(() =>
+        {
+            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.IsReplaceMode = true;
+            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.Close();
+            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.Open();
+        });
 
         MenuItemTrimWhitespaces.Command = new RelayCommand(() =>
         {

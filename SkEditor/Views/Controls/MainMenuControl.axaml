@@ -164,15 +164,13 @@
                     <icons:SymbolIcon Symbol="NumberSymbol" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderFind}" Name="MenuItemFind" InputGesture="Ctrl+F"
-                      HotKey="Ctrl+F">
+            <MenuItem Header="{localization:Translate MenuHeaderFind}" Name="MenuItemFind" InputGesture="Ctrl+F">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="Search" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderReplace}" Name="MenuItemFindAndReplace"
-                      InputGesture="Ctrl+H"
-                      HotKey="Ctrl+H">
+            <MenuItem Header="{localization:Translate MenuHeaderReplace}" Name="MenuItemReplace"
+                      InputGesture="Ctrl+H">
                 <MenuItem.Icon>
                     <icons:SymbolIcon Symbol="ArrowSwap" />
                 </MenuItem.Icon>
