@@ -319,9 +319,9 @@ public class Windows : IWindows
             {
                 return null;
             }
-
-            string translation = Translation.Get(Enum.Parse<TranslationKey>(input));
-            return translation == input ? input : translation;
+            
+            bool isKey = Enum.TryParse(input, out TranslationKey key);
+            return isKey ? Translation.Get(key) : input;
         }
     }
 }
