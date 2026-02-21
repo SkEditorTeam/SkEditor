@@ -52,7 +52,7 @@ public partial class SettingsViewModel : ObservableObject
 
     private void UpdateProperties()
     {
-        CurrentFont = Translation.Get("SettingsPersonalizationFontDescription")
+        CurrentFont = Translation.Get(TranslationKey.SettingsPersonalizationFontDescription)
             .Replace("{0}", SkEditorAPI.Configs.GetAppSettings().EditorFontFamily ?? "Default (JetBrains Mono)");
 
         SkEditorString = $"SkEditor v{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}";

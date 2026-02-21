@@ -94,8 +94,8 @@ public partial class Folder : StorageElement
     public async Task DeleteFolder()
     {
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
-            Translation.Get("DeleteFolderTitle"),
-            Translation.Get("DeleteStorageElement", Name),
+            Translation.Get(TranslationKey.DeleteFolderTitle),
+            Translation.Get(TranslationKey.DeleteStorageElement, Name),
             Symbol.Delete,
             primaryButtonText: "DeleteButton",
             cancelButtonText: "CancelButton", translate: true
@@ -155,37 +155,37 @@ public partial class Folder : StorageElement
     {
         if (input == Name)
         {
-            return Translation.Get("ProjectRenameErrorSameName");
+            return Translation.Get(TranslationKey.ProjectRenameErrorSameName);
         }
 
         if (Parent is null)
         {
-            return Translation.Get("ProjectRenameErrorParentNull");
+            return Translation.Get(TranslationKey.ProjectRenameErrorParentNull);
         }
 
         if (!ValidFolderNameRegex().IsMatch(input))
         {
-            return Translation.Get("ProjectRenameErrorNameInvalid");
+            return Translation.Get(TranslationKey.ProjectRenameErrorNameInvalid);
         }
 
         StorageElement? folder = Parent?.Children?.FirstOrDefault(x => x.Name == input);
 
-        return folder is not null ? Translation.Get("ProjectErrorNameExists") : null;
+        return folder is not null ? Translation.Get(TranslationKey.ProjectErrorNameExists) : null;
     }
 
     public string? ValidateCreationName(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {
-            return Translation.Get("ProjectCreateErrorNameEmpty");
+            return Translation.Get(TranslationKey.ProjectRenameErrorNameEmpty);
         }
 
         if (!ValidFolderNameRegex().IsMatch(input))
         {
-            return Translation.Get("ProjectRenameErrorNameInvalid");
+            return Translation.Get(TranslationKey.ProjectRenameErrorNameInvalid);
         }
 
-        return Children?.Any(x => x.Name == input) == true ? Translation.Get("ProjectErrorNameExists") : null;
+        return Children?.Any(x => x.Name == input) == true ? Translation.Get(TranslationKey.ProjectErrorNameExists) : null;
     }
 
     public override void HandleClick()

@@ -38,7 +38,7 @@ public class SkriptHubProvider : IDocProvider
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) &&
             searchData.FilteredType == IDocumentationEntry.Type.All)
         {
-            return [Translation.Get("DocumentationWindowInvalidDataQuery")];
+            return [Translation.Get(TranslationKey.DocumentationWindowInvalidDataQuery)];
         }
 
         return [];
@@ -59,11 +59,11 @@ public class SkriptHubProvider : IDocProvider
         {
             TaskDialog taskDialog = new()
             {
-                Title = Translation.Get("DocumentationWindowCacheSkriptHub"),
+                Title = Translation.Get(TranslationKey.DocumentationWindowCacheSkriptHub),
                 ShowProgressBar = true,
                 IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
-                SubHeader = Translation.Get("DocumentationWindowDownloading"),
-                Content = Translation.Get("DocumentationWindowCacheSkriptHubMessage")
+                SubHeader = Translation.Get(TranslationKey.DocumentationWindowDownloading),
+                Content = Translation.Get(TranslationKey.DocumentationWindowCacheSkriptHubMessage)
             };
 
             taskDialog.Opened += async (_, _) =>
@@ -84,8 +84,8 @@ public class SkriptHubProvider : IDocProvider
                 catch (Exception e)
                 {
                     await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                        ? Translation.Get("DocumentationWindowErrorOffline")
-                        : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                        ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
+                        : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
                     _cachedElements.Clear();
 
                     taskDialog.Hide(TaskDialogStandardResult.Cancel);
@@ -105,7 +105,7 @@ public class SkriptHubProvider : IDocProvider
             SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
         if (elements == null)
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal,
                 "Invalid cache file"));
             return [];
         }
@@ -149,8 +149,8 @@ public class SkriptHubProvider : IDocProvider
         catch (Exception e)
         {
             await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
+                : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
             return [];
         }
 
@@ -166,7 +166,7 @@ public class SkriptHubProvider : IDocProvider
             }
 
             await SkEditorAPI.Windows.ShowError(
-                Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+                Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, response.ReasonPhrase));
             return [];
         }
 
@@ -199,7 +199,7 @@ public class SkriptHubProvider : IDocProvider
             SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
         if (elements == null)
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal,
                 "Invalid cache file"));
             return [];
         }

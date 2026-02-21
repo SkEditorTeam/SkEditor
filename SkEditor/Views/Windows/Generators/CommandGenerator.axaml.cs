@@ -33,7 +33,7 @@ public partial class CommandGenerator : AppWindow
     {
         if (string.IsNullOrWhiteSpace(NameTextBox.Text))
         {
-            SkEditorAPI.Windows.ShowError(Translation.Get("CommandGeneratorPropertyMissing", "Name"));
+            SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.CommandGeneratorPropertyMissing, "Name"));
             return;
         }
 

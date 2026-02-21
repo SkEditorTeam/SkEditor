@@ -4,12 +4,12 @@ using SkEditor.Utilities.Localization;
 namespace SkEditor.Utilities.Settings.Attributes;
 
 public abstract class BaseSettingAttribute(
-    string titleKey,
-    string? categoryKey = null,
-    string? descriptionKey = null)
+    TranslationKey titleKey,
+    TranslationKey? categoryKey = null,
+    TranslationKey? descriptionKey = null)
     : Attribute
 {
     public TranslatableString TitleKey { get; } = new(titleKey);
-    public TranslatableString CategoryKey { get; } = new(categoryKey ?? "SettingsGeneralTitle");
-    public TranslatableString? DescriptionKey { get; } = descriptionKey == null ? null : new TranslatableString(descriptionKey);
+    public TranslatableString CategoryKey { get; } = new(categoryKey ?? TranslationKey.SettingsGeneralTitle);
+    public TranslatableString DescriptionKey { get; } = new(descriptionKey ?? TranslationKey.None);
 }

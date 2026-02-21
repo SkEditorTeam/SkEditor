@@ -50,8 +50,8 @@ public static class UpdateChecker
             }
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
-                Translation.Get("UpdateAvailable"),
-                Translation.Get("UpdateAvailableMessage"),
+                Translation.Get(TranslationKey.UpdateAvailable),
+                Translation.Get(TranslationKey.UpdateAvailableMessage),
                 new SymbolIconSource { Symbol = Symbol.ArrowSync },
                 primaryButtonText: "Yes",
                 cancelButtonText: "No"
@@ -70,7 +70,7 @@ public static class UpdateChecker
             ReleaseAsset? msi = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorInstaller.msi"));
             if (msi is null)
             {
-                await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
+                await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.UpdateFailed));
                 return;
             }
 
@@ -96,7 +96,7 @@ public static class UpdateChecker
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
         if (standardResult == TaskDialogStandardResult.Cancel)
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.UpdateFailed));
         }
     }
 
@@ -104,10 +104,10 @@ public static class UpdateChecker
     {
         TaskDialog td = new()
         {
-            Title = Translation.Get("DownloadingUpdateTitle"),
+            Title = Translation.Get(TranslationKey.DownloadingUpdateTitle),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
-            SubHeader = Translation.Get("Downloading")
+            SubHeader = Translation.Get(TranslationKey.Downloading)
         };
 
         td.Opened += async (_, _) => await DownloadUpdate(td, url);
@@ -145,7 +145,7 @@ public static class UpdateChecker
             Dispatcher.UIThread.Post(() =>
             {
                 td.Hide(TaskDialogStandardResult.Cancel);
-                SkEditorAPI.Windows.ShowError(Translation.Get("UpdateFailed") + "\n" + e.Message);
+                SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.UpdateFailed) + "\n" + e.Message);
             });
         }
     }

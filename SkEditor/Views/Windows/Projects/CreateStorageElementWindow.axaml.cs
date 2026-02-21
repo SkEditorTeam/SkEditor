@@ -20,7 +20,7 @@ public partial class CreateStorageElementWindow : AppWindow
         WindowStyler.Style(this);
         Focusable = true;
 
-        FileNameTextBlock.Text = Translation.Get(isFile ? "ProjectCreateFileName" : "ProjectCreateFolderName");
+        FileNameTextBlock.Text = Translation.Get(isFile ? TranslationKey.ProjectCreateFileName : TranslationKey.ProjectCreateFolderName);
 
         CreateButton.Command = new RelayCommand(Create);
         KeyDown += (_, e) =>
@@ -37,7 +37,7 @@ public partial class CreateStorageElementWindow : AppWindow
         };
 
         string placeholder =
-            Translation.Get(isFile ? "ProjectCreatePlaceholderFileName" : "ProjectCreatePlaceholderFolderName");
+            Translation.Get(isFile ? TranslationKey.ProjectCreatePlaceholderFileName : TranslationKey.ProjectCreatePlaceholderFolderName);
 
         NameTextBox.Text = placeholder + (isFile ? ".sk" : "");
 

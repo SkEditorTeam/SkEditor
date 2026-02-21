@@ -54,16 +54,16 @@ public partial class DocumentationControl : UserControl
         DownloadAllButton.Command = new AsyncRelayCommand(DownloadAllEntries);
         RetrieveSkriptHubDocsButton.Command = new AsyncRelayCommand(async () =>
         {
-            ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-                Translation.Get("DocumentationWindowFetchWarning"),
+            ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.Attention),
+                Translation.Get(TranslationKey.DocumentationWindowFetchWarning),
                 new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
-                Translation.Get("CancelButton"), Translation.Get("Okay"));
+                Translation.Get(TranslationKey.CancelButton), Translation.Get(TranslationKey.Okay));
             if (response == ContentDialogResult.Primary)
             {
                 SkriptHubProvider? provider = IDocProvider.Providers[DocProvider.SkriptHub] as SkriptHubProvider;
                 provider?.DeleteEverything();
-                await SkEditorAPI.Windows.ShowMessage(Translation.Get("Success"),
-                    Translation.Get("DocumentationWindowFetchSuccessMessage"));
+                await SkEditorAPI.Windows.ShowMessage(Translation.Get(TranslationKey.Success),
+                    Translation.Get(TranslationKey.DocumentationWindowFetchSuccessMessage));
             }
         });
 
@@ -277,8 +277,8 @@ public partial class DocumentationControl : UserControl
         provider = null;
         if (ViewModel.Provider == null)
         {
-            SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowNoProvidersMessage"));
-            OtherInformation.Text = Translation.Get("DocumentationWindowNoProviders");
+            SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowNoProvidersMessage));
+            OtherInformation.Text = Translation.Get(TranslationKey.DocumentationWindowNoProviders);
             return false;
         }
 
@@ -295,7 +295,7 @@ public partial class DocumentationControl : UserControl
         }
 
         SkEditorAPI.Windows.ShowError(string.Join("\n", errors));
-        OtherInformation.Text = Translation.Get("DocumentationWindowInvalidData");
+        OtherInformation.Text = Translation.Get(TranslationKey.DocumentationWindowInvalidData);
         return false;
     }
 
@@ -309,7 +309,7 @@ public partial class DocumentationControl : UserControl
             if (elements.Count > 100 && !await ConfirmLargeResults())
             {
                 LoadingInformation.IsVisible = false;
-                OtherInformation.Text = Translation.Get("DocumentationWindowTooManyResults");
+                OtherInformation.Text = Translation.Get(TranslationKey.DocumentationWindowTooManyResults);
                 return;
             }
 
@@ -330,12 +330,12 @@ public partial class DocumentationControl : UserControl
         switch (EntriesContainer.Children.Count)
         {
             case 0:
-                await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowNoEntries"));
+                await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowNoEntries));
                 return;
             case > 0:
             {
                 ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Download all",
-                    Translation.Get("DocumentationWindowDownloadAllMessage",
+                    Translation.Get(TranslationKey.DocumentationWindowDownloadAllMessage,
                         EntriesContainer.Children.Count.ToString()),
                     primaryButtonText: "Yes", cancelButtonText: "No");
 
@@ -350,11 +350,11 @@ public partial class DocumentationControl : UserControl
 
         TaskDialog taskDialog = new()
         {
-            Title = Translation.Get("DocumentationWindowDownloadingElements"),
+            Title = Translation.Get(TranslationKey.DocumentationWindowDownloadingElements),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
-            SubHeader = Translation.Get("DocumentationWindowDownloading"),
-            Content = Translation.Get("DocumentationWindowDownloadingMessage")
+            SubHeader = Translation.Get(TranslationKey.DocumentationWindowDownloading),
+            Content = Translation.Get(TranslationKey.DocumentationWindowDownloadingMessage)
         };
         taskDialog.SetProgressBarState(0, TaskDialogProgressState.Normal);
 
@@ -386,8 +386,8 @@ public partial class DocumentationControl : UserControl
     private static async Task<bool> ConfirmLargeResults()
     {
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
-            Translation.Get("DocumentationWindowTooManyResults"),
-            Translation.Get("DocumentationWindowTooManyResultsMessage"), primaryButtonText: "Yes",
+            Translation.Get(TranslationKey.DocumentationWindowTooManyResults),
+            Translation.Get(TranslationKey.DocumentationWindowTooManyResultsMessage), primaryButtonText: "Yes",
             cancelButtonText: "No");
         return result == ContentDialogResult.Primary;
     }
@@ -404,15 +404,15 @@ public partial class DocumentationControl : UserControl
 
         if (elements.Count == 0)
         {
-            OtherInformation.Text = Translation.Get("DocumentationWindowNoResults");
+            OtherInformation.Text = Translation.Get(TranslationKey.DocumentationWindowNoResults);
         }
     }
 
     private void HandleError(Exception exception)
     {
-        SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal", exception.Message));
+        SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, exception.Message));
         Log.Error(exception, "An error occurred while fetching the documentation.");
-        OtherInformation.Text = Translation.Get("DocumentationWindowAnErrorOccured");
+        OtherInformation.Text = Translation.Get(TranslationKey.DocumentationWindowAnErrorOccured);
     }
 
     public void FilterByType(IDocumentationEntry.Type type)

@@ -1,4 +1,5 @@
 ﻿using System;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Attributes;
 
@@ -7,11 +8,11 @@ namespace SkEditor.Utilities.Settings.Attributes;
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
 public class ChoiceSettingAttribute(
-    string titleKey,
+    TranslationKey titleKey,
     Type providerType,
-    string? categoryId = null,
-    string? descriptionKey = null)
-    : BaseSettingAttribute(titleKey, categoryId, descriptionKey)
+    TranslationKey categoryKey = TranslationKey.None,
+    TranslationKey descriptionKey = TranslationKey.None)
+    : BaseSettingAttribute(titleKey, categoryKey, descriptionKey)
 {
     public Type ProviderType { get; } = providerType;
 }

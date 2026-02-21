@@ -118,7 +118,7 @@ public partial class CodeParser : INotifyPropertyChanged
         ParserPanel.Refresh(Sections);
 
         ParserPanel.ParseButton.IsEnabled = false;
-        ParserPanel.ParseButton.Content = Translation.Get("CodeParserParsed");
+        ParserPanel.ParseButton.Content = Translation.Get(TranslationKey.CodeParserParsed);
     }
 
     private static void RemoveComments(ref List<string> lines)
@@ -154,7 +154,7 @@ public partial class CodeParser : INotifyPropertyChanged
     {
         IsParsed = false;
         ParserPanel.ParseButton.IsEnabled = true;
-        ParserPanel.ParseButton.Content = Translation.Get("CodeParserParseCode");
+        ParserPanel.ParseButton.Content = Translation.Get(TranslationKey.CodeParserParseCode);
         ParserPanel.UpdateInformationBox(true);
     }
 

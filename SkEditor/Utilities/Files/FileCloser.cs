@@ -78,8 +78,8 @@ internal static class FileCloser
 
     private static async Task<ContentDialogResult> ShowConfirmationDialog()
     {
-        return await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-            Translation.Get("ClosingFiles"),
+        return await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.Attention),
+            Translation.Get(TranslationKey.ClosingFiles),
             new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled });
     }
 }

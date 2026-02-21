@@ -50,8 +50,8 @@ public partial class File : StorageElement
     public async Task DeleteFile()
     {
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
-            Translation.Get("DeleteFileTitle"),
-            Translation.Get("DeleteStorageElement", Name),
+            Translation.Get(TranslationKey.DeleteFileTitle),
+            Translation.Get(TranslationKey.DeleteStorageElement, Name),
             Symbol.Delete,
             primaryButtonText: "DeleteButton",
             cancelButtonText: "CancelButton", translate: true);
@@ -69,21 +69,21 @@ public partial class File : StorageElement
     {
         if (input == Name)
         {
-            return Translation.Get("ProjectRenameErrorSameName");
+            return Translation.Get(TranslationKey.ProjectRenameErrorSameName);
         }
 
         if (Parent is null)
         {
-            return Translation.Get("ProjectRenameErrorParentNull");
+            return Translation.Get(TranslationKey.ProjectRenameErrorParentNull);
         }
 
         if (!ValidFileNameRegex().IsMatch(input))
         {
-            return Translation.Get("ProjectRenameErrorNameInvalid");
+            return Translation.Get(TranslationKey.ProjectRenameErrorNameInvalid);
         }
 
         StorageElement? file = Parent?.Children?.FirstOrDefault(x => x.Name == input);
-        return file is not null ? Translation.Get("ProjectErrorNameExists") : null;
+        return file is not null ? Translation.Get(TranslationKey.ProjectErrorNameExists) : null;
     }
 
     public override void RenameElement(string newName, bool move = true)

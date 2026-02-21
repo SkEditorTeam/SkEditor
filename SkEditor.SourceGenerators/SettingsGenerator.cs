@@ -41,8 +41,12 @@ public class SettingsGenerator : IIncrementalGenerator
             }))
             .Collect();
 
-        context.RegisterSourceOutput(classesWithAttribute, (ctx, classes) =>
+        var combined = classesWithAttribute.Combine(context.CompilationProvider);
+
+        context.RegisterSourceOutput(combined, (ctx, tuple) =>
         {
+            (ImmutableArray<INamedTypeSymbol?> classes, Compilation? compilation) = tuple;
+            
             foreach (INamedTypeSymbol classSymbol in classes.Where(c => c is not null)!)
             {
                 string className = classSymbol!.Name;
@@ -72,22 +76,21 @@ public class SettingsGenerator : IIncrementalGenerator
 
                     string icon = GetIconString(toggleProperty);
 
-                    var args = attr.ConstructorArguments;
+                    List<string> args = GetAttributeConstructorArgumentsFromSyntax(attr);
 
-                    string? titleKey = args[0].Value?.ToString();
-                    string? categoryKey = args.Length > 1 ? args[1].Value?.ToString() : "SettingsGeneralTitle";
-                    string? descriptionKey = args.Length > 2 ? args[2].Value?.ToString() : null;
-
+                    string titleKey = args.Count > 0 ? args[0] : "TranslationKey.None";
+                    string categoryKey = args.Count > 1 ? args[1] : "TranslationKey.SettingsGeneralTitle";
+                    string descriptionKey = args.Count > 2 ? args[2] : "TranslationKey.None";
 
                     settingsSectionsBuilder.AppendLine($"""
-                                                         new ToggleSetting(
-                                                             Translation.GetObservable("{titleKey}"),
-                                                             {icon},
-                                                             {(descriptionKey != null ? $"Translation.GetObservable(\"{descriptionKey}\")" : "null")},
-                                                             () => {toggleProperty.Name},
-                                                             (value) => {toggleProperty.Name} = value
-                                                         ),
-                                                         """);
+                                                        new ToggleSetting(
+                                                            new TranslatableString({titleKey}),
+                                                            {icon},
+                                                            new TranslatableString({descriptionKey}),
+                                                            () => {toggleProperty.Name},
+                                                            (value) => {toggleProperty.Name} = value
+                                                        ),
+                                                        """);
                 }
 
                 foreach (IPropertySymbol choiceProperty in choiceProperties)
@@ -95,27 +98,26 @@ public class SettingsGenerator : IIncrementalGenerator
                     AttributeData attr = choiceProperty.GetAttributes().First(a =>
                         a.AttributeClass?.ToDisplayString() == ChoiceSettingAttributeFullName);
 
-                    var args = attr.ConstructorArguments;
-
-                    string? titleKey = args[0].Value?.ToString();
-                    string? providerType = args[1].Value?.ToString();
-                    string? categoryKey = args[2].Value?.ToString();
-                    string? descriptionKey = args.Length > 3 ? args[3].Value?.ToString() : null;
-
+                    List<string> args = GetAttributeConstructorArgumentsFromSyntax(attr);
                     string propertyType = choiceProperty.Type.ToDisplayString();
-                    
                     string icon = GetIconString(choiceProperty);
 
+                    string titleKey = args.Count > 0 ? args[0] : "TranslationKey.None";
+                    AttributeSyntax attributeSyntax = (AttributeSyntax)attr.ApplicationSyntaxReference!.GetSyntax();
+                    string providerTypeName = GetFullyQualifiedTypeName(attributeSyntax, 1, compilation);
+                    string categoryKey = args.Count > 2 ? args[2] : "TranslationKey.None";
+                    string descriptionKey = args.Count > 3 ? args[3] : "TranslationKey.None";
+
                     settingsSectionsBuilder.AppendLine($"""
-                                                         new ChoiceSetting<{propertyType}>(
-                                                             Translation.GetObservable("{titleKey}"),
-                                                             {icon},
-                                                             {(descriptionKey != null ? $"Translation.GetObservable(\"{descriptionKey}\")" : "null")},
-                                                             new {providerType}(),
-                                                             () => {choiceProperty.Name},
-                                                             (value) => {choiceProperty.Name} = value
-                                                         ),
-                                                         """);
+                                                        new ChoiceSetting<{propertyType}>(
+                                                            new TranslatableString({titleKey}),
+                                                            {icon},
+                                                            new TranslatableString({descriptionKey}),
+                                                            new {providerTypeName}(),
+                                                            () => {choiceProperty.Name},
+                                                            (value) => {choiceProperty.Name} = value
+                                                        ),
+                                                        """);
                 }
 
                 string rawCode = $$"""
@@ -155,6 +157,46 @@ public class SettingsGenerator : IIncrementalGenerator
         });
     }
 
+    private static List<string> GetAttributeConstructorArgumentsFromSyntax(AttributeData attr)
+    {
+        if (attr.ApplicationSyntaxReference is null)
+            return [];
+
+        SyntaxNode syntaxNode = attr.ApplicationSyntaxReference.GetSyntax();
+        if (syntaxNode is not AttributeSyntax attributeSyntax)
+            return [];
+
+        var argList = attributeSyntax.ArgumentList;
+        if (argList is null)
+            return [];
+
+        return argList.Arguments
+            .Select(a => a.Expression.ToString())
+            .ToList();
+    }
+
+    private static string GetFullyQualifiedTypeName(AttributeSyntax attributeSyntax, int argumentIndex, Compilation compilation)
+    {
+        var argList = attributeSyntax.ArgumentList;
+        if (argList is null || argList.Arguments.Count <= argumentIndex)
+            return "object";
+
+        var expression = argList.Arguments[argumentIndex].Expression;
+        if (expression is not TypeOfExpressionSyntax typeOfExpr)
+        {
+            return expression.ToString().Replace("typeof(", "").TrimEnd(')');
+        }
+
+        SemanticModel model = compilation.GetSemanticModel(typeOfExpr.SyntaxTree);
+        SymbolInfo symbolInfo = model.GetSymbolInfo(typeOfExpr.Type);
+        if (symbolInfo.Symbol is INamedTypeSymbol typeSymbol)
+        {
+            return typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        }
+
+        return expression.ToString().Replace("typeof(", "").TrimEnd(')');
+    }
+
     private static string GetIconString(IPropertySymbol toggleProperty)
     {
         AttributeData? symbolIconAttr = toggleProperty.GetAttributes().FirstOrDefault(a =>
@@ -162,7 +204,7 @@ public class SettingsGenerator : IIncrementalGenerator
 
         AttributeData? pathIconAttr = toggleProperty.GetAttributes().FirstOrDefault(a =>
             a.AttributeClass?.ToDisplayString() == SettingPathIconAttributeFullName);
-                    
+
         string? icon =
             "new FluentIcons.Avalonia.Fluent.SymbolIconSource() { Symbol = FluentIcons.Common.Symbol.QuestionCircle }";
 

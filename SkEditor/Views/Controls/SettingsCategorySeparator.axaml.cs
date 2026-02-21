@@ -12,8 +12,8 @@ public partial class SettingsCategorySeparator : UserControl
     public static readonly StyledProperty<string?> TitleProperty =
         AvaloniaProperty.Register<SettingsCategorySeparator, string?>(nameof(Title));
 
-    public static readonly StyledProperty<string?> TitleKeyProperty =
-        AvaloniaProperty.Register<SettingsCategorySeparator, string?>(nameof(TitleKey));
+    public static readonly StyledProperty<TranslationKey?> TitleKeyProperty =
+        AvaloniaProperty.Register<SettingsCategorySeparator, TranslationKey?>(nameof(TitleKey));
 
     public SettingsCategorySeparator() => InitializeComponent();
 
@@ -23,7 +23,7 @@ public partial class SettingsCategorySeparator : UserControl
         set => SetValue(TitleProperty, value);
     }
 
-    public string? TitleKey
+    public TranslationKey? TitleKey
     {
         get => GetValue(TitleKeyProperty);
         set => SetValue(TitleKeyProperty, value);
@@ -58,7 +58,7 @@ public partial class SettingsCategorySeparator : UserControl
         string? label = "";
         if (TitleKey != null)
         {
-            label = Translation.Get(TitleKey);
+            label = Translation.Get(TitleKey.Value);
         }
         else if (Title != null)
         {

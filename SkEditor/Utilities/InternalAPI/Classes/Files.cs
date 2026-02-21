@@ -18,7 +18,6 @@ using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Parser;
 using SkEditor.Utilities.Syntax;
 using SkEditor.ViewModels;
-using SkEditor.Views.Controls;
 using SkEditor.Views.Pages;
 using File = System.IO.File;
 using FileTypeSelectionWindow = SkEditor.Views.Windows.FileTypes.FileTypeSelectionWindow;
@@ -78,7 +77,7 @@ public class Files : IFiles
 
             FilePickerSaveOptions saveOptions = new()
             {
-                Title = Translation.Get("WindowTitleSaveFilePicker"),
+                Title = Translation.Get(TranslationKey.WindowTitleSaveFilePicker),
                 SuggestedFileName = "",
                 DefaultExtension = Path.GetExtension(path) ?? ".sk",
                 FileTypeChoices = [skriptFileType, allFilesType],
@@ -135,7 +134,7 @@ public class Files : IFiles
         {
             Symbol = Symbol.Home
         };
-        AddCustomTab(Translation.GetObservable("WelcomePageTitle"), new WelcomePage(), icon: icon);
+        AddCustomTab(Translation.GetObservable(TranslationKey.WelcomePageTitle), new WelcomePage(), icon: icon);
     }
 
     private OpenedFile? GetFromTabViewItem(TabViewItem tabViewItem)
@@ -245,7 +244,7 @@ public class Files : IFiles
     public async Task<OpenedFile?> AddEditorTab(string content, string? path)
     {
         int index = GetOpenedEditors().Count + 1;
-        string header = Translation.Get("NewFileNameFormat").Replace("{0}", index.ToString());
+        string header = Translation.Get(TranslationKey.NewFileNameFormat).Replace("{0}", index.ToString());
 
         TabViewItem? tabItem = await FileBuilder.Build(header);
         if (tabItem == null)
@@ -470,10 +469,10 @@ public class Files : IFiles
             if (!file.IsSaved && file is { IsEditor: true })
             {
                 ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
-                    Translation.Get("UnsavedFileTitle"),
-                    Translation.Get("UnsavedFileMessage", file.Name),
-                    primaryButtonText: Translation.Get("Yes"),
-                    cancelButtonText: Translation.Get("CancelButton"),
+                    Translation.Get(TranslationKey.UnsavedFileTitle),
+                    Translation.Get(TranslationKey.UnsavedFileMessage, file.Name),
+                    primaryButtonText: Translation.Get(TranslationKey.Yes),
+                    cancelButtonText: Translation.Get(TranslationKey.CancelButton),
                     icon: Symbol.SaveArrowRight, translate: false);
                 if (response != ContentDialogResult.Primary)
                 {

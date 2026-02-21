@@ -158,7 +158,7 @@ public class FileHandler
             .OpenFilePickerAsync(
                 new FilePickerOpenOptions
                 {
-                    Title = Translation.Get("WindowTitleOpenFilePicker"),
+                    Title = Translation.Get(TranslationKey.WindowTitleOpenFilePicker),
                     AllowMultiple = true
                 });
 

@@ -49,9 +49,9 @@ public partial class DocElementControl : UserControl
 
         if (entry.DocType == IDocumentationEntry.Type.Event)
         {
-            OtherElementPanel.Children.Add(CreateExpander(Translation.Get("DocumentationControlEventValues"),
+            OtherElementPanel.Children.Add(CreateExpander(Translation.Get(TranslationKey.DocumentationControlEventValues),
                 Format(string.IsNullOrEmpty(entry.EventValues)
-                    ? Translation.Get("DocumentationControlNoEventValues")
+                    ? Translation.Get(TranslationKey.DocumentationControlNoEventValues)
                     : entry.EventValues)));
         }
     }
@@ -72,9 +72,9 @@ public partial class DocElementControl : UserControl
         }
 
 
-        Expander expander = CreateExpander(Translation.Get("DocumentationControlChangers"),
+        Expander expander = CreateExpander(Translation.Get(TranslationKey.DocumentationControlChangers),
             Format(string.IsNullOrEmpty(entry.Changers)
-                ? Translation.Get("DocumentationControlNoChangers")
+                ? Translation.Get(TranslationKey.DocumentationControlNoChangers)
                 : entry.Changers));
 
         StackPanel buttons = new()
@@ -90,7 +90,7 @@ public partial class DocElementControl : UserControl
             Spacing = 3,
             Children =
             {
-                new TextBlock { Text = Translation.Get("DocumentationControlChangerHelp") },
+                new TextBlock { Text = Translation.Get(TranslationKey.DocumentationControlChangerHelp) },
                 buttons
             }
         };
@@ -194,14 +194,14 @@ public partial class DocElementControl : UserControl
         NameText.Text = entry.Name;
         Expander.Description = entry.DocType + " from " + entry.Addon;
         Expander.Description =
-            Translation.Get("DocumentationControlTypeFromProvider", entry.DocType.ToString(), entry.Addon);
+            Translation.Get(TranslationKey.DocumentationControlTypeFromProvider, entry.DocType.ToString(), entry.Addon);
         Expander.IconSource = IDocumentationEntry.GetTypeIcon(entry.DocType);
         DescriptionText.Text = Format(string.IsNullOrEmpty(entry.Description)
-            ? Translation.Get("DocumentationControlNoDescription")
+            ? Translation.Get(TranslationKey.DocumentationControlNoDescription)
             : entry.Description);
         VersionBadge.IconSource = new FontIconSource
         {
-            Glyph = Translation.Get("DocumentationControlSince",
+            Glyph = Translation.Get(TranslationKey.DocumentationControlSince,
                 string.IsNullOrEmpty(entry.Version) ? "1.0.0" : entry.Version)
         };
 
@@ -214,7 +214,7 @@ public partial class DocElementControl : UserControl
             {
                 new TextBlock
                 {
-                    Text = Translation.Get("DocumentationControlSeeOn", entry.Provider.ToString()),
+                    Text = Translation.Get(TranslationKey.DocumentationControlSeeOn, entry.Provider.ToString()),
                     VerticalAlignment = VerticalAlignment.Center
                 },
                 new SymbolIcon
@@ -339,7 +339,7 @@ public partial class DocElementControl : UserControl
         {
             SkEditorAPI.Logs.Error($"Failed to fetch examples for {_entry.Name}: {e.Message}");
             examples = [];
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationControlErrorExamples", e.Message));
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationControlErrorExamples, e.Message));
         }
 
         LocalProvider? localProvider = LocalProvider.Get();
@@ -384,13 +384,13 @@ public partial class DocElementControl : UserControl
 
     public void EnableDownloadButton()
     {
-        DownloadElementButton.Content = new TextBlock { Text = Translation.Get("DocumentationControlDownload") };
+        DownloadElementButton.Content = new TextBlock { Text = Translation.Get(TranslationKey.DocumentationControlDownload) };
         DownloadElementButton.Classes.Add("accent");
     }
 
     public void DisableDownloadButton()
     {
-        DownloadElementButton.Content = new TextBlock { Text = Translation.Get("DocumentationControlRemove") };
+        DownloadElementButton.Content = new TextBlock { Text = Translation.Get(TranslationKey.DocumentationControlRemove) };
         DownloadElementButton.Classes.Remove("accent");
     }
 
@@ -450,7 +450,7 @@ public partial class DocElementControl : UserControl
             {
                 ExamplesEntry.Content = new TextBlock
                 {
-                    Text = Translation.Get("DocumentationControlNoExamples"),
+                    Text = Translation.Get(TranslationKey.DocumentationControlNoExamples),
                     Foreground = Brushes.Gray,
                     TextWrapping = TextWrapping.Wrap,
                     HorizontalAlignment = HorizontalAlignment.Center,
@@ -474,7 +474,7 @@ public partial class DocElementControl : UserControl
                     {
                         new TextBlock
                         {
-                            Text = Translation.Get("DocumentationControlExampleAuthor", example.Author),
+                            Text = Translation.Get(TranslationKey.DocumentationControlExampleAuthor, example.Author),
                             FontWeight = FontWeight.Regular,
                             FontSize = 16,
                             Margin = new Thickness(0, 0, 0, 5)
@@ -526,7 +526,7 @@ public partial class DocElementControl : UserControl
         {
             ExamplesEntry.Content = new TextBlock
             {
-                Text = Translation.Get("DocumentationControlErrorExamples", e.Message),
+                Text = Translation.Get(TranslationKey.DocumentationControlErrorExamples, e.Message),
                 Foreground = Brushes.Red,
                 FontWeight = FontWeight.SemiLight,
                 TextWrapping = TextWrapping.Wrap

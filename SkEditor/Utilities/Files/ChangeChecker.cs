@@ -101,8 +101,8 @@ public class ChangeChecker
         }
 
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
-            Translation.Get("Attention"),
-            Translation.Get("ChangesDetected"),
+            Translation.Get(TranslationKey.Attention),
+            Translation.Get(TranslationKey.ChangesDetected),
             new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
             primaryButtonText: "Yes",
             cancelButtonText: "No");

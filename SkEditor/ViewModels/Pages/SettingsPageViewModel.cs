@@ -23,7 +23,7 @@ public partial class SettingsPageViewModel : ObservableObject
         SettingsCategories =
         [
             new SettingSection(
-                Translation.GetObservable("SettingsGeneralTitle"),
+                Translation.GetObservable(TranslationKey.SettingsGeneralTitle),
                 new SymbolIconSource { Symbol = Symbol.Settings },
                 settings
             )

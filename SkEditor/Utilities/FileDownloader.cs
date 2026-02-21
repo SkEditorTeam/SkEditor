@@ -37,7 +37,7 @@ public static class FileDownloader
         if (standardResult == TaskDialogStandardResult.Cancel)
         {
             visual.Close();
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DownloadMissingFilesFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DownloadMissingFilesFailed));
         }
     }
 
@@ -45,11 +45,11 @@ public static class FileDownloader
     {
         TaskDialog td = new()
         {
-            Title = Translation.Get("DownloadingMissingFilesTitle"),
+            Title = Translation.Get(TranslationKey.DownloadingMissingFilesTitle),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
-            SubHeader = Translation.Get("Downloading"),
-            Content = Translation.Get("DownloadingMissingFilesDescriptionItems")
+            SubHeader = Translation.Get(TranslationKey.Downloading),
+            Content = Translation.Get(TranslationKey.DownloadingMissingFilesDescriptionItems)
         };
 
         td.Opened += async (_, _) => await DownloadMissingFiles(td);

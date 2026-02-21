@@ -30,37 +30,38 @@ public partial class WelcomePageViewModel : ObservableObject
     public WelcomePageViewModel()
     {
         WelcomeScreenSection gettingStarted = new(
-            Translation.GetObservable("WelcomePageGettingStarted"),
+            Translation.GetObservable(TranslationKey.WelcomePageGettingStarted),
             [
-                new WelcomeScreenElement(Translation.GetObservable("WelcomePageGettingStartedNewFile"),
+                new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageGettingStartedNewFile),
                     new RelayCommand(FileHandler.NewFile),
                     CreateSymbolIcon(Symbol.DocumentAdd)),
-                new WelcomeScreenElement(Translation.GetObservable("WelcomePageGettingStartedOpenFile"),
+                new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageGettingStartedOpenFile),
                     new AsyncRelayCommand(FileHandler.OpenFile), CreateSymbolIcon(Symbol.DocumentSearch)),
-                new WelcomeScreenElement(Translation.GetObservable("WelcomePageGettingStartedOpenFolder"),
+                new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageGettingStartedOpenFolder),
                     new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()),
                     CreateSymbolIcon(Symbol.FolderOpen)),
-                new WelcomeScreenElement(Translation.GetObservable("WelcomePageGettingStartedSettings"),
+                new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageGettingStartedSettings),
                     new AsyncRelayCommand(OpenSettings),
                     CreateSymbolIcon(Symbol.Settings))
             ]
         );
 
-        WelcomeScreenSection help = new(Translation.GetObservable("WelcomePageUsefulLinks"),
+        WelcomeScreenSection help = new(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinks),
         [
-            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksDiscordServer"),
+            new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinksDiscordServer),
                 new RelayCommand(() =>
                     SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev")), CreatePathIconSource("DiscordIcon")),
 
-            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksGitHub"), new RelayCommand(() =>
+            new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinksGitHub),
+                new RelayCommand(() =>
                     SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
                 CreatePathIconSource("GitHubIcon")),
 
-            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksDocumentation"),
+            new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinksDocumentation),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
                 CreateSymbolIcon(Symbol.Book)),
 
-            new WelcomeScreenElement(Translation.GetObservable("WelcomePageUsefulLinksSupportUs"),
+            new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinksSupportUs),
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://ko-fi.com/notro")),
                 CreateSymbolIcon(Symbol.Heart))
         ]);
@@ -90,7 +91,7 @@ public partial class WelcomePageViewModel : ObservableObject
                 true, DateTime.Now.AddSeconds(-30))
         ];
         recentItems.Sort((a, b) => b.LastOpened.CompareTo(a.LastOpened));
-         _recentItems.AddRange(recentItems);
+        _recentItems.AddRange(recentItems);
     }
 
     private static SymbolIconSource CreateSymbolIcon(Symbol symbol)
@@ -129,30 +130,32 @@ public partial class WelcomePageViewModel : ObservableObject
             switch (span.TotalDays)
             {
                 case < 0:
-                    return Translation.GetObservable("WelcomePageRecentInTheFuture");
+                    return Translation.GetObservable(TranslationKey.WelcomePageRecentInTheFuture);
                 case >= 365 * 50:
-                    return Translation.GetObservable("WelcomePageRecentTimeTraveler");
+                    return Translation.GetObservable(TranslationKey.WelcomePageRecentTimeTraveler);
             }
 
             if (span.TotalMinutes < 1)
-                return Translation.GetObservable("WelcomePageRecentJustNow");
+                return Translation.GetObservable(TranslationKey.WelcomePageRecentJustNow);
 
             if (span.TotalHours < 1)
             {
                 int minutes = (int)span.TotalMinutes;
-                return Translation.GetObservable($"WelcomePageRecentMinutes{GetPluralKey(minutes)}",
+
+                return Translation.GetObservable(GetKey("WelcomePageRecentMinutes", GetPluralKey(minutes)),
                     minutes.ToString());
             }
 
             if (!(span.TotalDays < 1))
             {
                 return date.Date == DateTime.Today.AddDays(-1)
-                    ? Translation.GetObservable("WelcomePageRecentYesterdayAt", date.ToString("t", appCulture))
+                    ? Translation.GetObservable(GetKey("WelcomePageRecentYesterdayAt", GetPluralKey(1)),
+                        date.ToString("t", appCulture))
                     : new TranslatableString(date.ToString("g", appCulture));
             }
 
             int hours = (int)span.TotalHours;
-            return Translation.GetObservable($"WelcomePageRecentHours{GetPluralKey(hours)}", hours.ToString());
+            return Translation.GetObservable(GetKey("WelcomePageRecentHours", GetPluralKey(hours)), hours.ToString());
         }
 
         public static string GetPluralKey(int n)
@@ -165,6 +168,14 @@ public partial class WelcomePageViewModel : ObservableObject
             }
 
             return "Many";
+        }
+
+        public static TranslationKey GetKey(string prefix, string pluralKey)
+        {
+            string keyName = $"{prefix}{pluralKey}";
+            return Enum.TryParse<TranslationKey>(keyName, out var key)
+                ? key
+                : throw new ArgumentException($"No translation key found for {keyName}");
         }
     }
 }

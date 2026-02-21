@@ -1,4 +1,5 @@
 ﻿using System;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Attributes;
 
@@ -7,7 +8,7 @@ namespace SkEditor.Utilities.Settings.Attributes;
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
 public class ToggleSettingAttribute(
-    string titleKey,
-    string categoryId = "General",
-    string? descriptionKey = null)
-    : BaseSettingAttribute(titleKey, categoryId, descriptionKey);
+    TranslationKey titleKey,
+    TranslationKey categoryKey = TranslationKey.SettingsGeneralTitle,
+    TranslationKey descriptionKey = TranslationKey.None)
+    : BaseSettingAttribute(titleKey, categoryKey, descriptionKey);

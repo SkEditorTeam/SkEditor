@@ -158,7 +158,7 @@ public class FileBuilder
         if (fileContent != null && fileContent.Any(c => char.IsControl(c) && c != '\n' && c != '\r' && c != '\t'))
         {
             ContentDialogResult response = await SkEditorAPI.Windows.ShowDialog(
-                Translation.Get("BinaryFileTitle"), Translation.Get("BinaryFileFound"),
+                Translation.Get(TranslationKey.BinaryFileTitle), Translation.Get(TranslationKey.BinaryFileFound),
                 new SymbolIconSource { Symbol = Symbol.Alert });
             if (response != ContentDialogResult.Primary)
             {
@@ -294,23 +294,24 @@ public class FileBuilder
     {
         MenuCommand[] commands =
         [
-            new("MenuHeaderCopy", new RelayCommand(editor.Copy), Symbol.Copy),
-            new("MenuHeaderPaste", new RelayCommand(editor.Paste), Symbol.Clipboard),
-            new("MenuHeaderCut", new RelayCommand(editor.Cut), Symbol.Cut),
-            new("MenuHeaderUndo", new RelayCommand(() => editor.Undo()), Symbol.ArrowUndo),
-            new("MenuHeaderRedo", new RelayCommand(() => editor.Redo()), Symbol.ArrowRedo),
-            new("MenuHeaderDuplicate",
+            new(TranslationKey.MenuHeaderCopy, new RelayCommand(editor.Copy), Symbol.Copy),
+            new(TranslationKey.MenuHeaderPaste, new RelayCommand(editor.Paste), Symbol.Clipboard),
+            new(TranslationKey.MenuHeaderCut, new RelayCommand(editor.Cut), Symbol.Cut),
+            new(TranslationKey.MenuHeaderUndo, new RelayCommand(() => editor.Undo()), Symbol.ArrowUndo),
+            new(TranslationKey.MenuHeaderRedo, new RelayCommand(() => editor.Redo()), Symbol.ArrowRedo),
+            new(TranslationKey.MenuHeaderDuplicate,
                 new RelayCommand(() => CustomCommandsHandler.OnDuplicateCommandExecuted(editor.TextArea)), Symbol.Copy),
-            new("MenuHeaderComment",
+            new(TranslationKey.MenuHeaderComment,
                 new RelayCommand(() => CustomCommandsHandler.OnCommentCommandExecuted(editor.TextArea)),
                 Symbol.Comment),
-            new("MenuHeaderGoToLine", new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())),
+            new(TranslationKey.MenuHeaderGoToLine,
+                new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())),
                 Symbol.TextNumberList),
-            new("MenuHeaderTrimWhitespaces",
+            new(TranslationKey.MenuHeaderTrimWhitespaces,
                 new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)),
                 Symbol.Eraser),
-            new("MenuHeaderDelete", new RelayCommand(editor.Delete), Symbol.Delete),
-            new("MenuHeaderRefactor",
+            new(TranslationKey.MenuHeaderDelete, new RelayCommand(editor.Delete), Symbol.Delete),
+            new(TranslationKey.MenuHeaderRefactor,
                 new AsyncRelayCommand(async () => await CustomCommandsHandler.OnRefactorCommandExecuted(editor)),
                 Symbol.Rename)
         ];
@@ -330,5 +331,5 @@ public class FileBuilder
         return contextMenu;
     }
 
-    private record MenuCommand(string HeaderKey, ICommand Command, Symbol Icon);
+    private record MenuCommand(TranslationKey HeaderKey, ICommand Command, Symbol Icon);
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
-using SkEditor.Languages;
 
 namespace SkEditor.Utilities.Localization;
 

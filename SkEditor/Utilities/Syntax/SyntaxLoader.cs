@@ -203,8 +203,8 @@ public class SyntaxLoader
         }
         catch
         {
-            await SkEditorAPI.Windows.ShowDialog(Translation.Get("Error"),
-                Translation.Get("FailedToDownloadSyntax"),
+            await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.Error),
+                Translation.Get(TranslationKey.FailedToDownloadSyntax),
                 new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
                 primaryButtonText: "Ok");
 

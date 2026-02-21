@@ -17,13 +17,13 @@ internal class ItemContextMenu
 
     public static MenuFlyout Get(int slot)
     {
-        MenuItem editItem = CreateMenuItem("MenuHeaderEdit", Symbol.Edit, () => EditItem(slot));
+        MenuItem editItem = CreateMenuItem(TranslationKey.MenuHeaderEdit, Symbol.Edit, () => EditItem(slot));
 
-        MenuItem copyItem = CreateMenuItem("MenuHeaderCopy", Symbol.Copy, () => CopyItem(slot));
+        MenuItem copyItem = CreateMenuItem(TranslationKey.MenuHeaderCopy, Symbol.Copy, () => CopyItem(slot));
 
-        MenuItem pasteItem = CreateMenuItem("MenuHeaderPaste", Symbol.Clipboard, () => PasteItem(slot));
+        MenuItem pasteItem = CreateMenuItem(TranslationKey.MenuHeaderPaste, Symbol.Clipboard, () => PasteItem(slot));
 
-        MenuItem deleteItem = CreateMenuItem("MenuHeaderDelete", Symbol.Delete, () => DeleteItem(slot));
+        MenuItem deleteItem = CreateMenuItem(TranslationKey.MenuHeaderDelete, Symbol.Delete, () => DeleteItem(slot));
 
         return new MenuFlyout
         {
@@ -31,7 +31,7 @@ internal class ItemContextMenu
         };
     }
 
-    private static MenuItem CreateMenuItem(string headerKey, Symbol symbol, Func<Task> asyncAction)
+    private static MenuItem CreateMenuItem(TranslationKey headerKey, Symbol symbol, Func<Task> asyncAction)
     {
         return new MenuItem
         {
@@ -113,7 +113,7 @@ internal class ItemContextMenu
         if (slot == -1)
         {
             GuiGenerator.Instance.BackgroundItem = null;
-            GuiGenerator.Instance.BackgroundItemButton.Content = Translation.Get("SelectButton");
+            GuiGenerator.Instance.BackgroundItemButton.Content = Translation.Get(TranslationKey.SelectButton);
         }
         else
         {

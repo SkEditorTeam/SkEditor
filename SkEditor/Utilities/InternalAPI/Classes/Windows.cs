@@ -61,7 +61,7 @@ public class Windows : IWindows
     {
         EnqueueDialogFireAndForget(async () =>
         {
-            await ShowDialogInternal(Translation.Get("Error"), error, Symbol.Alert);
+            await ShowDialogInternal(Translation.Get(TranslationKey.Error), error, Symbol.Alert);
         });
         return Task.CompletedTask;
     }
@@ -320,7 +320,7 @@ public class Windows : IWindows
                 return null;
             }
 
-            string translation = Translation.Get(input);
+            string translation = Translation.Get(Enum.Parse<TranslationKey>(input));
             return translation == input ? input : translation;
         }
     }

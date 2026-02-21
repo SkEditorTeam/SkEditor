@@ -43,8 +43,8 @@ public class SkriptMcProvider : IDocProvider
         catch (Exception e)
         {
             await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
+                : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
             return [];
         }
 
@@ -52,12 +52,12 @@ public class SkriptMcProvider : IDocProvider
         {
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
-                await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowSkriptMCBad2"));
+                await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowSkriptMCBad2));
                 return [];
             }
 
             await SkEditorAPI.Windows.ShowError(
-                Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+                Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, response.ReasonPhrase));
             return [];
         }
 
@@ -73,12 +73,12 @@ public class SkriptMcProvider : IDocProvider
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) &&
             searchData.FilteredType == IDocumentationEntry.Type.All)
         {
-            return [Translation.Get("DocumentationWindowInvalidDataQuery")];
+            return [Translation.Get(TranslationKey.DocumentationWindowInvalidDataQuery)];
         }
 
         if (searchData.FilteredType == IDocumentationEntry.Type.All)
         {
-            return [Translation.Get("DocumentationWindowSkriptMCBad")];
+            return [Translation.Get(TranslationKey.DocumentationWindowSkriptMCBad)];
         }
 
         return [];

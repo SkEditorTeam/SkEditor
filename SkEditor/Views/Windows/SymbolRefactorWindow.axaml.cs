@@ -17,7 +17,7 @@ public partial class SymbolRefactorWindow : AppWindow
 
         Element = element;
 
-        RenameText.Text = Translation.Get("RefactorWindowRefactorBoxName", element.GetNameDisplay());
+        RenameText.Text = Translation.Get(TranslationKey.RefactorWindowRefactorBoxName, element.GetNameDisplay());
         NameBox.Text = element.Name;
         RefactorButton.Command = new RelayCommand(Refactor);
 

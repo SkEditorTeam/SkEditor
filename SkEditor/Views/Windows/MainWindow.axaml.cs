@@ -137,8 +137,8 @@ public partial class MainWindow : AppWindow
 
     private static async Task<bool> PromptForUnsavedChanges()
     {
-        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get("Attention"),
-            Translation.Get("ClosingProgramWithUnsavedFiles"), Symbol.Warning,
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.Attention),
+            Translation.Get(TranslationKey.ClosingProgramWithUnsavedFiles), Symbol.Warning,
             primaryButtonText: "Yes", cancelButtonText: "No");
 
         return result != ContentDialogResult.Primary;

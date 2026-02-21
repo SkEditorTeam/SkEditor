@@ -38,8 +38,8 @@ public class ThemeItem : MarketplaceItem
             await using FileStream fileStream = File.Create(filePath);
             await stream.CopyToAsync(fileStream);
 
-            string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
-            message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
+            string message = Translation.Get(TranslationKey.MarketplaceInstallSuccess, ItemName);
+            message += "\n" + Translation.Get(TranslationKey.MarketplaceInstallEnableNow);
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message,
                 primaryButtonText: "MarketplaceEnableNow", cancelButtonText: "Okay",
@@ -60,7 +60,7 @@ public class ThemeItem : MarketplaceItem
         catch (Exception e)
         {
             Log.Error(e, "Failed to install theme!");
-            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.MarketplaceInstallFailed, ItemName));
         }
     }
 
@@ -88,8 +88,8 @@ public class ThemeItem : MarketplaceItem
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await SkEditorAPI.Windows.ShowDialog(Translation.Get("Success"),
-            Translation.Get("MarketplaceUninstallSuccess", ItemName),
+        await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.Success),
+            Translation.Get(TranslationKey.MarketplaceUninstallSuccess, ItemName),
             new SymbolIconSource { Symbol = Symbol.Checkmark });
     }
 

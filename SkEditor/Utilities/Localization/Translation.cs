@@ -34,11 +34,11 @@ public static class Translation
     /// <param name="key">The translation key.</param>
     /// <param name="parameters">Optional parameters to format the translated string.</param>
     /// <returns>The translated and formatted string.</returns>
-    public static string Get(string key, params string?[] parameters)
+    public static string Get(TranslationKey key, params string?[] parameters)
     {
         object? translation = null;
-        Application.Current?.TryGetResource(key, ThemeVariant.Default, out translation);
-        string translationString = translation?.ToString() ?? key;
+        Application.Current?.TryGetResource(key.ToString(), ThemeVariant.Default, out translation);
+        string translationString = translation?.ToString() ?? key.ToString();
         translationString = translationString.Replace("\\n", Environment.NewLine);
 
         if (parameters.Length <= 0)
@@ -56,12 +56,12 @@ public static class Translation
         }
     }
     
-    public static TranslatableString GetObservable(string key)
+    public static TranslatableString GetObservable(TranslationKey key)
     {
         return new TranslatableString(key);
     }
     
-    public static TranslatableString GetObservable(string key, params string[]? parameters)
+    public static TranslatableString GetObservable(TranslationKey key, params string[]? parameters)
     {
         return new TranslatableString(key, parameters);
     }

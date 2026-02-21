@@ -63,10 +63,10 @@ public static class AddonLoader
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             ContentDialogResult response =
-                await SkEditorAPI.Windows.ShowDialog(Translation.Get("AddonLoadErrorsTitle"),
-                    Translation.Get("AddonLoadErrors", errorCount.ToString()),
-                    Symbol.AlertUrgent, Translation.Get("CancelButton"),
-                    Translation.Get("Yes"));
+                await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.AddonLoadErrorsTitle),
+                    Translation.Get(TranslationKey.AddonLoadErrors, errorCount.ToString()),
+                    Symbol.AlertUrgent, Translation.Get(TranslationKey.CancelButton),
+                    Translation.Get(TranslationKey.Yes));
 
             if (response == ContentDialogResult.Primary)
             {

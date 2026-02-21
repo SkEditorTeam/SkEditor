@@ -33,8 +33,8 @@ public static class AddonUpdateChecker
 
                 if (currentVersion != latestVersion)
                 {
-                    await SkEditorAPI.Windows.ShowDialog(Translation.Get("AddonUpdateAvailableTitle"),
-                        Translation.Get("AddonUpdateAvailableMessage", addonItem.ItemName),
+                    await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.AddonUpdateAvailableTitle),
+                        Translation.Get(TranslationKey.AddonUpdateAvailableMessage, addonItem.ItemName),
                         Symbol.AlertUrgent);
                 }
             }

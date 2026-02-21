@@ -136,7 +136,7 @@ public partial class ExtendedItemSelector : AppWindow
     {
         MenuItem addMenuItem = new()
         {
-            Header = Translation.Get("GuiGeneratorAddLoreLine"),
+            Header = Translation.Get(TranslationKey.GuiGeneratorAddLoreLine),
             Icon = new SymbolIcon { Symbol = Symbol.Add, FontSize = 20 },
             Command = new RelayCommand(() =>
             {
@@ -162,6 +162,6 @@ public partial class ExtendedItemSelector : AppWindow
         _contextFlyout = menuFlyout;
 
         FirstLoreLine.LineTextBox.ContextFlyout = menuFlyout;
-        FirstLoreLine.LineTextBox.Watermark = Translation.Get("GuiGeneratorLoreLineWatermark");
+        FirstLoreLine.LineTextBox.Watermark = Translation.Get(TranslationKey.GuiGeneratorLoreLineWatermark);
     }
 }

@@ -128,7 +128,7 @@
                 <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5"
                             Spacing="10" IsVisible="{Binding !RecentItems.Count}">
                     <icons:SymbolIcon Symbol="History" FontSize="48" />
-                    <TextBlock Text="{DynamicResource WelcomePageRecentEmpty}" />
+                    <TextBlock Text="{localization:Translate WelcomePageRecentEmpty}" />
                 </StackPanel>
                 <ScrollViewer Grid.Row="1" Padding="0,0,18,0" VerticalAlignment="Stretch" HorizontalAlignment="Center"
                               VerticalScrollBarVisibility="Auto" IsVisible="{Binding !!RecentItems.Count}">

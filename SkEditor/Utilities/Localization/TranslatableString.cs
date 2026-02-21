@@ -13,11 +13,13 @@ public partial class TranslatableString : ObservableObject
     [ObservableProperty]
     private string _key;
     
+    private TranslationKey EnumKey => Enum.Parse<TranslationKey>(Key);
+    
     private readonly string[] _parameters = [];
 
-    public TranslatableString(string key)
+    public TranslatableString(TranslationKey key)
     {
-        _key = key;
+        _key = key.ToString();
 
         lock (Instances)
         {
@@ -33,14 +35,16 @@ public partial class TranslatableString : ObservableObject
         }
     }
     
-    public TranslatableString(string key, params string[]? parameters) : this(key)
+    public TranslatableString(string key) : this(Enum.Parse<TranslationKey>(key)) { }
+    
+    public TranslatableString(TranslationKey key, params string[]? parameters) : this(key)
     {
         _parameters = parameters ?? [];
     }
 
     public string Value => _parameters == null || _parameters.Length == 0
-        ? Translation.Get(Key)
-        : Translation.Get(Key, _parameters);
+        ? Translation.Get(EnumKey)
+        : Translation.Get(EnumKey, _parameters);
 
     private static void OnGlobalLanguageChanged(object? sender, EventArgs e)
     {

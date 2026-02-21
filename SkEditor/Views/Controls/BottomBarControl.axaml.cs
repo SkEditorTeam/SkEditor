@@ -125,9 +125,9 @@ public partial class BottomBarControl : UserControl
 
         TextLocation location = textEditor.Document.GetLocation(textEditor.CaretOffset);
 
-        LineText.Text = Translation.Get("BottomBarLine").Replace("{0}", location.Line.ToString());
-        ColumnText.Text = Translation.Get("BottomBarColumn").Replace("{0}", location.Column.ToString());
-        DocumentSizeText.Text = Translation.Get("BottomBarDocumentSize")
+        LineText.Text = Translation.Get(TranslationKey.BottomBarLine).Replace("{0}", location.Line.ToString());
+        ColumnText.Text = Translation.Get(TranslationKey.BottomBarColumn).Replace("{0}", location.Column.ToString());
+        DocumentSizeText.Text = Translation.Get(TranslationKey.BottomBarDocumentSize)
             .Replace("{0}", textEditor.Document.TextLength.ToString());
     }
 

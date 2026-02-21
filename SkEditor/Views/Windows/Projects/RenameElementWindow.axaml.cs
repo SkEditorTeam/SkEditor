@@ -62,7 +62,7 @@ public partial class RenameElementWindow : AppWindow
         string? input = NameBox.Text;
         if (string.IsNullOrWhiteSpace(input))
         {
-            ErrorBox.Text = Translation.Get("ProjectRenameErrorNameEmpty");
+            ErrorBox.Text = Translation.Get(TranslationKey.ProjectRenameErrorNameEmpty);
             return;
         }
 

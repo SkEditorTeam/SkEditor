@@ -64,12 +64,12 @@ public class ThemeWithSyntaxItem : MarketplaceItem
 
         if (!allInstalled)
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.MarketplaceInstallFailed, ItemName));
             return;
         }
 
-        string message = Translation.Get("MarketplaceInstallSuccess", ItemName);
-        message += "\n" + Translation.Get("MarketplaceInstallEnableNow");
+        string message = Translation.Get(TranslationKey.MarketplaceInstallSuccess, ItemName);
+        message += "\n" + Translation.Get(TranslationKey.MarketplaceInstallEnableNow);
 
         ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Success", message,
             primaryButtonText: "MarketplaceEnableNow", cancelButtonText: "Okay");
@@ -105,7 +105,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         catch (Exception e)
         {
             Log.Error(e, "Failed to install {S}!", ItemName);
-            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceInstallFailed", ItemName));
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.MarketplaceInstallFailed, ItemName));
             return false;
         }
 
@@ -120,7 +120,7 @@ public class ThemeWithSyntaxItem : MarketplaceItem
         MarketplaceWindow.Instance.HideAllButtons();
         MarketplaceWindow.Instance.ItemView.InstallButton.IsVisible = true;
 
-        await SkEditorAPI.Windows.ShowDialog("Success", Translation.Get("MarketplaceUninstallSuccess", ItemName),
+        await SkEditorAPI.Windows.ShowDialog("Success", Translation.Get(TranslationKey.MarketplaceUninstallSuccess, ItemName),
             primaryButtonText: "Okay");
     }
 

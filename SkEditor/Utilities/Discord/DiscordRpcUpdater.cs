@@ -54,7 +54,7 @@ public static partial class DiscordRpcUpdater
 
                 string tabName = tab.Header?.ToString()?.TrimEnd('*') ?? "";
                 tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
-                string translation = Translation.Get("DiscordRpcEditing", tabName);
+                string translation = Translation.Get(TranslationKey.DiscordRpcEditing, tabName);
                 if (translation.Length > 128)
                 {
                     translation = translation[..125] + "...";

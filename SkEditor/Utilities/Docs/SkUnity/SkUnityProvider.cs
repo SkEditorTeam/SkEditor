@@ -31,7 +31,7 @@ public class SkUnityProvider : IDocProvider
         if (searchData.Query.Length < 3 && string.IsNullOrEmpty(searchData.FilteredAddon) &&
             searchData.FilteredType == IDocumentationEntry.Type.All)
         {
-            return [Translation.Get("DocumentationWindowInvalidDataQuery")];
+            return [Translation.Get(TranslationKey.DocumentationWindowInvalidDataQuery)];
         }
 
         return [];
@@ -74,15 +74,15 @@ public class SkUnityProvider : IDocProvider
         catch (Exception e)
         {
             await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
+                : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
             return [];
         }
 
         if (!response.IsSuccessStatusCode)
         {
             await SkEditorAPI.Windows.ShowError(
-                Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+                Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, response.ReasonPhrase));
             return [];
         }
 
@@ -90,7 +90,7 @@ public class SkUnityProvider : IDocProvider
         JsonNode? responseObject = JsonNode.Parse(content);
         if (responseObject?["response"]?.GetValue<string>() != "success")
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get("DocumentationWindowErrorGlobal",
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal,
                 responseObject?["response"]?.GetValue<string>()));
             return [];
         }
@@ -122,15 +122,15 @@ public class SkUnityProvider : IDocProvider
         catch (Exception e)
         {
             await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
+                : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
             return [];
         }
 
         if (!response.IsSuccessStatusCode)
         {
             await SkEditorAPI.Windows.ShowError(
-                Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+                Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, response.ReasonPhrase));
             return [];
         }
 
@@ -183,15 +183,15 @@ public class SkUnityProvider : IDocProvider
         catch (Exception e)
         {
             await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
+                : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
             return [];
         }
 
         if (!response.IsSuccessStatusCode)
         {
             await SkEditorAPI.Windows.ShowError(
-                Translation.Get("DocumentationWindowErrorGlobal", response.ReasonPhrase));
+                Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, response.ReasonPhrase));
             return [];
         }
 
@@ -248,8 +248,8 @@ public class SkUnityProvider : IDocProvider
         catch (Exception e)
         {
             await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                ? Translation.Get("DocumentationWindowErrorOffline")
-                : Translation.Get("DocumentationWindowErrorGlobal", e.Message));
+                ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
+                : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
             Log.Error(e, "Failed to fetch addons");
             return null;
         }

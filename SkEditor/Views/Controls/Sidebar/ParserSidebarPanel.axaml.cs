@@ -144,7 +144,7 @@ public partial class ParserSidebarPanel : UserControl
         if (Sections.Count == 0)
         {
             CannotParseInfo.IsVisible = true;
-            CannotParseInfoText.Text = Translation.Get("CodeParserNoSections");
+            CannotParseInfoText.Text = Translation.Get(TranslationKey.CodeParserNoSections);
             return;
         }
 
@@ -153,7 +153,7 @@ public partial class ParserSidebarPanel : UserControl
         {
             Sections.Clear();
             CannotParseInfo.IsVisible = true;
-            CannotParseInfoText.Text = Translation.Get("CodeParserBadFormat");
+            CannotParseInfoText.Text = Translation.Get(TranslationKey.CodeParserBadFormat);
             return;
         }
 

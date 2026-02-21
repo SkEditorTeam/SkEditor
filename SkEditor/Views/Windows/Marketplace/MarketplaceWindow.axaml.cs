@@ -59,7 +59,7 @@ public partial class MarketplaceWindow : AppWindow
         catch (Exception e)
         {
             Log.Error(e, "Failed to load Marketplace items");
-            await SkEditorAPI.Windows.ShowError(Translation.Get("MarketplaceLoadFailed"));
+            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.MarketplaceLoadFailed));
         }
     }
 
