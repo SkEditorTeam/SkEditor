@@ -4,16 +4,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="using:FluentAvalonia.UI.Controls"
         xmlns:controls="clr-namespace:SkEditor.Views.Controls"
+        xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.Marketplace.MarketplaceWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleMarketplace}" Height="600" Width="1000" CanResize="False"
+        Title="{localization:Translate WindowTitleMarketplace}" Height="600" Width="1000" CanResize="False"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
     <Grid RowDefinitions="auto,*" Margin="15">
-        <!--<TextBox Grid.Row="0" Name="SearchBox" Width="250" Watermark="{DynamicResource MarketplaceSearch}" HorizontalAlignment="Left"/>-->
+        <!--<TextBox Grid.Row="0" Name="SearchBox" Width="250" Watermark="{localization:Translate MarketplaceSearch}" HorizontalAlignment="Left"/>-->
 
         <ui:InfoBar Grid.Row="0" IsOpen="True" IsClosable="False" Severity="Informational"
-                    Message="{DynamicResource MarketplaceInfo}" />
+                    Message="{localization:Translate MarketplaceInfo}" />
 
         <Grid Grid.Row="1" ColumnDefinitions="*,auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
               Margin="0,15,0,0">

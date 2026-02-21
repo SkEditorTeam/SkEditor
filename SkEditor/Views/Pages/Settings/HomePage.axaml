@@ -5,46 +5,47 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Pages.Settings.HomePage"
              x:CompileBindings="True">
 
     <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsHomeTitle}" HasBackButton="False"
+        <controls:SettingsTitle Name="Title" Title="{localization:Translate SettingsHomeTitle}" HasBackButton="False"
                                 Grid.Row="0" />
         <ScrollViewer Grid.Row="1">
             <StackPanel Name="ItemStackPanel" Spacing="8">
-                <ui:SettingsExpander Name="GeneralItem" Header="{DynamicResource SettingsHomeGeneral}"
+                <ui:SettingsExpander Name="GeneralItem" Header="{localization:Translate SettingsHomeGeneral}"
                                      IconSource="{icons:SymbolIconSource Symbol=Wrench}"
-                                     Description="{DynamicResource SettingsHomeGeneralDescription}"
+                                     Description="{localization:Translate SettingsHomeGeneralDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="PersonalizationItem" Header="{DynamicResource SettingsHomePersonalization}"
+                <ui:SettingsExpander Name="PersonalizationItem" Header="{localization:Translate SettingsHomePersonalization}"
                                      IconSource="{icons:SymbolIconSource Symbol=PaintBrush}"
-                                     Description="{DynamicResource SettingsHomePersonalizationDescription}"
+                                     Description="{localization:Translate SettingsHomePersonalizationDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="ExperimentsItem" Header="{DynamicResource SettingsHomeExperiments}"
+                <ui:SettingsExpander Name="ExperimentsItem" Header="{localization:Translate SettingsHomeExperiments}"
                                      IconSource="{icons:SymbolIconSource Symbol=Beaker}"
-                                     Description="{DynamicResource SettingsHomeExperimentsDescription}"
+                                     Description="{localization:Translate SettingsHomeExperimentsDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="ConnectionsItem" Header="{DynamicResource SettingsHomeConnections}"
+                <ui:SettingsExpander Name="ConnectionsItem" Header="{localization:Translate SettingsHomeConnections}"
                                      IconSource="{icons:SymbolIconSource Symbol=PlugConnected}"
-                                     Description="{DynamicResource SettingsHomeConnectionsDescription}"
+                                     Description="{localization:Translate SettingsHomeConnectionsDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="AddonsItem" Header="{DynamicResource SettingsHomeAddons}"
+                <ui:SettingsExpander Name="AddonsItem" Header="{localization:Translate SettingsHomeAddons}"
                                      IconSource="{icons:SymbolIconSource Symbol=PuzzlePiece}"
-                                     Description="{DynamicResource SettingsHomeAddonsDescription}"
+                                     Description="{localization:Translate SettingsHomeAddonsDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="FileTypesItem" Header="{DynamicResource SettingsHomeFileTypes}"
+                <ui:SettingsExpander Name="FileTypesItem" Header="{localization:Translate SettingsHomeFileTypes}"
                                      IconSource="{icons:SymbolIconSource Symbol=DocumentSettings}"
-                                     Description="{DynamicResource SettingsHomeFileTypesDescription}"
+                                     Description="{localization:Translate SettingsHomeFileTypesDescription}"
                                      IsClickEnabled="True" />
 
-                <ui:SettingsExpander Name="AboutItem" Header="{DynamicResource SettingsHomeAbout}"
+                <ui:SettingsExpander Name="AboutItem" Header="{localization:Translate SettingsHomeAbout}"
                                      IconSource="{icons:SymbolIconSource Symbol=Info}"
                                      IsClickEnabled="True" />
             </StackPanel>

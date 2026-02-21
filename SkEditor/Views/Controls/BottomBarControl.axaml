@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              x:Class="SkEditor.Views.Controls.BottomBarControl" Design.Width="1920">
 
     <UserControl.Styles>
@@ -44,9 +45,9 @@
 
             <StackPanel Grid.Column="2" Name="PositionInfo" Margin="5,0,10,0" Spacing="10" Orientation="Horizontal"
                         HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock x:Name="LineText" Text="{DynamicResource BottomBarLine}" />
-                <TextBlock x:Name="ColumnText" Text="{DynamicResource BottomBarColumn}" />
-                <TextBlock x:Name="DocumentSizeText" Text="{DynamicResource BottomBarDocumentSize}" />
+                <TextBlock x:Name="LineText" Text="{localization:Translate BottomBarLine}" />
+                <TextBlock x:Name="ColumnText" Text="{localization:Translate BottomBarColumn}" />
+                <TextBlock x:Name="DocumentSizeText" Text="{localization:Translate BottomBarDocumentSize}" />
             </StackPanel>
         </Grid>
     </Border>

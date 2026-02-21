@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.ConnectionEntryControl">
     <controls:SettingsExpander Name="Expander">
@@ -12,7 +13,7 @@
                         Width="200">
                 <Button Name="OpenDashboardButton" Width="200">
                     <StackPanel Spacing="5" Orientation="Horizontal">
-                        <TextBlock Text="{DynamicResource SettingsConnectionsDashboardButton}" />
+                        <TextBlock Text="{localization:Translate SettingsConnectionsDashboardButton}" />
                         <controls:IconSourceElement IconSource="Open" />
                     </StackPanel>
                 </Button>

@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Pages.Settings.Personalization.EditThemePage"
              x:CompileBindings="True">
@@ -12,35 +13,35 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="8">
                 <controls:ColorPickerSettingsExpander Name="WindowBackgroundExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorWindowBackground}"
+                                                      ExpanderHeader="{localization:Translate ThemeEditorWindowBackground}"
                                                       IsAlphaEnabled="False" />
                 <controls:ColorPickerSettingsExpander Name="SmallWindowBackgroundExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorSmallWindowBackground}"
+                                                      ExpanderHeader="{localization:Translate ThemeEditorSmallWindowBackground}"
                                                       IsAlphaEnabled="False" />
                 <controls:ColorPickerSettingsExpander Name="EditorBackgroundExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorEditorBackground}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorEditorBackground}" />
                 <controls:ColorPickerSettingsExpander Name="EditorForegroundExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorEditorText}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorEditorText}" />
                 <controls:ColorPickerSettingsExpander Name="LineNumbersExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorLineNumber}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorLineNumber}" />
                 <controls:ColorPickerSettingsExpander Name="SelectionExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorSelection}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorSelection}" />
                 <controls:ColorPickerSettingsExpander Name="SelectedTabItemBackgroundExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorSelectedTabBackground}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorSelectedTabBackground}" />
                 <controls:ColorPickerSettingsExpander Name="SelectedTabItemBorderExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorSelectedTabBorder}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorSelectedTabBorder}" />
                 <controls:ColorPickerSettingsExpander Name="MenuBackgroundExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorMenuBackground}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorMenuBackground}" />
                 <controls:ColorPickerSettingsExpander Name="MenuBorderExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorMenuBorder}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorMenuBorder}" />
                 <controls:ColorPickerSettingsExpander Name="TextBoxFocusedBackgroundExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorFocusedTextBoxBackground}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorFocusedTextBoxBackground}" />
                 <controls:ColorPickerSettingsExpander Name="CurrentLineBackgroundExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorCurrentLineBackground}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorCurrentLineBackground}" />
                 <controls:ColorPickerSettingsExpander Name="CurrentLineBorderExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorCurrentLineBorder}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorCurrentLineBorder}" />
                 <controls:ColorPickerSettingsExpander Name="AccentColorExpander"
-                                                      ExpanderHeader="{DynamicResource ThemeEditorAccentColor}" />
+                                                      ExpanderHeader="{localization:Translate ThemeEditorAccentColor}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

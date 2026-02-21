@@ -5,31 +5,32 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800"
              x:Class="SkEditor.Views.Pages.Settings.Personalization.ThemePage"
              x:CompileBindings="True">
 
     <Grid RowDefinitions="auto,*" Margin="20, 10, 20, 20">
-        <controls:SettingsTitle Name="Title" Title="{DynamicResource SettingsThemeTitle}" Grid.Row="0" />
+        <controls:SettingsTitle Name="Title" Title="{localization:Translate SettingsThemeTitle}" Grid.Row="0" />
         <ScrollViewer Grid.Row="1">
             <StackPanel Spacing="8">
 
-                <ui:SettingsExpander Header="{DynamicResource SettingsThemeNewThemeInfo}"
+                <ui:SettingsExpander Header="{localization:Translate SettingsThemeNewThemeInfo}"
                                      IconSource="{icons:SymbolIconSource Symbol=Important}">
                     <ui:SettingsExpander.Footer>
-                        <Button Name="OpenThemesFolderButton" Content="{DynamicResource SettingsThemeOpenFolder}" />
+                        <Button Name="OpenThemesFolderButton" Content="{localization:Translate SettingsThemeOpenFolder}" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
 
-                <ui:SettingsExpander Header="{DynamicResource SettingsThemeCurrentTheme}"
-                                     Description="{DynamicResource SettingsThemeCurrentThemeDescription}"
+                <ui:SettingsExpander Header="{localization:Translate SettingsThemeCurrentTheme}"
+                                     Description="{localization:Translate SettingsThemeCurrentThemeDescription}"
                                      IconSource="{icons:SymbolIconSource Symbol=PaintBrush}">
                     <ui:SettingsExpander.Footer>
                         <ComboBox Name="ThemeComboBox" />
                     </ui:SettingsExpander.Footer>
                 </ui:SettingsExpander>
-                <ui:SettingsExpander Name="EditThemeItem" Header="{DynamicResource SettingsThemeEditTheme}"
-                                     Description="{DynamicResource SettingsThemeEditThemeDescription}"
+                <ui:SettingsExpander Name="EditThemeItem" Header="{localization:Translate SettingsThemeEditTheme}"
+                                     Description="{localization:Translate SettingsThemeEditThemeDescription}"
                                      IconSource="{icons:SymbolIconSource Symbol=Edit}" IsClickEnabled="True" />
             </StackPanel>
         </ScrollViewer>

@@ -3,9 +3,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:windows="clr-namespace:SkEditor.Views.Windows"
+        xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.FontSelectionWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleFontSelector}" Height="400" Width="350" CanResize="False"
+        Title="{localization:Translate WindowTitleFontSelector}" Height="400" Width="350" CanResize="False"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
     <Grid ColumnDefinitions="auto,*" Margin="20">
@@ -22,8 +23,8 @@
             </Border>
         </Grid>
         <Grid Grid.Column="1" RowDefinitions="auto,auto" HorizontalAlignment="Right">
-            <Button Name="SelectButton" Content="{DynamicResource SelectButton}" Width="100" Grid.Row="0" />
-            <Button Name="CancelButton" Content="{DynamicResource CancelButton}" Width="100" Grid.Row="1"
+            <Button Name="SelectButton" Content="{localization:Translate SelectButton}" Width="100" Grid.Row="0" />
+            <Button Name="CancelButton" Content="{localization:Translate CancelButton}" Width="100" Grid.Row="1"
                     Margin="0,10,0,0" />
         </Grid>
     </Grid>

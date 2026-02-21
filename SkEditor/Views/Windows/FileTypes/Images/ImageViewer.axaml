@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:images="clr-namespace:SkEditor.Views.Windows.FileTypes.Images"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Windows.FileTypes.Images.ImageViewer">
     <Grid RowDefinitions="Auto,*" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -12,7 +13,7 @@
             </StackPanel>
             <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <CheckBox Name="AntialiasingModeToggle"
-                          Content="{DynamicResource FileViewImageAA}" Margin="10"
+                          Content="{localization:Translate FileViewImageAA}" Margin="10"
                           IsChecked="True" />
             </StackPanel>
         </Grid>

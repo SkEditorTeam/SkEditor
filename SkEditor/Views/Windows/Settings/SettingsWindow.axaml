@@ -4,9 +4,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="using:FluentAvalonia.UI.Controls"
         xmlns:settings="clr-namespace:SkEditor.Views.Pages.Settings"
+        xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.Settings.SettingsWindow" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleSettings}" Height="560" Width="1000"
+        Title="{localization:Translate WindowTitleSettings}" Height="560" Width="1000"
         CanResize="False" WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
     <ui:Frame Name="FrameView">

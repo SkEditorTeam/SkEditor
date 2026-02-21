@@ -2,64 +2,65 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.Generators.CommandGenerator" Icon="/Assets/SkEditor.ico"
-        Title="{DynamicResource WindowTitleCommandGenerator}" Height="615" Width="400" CanResize="False"
+        Title="{localization:Translate WindowTitleCommandGenerator}" Height="615" Width="400" CanResize="False"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
     <Panel Margin="20">
         <StackPanel Spacing="10">
             <StackPanel Spacing="5">
-                <TextBlock Text="{DynamicResource CommandGeneratorName}" />
+                <TextBlock Text="{localization:Translate CommandGeneratorName}" />
                 <TextBox Name="NameTextBox" />
             </StackPanel>
             <StackPanel Spacing="5">
-                <TextBlock Text="{DynamicResource CommandGeneratorPrefix}" />
+                <TextBlock Text="{localization:Translate CommandGeneratorPrefix}" />
                 <TextBox Name="PrefixTextBox" />
             </StackPanel>
             <StackPanel Spacing="5">
-                <TextBlock Text="{DynamicResource CommandGeneratorPermission}" />
+                <TextBlock Text="{localization:Translate CommandGeneratorPermission}" />
                 <TextBox Name="PermissionTextBox" />
             </StackPanel>
             <StackPanel Spacing="5">
-                <TextBlock Text="{DynamicResource CommandGeneratorNoPermissionMessage}" />
+                <TextBlock Text="{localization:Translate CommandGeneratorNoPermissionMessage}" />
                 <TextBox Name="NoPermissionMessageTextBox" />
             </StackPanel>
             <StackPanel Spacing="5">
-                <TextBlock Text="{DynamicResource CommandGeneratorAliases}" />
+                <TextBlock Text="{localization:Translate CommandGeneratorAliases}" />
                 <TextBox Name="AliasesTextBox" />
             </StackPanel>
             <StackPanel Spacing="5">
-                <TextBlock Text="{DynamicResource CommandGeneratorInvalidUsageMessage}" />
+                <TextBlock Text="{localization:Translate CommandGeneratorInvalidUsageMessage}" />
                 <TextBox Name="InvalidUsageMessageTextBox" />
             </StackPanel>
             <StackPanel Spacing="5">
-                <TextBlock Text="{DynamicResource CommandGeneratorWhoCanUseTheCommand}" />
+                <TextBlock Text="{localization:Translate CommandGeneratorWhoCanUseTheCommand}" />
                 <ComboBox Name="ExecutorComboBox" HorizontalAlignment="Stretch">
-                    <ComboBoxItem Content="{DynamicResource CommandGeneratorPlayer}" Tag="player" />
-                    <ComboBoxItem Content="{DynamicResource CommandGeneratorConsole}" Tag="console" />
+                    <ComboBoxItem Content="{localization:Translate CommandGeneratorPlayer}" Tag="player" />
+                    <ComboBoxItem Content="{localization:Translate CommandGeneratorConsole}" Tag="console" />
                 </ComboBox>
             </StackPanel>
             <StackPanel Spacing="5">
-                <TextBlock Text="{DynamicResource CommandGeneratorCooldown}" />
+                <TextBlock Text="{localization:Translate CommandGeneratorCooldown}" />
                 <Grid ColumnDefinitions="*,*">
                     <TextBox Name="CooldownQuantityTextBox" Grid.Column="0" Margin="0,0,5,0" />
                     <ComboBox Name="CooldownUnitComboBox" Grid.Column="1" Margin="5,0,0,0"
                               HorizontalAlignment="Stretch" SelectedIndex="1">
-                        <ComboBoxItem Content="{DynamicResource CommandGeneratorTicks}" Tag="ticks" />
-                        <ComboBoxItem Content="{DynamicResource CommandGeneratorSeconds}" Tag="seconds" />
-                        <ComboBoxItem Content="{DynamicResource CommandGeneratorMinutes}" Tag="minutes" />
-                        <ComboBoxItem Content="{DynamicResource CommandGeneratorHours}" Tag="hours" />
-                        <ComboBoxItem Content="{DynamicResource CommandGeneratorDays}" Tag="days" />
-                        <ComboBoxItem Content="{DynamicResource CommandGeneratorWeeks}" Tag="weeks" />
-                        <ComboBoxItem Content="{DynamicResource CommandGeneratorMonths}" Tag="months" />
-                        <ComboBoxItem Content="{DynamicResource CommandGeneratorYears}" Tag="years" />
+                        <ComboBoxItem Content="{localization:Translate CommandGeneratorTicks}" Tag="ticks" />
+                        <ComboBoxItem Content="{localization:Translate CommandGeneratorSeconds}" Tag="seconds" />
+                        <ComboBoxItem Content="{localization:Translate CommandGeneratorMinutes}" Tag="minutes" />
+                        <ComboBoxItem Content="{localization:Translate CommandGeneratorHours}" Tag="hours" />
+                        <ComboBoxItem Content="{localization:Translate CommandGeneratorDays}" Tag="days" />
+                        <ComboBoxItem Content="{localization:Translate CommandGeneratorWeeks}" Tag="weeks" />
+                        <ComboBoxItem Content="{localization:Translate CommandGeneratorMonths}" Tag="months" />
+                        <ComboBoxItem Content="{localization:Translate CommandGeneratorYears}" Tag="years" />
                     </ComboBox>
                 </Grid>
             </StackPanel>
         </StackPanel>
         
-        <Button Name="GenerateButton" Content="{DynamicResource CommandGeneratorGenerate}" HorizontalAlignment="Stretch"
+        <Button Name="GenerateButton" Content="{localization:Translate CommandGeneratorGenerate}" HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom" />
     </Panel>
 </Window>

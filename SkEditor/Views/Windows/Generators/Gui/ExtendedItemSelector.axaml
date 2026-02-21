@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:SkEditor.Views.Controls"
+        xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.Generators.Gui.ExtendedItemSelector" Icon="/Assets/SkEditor.ico"
         WindowStartupLocation="CenterOwner"
@@ -13,20 +14,20 @@
         <StackPanel Grid.Row="0" Spacing="10" HorizontalAlignment="Center">
             <StackPanel Spacing="10" Orientation="Horizontal">
                 <StackPanel Spacing="4">
-                    <TextBlock Text="{DynamicResource GuiGeneratorDisplayName}" />
-                    <TextBox Name="DisplayNameTextBox" Width="300" Watermark="{DynamicResource GuiGeneratorOptional}" />
+                    <TextBlock Text="{localization:Translate GuiGeneratorDisplayName}" />
+                    <TextBox Name="DisplayNameTextBox" Width="300" Watermark="{localization:Translate GuiGeneratorOptional}" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
-                    <TextBlock Text="{DynamicResource GuiGeneratorCustomModelData}" />
+                    <TextBlock Text="{localization:Translate GuiGeneratorCustomModelData}" />
                     <TextBox Name="CustomModelDataTextBox" Width="300"
-                             Watermark="{DynamicResource GuiGeneratorOptional}" />
+                             Watermark="{localization:Translate GuiGeneratorOptional}" />
                 </StackPanel>
             </StackPanel>
 
             <StackPanel Spacing="10" Orientation="Horizontal">
                 <StackPanel Spacing="4" Width="300" HorizontalAlignment="Left">
-                    <TextBlock Text="{DynamicResource GuiGeneratorLore}" />
+                    <TextBlock Text="{localization:Translate GuiGeneratorLore}" />
                     <ScrollViewer Height="165">
                         <StackPanel Name="LoreLineStackPanel" Spacing="10" HorizontalAlignment="Left">
                             <controls:LoreLineEditor Name="FirstLoreLine" IsDeleteButtonVisible="False" />
@@ -34,11 +35,11 @@
                     </ScrollViewer>
                 </StackPanel>
 
-                <CheckBox Name="ExampleActionCheckBox" Content="{DynamicResource GuiGeneratorAddExampleAction}"
+                <CheckBox Name="ExampleActionCheckBox" Content="{localization:Translate GuiGeneratorAddExampleAction}"
                           Margin="0,20,0,0" VerticalAlignment="Top" />
             </StackPanel>
         </StackPanel>
         <Button Name="ContinueButton" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100"
-                Content="{DynamicResource ContinueButton}" />
+                Content="{localization:Translate ContinueButton}" />
     </Grid>
 </Window>

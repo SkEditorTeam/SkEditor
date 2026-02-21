@@ -2,12 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.Generators.Gui.ItemSelector" Icon="/Assets/SkEditor.ico"
         x:CompileBindings="True"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         WindowStartupLocation="CenterOwner"
-        Title="{DynamicResource WindowTitleItemSelector}" Height="400" Width="450" CanResize="False"
+        Title="{localization:Translate WindowTitleItemSelector}" Height="400" Width="450" CanResize="False"
         Theme="{StaticResource SmallWindowTheme}">
 
     <Window.Resources>
@@ -26,8 +27,8 @@
             </Border>
         </Grid>
         <Grid Grid.Column="1" RowDefinitions="auto,auto" HorizontalAlignment="Right">
-            <Button Name="SelectButton" Content="{DynamicResource SelectButton}" Width="100" Grid.Row="0" />
-            <Button Name="CancelButton" Content="{DynamicResource CancelButton}" Width="100" Grid.Row="1"
+            <Button Name="SelectButton" Content="{localization:Translate SelectButton}" Width="100" Grid.Row="0" />
+            <Button Name="CancelButton" Content="{localization:Translate CancelButton}" Width="100" Grid.Row="1"
                     Margin="0,10,0,0" />
         </Grid>
     </Grid>
