@@ -38,6 +38,11 @@ public class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+#if DEBUG
+        // The Diagnostics package is only included in Debug builds,
+        // so after a Release compilation this line may show an error until recompiled.
+        this.AttachDeveloperTools();
+#endif
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -115,11 +120,6 @@ public class App : Application
                 {
                     desktop.MainWindow = mainWindow;
                     mainWindow.ApplyTemplate();
-#if DEBUG
-                    // The Diagnostics package is only included in Debug builds,
-                    // so after a Release compilation this line may show an error until recompiled.
-                    mainWindow.AttachDevTools();
-#endif
                 });
             }).ContinueWith(t =>
             {
