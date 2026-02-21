@@ -68,7 +68,12 @@ public class FileBuilder
         if (fileType is { IsEditor: true, Display: TextEditor editor })
         {
             SkEditorAPI.Events.FileCreated(editor);
-            Dispatcher.UIThread.Post(() => TextEditorEventHandler.CheckForHex(editor));
+            Dispatcher.UIThread.Post(() =>
+            {
+                editor.TextArea.Focus();
+                editor.CaretOffset = editor.Text.Length;
+                TextEditorEventHandler.CheckForHex(editor);
+            });
         }
 
         OpenedFiles.Remove(header);
