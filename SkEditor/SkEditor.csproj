@@ -46,6 +46,7 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <EmbeddedResource Include="Languages\English.json"/>
+        <AdditionalFiles Include="Languages\English.json" />
     </ItemGroup>
 
     <ItemGroup>
