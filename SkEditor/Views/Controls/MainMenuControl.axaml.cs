@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using AvaloniaEdit.Editing;
+using AvaloniaEdit.Search;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
@@ -62,15 +63,19 @@ public partial class MainMenuControl : UserControl
         MenuItemGoToLine.Command = new AsyncRelayCommand(() => ShowDialogIfEditorIsOpen(new GoToLineWindow()));
         MenuItemFind.Command = new RelayCommand(() =>
         {
-            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.IsReplaceMode = false;
-            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.Close();
-            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.Open();
+            SearchPanel? searchPanel = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel;
+            searchPanel?.IsReplaceMode = false;
+            searchPanel?.Close();
+            searchPanel?.Open();
+            searchPanel?.Reactivate();
         });
         MenuItemReplace.Command = new RelayCommand(() =>
         {
-            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.IsReplaceMode = true;
-            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.Close();
-            SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel.Open();
+            SearchPanel? searchPanel = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel;
+            searchPanel?.IsReplaceMode = true;
+            searchPanel?.Close();
+            searchPanel?.Open();
+            searchPanel?.Reactivate();
         });
 
         MenuItemTrimWhitespaces.Command = new RelayCommand(() =>
