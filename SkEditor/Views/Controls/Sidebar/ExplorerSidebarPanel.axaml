@@ -18,7 +18,7 @@
         <Style Selector="TreeViewItem">
             <Setter Property="FontWeight" Value="Regular" />
         </Style>
-        
+
         <Style Selector="icons|SymbolIcon">
             <Setter Property="FontSize" Value="18.5" />
         </Style>
@@ -31,7 +31,7 @@
             <TextBlock Grid.Row="0" Text="{localization:Translate ProjectExplorerTitle}" FontWeight="DemiBold"
                        Margin="20,10,20,10" />
             <Separator Grid.Row="1" Margin="0,0,0,10" />
-            <TreeView Grid.Row="3" Name="FileTreeView" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="4">
+            <TreeView Grid.Row="3" Name="FileTreeView" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="4,4,0,4" Padding="0,0,12,0">
                 <TreeView.Styles>
                     <Style Selector="TreeViewItem">
                         <Setter Property="IsExpanded" x:DataType="elements:StorageElement"
@@ -119,9 +119,12 @@
                                     </EventTriggerBehavior.Actions>
                                 </EventTriggerBehavior>
                             </Interaction.Behaviors>
-                            <ui:IconSourceElement Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                                                  IsVisible="{Binding IsFile}" IconSource="{Binding Icon}" Width="18"
-                                                  Height="18" />
+                            <Viewbox Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                     IsVisible="{Binding IsFile}"
+                                     Width="18"
+                                     Height="18">
+                                <ui:IconSourceElement IconSource="{Binding Icon}" />
+                            </Viewbox>
                             <TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
                                        TextTrimming="CharacterEllipsis" Text="{Binding Name}" />
                         </Grid>

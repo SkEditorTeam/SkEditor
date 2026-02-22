@@ -167,7 +167,7 @@ public partial class ParserSidebarPanel : UserControl
         public override IconSource Icon => new SymbolIconSource { Symbol = Symbol.Code };
 
         public override IconSource IconActive => new SymbolIconSource
-            { Symbol = Symbol.Code, IconVariant = IconVariant.Filled };
+            { Symbol = Symbol.Code };
 
         public override bool IsDisabled => false;
 

@@ -49,7 +49,7 @@ public partial class ExplorerSidebarPanel : UserControl
         public override IconSource Icon => new SymbolIconSource { Symbol = Symbol.Folder };
 
         public override IconSource IconActive =>
-            new SymbolIconSource { Symbol = Symbol.Folder, IconVariant = IconVariant.Filled };
+            new SymbolIconSource { Symbol = Symbol.Folder };
 
         public override bool IsDisabled => false;
     }
