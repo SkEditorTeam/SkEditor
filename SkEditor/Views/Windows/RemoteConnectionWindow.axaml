@@ -1,0 +1,57 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="SkEditor.Views.Windows.RemoteConnectionWindow" Icon="/Assets/SkEditor.ico"
+        Title="New Remote Connection" Height="475" Width="375" CanResize="False"
+        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+    
+    <Window.Styles>
+        <Style Selector="StackPanel > TextBlock">
+            <Setter Property="Margin" Value="2,0,0,0"/>
+        </Style>
+        
+        <Style Selector="ComboBox">
+            <Setter Property="Padding" Value="12,6,0,6"/>
+        </Style>
+    </Window.Styles>
+
+    <Panel Margin="20,16,20,20">
+        <StackPanel Spacing="16">
+            <StackPanel Spacing="5">
+                <TextBlock Text="Name" />
+                <TextBox Name="NameTextBox" />
+            </StackPanel>
+            <UniformGrid Columns="2" ColumnSpacing="16">
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Host" />
+                    <TextBox Name="HostTextBox" />
+                </StackPanel>
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Port" />
+                    <TextBox Name="PortTextBox" />
+                </StackPanel>
+            </UniformGrid>
+            <StackPanel Spacing="5">
+                <TextBlock Text="Username" />
+                <TextBox Name="UsernameTextBox" />
+            </StackPanel>
+            <StackPanel Spacing="5">
+                <TextBlock Text="Authorization Method" />
+                <ComboBox HorizontalAlignment="Stretch" SelectedIndex="0">
+                    <ComboBoxItem Content="Password" />
+                    <ComboBoxItem Content="Public Key" />
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Spacing="5">
+                <TextBlock Text="Password" />
+                <TextBox Name="PasswordTextBox" />
+            </StackPanel>
+        </StackPanel>
+
+        <Button Name="TestConnectionButton" Content="Test Connection"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom" />
+    </Panel>
+</Window>

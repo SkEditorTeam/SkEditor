@@ -66,6 +66,7 @@
             <ExcludeAssets>none</ExcludeAssets>
             <IncludeAssets>runtime; compile; native</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="SSH.NET" Version="2025.1.0" />
         <PackageReference Include="Xaml.Behaviors.Avalonia" Version="11.3.9.5" />
         <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.6.0" />
         <PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0"/>
@@ -89,6 +90,17 @@
         <ProjectReference Include="..\External\DiscordRPC\DiscordRPC.csproj"/>
         <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj"/>
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Controls\Sidebar\RemoteSidebarPanel.axaml.cs">
+        <DependentUpon>RemoteSidebarPanel.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Windows\RemoteConnectionWindow.axaml.cs">
+        <DependentUpon>RemoteConnectionWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
     <PropertyGroup>

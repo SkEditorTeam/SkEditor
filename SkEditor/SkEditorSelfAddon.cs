@@ -15,8 +15,8 @@ namespace SkEditor;
 public class SkEditorSelfAddon : IAddon
 {
     public readonly ParserSidebarPanel.ParserPanel ParserPanel = new();
-
     public readonly ExplorerSidebarPanel.ExplorerPanel ProjectPanel = new();
+    public readonly RemoteSidebarPanel.RemotePanel RemotePanel = new();
 
 
     private ImageIconSource _iconSource = null!;
@@ -91,6 +91,7 @@ public class SkEditorSelfAddon : IAddon
         #region Registries - Sidebar Panels
 
         Registries.SidebarPanels.Register(new RegistryKey(this, "ProjectPanel"), ProjectPanel);
+        Registries.SidebarPanels.Register(new RegistryKey(this, "RemotePanel"), RemotePanel);
         Registries.SidebarPanels.Register(new RegistryKey(this, "ParserPanel"), ParserPanel);
 
         #endregion
