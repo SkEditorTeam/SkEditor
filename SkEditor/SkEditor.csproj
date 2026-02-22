@@ -56,7 +56,7 @@
         <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.11"/>
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5"/>
         <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.11"/>
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.0-beta2"/>
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.12"/>
 
         <!-- UI, styling -->
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.11"/>
