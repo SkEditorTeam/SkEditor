@@ -34,14 +34,22 @@ public partial class SplashScreen : Window
         };
 
         Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/SkEditor.svg"));
-
+        SvgImage svgImage = new() { Source = SvgSource.LoadFromStream(stream) };
+        
         Image logo = new()
         {
-            Source = new SvgImage { Source = SvgSource.LoadFromStream(stream) },
+            Source = svgImage,
             Width = 150,
             Height = 150,
             HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
+            VerticalAlignment = VerticalAlignment.Center,
+            Effect = new DropShadowEffect
+            {
+                Color = Color.Parse("#64000000"),
+                BlurRadius = 15,
+                OffsetX = 0,
+                OffsetY = 5
+            }
         };
 
         Grid.SetRow(logo, 0);
