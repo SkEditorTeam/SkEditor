@@ -44,7 +44,24 @@ public partial class File : StorageElement
             return;
         }
 
-        Process.Start(new ProcessStartInfo(Parent.StorageFolderPath) { UseShellExecute = true });
+        if (OperatingSystem.IsWindows())
+        {
+            string windowsPath = StorageFilePath.Replace("/", "\\");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = $"/select,\"{windowsPath}\"",
+                UseShellExecute = true
+            });
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            Process.Start("open", $"-R \"{StorageFilePath}\"");
+        }
+        else
+        {
+            Process.Start(new ProcessStartInfo(Parent.StorageFolderPath) { UseShellExecute = true });
+        }
     }
 
     public async Task DeleteFile()
