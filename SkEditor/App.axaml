@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sty="using:FluentAvalonia.Styling"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+             xmlns:converters="clr-namespace:SkEditor.Converters"
              x:Class="SkEditor.App"
              x:CompileBindings="True"
              RequestedThemeVariant="Dark">
@@ -26,6 +27,8 @@
                 <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+        
+        <converters:TranslationConverter x:Key="TranslationConverter"/>
 
         <Brush x:Key="BackgroundColor">#1f1f1f</Brush>
         <Brush x:Key="TitleBarBackground">#00000000</Brush>

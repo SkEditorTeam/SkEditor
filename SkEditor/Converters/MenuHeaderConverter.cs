@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using Avalonia.Data.Converters;
+using FluentIcons.Avalonia.Fluent;
+using FluentIcons.Common;
+using SkEditor.Utilities.Localization;
+
+namespace SkEditor.Converters;
+
+public class MenuHeaderConverter : IMultiValueConverter
+{
+    public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+    {
+        var headerKey = values[0];
+        var iconSymbol = values[1];
+        bool isSeparator = values[2] is true;
+
+        if (isSeparator)
+            return "-";
+
+        if (headerKey is TranslationKey translationKey)
+            return Translation.GetObservable(translationKey);
+
+        if (iconSymbol is Symbol symbol)
+            return new SymbolIcon { Symbol = symbol, FontSize = 18 };
+
+        return null;
+    }
+}

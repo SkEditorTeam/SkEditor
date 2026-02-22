@@ -5,6 +5,10 @@
              xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
              xmlns:configs="clr-namespace:SkEditor.Utilities.Settings.Configs"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+             xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
+             xmlns:converters="clr-namespace:SkEditor.Converters"
+             DataContext="{x:Static viewModels:ViewModelLocator.MainMenuViewModel}"
+             x:DataType="vms:MainMenuViewModel"
              x:Class="SkEditor.Views.Controls.MainMenuControl">
 
     <UserControl.Styles>
@@ -15,234 +19,34 @@
         <Style Selector="Separator">
             <Setter Property="Margin" Value="8,4" />
         </Style>
+
+        <Style Selector="Menu">
+            <Setter Property="Height" Value="40" />
+        </Style>
     </UserControl.Styles>
 
-    <Menu Name="MainMenu">
-        <MenuItem Header="{localization:Translate MenuHeaderFile}">
-            <MenuItem Header="{localization:Translate MenuHeaderNew}" Name="MenuItemNew" HotKey="Ctrl+N"
-                      InputGesture="Ctrl+N">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Document" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderOpen}" Name="MenuItemOpen" HotKey="Ctrl+O"
-                      InputGesture="Ctrl+O">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="DocumentArrowUp" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderOpenFolder}" Name="MenuItemOpenFolder"
-                      HotKey="Ctrl+Shift+O" InputGesture="Ctrl+Shift+O">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Folder" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <Separator />
-            <MenuItem Header="{localization:Translate MenuHeaderSave}" Name="MenuItemSave" HotKey="Ctrl+S"
-                      InputGesture="Ctrl+S">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Save" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderSaveAs}" Name="MenuItemSaveAs" HotKey="Ctrl+Shift+S"
-                      InputGesture="Ctrl+Shift+S">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="SaveEdit" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderSaveAll}" Name="MenuItemSaveAll"
-                      InputGesture="Ctrl+Alt+S">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="SaveMultiple" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <Separator />
-            <MenuItem Header="{localization:Translate MenuHeaderPublish}" Name="MenuItemPublish" HotKey="Ctrl+Shift+P"
-                      InputGesture="Ctrl+Shift+P">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Share" />
-                </MenuItem.Icon>
-            </MenuItem>
+    <UserControl.Resources>
+        <converters:SymbolIconConverter x:Key="SymbolIconConverter" />
+        <converters:MenuHeaderConverter x:Key="MenuHeaderConverter" />
+    </UserControl.Resources>
 
-            <MenuItem Header="{localization:Translate MenuHeaderClose}">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Dismiss" />
-                </MenuItem.Icon>
 
-                <MenuItem Header="{localization:Translate MenuHeaderCloseCurrentFile}" Name="MenuItemClose"
-                          HotKey="Ctrl+W"
-                          InputGesture="Ctrl+W">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="Document" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{localization:Translate MenuHeaderCloseAll}" Name="MenuItemCloseAll"
-                          HotKey="Ctrl+Shift+W"
-                          InputGesture="Ctrl+Shift+W">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="DocumentMultiple" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem Header="{localization:Translate MenuHeaderCloseAllButCurrent}"
-                          Name="MenuItemCloseAllExceptCurrent">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="DocumentMultiple" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{localization:Translate MenuHeaderCloseUnsaved}" Name="MenuItemCloseAllUnsaved">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="DocumentMultiple" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem Header="{localization:Translate MenuHeaderCloseLeft}" Name="MenuItemCloseAllLeft">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="DocumentArrowLeft" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem Header="{localization:Translate MenuHeaderCloseRight}" Name="MenuItemCloseAllRight">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="DocumentArrowRight" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-            </MenuItem>
-        </MenuItem>
-        <MenuItem Header="{localization:Translate MenuHeaderEdit}">
-            <MenuItem Header="{localization:Translate MenuHeaderCopy}" Name="MenuItemCopy" InputGesture="Ctrl+C">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Copy" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderPaste}" Name="MenuItemPaste" InputGesture="Ctrl+V">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="ClipboardPaste" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderCut}" Name="MenuItemCut" InputGesture="Ctrl+X">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Cut" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderUndo}" Name="MenuItemUndo" InputGesture="Ctrl+Z">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="ArrowUndo" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderRedo}" Name="MenuItemRedo" InputGesture="Ctrl+Y">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="ArrowRedo" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <Separator />
-            <MenuItem Header="{localization:Translate MenuHeaderDuplicate}" Name="MenuItemDuplicate"
-                      InputGesture="Ctrl+D"
-                      HotKey="Ctrl+D">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="CopySelect" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderComment}" Name="MenuItemComment"
-                      InputGesture="Ctrl+OemQuestion" HotKey="Ctrl+OemQuestion">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Comment" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderTrimWhitespaces}" Name="MenuItemTrimWhitespaces"
-                      InputGesture="Ctrl+T" HotKey="Ctrl+T">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Eraser" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <Separator />
-            <MenuItem Header="{localization:Translate MenuHeaderGoToLine}" Name="MenuItemGoToLine"
-                      InputGesture="Ctrl+G"
-                      HotKey="Ctrl+G">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="NumberSymbol" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderFind}" Name="MenuItemFind" InputGesture="Ctrl+F">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Search" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderReplace}" Name="MenuItemReplace"
-                      InputGesture="Ctrl+H">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="ArrowSwap" />
-                </MenuItem.Icon>
-            </MenuItem>
-        </MenuItem>
-        <MenuItem Header="{localization:Translate MenuHeaderTools}">
-            <MenuItem Header="{localization:Translate MenuHeaderGenerate}" Name="MenuItemGenerate">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Wand" />
-                </MenuItem.Icon>
-                <MenuItem Header="{localization:Translate MenuHeaderGenerateGUI}" Name="MenuItemGenerateGui"
-                          HotKey="Ctrl+Shift+G" InputGesture="Ctrl+Shift+G">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="Window" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{localization:Translate MenuHeaderGenerateCommand}" Name="MenuItemGenerateCommand">
-                    <MenuItem.Icon>
-                        <icons:SymbolIcon Symbol="Keyboard" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderRefactor}" Name="MenuItemRefactor">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Beaker" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderDocumentation}" Name="MenuItemDocs">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Library" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderColorSelector}" Name="MenuItemColorSelector">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Color" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderMarketplace}" Name="MenuItemMarketplace">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="ShoppingBag" />
-                </MenuItem.Icon>
-            </MenuItem>
-        </MenuItem>
-
-        <MenuItem Header="{localization:Translate MenuHeaderHelp}">
-            <MenuItem Header="{localization:Translate MenuHeaderCheckForUpdates}"
-                      Icon="{iconsMarkup:SymbolIcon Symbol=ArrowSync}" />
-            <MenuItem Header="{localization:Translate MenuHeaderAppWiki}"
-                      Icon="{iconsMarkup:SymbolIcon Symbol=BookQuestionMark}" />
-            <MenuItem Header="{localization:Translate MenuHeaderCommunitySupport}"
-                      Icon="{iconsMarkup:SymbolIcon Symbol=ChatHelp}" />
-            <MenuItem Header="{localization:Translate MenuHeaderAbout}" Icon="{iconsMarkup:SymbolIcon Symbol=Info}" />
-        </MenuItem>
-
-        <MenuItem Header="{localization:Translate MenuHeaderDevTools}"
-                  DataContext="{x:Static viewModels:ViewModelLocator.AppSettings}" x:DataType="configs:AppSettings"
-                  IsVisible="{Binding IsDevModeEnabled}">
-            <MenuItem Header="{localization:Translate MenuHeaderRefreshSyntax}" Name="MenuItemRefreshSyntax">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="Color" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{localization:Translate MenuHeaderRefreshTheme}" Name="MenuItemRefreshTheme">
-                <MenuItem.Icon>
-                    <icons:SymbolIcon Symbol="PaintBucket" />
-                </MenuItem.Icon>
-            </MenuItem>
-        </MenuItem>
-        <MenuItem Name="MenuItemSettings" HotKey="Ctrl+," InputGesture="Ctrl+,">
-            <MenuItem.Header>
-                <icons:SymbolIcon Symbol="Settings" FontSize="18" />
-            </MenuItem.Header>
-        </MenuItem>
+    <Menu Name="MainMenu" ItemsSource="{Binding Items}">
+        <Menu.Styles>
+            <Style Selector="Menu MenuItem" x:DataType="vms:MainMenuItem">
+                <Setter Property="Command" Value="{Binding Command}" />
+                <Setter Property="ItemsSource" Value="{Binding SubItems}" />
+                <Setter Property="Header">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource MenuHeaderConverter}">
+                            <Binding Path="HeaderKey" />
+                            <Binding Path="IconSymbol" />
+                            <Binding Path="IsSeparator" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Icon" Value="{Binding IconSymbol, Converter={StaticResource SymbolIconConverter}}" />
+            </Style>
+        </Menu.Styles>
     </Menu>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using SkEditor.API;
+using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Pages;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
@@ -13,4 +14,5 @@ public static class ViewModelLocator
     public static BinarySettings BinarySettings => SkEditorAPI.Configs.GetBinarySettings();
     public static SettingsPageViewModel SettingsPageViewModel { get; } = new();
     public static WelcomePageViewModel WelcomePageViewModel { get; } = new();
+    public static MainMenuViewModel MainMenuViewModel { get; } = new();
 }
