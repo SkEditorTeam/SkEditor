@@ -84,6 +84,9 @@ internal static class FileCloser
     {
         return await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.Attention),
             Translation.Get(TranslationKey.ClosingFiles),
-            new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled });
+            new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
+            primaryButtonText: Translation.Get(TranslationKey.Yes),
+            cancelButtonText: Translation.Get(TranslationKey.CancelButton),
+            translate: false);
     }
 }
