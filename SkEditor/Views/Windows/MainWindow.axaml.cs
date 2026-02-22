@@ -20,6 +20,7 @@ using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Utilities.Updating;
+using SkEditor.ViewModels;
 using DiscordRpcUpdater = SkEditor.Utilities.Discord.DiscordRpcUpdater;
 using Symbol = FluentIcons.Common.Symbol;
 
@@ -44,6 +45,7 @@ public partial class MainWindow : AppWindow
 
         _shortcutHandler = new KeyboardShortcutHandler(this);
         _shortcutHandler.Initialize();
+        ViewModelLocator.MainMenuViewModel.RegisterHotKeys(this);
 
         WindowStyler.Style(this);
 

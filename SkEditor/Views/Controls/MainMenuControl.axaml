@@ -28,14 +28,17 @@
     <UserControl.Resources>
         <converters:SymbolIconConverter x:Key="SymbolIconConverter" />
         <converters:MenuHeaderConverter x:Key="MenuHeaderConverter" />
+        <converters:KeyGestureConverter x:Key="KeyGestureConverter" />
     </UserControl.Resources>
 
 
     <Menu Name="MainMenu" ItemsSource="{Binding Items}">
         <Menu.Styles>
             <Style Selector="Menu MenuItem" x:DataType="vms:MainMenuItem">
+                <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                 <Setter Property="Command" Value="{Binding Command}" />
                 <Setter Property="ItemsSource" Value="{Binding SubItems}" />
+                <Setter Property="InputGesture" Value="{Binding InputGestureText, Converter={StaticResource KeyGestureConverter}}" />
                 <Setter Property="Header">
                     <Setter.Value>
                         <MultiBinding Converter="{StaticResource MenuHeaderConverter}">
