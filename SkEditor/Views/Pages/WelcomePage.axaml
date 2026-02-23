@@ -19,6 +19,7 @@
         <system:TimeSpan x:Key="ButtonTransitionDuration">0:0:0.1</system:TimeSpan>
 
         <converters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
+        <converters:ScrollVisibleToPaddingConverter x:Key="ScrollVisibleToPaddingConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -53,7 +54,7 @@
     </UserControl.Styles>
 
     <Grid Name="MainGrid" ColumnDefinitions="450, *" Margin="24">
-        <StackPanel Grid.Column="0" Margin="16" Spacing="48" VerticalAlignment="Top">
+        <Grid Grid.Column="0" Margin="16" RowSpacing="48" RowDefinitions="Auto,*" VerticalAlignment="Top">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="24">
                 <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="100" Width="100">
                     <Svg.Effect>
@@ -68,46 +69,56 @@
                 </StackPanel>
             </StackPanel>
 
-            <ItemsRepeater ItemsSource="{Binding WelcomeSections}">
-                <ItemsRepeater.Layout>
-                    <StackLayout Spacing="32" />
-                </ItemsRepeater.Layout>
-                <ItemsRepeater.ItemTemplate>
-                    <DataTemplate DataType="vms:WelcomePageViewModel+WelcomeScreenSection">
-                        <StackPanel Spacing="12">
-                            <TextBlock Text="{Binding Title.Value}"
-                                       TextAlignment="Center"
-                                       FontSize="20"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,0" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          MaxHeight="600">
+                <ScrollViewer.Padding>
+                    <MultiBinding Converter="{StaticResource ScrollVisibleToPaddingConverter}">
+                        <Binding Path="Extent.Height" RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="Viewport.Height" RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                </ScrollViewer.Padding>
+                <ItemsRepeater ItemsSource="{Binding WelcomeSections}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Spacing="32" />
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate DataType="vms:WelcomePageViewModel+WelcomeScreenSection">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="{Binding Title.Value}"
+                                           TextAlignment="Center"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,0" />
 
-                            <ItemsRepeater ItemsSource="{Binding Entries}">
-                                <ItemsRepeater.Layout>
-                                    <StackLayout Spacing="6" />
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate DataType="vms:WelcomePageViewModel+WelcomeScreenElement">
-                                        <Button HorizontalContentAlignment="Stretch" Command="{Binding Command}">
-                                            <StackPanel Orientation="Horizontal" Spacing="16"
-                                                        VerticalAlignment="Center">
-                                                <Viewbox Width="24" Height="24">
-                                                    <ui:IconSourceElement IconSource="{Binding Icon}" />
-                                                </Viewbox>
+                                <ItemsRepeater ItemsSource="{Binding Entries}">
+                                    <ItemsRepeater.Layout>
+                                        <StackLayout Spacing="6" />
+                                    </ItemsRepeater.Layout>
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate DataType="vms:WelcomePageViewModel+WelcomeScreenElement">
+                                            <Button HorizontalContentAlignment="Stretch" Command="{Binding Command}">
+                                                <StackPanel Orientation="Horizontal" Spacing="16"
+                                                            VerticalAlignment="Center">
+                                                    <Viewbox Width="24" Height="24">
+                                                        <ui:IconSourceElement IconSource="{Binding Icon}" />
+                                                    </Viewbox>
 
-                                                <TextBlock Text="{Binding Name.Value}"
-                                                           VerticalAlignment="Center"
-                                                           FontSize="16"
-                                                           FontWeight="Normal" />
-                                            </StackPanel>
-                                        </Button>
-                                    </DataTemplate>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsRepeater.ItemTemplate>
-            </ItemsRepeater>
-        </StackPanel>
+                                                    <TextBlock Text="{Binding Name.Value}"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="16"
+                                                               FontWeight="Normal" />
+                                                </StackPanel>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </ScrollViewer>
+        </Grid>
 
         <Border Grid.Column="1"
                 Name="RecentItemsPanel"
