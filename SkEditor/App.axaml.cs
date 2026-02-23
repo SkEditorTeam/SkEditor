@@ -24,7 +24,7 @@ namespace SkEditor;
 
 public class App : Application
 {
-    private SplashScreen? _splashScreen;
+    private SplashScreen _splashScreen = null!;
 
     public App()
     {
@@ -61,25 +61,23 @@ public class App : Application
         Dispatcher.UIThread.Post(() => CompleteApplicationStart(desktop), DispatcherPriority.Background);
     }
 
-    private void CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop)
+    private async void CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop)
     {
         try
         {
-            _splashScreen?.UpdateStatus("Initializing...");
+            await _splashScreen.UpdateStatusAsync("Initializing...");
 
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Setting up logging..."));
+                await _splashScreen.UpdateStatusAsync("Setting up logging...");
                 SetupLogging();
 
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                    _splashScreen?.UpdateStatus("Configuring error handling..."));
+                await _splashScreen.UpdateStatusAsync("Configuring error handling...");
                 ConfigureErrorHandling();
 
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                    _splashScreen?.UpdateStatus("Checking for other instances..."));
+                await _splashScreen.UpdateStatusAsync("Checking for other instances...");
 
                 bool continueStartup = await Dispatcher.UIThread.InvokeAsync(() => HandleSingleInstance(desktop));
                 if (!continueStartup)
@@ -87,7 +85,7 @@ public class App : Application
                     return;
                 }
 
-                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Loading configuration..."));
+                await _splashScreen.UpdateStatusAsync("Loading configuration...");
                 SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
@@ -99,30 +97,29 @@ public class App : Application
                 await SkEditorAPI.Configs.MigrateConfigsAsync();
                 await SkEditorAPI.Configs.LoadAllConfigsAsync();
 
-                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Creating main window..."));
+                await _splashScreen.UpdateStatusAsync("Creating main window...");
 
                 MainWindow mainWindow =
                     await Dispatcher.UIThread.InvokeAsync(() => new MainWindow(_splashScreen) { IsVisible = false });
 
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                    _splashScreen?.UpdateStatus("Starting named pipe server..."));
+                await _splashScreen.UpdateStatusAsync("Starting named pipe server...");
 
                 NamedPipeServer.Start();
 
-                await Dispatcher.UIThread.InvokeAsync(() => _splashScreen?.UpdateStatus("Initializing main window..."));
+                await _splashScreen.UpdateStatusAsync("Initializing main window...");
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     desktop.MainWindow = mainWindow;
                     mainWindow.ApplyTemplate();
-                    
+
 #if DEBUG
                     // The Diagnostics package is only included in Debug builds,
                     // so after a Release compilation this line may show an error until recompiled.
                     mainWindow.AttachDevTools();
 #endif
                 });
-            }).ContinueWith(t =>
+            }).ContinueWith(async t =>
             {
                 if (!t.IsFaulted || t.Exception == null)
                 {
@@ -136,23 +133,20 @@ public class App : Application
                     innermost.Message,
                     innermost.StackTrace);
 
-                Dispatcher.UIThread.Post(() =>
-                {
-                    _splashScreen?.UpdateStatus(
-                        $"Error: {t.Exception.InnerException?.Message ?? t.Exception.Message}");
+                await _splashScreen.UpdateStatusAsync(
+                    $"Error: {t.Exception.InnerException?.Message ?? t.Exception.Message}");
 
-                    Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
-                        DispatcherPriority.Background,
-                        new CancellationTokenSource(3000).Token);
-                });
+                await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
+                    DispatcherPriority.Background,
+                    new CancellationTokenSource(3000).Token);
             }, TaskScheduler.Default);
         }
         catch (Exception ex)
         {
             Log.Error(ex, "Error creating SkEditor");
-            _splashScreen?.UpdateStatus($"Error: {ex.Message}");
+            await _splashScreen.UpdateStatusAsync($"Error: {ex.Message}");
 
-            Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
+            await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
                 DispatcherPriority.Background,
                 new CancellationTokenSource(3000).Token);
         }

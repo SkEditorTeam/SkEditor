@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -73,5 +74,10 @@ public partial class SplashScreen : Window
     public void UpdateStatus(string status)
     {
         Dispatcher.UIThread.Post(() => _statusText.Text = status);
+    }
+    
+    public async Task UpdateStatusAsync(string status)
+    {
+        await Dispatcher.UIThread.InvokeAsync(() => _statusText.Text = status);
     }
 }
