@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Icons;
 
 namespace SkEditor.Views.Controls.Sidebar;
@@ -12,10 +13,10 @@ public partial class RemoteSidebarPanel : UserControl
     {
         InitializeComponent();
         
-        NewRemoteConnectionButton.Command = new RelayCommand(() =>
+        NewRemoteConnectionButton.Command = new AsyncRelayCommand(async () =>
         {
             var window = new Windows.RemoteConnectionWindow();
-            window.Show();
+            await window.ShowDialogOnMainWindow();
         });
     }
 
