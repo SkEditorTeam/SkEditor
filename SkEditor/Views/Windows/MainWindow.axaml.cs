@@ -240,7 +240,7 @@ public partial class MainWindow : AppWindow
                                     Title = "Zapisano plik",
                                     Message = "Plik został pomyślnie zapisany.",
                                     Type = NotificationType.Success,
-                                    Expiration = TimeSpan.FromSeconds(4)
+                                    Expiration = TimeSpan.FromMinutes(4)
                                 });
                             });
                         });
