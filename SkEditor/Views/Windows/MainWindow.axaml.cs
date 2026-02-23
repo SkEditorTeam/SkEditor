@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -229,6 +230,20 @@ public partial class MainWindow : AppWindow
                         await CrashChecker.CheckForCrash();
 
                         await AddonUpdateChecker.CheckForUpdates();
+
+                        TitleBarButton.Command = new AsyncRelayCommand(async () =>
+                        {
+                            await Dispatcher.UIThread.InvokeAsync(() =>
+                            {
+                                NotificationManager.Show(new Notification
+                                {
+                                    Title = "Zapisano plik",
+                                    Message = "Plik został pomyślnie zapisany.",
+                                    Type = NotificationType.Success,
+                                    Expiration = TimeSpan.FromSeconds(4)
+                                });
+                            });
+                        });
                     }
                     catch (Exception exc)
                     {
