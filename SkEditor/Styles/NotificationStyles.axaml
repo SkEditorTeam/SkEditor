@@ -93,7 +93,7 @@
     </ControlTheme>
     
     <ControlTheme x:Key="{x:Type NotificationCard}" TargetType="NotificationCard">
-        <Setter Property="UseLayoutRounding" Value="False"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="Width" Value="355"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
