@@ -47,7 +47,7 @@
 
                             <TextBlock Name="TitleText"
                                        Text="{TemplateBinding Title}"
-                                       FontSize="11.5"
+                                       FontSize="12"
                                        IsVisible="{Binding TemplateSettings.IsTitleBarContentVisible, RelativeSource={RelativeSource TemplatedParent}}"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left" />
