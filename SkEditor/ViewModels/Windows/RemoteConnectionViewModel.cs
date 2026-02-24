@@ -36,7 +36,6 @@ public partial class RemoteConnectionViewModel : ObservableObject
 
     public bool RequiredFieldsFilled =>
         !string.IsNullOrWhiteSpace(Host) &&
-        !string.IsNullOrWhiteSpace(Port) &&
         !string.IsNullOrWhiteSpace(Username) &&
         !string.IsNullOrWhiteSpace(Password);
 
@@ -66,18 +65,11 @@ public partial class RemoteConnectionViewModel : ObservableObject
     private async Task<bool> TestConnection()
     {
         string host = Host;
-        int? port = int.TryParse(Port, out int p) ? p : null;
+        int port = int.TryParse(Port, out int p) ? p : 22;
         string username = Username;
         string password = Password;
 
-        if (port == null)
-        {
-            InfoBarMessage = "Port must be a valid number.";
-            InfoBarSeverity = InfoBarSeverity.Error;
-            return false;
-        }
-
-        using var client = new SftpClient(host, port.Value, username, password);
+        using var client = new SftpClient(host, port, username, password);
 
         try
         {
