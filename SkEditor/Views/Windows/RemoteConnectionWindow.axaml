@@ -23,63 +23,65 @@
         </Style>
     </Window.Styles>
 
-    <Grid Margin="20,16,20,20">
-        <StackPanel Spacing="16" Margin="0,0,0,50">
-            <StackPanel Spacing="5">
-                <TextBlock Text="Name" />
-                <TextBox Name="NameTextBox" Watermark="Survival" />
+    <DockPanel Margin="20,12,20,20">
+    
+    <Grid DockPanel.Dock="Bottom" ColumnDefinitions="Auto,*" ColumnSpacing="8">
+        <Button Name="TestConnectionButton" ToolTip.Tip="Test the connection settings"
+                HorizontalAlignment="Left" IsEnabled="{Binding RequiredFieldsFilled}"
+                Command="{Binding TestConnectionCommand}">
+            <fluent:SymbolIcon Symbol="Pulse" FontSize="18" />
+        </Button>
+        <Button Grid.Column="1" Name="AddConnectionButton" HorizontalAlignment="Stretch"
+                IsEnabled="{Binding RequiredFieldsFilled}" Command="{Binding AddConnectionCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <fluent:SymbolIcon Symbol="Add" FontSize="18" />
+                <TextBlock Text="Add Connection" FontSize="14" />
             </StackPanel>
-            <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">
-                <StackPanel Spacing="5">
-                    <TextBlock Text="Host" />
-                    <TextBox Name="HostTextBox" Watermark="192.168.0.1" Text="{Binding Host}" />
-                </StackPanel>
-                <StackPanel Grid.Column="1" Spacing="5">
-                    <TextBlock Text="Port" />
-                    <TextBox Name="PortTextBox" Watermark="22" Text="{Binding Port}" />
-                </StackPanel>
-            </Grid>
-            <StackPanel Spacing="5">
-                <TextBlock Text="Username" />
-                <TextBox Name="UsernameTextBox" Watermark="myusername" Text="{Binding Username}" />
-            </StackPanel>
-            <StackPanel Spacing="5">
-                <TextBlock Text="Authorization Method" />
-                <ComboBox HorizontalAlignment="Stretch" SelectedIndex="0">
-                    <ComboBoxItem Content="Password" />
-                    <ComboBoxItem Content="Public Key" />
-                </ComboBox>
-            </StackPanel>
-            <StackPanel Spacing="5">
-                <TextBlock Text="Password" />
-                <TextBox Name="PasswordTextBox" PasswordChar="●" Text="{Binding Password}" />
-            </StackPanel>
-            
-            <controls:InfoBar Name="InfoBar"
-                              Severity="Error"
-                              IsOpen="True"
-                              IsClosable="True"
-                              Message="Couldn't connect to the server"
-                              VerticalAlignment="Bottom"
-                              MinHeight="32">
-            </controls:InfoBar>
-        </StackPanel>
-
-        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Bottom">
-            <Button Name="TestConnectionButton"
-                    ToolTip.Tip="Test the connection settings"
-                    HorizontalAlignment="Left"
-                    IsEnabled="{Binding RequiredFieldsFilled}">
-                <fluent:SymbolIcon Symbol="Pulse" FontSize="18" />
-            </Button>
-
-            <Button Grid.Column="1" Name="AddConnectionButton" HorizontalAlignment="Stretch" IsEnabled="{Binding RequiredFieldsFilled}">
-                <StackPanel Orientation="Horizontal" Spacing="8"
-                            VerticalAlignment="Center">
-                    <fluent:SymbolIcon Symbol="Add" FontSize="18" />
-                    <TextBlock Text="Add Connection" FontSize="14" />
-                </StackPanel>
-            </Button>
-        </Grid>
+        </Button>
     </Grid>
+
+    <controls:InfoBar DockPanel.Dock="Bottom" 
+                      Name="InfoBar" IsClosable="False"
+                      Severity="{Binding InfoBarSeverity}"
+                      IsOpen="{Binding InfoBarMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                      Message="{Binding InfoBarMessage}"
+                      MinHeight="32" Margin="0,0,0,16" />
+    
+    <StackPanel Spacing="14">
+        <StackPanel Spacing="4">
+            <TextBlock Text="Name" />
+            <TextBox Name="NameTextBox" Watermark="Survival" />
+        </StackPanel>
+        
+        <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">
+            <StackPanel Spacing="4">
+                <TextBlock Text="Host" />
+                <TextBox Name="HostTextBox" Watermark="192.168.0.1" Text="{Binding Host}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="4">
+                <TextBlock Text="Port" />
+                <TextBox Name="PortTextBox" Watermark="22" Text="{Binding Port}" />
+            </StackPanel>
+        </Grid>
+        
+        <StackPanel Spacing="4">
+            <TextBlock Text="Username" />
+            <TextBox Name="UsernameTextBox" Watermark="myusername" Text="{Binding Username}" />
+        </StackPanel>
+        
+        <StackPanel Spacing="4">
+            <TextBlock Text="Authorization Method" />
+            <ComboBox HorizontalAlignment="Stretch" SelectedIndex="0">
+                <ComboBoxItem Content="Password" />
+                <ComboBoxItem Content="Public Key" />
+            </ComboBox>
+        </StackPanel>
+        
+        <StackPanel Spacing="4">
+            <TextBlock Text="Password" />
+            <TextBox Name="PasswordTextBox" PasswordChar="●" Text="{Binding Password}" />
+        </StackPanel>
+    </StackPanel>
+
+</DockPanel>
 </Window>
