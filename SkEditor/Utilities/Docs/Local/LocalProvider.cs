@@ -86,7 +86,7 @@ public class LocalProvider : IDocProvider
 
     private List<LocalDocEntry> _localDocs = null!;
 
-    private string GetLocalCachePath()
+    private static string GetLocalCachePath()
     {
         string folder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Docs");
         Directory.CreateDirectory(folder);

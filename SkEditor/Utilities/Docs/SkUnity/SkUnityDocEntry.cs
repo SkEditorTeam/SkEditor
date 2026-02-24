@@ -57,5 +57,5 @@ public class SkUnityDocEntry : IDocumentationEntry
     [JsonPropertyName("eventvalues")]
     public string? EventValues { set; get; }
 
-    public DocProvider Provider => DocProvider.skUnity;
+    public DocProvider Provider => DocProvider.SkUnity;
 }

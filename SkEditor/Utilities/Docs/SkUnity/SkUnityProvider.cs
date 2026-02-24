@@ -24,7 +24,7 @@ public class SkUnityProvider : IDocProvider
     private readonly HttpClient _client = new HttpClient()
         .WithUserAgent("SkEditor App");
 
-    public DocProvider Provider => DocProvider.skUnity;
+    public DocProvider Provider => DocProvider.SkUnity;
 
     public List<string> CanSearch(SearchData searchData)
     {
@@ -264,7 +264,7 @@ public class SkUnityProvider : IDocProvider
 
     public static IDocProvider Get()
     {
-        return (SkUnityProvider)IDocProvider.Providers[DocProvider.skUnity];
+        return (SkUnityProvider)IDocProvider.Providers[DocProvider.SkUnity];
     }
 
     public static string GetAddonLink(string addonName)

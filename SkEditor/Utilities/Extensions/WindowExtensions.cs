@@ -7,36 +7,39 @@ namespace SkEditor.Utilities.Extensions;
 
 public static class WindowExtensions
 {
-    public static async Task ShowDialogOnMainWindow(this AppWindow window)
+    extension(AppWindow window)
     {
-        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow == null)
+        public async Task ShowDialogOnMainWindow()
         {
-            return;
+            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+            if (mainWindow == null)
+            {
+                return;
+            }
+
+            await window.ShowDialog(mainWindow);
         }
 
-        await window.ShowDialog(mainWindow);
-    }
-
-    public static void ShowOnMainWindow(this AppWindow window)
-    {
-        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow == null)
+        public void ShowOnMainWindow()
         {
-            return;
+            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+            if (mainWindow == null)
+            {
+                return;
+            }
+
+            window.Show(mainWindow);
         }
 
-        window.Show(mainWindow);
-    }
-
-    public static async Task<T> ShowDialogOnMainWindow<T>(this AppWindow window)
-    {
-        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-        if (mainWindow == null)
+        public async Task<T> ShowDialogOnMainWindow<T>()
         {
-            return default!;
-        }
+            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+            if (mainWindow == null)
+            {
+                return default!;
+            }
 
-        return await window.ShowDialog<T>(mainWindow);
+            return await window.ShowDialog<T>(mainWindow);
+        }
     }
 }

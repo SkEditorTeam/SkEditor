@@ -71,11 +71,11 @@ public static class FoldingCreator
         FoldingManager? oldFoldingManager = editor.GetService<FoldingManager>();
 
         List<FoldingSection> foldedSections = [];
-        if (oldFoldingManager != null)
-        {
-            foldedSections = oldFoldingManager.AllFoldings.Where(folding => folding.IsFolded).ToList();
-            FoldingManager.Uninstall(oldFoldingManager);
-        }
+        if (oldFoldingManager == null)
+            return foldedSections;
+
+        foldedSections = oldFoldingManager.AllFoldings.Where(folding => folding.IsFolded).ToList();
+        FoldingManager.Uninstall(oldFoldingManager);
 
         return foldedSections;
     }
@@ -90,26 +90,25 @@ public static class FoldingCreator
         List<int> hiddenLines = [];
         FoldingManager? foldingManager = file.Editor.GetService<FoldingManager>();
 
-        if (foldingManager != null)
-        {
-            foreach (FoldingSection folding in foldingManager.AllFoldings)
-            {
-                if (folding.IsFolded)
-                {
-                    List<int> ls = new();
-                    for (int i = folding.StartOffset; i < folding.EndOffset; i++)
-                    {
-                        int l = file.Editor.Document.GetLineByOffset(i).LineNumber;
-                        if (!ls.Contains(l))
-                        {
-                            ls.Add(l);
-                        }
-                    }
+        if (foldingManager == null)
+            return hiddenLines.Distinct().ToList();
 
-                    ls.RemoveAt(0); // Remove the first line of the section
-                    hiddenLines.AddRange(ls);
+        foreach (FoldingSection folding in foldingManager.AllFoldings)
+        {
+            if (!folding.IsFolded) continue;
+
+            List<int> lines = [];
+            for (int i = folding.StartOffset; i < folding.EndOffset; i++)
+            {
+                int line = file.Editor.Document.GetLineByOffset(i).LineNumber;
+                if (!lines.Contains(line))
+                {
+                    lines.Add(line);
                 }
             }
+
+            lines.RemoveAt(0);
+            hiddenLines.AddRange(lines);
         }
 
         return hiddenLines.Distinct().ToList();

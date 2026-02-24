@@ -74,7 +74,7 @@ public class CustomCommandsHandler
         editor.Select(startOffset, replacement.Length);
     }
 
-    public static void OnTrimWhitespacesCommandExecuted(object target)
+    public static void OnTrimWhitespacesCommandExecuted()
     {
         if (!SkEditorAPI.Files.IsEditorOpen())
         {
@@ -98,12 +98,7 @@ public class CustomCommandsHandler
         List<string> modifiedLines = selectedLines.Select(line =>
         {
             string? text = document.GetText(line);
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return "";
-            }
-
-            return text;
+            return string.IsNullOrWhiteSpace(text) ? "" : text;
         }).ToList();
 
         string replacement = string.Join("\n", modifiedLines);

@@ -55,56 +55,55 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
                 }
             }
 
-            TextMarkerTypes underlineMarkerTypes = TextMarkerTypes.SquigglyUnderline | TextMarkerTypes.NormalUnderline;
-            if ((marker.MarkerTypes & underlineMarkerTypes) != 0)
+            const TextMarkerTypes underlineMarkerTypes = TextMarkerTypes.SquigglyUnderline | TextMarkerTypes.NormalUnderline;
+            if ((marker.MarkerTypes & underlineMarkerTypes) == 0) continue;
+
+            foreach (Rect r in BackgroundGeometryBuilder.GetRectsForSegment(textView, marker))
             {
-                foreach (Rect r in BackgroundGeometryBuilder.GetRectsForSegment(textView, marker))
+                Point startPoint = r.BottomLeft;
+                Point endPoint = r.BottomRight;
+
+                Brush usedBrush = new SolidColorBrush(marker.MarkerColor);
+                if ((marker.MarkerTypes & TextMarkerTypes.SquigglyUnderline) != 0)
                 {
-                    Point startPoint = r.BottomLeft;
-                    Point endPoint = r.BottomRight;
+                    const double offset = 2.5;
 
-                    Brush usedBrush = new SolidColorBrush(marker.MarkerColor);
-                    if ((marker.MarkerTypes & TextMarkerTypes.SquigglyUnderline) != 0)
+                    int count = Math.Max((int)((endPoint.X - startPoint.X) / offset) + 1, 0);
+
+                    StreamGeometry geometry = new();
+
+                    using (StreamGeometryContext ctx = geometry.Open())
                     {
-                        double offset = 2.5;
+                        Point[] points = CreatePoints(startPoint, endPoint, offset, count).ToArray();
 
-                        int count = Math.Max((int)((endPoint.X - startPoint.X) / offset) + 1, 0);
+                        ctx.BeginFigure(points[0], false);
 
-                        StreamGeometry geometry = new();
-
-                        using (StreamGeometryContext ctx = geometry.Open())
+                        for (int i = 0; i < points.Length; i++)
                         {
-                            Point[] points = CreatePoints(startPoint, endPoint, offset, count).ToArray();
-
-                            ctx.BeginFigure(points[0], false);
-
-                            for (int i = 0; i < points.Length; i++)
+                            if (i + 1 < points.Length)
                             {
-                                if (i + 1 < points.Length)
-                                {
-                                    ctx.QuadraticBezierTo(points[i], new Point((points[i].X + points[i + 1].X) / 2,
-                                        (points[i].Y + points[i + 1].Y) / 2));
-                                }
+                                ctx.QuadraticBezierTo(points[i], new Point((points[i].X + points[i + 1].X) / 2,
+                                    (points[i].Y + points[i + 1].Y) / 2));
                             }
                         }
-
-                        double? fontSize = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.FontSize;
-                        if (fontSize == null)
-                        {
-                            return;
-                        }
-
-                        float strokeThickness = (float)Math.Max(fontSize.Value / 15, 1);
-
-                        Pen usedPen = new(usedBrush, strokeThickness);
-                        drawingContext.DrawGeometry(Brushes.Transparent, usedPen, geometry);
                     }
 
-                    if ((marker.MarkerTypes & TextMarkerTypes.NormalUnderline) != 0)
+                    double? fontSize = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.FontSize;
+                    if (fontSize == null)
                     {
-                        Pen usedPen = new(usedBrush);
-                        drawingContext.DrawLine(usedPen, startPoint, endPoint);
+                        return;
                     }
+
+                    float strokeThickness = (float)Math.Max(fontSize.Value / 15, 1);
+
+                    Pen usedPen = new(usedBrush, strokeThickness);
+                    drawingContext.DrawGeometry(Brushes.Transparent, usedPen, geometry);
+                }
+
+                if ((marker.MarkerTypes & TextMarkerTypes.NormalUnderline) != 0)
+                {
+                    Pen usedPen = new(usedBrush);
+                    drawingContext.DrawLine(usedPen, startPoint, endPoint);
                 }
             }
         }

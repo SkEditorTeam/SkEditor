@@ -28,26 +28,23 @@ public class KeyboardShortcutHandler(Window window)
 
     private bool TryExecuteShortcut(KeyboardShortcut shortcut, KeyEventArgs e)
     {
-        if (shortcut is { Modifiers: KeyModifiers.Control, Key: >= Key.D1 and <= Key.D9 })
+        switch (shortcut)
         {
-            int tabIndex = (int)e.Key - 35;
-            FileHandler.SwitchTab(tabIndex);
-            return true;
+            case { Modifiers: KeyModifiers.Control, Key: >= Key.D1 and <= Key.D9 }:
+            {
+                int tabIndex = (int)e.Key - 35;
+                FileHandler.SwitchTab(tabIndex);
+                return true;
+            }
+            case { Modifiers: (KeyModifiers.Control | KeyModifiers.Shift), Key: Key.Oem3 }:
+                OpenTerminal();
+                return true;
+            case { Key: Key.F11, Modifiers: KeyModifiers.None }:
+                ToggleFullScreen();
+                return true;
+            default:
+                return false;
         }
-
-        if (shortcut is { Modifiers: (KeyModifiers.Control | KeyModifiers.Shift), Key: Key.Oem3 })
-        {
-            OpenTerminal();
-            return true;
-        }
-
-        if (shortcut is { Key: Key.F11, Modifiers: KeyModifiers.None })
-        {
-            ToggleFullScreen();
-            return true;
-        }
-
-        return false;
     }
 
     private static void OpenTerminal()

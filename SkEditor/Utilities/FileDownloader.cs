@@ -74,7 +74,7 @@ public static class FileDownloader
                 await client.DownloadDataAsync(ZipUrl, file, progress);
             }
 
-            ZipFile.ExtractToDirectory(ZipFilePath, AppDataFolderPath);
+            await ZipFile.ExtractToDirectoryAsync(ZipFilePath, AppDataFolderPath);
             File.Delete(ZipFilePath);
 
             Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.OK); });

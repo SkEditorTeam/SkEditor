@@ -38,7 +38,7 @@ public class SkriptMcDocEntry : IDocumentationEntry
         set => RawType = value.ToString().ToLower() + "s";
     }
 
-    public DocProvider Provider => DocProvider.SkriptMC;
+    public DocProvider Provider => DocProvider.SkriptMc;
 
     public string? ReturnType { get; set; }
     public string? Changers { get; set; }

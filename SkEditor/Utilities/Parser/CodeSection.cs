@@ -194,9 +194,8 @@ public partial class CodeSection
 
             if (Type == SectionType.Function)
             {
-                // Parse function arguments
                 MatchCollection functionArguments =
-                    Regex.Matches(Lines[0], CodeFunctionArgument.FunctionArgumentPattern);
+                    FunctionArgumentRegex().Matches(Lines[0]);
                 foreach (object? m in functionArguments)
                 {
                     if (m is not Match { Success: true } match)
@@ -302,7 +301,7 @@ public partial class CodeSection
         Parser.Editor.TextArea.TextView.LineTransformers.Remove(Colorizer);
     }
 
-    [GeneratedRegex(@"(.*): (.*)")]
+    [GeneratedRegex("(.*): (.*)")]
     private static partial Regex OptionRegex();
 
     [GeneratedRegex(@"(?<=\{)(?!@)_?([A-Za-z.\s_-]+)(?=\})")]
@@ -318,9 +317,12 @@ public partial class CodeSection
             }
         }
 
-        private void ApplyChanges(VisualLineElement element)
+        private static void ApplyChanges(VisualLineElement element)
         {
             element.BackgroundBrush = ThemeEditor.CurrentTheme.SelectionColor;
         }
     }
+
+    [GeneratedRegex(CodeFunctionArgument.FunctionArgumentPattern)]
+    private static partial Regex FunctionArgumentRegex();
 }

@@ -61,15 +61,7 @@ public class CrashChecker
             bool allFilesUnlocked = false;
             while (!allFilesUnlocked)
             {
-                allFilesUnlocked = true;
-                foreach (string file in files)
-                {
-                    if (IsFileLocked(file))
-                    {
-                        allFilesUnlocked = false;
-                        break;
-                    }
-                }
+                allFilesUnlocked = files.All(file => !IsFileLocked(file));
 
                 if (!allFilesUnlocked)
                 {

@@ -19,7 +19,7 @@ public class SkriptMcProvider : IDocProvider
 
     private readonly HttpClient _client = new();
 
-    public DocProvider Provider => DocProvider.SkriptMC;
+    public DocProvider Provider => DocProvider.SkriptMc;
 
     public Task<IDocumentationEntry?> FetchElement(string id)
     {

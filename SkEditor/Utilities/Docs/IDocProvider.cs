@@ -14,8 +14,8 @@ public interface IDocProvider
     static readonly Dictionary<DocProvider, IDocProvider> Providers = new()
     {
         { DocProvider.SkriptHub, new SkriptHubProvider() },
-        { DocProvider.skUnity, new SkUnityProvider() },
-        { DocProvider.SkriptMC, new SkriptMcProvider() },
+        { DocProvider.SkUnity, new SkUnityProvider() },
+        { DocProvider.SkriptMc, new SkriptMcProvider() },
         { DocProvider.Local, new LocalProvider() }
     };
 

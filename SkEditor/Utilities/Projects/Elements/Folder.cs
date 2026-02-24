@@ -279,6 +279,6 @@ public partial class Folder : StorageElement
         return null;
     }
 
-    [GeneratedRegex(@"^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$")]
+    [GeneratedRegex("""^(\.)?(?!\.{1,2}$)(?!.*[\\/:*?""<>|])(?!^[. ])(?!.*[. ]$)[\-a-zA-Z0-9][\w\-. ]{0,254}$""")]
     private static partial Regex ValidFolderNameRegex();
 }

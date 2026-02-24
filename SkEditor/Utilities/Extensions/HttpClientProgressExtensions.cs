@@ -14,7 +14,7 @@ public static class HttpClientProgressExtensions
         using HttpResponseMessage response =
             await client.GetAsync(requestUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         long? contentLength = response.Content.Headers.ContentLength;
-        using Stream download = await response.Content.ReadAsStreamAsync(cancellationToken);
+        await using Stream download = await response.Content.ReadAsStreamAsync(cancellationToken);
 
         if (progress is null || !contentLength.HasValue)
         {
@@ -25,6 +25,7 @@ public static class HttpClientProgressExtensions
         Progress<long> progressWrapper =
             new(totalBytes => progress.Report(GetProgressPercentage(totalBytes, contentLength.Value)));
         await download.CopyToAsync(destination, 81920, progressWrapper, cancellationToken);
+        return;
 
         static float GetProgressPercentage(float totalBytes, float currentBytes) => totalBytes / currentBytes * 100f;
     }

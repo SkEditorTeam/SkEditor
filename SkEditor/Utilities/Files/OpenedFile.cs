@@ -18,14 +18,12 @@ public class OpenedFile
     public string? Path { get; set; }
     public bool IsNewFile { get; set; }
 
-    private bool _saved;
-
     public bool IsSaved
     {
-        get => _saved;
+        get;
         set
         {
-            _saved = value;
+            field = value;
             TabViewItem?.Header = Header;
         }
     }

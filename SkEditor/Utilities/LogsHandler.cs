@@ -33,12 +33,12 @@ public class LogsHandler : ILogEventSink
     {
         return level switch
         {
-            LogEventLevel.Debug => "\u001b[37m",
-            LogEventLevel.Information => "\u001b[32m",
-            LogEventLevel.Warning => "\u001b[33m",
-            LogEventLevel.Error => "\u001b[31m",
-            LogEventLevel.Fatal => "\u001b[31m",
-            _ => "\u001b[37m"
+            LogEventLevel.Debug => "\e[37m",
+            LogEventLevel.Information => "\e[32m",
+            LogEventLevel.Warning => "\e[33m",
+            LogEventLevel.Error => "\e[31m",
+            LogEventLevel.Fatal => "\e[31m",
+            _ => "\e[37m"
         };
     }
 }

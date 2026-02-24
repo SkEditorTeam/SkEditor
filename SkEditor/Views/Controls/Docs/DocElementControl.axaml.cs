@@ -252,9 +252,9 @@ public partial class DocElementControl : UserControl
         SourceBadge.Background = new SolidColorBrush(color.Value);
         SourceBadge.Foreground = color.Value.ToHsl().L < 0.2 ? Brushes.White : Brushes.Black;
 
-        if (entry.Provider == DocProvider.skUnity)
+        if (entry.Provider == DocProvider.SkUnity)
         {
-            SkUnityProvider? skUnityProvider = IDocProvider.Providers[DocProvider.skUnity] as SkUnityProvider;
+            SkUnityProvider? skUnityProvider = IDocProvider.Providers[DocProvider.SkUnity] as SkUnityProvider;
             if (skUnityProvider == null)
             {
                 return;

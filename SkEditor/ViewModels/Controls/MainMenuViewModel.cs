@@ -174,7 +174,7 @@ public partial class MainMenuViewModel : ObservableObject
                 TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
                 if (textArea is not null)
                 {
-                    CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(textArea);
+                    CustomCommandsHandler.OnTrimWhitespacesCommandExecuted();
                 }
             });
 

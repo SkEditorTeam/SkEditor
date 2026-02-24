@@ -91,7 +91,7 @@ public partial class CodeVariable : ObservableObject, INameableCodeElement
         if (IsLocal) // rename all within the section
         {
             List<string> current = Section.Lines;
-            List<string> newLines = new();
+            List<string> newLines = [];
             foreach (string line in current)
             {
                 bool lineAdded = false;

@@ -374,7 +374,7 @@ public partial class TextEditorEventHandler
         e.Text = sb.ToString().Trim();
     }
 
-    [GeneratedRegex(@"<(color:|#)?#?(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
+    [GeneratedRegex("<(color:|#)?#?(?:[0-9a-fA-F]{3}){1,2}>", RegexOptions.Compiled)]
     private static partial Regex HexRegex();
 
     [GeneratedRegex("")]

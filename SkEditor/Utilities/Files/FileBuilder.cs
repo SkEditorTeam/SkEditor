@@ -313,7 +313,7 @@ public class FileBuilder
                 new RelayCommand(() => SkEditorAPI.Windows.ShowWindow(new GoToLineWindow())),
                 Symbol.TextNumberList),
             new(TranslationKey.MenuHeaderTrimWhitespaces,
-                new RelayCommand(() => CustomCommandsHandler.OnTrimWhitespacesCommandExecuted(editor.TextArea)),
+                new RelayCommand(CustomCommandsHandler.OnTrimWhitespacesCommandExecuted),
                 Symbol.Eraser),
             new(TranslationKey.MenuHeaderDelete, new RelayCommand(editor.Delete), Symbol.Delete),
             new(TranslationKey.MenuHeaderRefactor,

@@ -31,7 +31,7 @@ public class TextEditorUtilities
 
         VisualLine? line = textView.GetVisualLineFromVisualTop(pos.Y);
 
-        if (line == null || line.TextLines == null)
+        if (line?.TextLines == null)
         {
             return SimpleSegment.Invalid;
         }
@@ -74,12 +74,9 @@ public class TextEditorUtilities
 
         string? lineText = document.GetText(line.Offset, offset - line.Offset);
         int wordStartPos = lineText.LastIndexOfAny([' ', '\t', '\n', '\r']);
-        if (wordStartPos == -1)
-        {
-            return new SimpleSegment(line.Offset, offset - line.Offset);
-        }
-
-        return new SimpleSegment(line.Offset + wordStartPos + 1, offset - line.Offset - wordStartPos - 1);
+        return wordStartPos == -1
+            ? new SimpleSegment(line.Offset, offset - line.Offset)
+            : new SimpleSegment(line.Offset + wordStartPos + 1, offset - line.Offset - wordStartPos - 1);
     }
 
     public static IEnumerable<SimpleSegment> GetWordOccurrences(string word, TextDocument document)
