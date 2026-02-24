@@ -1,6 +1,7 @@
 ﻿using SkEditor.API;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Pages;
+using SkEditor.ViewModels.Windows;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using StateConfig = SkEditor.Utilities.Settings.Configs.StateConfig;
@@ -15,4 +16,5 @@ public static class ViewModelLocator
     public static SettingsPageViewModel SettingsPageViewModel { get; } = new();
     public static WelcomePageViewModel WelcomePageViewModel { get; } = new();
     public static MainMenuViewModel MainMenuViewModel { get; } = new();
+    public static RemoteConnectionViewModel RemoteConnectionViewModel { get; } = new();
 }
