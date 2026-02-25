@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+                    xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                     x:CompileBindings="True">
     <Design.PreviewWith>
         <Border Padding="32" Background="#1f1f1f">
@@ -124,8 +125,7 @@
                                         Height="24" Width="24"
                                         VerticalAlignment="Center">
                                     <Viewbox Height="12" Width="12">
-                                        <icons:SymbolIcon Name="PART_Icon" VerticalAlignment="Center"
-                                                          HorizontalAlignment="Center" />
+                                        <controls:IconSourceElement Name="PART_Icon" VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </Viewbox>
                                 </Border>
 
@@ -201,35 +201,50 @@
         </Style>
 
         <Style Selector="^:information /template/ Border#PART_IconBorder">
-            <Setter Property="Background" Value="#32325AFF" />
+            <Setter Property="Background" Value="#20325AFF" />
         </Style>
-        <Style Selector="^:information /template/ icons|SymbolIcon#PART_Icon">
-            <Setter Property="Symbol" Value="Info" />
-            <Setter Property="Foreground" Value="#325AFF" />
+        <Style Selector="^:information /template/ controls|IconSourceElement#PART_Icon">
+            <Setter Property="IconSource" Value="{StaticResource InfoNoCircleIcon}"/>
+            <Setter Property="Foreground" Value="#29AEFF" />
+            <Setter Property="RenderTransform">
+                <TranslateTransform X="0.5" />
+            </Setter>
         </Style>
         
         <Style Selector="^:success /template/ Border#PART_IconBorder">
-            <Setter Property="Background" Value="#3256FF20" />
+            <Setter Property="Background" Value="#2056FF20" />
         </Style>
-        <Style Selector="^:success /template/ icons|SymbolIcon#PART_Icon">
-            <Setter Property="Symbol" Value="Checkmark" />
+        <Style Selector="^:success /template/ controls|IconSourceElement#PART_Icon">
+            <Setter Property="IconSource">
+                <icons:SymbolIconSource Symbol="Checkmark" IconVariant="Filled"/>
+            </Setter>
             <Setter Property="Foreground" Value="#56FF20" />
         </Style>
 
         <Style Selector="^:warning /template/ Border#PART_IconBorder">
-            <Setter Property="Background" Value="#32FF803B" />
+            <Setter Property="Background" Value="#20FF6A3D" />
         </Style>
-        <Style Selector="^:warning /template/ icons|SymbolIcon#PART_Icon">
-            <Setter Property="Symbol" Value="Important" />
-            <Setter Property="Foreground" Value="#FF803B" />
+        <Style Selector="^:warning /template/ controls|IconSourceElement#PART_Icon">
+            <Setter Property="IconSource">
+                <icons:SymbolIconSource Symbol="Important"/>
+            </Setter>
+            <Setter Property="Foreground" Value="#FF7B34" />
+            <Setter Property="RenderTransform">
+                <TranslateTransform X="-1" />
+            </Setter>
         </Style>
 
         <Style Selector="^:error /template/ Border#PART_IconBorder">
-            <Setter Property="Background" Value="#32FF1B3E" />
+            <Setter Property="Background" Value="#20FF1B3E" />
         </Style>
-        <Style Selector="^:error /template/ icons|SymbolIcon#PART_Icon">
-            <Setter Property="Symbol" Value="Dismiss" />
+        <Style Selector="^:error /template/ controls|IconSourceElement#PART_Icon">
+            <Setter Property="IconSource">
+                <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled"/>
+            </Setter>
             <Setter Property="Foreground" Value="#FF1B3E" />
+            <Setter Property="RenderTransform">
+                <TranslateTransform X="-1" />
+            </Setter>
         </Style>
     </ControlTheme>
 </ResourceDictionary>
