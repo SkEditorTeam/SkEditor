@@ -237,10 +237,10 @@ public partial class MainWindow : AppWindow
                             {
                                 NotificationManager.Show(new Notification
                                 {
-                                    Title = "Zapisano plik",
-                                    Message = "Plik został pomyślnie zapisany.",
+                                    Title = "Saved",
+                                    Message = "Your work has been saved successfully!",
                                     Type = NotificationType.Success,
-                                    Expiration = TimeSpan.FromMinutes(4)
+                                    Expiration = TimeSpan.FromSeconds(4)
                                 });
                             });
                         });

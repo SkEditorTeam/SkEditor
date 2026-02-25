@@ -20,12 +20,12 @@
             </Border.DataTemplates>
             <NotificationCard NotificationType="Success">
                 <NotificationCard.Content>
-                    <Notification Title="Test title" Message="Test message" />
+                    <Notification Title="Saved" Message="Your changes have been saved successfully." />
                 </NotificationCard.Content>
             </NotificationCard>
         </Border>
     </Design.PreviewWith>
-    
+
     <ControlTheme x:Key="{x:Type WindowNotificationManager}" TargetType="WindowNotificationManager">
         <Setter Property="Margin" Value="0 0" />
         <Setter Property="Template">
@@ -38,7 +38,7 @@
                                 Spacing="8"
                                 TextElement.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                                 <StackPanel Spacing="8">
-                                    <TextBlock FontWeight="DemiBold" Text="Tajtel2" />
+                                    <TextBlock FontWeight="DemiBold" Text="{Binding Title}" />
                                 </StackPanel>
                                 <TextBlock
                                     MaxHeight="80"
@@ -91,30 +91,38 @@
             <Setter Property="HorizontalAlignment" Value="Center" />
         </Style>
     </ControlTheme>
-    
+
     <ControlTheme x:Key="{x:Type NotificationCard}" TargetType="NotificationCard">
-        <Setter Property="UseLayoutRounding" Value="True"/>
-        <Setter Property="Width" Value="355"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
-        <Setter Property="RenderTransformOrigin" Value="50%,75%"/>
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Width" Value="355" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="RenderTransformOrigin" Value="50%,75%" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource MenuFlyoutPresenterBorderBrush}" />
         <Setter Property="Background" Value="{DynamicResource MenuFlyoutPresenterBackground}" />
         <Setter Property="CornerRadius" Value="7" />
+        <Setter Property="RenderTransform">
+            <TransformGroup>
+                <ScaleTransform />
+                <TranslateTransform />
+            </TransformGroup>
+        </Setter>
+        
         <Setter Property="Template">
             <ControlTemplate>
                 <LayoutTransformControl Name="PART_LayoutTransformControl" UseRenderTransform="True">
-                    <Border CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="0 4 12 0 #64000000" Margin="5 5 5 10">
+                    <Border CornerRadius="{TemplateBinding CornerRadius}" BoxShadow="0 4 12 0 #64000000"
+                            Margin="5 5 5 10">
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="{TemplateBinding CornerRadius}"
                                 ClipToBounds="True">
                             <DockPanel>
-                                <ContentControl Name="PART_Content" 
+                                <ContentControl Name="PART_Content"
                                                 Content="{TemplateBinding Content}"
-                                                MinHeight="64"/>
+                                                MinHeight="64" />
                             </DockPanel>
                         </Border>
                     </Border>
@@ -123,40 +131,50 @@
         </Setter>
 
         <ControlTheme.Animations>
-            <Animation Duration="0:0:0.45" Easing="QuadraticEaseIn" FillMode="Forward">
+            <Animation Duration="0:0:0.3" FillMode="Forward">
+                <Animation.Easing>
+                    <SplineEasing X1="0.175" Y1="0.885" X2="0.32" Y2="1.275"/>
+                </Animation.Easing>
                 <KeyFrame Cue="0%">
-                    <Setter Property="Opacity" Value="0"/>
-                    <Setter Property="TranslateTransform.Y" Value="20"/>
-                    <Setter Property="ScaleTransform.ScaleX" Value="0.85"/>
-                    <Setter Property="ScaleTransform.ScaleY" Value="0.85"/>
-                </KeyFrame>
-                <KeyFrame Cue="30%">
-                    <Setter Property="TranslateTransform.Y" Value="-20"/>
+                    <Setter Property="TranslateTransform.Y" Value="40" />
+                    <Setter Property="ScaleTransform.ScaleX" Value="0.85" />
+                    <Setter Property="ScaleTransform.ScaleY" Value="0.85" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
-                    <Setter Property="Opacity" Value="1"/>
-                    <Setter Property="TranslateTransform.Y" Value="0"/>
-                    <Setter Property="ScaleTransform.ScaleX" Value="1"/>
-                    <Setter Property="ScaleTransform.ScaleY" Value="1"/>
+                    <Setter Property="TranslateTransform.Y" Value="0" />
+                    <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                    <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                </KeyFrame>
+            </Animation>
+            
+            <Animation Duration="0:0:0.25" Easing="QuadraticEaseOut" FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity" Value="0" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity" Value="1" />
                 </KeyFrame>
             </Animation>
         </ControlTheme.Animations>
 
         <Style Selector="^[IsClosing=true] /template/ LayoutTransformControl#PART_LayoutTransformControl">
-            <Setter Property="RenderTransformOrigin" Value="50%,0%"/>
+            <Setter Property="RenderTransformOrigin" Value="100%,50%" />
             <Style.Animations>
-                <Animation Duration="0:0:0.75" Easing="QuadraticEaseOut" FillMode="Forward">
+                <Animation Duration="0:0:0.4" Easing="CubicEaseIn" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="TranslateTransform.X" Value="0"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1"/>
+                        <Setter Property="TranslateTransform.X" Value="0" />
+                        <Setter Property="Opacity" Value="1" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
                     </KeyFrame>
-                    <KeyFrame Cue="70%">
-                        <Setter Property="TranslateTransform.X" Value="800"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1"/>
+                    <KeyFrame Cue="60%">
+                        <Setter Property="TranslateTransform.X" Value="150" />
+                        <Setter Property="Opacity" Value="0" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="ScaleTransform.ScaleY" Value="0"/>
-                        <Setter Property="TranslateTransform.X" Value="800"/>
+                        <Setter Property="TranslateTransform.X" Value="150" />
+                        <Setter Property="Opacity" Value="0" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="0" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -164,12 +182,12 @@
 
         <Style Selector="^[IsClosing=true]">
             <Style.Animations>
-                <Animation Duration="0:0:1.25" Easing="QuadraticEaseOut" FillMode="Forward">
+                <Animation Duration="0:0:0.4" FillMode="Forward">
                     <KeyFrame Cue="100%">
-                        <Setter Property="IsClosed" Value="True"/>
+                        <Setter Property="IsClosed" Value="True" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
-    </ControlTheme> 
+    </ControlTheme>
 </ResourceDictionary>
