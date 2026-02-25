@@ -12,7 +12,7 @@
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <PublishAot>true</PublishAot>
+        <PublishAot>false</PublishAot>
 
         <VersionPrefix>2.9.4</VersionPrefix>
         <VersionSuffix>alpha.1</VersionSuffix>
@@ -86,6 +86,10 @@
             <ExcludeAssets>all</ExcludeAssets>
         </PackageReference>
     </ItemGroup>
+    
+    <PropertyGroup>
+        <HotAvalonia>false</HotAvalonia>
+    </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\External\DiscordRPC\DiscordRPC.csproj"/>

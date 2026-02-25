@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
                     x:CompileBindings="True">
     <Design.PreviewWith>
         <Border Padding="32" Background="#1f1f1f">
@@ -9,7 +10,13 @@
                         Margin="12"
                         Spacing="8"
                         TextElement.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
-                        <TextBlock FontWeight="DemiBold" Text="{Binding Title}" />
+                        <StackPanel Spacing="8">
+                            <Border CornerRadius="100" Height="32" Width="32" Background="#9656FF20">
+                                <icons:SymbolIcon Symbol="Checkmark" Foreground="#56FF20" VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center" />
+                            </Border>
+                            <TextBlock FontWeight="DemiBold" Text="{Binding Title}" />
+                        </StackPanel>
                         <TextBlock
                             MaxHeight="80"
                             Margin="0,0,12,0"
@@ -33,25 +40,16 @@
                 <ReversibleStackPanel Name="PART_Items">
                     <ReversibleStackPanel.DataTemplates>
                         <DataTemplate DataType="INotification">
-                            <StackPanel
-                                Margin="12"
-                                Spacing="8"
-                                TextElement.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
-                                <StackPanel Spacing="8">
-                                    <TextBlock FontWeight="DemiBold" Text="{Binding Title}" />
-                                </StackPanel>
-                                <TextBlock
-                                    MaxHeight="80"
-                                    Margin="0,0,12,0"
-                                    Text="{Binding Message}"
-                                    TextWrapping="Wrap" />
+                            <StackPanel Margin="0"
+                                        TextElement.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        VerticalAlignment="Center">
+                                <TextBlock FontWeight="DemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                                <TextBlock MaxHeight="80" Text="{Binding Message}" TextWrapping="Wrap" Opacity="0.8" />
                             </StackPanel>
                         </DataTemplate>
                         <DataTemplate DataType="x:String">
-                            <TextBlock
-                                Margin="12"
-                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                                Text="{Binding}" />
+                            <TextBlock Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding}"
+                                       VerticalAlignment="Center" />
                         </DataTemplate>
                     </ReversibleStackPanel.DataTemplates>
                 </ReversibleStackPanel>
@@ -94,7 +92,7 @@
 
     <ControlTheme x:Key="{x:Type NotificationCard}" TargetType="NotificationCard">
         <Setter Property="UseLayoutRounding" Value="True" />
-        <Setter Property="Width" Value="355" />
+        <Setter Property="Width" Value="375" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         <Setter Property="RenderTransformOrigin" Value="50%,75%" />
@@ -108,7 +106,7 @@
                 <TranslateTransform />
             </TransformGroup>
         </Setter>
-        
+
         <Setter Property="Template">
             <ControlTemplate>
                 <LayoutTransformControl Name="PART_LayoutTransformControl" UseRenderTransform="True">
@@ -118,12 +116,24 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="{TemplateBinding CornerRadius}"
-                                ClipToBounds="True">
-                            <DockPanel>
-                                <ContentControl Name="PART_Content"
+                                ClipToBounds="True"
+                                Padding="12">
+
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">
+                                <Border Name="PART_IconBorder" Grid.Column="0" CornerRadius="100"
+                                        Height="24" Width="24"
+                                        VerticalAlignment="Center">
+                                    <Viewbox Height="12" Width="12">
+                                        <icons:SymbolIcon Name="PART_Icon" VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center" />
+                                    </Viewbox>
+                                </Border>
+
+                                <ContentControl Name="PART_Content" Grid.Column="1"
                                                 Content="{TemplateBinding Content}"
-                                                MinHeight="64" />
-                            </DockPanel>
+                                                MinHeight="40" VerticalContentAlignment="Center" />
+                            </Grid>
+
                         </Border>
                     </Border>
                 </LayoutTransformControl>
@@ -133,7 +143,7 @@
         <ControlTheme.Animations>
             <Animation Duration="0:0:0.3" FillMode="Forward">
                 <Animation.Easing>
-                    <SplineEasing X1="0.175" Y1="0.885" X2="0.32" Y2="1.275"/>
+                    <SplineEasing X1="0.175" Y1="0.885" X2="0.32" Y2="1.275" />
                 </Animation.Easing>
                 <KeyFrame Cue="0%">
                     <Setter Property="TranslateTransform.Y" Value="40" />
@@ -146,7 +156,7 @@
                     <Setter Property="ScaleTransform.ScaleY" Value="1" />
                 </KeyFrame>
             </Animation>
-            
+
             <Animation Duration="0:0:0.25" Easing="QuadraticEaseOut" FillMode="Forward">
                 <KeyFrame Cue="0%">
                     <Setter Property="Opacity" Value="0" />
@@ -188,6 +198,38 @@
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
+        </Style>
+
+        <Style Selector="^:information /template/ Border#PART_IconBorder">
+            <Setter Property="Background" Value="#32325AFF" />
+        </Style>
+        <Style Selector="^:information /template/ icons|SymbolIcon#PART_Icon">
+            <Setter Property="Symbol" Value="Info" />
+            <Setter Property="Foreground" Value="#325AFF" />
+        </Style>
+        
+        <Style Selector="^:success /template/ Border#PART_IconBorder">
+            <Setter Property="Background" Value="#3256FF20" />
+        </Style>
+        <Style Selector="^:success /template/ icons|SymbolIcon#PART_Icon">
+            <Setter Property="Symbol" Value="Checkmark" />
+            <Setter Property="Foreground" Value="#56FF20" />
+        </Style>
+
+        <Style Selector="^:warning /template/ Border#PART_IconBorder">
+            <Setter Property="Background" Value="#32FF803B" />
+        </Style>
+        <Style Selector="^:warning /template/ icons|SymbolIcon#PART_Icon">
+            <Setter Property="Symbol" Value="Important" />
+            <Setter Property="Foreground" Value="#FF803B" />
+        </Style>
+
+        <Style Selector="^:error /template/ Border#PART_IconBorder">
+            <Setter Property="Background" Value="#32FF1B3E" />
+        </Style>
+        <Style Selector="^:error /template/ icons|SymbolIcon#PART_Icon">
+            <Setter Property="Symbol" Value="Dismiss" />
+            <Setter Property="Foreground" Value="#FF1B3E" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>
