@@ -26,6 +26,19 @@ jobs:
           dotnet publish -c Release -r $arch -p:PublishSingleFile=true -p:PublishReadyToRun=true --no-self-contained --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false
         done
 
+    - name: 🎨 | Generate .icns from PNG
+      run: |
+        SOURCE="SkEditor/Assets/SkEditor.png"
+        ICONSET="SkEditor.iconset"
+        mkdir -p $ICONSET
+        for size in 16 32 64 128 256 512; do
+          sips -z $size $size "$SOURCE" --out "$ICONSET/icon_${size}x${size}.png"
+          double=$((size * 2))
+          sips -z $double $double "$SOURCE" --out "$ICONSET/icon_${size}x${size}@2x.png"
+        done
+        iconutil -c icns $ICONSET -o SkEditor/Assets/SkEditor.icns
+        rm -rf $ICONSET
+
     - name: 🛠️ | Create .app structure and zip for both architectures
       run: |
         for arch in osx-x64 osx-arm64; do
