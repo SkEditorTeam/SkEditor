@@ -241,7 +241,7 @@
             <Setter Property="IconSource">
                 <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled"/>
             </Setter>
-            <Setter Property="Foreground" Value="#FF1B3E" />
+            <Setter Property="Foreground" Value="#FF4E37" />
             <Setter Property="RenderTransform">
                 <TranslateTransform X="-1" />
             </Setter>
