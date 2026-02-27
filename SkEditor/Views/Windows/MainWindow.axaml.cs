@@ -235,37 +235,12 @@ public partial class MainWindow : AppWindow
                         {
                             await Dispatcher.UIThread.InvokeAsync(() =>
                             {
-                                NotificationManager.Show(new Notification
-                                {
-                                    Title = "Saved",
-                                    Message = "Your work has been saved successfully!",
-                                    Type = NotificationType.Success,
-                                    Expiration = TimeSpan.FromMinutes(4)
-                                });
-
-                                NotificationManager.Show(new Notification
-                                {
-                                    Title = "Error",
-                                    Message = "An error occurred while saving your work.",
-                                    Type = NotificationType.Error,
-                                    Expiration = TimeSpan.FromMinutes(4)
-                                });
-                                
-                                NotificationManager.Show(new Notification
-                                {
-                                    Title = "Warning",
-                                    Message = "Your work is not saved. Please save to avoid losing progress.",
-                                    Type = NotificationType.Warning,
-                                    Expiration = TimeSpan.FromMinutes(4)
-                                });
-
-                                NotificationManager.Show(new Notification
-                                {
-                                    Title = "Info",
-                                    Message = "This is an informational message.",
-                                    Type = NotificationType.Information,
-                                    Expiration = TimeSpan.FromMinutes(4)
-                                });
+                                NotificationManager.Show(
+                                    "Saved", 
+                                    "Your work has been saved successfully!", 
+                                    NotificationType.Success, 
+                                    TimeSpan.FromSeconds(5)
+                                );
                             });
                         });
                     }

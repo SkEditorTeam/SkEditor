@@ -1,0 +1,50 @@
+﻿using System;
+using Avalonia;
+using Avalonia.Controls.Notifications;
+using Avalonia.Input;
+using Avalonia.Threading;
+
+namespace SkEditor.Views.Controls.Notifications;
+
+public class SkEditorNotificationCard : NotificationCard
+{
+    private DispatcherTimer? _timer;
+    private TimeSpan _expiration;
+
+    protected override Type StyleKeyOverride => typeof(NotificationCard);
+
+    public void StartTimer(TimeSpan expiration)
+    {
+        _expiration = expiration;
+        if (expiration == TimeSpan.Zero) return;
+
+        _timer = new DispatcherTimer { Interval = expiration };
+        _timer.Tick += (_, _) =>
+        {
+            _timer.Stop();
+            Close();
+        };
+        _timer.Start();
+    }
+
+    protected override void OnPointerEntered(PointerEventArgs e)
+    {
+        base.OnPointerEntered(e);
+        _timer?.Stop();
+    }
+
+    protected override void OnPointerExited(PointerEventArgs e)
+    {
+        base.OnPointerExited(e);
+        if (_expiration != TimeSpan.Zero)
+        {
+            _timer?.Start();
+        }
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _timer?.Stop();
+    }
+}

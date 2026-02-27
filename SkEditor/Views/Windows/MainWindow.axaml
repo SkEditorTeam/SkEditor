@@ -6,7 +6,7 @@
         xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
         xmlns:avaloniaedit="using:AvaloniaEdit"
         xmlns:controls="clr-namespace:SkEditor.Views.Controls"
-        xmlns:notif="using:Avalonia.Controls.Notifications"
+        xmlns:notifications="clr-namespace:SkEditor.Views.Controls.Notifications"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         Background="{DynamicResource BackgroundColor}"
@@ -75,7 +75,7 @@
                 </Grid>
             </Border>
             
-            <notif:WindowNotificationManager 
+            <notifications:SkEditorNotificationManager  
                 x:Name="NotificationManager"
                 Grid.Row="1"
                 Position="BottomRight"
