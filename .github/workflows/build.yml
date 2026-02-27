@@ -45,7 +45,7 @@ jobs:
           mkdir -p "SkEditor.app/Contents/MacOS"
           mkdir -p "SkEditor.app/Contents/Resources"
           cp -r SkEditor/bin/Release/net8.0/$arch/publish/* "SkEditor.app/Contents/MacOS/"
-          cp SkEditor/Info.plist "SkEditor.app/Contents/"
+          cp SkEditor/Properties/Info.plist "SkEditor.app/Contents/"
           cp SkEditor/SkEditor.icns "SkEditor.app/Contents/Resources/"
           find SkEditor.app/Contents/MacOS/ -type f -exec chmod +x {} \;
           zip -r "SkEditorMac-$arch.zip" SkEditor.app

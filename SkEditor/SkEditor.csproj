@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <ApplicationManifest>Properties/app.manifest</ApplicationManifest>
         <ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>
         <PublishSingleFile>true</PublishSingleFile>
         <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
