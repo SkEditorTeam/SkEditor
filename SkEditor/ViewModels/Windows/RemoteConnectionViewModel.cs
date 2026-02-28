@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
@@ -17,7 +20,7 @@ public partial class RemoteConnectionViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
     private string _name = "";
-    
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
     private string _host = "";
@@ -35,33 +38,44 @@ public partial class RemoteConnectionViewModel : ObservableObject
     private string _password = "";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
+    private string _keyFilePath = "";
+
+    [ObservableProperty]
     private string? _infoBarMessage;
 
     [ObservableProperty]
     private InfoBarSeverity _infoBarSeverity = InfoBarSeverity.Informational;
-    
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(
+        nameof(RequiredFieldsFilled),
+        nameof(ConnectionFieldsFilled),
+        nameof(IsPasswordAuth),
+        nameof(IsPrivateKeyAuth))]
+    private AuthMethod _authMethod = AuthMethod.Password;
+
+    public IReadOnlyList<AuthMethod> AuthMethods { get; } =
+        Enum.GetValues<AuthMethod>().ToList();
+
+    public bool IsPasswordAuth => AuthMethod == AuthMethod.Password;
+    public bool IsPrivateKeyAuth => AuthMethod == AuthMethod.PrivateKey;
+
     public bool ConnectionFieldsFilled =>
         !string.IsNullOrWhiteSpace(Host) &&
         !string.IsNullOrWhiteSpace(Username) &&
-        !string.IsNullOrWhiteSpace(Password);
+        (IsPasswordAuth
+            ? !string.IsNullOrWhiteSpace(Password)
+            : !string.IsNullOrWhiteSpace(KeyFilePath));
 
     public bool RequiredFieldsFilled =>
         !string.IsNullOrWhiteSpace(Name) &&
-        !string.IsNullOrWhiteSpace(Host) &&
-        !string.IsNullOrWhiteSpace(Username) &&
-        !string.IsNullOrWhiteSpace(Password);
-
-    public AsyncRelayCommand TestConnectionCommand { get; }
-    public AsyncRelayCommand AddConnectionCommand { get; }
+        ConnectionFieldsFilled;
 
     public event EventHandler? CloseRequested;
+    public Func<Task<string?>>? RequestKeyFilePicker { get; set; }
 
-    public RemoteConnectionViewModel()
-    {
-        TestConnectionCommand = new AsyncRelayCommand(TestConnection);
-        AddConnectionCommand = new AsyncRelayCommand(AddConnection);
-    }
-
+    [RelayCommand]
     private async Task AddConnection()
     {
         bool connectionSuccessful = await TestConnection();
@@ -87,6 +101,7 @@ public partial class RemoteConnectionViewModel : ObservableObject
         });
     }
 
+    [RelayCommand]
     private async Task<bool> TestConnection()
     {
         string host = Host;
@@ -94,10 +109,25 @@ public partial class RemoteConnectionViewModel : ObservableObject
         string username = Username;
         string password = Password;
 
-        using var client = new SftpClient(host, port, username, password);
+
+        bool invalidKeyFile = IsPrivateKeyAuth && (string.IsNullOrWhiteSpace(KeyFilePath) || !File.Exists(KeyFilePath));
+        if (invalidKeyFile)
+        {
+            InfoBarMessage = "Provide a valid path to the private key file.";
+            InfoBarSeverity = InfoBarSeverity.Error;
+            return false;
+        }
 
         try
         {
+            AuthenticationMethod authMethod = IsPasswordAuth
+                ? new PasswordAuthenticationMethod(username, password)
+                : new PrivateKeyAuthenticationMethod(username, new PrivateKeyFile(KeyFilePath));
+
+            var connectionInfo = new ConnectionInfo(host, port, username, authMethod);
+
+            using var client = new SftpClient(connectionInfo);
+
             using var cts = new CancellationTokenSource();
 
             Stopwatch sw = Stopwatch.StartNew();
@@ -123,6 +153,19 @@ public partial class RemoteConnectionViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private async Task BrowseKey()
+    {
+        if (RequestKeyFilePicker == null) return;
+
+        var path = await RequestKeyFilePicker.Invoke();
+
+        if (!string.IsNullOrEmpty(path))
+        {
+            KeyFilePath = path;
+        }
+    }
+
     private void Clear()
     {
         Host = "";
@@ -132,4 +175,10 @@ public partial class RemoteConnectionViewModel : ObservableObject
         InfoBarMessage = null;
         InfoBarSeverity = InfoBarSeverity.Informational;
     }
+}
+
+public enum AuthMethod
+{
+    Password,
+    PrivateKey
 }
