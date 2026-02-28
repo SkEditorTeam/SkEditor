@@ -9,6 +9,7 @@
              xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+             xmlns:welcome="clr-namespace:SkEditor.Models.Welcome"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              DataContext="{x:Static viewModels:ViewModelLocator.WelcomePageViewModel}"
              x:DataType="vms:WelcomePageViewModel"
@@ -83,7 +84,7 @@
                         <StackLayout Spacing="32" />
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
-                        <DataTemplate DataType="vms:WelcomePageViewModel+WelcomeScreenSection">
+                        <DataTemplate DataType="welcome:WelcomeScreenSection">
                             <StackPanel Spacing="12">
                                 <TextBlock Text="{Binding Title.Value}"
                                            TextAlignment="Center"
@@ -96,7 +97,7 @@
                                         <StackLayout Spacing="6" />
                                     </ItemsRepeater.Layout>
                                     <ItemsRepeater.ItemTemplate>
-                                        <DataTemplate DataType="vms:WelcomePageViewModel+WelcomeScreenElement">
+                                        <DataTemplate DataType="welcome:WelcomeScreenElement">
                                             <Button HorizontalContentAlignment="Stretch" Command="{Binding Command}">
                                                 <StackPanel Orientation="Horizontal" Spacing="16"
                                                             VerticalAlignment="Center">
@@ -152,7 +153,7 @@
                             <StackLayout Spacing="8" />
                         </ItemsRepeater.Layout>
                         <ItemsRepeater.ItemTemplate>
-                            <DataTemplate DataType="vms:WelcomePageViewModel+WelcomeScreenRecentItem">
+                            <DataTemplate DataType="welcome:WelcomeScreenRecentItem">
                                 <Button HorizontalContentAlignment="Stretch"
                                         VerticalContentAlignment="Center">
                                     <DockPanel LastChildFill="True">
