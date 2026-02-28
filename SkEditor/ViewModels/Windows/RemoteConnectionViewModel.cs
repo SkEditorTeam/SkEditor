@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Renci.SshNet;
 using SkEditor.API;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Windows;
 
@@ -81,7 +82,7 @@ public partial class RemoteConnectionViewModel : ObservableObject
         bool connectionSuccessful = await TestConnection();
         if (!connectionSuccessful)
         {
-            InfoBarMessage = "Cannot add connection. Please fix the connection issues first.";
+            InfoBarMessage = Translation.Get(TranslationKey.RemoteConnectionCannotAddConnection);
             InfoBarSeverity = InfoBarSeverity.Error;
 
             return;
@@ -89,9 +90,11 @@ public partial class RemoteConnectionViewModel : ObservableObject
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
+            string hostPort = $"{Host}:{(!string.IsNullOrWhiteSpace(Port) ? Port : "22")}";
+
             SkEditorAPI.Windows.GetMainWindow()?.NotificationManager.Show(
-                "Connection added!",
-                $"Successfully added connection to {Host}:{(!string.IsNullOrWhiteSpace(Port) ? Port : 22)}.",
+                Translation.Get(TranslationKey.RemoteConnectionAddSuccessTitle),
+                Translation.Get(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort),
                 NotificationType.Success,
                 TimeSpan.FromSeconds(5)
             );
@@ -113,7 +116,7 @@ public partial class RemoteConnectionViewModel : ObservableObject
         bool invalidKeyFile = IsPrivateKeyAuth && (string.IsNullOrWhiteSpace(KeyFilePath) || !File.Exists(KeyFilePath));
         if (invalidKeyFile)
         {
-            InfoBarMessage = "Provide a valid path to the private key file.";
+            InfoBarMessage = Translation.Get(TranslationKey.RemoteConnectionInvalidKeyPath);
             InfoBarSeverity = InfoBarSeverity.Error;
             return false;
         }
@@ -134,14 +137,16 @@ public partial class RemoteConnectionViewModel : ObservableObject
             await client.ConnectAsync(cts.Token);
             sw.Stop();
 
+            string hostPort = $"{host}:{port}";
             if (client.IsConnected)
             {
-                InfoBarMessage = $"Successfully connected to {host}:{port} in {sw.ElapsedMilliseconds} ms.";
+                InfoBarMessage = Translation.Get(TranslationKey.RemoteConnectionTestSuccess, hostPort,
+                    $"{sw.ElapsedMilliseconds:N0}");
                 InfoBarSeverity = InfoBarSeverity.Success;
                 return true;
             }
 
-            InfoBarMessage = $"Failed to connect to {host}:{port}.";
+            InfoBarMessage = Translation.Get(TranslationKey.RemoteConnectionTestFailed, hostPort);
             InfoBarSeverity = InfoBarSeverity.Error;
             return false;
         }
