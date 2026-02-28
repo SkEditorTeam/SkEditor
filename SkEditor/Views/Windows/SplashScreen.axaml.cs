@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using Avalonia.Threading;
+using Serilog;
 
 namespace SkEditor.Views.Windows;
 
@@ -79,5 +80,26 @@ public partial class SplashScreen : Window
     public async Task UpdateStatusAsync(string status)
     {
         await Dispatcher.UIThread.InvokeAsync(() => _statusText.Text = status);
+    }
+}
+
+internal static class SplashScreenExtensions
+{
+    public static Task TryUpdateStatusAsync(this SplashScreen? splashScreen, string status)
+    {
+        if (splashScreen == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        try
+        {
+            return splashScreen.UpdateStatusAsync(status);
+        }
+        catch (Exception ex)
+        {
+            Log.Debug(ex, "Error updating splash screen");
+            return Task.CompletedTask;
+        }
     }
 }

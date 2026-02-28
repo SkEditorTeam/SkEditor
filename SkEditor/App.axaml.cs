@@ -16,6 +16,7 @@ using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Startup;
+using SkEditor.Views.Windows;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
@@ -65,19 +66,19 @@ public class App : Application
     {
         try
         {
-            await TryUpdateSplashScreen("Initializing...");
+            await _splashScreen.TryUpdateStatusAsync("Initializing...");
 
             _ = Task.Run(async () =>
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-                await TryUpdateSplashScreen("Setting up logging...");
+                await _splashScreen.TryUpdateStatusAsync("Setting up logging...");
                 SetupLogging();
 
-                await TryUpdateSplashScreen("Configuring error handling...");
+                await _splashScreen.TryUpdateStatusAsync("Configuring error handling...");
                 ConfigureErrorHandling();
 
-                await TryUpdateSplashScreen("Checking for other instances...");
+                await _splashScreen.TryUpdateStatusAsync("Checking for other instances...");
 
                 bool continueStartup = await Dispatcher.UIThread.InvokeAsync(() => HandleSingleInstance(desktop));
                 if (!continueStartup)
@@ -85,7 +86,7 @@ public class App : Application
                     return;
                 }
 
-                await TryUpdateSplashScreen("Loading configuration...");
+                await _splashScreen.TryUpdateStatusAsync("Loading configuration...");
                 SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
@@ -97,16 +98,16 @@ public class App : Application
                 await SkEditorAPI.Configs.MigrateConfigsAsync();
                 await SkEditorAPI.Configs.LoadAllConfigsAsync();
 
-                await TryUpdateSplashScreen("Creating main window...");
+                await _splashScreen.TryUpdateStatusAsync("Creating main window...");
 
                 MainWindow mainWindow =
                     await Dispatcher.UIThread.InvokeAsync(() => new MainWindow(_splashScreen) { IsVisible = false });
 
-                await TryUpdateSplashScreen("Starting named pipe server...");
+                await _splashScreen.TryUpdateStatusAsync("Starting named pipe server...");
 
                 NamedPipeServer.Start();
 
-                await TryUpdateSplashScreen("Initializing main window...");
+                await _splashScreen.TryUpdateStatusAsync("Initializing main window...");
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
@@ -133,7 +134,7 @@ public class App : Application
                     innermost.Message,
                     innermost.StackTrace);
 
-                await TryUpdateSplashScreen(
+                await _splashScreen.TryUpdateStatusAsync(
                     $"Error: {t.Exception.InnerException?.Message ?? t.Exception.Message}");
 
                 await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
@@ -144,28 +145,11 @@ public class App : Application
         catch (Exception ex)
         {
             Log.Error(ex, "Error creating SkEditor");
-            await TryUpdateSplashScreen($"Error: {ex.Message}");
+            await _splashScreen.TryUpdateStatusAsync($"Error: {ex.Message}");
 
             await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
                 DispatcherPriority.Background,
                 new CancellationTokenSource(3000).Token);
-        }
-    }
-    
-    private async Task TryUpdateSplashScreen(string status)
-    {
-        if (_splashScreen == null)
-        {
-            return;
-        }
-
-        try
-        {
-            await _splashScreen.UpdateStatusAsync(status);
-        }
-        catch (Exception ex)
-        {
-            Log.Debug(ex, "Error updating splash screen");
         }
     }
 

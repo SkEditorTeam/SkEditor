@@ -152,13 +152,13 @@ public partial class MainWindow : AppWindow
         try
         {
             await Translation.ChangeLanguage(SkEditorAPI.Configs.GetAppSettings().Language, true);
-            _splashScreen?.UpdateStatus("Loading themes and addons...");
+            await _splashScreen.TryUpdateStatusAsync("Loading themes and addons...");
 
             Task themeTask = ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
             Task addonTask = AddonLoader.Load();
             await Task.WhenAll(themeTask, addonTask);
 
-            _splashScreen?.UpdateStatus("Registering file types...");
+            await _splashScreen.TryUpdateStatusAsync("Registering file types...");
             Utilities.Files.FileTypes.RegisterDefaultAssociations();
             SideBar.ReloadPanels();
 
@@ -168,11 +168,11 @@ public partial class MainWindow : AppWindow
             bool sessionFilesAdded = false;
             if (SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
             {
-                _splashScreen?.UpdateStatus("Restoring session...");
+                await _splashScreen.TryUpdateStatusAsync("Restoring session...");
                 sessionFilesAdded = await SessionRestorer.RestoreSession();
             }
 
-            _splashScreen?.UpdateStatus("Opening files...");
+            await _splashScreen.TryUpdateStatusAsync("Opening files...");
             string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
             if (startupFiles.Length == 0 && !sessionFilesAdded)
             {
@@ -187,7 +187,7 @@ public partial class MainWindow : AppWindow
 
             BottomBar.UpdatePosition();
 
-            _splashScreen?.UpdateStatus("Finishing up...");
+            await _splashScreen.TryUpdateStatusAsync("Finishing up...");
 
             await Dispatcher.UIThread.InvokeAsync(async () =>
             {
