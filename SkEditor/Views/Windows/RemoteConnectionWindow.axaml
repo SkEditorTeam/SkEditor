@@ -27,7 +27,7 @@
 
         <Grid DockPanel.Dock="Bottom" ColumnDefinitions="Auto,*" ColumnSpacing="8">
             <Button Name="TestConnectionButton" ToolTip.Tip="Test the connection settings"
-                    HorizontalAlignment="Left" IsEnabled="{Binding RequiredFieldsFilled}"
+                    HorizontalAlignment="Left" IsEnabled="{Binding ConnectionFieldsFilled}"
                     Command="{Binding TestConnectionCommand}">
                 <fluent:SymbolIcon Symbol="Pulse" FontSize="18" />
             </Button>
@@ -52,7 +52,7 @@
         <StackPanel Spacing="14">
             <StackPanel Spacing="4">
                 <TextBlock Text="Name" />
-                <TextBox Name="NameTextBox" Watermark="Survival" />
+                <TextBox Name="NameTextBox" Watermark="Survival" Text="{Binding Name}" />
             </StackPanel>
 
             <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">

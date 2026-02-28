@@ -15,19 +15,23 @@ namespace SkEditor.ViewModels.Windows;
 public partial class RemoteConnectionViewModel : ObservableObject
 {
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled))]
+    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
+    private string _name = "";
+    
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
     private string _host = "";
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled))]
+    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
     private string _port = "";
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled))]
+    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
     private string _username = "";
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled))]
+    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
     private string _password = "";
 
     [ObservableProperty]
@@ -35,8 +39,14 @@ public partial class RemoteConnectionViewModel : ObservableObject
 
     [ObservableProperty]
     private InfoBarSeverity _infoBarSeverity = InfoBarSeverity.Informational;
+    
+    public bool ConnectionFieldsFilled =>
+        !string.IsNullOrWhiteSpace(Host) &&
+        !string.IsNullOrWhiteSpace(Username) &&
+        !string.IsNullOrWhiteSpace(Password);
 
     public bool RequiredFieldsFilled =>
+        !string.IsNullOrWhiteSpace(Name) &&
         !string.IsNullOrWhiteSpace(Host) &&
         !string.IsNullOrWhiteSpace(Username) &&
         !string.IsNullOrWhiteSpace(Password);
