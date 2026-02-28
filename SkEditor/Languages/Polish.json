@@ -67,6 +67,7 @@
   "DeleteButton": "Usuń",
   "CancelButton": "Anuluj",
   "ContinueButton": "Kontynuuj",
+  "BrowseButton": "Przeglądaj",
   "Error": "Błąd",
   "Success": "Sukces",
   "Attention": "Uwaga!",
@@ -416,6 +417,7 @@
   "RemoteConnectionAddSuccessTitle": "Dodano połączenie",
   "RemoteConnectionAddSuccessMessage": "Pomyślnie dodano zdalne połączenie z {0}!",
   "RemoteConnectionInvalidKeyPath": "Ścieżka do klucza jest nieprawidłowa lub plik nie istnieje.",
+  "RemoteConnectionInvalidKeyFormat": "Plik klucza jest w nieobsługiwanym formacie.",
   "RemoteConnectionTestSuccess": "Pomyślnie połączono z {0} w {1} ms!",
   "RemoteConnectionTestFailed": "Nie udało się połączyć z {0}"
 }

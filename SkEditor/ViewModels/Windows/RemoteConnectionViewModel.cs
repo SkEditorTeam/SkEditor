@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Renci.SshNet;
+using Renci.SshNet.Common;
 using SkEditor.API;
 using SkEditor.Utilities.Localization;
 
@@ -147,6 +148,12 @@ public partial class RemoteConnectionViewModel : ObservableObject
             }
 
             InfoBarMessage = Translation.Get(TranslationKey.RemoteConnectionTestFailed, hostPort);
+            InfoBarSeverity = InfoBarSeverity.Error;
+            return false;
+        }
+        catch (SshException ex) when (ex.Message == "Invalid private key file.")
+        {
+            InfoBarMessage = Translation.Get(TranslationKey.RemoteConnectionInvalidKeyFormat);
             InfoBarSeverity = InfoBarSeverity.Error;
             return false;
         }

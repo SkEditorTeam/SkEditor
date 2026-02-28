@@ -423,6 +423,7 @@
   "RemoteConnectionAddSuccessTitle": "Connection Added",
   "RemoteConnectionAddSuccessMessage": "Successfully added the remote connection to {0}!",
   "RemoteConnectionInvalidKeyPath": "The specified key file path is invalid or the file does not exist.",
+  "RemoteConnectionInvalidKeyFormat": "The specified key file is not in a valid format.",
   "RemoteConnectionTestSuccess": "Successfully connected to {0} in {1} ms!",
   "RemoteConnectionTestFailed": "Failed to connect to {0}"
 }
