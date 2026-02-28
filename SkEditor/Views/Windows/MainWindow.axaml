@@ -41,7 +41,6 @@
                     Background="{DynamicResource TitleBarBackground}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Margin="12,0,0,0" Height="20" Width="20" />
-                    <Button Name="TitleBarButton" Margin="12,0,0,0" Content="Notify"/>
                     <controls:MainMenuControl Name="MainMenu" Margin="15,0,0,0" />
                 </StackPanel>
             </Border>

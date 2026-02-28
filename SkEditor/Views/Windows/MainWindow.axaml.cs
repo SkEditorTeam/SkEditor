@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -230,19 +229,6 @@ public partial class MainWindow : AppWindow
                         await CrashChecker.CheckForCrash();
 
                         await AddonUpdateChecker.CheckForUpdates();
-
-                        TitleBarButton.Command = new AsyncRelayCommand(async () =>
-                        {
-                            await Dispatcher.UIThread.InvokeAsync(() =>
-                            {
-                                NotificationManager.Show(
-                                    "Saved", 
-                                    "Your work has been saved successfully!", 
-                                    NotificationType.Success, 
-                                    TimeSpan.FromSeconds(5)
-                                );
-                            });
-                        });
                     }
                     catch (Exception exc)
                     {

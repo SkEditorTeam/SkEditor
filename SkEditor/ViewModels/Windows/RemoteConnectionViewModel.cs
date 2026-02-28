@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
@@ -41,6 +43,8 @@ public partial class RemoteConnectionViewModel : ObservableObject
 
     public AsyncRelayCommand TestConnectionCommand { get; }
     public AsyncRelayCommand AddConnectionCommand { get; }
+    
+    public event EventHandler? CloseRequested;
 
     public RemoteConnectionViewModel()
     {
@@ -53,7 +57,22 @@ public partial class RemoteConnectionViewModel : ObservableObject
         bool connectionSuccessful = await TestConnection();
         if (connectionSuccessful)
         {
-            await SkEditorAPI.Windows.ShowMessage("Added", $"Successfully added connection to {Host}:{Port}.");
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                SkEditorAPI.Windows.GetMainWindow()?.NotificationManager.Show(
+                    "Connection added!",
+                    $"Successfully added connection to {Host}:{(!string.IsNullOrWhiteSpace(Port) ? Port : 22)}.",
+                    NotificationType.Success,
+                    TimeSpan.FromSeconds(5)
+                );
+                
+                CloseRequested?.Invoke(this, EventArgs.Empty);
+                
+                Host = "";
+                Port = "";
+                Username = "";
+                Password = "";
+            });
         }
         else
         {
