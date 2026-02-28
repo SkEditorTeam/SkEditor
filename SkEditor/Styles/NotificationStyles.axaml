@@ -225,13 +225,8 @@
             <Setter Property="Background" Value="#20FF6A3D" />
         </Style>
         <Style Selector="^:warning /template/ controls|IconSourceElement#PART_Icon">
-            <Setter Property="IconSource">
-                <icons:SymbolIconSource Symbol="Important"/>
-            </Setter>
+            <Setter Property="IconSource" Value="{StaticResource ExclamationMarkIcon}"/>
             <Setter Property="Foreground" Value="#FF7B34" />
-            <Setter Property="RenderTransform">
-                <TranslateTransform X="-1" />
-            </Setter>
         </Style>
 
         <Style Selector="^:error /template/ Border#PART_IconBorder">

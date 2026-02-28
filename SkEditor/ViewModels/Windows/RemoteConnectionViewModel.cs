@@ -111,7 +111,7 @@ public partial class RemoteConnectionViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            InfoBarMessage = $"Error connecting to {host}:{port}: {ex.Message}";
+            InfoBarMessage = ex.Message;
             InfoBarSeverity = InfoBarSeverity.Error;
             return false;
         }
