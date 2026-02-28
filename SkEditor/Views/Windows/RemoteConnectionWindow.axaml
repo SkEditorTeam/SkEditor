@@ -48,14 +48,6 @@
                           Message="{Binding InfoBarMessage}"
                           Margin="0,0,0,16"
                           MinHeight="32" MaxHeight="72" />
-        
-        <!-- <controls:InfoBar DockPanel.Dock="Bottom" -->
-        <!--                   Name="InfoBar" IsClosable="False" -->
-        <!--                   Severity="Error" -->
-        <!--                   IsOpen="True" -->
-        <!--                   Message="Error connecting to localhost:23: Nie można nawiązać połączenia, ponieważ komputer docelowy aktywnie go odmawia." -->
-        <!--                   Margin="0,0,0,16" -->
-        <!--                   MinHeight="32" MaxHeight="72" /> -->
 
         <StackPanel Spacing="14">
             <StackPanel Spacing="4">

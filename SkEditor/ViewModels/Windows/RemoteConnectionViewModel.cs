@@ -43,7 +43,7 @@ public partial class RemoteConnectionViewModel : ObservableObject
 
     public AsyncRelayCommand TestConnectionCommand { get; }
     public AsyncRelayCommand AddConnectionCommand { get; }
-    
+
     public event EventHandler? CloseRequested;
 
     public RemoteConnectionViewModel()
@@ -55,30 +55,26 @@ public partial class RemoteConnectionViewModel : ObservableObject
     private async Task AddConnection()
     {
         bool connectionSuccessful = await TestConnection();
-        if (connectionSuccessful)
-        {
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                SkEditorAPI.Windows.GetMainWindow()?.NotificationManager.Show(
-                    "Connection added!",
-                    $"Successfully added connection to {Host}:{(!string.IsNullOrWhiteSpace(Port) ? Port : 22)}.",
-                    NotificationType.Success,
-                    TimeSpan.FromSeconds(5)
-                );
-                
-                CloseRequested?.Invoke(this, EventArgs.Empty);
-                
-                Host = "";
-                Port = "";
-                Username = "";
-                Password = "";
-            });
-        }
-        else
+        if (!connectionSuccessful)
         {
             InfoBarMessage = "Cannot add connection. Please fix the connection issues first.";
             InfoBarSeverity = InfoBarSeverity.Error;
+
+            return;
         }
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            SkEditorAPI.Windows.GetMainWindow()?.NotificationManager.Show(
+                "Connection added!",
+                $"Successfully added connection to {Host}:{(!string.IsNullOrWhiteSpace(Port) ? Port : 22)}.",
+                NotificationType.Success,
+                TimeSpan.FromSeconds(5)
+            );
+
+            CloseRequested?.Invoke(this, EventArgs.Empty);
+            Clear();
+        });
     }
 
     private async Task<bool> TestConnection()
@@ -115,5 +111,15 @@ public partial class RemoteConnectionViewModel : ObservableObject
             InfoBarSeverity = InfoBarSeverity.Error;
             return false;
         }
+    }
+
+    private void Clear()
+    {
+        Host = "";
+        Port = "";
+        Username = "";
+        Password = "";
+        InfoBarMessage = null;
+        InfoBarSeverity = InfoBarSeverity.Informational;
     }
 }
