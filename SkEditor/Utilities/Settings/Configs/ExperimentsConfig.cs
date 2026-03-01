@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization.Metadata;
+﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings;
@@ -7,6 +8,8 @@ namespace SkEditor.Utilities.Settings;
 public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
 {
     protected override JsonTypeInfo<ExperimentsConfig> TypeInfo => AppJsonContext.Default.ExperimentsConfig;
+    
+    [JsonIgnore]
     public override string FileName => "experiments.json";
 
     /// <summary>

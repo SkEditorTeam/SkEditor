@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using SkEditor.Utilities.Settings.Attributes;
 
@@ -9,6 +10,7 @@ public partial class StateConfig : BaseConfig<StateConfig>
 {
     protected override JsonTypeInfo<StateConfig> TypeInfo => AppJsonContext.Default.StateConfig;
 
+    [JsonIgnore]
     public override string FileName => "state.json";
 
     /// <summary>

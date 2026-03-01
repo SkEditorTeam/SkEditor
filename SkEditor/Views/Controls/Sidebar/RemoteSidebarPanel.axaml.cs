@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using GitCredentialManager;
 using SkEditor.API;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities;
@@ -13,18 +14,33 @@ namespace SkEditor.Views.Controls.Sidebar;
 
 public partial class RemoteSidebarPanel : UserControl
 {
+    const string CredentialTarget = "skeditor://sftp-connections";
+    
     public RemoteSidebarPanel()
     {
         InitializeComponent();
-        
+
         NewRemoteConnectionButton.Command = new AsyncRelayCommand(async () =>
         {
             var window = new RemoteConnectionWindow();
             RemoteConnectionInfo info = await window.ShowDialogOnMainWindow<RemoteConnectionInfo>();
             if (info == null) return;
-            
-            SkEditorAPI.Logs.Info($"Added new remote connection {info}");
-            SkEditorAPI.Logs.Info($"Added new remote connection with name '{info.Name}': Host={info.Host}, Port={info.Port}, Username={info.Username}, AuthMethod={info.AuthMethod}");
+
+            RemoteConnection connection = new(info);
+
+            if (connection.AuthMethod == RemoteAuthMethod.Password)
+            {
+                ICredentialStore store = CredentialManager.Create("SkEditor Remote Connections");
+                store.AddOrUpdate(CredentialTarget, connection.Id.ToString(), info.Password);
+
+                ICredential? cred = store.Get(CredentialTarget, connection.Id.ToString());
+                if (cred != null)
+                {
+                    SkEditorAPI.Logs.Info($"Hasło dla {connection.Name} siedzi bezpiecznie w sejfie: {cred.Password}");
+                }
+            }
+
+            SkEditorAPI.Configs.GetConnectionsConfig().Connections.Add(connection);
         });
     }
 

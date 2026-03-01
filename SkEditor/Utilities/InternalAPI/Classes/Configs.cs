@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SkEditor.API;
 using SkEditor.Utilities.Settings;
+using SkEditor.Utilities.Settings.Configs;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using SecretsConfig = SkEditor.Utilities.Settings.Configs.SecretsConfig;
@@ -19,7 +20,8 @@ public partial class Configs : IConfigs
         new AppSettings(),
         new SecretsConfig(),
         new ExperimentsConfig(),
-        new StateConfig()
+        new StateConfig(),
+        new ConnectionsConfig()
     ];
 
     public string GetAppDataPath()
@@ -64,6 +66,12 @@ public partial class Configs : IConfigs
     {
         return GetConfig<StateConfig>() ??
                throw new InvalidOperationException("StateConfig config not found.");
+    }
+
+    public ConnectionsConfig GetConnectionsConfig()
+    {
+        return GetConfig<ConnectionsConfig>() ??
+               throw new InvalidOperationException("ConnectionsConfig config not found.");
     }
 
     public BinarySettings GetBinarySettings()

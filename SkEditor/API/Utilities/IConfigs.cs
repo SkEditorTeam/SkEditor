@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SkEditor.Utilities.Settings;
+using SkEditor.Utilities.Settings.Configs;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using SecretsConfig = SkEditor.Utilities.Settings.Configs.SecretsConfig;
@@ -67,6 +68,12 @@ public interface IConfigs
     /// </summary>
     /// <returns>The state configuration.</returns>
     StateConfig GetStateConfig();
+    
+    /// <summary>
+    ///    Get the connections configuration.
+    /// </summary>
+    /// <returns>The connections configuration.</returns>
+    ConnectionsConfig GetConnectionsConfig();
 
     /// <summary>
     ///     Get the binary settings.

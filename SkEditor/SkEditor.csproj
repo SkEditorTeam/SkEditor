@@ -61,6 +61,7 @@
         <!-- UI, styling -->
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.12"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.12"/>
+        <PackageReference Include="Devlooped.CredentialManager" Version="2.6.1.1" />
         <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.0.319">
             <PrivateAssets>none</PrivateAssets>
             <ExcludeAssets>none</ExcludeAssets>
