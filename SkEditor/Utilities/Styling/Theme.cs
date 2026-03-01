@@ -65,6 +65,12 @@ public partial class Theme
 
     [ThemeResource]
     public Brush CurrentLineBorder { get; set; } = C("#0DFFFFFF");
+    
+    [ThemeResource]
+    public Brush SidebarIconForeground { get; set; } = C("#FFCCCCCC");
+    
+    [ThemeResource]
+    public Brush SidebarIconSelectedForeground { get; set; } = C("#FF60CDFF");
 
     [ThemeResource]
     public Brush AccentColor { get; set; } = C("#FFFFFF");

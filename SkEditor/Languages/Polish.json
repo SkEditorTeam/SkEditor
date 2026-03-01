@@ -372,6 +372,8 @@
   "ThemeEditorFocusedTextBoxBackground": "Tło aktywnego pola tekstowego",
   "ThemeEditorCurrentLineBackground": "Tło aktualnej linii",
   "ThemeEditorCurrentLineBorder": "Obramowanie aktualnej linii",
+  "ThemeEditorSidebarIconForeground": "Kolor ikony paska bocznego",
+  "ThemeEditorSidebarIconSelectedForeground": "Kolor wybranej ikony paska bocznego",
   "ThemeEditorAccentColor": "Kolor wiodący",
   "WelcomePageTitle": "Witaj",
   "WelcomePageGettingStarted": "Pierwsze kroki",

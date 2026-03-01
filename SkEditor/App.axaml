@@ -61,6 +61,9 @@
 
         <Brush x:Key="CurrentLineBackground">#05FFFFFF</Brush>
         <Brush x:Key="CurrentLineBorder">#0DFFFFFF</Brush>
+        
+        <Brush x:Key="SidebarIconForeground">#FFCCCCCC</Brush>
+        <Brush x:Key="SidebarIconSelectedForeground">#FFFFB8E0</Brush>
 
         <Thickness x:Key="FlyoutContentPadding">10</Thickness>
 

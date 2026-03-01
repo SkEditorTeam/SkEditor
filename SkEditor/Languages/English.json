@@ -378,6 +378,8 @@
   "ThemeEditorFocusedTextBoxBackground": "Focused Text Box Background",
   "ThemeEditorCurrentLineBackground": "Current Line Background",
   "ThemeEditorCurrentLineBorder": "Current Line Border",
+  "ThemeEditorSidebarIconForeground": "Sidebar Icon Color",
+  "ThemeEditorSidebarIconSelectedForeground": "Sidebar Icon Selected Color",
   "ThemeEditorAccentColor": "Accent Color",
   "WelcomePageTitle": "Welcome",
   "WelcomePageGettingStarted": "Getting Started",

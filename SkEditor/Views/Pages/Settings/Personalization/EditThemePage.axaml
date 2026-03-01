@@ -40,6 +40,10 @@
                                                       ExpanderHeader="{localization:Translate ThemeEditorCurrentLineBackground}" />
                 <controls:ColorPickerSettingsExpander Name="CurrentLineBorderExpander"
                                                       ExpanderHeader="{localization:Translate ThemeEditorCurrentLineBorder}" />
+                <controls:ColorPickerSettingsExpander Name="SidebarIconForegroundExpander"
+                                                      ExpanderHeader="{localization:Translate ThemeEditorSidebarIconForeground}" />
+                <controls:ColorPickerSettingsExpander Name="SidebarIconSelectedForegroundExpander"
+                                                      ExpanderHeader="{localization:Translate ThemeEditorSidebarIconSelectedForeground}" />
                 <controls:ColorPickerSettingsExpander Name="AccentColorExpander"
                                                       ExpanderHeader="{localization:Translate ThemeEditorAccentColor}" />
             </StackPanel>
