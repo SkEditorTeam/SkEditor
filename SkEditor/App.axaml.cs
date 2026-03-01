@@ -11,11 +11,14 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using SkEditor.API;
+using SkEditor.Services;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Startup;
+using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Windows;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
@@ -25,6 +28,8 @@ namespace SkEditor;
 
 public class App : Application
 {
+    public static IServiceProvider Services { get; private set; } = null!;
+    
     private SplashScreen? _splashScreen;
 
     public App()
@@ -40,10 +45,15 @@ public class App : Application
     {
         AvaloniaXamlLoader.Load(this);
     }
-
+    
     public override void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
+        
+        var collection = new ServiceCollection();
+        ConfigureServices(collection);
+
+        Services = collection.BuildServiceProvider();
 
         Stopwatch.Start();
 
@@ -54,7 +64,8 @@ public class App : Application
 
         if (SplashScreenHandler.ShouldShowSplash())
         {
-            _splashScreen = new SplashScreen();
+            var splashScreen = Services.GetRequiredService<SplashScreen>();
+            _splashScreen = splashScreen;
             desktop.MainWindow = _splashScreen;
             _splashScreen.Show();
         }
@@ -254,5 +265,16 @@ public class App : Application
         {
             Log.Debug(ex, "Error connecting to named pipe");
         }
+    }
+    
+    private static void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSingleton<RemoteConnectionService>();
+        
+        services.AddTransient<RemoteConnectionViewModel>();
+        services.AddTransient<RemoteConnectionWindow>();
+        
+        services.AddTransient<SplashScreen>();
+        services.AddTransient<MainWindow>();
     }
 }

@@ -13,9 +13,16 @@ public partial class RemoteConnectionWindow : AppWindow
     {
         InitializeComponent();
         Focusable = true;
+    }
 
-        if (DataContext is not RemoteConnectionViewModel vm) return;
+    public RemoteConnectionWindow(RemoteConnectionViewModel viewModel) : this()
+    {
+        DataContext = viewModel;
+        SetupViewModelEvents(viewModel);
+    }
 
+    private void SetupViewModelEvents(RemoteConnectionViewModel vm)
+    {
         vm.CloseRequested += (_, _) =>
         {
             var info = vm.ConnectionInfo;
@@ -31,6 +38,7 @@ public partial class RemoteConnectionWindow : AppWindow
             };
             Close(infoSnapshot);
         };
+
         vm.RequestKeyFilePicker = SelectKeyFile;
     }
 
@@ -45,8 +53,10 @@ public partial class RemoteConnectionWindow : AppWindow
             AllowMultiple = false,
             FileTypeFilter =
             [
-                new FilePickerFileType(Translation.Get(TranslationKey.RemoteConnectionSelectKeyKeyFiles)) { Patterns = ["*.pem", "*.key", "*.ppk", "*.*"] },
-                new FilePickerFileType(Translation.Get(TranslationKey.RemoteConnectionSelectKeyAllFiles)) { Patterns = ["*.*"] }
+                new FilePickerFileType(Translation.Get(TranslationKey.RemoteConnectionSelectKeyKeyFiles))
+                    { Patterns = ["*.pem", "*.key", "*.ppk", "*.*"] },
+                new FilePickerFileType(Translation.Get(TranslationKey.RemoteConnectionSelectKeyAllFiles))
+                    { Patterns = ["*.*"] }
             ]
         });
 

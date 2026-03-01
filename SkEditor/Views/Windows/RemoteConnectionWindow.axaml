@@ -4,14 +4,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
         xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-        xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
         xmlns:converters="clr-namespace:SkEditor.Converters"
         xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.RemoteConnectionWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate RemoteConnectionNewWindowTitle}" Height="500" Width="375" CanResize="False"
-        DataContext="{x:Static viewModels:ViewModelLocator.RemoteConnectionViewModel}"
         x:DataType="windows:RemoteConnectionViewModel"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 

@@ -1,8 +1,8 @@
-﻿using System;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using GitCredentialManager;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities;
@@ -22,7 +22,7 @@ public partial class RemoteSidebarPanel : UserControl
 
         NewRemoteConnectionButton.Command = new AsyncRelayCommand(async () =>
         {
-            var window = new RemoteConnectionWindow();
+            var window = App.Services.GetRequiredService<RemoteConnectionWindow>();
             RemoteConnectionInfo info = await window.ShowDialogOnMainWindow<RemoteConnectionInfo>();
             if (info == null) return;
 

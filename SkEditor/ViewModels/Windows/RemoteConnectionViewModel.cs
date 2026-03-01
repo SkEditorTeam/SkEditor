@@ -14,11 +14,12 @@ using Renci.SshNet;
 using Renci.SshNet.Common;
 using SkEditor.API;
 using SkEditor.Models.Remote;
+using SkEditor.Services;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Windows;
 
-public partial class RemoteConnectionViewModel : ObservableObject
+public partial class RemoteConnectionViewModel(RemoteConnectionService connectionService) : ObservableObject
 {
     [ObservableProperty]
     private RemoteConnectionInfo _connectionInfo = new();
@@ -66,7 +67,10 @@ public partial class RemoteConnectionViewModel : ObservableObject
     [RelayCommand]
     private async Task<bool> TestConnection()
     {
-        string host =ConnectionInfo. Host;
+        connectionService.Test();
+        return true;
+        
+        string host = ConnectionInfo.Host;
         int port = int.TryParse(ConnectionInfo.Port, out int p) ? p : 22;
         string username = ConnectionInfo.Username;
         string password = ConnectionInfo.Password;
