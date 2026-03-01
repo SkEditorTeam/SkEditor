@@ -1,6 +1,9 @@
-﻿namespace SkEditor.Contracts.Services;
+﻿using System.Threading.Tasks;
+using SkEditor.Models.Remote;
+
+namespace SkEditor.Contracts.Services;
 
 public interface IRemoteConnectionService
 {
-    void Test();
+    Task<RemoteConnectionTestResult> TestConnection(RemoteConnectionInfo connectionInfo);
 }
