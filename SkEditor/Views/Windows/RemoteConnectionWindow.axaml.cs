@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Windowing;
+using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Windows;
 
@@ -15,7 +16,21 @@ public partial class RemoteConnectionWindow : AppWindow
 
         if (DataContext is not RemoteConnectionViewModel vm) return;
 
-        vm.CloseRequested += (_, _) => Close();
+        vm.CloseRequested += (_, _) =>
+        {
+            var info = vm.ConnectionInfo;
+            var infoSnapshot = new RemoteConnectionInfo
+            {
+                Name = info.Name,
+                Host = info.Host,
+                Port = info.Port,
+                Username = info.Username,
+                AuthMethod = info.AuthMethod,
+                Password = info.Password,
+                KeyFilePath = info.KeyFilePath
+            };
+            Close(infoSnapshot);
+        };
         vm.RequestKeyFilePicker = SelectKeyFile;
     }
 

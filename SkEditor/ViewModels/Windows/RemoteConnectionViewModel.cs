@@ -13,6 +13,7 @@ using FluentAvalonia.UI.Controls;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using SkEditor.API;
+using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Windows;
@@ -20,59 +21,16 @@ namespace SkEditor.ViewModels.Windows;
 public partial class RemoteConnectionViewModel : ObservableObject
 {
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _name = "";
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _host = "";
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _port = "";
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _username = "";
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _password = "";
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _keyFilePath = "";
-
+    private RemoteConnectionInfo _connectionInfo = new();
+    
     [ObservableProperty]
     private string? _infoBarMessage;
 
     [ObservableProperty]
     private InfoBarSeverity _infoBarSeverity = InfoBarSeverity.Informational;
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(
-        nameof(RequiredFieldsFilled),
-        nameof(ConnectionFieldsFilled),
-        nameof(IsPasswordAuth),
-        nameof(IsPrivateKeyAuth))]
-    private AuthMethod _authMethod = AuthMethod.Password;
-
-    public IReadOnlyList<AuthMethod> AuthMethods { get; } =
-        Enum.GetValues<AuthMethod>().ToList();
-
-    public bool IsPasswordAuth => AuthMethod == AuthMethod.Password;
-    public bool IsPrivateKeyAuth => AuthMethod == AuthMethod.PrivateKey;
-
-    public bool ConnectionFieldsFilled =>
-        !string.IsNullOrWhiteSpace(Host) &&
-        !string.IsNullOrWhiteSpace(Username) &&
-        (IsPasswordAuth
-            ? !string.IsNullOrWhiteSpace(Password)
-            : !string.IsNullOrWhiteSpace(KeyFilePath));
-
-    public bool RequiredFieldsFilled =>
-        !string.IsNullOrWhiteSpace(Name) &&
-        ConnectionFieldsFilled;
+    public IReadOnlyList<RemoteAuthMethod> AuthMethods { get; } =
+        Enum.GetValues<RemoteAuthMethod>().ToList();
 
     public event EventHandler? CloseRequested;
     public Func<Task<string?>>? RequestKeyFilePicker { get; set; }
@@ -91,7 +49,7 @@ public partial class RemoteConnectionViewModel : ObservableObject
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            string hostPort = $"{Host}:{(!string.IsNullOrWhiteSpace(Port) ? Port : "22")}";
+            string hostPort = $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
 
             SkEditorAPI.Windows.GetMainWindow()?.NotificationManager.Show(
                 Translation.Get(TranslationKey.RemoteConnectionAddSuccessTitle),
@@ -108,13 +66,13 @@ public partial class RemoteConnectionViewModel : ObservableObject
     [RelayCommand]
     private async Task<bool> TestConnection()
     {
-        string host = Host;
-        int port = int.TryParse(Port, out int p) ? p : 22;
-        string username = Username;
-        string password = Password;
+        string host =ConnectionInfo. Host;
+        int port = int.TryParse(ConnectionInfo.Port, out int p) ? p : 22;
+        string username = ConnectionInfo.Username;
+        string password = ConnectionInfo.Password;
+        string keyFilePath = ConnectionInfo.KeyFilePath;
 
-
-        bool invalidKeyFile = IsPrivateKeyAuth && (string.IsNullOrWhiteSpace(KeyFilePath) || !File.Exists(KeyFilePath));
+        bool invalidKeyFile = ConnectionInfo.IsPrivateKeyAuth && (string.IsNullOrWhiteSpace(keyFilePath) || !File.Exists(keyFilePath));
         if (invalidKeyFile)
         {
             InfoBarMessage = Translation.Get(TranslationKey.RemoteConnectionInvalidKeyPath);
@@ -124,9 +82,9 @@ public partial class RemoteConnectionViewModel : ObservableObject
 
         try
         {
-            AuthenticationMethod authMethod = IsPasswordAuth
+            AuthenticationMethod authMethod = ConnectionInfo.IsPasswordAuth
                 ? new PasswordAuthenticationMethod(username, password)
-                : new PrivateKeyAuthenticationMethod(username, new PrivateKeyFile(KeyFilePath));
+                : new PrivateKeyAuthenticationMethod(username, new PrivateKeyFile(keyFilePath));
 
             var connectionInfo = new ConnectionInfo(host, port, username, authMethod);
 
@@ -174,23 +132,14 @@ public partial class RemoteConnectionViewModel : ObservableObject
 
         if (!string.IsNullOrEmpty(path))
         {
-            KeyFilePath = path;
+            ConnectionInfo.KeyFilePath = path;
         }
     }
 
     private void Clear()
     {
-        Host = "";
-        Port = "";
-        Username = "";
-        Password = "";
+        ConnectionInfo = new RemoteConnectionInfo();
         InfoBarMessage = null;
         InfoBarSeverity = InfoBarSeverity.Informational;
     }
-}
-
-public enum AuthMethod
-{
-    Password,
-    PrivateKey
 }
