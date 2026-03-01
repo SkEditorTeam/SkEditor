@@ -398,6 +398,7 @@
   "WelcomePageRecentEmpty": "Nie ma tu jeszcze żadnych plików ani folderów",
   "RemoteConnectionNewWindowTitle": "Nowe połączenie zdalne",
   "RemoteConnectionTestConnectionTooltip": "Przetestuj ustawienia połączenia",
+  "RemoteConnectionAddConnectionMissingFields": "Wypełnij najpierw wszystkie wymagane pola",
   "RemoteConnectionAddButton": "Dodaj połączenie",
   "RemoteConnectionFieldName": "Nazwa",
   "RemoteConnectionFieldNamePlaceholder": "Mój serwer",

@@ -404,6 +404,7 @@
   "WelcomePageRecentEmpty": "No recent files or folders found",
   "RemoteConnectionNewWindowTitle": "New Remote Connection",
   "RemoteConnectionTestConnectionTooltip": "Test the connection settings",
+  "RemoteConnectionAddConnectionMissingFields": "Please fill in all required fields first",
   "RemoteConnectionAddButton": "Add Connection",
   "RemoteConnectionFieldName": "Name",
   "RemoteConnectionFieldNamePlaceholder": "My Server",
