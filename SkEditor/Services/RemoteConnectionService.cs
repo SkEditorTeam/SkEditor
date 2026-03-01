@@ -1,8 +1,9 @@
 ﻿using SkEditor.API;
+using SkEditor.Contracts.Services;
 
 namespace SkEditor.Services;
 
-public class RemoteConnectionService
+public class RemoteConnectionService : IRemoteConnectionService
 {
     public void Test()
     {

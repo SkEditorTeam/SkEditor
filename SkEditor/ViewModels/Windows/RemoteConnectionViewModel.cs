@@ -13,13 +13,14 @@ using FluentAvalonia.UI.Controls;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using SkEditor.API;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
 using SkEditor.Services;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Windows;
 
-public partial class RemoteConnectionViewModel(RemoteConnectionService connectionService) : ObservableObject
+public partial class RemoteConnectionViewModel(IRemoteConnectionService connectionService) : ObservableObject
 {
     [ObservableProperty]
     private RemoteConnectionInfo _connectionInfo = new();

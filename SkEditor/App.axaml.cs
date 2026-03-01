@@ -14,6 +14,7 @@ using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using SkEditor.API;
+using SkEditor.Contracts.Services;
 using SkEditor.Services;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
@@ -269,7 +270,7 @@ public class App : Application
     
     private static void ConfigureServices(IServiceCollection services)
     {
-        services.AddSingleton<RemoteConnectionService>();
+        services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
         
         services.AddTransient<RemoteConnectionViewModel>();
         services.AddTransient<RemoteConnectionWindow>();
