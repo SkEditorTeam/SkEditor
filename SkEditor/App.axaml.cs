@@ -1,23 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Services;
-using SkEditor.Utilities;
-using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Startup;
 using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Windows;
@@ -53,7 +43,6 @@ public class App : Application
         
         var collection = new ServiceCollection();
         ConfigureServices(collection);
-
         Services = collection.BuildServiceProvider();
 
         Stopwatch.Start();
@@ -71,206 +60,17 @@ public class App : Application
             _splashScreen.Show();
         }
 
-        Dispatcher.UIThread.Post(() => CompleteApplicationStart(desktop), DispatcherPriority.Background);
-    }
-
-    private async void CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop)
-    {
-        try
+        Dispatcher.UIThread.Post(() =>
         {
-            await _splashScreen.TryUpdateStatusAsync("Initializing...");
-
-            _ = Task.Run(async () =>
-            {
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-                await _splashScreen.TryUpdateStatusAsync("Setting up logging...");
-                SetupLogging();
-
-                await _splashScreen.TryUpdateStatusAsync("Configuring error handling...");
-                ConfigureErrorHandling();
-
-                await _splashScreen.TryUpdateStatusAsync("Checking for other instances...");
-
-                bool continueStartup = await Dispatcher.UIThread.InvokeAsync(() => HandleSingleInstance(desktop));
-                if (!continueStartup)
-                {
-                    return;
-                }
-
-                await _splashScreen.TryUpdateStatusAsync("Loading configuration...");
-                SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
-
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    AppWindow.AlwaysFallback =
-                        SkEditorAPI.Configs.GetAppSettings().ForceNativeTitleBar;
-                });
-
-                await SkEditorAPI.Configs.MigrateConfigsAsync();
-                await SkEditorAPI.Configs.LoadAllConfigsAsync();
-
-                await _splashScreen.TryUpdateStatusAsync("Creating main window...");
-
-                MainWindow mainWindow =
-                    await Dispatcher.UIThread.InvokeAsync(() => new MainWindow(_splashScreen) { IsVisible = false });
-
-                await _splashScreen.TryUpdateStatusAsync("Starting named pipe server...");
-
-                NamedPipeServer.Start();
-
-                await _splashScreen.TryUpdateStatusAsync("Initializing main window...");
-
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    desktop.MainWindow = mainWindow;
-                    mainWindow.ApplyTemplate();
-
-#if DEBUG
-                    // The Diagnostics package is only included in Debug builds,
-                    // so after a Release compilation this line may show an error until recompiled.
-                    mainWindow.AttachDevTools();
-#endif
-                });
-            }).ContinueWith(async t =>
-            {
-                if (!t.IsFaulted || t.Exception == null)
-                {
-                    return;
-                }
-
-                AggregateException flattenedException = t.Exception.Flatten();
-                Exception innermost = flattenedException.InnerExceptions.FirstOrDefault() ?? flattenedException;
-
-                Log.Error(t.Exception, "Error creating SkEditor: {ExceptionMessage}\nStack Trace: {StackTrace}",
-                    innermost.Message,
-                    innermost.StackTrace);
-
-                await _splashScreen.TryUpdateStatusAsync(
-                    $"Error: {t.Exception.InnerException?.Message ?? t.Exception.Message}");
-
-                await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
-                    DispatcherPriority.Background,
-                    new CancellationTokenSource(3000).Token);
-            }, TaskScheduler.Default);
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Error creating SkEditor");
-            await _splashScreen.TryUpdateStatusAsync($"Error: {ex.Message}");
-
-            await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
-                DispatcherPriority.Background,
-                new CancellationTokenSource(3000).Token);
-        }
-    }
-
-    private static void SetupLogging()
-    {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SkEditor/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
-            .WriteTo.Sink(new LogsHandler())
-            .CreateLogger();
-    }
-
-    private static void ConfigureErrorHandling()
-    {
-        Dispatcher.UIThread.UnhandledException += async (_, e) =>
-        {
-            e.Handled = true;
-            string? source = e.Exception.Source;
-            if (AddonLoader.DllNames.Contains(source + ".dll"))
-            {
-                Log.Error(e.Exception, "An error occured in an addon: {Source}", source);
-                await SkEditorAPI.Windows.ShowMessage("Error",
-                    $"An error occured in an addon: {source}\n\n{e.Exception.Message}");
-                return;
-            }
-
-            const string message = "Application crashed!";
-            Log.Fatal(e.Exception, message);
-            Console.Error.WriteLine(e);
-            await Console.Error.WriteLineAsync(message);
-
-            await SkEditorAPI.Core.SaveData();
-            await AddonLoader.SaveMeta();
-
-#if !DEBUG
-            string fullException = e.Exception.ToString();
-            string encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(fullException));
-            await Task.Delay(500);
-
-            string? processPath = Environment.ProcessPath;
-            if (string.IsNullOrEmpty(processPath))
-            {
-                processPath = AppDomain.CurrentDomain.BaseDirectory;
-            }
-
-            Process.Start(processPath, "--crash " + encodedMessage);
-#endif
-            Environment.Exit(1);
-        };
-    }
-
-    private static async Task<bool> HandleSingleInstance(IClassicDesktopStyleApplicationLifetime desktop)
-    {
-        Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
-
-        bool isFirstInstance;
-        try
-        {
-            isFirstInstance = mutex.WaitOne(TimeSpan.Zero, true);
-        }
-        catch (AbandonedMutexException ex)
-        {
-            Log.Debug(ex, "Abandoned mutex");
-            isFirstInstance = true;
-        }
-
-        if (isFirstInstance)
-        {
-            desktop.Exit += (_, _) =>
-            {
-                mutex.ReleaseMutex();
-                mutex.Dispose();
-            };
-
-            return true;
-        }
-
-        await SendArgsToExistingInstance();
-        desktop.Shutdown();
-        return false;
-    }
-
-    private static async Task SendArgsToExistingInstance()
-    {
-        try
-        {
-            string[] args = Environment.GetCommandLineArgs();
-            await using NamedPipeClientStream namedPipeClientStream = new("SkEditor");
-            await namedPipeClientStream.ConnectAsync();
-            if (args is { Length: > 1 })
-            {
-                byte[] buffer = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, args.Skip(1)));
-                namedPipeClientStream.Write(buffer, 0, buffer.Length);
-            }
-            else
-            {
-                namedPipeClientStream.WriteByte(0);
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Debug(ex, "Error connecting to named pipe");
-        }
+            IStartupService startupService = Services.GetRequiredService<IStartupService>();
+            startupService.CompleteApplicationStart(desktop, _splashScreen);
+        }, DispatcherPriority.Background);
     }
     
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
+        services.AddSingleton<IStartupService, StartupService>();
         
         services.AddTransient<RemoteConnectionViewModel>();
         services.AddTransient<RemoteConnectionWindow>();
