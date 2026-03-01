@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using SkEditor.Utilities.Styling;
 using ColorPickerSettingsExpander = SkEditor.Views.Controls.ColorPickerSettingsExpander;
+using SkEditorTheme = SkEditor.Utilities.Styling.Theme;
 
 namespace SkEditor.Views.Pages.Settings.Personalization;
 
@@ -18,20 +19,22 @@ public partial class EditThemePage : UserControl
 
     private void SetUpColorPickers()
     {
-        SetUpColorPicker(WindowBackgroundExpander, "BackgroundColor");
-        SetUpColorPicker(SmallWindowBackgroundExpander, "SmallWindowBackgroundColor");
-        SetUpColorPicker(EditorBackgroundExpander, "EditorBackgroundColor");
-        SetUpColorPicker(EditorForegroundExpander, "EditorTextColor");
-        SetUpColorPicker(LineNumbersExpander, "LineNumbersColor");
-        SetUpColorPicker(SelectionExpander, "SelectionColor");
-        SetUpColorPicker(SelectedTabItemBackgroundExpander, "SelectedTabItemBackground");
-        SetUpColorPicker(SelectedTabItemBorderExpander, "SelectedTabItemBorder");
-        SetUpColorPicker(MenuBackgroundExpander, "MenuBackground");
-        SetUpColorPicker(MenuBorderExpander, "MenuBorder");
-        SetUpColorPicker(TextBoxFocusedBackgroundExpander, "TextBoxFocusedBackground");
-        SetUpColorPicker(CurrentLineBackgroundExpander, "CurrentLineBackground");
-        SetUpColorPicker(CurrentLineBorderExpander, "CurrentLineBorder");
-        SetUpColorPicker(AccentColorExpander, "AccentColor");
+        SetUpColorPicker(WindowBackgroundExpander, nameof(SkEditorTheme.BackgroundColor));
+        SetUpColorPicker(SmallWindowBackgroundExpander, nameof(SkEditorTheme.SmallWindowBackgroundColor));
+        SetUpColorPicker(EditorBackgroundExpander, nameof(SkEditorTheme.EditorBackgroundColor));
+        SetUpColorPicker(EditorForegroundExpander, nameof(SkEditorTheme.EditorTextColor));
+        SetUpColorPicker(LineNumbersExpander, nameof(SkEditorTheme.LineNumbersColor));
+        SetUpColorPicker(SelectionExpander, nameof(SkEditorTheme.SelectionColor));
+        SetUpColorPicker(SelectedTabItemBackgroundExpander, nameof(SkEditorTheme.SelectedTabItemBackground));
+        SetUpColorPicker(SelectedTabItemBorderExpander, nameof(SkEditorTheme.SelectedTabItemBorder));
+        SetUpColorPicker(MenuBackgroundExpander, nameof(SkEditorTheme.MenuBackground));
+        SetUpColorPicker(MenuBorderExpander, nameof(SkEditorTheme.MenuBorder));
+        SetUpColorPicker(TextBoxFocusedBackgroundExpander, nameof(SkEditorTheme.TextBoxFocusedBackground));
+        SetUpColorPicker(CurrentLineBackgroundExpander, nameof(SkEditorTheme.CurrentLineBackground));
+        SetUpColorPicker(CurrentLineBorderExpander, nameof(SkEditorTheme.CurrentLineBorder));
+        SetUpColorPicker(SidebarIconForegroundExpander, nameof(SkEditorTheme.SidebarIconForeground));
+        SetUpColorPicker(SidebarIconSelectedForegroundExpander, nameof(SkEditorTheme.SidebarIconSelectedForeground));
+        SetUpColorPicker(AccentColorExpander, nameof(SkEditorTheme.AccentColor));
     }
 
     private static void SetUpColorPicker(ColorPickerSettingsExpander expander, string propertyName)
