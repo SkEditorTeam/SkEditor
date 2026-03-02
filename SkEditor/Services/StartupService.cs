@@ -12,13 +12,14 @@ using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Services;
 
-public class StartupService : IStartupService
+public class StartupService(MainWindowFactory mainWindowFactory) : IStartupService
 {
     public async Task CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop, SplashScreen? splashScreen)
     {
@@ -59,7 +60,7 @@ public class StartupService : IStartupService
                 await splashScreen.TryUpdateStatusAsync("Creating main window...");
 
                 MainWindow mainWindow =
-                    await Dispatcher.UIThread.InvokeAsync(() => new MainWindow(splashScreen) { IsVisible = false });
+                    await Dispatcher.UIThread.InvokeAsync(() => mainWindowFactory.Create(splashScreen));
 
                 await splashScreen.TryUpdateStatusAsync("Starting named pipe server...");
 

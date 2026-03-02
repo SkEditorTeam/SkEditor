@@ -8,7 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Services;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Startup;
+using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Windows;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
@@ -69,13 +71,18 @@ public class App : Application
     
     private static void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton<MainWindowFactory>();
+        services.AddSingleton<WindowRegistry>();
         services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
         services.AddSingleton<IStartupService, StartupService>();
+        services.AddSingleton<IMenuService, MenuService>();
         
+        services.AddTransient<MainWindowViewModel>();
+        services.AddTransient<MainMenuViewModel>();
         services.AddTransient<RemoteConnectionViewModel>();
-        services.AddTransient<RemoteConnectionWindow>();
         
-        services.AddTransient<SplashScreen>();
         services.AddTransient<MainWindow>();
+        services.AddTransient<SplashScreen>();
+        services.AddTransient<RemoteConnectionWindow>();
     }
 }

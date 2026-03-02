@@ -220,7 +220,7 @@ public partial class Folder : StorageElement
     public async Task CreateNewElement(bool file)
     {
         CreateStorageElementWindow window = new(this, file);
-        await window.ShowDialog(MainWindow.Instance);
+        await window.ShowDialogOnMainWindow();
     }
 
     public void CreateFile(string name)

@@ -6,6 +6,7 @@ using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Utilities.Extensions;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using RenameElementWindow = SkEditor.Views.Windows.Projects.RenameElementWindow;
 using Symbol = FluentIcons.Common.Symbol;
@@ -62,7 +63,7 @@ public abstract class StorageElement
     public async Task OpenRenameWindow()
     {
         RenameElementWindow window = new(this);
-        await window.ShowDialog(MainWindow.Instance);
+        await window.ShowDialogOnMainWindow();
     }
 
     protected void RefreshSelf()

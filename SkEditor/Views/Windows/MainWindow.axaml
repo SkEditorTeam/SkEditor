@@ -7,8 +7,10 @@
         xmlns:avaloniaedit="using:AvaloniaEdit"
         xmlns:controls="clr-namespace:SkEditor.Views.Controls"
         xmlns:notifications="clr-namespace:SkEditor.Views.Controls.Notifications"
+        xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
+        x:DataType="windows:MainWindowViewModel"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
         Title="SkEditor" WindowState="Maximized" DragDrop.AllowDrop="True">
@@ -41,7 +43,7 @@
                     Background="{DynamicResource TitleBarBackground}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Margin="12,0,0,0" Height="20" Width="20" />
-                    <controls:MainMenuControl Name="MainMenu" Margin="15,0,0,0" />
+                    <controls:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0" />
                 </StackPanel>
             </Border>
             <Separator Grid.Row="0" Height="1" Margin="0,1,0,0" VerticalAlignment="Bottom"

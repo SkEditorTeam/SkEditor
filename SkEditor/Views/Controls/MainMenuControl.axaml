@@ -1,10 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
-             xmlns:viewModels="clr-namespace:SkEditor.ViewModels"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:converters="clr-namespace:SkEditor.Converters"
-             DataContext="{x:Static viewModels:ViewModelLocator.MainMenuViewModel}"
+             xmlns:menu="clr-namespace:SkEditor.Models.Menu"
              x:DataType="vms:MainMenuViewModel"
              x:Class="SkEditor.Views.Controls.MainMenuControl">
 
@@ -31,7 +30,7 @@
 
     <Menu Name="MainMenu" ItemsSource="{Binding Items}">
         <Menu.Styles>
-            <Style Selector="Menu MenuItem" x:DataType="vms:MainMenuItem">
+            <Style Selector="Menu MenuItem" x:DataType="menu:MainMenuItem">
                 <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                 <Setter Property="Command" Value="{Binding Command}" />
                 <Setter Property="ItemsSource" Value="{Binding SubItems}" />

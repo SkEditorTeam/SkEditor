@@ -16,9 +16,12 @@ using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using AssociationSelectionWindow = SkEditor.Views.Windows.FileTypes.AssociationSelectionWindow;
@@ -50,7 +53,7 @@ public class FileBuilder
             Tag = string.Empty
         };
 
-        MainWindow.Instance.BottomBar.IsVisible = fileType.NeedsBottomBar;
+        App.Services.GetRequiredService<WindowRegistry>().Active?.BottomBar.IsVisible = fileType.NeedsBottomBar;
 
         if (!string.IsNullOrWhiteSpace(path))
         {
@@ -124,7 +127,7 @@ public class FileBuilder
             }
 
             AssociationSelectionWindow window = new(handlers);
-            await window.ShowDialog(MainWindow.Instance);
+            await window.ShowDialogOnMainWindow();
             FileTypes.FileAssociation? selected = window.SelectedAssociation;
             if (selected == null)
             {

@@ -9,7 +9,9 @@ using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
@@ -130,15 +132,17 @@ public class FileHandler
             return;
         }
 
+        MainWindow? mainWindow = App.Services.GetRequiredService<WindowRegistry>().Active;
+        
         OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
         if (file == null)
         {
-            MainWindow.Instance.BottomBar.IsVisible = false;
+            mainWindow?.BottomBar.IsVisible = false;
             return;
         }
 
         FileTypes.FileType? fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header);
-        MainWindow.Instance.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
+        mainWindow?.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
 
     public static void NewFile()

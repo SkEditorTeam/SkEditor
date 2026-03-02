@@ -13,7 +13,9 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkUnity;
@@ -125,8 +127,8 @@ public partial class DocElementControl : UserControl
                     IDocumentationEntry.Changer.RemoveAll => "remove all %s",
                     _ => throw new NotImplementedException("Changer not implemented")
                 };
-
-                IClipboard? clipboard = MainWindow.Instance?.Clipboard;
+                
+                IClipboard? clipboard = App.Services.GetRequiredService<WindowRegistry>().Active?.Clipboard;
                 if (clipboard == null)
                 {
                     return;

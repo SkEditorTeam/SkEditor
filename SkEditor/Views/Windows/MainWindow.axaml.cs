@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
@@ -20,7 +21,8 @@ using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Utilities.Updating;
-using SkEditor.ViewModels;
+using SkEditor.ViewModels.Controls;
+using SkEditor.ViewModels.Windows;
 using DiscordRpcUpdater = SkEditor.Utilities.Discord.DiscordRpcUpdater;
 using Symbol = FluentIcons.Common.Symbol;
 
@@ -29,33 +31,25 @@ namespace SkEditor.Views.Windows;
 public partial class MainWindow : AppWindow
 {
     private readonly KeyboardShortcutHandler? _shortcutHandler;
-    private readonly SplashScreen? _splashScreen;
+    private SplashScreen? _splashScreen;
 
     private bool _isFullyLoaded;
 
-    public MainWindow() : this(null)
+    public MainWindow()
     {
-    }
-
-    public MainWindow(SplashScreen? splashScreen = null)
-    {
-        _splashScreen = splashScreen;
-
         InitializeComponent();
+
+        DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
 
         _shortcutHandler = new KeyboardShortcutHandler(this);
         _shortcutHandler.Initialize();
-        ViewModelLocator.MainMenuViewModel.RegisterHotKeys(this);
+        App.Services.GetRequiredService<MainMenuViewModel>().RegisterHotKeys(this);
 
         WindowStyler.Style(this);
 
         ThemeEditor.LoadThemes();
         AddEvents();
-
-        Instance = this;
     }
-
-    public static MainWindow Instance { get; private set; } = null!;
 
     public bool AlreadyClosed { get; set; }
 
@@ -252,5 +246,15 @@ public partial class MainWindow : AppWindow
     public bool IsFullyLoaded()
     {
         return _isFullyLoaded;
+    }
+
+    public void SetSplashScreen(SplashScreen? splashScreen)
+    {
+        if (_splashScreen != null)
+        {
+            throw new InvalidOperationException("Splash screen has already been set.");
+        }
+
+        _splashScreen = splashScreen;
     }
 }

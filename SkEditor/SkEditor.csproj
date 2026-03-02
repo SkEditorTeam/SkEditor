@@ -100,6 +100,10 @@
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Registries\" />
+    </ItemGroup>
+
     <PropertyGroup>
         <AllowedReferenceRelatedFileExtensions>.dll;.exe</AllowedReferenceRelatedFileExtensions>
     </PropertyGroup>
