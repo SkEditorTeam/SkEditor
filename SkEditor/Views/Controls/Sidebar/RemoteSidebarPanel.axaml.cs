@@ -8,16 +8,20 @@ using SkEditor.Models.Remote;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Icons;
+using SkEditor.ViewModels.Controls;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Views.Controls.Sidebar;
 
 public partial class RemoteSidebarPanel : UserControl
 {
+    public FileTreeViewModel FileTree { get; }
+    
     const string CredentialTarget = "skeditor://sftp-connections";
     
-    public RemoteSidebarPanel()
+    public RemoteSidebarPanel(FileTreeViewModel fileTree)
     {
+        FileTree = fileTree;
         InitializeComponent();
 
         NewRemoteConnectionButton.Command = new AsyncRelayCommand(async () =>
@@ -44,9 +48,9 @@ public partial class RemoteSidebarPanel : UserControl
         });
     }
 
-    public class RemotePanel : SidebarPanel
+    public class RemotePanel(FileTreeViewModel fileTreeViewModel) : SidebarPanel
     {
-        public readonly RemoteSidebarPanel Panel = new();
+        public readonly RemoteSidebarPanel Panel = new(fileTreeViewModel);
         public override UserControl Content => Panel;
         public override IconSource Icon => Icons.GetPathIcon("RemoteDesktopIcon");
 

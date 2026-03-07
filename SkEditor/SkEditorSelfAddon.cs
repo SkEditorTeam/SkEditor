@@ -6,18 +6,18 @@ using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
 using SkEditor.Utilities.Updating;
+using SkEditor.ViewModels.Controls;
 using SkEditor.Views.Controls.Sidebar;
 using ImageViewer = SkEditor.Views.Windows.FileTypes.Images.ImageViewer;
 using SecretsConfig = SkEditor.Utilities.Settings.Configs.SecretsConfig;
 
 namespace SkEditor;
 
-public class SkEditorSelfAddon : IAddon
+public class SkEditorSelfAddon(FileTreeViewModel fileTree) : IAddon
 {
     public readonly ParserSidebarPanel.ParserPanel ParserPanel = new();
     public readonly ExplorerSidebarPanel.ExplorerPanel ProjectPanel = new();
-    public readonly RemoteSidebarPanel.RemotePanel RemotePanel = new();
-
+    public readonly RemoteSidebarPanel.RemotePanel RemotePanel = new(fileTree);
 
     private ImageIconSource _iconSource = null!;
     public string Name => "SkEditor Core";

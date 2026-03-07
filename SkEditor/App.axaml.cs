@@ -72,6 +72,7 @@ public class App : Application
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<MainWindowFactory>();
+        services.AddSingleton<SkEditorSelfAddon>();
         services.AddSingleton<WindowRegistry>();
         services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
         services.AddSingleton<IStartupService, StartupService>();
@@ -80,6 +81,7 @@ public class App : Application
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();
         services.AddTransient<RemoteConnectionViewModel>();
+        services.AddTransient<FileTreeViewModel>();
         
         services.AddTransient<MainWindow>();
         services.AddTransient<SplashScreen>();

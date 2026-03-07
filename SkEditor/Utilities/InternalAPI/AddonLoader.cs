@@ -7,6 +7,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.InternalAPI.Errors;
@@ -37,7 +38,7 @@ public static class AddonLoader
         Addons.Clear();
         LoadMeta();
 
-        SkEditorSelfAddon coreAddon = new();
+        SkEditorSelfAddon coreAddon = App.Services.GetRequiredService<SkEditorSelfAddon>();
         Addons.Add(new AddonMeta
         {
             Addon = coreAddon,
@@ -426,7 +427,7 @@ public static class AddonLoader
 
         if (addonClass == typeof(SkEditorSelfAddon))
         {
-            addon = new SkEditorSelfAddon();
+            addon = App.Services.GetRequiredService<SkEditorSelfAddon>();
         }
         else
         {
