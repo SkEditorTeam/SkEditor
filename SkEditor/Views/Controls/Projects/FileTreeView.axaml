@@ -4,13 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:projects="clr-namespace:SkEditor.Models.Projects"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="controls:FileTreeViewModel"
              x:Class="SkEditor.Views.Controls.Projects.FileTreeView">
-    <TreeView ItemsSource="{Binding Nodes}">
+    <TreeView ItemsSource="{Binding RootItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <TreeView.ItemTemplate>
             <TreeDataTemplate ItemsSource="{Binding Children}" DataType="projects:FileSystemNode">
-                <TextBlock Text="{Binding Name}"/>
+                <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center" ColumnSpacing="8"
+                      ToolTip.Tip="{Binding Name}" ToolTip.ShowDelay="750">
+                    <Panel Width="18" Height="18">
+                        <Viewbox>
+                            <fluent:SymbolIcon Symbol="{Binding Icon}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                        </Viewbox>
+                    </Panel>
+                    <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                </Grid>
             </TreeDataTemplate>
         </TreeView.ItemTemplate>
     </TreeView>

@@ -36,7 +36,7 @@
                        Margin="20,10,20,10" />
             <Separator Grid.Row="1" Margin="0,0,0,10" />
 
-            <Grid Grid.Row="2" RowDefinitions="*,Auto" Margin="10,0,10,10">
+            <Grid Grid.Row="2" RowDefinitions="*,Auto" Margin="10,0,0,10">
                 <projects:FileTreeView Grid.Row="0" DataContext="{Binding FileTree}" />
 
                 <Button Name="NewRemoteConnectionButton" Grid.Row="1" HorizontalAlignment="Stretch"

@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.API;
+using SkEditor.Contracts.Models;
 using SkEditor.Models.Projects;
 
 namespace SkEditor.ViewModels.Controls;
@@ -7,14 +10,17 @@ namespace SkEditor.ViewModels.Controls;
 public partial class FileTreeViewModel : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<FileSystemNode> _nodes;
+    private IFileSystem _fileSystem;
+    
+    public IEnumerable<FileSystemNode> RootItems => [FileSystem.Root];
     
     public FileTreeViewModel()
     {
-        var rootNode = new FileSystemNode("Root", "C:\\Root", true);
-        rootNode.Children.Add(new FileSystemNode("File1.txt", @"C:\Root\File1.txt", false));
-        rootNode.Children.Add(new FileSystemNode("File2.txt", @"C:\Root\File2.txt", false));
-        
-        Nodes = [rootNode];
+        _fileSystem = new LocalFileSystem(@"C:\Users\Notro\Documents");
+     
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        _fileSystem.Load();
+        stopwatch.Stop();
+        SkEditorAPI.Logs.Info($"Loaded file system in {stopwatch.ElapsedMilliseconds} ms");
     }
 }
