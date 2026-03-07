@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Settings.Attributes;
@@ -9,8 +10,8 @@ namespace SkEditor.Utilities.Settings.Configs;
 public partial class ConnectionsConfig : BaseConfig<ConnectionsConfig>
 {
     protected override JsonTypeInfo<ConnectionsConfig> TypeInfo => AppJsonContext.Default.ConnectionsConfig;
-
-    public override string FileName => "connections.json";
+    
+    protected override string GetFileName() => "connections.json";
 
     public List<RemoteConnection> Connections
     {

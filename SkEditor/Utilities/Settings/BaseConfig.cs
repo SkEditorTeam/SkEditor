@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +27,9 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
     protected abstract JsonTypeInfo<T> TypeInfo { get; }
 
     private string ConfigPath => Path.Combine(_appDataFolderPath, FileName);
-    public abstract string FileName { get; }
+
+    [JsonIgnore]
+    public string FileName => GetFileName();
 
     public async Task Load()
     {
@@ -107,4 +110,5 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
     }
 
     protected abstract void CopyFrom(T other);
+    protected abstract string GetFileName();
 }

@@ -8,9 +8,8 @@ namespace SkEditor.Utilities.Settings.Configs;
 public partial class SecretsConfig : BaseConfig<SecretsConfig>
 {
     protected override JsonTypeInfo<SecretsConfig> TypeInfo => AppJsonContext.Default.SecretsConfig;
-
-    [JsonIgnore]
-    public override string FileName => "secrets.json";
+    
+    protected override string GetFileName() => "secrets.json";
 
     /// <summary>
     ///     The skUnity API key.

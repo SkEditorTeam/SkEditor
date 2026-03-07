@@ -9,9 +9,8 @@ namespace SkEditor.Utilities.Settings.Configs;
 public partial class StateConfig : BaseConfig<StateConfig>
 {
     protected override JsonTypeInfo<StateConfig> TypeInfo => AppJsonContext.Default.StateConfig;
-
-    [JsonIgnore]
-    public override string FileName => "state.json";
+    
+    protected override string GetFileName() => "state.json";
 
     /// <summary>
     ///     The last used service for publishing scripts.

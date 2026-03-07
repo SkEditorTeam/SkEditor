@@ -9,8 +9,7 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
 {
     protected override JsonTypeInfo<ExperimentsConfig> TypeInfo => AppJsonContext.Default.ExperimentsConfig;
     
-    [JsonIgnore]
-    public override string FileName => "experiments.json";
+    protected override string GetFileName() => "experiments.json";
 
     /// <summary>
     ///     Enables the Auto-Completion Prototype feature.

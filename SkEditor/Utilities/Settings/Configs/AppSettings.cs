@@ -14,9 +14,8 @@ namespace SkEditor.Utilities.Settings.Configs;
 public partial class AppSettings : BaseConfig<AppSettings>
 {
     protected override JsonTypeInfo<AppSettings> TypeInfo => AppJsonContext.Default.AppSettings;
-
-    [JsonIgnore]
-    public override string FileName => "options.json";
+    
+    protected override string GetFileName() => "options.json";
 
     /// <summary>
     ///     The application version.
