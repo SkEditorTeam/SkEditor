@@ -8,21 +8,27 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="controls:FileTreeViewModel"
              x:Class="SkEditor.Views.Controls.Projects.FileTreeView">
-    <TreeView ItemsSource="{Binding RootItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-        <TreeView.ItemTemplate>
-            <TreeDataTemplate ItemsSource="{Binding Children}" DataType="projects:FileSystemNode">
-                <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center" ColumnSpacing="8"
-                      ToolTip.Tip="{Binding Name}" ToolTip.ShowDelay="750">
-                    <Panel Width="18" Height="18">
-                        <Viewbox>
-                            <fluent:SymbolIcon Symbol="{Binding Icon}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-                        </Viewbox>
-                    </Panel>
-                    <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
-                </Grid>
-            </TreeDataTemplate>
-        </TreeView.ItemTemplate>
-    </TreeView>
+    <Grid RowDefinitions="*,Auto">
+        <TreeView ItemsSource="{Binding RootItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate ItemsSource="{Binding Children}" DataType="projects:FileSystemNode">
+                    <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center" ColumnSpacing="8"
+                          ToolTip.Tip="{Binding Name}" ToolTip.ShowDelay="750">
+                        <Panel Width="17" Height="17">
+                            <Viewbox Stretch="Uniform">
+                                <fluent:SymbolIcon Symbol="{Binding Icon}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                            </Viewbox>
+                        </Panel>
+                        <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"
+                                   TextTrimming="CharacterEllipsis" />
+                    </Grid>
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <Button Grid.Row="1" Content="Load" Command="{Binding LoadFileSystemAsync}" Margin="4"
+                HorizontalAlignment="Right" />
+    </Grid>
 </UserControl>

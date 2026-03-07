@@ -1,9 +1,9 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using GitCredentialManager;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
@@ -15,11 +15,7 @@ namespace SkEditor.Views.Controls.Sidebar;
 
 public partial class RemoteSidebarPanel : UserControl
 {
-    public FileTreeViewModel FileTree { get; }
-    
-    const string CredentialTarget = "skeditor://sftp-connections";
-    
-    public RemoteSidebarPanel(FileTreeViewModel fileTree)
+    public RemoteSidebarPanel(FileTreeViewModel fileTree, IRemoteConnectionService remoteConnectionService)
     {
         FileTree = fileTree;
         InitializeComponent();
@@ -34,23 +30,19 @@ public partial class RemoteSidebarPanel : UserControl
 
             if (connection.AuthMethod == RemoteAuthMethod.Password)
             {
-                ICredentialStore store = CredentialManager.Create("SkEditor Remote Connections");
-                store.AddOrUpdate(CredentialTarget, connection.Id.ToString(), info.Password);
-
-                ICredential? cred = store.Get(CredentialTarget, connection.Id.ToString());
-                if (cred != null)
-                {
-                    SkEditorAPI.Logs.Info($"Hasło dla {connection.Name} siedzi bezpiecznie w sejfie: {cred.Password}");
-                }
+                remoteConnectionService.SavePassword(connection, info.Password);
             }
 
             SkEditorAPI.Configs.GetConnectionsConfig().Connections.Add(connection);
         });
     }
 
-    public class RemotePanel(FileTreeViewModel fileTreeViewModel) : SidebarPanel
+    public FileTreeViewModel FileTree { get; }
+
+    public class RemotePanel(FileTreeViewModel fileTreeViewModel, IRemoteConnectionService remoteConnectionService)
+        : SidebarPanel
     {
-        public readonly RemoteSidebarPanel Panel = new(fileTreeViewModel);
+        public readonly RemoteSidebarPanel Panel = new(fileTreeViewModel, remoteConnectionService);
         public override UserControl Content => Panel;
         public override IconSource Icon => Icons.GetPathIcon("RemoteDesktopIcon");
 

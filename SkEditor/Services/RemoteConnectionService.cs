@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using GitCredentialManager;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using SkEditor.Contracts.Services;
@@ -13,6 +14,10 @@ namespace SkEditor.Services;
 
 public class RemoteConnectionService : IRemoteConnectionService
 {
+    private const string CredentialNamespace = "SkEditor Remote Connections";
+    private const string CredentialTarget = "skeditor://sftp-connections";
+    private readonly ICredentialStore _store = CredentialManager.Create(CredentialNamespace);
+
     public async Task<RemoteConnectionTestResult> TestConnection(RemoteConnectionInfo connectionInfo)
     {
         string keyFilePath = connectionInfo.KeyFilePath;
@@ -48,6 +53,17 @@ public class RemoteConnectionService : IRemoteConnectionService
         {
             return RemoteConnectionTestResult.Error(ex.Message);
         }
+    }
+
+    public void SavePassword(RemoteConnection connection, string password)
+    {
+        _store.AddOrUpdate(CredentialTarget, connection.Id.ToString(), password);
+    }
+
+    public string? GetPassword(RemoteConnection connection)
+    {
+        ICredential? cred = _store.Get(CredentialTarget, connection.Id.ToString());
+        return cred.Password;
     }
 
     private static async Task<bool> TryConnect(RemoteConnectionInfo connectionInfo)
