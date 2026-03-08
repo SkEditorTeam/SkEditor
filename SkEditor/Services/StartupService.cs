@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
@@ -15,13 +17,17 @@ using SkEditor.Contracts.Services;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.InternalAPI;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
+// ReSharper disable once RedundantUsingDirective
+using System.Diagnostics;
 
 namespace SkEditor.Services;
 
 public class StartupService(MainWindowFactory mainWindowFactory) : IStartupService
 {
-    public async Task CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop, SplashScreen? splashScreen)
+    public async Task CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop,
+        SplashScreen? splashScreen)
     {
         try
         {
@@ -70,6 +76,8 @@ public class StartupService(MainWindowFactory mainWindowFactory) : IStartupServi
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
+                    RecoverMainWindowState(mainWindow);
+
                     desktop.MainWindow = mainWindow;
                     mainWindow.ApplyTemplate();
 
@@ -109,6 +117,44 @@ public class StartupService(MainWindowFactory mainWindowFactory) : IStartupServi
             await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(),
                 DispatcherPriority.Background,
                 new CancellationTokenSource(3000).Token);
+        }
+    }
+
+    private static void RecoverMainWindowState(MainWindow mainWindow)
+    {
+        StateConfig config = SkEditorAPI.Configs.GetStateConfig();
+
+        if (config is { MainWindowWidth: > 0, MainWindowHeight: > 0 })
+        {
+            mainWindow.Width = config.MainWindowWidth;
+            mainWindow.Height = config.MainWindowHeight;
+        }
+
+        PixelPoint position = new(config.MainWindowX, config.MainWindowY);
+        Screens screens = mainWindow.Screens;
+        PixelPoint lookupPosition = new(
+            (int)(config.MainWindowX + (config.MainWindowWidth / 2)),
+            (int)(Math.Max(config.MainWindowY, 0) + (config.MainWindowHeight / 2))
+        );
+
+        Screen? screen = screens.ScreenFromPoint(lookupPosition)
+                         ?? screens.ScreenFromPoint(new PixelPoint(config.MainWindowX,
+                             Math.Max(config.MainWindowY, 0)));
+
+        if (screen != null)
+        {
+            mainWindow.Position = config.MainWindowMaximized
+                ? screen.Bounds.TopLeft
+                : position;
+        }
+        else
+        {
+            mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
+        if (config.MainWindowMaximized)
+        {
+            mainWindow.WindowState = WindowState.Maximized;
         }
     }
 

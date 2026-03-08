@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using SkEditor.Utilities.Settings.Attributes;
 
@@ -9,8 +8,6 @@ namespace SkEditor.Utilities.Settings.Configs;
 public partial class StateConfig : BaseConfig<StateConfig>
 {
     protected override JsonTypeInfo<StateConfig> TypeInfo => AppJsonContext.Default.StateConfig;
-    
-    protected override string GetFileName() => "state.json";
 
     /// <summary>
     ///     The last used service for publishing scripts.
@@ -48,4 +45,39 @@ public partial class StateConfig : BaseConfig<StateConfig>
         get;
         set => SetProperty(ref field, value);
     } = false;
+
+    public double MainWindowWidth
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = 800;
+
+    public double MainWindowHeight
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = 600;
+
+    public int MainWindowX
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = 100;
+
+    public int MainWindowY
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = 100;
+
+    public bool MainWindowMaximized
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = false;
+
+    protected override string GetFileName()
+    {
+        return "state.json";
+    }
 }

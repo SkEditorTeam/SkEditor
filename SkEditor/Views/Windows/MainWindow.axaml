@@ -13,7 +13,7 @@
         x:DataType="windows:MainWindowViewModel"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
-        Title="SkEditor" WindowState="Maximized" DragDrop.AllowDrop="True">
+        Title="SkEditor" WindowStartupLocation="Manual" DragDrop.AllowDrop="True">
 
     <Window.Styles>
         <Style Selector="avaloniaedit|TextEditor /template/ Border">
@@ -75,8 +75,8 @@
                                                Grid.Row="1" Margin="0,10,0,0" />
                 </Grid>
             </Border>
-            
-            <notifications:SkEditorNotificationManager  
+
+            <notifications:SkEditorNotificationManager
                 x:Name="NotificationManager"
                 Grid.Row="1"
                 Position="BottomRight"

@@ -17,6 +17,7 @@ using SkEditor.Utilities.Files.Session;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
@@ -31,9 +32,9 @@ namespace SkEditor.Views.Windows;
 public partial class MainWindow : AppWindow
 {
     private readonly KeyboardShortcutHandler? _shortcutHandler;
-    private SplashScreen? _splashScreen;
 
     private bool _isFullyLoaded;
+    private SplashScreen? _splashScreen;
 
     public MainWindow()
     {
@@ -80,6 +81,14 @@ public partial class MainWindow : AppWindow
             {
                 return;
             }
+
+            StateConfig stateConfig = SkEditorAPI.Configs.GetStateConfig();
+
+            stateConfig.MainWindowHeight = Height;
+            stateConfig.MainWindowWidth = Width;
+            stateConfig.MainWindowX = Position.X;
+            stateConfig.MainWindowY = Position.Y;
+            stateConfig.MainWindowMaximized = WindowState == WindowState.Maximized;
 
             ThemeEditor.SaveAllThemes();
             await SkEditorAPI.Configs.SaveAllConfigsImmediateAsync();
