@@ -22,9 +22,14 @@ public class SftpFileSystem(
     public async Task<bool> Load()
     {
         AuthenticationMethod authMethod = GetAuthMethod();
-        ConnectionInfo info = new(Connection.Host, Connection.Port, Connection.Username, authMethod);
+        ConnectionInfo info = new(Connection.Host, Connection.Port, Connection.Username, authMethod)
+        {
+            Timeout = TimeSpan.FromSeconds(30)
+        };
 
         Client = new SftpClient(info);
+        Client.KeepAliveInterval = TimeSpan.FromSeconds(60);
+
         using CancellationTokenSource cts = new();
 
         await Client.ConnectAsync(cts.Token);
