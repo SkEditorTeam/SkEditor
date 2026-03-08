@@ -46,7 +46,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
 
                 SftpFolderNode folderNode = new(file.Name, file.FullName, false, client);
                 Children.Add(folderNode);
-                await folderNode.LoadChildren();
+                // await folderNode.LoadChildren();
             }
             else if (file.IsRegularFile)
             {

@@ -82,6 +82,7 @@ public class App : Application
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();
         services.AddTransient<RemoteConnectionViewModel>();
+        services.AddTransient<RemoteSidebarViewModel>();
         services.AddTransient<FileTreeViewModel>();
 
         services.AddTransient<MainWindow>();
