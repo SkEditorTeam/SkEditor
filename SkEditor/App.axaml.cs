@@ -21,8 +21,6 @@ namespace SkEditor;
 
 public class App : Application
 {
-    public static IServiceProvider Services { get; private set; } = null!;
-    
     private SplashScreen? _splashScreen;
 
     public App()
@@ -32,17 +30,19 @@ public class App : Application
         binarySettings.Load();
     }
 
+    public static IServiceProvider Services { get; private set; } = null!;
+
     public static Stopwatch Stopwatch { get; } = new();
 
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
     }
-    
+
     public override void OnFrameworkInitializationCompleted()
     {
         base.OnFrameworkInitializationCompleted();
-        
+
         var collection = new ServiceCollection();
         ConfigureServices(collection);
         Services = collection.BuildServiceProvider();
@@ -68,7 +68,7 @@ public class App : Application
             startupService.CompleteApplicationStart(desktop, _splashScreen);
         }, DispatcherPriority.Background);
     }
-    
+
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<MainWindowFactory>();
@@ -77,12 +77,13 @@ public class App : Application
         services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<IMenuService, MenuService>();
-        
+        services.AddSingleton<INotificationService, NotificationService>();
+
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();
         services.AddTransient<RemoteConnectionViewModel>();
         services.AddTransient<FileTreeViewModel>();
-        
+
         services.AddTransient<MainWindow>();
         services.AddTransient<SplashScreen>();
         services.AddTransient<RemoteConnectionWindow>();
