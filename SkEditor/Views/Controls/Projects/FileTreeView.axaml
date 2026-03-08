@@ -9,6 +9,11 @@
              x:DataType="controls:FileTreeViewModel"
              x:Class="SkEditor.Views.Controls.Projects.FileTreeView">
     <TreeView ItemsSource="{Binding RootItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <TreeView.Styles>
+            <Style Selector="TreeViewItem" x:DataType="projects:FileSystemNode">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+            </Style>
+        </TreeView.Styles>
         <TreeView.ItemTemplate>
             <TreeDataTemplate ItemsSource="{Binding Children}" DataType="projects:FileSystemNode">
                 <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center" ColumnSpacing="8"
