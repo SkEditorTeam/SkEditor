@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -15,11 +16,17 @@ namespace SkEditor.ViewModels.Controls;
 
 public partial class FileTreeViewModel : ObservableObject
 {
+    private readonly INotificationService _notificationService;
+
     [ObservableProperty]
     private IFileSystem _fileSystem;
 
+    [ObservableProperty]
+    private bool _isLoading;
+
     public FileTreeViewModel(IRemoteConnectionService remoteConnectionService, INotificationService notificationService)
     {
+        _notificationService = notificationService;
         RemoteConnection? first = SkEditorAPI.Configs.GetConnectionsConfig().Connections.FirstOrDefault();
 
         if (first == null)
@@ -33,6 +40,26 @@ public partial class FileTreeViewModel : ObservableObject
 
     public ObservableCollection<FileSystemNode> RootItems { get; } = [];
 
+    public List<RemoteConnection> RemoteConnections { get; } = SkEditorAPI.Configs.GetConnectionsConfig().Connections;
+
+    public bool IsEmpty => RootItems.Count == 0;
+
+    public List<ConnectionMenuItem> ConnectionMenuItems =>
+        RemoteConnections
+            .Select(c => new ConnectionMenuItem(c, ConnectToSelectedCommand))
+            .ToList();
+
+    [RelayCommand]
+    public async Task ConnectToLast()
+    {
+        _notificationService.Show("Last", "connecting to last!");
+    }
+
+    [RelayCommand]
+    public async Task ConnectToSelected(RemoteConnection connection)
+    {
+        _notificationService.Show("Selected", $"connecting to {connection.Name}!");
+    }
 
     [RelayCommand]
     public async Task LoadFileSystemAsync()
@@ -49,5 +76,10 @@ public partial class FileTreeViewModel : ObservableObject
         }
 
         SkEditorAPI.Logs.Info($"Loaded file system in {stopwatch.ElapsedMilliseconds} ms");
+    }
+
+    public record ConnectionMenuItem(RemoteConnection Connection, IRelayCommand<RemoteConnection> ConnectCommand)
+    {
+        public string Name => Connection.Name;
     }
 }

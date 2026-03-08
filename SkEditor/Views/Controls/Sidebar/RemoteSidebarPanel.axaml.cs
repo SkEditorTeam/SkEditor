@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,29 +17,43 @@ namespace SkEditor.Views.Controls.Sidebar;
 
 public partial class RemoteSidebarPanel : UserControl
 {
-    public RemoteSidebarPanel(FileTreeViewModel fileTree, IRemoteConnectionService remoteConnectionService)
+    private readonly IRemoteConnectionService _remoteConnectionService;
+
+    public RemoteSidebarPanel()
     {
-        FileTree = fileTree;
         InitializeComponent();
-
-        NewRemoteConnectionButton.Command = new AsyncRelayCommand(async () =>
-        {
-            var window = App.Services.GetRequiredService<RemoteConnectionWindow>();
-            RemoteConnectionInfo info = await window.ShowDialogOnMainWindow<RemoteConnectionInfo>();
-            if (info == null) return;
-
-            RemoteConnection connection = new(info);
-
-            if (connection.AuthMethod == RemoteAuthMethod.Password)
-            {
-                remoteConnectionService.SavePassword(connection, info.Password);
-            }
-
-            SkEditorAPI.Configs.GetConnectionsConfig().Connections.Add(connection);
-        });
     }
 
-    public FileTreeViewModel FileTree { get; }
+    [SetsRequiredMembers]
+    public RemoteSidebarPanel(FileTreeViewModel fileTree, IRemoteConnectionService remoteConnectionService) : this()
+    {
+        FileTree = fileTree;
+        _remoteConnectionService = remoteConnectionService;
+
+        DataContext = this;
+    }
+
+    public required FileTreeViewModel FileTree { get; init; }
+
+    [RelayCommand]
+    private async Task NewRemoteConnection()
+    {
+        RemoteConnectionWindow window = App.Services.GetRequiredService<RemoteConnectionWindow>();
+        RemoteConnectionInfo info = await window.ShowDialogOnMainWindow<RemoteConnectionInfo>();
+        if (info == null)
+        {
+            return;
+        }
+
+        RemoteConnection connection = new(info);
+
+        if (connection.AuthMethod == RemoteAuthMethod.Password)
+        {
+            _remoteConnectionService.SavePassword(connection, info.Password);
+        }
+
+        SkEditorAPI.Configs.GetConnectionsConfig().Connections.Add(connection);
+    }
 
     public class RemotePanel(FileTreeViewModel fileTreeViewModel, IRemoteConnectionService remoteConnectionService)
         : SidebarPanel
