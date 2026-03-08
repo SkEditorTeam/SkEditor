@@ -27,20 +27,40 @@ public partial class FileTreeViewModel : ObservableObject
     public FileTreeViewModel(IRemoteConnectionService remoteConnectionService, INotificationService notificationService)
     {
         _notificationService = notificationService;
-        RemoteConnection? first = SkEditorAPI.Configs.GetConnectionsConfig().Connections.FirstOrDefault();
 
-        if (first == null)
+        if (false)
         {
-            SkEditorAPI.Logs.Warning("No remote connections found in config!");
-            throw new InvalidOperationException("No remote connections found in config!");
-        }
+            RemoteConnection? first = SkEditorAPI.Configs.GetConnectionsConfig().Connections.FirstOrDefault();
 
-        _fileSystem = new SftpFileSystem(first, remoteConnectionService, notificationService);
+            if (first == null)
+            {
+                SkEditorAPI.Logs.Warning("No remote connections found in config!");
+                throw new InvalidOperationException("No remote connections found in config!");
+            }
+
+            _fileSystem = new SftpFileSystem(first, remoteConnectionService, notificationService);
+        }
     }
 
     public ObservableCollection<FileSystemNode> RootItems { get; } = [];
 
-    public List<RemoteConnection> RemoteConnections { get; } = SkEditorAPI.Configs.GetConnectionsConfig().Connections;
+    public ObservableCollection<RemoteConnection> RemoteConnections { get; } =
+        new(SkEditorAPI.Configs.GetConnectionsConfig().Connections);
+
+    public RemoteConnection SelectedConnection
+    {
+        get;
+        set
+        {
+            if (Equals(value, field))
+            {
+                return;
+            }
+
+            field = value;
+            _ = ChangeConnection(value);
+        }
+    }
 
     public bool IsEmpty => RootItems.Count == 0;
 
@@ -48,6 +68,24 @@ public partial class FileTreeViewModel : ObservableObject
         RemoteConnections
             .Select(c => new ConnectionMenuItem(c, ConnectToSelectedCommand))
             .ToList();
+
+    public void AddConnection(RemoteConnection connection)
+    {
+        RemoteConnections.Add(connection);
+        OnPropertyChanged(nameof(ConnectionMenuItems));
+        OnPropertyChanged(nameof(IsEmpty));
+    }
+
+    public async Task ChangeConnection(RemoteConnection connection)
+    {
+        if (connection == null)
+        {
+            SkEditorAPI.Logs.Warning("Selected connection is null!");
+            return;
+        }
+
+        _notificationService.Show("Changing Connection", $"Changing connection to {connection.Name}...");
+    }
 
     [RelayCommand]
     public async Task ConnectToLast()

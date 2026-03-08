@@ -47,12 +47,20 @@
                     </Viewbox>
                 </Button>
 
-                <ComboBox SelectedIndex="-1" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
+                <ComboBox Theme="{DynamicResource LiteComboBox}" HorizontalAlignment="Stretch"
+                          VerticalContentAlignment="Center"
                           PlaceholderText="Select connection..."
-                          Theme="{DynamicResource LiteComboBox}">
-                    <ComboBoxItem Content="My VPS" />
-                    <ComboBoxItem Content="Lokalny serwer" />
-                    <ComboBoxItem Content="Inny serwer" />
+                          SelectedItem="{Binding FileTree.SelectedConnection, Mode=TwoWay}"
+                          ToolTip.Tip="Add a connection first!"
+                          ToolTip.ShowOnDisabled="True"
+                          ToolTip.ServiceEnabled="{Binding !FileTree.RemoteConnections.Count}"
+                          IsEnabled="{Binding !!FileTree.RemoteConnections.Count}"
+                          ItemsSource="{Binding FileTree.RemoteConnections}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
             </DockPanel>
 
@@ -218,7 +226,12 @@
             <Style Selector="^:disabled">
                 <Setter Property="Background" Value="#08FFFFFF" />
                 <Setter Property="BorderBrush" Value="#08FFFFFF" />
-                <Setter Property="Foreground" Value="{DynamicResource ComboBoxForegroundDisabled}" />
+                <Setter Property="PlaceholderForeground" Value="#7DFFFFFF" />
+                <Setter Property="Foreground" Value="#7DFFFFFF" />
+
+                <Style Selector="^ /template/ icons|SymbolIcon#DropDownGlyph:disabled">
+                    <Setter Property="Foreground" Value="#7DFFFFFF" />
+                </Style>
             </Style>
         </ControlTheme>
     </UserControl.Resources>

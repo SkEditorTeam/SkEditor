@@ -53,6 +53,9 @@ public partial class RemoteSidebarPanel : UserControl
         }
 
         SkEditorAPI.Configs.GetConnectionsConfig().Connections.Add(connection);
+        _ = SkEditorAPI.Configs.GetConnectionsConfig().Save();
+
+        FileTree.AddConnection(connection);
     }
 
     public class RemotePanel(FileTreeViewModel fileTreeViewModel, IRemoteConnectionService remoteConnectionService)
