@@ -18,7 +18,7 @@ public partial class FileTreeViewModel : ObservableObject
     [ObservableProperty]
     private IFileSystem _fileSystem;
 
-    public FileTreeViewModel(IRemoteConnectionService remoteConnectionService)
+    public FileTreeViewModel(IRemoteConnectionService remoteConnectionService, INotificationService notificationService)
     {
         RemoteConnection? first = SkEditorAPI.Configs.GetConnectionsConfig().Connections.FirstOrDefault();
 
@@ -28,7 +28,7 @@ public partial class FileTreeViewModel : ObservableObject
             throw new InvalidOperationException("No remote connections found in config!");
         }
 
-        _fileSystem = new SftpFileSystem(first, remoteConnectionService);
+        _fileSystem = new SftpFileSystem(first, remoteConnectionService, notificationService);
     }
 
     public ObservableCollection<FileSystemNode> RootItems { get; } = [];

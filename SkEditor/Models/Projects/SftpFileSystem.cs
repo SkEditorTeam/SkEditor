@@ -9,18 +9,18 @@ using SkEditor.Models.Remote;
 
 namespace SkEditor.Models.Projects;
 
-public class SftpFileSystem(RemoteConnection connection, IRemoteConnectionService connectionService) : IFileSystem
+public class SftpFileSystem(
+    RemoteConnection connection,
+    IRemoteConnectionService connectionService,
+    INotificationService notificationService) : IFileSystem
 {
-    public SftpClient Client { get; private set; }
+    public SftpClient Client { get; private set; } = null!;
     public RemoteConnection Connection { get; } = connection;
 
-    public FileSystemNode Root { get; private set; }
+    public FileSystemNode? Root { get; private set; }
 
-    public async Task Load()
+    public async Task<bool> Load()
     {
-        SkEditorAPI.Logs.Info(
-            $"Will load SFTP file system for connection: {Connection.Name} ({Connection.Host}:{Connection.Port})");
-
         AuthenticationMethod authMethod = GetAuthMethod();
         ConnectionInfo info = new(Connection.Host, Connection.Port, Connection.Username, authMethod);
 
@@ -29,11 +29,18 @@ public class SftpFileSystem(RemoteConnection connection, IRemoteConnectionServic
 
         await Client.ConnectAsync(cts.Token);
 
+        if (!Client.IsConnected)
+        {
+            notificationService.ShowError("Connection Failed", $"Failed to connect to {Connection.Name}");
+            return false;
+        }
+
         string workingDirectory = Client.WorkingDirectory;
         SkEditorAPI.Logs.Info($"Working directory: {workingDirectory}");
 
         Root = new SftpFolderNode(Connection.Name, Client.WorkingDirectory, true, Client);
         await Root.LoadChildren();
+        return true;
     }
 
     private AuthenticationMethod GetAuthMethod()

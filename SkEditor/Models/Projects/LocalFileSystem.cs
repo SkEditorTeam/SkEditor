@@ -15,10 +15,16 @@ public class LocalFileSystem : IFileSystem
         Root = new LocalFolderNode(rootName, rootDirectory);
     }
 
-    public FileSystemNode Root { get; }
+    public FileSystemNode? Root { get; }
 
-    public async Task Load()
+    public async Task<bool> Load()
     {
+        if (Root == null)
+        {
+            return false;
+        }
+
         await Root.LoadChildren();
+        return true;
     }
 }

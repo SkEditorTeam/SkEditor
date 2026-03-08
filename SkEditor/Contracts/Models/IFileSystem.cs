@@ -5,6 +5,6 @@ namespace SkEditor.Contracts.Models;
 
 public interface IFileSystem
 {
-    FileSystemNode Root { get; }
-    Task Load();
+    FileSystemNode? Root { get; }
+    Task<bool> Load();
 }

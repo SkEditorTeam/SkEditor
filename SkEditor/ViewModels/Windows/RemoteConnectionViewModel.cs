@@ -7,18 +7,20 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Windows;
 
-public partial class RemoteConnectionViewModel(IRemoteConnectionService connectionService) : ObservableObject
+public partial class RemoteConnectionViewModel(
+    IRemoteConnectionService connectionService,
+    INotificationService
+        notificationService) : ObservableObject
 {
     [ObservableProperty]
     private RemoteConnectionInfo _connectionInfo = new();
-    
+
     [ObservableProperty]
     private string? _infoBarMessage;
 
@@ -28,8 +30,9 @@ public partial class RemoteConnectionViewModel(IRemoteConnectionService connecti
     public IReadOnlyList<RemoteAuthMethod> AuthMethods { get; } =
         Enum.GetValues<RemoteAuthMethod>().ToList();
 
-    public event EventHandler? CloseRequested;
     public Func<Task<string?>>? RequestKeyFilePicker { get; set; }
+
+    public event EventHandler? CloseRequested;
 
     [RelayCommand]
     private async Task AddConnection()
@@ -45,9 +48,10 @@ public partial class RemoteConnectionViewModel(IRemoteConnectionService connecti
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            string hostPort = $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
+            string hostPort =
+                $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
 
-            SkEditorAPI.Windows.GetMainWindow()?.NotificationManager.Show(
+            notificationService.Show(
                 Translation.Get(TranslationKey.RemoteConnectionAddSuccessTitle),
                 Translation.Get(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort),
                 NotificationType.Success,
@@ -63,10 +67,10 @@ public partial class RemoteConnectionViewModel(IRemoteConnectionService connecti
     private async Task<bool> TestConnection()
     {
         RemoteConnectionTestResult result = await connectionService.TestConnection(ConnectionInfo);
-        
+
         InfoBarMessage = result.Message;
         InfoBarSeverity = result.IsSuccess ? InfoBarSeverity.Success : InfoBarSeverity.Error;
-        
+
         return result.IsSuccess;
     }
 
