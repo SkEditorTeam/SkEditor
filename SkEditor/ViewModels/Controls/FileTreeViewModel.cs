@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,6 +17,8 @@ public partial class FileTreeViewModel(
     INotificationService notificationService)
     : ObservableObject
 {
+    private CancellationTokenSource? _cts;
+
     [ObservableProperty]
     private IFileSystem? _fileSystem;
 
@@ -39,6 +42,13 @@ public partial class FileTreeViewModel(
     [RelayCommand]
     public async Task LoadFileSystemAsync()
     {
+        if (_cts != null)
+        {
+            await _cts.CancelAsync();
+            _cts.Dispose();
+            _cts = null;
+        }
+
         RootItems.Clear();
         IsLoading = true;
 
@@ -50,12 +60,14 @@ public partial class FileTreeViewModel(
             return;
         }
 
-        await FileSystem.Load();
+        _cts = new CancellationTokenSource();
+        await FileSystem.Load(_cts.Token);
 
         stopwatch.Stop();
 
         if (FileSystem.Root != null)
         {
+            RootItems.Clear();
             RootItems.Add(FileSystem.Root);
         }
 

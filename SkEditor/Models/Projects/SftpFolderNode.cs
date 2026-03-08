@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using FluentIcons.Common;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
@@ -27,7 +31,10 @@ public class SftpFolderNode : FileSystemNode
         Children.Add(DummyNode);
     }
 
-    public override Symbol Icon => _isRoot ? Symbol.Desktop : Symbol.Folder;
+    public override Symbol? Icon => _isRoot ? Symbol.Desktop : Symbol.Folder;
+
+    public override IImmutableSolidColorBrush IconColor =>
+        new ImmutableSolidColorBrush(Color.Parse(_isRoot ? "#8CA9FF" : "#FFCF40"));
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -48,24 +55,28 @@ public class SftpFolderNode : FileSystemNode
 
         Children.Clear();
 
-        IAsyncEnumerable<ISftpFile> files = _client.ListDirectoryAsync(Path, CancellationToken.None);
+        List<SftpFolderNode> folders = new();
+        List<SftpFileNode> files = new();
 
-        await foreach (ISftpFile file in files)
+        await foreach (ISftpFile file in _client.ListDirectoryAsync(Path, CancellationToken.None))
         {
             if (file.IsDirectory)
             {
                 if (file.Name is "." or "..")
-                {
                     continue;
-                }
 
-                SftpFolderNode folderNode = new(file.Name, file.FullName, false, _client);
-                Children.Add(folderNode);
+                folders.Add(new SftpFolderNode(file.Name, file.FullName, false, _client));
             }
             else if (file.IsRegularFile)
             {
-                Children.Add(new SftpFileNode(file.Name, file.FullName, _client));
+                files.Add(new SftpFileNode(file.Name, file.FullName, _client));
             }
+        }
+
+        foreach (FileSystemNode node in folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
+                     .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)))
+        {
+            Children.Add(node);
         }
 
         HasLoadedChildren = true;

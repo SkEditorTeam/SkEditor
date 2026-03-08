@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentIcons.Common;
 
@@ -16,7 +17,9 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public ObservableCollection<FileSystemNode> Children { get; } = [];
 
-    public abstract Symbol Icon { get; }
+    public virtual Symbol? Icon => null;
+    public virtual IImmutableSolidColorBrush IconColor => Brushes.White;
+    public virtual IImage? IconImage => null;
 
     protected bool HasLoadedChildren { get; set; }
 

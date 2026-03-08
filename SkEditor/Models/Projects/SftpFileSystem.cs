@@ -19,7 +19,7 @@ public class SftpFileSystem(
 
     public FileSystemNode? Root { get; private set; }
 
-    public async Task<bool> Load()
+    public async Task<bool> Load(CancellationToken cancellationToken)
     {
         AuthenticationMethod authMethod = GetAuthMethod();
         ConnectionInfo info = new(Connection.Host, Connection.Port, Connection.Username, authMethod)
@@ -30,9 +30,7 @@ public class SftpFileSystem(
         Client = new SftpClient(info);
         Client.KeepAliveInterval = TimeSpan.FromSeconds(60);
 
-        using CancellationTokenSource cts = new();
-
-        await Client.ConnectAsync(cts.Token);
+        await Client.ConnectAsync(cancellationToken);
 
         if (!Client.IsConnected)
         {

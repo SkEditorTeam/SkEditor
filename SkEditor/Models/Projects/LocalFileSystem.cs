@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Models;
 
@@ -17,7 +18,7 @@ public class LocalFileSystem : IFileSystem
 
     public FileSystemNode? Root { get; }
 
-    public async Task<bool> Load()
+    public async Task<bool> Load(CancellationToken cancellationToken)
     {
         if (Root == null)
         {

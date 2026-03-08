@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:projects="clr-namespace:SkEditor.Models.Projects"
-             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="controls:FileTreeViewModel"
              x:Class="SkEditor.Views.Controls.Projects.FileTreeView">
@@ -18,11 +18,15 @@
             <TreeDataTemplate ItemsSource="{Binding Children}" DataType="projects:FileSystemNode">
                 <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center" ColumnSpacing="8"
                       ToolTip.Tip="{Binding Name}" ToolTip.ShowDelay="750">
-                    <Panel Width="17" Height="17">
-                        <Viewbox Stretch="Uniform">
-                            <fluent:SymbolIcon Symbol="{Binding Icon}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
+                    <Panel>
+                        <Viewbox Width="17" Height="17"
+                                 IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <icons:SymbolIcon Symbol="{Binding Icon}"
+                                              Foreground="{Binding IconColor}" />
+                        </Viewbox>
+                        <Viewbox Width="20" Height="20"
+                                 IsVisible="{Binding IconImage, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <Image Source="{Binding IconImage}" />
                         </Viewbox>
                     </Panel>
                     <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"
