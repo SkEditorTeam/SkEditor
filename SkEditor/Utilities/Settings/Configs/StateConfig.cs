@@ -50,13 +50,13 @@ public partial class StateConfig : BaseConfig<StateConfig>
     {
         get;
         set => SetProperty(ref field, value);
-    } = 800;
+    } = 1800;
 
     public double MainWindowHeight
     {
         get;
         set => SetProperty(ref field, value);
-    } = 600;
+    } = 1000;
 
     public int MainWindowX
     {
@@ -74,7 +74,7 @@ public partial class StateConfig : BaseConfig<StateConfig>
     {
         get;
         set => SetProperty(ref field, value);
-    } = false;
+    } = true;
 
     protected override string GetFileName()
     {
