@@ -14,38 +14,34 @@ public class SftpFileNode : FileSystemNode
         (Symbol icon, string color) = extension switch
         {
             ".sk" => (Symbol.Script, "#00C853"),
+            ".sql" or ".db" or ".sqlite" or ".sqlite3" => (Symbol.Database, "#BEF26F"),
+            ".csv" or ".tsv" => (Symbol.DocumentTable, "#FF8A30"),
 
-            ".java" => (Symbol.DocumentJava, "#E76F00"),
-            ".css" or ".scss" or ".sass" => (Symbol.DocumentCss, "#1572B6"),
-            ".sql" => (Symbol.Database, "#00758F"),
-
-            ".yml" or ".yaml" => (Symbol.DocumentYml, "#D32F2F"),
+            ".yml" or ".yaml" => (Symbol.DocumentYml, "#49B7E3"),
             ".json" or ".json5" => (Symbol.Braces, "#FFB300"),
             ".toml" or ".properties" or ".ini" or ".cfg" or ".conf" => (Symbol.DocumentSettings,
-                "#78909C"),
+                "#49B7E3"),
 
             ".png" or ".jpg" or ".jpeg" or ".gif" or ".bmp" or ".webp" or ".svg"
                 or ".ico" => (Symbol.Image, "#29B6F6"),
-            ".mp3" or ".wav" or ".ogg" or ".flac" => (Symbol.SoundWaveCircle, "#BA68C8"),
+            ".mp3" or ".wav" or ".ogg" or ".flac" => (Symbol.MusicNote2, "#BCF02E"),
             ".mp4" or ".mkv" or ".avi" or ".mov" => (Symbol.Video, "#FF5252"),
 
             ".txt" or ".info" => (Symbol.DocumentText, "#CFD8DC"),
-            ".log" => (Symbol.DocumentHeader, "#90A4AE"),
+            ".log" => (Symbol.DocumentHeader, "#BDCFD9"),
             ".md" => (Symbol.DocumentBulletList, "#4FC3F7"),
 
-            ".dll" or ".so" or ".bin" or ".sys" => (Symbol.DocumentCube, "#955251"),
-            ".exe" or ".msi" => (Symbol.AppGeneric, "#B71C1C"),
-            ".jar" => (Symbol.Box, "#DD4124"),
+            ".dll" or ".so" or ".bin" or ".sys" => (Symbol.DocumentCube, "#F53D3D"),
+            ".exe" or ".msi" => (Symbol.Play, "#35D4B4"),
+            ".jar" => (Symbol.Box, "#F03765"),
 
-            ".bat" or ".cmd" => (Symbol.WindowConsole, "#4CAF50"),
-            ".sh" or ".bash" or ".zsh" => (Symbol.WindowConsole, "#263238"),
-            ".ps1" => (Symbol.WindowConsole, "#0078D4"),
+            ".bat" or ".cmd" or ".sh" or ".bash" or ".zsh" or ".ps1" => (Symbol.WindowConsole, "#4AB9ED"),
 
             ".zip" or ".rar" or ".7z" or ".tar" or ".gz" or ".bz2" or ".xz" => (Symbol.FolderZip,
-                "#FFA726"),
+                "#FF87B7"),
 
-            ".env" or ".pem" or ".key" or ".pub" or ".cert" => (Symbol.DocumentKey,
-                "#FFD600"),
+            ".env" or ".pem" or ".key" or ".pub" or ".cert" => (Symbol.Key,
+                "#E38B2D"),
 
             _ => (Symbol.Document, "#FFFFFF")
         };
