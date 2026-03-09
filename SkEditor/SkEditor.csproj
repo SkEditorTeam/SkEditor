@@ -12,7 +12,7 @@
         <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-        <PublishAot>false</PublishAot>
+        <PublishAot>true</PublishAot>
 
         <VersionPrefix>3.0.0</VersionPrefix>
         <VersionSuffix>alpha.1</VersionSuffix>
@@ -24,8 +24,6 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-        <PublishTrimmed>true</PublishTrimmed>
-        <TrimMode>full</TrimMode>
         <InvariantGlobalization>false</InvariantGlobalization>
         <OptimizationPreference>Speed</OptimizationPreference>
         <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
@@ -33,6 +31,8 @@
 
     <PropertyGroup Condition="'$(PublishAot)' == 'true'">
         <DefineConstants>$(DefineConstants);AOT</DefineConstants>
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>full</TrimMode>
     </PropertyGroup>
 
     <ItemGroup>
