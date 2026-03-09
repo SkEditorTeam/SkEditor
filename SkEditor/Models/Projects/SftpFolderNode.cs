@@ -31,7 +31,7 @@ public class SftpFolderNode : FileSystemNode
         Children.Add(DummyNode);
     }
 
-    public override Symbol? Icon => _isRoot ? Symbol.Desktop : Symbol.Folder;
+    public override Symbol? Icon => _isRoot ? Symbol.Desktop : IsExpanded ? Symbol.FolderOpen : Symbol.Folder;
 
     public override IImmutableSolidColorBrush IconColor =>
         new ImmutableSolidColorBrush(Color.Parse(_isRoot ? "#8CA9FF" : "#FFCF40"));
@@ -40,10 +40,17 @@ public class SftpFolderNode : FileSystemNode
     {
         base.OnPropertyChanged(e);
 
-        if (e.PropertyName == nameof(IsExpanded) && IsExpanded && !HasLoadedChildren)
+        if (e.PropertyName != nameof(IsExpanded))
+        {
+            return;
+        }
+
+        if (IsExpanded && !HasLoadedChildren)
         {
             _ = LoadChildren();
         }
+
+        OnPropertyChanged(nameof(Icon));
     }
 
     public override async Task LoadChildren()
