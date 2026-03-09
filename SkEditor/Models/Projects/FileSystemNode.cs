@@ -11,6 +11,9 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     [ObservableProperty]
     private bool _isExpanded;
 
+    [ObservableProperty]
+    private bool _isLoadingChildren;
+
     public string Name { get; set; } = name;
     protected string Path { get; set; } = path;
     public bool IsDirectory { get; set; } = isDirectory;

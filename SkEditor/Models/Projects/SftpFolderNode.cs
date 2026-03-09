@@ -53,10 +53,12 @@ public class SftpFolderNode : FileSystemNode
             return;
         }
 
+        IsLoadingChildren = true;
+
         Children.Clear();
 
-        List<SftpFolderNode> folders = new();
-        List<SftpFileNode> files = new();
+        List<SftpFolderNode> folders = [];
+        List<SftpFileNode> files = [];
 
         await foreach (ISftpFile file in _client.ListDirectoryAsync(Path, CancellationToken.None))
         {
@@ -80,5 +82,6 @@ public class SftpFolderNode : FileSystemNode
         }
 
         HasLoadedChildren = true;
+        IsLoadingChildren = false;
     }
 }
