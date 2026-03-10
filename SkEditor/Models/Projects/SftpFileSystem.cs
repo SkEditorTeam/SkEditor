@@ -21,29 +21,38 @@ public class SftpFileSystem(
 
     public async Task<bool> Load(CancellationToken cancellationToken)
     {
-        AuthenticationMethod authMethod = GetAuthMethod();
-        ConnectionInfo info = new(Connection.Host, Connection.Port, Connection.Username, authMethod)
+        try
         {
-            Timeout = TimeSpan.FromSeconds(30)
-        };
+            AuthenticationMethod authMethod = GetAuthMethod();
+            ConnectionInfo info = new(Connection.Host, Connection.Port, Connection.Username, authMethod)
+            {
+                Timeout = TimeSpan.FromSeconds(30)
+            };
 
-        Client = new SftpClient(info);
-        Client.KeepAliveInterval = TimeSpan.FromSeconds(60);
+            Client = new SftpClient(info);
+            Client.KeepAliveInterval = TimeSpan.FromSeconds(60);
 
-        await Client.ConnectAsync(cancellationToken);
+            await Client.ConnectAsync(cancellationToken);
 
-        if (!Client.IsConnected)
+            if (!Client.IsConnected || cancellationToken.IsCancellationRequested)
+            {
+                notificationService.ShowError("Connection Failed", $"Failed to connect to {Connection.Name}");
+                return false;
+            }
+
+            string workingDirectory = Client.WorkingDirectory;
+            SkEditorAPI.Logs.Info($"Working directory: {workingDirectory}");
+
+            Root = new SftpFolderNode(Connection.Name, Client.WorkingDirectory, true, Client);
+            await Root.LoadChildren();
+            return true;
+        }
+        catch (Exception ex)
         {
-            notificationService.ShowError("Connection Failed", $"Failed to connect to {Connection.Name}");
+            notificationService.ShowError("Connection Error", ex.Message);
+            Client.Dispose();
             return false;
         }
-
-        string workingDirectory = Client.WorkingDirectory;
-        SkEditorAPI.Logs.Info($"Working directory: {workingDirectory}");
-
-        Root = new SftpFolderNode(Connection.Name, Client.WorkingDirectory, true, Client);
-        await Root.LoadChildren();
-        return true;
     }
 
     private AuthenticationMethod GetAuthMethod()

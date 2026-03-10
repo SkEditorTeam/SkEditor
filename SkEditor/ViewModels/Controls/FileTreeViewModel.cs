@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
@@ -27,20 +27,20 @@ public partial class FileTreeViewModel(
 
     public ObservableCollection<FileSystemNode> RootItems { get; } = [];
 
-    public async Task ChangeConnection(RemoteConnection connection)
+    public async Task<bool> ChangeConnection(RemoteConnection connection)
     {
         if (connection == null)
         {
             SkEditorAPI.Logs.Warning("Selected connection is null!");
-            return;
+            return false;
         }
 
         FileSystem = new SftpFileSystem(connection, remoteConnectionService, notificationService);
-        await LoadFileSystemAsync();
+        bool success = await LoadFileSystemAsync();
+        return success;
     }
 
-    [RelayCommand]
-    public async Task LoadFileSystemAsync()
+    public async Task<bool> LoadFileSystemAsync()
     {
         if (_cts != null)
         {
@@ -57,11 +57,18 @@ public partial class FileTreeViewModel(
         if (FileSystem == null)
         {
             SkEditorAPI.Logs.Warning("File system is null, cannot load!");
-            return;
+            IsLoading = false;
+            return false;
         }
 
-        _cts = new CancellationTokenSource();
-        await FileSystem.Load(_cts.Token);
+        _cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        bool isSuccess = await FileSystem.Load(_cts.Token);
+
+        if (!isSuccess)
+        {
+            IsLoading = false;
+            return false;
+        }
 
         stopwatch.Stop();
 
@@ -74,5 +81,6 @@ public partial class FileTreeViewModel(
         SkEditorAPI.Logs.Info($"Loaded file system in {stopwatch.ElapsedMilliseconds} ms");
 
         IsLoading = false;
+        return true;
     }
 }

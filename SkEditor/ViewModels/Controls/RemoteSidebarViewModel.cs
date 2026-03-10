@@ -29,10 +29,19 @@ public partial class RemoteSidebarViewModel(
     {
         if (value != null)
         {
-            _ = FileTree.ChangeConnection(value);
+            _ = HandleConnectionChangedAsync(value);
         }
 
         OnPropertyChanged(nameof(NoSelectedConnection));
+    }
+
+    private async Task HandleConnectionChangedAsync(RemoteConnection value)
+    {
+        bool success = await FileTree.ChangeConnection(value);
+        if (!success)
+        {
+            SelectedConnection = null;
+        }
     }
 
     [RelayCommand]
