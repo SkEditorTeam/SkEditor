@@ -1,12 +1,15 @@
 ﻿using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using Microsoft.Extensions.DependencyInjection;
 using Renci.SshNet;
+using SkEditor.Contracts.Services;
 
 namespace SkEditor.Models.Projects;
 
-public class SftpFileNode : FileSystemNode
+public partial class SftpFileNode : FileSystemNode
 {
     public SftpFileNode(string name, string path, SftpClient client) : base(name, path, false)
     {
@@ -52,6 +55,14 @@ public class SftpFileNode : FileSystemNode
 
     public override Symbol? Icon { get; }
     public override IImmutableSolidColorBrush IconColor { get; }
+    
+    public override IRelayCommand OpenCommand => OpenFileCommand;
+    
+    [RelayCommand]
+    public void OpenFile()
+    {
+        App.Services.GetRequiredService<INotificationService>().Show("Opened", "This file has been opened.");
+    }
 
     public override Task LoadChildren()
     {

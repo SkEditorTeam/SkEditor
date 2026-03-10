@@ -6,13 +6,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using Microsoft.Extensions.DependencyInjection;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
+using SkEditor.API;
+using SkEditor.Contracts.Services;
 
 namespace SkEditor.Models.Projects;
 
-public class SftpFolderNode : FileSystemNode
+public partial class SftpFolderNode : FileSystemNode
 {
     private static readonly FileSystemNode DummyNode = new LocalFileNode("Loading...", "...");
     private readonly SftpClient _client;
@@ -35,6 +39,14 @@ public class SftpFolderNode : FileSystemNode
 
     public override IImmutableSolidColorBrush IconColor =>
         new ImmutableSolidColorBrush(Color.Parse(_isRoot ? "#8CA9FF" : "#FFCF40"));
+
+    public override IRelayCommand OpenCommand => OpenFolderCommand;
+    
+    [RelayCommand]
+    public void OpenFolder()
+    {
+        App.Services.GetRequiredService<INotificationService>().Show("Opened", "This folder has been opened.");
+    }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {

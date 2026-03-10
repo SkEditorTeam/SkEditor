@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 
 namespace SkEditor.Models.Projects;
@@ -23,6 +24,8 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public virtual Symbol? Icon => null;
     public virtual IImmutableSolidColorBrush IconColor => Brushes.White;
     public virtual IImage? IconImage => null;
+
+    public virtual IRelayCommand? OpenCommand => null;
 
     protected bool HasLoadedChildren { get; set; }
 
