@@ -8,11 +8,8 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
-using Microsoft.Extensions.DependencyInjection;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
-using SkEditor.API;
-using SkEditor.Contracts.Services;
 
 namespace SkEditor.Models.Projects;
 
@@ -41,11 +38,11 @@ public partial class SftpFolderNode : FileSystemNode
         new ImmutableSolidColorBrush(Color.Parse(_isRoot ? "#8CA9FF" : "#FFCF40"));
 
     public override IRelayCommand OpenCommand => OpenFolderCommand;
-    
+
     [RelayCommand]
     public void OpenFolder()
     {
-        App.Services.GetRequiredService<INotificationService>().Show("Opened", "This folder has been opened.");
+        IsExpanded = !IsExpanded;
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
