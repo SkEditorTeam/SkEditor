@@ -35,7 +35,8 @@ public partial class FileTreeViewModel(
             return false;
         }
 
-        FileSystem = new SftpFileSystem(connection, remoteConnectionService, notificationService);
+        // FileSystem = new SftpFileSystem(connection, remoteConnectionService, notificationService);
+        FileSystem = new LocalFileSystem(@"C:\Users\Notro\Documents");
         bool success = await LoadFileSystemAsync();
         return success;
     }
