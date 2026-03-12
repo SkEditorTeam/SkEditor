@@ -8,7 +8,7 @@ using Avalonia.Media.Immutable;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Models.Projects.Sftp;
 
 public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client)
     : BaseFolderNode(name, path, isRoot)

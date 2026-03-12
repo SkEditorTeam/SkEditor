@@ -7,7 +7,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using FluentIcons.Common;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {

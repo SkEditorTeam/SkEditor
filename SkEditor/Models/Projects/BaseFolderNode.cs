@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using SkEditor.Models.Projects.Local;
 
 namespace SkEditor.Models.Projects;
 

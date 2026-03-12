@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Models;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Models.Projects.Local;
 
 public class LocalFileSystem : IFileSystem
 {

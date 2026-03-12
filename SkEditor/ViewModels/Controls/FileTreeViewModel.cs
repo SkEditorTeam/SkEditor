@@ -8,6 +8,7 @@ using SkEditor.API;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Projects;
+using SkEditor.Models.Projects.Local;
 using SkEditor.Models.Remote;
 
 namespace SkEditor.ViewModels.Controls;

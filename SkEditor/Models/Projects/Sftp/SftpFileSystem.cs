@@ -7,7 +7,7 @@ using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Models.Projects.Sftp;
 
 public class SftpFileSystem(
     RemoteConnection connection,

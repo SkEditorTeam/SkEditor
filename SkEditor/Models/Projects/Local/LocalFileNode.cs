@@ -1,11 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using Renci.SshNet;
 using SkEditor.Contracts.Services;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Models.Projects.Local;
 
-public partial class SftpFileNode(string name, string path, SftpClient client) : BaseFileNode(name, path)
+public partial class LocalFileNode(string name, string path) : BaseFileNode(name, path)
 {
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
