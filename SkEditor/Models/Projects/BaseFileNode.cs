@@ -42,6 +42,8 @@ public abstract class BaseFileNode : FileSystemNode
             ".env" or ".pem" or ".key" or ".pub" or ".cert" => (Symbol.Key,
                 "#E38B2D"),
 
+            ".gitignore" or ".gitattributes" => (Symbol.BranchFork, "#E3582D"),
+
             ".pdf" => (Symbol.DocumentPdf, "#FF595C"),
 
             _ => (Symbol.Document, "#FFFFFF")
