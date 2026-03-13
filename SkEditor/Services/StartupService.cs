@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
@@ -36,9 +35,6 @@ public class StartupService(MainWindowFactory mainWindowFactory) : IStartupServi
             _ = Task.Run(async () =>
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-                await splashScreen.TryUpdateStatusAsync("Setting up logging...");
-                SetupLogging();
 
                 await splashScreen.TryUpdateStatusAsync("Configuring error handling...");
                 ConfigureErrorHandling();
@@ -156,16 +152,6 @@ public class StartupService(MainWindowFactory mainWindowFactory) : IStartupServi
         {
             mainWindow.WindowState = WindowState.Maximized;
         }
-    }
-
-    private static void SetupLogging()
-    {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SkEditor/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
-            .WriteTo.Sink(new LogsHandler())
-            .CreateLogger();
     }
 
     private static void ConfigureErrorHandling()

@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Core;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Services;
 using SkEditor.Services.Windowing;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Startup;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Windows;
@@ -43,7 +47,18 @@ public class App : Application
     {
         base.OnFrameworkInitializationCompleted();
 
+        Logger serilogLogger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "SkEditor/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
+            .WriteTo.Sink(new LogsHandler())
+            .CreateLogger();
+
+        Log.Logger = serilogLogger;
+
         var collection = new ServiceCollection();
+        collection.AddSingleton<ILogger>(serilogLogger);
+
         ConfigureServices(collection);
         Services = collection.BuildServiceProvider();
 
@@ -78,6 +93,7 @@ public class App : Application
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<IMenuService, MenuService>();
         services.AddSingleton<INotificationService, NotificationService>();
+        services.AddSingleton<ILogService, LogService>();
 
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();
