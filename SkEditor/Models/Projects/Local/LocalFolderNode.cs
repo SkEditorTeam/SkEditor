@@ -12,7 +12,7 @@ namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
-    public override Symbol? Icon => Symbol.Folder;
+    public override Symbol? IconSymbol => Symbol.Folder;
 
     public override IImmutableSolidColorBrush IconColor =>
         new ImmutableSolidColorBrush(Color.Parse("#FFCF40"));
@@ -21,7 +21,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
     {
         Items =
         {
-            new MenuItem {Header = "Hello"},
+            new MenuItem { Header = "Hello" }
         }
     };
 
@@ -45,6 +45,11 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         {
             foreach (FileSystemInfo entry in directory.EnumerateFileSystemInfos("*.*", SearchOption.TopDirectoryOnly))
             {
+                if (IsSystemJunk(entry))
+                {
+                    continue;
+                }
+
                 switch (entry)
                 {
                     case DirectoryInfo subDirectory:
@@ -65,5 +70,12 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
 
         HasLoadedChildren = true;
         IsLoadingChildren = false;
+    }
+
+    private static bool IsSystemJunk(FileSystemInfo entry)
+    {
+        return entry.Attributes.HasFlag(FileAttributes.ReparsePoint) ||
+               (entry.Attributes.HasFlag(FileAttributes.Hidden) &&
+                entry.Attributes.HasFlag(FileAttributes.System));
     }
 }

@@ -32,13 +32,14 @@
                       ToolTip.Tip="{Binding Name}" ToolTip.ShowDelay="750">
                     <Panel>
                         <Viewbox Width="17" Height="17"
-                                 IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <icons:SymbolIcon Symbol="{Binding Icon}"
+                                 IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <icons:SymbolIcon Symbol="{Binding IconSymbol}"
                                               Foreground="{Binding IconColor}" />
                         </Viewbox>
-                        <Viewbox Width="20" Height="20"
-                                 IsVisible="{Binding IconImage, Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <Image Source="{Binding IconImage}" />
+                        <Viewbox Width="17" Height="17"
+                                 IsVisible="{Binding CustomIconSource, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <fa:IconSourceElement IconSource="{Binding CustomIconSource}"
+                                                  Foreground="{Binding IconColor}" />
                         </Viewbox>
                     </Panel>
                     <Panel Grid.Column="1">

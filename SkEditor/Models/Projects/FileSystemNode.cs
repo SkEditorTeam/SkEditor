@@ -4,12 +4,16 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentIcons.Common;
+using FluentAvalonia.UI.Controls;
+using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Models.Projects;
 
 public abstract partial class FileSystemNode(string name, string path, bool isDirectory) : ObservableObject
 {
+    [ObservableProperty]
+    private IconSource? _customIconSource;
+
     [ObservableProperty]
     private bool _isExpanded;
 
@@ -27,10 +31,9 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public ObservableCollection<FileSystemNode> Children { get; } = [];
 
-    public virtual Symbol? Icon => null;
+    public virtual Symbol? IconSymbol => null;
     public virtual IImmutableSolidColorBrush IconColor => Brushes.White;
-    public virtual IImage? IconImage => null;
-    
+
     public virtual MenuFlyout? ContextMenu => null;
 
     public virtual IRelayCommand? OpenCommand => null;

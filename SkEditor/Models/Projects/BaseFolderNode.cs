@@ -19,7 +19,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         }
     }
 
-    public override Symbol? Icon => _isRoot ? Symbol.Desktop : IsExpanded ? Symbol.FolderOpen : Symbol.Folder;
+    public override Symbol? IconSymbol => _isRoot ? Symbol.Desktop : IsExpanded ? Symbol.FolderOpen : Symbol.Folder;
 
     public override IRelayCommand OpenCommand => OpenFolderCommand;
 
@@ -43,6 +43,6 @@ public abstract partial class BaseFolderNode : FileSystemNode
             _ = LoadChildren();
         }
 
-        OnPropertyChanged(nameof(Icon));
+        OnPropertyChanged(nameof(IconSymbol));
     }
 }
