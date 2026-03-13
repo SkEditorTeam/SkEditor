@@ -9,7 +9,7 @@ using SkEditor.Models.Projects;
 
 namespace SkEditor.Behaviors;
 
-public class RenameBehavior : Behavior<TextBox>
+public class FileTreeRenameBehavior : Behavior<TextBox>
 {
     private string _originalName = string.Empty;
 

@@ -50,7 +50,7 @@
                                  Text="{Binding Name}"
                                  Margin="-5,-3">
                             <Interaction.Behaviors>
-                                <behaviors:RenameBehavior />
+                                <behaviors:FileTreeRenameBehavior />
                             </Interaction.Behaviors>
                         </TextBox>
                     </Panel>
