@@ -62,6 +62,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
 
         HasLoadedChildren = true;
         IsLoadingChildren = false;
+        OnPropertyChanged(nameof(IsExpanded));
     }
 
     private static bool IsSystemJunk(FileSystemInfo entry)

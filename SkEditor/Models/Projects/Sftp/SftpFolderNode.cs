@@ -48,5 +48,6 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
 
         HasLoadedChildren = true;
         IsLoadingChildren = false;
+        OnPropertyChanged(nameof(IsExpanded));
     }
 }
