@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Projects.Local;
 
@@ -41,4 +43,28 @@ public abstract partial class BaseFolderNode : FileSystemNode
             _ = LoadChildren();
         }
     }
+
+    public override async Task LoadChildren()
+    {
+        if (HasLoadedChildren)
+        {
+            return;
+        }
+
+        IsLoadingChildren = true;
+        Children.Clear();
+
+        IEnumerable<FileSystemNode> nodes = await LoadFilesAndFolders();
+
+        foreach (FileSystemNode node in nodes)
+        {
+            Children.Add(node);
+        }
+
+        HasLoadedChildren = true;
+        IsLoadingChildren = false;
+        OnPropertyChanged(nameof(IsExpanded));
+    }
+
+    protected abstract Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders();
 }

@@ -17,17 +17,8 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         }
     };
 
-    public override async Task LoadChildren()
+    protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
-        if (HasLoadedChildren)
-        {
-            return;
-        }
-
-        IsLoadingChildren = true;
-
-        Children.Clear();
-
         List<LocalFolderNode> folders = [];
         List<LocalFileNode> files = [];
 
@@ -53,16 +44,8 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
                 }
             }
         });
-
-        foreach (FileSystemNode node in folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
-                     .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)))
-        {
-            Children.Add(node);
-        }
-
-        HasLoadedChildren = true;
-        IsLoadingChildren = false;
-        OnPropertyChanged(nameof(IsExpanded));
+        return folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
+            .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
 
     private static bool IsSystemJunk(FileSystemInfo entry)

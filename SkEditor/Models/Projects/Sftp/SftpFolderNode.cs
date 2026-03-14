@@ -11,17 +11,8 @@ namespace SkEditor.Models.Projects.Sftp;
 public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client)
     : BaseFolderNode(name, path, isRoot)
 {
-    public override async Task LoadChildren()
+    protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
-        if (HasLoadedChildren)
-        {
-            return;
-        }
-
-        IsLoadingChildren = true;
-
-        Children.Clear();
-
         List<SftpFolderNode> folders = [];
         List<SftpFileNode> files = [];
 
@@ -40,14 +31,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
             }
         }
 
-        foreach (FileSystemNode node in folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
-                     .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)))
-        {
-            Children.Add(node);
-        }
-
-        HasLoadedChildren = true;
-        IsLoadingChildren = false;
-        OnPropertyChanged(nameof(IsExpanded));
+        return folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
+            .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
 }
