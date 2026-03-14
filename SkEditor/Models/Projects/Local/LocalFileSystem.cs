@@ -13,7 +13,7 @@ public class LocalFileSystem : IFileSystem
             throw new DirectoryNotFoundException($"The directory '{rootDirectory}' does not exist.");
 
         string rootName = Path.GetFileName(rootDirectory);
-        Root = new LocalFolderNode(rootName, rootDirectory, true);
+        Root = new LocalFolderNode(rootName, rootDirectory, true) { IsRoot = true };
     }
 
     public FileSystemNode? Root { get; }

@@ -4,19 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Media;
-using Avalonia.Media.Immutable;
-using FluentIcons.Common;
 
 namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
-    public override Symbol? IconSymbol => Symbol.Folder;
-
-    public override IImmutableSolidColorBrush IconColor =>
-        new ImmutableSolidColorBrush(Color.Parse("#FFCF40"));
-
     public override MenuFlyout ContextMenu => new()
     {
         Items =

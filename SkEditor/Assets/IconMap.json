@@ -1,0 +1,277 @@
+﻿[
+  {
+    "icon": "Script",
+    "color": "#00C853",
+    "extensions": [
+      ".sk"
+    ]
+  },
+  {
+    "icon": "Database",
+    "color": "#BEF26F",
+    "extensions": [
+      ".sql",
+      ".db",
+      ".sqlite",
+      ".sqlite3"
+    ]
+  },
+  {
+    "icon": "DocumentTable",
+    "color": "#FF8A30",
+    "extensions": [
+      ".csv",
+      ".tsv"
+    ]
+  },
+  {
+    "icon": "DocumentYml",
+    "color": "#49B7E3",
+    "extensions": [
+      ".yml",
+      ".yaml"
+    ]
+  },
+  {
+    "icon": "Braces",
+    "color": "#FFB300",
+    "extensions": [
+      ".json",
+      ".json5",
+      ".mcmeta"
+    ]
+  },
+  {
+    "icon": "DocumentSettings",
+    "color": "#49B7E3",
+    "extensions": [
+      ".toml",
+      ".properties",
+      ".ini",
+      ".cfg",
+      ".conf",
+      ".config",
+      ".props",
+      ".settings"
+    ]
+  },
+  {
+    "icon": "Code",
+    "color": "#44D468",
+    "extensions": [
+      ".xml"
+    ]
+  },
+  {
+    "icon": "DocumentCube",
+    "color": "#FF9800",
+    "extensions": [
+      ".schem",
+      ".schematic",
+      ".litematic",
+      ".structure"
+    ]
+  },
+  {
+    "icon": "DocumentCube",
+    "color": "#607D8B",
+    "extensions": [
+      ".nbt",
+      ".dat",
+      ".mca"
+    ]
+  },
+  {
+    "icon": "Image",
+    "color": "#29B6F6",
+    "extensions": [
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".gif",
+      ".bmp",
+      ".webp",
+      ".svg",
+      ".ico"
+    ]
+  },
+  {
+    "icon": "MusicNote2",
+    "color": "#BCF02E",
+    "extensions": [
+      ".mp3",
+      ".wav",
+      ".ogg",
+      ".flac"
+    ]
+  },
+  {
+    "icon": "Video",
+    "color": "#FF5252",
+    "extensions": [
+      ".mp4",
+      ".mkv",
+      ".avi",
+      ".mov",
+      ".ogv",
+      ".m4a"
+    ]
+  },
+  {
+    "icon": "DocumentText",
+    "color": "#CFD8DC",
+    "extensions": [
+      ".txt",
+      ".info"
+    ]
+  },
+  {
+    "icon": "DocumentHeader",
+    "color": "#BDCFD9",
+    "extensions": [
+      ".log"
+    ]
+  },
+  {
+    "icon": "DocumentBulletList",
+    "color": "#4FC3F7",
+    "extensions": [
+      ".md"
+    ]
+  },
+  {
+    "icon": "DocumentCube",
+    "color": "#F53D3D",
+    "extensions": [
+      ".dll",
+      ".so",
+      ".bin",
+      ".sys"
+    ]
+  },
+  {
+    "icon": "Play",
+    "color": "#35D4B4",
+    "extensions": [
+      ".exe",
+      ".msi"
+    ]
+  },
+  {
+    "icon": "Box",
+    "color": "#F03765",
+    "extensions": [
+      ".jar",
+      ".java"
+    ]
+  },
+  {
+    "icon": "DocumentCube",
+    "color": "#D32F2F",
+    "extensions": [
+      ".class"
+    ]
+  },
+  {
+    "icon": "WindowConsole",
+    "color": "#4AB9ED",
+    "extensions": [
+      ".bat",
+      ".cmd",
+      ".sh",
+      ".bash",
+      ".zsh",
+      ".ps1"
+    ]
+  },
+  {
+    "icon": "FolderZip",
+    "color": "#FF87B7",
+    "extensions": [
+      ".zip",
+      ".rar",
+      ".7z",
+      ".tar",
+      ".gz",
+      ".bz2",
+      ".xz"
+    ]
+  },
+  {
+    "icon": "Key",
+    "color": "#E38B2D",
+    "extensions": [
+      ".env",
+      ".pem",
+      ".key",
+      ".pub",
+      ".cert",
+      ".ppk"
+    ]
+  },
+  {
+    "icon": "BranchFork",
+    "color": "#F26A3D",
+    "extensions": [
+      ".gitignore",
+      ".gitattributes"
+    ]
+  },
+  {
+    "icon": "DocumentPdf",
+    "color": "#FF595C",
+    "extensions": [
+      ".pdf"
+    ]
+  },
+  {
+    "icon": "DocumentText",
+    "color": "#5CC9FF",
+    "extensions": [
+      ".doc",
+      ".docx",
+      ".odt"
+    ]
+  },
+  {
+    "icon": "SlidePlay",
+    "color": "#FF6D3A",
+    "extensions": [
+      ".pptx",
+      ".ppt",
+      ".odp"
+    ]
+  },
+  {
+    "icon": "Book",
+    "color": "#FF8A4F",
+    "extensions": [
+      ".epub",
+      ".azw",
+      ".azw3",
+      ".mobi",
+      ".fb2",
+      ".djvu",
+      ".prc"
+    ]
+  },
+  {
+    "icon": "Code",
+    "color": "#7ED4E6",
+    "extensions": [
+      ".cs",
+      ".py",
+      ".java",
+      ".cpp",
+      ".c",
+      ".h",
+      ".js",
+      ".ts",
+      ".html",
+      ".css",
+      ".php",
+      ".go",
+      ".rs"
+    ]
+  }
+]

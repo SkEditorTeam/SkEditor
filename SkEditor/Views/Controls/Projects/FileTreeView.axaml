@@ -4,12 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:projects="clr-namespace:SkEditor.Models.Projects"
-             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
+             xmlns:converters="clr-namespace:SkEditor.Converters"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="controls:FileTreeViewModel"
              x:Class="SkEditor.Views.Controls.Projects.FileTreeView">
+
+    <UserControl.Resources>
+        <converters:NodeToIconConverter x:Key="NodeToIconConverter" />
+        <converters:NodeToColorConverter x:Key="NodeToColorConverter" />
+    </UserControl.Resources>
+
     <TreeView Name="FileTree" ItemsSource="{Binding RootItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <TreeView.Styles>
             <Style Selector="TreeViewItem" x:DataType="projects:FileSystemNode">
@@ -31,15 +38,16 @@
                 <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center" ColumnSpacing="8"
                       ToolTip.Tip="{Binding Name}" ToolTip.ShowDelay="750">
                     <Panel>
-                        <Viewbox Width="17" Height="17"
-                                 IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <icons:SymbolIcon Symbol="{Binding IconSymbol}"
-                                              Foreground="{Binding IconColor}" />
-                        </Viewbox>
-                        <Viewbox Width="17" Height="17"
-                                 IsVisible="{Binding CustomIconSource, Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <fa:IconSourceElement IconSource="{Binding CustomIconSource}"
-                                                  Foreground="{Binding IconColor}" />
+                        <Viewbox Width="17" Height="17">
+                            <fluent:SymbolIcon
+                                Foreground="{Binding ., Converter={StaticResource NodeToColorConverter}}">
+                                <fluent:SymbolIcon.Symbol>
+                                    <MultiBinding Converter="{StaticResource NodeToIconConverter}">
+                                        <Binding Path="." />
+                                        <Binding Path="IsExpanded" />
+                                    </MultiBinding>
+                                </fluent:SymbolIcon.Symbol>
+                            </fluent:SymbolIcon>
                         </Viewbox>
                     </Panel>
                     <Panel Grid.Column="1">

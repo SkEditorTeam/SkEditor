@@ -94,6 +94,7 @@ public class App : Application
         services.AddSingleton<IMenuService, MenuService>();
         services.AddSingleton<INotificationService, NotificationService>();
         services.AddSingleton<ILogService, LogService>();
+        services.AddSingleton<IconProvider>();
 
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();

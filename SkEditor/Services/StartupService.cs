@@ -23,7 +23,7 @@ using System.Diagnostics;
 
 namespace SkEditor.Services;
 
-public class StartupService(MainWindowFactory mainWindowFactory) : IStartupService
+public class StartupService(MainWindowFactory mainWindowFactory, IconProvider iconProvider) : IStartupService
 {
     public async Task CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop,
         SplashScreen? splashScreen)
@@ -58,6 +58,7 @@ public class StartupService(MainWindowFactory mainWindowFactory) : IStartupServi
 
                 await SkEditorAPI.Configs.MigrateConfigsAsync();
                 await SkEditorAPI.Configs.LoadAllConfigsAsync();
+                await iconProvider.LoadIcons();
 
                 await splashScreen.TryUpdateStatusAsync("Creating main window...");
 

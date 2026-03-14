@@ -43,7 +43,7 @@ public class SftpFileSystem(
             string workingDirectory = Client.WorkingDirectory;
             SkEditorAPI.Logs.Info($"Working directory: {workingDirectory}");
 
-            Root = new SftpFolderNode(Connection.Name, Client.WorkingDirectory, true, Client);
+            Root = new SftpFolderNode(Connection.Name, Client.WorkingDirectory, true, Client) { IsRoot = true };
             await Root.LoadChildren();
             return true;
         }

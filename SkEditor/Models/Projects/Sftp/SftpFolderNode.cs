@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Media;
-using Avalonia.Media.Immutable;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 
@@ -13,9 +11,6 @@ namespace SkEditor.Models.Projects.Sftp;
 public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client)
     : BaseFolderNode(name, path, isRoot)
 {
-    public override IImmutableSolidColorBrush IconColor =>
-        new ImmutableSolidColorBrush(Color.Parse(isRoot ? "#8CA9FF" : "#FFCF40"));
-
     public override async Task LoadChildren()
     {
         if (HasLoadedChildren)

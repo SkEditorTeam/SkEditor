@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.Input;
-using FluentIcons.Common;
 using SkEditor.Models.Projects.Local;
 
 namespace SkEditor.Models.Projects;
@@ -8,20 +8,18 @@ namespace SkEditor.Models.Projects;
 public abstract partial class BaseFolderNode : FileSystemNode
 {
     private static readonly FileSystemNode DummyNode = new LocalFileNode("Loading...", "...");
-    private readonly bool _isRoot;
 
     protected BaseFolderNode(string name, string path, bool isRoot) : base(name, path, true)
     {
-        _isRoot = isRoot;
         if (!isRoot)
         {
             Children.Add(DummyNode);
         }
     }
 
-    public override Symbol? IconSymbol => _isRoot ? Symbol.Desktop : IsExpanded ? Symbol.FolderOpen : Symbol.Folder;
-
     public override IRelayCommand OpenCommand => OpenFolderCommand;
+
+    public bool HasChildren => Children.Any() && Children.First() != DummyNode;
 
     [RelayCommand]
     public void OpenFolder()
@@ -42,7 +40,5 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             _ = LoadChildren();
         }
-
-        OnPropertyChanged(nameof(IconSymbol));
     }
 }
