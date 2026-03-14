@@ -6,8 +6,9 @@ using Avalonia.Media.Immutable;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
-using SkEditor.Utilities.Styling;
+using SkEditor.Contracts.Services;
 
 namespace SkEditor.Utilities.Editor;
 
@@ -20,6 +21,8 @@ public class SelectionHandler
         {
             return;
         }
+
+        IThemeService themeService = App.Services.GetRequiredService<IThemeService>();
 
         textEditor.TextArea.TextView.LineTransformers
             .Where(x => x is OccurenceBackgroundTransformer)
@@ -42,7 +45,7 @@ public class SelectionHandler
         foreach (SimpleSegment segment in wordOccurrences.Where(s => s.Offset != start || s.Length != length))
         {
             int lineNumber = textEditor.Document.GetLineByOffset(segment.Offset).LineNumber;
-            lineTransformers.Add(new OccurenceBackgroundTransformer
+            lineTransformers.Add(new OccurenceBackgroundTransformer(themeService)
             {
                 LineNumber = lineNumber,
                 StartOffset = segment.Offset,
@@ -52,7 +55,7 @@ public class SelectionHandler
     }
 }
 
-public class OccurenceBackgroundTransformer : DocumentColorizingTransformer
+public class OccurenceBackgroundTransformer(IThemeService themeService) : DocumentColorizingTransformer
 {
     public int LineNumber { get; set; }
 
@@ -76,10 +79,10 @@ public class OccurenceBackgroundTransformer : DocumentColorizingTransformer
         }
     }
 
-    private static void ApplyChanges(VisualLineElement element)
+    private void ApplyChanges(VisualLineElement element)
     {
-        Color selectionColor = ThemeEditor.CurrentTheme.SelectionColor.Color;
-        Color accentColor = ThemeEditor.CurrentTheme.AccentColor.Color;
+        Color selectionColor = themeService.CurrentTheme.SelectionColor.Color;
+        Color accentColor = themeService.CurrentTheme.AccentColor.Color;
 
         Color occurrenceColor = BlendColors(selectionColor, accentColor, 0.3);
 

@@ -11,26 +11,32 @@ using Avalonia.Media.Immutable;
 using Avalonia.Styling;
 using AvaloniaEdit;
 using FluentAvalonia.Styling;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Files;
+using SkEditor.Utilities.Styling;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
-namespace SkEditor.Utilities.Styling;
+namespace SkEditor.Services;
 
-public class ThemeEditor
+public class ThemeService(ILogService log) : IThemeService
 {
-    private static bool _defaultColorsCollected;
+    private bool _defaultColorsCollected;
 
-    public static List<Theme> Themes { get; set; } = [];
-    public static Theme CurrentTheme { get; set; } = new();
+    [Obsolete("Use CurrentTheme property instead.")]
+    public static IThemeService ServiceStatic => App.Services.GetRequiredService<IThemeService>();
 
-    public static string ThemeFolderPath { get; set; } = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Themes");
+    public Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 
-    public static Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
+    public ControlTheme? SmallWindowTheme { get; private set; }
 
-    public static ControlTheme? SmallWindowTheme { get; private set; }
+    public List<Theme> Themes { get; set; } = [];
+    public Theme CurrentTheme { get; set; } = new();
 
-    public static void LoadThemes()
+    public string ThemeFolderPath { get; set; } = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Themes");
+
+    public void LoadThemes()
     {
         if (!Directory.Exists(ThemeFolderPath))
         {
@@ -52,7 +58,7 @@ public class ThemeEditor
         CurrentTheme = GetUsedTheme();
     }
 
-    public static Theme LoadTheme(string path)
+    public Theme LoadTheme(string path)
     {
         Theme? theme;
         try
@@ -71,14 +77,97 @@ public class ThemeEditor
         }
         catch (Exception ex)
         {
-            SkEditorAPI.Logs.Error($"Failed to load theme from {path}: {ex.Message}");
+            log.Error($"Failed to load theme from {path}: {ex.Message}");
             theme = GetDefaultTheme();
         }
 
         return theme;
     }
 
-    private static Theme GetUsedTheme()
+    public void SaveAllThemes()
+    {
+        Themes.ForEach(SaveTheme);
+    }
+
+    public async Task SetTheme(Theme theme)
+    {
+        if (CurrentTheme.UseMicaEffect && !theme.UseMicaEffect)
+        {
+            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+            mainWindow?.TransparencyLevelHint = [WindowTransparencyLevel.None];
+        }
+
+        CurrentTheme = theme;
+        SkEditorAPI.Configs.GetAppSettings().CurrentTheme = theme.Name;
+
+        await ApplyTheme();
+    }
+
+    public async Task ApplyTheme()
+    {
+        if (_defaultColorsCollected)
+        {
+            CaptureNewDefaultColors(CurrentTheme);
+        }
+        else
+        {
+            CollectDefaultColors();
+            _defaultColorsCollected = true;
+        }
+
+        RestoreDefaultColors();
+
+        List<Task> tasks = [];
+
+        Application? currentApp = Application.Current;
+        if (currentApp == null)
+        {
+            log.Error("Application.Current is null. Cannot apply theme.", true);
+            return;
+        }
+
+        foreach (KeyValuePair<string, string[]> item in Theme.ThemeToResourceDictionary)
+        {
+            ImmutableSolidColorBrush brush = CurrentTheme.GetBrushByName(item.Key);
+
+            tasks.AddRange(item.Value.Select(resource =>
+            {
+                currentApp.Resources[resource] = brush;
+                return Task.CompletedTask;
+            }));
+        }
+
+        UpdateTextEditorColors();
+
+        tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
+        {
+            currentApp.Resources[colorChange.Key] = colorChange.Value;
+            return Task.CompletedTask;
+        }));
+
+        FluentAvaloniaTheme styles = currentApp.Styles.OfType<FluentAvaloniaTheme>().First();
+        styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
+        styles.PreferUserAccentColor = true;
+
+        ApplyMica();
+        UpdateFont();
+
+        await Task.WhenAll(tasks);
+    }
+
+    public async Task ReloadCurrentTheme()
+    {
+        string themePath = Path.Combine(ThemeFolderPath, CurrentTheme.FileName);
+
+        Themes.RemoveAll(t => t.FileName == CurrentTheme.FileName);
+
+        Theme reloadedTheme = LoadTheme(themePath);
+        CurrentTheme = reloadedTheme;
+
+        await ApplyTheme();
+    }
+
+    private Theme GetUsedTheme()
     {
         string currentTheme = SkEditorAPI.Configs.GetAppSettings().CurrentTheme;
 
@@ -117,7 +206,7 @@ public class ThemeEditor
         };
     }
 
-    public static void SaveTheme(Theme theme)
+    public void SaveTheme(Theme theme)
     {
         string path = Path.Combine(ThemeFolderPath, theme.FileName);
 
@@ -125,90 +214,19 @@ public class ThemeEditor
         File.WriteAllText(path, serializedTheme);
     }
 
-    public static void SaveAllThemes()
-    {
-        Themes.ForEach(SaveTheme);
-    }
-
-    public static async Task SetTheme(Theme theme)
-    {
-        if (CurrentTheme.UseMicaEffect && !theme.UseMicaEffect)
-        {
-            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
-            mainWindow?.TransparencyLevelHint = [WindowTransparencyLevel.None];
-        }
-
-        CurrentTheme = theme;
-        SkEditorAPI.Configs.GetAppSettings().CurrentTheme = theme.Name;
-
-        await ApplyTheme();
-    }
-
-    public static async Task ApplyTheme()
-    {
-        if (_defaultColorsCollected)
-        {
-            CaptureNewDefaultColors(CurrentTheme);
-        }
-        else
-        {
-            CollectDefaultColors();
-            _defaultColorsCollected = true;
-        }
-
-        RestoreDefaultColors();
-
-        List<Task> tasks = [];
-
-        Application? currentApp = Application.Current;
-        if (currentApp == null)
-        {
-            SkEditorAPI.Logs.Error("Application.Current is null. Cannot apply theme.", true);
-            return;
-        }
-
-        foreach (KeyValuePair<string, string[]> item in Theme.ThemeToResourceDictionary)
-        {
-            ImmutableSolidColorBrush brush = CurrentTheme.GetBrushByName(item.Key);
-
-            tasks.AddRange(item.Value.Select(resource =>
-            {
-                currentApp.Resources[resource] = brush;
-                return Task.CompletedTask;
-            }));
-        }
-
-        UpdateTextEditorColors();
-
-        tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
-        {
-            currentApp.Resources[colorChange.Key] = colorChange.Value;
-            return Task.CompletedTask;
-        }));
-
-        FluentAvaloniaTheme styles = currentApp.Styles.OfType<FluentAvaloniaTheme>().First();
-        styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
-        styles.PreferUserAccentColor = true;
-
-        ApplyMica();
-        UpdateFont();
-
-        await Task.WhenAll(tasks);
-    }
-
-    private static void ApplyMica()
+    private void ApplyMica()
     {
         Application? currentApp = Application.Current;
         if (currentApp == null)
         {
-            SkEditorAPI.Logs.Error("Application.Current is null. Cannot apply Mica.", true);
+            log.Error("Application.Current is null. Cannot apply Mica.", true);
             return;
         }
 
         if (!currentApp.Resources.TryGetResource("SmallWindowTheme", ThemeVariant.Default,
                 out object? smallWindowTheme))
         {
-            SkEditorAPI.Logs.Error("Failed to get SmallWindowTheme resource.", true);
+            log.Error("Failed to get SmallWindowTheme resource.", true);
             return;
         }
 
@@ -244,7 +262,7 @@ public class ThemeEditor
         SmallWindowTheme = smallWindow;
     }
 
-    private static void CaptureNewDefaultColors(Theme themeToApply)
+    private void CaptureNewDefaultColors(Theme themeToApply)
     {
         themeToApply.CustomColorChanges
             .Where(kvp => !DefaultColors.ContainsKey(kvp.Key))
@@ -265,14 +283,14 @@ public class ThemeEditor
                 }
                 else
                 {
-                    SkEditorAPI.Logs.Warning(
+                    log.Warning(
                         $"Could not find default resource for key '{kvp.Key}' introduced by theme '{themeToApply.Name}'. It might not reset correctly.");
                 }
             });
     }
 
 
-    private static void CollectDefaultColors()
+    private void CollectDefaultColors()
     {
         DefaultColors.Clear();
 
@@ -319,7 +337,7 @@ public class ThemeEditor
         _defaultColorsCollected = true;
     }
 
-    private static void RestoreDefaultColors()
+    private void RestoreDefaultColors()
     {
         foreach (KeyValuePair<string, ImmutableSolidColorBrush> kvp in DefaultColors)
         {
@@ -330,7 +348,7 @@ public class ThemeEditor
         }
     }
 
-    private static void UpdateTextEditorColors()
+    private void UpdateTextEditorColors()
     {
         List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
         foreach (TextEditor textEditor in files.Select(x => x.Editor).OfType<TextEditor>())
@@ -344,7 +362,7 @@ public class ThemeEditor
         }
     }
 
-    private static void UpdateFont()
+    private void UpdateFont()
     {
         // if (OSVersionHelper.IsWindows())
         // {
@@ -360,17 +378,5 @@ public class ThemeEditor
         {
             Application.Current.Resources["ContentControlThemeFontFamily"] = new FontFamily(fontName);
         }
-    }
-
-    public static async Task ReloadCurrentTheme()
-    {
-        string themePath = Path.Combine(ThemeFolderPath, CurrentTheme.FileName);
-
-        Themes.RemoveAll(t => t.FileName == CurrentTheme.FileName);
-
-        Theme reloadedTheme = LoadTheme(themePath);
-        CurrentTheme = reloadedTheme;
-
-        await ApplyTheme();
     }
 }

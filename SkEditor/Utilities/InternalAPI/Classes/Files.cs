@@ -11,6 +11,7 @@ using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Services.Files;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
@@ -246,7 +247,7 @@ public class Files : IFiles
         int index = GetOpenedEditors().Count + 1;
         string header = Translation.Get(TranslationKey.NewFileNameFormat).Replace("{0}", index.ToString());
 
-        TabViewItem? tabItem = await FileBuilder.Build(header);
+        TabViewItem? tabItem = await FileFactory.Instance.Build(header);
         if (tabItem == null)
         {
             return null;

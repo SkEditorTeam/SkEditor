@@ -15,13 +15,13 @@ using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Services;
+using SkEditor.Services.Files;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkUnity;
-using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
@@ -168,12 +168,12 @@ public partial class DocElementControl : UserControl
 
     private void LoadPatternsEditor(IDocumentationEntry entry)
     {
-        PatternsEditor.TextArea.SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor;
+        PatternsEditor.TextArea.SelectionBrush = ThemeService.ServiceStatic.CurrentTheme.SelectionColor;
 
         string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
         if (fontFamily is null)
         {
-            object? font = FileBuilder.GetJetbrainsMonoFont();
+            object? font = FileFactory.GetJetbrainsMonoFont();
             if (font == null)
             {
                 return;
@@ -283,14 +283,14 @@ public partial class DocElementControl : UserControl
             Text = content,
             TextArea =
             {
-                SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor
+                SelectionBrush = ThemeService.ServiceStatic.CurrentTheme.SelectionColor
             }
         };
 
         string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
         if (fontFamily is null)
         {
-            object? font = FileBuilder.GetJetbrainsMonoFont();
+            object? font = FileFactory.GetJetbrainsMonoFont();
             if (font is not null)
             {
                 editor.FontFamily = (FontFamily)font;
@@ -503,14 +503,14 @@ public partial class DocElementControl : UserControl
                     Margin = new Thickness(0, 0, 0, 10),
                     TextArea =
                     {
-                        SelectionBrush = ThemeEditor.CurrentTheme.SelectionColor
+                        SelectionBrush = ThemeService.ServiceStatic.CurrentTheme.SelectionColor
                     }
                 };
 
                 string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
                 if (fontFamily is null)
                 {
-                    object? font = FileBuilder.GetJetbrainsMonoFont();
+                    object? font = FileFactory.GetJetbrainsMonoFont();
                     if (font is not null)
                     {
                         textEditor.FontFamily = (FontFamily)font;

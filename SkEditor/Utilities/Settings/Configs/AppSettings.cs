@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.Json.Serialization.Metadata;
 using FluentIcons.Common;
+using SkEditor.Services;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Attributes;
 using SkEditor.Utilities.Settings.Providers;
@@ -69,13 +70,13 @@ public partial class AppSettings : BaseConfig<AppSettings>
                 return;
             }
 
-            Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.Name.Equals(value));
+            Theme? theme = ThemeService.ServiceStatic.Themes.FirstOrDefault(x => x.Name.Equals(value));
             if (theme == null)
             {
                 return;
             }
 
-            _ = ThemeEditor.SetTheme(theme);
+            _ = ThemeService.ServiceStatic.SetTheme(theme);
         }
     } = "Default.json";
 

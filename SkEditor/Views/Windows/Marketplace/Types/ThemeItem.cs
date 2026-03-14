@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using Serilog;
 using SkEditor.API;
+using SkEditor.Services;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using Symbol = FluentIcons.Common.Symbol;
@@ -49,8 +50,8 @@ public class ThemeItem : MarketplaceItem
             {
                 _ = Dispatcher.UIThread.InvokeAsync(async () =>
                 {
-                    Theme theme = ThemeEditor.LoadTheme(filePath);
-                    await ThemeEditor.SetTheme(theme);
+                    Theme theme = ThemeService.ServiceStatic.LoadTheme(filePath);
+                    await ThemeService.ServiceStatic.SetTheme(theme);
                 });
             }
 
@@ -68,21 +69,22 @@ public class ThemeItem : MarketplaceItem
     {
         string fileName = ItemFileUrl.Split('/').Last();
 
-        if (fileName.Equals(ThemeEditor.CurrentTheme.FileName))
+        if (fileName.Equals(ThemeService.ServiceStatic.CurrentTheme.FileName))
         {
-            await ThemeEditor.SetTheme(ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ??
-                                       ThemeEditor.GetDefaultTheme());
+            await ThemeService.ServiceStatic.SetTheme(
+                ThemeService.ServiceStatic.Themes.FirstOrDefault(x => x.FileName.Equals("Default.json")) ??
+                ThemeService.GetDefaultTheme());
         }
 
-        Theme? theme = ThemeEditor.Themes.FirstOrDefault(x => x.FileName.Equals(fileName));
+        Theme? theme = ThemeService.ServiceStatic.Themes.FirstOrDefault(x => x.FileName.Equals(fileName));
         if (theme == null)
         {
             await SkEditorAPI.Windows.ShowError("The theme is not installed.");
             return;
         }
 
-        ThemeEditor.Themes.Remove(theme);
-        ThemeEditor.SaveAllThemes();
+        ThemeService.ServiceStatic.Themes.Remove(theme);
+        ThemeService.ServiceStatic.SaveAllThemes();
         File.Delete(Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Themes", fileName));
 
         MarketplaceWindow.Instance.HideAllButtons();

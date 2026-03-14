@@ -9,8 +9,8 @@ using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using SkEditor.Services;
 using SkEditor.Utilities.Parser.Elements;
-using SkEditor.Utilities.Styling;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -322,7 +322,7 @@ public partial class CodeSection
 
         private static void ApplyChanges(VisualLineElement element)
         {
-            element.BackgroundBrush = ThemeEditor.CurrentTheme.SelectionColor;
+            element.BackgroundBrush = ThemeService.ServiceStatic.CurrentTheme.SelectionColor;
         }
     }
 }

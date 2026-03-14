@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
+using SkEditor.Services.Files;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
@@ -60,7 +61,7 @@ public partial class GeneralPage : UserControl
 
                 foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
                 {
-                    openedFile.Editor!.ContextFlyout = FileBuilder.GetContextMenu(openedFile.Editor);
+                    openedFile.Editor!.ContextFlyout = FileFactory.GetContextMenu(openedFile.Editor);
                 }
             });
         };

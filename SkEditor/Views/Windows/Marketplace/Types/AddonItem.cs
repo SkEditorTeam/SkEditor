@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using SkEditor.API;
 using SkEditor.Utilities.InternalAPI;
@@ -96,7 +97,7 @@ public class AddonItem : MarketplaceItem
 
     public static void Manage()
     {
-        SkEditorAPI.Windows.ShowWindow(new SettingsWindow());
+        SkEditorAPI.Windows.ShowWindow(App.Services.GetRequiredService<SettingsWindow>());
         SettingsWindow.NavigateToPage(typeof(AddonsPage));
     }
 

@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Models.Welcome;
 using SkEditor.Utilities.Extensions;
@@ -130,6 +131,6 @@ public partial class WelcomePageViewModel : ObservableObject
 
     private static async Task OpenSettings()
     {
-        await new SettingsWindow().ShowDialogOnMainWindow();
+        await App.Services.GetRequiredService<SettingsWindow>().ShowDialogOnMainWindow();
     }
 }

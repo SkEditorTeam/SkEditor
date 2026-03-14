@@ -11,6 +11,7 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Services.Files;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
@@ -141,7 +142,7 @@ public class FileHandler
             return;
         }
 
-        FileTypes.FileType? fileType = FileBuilder.OpenedFiles.GetValueOrDefault(file.Header);
+        FileTypes.FileType? fileType = FileFactory.OpenedFiles.GetValueOrDefault(file.Header);
         mainWindow?.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
 

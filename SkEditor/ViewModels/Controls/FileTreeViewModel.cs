@@ -4,18 +4,19 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.API;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Local;
+using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
 
 namespace SkEditor.ViewModels.Controls;
 
 public partial class FileTreeViewModel(
     IRemoteConnectionService remoteConnectionService,
-    INotificationService notificationService)
+    INotificationService notificationService,
+    ILogService logService)
     : ObservableObject
 {
     private CancellationTokenSource? _cts;
@@ -32,12 +33,24 @@ public partial class FileTreeViewModel(
     {
         if (connection == null)
         {
-            SkEditorAPI.Logs.Warning("Selected connection is null!");
+            logService.Warning("Selected connection is null!");
             return false;
         }
 
-        // FileSystem = new SftpFileSystem(connection, remoteConnectionService, notificationService);
-        FileSystem = new LocalFileSystem(@"C:\Users\Notro\Documents");
+        const bool isRemote = false;
+
+        if (isRemote)
+#pragma warning disable CS0162 // Unreachable code detected
+        {
+            FileSystem = new SftpFileSystem(connection, remoteConnectionService, notificationService, logService);
+        }
+        // ReSharper disable RedundantIfElseBlock
+        else
+        {
+            FileSystem = new LocalFileSystem(@"C:\Users\Notro\Documents");
+        }
+#pragma warning restore CS0162 // Unreachable code detected
+
         bool success = await LoadFileSystemAsync();
         return success;
     }
@@ -58,7 +71,7 @@ public partial class FileTreeViewModel(
 
         if (FileSystem == null)
         {
-            SkEditorAPI.Logs.Warning("File system is null, cannot load!");
+            logService.Warning("File system is null, cannot load!");
             IsLoading = false;
             return false;
         }
@@ -80,7 +93,7 @@ public partial class FileTreeViewModel(
             RootItems.Add(FileSystem.Root);
         }
 
-        SkEditorAPI.Logs.Info($"Loaded file system in {stopwatch.ElapsedMilliseconds} ms");
+        logService.Info($"Loaded file system in {stopwatch.ElapsedMilliseconds} ms");
 
         IsLoading = false;
         return true;

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using SkEditor.Utilities.Styling;
+using SkEditor.Services;
 using ColorPickerSettingsExpander = SkEditor.Views.Controls.ColorPickerSettingsExpander;
 using SkEditorTheme = SkEditor.Utilities.Styling.Theme;
 
@@ -40,7 +40,7 @@ public partial class EditThemePage : UserControl
     private static void SetUpColorPicker(ColorPickerSettingsExpander expander, string propertyName)
     {
         ColorPicker? colorPicker = expander.ColorPicker;
-        colorPicker.Color = ThemeEditor.CurrentTheme.GetBrushByName(propertyName).Color;
+        colorPicker.Color = ThemeService.ServiceStatic.CurrentTheme.GetBrushByName(propertyName).Color;
         colorPicker.ColorChanged += async (_, e) => await ChangeColor(propertyName, e.NewColor);
     }
 
@@ -51,7 +51,7 @@ public partial class EditThemePage : UserControl
             return;
         }
 
-        ThemeEditor.CurrentTheme.SetBrush(name, new ImmutableSolidColorBrush(color.Value));
-        await ThemeEditor.ApplyTheme();
+        ThemeService.ServiceStatic.CurrentTheme.SetBrush(name, new ImmutableSolidColorBrush(color.Value));
+        await ThemeService.ServiceStatic.ApplyTheme();
     }
 }

@@ -7,6 +7,7 @@ using FluentAvalonia.UI.Navigation;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.API;
 using SkEditor.Utilities.Styling;
+using SkEditor.ViewModels.Pages;
 using SkEditor.Views.Pages.Settings;
 using SkEditor.Views.Pages.Settings.Personalization;
 
@@ -18,14 +19,17 @@ public partial class SettingsWindow : AppWindow
     {
         InitializeComponent();
         Focusable = true;
+        Instance = this;
+    }
 
+    public SettingsWindow(ThemePageViewModel themePageViewModel) : this()
+    {
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;
 
-        Instance = this;
         SkEditorAPI.Events.SettingsOpened();
 
-        FrameView.NavigationPageFactory = new SettingsPageFactory();
+        FrameView.NavigationPageFactory = new SettingsPageFactory(themePageViewModel);
 
         KeyDown += (_, e) =>
         {
@@ -73,7 +77,7 @@ public partial class SettingsWindow : AppWindow
     }
 }
 
-public class SettingsPageFactory : INavigationPageFactory
+public class SettingsPageFactory(ThemePageViewModel themePageViewModel) : INavigationPageFactory
 {
     public Control? GetPage(Type sourcePageType)
     {
@@ -129,7 +133,7 @@ public class SettingsPageFactory : INavigationPageFactory
 
         if (sourcePageType == typeof(ThemePage))
         {
-            return new ThemePage();
+            return new ThemePage(themePageViewModel);
         }
 
         if (sourcePageType == typeof(FileSyntaxes))

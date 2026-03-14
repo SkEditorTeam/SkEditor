@@ -18,25 +18,29 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Contracts.Services;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Completion;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Styling;
 using AssociationSelectionWindow = SkEditor.Views.Windows.FileTypes.AssociationSelectionWindow;
 using GoToLineWindow = SkEditor.Views.Windows.GoToLineWindow;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
-namespace SkEditor.Utilities.Files;
+namespace SkEditor.Services.Files;
 
-public class FileBuilder
+public class FileFactory(IThemeService themeService) : IFileFactory
 {
     public static readonly Dictionary<string, FileTypes.FileType> OpenedFiles = [];
 
-    public static async Task<TabViewItem?> Build(string header, string path = "", string? content = null)
+    [Obsolete("Use DI!!!")]
+    public static IFileFactory Instance => App.Services.GetRequiredService<IFileFactory>();
+
+    public async Task<TabViewItem?> Build(string header, string path = "", string? content = null)
     {
         FileTypes.FileType? fileType = await GetFileDisplay(path, content);
         if (fileType == null)
@@ -83,7 +87,7 @@ public class FileBuilder
         return tabViewItem;
     }
 
-    private static async Task<FileTypes.FileType?> GetFileDisplay(string path, string? content)
+    private async Task<FileTypes.FileType?> GetFileDisplay(string path, string? content)
     {
         FileTypes.FileType? fileType = null;
         if (!FileTypes.RegisteredFileTypes.ContainsKey(Path.GetExtension(path)))
@@ -108,7 +112,7 @@ public class FileBuilder
                 else
                 {
                     FileTypes.FileAssociation? preferred = handlers.Find(association => association.IsFromAddon &&
-                        association.Addon?.Name == value);
+                                                                              association.Addon?.Name == value);
                     if (preferred != null)
                     {
                         fileType = preferred.Handle(path);
@@ -150,7 +154,7 @@ public class FileBuilder
         return fileType ?? await GetDefaultEditor(path, content);
     }
 
-    private static async Task<FileTypes.FileType?> GetDefaultEditor(string path, string? content)
+    private async Task<FileTypes.FileType?> GetDefaultEditor(string path, string? content)
     {
         string? fileContent = null;
         if (!string.IsNullOrWhiteSpace(path))
@@ -188,7 +192,7 @@ public class FileBuilder
         return new FileTypes.FileType(editor, path, true);
     }
 
-    public static TextEditor CreateEditor(string content = "")
+    public TextEditor CreateEditor(string content = "")
     {
         Application? application = Application.Current;
 
@@ -273,7 +277,7 @@ public class FileBuilder
         return editor;
     }
 
-    private static TextEditor SetOptions(TextEditor editor)
+    private TextEditor SetOptions(TextEditor editor)
     {
         editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));
         editor.TextArea.TextView.LinkTextUnderline = true;
@@ -290,8 +294,8 @@ public class FileBuilder
         editor.Options.ConvertTabsToSpaces = !SkEditorAPI.Configs.GetAppSettings().UseEditorTabsForIndentation;
         editor.Options.IndentationSize = SkEditorAPI.Configs.GetAppSettings().EditorTabSize;
 
-        editor.TextArea.TextView.CurrentLineBackground = ThemeEditor.CurrentTheme.CurrentLineBackground;
-        editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(ThemeEditor.CurrentTheme.CurrentLineBorder, 2);
+        editor.TextArea.TextView.CurrentLineBackground = themeService.CurrentTheme.CurrentLineBackground;
+        editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(themeService.CurrentTheme.CurrentLineBorder, 2);
         editor.Options.HighlightCurrentLine = SkEditorAPI.Configs.GetAppSettings().HighlightCurrentLine;
 
         return editor;

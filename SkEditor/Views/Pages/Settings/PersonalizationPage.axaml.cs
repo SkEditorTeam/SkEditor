@@ -5,8 +5,8 @@ using Avalonia.Media;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.API;
+using SkEditor.Services.Files;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Files;
 using SkEditor.Views.Pages.Settings.Personalization;
 using SkEditor.Views.Windows;
 using SkEditor.Views.Windows.Settings;
@@ -58,7 +58,7 @@ public partial class PersonalizationPage : UserControl
                 return;
             }
 
-            object? jetbrainsMonoFont = FileBuilder.GetJetbrainsMonoFont();
+            object? jetbrainsMonoFont = FileFactory.GetJetbrainsMonoFont();
             if (jetbrainsMonoFont is null)
             {
                 i.Editor!.FontFamily = new FontFamily("JetBrains Mono");

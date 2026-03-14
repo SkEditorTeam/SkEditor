@@ -11,12 +11,15 @@ using Serilog.Core;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Services;
+using SkEditor.Services.Files;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Startup;
 using SkEditor.ViewModels.Controls;
+using SkEditor.ViewModels.Pages;
 using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Windows;
+using SkEditor.Views.Windows.Settings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
@@ -95,15 +98,20 @@ public class App : Application
         services.AddSingleton<INotificationService, NotificationService>();
         services.AddSingleton<ILogService, LogService>();
         services.AddSingleton<IconProvider>();
+        services.AddSingleton<CrashChecker>();
+        services.AddSingleton<IThemeService, ThemeService>();
+        services.AddSingleton<IFileFactory, FileFactory>();
 
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();
         services.AddTransient<RemoteConnectionViewModel>();
         services.AddTransient<RemoteSidebarViewModel>();
         services.AddTransient<FileTreeViewModel>();
+        services.AddTransient<ThemePageViewModel>();
 
         services.AddTransient<MainWindow>();
         services.AddTransient<SplashScreen>();
         services.AddTransient<RemoteConnectionWindow>();
+        services.AddTransient<SettingsWindow>();
     }
 }

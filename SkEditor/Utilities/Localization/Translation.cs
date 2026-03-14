@@ -10,6 +10,7 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using SkEditor.API;
+using SkEditor.Services.Files;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Files;
 
@@ -98,7 +99,7 @@ public static class Translation
 
             foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
             {
-                openedFile.Editor!.ContextFlyout = FileBuilder.GetContextMenu(openedFile.Editor);
+                openedFile.Editor!.ContextFlyout = FileFactory.GetContextMenu(openedFile.Editor);
             }
         });
     }

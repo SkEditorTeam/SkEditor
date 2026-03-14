@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet;
-using SkEditor.API;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
@@ -12,7 +11,8 @@ namespace SkEditor.Models.Projects.Sftp;
 public class SftpFileSystem(
     RemoteConnection connection,
     IRemoteConnectionService connectionService,
-    INotificationService notificationService) : IFileSystem
+    INotificationService notificationService,
+    ILogService logService) : IFileSystem
 {
     public SftpClient Client { get; private set; } = null!;
     public RemoteConnection Connection { get; } = connection;
@@ -41,7 +41,7 @@ public class SftpFileSystem(
             }
 
             string workingDirectory = Client.WorkingDirectory;
-            SkEditorAPI.Logs.Info($"Working directory: {workingDirectory}");
+            logService.Info($"Working directory: {workingDirectory}");
 
             Root = new SftpFolderNode(Connection.Name, Client.WorkingDirectory, true, Client) { IsRoot = true };
             await Root.LoadChildren();
@@ -64,7 +64,7 @@ public class SftpFileSystem(
             string? password = connectionService.GetPassword(Connection);
             if (password == null)
             {
-                SkEditorAPI.Logs.Error($"No password found for connection: {Connection.Name}");
+                logService.Error($"No password found for connection: {Connection.Name}");
                 throw new InvalidOperationException("No password found for connection.");
             }
 

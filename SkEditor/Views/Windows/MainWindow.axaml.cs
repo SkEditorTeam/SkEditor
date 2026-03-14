@@ -11,6 +11,8 @@ using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Contracts.Services;
+using SkEditor.Services;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Files.Session;
@@ -31,6 +33,7 @@ namespace SkEditor.Views.Windows;
 
 public partial class MainWindow : AppWindow
 {
+    private readonly ILogService _log;
     private readonly KeyboardShortcutHandler? _shortcutHandler;
 
     private bool _isFullyLoaded;
@@ -41,6 +44,7 @@ public partial class MainWindow : AppWindow
         InitializeComponent();
 
         DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
+        _log = App.Services.GetRequiredService<ILogService>();
 
         _shortcutHandler = new KeyboardShortcutHandler(this);
         _shortcutHandler.Initialize();
@@ -48,7 +52,7 @@ public partial class MainWindow : AppWindow
 
         WindowStyler.Style(this);
 
-        ThemeEditor.LoadThemes();
+        ThemeService.ServiceStatic.LoadThemes();
         AddEvents();
     }
 
@@ -90,7 +94,7 @@ public partial class MainWindow : AppWindow
             stateConfig.MainWindowY = Position.Y;
             stateConfig.MainWindowMaximized = WindowState == WindowState.Maximized;
 
-            ThemeEditor.SaveAllThemes();
+            ThemeService.ServiceStatic.SaveAllThemes();
             await SkEditorAPI.Configs.SaveAllConfigsImmediateAsync();
 
             e.Cancel = true;
@@ -128,7 +132,7 @@ public partial class MainWindow : AppWindow
         }
         catch (Exception exc)
         {
-            SkEditorAPI.Logs.Error($"Error while closing the window: {exc.Message}");
+            _log.Error($"Error while closing the window: {exc.Message}");
             AlreadyClosed = true;
             Close();
         }
@@ -156,7 +160,7 @@ public partial class MainWindow : AppWindow
             await Translation.ChangeLanguage(SkEditorAPI.Configs.GetAppSettings().Language, true);
             await _splashScreen.TryUpdateStatusAsync("Loading themes and addons...");
 
-            Task themeTask = ThemeEditor.SetTheme(ThemeEditor.CurrentTheme);
+            Task themeTask = ThemeService.ServiceStatic.SetTheme(ThemeService.ServiceStatic.CurrentTheme);
             Task addonTask = AddonLoader.Load();
             await Task.WhenAll(themeTask, addonTask);
 
@@ -200,7 +204,7 @@ public partial class MainWindow : AppWindow
                 }
                 catch (Exception exc)
                 {
-                    SkEditorAPI.Logs.Error($"Error loading final components: {exc.Message}", true);
+                    _log.Error($"Error loading final components: {exc.Message}", true);
                 }
             });
 
@@ -229,20 +233,20 @@ public partial class MainWindow : AppWindow
                         await Tutorial.ShowTutorial();
                         await ChangelogChecker.Check();
 
-                        await CrashChecker.CheckForCrash();
+                        await App.Services.GetRequiredService<CrashChecker>().CheckForCrash();
 
                         await AddonUpdateChecker.CheckForUpdates();
                     }
                     catch (Exception exc)
                     {
-                        SkEditorAPI.Logs.Error($"Error loading non-blocking components: {exc.Message}", true);
+                        _log.Error($"Error loading non-blocking components: {exc.Message}", true);
                     }
                 }, DispatcherPriority.Background);
             }, DispatcherPriority.Background);
         }
         catch (Exception exc)
         {
-            SkEditorAPI.Logs.Error(
+            _log.Error(
                 $"Something went wrong while loading the window: {exc.Message} + {exc.InnerException} {exc.StackTrace}",
                 true);
 

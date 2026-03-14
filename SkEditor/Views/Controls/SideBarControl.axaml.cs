@@ -12,8 +12,8 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Services;
 using SkEditor.Utilities;
-using SkEditor.Utilities.Styling;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Views.Controls;
@@ -175,9 +175,10 @@ public partial class SideBarControl : UserControl
 
     private Button CreatePanelButton(SidebarPanel panel)
     {
-        Viewbox iconViewBox = CreateIconViewbox(panel.Icon, ThemeEditor.CurrentTheme.SidebarIconForeground);
+        Viewbox iconViewBox =
+            CreateIconViewbox(panel.Icon, ThemeService.ServiceStatic.CurrentTheme.SidebarIconForeground);
         Viewbox activeIconViewBox =
-            CreateIconViewbox(panel.IconActive, ThemeEditor.CurrentTheme.SidebarIconSelectedForeground);
+            CreateIconViewbox(panel.IconActive, ThemeService.ServiceStatic.CurrentTheme.SidebarIconSelectedForeground);
 
         Button button = new()
         {

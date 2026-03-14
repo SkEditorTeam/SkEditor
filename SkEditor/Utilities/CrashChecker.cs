@@ -5,14 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SkEditor.API;
+using SkEditor.Contracts.Services;
 using CrashWindow = SkEditor.Views.Windows.CrashWindow;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities;
 
-public class CrashChecker
+public class CrashChecker(ILogService logService)
 {
-    public static async Task<bool> CheckForCrash()
+    public async Task<bool> CheckForCrash()
     {
         string[] args = SkEditorAPI.Core.GetStartupArguments();
         if (args is not ["--crash", _])
@@ -39,7 +40,7 @@ public class CrashChecker
                     }
                     catch (Exception ex)
                     {
-                        SkEditorAPI.Logs.Warning($"Failed to delete temporary directory: {ex}");
+                        logService.Warning($"Failed to delete temporary directory: {ex}");
                     }
                 }
             }
@@ -49,7 +50,7 @@ public class CrashChecker
         }
         catch (FormatException e)
         {
-            SkEditorAPI.Logs.Warning($"Failed to decode crash exception: {e}");
+            logService.Warning($"Failed to decode crash exception: {e}");
             return false;
         }
     }

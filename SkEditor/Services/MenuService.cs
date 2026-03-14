@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Menu;
@@ -15,7 +16,6 @@ using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
 using SkEditor.Views.Controls.Docs;
 using SkEditor.Views.Windows;
@@ -26,7 +26,7 @@ using SkEditor.Views.Windows.Settings;
 
 namespace SkEditor.Services;
 
-public class MenuService : IMenuService
+public class MenuService(IThemeService themeService) : IMenuService
 {
     public IEnumerable<MainMenuItem> GetMainMenuItems()
     {
@@ -281,14 +281,14 @@ public class MenuService : IMenuService
         ]);
     }
 
-    private static MainMenuItem BuildDevToolsMenu()
+    private MainMenuItem BuildDevToolsMenu()
     {
         MainMenuItem refreshSyntax = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderRefreshSyntax, Symbol.Color)
             .WithCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
 
         MainMenuItem refreshTheme = MainMenuItem
             .HeaderWithIcon(TranslationKey.MenuHeaderRefreshTheme, Symbol.PaintBucket)
-            .WithCommand(async () => await ThemeEditor.ReloadCurrentTheme());
+            .WithCommand(async () => await themeService.ReloadCurrentTheme());
 
         return MainMenuItem.HeaderOnly(TranslationKey.MenuHeaderDevTools).WithItems([
             refreshSyntax,
@@ -299,7 +299,7 @@ public class MenuService : IMenuService
     private static MainMenuItem BuildSettingsItem()
     {
         return MainMenuItem.IconOnly(Symbol.Settings)
-            .WithCommand(() => new SettingsWindow().ShowDialogOnMainWindow())
+            .WithCommand(() => App.Services.GetRequiredService<SettingsWindow>().ShowDialogOnMainWindow())
             .WithInputGesture("Ctrl+,");
     }
 
