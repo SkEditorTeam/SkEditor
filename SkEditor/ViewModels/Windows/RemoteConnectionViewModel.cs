@@ -77,9 +77,12 @@ public partial class RemoteConnectionViewModel(
     [RelayCommand]
     private async Task BrowseKey()
     {
-        if (RequestKeyFilePicker == null) return;
+        if (RequestKeyFilePicker == null)
+        {
+            return;
+        }
 
-        var path = await RequestKeyFilePicker.Invoke();
+        string? path = await RequestKeyFilePicker.Invoke();
 
         if (!string.IsNullOrEmpty(path))
         {

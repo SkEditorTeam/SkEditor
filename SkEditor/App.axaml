@@ -30,8 +30,8 @@
                 <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        
-        <converters:TranslationConverter x:Key="TranslationConverter"/>
+
+        <converters:TranslationConverter x:Key="TranslationConverter" />
 
         <Brush x:Key="BackgroundColor">#1f1f1f</Brush>
         <Brush x:Key="TitleBarBackground">#00000000</Brush>
@@ -61,7 +61,7 @@
 
         <Brush x:Key="CurrentLineBackground">#05FFFFFF</Brush>
         <Brush x:Key="CurrentLineBorder">#0DFFFFFF</Brush>
-        
+
         <Brush x:Key="SidebarIconForeground">#FFCCCCCC</Brush>
         <Brush x:Key="SidebarIconSelectedForeground">#FFFFB8E0</Brush>
 

@@ -37,7 +37,7 @@ public partial class SplashScreen : Window
 
         Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/SkEditor.svg"));
         SvgImage svgImage = new() { Source = SvgSource.LoadFromStream(stream) };
-        
+
         Image logo = new()
         {
             Source = svgImage,
@@ -76,7 +76,7 @@ public partial class SplashScreen : Window
     {
         Dispatcher.UIThread.Post(() => _statusText.Text = status);
     }
-    
+
     public async Task UpdateStatusAsync(string status)
     {
         await Dispatcher.UIThread.InvokeAsync(() => _statusText.Text = status);

@@ -91,7 +91,8 @@
         <Setter Property="MinHeight" Value="{DynamicResource TreeViewItemMinHeight}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
-        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=Bounds.Width}" />
+        <Setter Property="Width"
+                Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=Bounds.Width}" />
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel>

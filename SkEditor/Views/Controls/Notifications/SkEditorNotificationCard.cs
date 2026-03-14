@@ -8,15 +8,18 @@ namespace SkEditor.Views.Controls.Notifications;
 
 public class SkEditorNotificationCard : NotificationCard
 {
-    private DispatcherTimer? _timer;
     private TimeSpan _expiration;
+    private DispatcherTimer? _timer;
 
     protected override Type StyleKeyOverride => typeof(NotificationCard);
 
     public void StartTimer(TimeSpan expiration)
     {
         _expiration = expiration;
-        if (expiration == TimeSpan.Zero) return;
+        if (expiration == TimeSpan.Zero)
+        {
+            return;
+        }
 
         _timer = new DispatcherTimer { Interval = expiration };
         _timer.Tick += (_, _) =>

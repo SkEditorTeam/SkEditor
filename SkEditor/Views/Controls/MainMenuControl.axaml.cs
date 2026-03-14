@@ -7,10 +7,7 @@ namespace SkEditor.Views.Controls;
 
 public partial class MainMenuControl : UserControl
 {
-    public MainMenuControl()
-    {
-        InitializeComponent();
-    }
+    public MainMenuControl() => InitializeComponent();
 
     protected override void OnDataContextChanged(EventArgs e)
     {

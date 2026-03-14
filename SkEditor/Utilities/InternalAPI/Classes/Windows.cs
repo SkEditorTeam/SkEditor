@@ -319,7 +319,7 @@ public class Windows : IWindows
             {
                 return null;
             }
-            
+
             bool isKey = Enum.TryParse(input, out TranslationKey key);
             return isKey ? Translation.Get(key) : input;
         }

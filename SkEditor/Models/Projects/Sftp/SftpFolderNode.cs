@@ -21,7 +21,9 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
             if (file.IsDirectory)
             {
                 if (file.Name is "." or "..")
+                {
                     continue;
+                }
 
                 folders.Add(new SftpFolderNode(file.Name, file.FullName, false, client));
             }

@@ -39,7 +39,8 @@
             <Button Grid.Column="1" Name="AddConnectionButton" HorizontalAlignment="Stretch"
                     IsEnabled="{Binding ConnectionInfo.RequiredFieldsFilled}" Command="{Binding AddConnectionCommand}"
                     ToolTip.Tip="{localization:Translate RemoteConnectionAddConnectionMissingFields}"
-                    ToolTip.ShowOnDisabled="True" ToolTip.ServiceEnabled="{Binding !ConnectionInfo.RequiredFieldsFilled}">
+                    ToolTip.ShowOnDisabled="True"
+                    ToolTip.ServiceEnabled="{Binding !ConnectionInfo.RequiredFieldsFilled}">
                 <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                     <fluent:SymbolIcon Symbol="Add" FontSize="18" />
                     <TextBlock Text="{localization:Translate RemoteConnectionAddButton}" FontSize="14" />

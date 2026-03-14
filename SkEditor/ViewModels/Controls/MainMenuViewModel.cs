@@ -12,10 +12,7 @@ public partial class MainMenuViewModel : ObservableObject
     [ObservableProperty]
     private IEnumerable<MainMenuItem> _items = new List<MainMenuItem>();
 
-    public MainMenuViewModel(IMenuService menuService)
-    {
-        Items = menuService.GetMainMenuItems();
-    }
+    public MainMenuViewModel(IMenuService menuService) => Items = menuService.GetMainMenuItems();
 
     public void RegisterHotKeys(MainWindow mainWindow)
     {

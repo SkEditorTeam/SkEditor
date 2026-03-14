@@ -55,8 +55,12 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
                 }
             }
 
-            const TextMarkerTypes underlineMarkerTypes = TextMarkerTypes.SquigglyUnderline | TextMarkerTypes.NormalUnderline;
-            if ((marker.MarkerTypes & underlineMarkerTypes) == 0) continue;
+            const TextMarkerTypes underlineMarkerTypes =
+                TextMarkerTypes.SquigglyUnderline | TextMarkerTypes.NormalUnderline;
+            if ((marker.MarkerTypes & underlineMarkerTypes) == 0)
+            {
+                continue;
+            }
 
             foreach (Rect r in BackgroundGeometryBuilder.GetRectsForSegment(textView, marker))
             {

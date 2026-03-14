@@ -26,7 +26,6 @@ using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using AssociationSelectionWindow = SkEditor.Views.Windows.FileTypes.AssociationSelectionWindow;
 using GoToLineWindow = SkEditor.Views.Windows.GoToLineWindow;
-using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;

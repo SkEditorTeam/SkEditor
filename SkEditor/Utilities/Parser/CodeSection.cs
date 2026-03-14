@@ -307,6 +307,9 @@ public partial class CodeSection
     [GeneratedRegex(@"(?<=\{)(?!@)_?([A-Za-z.\s_-]+)(?=\})")]
     private static partial Regex VariableRegex();
 
+    [GeneratedRegex(CodeFunctionArgument.FunctionArgumentPattern)]
+    private static partial Regex FunctionArgumentRegex();
+
     public class LineColorizer(int from, int to) : DocumentColorizingTransformer
     {
         protected override void ColorizeLine(DocumentLine line)
@@ -322,7 +325,4 @@ public partial class CodeSection
             element.BackgroundBrush = ThemeEditor.CurrentTheme.SelectionColor;
         }
     }
-
-    [GeneratedRegex(CodeFunctionArgument.FunctionArgumentPattern)]
-    private static partial Regex FunctionArgumentRegex();
 }

@@ -16,13 +16,26 @@ namespace SkEditor.Views.Controls.Notifications;
 [PseudoClasses(":topleft", ":topright", ":bottomleft", ":bottomright", ":topcenter", ":bottomcenter")]
 public class SkEditorNotificationManager : TemplatedControl
 {
-    private Panel? _itemsControl;
-    private readonly List<SkEditorNotificationCard> _items = [];
-
-    protected override Type StyleKeyOverride => typeof(WindowNotificationManager);
-
     public static readonly StyledProperty<NotificationPosition> PositionProperty =
         WindowNotificationManager.PositionProperty.AddOwner<SkEditorNotificationManager>();
+
+    public static readonly StyledProperty<int> MaxItemsProperty =
+        WindowNotificationManager.MaxItemsProperty.AddOwner<SkEditorNotificationManager>();
+
+    private readonly List<SkEditorNotificationCard> _items = [];
+    private Panel? _itemsControl;
+
+    static SkEditorNotificationManager()
+    {
+        HorizontalAlignmentProperty.OverrideDefaultValue<SkEditorNotificationManager>(HorizontalAlignment.Stretch);
+        VerticalAlignmentProperty.OverrideDefaultValue<SkEditorNotificationManager>(VerticalAlignment.Stretch);
+    }
+
+    public SkEditorNotificationManager() => UpdatePseudoClasses(Position);
+
+    public SkEditorNotificationManager(TopLevel host) : this() => InstallFromTopLevel(host);
+
+    protected override Type StyleKeyOverride => typeof(WindowNotificationManager);
 
     public NotificationPosition Position
     {
@@ -30,29 +43,10 @@ public class SkEditorNotificationManager : TemplatedControl
         set => SetValue(PositionProperty, value);
     }
 
-    public static readonly StyledProperty<int> MaxItemsProperty =
-        WindowNotificationManager.MaxItemsProperty.AddOwner<SkEditorNotificationManager>();
-
     public int MaxItems
     {
         get => GetValue(MaxItemsProperty);
         set => SetValue(MaxItemsProperty, value);
-    }
-
-    public SkEditorNotificationManager()
-    {
-        UpdatePseudoClasses(Position);
-    }
-
-    public SkEditorNotificationManager(TopLevel host) : this()
-    {
-        InstallFromTopLevel(host);
-    }
-
-    static SkEditorNotificationManager()
-    {
-        HorizontalAlignmentProperty.OverrideDefaultValue<SkEditorNotificationManager>(HorizontalAlignment.Stretch);
-        VerticalAlignmentProperty.OverrideDefaultValue<SkEditorNotificationManager>(VerticalAlignment.Stretch);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -66,7 +60,7 @@ public class SkEditorNotificationManager : TemplatedControl
     {
         Dispatcher.UIThread.VerifyAccess();
 
-        var card = new SkEditorNotificationCard
+        SkEditorNotificationCard card = new()
         {
             Content = new Notification(title, message, type),
             NotificationType = type
@@ -107,8 +101,11 @@ public class SkEditorNotificationManager : TemplatedControl
     private void InstallFromTopLevel(TopLevel topLevel)
     {
         topLevel.TemplateApplied += TopLevelOnTemplateApplied;
-        var adorner = topLevel.FindDescendantOfType<VisualLayerManager>()?.AdornerLayer;
-        if (adorner is null) return;
+        AdornerLayer? adorner = topLevel.FindDescendantOfType<VisualLayerManager>()?.AdornerLayer;
+        if (adorner is null)
+        {
+            return;
+        }
 
         adorner.Children.Add(this);
         AdornerLayer.SetAdornedElement(this, adorner);
@@ -122,7 +119,7 @@ public class SkEditorNotificationManager : TemplatedControl
             AdornerLayer.SetAdornedElement(this, null);
         }
 
-        var topLevel = (TopLevel)sender!;
+        TopLevel topLevel = (TopLevel)sender!;
         topLevel.TemplateApplied -= TopLevelOnTemplateApplied;
         InstallFromTopLevel(topLevel);
     }

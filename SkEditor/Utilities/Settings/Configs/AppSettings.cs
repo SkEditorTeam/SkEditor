@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
@@ -14,8 +13,6 @@ namespace SkEditor.Utilities.Settings.Configs;
 public partial class AppSettings : BaseConfig<AppSettings>
 {
     protected override JsonTypeInfo<AppSettings> TypeInfo => AppJsonContext.Default.AppSettings;
-    
-    protected override string GetFileName() => "options.json";
 
     /// <summary>
     ///     The application version.
@@ -266,5 +263,10 @@ public partial class AppSettings : BaseConfig<AppSettings>
     {
         get;
         set => SetProperty(ref field, value);
+    }
+
+    protected override string GetFileName()
+    {
+        return "options.json";
     }
 }

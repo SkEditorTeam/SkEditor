@@ -14,7 +14,9 @@ internal static class FileCloser
     public static async Task CloseFile(TabViewTabCloseRequestedEventArgs e)
     {
         if (e.Tab.Content is WelcomePage && SkEditorAPI.Files.GetOpenedTabs().Count == 1)
+        {
             return;
+        }
 
         await SkEditorAPI.Files.Close(e.Tab);
     }

@@ -31,7 +31,8 @@
             <TextBlock Grid.Row="0" Text="{localization:Translate ProjectExplorerTitle}" FontWeight="DemiBold"
                        Margin="20,10,20,10" />
             <Separator Grid.Row="1" Margin="0,0,0,10" />
-            <TreeView Grid.Row="3" Name="FileTreeView" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="4,4,0,4" Padding="0,0,12,0">
+            <TreeView Grid.Row="3" Name="FileTreeView" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      Margin="4,4,0,4" Padding="0,0,12,0">
                 <TreeView.Styles>
                     <Style Selector="TreeViewItem">
                         <Setter Property="IsExpanded" x:DataType="elements:StorageElement"

@@ -11,7 +11,7 @@ using SkEditor.Services;
 
 namespace SkEditor.Converters;
 
-public class NodeToIconConverter : IMultiValueConverter
+public class NodeToIconConverter : IMultiValueConverter, IValueConverter
 {
     private readonly IconProvider _iconProvider = App.Services.GetRequiredService<IconProvider>();
 
@@ -49,7 +49,7 @@ public class NodeToIconConverter : IMultiValueConverter
         string ext = Path.GetExtension(file.Name);
         IconProvider.FileIconEntry iconData = _iconProvider.GetIconForExtension(ext);
 
-        return Enum.TryParse<Symbol>(iconData.Icon, out Symbol symbol)
+        return Enum.TryParse(iconData.Icon, out Symbol symbol)
             ? symbol
             : _iconProvider.DefaultIcon;
     }

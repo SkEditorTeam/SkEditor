@@ -5,15 +5,21 @@ public record RemoteConnectionTestResult
     public bool IsSuccess { get; set; }
     public string Message { get; set; } = string.Empty;
 
-    public static RemoteConnectionTestResult Error(string message) => new()
+    public static RemoteConnectionTestResult Error(string message)
     {
-        IsSuccess = false,
-        Message = message,
-    };
+        return new RemoteConnectionTestResult
+        {
+            IsSuccess = false,
+            Message = message
+        };
+    }
 
-    public static RemoteConnectionTestResult Success(string message) => new()
+    public static RemoteConnectionTestResult Success(string message)
     {
-        IsSuccess = true,
-        Message = message,
-    };
+        return new RemoteConnectionTestResult
+        {
+            IsSuccess = true,
+            Message = message
+        };
+    }
 }

@@ -23,7 +23,6 @@ using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Syntax;
-using MainWindow = SkEditor.Views.Windows.MainWindow;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
@@ -127,7 +126,7 @@ public partial class DocElementControl : UserControl
                     IDocumentationEntry.Changer.RemoveAll => "remove all %s",
                     _ => throw new NotImplementedException("Changer not implemented")
                 };
-                
+
                 IClipboard? clipboard = App.Services.GetRequiredService<WindowRegistry>().Active?.Clipboard;
                 if (clipboard == null)
                 {

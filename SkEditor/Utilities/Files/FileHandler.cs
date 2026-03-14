@@ -133,7 +133,7 @@ public class FileHandler
         }
 
         MainWindow? mainWindow = App.Services.GetRequiredService<WindowRegistry>().Active;
-        
+
         OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
         if (file == null)
         {

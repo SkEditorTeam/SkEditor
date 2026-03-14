@@ -11,13 +11,15 @@ public class TranslationConverter : IValueConverter
 {
     public static readonly TranslationConverter Instance = new();
 
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         return value is not TranslationKey key
             ? BindingOperations.DoNothing
             : Translation.GetObservable(key);
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-        => AvaloniaProperty.UnsetValue;
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        return AvaloniaProperty.UnsetValue;
+    }
 }

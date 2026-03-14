@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Pages;
 
 namespace SkEditor.Models.Welcome;
 

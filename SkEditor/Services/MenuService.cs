@@ -31,7 +31,7 @@ public class MenuService : IMenuService
     public IEnumerable<MainMenuItem> GetMainMenuItems()
     {
         AppSettings appSettings = SkEditorAPI.Configs.GetAppSettings();
-        
+
         MainMenuItem devToolsItem = BuildDevToolsMenu();
         devToolsItem.IsVisible = appSettings.IsDevModeEnabled;
         appSettings.PropertyChanged += (_, args) =>
@@ -41,7 +41,7 @@ public class MenuService : IMenuService
                 devToolsItem.IsVisible = appSettings.IsDevModeEnabled;
             }
         };
-        
+
         List<MainMenuItem> items =
         [
             BuildFileMenu(),
@@ -51,10 +51,10 @@ public class MenuService : IMenuService
             devToolsItem,
             BuildSettingsItem()
         ];
-        
+
         return items;
     }
-    
+
     private static MainMenuItem BuildFileMenu()
     {
         MainMenuItem newFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderNew, Symbol.Document)

@@ -10,33 +10,33 @@
                 <ui:InfoBar IsOpen="True" Title="Title1" Message="Message" IsClosable="True" IsIconVisible="True" />
                 <ui:InfoBar IsOpen="True" Title="Title" Message="Message" IsClosable="False" IsIconVisible="True" />
                 <ui:InfoBar IsOpen="True" Title="Title" Message="Message" IsClosable="True" IsIconVisible="False" />
-        
+
                 <Border Background="Black" Height="1" />
-        
+
                 <ui:InfoBar IsOpen="True" Title="Title" Message="Message" Severity="Informational" />
                 <ui:InfoBar IsOpen="True" Title="Title" Message="Message" Severity="Warning" />
                 <ui:InfoBar IsOpen="True" Title="Title" Message="Message" Severity="Error" />
                 <ui:InfoBar IsOpen="True" Title="Title" Message="Message" Severity="Success" />
-        
+
                 <ui:InfoBar IsOpen="True" Title="Title" Background="DarkSlateBlue" Message="Message" Severity="Success"
                             Foreground="Red" />
-        
+
                 <ui:InfoBar IsOpen="True" Title="Custom Icon" Message="akls;df">
                     <ui:InfoBar.IconSource>
                         <ui:SymbolIconSource Symbol="Add" />
                     </ui:InfoBar.IconSource>
                 </ui:InfoBar>
-        
+
                 <ui:InfoBar IsOpen="True" Title="Title" Message="Action Button">
                     <ui:InfoBar.ActionButton>
                         <Button Content="Click" />
                     </ui:InfoBar.ActionButton>
                 </ui:InfoBar>
-        
+
                 <ui:InfoBar IsOpen="True" Title="Title" Message="asdf">
                     <CheckBox Content="Custom Content" />
                 </ui:InfoBar>
-        
+
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -161,7 +161,7 @@
             </Style>
         </Style>
 
-        
+
         <Style Selector="^:hidden /template/ Border#ContentRoot">
             <Setter Property="IsVisible" Value="False" />
         </Style>

@@ -72,7 +72,9 @@ public static class FoldingCreator
 
         List<FoldingSection> foldedSections = [];
         if (oldFoldingManager == null)
+        {
             return foldedSections;
+        }
 
         foldedSections = oldFoldingManager.AllFoldings.Where(folding => folding.IsFolded).ToList();
         FoldingManager.Uninstall(oldFoldingManager);
@@ -91,11 +93,16 @@ public static class FoldingCreator
         FoldingManager? foldingManager = file.Editor.GetService<FoldingManager>();
 
         if (foldingManager == null)
+        {
             return hiddenLines.Distinct().ToList();
+        }
 
         foreach (FoldingSection folding in foldingManager.AllFoldings)
         {
-            if (!folding.IsFolded) continue;
+            if (!folding.IsFolded)
+            {
+                continue;
+            }
 
             List<int> lines = [];
             for (int i = folding.StartOffset; i < folding.EndOffset; i++)

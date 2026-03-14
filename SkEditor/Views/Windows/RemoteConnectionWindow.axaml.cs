@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Models.Remote;
@@ -25,8 +27,8 @@ public partial class RemoteConnectionWindow : AppWindow
     {
         vm.CloseRequested += (_, _) =>
         {
-            var info = vm.ConnectionInfo;
-            var infoSnapshot = new RemoteConnectionInfo
+            RemoteConnectionInfo info = vm.ConnectionInfo;
+            RemoteConnectionInfo infoSnapshot = new()
             {
                 Name = info.Name,
                 Host = info.Host,
@@ -44,10 +46,13 @@ public partial class RemoteConnectionWindow : AppWindow
 
     private async Task<string?> SelectKeyFile()
     {
-        var topLevel = GetTopLevel(this);
-        if (topLevel == null) return null;
+        TopLevel? topLevel = GetTopLevel(this);
+        if (topLevel == null)
+        {
+            return null;
+        }
 
-        var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = Translation.Get(TranslationKey.RemoteConnectionSelectKeyFile),
             AllowMultiple = false,

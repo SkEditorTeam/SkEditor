@@ -68,9 +68,9 @@ public interface IConfigs
     /// </summary>
     /// <returns>The state configuration.</returns>
     StateConfig GetStateConfig();
-    
+
     /// <summary>
-    ///    Get the connections configuration.
+    ///     Get the connections configuration.
     /// </summary>
     /// <returns>The connections configuration.</returns>
     ConnectionsConfig GetConnectionsConfig();

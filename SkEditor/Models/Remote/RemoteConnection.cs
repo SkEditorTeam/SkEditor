@@ -4,19 +4,10 @@ namespace SkEditor.Models.Remote;
 
 public class RemoteConnection
 {
-    public Guid Id { get; set; } = Guid.NewGuid(); 
+    public RemoteConnection()
+    {
+    }
 
-    public string Name { get; set; } = string.Empty;
-    public string Host { get; set; } = string.Empty;
-    public int Port { get; set; } = 22;
-    public string Username { get; set; } = string.Empty;
-    
-    public RemoteAuthMethod AuthMethod { get; set; } = RemoteAuthMethod.Password; 
-    
-    public string KeyFilePath { get; set; } = string.Empty;
-    
-    public RemoteConnection() {}
-    
     public RemoteConnection(RemoteConnectionInfo info)
     {
         Name = info.Name;
@@ -26,4 +17,15 @@ public class RemoteConnection
         AuthMethod = info.AuthMethod;
         KeyFilePath = info.KeyFilePath;
     }
+
+    public Guid Id { get; set; } = Guid.NewGuid();
+
+    public string Name { get; set; } = string.Empty;
+    public string Host { get; set; } = string.Empty;
+    public int Port { get; set; } = 22;
+    public string Username { get; set; } = string.Empty;
+
+    public RemoteAuthMethod AuthMethod { get; set; } = RemoteAuthMethod.Password;
+
+    public string KeyFilePath { get; set; } = string.Empty;
 }

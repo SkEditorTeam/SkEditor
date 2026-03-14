@@ -25,7 +25,7 @@ public partial class SideBarControl : UserControl
     private const double GapWidth = 10.0;
     private const double ZeroWidth = 0.0;
     private static readonly TimeSpan TransitionDuration = TimeSpan.FromMilliseconds(250);
-    
+
     private readonly TimeSpan _toggleDebounceTime = TimeSpan.FromMilliseconds(250);
     private CancellationTokenSource? _animationCancellationSource;
 
@@ -176,7 +176,8 @@ public partial class SideBarControl : UserControl
     private Button CreatePanelButton(SidebarPanel panel)
     {
         Viewbox iconViewBox = CreateIconViewbox(panel.Icon, ThemeEditor.CurrentTheme.SidebarIconForeground);
-        Viewbox activeIconViewBox = CreateIconViewbox(panel.IconActive, ThemeEditor.CurrentTheme.SidebarIconSelectedForeground);
+        Viewbox activeIconViewBox =
+            CreateIconViewbox(panel.IconActive, ThemeEditor.CurrentTheme.SidebarIconSelectedForeground);
 
         Button button = new()
         {

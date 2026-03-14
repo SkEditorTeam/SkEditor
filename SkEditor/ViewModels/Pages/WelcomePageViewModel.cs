@@ -21,10 +21,6 @@ namespace SkEditor.ViewModels.Pages;
 
 public partial class WelcomePageViewModel : ObservableObject
 {
-    public List<WelcomeScreenSection> WelcomeSections { get; } = [];
-
-    public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
-
     [ObservableProperty]
     private ObservableCollection<WelcomeScreenRecentItem> _recentItems = [];
 
@@ -37,6 +33,10 @@ public partial class WelcomePageViewModel : ObservableObject
 
         StartDateTimer();
     }
+
+    public List<WelcomeScreenSection> WelcomeSections { get; } = [];
+
+    public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
 
     private void BuildRecentItems()
     {

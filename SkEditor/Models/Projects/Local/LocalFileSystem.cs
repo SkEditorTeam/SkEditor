@@ -10,7 +10,9 @@ public class LocalFileSystem : IFileSystem
     public LocalFileSystem(string rootDirectory)
     {
         if (!Directory.Exists(rootDirectory))
+        {
             throw new DirectoryNotFoundException($"The directory '{rootDirectory}' does not exist.");
+        }
 
         string rootName = Path.GetFileName(rootDirectory);
         Root = new LocalFolderNode(rootName, rootDirectory, true) { IsRoot = true };

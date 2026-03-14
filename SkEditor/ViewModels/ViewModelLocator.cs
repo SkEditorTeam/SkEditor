@@ -1,5 +1,4 @@
 ﻿using SkEditor.API;
-using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Pages;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;

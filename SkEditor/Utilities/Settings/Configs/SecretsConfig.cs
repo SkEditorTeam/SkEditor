@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
+﻿using System.Text.Json.Serialization.Metadata;
 using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings.Configs;
@@ -8,8 +7,6 @@ namespace SkEditor.Utilities.Settings.Configs;
 public partial class SecretsConfig : BaseConfig<SecretsConfig>
 {
     protected override JsonTypeInfo<SecretsConfig> TypeInfo => AppJsonContext.Default.SecretsConfig;
-    
-    protected override string GetFileName() => "secrets.json";
 
     /// <summary>
     ///     The skUnity API key.
@@ -46,4 +43,9 @@ public partial class SecretsConfig : BaseConfig<SecretsConfig>
         get;
         set => SetProperty(ref field, value);
     } = string.Empty;
+
+    protected override string GetFileName()
+    {
+        return "secrets.json";
+    }
 }

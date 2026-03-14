@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
-using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;

@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
+﻿using System.Text.Json.Serialization.Metadata;
 using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings;
@@ -8,8 +7,6 @@ namespace SkEditor.Utilities.Settings;
 public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
 {
     protected override JsonTypeInfo<ExperimentsConfig> TypeInfo => AppJsonContext.Default.ExperimentsConfig;
-    
-    protected override string GetFileName() => "experiments.json";
 
     /// <summary>
     ///     Enables the Auto-Completion Prototype feature.
@@ -73,4 +70,9 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
         get;
         set => SetProperty(ref field, value);
     } = false;
+
+    protected override string GetFileName()
+    {
+        return "experiments.json";
+    }
 }

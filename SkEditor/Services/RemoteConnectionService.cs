@@ -75,10 +75,10 @@ public class RemoteConnectionService : IRemoteConnectionService
             : new PrivateKeyAuthenticationMethod(connectionInfo.Username,
                 new PrivateKeyFile(connectionInfo.KeyFilePath));
 
-        var info = new ConnectionInfo(connectionInfo.Host, port, connectionInfo.Username, authMethod);
+        ConnectionInfo info = new(connectionInfo.Host, port, connectionInfo.Username, authMethod);
 
-        using var client = new SftpClient(info);
-        using var cts = new CancellationTokenSource();
+        using SftpClient client = new(info);
+        using CancellationTokenSource cts = new();
 
         await client.ConnectAsync(cts.Token);
 

@@ -56,7 +56,7 @@ public class App : Application
 
         Log.Logger = serilogLogger;
 
-        var collection = new ServiceCollection();
+        ServiceCollection collection = new();
         collection.AddSingleton<ILogger>(serilogLogger);
 
         ConfigureServices(collection);
@@ -71,7 +71,7 @@ public class App : Application
 
         if (SplashScreenHandler.ShouldShowSplash())
         {
-            var splashScreen = Services.GetRequiredService<SplashScreen>();
+            SplashScreen splashScreen = Services.GetRequiredService<SplashScreen>();
             _splashScreen = splashScreen;
             desktop.MainWindow = _splashScreen;
             _splashScreen.Show();

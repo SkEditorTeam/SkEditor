@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using FluentIcons.Common;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Projects.Elements;

@@ -34,7 +34,8 @@
                 <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                 <Setter Property="Command" Value="{Binding Command}" />
                 <Setter Property="ItemsSource" Value="{Binding SubItems}" />
-                <Setter Property="InputGesture" Value="{Binding InputGestureText, Converter={StaticResource KeyGestureConverter}}" />
+                <Setter Property="InputGesture"
+                        Value="{Binding InputGestureText, Converter={StaticResource KeyGestureConverter}}" />
                 <Setter Property="Header">
                     <Setter.Value>
                         <MultiBinding Converter="{StaticResource MenuHeaderConverter}">

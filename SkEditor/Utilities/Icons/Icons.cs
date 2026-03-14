@@ -1,9 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Styling;
 using FluentAvalonia.UI.Controls;
+using SkEditor.API;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Icons;
 
@@ -16,7 +16,7 @@ public static class Icons
         PathIconSource? iconSource = icon as PathIconSource;
         return iconSource ?? new PathIconSource();
     }
-    
+
     public static SymbolIconSource CreateSymbolIcon(Symbol symbol)
     {
         return new SymbolIconSource

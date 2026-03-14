@@ -36,7 +36,7 @@ public class KeyboardShortcutHandler(Window window)
                 FileHandler.SwitchTab(tabIndex);
                 return true;
             }
-            case { Modifiers: (KeyModifiers.Control | KeyModifiers.Shift), Key: Key.Oem3 }:
+            case { Modifiers: KeyModifiers.Control | KeyModifiers.Shift, Key: Key.Oem3 }:
                 OpenTerminal();
                 return true;
             case { Key: Key.F11, Modifiers: KeyModifiers.None }:
