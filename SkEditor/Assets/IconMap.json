@@ -38,6 +38,7 @@
     "extensions": [
       ".json",
       ".json5",
+      ".jsonc",
       ".mcmeta"
     ]
   },
@@ -102,7 +103,10 @@
       ".mp3",
       ".wav",
       ".ogg",
-      ".flac"
+      ".flac",
+      ".aac",
+      ".opus",
+      ".m4a"
     ]
   },
   {
@@ -113,8 +117,7 @@
       ".mkv",
       ".avi",
       ".mov",
-      ".ogv",
-      ".m4a"
+      ".ogv"
     ]
   },
   {
@@ -161,8 +164,7 @@
     "icon": "Box",
     "color": "#F03765",
     "extensions": [
-      ".jar",
-      ".java"
+      ".jar"
     ]
   },
   {
@@ -225,43 +227,15 @@
     ]
   },
   {
-    "icon": "DocumentText",
-    "color": "#5CC9FF",
-    "extensions": [
-      ".doc",
-      ".docx",
-      ".odt"
-    ]
-  },
-  {
-    "icon": "SlidePlay",
-    "color": "#FF6D3A",
-    "extensions": [
-      ".pptx",
-      ".ppt",
-      ".odp"
-    ]
-  },
-  {
-    "icon": "Book",
-    "color": "#FF8A4F",
-    "extensions": [
-      ".epub",
-      ".azw",
-      ".azw3",
-      ".mobi",
-      ".fb2",
-      ".djvu",
-      ".prc"
-    ]
-  },
-  {
     "icon": "Code",
     "color": "#7ED4E6",
     "extensions": [
+      ".mcfunction",
       ".cs",
       ".py",
       ".java",
+      ".kt",
+      ".kts",
       ".cpp",
       ".c",
       ".h",
