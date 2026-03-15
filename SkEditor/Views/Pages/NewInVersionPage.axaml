@@ -1,0 +1,213 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="1100"
+             x:Class="SkEditor.Views.Pages.NewInVersionPage"
+             x:CompileBindings="False">
+
+    <UserControl.Styles>
+        <Style Selector="Border.feature-card">
+            <Setter Property="Background" Value="#08FFFFFF" />
+            <Setter Property="BorderBrush" Value="#0AFFFFFF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="24" />
+        </Style>
+
+        <Style Selector="Border.change-item">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="14,10" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel MaxWidth="780"
+                    HorizontalAlignment="Center"
+                    Margin="48"
+                    Spacing="32">
+
+            <StackPanel HorizontalAlignment="Center" Spacing="12">
+                <Svg Path="/Assets/SkEditor.svg"
+                     Height="80" Width="80"
+                     HorizontalAlignment="Center">
+                    <Svg.Effect>
+                        <DropShadowEffect Color="#40000000"
+                                          BlurRadius="20"
+                                          OffsetX="0" OffsetY="4" />
+                    </Svg.Effect>
+                </Svg>
+
+                <StackPanel Spacing="4" HorizontalAlignment="Center">
+                    <TextBlock Text="What's New"
+                               FontSize="36"
+                               FontWeight="DemiBold"
+                               HorizontalAlignment="Center" />
+
+                    <TextBlock TextAlignment="Center" Text="v3.0.0" FontSize="24" FontWeight="Normal"
+                               Foreground="#ccffffff" />
+                </StackPanel>
+            </StackPanel>
+
+            <Grid ColumnDefinitions="*,16,*"
+                  RowDefinitions="Auto,16,Auto">
+
+                <Border Grid.Row="0" Grid.Column="0"
+                        Classes="feature-card">
+                    <StackPanel Spacing="16">
+                        <Border Background="#12FFFFFF"
+                                CornerRadius="10"
+                                Width="44" Height="44"
+                                HorizontalAlignment="Left">
+                            <Viewbox Height="20" Width="20">
+                                <icons:SymbolIcon Symbol="Rocket"
+                                                  FontSize="20"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Viewbox>
+                        </Border>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="New Architecture"
+                                       FontSize="16"
+                                       FontWeight="SemiBold" />
+                            <TextBlock
+                                Text="A significant portion of the codebase has been rewritten to introduce a superior, highly extensible architecture, greatly enhancing the developer experience."
+                                FontSize="13"
+                                Foreground="#80FFFFFF"
+                                TextWrapping="Wrap"
+                                LineHeight="20" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="2"
+                        Classes="feature-card">
+                    <StackPanel Spacing="16">
+                        <Border Background="#12FFFFFF"
+                                CornerRadius="10"
+                                Width="44" Height="44"
+                                HorizontalAlignment="Left">
+                            <Viewbox Height="20" Width="20">
+                                <icons:SymbolIcon Symbol="PaintBrush"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Viewbox>
+                        </Border>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Revamped Interface"
+                                       FontSize="16"
+                                       FontWeight="SemiBold" />
+                            <TextBlock
+                                Text="Numerous UI enhancements, a modern toast notification system, a redesigned settings view, and much more!"
+                                FontSize="13"
+                                Foreground="#80FFFFFF"
+                                TextWrapping="Wrap"
+                                LineHeight="20" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="0"
+                        Classes="feature-card">
+                    <StackPanel Spacing="16">
+                        <Border Background="#12FFFFFF"
+                                CornerRadius="10"
+                                Width="44" Height="44"
+                                HorizontalAlignment="Left">
+                            <Viewbox Height="20" Width="20">
+                                <icons:SymbolIcon Symbol="Folder"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Viewbox>
+                        </Border>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Overhauled Project System"
+                                       FontSize="16"
+                                       FontWeight="SemiBold" />
+                            <TextBlock
+                                Text="Projects have finally received a major update. Completely rewritten from the ground up, they are now significantly faster and far more practical."
+                                FontSize="13"
+                                Foreground="#80FFFFFF"
+                                TextWrapping="Wrap"
+                                LineHeight="20" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="2"
+                        Classes="feature-card">
+                    <StackPanel Spacing="16">
+                        <Border Background="#12FFFFFF"
+                                CornerRadius="10"
+                                Width="44" Height="44"
+                                HorizontalAlignment="Left">
+                            <Viewbox Height="20" Width="20">
+                                <controls:IconSourceElement IconSource="{DynamicResource RemoteDesktopIcon}"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center" />
+                            </Viewbox>
+                        </Border>
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="SFTP Support"
+                                       FontSize="16"
+                                       FontWeight="SemiBold" />
+                            <TextBlock
+                                Text="At long last, SkEditor features built-in SFTP integration! You can now connect directly to remote servers and edit files without ever leaving the editor."
+                                FontSize="13"
+                                Foreground="#80FFFFFF"
+                                TextWrapping="Wrap"
+                                LineHeight="20" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+            <StackPanel Spacing="20">
+                <TextBlock Text="Also in this release"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center"
+                           Foreground="#BBFFFFFF" />
+
+                <StackPanel Spacing="2">
+
+                    <Border Classes="change-item">
+                        <StackPanel Orientation="Horizontal" Spacing="14">
+                            <icons:SymbolIcon Symbol="CheckmarkCircle"
+                                              FontSize="16"
+                                              Foreground="{DynamicResource AccentButtonBackground}"
+                                              VerticalAlignment="Center"
+                                              Opacity="0.8" />
+                            <TextBlock Text="..."
+                                       FontSize="14"
+                                       VerticalAlignment="Center"
+                                       Foreground="#AAFFFFFF" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <Button FontSize="15"
+                    Margin="0,32,0,0"
+                    Padding="16,8"
+                    FontWeight="SemiBold"
+                    HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <TextBlock Text="Continue to SkEditor"
+                               VerticalAlignment="Center" />
+                    <Viewbox Height="16" Width="16">
+                        <icons:SymbolIcon Symbol="ArrowRight"
+                                          VerticalAlignment="Center" />
+                    </Viewbox>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

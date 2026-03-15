@@ -135,7 +135,7 @@ public class Files : IFiles
         {
             Symbol = Symbol.Home
         };
-        AddCustomTab(Translation.GetObservable(TranslationKey.WelcomePageTitle), new WelcomePage(), icon: icon);
+        AddCustomTab(Translation.GetObservable(TranslationKey.WelcomePageTitle), new NewInVersionPage(), icon: icon);
     }
 
     private OpenedFile? GetFromTabViewItem(TabViewItem tabViewItem)
