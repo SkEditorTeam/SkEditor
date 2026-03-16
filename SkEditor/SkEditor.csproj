@@ -73,7 +73,7 @@
         <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.7.0"/>
         <PackageReference Include="Avalonia.Svg.Skia" Version="11.3.0"/>
         <PackageReference Include="Svg.Skia" Version="3.4.1"/>
-        <PackageReference Include="SkAvaloniaEdit" Version="11.3.3"/>
+        <PackageReference Include="SkAvaloniaEdit" Version="11.3.4"/>
 
         <!-- Libraries -->
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>

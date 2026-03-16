@@ -12,12 +12,14 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
+using SkEditor.Behaviors;
 using SkEditor.Contracts.Services;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Completion;
@@ -27,13 +29,14 @@ using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
 using AssociationSelectionWindow = SkEditor.Views.Windows.FileTypes.AssociationSelectionWindow;
 using GoToLineWindow = SkEditor.Views.Windows.GoToLineWindow;
+using Interaction = Avalonia.Xaml.Interactivity.Interaction;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
 namespace SkEditor.Services.Files;
 
-public class FileFactory(IThemeService themeService) : IFileFactory
+public class FileFactory(IThemeService themeService, INotificationService notificationService) : IFileFactory
 {
     public static readonly Dictionary<string, FileTypes.FileType> OpenedFiles = [];
 
@@ -79,6 +82,12 @@ public class FileFactory(IThemeService themeService) : IFileFactory
                 editor.TextArea.Focus();
                 editor.CaretOffset = editor.Text.Length;
                 TextEditorEventHandler.CheckForHex(editor);
+
+                BehaviorCollection behaviors =
+                [
+                    new VerticalScrollViewerAnimatedBehavior()
+                ];
+                Interaction.SetBehaviors(editor.ScrollViewer, behaviors);
             });
         }
 
