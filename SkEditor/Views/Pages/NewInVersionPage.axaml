@@ -26,12 +26,12 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled">
-        <StackPanel MaxWidth="780"
-                    HorizontalAlignment="Center"
-                    Margin="48"
-                    Spacing="32">
+        <DockPanel MaxWidth="780"
+                   HorizontalAlignment="Center"
+                   Margin="48,48,48,0"
+                   VerticalSpacing="32">
 
-            <StackPanel HorizontalAlignment="Center" Spacing="12">
+            <StackPanel HorizontalAlignment="Center" Spacing="12" DockPanel.Dock="Top">
                 <Svg Path="/Assets/SkEditor.svg"
                      Height="80" Width="80"
                      HorizontalAlignment="Center">
@@ -53,7 +53,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <Grid ColumnDefinitions="*,16,*"
+            <Grid ColumnDefinitions="*,16,*" DockPanel.Dock="Top"
                   RowDefinitions="Auto,16,Auto">
 
                 <Border Grid.Row="0" Grid.Column="0"
@@ -167,7 +167,7 @@
 
             </Grid>
 
-            <StackPanel Spacing="20">
+            <StackPanel Spacing="20" DockPanel.Dock="Top">
                 <TextBlock Text="Also in this release"
                            FontSize="18"
                            FontWeight="SemiBold"
@@ -193,10 +193,10 @@
             </StackPanel>
 
             <Button FontSize="15"
-                    Margin="0,32,0,0"
                     Padding="16,8"
+                    Margin="0,0,0,24"
                     FontWeight="SemiBold"
-                    HorizontalAlignment="Center">
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom" DockPanel.Dock="Bottom">
                 <StackPanel Orientation="Horizontal" Spacing="12">
                     <TextBlock Text="Continue to SkEditor"
                                VerticalAlignment="Center" />
@@ -206,8 +206,7 @@
                     </Viewbox>
                 </StackPanel>
             </Button>
-
-        </StackPanel>
+        </DockPanel>
     </ScrollViewer>
 
 </UserControl>
