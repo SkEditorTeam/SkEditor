@@ -5,6 +5,7 @@
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:pages="clr-namespace:SkEditor.ViewModels.Pages"
+             xmlns:ia="using:Xaml.Behaviors.Interactions.Animated"
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="1100"
              x:Class="SkEditor.Views.Pages.WhatsNewPage"
              x:DataType="pages:WhatsNewPageViewModel">
@@ -27,6 +28,9 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled">
+        <Interaction.Behaviors>
+            <ia:VerticalScrollViewerAnimatedBehavior />
+        </Interaction.Behaviors>
         <DockPanel MaxWidth="780"
                    HorizontalAlignment="Center"
                    Margin="48,48,48,0"
@@ -54,143 +58,80 @@
                 </StackPanel>
             </StackPanel>
 
-            <Grid ColumnDefinitions="*,16,*" DockPanel.Dock="Top"
-                  RowDefinitions="Auto,16,Auto">
-
-                <Border Grid.Row="0" Grid.Column="0"
-                        Classes="feature-card">
-                    <StackPanel Spacing="16">
-                        <Border Background="#12FFFFFF"
-                                CornerRadius="10"
-                                Width="44" Height="44"
-                                HorizontalAlignment="Left">
-                            <Viewbox Height="20" Width="20">
-                                <icons:SymbolIcon Symbol="Rocket"
-                                                  FontSize="20"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
-                            </Viewbox>
+            <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding FeaturedItems}"
+                          IsVisible="{Binding FeaturedItems.Count}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" ItemSpacing="16" LineSpacing="16" ItemWidth="380" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="pages:WhatsNewPageViewModel+FeaturedItem">
+                        <Border
+                            Classes="feature-card">
+                            <StackPanel Spacing="16">
+                                <Border Background="#12FFFFFF"
+                                        CornerRadius="10"
+                                        Width="44" Height="44"
+                                        HorizontalAlignment="Left">
+                                    <Viewbox Height="20" Width="20">
+                                        <controls:IconSourceElement IconSource="{Binding Icon}"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center" />
+                                    </Viewbox>
+                                </Border>
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="16"
+                                               FontWeight="SemiBold" />
+                                    <TextBlock
+                                        Text="{Binding Description}"
+                                        FontSize="13"
+                                        Foreground="#80FFFFFF"
+                                        TextWrapping="Wrap"
+                                        LineHeight="20" />
+                                </StackPanel>
+                            </StackPanel>
                         </Border>
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="New Architecture"
-                                       FontSize="16"
-                                       FontWeight="SemiBold" />
-                            <TextBlock
-                                Text="A significant portion of the codebase has been rewritten to introduce a superior, highly extensible architecture, greatly enhancing the developer experience."
-                                FontSize="13"
-                                Foreground="#80FFFFFF"
-                                TextWrapping="Wrap"
-                                LineHeight="20" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <Border Grid.Row="0" Grid.Column="2"
-                        Classes="feature-card">
-                    <StackPanel Spacing="16">
-                        <Border Background="#12FFFFFF"
-                                CornerRadius="10"
-                                Width="44" Height="44"
-                                HorizontalAlignment="Left">
-                            <Viewbox Height="20" Width="20">
-                                <icons:SymbolIcon Symbol="PaintBrush"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
-                            </Viewbox>
-                        </Border>
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="Revamped Interface"
-                                       FontSize="16"
-                                       FontWeight="SemiBold" />
-                            <TextBlock
-                                Text="Numerous UI enhancements, a modern toast notification system, a redesigned settings view, and much more!"
-                                FontSize="13"
-                                Foreground="#80FFFFFF"
-                                TextWrapping="Wrap"
-                                LineHeight="20" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <Border Grid.Row="2" Grid.Column="0"
-                        Classes="feature-card">
-                    <StackPanel Spacing="16">
-                        <Border Background="#12FFFFFF"
-                                CornerRadius="10"
-                                Width="44" Height="44"
-                                HorizontalAlignment="Left">
-                            <Viewbox Height="20" Width="20">
-                                <icons:SymbolIcon Symbol="Folder"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
-                            </Viewbox>
-                        </Border>
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="Overhauled Project System"
-                                       FontSize="16"
-                                       FontWeight="SemiBold" />
-                            <TextBlock
-                                Text="Projects have finally received a major update. Completely rewritten from the ground up, they are now significantly faster and far more practical."
-                                FontSize="13"
-                                Foreground="#80FFFFFF"
-                                TextWrapping="Wrap"
-                                LineHeight="20" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <Border Grid.Row="2" Grid.Column="2"
-                        Classes="feature-card">
-                    <StackPanel Spacing="16">
-                        <Border Background="#12FFFFFF"
-                                CornerRadius="10"
-                                Width="44" Height="44"
-                                HorizontalAlignment="Left">
-                            <Viewbox Height="20" Width="20">
-                                <controls:IconSourceElement IconSource="{DynamicResource RemoteDesktopIcon}"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center" />
-                            </Viewbox>
-                        </Border>
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="SFTP Support"
-                                       FontSize="16"
-                                       FontWeight="SemiBold" />
-                            <TextBlock
-                                Text="At long last, SkEditor features built-in SFTP integration! You can now connect directly to remote servers and edit files without ever leaving the editor."
-                                FontSize="13"
-                                Foreground="#80FFFFFF"
-                                TextWrapping="Wrap"
-                                LineHeight="20" />
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-            </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
             <StackPanel Spacing="20" DockPanel.Dock="Top">
-                <TextBlock Text="Also in this release"
+                <TextBlock Text="Also in this release" IsVisible="{Binding FeaturedItems.Count}"
                            FontSize="18"
                            FontWeight="SemiBold"
                            HorizontalAlignment="Center"
                            Foreground="#BBFFFFFF" />
 
-                <StackPanel Spacing="2">
+                <Border HorizontalAlignment="Center">
+                    <ItemsControl ItemsSource="{Binding Changes}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="2" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                    <Border Classes="change-item">
-                        <StackPanel Orientation="Horizontal" Spacing="14">
-                            <icons:SymbolIcon Symbol="CheckmarkCircle"
-                                              FontSize="16"
-                                              Foreground="{DynamicResource AccentButtonBackground}"
-                                              VerticalAlignment="Center"
-                                              Opacity="0.8" />
-                            <TextBlock Text="..."
-                                       FontSize="14"
-                                       VerticalAlignment="Center"
-                                       Foreground="#AAFFFFFF" />
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="change-item" HorizontalAlignment="Left">
+                                    <StackPanel Orientation="Horizontal" Spacing="14">
+                                        <Viewbox Height="16" Width="16">
+                                            <icons:SymbolIcon Symbol="CheckmarkCircle"
+                                                              Foreground="{DynamicResource AccentButtonBackground}"
+                                                              VerticalAlignment="Center"
+                                                              Opacity="0.8" />
+                                        </Viewbox>
+                                        <TextBlock Text="{Binding .}"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="#AAFFFFFF" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
             </StackPanel>
 
             <Button FontSize="15"

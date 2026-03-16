@@ -62,6 +62,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.12"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.12"/>
         <PackageReference Include="Devlooped.CredentialManager" Version="2.7.0"/>
+        <PackageReference Include="Egolds.Xaml.Behaviors.Interactions.Animated" Version="11.3.3"/>
         <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.0.320">
             <PrivateAssets>none</PrivateAssets>
             <ExcludeAssets>none</ExcludeAssets>
