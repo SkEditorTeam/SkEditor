@@ -31,7 +31,7 @@
         <Interaction.Behaviors>
             <behaviors:VerticalScrollViewerAnimatedBehavior />
         </Interaction.Behaviors>
-        <DockPanel MaxWidth="780"
+        <DockPanel MaxWidth="1000"
                    HorizontalAlignment="Center"
                    Margin="48,48,48,0"
                    VerticalSpacing="32">
@@ -62,7 +62,7 @@
                           IsVisible="{Binding FeaturedItems.Count}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" ItemSpacing="16" LineSpacing="16" ItemWidth="380" />
+                        <WrapPanel Orientation="Horizontal" ItemSpacing="16" LineSpacing="16" ItemWidth="400" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
