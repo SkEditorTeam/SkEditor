@@ -10,6 +10,7 @@ using Avalonia.Threading;
 using AvaloniaEdit;
 using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Services.Files;
 using SkEditor.Utilities.Editor;
@@ -135,7 +136,20 @@ public class Files : IFiles
         {
             Symbol = Symbol.Home
         };
-        AddCustomTab(Translation.GetObservable(TranslationKey.WelcomePageTitle), new NewInVersionPage(), icon: icon);
+
+        AddCustomTab(Translation.GetObservable(TranslationKey.WelcomePageTitle), new WelcomePage(), icon: icon);
+    }
+
+    public void AddWhatsNewPage()
+    {
+        SymbolIconSource icon = new()
+        {
+            Symbol = Symbol.Rocket
+        };
+
+        WhatsNewPage whatsNewPage = App.Services.GetRequiredService<WhatsNewPage>();
+
+        AddCustomTab(TranslatableString.FromRawString("What's New"), whatsNewPage, icon: icon);
     }
 
     private OpenedFile? GetFromTabViewItem(TabViewItem tabViewItem)

@@ -18,6 +18,7 @@ using SkEditor.Utilities.Startup;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Pages;
 using SkEditor.ViewModels.Windows;
+using SkEditor.Views.Pages;
 using SkEditor.Views.Windows;
 using SkEditor.Views.Windows.Settings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
@@ -108,10 +109,12 @@ public class App : Application
         services.AddTransient<RemoteSidebarViewModel>();
         services.AddTransient<FileTreeViewModel>();
         services.AddTransient<ThemePageViewModel>();
+        services.AddTransient<WhatsNewPageViewModel>();
 
         services.AddTransient<MainWindow>();
         services.AddTransient<SplashScreen>();
         services.AddTransient<RemoteConnectionWindow>();
         services.AddTransient<SettingsWindow>();
+        services.AddTransient<WhatsNewPage>();
     }
 }

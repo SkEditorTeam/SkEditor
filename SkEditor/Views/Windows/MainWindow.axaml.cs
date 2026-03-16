@@ -178,17 +178,19 @@ public partial class MainWindow : AppWindow
                 sessionFilesAdded = await SessionRestorer.RestoreSession();
             }
 
+            SkEditorAPI.Files.AddWhatsNewPage();
+
             await _splashScreen.TryUpdateStatusAsync("Opening files...");
             string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
             if (startupFiles.Length == 0 && !sessionFilesAdded)
             {
-                SkEditorAPI.Files.AddWelcomeTab();
+                //SkEditorAPI.Files.AddWelcomeTab();
             }
 
             startupFiles.ToList().ForEach(FileHandler.OpenFile);
             if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
             {
-                SkEditorAPI.Files.AddWelcomeTab();
+                //SkEditorAPI.Files.AddWelcomeTab();
             }
 
             BottomBar.UpdatePosition();

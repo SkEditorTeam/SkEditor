@@ -128,4 +128,6 @@ public interface IFiles
     ///     Add a welcome tab to the tab view.
     /// </summary>
     void AddWelcomeTab();
+
+    void AddWhatsNewPage();
 }

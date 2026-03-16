@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:pages="clr-namespace:SkEditor.ViewModels.Pages"
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="1100"
-             x:Class="SkEditor.Views.Pages.NewInVersionPage"
-             x:CompileBindings="False">
+             x:Class="SkEditor.Views.Pages.WhatsNewPage"
+             x:DataType="pages:WhatsNewPageViewModel">
 
     <UserControl.Styles>
         <Style Selector="Border.feature-card">
@@ -48,7 +49,7 @@
                                FontWeight="DemiBold"
                                HorizontalAlignment="Center" />
 
-                    <TextBlock TextAlignment="Center" Text="v3.0.0" FontSize="24" FontWeight="Normal"
+                    <TextBlock TextAlignment="Center" Text="{Binding Version}" FontSize="24" FontWeight="Normal"
                                Foreground="#ccffffff" />
                 </StackPanel>
             </StackPanel>
