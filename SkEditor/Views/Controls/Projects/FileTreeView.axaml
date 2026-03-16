@@ -32,6 +32,14 @@
                 <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="MinHeight" Value="24" />
             </Style>
+
+            <Style Selector="TreeView /template/ ScrollViewer">
+                <Setter Property="Interaction.Behaviors">
+                    <BehaviorCollection>
+                        <behaviors:VerticalScrollViewerAnimatedBehavior />
+                    </BehaviorCollection>
+                </Setter>
+            </Style>
         </TreeView.Styles>
         <TreeView.ItemTemplate>
             <TreeDataTemplate ItemsSource="{Binding Children}" DataType="projects:FileSystemNode">
