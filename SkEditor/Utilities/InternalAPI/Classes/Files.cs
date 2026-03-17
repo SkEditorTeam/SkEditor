@@ -149,7 +149,7 @@ public class Files : IFiles
 
         WhatsNewPage whatsNewPage = App.Services.GetRequiredService<WhatsNewPage>();
 
-        AddCustomTab(TranslatableString.FromRawString("What's New"), whatsNewPage, icon: icon);
+        AddCustomTab(Translation.GetObservable(TranslationKey.WhatsNewPageTitle), whatsNewPage, icon: icon);
     }
 
     private OpenedFile? GetFromTabViewItem(TabViewItem tabViewItem)

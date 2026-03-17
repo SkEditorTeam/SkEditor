@@ -422,5 +422,8 @@
   "RemoteConnectionInvalidKeyPath": "Ścieżka do klucza jest nieprawidłowa lub plik nie istnieje.",
   "RemoteConnectionInvalidKeyFormat": "Plik klucza jest w nieobsługiwanym formacie.",
   "RemoteConnectionTestSuccess": "Pomyślnie połączono z {0} w {1} ms!",
-  "RemoteConnectionTestFailed": "Nie udało się połączyć z {0}"
+  "RemoteConnectionTestFailed": "Nie udało się połączyć z {0}",
+  "WhatsNewPageTitle": "Co nowego?",
+  "WhatsNewPageAlsoInThisRelease": "Również w tej aktualizacji",
+  "WhatsNewPageContinueToSkEditor": "Przejdź do SkEditora"
 }
