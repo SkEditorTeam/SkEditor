@@ -49,9 +49,11 @@ public partial class TextEditorEventHandler
             return;
         }
 
-        int zoom = e.Delta.Y > 0 && editor.FontSize < 200 ? 1 : -1;
+        double zoomDelta = e.Delta.Y * 2.0; 
 
-        Zoom(editor, zoom);
+        if (editor.FontSize >= 200 && zoomDelta > 0) return;
+
+        Zoom(editor, zoomDelta);
     }
 
     public static void OnKeyDown(object? sender, KeyEventArgs e)
@@ -78,7 +80,7 @@ public partial class TextEditorEventHandler
         }
     }
 
-    private static void Zoom(TextEditor editor, int value)
+    private static void Zoom(TextEditor editor, double value)
     {
         if (SkEditorAPI.Configs.GetAppSettings().IsEditorZoomLevelSyncEnabled)
         {
@@ -93,7 +95,7 @@ public partial class TextEditorEventHandler
         }
     }
 
-    public static void ZoomEditor(int value, TextEditor editor)
+    public static void ZoomEditor(double value, TextEditor editor)
     {
         if (value < 0 && editor.FontSize <= 5)
         {
@@ -101,8 +103,14 @@ public partial class TextEditorEventHandler
         }
 
         double oldLineHeight = editor.TextArea.TextView.DefaultLineHeight;
-        editor.FontSize += value;
+    
+        editor.FontSize += value; 
+    
+        if (editor.FontSize < 5) editor.FontSize = 5;
+
         double lineHeight = editor.TextArea.TextView.DefaultLineHeight;
+    
+        if (oldLineHeight == 0) return; 
 
         double lineHeightChange = lineHeight / oldLineHeight;
 

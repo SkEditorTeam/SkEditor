@@ -121,7 +121,7 @@ public class FileFactory(IThemeService themeService, INotificationService notifi
                 else
                 {
                     FileTypes.FileAssociation? preferred = handlers.Find(association => association.IsFromAddon &&
-                                                                              association.Addon?.Name == value);
+                        association.Addon?.Name == value);
                     if (preferred != null)
                     {
                         fileType = preferred.Handle(path);
@@ -251,7 +251,8 @@ public class FileFactory(IThemeService themeService, INotificationService notifi
 
     private static TextEditor AddEventHandlers(TextEditor editor)
     {
-        editor.TextArea.PointerWheelChanged += TextEditorEventHandler.OnZoom;
+        editor.AddHandler(InputElement.PointerWheelChangedEvent, TextEditorEventHandler.OnZoom, RoutingStrategies.Tunnel);
+        
         editor.TextArea.Loaded += (_, _) => editor.Focus();
         editor.TextChanged += TextEditorEventHandler.OnTextChanged;
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoIndent;
