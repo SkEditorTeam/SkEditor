@@ -131,12 +131,12 @@ public class StartupService(MainWindowFactory mainWindowFactory, IconProvider ic
         Screens screens = mainWindow.Screens;
         PixelPoint lookupPosition = new(
             (int)(config.MainWindowX + (config.MainWindowWidth / 2)),
-            (int)(Math.Max(config.MainWindowY, 0) + (config.MainWindowHeight / 2))
+            (int)(config.MainWindowY + (config.MainWindowHeight / 2))
         );
 
         Screen? screen = screens.ScreenFromPoint(lookupPosition)
                          ?? screens.ScreenFromPoint(new PixelPoint(config.MainWindowX,
-                             Math.Max(config.MainWindowY, 0)));
+                             config.MainWindowY));
 
         if (screen != null)
         {
