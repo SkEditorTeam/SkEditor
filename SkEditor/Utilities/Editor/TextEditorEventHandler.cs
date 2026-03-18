@@ -49,7 +49,7 @@ public partial class TextEditorEventHandler
             return;
         }
 
-        double zoomDelta = e.Delta.Y * 2.0; 
+        double zoomDelta = e.Delta.Y;
 
         if (editor.FontSize >= 200 && zoomDelta > 0) return;
 
@@ -103,14 +103,17 @@ public partial class TextEditorEventHandler
         }
 
         double oldLineHeight = editor.TextArea.TextView.DefaultLineHeight;
-    
-        editor.FontSize += value; 
-    
+
+        editor.FontSize += value;
+
         if (editor.FontSize < 5) editor.FontSize = 5;
 
         double lineHeight = editor.TextArea.TextView.DefaultLineHeight;
-    
-        if (oldLineHeight == 0) return; 
+
+        if (oldLineHeight == 0)
+        {
+            return;
+        }
 
         double lineHeightChange = lineHeight / oldLineHeight;
 
