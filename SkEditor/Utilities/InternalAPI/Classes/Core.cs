@@ -77,33 +77,33 @@ public class Core : ICore
 
     public async Task SaveData()
     {
-        foreach (OpenedFile file in SkEditorAPI.Files.GetOpenedEditors())
-        {
-            string? path = file.Path;
-            if (string.IsNullOrEmpty(path))
-            {
-                string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
-                Directory.CreateDirectory(tempPath);
-                path = Path.Combine(tempPath, file.Header);
-            }
-
-            string? textToWrite = file.Editor?.Text;
-            if (string.IsNullOrEmpty(textToWrite))
-            {
-                continue;
-            }
-
-            try
-            {
-                await File.WriteAllTextAsync(path, textToWrite);
-                await using FileStream fileStream = new(path, FileMode.Open, FileAccess.Read, FileShare.None);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to save file: {Path}", path);
-            }
-        }
-
-        await SkEditorAPI.Configs.SaveAllConfigsAsync();
+        // foreach (OpenedFile file in SkEditorAPI.Files.GetOpenedEditors())
+        // {
+        //     string? path = file.Path;
+        //     if (string.IsNullOrEmpty(path))
+        //     {
+        //         string tempPath = Path.Combine(Path.GetTempPath(), "SkEditor");
+        //         Directory.CreateDirectory(tempPath);
+        //         path = Path.Combine(tempPath, file.Header);
+        //     }
+        //
+        //     string? textToWrite = file.Editor?.Text;
+        //     if (string.IsNullOrEmpty(textToWrite))
+        //     {
+        //         continue;
+        //     }
+        //
+        //     try
+        //     {
+        //         await File.WriteAllTextAsync(path, textToWrite);
+        //         await using FileStream fileStream = new(path, FileMode.Open, FileAccess.Read, FileShare.None);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Log.Error(ex, "Failed to save file: {Path}", path);
+        //     }
+        // }
+        //
+        // await SkEditorAPI.Configs.SaveAllConfigsAsync();
     }
 }

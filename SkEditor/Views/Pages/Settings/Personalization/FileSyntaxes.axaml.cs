@@ -97,24 +97,24 @@ public partial class FileSyntaxes : UserControl
             config.FileSyntaxes[language] = selectedFileSyntaxConfig.FullIdName;
             config.FileSyntaxes[selectedFileSyntaxConfig.LanguageName] = selectedFileSyntaxConfig.FullIdName;
 
-            List<TabViewItem?> tabs = SkEditorAPI.Files.GetOpenedEditors()
-                .Where(o =>
-                {
-                    string ext = Path.GetExtension(o.Path?.ToLower() ?? "");
-                    return selectedFileSyntaxConfig.Extensions.Contains(ext);
-                })
-                .Select(o => o.TabViewItem)
-                .ToList();
-
-            foreach (TabViewItem? tab in tabs)
-            {
-                if (tab?.Content is not TextEditor editor)
-                {
-                    continue;
-                }
-
-                editor.SyntaxHighlighting = selectedFileSyntax?.Highlighting;
-            }
+            // List<TabViewItem?> tabs = SkEditorAPI.Files.GetOpenedEditors()
+            //     .Where(o =>
+            //     {
+            //         string ext = Path.GetExtension(o.Path?.ToLower() ?? "");
+            //         return selectedFileSyntaxConfig.Extensions.Contains(ext);
+            //     })
+            //     .Select(o => o.TabViewItem)
+            //     .ToList();
+            //
+            // foreach (TabViewItem? tab in tabs)
+            // {
+            //     if (tab?.Content is not TextEditor editor)
+            //     {
+            //         continue;
+            //     }
+            //
+            //     editor.SyntaxHighlighting = selectedFileSyntax?.Highlighting;
+            // }
         };
 
         return expander;

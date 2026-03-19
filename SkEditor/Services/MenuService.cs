@@ -125,44 +125,44 @@ public class MenuService(IThemeService themeService) : IMenuService
     private static MainMenuItem BuildEditMenu()
     {
         MainMenuItem copy = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCopy, Symbol.Copy)
-            .WithCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Copy())
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+C");
 
         MainMenuItem paste = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPaste, Symbol.ClipboardPaste)
-            .WithCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Paste())
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+V");
 
         MainMenuItem cut = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCut, Symbol.Cut)
-            .WithCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Cut())
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+X");
 
         MainMenuItem undo = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderUndo, Symbol.ArrowUndo)
-            .WithCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Undo())
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+Z");
 
         MainMenuItem redo = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderRedo, Symbol.ArrowRedo)
-            .WithCommand(() => SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Redo())
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+Y");
 
         MainMenuItem duplicate = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderDuplicate, Symbol.CopySelect)
             .WithCommand(() =>
             {
-                TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
-                if (textArea is not null)
-                {
-                    CustomCommandsHandler.OnDuplicateCommandExecuted(textArea);
-                }
+                // TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
+                // if (textArea is not null)
+                // {
+                //     CustomCommandsHandler.OnDuplicateCommandExecuted(textArea);
+                // }
             })
             .WithInputGesture("Ctrl+D");
 
         MainMenuItem comment = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderComment, Symbol.Comment)
             .WithCommand(() =>
             {
-                TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
-                if (textArea is not null)
-                {
-                    CustomCommandsHandler.OnCommentCommandExecuted(textArea);
-                }
+                // TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
+                // if (textArea is not null)
+                // {
+                //     CustomCommandsHandler.OnCommentCommandExecuted(textArea);
+                // }
             })
             .WithInputGesture("Ctrl+OemQuestion");
 
@@ -170,11 +170,11 @@ public class MenuService(IThemeService themeService) : IMenuService
             .HeaderWithIcon(TranslationKey.MenuHeaderTrimWhitespaces, Symbol.Eraser)
             .WithCommand(() =>
             {
-                TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
-                if (textArea is not null)
-                {
-                    CustomCommandsHandler.OnTrimWhitespacesCommandExecuted();
-                }
+                // TextArea? textArea = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea;
+                // if (textArea is not null)
+                // {
+                //     CustomCommandsHandler.OnTrimWhitespacesCommandExecuted();
+                // }
             });
 
         MainMenuItem goToLine = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderGoToLine, Symbol.NumberSymbol)
@@ -184,32 +184,32 @@ public class MenuService(IThemeService themeService) : IMenuService
         MainMenuItem find = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderFind, Symbol.Search)
             .WithCommand(() =>
             {
-                SearchPanel? searchPanel = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel;
-                if (searchPanel is null)
-                {
-                    return;
-                }
-
-                searchPanel.IsReplaceMode = false;
-                searchPanel.Close();
-                searchPanel.Open();
-                searchPanel.Reactivate();
+                // SearchPanel? searchPanel = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel;
+                // if (searchPanel is null)
+                // {
+                //     return;
+                // }
+                //
+                // searchPanel.IsReplaceMode = false;
+                // searchPanel.Close();
+                // searchPanel.Open();
+                // searchPanel.Reactivate();
             })
             .WithInputGesture("Ctrl+F");
 
         MainMenuItem replace = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderReplace, Symbol.ArrowSwap)
             .WithCommand(() =>
             {
-                SearchPanel? searchPanel = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel;
-                if (searchPanel is null)
-                {
-                    return;
-                }
-
-                searchPanel.IsReplaceMode = true;
-                searchPanel.Close();
-                searchPanel.Open();
-                searchPanel.Reactivate();
+                // SearchPanel? searchPanel = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.SearchPanel;
+                // if (searchPanel is null)
+                // {
+                //     return;
+                // }
+                //
+                // searchPanel.IsReplaceMode = true;
+                // searchPanel.Close();
+                // searchPanel.Open();
+                // searchPanel.Reactivate();
             })
             .WithInputGesture("Ctrl+H");
 
@@ -310,10 +310,10 @@ public class MenuService(IThemeService themeService) : IMenuService
 
     private static async Task ShowDialogIfEditorIsOpen(AppWindow window, bool openAsDialog = true)
     {
-        if (SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor == null)
-        {
-            return;
-        }
+        // if (SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor == null)
+        // {
+        //     return;
+        // }
 
         if (openAsDialog)
         {
@@ -327,12 +327,12 @@ public class MenuService(IThemeService themeService) : IMenuService
 
     private static void AddDocsTab()
     {
-        SymbolIconSource icon = new()
-        {
-            Symbol = Symbol.Book
-        };
-        SkEditorAPI.Files.AddCustomTab(Translation.GetObservable(TranslationKey.DocumentationWindowTitle),
-            new DocumentationControl(),
-            icon: icon);
+        // SymbolIconSource icon = new()
+        // {
+        //     Symbol = Symbol.Book
+        // };
+        // SkEditorAPI.Files.AddCustomTab(Translation.GetObservable(TranslationKey.DocumentationWindowTitle),
+        //     new DocumentationControl(),
+        //     icon: icon);
     }
 }

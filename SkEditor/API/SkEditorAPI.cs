@@ -38,11 +38,6 @@ public static class SkEditorAPI
     public static IAddons Addons { get; } = new Addons();
 
     /// <summary>
-    ///     Get the Files API.
-    /// </summary>
-    public static IFiles Files { get; } = new Files();
-
-    /// <summary>
     ///     Get the Configs API.
     /// </summary>
     public static IConfigs Configs { get; } = new Configs();

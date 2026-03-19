@@ -32,26 +32,26 @@ public class Generation
             _guiGen.TitleTextBox.Text = "GUI";
         }
 
-        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (editor == null)
-        {
-            return;
-        }
-
-        int offset = editor.CaretOffset;
-        DocumentLine line = editor.Document.GetLineByOffset(offset);
-
-        if (!string.IsNullOrEmpty(editor.Document.GetText(line.Offset, line.Length)))
-        {
-            code.Append("\n\n");
-        }
-
-        code.Append($"function {functionName}(p: player):");
-
-        code.Append(_guiGen.UseSkriptGuiCheckBox.IsChecked == false ? GetSkriptCode() : GetSkriptGuiCode());
-
-        editor.Document.Insert(offset, code.ToString());
-        editor.CaretOffset = offset + code.Length;
+        // TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (editor == null)
+        // {
+        //     return;
+        // }
+        //
+        // int offset = editor.CaretOffset;
+        // DocumentLine line = editor.Document.GetLineByOffset(offset);
+        //
+        // if (!string.IsNullOrEmpty(editor.Document.GetText(line.Offset, line.Length)))
+        // {
+        //     code.Append("\n\n");
+        // }
+        //
+        // code.Append($"function {functionName}(p: player):");
+        //
+        // code.Append(_guiGen.UseSkriptGuiCheckBox.IsChecked == false ? GetSkriptCode() : GetSkriptGuiCode());
+        //
+        // editor.Document.Insert(offset, code.ToString());
+        // editor.CaretOffset = offset + code.Length;
     }
 
     private static string GetSkriptCode()

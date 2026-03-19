@@ -31,10 +31,10 @@ public partial class PersonalizationPage : UserControl
 
         HighlightCurrentLineSwitch.Command = new RelayCommand(() =>
         {
-            foreach (TextEditor textEditor in SkEditorAPI.Files.GetOpenedEditors().Select(x => x.Editor)!)
-            {
-                textEditor!.Options.HighlightCurrentLine = !textEditor.Options.HighlightCurrentLine;
-            }
+            // foreach (TextEditor textEditor in SkEditorAPI.Files.GetOpenedEditors().Select(x => x.Editor)!)
+            // {
+            //     textEditor!.Options.HighlightCurrentLine = !textEditor.Options.HighlightCurrentLine;
+            // }
         });
     }
 
@@ -50,23 +50,23 @@ public partial class PersonalizationPage : UserControl
         bool isDefault = result.Equals("Default");
         SkEditorAPI.Configs.GetAppSettings().EditorFontFamily = isDefault ? null : result;
 
-        SkEditorAPI.Files.GetOpenedEditors().ForEach(i =>
-        {
-            if (!isDefault)
-            {
-                i.Editor!.FontFamily = new FontFamily(result);
-                return;
-            }
-
-            object? jetbrainsMonoFont = FileFactory.GetJetbrainsMonoFont();
-            if (jetbrainsMonoFont is null)
-            {
-                i.Editor!.FontFamily = new FontFamily("JetBrains Mono");
-            }
-            else
-            {
-                i.Editor!.FontFamily = (FontFamily)jetbrainsMonoFont;
-            }
-        });
+        // SkEditorAPI.Files.GetOpenedEditors().ForEach(i =>
+        // {
+        //     if (!isDefault)
+        //     {
+        //         i.Editor!.FontFamily = new FontFamily(result);
+        //         return;
+        //     }
+        //
+        //     object? jetbrainsMonoFont = FileFactory.GetJetbrainsMonoFont();
+        //     if (jetbrainsMonoFont is null)
+        //     {
+        //         i.Editor!.FontFamily = new FontFamily("JetBrains Mono");
+        //     }
+        //     else
+        //     {
+        //         i.Editor!.FontFamily = (FontFamily)jetbrainsMonoFont;
+        //     }
+        // });
     }
 }

@@ -39,45 +39,45 @@ public partial class GoToLineWindow : AppWindow
             return;
         }
 
-        if (!SkEditorAPI.Files.IsEditorOpen())
-        {
-            return;
-        }
-
-        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (editor == null)
-        {
-            return;
-        }
+        // if (!SkEditorAPI.Files.IsEditorOpen())
+        // {
+        //     return;
+        // }
+        //
+        // TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (editor == null)
+        // {
+        //     return;
+        // }
 
         if (!int.TryParse((string?)GoToLineInput.Text, out int lineNumber))
         {
             return;
         }
 
-        DocumentLine line = editor.Document.GetLineByNumber(lineNumber);
-        editor.ScrollTo(line.LineNumber, 0);
-        editor.Focus();
-        editor.CaretOffset = line.Offset;
+        // DocumentLine line = editor.Document.GetLineByNumber(lineNumber);
+        // editor.ScrollTo(line.LineNumber, 0);
+        // editor.Focus();
+        // editor.CaretOffset = line.Offset;
         Close();
     }
 
     private void UpdateInput()
     {
-        TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (editor == null)
-        {
-            return;
-        }
-
-        int documentLines = editor.Document.LineCount;
-        if (!int.TryParse(GoToLineInput.Text, out int line))
-        {
-            GoToLineInput.Text = "";
-            return;
-        }
-
-        line = Math.Clamp(line, 1, documentLines);
-        GoToLineInput.Text = line.ToString();
+        // TextEditor? editor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (editor == null)
+        // {
+        //     return;
+        // }
+        //
+        // int documentLines = editor.Document.LineCount;
+        // if (!int.TryParse(GoToLineInput.Text, out int line))
+        // {
+        //     GoToLineInput.Text = "";
+        //     return;
+        // }
+        //
+        // line = Math.Clamp(line, 1, documentLines);
+        // GoToLineInput.Text = line.ToString();
     }
 }

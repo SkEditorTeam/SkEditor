@@ -80,37 +80,37 @@ public partial class PublishWindow : AppWindow
 
     private async Task Publish()
     {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-        {
-            await SkEditorAPI.Windows.ShowError("The current opened tab is not a code editor.");
-            return;
-        }
-
-        string? code = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Text;
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            await SkEditorAPI.Windows.ShowError("You can't publish empty code!");
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(ApiKey))
-        {
-            await SkEditorAPI.Windows.ShowError(
-                "You didn't provide an API key for this service - set it in the Connections settings.");
-            return;
-        }
-
-        switch ((WebsiteComboBox.SelectedItem as ComboBoxItem)?.Content as string)
-        {
-            case "Pastebin":
-                await CodePublisher.PublishPastebin(code, this);
-                break;
-            case "code.skript.pl":
-                await CodePublisher.PublishCodeSkriptPl(code, this);
-                break;
-            case "skUnity Parser":
-                await CodePublisher.PublishSkUnity(code, this);
-                break;
-        }
+        // if (!SkEditorAPI.Files.IsEditorOpen())
+        // {
+        //     await SkEditorAPI.Windows.ShowError("The current opened tab is not a code editor.");
+        //     return;
+        // }
+        //
+        // string? code = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.Text;
+        // if (string.IsNullOrWhiteSpace(code))
+        // {
+        //     await SkEditorAPI.Windows.ShowError("You can't publish empty code!");
+        //     return;
+        // }
+        //
+        // if (string.IsNullOrWhiteSpace(ApiKey))
+        // {
+        //     await SkEditorAPI.Windows.ShowError(
+        //         "You didn't provide an API key for this service - set it in the Connections settings.");
+        //     return;
+        // }
+        //
+        // switch ((WebsiteComboBox.SelectedItem as ComboBoxItem)?.Content as string)
+        // {
+        //     case "Pastebin":
+        //         await CodePublisher.PublishPastebin(code, this);
+        //         break;
+        //     case "code.skript.pl":
+        //         await CodePublisher.PublishCodeSkriptPl(code, this);
+        //         break;
+        //     case "skUnity Parser":
+        //         await CodePublisher.PublishSkUnity(code, this);
+        //         break;
+        // }
     }
 }

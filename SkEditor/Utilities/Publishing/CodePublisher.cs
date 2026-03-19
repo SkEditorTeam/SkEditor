@@ -77,25 +77,25 @@ public class CodePublisher
     {
         try
         {
-            string? apiKey = window.ApiKey;
-
-            string json = JsonSerializer.Serialize(new SkUnityCreateRequest { Content = code },
-                PublishingJsonContext.Default.SkUnityCreateRequest);
-            string? fileName = SkEditorAPI.Files.GetCurrentOpenedFile()?.Name;
-
-            HttpClient client = new();
-            HttpRequestMessage request = new(HttpMethod.Post,
-                $"https://api.skunity.com/v1/{apiKey}/parser/savenewfile/{fileName}");
-            request.Headers.Add("User-Agent", "SkEditor");
-            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await client.SendAsync(request);
-            string responseString = await response.Content.ReadAsStringAsync();
-
-            SkUnityCreateResponse? jsonResult = JsonSerializer.Deserialize<SkUnityCreateResponse>(responseString,
-                PublishingJsonContext.Default.SkUnityCreateResponse);
-            string url = "https://parser.skunity.com/" + jsonResult?.Result.ShareCode;
-            window.ResultTextBox.Text = url;
+            // string? apiKey = window.ApiKey;
+            //
+            // string json = JsonSerializer.Serialize(new SkUnityCreateRequest { Content = code },
+            //     PublishingJsonContext.Default.SkUnityCreateRequest);
+            // string? fileName = SkEditorAPI.Files.GetCurrentOpenedFile()?.Name;
+            //
+            // HttpClient client = new();
+            // HttpRequestMessage request = new(HttpMethod.Post,
+            //     $"https://api.skunity.com/v1/{apiKey}/parser/savenewfile/{fileName}");
+            // request.Headers.Add("User-Agent", "SkEditor");
+            // request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            //
+            // HttpResponseMessage response = await client.SendAsync(request);
+            // string responseString = await response.Content.ReadAsStringAsync();
+            //
+            // SkUnityCreateResponse? jsonResult = JsonSerializer.Deserialize<SkUnityCreateResponse>(responseString,
+            //     PublishingJsonContext.Default.SkUnityCreateResponse);
+            // string url = "https://parser.skunity.com/" + jsonResult?.Result.ShareCode;
+            // window.ResultTextBox.Text = url;
         }
         catch (Exception e)
         {

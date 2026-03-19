@@ -49,21 +49,21 @@ public partial class GeneralPage : UserControl
                 return;
             }
 
-            Dispatcher.UIThread.InvokeAsync(async () =>
-            {
-                await Translation.ChangeLanguage(language);
-
-                // Regenerate the text editor context menu
-                if (!SkEditorAPI.Files.IsEditorOpen())
-                {
-                    return;
-                }
-
-                foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
-                {
-                    openedFile.Editor!.ContextFlyout = FileFactory.GetContextMenu(openedFile.Editor);
-                }
-            });
+            // Dispatcher.UIThread.InvokeAsync(async () =>
+            // {
+            //     await Translation.ChangeLanguage(language);
+            //
+            //     // Regenerate the text editor context menu
+            //     if (!SkEditorAPI.Files.IsEditorOpen())
+            //     {
+            //         return;
+            //     }
+            //
+            //     foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
+            //     {
+            //         openedFile.Editor!.ContextFlyout = FileFactory.GetContextMenu(openedFile.Editor);
+            //     }
+            // });
         };
     }
 
@@ -113,16 +113,16 @@ public partial class GeneralPage : UserControl
             }
 
             oldAppConfig.EditorTabSize = result;
-            SkEditorAPI.Files.GetOpenedEditors()
-                .ForEach(file => file.Editor!.Options.IndentationSize = oldAppConfig.EditorTabSize);
+            // SkEditorAPI.Files.GetOpenedEditors()
+            //     .ForEach(file => file.Editor!.Options.IndentationSize = oldAppConfig.EditorTabSize);
         };
         IndentationTypeComboBox.SelectionChanged += (_, _) =>
         {
             AppSettings oldAppConfig = SkEditorAPI.Configs.GetAppSettings();
             oldAppConfig.UseEditorTabsForIndentation =
                 (IndentationTypeComboBox.SelectedItem as ComboBoxItem)?.Tag?.ToString() == "tabs";
-            SkEditorAPI.Files.GetOpenedEditors().ForEach(file =>
-                file.Editor!.Options.ConvertTabsToSpaces = !oldAppConfig.UseEditorTabsForIndentation);
+            // SkEditorAPI.Files.GetOpenedEditors().ForEach(file =>
+            //     file.Editor!.Options.ConvertTabsToSpaces = !oldAppConfig.UseEditorTabsForIndentation);
         };
     }
 
@@ -140,9 +140,9 @@ public partial class GeneralPage : UserControl
 
     private static void ToggleWrapping()
     {
-        List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
-
-        textEditors.ForEach(textEditor => textEditor.WordWrap = SkEditorAPI.Configs.GetAppSettings().IsWordWrapEnabled);
+        // List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
+        //
+        // textEditors.ForEach(textEditor => textEditor.WordWrap = SkEditorAPI.Configs.GetAppSettings().IsWordWrapEnabled);
     }
 
     private static void ToggleZoomSync()
@@ -152,13 +152,13 @@ public partial class GeneralPage : UserControl
             return;
         }
 
-        List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
-        if (textEditors.Count == 0)
-        {
-            return;
-        }
-
-        double fontSize = textEditors.First().FontSize;
-        textEditors.ForEach(textEditor => { textEditor.FontSize = fontSize; });
+        // List<TextEditor> textEditors = SkEditorAPI.Files.GetOpenedEditors().Select(e => e.Editor).ToList()!;
+        // if (textEditors.Count == 0)
+        // {
+        //     return;
+        // }
+        //
+        // double fontSize = textEditors.First().FontSize;
+        // textEditors.ForEach(textEditor => { textEditor.FontSize = fontSize; });
     }
 }

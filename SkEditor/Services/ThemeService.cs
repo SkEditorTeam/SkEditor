@@ -350,16 +350,16 @@ public class ThemeService(ILogService log) : IThemeService
 
     private void UpdateTextEditorColors()
     {
-        List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
-        foreach (TextEditor textEditor in files.Select(x => x.Editor).OfType<TextEditor>())
-        {
-            textEditor.Background = CurrentTheme.EditorBackgroundColor;
-            textEditor.Foreground = CurrentTheme.EditorTextColor;
-            textEditor.LineNumbersForeground = CurrentTheme.LineNumbersColor;
-            textEditor.TextArea.TextView.CurrentLineBackground = CurrentTheme.CurrentLineBackground;
-            textEditor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(CurrentTheme.CurrentLineBorder, 2);
-            textEditor.TextArea.TextView.InvalidateVisual();
-        }
+        // List<OpenedFile> files = SkEditorAPI.Files.GetOpenedEditors();
+        // foreach (TextEditor textEditor in files.Select(x => x.Editor).OfType<TextEditor>())
+        // {
+        //     textEditor.Background = CurrentTheme.EditorBackgroundColor;
+        //     textEditor.Foreground = CurrentTheme.EditorTextColor;
+        //     textEditor.LineNumbersForeground = CurrentTheme.LineNumbersColor;
+        //     textEditor.TextArea.TextView.CurrentLineBackground = CurrentTheme.CurrentLineBackground;
+        //     textEditor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(CurrentTheme.CurrentLineBorder, 2);
+        //     textEditor.TextArea.TextView.InvalidateVisual();
+        // }
     }
 
     private void UpdateFont()

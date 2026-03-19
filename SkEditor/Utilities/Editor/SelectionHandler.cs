@@ -16,42 +16,42 @@ public class SelectionHandler
 {
     public static void OnSelectionChanged(object? sender, EventArgs e)
     {
-        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null)
-        {
-            return;
-        }
-
-        IThemeService themeService = App.Services.GetRequiredService<IThemeService>();
-
-        textEditor.TextArea.TextView.LineTransformers
-            .Where(x => x is OccurenceBackgroundTransformer)
-            .ToList()
-            .ForEach(x => textEditor.TextArea.TextView.LineTransformers.Remove(x));
-
-        int start = textEditor.SelectionStart;
-        int length = textEditor.SelectionLength;
-        string selectedText = textEditor.Document.GetText(start, length);
-
-        if (string.IsNullOrWhiteSpace(selectedText))
-        {
-            return;
-        }
-
-        IEnumerable<SimpleSegment> wordOccurrences =
-            TextEditorUtilities.GetWordOccurrences(selectedText, textEditor.Document);
-        IList<IVisualLineTransformer>? lineTransformers = textEditor.TextArea.TextView.LineTransformers;
-
-        foreach (SimpleSegment segment in wordOccurrences.Where(s => s.Offset != start || s.Length != length))
-        {
-            int lineNumber = textEditor.Document.GetLineByOffset(segment.Offset).LineNumber;
-            lineTransformers.Add(new OccurenceBackgroundTransformer(themeService)
-            {
-                LineNumber = lineNumber,
-                StartOffset = segment.Offset,
-                EndOffset = segment.Offset + segment.Length
-            });
-        }
+        // TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (textEditor == null)
+        // {
+        //     return;
+        // }
+        //
+        // IThemeService themeService = App.Services.GetRequiredService<IThemeService>();
+        //
+        // textEditor.TextArea.TextView.LineTransformers
+        //     .Where(x => x is OccurenceBackgroundTransformer)
+        //     .ToList()
+        //     .ForEach(x => textEditor.TextArea.TextView.LineTransformers.Remove(x));
+        //
+        // int start = textEditor.SelectionStart;
+        // int length = textEditor.SelectionLength;
+        // string selectedText = textEditor.Document.GetText(start, length);
+        //
+        // if (string.IsNullOrWhiteSpace(selectedText))
+        // {
+        //     return;
+        // }
+        //
+        // IEnumerable<SimpleSegment> wordOccurrences =
+        //     TextEditorUtilities.GetWordOccurrences(selectedText, textEditor.Document);
+        // IList<IVisualLineTransformer>? lineTransformers = textEditor.TextArea.TextView.LineTransformers;
+        //
+        // foreach (SimpleSegment segment in wordOccurrences.Where(s => s.Offset != start || s.Length != length))
+        // {
+        //     int lineNumber = textEditor.Document.GetLineByOffset(segment.Offset).LineNumber;
+        //     lineTransformers.Add(new OccurenceBackgroundTransformer(themeService)
+        //     {
+        //         LineNumber = lineNumber,
+        //         StartOffset = segment.Offset,
+        //         EndOffset = segment.Offset + segment.Length
+        //     });
+        // }
     }
 }
 

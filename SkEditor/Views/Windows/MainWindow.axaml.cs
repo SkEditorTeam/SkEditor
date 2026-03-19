@@ -6,12 +6,13 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
-using CommunityToolkit.Mvvm.Input;
+using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Tabs;
 using SkEditor.Services;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Files;
@@ -60,9 +61,6 @@ public partial class MainWindow : AppWindow
 
     private void AddEvents()
     {
-        TabControl.AddTabButtonCommand = new RelayCommand(FileHandler.NewFile);
-        TabControl.TabCloseRequested += async (_, e) => await FileCloser.CloseFile(e);
-        TabControl.SelectionChanged += (_, e) => SkEditorAPI.Events.TabChanged(e);
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;
 
@@ -100,17 +98,17 @@ public partial class MainWindow : AppWindow
             e.Cancel = true;
             if (!SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
             {
-                bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
-                if (!anyUnsaved)
-                {
-                    e.Cancel = false;
-                    return;
-                }
-
-                if (await PromptForUnsavedChanges())
-                {
-                    return;
-                }
+                // bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
+                // if (!anyUnsaved)
+                // {
+                //     e.Cancel = false;
+                //     return;
+                // }
+                //
+                // if (await PromptForUnsavedChanges())
+                // {
+                //     return;
+                // }
 
                 AlreadyClosed = true;
                 Close();
@@ -178,7 +176,7 @@ public partial class MainWindow : AppWindow
                 sessionFilesAdded = await SessionRestorer.RestoreSession();
             }
 
-            SkEditorAPI.Files.AddWhatsNewPage();
+            // SkEditorAPI.Files.AddWhatsNewPage();
 
             await _splashScreen.TryUpdateStatusAsync("Opening files...");
             string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
@@ -188,10 +186,10 @@ public partial class MainWindow : AppWindow
             }
 
             startupFiles.ToList().ForEach(FileHandler.OpenFile);
-            if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
-            {
-                //SkEditorAPI.Files.AddWelcomeTab();
-            }
+            // if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
+            // {
+            //     //SkEditorAPI.Files.AddWelcomeTab();
+            // }
 
             BottomBar.UpdatePosition();
 
@@ -238,6 +236,9 @@ public partial class MainWindow : AppWindow
                         await App.Services.GetRequiredService<CrashChecker>().CheckForCrash();
 
                         await AddonUpdateChecker.CheckForUpdates();
+
+                        await Task.Delay(1500);
+                        // (DataContext as MainWindowViewModel)?.Tabs.Add(new EditorTab("ttt", new TextEditor {Background = Brushes.Red}));
                     }
                     catch (Exception exc)
                     {

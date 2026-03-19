@@ -31,42 +31,42 @@ public static partial class DiscordRpcUpdater
             }
         });
 
-        TabView? tabView = SkEditorAPI.Files.GetTabView();
-
-        if (tabView == null)
-        {
-            return;
-        }
-
-        tabView.SelectionChanged += (_, _) =>
-        {
-            if (!_client.IsInitialized)
-            {
-                return;
-            }
-
-            if (SkEditorAPI.Files.IsFileOpen())
-            {
-                if (tabView.SelectedItem is not TabViewItem tab)
-                {
-                    return;
-                }
-
-                string tabName = tab.Header?.ToString()?.TrimEnd('*') ?? "";
-                tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
-                string translation = Translation.Get(TranslationKey.DiscordRpcEditing, tabName);
-                if (translation.Length > 128)
-                {
-                    translation = translation[..125] + "...";
-                }
-
-                _client.UpdateDetails(translation);
-            }
-            else
-            {
-                _client.UpdateDetails("");
-            }
-        };
+        // TabView? tabView = SkEditorAPI.Files.GetTabView();
+        //
+        // if (tabView == null)
+        // {
+        //     return;
+        // }
+        //
+        // tabView.SelectionChanged += (_, _) =>
+        // {
+        //     if (!_client.IsInitialized)
+        //     {
+        //         return;
+        //     }
+        //
+        //     if (SkEditorAPI.Files.IsFileOpen())
+        //     {
+        //         if (tabView.SelectedItem is not TabViewItem tab)
+        //         {
+        //             return;
+        //         }
+        //
+        //         string tabName = tab.Header?.ToString()?.TrimEnd('*') ?? "";
+        //         tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
+        //         string translation = Translation.Get(TranslationKey.DiscordRpcEditing, tabName);
+        //         if (translation.Length > 128)
+        //         {
+        //             translation = translation[..125] + "...";
+        //         }
+        //
+        //         _client.UpdateDetails(translation);
+        //     }
+        //     else
+        //     {
+        //         _client.UpdateDetails("");
+        //     }
+        // };
     }
 
     public static void Uninitialize()

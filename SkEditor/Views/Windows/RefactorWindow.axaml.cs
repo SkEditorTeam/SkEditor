@@ -52,86 +52,88 @@ public partial class RefactorWindow : AppWindow
     // TODO: Support for comments starting after a line of code in the same line
     private static Task RemoveComments()
     {
-        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null)
-        {
-            return Task.CompletedTask;
-        }
-
-        List<DocumentLine> linesToStay =
-            textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
-
-        StringBuilder builder = new();
-        linesToStay.ForEach(x => builder.AppendLine(GetText(x)));
-        textEditor.Document.Text = builder.ToString()[..^2];
-
+        // TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (textEditor == null)
+        // {
+        //     return Task.CompletedTask;
+        // }
+        //
+        // List<DocumentLine> linesToStay =
+        //     textEditor.Document.Lines.Where(x => !GetText(x).Trim().StartsWith('#')).ToList();
+        //
+        // StringBuilder builder = new();
+        // linesToStay.ForEach(x => builder.AppendLine(GetText(x)));
+        // textEditor.Document.Text = builder.ToString()[..^2];
+        //
         return Task.CompletedTask;
     }
 
     private static Task TabsToSpaces()
     {
-        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null)
-        {
-            return Task.CompletedTask;
-        }
-
-        IList<DocumentLine>? lines = textEditor.Document.Lines;
-
-        lines.Where(line => GetText(line).StartsWith("\t")).ToList().ForEach(line =>
-        {
-            int tabs = GetText(line).TakeWhile(x => x == '\t').Count();
-            textEditor.Document.Replace(line.Offset, tabs, new string(' ', tabs * 4));
-        });
+        // TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (textEditor == null)
+        // {
+        //     return Task.CompletedTask;
+        // }
+        //
+        // IList<DocumentLine>? lines = textEditor.Document.Lines;
+        //
+        // lines.Where(line => GetText(line).StartsWith("\t")).ToList().ForEach(line =>
+        // {
+        //     int tabs = GetText(line).TakeWhile(x => x == '\t').Count();
+        //     textEditor.Document.Replace(line.Offset, tabs, new string(' ', tabs * 4));
+        // });
         return Task.CompletedTask;
     }
 
     private static Task SpacesToTabs()
     {
-        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null)
-        {
-            return Task.CompletedTask;
-        }
-
-        int tabSize = GetTabSize();
-        IList<DocumentLine>? lines = textEditor.Document.Lines;
-        lines.Where(line => GetText(line).StartsWith(" ")).ToList().ForEach(line =>
-        {
-            int spaces = GetText(line).TakeWhile(x => x == ' ').Count();
-            if (spaces % tabSize == 0)
-            {
-                textEditor.Document.Replace(line.Offset, spaces, new string('\t', spaces / tabSize));
-            }
-        });
+        // TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (textEditor == null)
+        // {
+        //     return Task.CompletedTask;
+        // }
+        //
+        // int tabSize = GetTabSize();
+        // IList<DocumentLine>? lines = textEditor.Document.Lines;
+        // lines.Where(line => GetText(line).StartsWith(" ")).ToList().ForEach(line =>
+        // {
+        //     int spaces = GetText(line).TakeWhile(x => x == ' ').Count();
+        //     if (spaces % tabSize == 0)
+        //     {
+        //         textEditor.Document.Replace(line.Offset, spaces, new string('\t', spaces / tabSize));
+        //     }
+        // });
 
         return Task.CompletedTask;
     }
 
     private static int GetTabSize()
     {
-        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor == null)
-        {
-            return 4;
-        }
-
-        IList<DocumentLine>? lines = textEditor.Document.Lines;
-        int tabSize = 4;
-
-        DocumentLine? line = lines.FirstOrDefault(line => GetText(line).StartsWith(" "));
-
-        if (line != null)
-        {
-            tabSize = GetText(line).TakeWhile(x => x == ' ').Count();
-        }
-
-        return tabSize;
+        // TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (textEditor == null)
+        // {
+        //     return 4;
+        // }
+        //
+        // IList<DocumentLine>? lines = textEditor.Document.Lines;
+        // int tabSize = 4;
+        //
+        // DocumentLine? line = lines.FirstOrDefault(line => GetText(line).StartsWith(" "));
+        //
+        // if (line != null)
+        // {
+        //     tabSize = GetText(line).TakeWhile(x => x == ' ').Count();
+        // }
+        //
+        // return tabSize;
+        return 0;
     }
 
     private static string GetText(DocumentLine line)
     {
-        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        return textEditor == null ? string.Empty : textEditor.Document.GetText(line.Offset, line.Length);
+        // TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // return textEditor == null ? string.Empty : textEditor.Document.GetText(line.Offset, line.Length);
+        return string.Empty;
     }
 }

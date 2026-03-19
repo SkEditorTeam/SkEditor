@@ -30,14 +30,14 @@ public partial class BottomBarControl : UserControl
                 current.ResourcesChanged += (_, _) => UpdatePosition();
             }
 
-            TabView? tabView = SkEditorAPI.Files.GetTabView();
-            if (tabView is null)
-            {
-                return;
-            }
-
-            tabView.SelectionChanged += (_, _) => UpdatePosition();
-            tabView.SelectionChanged += (_, _) => FileHandler.TabSwitchAction();
+            // TabView? tabView = SkEditorAPI.Files.GetTabView();
+            // if (tabView is null)
+            // {
+            //     return;
+            // }
+            //
+            // tabView.SelectionChanged += (_, _) => UpdatePosition();
+            // tabView.SelectionChanged += (_, _) => FileHandler.TabSwitchAction();
         };
 
         ReloadBottomIcons();
@@ -110,25 +110,25 @@ public partial class BottomBarControl : UserControl
 
     public void UpdatePosition()
     {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-        {
-            PositionInfo.IsVisible = false;
-            return;
-        }
-
-        PositionInfo.IsVisible = true;
-        TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
-        if (textEditor is null)
-        {
-            return;
-        }
-
-        TextLocation location = textEditor.Document.GetLocation(textEditor.CaretOffset);
-
-        LineText.Text = Translation.Get(TranslationKey.BottomBarLine).Replace("{0}", location.Line.ToString());
-        ColumnText.Text = Translation.Get(TranslationKey.BottomBarColumn).Replace("{0}", location.Column.ToString());
-        DocumentSizeText.Text = Translation.Get(TranslationKey.BottomBarDocumentSize)
-            .Replace("{0}", textEditor.Document.TextLength.ToString());
+        // if (!SkEditorAPI.Files.IsEditorOpen())
+        // {
+        //     PositionInfo.IsVisible = false;
+        //     return;
+        // }
+        //
+        // PositionInfo.IsVisible = true;
+        // TextEditor? textEditor = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor;
+        // if (textEditor is null)
+        // {
+        //     return;
+        // }
+        //
+        // TextLocation location = textEditor.Document.GetLocation(textEditor.CaretOffset);
+        //
+        // LineText.Text = Translation.Get(TranslationKey.BottomBarLine).Replace("{0}", location.Line.ToString());
+        // ColumnText.Text = Translation.Get(TranslationKey.BottomBarColumn).Replace("{0}", location.Column.ToString());
+        // DocumentSizeText.Text = Translation.Get(TranslationKey.BottomBarDocumentSize)
+        //     .Replace("{0}", textEditor.Document.TextLength.ToString());
     }
 
     public void UpdateLogs(string logs)

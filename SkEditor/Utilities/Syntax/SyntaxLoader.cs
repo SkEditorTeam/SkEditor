@@ -214,110 +214,110 @@ public class SyntaxLoader
 
     public static async Task RefreshSyntaxAsync(string? extension = null)
     {
-        if (!_enableChecking)
-        {
-            return;
-        }
-
-        FileSyntax? defaultSyntax = await GetDefaultSyntax();
-
-        OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
-        if (file?.Editor is null)
-        {
-            return;
-        }
-
-        if (extension == null)
-        {
-            extension = Path.GetExtension(file.Path);
-            if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
-            {
-                if (defaultSyntax == null || defaultSyntax.Highlighting == null)
-                {
-                    return;
-                }
-
-                file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
-                return;
-            }
-        }
-
-        if (!SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? fileSyntax))
-        {
-            if (defaultSyntax == null || defaultSyntax.Highlighting == null)
-            {
-                return;
-            }
-
-            file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
-            return;
-        }
-
-        FileSyntax? syntax = fileSyntax.FirstOrDefault(x => x.Config != null &&
-                                                            x.Config.FullIdName == SkEditorAPI.Configs.GetAppSettings()
-                                                                .FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
-                                                            && x.Config.Extensions.Contains(extension));
-
-        if (syntax == null && fileSyntax.Count > 0)
-        {
-            syntax = fileSyntax[0];
-        }
-
-        if (syntax == null)
-        {
-            if (defaultSyntax == null || defaultSyntax.Highlighting == null)
-            {
-                return;
-            }
-
-            file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
-            return;
-        }
-
-        syntax = await FileSyntax.LoadSyntax(syntax.FolderName);
-        if (syntax.Highlighting != null)
-        {
-            file.Editor.SyntaxHighlighting = syntax.Highlighting;
-        }
+        // if (!_enableChecking)
+        // {
+        //     return;
+        // }
+        //
+        // FileSyntax? defaultSyntax = await GetDefaultSyntax();
+        //
+        // OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        // if (file?.Editor is null)
+        // {
+        //     return;
+        // }
+        //
+        // if (extension == null)
+        // {
+        //     extension = Path.GetExtension(file.Path);
+        //     if (string.IsNullOrWhiteSpace(extension) || !SortedFileSyntaxes.ContainsKey(extension))
+        //     {
+        //         if (defaultSyntax == null || defaultSyntax.Highlighting == null)
+        //         {
+        //             return;
+        //         }
+        //
+        //         file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
+        //         return;
+        //     }
+        // }
+        //
+        // if (!SortedFileSyntaxes.TryGetValue(extension, out List<FileSyntax>? fileSyntax))
+        // {
+        //     if (defaultSyntax == null || defaultSyntax.Highlighting == null)
+        //     {
+        //         return;
+        //     }
+        //
+        //     file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
+        //     return;
+        // }
+        //
+        // FileSyntax? syntax = fileSyntax.FirstOrDefault(x => x.Config != null &&
+        //                                                     x.Config.FullIdName == SkEditorAPI.Configs.GetAppSettings()
+        //                                                         .FileSyntaxes.GetValueOrDefault(x.Config.LanguageName)
+        //                                                     && x.Config.Extensions.Contains(extension));
+        //
+        // if (syntax == null && fileSyntax.Count > 0)
+        // {
+        //     syntax = fileSyntax[0];
+        // }
+        //
+        // if (syntax == null)
+        // {
+        //     if (defaultSyntax == null || defaultSyntax.Highlighting == null)
+        //     {
+        //         return;
+        //     }
+        //
+        //     file.Editor.SyntaxHighlighting = defaultSyntax.Highlighting;
+        //     return;
+        // }
+        //
+        // syntax = await FileSyntax.LoadSyntax(syntax.FolderName);
+        // if (syntax.Highlighting != null)
+        // {
+        //     file.Editor.SyntaxHighlighting = syntax.Highlighting;
+        // }
     }
 
     public static void RefreshAllOpenedEditors()
     {
-        List<OpenedFile> openedFiles = SkEditorAPI.Files.GetOpenedEditors();
-
-        foreach (OpenedFile file in openedFiles)
-        {
-            if (file.Editor == null || file.Path == null)
-            {
-                continue;
-            }
-
-            string ext = Path.GetExtension(file.Path.TrimEnd('*').ToLower());
-            if (string.IsNullOrWhiteSpace(ext) || !SortedFileSyntaxes.ContainsKey(ext))
-            {
-                continue;
-            }
-
-            FileSyntax? syntax = SortedFileSyntaxes[ext]
-                .FirstOrDefault(x => x.Config != null &&
-                                     x.Config.FullIdName == SkEditorAPI.Configs
-                                         .GetAppSettings().FileSyntaxes
-                                         .GetValueOrDefault(
-                                             x.Config.LanguageName)
-                                     && x.Config.Extensions.Contains(ext));
-
-            if (syntax == null && SortedFileSyntaxes[ext].Count > 0)
-            {
-                syntax = SortedFileSyntaxes[ext][0];
-            }
-
-            if (syntax?.Highlighting == null)
-            {
-                continue;
-            }
-
-            file.Editor.SyntaxHighlighting = syntax.Highlighting;
-        }
+        // List<OpenedFile> openedFiles = SkEditorAPI.Files.GetOpenedEditors();
+        //
+        // foreach (OpenedFile file in openedFiles)
+        // {
+        //     if (file.Editor == null || file.Path == null)
+        //     {
+        //         continue;
+        //     }
+        //
+        //     string ext = Path.GetExtension(file.Path.TrimEnd('*').ToLower());
+        //     if (string.IsNullOrWhiteSpace(ext) || !SortedFileSyntaxes.ContainsKey(ext))
+        //     {
+        //         continue;
+        //     }
+        //
+        //     FileSyntax? syntax = SortedFileSyntaxes[ext]
+        //         .FirstOrDefault(x => x.Config != null &&
+        //                              x.Config.FullIdName == SkEditorAPI.Configs
+        //                                  .GetAppSettings().FileSyntaxes
+        //                                  .GetValueOrDefault(
+        //                                      x.Config.LanguageName)
+        //                              && x.Config.Extensions.Contains(ext));
+        //
+        //     if (syntax == null && SortedFileSyntaxes[ext].Count > 0)
+        //     {
+        //         syntax = SortedFileSyntaxes[ext][0];
+        //     }
+        //
+        //     if (syntax?.Highlighting == null)
+        //     {
+        //         continue;
+        //     }
+        //
+        //     file.Editor.SyntaxHighlighting = syntax.Highlighting;
+        // }
     }
 
     public static IHighlightingDefinition? GetCurrentSkriptHighlighting()

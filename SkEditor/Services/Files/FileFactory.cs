@@ -259,7 +259,7 @@ public class FileFactory(IThemeService themeService, INotificationService notifi
         editor.TextArea.TextEntered += TextEditorEventHandler.DoAutoPairing;
         if (!SkEditorAPI.Configs.GetExperimentsConfig().RealtimeCodeParserEnabled)
         {
-            editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser?.SetUnparsed();
+            // editor.TextChanged += (_, _) => SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser?.SetUnparsed();
         }
 
         if (SkEditorAPI.Configs.GetExperimentsConfig().HexPreviewEnabled)

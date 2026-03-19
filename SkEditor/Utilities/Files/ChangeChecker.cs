@@ -31,92 +31,92 @@ public class ChangeChecker
 
     public static async Task Check()
     {
-        if (!SkEditorAPI.Configs.GetAppSettings().CheckForExternalFileChanges)
-        {
-            return;
-        }
-
-        try
-        {
-            OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
-            if (file == null)
-            {
-                return;
-            }
-
-            if (!file.IsEditor || string.IsNullOrWhiteSpace(file.Path))
-            {
-                return;
-            }
-
-            string path = Uri.UnescapeDataString(file.Path);
-            if (!File.Exists(path))
-            {
-                return;
-            }
-
-            if (!HasChangedDictionary.TryGetValue(path, out bool hasChanged))
-            {
-                HasChangedDictionary[path] = false;
-                hasChanged = false;
-            }
-
-            if (hasChanged)
-            {
-                return;
-            }
-
-            string textToWrite = file.Editor?.Document?.Text ?? string.Empty;
-            using StreamReader reader = new(path);
-            string textToRead = await reader.ReadToEndAsync();
-
-            if (textToWrite.Equals(textToRead) ||
-                textToRead.Equals(GetLastKnownContent(file)))
-            {
-                return;
-            }
-
-            if (_isMessageShown)
-            {
-                return;
-            }
-
-            _isMessageShown = true;
-            await ShowMessage(file, textToRead);
-        }
-        catch (Exception e)
-        {
-            Log.Warning(e, "Error while checking for changes");
-        }
-
-        _isMessageShown = false;
+        // if (!SkEditorAPI.Configs.GetAppSettings().CheckForExternalFileChanges)
+        // {
+        //     return;
+        // }
+        //
+        // try
+        // {
+        //     OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        //     if (file == null)
+        //     {
+        //         return;
+        //     }
+        //
+        //     if (!file.IsEditor || string.IsNullOrWhiteSpace(file.Path))
+        //     {
+        //         return;
+        //     }
+        //
+        //     string path = Uri.UnescapeDataString(file.Path);
+        //     if (!File.Exists(path))
+        //     {
+        //         return;
+        //     }
+        //
+        //     if (!HasChangedDictionary.TryGetValue(path, out bool hasChanged))
+        //     {
+        //         HasChangedDictionary[path] = false;
+        //         hasChanged = false;
+        //     }
+        //
+        //     if (hasChanged)
+        //     {
+        //         return;
+        //     }
+        //
+        //     string textToWrite = file.Editor?.Document?.Text ?? string.Empty;
+        //     using StreamReader reader = new(path);
+        //     string textToRead = await reader.ReadToEndAsync();
+        //
+        //     if (textToWrite.Equals(textToRead) ||
+        //         textToRead.Equals(GetLastKnownContent(file)))
+        //     {
+        //         return;
+        //     }
+        //
+        //     if (_isMessageShown)
+        //     {
+        //         return;
+        //     }
+        //
+        //     _isMessageShown = true;
+        //     await ShowMessage(file, textToRead);
+        // }
+        // catch (Exception e)
+        // {
+        //     Log.Warning(e, "Error while checking for changes");
+        // }
+        //
+        // _isMessageShown = false;
     }
 
     private static async Task ShowMessage(OpenedFile file, string textToRead)
     {
-        OpenedFile? openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(f => f == file);
-        if (openedFile is not { Editor: not null })
-        {
-            return;
-        }
-
-        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
-            Translation.Get(TranslationKey.Attention),
-            Translation.Get(TranslationKey.ChangesDetected),
-            new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
-            primaryButtonText: "Yes",
-            cancelButtonText: "No");
-
-        if (result == ContentDialogResult.Primary)
-        {
-            openedFile.Editor.Document.Text = textToRead;
-            SetLastKnownContent(openedFile, textToRead);
-            openedFile.IsSaved = true;
-        }
-        else
-        {
-            SetLastKnownContent(openedFile, textToRead);
-            openedFile.IsSaved = false;
-        }
+        // OpenedFile? openedFile = SkEditorAPI.Files.GetOpenedFiles().Find(f => f == file);
+        // if (openedFile is not { Editor: not null })
+        // {
+        //     return;
+        // }
+        //
+        // ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
+        //     Translation.Get(TranslationKey.Attention),
+        //     Translation.Get(TranslationKey.ChangesDetected),
+        //     new SymbolIconSource { Symbol = Symbol.Important, IconVariant = IconVariant.Filled },
+        //     primaryButtonText: "Yes",
+        //     cancelButtonText: "No");
+        //
+        // if (result == ContentDialogResult.Primary)
+        // {
+        //     openedFile.Editor.Document.Text = textToRead;
+        //     SetLastKnownContent(openedFile, textToRead);
+        //     openedFile.IsSaved = true;
+        // }
+        // else
+        // {
+        //     SetLastKnownContent(openedFile, textToRead);
+        //     openedFile.IsSaved = false;
+        // }
     }
 }

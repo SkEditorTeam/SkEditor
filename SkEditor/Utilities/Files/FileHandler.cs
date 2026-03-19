@@ -80,75 +80,75 @@ public class FileHandler
 
     public static void SaveFile()
     {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-        {
-            return;
-        }
-
-        QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
-            if (file == null)
-            {
-                return;
-            }
-
-            await SkEditorAPI.Files.Save(file);
-        }));
+        // if (!SkEditorAPI.Files.IsEditorOpen())
+        // {
+        //     return;
+        // }
+        //
+        // QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
+        // {
+        //     OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        //     if (file == null)
+        //     {
+        //         return;
+        //     }
+        //
+        //     await SkEditorAPI.Files.Save(file);
+        // }));
     }
 
     public static void SaveAsFile()
     {
-        if (!SkEditorAPI.Files.IsEditorOpen())
-        {
-            return;
-        }
-
-        QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
-            if (file == null)
-            {
-                return;
-            }
-
-            await SkEditorAPI.Files.Save(file, true);
-        }));
+        // if (!SkEditorAPI.Files.IsEditorOpen())
+        // {
+        //     return;
+        // }
+        //
+        // QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
+        // {
+        //     OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        //     if (file == null)
+        //     {
+        //         return;
+        //     }
+        //
+        //     await SkEditorAPI.Files.Save(file, true);
+        // }));
     }
 
     public static void SaveAllFiles()
     {
-        List<OpenedFile> openedEditors = SkEditorAPI.Files.GetOpenedEditors();
-        foreach (OpenedFile file in openedEditors)
-        {
-            QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
-                await SkEditorAPI.Files.Save(file)));
-        }
+        // List<OpenedFile> openedEditors = SkEditorAPI.Files.GetOpenedEditors();
+        // foreach (OpenedFile file in openedEditors)
+        // {
+        //     QueueSave(async () => await Dispatcher.UIThread.InvokeAsync(async () =>
+        //         await SkEditorAPI.Files.Save(file)));
+        // }
     }
 
     public static void TabSwitchAction()
     {
-        if (SkEditorAPI.Files.GetOpenedTabs().Count == 0 || !SkEditorAPI.Files.IsEditorOpen())
-        {
-            return;
-        }
-
-        MainWindow? mainWindow = App.Services.GetRequiredService<WindowRegistry>().Active;
-
-        OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
-        if (file == null)
-        {
-            mainWindow?.BottomBar.IsVisible = false;
-            return;
-        }
-
-        FileTypes.FileType? fileType = FileFactory.OpenedFiles.GetValueOrDefault(file.Header);
-        mainWindow?.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
+        // if (SkEditorAPI.Files.GetOpenedTabs().Count == 0 || !SkEditorAPI.Files.IsEditorOpen())
+        // {
+        //     return;
+        // }
+        //
+        // MainWindow? mainWindow = App.Services.GetRequiredService<WindowRegistry>().Active;
+        //
+        // OpenedFile? file = SkEditorAPI.Files.GetCurrentOpenedFile();
+        // if (file == null)
+        // {
+        //     mainWindow?.BottomBar.IsVisible = false;
+        //     return;
+        // }
+        //
+        // FileTypes.FileType? fileType = FileFactory.OpenedFiles.GetValueOrDefault(file.Header);
+        // mainWindow?.BottomBar.IsVisible = fileType?.NeedsBottomBar ?? true;
     }
 
     public static void NewFile()
     {
-        SkEditorAPI.Files.NewFile();
+        // SkEditorAPI.Files.NewFile();
     }
 
     public static async Task OpenFile()
@@ -172,14 +172,14 @@ public class FileHandler
 
     public static void OpenFile(string path)
     {
-        SkEditorAPI.Files.OpenFile(path);
+        // SkEditorAPI.Files.OpenFile(path);
     }
 
     public static void SwitchTab(int index)
     {
-        if (index < SkEditorAPI.Files.GetOpenedTabs().Count)
-        {
-            SkEditorAPI.Files.Select(index);
-        }
+        // if (index < SkEditorAPI.Files.GetOpenedTabs().Count)
+        // {
+        //     SkEditorAPI.Files.Select(index);
+        // }
     }
 }

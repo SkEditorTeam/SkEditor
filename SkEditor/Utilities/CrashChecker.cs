@@ -31,7 +31,7 @@ public class CrashChecker(ILogService logService)
                 List<string> files = Directory.GetFiles(tempPath).ToList();
                 if (files.Count != 0)
                 {
-                    files.ForEach(file => SkEditorAPI.Files.OpenFile(file));
+                    // files.ForEach(file => SkEditorAPI.Files.OpenFile(file));
                     await WaitForUnlock(files);
 
                     try

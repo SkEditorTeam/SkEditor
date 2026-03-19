@@ -8,6 +8,8 @@
         xmlns:controls="clr-namespace:SkEditor.Views.Controls"
         xmlns:notifications="clr-namespace:SkEditor.Views.Controls.Notifications"
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
+        xmlns:tabs="clr-namespace:SkEditor.Models.Tabs"
+        xmlns:pages="clr-namespace:SkEditor.Views.Pages"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         x:DataType="windows:MainWindowViewModel"
@@ -20,11 +22,11 @@
             <Setter Property="CornerRadius" Value="0,7,7,7" />
             <Setter Property="ClipToBounds" Value="True" />
         </Style>
-        <Style Selector="ui|TabView#TabControl /template/ ContentPresenter#TabContentPresenter">
+        <Style Selector="ui|TabView /template/ ContentPresenter#TabContentPresenter">
             <Setter Property="CornerRadius" Value="0,7,7,7" />
             <Setter Property="ClipToBounds" Value="True" />
         </Style>
-        <Style Selector="ui|TabView#TabControl /template/ uip|TabViewListView#TabListView">
+        <Style Selector="ui|TabView /template/ uip|TabViewListView#TabListView">
             <Setter Property="Margin" Value="-10,0,0,0" />
         </Style>
         <Style Selector="ui|TabViewItem">
@@ -67,8 +69,20 @@
                                   ResizeDirection="Columns" />
 
                     <!-- TabControl -->
-                    <ui:TabView Name="TabControl" Grid.Column="4" Grid.Row="0" Margin="0,-10,0,0"
-                                VerticalAlignment="Stretch" CanDragTabs="True" CanReorderTabs="True" />
+                    <Panel Grid.Column="4" Grid.Row="0" VerticalAlignment="Stretch">
+                        <ui:TabView IsVisible="{Binding !!Tabs.Count}" Margin="0,-10,0,0" CanDragTabs="True" CanReorderTabs="True" VerticalAlignment="Stretch"
+                                    TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
+                            <ui:TabView.TabItemTemplate>
+                                <DataTemplate x:DataType="tabs:Tab">
+                                    <ui:TabViewItem Header="{Binding Header}"
+                                                    Content="{Binding Content}"/>
+                                </DataTemplate>
+                            </ui:TabView.TabItemTemplate>
+                        </ui:TabView>
+                        
+                        <pages:WelcomePage VerticalAlignment="Stretch"
+                                           IsVisible="{Binding !$parent[Window].((windows:MainWindowViewModel)DataContext).Tabs.Count}"/>
+                    </Panel>
 
                     <!-- BottomBar -->
                     <controls:BottomBarControl x:Name="BottomBar" Name="BottomBar" Grid.Column="0" Grid.ColumnSpan="5"

@@ -49,13 +49,13 @@ public partial class ParserSidebarPanel : UserControl
         TypeFilterBox.SelectionChanged += (_, _) => UpdateSearchFilter();
         SkEditorAPI.Events.OnTabChanged += (_, _) =>
         {
-            CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser;
-            if (parser == null)
-            {
-                return;
-            }
-
-            parser.Parse();
+            // CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser;
+            // if (parser == null)
+            // {
+            //     return;
+            // }
+            //
+            // parser.Parse();
         };
     }
 
@@ -97,14 +97,14 @@ public partial class ParserSidebarPanel : UserControl
 
     public void ParseCurrentFile()
     {
-        CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser;
-        if (parser == null)
-        {
-            return;
-        }
-
-        ParseButton.IsEnabled = false;
-        parser.Parse();
+        // CodeParser? parser = SkEditorAPI.Files.GetCurrentOpenedFile()?.Parser;
+        // if (parser == null)
+        // {
+        //     return;
+        // }
+        //
+        // ParseButton.IsEnabled = false;
+        // parser.Parse();
     }
 
     public void UpdateSearchFilter()
