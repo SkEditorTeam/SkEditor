@@ -35,6 +35,11 @@
         <TrimMode>full</TrimMode>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And '$(PublishAot)' == 'false'">
+        <PublishReadyToRun>true</PublishReadyToRun>
+        <PublishSingleFile>true</PublishSingleFile>
+    </PropertyGroup>
+    
     <ItemGroup>
         <AvaloniaXaml Remove="Assets\*.axaml"/>
         <AvaloniaResource Include="Assets\**"/>
@@ -95,8 +100,4 @@
         <!--        <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj"/>-->
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
-
-    <PropertyGroup>
-        <AllowedReferenceRelatedFileExtensions>.dll;.exe</AllowedReferenceRelatedFileExtensions>
-    </PropertyGroup>
 </Project>
