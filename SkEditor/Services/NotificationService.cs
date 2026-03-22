@@ -36,4 +36,9 @@ public class NotificationService(WindowRegistry windowRegistry) : INotificationS
     {
         Show(title, message, NotificationType.Warning);
     }
+
+    public void Debug(string message)
+    {
+        Show("Debug", message, NotificationType.Information, TimeSpan.FromSeconds(10));
+    }
 }
