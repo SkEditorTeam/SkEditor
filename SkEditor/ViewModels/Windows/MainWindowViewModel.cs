@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Avalonia.Media;
 using Avalonia.Threading;
-using AvaloniaEdit;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -12,13 +10,11 @@ namespace SkEditor.ViewModels.Windows;
 
 public partial class MainWindowViewModel : ObservableRecipient
 {
-    public MainMenuViewModel MainMenu { get; }
+    [ObservableProperty]
+    private Tab? _selectedTab;
 
     [ObservableProperty]
     private ObservableCollection<Tab> _tabs = [];
-
-    [ObservableProperty]
-    private Tab? _selectedTab;
 
     public MainWindowViewModel(MainMenuViewModel mainMenu)
     {
@@ -34,10 +30,14 @@ public partial class MainWindowViewModel : ObservableRecipient
             Tabs.Remove(m.Tab));
     }
 
+    public MainMenuViewModel MainMenu { get; }
+
     [RelayCommand]
     public void NewTab()
     {
         // Tabs.Add(new EditorTab("New Tab", "new tab"));
-        Tabs.Add(new SettingsTab("Settings"));
+        Tab tab = new SettingsTab();
+        Tabs.Add(tab);
+        SelectedTab = tab;
     }
 }
