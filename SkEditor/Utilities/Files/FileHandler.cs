@@ -6,15 +6,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
+using AvaloniaEdit;
 using FluentAvalonia.UI.Windowing;
-using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
-using SkEditor.Services.Files;
-using SkEditor.Services.Windowing;
+using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
+using SkEditor.ViewModels.Windows;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities.Files;
@@ -149,6 +149,7 @@ public class FileHandler
     public static void NewFile()
     {
         // SkEditorAPI.Files.NewFile();
+        (SkEditorAPI.Windows.GetMainWindow().DataContext as MainWindowViewModel)?.Tabs.Add(new EditorTab("ttt", new TextEditor {Background = Brush.Parse("#0B2E20")}));
     }
 
     public static async Task OpenFile()

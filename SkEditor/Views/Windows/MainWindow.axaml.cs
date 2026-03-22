@@ -236,9 +236,6 @@ public partial class MainWindow : AppWindow
                         await App.Services.GetRequiredService<CrashChecker>().CheckForCrash();
 
                         await AddonUpdateChecker.CheckForUpdates();
-
-                        await Task.Delay(1500);
-                        // (DataContext as MainWindowViewModel)?.Tabs.Add(new EditorTab("ttt", new TextEditor {Background = Brushes.Red}));
                     }
                     catch (Exception exc)
                     {
