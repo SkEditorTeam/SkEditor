@@ -10,9 +10,7 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using SkEditor.API;
-using SkEditor.Services.Files;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Files;
 
 namespace SkEditor.Utilities.Localization;
 
@@ -88,20 +86,20 @@ public static class Translation
 
     public static async Task ChangeAndRefreshLanguage(string language)
     {
-        // await Dispatcher.UIThread.InvokeAsync(async () =>
-        // {
-        //     await ChangeLanguage(language);
-        //
-        //     if (!SkEditorAPI.Files.IsEditorOpen())
-        //     {
-        //         return;
-        //     }
-        //
-        //     foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
-        //     {
-        //         openedFile.Editor!.ContextFlyout = FileFactory.GetContextMenu(openedFile.Editor);
-        //     }
-        // });
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            await ChangeLanguage(language);
+
+            // if (!SkEditorAPI.Files.IsEditorOpen())
+            // {
+            //     return;
+            // }
+            //
+            // foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
+            // {
+            //     openedFile.Editor!.ContextFlyout = FileFactory.GetContextMenu(openedFile.Editor);
+            // }
+        });
     }
 
     private static void ClearOldLanguages()
