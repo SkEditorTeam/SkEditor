@@ -72,28 +72,18 @@
                     <Panel Grid.Column="4" Grid.Row="0" VerticalAlignment="Stretch">
                         <ui:TabView IsVisible="{Binding !!Tabs.Count}" Margin="0,-10,0,0" CanDragTabs="True"
                                     CanReorderTabs="True" VerticalAlignment="Stretch"
-                                    TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
+                                    TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
+                                    AddTabButtonCommand="{Binding NewTabCommand}">
                             <ui:TabView.TabItemTemplate>
                                 <DataTemplate x:DataType="tabs:Tab">
                                     <ui:TabViewItem Header="{Binding Header}"
                                                     Content="{Binding Content}">
                                         <Interaction.Behaviors>
-                                            <EventTriggerBehavior EventName="CloseRequested">
-                                                <EventTriggerBehavior.Actions>
-                                                    <InvokeCommandAction Command="{Binding CloseCommand}" />
-                                                </EventTriggerBehavior.Actions>
-                                            </EventTriggerBehavior>
+                                            <ui:TabViewItemCloseRequestedEventCommandTrigger Command="{Binding CloseCommand}" />
                                         </Interaction.Behaviors>
                                     </ui:TabViewItem>
                                 </DataTemplate>
                             </ui:TabView.TabItemTemplate>
-                            <Interaction.Behaviors>
-                                <EventTriggerBehavior EventName="AddTabButtonClick">
-                                    <EventTriggerBehavior.Actions>
-                                        <InvokeCommandAction Command="{Binding NewTabCommand}" />
-                                    </EventTriggerBehavior.Actions>
-                                </EventTriggerBehavior>
-                            </Interaction.Behaviors>
                         </ui:TabView>
 
                         <pages:WelcomePage VerticalAlignment="Stretch"

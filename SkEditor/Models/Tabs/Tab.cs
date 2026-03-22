@@ -14,8 +14,7 @@ public abstract partial class Tab(string header, object content) : ObservableObj
     
     public abstract IRelayCommand? CloseCommand { get; }
     
-    protected void RequestClose() =>
-        WeakReferenceMessenger.Default.Send(new TabCloseRequestedMessage(this));
+    protected void RequestClose() => WeakReferenceMessenger.Default.Send(new TabCloseRequestedMessage(this));
 }
 
 public record TabCloseRequestedMessage(Tab Tab);
