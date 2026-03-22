@@ -75,21 +75,24 @@
                                     CanReorderTabs="True" VerticalAlignment="Stretch"
                                     TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
                                     AddTabButtonCommand="{Binding NewTabCommand}">
+                            <ui:TabView.DataTemplates>
+                                <DataTemplate DataType="{x:Type tabs:EditorTab}">
+                                    <avaloniaedit:TextEditor>
+                                        <Interaction.Behaviors>
+                                            <behaviors:DocumentTextBindingBehavior Text="{Binding Content, Mode=TwoWay}" />
+                                        </Interaction.Behaviors>
+                                    </avaloniaedit:TextEditor>
+                                </DataTemplate>
+
+                                <DataTemplate DataType="{x:Type tabs:SettingsTab}">
+                                    <pages:SettingsPage />
+                                </DataTemplate>
+                            </ui:TabView.DataTemplates>
                             <ui:TabView.TabItemTemplate>
                                 <DataTemplate x:DataType="tabs:Tab">
                                     <ui:TabViewItem Header="{Binding Header}" Content="{Binding .}">
-                                        <ui:TabViewItem.ContentTemplate>
-                                            <DataTemplate DataType="{x:Type tabs:EditorTab}">
-                                                <avaloniaedit:TextEditor>
-                                                    <Interaction.Behaviors>
-                                                        <behaviors:DocumentTextBindingBehavior Text="{Binding Content, Mode=TwoWay}" />
-                                                    </Interaction.Behaviors>
-                                                </avaloniaedit:TextEditor>
-                                            </DataTemplate>
-                                        </ui:TabViewItem.ContentTemplate>
                                         <Interaction.Behaviors>
-                                            <ui:TabViewItemCloseRequestedEventCommandTrigger
-                                                Command="{Binding CloseCommand}" />
+                                            <ui:TabViewItemCloseRequestedEventCommandTrigger Command="{Binding CloseCommand}" />
                                         </Interaction.Behaviors>
                                     </ui:TabViewItem>
                                 </DataTemplate>

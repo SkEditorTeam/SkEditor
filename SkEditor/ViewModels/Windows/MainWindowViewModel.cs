@@ -16,20 +16,20 @@ public partial class MainWindowViewModel : ObservableRecipient
 
     [ObservableProperty]
     private ObservableCollection<Tab> _tabs = [];
-    
+
     [ObservableProperty]
     private Tab? _selectedTab;
-    
+
     public MainWindowViewModel(MainMenuViewModel mainMenu)
     {
         MainMenu = mainMenu;
-        
+
         Tabs.CollectionChanged += (_, e) =>
         {
             if (SelectedTab is null && Tabs.Count > 0)
                 Dispatcher.UIThread.Post(() => SelectedTab = Tabs[0]);
         };
-        
+
         Messenger.Register<TabCloseRequestedMessage>(this, (r, m) =>
             Tabs.Remove(m.Tab));
     }
@@ -37,6 +37,7 @@ public partial class MainWindowViewModel : ObservableRecipient
     [RelayCommand]
     public void NewTab()
     {
-        Tabs.Add(new EditorTab("New Tab", "new tab"));
+        // Tabs.Add(new EditorTab("New Tab", "new tab"));
+        Tabs.Add(new SettingsTab("Settings"));
     }
 }
