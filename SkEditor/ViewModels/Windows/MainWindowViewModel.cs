@@ -37,6 +37,6 @@ public partial class MainWindowViewModel : ObservableRecipient
     [RelayCommand]
     public void NewTab()
     {
-        Tabs.Add(new EditorTab("New Tab", new TextEditor {Background = Brush.Parse("#240B2E")}));
+        Tabs.Add(new EditorTab("New Tab", "new tab"));
     }
 }

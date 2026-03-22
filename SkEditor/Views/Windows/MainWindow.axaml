@@ -10,6 +10,7 @@
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
         xmlns:tabs="clr-namespace:SkEditor.Models.Tabs"
         xmlns:pages="clr-namespace:SkEditor.Views.Pages"
+        xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         x:DataType="windows:MainWindowViewModel"
@@ -76,10 +77,19 @@
                                     AddTabButtonCommand="{Binding NewTabCommand}">
                             <ui:TabView.TabItemTemplate>
                                 <DataTemplate x:DataType="tabs:Tab">
-                                    <ui:TabViewItem Header="{Binding Header}"
-                                                    Content="{Binding Content}">
+                                    <ui:TabViewItem Header="{Binding Header}" Content="{Binding .}">
+                                        <ui:TabViewItem.ContentTemplate>
+                                            <DataTemplate DataType="{x:Type tabs:EditorTab}">
+                                                <avaloniaedit:TextEditor>
+                                                    <Interaction.Behaviors>
+                                                        <behaviors:DocumentTextBindingBehavior Text="{Binding Content, Mode=TwoWay}" />
+                                                    </Interaction.Behaviors>
+                                                </avaloniaedit:TextEditor>
+                                            </DataTemplate>
+                                        </ui:TabViewItem.ContentTemplate>
                                         <Interaction.Behaviors>
-                                            <ui:TabViewItemCloseRequestedEventCommandTrigger Command="{Binding CloseCommand}" />
+                                            <ui:TabViewItemCloseRequestedEventCommandTrigger
+                                                Command="{Binding CloseCommand}" />
                                         </Interaction.Behaviors>
                                     </ui:TabViewItem>
                                 </DataTemplate>

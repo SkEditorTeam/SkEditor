@@ -149,7 +149,7 @@ public class FileHandler
     public static void NewFile()
     {
         // SkEditorAPI.Files.NewFile();
-        (SkEditorAPI.Windows.GetMainWindow().DataContext as MainWindowViewModel)?.Tabs.Add(new EditorTab("ttt", new TextEditor {Background = Brush.Parse("#0B2E20")}));
+        (SkEditorAPI.Windows.GetMainWindow().DataContext as MainWindowViewModel)?.Tabs.Add(new EditorTab("ttt", "new file!"));
     }
 
     public static async Task OpenFile()

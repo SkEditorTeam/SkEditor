@@ -4,13 +4,10 @@ using CommunityToolkit.Mvvm.Messaging;
 
 namespace SkEditor.Models.Tabs;
 
-public abstract partial class Tab(string header, object content) : ObservableObject
+public abstract partial class Tab(string header) : ObservableObject
 {
     [ObservableProperty]
     private string _header = header;
-
-    [ObservableProperty]
-    private object _content = content;
     
     public abstract IRelayCommand? CloseCommand { get; }
     
