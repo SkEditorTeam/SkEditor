@@ -71,15 +71,14 @@ public partial class WelcomePageViewModel : ObservableObject
         WelcomeScreenSection gettingStarted = new(
             Translation.GetObservable(TranslationKey.WelcomePageGettingStarted),
             [
-                new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageGettingStartedNewFile),
-                    new RelayCommand(FileHandler.NewFile),
-                    Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
-                new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageGettingStartedOpenFile),
+                WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
+                    new RelayCommand(FileHandler.NewFile), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
+                WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
                     new AsyncRelayCommand(FileHandler.OpenFile), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
-                new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageGettingStartedOpenFolder),
+                WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,
                     new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()),
                     Icons.CreateSymbolIcon(Symbol.FolderOpen)),
-                new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageGettingStartedSettings),
+                WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedSettings,
                     new AsyncRelayCommand(OpenSettings),
                     Icons.CreateSymbolIcon(Symbol.Settings))
             ]
@@ -87,21 +86,21 @@ public partial class WelcomePageViewModel : ObservableObject
 
         WelcomeScreenSection help = new(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinks),
         [
-            new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinksDiscordServer),
+            WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDiscordServer,
                 new RelayCommand(() =>
                     SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev")),
                 Icons.CreatePathIconSource("DiscordIcon")),
 
-            new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinksGitHub),
+            WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksGitHub,
                 new RelayCommand(() =>
                     SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
                 Icons.CreatePathIconSource("GitHubIcon")),
 
-            new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinksDocumentation),
+            WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDocumentation,
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
                 Icons.CreateSymbolIcon(Symbol.Book)),
 
-            new WelcomeScreenElement(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinksSupportUs),
+            WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksSupportUs,
                 new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://ko-fi.com/notro")),
                 Icons.CreateSymbolIcon(Symbol.Heart))
         ]);
