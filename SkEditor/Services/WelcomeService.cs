@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Welcome;
 using SkEditor.Utilities.Icons;
 using SkEditor.Utilities.Localization;
@@ -18,12 +19,15 @@ namespace SkEditor.Services;
 
 public class WelcomeService : IWelcomeService
 {
+    private readonly IFileService _fileService;
     private readonly SortedObservableCollection<WelcomeScreenRecentItem> _recentItems;
 
     private DispatcherTimer _timeUpdater;
 
-    public WelcomeService()
+    public WelcomeService(IFileService fileService)
     {
+        _fileService = fileService;
+
         _recentItems = new SortedObservableCollection<WelcomeScreenRecentItem>(
             Comparer<WelcomeScreenRecentItem>.Create((a, b) => b.LastOpened.CompareTo(a.LastOpened))
         );
@@ -79,7 +83,7 @@ public class WelcomeService : IWelcomeService
             Translation.GetObservable(TranslationKey.WelcomePageGettingStarted),
             [
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
-                    new RelayCommand(() => { }), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
+                    new RelayCommand(() => _fileService.NewFile()), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
                     new AsyncRelayCommand(() => Task.CompletedTask), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,

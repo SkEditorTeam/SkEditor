@@ -24,14 +24,21 @@ public class TabService : ITabService
 
     public void OpenTab(Tab tab)
     {
+        tab.CloseRequested += OnTabCloseRequested;
         Tabs.Add(tab);
         SelectedTab = tab;
     }
 
     public void CloseTab(Tab tab)
     {
+        tab.CloseRequested -= OnTabCloseRequested;
         Tabs.Remove(tab);
         if (SelectedTab == tab)
             SelectedTab = Tabs.LastOrDefault();
+    }
+
+    private void OnTabCloseRequested(object? sender, EventArgs e)
+    {
+        if (sender is Tab tab) CloseTab(tab);
     }
 }
