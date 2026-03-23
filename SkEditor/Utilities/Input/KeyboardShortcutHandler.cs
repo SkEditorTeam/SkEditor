@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
-using SkEditor.Utilities.Files;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Utilities.Input;
@@ -33,7 +32,7 @@ public class KeyboardShortcutHandler(Window window)
             case { Modifiers: KeyModifiers.Control, Key: >= Key.D1 and <= Key.D9 }:
             {
                 int tabIndex = (int)e.Key - 35;
-                FileHandler.SwitchTab(tabIndex);
+                // FileHandler.SwitchTab(tabIndex);
                 return true;
             }
             case { Modifiers: KeyModifiers.Control | KeyModifiers.Shift, Key: Key.Oem3 }:

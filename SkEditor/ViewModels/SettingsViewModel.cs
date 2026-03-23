@@ -31,10 +31,10 @@ public partial class SettingsViewModel : ObservableObject
             nameof(INotifyPropertyChanged.PropertyChanged),
             OnAppConfigPropertyChanged);
 
-        WeakEventHandlerManager.Subscribe<IEvents, LanguageChangedEventArgs, SettingsViewModel>(
-            SkEditorAPI.Events,
-            nameof(SkEditorAPI.Events.OnLanguageChanged),
-            OnLanguageChanged);
+        // WeakEventHandlerManager.Subscribe<IEvents, LanguageChangedEventArgs, SettingsViewModel>(
+        //     SkEditorAPI.Events,
+        //     nameof(SkEditorAPI.Events.OnLanguageChanged),
+        //     OnLanguageChanged);
     }
 
     private void OnAppConfigPropertyChanged(object? sender, PropertyChangedEventArgs e)

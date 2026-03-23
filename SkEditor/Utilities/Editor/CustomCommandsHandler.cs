@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AvaloniaEdit;
-using AvaloniaEdit.Document;
-using AvaloniaEdit.Editing;
-using SkEditor.API;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Files;
-using SkEditor.Utilities.Parser;
-using SkEditor.Utilities.Parser.Elements;
-using CodeVariable = SkEditor.Utilities.Parser.Elements.CodeVariable;
-using SymbolRefactorWindow = SkEditor.Views.Windows.SymbolRefactorWindow;
 
 namespace SkEditor.Utilities.Editor;
 

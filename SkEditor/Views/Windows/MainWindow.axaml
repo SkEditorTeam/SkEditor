@@ -64,7 +64,7 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Sidebar -->
-                    <controls:SideBarControl Name="SideBar" Grid.Column="0" Grid.Row="0" MinWidth="48" />
+                    <!-- <controls:SideBarControl Name="SideBar" Grid.Column="0" Grid.Row="0" MinWidth="48" /> -->
                     <Border Name="SidebarContentBorder" Grid.Column="2" Grid.Row="0" ClipToBounds="True" />
                     <GridSplitter Name="Splitter" Grid.Column="3" Grid.Row="0" Width="10" Background="Transparent"
                                   ResizeDirection="Columns" />
@@ -79,7 +79,8 @@
                                 <DataTemplate DataType="{x:Type tabs:EditorTab}">
                                     <avaloniaedit:TextEditor>
                                         <Interaction.Behaviors>
-                                            <behaviors:DocumentTextBindingBehavior Text="{Binding Content, Mode=TwoWay}" />
+                                            <behaviors:DocumentTextBindingBehavior
+                                                Text="{Binding Content, Mode=TwoWay}" />
                                         </Interaction.Behaviors>
                                     </avaloniaedit:TextEditor>
                                 </DataTemplate>
@@ -92,7 +93,8 @@
                                 <DataTemplate x:DataType="tabs:Tab">
                                     <ui:TabViewItem Header="{Binding Header}" Content="{Binding .}">
                                         <Interaction.Behaviors>
-                                            <ui:TabViewItemCloseRequestedEventCommandTrigger Command="{Binding CloseCommand}" />
+                                            <ui:TabViewItemCloseRequestedEventCommandTrigger
+                                                Command="{Binding CloseCommand}" />
                                         </Interaction.Behaviors>
                                     </ui:TabViewItem>
                                 </DataTemplate>

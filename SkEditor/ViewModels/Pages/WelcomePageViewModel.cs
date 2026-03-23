@@ -7,15 +7,10 @@ using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Models.Welcome;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Icons;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Projects;
-using SkEditor.Views.Windows.Settings;
 using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.ViewModels.Pages;
@@ -72,11 +67,11 @@ public partial class WelcomePageViewModel : ObservableObject
             Translation.GetObservable(TranslationKey.WelcomePageGettingStarted),
             [
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
-                    new RelayCommand(FileHandler.NewFile), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
+                    new RelayCommand(() => { }), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
-                    new AsyncRelayCommand(FileHandler.OpenFile), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
+                    new AsyncRelayCommand(() => Task.CompletedTask), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,
-                    new AsyncRelayCommand(async () => await ProjectOpener.OpenProject()),
+                    new AsyncRelayCommand(() => Task.CompletedTask),
                     Icons.CreateSymbolIcon(Symbol.FolderOpen)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedSettings,
                     new AsyncRelayCommand(OpenSettings),
@@ -130,6 +125,6 @@ public partial class WelcomePageViewModel : ObservableObject
 
     private static async Task OpenSettings()
     {
-        await App.Services.GetRequiredService<SettingsWindow>().ShowDialogOnMainWindow();
+        // await App.Services.GetRequiredService<SettingsWindow>().ShowDialogOnMainWindow();
     }
 }

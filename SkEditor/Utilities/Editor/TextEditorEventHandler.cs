@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Media;
-using Avalonia.Threading;
 using AvaloniaEdit;
-using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
-using AvaloniaEdit.Highlighting;
-using SkEditor.API;
-using SkEditor.Utilities.Files;
-using SkEditor.Utilities.Input;
 
 namespace SkEditor.Utilities.Editor;
 

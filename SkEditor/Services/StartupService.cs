@@ -15,7 +15,6 @@ using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
-using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 // ReSharper disable once RedundantUsingDirective
@@ -160,14 +159,6 @@ public class StartupService(MainWindowFactory mainWindowFactory, IconProvider ic
         Dispatcher.UIThread.UnhandledException += async (_, e) =>
         {
             e.Handled = true;
-            string? source = e.Exception.Source;
-            if (AddonLoader.DllNames.Contains(source + ".dll"))
-            {
-                Log.Error(e.Exception, "An error occured in an addon: {Source}", source);
-                await SkEditorAPI.Windows.ShowMessage("Error",
-                    $"An error occured in an addon: {source}\n\n{e.Exception.Message}");
-                return;
-            }
 
             const string message = "Application crashed!";
             Log.Fatal(e.Exception, message);
@@ -175,7 +166,6 @@ public class StartupService(MainWindowFactory mainWindowFactory, IconProvider ic
             await Console.Error.WriteLineAsync(message);
 
             await SkEditorAPI.Core.SaveData();
-            await AddonLoader.SaveMeta();
 
 #if !DEBUG
             string fullException = e.Exception.ToString();

@@ -1,28 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AvaloniaEdit.Editing;
-using AvaloniaEdit.Search;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
-using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Menu;
-using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Files;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Syntax;
-using SkEditor.Views.Controls.Docs;
 using SkEditor.Views.Windows;
 using SkEditor.Views.Windows.Generators;
 using SkEditor.Views.Windows.Generators.Gui;
-using SkEditor.Views.Windows.Marketplace;
-using SkEditor.Views.Windows.Settings;
 
 namespace SkEditor.Services;
 
@@ -58,27 +47,27 @@ public class MenuService(IThemeService themeService) : IMenuService
     private static MainMenuItem BuildFileMenu()
     {
         MainMenuItem newFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderNew, Symbol.Document)
-            .WithCommand(FileHandler.NewFile)
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+N");
 
         MainMenuItem openFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderOpen, Symbol.DocumentArrowUp)
-            .WithCommand(FileHandler.OpenFile)
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+O");
 
         MainMenuItem openFolder = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderOpenFolder, Symbol.Folder)
-            .WithCommand(() => ProjectOpener.OpenProject())
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+Shift+O");
 
         MainMenuItem saveFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
-            .WithCommand(FileHandler.SaveFile)
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+S");
 
         MainMenuItem saveAsFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
-            .WithCommand(FileHandler.SaveAsFile)
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+Shift+S");
 
         MainMenuItem saveAllFiles = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAll, Symbol.SaveMultiple)
-            .WithCommand(FileHandler.SaveAllFiles)
+            .WithCommand(() => Task.CompletedTask)
             .WithInputGesture("Ctrl+Alt+S");
 
         MainMenuItem publishFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPublish, Symbol.Share)
@@ -88,24 +77,24 @@ public class MenuService(IThemeService themeService) : IMenuService
         MainMenuItem closeMenu = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderClose, Symbol.Dismiss)
             .WithItems([
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseCurrentFile, Symbol.Document)
-                    .WithCommand(FileCloser.CloseCurrentFile)
+                    .WithCommand(() => Task.CompletedTask)
                     .WithInputGesture("Ctrl+W"),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAll, Symbol.DocumentMultiple)
-                    .WithCommand(FileCloser.CloseAllFiles)
+                    .WithCommand(() => Task.CompletedTask)
                     .WithInputGesture("Ctrl+Shift+W"),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAllButCurrent, Symbol.DocumentMultiple)
-                    .WithCommand(FileCloser.CloseAllExceptCurrent),
+                    .WithCommand(() => Task.CompletedTask),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseUnsaved, Symbol.DocumentMultiple)
-                    .WithCommand(FileCloser.CloseUnsaved),
+                    .WithCommand(() => Task.CompletedTask),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseLeft, Symbol.DocumentArrowLeft)
-                    .WithCommand(FileCloser.CloseAllToTheLeft),
+                    .WithCommand(() => Task.CompletedTask),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseRight, Symbol.DocumentArrowRight)
-                    .WithCommand(FileCloser.CloseAllToTheRight)
+                    .WithCommand(() => Task.CompletedTask)
             ]);
 
         return MainMenuItem.HeaderOnly(TranslationKey.MenuHeaderFile).WithItems([
@@ -253,7 +242,7 @@ public class MenuService(IThemeService themeService) : IMenuService
             .WithCommand(() => new ColorSelectionWindow().ShowDialogOnMainWindow());
 
         MainMenuItem marketplace = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderMarketplace, Symbol.ShoppingBag)
-            .WithCommand(() => new MarketplaceWindow().ShowDialogOnMainWindow());
+            .WithCommand(() => { });
 
         return MainMenuItem.HeaderOnly(TranslationKey.MenuHeaderTools).WithItems([
             generate,
@@ -284,7 +273,7 @@ public class MenuService(IThemeService themeService) : IMenuService
     private MainMenuItem BuildDevToolsMenu()
     {
         MainMenuItem refreshSyntax = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderRefreshSyntax, Symbol.Color)
-            .WithCommand(async () => await SyntaxLoader.RefreshSyntaxAsync());
+            .WithCommand(() => Task.CompletedTask);
 
         MainMenuItem refreshTheme = MainMenuItem
             .HeaderWithIcon(TranslationKey.MenuHeaderRefreshTheme, Symbol.PaintBucket)
@@ -299,7 +288,7 @@ public class MenuService(IThemeService themeService) : IMenuService
     private static MainMenuItem BuildSettingsItem()
     {
         return MainMenuItem.IconOnly(Symbol.Settings)
-            .WithCommand(() => App.Services.GetRequiredService<SettingsWindow>().ShowDialogOnMainWindow())
+            .WithCommand(() => { })
             .WithInputGesture("Ctrl+,");
     }
 

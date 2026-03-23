@@ -199,6 +199,6 @@ public static class Translation
     {
         SkEditorAPI.Configs.GetAppSettings().Language = language;
         _ = SkEditorAPI.Configs.GetAppSettings().Save();
-        Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
+        // Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
     }
 }

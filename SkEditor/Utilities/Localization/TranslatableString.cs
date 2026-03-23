@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Localization;
 
@@ -36,7 +35,7 @@ public partial class TranslatableString : ObservableObject
                 return;
             }
 
-            SkEditorAPI.Events.OnLanguageChanged += OnGlobalLanguageChanged;
+            // SkEditorAPI.Events.OnLanguageChanged += OnGlobalLanguageChanged;
             _eventSubscribed = true;
         }
     }

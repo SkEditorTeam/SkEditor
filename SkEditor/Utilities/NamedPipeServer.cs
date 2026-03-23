@@ -7,7 +7,6 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities.Files;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities;
@@ -75,8 +74,9 @@ public static class NamedPipeServer
 
     private static void OpenFiles(string filesToOpen)
     {
+        // TODO: re-implement
         filesToOpen.Split(Environment.NewLine)
-            .Where(x => !string.IsNullOrEmpty(x)).ToList().ForEach(FileHandler.OpenFile);
+            .Where(x => !string.IsNullOrEmpty(x)).ToList().ForEach(_ => Task.CompletedTask.RunSynchronously());
     }
 
     private static void BringMainWindowToFront()

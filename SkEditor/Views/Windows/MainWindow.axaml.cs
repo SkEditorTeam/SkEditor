@@ -1,29 +1,21 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
-using AvaloniaEdit;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
-using SkEditor.Models.Tabs;
 using SkEditor.Services;
 using SkEditor.Utilities;
-using SkEditor.Utilities.Files;
-using SkEditor.Utilities.Files.Session;
 using SkEditor.Utilities.Input;
-using SkEditor.Utilities.InternalAPI;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
-using SkEditor.Utilities.Syntax;
 using SkEditor.Utilities.Updating;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Windows;
@@ -64,15 +56,15 @@ public partial class MainWindow : AppWindow
         TemplateApplied += OnWindowLoaded;
         Closing += OnClosing;
 
-        Activated += (_, _) => _ = ChangeChecker.Check();
-
-        AddHandler(DragDrop.DropEvent, FileHandler.FileDropAction);
+        // Activated += (_, _) => _ = ChangeChecker.Check();
+        //
+        // AddHandler(DragDrop.DropEvent, FileHandler.FileDropAction);
     }
 
     public void ReloadUiOfAddons()
     {
         BottomBar.ReloadBottomIcons();
-        SideBar.ReloadPanels();
+        // SideBar.ReloadPanels();
     }
 
     private async void OnClosing(object? sender, WindowClosingEventArgs e)
@@ -115,14 +107,14 @@ public partial class MainWindow : AppWindow
             }
             else
             {
-                bool isSuccess = await SessionRestorer.SaveSession();
-                if (!isSuccess)
-                {
-                    if (await PromptForUnsavedChanges())
-                    {
-                        return;
-                    }
-                }
+                // bool isSuccess = await SessionRestorer.SaveSession();
+                // if (!isSuccess)
+                // {
+                //     if (await PromptForUnsavedChanges())
+                //     {
+                //         return;
+                //     }
+                // }
 
                 AlreadyClosed = true;
                 Close();
@@ -159,22 +151,22 @@ public partial class MainWindow : AppWindow
             await _splashScreen.TryUpdateStatusAsync("Loading themes and addons...");
 
             Task themeTask = ThemeService.ServiceStatic.SetTheme(ThemeService.ServiceStatic.CurrentTheme);
-            Task addonTask = AddonLoader.Load();
-            await Task.WhenAll(themeTask, addonTask);
-
-            await _splashScreen.TryUpdateStatusAsync("Registering file types...");
-            Utilities.Files.FileTypes.RegisterDefaultAssociations();
-            SideBar.ReloadPanels();
+            // Task addonTask = AddonLoader.Load();
+            // await Task.WhenAll(themeTask, addonTask);
+            //
+            // await _splashScreen.TryUpdateStatusAsync("Registering file types...");
+            // Utilities.Files.FileTypes.RegisterDefaultAssociations();
+            // SideBar.ReloadPanels();
 
             double scale = SkEditorAPI.Configs.GetAppSettings().CustomUiScale;
             LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
 
             bool sessionFilesAdded = false;
-            if (SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
-            {
-                await _splashScreen.TryUpdateStatusAsync("Restoring session...");
-                sessionFilesAdded = await SessionRestorer.RestoreSession();
-            }
+            // if (SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
+            // {
+            //     await _splashScreen.TryUpdateStatusAsync("Restoring session...");
+            //     sessionFilesAdded = await SessionRestorer.RestoreSession();
+            // }
 
             // SkEditorAPI.Files.AddWhatsNewPage();
 
@@ -185,7 +177,7 @@ public partial class MainWindow : AppWindow
                 //SkEditorAPI.Files.AddWelcomeTab();
             }
 
-            startupFiles.ToList().ForEach(FileHandler.OpenFile);
+            // startupFiles.ToList().ForEach(FileHandler.OpenFile);
             // if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
             // {
             //     //SkEditorAPI.Files.AddWelcomeTab();
@@ -199,7 +191,7 @@ public partial class MainWindow : AppWindow
             {
                 try
                 {
-                    await SyntaxLoader.LoadAdvancedSyntaxes();
+                    // await SyntaxLoader.LoadAdvancedSyntaxes();
                     DiscordRpcUpdater.Initialize();
                 }
                 catch (Exception exc)
@@ -234,8 +226,6 @@ public partial class MainWindow : AppWindow
                         await ChangelogChecker.Check();
 
                         await App.Services.GetRequiredService<CrashChecker>().CheckForCrash();
-
-                        await AddonUpdateChecker.CheckForUpdates();
                     }
                     catch (Exception exc)
                     {

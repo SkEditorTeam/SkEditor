@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Styling;
-using Serilog;
 using SkEditor.API;
-using SkEditor.Utilities.Files;
 
 namespace SkEditor.Utilities.InternalAPI.Classes;
 

@@ -28,16 +28,6 @@ public static class SkEditorAPI
     public static ICore Core { get; } = new Core();
 
     /// <summary>
-    ///     Get the Events API.
-    /// </summary>
-    public static IEvents Events { get; } = new Events();
-
-    /// <summary>
-    ///     Get the Addons API.
-    /// </summary>
-    public static IAddons Addons { get; } = new Addons();
-
-    /// <summary>
     ///     Get the Configs API.
     /// </summary>
     public static IConfigs Configs { get; } = new Configs();

@@ -11,7 +11,6 @@ using Serilog.Core;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Services;
-using SkEditor.Services.Files;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Startup;
@@ -20,7 +19,6 @@ using SkEditor.ViewModels.Pages;
 using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Pages;
 using SkEditor.Views.Windows;
-using SkEditor.Views.Windows.Settings;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
@@ -91,7 +89,6 @@ public class App : Application
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<MainWindowFactory>();
-        services.AddSingleton<SkEditorSelfAddon>();
         services.AddSingleton<WindowRegistry>();
         services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
         services.AddSingleton<IStartupService, StartupService>();
@@ -101,7 +98,6 @@ public class App : Application
         services.AddSingleton<IconProvider>();
         services.AddSingleton<CrashChecker>();
         services.AddSingleton<IThemeService, ThemeService>();
-        services.AddSingleton<IFileFactory, FileFactory>();
 
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();
@@ -114,7 +110,6 @@ public class App : Application
         services.AddTransient<MainWindow>();
         services.AddTransient<SplashScreen>();
         services.AddTransient<RemoteConnectionWindow>();
-        services.AddTransient<SettingsWindow>();
         services.AddTransient<WhatsNewPage>();
     }
 }

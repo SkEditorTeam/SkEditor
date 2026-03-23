@@ -8,9 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
-using MarketplaceWindow = SkEditor.Views.Windows.Marketplace.MarketplaceWindow;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -18,7 +16,7 @@ namespace SkEditor.Utilities;
 
 public static class FileDownloader
 {
-    private const string ZipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
+    // private const string ZipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
     private static readonly string AppDataFolderPath = SkEditorAPI.Configs.GetAppDataPath();
     private static readonly string ZipFilePath = Path.Combine(AppDataFolderPath, "items.zip");
 
@@ -71,7 +69,7 @@ public static class FileDownloader
                 progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
 
                 await using FileStream file = new(ZipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-                await client.DownloadDataAsync(ZipUrl, file, progress);
+                // await client.DownloadDataAsync(ZipUrl, file, progress);
             }
 
             await ZipFile.ExtractToDirectoryAsync(ZipFilePath, AppDataFolderPath);

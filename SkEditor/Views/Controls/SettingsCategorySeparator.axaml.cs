@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
-using SkEditor.API;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Views.Controls;
@@ -38,20 +37,20 @@ public partial class SettingsCategorySeparator : UserControl
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        SkEditorAPI.Events.OnLanguageChanged += OnLanguageChanged;
+        // SkEditorAPI.Events.OnLanguageChanged += OnLanguageChanged;
         UpdateTitle();
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
-        SkEditorAPI.Events.OnLanguageChanged -= OnLanguageChanged;
+        // SkEditorAPI.Events.OnLanguageChanged -= OnLanguageChanged;
     }
 
-    private void OnLanguageChanged(object? sender, LanguageChangedEventArgs e)
-    {
-        UpdateTitle();
-    }
+    // private void OnLanguageChanged(object? sender, LanguageChangedEventArgs e)
+    // {
+    //     UpdateTitle();
+    // }
 
     private void UpdateTitle()
     {

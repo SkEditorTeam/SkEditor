@@ -16,13 +16,11 @@ using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Services;
-using SkEditor.Services.Files;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Local;
 using SkEditor.Utilities.Docs.SkUnity;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Syntax;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 
@@ -173,7 +171,8 @@ public partial class DocElementControl : UserControl
         string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
         if (fontFamily is null)
         {
-            object? font = FileFactory.GetJetbrainsMonoFont();
+            // TODO: re-add jetbrains mono fetching
+            object? font = null;
             if (font == null)
             {
                 return;
@@ -290,7 +289,8 @@ public partial class DocElementControl : UserControl
         string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
         if (fontFamily is null)
         {
-            object? font = FileFactory.GetJetbrainsMonoFont();
+            // TODO: re-add jetbrains mono fetching
+            object? font = null;
             if (font is not null)
             {
                 editor.FontFamily = (FontFamily)font;
@@ -510,7 +510,8 @@ public partial class DocElementControl : UserControl
                 string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
                 if (fontFamily is null)
                 {
-                    object? font = FileFactory.GetJetbrainsMonoFont();
+                    // TODO: re-add jetbrains mono fetching
+                    object? font = null;
                     if (font is not null)
                     {
                         textEditor.FontFamily = (FontFamily)font;
@@ -521,7 +522,7 @@ public partial class DocElementControl : UserControl
                     textEditor.FontFamily = new FontFamily(fontFamily);
                 }
 
-                textEditor.SyntaxHighlighting = SyntaxLoader.GetCurrentSkriptHighlighting();
+                // textEditor.SyntaxHighlighting = SyntaxLoader.GetCurrentSkriptHighlighting();
                 stackPanel.Children.Add(textEditor);
 
                 ((StackPanel)ExamplesEntry.Content).Children.Add(stackPanel);

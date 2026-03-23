@@ -100,4 +100,8 @@
         <!--        <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj"/>-->
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Utilities\Files\"/>
+    </ItemGroup>
 </Project>
