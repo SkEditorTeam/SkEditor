@@ -5,7 +5,7 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Tabs;
 
-public partial class EditorTab(string header, string content) : Tab(TranslatableString.FromRawString(header))
+public partial class EditorTab(TranslatableString header, string content) : Tab(header)
 {
     public string Content { get; set; } = content;
 
