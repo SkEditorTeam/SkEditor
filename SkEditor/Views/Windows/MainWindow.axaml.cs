@@ -63,7 +63,6 @@ public partial class MainWindow : AppWindow
 
     public void ReloadUiOfAddons()
     {
-        BottomBar.ReloadBottomIcons();
         // SideBar.ReloadPanels();
     }
 
@@ -182,8 +181,6 @@ public partial class MainWindow : AppWindow
             // {
             //     //SkEditorAPI.Files.AddWelcomeTab();
             // }
-
-            BottomBar.UpdatePosition();
 
             await _splashScreen.TryUpdateStatusAsync("Finishing up...");
 

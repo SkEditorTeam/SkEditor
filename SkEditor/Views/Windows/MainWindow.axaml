@@ -104,10 +104,6 @@
                         <pages:WelcomePage VerticalAlignment="Stretch"
                                            IsVisible="{Binding !$parent[Window].((windows:MainWindowViewModel)DataContext).Tabs.Count}" />
                     </Panel>
-
-                    <!-- BottomBar -->
-                    <controls:BottomBarControl x:Name="BottomBar" Name="BottomBar" Grid.Column="0" Grid.ColumnSpan="5"
-                                               Grid.Row="1" Margin="0,10,0,0" />
                 </Grid>
             </Border>
 
