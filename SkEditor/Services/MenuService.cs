@@ -5,6 +5,7 @@ using FluentAvalonia.UI.Windowing;
 using FluentIcons.Common;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Menu;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
@@ -15,7 +16,7 @@ using SkEditor.Views.Windows.Generators.Gui;
 
 namespace SkEditor.Services;
 
-public class MenuService(IThemeService themeService) : IMenuService
+public class MenuService(ITabService tabService, IThemeService themeService) : IMenuService
 {
     public IEnumerable<MainMenuItem> GetMainMenuItems()
     {

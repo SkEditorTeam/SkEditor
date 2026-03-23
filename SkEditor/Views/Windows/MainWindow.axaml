@@ -101,7 +101,7 @@
                             </ui:TabView.TabItemTemplate>
                         </ui:TabView>
 
-                        <pages:WelcomePage VerticalAlignment="Stretch"
+                        <pages:WelcomePage VerticalAlignment="Stretch" DataContext="{Binding WelcomePage}"
                                            IsVisible="{Binding !$parent[Window].((windows:MainWindowViewModel)DataContext).Tabs.Count}" />
                     </Panel>
                 </Grid>

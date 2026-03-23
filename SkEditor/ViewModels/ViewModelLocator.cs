@@ -12,5 +12,4 @@ public static class ViewModelLocator
     public static StateConfig StateConfig => SkEditorAPI.Configs.GetStateConfig();
     public static BinarySettings BinarySettings => SkEditorAPI.Configs.GetBinarySettings();
     public static SettingsPageViewModel SettingsPageViewModel { get; } = new();
-    public static WelcomePageViewModel WelcomePageViewModel { get; } = new();
 }

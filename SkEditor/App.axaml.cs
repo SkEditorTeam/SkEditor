@@ -10,7 +10,9 @@ using Serilog;
 using Serilog.Core;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Services;
+using SkEditor.Services.Files;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Startup;
@@ -98,6 +100,9 @@ public class App : Application
         services.AddSingleton<IconProvider>();
         services.AddSingleton<CrashChecker>();
         services.AddSingleton<IThemeService, ThemeService>();
+        services.AddSingleton<ITabService, TabService>();
+        services.AddSingleton<IFileService, FileService>();
+        services.AddSingleton<IWelcomeService, WelcomeService>();
 
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();
@@ -106,6 +111,7 @@ public class App : Application
         services.AddTransient<FileTreeViewModel>();
         services.AddTransient<ThemePageViewModel>();
         services.AddTransient<WhatsNewPageViewModel>();
+        services.AddTransient<WelcomePageViewModel>();
 
         services.AddTransient<MainWindow>();
         services.AddTransient<SplashScreen>();
