@@ -15,6 +15,7 @@ public class TabService : ITabService
         get;
         set
         {
+            if (Equals(field, value)) return;
             field = value;
             SelectedTabChanged?.Invoke(value);
         }

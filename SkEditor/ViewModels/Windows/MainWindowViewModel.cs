@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services.Files;
@@ -11,19 +10,22 @@ namespace SkEditor.ViewModels.Windows;
 
 public partial class MainWindowViewModel : ObservableRecipient
 {
+    private readonly IFileService _fileService;
     private readonly ITabService _tabService;
 
     [ObservableProperty]
     private Tab? _selectedTab;
 
-    public MainWindowViewModel(ITabService tabService, MainMenuViewModel mainMenu, WelcomePageViewModel welcomePage)
+    public MainWindowViewModel(ITabService tabService, IFileService fileService, MainMenuViewModel mainMenu,
+        WelcomePageViewModel welcomePage)
     {
         _tabService = tabService;
+        _fileService = fileService;
         MainMenu = mainMenu;
         WelcomePage = welcomePage;
 
         _tabService.SelectedTabChanged += tab =>
-            Dispatcher.UIThread.Post(() => SelectedTab = tab);
+            SelectedTab = tab;
     }
 
     public MainMenuViewModel MainMenu { get; }
@@ -38,5 +40,5 @@ public partial class MainWindowViewModel : ObservableRecipient
     }
 
     [RelayCommand]
-    public void NewTab() => _tabService.OpenTab(new SettingsTab());
+    public void NewTab() => _fileService.NewFile();
 }
