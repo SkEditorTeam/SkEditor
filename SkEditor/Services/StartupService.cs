@@ -186,7 +186,7 @@ public class StartupService(MainWindowFactory mainWindowFactory, IconProvider ic
 
     private static async Task<bool> HandleSingleInstance(IClassicDesktopStyleApplicationLifetime desktop)
     {
-        Mutex mutex = new(true, "{217619cc-ff9d-438b-8a0a-348df94de61b}");
+        Mutex mutex = new(true, $@"Local\{NamedPipeServer.PipeName}Mutex");
 
         bool isFirstInstance;
         try
@@ -220,7 +220,7 @@ public class StartupService(MainWindowFactory mainWindowFactory, IconProvider ic
         try
         {
             string[] args = Environment.GetCommandLineArgs();
-            await using NamedPipeClientStream namedPipeClientStream = new("SkEditor");
+            await using NamedPipeClientStream namedPipeClientStream = new(NamedPipeServer.PipeName);
             await namedPipeClientStream.ConnectAsync();
             if (args is { Length: > 1 })
             {

@@ -13,6 +13,8 @@ namespace SkEditor.Utilities;
 
 public static class NamedPipeServer
 {
+    public const string PipeName = "SkEditor3";
+
     private static bool _isRunning;
 
     public static void Start()
@@ -33,7 +35,7 @@ public static class NamedPipeServer
         {
             while (true)
             {
-                await using NamedPipeServerStream serverStream = new("SkEditor", PipeDirection.InOut, 1,
+                await using NamedPipeServerStream serverStream = new(PipeName, PipeDirection.InOut, 1,
                     PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
                 await serverStream.WaitForConnectionAsync();
 
