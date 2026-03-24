@@ -9,6 +9,7 @@
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              xmlns:welcome="clr-namespace:SkEditor.Models.Welcome"
+             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:DataType="vms:WelcomePageViewModel"
              x:CompileBindings="True"
@@ -71,6 +72,11 @@
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled"
                           MaxHeight="600">
+                <Interaction.Behaviors>
+                    <BehaviorCollection>
+                        <behaviors:VerticalScrollViewerAnimatedBehavior />
+                    </BehaviorCollection>
+                </Interaction.Behaviors>
                 <ScrollViewer.Padding>
                     <MultiBinding Converter="{StaticResource ScrollVisibleToPaddingConverter}">
                         <Binding Path="Extent.Height" RelativeSource="{RelativeSource Self}" />
@@ -146,6 +152,11 @@
                 </StackPanel>
                 <ScrollViewer Grid.Row="1" Padding="0,0,18,0" VerticalAlignment="Stretch" HorizontalAlignment="Center"
                               VerticalScrollBarVisibility="Auto" IsVisible="{Binding !!RecentItems.Count}">
+                    <Interaction.Behaviors>
+                        <BehaviorCollection>
+                            <behaviors:VerticalScrollViewerAnimatedBehavior />
+                        </BehaviorCollection>
+                    </Interaction.Behaviors>
                     <ItemsRepeater ItemsSource="{Binding RecentItems}">
                         <ItemsRepeater.Layout>
                             <StackLayout Spacing="8" />
