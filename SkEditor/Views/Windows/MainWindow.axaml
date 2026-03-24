@@ -76,13 +76,8 @@
                                     TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
                                     AddTabButtonCommand="{Binding NewTabCommand}">
                             <ui:TabView.DataTemplates>
-                                <DataTemplate DataType="{x:Type tabs:EditorTab}">
-                                    <avaloniaedit:TextEditor>
-                                        <Interaction.Behaviors>
-                                            <behaviors:DocumentTextBindingBehavior
-                                                Text="{Binding Content, Mode=TwoWay}" />
-                                        </Interaction.Behaviors>
-                                    </avaloniaedit:TextEditor>
+                                <DataTemplate DataType="{x:Type tabs:FileTab}">
+                                    <avaloniaedit:TextEditor Document="{Binding Document}"/>
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type tabs:SettingsTab}">
