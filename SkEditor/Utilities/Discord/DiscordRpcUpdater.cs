@@ -1,8 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using DiscordRPC;
-using FluentAvalonia.UI.Controls;
-using SkEditor.API;
-using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Discord;
 
@@ -13,10 +10,10 @@ public static partial class DiscordRpcUpdater
 
     public static void Initialize()
     {
-        if (!SkEditorAPI.Configs.GetAppSettings().IsDiscordRichPresenceEnabled)
-        {
-            return;
-        }
+        // if (!SkEditorAPI.Configs.GetAppSettings().IsDiscordRichPresenceEnabled)
+        // {
+        //     return;
+        // }
 
         _client = new DiscordRpcClient(ApplicationId);
         _client.Initialize();

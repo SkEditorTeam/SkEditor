@@ -1,13 +1,8 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
-using SkEditor.API;
 using SkEditor.Utilities.Localization;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
@@ -17,26 +12,26 @@ namespace SkEditor.Utilities;
 public static class FileDownloader
 {
     // private const string ZipUrl = MarketplaceWindow.MarketplaceUrl + "SkEditorFiles/Items_and_json.zip";
-    private static readonly string AppDataFolderPath = SkEditorAPI.Configs.GetAppDataPath();
-    private static readonly string ZipFilePath = Path.Combine(AppDataFolderPath, "items.zip");
+    // private static readonly string AppDataFolderPath = SkEditorAPI.Configs.GetAppDataPath();
+    // private static readonly string ZipFilePath = Path.Combine(AppDataFolderPath, "items.zip");
 
     public static async Task CheckForMissingItemFiles(Window visual)
     {
-        string itemsFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "items.json");
-        if (File.Exists(itemsFile))
-        {
-            return;
-        }
-
-        TaskDialog td = CreateTaskDialog(visual);
-        object? result = await td.ShowAsync();
-
-        TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
-        if (standardResult == TaskDialogStandardResult.Cancel)
-        {
-            visual.Close();
-            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DownloadMissingFilesFailed));
-        }
+        // string itemsFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "items.json");
+        // if (File.Exists(itemsFile))
+        // {
+        //     return;
+        // }
+        //
+        // TaskDialog td = CreateTaskDialog(visual);
+        // object? result = await td.ShowAsync();
+        //
+        // TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
+        // if (standardResult == TaskDialogStandardResult.Cancel)
+        // {
+        //     visual.Close();
+        //     await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DownloadMissingFilesFailed));
+        // }
     }
 
     private static TaskDialog CreateTaskDialog(Visual visual)
@@ -63,17 +58,17 @@ public static class FileDownloader
 
         try
         {
-            using (HttpClient client = new())
-            {
-                Progress<float> progress = new();
-                progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
-
-                await using FileStream file = new(ZipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-                // await client.DownloadDataAsync(ZipUrl, file, progress);
-            }
-
-            await ZipFile.ExtractToDirectoryAsync(ZipFilePath, AppDataFolderPath);
-            File.Delete(ZipFilePath);
+            // using (HttpClient client = new())
+            // {
+            //     Progress<float> progress = new();
+            //     progress.ProgressChanged += (_, sender) => td.SetProgressBarState(sender, state);
+            //
+            //     await using FileStream file = new(ZipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            //     // await client.DownloadDataAsync(ZipUrl, file, progress);
+            // }
+            //
+            // await ZipFile.ExtractToDirectoryAsync(ZipFilePath, AppDataFolderPath);
+            // File.Delete(ZipFilePath);
 
             Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.OK); });
         }

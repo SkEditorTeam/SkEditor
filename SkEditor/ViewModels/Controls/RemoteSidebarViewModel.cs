@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Extensions;
@@ -20,8 +19,9 @@ public partial class RemoteSidebarViewModel(
 
     public required FileTreeViewModel FileTree { get; init; } = fileTree;
 
-    public ObservableCollection<RemoteConnection> RemoteConnections { get; } =
-        new(SkEditorAPI.Configs.GetConnectionsConfig().Connections);
+    // public ObservableCollection<RemoteConnection> RemoteConnections { get; } =
+    //     new(SkEditorAPI.Configs.GetConnectionsConfig().Connections);
+    public ObservableCollection<RemoteConnection> RemoteConnections => [];
 
     public bool NoSelectedConnection => SelectedConnection == null;
 
@@ -61,8 +61,8 @@ public partial class RemoteSidebarViewModel(
             remoteConnectionService.SavePassword(connection, info.Password);
         }
 
-        SkEditorAPI.Configs.GetConnectionsConfig().Connections.Add(connection);
-        _ = SkEditorAPI.Configs.GetConnectionsConfig().Save();
+        // SkEditorAPI.Configs.GetConnectionsConfig().Connections.Add(connection);
+        // _ = SkEditorAPI.Configs.GetConnectionsConfig().Save();
 
         RemoteConnections.Add(connection);
     }

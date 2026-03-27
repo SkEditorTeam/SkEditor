@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SkEditor.Models.Files;
 
-public class LocalFile(string path) : BaseFile(path)
+public class LocalFile(string name, string? path = null) : BaseFile(name, path)
 {
     public override ValueTask<Stream> LoadAsync()
     {
@@ -42,7 +42,8 @@ public class LocalFile(string path) : BaseFile(path)
 
         try
         {
-            await using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, options: FileOptions.Asynchronous))
+            await using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write,
+                             FileShare.None, bufferSize: 4096, options: FileOptions.Asynchronous))
             {
                 await stream.CopyToAsync(fileStream);
                 await fileStream.FlushAsync();

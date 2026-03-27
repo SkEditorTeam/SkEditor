@@ -7,7 +7,6 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.API;
 
 namespace SkEditor.Views.Windows;
 
@@ -65,8 +64,8 @@ public partial class FontSelectionWindow : AppWindow
 
         FontListBox.ItemsSource = fonts;
 
-        FontListBox.SelectedItem = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily ?? "Default";
-        FontListBox.ScrollIntoView(FontListBox.SelectedItem);
+        // FontListBox.SelectedItem = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily ?? "Default";
+        // FontListBox.ScrollIntoView(FontListBox.SelectedItem);
     }
 }
 

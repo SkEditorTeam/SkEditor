@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using FluentIcons.Common;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Menu;
@@ -16,12 +15,10 @@ using SkEditor.Views.Windows.Generators.Gui;
 
 namespace SkEditor.Services;
 
-public class MenuService(ITabService tabService, IThemeService themeService) : IMenuService
+public class MenuService(ITabService tabService, IThemeService themeService, AppSettings appSettings) : IMenuService
 {
     public IEnumerable<MainMenuItem> GetMainMenuItems()
     {
-        AppSettings appSettings = SkEditorAPI.Configs.GetAppSettings();
-
         MainMenuItem devToolsItem = BuildDevToolsMenu();
         devToolsItem.IsVisible = appSettings.IsDevModeEnabled;
         appSettings.PropertyChanged += (_, args) =>

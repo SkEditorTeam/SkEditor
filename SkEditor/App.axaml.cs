@@ -8,13 +8,14 @@ using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Services;
 using SkEditor.Services.Files;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Settings;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Pages;
@@ -29,13 +30,13 @@ namespace SkEditor;
 
 public class App : Application
 {
+    private readonly BinarySettings _binarySettings;
     private SplashScreen? _splashScreen;
 
     public App()
     {
-        BinarySettings binarySettings = new();
-        SkEditorAPI.Configs.AddConfig(binarySettings);
-        binarySettings.Load();
+        _binarySettings = new BinarySettings();
+        _binarySettings.Load();
     }
 
     public static IServiceProvider Services { get; private set; } = null!;
@@ -63,7 +64,7 @@ public class App : Application
         ServiceCollection collection = new();
         collection.AddSingleton<ILogger>(serilogLogger);
 
-        ConfigureServices(collection);
+        ConfigureServices(collection, _binarySettings);
         Services = collection.BuildServiceProvider();
 
         Stopwatch.Start();
@@ -88,7 +89,7 @@ public class App : Application
         }, DispatcherPriority.Background);
     }
 
-    private static void ConfigureServices(IServiceCollection services)
+    private static void ConfigureServices(IServiceCollection services, BinarySettings binarySettings)
     {
         services.AddSingleton<MainWindowFactory>();
         services.AddSingleton<WindowRegistry>();
@@ -103,6 +104,21 @@ public class App : Application
         services.AddSingleton<ITabService, TabService>();
         services.AddSingleton<IFileService, FileService>();
         services.AddSingleton<IWelcomeService, WelcomeService>();
+        services.AddSingleton<IConfigService, ConfigService>();
+        services.AddSingleton<LegacyConfigMigrator>();
+
+        services.AddSingleton<AppSettings>();
+        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<AppSettings>());
+        services.AddSingleton<ConnectionsConfig>();
+        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<ConnectionsConfig>());
+        services.AddSingleton<ExperimentsConfig>();
+        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<ExperimentsConfig>());
+        services.AddSingleton<SecretsConfig>();
+        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<SecretsConfig>());
+        services.AddSingleton<StateConfig>();
+        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<StateConfig>());
+        services.AddSingleton(binarySettings);
+        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<BinarySettings>());
 
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();

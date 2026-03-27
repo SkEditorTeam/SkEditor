@@ -197,8 +197,8 @@ public static class Translation
 
     private static void PropagateLanguageChange(string language)
     {
-        SkEditorAPI.Configs.GetAppSettings().Language = language;
-        _ = SkEditorAPI.Configs.GetAppSettings().Save();
+        // SkEditorAPI.Configs.GetAppSettings().Language = language;
+        // _ = SkEditorAPI.Configs.GetAppSettings().Save();
         // Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
     }
 }

@@ -168,7 +168,8 @@ public partial class DocElementControl : UserControl
     {
         PatternsEditor.TextArea.SelectionBrush = ThemeService.ServiceStatic.CurrentTheme.SelectionColor;
 
-        string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+        // string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+        string? fontFamily = null;
         if (fontFamily is null)
         {
             // TODO: re-add jetbrains mono fetching
@@ -286,7 +287,8 @@ public partial class DocElementControl : UserControl
             }
         };
 
-        string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+        // string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+        string? fontFamily = null;
         if (fontFamily is null)
         {
             // TODO: re-add jetbrains mono fetching
@@ -507,7 +509,8 @@ public partial class DocElementControl : UserControl
                     }
                 };
 
-                string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+                // string? fontFamily = SkEditorAPI.Configs.GetAppSettings().EditorFontFamily;
+                string? fontFamily = null;
                 if (fontFamily is null)
                 {
                     // TODO: re-add jetbrains mono fetching

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.API;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Models;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
@@ -14,9 +13,8 @@ public partial class SettingsPageViewModel : ObservableObject
     [ObservableProperty]
     private SettingSection _currentSection;
 
-    public SettingsPageViewModel()
+    public SettingsPageViewModel(AppSettings appSettings)
     {
-        AppSettings appSettings = SkEditorAPI.Configs.GetAppSettings();
         List<SettingElement> settings = appSettings.GetToggleSettingsSections();
         SettingsCategories =
         [

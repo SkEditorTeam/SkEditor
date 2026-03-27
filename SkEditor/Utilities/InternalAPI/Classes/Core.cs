@@ -63,13 +63,7 @@ public class Core : ICore
 
     public bool IsDeveloperMode()
     {
-#pragma warning disable 162
-#if DEBUG
         return true;
-#endif
-        // ReSharper disable once HeuristicUnreachableCode
-        return SkEditorAPI.Configs.GetAppSettings().IsDevModeEnabled;
-#pragma warning restore 162
     }
 
     public async Task SaveData()

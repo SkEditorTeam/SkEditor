@@ -26,9 +26,4 @@ public static class SkEditorAPI
     ///     Get the Core API.
     /// </summary>
     public static ICore Core { get; } = new Core();
-
-    /// <summary>
-    ///     Get the Configs API.
-    /// </summary>
-    public static IConfigs Configs { get; } = new Configs();
 }

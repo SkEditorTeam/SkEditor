@@ -1,4 +1,5 @@
-﻿using SkEditor.API;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 
 namespace SkEditor.Utilities.Startup;
@@ -6,7 +7,9 @@ namespace SkEditor.Utilities.Startup;
 public static class SplashScreenHandler
 {
     private const int AutoDisableThreshold = 500;
-    private static BinarySettings BinarySettings => SkEditorAPI.Configs.GetBinarySettings();
+
+    [Obsolete("use proper config injection when rewriting to DI")]
+    private static BinarySettings BinarySettings => App.Services.GetRequiredService<BinarySettings>();
 
     public static bool ShouldShowSplash()
     {

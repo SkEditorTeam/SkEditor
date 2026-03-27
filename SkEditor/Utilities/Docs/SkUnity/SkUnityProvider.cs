@@ -45,7 +45,8 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationEntry>> Search(SearchData searchData)
     {
         // First build the URI
-        string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "search/";
+        // string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "search/";
+        string uri = string.Empty;
         List<string> queryElements = [];
 
         if (!string.IsNullOrEmpty(searchData.Query))
@@ -102,7 +103,8 @@ public class SkUnityProvider : IDocProvider
 
     public bool IsAvailable()
     {
-        return !string.IsNullOrEmpty(SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey);
+        // return !string.IsNullOrEmpty(SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey);
+        return false;
     }
 
     public bool NeedsToLoadExamples => true;
@@ -110,8 +112,9 @@ public class SkUnityProvider : IDocProvider
     public async Task<List<IDocumentationExample>> FetchExamples(IDocumentationEntry entry)
     {
         string elementId = entry.Id;
-        string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "getExamplesByID/" +
-                     elementId;
+        // string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "getExamplesByID/" +
+        //              elementId;
+        string uri = string.Empty;
 
         CancellationTokenSource cancellationToken = new(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;
@@ -172,7 +175,8 @@ public class SkUnityProvider : IDocProvider
             return [.. CachedAddons.Keys];
         }
 
-        string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "getAllAddons/";
+        // string uri = BaseUri.Replace("%s", SkEditorAPI.Configs.GetSecretsConfig().SkUnityApiKey) + "getAllAddons/";
+        string uri = string.Empty;
 
         CancellationTokenSource cancellationToken = new(new TimeSpan(0, 0, 5));
         HttpResponseMessage response;

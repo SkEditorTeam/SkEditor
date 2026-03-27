@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Tabs;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Pages;
 
@@ -16,11 +17,15 @@ public partial class MainWindowViewModel : ObservableRecipient
     [ObservableProperty]
     private Tab? _selectedTab;
 
-    public MainWindowViewModel(ITabService tabService, IFileService fileService, MainMenuViewModel mainMenu,
+    public MainWindowViewModel(ITabService tabService, IFileService fileService, AppSettings appSettings,
+        MainMenuViewModel mainMenu,
         WelcomePageViewModel welcomePage)
     {
         _tabService = tabService;
         _fileService = fileService;
+
+        AppSettings = appSettings;
+
         MainMenu = mainMenu;
         WelcomePage = welcomePage;
 
@@ -28,6 +33,7 @@ public partial class MainWindowViewModel : ObservableRecipient
             SelectedTab = tab;
     }
 
+    public AppSettings AppSettings { get; }
     public MainMenuViewModel MainMenu { get; }
     public WelcomePageViewModel WelcomePage { get; }
 

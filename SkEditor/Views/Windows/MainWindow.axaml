@@ -10,10 +10,10 @@
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
         xmlns:tabs="clr-namespace:SkEditor.Models.Tabs"
         xmlns:pages="clr-namespace:SkEditor.Views.Pages"
-        xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         x:DataType="windows:MainWindowViewModel"
+        x:Name="Root"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
         Title="SkEditor" WindowStartupLocation="Manual" DragDrop.AllowDrop="True">
@@ -77,7 +77,14 @@
                                     AddTabButtonCommand="{Binding NewTabCommand}">
                             <ui:TabView.DataTemplates>
                                 <DataTemplate DataType="{x:Type tabs:FileTab}">
-                                    <avaloniaedit:TextEditor Document="{Binding Document}"/>
+                                    <avaloniaedit:TextEditor Document="{Binding Document}"
+                                                             ShowLineNumbers="True"
+                                                             Foreground="{DynamicResource EditorTextColor}"
+                                                             Background="{DynamicResource EditorBackgroundColor}"
+                                                             LineNumbersForeground="{DynamicResource LineNumbersColor}"
+                                                             FontSize="16"
+                                                             FontFamily="{Binding #Root.((windows:MainWindowViewModel)DataContext).AppSettings.EditorFontFamily, TargetNullValue='Consolas', FallbackValue='Consolas'}"
+                                                             WordWrap="{Binding #Root.((windows:MainWindowViewModel)DataContext).AppSettings.IsWordWrapEnabled, FallbackValue=False}" />
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type tabs:SettingsTab}">

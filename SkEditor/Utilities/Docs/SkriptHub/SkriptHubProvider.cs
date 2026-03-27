@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -11,10 +10,7 @@ using Avalonia.Platform;
 using Avalonia.Svg.Skia;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
-using Symbol = FluentIcons.Common.Symbol;
-using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.Utilities.Docs.SkriptHub;
 
@@ -54,67 +50,68 @@ public class SkriptHubProvider : IDocProvider
             return foundElements.Cast<IDocumentationEntry>().ToList();
         }
 
-        string cacheFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json");
-        if (!File.Exists(cacheFile))
-        {
-            TaskDialog taskDialog = new()
-            {
-                Title = Translation.Get(TranslationKey.DocumentationWindowCacheSkriptHub),
-                ShowProgressBar = true,
-                IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
-                SubHeader = Translation.Get(TranslationKey.DocumentationWindowDownloading),
-                Content = Translation.Get(TranslationKey.DocumentationWindowCacheSkriptHubMessage)
-            };
-
-            taskDialog.Opened += async (_, _) =>
-            {
-                try
-                {
-                    using HttpClient client = new();
-                    Progress<float> progress = new();
-                    progress.ProgressChanged += (_, sender) =>
-                        taskDialog.SetProgressBarState(sender, TaskDialogProgressState.Normal);
-
-                    await using FileStream file = new(cacheFile, FileMode.Create, FileAccess.Write, FileShare.None);
-                    await client.DownloadDataAsync(uri, file, progress);
-                    file.Close();
-
-                    taskDialog.Hide(TaskDialogStandardResult.OK);
-                }
-                catch (Exception e)
-                {
-                    await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
-                        ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
-                        : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
-                    _cachedElements.Clear();
-
-                    taskDialog.Hide(TaskDialogStandardResult.Cancel);
-                }
-            };
-
-            taskDialog.XamlRoot = SkEditorAPI.Windows.GetMainWindow();
-            TaskDialogStandardResult result = (TaskDialogStandardResult)await taskDialog.ShowAsync();
-            if (result == TaskDialogStandardResult.Cancel)
-            {
-                return [];
-            }
-        }
-
-        string content = await File.ReadAllTextAsync(cacheFile);
-        List<SkriptHubDocEntry>? elements = JsonSerializer.Deserialize<List<SkriptHubDocEntry>>(content,
-            SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
-        if (elements == null)
-        {
-            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal,
-                "Invalid cache file"));
-            return [];
-        }
-
-        _cachedElements.AddRange(elements);
-        await SaveCache();
-
-        List<SkriptHubDocEntry> foundElements2 = _cachedElements.Where(e => e.DoMatch(searchData)).ToList();
-        return foundElements2.Cast<IDocumentationEntry>().ToList();
+        // string cacheFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json");
+        // if (!File.Exists(cacheFile))
+        // {
+        //     TaskDialog taskDialog = new()
+        //     {
+        //         Title = Translation.Get(TranslationKey.DocumentationWindowCacheSkriptHub),
+        //         ShowProgressBar = true,
+        //         IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
+        //         SubHeader = Translation.Get(TranslationKey.DocumentationWindowDownloading),
+        //         Content = Translation.Get(TranslationKey.DocumentationWindowCacheSkriptHubMessage)
+        //     };
+        //
+        //     taskDialog.Opened += async (_, _) =>
+        //     {
+        //         try
+        //         {
+        //             using HttpClient client = new();
+        //             Progress<float> progress = new();
+        //             progress.ProgressChanged += (_, sender) =>
+        //                 taskDialog.SetProgressBarState(sender, TaskDialogProgressState.Normal);
+        //
+        //             await using FileStream file = new(cacheFile, FileMode.Create, FileAccess.Write, FileShare.None);
+        //             await client.DownloadDataAsync(uri, file, progress);
+        //             file.Close();
+        //
+        //             taskDialog.Hide(TaskDialogStandardResult.OK);
+        //         }
+        //         catch (Exception e)
+        //         {
+        //             await SkEditorAPI.Windows.ShowError(e is TaskCanceledException
+        //                 ? Translation.Get(TranslationKey.DocumentationWindowErrorOffline)
+        //                 : Translation.Get(TranslationKey.DocumentationWindowErrorGlobal, e.Message));
+        //             _cachedElements.Clear();
+        //
+        //             taskDialog.Hide(TaskDialogStandardResult.Cancel);
+        //         }
+        //     };
+        //
+        //     taskDialog.XamlRoot = SkEditorAPI.Windows.GetMainWindow();
+        //     TaskDialogStandardResult result = (TaskDialogStandardResult)await taskDialog.ShowAsync();
+        //     if (result == TaskDialogStandardResult.Cancel)
+        //     {
+        //         return [];
+        //     }
+        // }
+        //
+        // string content = await File.ReadAllTextAsync(cacheFile);
+        // List<SkriptHubDocEntry>? elements = JsonSerializer.Deserialize<List<SkriptHubDocEntry>>(content,
+        //     SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
+        // if (elements == null)
+        // {
+        //     await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal,
+        //         "Invalid cache file"));
+        //     return [];
+        // }
+        //
+        // _cachedElements.AddRange(elements);
+        // await SaveCache();
+        //
+        // List<SkriptHubDocEntry> foundElements2 = _cachedElements.Where(e => e.DoMatch(searchData)).ToList();
+        // return foundElements2.Cast<IDocumentationEntry>().ToList();
+        return [];
     }
 
     public bool IsAvailable()
@@ -188,26 +185,27 @@ public class SkriptHubProvider : IDocProvider
             return _cachedElements.Select(e => e.Addon).Distinct().ToList();
         }
 
-        string cacheFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json");
-        if (!File.Exists(cacheFile))
-        {
-            return [];
-        }
-
-        string content = await File.ReadAllTextAsync(cacheFile);
-        List<SkriptHubDocEntry>? elements = JsonSerializer.Deserialize<List<SkriptHubDocEntry>>(content,
-            SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
-        if (elements == null)
-        {
-            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal,
-                "Invalid cache file"));
-            return [];
-        }
-
-        _cachedElements.AddRange(elements);
-        await SaveCache();
-
-        return _cachedElements.Select(e => e.Addon).Distinct().ToList();
+        // string cacheFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json");
+        // if (!File.Exists(cacheFile))
+        // {
+        //     return [];
+        // }
+        //
+        // string content = await File.ReadAllTextAsync(cacheFile);
+        // List<SkriptHubDocEntry>? elements = JsonSerializer.Deserialize<List<SkriptHubDocEntry>>(content,
+        //     SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
+        // if (elements == null)
+        // {
+        //     await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.DocumentationWindowErrorGlobal,
+        //         "Invalid cache file"));
+        //     return [];
+        // }
+        //
+        // _cachedElements.AddRange(elements);
+        // await SaveCache();
+        //
+        // return _cachedElements.Select(e => e.Addon).Distinct().ToList();
+        return [];
     }
 
     public Task<Color?> GetAddonColor(string addonName)
@@ -236,15 +234,15 @@ public class SkriptHubProvider : IDocProvider
 
     public async Task SaveCache()
     {
-        string cacheFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json");
-        string content =
-            JsonSerializer.Serialize(_cachedElements, SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
-        await File.WriteAllTextAsync(cacheFile, content);
+        // string cacheFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json");
+        // string content =
+        //     JsonSerializer.Serialize(_cachedElements, SkriptHubDocJsonContext.Default.ListSkriptHubDocEntry);
+        // await File.WriteAllTextAsync(cacheFile, content);
     }
 
     public void DeleteEverything()
     {
         _cachedElements.Clear();
-        File.Delete(Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json"));
+        // File.Delete(Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "SkriptHubCache.json"));
     }
 }

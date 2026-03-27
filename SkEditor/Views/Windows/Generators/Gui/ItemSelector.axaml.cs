@@ -140,7 +140,8 @@ public partial class ItemSelector : AppWindow
 
     private async Task CheckForFile()
     {
-        string itemsFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "items.json");
+        // string itemsFile = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "items.json");
+        string itemsFile = string.Empty;
 
         if (!File.Exists(itemsFile))
         {

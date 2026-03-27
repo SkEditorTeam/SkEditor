@@ -22,7 +22,13 @@ using System.Diagnostics;
 
 namespace SkEditor.Services;
 
-public class StartupService(MainWindowFactory mainWindowFactory, IconProvider iconProvider) : IStartupService
+public class StartupService(
+    MainWindowFactory mainWindowFactory,
+    IconProvider iconProvider,
+    IConfigService config,
+    AppSettings appSettings,
+    StateConfig stateConfig,
+    LegacyConfigMigrator configMigrator) : IStartupService
 {
     public async Task CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop,
         SplashScreen? splashScreen)
@@ -51,12 +57,11 @@ public class StartupService(MainWindowFactory mainWindowFactory, IconProvider ic
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    AppWindow.AlwaysFallback =
-                        SkEditorAPI.Configs.GetAppSettings().ForceNativeTitleBar;
+                    AppWindow.AlwaysFallback = appSettings.ForceNativeTitleBar;
                 });
 
-                await SkEditorAPI.Configs.MigrateConfigsAsync();
-                await SkEditorAPI.Configs.LoadAllConfigsAsync();
+                await configMigrator.MigrateConfigsAsync();
+                await config.LoadAllConfigsAsync();
                 await iconProvider.LoadIcons();
 
                 await splashScreen.TryUpdateStatusAsync("Creating main window...");
@@ -116,30 +121,28 @@ public class StartupService(MainWindowFactory mainWindowFactory, IconProvider ic
         }
     }
 
-    private static void RecoverMainWindowState(MainWindow mainWindow)
+    private void RecoverMainWindowState(MainWindow mainWindow)
     {
-        StateConfig config = SkEditorAPI.Configs.GetStateConfig();
-
-        if (config is { MainWindowWidth: > 0, MainWindowHeight: > 0 })
+        if (stateConfig is { MainWindowWidth: > 0, MainWindowHeight: > 0 })
         {
-            mainWindow.Width = config.MainWindowWidth;
-            mainWindow.Height = config.MainWindowHeight;
+            mainWindow.Width = stateConfig.MainWindowWidth;
+            mainWindow.Height = stateConfig.MainWindowHeight;
         }
 
-        PixelPoint position = new(config.MainWindowX, config.MainWindowY);
+        PixelPoint position = new(stateConfig.MainWindowX, stateConfig.MainWindowY);
         Screens screens = mainWindow.Screens;
         PixelPoint lookupPosition = new(
-            (int)(config.MainWindowX + (config.MainWindowWidth / 2)),
-            (int)(config.MainWindowY + (config.MainWindowHeight / 2))
+            (int)(stateConfig.MainWindowX + (stateConfig.MainWindowWidth / 2)),
+            (int)(stateConfig.MainWindowY + (stateConfig.MainWindowHeight / 2))
         );
 
         Screen? screen = screens.ScreenFromPoint(lookupPosition)
-                         ?? screens.ScreenFromPoint(new PixelPoint(config.MainWindowX,
-                             config.MainWindowY));
+                         ?? screens.ScreenFromPoint(new PixelPoint(stateConfig.MainWindowX,
+                             stateConfig.MainWindowY));
 
         if (screen != null)
         {
-            mainWindow.Position = config.MainWindowMaximized
+            mainWindow.Position = stateConfig.MainWindowMaximized
                 ? screen.Bounds.TopLeft
                 : position;
         }
@@ -148,7 +151,7 @@ public class StartupService(MainWindowFactory mainWindowFactory, IconProvider ic
             mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
-        if (config.MainWindowMaximized)
+        if (stateConfig.MainWindowMaximized)
         {
             mainWindow.WindowState = WindowState.Maximized;
         }

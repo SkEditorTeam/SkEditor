@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Windowing;
@@ -13,7 +12,6 @@ using SkEditor.Services;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Updating;
@@ -75,49 +73,49 @@ public partial class MainWindow : AppWindow
                 return;
             }
 
-            StateConfig stateConfig = SkEditorAPI.Configs.GetStateConfig();
-
-            stateConfig.MainWindowHeight = Height;
-            stateConfig.MainWindowWidth = Width;
-            stateConfig.MainWindowX = Position.X;
-            stateConfig.MainWindowY = Position.Y;
-            stateConfig.MainWindowMaximized = WindowState == WindowState.Maximized;
-
-            ThemeService.ServiceStatic.SaveAllThemes();
-            await SkEditorAPI.Configs.SaveAllConfigsImmediateAsync();
-
-            e.Cancel = true;
-            if (!SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
-            {
-                // bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
-                // if (!anyUnsaved)
-                // {
-                //     e.Cancel = false;
-                //     return;
-                // }
-                //
-                // if (await PromptForUnsavedChanges())
-                // {
-                //     return;
-                // }
-
-                AlreadyClosed = true;
-                Close();
-            }
-            else
-            {
-                // bool isSuccess = await SessionRestorer.SaveSession();
-                // if (!isSuccess)
-                // {
-                //     if (await PromptForUnsavedChanges())
-                //     {
-                //         return;
-                //     }
-                // }
-
-                AlreadyClosed = true;
-                Close();
-            }
+            // StateConfig stateConfig = SkEditorAPI.Configs.GetStateConfig();
+            //
+            // stateConfig.MainWindowHeight = Height;
+            // stateConfig.MainWindowWidth = Width;
+            // stateConfig.MainWindowX = Position.X;
+            // stateConfig.MainWindowY = Position.Y;
+            // stateConfig.MainWindowMaximized = WindowState == WindowState.Maximized;
+            //
+            // ThemeService.ServiceStatic.SaveAllThemes();
+            // await SkEditorAPI.Configs.SaveAllConfigsImmediateAsync();
+            //
+            // e.Cancel = true;
+            // if (!SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
+            // {
+            //     // bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
+            //     // if (!anyUnsaved)
+            //     // {
+            //     //     e.Cancel = false;
+            //     //     return;
+            //     // }
+            //     //
+            //     // if (await PromptForUnsavedChanges())
+            //     // {
+            //     //     return;
+            //     // }
+            //
+            //     AlreadyClosed = true;
+            //     Close();
+            // }
+            // else
+            // {
+            //     // bool isSuccess = await SessionRestorer.SaveSession();
+            //     // if (!isSuccess)
+            //     // {
+            //     //     if (await PromptForUnsavedChanges())
+            //     //     {
+            //     //         return;
+            //     //     }
+            //     // }
+            //
+            //     AlreadyClosed = true;
+            //     Close();
+            // }
         }
         catch (Exception exc)
         {
@@ -146,7 +144,7 @@ public partial class MainWindow : AppWindow
     {
         try
         {
-            await Translation.ChangeLanguage(SkEditorAPI.Configs.GetAppSettings().Language, true);
+            // await Translation.ChangeLanguage(SkEditorAPI.Configs.GetAppSettings().Language, true);
             await _splashScreen.TryUpdateStatusAsync("Loading themes and addons...");
 
             Task themeTask = ThemeService.ServiceStatic.SetTheme(ThemeService.ServiceStatic.CurrentTheme);
@@ -157,8 +155,8 @@ public partial class MainWindow : AppWindow
             // Utilities.Files.FileTypes.RegisterDefaultAssociations();
             // SideBar.ReloadPanels();
 
-            double scale = SkEditorAPI.Configs.GetAppSettings().CustomUiScale;
-            LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
+            // double scale = SkEditorAPI.Configs.GetAppSettings().CustomUiScale;
+            // LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
 
             bool sessionFilesAdded = false;
             // if (SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
@@ -214,10 +212,10 @@ public partial class MainWindow : AppWindow
                 {
                     try
                     {
-                        if (SkEditorAPI.Configs.GetAppSettings().CheckForAppUpdates)
-                        {
-                            await UpdateChecker.Check();
-                        }
+                        // if (SkEditorAPI.Configs.GetAppSettings().CheckForAppUpdates)
+                        // {
+                        //     await UpdateChecker.Check();
+                        // }
 
                         await Tutorial.ShowTutorial();
                         await ChangelogChecker.Check();

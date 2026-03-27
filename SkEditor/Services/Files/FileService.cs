@@ -12,9 +12,8 @@ public class FileService(ITabService tabService) : IFileService
     {
         TranslatableString header =
             Translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
-        
-        FileTab newFileTab = FileTab.CreateFromFile(@"C:\Users\Notro\Documents\skrypty\adminchat.sk");
-        _ = newFileTab.LoadContentAsync();
+
+        FileTab newFileTab = FileTab.CreateNewFile(header.Value);
         tabService.OpenTab(newFileTab);
     }
 

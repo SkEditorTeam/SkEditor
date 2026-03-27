@@ -1,16 +1,21 @@
 ﻿using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 
-namespace SkEditor.Utilities.InternalAPI.Classes;
+namespace SkEditor.Services;
 
-public partial class Configs
+public class LegacyConfigMigrator(IConfigService config)
 {
+    /// <summary>
+    ///     Check and migrate old configuration files to the new format asynchronously.
+    /// </summary>
+    /// <returns>>A task representing the asynchronous operation.</returns>
     public async Task MigrateConfigsAsync()
     {
-        string oldSettings = Path.Combine(GetAppDataPath(), "settings.json");
+        string oldSettings = Path.Combine(config.GetAppDataPath(), "settings.json");
         if (!File.Exists(oldSettings))
         {
             return;
@@ -21,9 +26,18 @@ public partial class Configs
         OldAppConfig? oldAppConfig =
             JsonSerializer.Deserialize<OldAppConfig>(json, OldAppJsonContext.Default.OldAppConfig);
 
+        var appSettings = config.GetConfig<AppSettings>();
+        var stateConfig = config.GetConfig<StateConfig>();
+        var experimentsConfig = config.GetConfig<ExperimentsConfig>();
+        var secretsConfig = config.GetConfig<SecretsConfig>();
+
+        if (appSettings == null || stateConfig == null || experimentsConfig == null || secretsConfig == null)
+        {
+            return;
+        }
+
         if (oldAppConfig != null)
         {
-            AppSettings appSettings = GetAppSettings();
             appSettings.CheckForAppUpdates = oldAppConfig.CheckForUpdates;
             appSettings.CheckForExternalFileChanges = oldAppConfig.CheckForChanges;
             appSettings.CurrentTheme = oldAppConfig.CurrentTheme;
@@ -49,13 +63,11 @@ public partial class Configs
             appSettings.EditorTabSize = oldAppConfig.TabSize;
             appSettings.UseEditorTabsForIndentation = !oldAppConfig.UseSpacesInsteadOfTabs;
 
-            StateConfig stateConfig = GetStateConfig();
             stateConfig.LastUsedPublishService = oldAppConfig.LastUsedPublishService;
             stateConfig.GuiGeneratorSkriptGuiAddonUsed = oldAppConfig.UseSkriptGui;
             stateConfig.SidebarPanelSizes = oldAppConfig.SidebarPanelSizes;
             stateConfig.FileTypeChoices = oldAppConfig.FileTypeChoices;
 
-            ExperimentsConfig experimentsConfig = GetExperimentsConfig();
             experimentsConfig.AutoCompletionPrototypeEnabled = oldAppConfig.EnableAutoCompletionExperiment;
             experimentsConfig.ProjectsEnabled = oldAppConfig.EnableProjectsExperiment;
             experimentsConfig.HexPreviewEnabled = oldAppConfig.EnableHexPreview;
@@ -64,13 +76,12 @@ public partial class Configs
             experimentsConfig.SessionRestoringEnabled = oldAppConfig.EnableSessionRestoring;
             experimentsConfig.RealtimeCodeParserEnabled = oldAppConfig.EnableRealtimeCodeParser;
 
-            SecretsConfig secretsConfig = GetSecretsConfig();
             secretsConfig.SkUnityApiKey = oldAppConfig.SkUnityApiKey;
             secretsConfig.SkriptMcApiKey = oldAppConfig.SkriptMcApiKey;
             secretsConfig.PastebinApiKey = oldAppConfig.PastebinApiKey;
             secretsConfig.CodeSkriptPlApiKey = oldAppConfig.CodeSkriptPlApiKey;
 
-            await SaveAllConfigsAsync();
+            await config.SaveAllConfigsAsync();
             File.Delete(oldSettings);
         }
     }

@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using Avalonia.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.API;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Updating;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
@@ -11,14 +10,18 @@ namespace SkEditor.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
+    private AppSettings _appSettings;
+
     [ObservableProperty]
     private string _currentFont = string.Empty;
 
     [ObservableProperty]
     private string _skEditorString = string.Empty;
 
-    public SettingsViewModel()
+    public SettingsViewModel(AppSettings appSettings)
     {
+        _appSettings = appSettings;
+
         UpdateProperties();
         SubscribeToEvents();
     }
@@ -27,7 +30,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         // Use weak event handlers to avoid memory leaks
         WeakEventHandlerManager.Subscribe<AppSettings, PropertyChangedEventArgs, SettingsViewModel>(
-            SkEditorAPI.Configs.GetAppSettings(),
+            _appSettings,
             nameof(INotifyPropertyChanged.PropertyChanged),
             OnAppConfigPropertyChanged);
 
@@ -53,7 +56,7 @@ public partial class SettingsViewModel : ObservableObject
     private void UpdateProperties()
     {
         CurrentFont = Translation.Get(TranslationKey.SettingsPersonalizationFontDescription)
-            .Replace("{0}", SkEditorAPI.Configs.GetAppSettings().EditorFontFamily ?? "Default (JetBrains Mono)");
+            .Replace("{0}", _appSettings.EditorFontFamily ?? "Default (JetBrains Mono)");
 
         SkEditorString = $"SkEditor v{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}";
     }

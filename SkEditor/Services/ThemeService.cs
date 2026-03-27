@@ -13,12 +13,13 @@ using FluentAvalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Styling;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Services;
 
-public class ThemeService(ILogService log) : IThemeService
+public class ThemeService(ILogService log, IConfigService config, AppSettings appSettings) : IThemeService
 {
     private bool _defaultColorsCollected;
 
@@ -32,7 +33,7 @@ public class ThemeService(ILogService log) : IThemeService
     public List<Theme> Themes { get; set; } = [];
     public Theme CurrentTheme { get; set; } = new();
 
-    public string ThemeFolderPath { get; set; } = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Themes");
+    public string ThemeFolderPath { get; set; } = Path.Combine(config.GetAppDataPath(), "Themes");
 
     public void LoadThemes()
     {
@@ -96,7 +97,7 @@ public class ThemeService(ILogService log) : IThemeService
         }
 
         CurrentTheme = theme;
-        SkEditorAPI.Configs.GetAppSettings().CurrentTheme = theme.Name;
+        appSettings.CurrentTheme = theme.Name;
 
         await ApplyTheme();
     }
@@ -167,7 +168,7 @@ public class ThemeService(ILogService log) : IThemeService
 
     private Theme GetUsedTheme()
     {
-        string currentTheme = SkEditorAPI.Configs.GetAppSettings().CurrentTheme;
+        string currentTheme = appSettings.CurrentTheme;
 
         if (currentTheme != null)
         {
@@ -181,7 +182,7 @@ public class ThemeService(ILogService log) : IThemeService
 
             if (!selectedTheme.Name.Equals(currentTheme))
             {
-                SkEditorAPI.Configs.GetAppSettings().CurrentTheme = selectedTheme.Name;
+                appSettings.CurrentTheme = selectedTheme.Name;
             }
 
             return selectedTheme;

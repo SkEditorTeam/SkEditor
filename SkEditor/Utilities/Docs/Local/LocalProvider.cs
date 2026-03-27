@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
-using SkEditor.API;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
@@ -88,15 +87,16 @@ public class LocalProvider : IDocProvider
 
     private static string GetLocalCachePath()
     {
-        string folder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Docs");
-        Directory.CreateDirectory(folder);
-        string file = Path.Combine(folder, "local.json");
-        if (!File.Exists(file))
-        {
-            File.WriteAllText(file, "[]");
-        }
-
-        return file;
+        // string folder = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Docs");
+        // Directory.CreateDirectory(folder);
+        // string file = Path.Combine(folder, "local.json");
+        // if (!File.Exists(file))
+        // {
+        //     File.WriteAllText(file, "[]");
+        // }
+        //
+        // return file;
+        return string.Empty;
     }
 
     private async Task LoadLocalDocs()

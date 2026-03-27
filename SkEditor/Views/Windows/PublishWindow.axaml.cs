@@ -3,10 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.API;
-using SkEditor.Utilities.Publishing;
 using SkEditor.Utilities.Styling;
-using SecretsConfig = SkEditor.Utilities.Settings.Configs.SecretsConfig;
 
 namespace SkEditor.Views.Windows;
 
@@ -41,13 +38,13 @@ public partial class PublishWindow : AppWindow
             await Clipboard.SetTextAsync(result);
         });
 
-        WebsiteComboBox.SelectedIndex = SkEditorAPI.Configs.GetStateConfig().LastUsedPublishService switch
-        {
-            "Pastebin" => 0,
-            "code.skript.pl" => 1,
-            "skUnity Parser" => 2,
-            _ => 0
-        };
+        // WebsiteComboBox.SelectedIndex = SkEditorAPI.Configs.GetStateConfig().LastUsedPublishService switch
+        // {
+        //     "Pastebin" => 0,
+        //     "code.skript.pl" => 1,
+        //     "skUnity Parser" => 2,
+        //     _ => 0
+        // };
 
         WebsiteComboBox.SelectionChanged += (_, _) => UpdateServiceInfo();
 
@@ -64,16 +61,16 @@ public partial class PublishWindow : AppWindow
 
     private void UpdateServiceInfo()
     {
-        SecretsConfig secretsConfig = SkEditorAPI.Configs.GetSecretsConfig();
-        ApiKey = CurrentService switch
-        {
-            "Pastebin" => secretsConfig.PastebinApiKey,
-            "code.skript.pl" => secretsConfig.CodeSkriptPlApiKey,
-            "skUnity Parser" => secretsConfig.SkUnityApiKey,
-            _ => ""
-        };
+        // SecretsConfig secretsConfig = SkEditorAPI.Configs.GetSecretsConfig();
+        // ApiKey = CurrentService switch
+        // {
+        //     "Pastebin" => secretsConfig.PastebinApiKey,
+        //     "code.skript.pl" => secretsConfig.CodeSkriptPlApiKey,
+        //     "skUnity Parser" => secretsConfig.SkUnityApiKey,
+        //     _ => ""
+        // };
 
-        SkEditorAPI.Configs.GetStateConfig().LastUsedPublishService = CurrentService ?? string.Empty;
+        // SkEditorAPI.Configs.GetStateConfig().LastUsedPublishService = CurrentService ?? string.Empty;
 
         AnonymouslyCheckBox.IsVisible = LanguageComboBox.IsVisible = CurrentService?.Equals("code.skript.pl") == true;
     }
