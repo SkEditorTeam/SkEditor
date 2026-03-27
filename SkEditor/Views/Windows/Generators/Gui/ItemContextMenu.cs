@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 using Symbol = FluentIcons.Common.Symbol;
@@ -35,7 +36,7 @@ internal class ItemContextMenu
     {
         return new MenuItem
         {
-            Header = Translation.Get(headerKey),
+            Header = TranslationService.Current.Get(headerKey),
             Icon = new SymbolIcon { Symbol = symbol, FontSize = 20 },
             Command = new AsyncRelayCommand(asyncAction)
         };
@@ -113,7 +114,8 @@ internal class ItemContextMenu
         if (slot == -1)
         {
             GuiGenerator.Instance.BackgroundItem = null;
-            GuiGenerator.Instance.BackgroundItemButton.Content = Translation.Get(TranslationKey.SelectButton);
+            GuiGenerator.Instance.BackgroundItemButton.Content =
+                TranslationService.Current.Get(TranslationKey.SelectButton);
         }
         else
         {

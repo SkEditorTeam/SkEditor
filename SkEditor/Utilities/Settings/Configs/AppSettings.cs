@@ -45,13 +45,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public string Language
     {
         get;
-        set
-        {
-            if (SetProperty(ref field, value))
-            {
-                _ = Translation.ChangeAndRefreshLanguage(value);
-            }
-        }
+        set => SetProperty(ref field, value);
     } = "English";
 
     /// <summary>

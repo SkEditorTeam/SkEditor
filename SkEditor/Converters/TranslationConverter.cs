@@ -3,6 +3,7 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Converters;
@@ -15,7 +16,7 @@ public class TranslationConverter : IValueConverter
     {
         return value is not TranslationKey key
             ? BindingOperations.DoNothing
-            : Translation.GetObservable(key);
+            : TranslationService.Current.GetObservable(key);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 using Symbol = FluentIcons.Common.Symbol;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
@@ -38,11 +39,11 @@ public static class FileDownloader
     {
         TaskDialog td = new()
         {
-            Title = Translation.Get(TranslationKey.DownloadingMissingFilesTitle),
+            Title = TranslationService.Current.Get(TranslationKey.DownloadingMissingFilesTitle),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
-            SubHeader = Translation.Get(TranslationKey.Downloading),
-            Content = Translation.Get(TranslationKey.DownloadingMissingFilesDescriptionItems)
+            SubHeader = TranslationService.Current.Get(TranslationKey.Downloading),
+            Content = TranslationService.Current.Get(TranslationKey.DownloadingMissingFilesDescriptionItems)
         };
 
         td.Opened += async (_, _) => await DownloadMissingFiles(td);

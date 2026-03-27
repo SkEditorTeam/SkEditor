@@ -7,12 +7,13 @@ using GitCredentialManager;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services;
 
-public class RemoteConnectionService : IRemoteConnectionService
+public class RemoteConnectionService(ITranslationService translation) : IRemoteConnectionService
 {
     private const string CredentialNamespace = "SkEditor Remote Connections";
     private const string CredentialTarget = "skeditor://sftp-connections";
@@ -26,7 +27,7 @@ public class RemoteConnectionService : IRemoteConnectionService
                               (string.IsNullOrWhiteSpace(keyFilePath) || !File.Exists(keyFilePath));
         if (invalidKeyFile)
         {
-            return RemoteConnectionTestResult.Error(Translation.Get(TranslationKey.RemoteConnectionInvalidKeyPath));
+            return RemoteConnectionTestResult.Error(translation.Get(TranslationKey.RemoteConnectionInvalidKeyPath));
         }
 
         try
@@ -37,17 +38,17 @@ public class RemoteConnectionService : IRemoteConnectionService
 
             if (connected)
             {
-                return RemoteConnectionTestResult.Success(Translation.Get(TranslationKey.RemoteConnectionTestSuccess,
+                return RemoteConnectionTestResult.Success(translation.Get(TranslationKey.RemoteConnectionTestSuccess,
                     connectionInfo.Host,
                     $"{sw.ElapsedMilliseconds:N0}"));
             }
 
             return RemoteConnectionTestResult.Error(
-                Translation.Get(TranslationKey.RemoteConnectionTestFailed, connectionInfo.Host));
+                translation.Get(TranslationKey.RemoteConnectionTestFailed, connectionInfo.Host));
         }
         catch (SshException ex) when (ex.Message == "Invalid private key file.")
         {
-            return RemoteConnectionTestResult.Error(Translation.Get(TranslationKey.RemoteConnectionInvalidKeyFormat));
+            return RemoteConnectionTestResult.Error(translation.Get(TranslationKey.RemoteConnectionInvalidKeyFormat));
         }
         catch (Exception ex)
         {

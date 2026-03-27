@@ -8,10 +8,12 @@ using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Localization;
 using SkEditor.Services;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Updating;
@@ -24,8 +26,10 @@ namespace SkEditor.Views.Windows;
 
 public partial class MainWindow : AppWindow
 {
+    private readonly AppSettings _appSettings;
     private readonly ILogService _log;
     private readonly KeyboardShortcutHandler? _shortcutHandler;
+    private readonly ITranslationService _translation;
 
     private bool _isFullyLoaded;
     private SplashScreen? _splashScreen;
@@ -36,6 +40,8 @@ public partial class MainWindow : AppWindow
 
         DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
         _log = App.Services.GetRequiredService<ILogService>();
+        _appSettings = App.Services.GetRequiredService<AppSettings>();
+        _translation = App.Services.GetRequiredService<ITranslationService>();
 
         _shortcutHandler = new KeyboardShortcutHandler(this);
         _shortcutHandler.Initialize();
@@ -131,10 +137,10 @@ public partial class MainWindow : AppWindow
         base.OnClosed(e);
     }
 
-    private static async Task<bool> PromptForUnsavedChanges()
+    private async Task<bool> PromptForUnsavedChanges()
     {
-        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(Translation.Get(TranslationKey.Attention),
-            Translation.Get(TranslationKey.ClosingProgramWithUnsavedFiles), Symbol.Warning,
+        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(_translation.Get(TranslationKey.Attention),
+            _translation.Get(TranslationKey.ClosingProgramWithUnsavedFiles), Symbol.Warning,
             primaryButtonText: "Yes", cancelButtonText: "No");
 
         return result != ContentDialogResult.Primary;
@@ -144,7 +150,7 @@ public partial class MainWindow : AppWindow
     {
         try
         {
-            // await Translation.ChangeLanguage(SkEditorAPI.Configs.GetAppSettings().Language, true);
+            await _translation.ChangeLanguage(_appSettings.Language, true);
             await _splashScreen.TryUpdateStatusAsync("Loading themes and addons...");
 
             Task themeTask = ThemeService.ServiceStatic.SetTheme(ThemeService.ServiceStatic.CurrentTheme);

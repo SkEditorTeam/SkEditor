@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.Services.Localization;
 
 namespace SkEditor.Utilities.Localization;
 
@@ -73,9 +74,19 @@ public partial class TranslatableString : ObservableObject
     ///     Gets the translated value of this instance based on the current language and the translation key. If the instance
     ///     was created with a raw string value, that value will be returned instead.
     /// </summary>
-    public string Value => field ?? (_parameters == null || _parameters.Length == 0
-        ? Translation.Get(EnumKey)
-        : Translation.Get(EnumKey, _parameters));
+    public string Value
+    {
+        get
+        {
+            if (field != null) return field;
+
+            var translationService = TranslationService.Current;
+
+            return _parameters == null || _parameters.Length == 0
+                ? translationService.Get(EnumKey)
+                : translationService.Get(EnumKey, _parameters);
+        }
+    }
 
     /// <summary>
     ///     Creates a new instance of <see cref="TranslatableString" /> with the specified raw string value.

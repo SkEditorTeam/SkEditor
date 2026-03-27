@@ -12,6 +12,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using SkEditor.API;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
@@ -61,7 +62,7 @@ public class Windows : IWindows
     {
         EnqueueDialogFireAndForget(async () =>
         {
-            await ShowDialogInternal(Translation.Get(TranslationKey.Error), error, Symbol.Alert);
+            await ShowDialogInternal(TranslationService.Current.Get(TranslationKey.Error), error, Symbol.Alert);
         });
         return Task.CompletedTask;
     }
@@ -321,7 +322,7 @@ public class Windows : IWindows
             }
 
             bool isKey = Enum.TryParse(input, out TranslationKey key);
-            return isKey ? Translation.Get(key) : input;
+            return isKey ? TranslationService.Current.Get(key) : input;
         }
     }
 }

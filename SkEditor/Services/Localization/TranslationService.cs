@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,31 +10,34 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using SkEditor.API;
+using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Localization;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Configs;
 
-namespace SkEditor.Utilities.Localization;
+namespace SkEditor.Services.Localization;
 
-/// <summary>
-///     Provides functionality for translating strings based on the current language setting.
-/// </summary>
-public static class Translation
+public class TranslationService : ITranslationService
 {
     private const string DefaultLanguage = "English";
     private static readonly Dictionary<string, ResourceDictionary> Translations = [];
+    private readonly AppSettings _appSettings;
+    private readonly ILogService _logs;
 
-    /// <summary>
-    ///     The folder where language files are stored.
-    /// </summary>
-    public static string LanguagesFolder { get; } = Path.Combine(AppContext.BaseDirectory, "Languages");
+    public TranslationService(ILogService logs, AppSettings appSettings)
+    {
+        _logs = logs;
+        _appSettings = appSettings;
 
-    /// <summary>
-    ///     Retrieves the translated string for the given key, formatting it with the provided parameters if any.
-    /// </summary>
-    /// <param name="key">The translation key.</param>
-    /// <param name="parameters">Optional parameters to format the translated string.</param>
-    /// <returns>The translated and formatted string.</returns>
-    public static string Get(TranslationKey key, params string?[] parameters)
+        appSettings.PropertyChanged += OnSettingsChanged;
+    }
+
+    public static ITranslationService Current { get; set; } = null!;
+
+    public string LanguagesFolder => Path.Combine(AppContext.BaseDirectory, "Languages");
+
+    public string Get(TranslationKey key, params string?[] parameters)
     {
         object? translation = null;
         Application.Current?.TryGetResource(key.ToString(), ThemeVariant.Default, out translation);
@@ -55,22 +59,17 @@ public static class Translation
         }
     }
 
-    public static TranslatableString GetObservable(TranslationKey key)
+    public TranslatableString GetObservable(TranslationKey key)
     {
         return new TranslatableString(key);
     }
 
-    public static TranslatableString GetObservable(TranslationKey key, params string[]? parameters)
+    public TranslatableString GetObservable(TranslationKey key, params string[]? parameters)
     {
         return new TranslatableString(key, parameters);
     }
 
-    /// <summary>
-    ///     Changes the application's language to the specified language.
-    /// </summary>
-    /// <param name="language">The language to change to.</param>
-    /// <param name="startup">Whether this change is occurring during application startup.</param>
-    public static async Task ChangeLanguage(string language, bool startup = false)
+    public async Task ChangeLanguage(string language, bool startup = false)
     {
         ClearOldLanguages();
 
@@ -84,7 +83,7 @@ public static class Translation
         }
     }
 
-    public static async Task ChangeAndRefreshLanguage(string language)
+    public async Task ChangeAndRefreshLanguage(string language)
     {
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
@@ -113,7 +112,7 @@ public static class Translation
         }
     }
 
-    private static async Task<ResourceDictionary> CreateLanguageDictionary(string language)
+    private async Task<ResourceDictionary> CreateLanguageDictionary(string language)
     {
         ResourceDictionary languageDict = new();
 
@@ -147,7 +146,7 @@ public static class Translation
         LoadToResourceDictionary(ms.ToArray(), newLanguageDict);
     }
 
-    private static async Task LoadLanguage(string language, ResourceDictionary newLanguageDict)
+    private async Task LoadLanguage(string language, ResourceDictionary newLanguageDict)
     {
         string languageFile = Path.Combine(LanguagesFolder, $"{language}.json").NormalizePathSeparators();
 
@@ -163,7 +162,7 @@ public static class Translation
         }
         catch (JsonException ex)
         {
-            SkEditorAPI.Logs.Error($"Failed to load language file '{Path.GetFileName(languageFile)}': {ex.Message}",
+            _logs.Error($"Failed to load language file '{Path.GetFileName(languageFile)}': {ex.Message}",
                 true);
         }
     }
@@ -195,10 +194,18 @@ public static class Translation
         Translations.TryAdd(language, newLanguageDict);
     }
 
-    private static void PropagateLanguageChange(string language)
+    private void PropagateLanguageChange(string language)
     {
-        // SkEditorAPI.Configs.GetAppSettings().Language = language;
-        // _ = SkEditorAPI.Configs.GetAppSettings().Save();
+        _appSettings.Language = language;
+        _ = _appSettings.Save();
         // Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
+    }
+
+    private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AppSettings.Language))
+        {
+            _ = ChangeAndRefreshLanguage(_appSettings.Language);
+        }
     }
 }

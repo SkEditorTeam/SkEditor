@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Avalonia.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.Contracts.Services.Localization;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Updating;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
@@ -10,7 +11,8 @@ namespace SkEditor.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
-    private AppSettings _appSettings;
+    private readonly AppSettings _appSettings;
+    private readonly ITranslationService _translation;
 
     [ObservableProperty]
     private string _currentFont = string.Empty;
@@ -18,9 +20,10 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _skEditorString = string.Empty;
 
-    public SettingsViewModel(AppSettings appSettings)
+    public SettingsViewModel(AppSettings appSettings, ITranslationService translation)
     {
         _appSettings = appSettings;
+        _translation = translation;
 
         UpdateProperties();
         SubscribeToEvents();
@@ -55,7 +58,7 @@ public partial class SettingsViewModel : ObservableObject
 
     private void UpdateProperties()
     {
-        CurrentFont = Translation.Get(TranslationKey.SettingsPersonalizationFontDescription)
+        CurrentFont = _translation.Get(TranslationKey.SettingsPersonalizationFontDescription)
             .Replace("{0}", _appSettings.EditorFontFamily ?? "Default (JetBrains Mono)");
 
         SkEditorString = $"SkEditor v{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}";

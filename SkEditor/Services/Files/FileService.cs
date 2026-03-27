@@ -1,17 +1,18 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services.Files;
 
-public class FileService(ITabService tabService) : IFileService
+public class FileService(ITabService tabService, ITranslationService translation) : IFileService
 {
     public void NewFile()
     {
         TranslatableString header =
-            Translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
+            translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
 
         FileTab newFileTab = FileTab.CreateNewFile(header.Value);
         tabService.OpenTab(newFileTab);
@@ -19,7 +20,7 @@ public class FileService(ITabService tabService) : IFileService
 
     private int GetNewFileNumber()
     {
-        string template = Translation.Get(TranslationKey.NewFileNameFormat);
+        string template = translation.Get(TranslationKey.NewFileNameFormat);
         string pattern = Regex.Escape(template).Replace(@"\{0}", @"(\d+)");
         Regex regex = new(pattern);
 

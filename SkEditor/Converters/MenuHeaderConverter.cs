@@ -4,6 +4,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Converters;
@@ -23,7 +24,7 @@ public class MenuHeaderConverter : IMultiValueConverter
 
         if (headerKey is TranslationKey translationKey)
         {
-            return Translation.GetObservable(translationKey);
+            return TranslationService.Current.GetObservable(translationKey);
         }
 
         if (iconSymbol is Symbol symbol)

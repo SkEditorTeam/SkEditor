@@ -8,6 +8,6 @@ public record WelcomeScreenElement(TranslatableString Name, IRelayCommand Comman
 {
     public static WelcomeScreenElement Create(TranslationKey nameKey, IRelayCommand command, IconSource? icon = null)
     {
-        return new WelcomeScreenElement(Translation.GetObservable(nameKey), command, icon);
+        return new WelcomeScreenElement(new TranslatableString(nameKey), command, icon);
     }
 }

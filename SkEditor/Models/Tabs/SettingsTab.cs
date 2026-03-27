@@ -5,7 +5,7 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Tabs;
 
-public partial class SettingsTab() : Tab(Translation.GetObservable(TranslationKey.WindowTitleSettings))
+public partial class SettingsTab() : Tab(TranslatableString.FromRawString("Settings"))
 {
     public override IRelayCommand CloseCommand => CloseTabCommand;
 

@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Styling;
 using LoreLineEditor = SkEditor.Views.Controls.LoreLineEditor;
@@ -136,7 +137,7 @@ public partial class ExtendedItemSelector : AppWindow
     {
         MenuItem addMenuItem = new()
         {
-            Header = Translation.Get(TranslationKey.GuiGeneratorAddLoreLine),
+            Header = TranslationService.Current.Get(TranslationKey.GuiGeneratorAddLoreLine),
             Icon = new SymbolIcon { Symbol = Symbol.Add, FontSize = 20 },
             Command = new RelayCommand(() =>
             {
@@ -162,6 +163,7 @@ public partial class ExtendedItemSelector : AppWindow
         _contextFlyout = menuFlyout;
 
         FirstLoreLine.LineTextBox.ContextFlyout = menuFlyout;
-        FirstLoreLine.LineTextBox.Watermark = Translation.Get(TranslationKey.GuiGeneratorLoreLineWatermark);
+        FirstLoreLine.LineTextBox.Watermark =
+            TranslationService.Current.Get(TranslationKey.GuiGeneratorLoreLineWatermark);
     }
 }

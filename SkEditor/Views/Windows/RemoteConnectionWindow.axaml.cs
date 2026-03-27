@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Models.Remote;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Windows;
 
@@ -54,13 +55,13 @@ public partial class RemoteConnectionWindow : AppWindow
 
         IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = Translation.Get(TranslationKey.RemoteConnectionSelectKeyFile),
+            Title = TranslationService.Current.Get(TranslationKey.RemoteConnectionSelectKeyFile),
             AllowMultiple = false,
             FileTypeFilter =
             [
-                new FilePickerFileType(Translation.Get(TranslationKey.RemoteConnectionSelectKeyKeyFiles))
+                new FilePickerFileType(TranslationService.Current.Get(TranslationKey.RemoteConnectionSelectKeyKeyFiles))
                     { Patterns = ["*.pem", "*.key", "*.ppk", "*.*"] },
-                new FilePickerFileType(Translation.Get(TranslationKey.RemoteConnectionSelectKeyAllFiles))
+                new FilePickerFileType(TranslationService.Current.Get(TranslationKey.RemoteConnectionSelectKeyAllFiles))
                     { Patterns = ["*.*"] }
             ]
         });

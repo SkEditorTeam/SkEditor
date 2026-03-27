@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Views.Controls;
@@ -57,7 +58,7 @@ public partial class SettingsCategorySeparator : UserControl
         string? label = "";
         if (TitleKey != null)
         {
-            label = Translation.Get(TitleKey.Value);
+            label = TranslationService.Current.Get(TitleKey.Value);
         }
         else if (Title != null)
         {

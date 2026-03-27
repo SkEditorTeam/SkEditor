@@ -2,6 +2,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using SkEditor.Models.Remote;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Converters;
@@ -12,8 +13,10 @@ public class AuthMethodConverter : IValueConverter
     {
         return value switch
         {
-            RemoteAuthMethod.Password => Translation.Get(TranslationKey.RemoteConnectionFieldAuthMethodPassword),
-            RemoteAuthMethod.PrivateKey => Translation.Get(TranslationKey.RemoteConnectionFieldAuthMethodKey),
+            RemoteAuthMethod.Password => TranslationService.Current.Get(TranslationKey
+                .RemoteConnectionFieldAuthMethodPassword),
+            RemoteAuthMethod.PrivateKey => TranslationService.Current.Get(TranslationKey
+                .RemoteConnectionFieldAuthMethodKey),
             _ => value?.ToString()
         };
     }

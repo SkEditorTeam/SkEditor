@@ -80,7 +80,7 @@ public class WelcomeService : IWelcomeService
     private void BuildSections()
     {
         WelcomeScreenSection gettingStarted = new(
-            Translation.GetObservable(TranslationKey.WelcomePageGettingStarted),
+            new TranslatableString(TranslationKey.WelcomePageGettingStarted),
             [
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
                     new RelayCommand(() => _fileService.NewFile()), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
@@ -95,7 +95,7 @@ public class WelcomeService : IWelcomeService
             ]
         );
 
-        WelcomeScreenSection help = new(Translation.GetObservable(TranslationKey.WelcomePageUsefulLinks),
+        WelcomeScreenSection help = new(new TranslatableString(TranslationKey.WelcomePageUsefulLinks),
         [
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDiscordServer,
                 new RelayCommand(() =>

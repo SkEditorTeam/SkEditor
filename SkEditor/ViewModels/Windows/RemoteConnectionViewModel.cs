@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
 
@@ -15,8 +16,8 @@ namespace SkEditor.ViewModels.Windows;
 
 public partial class RemoteConnectionViewModel(
     IRemoteConnectionService connectionService,
-    INotificationService
-        notificationService) : ObservableObject
+    INotificationService notificationService,
+    ITranslationService translation) : ObservableObject
 {
     [ObservableProperty]
     private RemoteConnectionInfo _connectionInfo = new();
@@ -40,7 +41,7 @@ public partial class RemoteConnectionViewModel(
         RemoteConnectionTestResult result = await connectionService.TestConnection(ConnectionInfo);
         if (!result.IsSuccess)
         {
-            InfoBarMessage = Translation.Get(TranslationKey.RemoteConnectionCannotAddConnection);
+            InfoBarMessage = translation.Get(TranslationKey.RemoteConnectionCannotAddConnection);
             InfoBarSeverity = InfoBarSeverity.Error;
 
             return;
@@ -52,8 +53,8 @@ public partial class RemoteConnectionViewModel(
                 $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
 
             notificationService.Show(
-                Translation.Get(TranslationKey.RemoteConnectionAddSuccessTitle),
-                Translation.Get(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort),
+                translation.Get(TranslationKey.RemoteConnectionAddSuccessTitle),
+                translation.Get(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort),
                 NotificationType.Success,
                 TimeSpan.FromSeconds(5)
             );

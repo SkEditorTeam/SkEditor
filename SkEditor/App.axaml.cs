@@ -10,8 +10,10 @@ using Serilog;
 using Serilog.Core;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Localization;
 using SkEditor.Services;
 using SkEditor.Services.Files;
+using SkEditor.Services.Localization;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Settings;
@@ -66,6 +68,7 @@ public class App : Application
 
         ConfigureServices(collection, _binarySettings);
         Services = collection.BuildServiceProvider();
+        TranslationService.Current = Services.GetRequiredService<ITranslationService>();
 
         Stopwatch.Start();
 
@@ -106,6 +109,7 @@ public class App : Application
         services.AddSingleton<IWelcomeService, WelcomeService>();
         services.AddSingleton<IConfigService, ConfigService>();
         services.AddSingleton<LegacyConfigMigrator>();
+        services.AddSingleton<ITranslationService, TranslationService>();
 
         services.AddSingleton<AppSettings>();
         services.AddSingleton<IConfig>(sp => sp.GetRequiredService<AppSettings>());

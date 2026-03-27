@@ -12,6 +12,7 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using Octokit;
 using SkEditor.API;
+using SkEditor.Services.Localization;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using Application = Avalonia.Application;
@@ -50,8 +51,8 @@ public static class UpdateChecker
             }
 
             ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
-                Translation.Get(TranslationKey.UpdateAvailable),
-                Translation.Get(TranslationKey.UpdateAvailableMessage),
+                TranslationService.Current.Get(TranslationKey.UpdateAvailable),
+                TranslationService.Current.Get(TranslationKey.UpdateAvailableMessage),
                 new SymbolIconSource { Symbol = Symbol.ArrowSync },
                 primaryButtonText: "Yes",
                 cancelButtonText: "No"
@@ -70,7 +71,7 @@ public static class UpdateChecker
             ReleaseAsset? msi = release.Assets.FirstOrDefault(asset => asset.Name.Equals("SkEditorInstaller.msi"));
             if (msi is null)
             {
-                await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.UpdateFailed));
+                await SkEditorAPI.Windows.ShowError(TranslationService.Current.Get(TranslationKey.UpdateFailed));
                 return;
             }
 
@@ -96,7 +97,7 @@ public static class UpdateChecker
         TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
         if (standardResult == TaskDialogStandardResult.Cancel)
         {
-            await SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.UpdateFailed));
+            await SkEditorAPI.Windows.ShowError(TranslationService.Current.Get(TranslationKey.UpdateFailed));
         }
     }
 
@@ -104,10 +105,10 @@ public static class UpdateChecker
     {
         TaskDialog td = new()
         {
-            Title = Translation.Get(TranslationKey.DownloadingUpdateTitle),
+            Title = TranslationService.Current.Get(TranslationKey.DownloadingUpdateTitle),
             ShowProgressBar = true,
             IconSource = new SymbolIconSource { Symbol = Symbol.ArrowDownload },
-            SubHeader = Translation.Get(TranslationKey.Downloading)
+            SubHeader = TranslationService.Current.Get(TranslationKey.Downloading)
         };
 
         td.Opened += async (_, _) => await DownloadUpdate(td, url);
@@ -145,7 +146,8 @@ public static class UpdateChecker
             Dispatcher.UIThread.Post(() =>
             {
                 td.Hide(TaskDialogStandardResult.Cancel);
-                SkEditorAPI.Windows.ShowError(Translation.Get(TranslationKey.UpdateFailed) + "\n" + e.Message);
+                SkEditorAPI.Windows.ShowError(TranslationService.Current.Get(TranslationKey.UpdateFailed) + "\n" +
+                                              e.Message);
             });
         }
     }

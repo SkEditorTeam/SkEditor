@@ -32,34 +32,34 @@ public class WelcomeScreenRecentItem(string name, string path, bool isFolder, Da
         switch (span.TotalDays)
         {
             case < 0:
-                return Translation.GetObservable(TranslationKey.WelcomePageRecentInTheFuture);
+                return new TranslatableString(TranslationKey.WelcomePageRecentInTheFuture);
             case >= 365 * 50:
-                return Translation.GetObservable(TranslationKey.WelcomePageRecentTimeTraveler);
+                return new TranslatableString(TranslationKey.WelcomePageRecentTimeTraveler);
         }
 
         if (span.TotalMinutes < 1)
         {
-            return Translation.GetObservable(TranslationKey.WelcomePageRecentJustNow);
+            return new TranslatableString(TranslationKey.WelcomePageRecentJustNow);
         }
 
         if (span.TotalHours < 1)
         {
             int minutes = (int)span.TotalMinutes;
 
-            return Translation.GetObservable(GetKey("WelcomePageRecentMinutes", GetPluralKey(minutes)),
+            return new TranslatableString(GetKey("WelcomePageRecentMinutes", GetPluralKey(minutes)),
                 minutes.ToString());
         }
 
         if (!(span.TotalDays < 1))
         {
             return date.Date == DateTime.Today.AddDays(-1)
-                ? Translation.GetObservable(GetKey("WelcomePageRecentYesterdayAt", GetPluralKey(1)),
+                ? new TranslatableString(GetKey("WelcomePageRecentYesterdayAt", GetPluralKey(1)),
                     date.ToString("t", appCulture))
                 : TranslatableString.FromRawString(date.ToString("g", appCulture));
         }
 
         int hours = (int)span.TotalHours;
-        return Translation.GetObservable(GetKey("WelcomePageRecentHours", GetPluralKey(hours)), hours.ToString());
+        return new TranslatableString(GetKey("WelcomePageRecentHours", GetPluralKey(hours)), hours.ToString());
     }
 
     public static string GetPluralKey(int n)
