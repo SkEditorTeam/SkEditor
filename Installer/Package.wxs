@@ -2,7 +2,7 @@
      xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Package Name="SkEditor"
              Manufacturer="Notro"
-             Version="2.9.3"
+             Version="3.0.0.0"
              UpgradeCode="14564974-da58-4917-8a0d-590043f589c2">
         <MediaTemplate EmbedCab="yes"/>
 

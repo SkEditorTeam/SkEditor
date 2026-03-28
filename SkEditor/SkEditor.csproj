@@ -98,7 +98,10 @@
     <ItemGroup>
         <ProjectReference Include="..\External\DiscordRPC\DiscordRPC.csproj"/>
         <!--        <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj"/>-->
-        <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false"
+                          Properties="PublishAot=false"/>
     </ItemGroup>
 
     <ItemGroup>

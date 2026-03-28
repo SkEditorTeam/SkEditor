@@ -1,7 +1,13 @@
 <Project Sdk="WixToolset.Sdk/6.0.0">
     <PropertyGroup>
-        <OutputName>SkEditor</OutputName>
-        <DefineConstants>PublishDir=..\SkEditor\bin\Release\net8.0\win-x64\publish</DefineConstants>
+        <OutputName Condition="'$(IsAot)' == 'true'">SkEditor-AOT</OutputName>
+        <OutputName Condition="'$(IsAot)' != 'true'">SkEditor</OutputName>
+        <DefineConstants>PublishDir=$(PublishDir)</DefineConstants>
+
+        <PlatformTarget>x64</PlatformTarget>
+        <InstallerPlatform>x64</InstallerPlatform>
+
+        <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,11 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="WixToolset.UI.wixext" Version="6.0.0"/>
+        <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2"/>
     </ItemGroup>
-
-    <Target Name="PublishSkEditor" BeforeTargets="BeforeBuild">
-        <Message Importance="high" Text="Publishing SkEditor application..."/>
-        <Exec Command="dotnet publish ..\SkEditor\SkEditor.csproj -c Release -r win-x64 /p:PublishReadyToRun=true -p:PublishSingleFile=true --self-contained false"/>
-    </Target>
 </Project>
