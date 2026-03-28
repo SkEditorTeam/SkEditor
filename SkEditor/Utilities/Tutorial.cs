@@ -18,6 +18,8 @@ public static class Tutorial
         // SkEditorAPI.Configs.GetBinarySettings().IsFirstRun = false;
         // _ = SkEditorAPI.Configs.GetBinarySettings().Save();
 
+        return;
+
         object? icon = null;
         Application.Current?.TryGetResource("SkEditorIcon", ThemeVariant.Default, out icon);
         PathIconSource? iconSource = icon as PathIconSource;

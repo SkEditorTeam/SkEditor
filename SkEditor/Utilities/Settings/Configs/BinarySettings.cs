@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Serilog;
 using SkEditor.Utilities.Startup;
 
 namespace SkEditor.Utilities.Settings.Configs;
@@ -22,12 +23,10 @@ public partial class BinarySettings : ObservableObject, IConfig
     private int _averageStartupTime;
 
     [ObservableProperty]
-    private bool _isFirstRun = true;
-
-    [ObservableProperty]
     private StartupMode _splashScreenMode = StartupMode.Auto;
 
-    public BinarySettings() =>
+    public BinarySettings()
+    {
         _registry =
         [
             new BinarySettingHandler<byte>(() => (byte)SplashScreenMode, v => SplashScreenMode = (StartupMode)v,
@@ -35,10 +34,8 @@ public partial class BinarySettings : ObservableObject, IConfig
 
             new BinarySettingHandler<int>(() => AverageStartupTime, v => AverageStartupTime = v, r => r.ReadInt32(),
                 (w, v) => w.Write(v)),
-
-            new BinarySettingHandler<bool>(() => IsFirstRun, v => IsFirstRun = v, r => r.ReadBoolean(),
-                (w, v) => w.Write(v))
         ];
+    }
 
     public int SplashScreenModeIndex
     {
@@ -67,9 +64,9 @@ public partial class BinarySettings : ObservableObject, IConfig
                 handler.Load(reader);
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // ignored
+            Log.Logger.Error(ex, "Error loading binary settings");
         }
 
         return Task.CompletedTask;
@@ -88,9 +85,9 @@ public partial class BinarySettings : ObservableObject, IConfig
                 handler.Save(writer);
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // ignored
+            Log.Logger.Error(ex, "Error saving binary settings");
         }
 
         return Task.CompletedTask;

@@ -25,6 +25,15 @@ public partial class AppSettings : BaseConfig<AppSettings>
     } = string.Empty;
 
     /// <summary>
+    ///    Whether this is (likely) the first time the user runs the application. Used to show the tutorial.
+    /// </summary>
+    public string IsFirstRun
+    {
+        get;
+        set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>
     ///     Whether to enable the developer mode.
     /// </summary>
     [ToggleSetting(TranslationKey.SettingsAboutDevMode, TranslationKey.SettingsGeneralTitle,
