@@ -19,7 +19,6 @@ using SkEditor.Utilities.Styling;
 using SkEditor.Utilities.Updating;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Windows;
-using DiscordRpcUpdater = SkEditor.Utilities.Discord.DiscordRpcUpdater;
 using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows;
@@ -193,7 +192,7 @@ public partial class MainWindow : AppWindow
                 try
                 {
                     // await SyntaxLoader.LoadAdvancedSyntaxes();
-                    DiscordRpcUpdater.Initialize();
+                    // DiscordRpcUpdater.Initialize();
                 }
                 catch (Exception exc)
                 {

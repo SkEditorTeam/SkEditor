@@ -1,14 +1,15 @@
 ﻿using System.Text.RegularExpressions;
 using DiscordRPC;
+using SkEditor.Contracts.Services;
 
-namespace SkEditor.Utilities.Discord;
+namespace SkEditor.Services;
 
-public static partial class DiscordRpcUpdater
+public partial class DiscordIntegrationService : IDiscordIntegrationService
 {
     private const string ApplicationId = "1152625623777431662";
-    private static DiscordRpcClient? _client;
+    private DiscordRpcClient? _client;
 
-    public static void Initialize()
+    public void Initialize()
     {
         // if (!SkEditorAPI.Configs.GetAppSettings().IsDiscordRichPresenceEnabled)
         // {
@@ -66,7 +67,7 @@ public static partial class DiscordRpcUpdater
         // };
     }
 
-    public static void Uninitialize()
+    public void Uninitialize()
     {
         if (_client == null)
         {

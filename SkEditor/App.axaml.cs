@@ -110,6 +110,7 @@ public class App : Application
         services.AddSingleton<IConfigService, ConfigService>();
         services.AddSingleton<LegacyConfigMigrator>();
         services.AddSingleton<ITranslationService, TranslationService>();
+        services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
 
         services.AddSingleton<AppSettings>();
         services.AddSingleton<IConfig>(sp => sp.GetRequiredService<AppSettings>());
