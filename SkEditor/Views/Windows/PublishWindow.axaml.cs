@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities.Styling;
+using SkEditor.ViewModels.Windows;
 
 namespace SkEditor.Views.Windows;
 
@@ -16,9 +16,10 @@ public partial class PublishWindow : AppWindow
         InitializeUi();
     }
 
-    public string? ApiKey { get; private set; }
-
-    private string? CurrentService => (WebsiteComboBox.SelectedItem as ComboBoxItem)?.Content as string;
+    public PublishWindow(PublishWindowViewModel viewModel) : this()
+    {
+        DataContext = viewModel;
+    }
 
     private void InitializeUi()
     {
@@ -46,8 +47,6 @@ public partial class PublishWindow : AppWindow
         //     _ => 0
         // };
 
-        WebsiteComboBox.SelectionChanged += (_, _) => UpdateServiceInfo();
-
         KeyDown += (_, e) =>
         {
             if (e.Key == Key.Escape)
@@ -55,24 +54,6 @@ public partial class PublishWindow : AppWindow
                 Close();
             }
         };
-
-        UpdateServiceInfo();
-    }
-
-    private void UpdateServiceInfo()
-    {
-        // SecretsConfig secretsConfig = SkEditorAPI.Configs.GetSecretsConfig();
-        // ApiKey = CurrentService switch
-        // {
-        //     "Pastebin" => secretsConfig.PastebinApiKey,
-        //     "code.skript.pl" => secretsConfig.CodeSkriptPlApiKey,
-        //     "skUnity Parser" => secretsConfig.SkUnityApiKey,
-        //     _ => ""
-        // };
-
-        // SkEditorAPI.Configs.GetStateConfig().LastUsedPublishService = CurrentService ?? string.Empty;
-
-        AnonymouslyCheckBox.IsVisible = LanguageComboBox.IsVisible = CurrentService?.Equals("code.skript.pl") == true;
     }
 
     private async Task Publish()

@@ -133,10 +133,12 @@ public class App : Application
         services.AddTransient<ThemePageViewModel>();
         services.AddTransient<WhatsNewPageViewModel>();
         services.AddTransient<WelcomePageViewModel>();
+        services.AddTransient<PublishWindowViewModel>();
 
         services.AddTransient<MainWindow>();
         services.AddTransient<SplashScreen>();
         services.AddTransient<RemoteConnectionWindow>();
         services.AddTransient<WhatsNewPage>();
+        services.AddTransient<PublishWindow>();
     }
 }

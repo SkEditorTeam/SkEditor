@@ -16,7 +16,6 @@ using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
-using SkEditor.Utilities.Updating;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Windows;
 using Symbol = FluentIcons.Common.Symbol;
@@ -223,7 +222,7 @@ public partial class MainWindow : AppWindow
                         // }
 
                         await Tutorial.ShowTutorial();
-                        await ChangelogChecker.Check();
+                        // await ChangelogChecker.Check();
 
                         await App.Services.GetRequiredService<CrashChecker>().CheckForCrash();
                     }

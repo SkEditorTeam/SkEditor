@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using FluentIcons.Common;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Menu;
@@ -42,7 +44,7 @@ public class MenuService(ITabService tabService, IThemeService themeService, App
         return items;
     }
 
-    private static MainMenuItem BuildFileMenu()
+    private MainMenuItem BuildFileMenu()
     {
         MainMenuItem newFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderNew, Symbol.Document)
             .WithCommand(() => Task.CompletedTask)
@@ -69,7 +71,7 @@ public class MenuService(ITabService tabService, IThemeService themeService, App
             .WithInputGesture("Ctrl+Alt+S");
 
         MainMenuItem publishFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPublish, Symbol.Share)
-            .WithCommand(OpenWindowDialog(new PublishWindow()))
+            .WithCommand(OpenWindowDialog(() => App.Services.GetRequiredService<PublishWindow>()))
             .WithInputGesture("Ctrl+Shift+P");
 
         MainMenuItem closeMenu = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderClose, Symbol.Dismiss)
@@ -290,9 +292,9 @@ public class MenuService(ITabService tabService, IThemeService themeService, App
             .WithInputGesture("Ctrl+,");
     }
 
-    private static AsyncRelayCommand OpenWindowDialog(AppWindow window)
+    private static AsyncRelayCommand OpenWindowDialog(Func<AppWindow> windowFactory)
     {
-        return new AsyncRelayCommand(async () => await window.ShowDialogOnMainWindow());
+        return new AsyncRelayCommand(async () => await windowFactory().ShowDialogOnMainWindow());
     }
 
     private static async Task ShowDialogIfEditorIsOpen(AppWindow window, bool openAsDialog = true)
