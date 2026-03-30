@@ -16,6 +16,7 @@ using SkEditor.Services.Files;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Publishing;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
@@ -111,6 +112,7 @@ public class App : Application
         services.AddSingleton<LegacyConfigMigrator>();
         services.AddSingleton<ITranslationService, TranslationService>();
         services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
+        services.AddSingleton<IClipboardService, ClipboardService>();
 
         services.AddSingleton<AppSettings>();
         services.AddSingleton<IConfig>(sp => sp.GetRequiredService<AppSettings>());
