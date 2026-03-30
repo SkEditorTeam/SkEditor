@@ -7,8 +7,9 @@ namespace SkEditor.Utilities.Publishing;
 
 public class PublishService : IPublishService
 {
-    public async Task PublishCode(PublishType type)
+    public async Task<string?> PublishCode(PublishType type)
     {
+        return null;
     }
 
     // public static async Task PublishPastebin(string code, PublishWindow window)

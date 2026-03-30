@@ -5,5 +5,5 @@ namespace SkEditor.Contracts.Services.Files;
 
 public interface IPublishService
 {
-    public Task PublishCode(PublishType type);
+    public Task<string?> PublishCode(PublishType type);
 }

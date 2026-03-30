@@ -112,6 +112,7 @@ public class App : Application
         services.AddSingleton<LegacyConfigMigrator>();
         services.AddSingleton<ITranslationService, TranslationService>();
         services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
+        services.AddSingleton<IPublishService, PublishService>();
         services.AddSingleton<IClipboardService, ClipboardService>();
 
         services.AddSingleton<AppSettings>();

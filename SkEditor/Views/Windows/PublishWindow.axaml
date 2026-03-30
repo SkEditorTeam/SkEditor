@@ -30,17 +30,20 @@
 
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Spacing="12">
             <Grid ColumnDefinitions="*,auto" VerticalAlignment="Bottom" ColumnSpacing="6">
-                <TextBox Name="ResultTextBox" IsReadOnly="True" Focusable="False"
+                <TextBox IsReadOnly="True" Focusable="False"
                          Watermark="{localization:Translate PublishWindowResultLink}"
+                         Text="{Binding Result}"
                          Grid.Column="0" />
-                <Button Name="CopyButton" Width="35" Height="35" HorizontalAlignment="Right" Grid.Column="1"
+                <Button Width="35" Height="35" HorizontalAlignment="Right" Grid.Column="1"
+                        Command="{Binding CopyCommand}"
                         FontSize="18">
                     <Button.Content>
                         <ui:SymbolIcon Symbol="Copy" />
                     </Button.Content>
                 </Button>
             </Grid>
-            <Button Name="PublishButton" Content="{localization:Translate PublishWindowPublishButton}"
+            <Button Content="{localization:Translate PublishWindowPublishButton}"
+                    Command="{Binding PublishCommand}"
                     HorizontalAlignment="Stretch" />
         </StackPanel>
     </DockPanel>
