@@ -15,7 +15,9 @@ public class FileService(ITabService tabService, ITranslationService translation
         TranslatableString header =
             translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
 
-        FileTab newFileTab = fileTabFactory.CreateNewFile(header.Value);
+        // FileTab newFileTab = fileTabFactory.CreateNewFile(header.Value);
+        FileTab newFileTab = fileTabFactory.CreateFromFile(@"C:\Users\Notro\Documents\Skrypty\skrypt.sk");
+        _ = newFileTab.LoadContentAsync();
         tabService.OpenTab(newFileTab);
     }
 

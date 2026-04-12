@@ -11,6 +11,7 @@
         xmlns:tabs="clr-namespace:SkEditor.Models.Tabs"
         xmlns:pages="clr-namespace:SkEditor.Views.Pages"
         xmlns:converters="clr-namespace:SkEditor.Converters"
+        xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         x:DataType="windows:MainWindowViewModel"
@@ -91,9 +92,13 @@
                                                              Foreground="{DynamicResource EditorTextColor}"
                                                              Background="{DynamicResource EditorBackgroundColor}"
                                                              LineNumbersForeground="{DynamicResource LineNumbersColor}"
-                                                             FontSize="16"
+                                                             FontSize="{Binding FontSize}"
                                                              FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}"
-                                                             WordWrap="{Binding AppSettings.IsWordWrapEnabled, FallbackValue=False}" />
+                                                             WordWrap="{Binding AppSettings.IsWordWrapEnabled, FallbackValue=False}">
+                                        <Interaction.Behaviors>
+                                            <behaviors:TextEditorLoadBehavior />
+                                        </Interaction.Behaviors>
+                                    </avaloniaedit:TextEditor>
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type tabs:SettingsTab}">

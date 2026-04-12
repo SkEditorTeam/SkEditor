@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using AvaloniaEdit.Document;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Files;
@@ -19,6 +20,9 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
     public AppSettings AppSettings { get; } = appSettings;
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
+
+    [ObservableProperty]
+    public partial double FontSize { get; set; } = appSettings.EditorFontSize;
 
     public async Task LoadContentAsync()
     {
