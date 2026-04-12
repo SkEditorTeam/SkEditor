@@ -7,14 +7,15 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services.Files;
 
-public class FileService(ITabService tabService, ITranslationService translation) : IFileService
+public class FileService(ITabService tabService, ITranslationService translation, IFileTabFactory fileTabFactory)
+    : IFileService
 {
     public void NewFile()
     {
         TranslatableString header =
             translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
 
-        FileTab newFileTab = FileTab.CreateNewFile(header.Value);
+        FileTab newFileTab = fileTabFactory.CreateNewFile(header.Value);
         tabService.OpenTab(newFileTab);
     }
 

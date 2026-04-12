@@ -107,6 +107,7 @@ public class App : Application
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<ITabService, TabService>();
         services.AddSingleton<IFileService, FileService>();
+        services.AddSingleton<IFileTabFactory, FileTabFactory>();
         services.AddSingleton<IWelcomeService, WelcomeService>();
         services.AddSingleton<IConfigService, ConfigService>();
         services.AddSingleton<LegacyConfigMigrator>();

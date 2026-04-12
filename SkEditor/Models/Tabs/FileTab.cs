@@ -3,24 +3,27 @@ using System.Text;
 using System.Threading.Tasks;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Files;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Models.Tabs;
 
-public partial class FileTab(TranslatableString header) : Tab(header)
+public partial class FileTab(TranslatableString header, AppSettings appSettings, INotificationService notifications)
+    : Tab(header)
 {
     public required BaseFile File { get; init; }
     public TextDocument Document { get; } = new();
+
+    public AppSettings AppSettings { get; } = appSettings;
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
 
     [RelayCommand]
     private void CloseTab()
     {
-        App.Services.GetRequiredService<INotificationService>().Debug("Close Editor Tab");
+        notifications.Debug("Close Editor Tab");
 
         RequestClose();
     }
@@ -50,26 +53,5 @@ public partial class FileTab(TranslatableString header) : Tab(header)
         memoryStream.Position = 0;
 
         await File.SaveAsync(memoryStream);
-    }
-
-    public static FileTab CreateFromFile(string path)
-    {
-        string fileName = Path.GetFileName(path);
-        TranslatableString header = TranslatableString.FromRawString(fileName);
-
-        return new FileTab(header)
-        {
-            File = new LocalFile(fileName, path)
-        };
-    }
-
-    public static FileTab CreateNewFile(string name)
-    {
-        TranslatableString header = TranslatableString.FromRawString(name);
-
-        return new FileTab(header)
-        {
-            File = new LocalFile(name)
-        };
     }
 }

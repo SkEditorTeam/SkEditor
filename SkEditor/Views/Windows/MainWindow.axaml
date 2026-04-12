@@ -91,8 +91,8 @@
                                                              Background="{DynamicResource EditorBackgroundColor}"
                                                              LineNumbersForeground="{DynamicResource LineNumbersColor}"
                                                              FontSize="16"
-                                                             FontFamily="{Binding #Root.((windows:MainWindowViewModel)DataContext).AppSettings.EditorFontFamily, TargetNullValue='Consolas', FallbackValue='Consolas'}"
-                                                             WordWrap="{Binding #Root.((windows:MainWindowViewModel)DataContext).AppSettings.IsWordWrapEnabled, FallbackValue=False}" />
+                                                             FontFamily="{Binding AppSettings.EditorFontFamily, TargetNullValue='Consolas', FallbackValue='Consolas'}"
+                                                             WordWrap="{Binding AppSettings.IsWordWrapEnabled, FallbackValue=False}" />
                                 </DataTemplate>
 
                                 <DataTemplate DataType="{x:Type tabs:SettingsTab}">
