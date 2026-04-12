@@ -16,14 +16,18 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
 {
     private readonly Dictionary<FileTab, TextEditor> _activeEditors = [];
 
+    private readonly HashSet<FileTab> _allAttachedTabs = [];
+
     public bool CanAttach(FileTab tab) => true;
 
     public void Attach(FileTab tab)
     {
+        _allAttachedTabs.Add(tab);
     }
 
     public void Detach(FileTab tab)
     {
+        _allAttachedTabs.Remove(tab);
     }
 
     public void OnViewAttached(FileTab tab, TextEditor editor)
@@ -49,9 +53,17 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
 
         if (appSettings.IsEditorZoomLevelSyncEnabled)
         {
-            foreach (var entry in _activeEditors)
+            foreach (var tab in _allAttachedTabs)
             {
-                ApplyZoom(entry.Key, entry.Value, zoomDelta);
+                if (_activeEditors.TryGetValue(tab, out var activeEditor))
+                {
+                    ApplyZoom(tab, activeEditor, zoomDelta);
+                }
+                else
+                {
+                    tab.FontSize += zoomDelta;
+                    if (tab.FontSize < 5) tab.FontSize = 5;
+                }
             }
         }
         else if (editor.DataContext is FileTab tab)
@@ -60,7 +72,7 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
         }
     }
 
-    private void ApplyZoom(FileTab tab, TextEditor editor, double delta)
+    private static void ApplyZoom(FileTab tab, TextEditor editor, double delta)
     {
         switch (delta)
         {
@@ -80,10 +92,7 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
         double lineHeightChange = newLineHeight / oldLineHeight;
 
         var scrollViewer = editor.GetVisualChildren().OfType<ScrollViewer>().FirstOrDefault();
-        if (scrollViewer == null)
-        {
-            return;
-        }
+        if (scrollViewer == null) return;
 
         double newOffset = scrollViewer.Offset.Y * lineHeightChange;
         scrollViewer.Offset = new Vector(scrollViewer.Offset.X, newOffset);

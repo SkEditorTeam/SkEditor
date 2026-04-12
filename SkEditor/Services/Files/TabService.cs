@@ -26,13 +26,14 @@ public class TabService(IFileFeatureService featureService) : ITabService
     public void OpenTab(Tab tab)
     {
         tab.CloseRequested += OnTabCloseRequested;
-        Tabs.Add(tab);
-        SelectedTab = tab;
 
         if (tab is FileTab fileTab)
         {
             featureService.OnTabOpened(fileTab);
         }
+        
+        Tabs.Add(tab);
+        SelectedTab = tab;
     }
 
     public void CloseTab(Tab tab)

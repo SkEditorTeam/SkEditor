@@ -1,4 +1,4 @@
-﻿using Avalonia.Interactivity;
+﻿using Avalonia;
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,37 +9,54 @@ namespace SkEditor.Behaviors;
 
 public class TextEditorLoadBehavior : Behavior<TextEditor>
 {
+    private FileTab? _currentTab;
+
     protected override void OnAttached()
     {
         base.OnAttached();
+        if (AssociatedObject is not { } textEditor) return;
 
-        if (AssociatedObject is not { } textEditor)
+        textEditor.PropertyChanged += OnEditorPropertyChanged;
+        
+        if (textEditor.DataContext is FileTab tab)
         {
-            return;
+            UpdateTabBinding(null, tab);
         }
-
-        textEditor.Loaded += OnEditorLoaded;
     }
 
     protected override void OnDetaching()
     {
         base.OnDetaching();
+        if (AssociatedObject is not { } textEditor) return;
 
-        if (AssociatedObject is not { } textEditor)
-        {
-            return;
-        }
-
-        textEditor.Loaded -= OnEditorLoaded;
+        textEditor.PropertyChanged -= OnEditorPropertyChanged;
+        UpdateTabBinding(_currentTab, null);
     }
 
-    private void OnEditorLoaded(object? sender, RoutedEventArgs e)
+    private void OnEditorPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
-        if (sender is not TextEditor { DataContext: FileTab tab } textEditor)
+        if (e.Property == StyledElement.DataContextProperty)
         {
-            return;
+            UpdateTabBinding(e.OldValue as FileTab, e.NewValue as FileTab);
+        }
+    }
+
+    private void UpdateTabBinding(FileTab? oldTab, FileTab? newTab)
+    {
+        if (ReferenceEquals(oldTab, newTab)) return;
+
+        var featureService = App.Services.GetRequiredService<IFileFeatureService>();
+
+        if (oldTab != null && AssociatedObject != null)
+        {
+            featureService.OnViewUnloaded(oldTab, AssociatedObject);
         }
 
-        App.Services.GetRequiredService<IFileFeatureService>().OnViewLoaded(tab, textEditor);
+        if (newTab != null && AssociatedObject != null)
+        {
+            featureService.OnViewLoaded(newTab, AssociatedObject);
+        }
+
+        _currentTab = newTab;
     }
 }

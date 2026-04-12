@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
@@ -16,8 +17,14 @@ public class FileService(ITabService tabService, ITranslationService translation
             translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
 
         // FileTab newFileTab = fileTabFactory.CreateNewFile(header.Value);
-        FileTab newFileTab = fileTabFactory.CreateFromFile(@"C:\Users\Notro\Documents\Skrypty\skrypt.sk");
+        const string scriptFolder = @"C:\Users\Notro\Documents\Skrypty";
+        string[] existingFiles = System.IO.Directory.GetFiles(scriptFolder, "*.sk");
+        
+        Random random = new();
+        
+        FileTab newFileTab = fileTabFactory.CreateFromFile(existingFiles[random.Next(existingFiles.Length)]);
         _ = newFileTab.LoadContentAsync();
+        
         tabService.OpenTab(newFileTab);
     }
 
