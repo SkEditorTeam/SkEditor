@@ -40,8 +40,6 @@ public class TabService(IFileFeatureService featureService) : ITabService
         tab.CloseRequested -= OnTabCloseRequested;
         Tabs.Remove(tab);
 
-        if (tab is IDisposable disposable) disposable.Dispose();
-
         if (SelectedTab == tab)
             SelectedTab = Tabs.LastOrDefault();
 

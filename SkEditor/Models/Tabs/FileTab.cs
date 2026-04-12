@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using AvaloniaEdit.Document;
@@ -12,7 +11,7 @@ using SkEditor.Utilities.Settings.Configs;
 namespace SkEditor.Models.Tabs;
 
 public partial class FileTab(TranslatableString header, AppSettings appSettings, INotificationService notifications)
-    : Tab(header), IDisposable
+    : Tab(header)
 {
     public required BaseFile File { get; init; }
     public TextDocument Document { get; } = new();
@@ -20,15 +19,6 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
     public AppSettings AppSettings { get; } = appSettings;
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
-
-    public void Dispose()
-    {
-        Document.TextChanged -= OnDocumentTextChanged;
-
-        Document.UndoStack.ClearAll();
-
-        GC.SuppressFinalize(this);
-    }
 
     public async Task LoadContentAsync()
     {
@@ -55,11 +45,6 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
         memoryStream.Position = 0;
 
         await File.SaveAsync(memoryStream);
-    }
-
-    private void OnDocumentTextChanged(object? sender, EventArgs e)
-    {
-        IsSaved = false;
     }
 
     [RelayCommand]
