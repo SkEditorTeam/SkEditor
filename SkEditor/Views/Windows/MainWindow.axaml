@@ -43,6 +43,7 @@
 
     <Window.Resources>
         <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+        <converters:EditorFontFamilyConverter x:Key="EditorFontFamilyConverter" />
     </Window.Resources>
 
     <LayoutTransformControl Name="LayoutTransform">
@@ -91,7 +92,7 @@
                                                              Background="{DynamicResource EditorBackgroundColor}"
                                                              LineNumbersForeground="{DynamicResource LineNumbersColor}"
                                                              FontSize="16"
-                                                             FontFamily="{Binding AppSettings.EditorFontFamily, TargetNullValue='Consolas', FallbackValue='Consolas'}"
+                                                             FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}"
                                                              WordWrap="{Binding AppSettings.IsWordWrapEnabled, FallbackValue=False}" />
                                 </DataTemplate>
 
