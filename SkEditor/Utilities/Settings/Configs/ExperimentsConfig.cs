@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization.Metadata;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings;
@@ -11,65 +12,44 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     /// <summary>
     ///     Enables the Auto-Completion Prototype feature.
     /// </summary>
-    public bool AutoCompletionPrototypeEnabled
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = false;
+    [ObservableProperty]
+    public partial bool AutoCompletionPrototypeEnabled { get; set; } = false;
 
     /// <summary>
     ///     Enables the Projects feature.
     /// </summary>
-    public bool ProjectsEnabled
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = false;
+    [ObservableProperty]
+    public partial bool ProjectsEnabled { get; set; } = false;
 
     /// <summary>
     ///     Enables the Hex Preview feature.
     /// </summary>
-    public bool HexPreviewEnabled
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = false;
+    [ObservableProperty]
+    public partial bool HexPreviewEnabled { get; set; } = false;
 
     /// <summary>
     ///     Enables the Code Parser feature.
     /// </summary>
-    public bool CodeParserEnabled
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = false;
+    [ObservableProperty]
+    public partial bool CodeParserEnabled { get; set; } = false;
 
     /// <summary>
     ///     Makes the Code Parser run in real-time as you type.
     /// </summary>
-    public bool RealtimeCodeParserEnabled
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = false;
+    [ObservableProperty]
+    public partial bool RealtimeCodeParserEnabled { get; set; } = false;
 
     /// <summary>
     ///     Enables the Folding feature.
     /// </summary>
-    public bool FoldingEnabled
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = false;
+    [ObservableProperty]
+    public partial bool FoldingEnabled { get; set; } = false;
 
     /// <summary>
     ///     Enables the Session Restoring feature.
     /// </summary>
-    public bool SessionRestoringEnabled
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = false;
+    [ObservableProperty]
+    public partial bool SessionRestoringEnabled { get; set; } = false;
 
     protected override string GetFileName()
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization.Metadata;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Settings.Attributes;
 
@@ -10,11 +11,8 @@ public partial class ConnectionsConfig : BaseConfig<ConnectionsConfig>
 {
     protected override JsonTypeInfo<ConnectionsConfig> TypeInfo => AppJsonContext.Default.ConnectionsConfig;
 
-    public List<RemoteConnection> Connections
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = [];
+    [ObservableProperty]
+    public partial List<RemoteConnection> Connections { get; set; } = [];
 
     protected override string GetFileName()
     {

@@ -19,12 +19,6 @@ public partial class BinarySettings : ObservableObject, IConfig
     private readonly string _binaryFilePath = Path.Combine(AppContext.BaseDirectory, ConfigFileName);
     private readonly List<IBinarySettingHandler> _registry;
 
-    [ObservableProperty]
-    private int _averageStartupTime;
-
-    [ObservableProperty]
-    private StartupMode _splashScreenMode = StartupMode.Auto;
-
     public BinarySettings()
     {
         _registry =
@@ -36,6 +30,12 @@ public partial class BinarySettings : ObservableObject, IConfig
                 (w, v) => w.Write(v)),
         ];
     }
+
+    [ObservableProperty]
+    public partial int AverageStartupTime { get; set; }
+
+    [ObservableProperty]
+    public partial StartupMode SplashScreenMode { get; set; } = StartupMode.Auto;
 
     public int SplashScreenModeIndex
     {
