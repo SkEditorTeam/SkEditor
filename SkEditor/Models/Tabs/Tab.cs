@@ -11,7 +11,7 @@ public abstract partial class Tab(TranslatableString header) : ObservableObject
     public partial TranslatableString Header { get; set; } = header;
 
     [ObservableProperty]
-    public partial bool IsSaved { get; set; } = false;
+    public partial bool IsSaved { get; set; } = true;
 
     public abstract IRelayCommand? CloseCommand { get; }
 

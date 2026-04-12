@@ -16,6 +16,7 @@ using SkEditor.Services.Files;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Publishing;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
@@ -145,5 +146,8 @@ public class App : Application
         services.AddTransient<RemoteConnectionWindow>();
         services.AddTransient<WhatsNewPage>();
         services.AddTransient<PublishWindow>();
+
+        services.AddSingleton<IFileFeatureService, FileFeatureService>();
+        services.AddEditorFeatures();
     }
 }

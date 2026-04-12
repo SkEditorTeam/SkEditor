@@ -6,7 +6,7 @@ using SkEditor.Models.Tabs;
 
 namespace SkEditor.Services.Files;
 
-public class TabService : ITabService
+public class TabService(IFileFeatureService featureService) : ITabService
 {
     public ObservableCollection<Tab> Tabs { get; } = [];
 
@@ -28,14 +28,27 @@ public class TabService : ITabService
         tab.CloseRequested += OnTabCloseRequested;
         Tabs.Add(tab);
         SelectedTab = tab;
+
+        if (tab is FileTab fileTab)
+        {
+            featureService.OnTabOpened(fileTab);
+        }
     }
 
     public void CloseTab(Tab tab)
     {
         tab.CloseRequested -= OnTabCloseRequested;
         Tabs.Remove(tab);
+
+        if (tab is IDisposable disposable) disposable.Dispose();
+
         if (SelectedTab == tab)
             SelectedTab = Tabs.LastOrDefault();
+
+        if (tab is FileTab fileTab)
+        {
+            featureService.OnTabClosed(fileTab);
+        }
     }
 
     private void OnTabCloseRequested(object? sender, EventArgs e)

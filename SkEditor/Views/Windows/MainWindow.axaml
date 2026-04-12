@@ -104,9 +104,11 @@
                                     <ui:TabViewItem Content="{Binding .}">
                                         <ui:TabViewItem.Header>
                                             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                                <TextBlock Text="adminchat.sk" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Text="{Binding Header.Value}"
+                                                           TextTrimming="CharacterEllipsis" />
                                                 <Ellipse
                                                     Grid.Column="1"
+                                                    IsVisible="{Binding !IsSaved}"
                                                     Width="4" Height="4"
                                                     Fill="{Binding $parent[ContentPresenter].Foreground}"
                                                     VerticalAlignment="Center" />
