@@ -62,7 +62,7 @@
                             <Viewbox Grid.Column="2" Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Right"
-                                     Height="16">
+                                     Height="12">
                                 <icons:SymbolIcon Name="PART_ChevronPath"
                                                   Symbol="ChevronRight"
                                                   Foreground="{DynamicResource MenuFlyoutSubItemChevron}" />
