@@ -93,7 +93,17 @@
                             </ui:TabView.DataTemplates>
                             <ui:TabView.TabItemTemplate>
                                 <DataTemplate x:DataType="tabs:Tab">
-                                    <ui:TabViewItem Header="{Binding Header}" Content="{Binding .}">
+                                    <ui:TabViewItem Content="{Binding .}">
+                                        <ui:TabViewItem.Header>
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                                <TextBlock Text="adminchat.sk" TextTrimming="CharacterEllipsis" />
+                                                <Ellipse
+                                                    Grid.Column="1"
+                                                    Width="4" Height="4"
+                                                    Fill="{Binding $parent[ContentPresenter].Foreground}"
+                                                    VerticalAlignment="Center" />
+                                            </Grid>
+                                        </ui:TabViewItem.Header>
                                         <Interaction.Behaviors>
                                             <ui:TabViewItemCloseRequestedEventCommandTrigger
                                                 Command="{Binding CloseCommand}" />

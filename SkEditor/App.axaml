@@ -25,6 +25,7 @@
                 <ResourceInclude Source="avares://SkEditor/Styles/TreeViewStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/NotificationStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/InfoBarStyles.axaml" />
+                <ResourceInclude Source="avares://SkEditor/Styles/TabViewItemStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
             </ResourceDictionary.MergedDictionaries>

@@ -8,7 +8,10 @@ namespace SkEditor.Models.Tabs;
 public abstract partial class Tab(TranslatableString header) : ObservableObject
 {
     [ObservableProperty]
-    private TranslatableString _header = header;
+    public partial TranslatableString Header { get; set; } = header;
+
+    [ObservableProperty]
+    public partial bool IsSaved { get; set; } = false;
 
     public abstract IRelayCommand? CloseCommand { get; }
 
