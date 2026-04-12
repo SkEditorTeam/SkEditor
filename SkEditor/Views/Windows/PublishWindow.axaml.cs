@@ -5,7 +5,7 @@ using SkEditor.ViewModels.Windows;
 
 namespace SkEditor.Views.Windows;
 
-public partial class PublishWindow : AppWindow
+public partial class PublishWindow : FAAppWindow
 {
     public PublishWindow()
     {

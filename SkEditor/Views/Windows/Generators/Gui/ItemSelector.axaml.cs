@@ -19,7 +19,7 @@ using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
-public partial class ItemSelector : AppWindow
+public partial class ItemSelector : FAAppWindow
 {
     public ItemSelector()
     {

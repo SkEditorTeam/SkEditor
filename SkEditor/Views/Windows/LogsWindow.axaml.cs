@@ -12,7 +12,7 @@ using LogEventLevel = Serilog.Events.LogEventLevel;
 
 namespace SkEditor.Views.Windows;
 
-public partial class LogsWindow : AppWindow
+public partial class LogsWindow : FAAppWindow
 {
     public static readonly List<LogEvent> Logs = [];
 

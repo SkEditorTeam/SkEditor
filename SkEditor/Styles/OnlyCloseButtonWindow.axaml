@@ -3,7 +3,7 @@
                     xmlns:wnd="using:FluentAvalonia.UI.Windowing"
                     x:CompileBindings="True">
 
-    <ControlTheme x:Key="OnlyCloseButtonTheme" TargetType="wnd:MinMaxCloseControl">
+    <ControlTheme x:Key="OnlyCloseButtonTheme" TargetType="wnd:FAMinMaxCloseControl">
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel Orientation="Horizontal">
@@ -28,7 +28,7 @@
         </Style>
     </ControlTheme>
 
-    <ControlTemplate x:Key="OnlyCloseButtonWindowTemplate" TargetType="{x:Type wnd:AppWindow}">
+    <ControlTemplate x:Key="OnlyCloseButtonWindowTemplate" TargetType="{x:Type wnd:FAAppWindow}">
         <VisualLayerManager>
             <Border Background="{DynamicResource SmallWindowBackgroundColor}"
                     Padding="{TemplateBinding Padding}"
@@ -53,11 +53,11 @@
                                        HorizontalAlignment="Left" />
                         </StackPanel>
 
-                        <wnd:MinMaxCloseControl Grid.Column="1"
-                                                HorizontalAlignment="Right"
-                                                Name="SystemCaptionButtons"
-                                                Theme="{StaticResource OnlyCloseButtonTheme}"
-                                                Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <wnd:FAMinMaxCloseControl Grid.Column="1"
+                                                  HorizontalAlignment="Right"
+                                                  Name="SystemCaptionButtons"
+                                                  Theme="{StaticResource OnlyCloseButtonTheme}"
+                                                  Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
 
                     <ContentPresenter Grid.Row="1" Name="PART_ContentPresenter"
@@ -72,7 +72,7 @@
         </VisualLayerManager>
     </ControlTemplate>
 
-    <ControlTheme x:Key="SmallWindowTheme" TargetType="wnd:AppWindow">
+    <ControlTheme x:Key="SmallWindowTheme" TargetType="wnd:FAAppWindow">
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
         <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
@@ -92,7 +92,7 @@
                 <Style Selector="^ /template/ Grid#DefaultTitleBar">
                     <Setter Property="IsVisible" Value="False" />
                 </Style>
-                <Style Selector="^ /template/ wnd|MinMaxCloseControl#SystemCaptionButtons">
+                <Style Selector="^ /template/ wnd|FAMinMaxCloseControl#SystemCaptionButtons">
                     <Setter Property="IsVisible" Value="False" />
                 </Style>
             </Style>
@@ -107,7 +107,7 @@
         </Style>
 
         <Style Selector="^:splashOpen">
-            <Style Selector="^ /template/ wnd|AppSplashScreen#SplashHost">
+            <Style Selector="^ /template/ wnd|FAAppSplashScreen#SplashHost">
                 <Setter Property="IsVisible" Value="True" />
             </Style>
         </Style>

@@ -80,7 +80,7 @@
             <StackPanel Grid.Row="3" Orientation="Vertical" VerticalAlignment="Center" Spacing="12"
                         IsVisible="{Binding FileTree.IsLoading}">
                 <Viewbox Height="64" Opacity="0.5" OpacityMask="White">
-                    <controls:ProgressRing HorizontalAlignment="Center" />
+                    <controls:FAProgressRing HorizontalAlignment="Center" />
                 </Viewbox>
                 <TextBlock Text="Connecting..." HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
             </StackPanel>

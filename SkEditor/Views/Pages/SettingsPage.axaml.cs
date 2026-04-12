@@ -32,8 +32,8 @@ public partial class SettingsPage : UserControl
         double paneWidth = paneSize.Width / 4;
 
         NavigationView.PaneDisplayMode = paneWidth < 180
-            ? NavigationViewPaneDisplayMode.LeftCompact
-            : NavigationViewPaneDisplayMode.Left;
+            ? FANavigationViewPaneDisplayMode.LeftCompact
+            : FANavigationViewPaneDisplayMode.Left;
 
         NavigationView.OpenPaneLength = Math.Min(paneWidth, 280);
     }

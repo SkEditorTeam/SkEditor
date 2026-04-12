@@ -42,7 +42,7 @@ public class Windows : IWindows
         return windows is { Count: > 0 } ? windows[^1] : GetMainWindow();
     }
 
-    public async Task<ContentDialogResult> ShowDialog(string title,
+    public async Task<FAContentDialogResult> ShowDialog(string title,
         string message,
         object? icon = null,
         string? cancelButtonText = null,
@@ -220,7 +220,7 @@ public class Windows : IWindows
         return await tcs.Task;
     }
 
-    private async Task<ContentDialogResult> ShowDialogInternal(string title,
+    private async Task<FAContentDialogResult> ShowDialogInternal(string title,
         string message,
         object? icon = null,
         string? cancelButtonText = null,
@@ -228,7 +228,7 @@ public class Windows : IWindows
     {
         object? background = null;
         Application.Current?.TryGetResource("MessageBoxBackground", out background);
-        ContentDialog dialog = new()
+        FAContentDialog dialog = new()
         {
             Title = translate ? TryGetTranslation(title) : title,
             Background = background as ImmutableSolidColorBrush,
@@ -242,7 +242,7 @@ public class Windows : IWindows
             _ => icon
         };
 
-        if (icon is FluentAvalonia.UI.Controls.Symbol fluentAvaloniaSymbol)
+        if (icon is FASymbol fluentAvaloniaSymbol)
         {
             string name = fluentAvaloniaSymbol.ToString();
             Symbol? symbol = Enum.TryParse(name, out Symbol parsedSymbol) ? parsedSymbol : null;
@@ -252,7 +252,7 @@ public class Windows : IWindows
             }
             else
             {
-                icon = new FluentAvalonia.UI.Controls.SymbolIconSource
+                icon = new FASymbolIconSource
                 {
                     Symbol = fluentAvaloniaSymbol,
                     FontSize = DialogIconSize
@@ -265,21 +265,21 @@ public class Windows : IWindows
             symbolIconSource.FontSize = DialogIconSize;
         }
 
-        IconSource? source = icon switch
+        FAIconSource? source = icon switch
         {
-            IconSource iconSource => iconSource,
+            FAIconSource iconSource => iconSource,
             null => null,
             _ => throw new ArgumentException("Icon must be of type IconSource, Symbol or SymbolIconSource.")
         };
 
         switch (source)
         {
-            case FontIconSource fontIconSource:
+            case FAFontIconSource fontIconSource:
                 fontIconSource.FontSize = DialogIconSize;
                 break;
         }
 
-        IconSourceElement iconElement = new()
+        FAIconSourceElement iconElement = new()
         {
             IconSource = source,
             MinWidth = DialogIconSize,

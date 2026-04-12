@@ -8,7 +8,6 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 
 namespace SkEditor.Views.Controls.Notifications;
 
@@ -101,7 +100,7 @@ public class SkEditorNotificationManager : TemplatedControl
     private void InstallFromTopLevel(TopLevel topLevel)
     {
         topLevel.TemplateApplied += TopLevelOnTemplateApplied;
-        AdornerLayer? adorner = topLevel.FindDescendantOfType<VisualLayerManager>()?.AdornerLayer;
+        AdornerLayer? adorner = AdornerLayer.GetAdornerLayer(topLevel);
         if (adorner is null)
         {
             return;

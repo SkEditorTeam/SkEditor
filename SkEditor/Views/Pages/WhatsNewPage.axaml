@@ -77,9 +77,9 @@
                                         Width="44" Height="44"
                                         HorizontalAlignment="Left">
                                     <Viewbox Height="20" Width="20">
-                                        <controls:IconSourceElement IconSource="{Binding Icon}"
-                                                                    HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center" />
+                                        <controls:FAIconSourceElement IconSource="{Binding Icon}"
+                                                                      HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center" />
                                     </Viewbox>
                                 </Border>
                                 <StackPanel Spacing="6">
@@ -100,7 +100,8 @@
             </ItemsControl>
 
             <StackPanel Spacing="20" DockPanel.Dock="Top">
-                <TextBlock Text="{localization:Translate WhatsNewPageAlsoInThisRelease}" IsVisible="{Binding FeaturedItems.Count}"
+                <TextBlock Text="{localization:Translate WhatsNewPageAlsoInThisRelease}"
+                           IsVisible="{Binding FeaturedItems.Count}"
                            FontSize="18"
                            FontWeight="SemiBold"
                            HorizontalAlignment="Center"

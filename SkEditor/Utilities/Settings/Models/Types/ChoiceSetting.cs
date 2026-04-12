@@ -19,10 +19,7 @@ public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
 {
     private readonly Action<T> _set;
 
-    [ObservableProperty]
-    private T _selectedOption;
-
-    public ChoiceSetting(TranslatableString name, IconSource icon, TranslatableString? desc,
+    public ChoiceSetting(TranslatableString name, FAIconSource icon, TranslatableString? desc,
         ISettingsProvider provider, Func<T> get, Action<T> set)
         : base(name, icon, desc)
     {
@@ -30,6 +27,9 @@ public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
         Options = provider.GetValues().Cast<T>().ToList();
         SelectedOption = get();
     }
+
+    [ObservableProperty]
+    public partial T SelectedOption { get; set; }
 
     public List<T> Options { get; }
 

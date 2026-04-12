@@ -1,17 +1,12 @@
 using System.Linq;
 using System.Text;
-using Avalonia.Controls;
 using Avalonia.Input;
-using AvaloniaEdit;
-using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.API;
-using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Views.Windows.Generators;
 
-public partial class CommandGenerator : AppWindow
+public partial class CommandGenerator : FAAppWindow
 {
     public CommandGenerator()
     {

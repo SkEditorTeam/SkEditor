@@ -16,7 +16,7 @@ using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
-public partial class GuiGenerator : AppWindow
+public partial class GuiGenerator : FAAppWindow
 {
     // public readonly string ItemPath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Items");
     public readonly string ItemPath = string.Empty;

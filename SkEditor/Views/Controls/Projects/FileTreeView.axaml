@@ -71,8 +71,8 @@
                         </TextBox>
                     </Panel>
 
-                    <fa:ProgressRing Grid.Column="2" IsActive="{Binding IsLoadingChildren}" Width="16" Height="16"
-                                     VerticalAlignment="Center" HorizontalAlignment="Right" />
+                    <fa:FAProgressRing Grid.Column="2" IsActive="{Binding IsLoadingChildren}" Width="16" Height="16"
+                                       VerticalAlignment="Center" HorizontalAlignment="Right" />
                 </Grid>
             </TreeDataTemplate>
         </TreeView.ItemTemplate>

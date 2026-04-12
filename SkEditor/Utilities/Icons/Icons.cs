@@ -9,12 +9,12 @@ namespace SkEditor.Utilities.Icons;
 
 public static class Icons
 {
-    public static PathIconSource GetPathIcon(string name)
+    public static FAPathIconSource GetPathIcon(string name)
     {
         object? icon = null;
         Application.Current?.TryGetResource(name, ThemeVariant.Default, out icon);
-        PathIconSource? iconSource = icon as PathIconSource;
-        return iconSource ?? new PathIconSource();
+        FAPathIconSource? iconSource = icon as FAPathIconSource;
+        return iconSource ?? new FAPathIconSource();
     }
 
     public static SymbolIconSource CreateSymbolIcon(Symbol symbol)
@@ -25,8 +25,8 @@ public static class Icons
         };
     }
 
-    public static IconSource? CreatePathIconSource(string name)
+    public static FAIconSource? CreatePathIconSource(string name)
     {
-        return SkEditorAPI.Core.GetApplicationResource(name) as PathIconSource;
+        return SkEditorAPI.Core.GetApplicationResource(name) as FAPathIconSource;
     }
 }

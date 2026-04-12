@@ -1,7 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ui="using:FluentAvalonia.UI.Controls"
                     xmlns:sys="clr-namespace:System;assembly=netstandard"
+                    xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
                     x:CompileBindings="True">
 
     <ControlTheme x:Key="{x:Type MenuItem}" TargetType="MenuItem">
@@ -59,15 +59,14 @@
                                        Text="{TemplateBinding InputGesture, Converter={StaticResource KeyGestureConverter}}"
                                        HorizontalAlignment="Right"
                                        VerticalAlignment="Center" />
-                            <ui:SymbolIcon Name="PART_ChevronPath"
-                                           Height="16"
-                                           Symbol="ChevronRight"
-                                           Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Right"
-                                           Grid.Column="2"
-                                           FontSize="18"
-                                           Foreground="{DynamicResource MenuFlyoutSubItemChevron}" />
+                            <Viewbox Grid.Column="2" Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Right"
+                                     Height="16">
+                                <icons:SymbolIcon Name="PART_ChevronPath"
+                                                  Symbol="ChevronRight"
+                                                  Foreground="{DynamicResource MenuFlyoutSubItemChevron}" />
+                            </Viewbox>
                         </Grid>
                     </Border>
                     <Popup Name="PART_Popup"
@@ -119,7 +118,7 @@
                 <Setter Property="Foreground"
                         Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundPointerOver}" />
             </Style>
-            <Style Selector="^ /template/ ui|SymbolIcon#PART_ChevronPath">
+            <Style Selector="^ /template/ icons|SymbolIcon#PART_ChevronPath">
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronPointerOver}" />
             </Style>
         </Style>
@@ -134,7 +133,7 @@
                 <Setter Property="Foreground"
                         Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundPressed}" />
             </Style>
-            <Style Selector="^ ui|SymbolIcon#PART_ChevronPath">
+            <Style Selector="^ icons|SymbolIcon#PART_ChevronPath">
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronPressed}" />
             </Style>
         </Style>
@@ -151,16 +150,16 @@
                 <Setter Property="Foreground"
                         Value="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForegroundDisabled}" />
             </Style>
-            <Style Selector="^ /template/ ui|SymbolIcon#PART_ChevronPath">
+            <Style Selector="^ /template/ icons|SymbolIcon#PART_ChevronPath">
                 <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronDisabled}" />
             </Style>
         </Style>
 
-        <Style Selector="^:open /template/ ui|SymbolIcon#PART_ChevronPath">
+        <Style Selector="^:open /template/ icons|SymbolIcon#PART_ChevronPath">
             <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronSubMenuOpened}" />
         </Style>
 
-        <Style Selector="^:empty /template/ ui|SymbolIcon#PART_ChevronPath">
+        <Style Selector="^:empty /template/ icons|SymbolIcon#PART_ChevronPath">
             <Setter Property="IsVisible" Value="False" />
         </Style>
 

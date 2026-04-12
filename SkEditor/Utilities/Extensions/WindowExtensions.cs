@@ -7,7 +7,7 @@ namespace SkEditor.Utilities.Extensions;
 
 public static class WindowExtensions
 {
-    extension(AppWindow window)
+    extension(FAAppWindow window)
     {
         public async Task ShowDialogOnMainWindow()
         {

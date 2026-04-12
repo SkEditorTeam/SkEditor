@@ -1,17 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Input;
-using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.API;
 
 namespace SkEditor.Views.Windows;
 
-public partial class RefactorWindow : AppWindow
+public partial class RefactorWindow : FAAppWindow
 {
     public RefactorWindow()
     {

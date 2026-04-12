@@ -35,9 +35,9 @@ public static class FileDownloader
         // }
     }
 
-    private static TaskDialog CreateTaskDialog(Visual visual)
+    private static FATaskDialog CreateTaskDialog(Visual visual)
     {
-        TaskDialog td = new()
+        FATaskDialog td = new()
         {
             Title = TranslationService.Current.Get(TranslationKey.DownloadingMissingFilesTitle),
             ShowProgressBar = true,
@@ -52,9 +52,9 @@ public static class FileDownloader
         return td;
     }
 
-    private static async Task DownloadMissingFiles(TaskDialog td)
+    private static async Task DownloadMissingFiles(FATaskDialog td)
     {
-        const TaskDialogProgressState state = TaskDialogProgressState.Normal;
+        const FATaskDialogProgressState state = FATaskDialogProgressState.Normal;
         td.SetProgressBarState(0, state);
 
         try
@@ -71,11 +71,11 @@ public static class FileDownloader
             // await ZipFile.ExtractToDirectoryAsync(ZipFilePath, AppDataFolderPath);
             // File.Delete(ZipFilePath);
 
-            Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.OK); });
+            Dispatcher.UIThread.Post(() => { td.Hide(FATaskDialogStandardResult.OK); });
         }
         catch
         {
-            Dispatcher.UIThread.Post(() => { td.Hide(TaskDialogStandardResult.Cancel); });
+            Dispatcher.UIThread.Post(() => { td.Hide(FATaskDialogStandardResult.Cancel); });
         }
     }
 }

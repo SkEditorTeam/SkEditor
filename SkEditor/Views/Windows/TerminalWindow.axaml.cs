@@ -17,7 +17,7 @@ using Serilog;
 
 namespace SkEditor.Views.Windows;
 
-public partial class TerminalWindow : AppWindow
+public partial class TerminalWindow : FAAppWindow
 {
     private const char EscapeChar = '\x1b';
     private const string CrSplitPattern = "(?=\r)";

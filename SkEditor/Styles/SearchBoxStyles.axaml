@@ -5,7 +5,7 @@
                     x:CompileBindings="True">
 
     <Design.PreviewWith>
-        <TextBox Watermark="Search quick actions"
+        <TextBox PlaceholderText="Search quick actions"
                  Theme="{StaticResource SearchBoxTheme}"
                  Width="500" />
     </Design.PreviewWith>

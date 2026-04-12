@@ -106,7 +106,7 @@
                                                 <StackPanel Orientation="Horizontal" Spacing="16"
                                                             VerticalAlignment="Center">
                                                     <Viewbox Width="24" Height="24">
-                                                        <ui:IconSourceElement IconSource="{Binding Icon}" />
+                                                        <ui:FAIconSourceElement IconSource="{Binding Icon}" />
                                                     </Viewbox>
 
                                                     <TextBlock Text="{Binding Name.Value}"

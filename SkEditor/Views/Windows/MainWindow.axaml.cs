@@ -22,7 +22,7 @@ using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows;
 
-public partial class MainWindow : AppWindow
+public partial class MainWindow : FAAppWindow
 {
     private readonly AppSettings _appSettings;
     private readonly ILogService _log;
@@ -137,11 +137,11 @@ public partial class MainWindow : AppWindow
 
     private async Task<bool> PromptForUnsavedChanges()
     {
-        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(_translation.Get(TranslationKey.Attention),
+        FAContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(_translation.Get(TranslationKey.Attention),
             _translation.Get(TranslationKey.ClosingProgramWithUnsavedFiles), Symbol.Warning,
             primaryButtonText: "Yes", cancelButtonText: "No");
 
-        return result != ContentDialogResult.Primary;
+        return result != FAContentDialogResult.Primary;
     }
 
     private async void OnWindowLoaded(object? sender, RoutedEventArgs e)

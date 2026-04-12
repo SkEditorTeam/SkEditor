@@ -8,12 +8,12 @@ namespace SkEditor.Utilities.Settings.Models;
 
 public class SettingSection(
     TranslatableString name,
-    IconSource icon,
+    FAIconSource icon,
     IEnumerable<SettingElement> settings,
     List<SettingSection>? subsections = null) : ObservableObject
 {
     public TranslatableString Name { get; set; } = name;
-    public IconSource Icon { get; set; } = icon;
+    public FAIconSource Icon { get; set; } = icon;
     public List<SettingElement> Settings { get; set; } = settings.ToList();
     public List<SettingSection> Subsections { get; set; } = subsections ?? [];
 }

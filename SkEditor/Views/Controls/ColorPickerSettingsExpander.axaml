@@ -5,11 +5,11 @@
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              x:Class="SkEditor.Views.Controls.ColorPickerSettingsExpander">
 
-    <ui:SettingsExpander Header="{Binding ExpanderHeader}" Name="SettingsExpanderObject"
-                         IconSource="{icons:SymbolIconSource Symbol=Color}">
-        <ui:SettingsExpander.Footer>
+    <ui:FASettingsExpander Header="{Binding ExpanderHeader}" Name="SettingsExpanderObject"
+                           IconSource="{icons:SymbolIconSource Symbol=Color}">
+        <ui:FASettingsExpander.Footer>
             <ColorPicker Name="ColorPicker" IsAlphaEnabled="{Binding IsAlphaEnabled}"
                          IsAlphaVisible="{Binding IsAlphaEnabled}" />
-        </ui:SettingsExpander.Footer>
-    </ui:SettingsExpander>
+        </ui:FASettingsExpander.Footer>
+    </ui:FASettingsExpander>
 </UserControl>

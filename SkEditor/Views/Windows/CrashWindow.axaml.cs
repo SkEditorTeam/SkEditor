@@ -5,7 +5,7 @@ using SkEditor.API;
 
 namespace SkEditor.Views.Windows;
 
-public partial class CrashWindow : AppWindow
+public partial class CrashWindow : FAAppWindow
 {
     public CrashWindow(string exception)
     {

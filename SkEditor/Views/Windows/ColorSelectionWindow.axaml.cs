@@ -1,11 +1,12 @@
 using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 
 namespace SkEditor.Views.Windows;
 
-public partial class ColorSelectionWindow : AppWindow
+public partial class ColorSelectionWindow : FAAppWindow
 {
     public ColorSelectionWindow()
     {

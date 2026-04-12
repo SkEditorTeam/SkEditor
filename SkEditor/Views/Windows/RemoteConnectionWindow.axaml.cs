@@ -10,7 +10,7 @@ using SkEditor.ViewModels.Windows;
 
 namespace SkEditor.Views.Windows;
 
-public partial class RemoteConnectionWindow : AppWindow
+public partial class RemoteConnectionWindow : FAAppWindow
 {
     public RemoteConnectionWindow()
     {

@@ -125,8 +125,8 @@
                                         Height="24" Width="24"
                                         VerticalAlignment="Center">
                                     <Viewbox Height="12" Width="12">
-                                        <controls:IconSourceElement Name="PART_Icon" VerticalAlignment="Center"
-                                                                    HorizontalAlignment="Center" />
+                                        <controls:FAIconSourceElement Name="PART_Icon" VerticalAlignment="Center"
+                                                                      HorizontalAlignment="Center" />
                                     </Viewbox>
                                 </Border>
 
@@ -204,7 +204,7 @@
         <Style Selector="^:information /template/ Border#PART_IconBorder">
             <Setter Property="Background" Value="#20325AFF" />
         </Style>
-        <Style Selector="^:information /template/ controls|IconSourceElement#PART_Icon">
+        <Style Selector="^:information /template/ controls|FAIconSourceElement#PART_Icon">
             <Setter Property="IconSource" Value="{StaticResource InfoNoCircleIcon}" />
             <Setter Property="Foreground" Value="#29AEFF" />
             <Setter Property="RenderTransform">
@@ -215,7 +215,7 @@
         <Style Selector="^:success /template/ Border#PART_IconBorder">
             <Setter Property="Background" Value="#2056FF20" />
         </Style>
-        <Style Selector="^:success /template/ controls|IconSourceElement#PART_Icon">
+        <Style Selector="^:success /template/ controls|FAIconSourceElement#PART_Icon">
             <Setter Property="IconSource">
                 <icons:SymbolIconSource Symbol="Checkmark" IconVariant="Filled" />
             </Setter>
@@ -225,7 +225,7 @@
         <Style Selector="^:warning /template/ Border#PART_IconBorder">
             <Setter Property="Background" Value="#20FF6A3D" />
         </Style>
-        <Style Selector="^:warning /template/ controls|IconSourceElement#PART_Icon">
+        <Style Selector="^:warning /template/ controls|FAIconSourceElement#PART_Icon">
             <Setter Property="IconSource" Value="{StaticResource ExclamationMarkIcon}" />
             <Setter Property="Foreground" Value="#FF7B34" />
         </Style>
@@ -233,7 +233,7 @@
         <Style Selector="^:error /template/ Border#PART_IconBorder">
             <Setter Property="Background" Value="#20FF1B3E" />
         </Style>
-        <Style Selector="^:error /template/ controls|IconSourceElement#PART_Icon">
+        <Style Selector="^:error /template/ controls|FAIconSourceElement#PART_Icon">
             <Setter Property="IconSource">
                 <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled" />
             </Setter>

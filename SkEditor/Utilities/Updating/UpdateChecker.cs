@@ -50,7 +50,7 @@ public static class UpdateChecker
                 return;
             }
 
-            ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
+            FAContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(
                 TranslationService.Current.Get(TranslationKey.UpdateAvailable),
                 TranslationService.Current.Get(TranslationKey.UpdateAvailableMessage),
                 new SymbolIconSource { Symbol = Symbol.ArrowSync },
@@ -58,7 +58,7 @@ public static class UpdateChecker
                 cancelButtonText: "No"
             );
 
-            if (result != ContentDialogResult.Primary)
+            if (result != FAContentDialogResult.Primary)
             {
                 return;
             }
@@ -91,19 +91,19 @@ public static class UpdateChecker
             return;
         }
 
-        TaskDialog td = CreateTaskDialog(mainWindow, url);
+        FATaskDialog td = CreateTaskDialog(mainWindow, url);
         object? result = await td.ShowAsync();
 
-        TaskDialogStandardResult standardResult = (TaskDialogStandardResult)result;
-        if (standardResult == TaskDialogStandardResult.Cancel)
+        FATaskDialogStandardResult standardResult = (FATaskDialogStandardResult)result;
+        if (standardResult == FATaskDialogStandardResult.Cancel)
         {
             await SkEditorAPI.Windows.ShowError(TranslationService.Current.Get(TranslationKey.UpdateFailed));
         }
     }
 
-    private static TaskDialog CreateTaskDialog(Visual visual, string url)
+    private static FATaskDialog CreateTaskDialog(Visual visual, string url)
     {
-        TaskDialog td = new()
+        FATaskDialog td = new()
         {
             Title = TranslationService.Current.Get(TranslationKey.DownloadingUpdateTitle),
             ShowProgressBar = true,
@@ -117,9 +117,9 @@ public static class UpdateChecker
         return td;
     }
 
-    private static async Task DownloadUpdate(TaskDialog td, string url)
+    private static async Task DownloadUpdate(FATaskDialog td, string url)
     {
-        const TaskDialogProgressState state = TaskDialogProgressState.Normal;
+        const FATaskDialogProgressState state = FATaskDialogProgressState.Normal;
         td.SetProgressBarState(0, state);
 
         try
@@ -145,7 +145,7 @@ public static class UpdateChecker
         {
             Dispatcher.UIThread.Post(() =>
             {
-                td.Hide(TaskDialogStandardResult.Cancel);
+                td.Hide(FATaskDialogStandardResult.Cancel);
                 SkEditorAPI.Windows.ShowError(TranslationService.Current.Get(TranslationKey.UpdateFailed) + "\n" +
                                               e.Message);
             });

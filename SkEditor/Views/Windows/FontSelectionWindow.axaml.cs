@@ -11,7 +11,7 @@ using FluentAvalonia.UI.Windowing;
 namespace SkEditor.Views.Windows;
 
 // TODO: rework the entire font selection window
-public partial class FontSelectionWindow : AppWindow
+public partial class FontSelectionWindow : FAAppWindow
 {
     private static FontInfo? _selectedFont;
 

@@ -16,13 +16,13 @@
                 <StackPanel Spacing="4">
                     <TextBlock Text="{localization:Translate GuiGeneratorDisplayName}" />
                     <TextBox Name="DisplayNameTextBox" Width="300"
-                             Watermark="{localization:Translate GuiGeneratorOptional}" />
+                             PlaceholderText="{localization:Translate GuiGeneratorOptional}" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
                     <TextBlock Text="{localization:Translate GuiGeneratorCustomModelData}" />
                     <TextBox Name="CustomModelDataTextBox" Width="300"
-                             Watermark="{localization:Translate GuiGeneratorOptional}" />
+                             PlaceholderText="{localization:Translate GuiGeneratorOptional}" />
                 </StackPanel>
             </StackPanel>
 

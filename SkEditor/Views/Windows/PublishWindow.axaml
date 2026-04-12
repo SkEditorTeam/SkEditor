@@ -2,9 +2,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="using:FluentAvalonia.UI.Controls"
         xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
+        xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.PublishWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate WindowTitlePublish}" Height="400" Width="350" CanResize="False"
@@ -31,14 +31,14 @@
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Spacing="12">
             <Grid ColumnDefinitions="*,auto" VerticalAlignment="Bottom" ColumnSpacing="6">
                 <TextBox IsReadOnly="True" Focusable="False"
-                         Watermark="{localization:Translate PublishWindowResultLink}"
+                         PlaceholderText="{localization:Translate PublishWindowResultLink}"
                          Text="{Binding Result}"
                          Grid.Column="0" />
                 <Button Width="35" Height="35" HorizontalAlignment="Right" Grid.Column="1"
                         Command="{Binding CopyCommand}"
                         FontSize="18">
                     <Button.Content>
-                        <ui:SymbolIcon Symbol="Copy" />
+                        <icons:SymbolIcon Symbol="Copy" />
                     </Button.Content>
                 </Button>
             </Grid>

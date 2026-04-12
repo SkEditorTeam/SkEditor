@@ -48,37 +48,38 @@
             </Button>
         </Grid>
 
-        <controls:InfoBar DockPanel.Dock="Bottom"
-                          Theme="{DynamicResource LiteInfoBarTheme}"
-                          Name="InfoBar" IsClosable="False"
-                          Severity="{Binding InfoBarSeverity}"
-                          IsOpen="{Binding InfoBarMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                          Message="{Binding InfoBarMessage}"
-                          Margin="0,0,0,16"
-                          MinHeight="32" MaxHeight="72" />
+        <controls:FAInfoBar DockPanel.Dock="Bottom"
+                            Theme="{DynamicResource LiteInfoBarTheme}"
+                            Name="InfoBar" IsClosable="False"
+                            Severity="{Binding InfoBarSeverity}"
+                            IsOpen="{Binding InfoBarMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            Message="{Binding InfoBarMessage}"
+                            Margin="0,0,0,16"
+                            MinHeight="32" MaxHeight="72" />
 
         <StackPanel Spacing="14">
             <StackPanel Spacing="4">
                 <TextBlock Text="{localization:Translate RemoteConnectionFieldName}" />
-                <TextBox Name="NameTextBox" Watermark="{localization:Translate RemoteConnectionFieldNamePlaceholder}"
+                <TextBox Name="NameTextBox"
+                         PlaceholderText="{localization:Translate RemoteConnectionFieldNamePlaceholder}"
                          Text="{Binding ConnectionInfo.Name}" />
             </StackPanel>
 
             <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">
                 <StackPanel Spacing="4">
                     <TextBlock Text="{localization:Translate RemoteConnectionFieldHost}" />
-                    <TextBox Name="HostTextBox" Watermark="192.168.0.1" Text="{Binding ConnectionInfo.Host}" />
+                    <TextBox Name="HostTextBox" PlaceholderText="192.168.0.1" Text="{Binding ConnectionInfo.Host}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Spacing="4">
                     <TextBlock Text="{localization:Translate RemoteConnectionFieldPort}" />
-                    <TextBox Name="PortTextBox" Watermark="22" Text="{Binding ConnectionInfo.Port}" />
+                    <TextBox Name="PortTextBox" PlaceholderText="22" Text="{Binding ConnectionInfo.Port}" />
                 </StackPanel>
             </Grid>
 
             <StackPanel Spacing="4">
                 <TextBlock Text="{localization:Translate RemoteConnectionFieldUsername}" />
                 <TextBox Name="UsernameTextBox"
-                         Watermark="{localization:Translate RemoteConnectionFieldUsernamePlaceholder}"
+                         PlaceholderText="{localization:Translate RemoteConnectionFieldUsernamePlaceholder}"
                          Text="{Binding ConnectionInfo.Username}" />
             </StackPanel>
 

@@ -2,8 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="using:FluentAvalonia.UI.Controls"
         xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+        xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.ColorSelectionWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate WindowTitleColorSelector}" Height="475" Width="375" CanResize="False"
@@ -13,12 +13,12 @@
         <ColorView Name="ColorPicker" Grid.Row="0" Margin="0,0,0,6" IsAlphaEnabled="False" IsAlphaVisible="False" />
 
         <Grid Grid.Row="1" ColumnDefinitions="*,auto" Margin="0,6" VerticalAlignment="Bottom">
-            <TextBox Name="ResultTextBox" Watermark="{localization:Translate ColorSelectorWindowHexResult}"
+            <TextBox Name="ResultTextBox" PlaceholderText="{localization:Translate ColorSelectorWindowHexResult}"
                      Grid.Column="0"
                      Margin="5,0" />
             <Button Name="CopyButton" Width="35" Height="35" HorizontalAlignment="Right" Grid.Column="1" FontSize="18">
                 <Button.Content>
-                    <ui:SymbolIcon Symbol="Copy" />
+                    <icons:SymbolIcon Symbol="Copy" />
                 </Button.Content>
             </Button>
         </Grid>

@@ -13,7 +13,7 @@ using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
-public partial class ExtendedItemSelector : AppWindow
+public partial class ExtendedItemSelector : FAAppWindow
 {
     private readonly Item _item;
 

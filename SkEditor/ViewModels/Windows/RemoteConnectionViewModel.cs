@@ -20,13 +20,13 @@ public partial class RemoteConnectionViewModel(
     ITranslationService translation) : ObservableObject
 {
     [ObservableProperty]
-    private RemoteConnectionInfo _connectionInfo = new();
+    public partial RemoteConnectionInfo ConnectionInfo { get; set; } = new();
 
     [ObservableProperty]
-    private string? _infoBarMessage;
+    public partial string? InfoBarMessage { get; set; }
 
     [ObservableProperty]
-    private InfoBarSeverity _infoBarSeverity = InfoBarSeverity.Informational;
+    public partial FAInfoBarSeverity InfoBarSeverity { get; set; } = FAInfoBarSeverity.Informational;
 
     public IReadOnlyList<RemoteAuthMethod> AuthMethods { get; } =
         Enum.GetValues<RemoteAuthMethod>().ToList();
@@ -42,7 +42,7 @@ public partial class RemoteConnectionViewModel(
         if (!result.IsSuccess)
         {
             InfoBarMessage = translation.Get(TranslationKey.RemoteConnectionCannotAddConnection);
-            InfoBarSeverity = InfoBarSeverity.Error;
+            InfoBarSeverity = FAInfoBarSeverity.Error;
 
             return;
         }
@@ -70,7 +70,7 @@ public partial class RemoteConnectionViewModel(
         RemoteConnectionTestResult result = await connectionService.TestConnection(ConnectionInfo);
 
         InfoBarMessage = result.Message;
-        InfoBarSeverity = result.IsSuccess ? InfoBarSeverity.Success : InfoBarSeverity.Error;
+        InfoBarSeverity = result.IsSuccess ? FAInfoBarSeverity.Success : FAInfoBarSeverity.Error;
 
         return result.IsSuccess;
     }
@@ -95,6 +95,6 @@ public partial class RemoteConnectionViewModel(
     {
         ConnectionInfo = new RemoteConnectionInfo();
         InfoBarMessage = null;
-        InfoBarSeverity = InfoBarSeverity.Informational;
+        InfoBarSeverity = FAInfoBarSeverity.Informational;
     }
 }

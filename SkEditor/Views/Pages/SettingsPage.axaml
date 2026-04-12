@@ -36,20 +36,20 @@
         <!-- -->
     </UserControl.DataTemplates>
 
-    <controls:NavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,16,0,16"
-                             PaneDisplayMode="Auto" OpenPaneLength="280"
-                             MaxWidth="1080"
-                             MenuItemsSource="{Binding SettingsCategories}"
-                             SelectedItem="{Binding CurrentSection, Mode=TwoWay}"
-                             IsSettingsVisible="False" IsPaneToggleButtonVisible="False">
-        <controls:NavigationView.MenuItemTemplate>
+    <controls:FANavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,16,0,16"
+                               PaneDisplayMode="Auto" OpenPaneLength="280"
+                               MaxWidth="1080"
+                               MenuItemsSource="{Binding SettingsCategories}"
+                               SelectedItem="{Binding CurrentSection, Mode=TwoWay}"
+                               IsSettingsVisible="False" IsPaneToggleButtonVisible="False">
+        <controls:FANavigationView.MenuItemTemplate>
             <DataTemplate DataType="models:SettingSection">
-                <controls:NavigationViewItem Content="{Binding Name.Value}" IconSource="{Binding Icon}"
-                                             MenuItemsSource="{Binding Subsections}" />
+                <controls:FANavigationViewItem Content="{Binding Name.Value}" IconSource="{Binding Icon}"
+                                               MenuItemsSource="{Binding Subsections}" />
             </DataTemplate>
-        </controls:NavigationView.MenuItemTemplate>
+        </controls:FANavigationView.MenuItemTemplate>
 
-        <controls:NavigationView.Content>
+        <controls:FANavigationView.Content>
             <ScrollViewer Name="ScrollViewer" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                           Padding="24,4,24,24" VerticalScrollBarVisibility="Hidden">
                 <ItemsRepeater ItemsSource="{Binding CurrentSection.Settings}">
@@ -59,14 +59,14 @@
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate DataType="models:SettingElement">
-                            <controls:SettingsExpander Header="{Binding Name.Value}"
-                                                       IconSource="{Binding Icon}"
-                                                       Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                       Footer="{Binding}" />
+                            <controls:FASettingsExpander Header="{Binding Name.Value}"
+                                                         IconSource="{Binding Icon}"
+                                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                         Footer="{Binding}" />
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>
             </ScrollViewer>
-        </controls:NavigationView.Content>
-    </controls:NavigationView>
+        </controls:FANavigationView.Content>
+    </controls:FANavigationView>
 </UserControl>

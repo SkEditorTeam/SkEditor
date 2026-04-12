@@ -71,7 +71,7 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Sidebar -->
-                    <!-- <controls:SideBarControl Name="SideBar" Grid.Column="0" Grid.Row="0" MinWidth="48" /> -->
+                    <!-- <controls:FASideBarControl Name="SideBar" Grid.Column="0" Grid.Row="0" MinWidth="48" /> -->
                     <Border Name="SidebarContentBorder" Grid.Column="2" Grid.Row="0" ClipToBounds="True" />
                     <GridSplitter Name="Splitter" Grid.Column="3" Grid.Row="0" Width="10" Background="Transparent"
                                   ResizeDirection="Columns" />

@@ -22,13 +22,13 @@ public static class Tutorial
 
         object? icon = null;
         Application.Current?.TryGetResource("SkEditorIcon", ThemeVariant.Default, out icon);
-        PathIconSource? iconSource = icon as PathIconSource;
+        FAPathIconSource? iconSource = icon as FAPathIconSource;
 
-        ContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Welcome to the SkEditor!",
+        FAContentDialogResult result = await SkEditorAPI.Windows.ShowDialog("Welcome to the SkEditor!",
             "Do you want to read a quick intro?\nIf you're new to the app, it's a good idea ;)",
             iconSource, primaryButtonText: "Yes", cancelButtonText: "No");
 
-        if (result == ContentDialogResult.Primary)
+        if (result == FAContentDialogResult.Primary)
         {
             await ShowTutorialMessage("Settings",
                 "On the top menu, you'll find a cog icon. Click on it to open the settings, where you can customize the app to your liking!",
@@ -46,7 +46,7 @@ public static class Tutorial
         }
     }
 
-    private static async Task ShowTutorialMessage(string title, string message, PathIconSource? iconSource)
+    private static async Task ShowTutorialMessage(string title, string message, FAPathIconSource? iconSource)
     {
         await SkEditorAPI.Windows.ShowDialog(title, message, iconSource, translate: false);
     }

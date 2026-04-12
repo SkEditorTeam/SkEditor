@@ -9,16 +9,16 @@ public partial class ToggleSetting : SettingElement
 {
     private readonly Action<bool> _set;
 
-    [ObservableProperty]
-    private bool _isEnabled;
-
-    public ToggleSetting(TranslatableString name, IconSource icon, TranslatableString? desc, Func<bool> get,
+    public ToggleSetting(TranslatableString name, FAIconSource icon, TranslatableString? desc, Func<bool> get,
         Action<bool> set)
         : base(name, icon, desc)
     {
         _set = set;
         IsEnabled = get();
     }
+
+    [ObservableProperty]
+    public partial bool IsEnabled { get; set; }
 
     partial void OnIsEnabledChanged(bool oldValue, bool newValue)
     {

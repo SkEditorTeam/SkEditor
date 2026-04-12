@@ -57,7 +57,7 @@ public class StartupService(
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    AppWindow.AlwaysFallback = appSettings.ForceNativeTitleBar;
+                    FAAppWindow.AlwaysFallback = appSettings.ForceNativeTitleBar;
                 });
 
                 await configMigrator.MigrateConfigsAsync();

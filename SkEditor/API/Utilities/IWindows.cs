@@ -34,7 +34,7 @@ public interface IWindows
     /// <param name="primaryButtonText">The text of the primary button. Default is "Okay", <b>cannot be null</b></param>
     /// <param name="translate">Whether to try translate the title</param>
     /// <returns>The result of the dialog.</returns>
-    Task<ContentDialogResult> ShowDialog(string title,
+    Task<FAContentDialogResult> ShowDialog(string title,
         string message,
         object? icon = null,
         string? cancelButtonText = null,
