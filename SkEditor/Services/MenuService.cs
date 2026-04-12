@@ -292,12 +292,12 @@ public class MenuService(ITabService tabService, IThemeService themeService, App
             .WithInputGesture("Ctrl+,");
     }
 
-    private static AsyncRelayCommand OpenWindowDialog(Func<AppWindow> windowFactory)
+    private static AsyncRelayCommand OpenWindowDialog(Func<FAAppWindow> windowFactory)
     {
         return new AsyncRelayCommand(async () => await windowFactory().ShowDialogOnMainWindow());
     }
 
-    private static async Task ShowDialogIfEditorIsOpen(AppWindow window, bool openAsDialog = true)
+    private static async Task ShowDialogIfEditorIsOpen(FAAppWindow window, bool openAsDialog = true)
     {
         // if (SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor == null)
         // {
