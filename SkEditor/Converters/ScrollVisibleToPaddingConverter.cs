@@ -6,15 +6,15 @@ using Avalonia.Data.Converters;
 
 namespace SkEditor.Converters;
 
-public class ScrollVisibleToPaddingConverter : IMultiValueConverter
+public class ScrollVisibleToPaddingConverter : IValueConverter
 {
-    public object Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values[0] is double extent && values[1] is double viewport)
-        {
-            return extent > viewport ? new Thickness(0, 0, 16, 0) : new Thickness(0);
-        }
-
-        return new Thickness(0);
+        return value is Vector { Y: > 0 }
+            ? new Thickness(0, 0, 16, 0)
+            : new Thickness(0);
     }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
 }

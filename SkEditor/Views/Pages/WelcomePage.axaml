@@ -78,10 +78,9 @@
                     </BehaviorCollection>
                 </Interaction.Behaviors>
                 <ScrollViewer.Padding>
-                    <MultiBinding Converter="{StaticResource ScrollVisibleToPaddingConverter}">
-                        <Binding Path="Extent.Height" RelativeSource="{RelativeSource Self}" />
-                        <Binding Path="Viewport.Height" RelativeSource="{RelativeSource Self}" />
-                    </MultiBinding>
+                    <Binding Path="ScrollBarMaximum"
+                             RelativeSource="{RelativeSource Self}"
+                             Converter="{StaticResource ScrollVisibleToPaddingConverter}" />
                 </ScrollViewer.Padding>
                 <ItemsRepeater ItemsSource="{Binding WelcomeSections}">
                     <ItemsRepeater.Layout>
