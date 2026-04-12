@@ -112,7 +112,6 @@ public class App : Application
         services.AddSingleton<LegacyConfigMigrator>();
         services.AddSingleton<ITranslationService, TranslationService>();
         services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
-        services.AddSingleton<IPublishService, PublishService>();
         services.AddSingleton<IClipboardService, ClipboardService>();
 
         services.AddSingleton<AppSettings>();
@@ -127,6 +126,8 @@ public class App : Application
         services.AddSingleton<IConfig>(sp => sp.GetRequiredService<StateConfig>());
         services.AddSingleton(binarySettings);
         services.AddSingleton<IConfig>(sp => sp.GetRequiredService<BinarySettings>());
+
+        services.AddHttpClient<IPublishService, PublishService>();
 
         services.AddTransient<MainWindowViewModel>();
         services.AddTransient<MainMenuViewModel>();

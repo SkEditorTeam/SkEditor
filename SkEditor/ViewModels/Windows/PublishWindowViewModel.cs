@@ -1,43 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Integrations;
+using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Windows;
 
 public partial class PublishWindowViewModel : ObservableObject
 {
     public PublishWindowViewModel(IPublishService publishService, INotificationService notifications,
-        IClipboardService clipboard)
+        IClipboardService clipboard, SecretsConfig secretsConfig)
     {
         SelectedType = PublishTypes[0];
         SelectedLanguage = Languages[0];
 
         PublishCommand = new AsyncRelayCommand(async () =>
         {
-            string? result = await publishService.PublishCode(SelectedType.Type);
-            if (result is null)
+            string code = "Test code, todo: change it!";
+
+            string? apiKey = SelectedType switch
             {
-                notifications.Debug("HELLO WORLD");
+                { Type: PublishType.Pastebin } => secretsConfig.PastebinApiKey,
+                { Type: PublishType.SkUnity } => secretsConfig.SkUnityApiKey,
+                { Type: PublishType.CodeSkriptPl } => secretsConfig.CodeSkriptPlApiKey,
+                _ => null
+            };
+
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                notifications.ShowError("API key missing",
+                    "The selected publish type requires an API key, but it is not set. Please set the API key in the settings and try again.");
                 return;
             }
+
+            string language = SelectedLanguage.ToLower();
+            string? result = await publishService.PublishCode(code, apiKey, SelectedType.Type, language, false);
+            if (result is null)
+            {
+                notifications.ShowError("Failed to publish code",
+                    "An error occurred while trying to publish the code. See logs for more details.");
+                return;
+            }
+
+            Result = result;
         });
 
         CopyCommand = new AsyncRelayCommand(async () =>
         {
-            // if (string.IsNullOrWhiteSpace(Result))
-            // {
-            //     return;
-            // }
+            if (string.IsNullOrWhiteSpace(Result))
+            {
+                return;
+            }
 
-            await clipboard.SetTextAsync($"TEST" + Random.Shared.Next(1000, 9999));
+            await clipboard.SetTextAsync(Result);
         });
     }
 
-    public string Result { get; private set; } = string.Empty;
+    [ObservableProperty]
+    public partial string Result { get; private set; } = string.Empty;
 
     public List<PublishTypeEntry> PublishTypes { get; } =
     [
@@ -48,7 +70,7 @@ public partial class PublishWindowViewModel : ObservableObject
 
     public List<string> Languages { get; } =
     [
-        "Skript", "YAML"
+        "Skript", "YAML", "Text"
     ];
 
     [ObservableProperty]
