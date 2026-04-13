@@ -1,0 +1,50 @@
+﻿using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Media.Immutable;
+using AvaloniaEdit;
+using AvaloniaEdit.Editing;
+using SkEditor.API;
+using SkEditor.Models.Tabs;
+using SkEditor.Utilities.Settings.Configs;
+
+namespace SkEditor.Features;
+
+public class EditorOptionsFeature(AppSettings appSettings) : IEditorFeature
+{
+    public bool CanAttach(FileTab tab) => true;
+
+    public void Attach(FileTab tab)
+    {
+    }
+
+    public void Detach(FileTab tab)
+    {
+    }
+
+    public void OnViewAttached(FileTab tab, TextEditor editor)
+    {
+        editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));
+        editor.TextArea.TextView.LinkTextUnderline = true;
+        editor.TextArea.SelectionBrush = (ImmutableSolidColorBrush?)Application.Current?.FindResource("SelectionColor");
+        editor.TextArea.RightClickMovesCaret = true;
+
+        LineNumberMargin? lineNumberMargin = editor.TextArea.LeftMargins.OfType<LineNumberMargin>().FirstOrDefault();
+        lineNumberMargin?.Margin = new Thickness(10, 0);
+
+        editor.Options.AllowScrollBelowDocument = true;
+        editor.Options.CutCopyWholeLine = true;
+
+        editor.Options.ConvertTabsToSpaces = !appSettings.UseEditorTabsForIndentation;
+        editor.Options.IndentationSize = appSettings.EditorTabSize;
+
+        // editor.TextArea.TextView.CurrentLineBackground = ThemeEditor.CurrentTheme.CurrentLineBackground;
+        // editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(ThemeEditor.CurrentTheme.CurrentLineBorder, 2);
+        // editor.Options.HighlightCurrentLine = SkEditorAPI.Core.GetAppConfig().HighlightCurrentLine;
+        
+        editor.TextArea.TextView.CurrentLineBackground = new ImmutableSolidColorBrush(Color.Parse("#05FFFFFF"));
+        editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(new ImmutableSolidColorBrush(Color.Parse("#0DFFFFFF")));
+        editor.Options.HighlightCurrentLine = appSettings.HighlightCurrentLine;
+    }
+}
