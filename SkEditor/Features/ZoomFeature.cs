@@ -11,7 +11,7 @@ using Vector = Avalonia.Vector;
 
 namespace SkEditor.Features;
 
-public class ZoomFeature(AppSettings appSettings, INotificationService notifications) : IEditorFeature
+public class ZoomFeature(AppSettings appSettings) : IEditorFeature
 {
     private readonly Dictionary<FileTab, TextEditor> _activeEditors = [];
     private readonly HashSet<FileTab> _allAttachedTabs = [];
