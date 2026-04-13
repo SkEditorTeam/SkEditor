@@ -15,14 +15,20 @@ namespace SkEditor.Features;
 public class ZoomFeature(AppSettings appSettings) : IEditorFeature
 {
     private readonly Dictionary<FileTab, TextEditor> _activeEditors = [];
-
     private readonly HashSet<FileTab> _allAttachedTabs = [];
+    
+    private double? _syncedFontSize;
 
     public bool CanAttach(FileTab tab) => true;
 
     public void Attach(FileTab tab)
     {
         _allAttachedTabs.Add(tab);
+        
+        if (appSettings.IsEditorZoomLevelSyncEnabled && _syncedFontSize.HasValue)
+        {
+            tab.FontSize = _syncedFontSize.Value;
+        }
     }
 
     public void Detach(FileTab tab)
@@ -65,6 +71,8 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
                     if (tab.FontSize < 5) tab.FontSize = 5;
                 }
             }
+            
+            _syncedFontSize = _allAttachedTabs.FirstOrDefault()?.FontSize;
         }
         else if (editor.DataContext is FileTab tab)
         {
