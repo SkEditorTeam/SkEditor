@@ -39,12 +39,32 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
     {
         _activeEditors[tab] = editor;
         editor.AddHandler(InputElement.PointerWheelChangedEvent, OnZoom, RoutingStrategies.Tunnel);
+        editor.AddHandler(InputElement.KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
     {
         _activeEditors.Remove(tab);
         editor.RemoveHandler(InputElement.PointerWheelChangedEvent, OnZoom);
+        editor.RemoveHandler(InputElement.KeyDownEvent, OnKeyDown);
+    }
+
+    private void OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.KeyModifiers != KeyUtility.GetControlModifier()) return;
+
+        e.Handled = true;
+        if (sender is not TextEditor { DataContext: FileTab } editor) return;
+
+        switch (e.Key)
+        {
+            case Key.OemPlus:
+                ZoomEditors(1.0, editor);
+                break;
+            case Key.OemMinus:
+                ZoomEditors(-1.0, editor);
+                break;
+        }
     }
 
     private void OnZoom(object? sender, PointerWheelEventArgs e)
@@ -56,6 +76,11 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
 
         double zoomDelta = e.Delta.Y * 2.0;
 
+        ZoomEditors(zoomDelta, editor);
+    }
+
+    private void ZoomEditors(double zoomDelta, TextEditor editor)
+    {
         if (appSettings.IsEditorZoomLevelSyncEnabled)
         {
             foreach (var tab in _allAttachedTabs)
@@ -79,7 +104,7 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
         }
     }
 
-    private void ApplyZoom(FileTab tab, TextEditor editor, double delta)
+    private static void ApplyZoom(FileTab tab, TextEditor editor, double delta)
     {
         switch (delta)
         {
