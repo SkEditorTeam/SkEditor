@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.VisualTree;
 using AvaloniaEdit;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.Settings.Configs;
@@ -12,7 +11,7 @@ using Vector = Avalonia.Vector;
 
 namespace SkEditor.Features;
 
-public class ZoomFeature(AppSettings appSettings) : IEditorFeature
+public class ZoomFeature(AppSettings appSettings, INotificationService notifications) : IEditorFeature
 {
     private readonly Dictionary<FileTab, TextEditor> _activeEditors = [];
     private readonly HashSet<FileTab> _allAttachedTabs = [];
@@ -80,7 +79,7 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
         }
     }
 
-    private static void ApplyZoom(FileTab tab, TextEditor editor, double delta)
+    private void ApplyZoom(FileTab tab, TextEditor editor, double delta)
     {
         switch (delta)
         {
@@ -99,7 +98,7 @@ public class ZoomFeature(AppSettings appSettings) : IEditorFeature
 
         double lineHeightChange = newLineHeight / oldLineHeight;
 
-        var scrollViewer = editor.GetVisualChildren().OfType<ScrollViewer>().FirstOrDefault();
+        var scrollViewer = editor.ScrollViewer;
         if (scrollViewer == null) return;
 
         double newOffset = scrollViewer.Offset.Y * lineHeightChange;
