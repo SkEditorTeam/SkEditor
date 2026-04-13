@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -23,6 +24,9 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
 
     [ObservableProperty]
     public partial double FontSize { get; set; } = appSettings.EditorFontSize;
+
+    [ObservableProperty]
+    public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
     public async Task LoadContentAsync()
     {
