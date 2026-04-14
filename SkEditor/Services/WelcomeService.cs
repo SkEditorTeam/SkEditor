@@ -37,13 +37,6 @@ public class WelcomeService : IWelcomeService
         BuildRecentItems();
 
         StartDateTimer();
-
-        _ = Task.Run(async () =>
-        {
-            await Task.Delay(5000);
-            _recentItems.Add(new WelcomeScreenRecentItem("NewScript.sk",
-                @"C:\Users\NotroDev\Desktop\NewScript.sk", false, DateTime.Now));
-        });
     }
 
     public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
