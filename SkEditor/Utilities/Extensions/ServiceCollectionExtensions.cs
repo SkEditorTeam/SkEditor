@@ -10,5 +10,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEditorFeature, SaveIndicatorFeature>();
         services.AddSingleton<IEditorFeature, ZoomFeature>();
         services.AddSingleton<IEditorFeature, EditorOptionsFeature>();
+        services.AddSingleton<IEditorFeature, EditorShortcutsFeature>();
     }
 }

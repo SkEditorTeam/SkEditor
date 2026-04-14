@@ -11,7 +11,7 @@ namespace SkEditor.Models.Menu;
 public partial class MainMenuItem : ObservableObject
 {
     [ObservableProperty]
-    private bool _isVisible = true;
+    public partial bool IsVisible { get; set; } = true;
 
     protected MainMenuItem()
     {
@@ -22,6 +22,7 @@ public partial class MainMenuItem : ObservableObject
     public IRelayCommand? Command { get; init; }
     public IEnumerable<MainMenuItem>? SubItems { get; init; }
     public string? InputGestureText { get; init; }
+    public bool RegisterHotKey { get; init; }
     public bool IsSeparator { get; init; }
 
     public static MainMenuItem Separator => new() { IsSeparator = true };
@@ -32,6 +33,7 @@ public partial class MainMenuItem : ObservableObject
         IRelayCommand? command = null,
         IEnumerable<MainMenuItem>? subItems = null,
         string? inputGestureText = null,
+        bool registerHotkey = true,
         bool? isVisible = null)
     {
         return new MainMenuItem
@@ -41,6 +43,7 @@ public partial class MainMenuItem : ObservableObject
             Command = command ?? Command,
             SubItems = subItems ?? SubItems,
             InputGestureText = inputGestureText ?? InputGestureText,
+            RegisterHotKey = registerHotkey,
             IsSeparator = IsSeparator,
             IsVisible = isVisible ?? IsVisible
         };
@@ -99,9 +102,9 @@ public partial class MainMenuItem : ObservableObject
         return CloneWith(command: new AsyncRelayCommand(execute));
     }
 
-    public MainMenuItem WithInputGesture(string text)
+    public MainMenuItem WithInputGesture(string text, bool registerHotkey = true)
     {
-        return CloneWith(inputGestureText: text);
+        return CloneWith(inputGestureText: text, registerHotkey: registerHotkey);
     }
 
     public MainMenuItem WithVisibility(bool isVisible)

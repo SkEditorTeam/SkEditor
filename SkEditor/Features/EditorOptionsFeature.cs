@@ -5,7 +5,6 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
-using SkEditor.API;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
 
@@ -39,6 +38,7 @@ public class EditorOptionsFeature(AppSettings appSettings) : IEditorFeature
         editor.Options.ConvertTabsToSpaces = !appSettings.UseEditorTabsForIndentation;
         editor.Options.IndentationSize = appSettings.EditorTabSize;
 
+        // TODO:
         // editor.TextArea.TextView.CurrentLineBackground = ThemeEditor.CurrentTheme.CurrentLineBackground;
         // editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(ThemeEditor.CurrentTheme.CurrentLineBorder, 2);
         // editor.Options.HighlightCurrentLine = SkEditorAPI.Core.GetAppConfig().HighlightCurrentLine;

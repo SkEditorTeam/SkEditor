@@ -112,6 +112,7 @@
                                         <ui:TabViewItem.Header>
                                             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                                 <TextBlock Text="{Binding Header.Value}"
+                                                           ToolTip.Tip="{Binding Header.Value}"
                                                            TextTrimming="CharacterEllipsis" />
                                                 <Ellipse
                                                     Grid.Column="1"

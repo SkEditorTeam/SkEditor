@@ -115,23 +115,23 @@ public class MenuService(ITabService tabService, IThemeService themeService, App
     {
         MainMenuItem copy = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCopy, Symbol.Copy)
             .WithCommand(() => Task.CompletedTask)
-            .WithInputGesture("Ctrl+C");
+            .WithInputGesture("Ctrl+C", false);
 
         MainMenuItem paste = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPaste, Symbol.ClipboardPaste)
             .WithCommand(() => Task.CompletedTask)
-            .WithInputGesture("Ctrl+V");
+            .WithInputGesture("Ctrl+V", false);
 
         MainMenuItem cut = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCut, Symbol.Cut)
             .WithCommand(() => Task.CompletedTask)
-            .WithInputGesture("Ctrl+X");
+            .WithInputGesture("Ctrl+X", false);
 
         MainMenuItem undo = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderUndo, Symbol.ArrowUndo)
             .WithCommand(() => Task.CompletedTask)
-            .WithInputGesture("Ctrl+Z");
+            .WithInputGesture("Ctrl+Z", false);
 
         MainMenuItem redo = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderRedo, Symbol.ArrowRedo)
             .WithCommand(() => Task.CompletedTask)
-            .WithInputGesture("Ctrl+Y");
+            .WithInputGesture("Ctrl+Y", false);
 
         MainMenuItem duplicate = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderDuplicate, Symbol.CopySelect)
             .WithCommand(() =>
@@ -142,7 +142,7 @@ public class MenuService(ITabService tabService, IThemeService themeService, App
                 //     CustomCommandsHandler.OnDuplicateCommandExecuted(textArea);
                 // }
             })
-            .WithInputGesture("Ctrl+D");
+            .WithInputGesture("Ctrl+D", false);
 
         MainMenuItem comment = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderComment, Symbol.Comment)
             .WithCommand(() =>
@@ -153,7 +153,7 @@ public class MenuService(ITabService tabService, IThemeService themeService, App
                 //     CustomCommandsHandler.OnCommentCommandExecuted(textArea);
                 // }
             })
-            .WithInputGesture("Ctrl+OemQuestion");
+            .WithInputGesture("Ctrl+OemQuestion", false);
 
         MainMenuItem trimWhitespaces = MainMenuItem
             .HeaderWithIcon(TranslationKey.MenuHeaderTrimWhitespaces, Symbol.Eraser)

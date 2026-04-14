@@ -10,33 +10,34 @@ namespace SkEditor.ViewModels.Controls;
 public partial class MainMenuViewModel : ObservableObject
 {
     [ObservableProperty]
-    private IEnumerable<MainMenuItem> _items = new List<MainMenuItem>();
+    public partial IEnumerable<MainMenuItem> Items { get; set; }
 
     public MainMenuViewModel(IMenuService menuService) => Items = menuService.GetMainMenuItems();
 
     public void RegisterHotKeys(MainWindow mainWindow)
     {
-        RegisterHotKeysRecursive(Items);
-        return;
+        RegisterHotKeysRecursive(Items, mainWindow);
+    }
 
-        void RegisterHotKeysRecursive(IEnumerable<MainMenuItem> items)
+    private static void RegisterHotKeysRecursive(IEnumerable<MainMenuItem> items, MainWindow mainWindow)
+    {
+        foreach (MainMenuItem item in items)
         {
-            foreach (MainMenuItem item in items)
+            if (!item.RegisterHotKey) continue;
+            
+            if (!string.IsNullOrEmpty(item.InputGestureText) && item.Command is not null)
             {
-                if (!string.IsNullOrEmpty(item.InputGestureText) && item.Command is not null)
+                KeyBinding keyBinding = new()
                 {
-                    KeyBinding keyBinding = new()
-                    {
-                        Command = item.Command,
-                        Gesture = KeyGesture.Parse(item.InputGestureText)
-                    };
-                    mainWindow.KeyBindings.Add(keyBinding);
-                }
+                    Command = item.Command,
+                    Gesture = KeyGesture.Parse(item.InputGestureText)
+                };
+                mainWindow.KeyBindings.Add(keyBinding);
+            }
 
-                if (item.SubItems is not null)
-                {
-                    RegisterHotKeysRecursive(item.SubItems);
-                }
+            if (item.SubItems is not null)
+            {
+                RegisterHotKeysRecursive(item.SubItems, mainWindow);
             }
         }
     }
