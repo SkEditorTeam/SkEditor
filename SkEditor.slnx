@@ -11,6 +11,7 @@
             <Platform Solution="*|ARM64" Project="x64"/>
             <Platform Solution="*|x86" Project="x64"/>
         </Project>
+        <Project Path="External/SkAvaloniaEdit/src/AvaloniaEdit/AvaloniaEdit.csproj"/>
         <Project Path="External/SkFluentAvalonia/src/FluentAvalonia/FluentAvalonia.csproj"/>
     </Folder>
     <Project Path="Installer/SkEditorInstaller.wixproj" Type="b7dd6f7e-def8-4e67-b5b7-07ef123db6f0">

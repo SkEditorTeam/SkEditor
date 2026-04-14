@@ -1,3 +1,6 @@
 [submodule "External/SkFluentAvalonia"]
 	path = External/SkFluentAvalonia
 	url = https://github.com/SkEditorTeam/SkFluentAvalonia
+[submodule "External/SkAvaloniaEdit"]
+	path = External/SkAvaloniaEdit
+	url = https://github.com/SkEditorTeam/SkAvaloniaEdit
