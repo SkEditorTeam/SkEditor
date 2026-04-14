@@ -115,6 +115,7 @@ public class App : Application
         services.AddSingleton<ITranslationService, TranslationService>();
         services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
         services.AddSingleton<IClipboardService, ClipboardService>();
+        services.AddSingleton<IFilePickerService, FilePickerService>();
 
         services.AddSingleton<AppSettings>();
         services.AddSingleton<IConfig>(sp => sp.GetRequiredService<AppSettings>());

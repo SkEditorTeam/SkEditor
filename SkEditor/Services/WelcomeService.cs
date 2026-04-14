@@ -20,13 +20,15 @@ namespace SkEditor.Services;
 public class WelcomeService : IWelcomeService
 {
     private readonly IFileService _fileService;
+    private readonly IFilePickerService _filePickerService;
     private readonly SortedObservableCollection<WelcomeScreenRecentItem> _recentItems;
 
     private DispatcherTimer _timeUpdater;
 
-    public WelcomeService(IFileService fileService)
+    public WelcomeService(IFileService fileService, IFilePickerService filePickerService)
     {
         _fileService = fileService;
+        _filePickerService = filePickerService;
 
         _recentItems = new SortedObservableCollection<WelcomeScreenRecentItem>(
             Comparer<WelcomeScreenRecentItem>.Create((a, b) => b.LastOpened.CompareTo(a.LastOpened))
@@ -78,7 +80,16 @@ public class WelcomeService : IWelcomeService
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
                     new RelayCommand(() => _fileService.NewFile()), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
-                    new AsyncRelayCommand(() => Task.CompletedTask), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
+                    new AsyncRelayCommand(async () =>
+                    {
+                        string[]? paths = await _filePickerService.PickFileAsync();
+                        if (paths is null) return;
+                        
+                        foreach (string path in paths)
+                        {
+                            await _fileService.OpenFile(path);
+                        }
+                    }), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,
                     new AsyncRelayCommand(() => Task.CompletedTask),
                     Icons.CreateSymbolIcon(Symbol.FolderOpen)),
