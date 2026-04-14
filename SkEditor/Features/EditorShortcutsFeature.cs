@@ -1,45 +1,54 @@
-﻿using Avalonia.Input;
+﻿using System.Collections.Generic;
+using System.Windows.Input;
+using Avalonia.Input;
 using AvaloniaEdit;
-using SkEditor.Contracts.Services;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Input;
 
 namespace SkEditor.Features;
 
-public class EditorShortcutsFeature(INotificationService notifications) : IEditorFeature
+public class EditorShortcutsFeature : IEditorFeature
 {
-    public bool CanAttach(FileTab tab) => true;
+    private Dictionary<KeyGesture, ICommand> _shortcuts = [];
 
     public void Attach(FileTab tab)
     {
+        KeyModifiers controlModifier = KeyUtility.GetControlModifier();
+
+        _shortcuts = new Dictionary<KeyGesture, ICommand>
+        {
+            { new KeyGesture(Key.C, controlModifier), ApplicationCommands.Copy },
+            { new KeyGesture(Key.V, controlModifier), ApplicationCommands.Paste },
+            { new KeyGesture(Key.X, controlModifier), ApplicationCommands.Cut },
+            { new KeyGesture(Key.Z, controlModifier), ApplicationCommands.Undo },
+            { new KeyGesture(Key.R, controlModifier), ApplicationCommands.Redo },
+            { new KeyGesture(Key.A, controlModifier), ApplicationCommands.SelectAll },
+            { new KeyGesture(Key.F, controlModifier), ApplicationCommands.Find },
+            { new KeyGesture(Key.H, controlModifier), ApplicationCommands.Replace },
+        };
     }
 
-    public void Detach(FileTab tab)
-    {
-    }
-
+    private List<KeyBinding> _currentKeyBindings = [];
+    
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
-        var controlModifier = KeyUtility.GetControlModifier();
+        _currentKeyBindings = [];
         
-        var copyBinding = new KeyBinding
+        foreach ((KeyGesture gesture, ICommand command) in _shortcuts)
         {
-            Gesture = new KeyGesture(Key.C, controlModifier),
-            Command = ApplicationCommands.Copy
-        };
-        
-        var pasteBinding = new KeyBinding
-        {
-            Gesture = new KeyGesture(Key.V, controlModifier),
-            Command = ApplicationCommands.Paste
-        };
-
-        editor.TextArea.KeyBindings.Add(copyBinding);
-        editor.TextArea.KeyBindings.Add(pasteBinding);
+            KeyBinding binding = new() { Gesture = gesture, Command = command };
+            _currentKeyBindings.Add(binding);
+            editor.TextArea.KeyBindings.Add(binding);
+        }
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
     {
-        notifications.Debug("view detached");
+        foreach (KeyBinding currentKeyBinding in _currentKeyBindings)
+        {
+            editor.TextArea.KeyBindings.Remove(currentKeyBinding);
+        }
+        
+        _currentKeyBindings.Clear();
     }
 }
