@@ -1,0 +1,314 @@
+{
+  "scopeName": "source.sk",
+  "name": "Skript",
+  "repository": {
+    "main": {
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#colorCodes"
+        },
+        {
+          "include": "#bracedExpression"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#variables"
+        },
+        {
+          "include": "#functions"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "begin": "^###",
+          "end": "^###",
+          "name": "comment.block.sk",
+          "patterns": [
+            {
+              "match": "(@param|@returns)",
+              "name": "keyword.other.documentation.tag.sk"
+            },
+            {
+              "match": "(?<=@param\\s)\\w+",
+              "name": "variable.parameter.documentation.sk"
+            }
+          ]
+        },
+        {
+          "begin": "#",
+          "end": "$",
+          "name": "comment.line.sk",
+          "patterns": [
+            {
+              "match": "(?i)todo:",
+              "name": "keyword.other.todo.sk"
+            }
+          ]
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double.sk",
+          "patterns": [
+            {
+              "include": "#stringExpressions"
+            },
+            {
+              "include": "#colorCodes"
+            }
+          ]
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "match": "\\{(?:[^{}]|\\{[^{}]*\\})*\\}",
+          "name": "variable.other.readwrite.sk"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "(options|variables|import):",
+          "name": "entity.name.section.sk"
+        },
+        {
+          "match": "^on .*:$",
+          "name": "entity.name.section.sk"
+        },
+        {
+          "match": "^command /.*:$",
+          "name": "entity.name.section.sk"
+        },
+        {
+          "match": "aliases:|description:|usage:|trigger:|cooldown:|cooldown message:|cooldown storage:|cooldown bypass:|executable by:|permission:|permission message:",
+          "name": "entity.other.attribute-name.sk"
+        },
+        {
+          "match": "arg[ -]\\d+",
+          "name": "variable.parameter.sk"
+        },
+        {
+          "match": "(?<!\\w)(is(n't)?( not)?|are(n't)?( not)?|do(es)?(n't)?( not)?|don't|have(n't)?|has(n't)?( 0not)?|did not|didn't)(?!\\w)",
+          "name": "keyword.operator.logical.sk"
+        },
+        {
+          "match": "(?<!\\w)(<|>|=|-|\\+)(?!\\w)",
+          "name": "keyword.operator.relational.sk"
+        },
+        {
+          "match": "(?<!\\w)(if|else|then|loop|while|cancel event|from|stop|of)(?!\\w)",
+          "name": "keyword.control.sk"
+        },
+        {
+          "match": "(true|false)",
+          "name": "constant.language.boolean.sk"
+        },
+        {
+          "match": "(\\(|\\)|\\[|\\])",
+          "name": "punctuation.section.sk"
+        },
+        {
+          "match": "(player|all players|console|loop-player|input player|victim|attacker|executor)",
+          "name": "variable.language.sk"
+        },
+        {
+          "match": "\b(integer|boolean|number|string|text)\b",
+          "name": "storage.type.sk"
+        }
+      ]
+    },
+    "bracedExpression": {
+      "patterns": [
+        {
+          "begin": "\\{@",
+          "end": "\\}",
+          "name": "variable.other.readwrite.sk",
+          "patterns": [
+            {
+              "match": "\\{(\\w)+(::(\\w)+)\\.",
+              "name": "variable.other.readwrite.sk"
+            },
+            {
+              "match": "\\{(\\w)+(\\.\\w)+\\.",
+              "name": "variable.other.readwrite.sk"
+            }
+          ]
+        },
+        {
+          "match": "%\\[^%{}\\]\\*(?=\\[^%{}\\]\\*\\[{}\\])\\[^%\\]\\*%\\[^%\\]\\*(?=\\[^%{}\\]\\*\\[{}\\])\\[^%\\]\\*%|%\\[^%\\]\\*%",
+          "name": "variable.other.readwrite.sk"
+        }
+      ]
+    },
+    "stringExpressions": {
+      "patterns": [
+        {
+          "begin": "\\{@",
+          "end": "\\}",
+          "name": "meta.interpolation.sk",
+          "patterns": [
+            {
+              "match": "\\{(\\w)+(::(\\w)+)\\.",
+              "name": "meta.interpolation.sk"
+            },
+            {
+              "match": "\\{(\\w)+(\\.\\w)+\\.",
+              "name": "meta.interpolation.sk"
+            }
+          ]
+        },
+        {
+          "match": "%.*?%",
+          "name": "meta.interpolation.sk"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "match": "\\d",
+          "name": "constant.numeric.sk"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "begin": "^(function|local function) ",
+          "end": "$",
+          "name": "meta.function.sk",
+          "patterns": [
+            {
+              "match": "(\\w)+(::(\\w)+)?(?=\\()",
+              "name": "entity.name.function.sk"
+            },
+            {
+              "begin": "\\(",
+              "end": "\\)",
+              "name": "punctuation.definition.function.sk",
+              "patterns": [
+                {
+                  "match": "\\w+:",
+                  "name": "variable.parameter.sk"
+                },
+                {
+                  "match": "\\w+",
+                  "name": "storage.type.sk"
+                }
+              ]
+            },
+            {
+              "match": "::",
+              "name": "punctuation.definition.function.sk"
+            },
+            {
+              "match": "(?<=:: )[^:]+",
+              "name": "storage.type.sk"
+            },
+            {
+              "match": ":$",
+              "name": "punctuation.definition.function.sk"
+            }
+          ]
+        },
+        {
+          "match": "(\\w)+(::(\\w)+)?(?=\\()",
+          "name": "entity.name.function.sk"
+        }
+      ]
+    },
+    "colorCodes": {
+      "patterns": [
+        {
+          "match": "(&c|<light red>|<pink>)",
+          "name": "constant.other.color.red.sk"
+        },
+        {
+          "match": "(&4|<dark red>|<red>)",
+          "name": "constant.other.color.darkred.sk"
+        },
+        {
+          "match": "(&e|<yellow>|<light yellow>)",
+          "name": "constant.other.color.yellow.sk"
+        },
+        {
+          "match": "(&2|<green>|<dark green>)",
+          "name": "constant.other.color.darkgreen.sk"
+        },
+        {
+          "match": "(&a|<light green>|<lime>|<lime green>)",
+          "name": "constant.other.color.green.sk"
+        },
+        {
+          "match": "(&b|<light cyan>|<light aqua>|<turquoise>|<turquois>)",
+          "name": "constant.other.color.aqua.sk"
+        },
+        {
+          "match": "(&3|<aqua>|<dark cyan>|<dark aqua>|<dark turquoise>|<dark turquois>)",
+          "name": "constant.other.color.darkaqua.sk"
+        },
+        {
+          "match": "(&1|<blue>|<dark blue>)",
+          "name": "constant.other.color.blue.sk"
+        },
+        {
+          "match": "(&9|<light blue>|<indigo>)",
+          "name": "constant.other.color.lightblue.sk"
+        },
+        {
+          "match": "(&d|<magenta>|<light purple>)",
+          "name": "constant.other.color.magenta.sk"
+        },
+        {
+          "match": "(&5|<purple>|<dark purple>)",
+          "name": "constant.other.color.purple.sk"
+        },
+        {
+          "match": "(&f|<white>)",
+          "name": "constant.other.color.white.sk"
+        },
+        {
+          "match": "(&7|<grey>|<light grey>|<gray>|<light gray>|<silver>)",
+          "name": "constant.other.color.gray.sk"
+        },
+        {
+          "match": "(&8|<dark gray>|<dark grey>)",
+          "name": "constant.other.color.darkgray.sk"
+        },
+        {
+          "match": "(&0|<black>)",
+          "name": "constant.other.color.black.sk"
+        },
+        {
+          "match": "(&6|<orange>|<gold>|<dark yellow>)",
+          "name": "constant.other.color.gold.sk"
+        }
+      ]
+    }
+  },
+  "patterns": [
+    {
+      "include": "#main"
+    }
+  ]
+}
