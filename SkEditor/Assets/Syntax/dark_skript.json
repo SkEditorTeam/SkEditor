@@ -28,14 +28,14 @@
       }
     },
     {
-      "scope": "comment.documentation.param.arg.sk",
+      "scope": "variable.parameter.documentation.sk",
       "settings": {
         "foreground": "#f0e768",
         "fontStyle": "italic"
       }
     },
     {
-      "scope": "variable.parameter.documentation.sk",
+      "scope": "string.quoted.double.sk",
       "settings": {
         "foreground": "#f4d764"
       }
@@ -47,7 +47,7 @@
       }
     },
     {
-      "scope": "variable.parameter.sk",
+      "scope": "variable.parameter.argument.sk",
       "settings": {
         "foreground": "#91bee6"
       }
@@ -148,13 +148,13 @@
       }
     },
     {
-      "scope": "variable.parameter.sk",
+      "scope": "variable.parameter.function.sk",
       "settings": {
         "foreground": "#d9ad69"
       }
     },
     {
-      "scope": "storage.type.sk",
+      "scope": "storage.type.function.sk",
       "settings": {
         "foreground": "#54d7a9",
         "fontStyle": "bold"

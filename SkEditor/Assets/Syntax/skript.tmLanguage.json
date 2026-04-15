@@ -105,7 +105,7 @@
         },
         {
           "match": "arg[ -]\\d+",
-          "name": "variable.parameter.sk"
+          "name": "variable.parameter.argument.sk"
         },
         {
           "match": "(?<!\\w)(is(n't)?( not)?|are(n't)?( not)?|do(es)?(n't)?( not)?|don't|have(n't)?|has(n't)?( 0not)?|did not|didn't)(?!\\w)",
@@ -209,11 +209,11 @@
               "patterns": [
                 {
                   "match": "\\w+:",
-                  "name": "variable.parameter.sk"
+                  "name": "variable.parameter.function.sk"
                 },
                 {
                   "match": "\\w+",
-                  "name": "storage.type.sk"
+                  "name": "storage.type.function.sk"
                 }
               ]
             },
@@ -223,7 +223,7 @@
             },
             {
               "match": "(?<=:: )[^:]+",
-              "name": "storage.type.sk"
+              "name": "storage.type.function.sk"
             },
             {
               "match": ":$",
