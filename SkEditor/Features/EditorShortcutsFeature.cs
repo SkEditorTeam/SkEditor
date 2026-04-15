@@ -40,7 +40,7 @@ public class EditorShortcutsFeature(INotificationService notifications) : IEdito
         {
             {
                 (new KeyGesture(Key.E, KeyModifiers.Control), new KeyGesture(Key.W)),
-                new RelayCommand(() => { notifications.Debug("toggle word wrap"); })
+                new RelayCommand(() => { tab.WordWrap = !tab.WordWrap; })
             }
         };
     }

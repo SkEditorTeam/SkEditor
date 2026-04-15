@@ -93,9 +93,9 @@
                                                              Background="{DynamicResource EditorBackgroundColor}"
                                                              LineNumbersForeground="{DynamicResource LineNumbersColor}"
                                                              FontSize="{Binding FontSize}"
+                                                             WordWrap="{Binding WordWrap}"
                                                              ScrollOffset="{Binding ScrollOffset, Mode=TwoWay}"
-                                                             FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}"
-                                                             WordWrap="{Binding AppSettings.IsWordWrapEnabled, FallbackValue=False}">
+                                                             FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}">
                                         <Interaction.Behaviors>
                                             <behaviors:TextEditorLoadBehavior />
                                         </Interaction.Behaviors>

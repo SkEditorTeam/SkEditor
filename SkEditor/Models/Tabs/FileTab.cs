@@ -22,11 +22,11 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
 
-    [ObservableProperty]
-    public partial double FontSize { get; set; } = appSettings.EditorFontSize;
+    [ObservableProperty] public partial double FontSize { get; set; } = appSettings.EditorFontSize;
 
-    [ObservableProperty]
-    public partial Vector ScrollOffset { get; set; } = Vector.Zero;
+    [ObservableProperty] public partial bool WordWrap { get; set; } = appSettings.IsWordWrapEnabled;
+
+    [ObservableProperty] public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
     public async Task LoadContentAsync()
     {
