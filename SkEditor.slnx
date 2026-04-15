@@ -11,6 +11,7 @@
             <Platform Solution="*|ARM64" Project="x64"/>
             <Platform Solution="*|x86" Project="x64"/>
         </Project>
+        <Project Path="External/SkAvaloniaEdit/src/AvaloniaEdit.TextMate/AvaloniaEdit.TextMate.csproj"/>
         <Project Path="External/SkAvaloniaEdit/src/AvaloniaEdit/AvaloniaEdit.csproj"/>
         <Project Path="External/SkFluentAvalonia/src/FluentAvalonia/FluentAvalonia.csproj"/>
     </Folder>
