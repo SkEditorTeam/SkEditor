@@ -12,5 +12,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEditorFeature, EditorOptionsFeature>();
         services.AddSingleton<IEditorFeature, EditorShortcutsFeature>();
         services.AddSingleton<IEditorFeature, TextMateFeature>();
+        services.AddSingleton<IEditorFeature, HexColorFeature>();
     }
 }
