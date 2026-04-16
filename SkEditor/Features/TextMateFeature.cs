@@ -25,7 +25,7 @@ public class TextMateFeature : IEditorFeature
         _textMateInstallation = editor.InstallTextMate(registryOptions);
 
         _textMateInstallation.SetGrammar("source.sk");
-        _textMateInstallation.SetTheme(registryOptions.GetDefaultTheme());
+        _textMateInstallation.SetTheme(registryOptions.GetTheme("dark_skript"));
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)

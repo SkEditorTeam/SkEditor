@@ -92,11 +92,13 @@
           "name": "entity.name.section.sk"
         },
         {
-          "match": "^on .*:$",
+          "begin": "^on ",
+          "end": "$",
           "name": "entity.name.section.sk"
         },
         {
-          "match": "^command /.*:$",
+          "begin": "^command /",
+          "end": "$",
           "name": "entity.name.section.sk"
         },
         {
