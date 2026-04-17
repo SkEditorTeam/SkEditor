@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -9,22 +10,33 @@ namespace SkEditor.Views.Controls.Editor;
 
 public class ColorBoxControl : Control
 {
-    private readonly Color _color;
-    private readonly TextRunProperties _properties;
-    private readonly TextView _textView;
+    private readonly Action<ColorBoxControl> _clickAction;
 
-    public ColorBoxControl(Color color, TextView textView, TextRunProperties properties)
+    private readonly TextRunProperties _properties;
+
+    public ColorBoxControl(Color color, TextView textView, TextRunProperties properties,
+        Action<ColorBoxControl> clickAction,
+        int documentOffset,
+        int documentLength)
     {
-        _color = color;
-        _textView = textView;
+        Color = color;
+        TextView = textView;
         _properties = properties;
+        _clickAction = clickAction;
+        DocumentOffset = documentOffset;
+        DocumentLength = documentLength;
 
         this.Cursor = new Cursor(StandardCursorType.Hand);
     }
 
+    public Color Color { get; }
+    public int DocumentOffset { get; }
+    public int DocumentLength { get; }
+    public TextView TextView { get; }
+
     protected override Size MeasureOverride(Size availableSize)
     {
-        double height = _textView.DefaultLineHeight;
+        double height = TextView.DefaultLineHeight;
         double boxSize = height * 0.7;
 
         return new Size(boxSize, _properties.FontRenderingEmSize);
@@ -40,7 +52,7 @@ public class ColorBoxControl : Control
 
         double borderRadius = boxSize * 0.1;
 
-        context.DrawRectangle(new SolidColorBrush(_color), new Pen(Brushes.Gray, 0.5), rect, borderRadius,
+        context.DrawRectangle(new SolidColorBrush(Color), new Pen(Brushes.Gray, 0.5), rect, borderRadius,
             borderRadius);
     }
 
@@ -49,6 +61,6 @@ public class ColorBoxControl : Control
         base.OnPointerPressed(e);
         e.Handled = true;
 
-        // todo
+        _clickAction(this);
     }
 }

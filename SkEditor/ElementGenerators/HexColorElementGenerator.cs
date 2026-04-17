@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -8,7 +9,7 @@ using SkEditor.Views.Controls.Editor;
 
 namespace SkEditor.ElementGenerators;
 
-public class HexColorElementGenerator : VisualLineElementGenerator
+public class HexColorElementGenerator(Action<ColorBoxControl> clickAction) : VisualLineElementGenerator
 {
     private static readonly Regex HexRegex = HexColorFeature.HexRegexGen();
 
@@ -39,7 +40,8 @@ public class HexColorElementGenerator : VisualLineElementGenerator
             return null!;
         }
 
-        var control = new ColorBoxControl(color, CurrentContext.TextView, CurrentContext.GlobalTextRunProperties);
+        var control = new ColorBoxControl(color, CurrentContext.TextView, CurrentContext.GlobalTextRunProperties,
+            clickAction, offset, m.Length);
 
         TextBlock.SetBaselineOffset(control, CurrentContext.GlobalTextRunProperties.FontRenderingEmSize);
         control.VerticalAlignment = VerticalAlignment.Center;
