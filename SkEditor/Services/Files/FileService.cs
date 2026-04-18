@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services.Files;
@@ -20,12 +19,20 @@ public class FileService(ITabService tabService, ITranslationService translation
         FileTab newFileTab = fileTabFactory.CreateNewFile(header.Value);
         tabService.OpenTab(newFileTab);
     }
-    
+
     public async Task OpenFile(string path)
     {
         FileTab fileTab = fileTabFactory.CreateFromFile(path);
         await fileTab.LoadContentAsync();
         tabService.OpenTab(fileTab);
+    }
+
+    public async Task SaveFile()
+    {
+        if (tabService.SelectedTab is FileTab fileTab)
+        {
+            await fileTab.SaveContentAsync();
+        }
     }
 
     private int GetNewFileNumber()
