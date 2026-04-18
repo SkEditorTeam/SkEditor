@@ -17,13 +17,16 @@
           "include": "#keywords"
         },
         {
-          "include": "#bracedExpression"
+          "include": "#options"
         },
         {
-          "include": "#numbers"
+          "include": "#placeholders"
         },
         {
           "include": "#variables"
+        },
+        {
+          "include": "#numbers"
         },
         {
           "include": "#functions"
@@ -68,20 +71,21 @@
           "name": "string.quoted.double.sk",
           "patterns": [
             {
-              "include": "#stringExpressions"
+              "include": "#textFormatting"
             },
             {
-              "include": "#textFormatting"
+              "match": "{@\\w+}",
+              "name": "variable.other.readwrite.option.in-string.sk"
+            },
+            {
+              "match": "%.+?%",
+              "name": "meta.interpolation.in-string.sk"
+            },
+            {
+              "match": "\\{(?:[^{}]|\\{[^{}]*\\})*\\}",
+              "name": "variable.other.readwrite.variable.in-string.sk"
             }
           ]
-        }
-      ]
-    },
-    "variables": {
-      "patterns": [
-        {
-          "match": "\\{(?:[^{}]|\\{[^{}]*\\})*\\}",
-          "name": "variable.other.readwrite.sk"
         }
       ]
     },
@@ -134,30 +138,31 @@
           "name": "variable.language.sk"
         },
         {
-          "match": "\b(integer|boolean|number|string|text)\b",
+          "match": "\\b(integer|boolean|number|string|text)\\b",
           "name": "storage.type.sk"
         }
       ]
     },
-    "bracedExpression": {
+    "options": {
       "patterns": [
         {
-          "begin": "\\{@",
-          "end": "\\}",
-          "name": "variable.other.readwrite.sk",
-          "patterns": [
-            {
-              "match": "\\{(\\w)+(::(\\w)+)\\.",
-              "name": "variable.other.readwrite.sk"
-            },
-            {
-              "match": "\\{(\\w)+(\\.\\w)+\\.",
-              "name": "variable.other.readwrite.sk"
-            }
-          ]
-        },
+          "match": "{@\\w+}",
+          "name": "variable.other.readwrite.sk"
+        }
+      ]
+    },
+    "placeholders": {
+      "patterns": [
         {
-          "match": "%\\[^%{}\\]\\*(?=\\[^%{}\\]\\*\\[{}\\])\\[^%\\]\\*%\\[^%\\]\\*(?=\\[^%{}\\]\\*\\[{}\\])\\[^%\\]\\*%|%\\[^%\\]\\*%",
+          "match": "%.+?%",
+          "name": "meta.interpolation.sk"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "match": "\\{(?:[^{}]|\\{[^{}]*\\})*\\}",
           "name": "variable.other.readwrite.sk"
         }
       ]
@@ -188,7 +193,7 @@
     "numbers": {
       "patterns": [
         {
-          "match": "(-)?\\d",
+          "match": "(-)?\\d+",
           "name": "constant.numeric.sk"
         }
       ]

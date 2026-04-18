@@ -41,9 +41,21 @@
       }
     },
     {
+      "scope": "meta.interpolation.in-string.sk, variable.other.readwrite.option.in-string.sk, variable.other.readwrite.variable.in-string.sk",
+      "settings": {
+        "foreground": "#ff7f50"
+      }
+    },
+    {
       "scope": "variable.other.readwrite.sk",
       "settings": {
         "foreground": "#3498db"
+      }
+    },
+    {
+      "scope": "meta.interpolation.sk",
+      "settings": {
+        "foreground": "#ff7f50"
       }
     },
     {
@@ -92,12 +104,6 @@
       "scope": "storage.type.sk",
       "settings": {
         "foreground": "#f5c842"
-      }
-    },
-    {
-      "scope": "meta.interpolation.sk",
-      "settings": {
-        "foreground": "#ff7f50"
       }
     },
     {
