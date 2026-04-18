@@ -161,99 +161,15 @@
       }
     },
     {
-      "scope": "constant.other.color.red.sk",
+      "scope": "entity.name.tag.minimessage.sk",
       "settings": {
-        "foreground": "#FF5555"
+        "foreground": "#eda951"
       }
     },
     {
-      "scope": "constant.other.color.darkred.sk",
+      "scope": "constant.character.format.legacy.sk",
       "settings": {
-        "foreground": "#AA0000"
-      }
-    },
-    {
-      "scope": "constant.other.color.yellow.sk",
-      "settings": {
-        "foreground": "#FFFF55"
-      }
-    },
-    {
-      "scope": "constant.other.color.darkgreen.sk",
-      "settings": {
-        "foreground": "#00AA00"
-      }
-    },
-    {
-      "scope": "constant.other.color.green.sk",
-      "settings": {
-        "foreground": "#55FF55"
-      }
-    },
-    {
-      "scope": "constant.other.color.aqua.sk",
-      "settings": {
-        "foreground": "#55FFFF"
-      }
-    },
-    {
-      "scope": "constant.other.color.darkaqua.sk",
-      "settings": {
-        "foreground": "#00AAAA"
-      }
-    },
-    {
-      "scope": "constant.other.color.blue.sk",
-      "settings": {
-        "foreground": "#0000AA"
-      }
-    },
-    {
-      "scope": "constant.other.color.lightblue.sk",
-      "settings": {
-        "foreground": "#5555FF"
-      }
-    },
-    {
-      "scope": "constant.other.color.magenta.sk",
-      "settings": {
-        "foreground": "#FF55FF"
-      }
-    },
-    {
-      "scope": "constant.other.color.purple.sk",
-      "settings": {
-        "foreground": "#AA00AA"
-      }
-    },
-    {
-      "scope": "constant.other.color.white.sk",
-      "settings": {
-        "foreground": "#FFFFFF"
-      }
-    },
-    {
-      "scope": "constant.other.color.gray.sk",
-      "settings": {
-        "foreground": "#AAAAAA"
-      }
-    },
-    {
-      "scope": "constant.other.color.darkgray.sk",
-      "settings": {
-        "foreground": "#555555"
-      }
-    },
-    {
-      "scope": "constant.other.color.black.sk",
-      "settings": {
-        "foreground": "#000000"
-      }
-    },
-    {
-      "scope": "constant.other.color.gold.sk",
-      "settings": {
-        "foreground": "#FFAA00"
+        "foreground": "#eda951"
       }
     }
   ]

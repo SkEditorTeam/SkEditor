@@ -11,10 +11,10 @@
           "include": "#strings"
         },
         {
-          "include": "#keywords"
+          "include": "#textFormatting"
         },
         {
-          "include": "#colorCodes"
+          "include": "#keywords"
         },
         {
           "include": "#bracedExpression"
@@ -48,12 +48,12 @@
           ]
         },
         {
-          "begin": "#",
+          "begin": "(?<!<)#",
           "end": "$",
           "name": "comment.line.sk",
           "patterns": [
             {
-              "match": "(?i)todo:",
+              "match": "(?i)todo(:)?",
               "name": "keyword.other.todo.sk"
             }
           ]
@@ -71,7 +71,7 @@
               "include": "#stringExpressions"
             },
             {
-              "include": "#colorCodes"
+              "include": "#textFormatting"
             }
           ]
         }
@@ -92,7 +92,7 @@
           "name": "entity.name.section.sk"
         },
         {
-          "begin": "^on ",
+          "begin": "^(on|every) ",
           "end": "$",
           "name": "entity.name.section.sk"
         },
@@ -110,7 +110,7 @@
           "name": "variable.parameter.argument.sk"
         },
         {
-          "match": "(?<!\\w)(is(n't)?( not)?|are(n't)?( not)?|do(es)?(n't)?( not)?|don't|have(n't)?|has(n't)?( 0not)?|did not|didn't)(?!\\w)",
+          "match": "(?<!\\w)(is(n't)?( not)?|are(n't)?( not)?|do(es)?(n't)?( not)?|don't|have(n't)?|has(n't)?( not)?|did not|didn't)(?!\\w)",
           "name": "keyword.operator.logical.sk"
         },
         {
@@ -188,7 +188,7 @@
     "numbers": {
       "patterns": [
         {
-          "match": "\\d",
+          "match": "(-)?\\d",
           "name": "constant.numeric.sk"
         }
       ]
@@ -239,71 +239,15 @@
         }
       ]
     },
-    "colorCodes": {
+    "textFormatting": {
       "patterns": [
         {
-          "match": "(&c|<light red>|<pink>)",
-          "name": "constant.other.color.red.sk"
+          "match": "&[0-9a-fA-Fk-orlmnK-ORLMN]",
+          "name": "constant.character.format.legacy.sk"
         },
         {
-          "match": "(&4|<dark red>|<red>)",
-          "name": "constant.other.color.darkred.sk"
-        },
-        {
-          "match": "(&e|<yellow>|<light yellow>)",
-          "name": "constant.other.color.yellow.sk"
-        },
-        {
-          "match": "(&2|<green>|<dark green>)",
-          "name": "constant.other.color.darkgreen.sk"
-        },
-        {
-          "match": "(&a|<light green>|<lime>|<lime green>)",
-          "name": "constant.other.color.green.sk"
-        },
-        {
-          "match": "(&b|<light cyan>|<light aqua>|<turquoise>|<turquois>)",
-          "name": "constant.other.color.aqua.sk"
-        },
-        {
-          "match": "(&3|<aqua>|<dark cyan>|<dark aqua>|<dark turquoise>|<dark turquois>)",
-          "name": "constant.other.color.darkaqua.sk"
-        },
-        {
-          "match": "(&1|<blue>|<dark blue>)",
-          "name": "constant.other.color.blue.sk"
-        },
-        {
-          "match": "(&9|<light blue>|<indigo>)",
-          "name": "constant.other.color.lightblue.sk"
-        },
-        {
-          "match": "(&d|<magenta>|<light purple>)",
-          "name": "constant.other.color.magenta.sk"
-        },
-        {
-          "match": "(&5|<purple>|<dark purple>)",
-          "name": "constant.other.color.purple.sk"
-        },
-        {
-          "match": "(&f|<white>)",
-          "name": "constant.other.color.white.sk"
-        },
-        {
-          "match": "(&7|<grey>|<light grey>|<gray>|<light gray>|<silver>)",
-          "name": "constant.other.color.gray.sk"
-        },
-        {
-          "match": "(&8|<dark gray>|<dark grey>)",
-          "name": "constant.other.color.darkgray.sk"
-        },
-        {
-          "match": "(&0|<black>)",
-          "name": "constant.other.color.black.sk"
-        },
-        {
-          "match": "(&6|<orange>|<gold>|<dark yellow>)",
-          "name": "constant.other.color.gold.sk"
+          "match": "</?!?(?:#[0-9a-fA-F]{3,6}|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|grey|dark_gray|dark_grey|blue|green|aqua|red|light_purple|yellow|white|color|colour|c|shadow|bold|b|italic|em|i|underlined|u|strikethrough|st|obfuscated|obf|reset|click|hover|insert|key|lang|tr|translate|lang_or|tr_or|translate_or|rainbow|gradient|transition|font|newline|br|selector|sel|score|nbt|data|pride|sprite|head)(?::(?:[^>'\"]|'[^']*'|\"[^\"]*\")*)?/?>",
+          "name": "entity.name.tag.minimessage.sk"
         }
       ]
     }

@@ -27,6 +27,7 @@ public class ColorBoxControl : Control
         DocumentLength = documentLength;
 
         this.Cursor = new Cursor(StandardCursorType.Hand);
+        this.Margin = new Thickness(2, 0, 2, 0);
     }
 
     public Color Color { get; }
@@ -48,9 +49,11 @@ public class ColorBoxControl : Control
         double boxSize = height * 0.75;
         double yOffset = (height - boxSize) / 2;
 
-        var rect = new Rect(0, yOffset, boxSize, boxSize);
+        double xOffset = 2 * (_properties.FontRenderingEmSize / 16);
 
-        double borderRadius = boxSize * 0.1;
+        Rect rect = new(xOffset, yOffset, boxSize, boxSize);
+
+        double borderRadius = boxSize * 0.15;
 
         context.DrawRectangle(new SolidColorBrush(Color), new Pen(Brushes.Gray, 0.5), rect, borderRadius,
             borderRadius);

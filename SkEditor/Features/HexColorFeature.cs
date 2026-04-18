@@ -8,7 +8,6 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using SkEditor.ElementGenerators;
 using SkEditor.Models.Tabs;
-using SkEditor.Transformers;
 using SkEditor.Utilities.Settings;
 using SkEditor.Views.Controls.Editor;
 
@@ -17,7 +16,6 @@ namespace SkEditor.Features;
 public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFeature
 {
     private readonly HexColorElementGenerator _colorGenerator = new(ShowColorFlyout);
-    private readonly HexColorTransformer _colorTransformer = new();
 
     public bool CanAttach(FileTab tab)
     {
@@ -27,29 +25,45 @@ public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFea
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
         editor.TextArea.TextView.ElementGenerators.Add(_colorGenerator);
-        editor.TextArea.TextView.LineTransformers.Add(_colorTransformer);
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
     {
         editor.TextArea.TextView.ElementGenerators.Remove(_colorGenerator);
-        editor.TextArea.TextView.LineTransformers.Remove(_colorTransformer);
     }
 
     private static void ShowColorFlyout(ColorBoxControl control)
     {
-        Point pos = control.TranslatePoint(
-            new Point(0, control.Bounds.Height), control.TextView) ?? new Point();
+        var topLevel = TopLevel.GetTopLevel(control)!;
 
-        Flyout flyout = new()
+        Point topLeft = control.TranslatePoint(new Point(0, 0), topLevel) ?? new Point();
+
+        var flyout = new Flyout
         {
-            Placement = PlacementMode.AnchorAndGravity,
-            PlacementAnchor = PopupAnchor.TopLeft,
-            PlacementGravity = PopupGravity.BottomRight,
-            PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.All,
-            HorizontalOffset = pos.X,
-            VerticalOffset = pos.Y + 8
+            Placement = PlacementMode.Custom,
+            CustomPopupPlacementCallback = placement =>
+            {
+                const double offset = 8;
+
+                placement.AnchorRectangle = new Rect(
+                    topLeft.X,
+                    topLeft.Y - offset,
+                    control.Bounds.Width,
+                    control.Bounds.Height + offset * 2);
+
+                placement.Anchor = PopupAnchor.BottomLeft;
+                placement.Gravity = PopupGravity.BottomRight;
+                placement.ConstraintAdjustment =
+                    PopupPositionerConstraintAdjustment.FlipY |
+                    PopupPositionerConstraintAdjustment.FlipX;
+            }
         };
+
+        LayoutTransformControl transformControl = new()
+        {
+            LayoutTransform = new ScaleTransform(0.9, 0.9)
+        };
+
         ColorView colorPicker = new()
         {
             IsColorPaletteVisible = false,
@@ -58,6 +72,8 @@ public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFea
             Color = control.Color,
             Cursor = new Cursor(StandardCursorType.Arrow)
         };
+
+        transformControl.Child = colorPicker;
 
         int capturedOffset = control.DocumentOffset;
         int capturedLength = control.DocumentLength;
@@ -74,7 +90,7 @@ public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFea
             capturedLength = newHex.Length;
         };
 
-        flyout.Content = colorPicker;
+        flyout.Content = transformControl;
         flyout.ShowAt(control.TextView);
 
         flyout.Closed += (_, _) => document.UndoStack.EndUndoGroup();
