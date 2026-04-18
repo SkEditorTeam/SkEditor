@@ -42,8 +42,12 @@
 
     <ItemGroup>
         <AvaloniaXaml Remove="Assets\*.axaml" />
-        <AvaloniaResource Include="Assets\**" />
         <AvaloniaResource Include="Styles\**" />
+
+        <AvaloniaResource Include="Assets\**" Exclude="Assets\Syntax\**"/>
+        <Content Include="Assets\Syntax\**">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

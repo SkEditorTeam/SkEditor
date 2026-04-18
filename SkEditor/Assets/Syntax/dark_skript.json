@@ -156,13 +156,13 @@
     {
       "scope": "variable.parameter.function.sk",
       "settings": {
-        "foreground": "#d9ad69"
+        "foreground": "#54d7a9"
       }
     },
     {
       "scope": "storage.type.function.sk",
       "settings": {
-        "foreground": "#54d7a9",
+        "foreground": "#f5c842",
         "fontStyle": "bold"
       }
     },

@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using Avalonia.Platform;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using AvaloniaEdit;
+using AvaloniaEdit.Editing;
 using AvaloniaEdit.TextMate;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Tabs;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;
@@ -14,23 +16,53 @@ using TextMateSharp.Themes;
 
 namespace SkEditor.Features;
 
-public class TextMateFeature : IEditorFeature
+public class TextMateFeature(INotificationService notifications) : IEditorFeature
 {
-    private TextMate.Installation? _textMateInstallation;
+    private readonly Dictionary<TextArea, TextMate.Installation> _installations = new();
+    private readonly SkEditorRegistryOptions _registryOptions = new(ThemeName.DarkPlus);
+
     public bool CanAttach(FileTab tab) => true;
 
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
-        var registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
-        _textMateInstallation = editor.InstallTextMate(registryOptions);
+        TextMate.Installation textMateInstallation = editor.InstallTextMate(_registryOptions);
 
-        _textMateInstallation.SetGrammar("source.sk");
-        _textMateInstallation.SetTheme(registryOptions.GetTheme("dark_skript"));
+        textMateInstallation.SetGrammar("source.sk");
+        textMateInstallation.SetTheme(_registryOptions.GetTheme("dark_skript"));
+
+        _installations.Add(editor.TextArea, textMateInstallation);
+
+        editor.TextArea.AddHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown, RoutingStrategies.Tunnel,
+            handledEventsToo: true);
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
     {
-        _textMateInstallation?.Dispose();
+        if (_installations.TryGetValue(editor.TextArea, out var installation))
+        {
+            installation.Dispose();
+            _installations.Remove(editor.TextArea);
+        }
+
+        editor.TextArea.RemoveHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown);
+    }
+
+    private void OnEditorPreviewKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.F1)
+        {
+            return;
+        }
+
+        if (sender is not TextArea textArea || !_installations.TryGetValue(textArea, out var installation))
+        {
+            return;
+        }
+
+        notifications.Debug("Reloading TextMate grammar and theme...");
+
+        installation.SetGrammar("source.sk");
+        installation.SetTheme(_registryOptions.GetTheme("dark_skript"));
     }
 }
 
@@ -45,7 +77,9 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme) : IRegistryOptions
             return _defaultRegistry.GetGrammar(scopeName);
         }
 
-        using var stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/skript.tmLanguage.json"));
+        using var stream =
+            File.OpenRead(
+                @"C:\Users\Notro\Documents\Projekty\CSharp\Aplikacje\SkEditor\SkEditor\Assets\Syntax\skript.tmLanguage.json");
         using var reader = new StreamReader(stream);
         return GrammarReader.ReadGrammarSync(reader);
     }
@@ -57,7 +91,9 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme) : IRegistryOptions
             return _defaultRegistry.GetTheme(scopeName);
         }
 
-        using var stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/dark_skript.json"));
+        using var stream =
+            File.OpenRead(
+                @"C:\Users\Notro\Documents\Projekty\CSharp\Aplikacje\SkEditor\SkEditor\Assets\Syntax\dark_skript.json");
         using var reader = new StreamReader(stream);
         return ThemeReader.ReadThemeSync(reader);
     }
