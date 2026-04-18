@@ -46,6 +46,7 @@ public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFea
             Placement = PlacementMode.AnchorAndGravity,
             PlacementAnchor = PopupAnchor.TopLeft,
             PlacementGravity = PopupGravity.BottomRight,
+            PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.All,
             HorizontalOffset = pos.X,
             VerticalOffset = pos.Y + 8
         };
