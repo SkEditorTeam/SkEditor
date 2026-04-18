@@ -19,8 +19,8 @@ namespace SkEditor.Services;
 
 public class WelcomeService : IWelcomeService
 {
-    private readonly IFileService _fileService;
     private readonly IFilePickerService _filePickerService;
+    private readonly IFileService _fileService;
     private readonly SortedObservableCollection<WelcomeScreenRecentItem> _recentItems;
 
     private DispatcherTimer _timeUpdater;
@@ -84,7 +84,7 @@ public class WelcomeService : IWelcomeService
                     {
                         string[]? paths = await _filePickerService.PickFileAsync();
                         if (paths is null) return;
-                        
+
                         foreach (string path in paths)
                         {
                             await _fileService.OpenFile(path);
@@ -92,10 +92,10 @@ public class WelcomeService : IWelcomeService
                     }), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,
                     new AsyncRelayCommand(() => Task.CompletedTask),
-                    Icons.CreateSymbolIcon(Symbol.FolderOpen)),
+                    Icons.CreateSymbolIcon(Symbol.FolderOpen)).Disable(),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedSettings,
                     new AsyncRelayCommand(() => Task.CompletedTask),
-                    Icons.CreateSymbolIcon(Symbol.Settings))
+                    Icons.CreateSymbolIcon(Symbol.Settings)).Disable()
             ]
         );
 

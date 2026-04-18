@@ -4,10 +4,19 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Welcome;
 
-public record WelcomeScreenElement(TranslatableString Name, IRelayCommand Command, FAIconSource? Icon)
+public record WelcomeScreenElement(
+    TranslatableString Name,
+    IRelayCommand Command,
+    FAIconSource? Icon,
+    bool? IsEnabled = true)
 {
     public static WelcomeScreenElement Create(TranslationKey nameKey, IRelayCommand command, FAIconSource? icon = null)
     {
         return new WelcomeScreenElement(new TranslatableString(nameKey), command, icon);
+    }
+
+    public WelcomeScreenElement Disable()
+    {
+        return this with { IsEnabled = false };
     }
 }

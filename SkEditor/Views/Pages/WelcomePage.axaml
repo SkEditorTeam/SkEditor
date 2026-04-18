@@ -101,7 +101,8 @@
                                     </ItemsRepeater.Layout>
                                     <ItemsRepeater.ItemTemplate>
                                         <DataTemplate DataType="welcome:WelcomeScreenElement">
-                                            <Button HorizontalContentAlignment="Stretch" Command="{Binding Command}">
+                                            <Button HorizontalContentAlignment="Stretch" Command="{Binding Command}"
+                                                    IsEnabled="{Binding IsEnabled}">
                                                 <StackPanel Orientation="Horizontal" Spacing="16"
                                                             VerticalAlignment="Center">
                                                     <Viewbox Width="24" Height="24">
