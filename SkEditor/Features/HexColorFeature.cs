@@ -62,7 +62,7 @@ public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFea
         int capturedLength = control.DocumentLength;
         TextDocument? document = control.TextView.Document;
 
-        document.RunUpdate();
+        document.UndoStack.StartUndoGroup();
 
         colorPicker.ColorChanged += (_, e) =>
         {
@@ -76,7 +76,7 @@ public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFea
         flyout.Content = colorPicker;
         flyout.ShowAt(control.TextView);
 
-        flyout.Closed += (_, _) => document.EndUpdate();
+        flyout.Closed += (_, _) => document.UndoStack.EndUndoGroup();
     }
 
     [GeneratedRegex(@"<#[#]?(?<hex>(?:[0-9a-fA-F]{3}){1,2})>")]
