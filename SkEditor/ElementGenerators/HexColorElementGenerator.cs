@@ -1,24 +1,77 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using SkEditor.Features;
 using SkEditor.Views.Controls.Editor;
 
 namespace SkEditor.ElementGenerators;
 
-public class HexColorElementGenerator(Action<ColorBoxControl> clickAction) : VisualLineElementGenerator
+public partial class HexColorElementGenerator(Action<ColorBoxControl> clickAction) : VisualLineElementGenerator
 {
-    private static readonly Regex HexRegex = HexColorFeature.HexRegexGen();
+    private static readonly Dictionary<string, string> LegacyColorMap = new(StringComparer.OrdinalIgnoreCase)
+    {
+        { "&0", "#000000" },
+        { "&1", "#0000AA" },
+        { "&2", "#00AA00" },
+        { "&3", "#00AAAA" },
+        { "&4", "#AA0000" },
+        { "&5", "#AA00AA" },
+        { "&6", "#FFAA00" },
+        { "&7", "#AAAAAA" },
+        { "&8", "#555555" },
+        { "&9", "#5555FF" },
+        { "&a", "#55FF55" },
+        { "&b", "#55FFFF" },
+        { "&c", "#FF5555" },
+        { "&d", "#FF55FF" },
+        { "&e", "#FFFF55" },
+        { "&f", "#FFFFFF" }
+    };
+
+    private static readonly Dictionary<string, string> NamedColorMap = new(StringComparer.OrdinalIgnoreCase)
+    {
+        { "black", "#000000" },
+        { "dark_blue", "#0000AA" },
+        { "dark_green", "#00AA00" },
+        { "dark_aqua", "#00AAAA" },
+        { "dark_red", "#AA0000" },
+        { "dark_purple", "#AA00AA" },
+        { "gold", "#FFAA00" },
+        { "gray", "#AAAAAA" },
+        { "grey", "#AAAAAA" },
+        { "dark_gray", "#555555" },
+        { "dark_grey", "#555555" },
+        { "blue", "#5555FF" },
+        { "green", "#55FF55" },
+        { "aqua", "#55FFFF" },
+        { "red", "#FF5555" },
+        { "light_purple", "#FF55FF" },
+        { "yellow", "#FFFF55" },
+        { "white", "#FFFFFF" }
+    };
+
+    private static readonly Regex FullColorRegex = new(
+        @"(?:<#(?<hex>(?:[0-9a-fA-F]{3}){1,2})>)" +
+        @"|(?<legacy>&[0-9a-fA-F])" +
+        @"|(?:<(?:color|colour|c):(?<prefixed>#?(?:[0-9a-fA-F]{3}){1,2}|" +
+        string.Join("|", NamedColorMap.Keys.Select(Regex.Escape)) + @")>)" +
+        @"|(?:<(?<named>" + string.Join("|", NamedColorMap.Keys.Select(Regex.Escape)) + @")>)",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase
+    );
+
+    private static readonly Regex OnlyHexRegex = OnlyHexRegexGen();
 
     public override int GetFirstInterestedOffset(int startOffset)
     {
         int endOffset = CurrentContext.VisualLine.LastDocumentLine.EndOffset;
-        var document = CurrentContext.Document;
+        TextDocument document = CurrentContext.Document;
         string relevantText = document.GetText(startOffset, endOffset - startOffset);
-        Match m = HexRegex.Match(relevantText);
+        Match m = FullColorRegex.Match(relevantText);
         return m.Success ? startOffset + m.Index : -1;
     }
 
@@ -26,26 +79,65 @@ public class HexColorElementGenerator(Action<ColorBoxControl> clickAction) : Vis
     {
         int endOffset = CurrentContext.VisualLine.LastDocumentLine.EndOffset;
         string text = CurrentContext.Document.GetText(offset, endOffset - offset);
-        Match m = HexRegex.Match(text);
+        Match m = FullColorRegex.Match(text);
 
         if (m is not { Success: true, Index: 0 })
         {
             return null!;
         }
 
-        string pureHex = m.Groups["hex"].Value;
-
-        if (!Color.TryParse($"#{pureHex}", out Color color))
+        string? hexValue = ResolveColor(m);
+        if (hexValue is null || !Color.TryParse(hexValue, out Color color))
         {
             return null!;
         }
 
-        var control = new ColorBoxControl(color, CurrentContext.TextView, CurrentContext.GlobalTextRunProperties,
-            clickAction, offset, m.Length);
+        ColorBoxControl control = new(color, CurrentContext.TextView,
+            CurrentContext.GlobalTextRunProperties, clickAction, offset, m.Length);
 
         TextBlock.SetBaselineOffset(control, CurrentContext.GlobalTextRunProperties.FontRenderingEmSize);
         control.VerticalAlignment = VerticalAlignment.Center;
 
         return new InlineObjectElement(0, control);
     }
+
+    private static string? ResolveColor(Match m)
+    {
+        if (m.Groups["hex"].Success)
+        {
+            string raw = m.Groups["hex"].Value;
+            return raw.StartsWith('#') ? raw : $"#{raw}";
+        }
+
+        if (m.Groups["legacy"].Success &&
+            LegacyColorMap.TryGetValue(m.Groups["legacy"].Value, out string? legacyHex))
+        {
+            return legacyHex;
+        }
+
+        if (m.Groups["prefixed"].Success)
+        {
+            string val = m.Groups["prefixed"].Value;
+            if (OnlyHexRegex.IsMatch(val))
+            {
+                return val.StartsWith('#') ? val : $"#{val}";
+            }
+
+            if (NamedColorMap.TryGetValue(val, out string? prefixedHex))
+            {
+                return prefixedHex;
+            }
+        }
+
+        if (m.Groups["named"].Success &&
+            NamedColorMap.TryGetValue(m.Groups["named"].Value, out string? namedHex))
+        {
+            return namedHex;
+        }
+
+        return null;
+    }
+
+    [GeneratedRegex(@"^#?(?:[0-9a-fA-F]{3}){1,2}$")]
+    private static partial Regex OnlyHexRegexGen();
 }
