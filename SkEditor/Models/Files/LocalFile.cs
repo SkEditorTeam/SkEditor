@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SkEditor.Models.Files;
@@ -25,7 +26,7 @@ public class LocalFile(string name, string? path = null) : BaseFile(name, path)
         return ValueTask.FromResult(stream);
     }
 
-    public override async Task SaveAsync(Stream stream)
+    public override async Task SaveAsync(Stream stream, CancellationToken token)
     {
         if (Path is null)
         {
@@ -45,8 +46,8 @@ public class LocalFile(string name, string? path = null) : BaseFile(name, path)
             await using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write,
                              FileShare.None, bufferSize: 4096, options: FileOptions.Asynchronous))
             {
-                await stream.CopyToAsync(fileStream);
-                await fileStream.FlushAsync();
+                await stream.CopyToAsync(fileStream, token);
+                await fileStream.FlushAsync(token);
             }
 
             File.Replace(tempFilePath, Path, null);

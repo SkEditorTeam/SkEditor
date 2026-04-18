@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SkEditor.Models.Files;
@@ -10,5 +11,5 @@ public abstract class BaseFile(string name, string? path)
     public bool IsSaved { get; set; } = false;
 
     public abstract ValueTask<Stream> LoadAsync();
-    public abstract Task SaveAsync(Stream stream);
+    public abstract Task SaveAsync(Stream stream, CancellationToken token);
 }
