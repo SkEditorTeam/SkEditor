@@ -47,6 +47,7 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
 
         Document.Text = await reader.ReadToEndAsync();
         Document.UndoStack.ClearAll();
+        Document.UndoStack.MarkAsOriginalFile();
     }
 
     public async Task SaveContentAsync()
@@ -77,6 +78,8 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
         {
             _saveSemaphore.Release();
         }
+
+        Document.UndoStack.MarkAsOriginalFile();
     }
 
     [RelayCommand]
