@@ -101,10 +101,4 @@
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit.TextMate\AvaloniaEdit.TextMate.csproj"/>
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="AvaloniaEdit">
-        <HintPath>..\External\AvaloniaEdit.dll</HintPath>
-      </Reference>
-    </ItemGroup>
 </Project>
