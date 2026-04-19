@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Input;
+﻿using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using SkEditor.Contracts.Services.Files.Features;
@@ -41,10 +40,15 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
 
     private void OnGlobalZoomChanged(double newSize)
     {
-        if (appSettings.IsEditorZoomLevelSyncEnabled && _tab != null)
+        if (!appSettings.IsEditorZoomLevelSyncEnabled || _tab == null || _editor == null)
         {
-            _tab.FontSize = newSize;
+            return;
         }
+
+        double oldLineHeight = _editor.TextArea.TextView.DefaultLineHeight;
+        _tab.FontSize = newSize;
+
+        FixScrollOffset(oldLineHeight);
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
@@ -91,13 +95,6 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
             return;
         }
 
-        switch (delta)
-        {
-            case < 0 when _tab.FontSize <= 5:
-            case > 0 when _tab.FontSize >= 200:
-                return;
-        }
-
         double oldLineHeight = _editor.TextArea.TextView.DefaultLineHeight;
 
         if (appSettings.IsEditorZoomLevelSyncEnabled)
@@ -107,14 +104,16 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         else
         {
             _tab.FontSize += delta;
+            FixScrollOffset(oldLineHeight);
         }
+    }
 
-        _tab.FontSize = _tab.FontSize switch
+    private void FixScrollOffset(double oldLineHeight)
+    {
+        if (_editor == null || _tab == null)
         {
-            < 5 => 5,
-            > 200 => 200,
-            _ => _tab.FontSize
-        };
+            return;
+        }
 
         double newLineHeight = _editor.TextArea.TextView.DefaultLineHeight;
         if (!(oldLineHeight > 0) || !(newLineHeight > 0) || Equals(oldLineHeight, newLineHeight))
@@ -123,13 +122,8 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         }
 
         double lineHeightChange = newLineHeight / oldLineHeight;
-        ScrollViewer? scrollViewer = _editor.ScrollViewer;
-        if (scrollViewer == null)
-        {
-            return;
-        }
 
-        double newOffset = scrollViewer.Offset.Y * lineHeightChange;
-        scrollViewer.Offset = new Vector(scrollViewer.Offset.X, newOffset);
+        double newOffset = _tab.ScrollOffset.Y * lineHeightChange;
+        _tab.ScrollOffset = new Vector(_tab.ScrollOffset.X, newOffset);
     }
 }
