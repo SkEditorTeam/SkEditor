@@ -18,7 +18,7 @@ public partial class MainMenuItem : ObservableObject
     public IRelayCommand? Command { get; private set; }
     public IEnumerable<MainMenuItem>? SubItems { get; private set; }
     public string? InputGestureText { get; private set; }
-    public bool RegisterHotKey { get; private set; }
+    public bool RegisterHotKey { get; private set; } = true;
     public bool IsSeparator { get; private set; }
 
     public static MainMenuItem Separator => new() { IsSeparator = true };
