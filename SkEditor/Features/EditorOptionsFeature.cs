@@ -12,16 +12,6 @@ namespace SkEditor.Features;
 
 public class EditorOptionsFeature(AppSettings appSettings) : IEditorFeature
 {
-    public bool CanAttach(FileTab tab) => true;
-
-    public void Attach(FileTab tab)
-    {
-    }
-
-    public void Detach(FileTab tab)
-    {
-    }
-
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
         editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));
@@ -42,9 +32,10 @@ public class EditorOptionsFeature(AppSettings appSettings) : IEditorFeature
         // editor.TextArea.TextView.CurrentLineBackground = ThemeEditor.CurrentTheme.CurrentLineBackground;
         // editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(ThemeEditor.CurrentTheme.CurrentLineBorder, 2);
         // editor.Options.HighlightCurrentLine = SkEditorAPI.Core.GetAppConfig().HighlightCurrentLine;
-        
+
         editor.TextArea.TextView.CurrentLineBackground = new ImmutableSolidColorBrush(Color.Parse("#05FFFFFF"));
-        editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(new ImmutableSolidColorBrush(Color.Parse("#0DFFFFFF")));
+        editor.TextArea.TextView.CurrentLineBorder =
+            new ImmutablePen(new ImmutableSolidColorBrush(Color.Parse("#0DFFFFFF")));
         editor.Options.HighlightCurrentLine = appSettings.HighlightCurrentLine;
     }
 }

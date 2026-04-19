@@ -10,9 +10,11 @@ using Serilog;
 using Serilog.Core;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Services;
 using SkEditor.Services.Files;
+using SkEditor.Services.Files.Features;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
@@ -116,6 +118,7 @@ public class App : Application
         services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
         services.AddSingleton<IClipboardService, ClipboardService>();
         services.AddSingleton<IFilePickerService, FilePickerService>();
+        services.AddSingleton<IZoomService, ZoomService>();
 
         services.AddSingleton<AppSettings>();
         services.AddSingleton<IConfig>(sp => sp.GetRequiredService<AppSettings>());

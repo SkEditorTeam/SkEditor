@@ -2,7 +2,7 @@
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Models.Tabs;
 
 namespace SkEditor.Behaviors;
@@ -17,7 +17,7 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
         if (AssociatedObject is not { } textEditor) return;
 
         textEditor.PropertyChanged += OnEditorPropertyChanged;
-        
+
         if (textEditor.DataContext is FileTab tab)
         {
             UpdateTabBinding(null, tab);

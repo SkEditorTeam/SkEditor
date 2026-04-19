@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Models.Tabs;
 
 namespace SkEditor.Services.Files;
@@ -31,7 +32,7 @@ public class TabService(IFileFeatureService featureService) : ITabService
         {
             featureService.OnTabOpened(fileTab);
         }
-        
+
         Tabs.Add(tab);
         SelectedTab = tab;
     }

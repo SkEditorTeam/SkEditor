@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using AvaloniaEdit.Document;
 using SkEditor.Models.Tabs;
 
@@ -7,13 +6,11 @@ namespace SkEditor.Features;
 
 public class SaveIndicatorFeature : IEditorFeature
 {
-    private readonly Dictionary<FileTab, PropertyChangedEventHandler> _handlers = [];
-
-    public bool CanAttach(FileTab tab) => true;
+    private PropertyChangedEventHandler? _handler;
 
     public void Attach(FileTab tab)
     {
-        PropertyChangedEventHandler handler = (_, e) =>
+        _handler = (_, e) =>
         {
             if (e.PropertyName == nameof(UndoStack.IsOriginalFile))
             {
@@ -21,19 +18,11 @@ public class SaveIndicatorFeature : IEditorFeature
             }
         };
 
-        _handlers[tab] = handler;
-
-        tab.Document.UndoStack.PropertyChanged += handler;
+        tab.Document.UndoStack.PropertyChanged += _handler;
     }
 
     public void Detach(FileTab tab)
     {
-        if (!_handlers.TryGetValue(tab, out var handler))
-        {
-            return;
-        }
-
-        tab.Document.UndoStack.PropertyChanged -= handler;
-        _handlers.Remove(tab);
+        tab.Document.UndoStack.PropertyChanged -= _handler;
     }
 }

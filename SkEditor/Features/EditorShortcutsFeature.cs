@@ -14,97 +14,89 @@ namespace SkEditor.Features;
 
 public class EditorShortcutsFeature : IEditorFeature
 {
-    private Dictionary<(KeyGesture, KeyGesture), Action<FileTab, TextEditor>> _chordShortcuts = [];
-    private TextEditor? _currentEditor;
+    private static readonly KeyModifiers ControlModifier = KeyUtility.GetControlModifier();
+    private Dictionary<(KeyGesture, KeyGesture), Action> _chordShortcuts = [];
 
     private List<KeyBinding> _currentKeyBindings = [];
 
-    private FileTab? _currentTab;
+    private TextEditor? _editor;
 
     private KeyGesture? _pendingChordPrefix;
-    private Dictionary<KeyGesture, Action<FileTab, TextEditor>> _shortcuts = [];
-
-    public void Attach(FileTab fileTab)
-    {
-        _currentTab = fileTab;
-
-        KeyModifiers controlModifier = KeyUtility.GetControlModifier();
-
-        _shortcuts = new Dictionary<KeyGesture, Action<FileTab, TextEditor>>
-        {
-            { new KeyGesture(Key.C, controlModifier), FromCommand(ApplicationCommands.Copy) },
-            { new KeyGesture(Key.V, controlModifier), FromCommand(ApplicationCommands.Paste) },
-            { new KeyGesture(Key.X, controlModifier), FromCommand(ApplicationCommands.Cut) },
-            { new KeyGesture(Key.Z, controlModifier), FromCommand(ApplicationCommands.Undo) },
-            { new KeyGesture(Key.R, controlModifier), FromCommand(ApplicationCommands.Redo) },
-            { new KeyGesture(Key.A, controlModifier), FromCommand(ApplicationCommands.SelectAll) },
-            { new KeyGesture(Key.F, controlModifier), FromCommand(ApplicationCommands.Find) },
-            { new KeyGesture(Key.H, controlModifier), FromCommand(ApplicationCommands.Replace) }
-        };
-
-        _chordShortcuts = new Dictionary<(KeyGesture, KeyGesture), Action<FileTab, TextEditor>>
-        {
-            {
-                (new KeyGesture(Key.E, KeyModifiers.Control), new KeyGesture(Key.W)),
-                (tab, _) => { tab.WordWrap = !tab.WordWrap; }
-            }
-        };
-
-        _shortcuts.Add(new KeyGesture(Key.Back, controlModifier), (tab, editor) =>
-        {
-            TextDocument? doc = tab.Document;
-            if (doc == null)
-            {
-                return;
-            }
-
-            int caretOffset = editor.CaretOffset;
-            int wordStart = TextUtilities.GetNextCaretPosition(
-                doc, caretOffset,
-                LogicalDirection.Backward,
-                CaretPositioningMode.WordStartOrSymbol);
-
-            if (wordStart < 0)
-            {
-                return;
-            }
-
-            doc.Remove(wordStart, caretOffset - wordStart);
-        });
-    }
+    private Dictionary<KeyGesture, Action> _shortcuts = [];
+    private FileTab? _tab;
 
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
-        _currentEditor = editor;
+        _tab = tab;
+        _editor = editor;
         _currentKeyBindings = [];
 
-        foreach ((KeyGesture gesture, Action<FileTab, TextEditor> action) in _shortcuts)
+        _shortcuts = new Dictionary<KeyGesture, Action>
         {
-            KeyBinding binding = new() { Gesture = gesture, Command = new RelayCommand(() => action(tab, editor)) };
+            { new KeyGesture(Key.C, ControlModifier), FromCommand(ApplicationCommands.Copy) },
+            { new KeyGesture(Key.V, ControlModifier), FromCommand(ApplicationCommands.Paste) },
+            { new KeyGesture(Key.X, ControlModifier), FromCommand(ApplicationCommands.Cut) },
+            { new KeyGesture(Key.Z, ControlModifier), FromCommand(ApplicationCommands.Undo) },
+            { new KeyGesture(Key.R, ControlModifier), FromCommand(ApplicationCommands.Redo) },
+            { new KeyGesture(Key.A, ControlModifier), FromCommand(ApplicationCommands.SelectAll) },
+            { new KeyGesture(Key.F, ControlModifier), FromCommand(ApplicationCommands.Find) },
+            { new KeyGesture(Key.H, ControlModifier), FromCommand(ApplicationCommands.Replace) },
+            { new KeyGesture(Key.Back, ControlModifier), DeletePreviousWord }
+        };
+
+        _chordShortcuts = new Dictionary<(KeyGesture, KeyGesture), Action>
+        {
+            {
+                (new KeyGesture(Key.E, KeyModifiers.Control), new KeyGesture(Key.W)),
+                () => { _tab.WordWrap = !_tab.WordWrap; }
+            }
+        };
+
+        foreach ((KeyGesture gesture, Action action) in _shortcuts)
+        {
+            KeyBinding binding = new() { Gesture = gesture, Command = new RelayCommand(action) };
             _currentKeyBindings.Add(binding);
             editor.TextArea.KeyBindings.Add(binding);
         }
 
-        editor.TextArea.AddHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown, RoutingStrategies.Tunnel,
-            handledEventsToo: true);
+        editor.TextArea.AddHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown,
+            RoutingStrategies.Tunnel, true);
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
     {
-        foreach (KeyBinding currentKeyBinding in _currentKeyBindings)
+        foreach (KeyBinding binding in _currentKeyBindings)
         {
-            editor.TextArea.KeyBindings.Remove(currentKeyBinding);
+            editor.TextArea.KeyBindings.Remove(binding);
         }
 
         _currentKeyBindings.Clear();
-        _chordShortcuts.Clear();
 
         editor.TextArea.RemoveHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown);
+        _editor = null;
+        _tab = null;
     }
 
-    private static Action<FileTab, TextEditor> FromCommand(ICommand command)
+    private void DeletePreviousWord()
     {
-        return (_, _) =>
+        if (_tab?.Document is not { } doc || _editor is not { } editor)
+        {
+            return;
+        }
+
+        int caretOffset = editor.CaretOffset;
+        int wordStart = TextUtilities.GetNextCaretPosition(
+            doc, caretOffset, LogicalDirection.Backward, CaretPositioningMode.WordStartOrSymbol);
+
+        if (wordStart >= 0)
+        {
+            doc.Remove(wordStart, caretOffset - wordStart);
+        }
+    }
+
+    private static Action FromCommand(ICommand command)
+    {
+        return () =>
         {
             if (command.CanExecute(null))
             {
@@ -120,7 +112,7 @@ public class EditorShortcutsFeature : IEditorFeature
 
         var exactGesture = new KeyGesture(e.Key, e.KeyModifiers);
 
-        if (_currentEditor == null || _currentTab == null)
+        if (_editor == null || _tab == null)
         {
             return;
         }
@@ -129,9 +121,9 @@ public class EditorShortcutsFeature : IEditorFeature
         {
             (KeyGesture _pendingChordPrefix, KeyGesture exactGesture) exactChord = (_pendingChordPrefix, exactGesture);
 
-            if (_chordShortcuts.TryGetValue(exactChord, out Action<FileTab, TextEditor>? action))
+            if (_chordShortcuts.TryGetValue(exactChord, out Action? action))
             {
-                action(_currentTab, _currentEditor);
+                action();
             }
             else if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
             {
@@ -141,7 +133,7 @@ public class EditorShortcutsFeature : IEditorFeature
 
                 if (_chordShortcuts.TryGetValue(strippedChord, out action))
                 {
-                    action(_currentTab, _currentEditor);
+                    action();
                 }
             }
 

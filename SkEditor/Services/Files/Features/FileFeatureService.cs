@@ -1,26 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AvaloniaEdit;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
+using Microsoft.Extensions.DependencyInjection;
+using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Features;
 using SkEditor.Models.Tabs;
 
-namespace SkEditor.Services.Files;
+namespace SkEditor.Services.Files.Features;
 
-public class FileFeatureService(IEnumerable<IEditorFeature> allFeatures, INotificationService notifications)
-    : IFileFeatureService
+public class FileFeatureService(IServiceProvider serviceProvider) : IFileFeatureService
 {
     private readonly Dictionary<FileTab, List<IEditorFeature>> _attachedFeatures = [];
 
     public void OnTabOpened(FileTab tab)
     {
-        _attachedFeatures[tab] = [];
+        List<IEditorFeature> features = serviceProvider.GetServices<IEditorFeature>()
+            .Where(f => f.CanAttach(tab))
+            .ToList();
 
-        foreach (var feature in allFeatures.Where(f => f.CanAttach(tab)))
+        _attachedFeatures[tab] = features;
+
+        foreach (IEditorFeature feature in features)
         {
             feature.Attach(tab);
-            _attachedFeatures[tab].Add(feature);
         }
     }
 

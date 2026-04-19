@@ -3,7 +3,7 @@ using AvaloniaEdit;
 using SkEditor.Features;
 using SkEditor.Models.Tabs;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Contracts.Services.Files.Features;
 
 public interface IFileFeatureService
 {

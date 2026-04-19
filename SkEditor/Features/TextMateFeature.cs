@@ -3,7 +3,6 @@ using System.IO;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
-using AvaloniaEdit.Editing;
 using AvaloniaEdit.TextMate;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Tabs;
@@ -18,19 +17,17 @@ namespace SkEditor.Features;
 
 public class TextMateFeature(INotificationService notifications) : IEditorFeature
 {
-    private readonly Dictionary<TextArea, TextMate.Installation> _installations = new();
     private readonly SkEditorRegistryOptions _registryOptions = new(ThemeName.DarkPlus);
+    private TextMate.Installation? _installation;
 
     public bool CanAttach(FileTab tab) => true;
 
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
-        TextMate.Installation textMateInstallation = editor.InstallTextMate(_registryOptions);
+        _installation = editor.InstallTextMate(_registryOptions);
 
-        textMateInstallation.SetGrammar("source.sk");
-        textMateInstallation.SetTheme(_registryOptions.GetTheme("dark_skript"));
-
-        _installations.Add(editor.TextArea, textMateInstallation);
+        _installation.SetGrammar("source.sk");
+        _installation.SetTheme(_registryOptions.GetTheme("dark_skript"));
 
         editor.TextArea.AddHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown, RoutingStrategies.Tunnel,
             handledEventsToo: true);
@@ -38,11 +35,7 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
     {
-        if (_installations.TryGetValue(editor.TextArea, out var installation))
-        {
-            installation.Dispose();
-            _installations.Remove(editor.TextArea);
-        }
+        _installation?.Dispose();
 
         editor.TextArea.RemoveHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown);
     }
@@ -54,15 +47,10 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
             return;
         }
 
-        if (sender is not TextArea textArea || !_installations.TryGetValue(textArea, out var installation))
-        {
-            return;
-        }
-
         notifications.Debug("Reloading TextMate grammar and theme...");
 
-        installation.SetGrammar("source.sk");
-        installation.SetTheme(_registryOptions.GetTheme("dark_skript"));
+        _installation?.SetGrammar("source.sk");
+        _installation?.SetTheme(_registryOptions.GetTheme("dark_skript"));
     }
 }
 
