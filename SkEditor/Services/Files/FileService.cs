@@ -8,7 +8,11 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services.Files;
 
-public class FileService(ITabService tabService, ITranslationService translation, IFileTabFactory fileTabFactory)
+public class FileService(
+    ITabService tabs,
+    ITranslationService translation,
+    IFileTabFactory fileTabFactory,
+    IFilePickerService filePicker)
     : IFileService
 {
     public void NewFile()
@@ -17,21 +21,41 @@ public class FileService(ITabService tabService, ITranslationService translation
             translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
 
         FileTab newFileTab = fileTabFactory.CreateNewFile(header.Value);
-        tabService.OpenTab(newFileTab);
+        tabs.OpenTab(newFileTab);
     }
 
     public async Task OpenFile(string path)
     {
         FileTab fileTab = fileTabFactory.CreateFromFile(path);
         await fileTab.LoadContentAsync();
-        tabService.OpenTab(fileTab);
+        tabs.OpenTab(fileTab);
     }
 
     public async Task SaveFile()
     {
-        if (tabService.SelectedTab is FileTab fileTab)
+        if (tabs.SelectedTab is FileTab fileTab)
         {
+            if (fileTab.File.Path == null)
+            {
+                await SaveAsFile();
+                return;
+            }
+
             await fileTab.SaveContentAsync();
+        }
+    }
+
+    public async Task SaveAsFile()
+    {
+        if (tabs.SelectedTab is FileTab fileTab)
+        {
+            string? path = await filePicker.SaveFileAsync();
+            if (path != null)
+            {
+                fileTab.File.Path = path;
+                fileTab.UpdateHeader();
+                await fileTab.SaveContentAsync();
+            }
         }
     }
 
@@ -41,7 +65,7 @@ public class FileService(ITabService tabService, ITranslationService translation
         string pattern = Regex.Escape(template).Replace(@"\{0}", @"(\d+)");
         Regex regex = new(pattern);
 
-        var existingNumbers = tabService.Tabs
+        var existingNumbers = tabs.Tabs
             .Select(tab => regex.Match(tab.Header.Value))
             .Where(m => m.Success)
             .Select(m => int.Parse(m.Groups[1].Value))

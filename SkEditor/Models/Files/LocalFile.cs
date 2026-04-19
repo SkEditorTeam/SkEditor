@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SkEditor.Models.Files;
 
-public class LocalFile(string name, string? path = null) : BaseFile(name, path)
+public class LocalFile(string? path = null) : BaseFile(path)
 {
     public override ValueTask<Stream> LoadAsync()
     {
@@ -37,6 +37,11 @@ public class LocalFile(string name, string? path = null) : BaseFile(name, path)
         if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
         {
             Directory.CreateDirectory(directory);
+        }
+
+        if (!File.Exists(Path))
+        {
+            await File.Create(Path).DisposeAsync();
         }
 
         string tempFilePath = Path + ".tmp";

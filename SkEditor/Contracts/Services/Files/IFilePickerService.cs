@@ -4,5 +4,6 @@ namespace SkEditor.Contracts.Services.Files;
 
 public interface IFilePickerService
 {
-    Task<string[]?> PickFileAsync();
+    Task<string[]?> PickFilesAsync();
+    Task<string?> SaveFileAsync();
 }

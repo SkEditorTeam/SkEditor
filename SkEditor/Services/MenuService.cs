@@ -21,17 +21,23 @@ public class MenuService(IFileService fileService) : IMenuService
 
     private MainMenuItem BuildFileMenu()
     {
-        MainMenuItem newFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderNew, Symbol.Document)
+        MainMenuItem fileMenu = MainMenuItem.HeaderOnly(TranslationKey.MenuHeaderFile);
+
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderNew, Symbol.Document)
             .WithCommand(fileService.NewFile)
-            .WithInputGesture("Ctrl+N");
+            .WithInputGesture("Ctrl+N")
+            .AddTo(fileMenu);
 
-        MainMenuItem saveFile = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
             .WithCommand(fileService.SaveFile)
-            .WithInputGesture("Ctrl+S");
+            .WithInputGesture("Ctrl+S")
+            .AddTo(fileMenu);
 
-        return MainMenuItem.HeaderOnly(TranslationKey.MenuHeaderFile).WithItems([
-            newFile,
-            saveFile
-        ]);
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
+            .WithCommand(fileService.SaveAsFile)
+            .WithInputGesture("Ctrl+Shift+S")
+            .AddTo(fileMenu);
+
+        return fileMenu;
     }
 }

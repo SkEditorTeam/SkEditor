@@ -7,4 +7,5 @@ public interface IFileService
     void NewFile();
     Task OpenFile(string path);
     Task SaveFile();
+    Task SaveAsFile();
 }

@@ -82,6 +82,17 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
         Document.UndoStack.MarkAsOriginalFile();
     }
 
+    public void UpdateHeader()
+    {
+        if (File.Path is null)
+        {
+            return;
+        }
+
+        string fileName = Path.GetFileName(File.Path);
+        Header = TranslatableString.FromRawString(fileName);
+    }
+
     [RelayCommand]
     private void CloseTab()
     {

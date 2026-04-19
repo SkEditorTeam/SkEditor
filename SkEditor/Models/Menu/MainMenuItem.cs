@@ -13,41 +13,15 @@ public partial class MainMenuItem : ObservableObject
     [ObservableProperty]
     public partial bool IsVisible { get; set; } = true;
 
-    protected MainMenuItem()
-    {
-    }
-
-    public TranslationKey? HeaderKey { get; init; }
-    public Symbol? IconSymbol { get; init; }
-    public IRelayCommand? Command { get; init; }
-    public IEnumerable<MainMenuItem>? SubItems { get; init; }
-    public string? InputGestureText { get; init; }
-    public bool RegisterHotKey { get; init; }
-    public bool IsSeparator { get; init; }
+    public TranslationKey? HeaderKey { get; private set; }
+    public Symbol? IconSymbol { get; private set; }
+    public IRelayCommand? Command { get; private set; }
+    public IEnumerable<MainMenuItem>? SubItems { get; private set; }
+    public string? InputGestureText { get; private set; }
+    public bool RegisterHotKey { get; private set; }
+    public bool IsSeparator { get; private set; }
 
     public static MainMenuItem Separator => new() { IsSeparator = true };
-
-    private MainMenuItem CloneWith(
-        TranslationKey? headerKey = null,
-        Symbol? iconSymbol = null,
-        IRelayCommand? command = null,
-        IEnumerable<MainMenuItem>? subItems = null,
-        string? inputGestureText = null,
-        bool registerHotkey = true,
-        bool? isVisible = null)
-    {
-        return new MainMenuItem
-        {
-            HeaderKey = headerKey ?? HeaderKey,
-            IconSymbol = iconSymbol ?? IconSymbol,
-            Command = command ?? Command,
-            SubItems = subItems ?? SubItems,
-            InputGestureText = inputGestureText ?? InputGestureText,
-            RegisterHotKey = registerHotkey,
-            IsSeparator = IsSeparator,
-            IsVisible = isVisible ?? IsVisible
-        };
-    }
 
     public static MainMenuItem HeaderOnly(TranslationKey headerKey)
     {
@@ -70,45 +44,55 @@ public partial class MainMenuItem : ObservableObject
 
     public MainMenuItem WithItem(MainMenuItem subItem)
     {
-        List<MainMenuItem> list = SubItems is not null ? [..SubItems] : [];
-        list.Add(subItem);
-        return CloneWith(subItems: list);
+        SubItems = SubItems is not null ? [..SubItems, subItem] : [subItem];
+        return this;
     }
 
     public MainMenuItem WithItems(IEnumerable<MainMenuItem> subItems)
     {
-        List<MainMenuItem> list = SubItems is not null ? [..SubItems] : [];
-        list.AddRange(subItems);
-        return CloneWith(subItems: list);
+        SubItems = SubItems is not null ? [..SubItems, ..subItems] : subItems;
+        return this;
     }
 
     public MainMenuItem WithIcon(Symbol iconSymbol)
     {
-        return CloneWith(iconSymbol: iconSymbol);
+        IconSymbol = iconSymbol;
+        return this;
     }
 
     public MainMenuItem WithCommand(IRelayCommand command)
     {
-        return CloneWith(command: command);
+        Command = command;
+        return this;
     }
 
     public MainMenuItem WithCommand(Action execute)
     {
-        return CloneWith(command: new RelayCommand(execute));
+        Command = new RelayCommand(execute);
+        return this;
     }
 
     public MainMenuItem WithCommand(Func<Task> execute)
     {
-        return CloneWith(command: new AsyncRelayCommand(execute));
+        Command = new AsyncRelayCommand(execute);
+        return this;
     }
 
     public MainMenuItem WithInputGesture(string text, bool registerHotkey = true)
     {
-        return CloneWith(inputGestureText: text, registerHotkey: registerHotkey);
+        InputGestureText = text;
+        RegisterHotKey = registerHotkey;
+        return this;
     }
 
     public MainMenuItem WithVisibility(bool isVisible)
     {
-        return CloneWith(isVisible: isVisible);
+        IsVisible = isVisible;
+        return this;
+    }
+
+    public void AddTo(MainMenuItem parent)
+    {
+        parent.WithItem(this);
     }
 }

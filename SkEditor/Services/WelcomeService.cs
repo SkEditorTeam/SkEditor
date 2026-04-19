@@ -82,7 +82,7 @@ public class WelcomeService : IWelcomeService
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
                     new AsyncRelayCommand(async () =>
                     {
-                        string[]? paths = await _filePickerService.PickFileAsync();
+                        string[]? paths = await _filePickerService.PickFilesAsync();
                         if (paths is null) return;
 
                         foreach (string path in paths)

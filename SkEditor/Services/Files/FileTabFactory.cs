@@ -17,7 +17,7 @@ public class FileTabFactory(AppSettings appSettings, INotificationService notifi
 
         return new FileTab(header, appSettings, notificationService)
         {
-            File = new LocalFile(fileName, path)
+            File = new LocalFile(path)
         };
     }
 
@@ -27,7 +27,8 @@ public class FileTabFactory(AppSettings appSettings, INotificationService notifi
 
         return new FileTab(header, appSettings, notificationService)
         {
-            File = new LocalFile(name)
+            File = new LocalFile(),
+            IsSaved = false
         };
     }
 }
