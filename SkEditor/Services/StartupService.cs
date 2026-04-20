@@ -81,12 +81,6 @@ public class StartupService(
 
                     desktop.MainWindow = mainWindow;
                     mainWindow.ApplyTemplate();
-
-#if DEBUG
-                    // The Diagnostics package is only included in Debug builds,
-                    // so after a Release compilation this line may show an error until recompiled.
-                    mainWindow.AttachDevTools();
-#endif
                 });
             }).ContinueWith(async t =>
             {

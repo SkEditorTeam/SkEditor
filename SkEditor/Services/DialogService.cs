@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
@@ -21,32 +24,20 @@ public class DialogService(WindowRegistry windowRegistry, ILogService logs) : ID
             throw new InvalidOperationException("No active window found.");
         }
 
-        FATaskDialog td = new()
+        var dialog = new FATaskDialog
         {
-            Title = "FluentAvalonia",
-            Header = "Header",
-            SubHeader = "Subheader",
-            Content = "This is some sample text, but you can put more advanced content here if you like",
+            Header = "Niezapisane zmiany",
+            SubHeader = "Plik 'adminchat.sk' ma niezapisane zmiany. Chcesz je zapisać przed zamknięciem?",
             IconSource = new SymbolIconSource { Symbol = Symbol.Save },
-            FooterVisibility = FATaskDialogFooterVisibility.Auto,
-            Footer = new CheckBox { Content = "Never show me this again" },
-            Commands =
-            {
-                new FATaskDialogCommand
-                {
-                    Text = "Command Text",
-                    Description = "Description",
-                    DialogResult = "CommandResult",
-                    ClosesOnInvoked = true
-                }
-            },
             Buttons =
             {
-                new FATaskDialogButton("OK", "myResult")
+                new FATaskDialogButton("Zapisz", FATaskDialogStandardResult.Yes) { IsDefault = true },
+                new FATaskDialogButton("Nie zapisuj", FATaskDialogStandardResult.No),
+                FATaskDialogButton.CancelButton
             },
             XamlRoot = mainWindow
         };
 
-        await td.ShowAsync();
+        await dialog.ShowAsync(true);
     }
 }
