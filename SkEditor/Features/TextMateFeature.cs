@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Platform;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
 using SkEditor.Contracts.Services;
@@ -65,9 +67,7 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme) : IRegistryOptions
             return _defaultRegistry.GetGrammar(scopeName);
         }
 
-        using var stream =
-            File.OpenRead(
-                @"C:\Users\Notro\Documents\Projekty\CSharp\Aplikacje\SkEditor\SkEditor\Assets\Syntax\skript.tmLanguage.json");
+        using var stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/skript.tmLanguage.json"));
         using var reader = new StreamReader(stream);
         return GrammarReader.ReadGrammarSync(reader);
     }
@@ -79,9 +79,7 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme) : IRegistryOptions
             return _defaultRegistry.GetTheme(scopeName);
         }
 
-        using var stream =
-            File.OpenRead(
-                @"C:\Users\Notro\Documents\Projekty\CSharp\Aplikacje\SkEditor\SkEditor\Assets\Syntax\dark_skript.json");
+        using var stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/dark_skript.json"));
         using var reader = new StreamReader(stream);
         return ThemeReader.ReadThemeSync(reader);
     }

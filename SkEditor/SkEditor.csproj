@@ -41,13 +41,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AvaloniaXaml Remove="Assets\*.axaml" />
-        <AvaloniaResource Include="Styles\**" />
+        <AvaloniaXaml Remove="Assets\*.axaml"/>
+        <AvaloniaResource Include="Styles\**"/>
 
-        <AvaloniaResource Include="Assets\**" Exclude="Assets\Syntax\**"/>
-        <Content Include="Assets\Syntax\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
+        <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
 
     <ItemGroup>
