@@ -8,14 +8,14 @@ using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Services.Files;
 
-public class FileTabFactory(AppSettings appSettings, INotificationService notificationService) : IFileTabFactory
+public class FileTabFactory(AppSettings appSettings, IDialogService dialogService) : IFileTabFactory
 {
     public FileTab CreateFromFile(string path)
     {
         string fileName = Path.GetFileName(path);
         var header = TranslatableString.FromRawString(fileName);
 
-        return new FileTab(header, appSettings, notificationService)
+        return new FileTab(header, appSettings, dialogService)
         {
             File = new LocalFile(path)
         };
@@ -25,7 +25,7 @@ public class FileTabFactory(AppSettings appSettings, INotificationService notifi
     {
         TranslatableString header = TranslatableString.FromRawString(name);
 
-        return new FileTab(header, appSettings, notificationService)
+        return new FileTab(header, appSettings, dialogService)
         {
             File = new LocalFile(),
             IsSaved = false

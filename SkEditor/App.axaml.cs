@@ -104,6 +104,7 @@ public class App : Application
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<IMenuService, MenuService>();
         services.AddSingleton<INotificationService, NotificationService>();
+        services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<ILogService, LogService>();
         services.AddSingleton<IconProvider>();
         services.AddSingleton<CrashChecker>();

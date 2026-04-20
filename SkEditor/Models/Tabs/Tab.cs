@@ -8,7 +8,7 @@ namespace SkEditor.Models.Tabs;
 public abstract partial class Tab(TranslatableString header) : ObservableObject
 {
     [ObservableProperty]
-    public partial TranslatableString Header { get; set; } = header;
+    public partial TranslatableString Header { get; protected set; } = header;
 
     [ObservableProperty]
     public partial bool IsSaved { get; set; } = true;

@@ -13,7 +13,7 @@ using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Models.Tabs;
 
-public partial class FileTab(TranslatableString header, AppSettings appSettings, INotificationService notifications)
+public partial class FileTab(TranslatableString header, AppSettings appSettings, IDialogService dialogs)
     : Tab(header)
 {
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
@@ -94,9 +94,13 @@ public partial class FileTab(TranslatableString header, AppSettings appSettings,
     }
 
     [RelayCommand]
-    private void CloseTab()
+    private async Task CloseTab()
     {
-        notifications.Debug("Close Editor Tab");
+        if (!IsSaved)
+        {
+            await dialogs.Debug("You have unsaved changes. Please save before closing the tab.");
+            return;
+        }
 
         RequestClose();
     }
