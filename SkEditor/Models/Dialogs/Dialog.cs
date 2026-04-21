@@ -49,9 +49,10 @@ public class Dialog
     }
 }
 
-public class DialogButton(TranslatableString text, DialogResult result)
+public class DialogButton(TranslatableString text, DialogResult result, bool isDefault = false)
 {
     public TranslatableString Text { get; init; } = text;
+    public bool IsDefault { get; init; } = isDefault;
     public DialogResult Result { get; init; } = result;
 
     public static DialogButton Ok => new(TranslationKey.ButtonOkay, DialogResult.Ok);

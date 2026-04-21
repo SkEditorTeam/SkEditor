@@ -20,10 +20,19 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
             throw new InvalidOperationException("No active window found.");
         }
 
-        var taskDialog = new FATaskDialog
+        FATaskDialog taskDialog = BuildTaskDialog(dialog);
+        taskDialog.XamlRoot = mainWindow;
+
+        object result = await taskDialog.ShowAsync(true);
+
+        return result as DialogResult ?? throw new InvalidOperationException("Unexpected dialog result type.");
+    }
+
+    private static FATaskDialog BuildTaskDialog(Dialog dialog)
+    {
+        FATaskDialog taskDialog = new()
         {
-            Header = dialog.Title.Value,
-            XamlRoot = mainWindow
+            Header = dialog.Title.Value
         };
 
         if (dialog.Message is not null)
@@ -38,11 +47,10 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
 
         foreach (DialogButton button in dialog.Buttons)
         {
-            taskDialog.Buttons.Add(new FATaskDialogButton(button.Text.Value, button.Result));
+            taskDialog.Buttons.Add(new FATaskDialogButton(button.Text.Value, button.Result)
+                { IsDefault = button.IsDefault });
         }
 
-        object result = await taskDialog.ShowAsync(true);
-
-        return result as DialogResult ?? throw new InvalidOperationException("Unexpected dialog result type.");
+        return taskDialog;
     }
 }

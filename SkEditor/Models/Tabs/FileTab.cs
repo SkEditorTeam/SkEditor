@@ -109,7 +109,7 @@ public partial class FileTab(
                 .WithMessage(TranslationKey.UnsavedFileMessage)
                 .WithIcon(Symbol.Save)
                 .WithButtons(
-                    new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes),
+                    new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
                     new DialogButton(TranslationKey.ButtonDontSave, DialogResult.No),
                     DialogButton.Cancel
                 );
