@@ -104,7 +104,7 @@
                 <TextBlock Text="{localization:Translate RemoteConnectionFieldKeyFile}" />
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                     <TextBox Name="KeyFileTextBox" Text="{Binding ConnectionInfo.KeyFilePath}" />
-                    <Button Grid.Column="1" Content="{localization:Translate BrowseButton}" HorizontalAlignment="Right"
+                    <Button Grid.Column="1" Content="{localization:Translate ButtonBrowse}" HorizontalAlignment="Right"
                             Command="{Binding BrowseKeyCommand}" />
                 </Grid>
             </StackPanel>

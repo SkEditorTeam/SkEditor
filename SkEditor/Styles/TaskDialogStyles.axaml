@@ -58,7 +58,6 @@
                         <Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="12">
                             <Grid Grid.Row="0"
                                   Name="HeaderHost"
-                                  ColumnSpacing="12"
                                   Background="{TemplateBinding HeaderBackground}"
                                   IsVisible="False"
                                   ColumnDefinitions="Auto,*">
@@ -193,6 +192,7 @@
             </Style>
             <Style Selector="^ /template/ Grid#HeaderHost">
                 <Setter Property="IsVisible" Value="True" />
+                <Setter Property="ColumnSpacing" Value="12" />
             </Style>
         </Style>
 

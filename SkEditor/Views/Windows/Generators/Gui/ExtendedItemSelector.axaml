@@ -41,6 +41,6 @@
             </StackPanel>
         </StackPanel>
         <Button Name="ContinueButton" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100"
-                Content="{localization:Translate ContinueButton}" />
+                Content="{localization:Translate ButtonContinue}" />
     </Grid>
 </Window>

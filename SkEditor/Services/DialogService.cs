@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
-using FluentIcons.Common;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Dialogs;
 using SkEditor.Services.Windowing;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Services;
 
-public class DialogService(WindowRegistry windowRegistry, ILogService logs) : IDialogService
+public class DialogService(WindowRegistry windowRegistry) : IDialogService
 {
-    public async Task Debug(string message)
+    public async Task<DialogResult> ShowDialog(Dialog dialog)
     {
         MainWindow? mainWindow = windowRegistry.Active;
 
@@ -24,20 +20,29 @@ public class DialogService(WindowRegistry windowRegistry, ILogService logs) : ID
             throw new InvalidOperationException("No active window found.");
         }
 
-        var dialog = new FATaskDialog
+        var taskDialog = new FATaskDialog
         {
-            Header = "Unsaved changes",
-            SubHeader = "This file has unsaved changes. Do you want to save them before closing?",
-            IconSource = new SymbolIconSource { Symbol = Symbol.Save },
-            Buttons =
-            {
-                new FATaskDialogButton("Save", FATaskDialogStandardResult.Yes) { IsDefault = true },
-                new FATaskDialogButton("Don't Save", FATaskDialogStandardResult.No),
-                new FATaskDialogButton("Cancel", FATaskDialogStandardResult.Cancel),
-            },
+            Header = dialog.Title.Value,
             XamlRoot = mainWindow
         };
 
-        await dialog.ShowAsync(true);
+        if (dialog.Message is not null)
+        {
+            taskDialog.SubHeader = dialog.Message.Value;
+        }
+
+        if (dialog.Icon is not null)
+        {
+            taskDialog.IconSource = new SymbolIconSource { Symbol = dialog.Icon.Value };
+        }
+
+        foreach (DialogButton button in dialog.Buttons)
+        {
+            taskDialog.Buttons.Add(new FATaskDialogButton(button.Text.Value, button.Result));
+        }
+
+        object result = await taskDialog.ShowAsync(true);
+
+        return result as DialogResult ?? throw new InvalidOperationException("Unexpected dialog result type.");
     }
 }

@@ -115,7 +115,7 @@ internal class ItemContextMenu
         {
             GuiGenerator.Instance.BackgroundItem = null;
             GuiGenerator.Instance.BackgroundItemButton.Content =
-                TranslationService.Current.Get(TranslationKey.SelectButton);
+                TranslationService.Current.Get(TranslationKey.ButtonSelect);
         }
         else
         {

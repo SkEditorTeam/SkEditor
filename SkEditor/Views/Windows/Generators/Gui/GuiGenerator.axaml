@@ -27,7 +27,7 @@
             </StackPanel>
             <StackPanel Spacing="4" Margin="10">
                 <TextBlock Text="{localization:Translate GuiGeneratorBackgroundItem}" />
-                <Button Name="BackgroundItemButton" Width="175" Content="{localization:Translate SelectButton}" />
+                <Button Name="BackgroundItemButton" Width="175" Content="{localization:Translate ButtonSelect}" />
             </StackPanel>
         </StackPanel>
         <Grid x:Name="ItemGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"

@@ -16,16 +16,13 @@ public partial class TranslatableString : ObservableObject
 
     private readonly string[] _parameters = [];
 
-    [ObservableProperty]
-    private string _key;
-
     /// <summary>
     ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key.
     /// </summary>
     /// <param name="key">The translation key to use for retrieving the translated string.</param>
     public TranslatableString(TranslationKey key)
     {
-        _key = key.ToString();
+        Key = key.ToString();
 
         lock (Instances)
         {
@@ -44,7 +41,7 @@ public partial class TranslatableString : ObservableObject
     // ReSharper disable once UnusedParameter.Local
     private TranslatableString(string rawValue, bool _)
     {
-        _key = string.Empty;
+        Key = string.Empty;
         Value = rawValue;
     }
 
@@ -68,6 +65,9 @@ public partial class TranslatableString : ObservableObject
     public TranslatableString(TranslationKey key, params string[]? parameters) : this(key) =>
         _parameters = parameters ?? [];
 
+    [ObservableProperty]
+    public partial string Key { get; set; }
+
     private TranslationKey EnumKey => Enum.Parse<TranslationKey>(Key);
 
     /// <summary>
@@ -86,6 +86,17 @@ public partial class TranslatableString : ObservableObject
                 ? translationService.Get(EnumKey)
                 : translationService.Get(EnumKey, _parameters);
         }
+    }
+
+    /// <summary>
+    ///     Implicitly converts a <see cref="TranslationKey" /> to a <see cref="TranslatableString" /> by creating a new
+    ///     instance with the given key.
+    /// </summary>
+    /// <param name="key">The translation key to convert to a <see cref="TranslatableString" />.</param>
+    /// <returns>A new instance of <see cref="TranslatableString" /> initialized with the provided translation key.</returns>
+    public static implicit operator TranslatableString(TranslationKey key)
+    {
+        return new TranslatableString(key);
     }
 
     /// <summary>

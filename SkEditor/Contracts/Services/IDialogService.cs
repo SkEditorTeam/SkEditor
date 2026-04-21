@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
+using SkEditor.Models.Dialogs;
 
 namespace SkEditor.Contracts.Services;
 
 public interface IDialogService
 {
-    Task Debug(string message);
+    Task<DialogResult> ShowDialog(Dialog dialog);
 }
