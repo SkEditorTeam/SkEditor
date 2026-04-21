@@ -13,12 +13,7 @@
     <x:String x:Key="TaskDialogFooterButtonExpandedText">Less Details</x:String>
 
     <Thickness x:Key="TaskDialogIconMargin">12</Thickness>
-    <Thickness x:Key="TaskDialogHeaderPadding">60 9 12 9</Thickness>
-    <Thickness x:Key="TaskDialogHeaderPaddingNoIcon">18 9 12 9</Thickness>
-    <Thickness x:Key="TaskDialogSubHeaderPadding">18 4</Thickness>
     <x:Double x:Key="TaskDialogIconSize">28</x:Double>
-    <Thickness x:Key="TaskDialogContentMargin">18 9</Thickness>
-    <Thickness x:Key="TaskDialogButtonHostMargin">18</Thickness>
 
     <FontWeight x:Key="TaskDialogHeaderFontWeight">SemiBold</FontWeight>
     <x:Double x:Key="TaskDialogHeaderFontSize">20</x:Double>
@@ -55,14 +50,15 @@
                             MaxWidth="{DynamicResource TaskDialogMaxWidth}"
                             MinHeight="{DynamicResource TaskDialogMinHeight}"
                             MaxHeight="{DynamicResource TaskDialogMaxHeight}"
-                            Padding="8"
+                            Padding="18"
                             Name="ContentRoot"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             BackgroundSizing="{TemplateBinding BackgroundSizing}">
-                        <Grid RowDefinitions="Auto,Auto,*,Auto">
+                        <Grid RowDefinitions="Auto,Auto,*,Auto" RowSpacing="12">
                             <Grid Grid.Row="0"
                                   Name="HeaderHost"
+                                  ColumnSpacing="12"
                                   Background="{TemplateBinding HeaderBackground}"
                                   IsVisible="False"
                                   ColumnDefinitions="Auto,*">
@@ -95,14 +91,12 @@
                                        VerticalAlignment="Center"
                                        TextWrapping="Wrap"
                                        FontSize="{StaticResource TaskDialogSubHeaderFontSize}"
-                                       Margin="{DynamicResource TaskDialogSubHeaderPadding}"
                                        Grid.Row="1"
                                        IsVisible="False" />
 
                             <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                                           VerticalScrollBarVisibility="Auto"
-                                          Grid.Row="2"
-                                          Margin="{StaticResource TaskDialogContentMargin}">
+                                          Grid.Row="2">
                                 <StackPanel Spacing="18">
                                     <ContentPresenter Name="ContentPresenter"
                                                       Content="{TemplateBinding Content}"
@@ -152,10 +146,8 @@
                                 </StackPanel>
                             </ScrollViewer>
 
-                            <Border Padding="{StaticResource TaskDialogButtonHostMargin}"
-                                    Grid.Row="3"
-                                    Background="{DynamicResource TaskDialogButtonAreaBackground}"
-                                    Name="ButtonBorder">
+                            <Border Name="ButtonBorder" Grid.Row="3"
+                                    Background="{DynamicResource TaskDialogButtonAreaBackground}">
                                 <ItemsControl Name="ButtonsHost"
                                               KeyboardNavigation.TabNavigation="Continue">
                                     <ItemsControl.ItemsPanel>
@@ -184,9 +176,6 @@
             </Style>
             <Style Selector="^ /template/ TextBlock#HeaderText">
                 <Setter Property="IsVisible" Value="True" />
-            </Style>
-            <Style Selector="^:not(:icon) /template/ TextBlock#HeaderText">
-                <Setter Property="Margin" Value="{DynamicResource TaskDialogHeaderPaddingNoIcon}" />
             </Style>
         </Style>
 

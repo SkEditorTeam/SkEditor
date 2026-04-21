@@ -26,14 +26,14 @@ public class DialogService(WindowRegistry windowRegistry, ILogService logs) : ID
 
         var dialog = new FATaskDialog
         {
-            Header = "Niezapisane zmiany",
-            SubHeader = "Plik 'adminchat.sk' ma niezapisane zmiany. Chcesz je zapisać przed zamknięciem?",
+            Header = "Unsaved changes",
+            SubHeader = "This file has unsaved changes. Do you want to save them before closing?",
             IconSource = new SymbolIconSource { Symbol = Symbol.Save },
             Buttons =
             {
-                new FATaskDialogButton("Zapisz", FATaskDialogStandardResult.Yes) { IsDefault = true },
-                new FATaskDialogButton("Nie zapisuj", FATaskDialogStandardResult.No),
-                FATaskDialogButton.CancelButton
+                new FATaskDialogButton("Save", FATaskDialogStandardResult.Yes) { IsDefault = true },
+                new FATaskDialogButton("Don't Save", FATaskDialogStandardResult.No),
+                new FATaskDialogButton("Cancel", FATaskDialogStandardResult.Cancel),
             },
             XamlRoot = mainWindow
         };
