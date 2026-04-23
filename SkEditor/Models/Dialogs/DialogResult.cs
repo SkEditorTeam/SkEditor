@@ -32,12 +32,13 @@ public class DialogResult(StandardDialogResult result)
 
     public override bool Equals(object? obj)
     {
-        if (obj is DialogResult dialogResult)
+        return obj switch
         {
-            return Result == dialogResult.Result;
-        }
-
-        return false;
+            DialogResult other when Result == StandardDialogResult.Custom => Data == other.Data,
+            DialogResult other => Result == other.Result,
+            StandardDialogResult standardResult => Result == standardResult,
+            _ => false
+        };
     }
 
     public override int GetHashCode()
