@@ -5,5 +5,5 @@ namespace SkEditor.Contracts.Services;
 
 public interface IDialogService
 {
-    Task<DialogResult> ShowDialog(Dialog dialog);
+    Task<DialogResult> ShowDialogAsync(Dialog dialog);
 }

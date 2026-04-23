@@ -30,7 +30,7 @@ public class StartupService(
     StateConfig stateConfig,
     LegacyConfigMigrator configMigrator) : IStartupService
 {
-    public async Task CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop,
+    public async Task CompleteApplicationStartAsync(IClassicDesktopStyleApplicationLifetime desktop,
         SplashScreen? splashScreen)
     {
         try

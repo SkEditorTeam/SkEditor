@@ -6,5 +6,5 @@ namespace SkEditor.Contracts.Services;
 
 public interface IStartupService
 {
-    Task CompleteApplicationStart(IClassicDesktopStyleApplicationLifetime desktop, SplashScreen? splashScreen);
+    Task CompleteApplicationStartAsync(IClassicDesktopStyleApplicationLifetime desktop, SplashScreen? splashScreen);
 }

@@ -114,7 +114,8 @@ public partial class FileTab(
                     DialogButton.Cancel
                 );
 
-            DialogResult result = await dialogs.ShowDialog(dialog);
+            DialogResult result = await dialogs.ShowDialogAsync(dialog);
+
             if (result == StandardDialogResult.Cancel)
             {
                 return;

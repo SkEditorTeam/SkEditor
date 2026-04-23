@@ -148,10 +148,10 @@ public partial class MainWindow : FAAppWindow
     {
         try
         {
-            await _translation.ChangeLanguage(_appSettings.Language, true);
+            await _translation.ChangeLanguageAsync(_appSettings.Language, true);
             await _splashScreen.TryUpdateStatusAsync("Loading themes and addons...");
 
-            Task themeTask = ThemeService.ServiceStatic.SetTheme(ThemeService.ServiceStatic.CurrentTheme);
+            Task themeTask = ThemeService.ServiceStatic.SetThemeAsync(ThemeService.ServiceStatic.CurrentTheme);
             // Task addonTask = AddonLoader.Load();
             // await Task.WhenAll(themeTask, addonTask);
             //

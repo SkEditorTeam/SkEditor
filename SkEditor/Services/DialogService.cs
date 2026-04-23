@@ -11,7 +11,7 @@ namespace SkEditor.Services;
 
 public class DialogService(WindowRegistry windowRegistry) : IDialogService
 {
-    public async Task<DialogResult> ShowDialog(Dialog dialog)
+    public async Task<DialogResult> ShowDialogAsync(Dialog dialog)
     {
         MainWindow? mainWindow = windowRegistry.Active;
 

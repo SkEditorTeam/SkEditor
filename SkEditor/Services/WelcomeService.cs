@@ -87,7 +87,7 @@ public class WelcomeService : IWelcomeService
 
                         foreach (string path in paths)
                         {
-                            await _fileService.OpenFile(path);
+                            await _fileService.OpenFileAsync(path);
                         }
                     }), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,

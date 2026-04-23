@@ -69,7 +69,7 @@ public class TranslationService : ITranslationService
         return new TranslatableString(key, parameters);
     }
 
-    public async Task ChangeLanguage(string language, bool startup = false)
+    public async Task ChangeLanguageAsync(string language, bool startup = false)
     {
         ClearOldLanguages();
 
@@ -83,11 +83,11 @@ public class TranslationService : ITranslationService
         }
     }
 
-    public async Task ChangeAndRefreshLanguage(string language)
+    public async Task ChangeAndRefreshLanguageAsync(string language)
     {
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            await ChangeLanguage(language);
+            await ChangeLanguageAsync(language);
 
             // if (!SkEditorAPI.Files.IsEditorOpen())
             // {
@@ -205,7 +205,7 @@ public class TranslationService : ITranslationService
     {
         if (e.PropertyName == nameof(AppSettings.Language))
         {
-            _ = ChangeAndRefreshLanguage(_appSettings.Language);
+            _ = ChangeAndRefreshLanguageAsync(_appSettings.Language);
         }
     }
 }

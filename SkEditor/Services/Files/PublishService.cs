@@ -13,7 +13,7 @@ namespace SkEditor.Utilities.Publishing;
 
 public class PublishService(HttpClient httpClient, ILogService logs) : IPublishService
 {
-    public async Task<string?> PublishCode(string code, string apiKey, PublishType type, string language,
+    public async Task<string?> PublishCodeAsync(string code, string apiKey, PublishType type, string language,
         bool isAnonymous)
     {
         return type switch

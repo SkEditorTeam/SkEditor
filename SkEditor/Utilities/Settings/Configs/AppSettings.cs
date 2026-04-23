@@ -68,7 +68,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
                 return;
             }
 
-            _ = ThemeService.ServiceStatic.SetTheme(theme);
+            _ = ThemeService.ServiceStatic.SetThemeAsync(theme);
         }
     } = "Default.json";
 

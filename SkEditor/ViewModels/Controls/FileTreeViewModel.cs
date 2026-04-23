@@ -77,7 +77,7 @@ public partial class FileTreeViewModel(
         }
 
         _cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        bool isSuccess = await FileSystem.Load(_cts.Token);
+        bool isSuccess = await FileSystem.LoadAsync(_cts.Token);
 
         if (!isSuccess)
         {

@@ -24,20 +24,20 @@ public class FileService(
         tabs.OpenTab(newFileTab);
     }
 
-    public async Task OpenFile(string path)
+    public async Task OpenFileAsync(string path)
     {
         FileTab fileTab = fileTabFactory.CreateFromFile(path);
         await fileTab.LoadContentAsync();
         tabs.OpenTab(fileTab);
     }
 
-    public async Task SaveFile()
+    public async Task SaveFileAsync()
     {
         if (tabs.SelectedTab is FileTab fileTab)
         {
             if (fileTab.File.Path == null)
             {
-                await SaveAsFile();
+                await SaveAsFileAsync();
                 return;
             }
 
@@ -45,7 +45,7 @@ public class FileService(
         }
     }
 
-    public async Task SaveAsFile()
+    public async Task SaveAsFileAsync()
     {
         if (tabs.SelectedTab is FileTab fileTab)
         {

@@ -25,7 +25,7 @@ public partial class ThemePageViewModel(IThemeService themeService) : Observable
             field = value;
             OnPropertyChanged();
 
-            _ = Dispatcher.UIThread.InvokeAsync(() => themeService.SetTheme(value));
+            _ = Dispatcher.UIThread.InvokeAsync(() => themeService.SetThemeAsync(value));
         }
     } = themeService.CurrentTheme;
 

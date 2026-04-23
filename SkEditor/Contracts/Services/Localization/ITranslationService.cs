@@ -26,7 +26,7 @@ public interface ITranslationService
     /// </summary>
     /// <param name="language">The language to change to.</param>
     /// <param name="startup">Whether this change is occurring during application startup.</param>
-    public Task ChangeLanguage(string language, bool startup = false);
+    Task ChangeLanguageAsync(string language, bool startup = false);
 
-    public Task ChangeAndRefreshLanguage(string language);
+    Task ChangeAndRefreshLanguageAsync(string language);
 }

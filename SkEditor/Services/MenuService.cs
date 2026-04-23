@@ -29,12 +29,12 @@ public class MenuService(IFileService fileService) : IMenuService
             .AddTo(fileMenu);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
-            .WithCommand(fileService.SaveFile)
+            .WithCommand(fileService.SaveFileAsync)
             .WithInputGesture("Ctrl+S")
             .AddTo(fileMenu);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
-            .WithCommand(fileService.SaveAsFile)
+            .WithCommand(fileService.SaveAsFileAsync)
             .WithInputGesture("Ctrl+Shift+S")
             .AddTo(fileMenu);
 

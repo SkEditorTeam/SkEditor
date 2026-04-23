@@ -38,7 +38,7 @@ public partial class RemoteConnectionViewModel(
     [RelayCommand]
     private async Task AddConnection()
     {
-        RemoteConnectionTestResult result = await connectionService.TestConnection(ConnectionInfo);
+        RemoteConnectionTestResult result = await connectionService.TestConnectionAsync(ConnectionInfo);
         if (!result.IsSuccess)
         {
             InfoBarMessage = translation.Get(TranslationKey.RemoteConnectionCannotAddConnection);
@@ -67,7 +67,7 @@ public partial class RemoteConnectionViewModel(
     [RelayCommand]
     private async Task<bool> TestConnection()
     {
-        RemoteConnectionTestResult result = await connectionService.TestConnection(ConnectionInfo);
+        RemoteConnectionTestResult result = await connectionService.TestConnectionAsync(ConnectionInfo);
 
         InfoBarMessage = result.Message;
         InfoBarSeverity = result.IsSuccess ? FAInfoBarSeverity.Success : FAInfoBarSeverity.Error;

@@ -50,14 +50,14 @@ public class ThemeService(ILogService log, IConfigService config, AppSettings ap
         string[] files = Directory.GetFiles(ThemeFolderPath);
 
         Themes.Clear();
-        files.Where(x => Path.GetExtension(x) == ".json").ToList().ForEach(x => LoadTheme(x));
+        files.Where(x => Path.GetExtension(x) == ".json").ToList().ForEach(x => LoadThemeAsync(x));
 
         Themes = [.. Themes.OrderBy(x => x.FileName.Equals("Default.json") ? 0 : 1)];
 
         CurrentTheme = GetUsedTheme();
     }
 
-    public Theme LoadTheme(string path)
+    public Theme LoadThemeAsync(string path)
     {
         Theme? theme;
         try
@@ -88,7 +88,7 @@ public class ThemeService(ILogService log, IConfigService config, AppSettings ap
         Themes.ForEach(SaveTheme);
     }
 
-    public async Task SetTheme(Theme theme)
+    public async Task SetThemeAsync(Theme theme)
     {
         if (CurrentTheme.UseMicaEffect && !theme.UseMicaEffect)
         {
@@ -99,10 +99,10 @@ public class ThemeService(ILogService log, IConfigService config, AppSettings ap
         CurrentTheme = theme;
         appSettings.CurrentTheme = theme.Name;
 
-        await ApplyTheme();
+        await ApplyThemeAsync();
     }
 
-    public async Task ApplyTheme()
+    public async Task ApplyThemeAsync()
     {
         if (_defaultColorsCollected)
         {
@@ -154,16 +154,16 @@ public class ThemeService(ILogService log, IConfigService config, AppSettings ap
         await Task.WhenAll(tasks);
     }
 
-    public async Task ReloadCurrentTheme()
+    public async Task ReloadCurrentThemeAsync()
     {
         string themePath = Path.Combine(ThemeFolderPath, CurrentTheme.FileName);
 
         Themes.RemoveAll(t => t.FileName == CurrentTheme.FileName);
 
-        Theme reloadedTheme = LoadTheme(themePath);
+        Theme reloadedTheme = LoadThemeAsync(themePath);
         CurrentTheme = reloadedTheme;
 
-        await ApplyTheme();
+        await ApplyThemeAsync();
     }
 
     private Theme GetUsedTheme()

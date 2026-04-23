@@ -96,7 +96,7 @@ public class App : Application
         Dispatcher.UIThread.Post(() =>
         {
             IStartupService startupService = Services.GetRequiredService<IStartupService>();
-            startupService.CompleteApplicationStart(desktop, _splashScreen);
+            startupService.CompleteApplicationStartAsync(desktop, _splashScreen);
         }, DispatcherPriority.Background);
     }
 

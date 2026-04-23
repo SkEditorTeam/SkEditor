@@ -19,7 +19,7 @@ public class RemoteConnectionService(ITranslationService translation) : IRemoteC
     private const string CredentialTarget = "skeditor://sftp-connections";
     private readonly ICredentialStore _store = CredentialManager.Create(CredentialNamespace);
 
-    public async Task<RemoteConnectionTestResult> TestConnection(RemoteConnectionInfo connectionInfo)
+    public async Task<RemoteConnectionTestResult> TestConnectionAsync(RemoteConnectionInfo connectionInfo)
     {
         string keyFilePath = connectionInfo.KeyFilePath;
 

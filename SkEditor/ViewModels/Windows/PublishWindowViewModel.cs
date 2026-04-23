@@ -36,7 +36,7 @@ public partial class PublishWindowViewModel : ObservableObject
             }
 
             string language = SelectedLanguage.ToLower();
-            string? result = await publishService.PublishCode(code, apiKey, SelectedType.Type, language, false);
+            string? result = await publishService.PublishCodeAsync(code, apiKey, SelectedType.Type, language, false);
             if (result is null)
             {
                 notifications.ShowError("Failed to publish code",

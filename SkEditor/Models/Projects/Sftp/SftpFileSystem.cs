@@ -19,7 +19,7 @@ public class SftpFileSystem(
 
     public FileSystemNode? Root { get; private set; }
 
-    public async Task<bool> Load(CancellationToken cancellationToken)
+    public async Task<bool> LoadAsync(CancellationToken cancellationToken)
     {
         try
         {
