@@ -104,6 +104,9 @@ public class App : Application
     {
         services.AddSingleton<MainWindowFactory>();
         services.AddSingleton<WindowRegistry>();
+        services.AddSingleton<WindowInstanceService>();
+        services.AddSingleton<WindowStateService>();
+        services.AddSingleton<WindowErrorService>();
         services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<IMenuService, MenuService>();

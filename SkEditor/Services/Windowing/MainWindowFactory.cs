@@ -9,7 +9,7 @@ public class MainWindowFactory(IServiceProvider sp, WindowRegistry registry)
     public MainWindow Create(SplashScreen? splashScreen = null)
     {
         MainWindow window = sp.GetRequiredService<MainWindow>();
-        window.SetSplashScreen(splashScreen);
+        window.SplashScreen = splashScreen;
         registry.Register(window);
         return window;
     }

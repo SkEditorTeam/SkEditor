@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Avalonia;
 using Avalonia.Data;
 
@@ -12,6 +13,7 @@ internal class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         GC.KeepAlive(typeof(RelativeSource));
 
         BuildAvaloniaApp()

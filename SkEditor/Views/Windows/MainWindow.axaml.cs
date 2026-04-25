@@ -1,24 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Threading;
-using FluentAvalonia.UI.Controls;
+﻿using System.Threading.Tasks;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
-using SkEditor.Services;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Input;
-using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Windows;
-using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows;
 
@@ -28,9 +18,6 @@ public partial class MainWindow : FAAppWindow
     private readonly ILogService _log;
     private readonly KeyboardShortcutHandler? _shortcutHandler;
     private readonly ITranslationService _translation;
-
-    private bool _isFullyLoaded;
-    private SplashScreen? _splashScreen;
 
     public MainWindow()
     {
@@ -47,216 +34,28 @@ public partial class MainWindow : FAAppWindow
 
         WindowStyler.Style(this);
 
-        ThemeService.ServiceStatic.LoadThemes();
-        AddEvents();
+        Loaded += async (_, _) => await OnLoaded();
     }
 
-    public bool AlreadyClosed { get; set; }
+    public SplashScreen? SplashScreen { get; set; }
 
-    private void AddEvents()
+    public async Task OnLoaded()
     {
-        TemplateApplied += OnWindowLoaded;
-        Closing += OnClosing;
+        await _translation.ChangeLanguageAsync(_appSettings.Language, true);
+        await SplashScreen.TryUpdateStatusAsync("Loading themes and addons...");
 
-        // Activated += (_, _) => _ = ChangeChecker.Check();
-        //
-        // AddHandler(DragDrop.DropEvent, FileHandler.FileDropAction);
-    }
+        App.Stopwatch.Stop();
+        SplashScreenHandler.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
 
-    public void ReloadUiOfAddons()
-    {
-        // SideBar.ReloadPanels();
-    }
+        await SplashScreen.TryUpdateStatusAsync("Initializing main window...");
 
-    private async void OnClosing(object? sender, WindowClosingEventArgs e)
-    {
-        try
+        Dispatcher.Post(() =>
         {
-            if (AlreadyClosed)
-            {
-                return;
-            }
-
-            // StateConfig stateConfig = SkEditorAPI.Configs.GetStateConfig();
-            //
-            // stateConfig.MainWindowHeight = Height;
-            // stateConfig.MainWindowWidth = Width;
-            // stateConfig.MainWindowX = Position.X;
-            // stateConfig.MainWindowY = Position.Y;
-            // stateConfig.MainWindowMaximized = WindowState == WindowState.Maximized;
-            //
-            // ThemeService.ServiceStatic.SaveAllThemes();
-            // await SkEditorAPI.Configs.SaveAllConfigsImmediateAsync();
-            //
-            // e.Cancel = true;
-            // if (!SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
-            // {
-            //     // bool anyUnsaved = SkEditorAPI.Files.GetOpenedEditors().Any(x => !x.IsSaved);
-            //     // if (!anyUnsaved)
-            //     // {
-            //     //     e.Cancel = false;
-            //     //     return;
-            //     // }
-            //     //
-            //     // if (await PromptForUnsavedChanges())
-            //     // {
-            //     //     return;
-            //     // }
-            //
-            //     AlreadyClosed = true;
-            //     Close();
-            // }
-            // else
-            // {
-            //     // bool isSuccess = await SessionRestorer.SaveSession();
-            //     // if (!isSuccess)
-            //     // {
-            //     //     if (await PromptForUnsavedChanges())
-            //     //     {
-            //     //         return;
-            //     //     }
-            //     // }
-            //
-            //     AlreadyClosed = true;
-            //     Close();
-            // }
-        }
-        catch (Exception exc)
-        {
-            _log.Error($"Error while closing the window: {exc.Message}");
-            AlreadyClosed = true;
-            Close();
-        }
-    }
-
-    protected override void OnClosed(EventArgs e)
-    {
-        _shortcutHandler?.Dispose();
-        base.OnClosed(e);
-    }
-
-    private async Task<bool> PromptForUnsavedChanges()
-    {
-        FAContentDialogResult result = await SkEditorAPI.Windows.ShowDialog(_translation.Get(TranslationKey.Attention),
-            _translation.Get(TranslationKey.ClosingProgramWithUnsavedFiles), Symbol.Warning,
-            primaryButtonText: "Yes", cancelButtonText: "No");
-
-        return result != FAContentDialogResult.Primary;
-    }
-
-    private async void OnWindowLoaded(object? sender, RoutedEventArgs e)
-    {
-        try
-        {
-            await _translation.ChangeLanguageAsync(_appSettings.Language, true);
-            await _splashScreen.TryUpdateStatusAsync("Loading themes and addons...");
-
-            Task themeTask = ThemeService.ServiceStatic.SetThemeAsync(ThemeService.ServiceStatic.CurrentTheme);
-            // Task addonTask = AddonLoader.Load();
-            // await Task.WhenAll(themeTask, addonTask);
-            //
-            // await _splashScreen.TryUpdateStatusAsync("Registering file types...");
-            // Utilities.Files.FileTypes.RegisterDefaultAssociations();
-            // SideBar.ReloadPanels();
-
-            // double scale = SkEditorAPI.Configs.GetAppSettings().CustomUiScale;
-            // LayoutTransform.LayoutTransform = new ScaleTransform(scale, scale);
-
-            bool sessionFilesAdded = false;
-            // if (SkEditorAPI.Configs.GetExperimentsConfig().SessionRestoringEnabled)
-            // {
-            //     await _splashScreen.TryUpdateStatusAsync("Restoring session...");
-            //     sessionFilesAdded = await SessionRestorer.RestoreSession();
-            // }
-
-            // SkEditorAPI.Files.AddWhatsNewPage();
-
-            await _splashScreen.TryUpdateStatusAsync("Opening files...");
-            string[] startupFiles = SkEditorAPI.Core.GetStartupArguments();
-            if (startupFiles.Length == 0 && !sessionFilesAdded)
-            {
-                //SkEditorAPI.Files.AddWelcomeTab();
-            }
-
-            // startupFiles.ToList().ForEach(FileHandler.OpenFile);
-            // if (SkEditorAPI.Files.GetOpenedFiles().Count == 0)
-            // {
-            //     //SkEditorAPI.Files.AddWelcomeTab();
-            // }
-
-            await _splashScreen.TryUpdateStatusAsync("Finishing up...");
-
-            await Dispatcher.UIThread.InvokeAsync(async () =>
-            {
-                try
-                {
-                    // await SyntaxLoader.LoadAdvancedSyntaxes();
-                    // DiscordRpcUpdater.Initialize();
-                }
-                catch (Exception exc)
-                {
-                    _log.Error($"Error loading final components: {exc.Message}", true);
-                }
-            });
-
-            _isFullyLoaded = true;
-
-            App.Stopwatch.Stop();
-            SplashScreenHandler.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
-
-            Dispatcher.UIThread.Post(() =>
-            {
-                IsVisible = true;
-                Activate();
-                Focus();
-
-                _splashScreen?.Close();
-
-                Dispatcher.UIThread.Post(async void () =>
-                {
-                    try
-                    {
-                        // if (SkEditorAPI.Configs.GetAppSettings().CheckForAppUpdates)
-                        // {
-                        //     await UpdateChecker.Check();
-                        // }
-
-                        await Tutorial.ShowTutorial();
-                        // await ChangelogChecker.Check();
-
-                        await App.Services.GetRequiredService<CrashChecker>().CheckForCrash();
-                    }
-                    catch (Exception exc)
-                    {
-                        _log.Error($"Error loading non-blocking components: {exc.Message}", true);
-                    }
-                }, DispatcherPriority.Background);
-            }, DispatcherPriority.Background);
-        }
-        catch (Exception exc)
-        {
-            _log.Error(
-                $"Something went wrong while loading the window: {exc.Message} + {exc.InnerException} {exc.StackTrace}",
-                true);
-
-            _isFullyLoaded = true;
             IsVisible = true;
-            _splashScreen?.Close();
-        }
-    }
+            Activate();
+            Focus();
 
-    public bool IsFullyLoaded()
-    {
-        return _isFullyLoaded;
-    }
-
-    public void SetSplashScreen(SplashScreen? splashScreen)
-    {
-        if (_splashScreen != null)
-        {
-            throw new InvalidOperationException("Splash screen has already been set.");
-        }
-
-        _splashScreen = splashScreen;
+            SplashScreen?.Close();
+        });
     }
 }
