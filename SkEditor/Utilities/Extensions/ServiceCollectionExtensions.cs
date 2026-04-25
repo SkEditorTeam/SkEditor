@@ -13,5 +13,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IEditorFeature, EditorShortcutsFeature>();
         services.AddTransient<IEditorFeature, TextMateFeature>();
         services.AddTransient<IEditorFeature, HexColorFeature>();
+        services.AddTransient<IEditorFeature, EditorSmoothScrollFeature>();
     }
 }

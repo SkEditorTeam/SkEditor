@@ -10,7 +10,6 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Styling;
 using FluentAvalonia.Styling;
-using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Settings.Configs;
@@ -26,9 +25,6 @@ public class ThemeService(
     WindowRegistry windowRegistry) : IThemeService
 {
     private bool _defaultColorsCollected;
-
-    [Obsolete("Use CurrentTheme property instead.")]
-    public static IThemeService ServiceStatic => App.Services.GetRequiredService<IThemeService>();
 
     public Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 

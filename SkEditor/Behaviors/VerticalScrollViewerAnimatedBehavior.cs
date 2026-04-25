@@ -22,8 +22,6 @@ public class VerticalScrollViewerAnimatedBehavior : StyledElementBehavior<Scroll
         Page
     }
 
-    private const double AnimationDuration = 170;
-
     public static readonly DirectProperty<VerticalScrollViewerAnimatedBehavior, double> ScrollStepSizeProperty =
         AvaloniaProperty.RegisterDirect<VerticalScrollViewerAnimatedBehavior, double>(nameof(ScrollStepSize),
             o => o.ScrollStepSize,
@@ -39,6 +37,9 @@ public class VerticalScrollViewerAnimatedBehavior : StyledElementBehavior<Scroll
     private ScrollContentPresenter? _scp;
     private double _startOffset;
     private double _targetOffset;
+
+    public double AnimationDuration = 170;
+    public Easing ScrollEasing { get; set; } = new CubicEaseOut();
 
     public double ScrollStepSize
     {
@@ -181,8 +182,7 @@ public class VerticalScrollViewerAnimatedBehavior : StyledElementBehavior<Scroll
             double elapsedTime = (currentTime - _animationStartTime).TotalMilliseconds;
             double progress = Math.Min(elapsedTime / AnimationDuration, 1.0);
 
-            SineEaseOut easing = new();
-            double easedProgress = easing.Ease(progress);
+            double easedProgress = ScrollEasing.Ease(progress);
 
             _startOffset += easedProgress * (_targetOffset - _startOffset);
 
@@ -231,8 +231,7 @@ public class VerticalScrollViewerAnimatedBehavior : StyledElementBehavior<Scroll
             }
 
             double progress = elapsedTime / AnimationDuration;
-            SineEaseOut easing = new();
-            double easedProgress = easing.Ease(progress);
+            double easedProgress = ScrollEasing.Ease(progress);
 
             double currentOffset = _startOffset + (easedProgress * (_targetOffset - _startOffset));
 

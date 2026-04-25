@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentIcons.Common;
-using SkEditor.Services;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Attributes;
 using SkEditor.Utilities.Settings.Providers;
-using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Utilities.Settings.Configs;
 
@@ -49,28 +46,11 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// <summary>
     ///     The current application theme file name.
     /// </summary>
+    [ObservableProperty]
     [ChoiceSetting(TranslationKey.SettingsThemeCurrentTheme, typeof(ThemeSettingsProvider),
         TranslationKey.SettingsThemeTitle, TranslationKey.SettingsThemeCurrentThemeDescription)]
     [SettingSymbolIcon(Symbol.PaintBrush)]
-    public string CurrentTheme
-    {
-        get;
-        set
-        {
-            if (!SetProperty(ref field, value))
-            {
-                return;
-            }
-
-            Theme? theme = ThemeService.ServiceStatic.Themes.FirstOrDefault(x => x.Name.Equals(value));
-            if (theme == null)
-            {
-                return;
-            }
-
-            _ = ThemeService.ServiceStatic.SetThemeAsync(theme);
-        }
-    } = "Default.json";
+    public partial string CurrentTheme { get; set; } = "Default.json";
 
     /// <summary>
     ///     A dictionary mapping file extensions to their associated syntax highlighting themes.
@@ -173,6 +153,12 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// </summary>
     [ObservableProperty]
     public partial bool IsEditorZoomLevelSyncEnabled { get; set; }
+
+    /// <summary>
+    ///     Whether to enable smooth scrolling in the editor.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsEditorSmoothScrollEnabled { get; set; } = true;
 
     /// <summary>
     ///     The font size used in the code editor.
