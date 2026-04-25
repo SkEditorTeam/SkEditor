@@ -31,4 +31,11 @@ public interface IFileService
     ///     been saved before or not.
     /// </summary>
     Task SaveAsFileAsync();
+
+    /// <summary>
+    ///     Saves all open files. If any file has not been saved before, it prompts the user to select a location to save the
+    ///     file.
+    /// </summary>
+    /// <returns></returns>
+    Task SaveAllAsync();
 }

@@ -33,6 +33,8 @@ public class MenuService(IFileService fileService) : IMenuService
             .WithInputGesture("Ctrl+O")
             .AddTo(fileMenu);
 
+        MainMenuItem.Separator.AddTo(fileMenu);
+
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
             .WithCommand(fileService.SaveFileAsync)
             .WithInputGesture("Ctrl+S")
@@ -41,6 +43,11 @@ public class MenuService(IFileService fileService) : IMenuService
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
             .WithCommand(fileService.SaveAsFileAsync)
             .WithInputGesture("Ctrl+Shift+S")
+            .AddTo(fileMenu);
+
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAll, Symbol.SaveMultiple)
+            .WithCommand(fileService.SaveAllAsync)
+            .WithInputGesture("Ctrl+Alt+S")
             .AddTo(fileMenu);
 
         return fileMenu;

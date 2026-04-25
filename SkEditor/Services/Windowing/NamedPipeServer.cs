@@ -8,10 +8,9 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using Serilog;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.Services.Windowing;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Services.Windowing;
 
 public class NamedPipeServer(WindowRegistry windowRegistry, IFileService fileService)
 {

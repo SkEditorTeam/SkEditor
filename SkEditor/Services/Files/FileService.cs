@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services.Files;
@@ -40,6 +41,14 @@ public class FileService(
 
     public async Task OpenFileAsync(string path)
     {
+        FileTab? existingTab = tabs.Tabs.OfType<FileTab>().FirstOrDefault(tab => tab.File.Path == path);
+
+        if (existingTab is not null)
+        {
+            tabs.SelectedTab = existingTab;
+            return;
+        }
+
         FileTab fileTab = fileTabFactory.CreateFromFile(path);
         await fileTab.LoadContentAsync();
         tabs.OpenTab(fileTab);
@@ -58,6 +67,16 @@ public class FileService(
         if (tabs.SelectedTab is FileTab fileTab)
         {
             await fileTab.SaveAsAsync();
+        }
+    }
+
+    public async Task SaveAllAsync()
+    {
+        IEnumerable<FileTab> fileTabs = tabs.Tabs.OfType<FileTab>();
+
+        foreach (FileTab fileTab in fileTabs)
+        {
+            await fileTab.SaveAsync();
         }
     }
 
