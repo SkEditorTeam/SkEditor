@@ -3,7 +3,7 @@
   "WindowTitleRefactor": "Refactor",
   "WindowTitleSettings": "Settings",
   "WindowTitleFontSelector": "Select Font",
-  "WindowTitleSaveFilePicker": "Save File",
+  "WindowTitleSaveFilePicker": "Save \"{0}\" as...",
   "WindowTitleOpenFilePicker": "Open File",
   "WindowTitleGuiGenerator": "Generate GUI",
   "WindowTitleCommandGenerator": "Generate Command",

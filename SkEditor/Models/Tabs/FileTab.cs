@@ -69,7 +69,7 @@ public partial class FileTab(
 
     public async Task<bool> SaveAsAsync()
     {
-        string? path = await filePicker.SaveFileAsync();
+        string? path = await filePicker.SaveFileAsync(Header.Value);
         if (path == null)
         {
             return false;

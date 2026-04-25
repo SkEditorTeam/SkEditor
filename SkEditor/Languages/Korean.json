@@ -3,7 +3,7 @@
   "WindowTitleRefactor": "코드 서식 다시 지정",
   "WindowTitleSettings": "설정",
   "WindowTitleFontSelector": "글꼴 선택",
-  "WindowTitleSaveFilePicker": "파일 저장",
+  "WindowTitleSaveFilePicker": "\"{0}\" 파일을 다른 이름으로 저장...",
   "WindowTitleOpenFilePicker": "파일 열기",
   "WindowTitleGuiGenerator": "GUI 생성",
   "WindowTitleCommandGenerator": "명령어 생성",

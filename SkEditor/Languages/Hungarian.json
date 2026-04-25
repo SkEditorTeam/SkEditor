@@ -3,7 +3,7 @@
   "WindowTitleRefactor": "Átstrukturálás",
   "WindowTitleSettings": "Beállítások",
   "WindowTitleFontSelector": "Betűkészlet választása",
-  "WindowTitleSaveFilePicker": "Fájl mentése",
+  "WindowTitleSaveFilePicker": "\"{0}\" mentése másként...",
   "WindowTitleOpenFilePicker": "Fájl megnyitása",
   "WindowTitleGuiGenerator": "GUI generálása",
   "WindowTitleCommandGenerator": "Parancs generálása",

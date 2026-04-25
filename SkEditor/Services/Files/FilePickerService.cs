@@ -30,7 +30,7 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
         return result.Count == 0 ? null : result.Select(x => x.Path.LocalPath).ToArray();
     }
 
-    public async Task<string?> SaveFileAsync()
+    public async Task<string?> SaveFileAsync(string fileName)
     {
         IStorageProvider? storageProvider = GetStorageProvider();
         if (storageProvider == null)
@@ -40,7 +40,7 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
 
         FilePickerSaveOptions dialogOptions = new()
         {
-            Title = translations.Get(TranslationKey.WindowTitleSaveFilePicker)
+            Title = translations.Get(TranslationKey.WindowTitleSaveFilePicker, fileName)
         };
         IStorageFile? result = await storageProvider.SaveFilePickerAsync(dialogOptions);
         return result?.Path.LocalPath;

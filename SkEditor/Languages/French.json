@@ -3,7 +3,7 @@
   "WindowTitleRefactor": "Refactoriser",
   "WindowTitleSettings": "Paramètres",
   "WindowTitleFontSelector": "Sélectionner la police",
-  "WindowTitleSaveFilePicker": "Enregistrer le fichier",
+  "WindowTitleSaveFilePicker": "Enregistrer \"{0}\" sous...",
   "WindowTitleOpenFilePicker": "Ouvrir le fichier",
   "WindowTitleGuiGenerator": "Générer une GUI",
   "WindowTitleCommandGenerator": "Générer une commande",

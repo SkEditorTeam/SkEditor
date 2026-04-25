@@ -3,7 +3,7 @@
   "WindowTitleRefactor": "重构",
   "WindowTitleSettings": "设置",
   "WindowTitleFontSelector": "选择字体",
-  "WindowTitleSaveFilePicker": "保存文件",
+  "WindowTitleSaveFilePicker": "将\"{0}\"另存为...",
   "WindowTitleOpenFilePicker": "打开文件",
   "WindowTitleGuiGenerator": "生成GUI",
   "WindowTitleCommandGenerator": "生成命令",

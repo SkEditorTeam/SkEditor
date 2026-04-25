@@ -3,7 +3,7 @@
   "WindowTitleRefactor": "Рефакторинг",
   "WindowTitleSettings": "Настройки",
   "WindowTitleFontSelector": "Выбор шрифта",
-  "WindowTitleSaveFilePicker": "Сохранение файла",
+  "WindowTitleSaveFilePicker": "Сохранить \"{0}\" как...",
   "WindowTitleOpenFilePicker": "Открытие файла",
   "WindowTitleGuiGenerator": "Генератор GUI",
   "WindowTitleCommandGenerator": "Генератор команд",

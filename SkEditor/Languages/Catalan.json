@@ -3,7 +3,7 @@
   "WindowTitleRefactor": "Refactoritzar",
   "WindowTitleSettings": "Configuració",
   "WindowTitleFontSelector": "Selecciona la font",
-  "WindowTitleSaveFilePicker": "Desar fitxer",
+  "WindowTitleSaveFilePicker": "Desa \"{0}\" com a...",
   "WindowTitleOpenFilePicker": "Obrir fitxer",
   "WindowTitleGuiGenerator": "Generar GUI",
   "WindowTitleCommandGenerator": "Generar comanda",

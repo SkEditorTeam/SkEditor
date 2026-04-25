@@ -3,7 +3,7 @@
   "WindowTitleRefactor": "Refactoren",
   "WindowTitleSettings": "Instellingen",
   "WindowTitleFontSelector": "Lettertype kiezen",
-  "WindowTitleSaveFilePicker": "Bestand opslaan",
+  "WindowTitleSaveFilePicker": "\"{0}\" opslaan als...",
   "WindowTitleOpenFilePicker": "Bestand openen",
   "WindowTitleGuiGenerator": "GUI genereren",
   "WindowTitleCommandGenerator": "Commando genereren",
