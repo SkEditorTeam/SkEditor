@@ -29,7 +29,7 @@ public class FileTabFactory(AppSettings appSettings, IDialogService dialogServic
         return new FileTab(header, appSettings, dialogService, filePicker)
         {
             File = new LocalFile(),
-            IsSaved = false
+            IsSaved = true
         };
     }
 }
