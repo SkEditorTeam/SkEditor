@@ -15,6 +15,8 @@
     <SolidColorBrush x:Key="TabViewItemHeaderForeground" Color="#96FFFFFF" />
     <SolidColorBrush x:Key="TabViewItemHeaderForegroundPointerOver" Color="#E1FFFFFF" />
     <SolidColorBrush x:Key="TabViewItemHeaderForegroundSelected" Color="#FFFFFF" />
+    <Thickness x:Key="TabViewItemHeaderPadding">8,3,4,4</Thickness>
+    <Thickness x:Key="TabViewSelectedItemHeaderPadding">9,3,5,4</Thickness>
 
     <ControlTheme x:Key="TabViewCloseButtonStyle" TargetType="Button">
         <Setter Property="HorizontalContentAlignment" Value="Center" />

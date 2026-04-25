@@ -45,6 +45,7 @@
     <Window.Resources>
         <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
         <converters:EditorFontFamilyConverter x:Key="EditorFontFamilyConverter" />
+        <converters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
     </Window.Resources>
 
     <LayoutTransformControl Name="LayoutTransform">
@@ -108,7 +109,8 @@
                             </ui:TabView.DataTemplates>
                             <ui:TabView.TabItemTemplate>
                                 <DataTemplate x:DataType="tabs:Tab">
-                                    <ui:TabViewItem Content="{Binding .}">
+                                    <ui:TabViewItem Content="{Binding .}"
+                                                    IconSource="{Binding Icon, Converter={StaticResource SymbolIconSourceConverter}}">
                                         <ui:TabViewItem.Header>
                                             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                                 <TextBlock Text="{Binding Header.Value}"

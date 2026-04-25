@@ -21,7 +21,7 @@ public partial class FileTab(
     AppSettings appSettings,
     IDialogService dialogs,
     IFilePickerService filePicker)
-    : Tab(header)
+    : Tab(header, Symbol.Document)
 {
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Tabs;
@@ -10,13 +11,19 @@ namespace SkEditor.Models.Tabs;
 ///     tabs, settings tabs, etc.).
 /// </summary>
 /// <param name="header">The header text of the tab, which is displayed on the tab itself.</param>
-public abstract partial class Tab(TranslatableString header) : ObservableObject
+public abstract partial class Tab(TranslatableString header, Symbol? icon = null) : ObservableObject
 {
     /// <summary>
     ///     The header text of the tab, which is displayed on the tab itself.
     /// </summary>
     [ObservableProperty]
     public partial TranslatableString Header { get; protected set; } = header;
+
+    /// <summary>
+    ///     The Symbol icon that is displayed on the tab.
+    /// </summary>
+    [ObservableProperty]
+    public partial Symbol? Icon { get; protected set; } = icon;
 
     /// <summary>
     ///     Indicates whether the content of the tab has unsaved changes.
