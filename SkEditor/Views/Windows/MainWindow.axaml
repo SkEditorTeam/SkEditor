@@ -8,10 +8,6 @@
         xmlns:controls="clr-namespace:SkEditor.Views.Controls"
         xmlns:notifications="clr-namespace:SkEditor.Views.Controls.Notifications"
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
-        xmlns:tabs="clr-namespace:SkEditor.Models.Tabs"
-        xmlns:pages="clr-namespace:SkEditor.Views.Pages"
-        xmlns:converters="clr-namespace:SkEditor.Converters"
-        xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         x:DataType="windows:MainWindowViewModel"
@@ -41,12 +37,6 @@
             <Setter Property="Height" Value="14" />
         </Style>
     </Window.Styles>
-
-    <Window.Resources>
-        <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
-        <converters:EditorFontFamilyConverter x:Key="EditorFontFamilyConverter" />
-        <converters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
-    </Window.Resources>
 
     <LayoutTransformControl Name="LayoutTransform">
         <Grid RowDefinitions="Auto,*">
@@ -78,64 +68,7 @@
                                   ResizeDirection="Columns" />
 
                     <!-- TabControl -->
-                    <Panel Grid.Column="4" Grid.Row="0" VerticalAlignment="Stretch">
-                        <ui:TabView
-                            Opacity="{Binding !!Tabs.Count, Converter={StaticResource BoolToOpacityConverter}}"
-                            IsHitTestVisible="{Binding !!Tabs.Count}"
-                            Margin="0,-10,0,0" CanDragTabs="True"
-                            CanReorderTabs="True" VerticalAlignment="Stretch"
-                            TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
-                            AddTabButtonCommand="{Binding NewTabCommand}">
-                            <ui:TabView.DataTemplates>
-                                <DataTemplate DataType="{x:Type tabs:FileTab}">
-                                    <avaloniaedit:TextEditor Document="{Binding Document}"
-                                                             ShowLineNumbers="True"
-                                                             Foreground="{DynamicResource EditorTextColor}"
-                                                             Background="{DynamicResource EditorBackgroundColor}"
-                                                             LineNumbersForeground="{DynamicResource LineNumbersColor}"
-                                                             FontSize="{Binding FontSize}"
-                                                             WordWrap="{Binding WordWrap}"
-                                                             ScrollOffset="{Binding ScrollOffset, Mode=TwoWay}"
-                                                             FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}">
-                                        <Interaction.Behaviors>
-                                            <behaviors:TextEditorLoadBehavior />
-                                        </Interaction.Behaviors>
-                                    </avaloniaedit:TextEditor>
-                                </DataTemplate>
-
-                                <DataTemplate DataType="{x:Type tabs:SettingsTab}">
-                                    <pages:SettingsPage />
-                                </DataTemplate>
-                            </ui:TabView.DataTemplates>
-                            <ui:TabView.TabItemTemplate>
-                                <DataTemplate x:DataType="tabs:Tab">
-                                    <ui:TabViewItem Content="{Binding .}"
-                                                    IconSource="{Binding Icon, Converter={StaticResource SymbolIconSourceConverter}}">
-                                        <ui:TabViewItem.Header>
-                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                                <TextBlock Text="{Binding Header.Value}"
-                                                           ToolTip.Tip="{Binding Header.Value}"
-                                                           TextTrimming="CharacterEllipsis" />
-                                                <Ellipse
-                                                    Grid.Column="1"
-                                                    IsVisible="{Binding !IsSaved}"
-                                                    Width="4" Height="4"
-                                                    Fill="{Binding $parent[ContentPresenter].Foreground}"
-                                                    VerticalAlignment="Center" />
-                                            </Grid>
-                                        </ui:TabViewItem.Header>
-                                        <Interaction.Behaviors>
-                                            <ui:TabViewItemCloseRequestedEventCommandTrigger
-                                                Command="{Binding CloseCommand}" />
-                                        </Interaction.Behaviors>
-                                    </ui:TabViewItem>
-                                </DataTemplate>
-                            </ui:TabView.TabItemTemplate>
-                        </ui:TabView>
-
-                        <pages:WelcomePage VerticalAlignment="Stretch" DataContext="{Binding WelcomePage}"
-                                           IsVisible="{Binding !$parent[Window].((windows:MainWindowViewModel)DataContext).Tabs.Count}" />
-                    </Panel>
+                    <controls:MainTabView Grid.Column="4" Grid.Row="0" VerticalAlignment="Stretch" />
                 </Grid>
             </Border>
 
