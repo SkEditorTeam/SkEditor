@@ -1,18 +1,43 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Features;
+using SkEditor.Services.Settings;
+using SkEditor.Utilities.Settings;
+using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Utilities.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddEditorFeatures(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services.AddTransient<IEditorFeature, SaveIndicatorFeature>();
-        services.AddTransient<IEditorFeature, ZoomFeature>();
-        services.AddTransient<IEditorFeature, EditorOptionsFeature>();
-        services.AddTransient<IEditorFeature, EditorShortcutsFeature>();
-        services.AddTransient<IEditorFeature, TextMateFeature>();
-        services.AddTransient<IEditorFeature, HexColorFeature>();
-        services.AddTransient<IEditorFeature, EditorSmoothScrollFeature>();
+        public void AddEditorFeatures()
+        {
+            services.AddTransient<IEditorFeature, SaveIndicatorFeature>();
+            services.AddTransient<IEditorFeature, ZoomFeature>();
+            services.AddTransient<IEditorFeature, EditorOptionsFeature>();
+            services.AddTransient<IEditorFeature, EditorShortcutsFeature>();
+            services.AddTransient<IEditorFeature, TextMateFeature>();
+            services.AddTransient<IEditorFeature, HexColorFeature>();
+            services.AddTransient<IEditorFeature, EditorSmoothScrollFeature>();
+        }
+
+        public void AddConfigs(BinarySettings binarySettings)
+        {
+            AddConfig(new AppSettings());
+            AddConfig(new ConnectionsConfig());
+            AddConfig(new ExperimentsConfig());
+            AddConfig(new SecretsConfig());
+            AddConfig(new StateConfig());
+            AddConfig(binarySettings);
+
+            services.AddSingleton<SettingsObserverService>();
+            return;
+
+            void AddConfig<TConfig>(TConfig config) where TConfig : class, IConfig
+            {
+                services.AddSingleton(config);
+                services.AddSingleton<IConfig>(sp => sp.GetRequiredService<TConfig>());
+            }
+        }
     }
 }

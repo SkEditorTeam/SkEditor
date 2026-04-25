@@ -17,12 +17,11 @@ using SkEditor.Services;
 using SkEditor.Services.Files;
 using SkEditor.Services.Files.Features;
 using SkEditor.Services.Localization;
+using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Publishing;
-using SkEditor.Utilities.Settings;
-using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Pages;
@@ -79,6 +78,9 @@ public class App : Application
         Services = collection.BuildServiceProvider();
         TranslationService.Current = Services.GetRequiredService<ITranslationService>();
 
+        SettingsObserverService observer = Services.GetRequiredService<SettingsObserverService>();
+        observer.Initialize();
+
         Stopwatch.Start();
 
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
@@ -131,18 +133,7 @@ public class App : Application
         services.AddSingleton<IFilePickerService, FilePickerService>();
         services.AddSingleton<IZoomService, ZoomService>();
 
-        services.AddSingleton<AppSettings>();
-        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<AppSettings>());
-        services.AddSingleton<ConnectionsConfig>();
-        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<ConnectionsConfig>());
-        services.AddSingleton<ExperimentsConfig>();
-        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<ExperimentsConfig>());
-        services.AddSingleton<SecretsConfig>();
-        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<SecretsConfig>());
-        services.AddSingleton<StateConfig>();
-        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<StateConfig>());
-        services.AddSingleton(binarySettings);
-        services.AddSingleton<IConfig>(sp => sp.GetRequiredService<BinarySettings>());
+        services.AddConfigs(binarySettings);
 
         services.AddHttpClient<IPublishService, PublishService>();
 

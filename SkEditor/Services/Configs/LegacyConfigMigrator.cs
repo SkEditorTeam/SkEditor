@@ -66,7 +66,6 @@ public class LegacyConfigMigrator(IConfigService config)
             stateConfig.LastUsedPublishService = oldAppConfig.LastUsedPublishService;
             stateConfig.GuiGeneratorSkriptGuiAddonUsed = oldAppConfig.UseSkriptGui;
             stateConfig.SidebarPanelSizes = oldAppConfig.SidebarPanelSizes;
-            stateConfig.FileTypeChoices = oldAppConfig.FileTypeChoices;
 
             experimentsConfig.AutoCompletionPrototypeEnabled = oldAppConfig.EnableAutoCompletionExperiment;
             experimentsConfig.ProjectsEnabled = oldAppConfig.EnableProjectsExperiment;

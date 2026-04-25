@@ -23,13 +23,6 @@ public partial class StateConfig : BaseConfig<StateConfig>
     public partial Dictionary<string, int> SidebarPanelSizes { get; set; } = new();
 
     /// <summary>
-    ///     The file type choices made by the user when opening files.
-    /// </summary>
-    // TODO: reconsider this entire system (i'm a bit lost, wasn't that the same as PreferredFileAssociations?) and whether this option should belong in state config
-    [ObservableProperty]
-    public partial Dictionary<string, string?> FileTypeChoices { get; set; } = new();
-
-    /// <summary>
     ///     Whether to use the skript-gui addon syntax in the GUI Generator instead of the default Skript syntax.
     /// </summary>
     [ObservableProperty]
