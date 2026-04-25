@@ -11,8 +11,7 @@ namespace SkEditor.Services.Files;
 public class FileService(
     ITabService tabs,
     ITranslationService translation,
-    IFileTabFactory fileTabFactory,
-    IFilePickerService filePicker)
+    IFileTabFactory fileTabFactory)
     : IFileService
 {
     public void NewFile()
@@ -35,13 +34,7 @@ public class FileService(
     {
         if (tabs.SelectedTab is FileTab fileTab)
         {
-            if (fileTab.File.Path == null)
-            {
-                await SaveAsFileAsync();
-                return;
-            }
-
-            await fileTab.SaveContentAsync();
+            await fileTab.SaveAsync();
         }
     }
 
@@ -49,13 +42,7 @@ public class FileService(
     {
         if (tabs.SelectedTab is FileTab fileTab)
         {
-            string? path = await filePicker.SaveFileAsync();
-            if (path != null)
-            {
-                fileTab.File.Path = path;
-                fileTab.UpdateHeader();
-                await fileTab.SaveContentAsync();
-            }
+            await fileTab.SaveAsAsync();
         }
     }
 

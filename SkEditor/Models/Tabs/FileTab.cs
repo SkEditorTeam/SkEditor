@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Files;
 using SkEditor.Utilities.Localization;
@@ -19,7 +20,7 @@ public partial class FileTab(
     TranslatableString header,
     AppSettings appSettings,
     IDialogService dialogs,
-    INotificationService notifications)
+    IFilePickerService filePicker)
     : Tab(header)
 {
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
@@ -56,7 +57,30 @@ public partial class FileTab(
         Document.UndoStack.MarkAsOriginalFile();
     }
 
-    public async Task SaveContentAsync()
+    public async Task<bool> SaveAsync()
+    {
+        if (File.Path == null)
+        {
+            return await SaveAsAsync();
+        }
+
+        return await PerformSaveAsync();
+    }
+
+    public async Task<bool> SaveAsAsync()
+    {
+        string? path = await filePicker.SaveFileAsync();
+        if (path == null)
+        {
+            return false;
+        }
+
+        File.Path = path;
+        UpdateHeader();
+        return await PerformSaveAsync();
+    }
+
+    public async Task<bool> PerformSaveAsync()
     {
         if (_saveCts is not null)
         {
@@ -86,6 +110,7 @@ public partial class FileTab(
         }
 
         Document.UndoStack.MarkAsOriginalFile();
+        return true;
     }
 
     public void UpdateHeader()
@@ -123,14 +148,11 @@ public partial class FileTab(
 
             if (result == StandardDialogResult.Yes)
             {
-                notifications.Debug("Saving file before closing...");
-                return;
-            }
-
-            if (result == StandardDialogResult.No)
-            {
-                notifications.Debug("Closing without saving...");
-                return;
+                bool saved = await SaveAsync();
+                if (!saved)
+                {
+                    return;
+                }
             }
         }
 
