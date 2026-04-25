@@ -2,6 +2,7 @@
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Startup;
@@ -30,7 +31,8 @@ public partial class MainWindow : FAAppWindow
         MainMenuViewModel menuViewModel,
         AppSettings appSettings,
         IThemeService themes,
-        ITranslationService translation)
+        ITranslationService translation,
+        DragDropService dragDropService)
         : this()
     {
         DataContext = viewModel;
@@ -46,10 +48,16 @@ public partial class MainWindow : FAAppWindow
         WindowStyler.Style(this);
         _themes.LoadThemes();
 
-        Loaded += async (_, _) => await OnLoaded();
+        AttachEvents(dragDropService);
     }
 
     public new SplashScreen? SplashScreen { get; set; }
+
+    private void AttachEvents(DragDropService dragDropService)
+    {
+        Loaded += async (_, _) => await OnLoaded();
+        dragDropService.AttachDragDropEvents(this);
+    }
 
     public async Task OnLoaded()
     {

@@ -109,6 +109,7 @@ public class App : Application
         services.AddSingleton<WindowStateService>();
         services.AddSingleton<WindowErrorService>();
         services.AddSingleton<NamedPipeServer>();
+        services.AddSingleton<DragDropService>();
         services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<IMenuService, MenuService>();
