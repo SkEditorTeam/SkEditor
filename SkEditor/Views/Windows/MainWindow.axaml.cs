@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using FluentAvalonia.UI.Windowing;
-using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Utilities.Input;
@@ -15,34 +14,49 @@ namespace SkEditor.Views.Windows;
 public partial class MainWindow : FAAppWindow
 {
     private readonly AppSettings _appSettings;
-    private readonly ILogService _log;
-    private readonly KeyboardShortcutHandler? _shortcutHandler;
+    private readonly IThemeService _themes;
     private readonly ITranslationService _translation;
 
     public MainWindow()
     {
         InitializeComponent();
+        _appSettings = null!;
+        _translation = null!;
+        _themes = null!;
+    }
 
-        DataContext = App.Services.GetRequiredService<MainWindowViewModel>();
-        _log = App.Services.GetRequiredService<ILogService>();
-        _appSettings = App.Services.GetRequiredService<AppSettings>();
-        _translation = App.Services.GetRequiredService<ITranslationService>();
+    public MainWindow(
+        MainWindowViewModel viewModel,
+        MainMenuViewModel menuViewModel,
+        AppSettings appSettings,
+        IThemeService themes,
+        ITranslationService translation)
+        : this()
+    {
+        DataContext = viewModel;
+        _appSettings = appSettings;
+        _translation = translation;
+        _themes = themes;
 
-        _shortcutHandler = new KeyboardShortcutHandler(this);
-        _shortcutHandler.Initialize();
-        App.Services.GetRequiredService<MainMenuViewModel>().RegisterHotKeys(this);
+        KeyboardShortcutHandler shortcutHandler = new(this);
+        shortcutHandler.Initialize();
+
+        menuViewModel.RegisterHotKeys(this);
 
         WindowStyler.Style(this);
+        _themes.LoadThemes();
 
         Loaded += async (_, _) => await OnLoaded();
     }
 
-    public SplashScreen? SplashScreen { get; set; }
+    public new SplashScreen? SplashScreen { get; set; }
 
     public async Task OnLoaded()
     {
         await _translation.ChangeLanguageAsync(_appSettings.Language, true);
         await SplashScreen.TryUpdateStatusAsync("Loading themes and addons...");
+
+        await _themes.SetThemeAsync(_themes.CurrentTheme);
 
         App.Stopwatch.Stop();
         SplashScreenHandler.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
