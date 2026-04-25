@@ -5,23 +5,24 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
-using SkEditor.Utilities.Extensions;
+using SkEditor.Services.Windowing;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.ViewModels.Controls;
 
 public partial class RemoteSidebarViewModel(
     FileTreeViewModel fileTree,
-    IRemoteConnectionService remoteConnectionService) : ObservableObject
+    IRemoteConnectionService remoteConnectionService,
+    WindowRegistry windowRegistry,
+    ConnectionsConfig connectionsConfig) : ObservableObject
 {
     [ObservableProperty]
-    private RemoteConnection? _selectedConnection;
+    public partial RemoteConnection? SelectedConnection { get; set; }
 
     public required FileTreeViewModel FileTree { get; init; } = fileTree;
 
-    // public ObservableCollection<RemoteConnection> RemoteConnections { get; } =
-    //     new(SkEditorAPI.Configs.GetConnectionsConfig().Connections);
-    public ObservableCollection<RemoteConnection> RemoteConnections => [];
+    public ObservableCollection<RemoteConnection> RemoteConnections { get; } = new(connectionsConfig.Connections);
 
     public bool NoSelectedConnection => SelectedConnection == null;
 
@@ -48,7 +49,13 @@ public partial class RemoteSidebarViewModel(
     private async Task NewRemoteConnection()
     {
         RemoteConnectionWindow window = App.Services.GetRequiredService<RemoteConnectionWindow>();
-        RemoteConnectionInfo? info = await window.ShowDialogOnMainWindow<RemoteConnectionInfo>();
+
+        if (windowRegistry.Active is not { } mainWindow)
+        {
+            return;
+        }
+
+        RemoteConnectionInfo? info = await window.ShowDialog<RemoteConnectionInfo>(mainWindow);
         if (info == null)
         {
             return;
@@ -61,8 +68,8 @@ public partial class RemoteSidebarViewModel(
             remoteConnectionService.SavePassword(connection, info.Password);
         }
 
-        // SkEditorAPI.Configs.GetConnectionsConfig().Connections.Add(connection);
-        // _ = SkEditorAPI.Configs.GetConnectionsConfig().Save();
+        connectionsConfig.Connections.Add(connection);
+        _ = connectionsConfig.Save();
 
         RemoteConnections.Add(connection);
     }

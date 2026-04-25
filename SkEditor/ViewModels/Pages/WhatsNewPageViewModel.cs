@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.API;
 using SkEditor.Models.WhatsNew;
 using Symbol = FluentIcons.Common.Symbol;
 
@@ -8,7 +7,7 @@ namespace SkEditor.ViewModels.Pages;
 
 public class WhatsNewPageViewModel : ObservableObject
 {
-    public string Version { get; } = $"v{SkEditorAPI.Core.GetInformationalVersion()}";
+    public string Version { get; } = $"v{App.GetInformationalVersion()}";
 
     public List<WhatsNewFeaturedItem> FeaturedItems { get; } =
     [

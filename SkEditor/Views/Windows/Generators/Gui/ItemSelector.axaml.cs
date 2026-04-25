@@ -14,7 +14,8 @@ using Avalonia.Media.Imaging;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.API;
+using Microsoft.Extensions.DependencyInjection;
+using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
@@ -74,7 +75,7 @@ public partial class ItemSelector : FAAppWindow
         }
         catch (Exception exc)
         {
-            SkEditorAPI.Logs.Error("Error loading items: " + exc.Message);
+            App.Services.GetRequiredService<ILogService>().Error("Error loading items: " + exc.Message);
         }
     }
 
@@ -165,7 +166,7 @@ public partial class ItemSelector : FAAppWindow
         }
         catch (Exception ex)
         {
-            SkEditorAPI.Logs.Error($"Error loading items.json: {ex.Message}");
+            App.Services.GetRequiredService<ILogService>().Error($"Error loading items.json: {ex.Message}");
         }
     }
 

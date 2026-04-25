@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Styling;
 using FluentAvalonia.UI.Controls;
-using SkEditor.API;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 
@@ -23,10 +22,5 @@ public static class Icons
         {
             Symbol = symbol
         };
-    }
-
-    public static FAIconSource? CreatePathIconSource(string name)
-    {
-        return SkEditorAPI.Core.GetApplicationResource(name) as FAPathIconSource;
     }
 }

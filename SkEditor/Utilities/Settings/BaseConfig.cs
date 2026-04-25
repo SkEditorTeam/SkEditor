@@ -6,7 +6,8 @@ using System.Text.Json.Serialization.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.API;
+using Microsoft.Extensions.DependencyInjection;
+using SkEditor.Contracts.Services;
 
 namespace SkEditor.Utilities.Settings;
 
@@ -54,7 +55,7 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
         }
         catch (Exception ex)
         {
-            SkEditorAPI.Logs.Error($"Failed to load config file '{ConfigPath}': {ex}");
+            App.Services.GetService<ILogService>()?.Error($"Failed to load config file '{ConfigPath}': {ex}");
         }
     }
 

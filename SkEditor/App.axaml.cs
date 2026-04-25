@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -107,6 +108,7 @@ public class App : Application
         services.AddSingleton<WindowInstanceService>();
         services.AddSingleton<WindowStateService>();
         services.AddSingleton<WindowErrorService>();
+        services.AddSingleton<NamedPipeServer>();
         services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<IMenuService, MenuService>();
@@ -161,5 +163,14 @@ public class App : Application
 
         services.AddSingleton<IFileFeatureService, FileFeatureService>();
         services.AddEditorFeatures();
+    }
+
+    public static string GetInformationalVersion()
+    {
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string? informationVersion =
+            assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+
+        return informationVersion ?? throw new InvalidOperationException("Informational version is null");
     }
 }

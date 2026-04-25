@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using Microsoft.Extensions.DependencyInjection;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
 
 namespace SkEditor.Utilities.Editor;

@@ -7,10 +7,10 @@ using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Welcome;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Icons;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Types;
@@ -103,20 +103,20 @@ public class WelcomeService : IWelcomeService
         [
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDiscordServer,
                 new RelayCommand(() =>
-                    SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev")),
-                Icons.CreatePathIconSource("DiscordIcon")),
+                    LinkOpener.OpenLink("https://discord.skeditor.dev")),
+                Icons.GetPathIcon("DiscordIcon")),
 
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksGitHub,
                 new RelayCommand(() =>
-                    SkEditorAPI.Core.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
-                Icons.CreatePathIconSource("GitHubIcon")),
+                    LinkOpener.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
+                Icons.GetPathIcon("GitHubIcon")),
 
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDocumentation,
-                new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://docs.skeditor.dev")),
+                new RelayCommand(() => LinkOpener.OpenLink("https://docs.skeditor.dev")),
                 Icons.CreateSymbolIcon(Symbol.Book)),
 
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksSupportUs,
-                new RelayCommand(() => SkEditorAPI.Core.OpenLink("https://ko-fi.com/notro")),
+                new RelayCommand(() => LinkOpener.OpenLink("https://ko-fi.com/notro")),
                 Icons.CreateSymbolIcon(Symbol.Heart))
         ]);
 

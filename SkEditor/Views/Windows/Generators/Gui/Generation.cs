@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using AvaloniaEdit;
-using AvaloniaEdit.Document;
-using SkEditor.API;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 

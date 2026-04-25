@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,19 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Serilog;
-using SkEditor.API;
+using SkEditor.Contracts.Services.Files;
+using SkEditor.Services.Windowing;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Utilities;
 
-public static class NamedPipeServer
+public class NamedPipeServer(WindowRegistry windowRegistry, IFileService fileService)
 {
     public const string PipeName = "SkEditor3";
 
-    private static bool _isRunning;
+    private bool _isRunning;
 
-    public static void Start()
+    public void Start()
     {
         if (_isRunning)
         {
@@ -29,7 +31,7 @@ public static class NamedPipeServer
         Task.Run(RunServer);
     }
 
-    private static async Task RunServer()
+    private async Task RunServer()
     {
         try
         {
@@ -48,20 +50,20 @@ public static class NamedPipeServer
         }
     }
 
-    private static async Task OnClientConnected(NamedPipeServerStream namedPipeServerStream)
+    private async Task OnClientConnected(NamedPipeServerStream namedPipeServerStream)
     {
         try
         {
             byte[] buffer = new byte[1024];
             int bytesRead = await namedPipeServerStream.ReadAsync(buffer.AsMemory(0, 1024));
 
-            await Dispatcher.UIThread.InvokeAsync(() =>
+            await Dispatcher.UIThread.InvokeAsync(async () =>
             {
                 if (bytesRead is not (0 or 1))
                 {
                     string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-                    OpenFiles(message);
+                    await OpenFiles(message);
                 }
 
                 BringMainWindowToFront();
@@ -74,16 +76,20 @@ public static class NamedPipeServer
     }
 
 
-    private static void OpenFiles(string filesToOpen)
+    private async Task OpenFiles(string filesToOpen)
     {
-        // TODO: re-implement
-        filesToOpen.Split(Environment.NewLine)
-            .Where(x => !string.IsNullOrEmpty(x)).ToList().ForEach(_ => Task.CompletedTask.RunSynchronously());
+        IEnumerable<string> files = filesToOpen.Split(Environment.NewLine)
+            .Where(x => !string.IsNullOrEmpty(x));
+
+        foreach (string file in files)
+        {
+            await fileService.OpenFileAsync(file);
+        }
     }
 
-    private static void BringMainWindowToFront()
+    private void BringMainWindowToFront()
     {
-        MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+        MainWindow? mainWindow = windowRegistry.Active;
         if (mainWindow == null)
         {
             return;

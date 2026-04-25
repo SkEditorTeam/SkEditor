@@ -11,15 +11,19 @@ using Avalonia.Media.Immutable;
 using Avalonia.Styling;
 using FluentAvalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Styling;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Services;
 
-public class ThemeService(ILogService log, IConfigService config, AppSettings appSettings) : IThemeService
+public class ThemeService(
+    ILogService log,
+    IConfigService config,
+    AppSettings appSettings,
+    WindowRegistry windowRegistry) : IThemeService
 {
     private bool _defaultColorsCollected;
 
@@ -92,7 +96,7 @@ public class ThemeService(ILogService log, IConfigService config, AppSettings ap
     {
         if (CurrentTheme.UseMicaEffect && !theme.UseMicaEffect)
         {
-            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+            MainWindow? mainWindow = windowRegistry.Active;
             mainWindow?.TransparencyLevelHint = [WindowTransparencyLevel.None];
         }
 
@@ -243,7 +247,7 @@ public class ThemeService(ILogService log, IConfigService config, AppSettings ap
             }
 
             smallWindow?.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
-            MainWindow? mainWindow = SkEditorAPI.Windows.GetMainWindow();
+            MainWindow? mainWindow = windowRegistry.Active;
             mainWindow?.TransparencyLevelHint = levels;
         }
         else
@@ -255,7 +259,7 @@ public class ThemeService(ILogService log, IConfigService config, AppSettings ap
                 smallWindow?.Setters.Remove(existingSetter);
             }
 
-            SkEditorAPI.Windows.GetMainWindow()!.TransparencyLevelHint = [WindowTransparencyLevel.None];
+            windowRegistry.Active?.TransparencyLevelHint = [WindowTransparencyLevel.None];
         }
 
         SmallWindowTheme = smallWindow;

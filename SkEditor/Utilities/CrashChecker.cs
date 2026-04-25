@@ -4,18 +4,23 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
+using SkEditor.Services.Windowing;
 using CrashWindow = SkEditor.Views.Windows.CrashWindow;
 using Path = System.IO.Path;
 
 namespace SkEditor.Utilities;
 
-public class CrashChecker(ILogService logService)
+public class CrashChecker(
+    ILogService logService,
+    IStartupService startupService,
+    WindowRegistry windowRegistry,
+    IFileService fileService)
 {
     public async Task<bool> CheckForCrash()
     {
-        string[] args = SkEditorAPI.Core.GetStartupArguments();
+        string[]? args = startupService.StartupArguments;
         if (args is not ["--crash", _])
         {
             return false;
@@ -31,7 +36,11 @@ public class CrashChecker(ILogService logService)
                 List<string> files = Directory.GetFiles(tempPath).ToList();
                 if (files.Count != 0)
                 {
-                    // files.ForEach(file => SkEditorAPI.Files.OpenFile(file));
+                    foreach (string file in files)
+                    {
+                        await fileService.OpenFileAsync(file);
+                    }
+
                     await WaitForUnlock(files);
 
                     try
@@ -45,7 +54,11 @@ public class CrashChecker(ILogService logService)
                 }
             }
 
-            await SkEditorAPI.Windows.ShowWindowAsDialog(new CrashWindow(exception));
+            if (windowRegistry.Active is { } mainWindow)
+            {
+                await new CrashWindow(exception).ShowDialog(mainWindow);
+            }
+
             return true;
         }
         catch (FormatException e)

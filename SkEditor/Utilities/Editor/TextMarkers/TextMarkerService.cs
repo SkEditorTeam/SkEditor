@@ -7,7 +7,6 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using SkEditor.API;
 
 namespace SkEditor.Utilities.Editor.TextMarkers;
 

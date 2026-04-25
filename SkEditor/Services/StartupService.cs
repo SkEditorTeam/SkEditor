@@ -5,7 +5,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
-using SkEditor.API;
 using SkEditor.Contracts.Services;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
@@ -19,11 +18,14 @@ public class StartupService(
     WindowInstanceService windowInstanceService,
     WindowStateService windowStateService,
     WindowErrorService windowErrorService,
+    NamedPipeServer namedPipeServer,
     IconProvider iconProvider,
     IConfigService config,
     AppSettings appSettings,
     LegacyConfigMigrator configMigrator) : IStartupService
 {
+    public string[]? StartupArguments { get; set; }
+
     public async Task CompleteApplicationStartAsync(
         IClassicDesktopStyleApplicationLifetime desktop,
         SplashScreen? splashScreen)
@@ -66,7 +68,7 @@ public class StartupService(
             return;
         }
 
-        SkEditorAPI.Core.SetStartupArguments(desktop.Args ?? []);
+        StartupArguments = desktop.Args ?? [];
 
         await Dispatcher.UIThread.InvokeAsync(() => FAAppWindow.AlwaysFallback = appSettings.ForceNativeTitleBar);
 
@@ -76,7 +78,7 @@ public class StartupService(
 
         MainWindow mainWindow = await Dispatcher.UIThread.InvokeAsync(() => mainWindowFactory.Create(splashScreen));
 
-        NamedPipeServer.Start();
+        namedPipeServer.Start();
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {

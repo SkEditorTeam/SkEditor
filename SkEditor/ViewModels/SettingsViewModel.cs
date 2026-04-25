@@ -4,7 +4,6 @@ using Avalonia.Utilities;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Updating;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 
 namespace SkEditor.ViewModels;
@@ -61,6 +60,6 @@ public partial class SettingsViewModel : ObservableObject
         CurrentFont = _translation.Get(TranslationKey.SettingsPersonalizationFontDescription)
             .Replace("{0}", _appSettings.EditorFontFamily ?? "Default (JetBrains Mono)");
 
-        SkEditorString = $"SkEditor v{UpdateChecker.Major}.{UpdateChecker.Minor}.{UpdateChecker.Build}";
+        SkEditorString = $"SkEditor v{App.GetInformationalVersion()}";
     }
 }

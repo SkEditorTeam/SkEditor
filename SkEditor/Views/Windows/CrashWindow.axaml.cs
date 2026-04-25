@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia.Input;
 using FluentAvalonia.UI.Windowing;
-using SkEditor.API;
+using SkEditor.Utilities;
 
 namespace SkEditor.Views.Windows;
 
@@ -34,6 +34,6 @@ public partial class CrashWindow : FAAppWindow
 
     public static void OpenDiscord()
     {
-        SkEditorAPI.Core.OpenLink("https://discord.skeditor.dev");
+        LinkOpener.OpenLink("https://discord.skeditor.dev");
     }
 }
