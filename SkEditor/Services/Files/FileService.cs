@@ -11,7 +11,8 @@ namespace SkEditor.Services.Files;
 public class FileService(
     ITabService tabs,
     ITranslationService translation,
-    IFileTabFactory fileTabFactory)
+    IFileTabFactory fileTabFactory,
+    IFilePickerService filePicker)
     : IFileService
 {
     public void NewFile()
@@ -21,6 +22,20 @@ public class FileService(
 
         FileTab newFileTab = fileTabFactory.CreateNewFile(header.Value);
         tabs.OpenTab(newFileTab);
+    }
+
+    public async Task OpenFileAsync()
+    {
+        string[]? paths = await filePicker.PickFilesAsync();
+        if (paths is null)
+        {
+            return;
+        }
+
+        foreach (string path in paths)
+        {
+            await OpenFileAsync(path);
+        }
     }
 
     public async Task OpenFileAsync(string path)

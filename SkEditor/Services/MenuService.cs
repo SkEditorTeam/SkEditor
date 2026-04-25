@@ -28,6 +28,11 @@ public class MenuService(IFileService fileService) : IMenuService
             .WithInputGesture("Ctrl+N")
             .AddTo(fileMenu);
 
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderOpen, Symbol.DocumentArrowUp)
+            .WithCommand(fileService.OpenFileAsync)
+            .WithInputGesture("Ctrl+O")
+            .AddTo(fileMenu);
+
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
             .WithCommand(fileService.SaveFileAsync)
             .WithInputGesture("Ctrl+S")

@@ -80,16 +80,8 @@ public class WelcomeService : IWelcomeService
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
                     new RelayCommand(() => _fileService.NewFile()), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
-                    new AsyncRelayCommand(async () =>
-                    {
-                        string[]? paths = await _filePickerService.PickFilesAsync();
-                        if (paths is null) return;
-
-                        foreach (string path in paths)
-                        {
-                            await _fileService.OpenFileAsync(path);
-                        }
-                    }), Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
+                    new AsyncRelayCommand(async () => await _fileService.OpenFileAsync()),
+                    Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,
                     new AsyncRelayCommand(() => Task.CompletedTask),
                     Icons.CreateSymbolIcon(Symbol.FolderOpen)).Disable(),
