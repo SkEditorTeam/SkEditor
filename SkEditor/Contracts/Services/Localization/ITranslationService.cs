@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Contracts.Services.Localization;
@@ -9,6 +10,12 @@ public interface ITranslationService
     ///     The folder where language files are stored.
     /// </summary>
     public string LanguagesFolder { get; }
+
+    /// <summary>
+    ///     Event triggered when the application's language is changed. The event handler receives the new language as a
+    ///     parameter.
+    /// </summary>
+    event EventHandler<string>? LanguageChanged;
 
     /// <summary>
     ///     Retrieves the translated string for the given key, formatting it with the provided parameters if any.

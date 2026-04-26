@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
-using Avalonia.Threading;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Utilities.Extensions;
@@ -36,6 +35,8 @@ public class TranslationService : ITranslationService
     public static ITranslationService Current { get; set; } = null!;
 
     public string LanguagesFolder => Path.Combine(AppContext.BaseDirectory, "Languages");
+
+    public event EventHandler<string>? LanguageChanged;
 
     public string Get(TranslationKey key, params string?[] parameters)
     {
@@ -81,24 +82,6 @@ public class TranslationService : ITranslationService
         {
             PropagateLanguageChange(language);
         }
-    }
-
-    public async Task ChangeAndRefreshLanguageAsync(string language)
-    {
-        await Dispatcher.UIThread.InvokeAsync(async () =>
-        {
-            await ChangeLanguageAsync(language);
-
-            // if (!SkEditorAPI.Files.IsEditorOpen())
-            // {
-            //     return;
-            // }
-            //
-            // foreach (OpenedFile openedFile in SkEditorAPI.Files.GetOpenedEditors())
-            // {
-            //     openedFile.Editor!.ContextFlyout = FileFactory.GetContextMenu(openedFile.Editor);
-            // }
-        });
     }
 
     private static void ClearOldLanguages()
@@ -198,14 +181,14 @@ public class TranslationService : ITranslationService
     {
         _appSettings.Language = language;
         _ = _appSettings.Save();
-        // Dispatcher.UIThread.Post(() => SkEditorAPI.Events.LanguageChanged(language));
+        LanguageChanged?.Invoke(this, language);
     }
 
     private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(AppSettings.Language))
         {
-            _ = ChangeAndRefreshLanguageAsync(_appSettings.Language);
+            _ = ChangeLanguageAsync(_appSettings.Language);
         }
     }
 }
