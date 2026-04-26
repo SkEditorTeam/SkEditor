@@ -7,6 +7,5 @@ namespace SkEditor.Utilities.Settings.Attributes;
 
 public abstract class BaseSettingAttribute(
     TranslationKey titleKey,
-    TranslationKey? categoryKey = null,
     TranslationKey? descriptionKey = null)
     : Attribute;

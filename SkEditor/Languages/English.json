@@ -237,6 +237,8 @@
   "SettingsGeneralCategoryTitleApplication": "Application",
   "SettingsGeneralCategoryTitleEditor": "Editor",
   "SettingsGeneralTitle": "General",
+  "SettingsUpdatesTitle": "Updates",
+  "SettingsAdvancedTitle": "Advanced",
   "SettingsGeneralLanguage": "Language",
   "SettingsGeneralWrapping": "Wrapping",
   "SettingsGeneralWrappingDescription": "Choose whether lines should wrap at the viewport width.",

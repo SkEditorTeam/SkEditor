@@ -9,6 +9,5 @@ namespace SkEditor.Utilities.Settings.Attributes;
 [AttributeUsage(AttributeTargets.Property)]
 public class ToggleSettingAttribute(
     TranslationKey titleKey,
-    TranslationKey categoryKey = TranslationKey.SettingsGeneralTitle,
     TranslationKey descriptionKey = TranslationKey.None)
-    : BaseSettingAttribute(titleKey, categoryKey, descriptionKey);
+    : BaseSettingAttribute(titleKey, descriptionKey);

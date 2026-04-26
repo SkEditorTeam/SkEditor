@@ -6,6 +6,7 @@
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
              xmlns:models="clr-namespace:SkEditor.Utilities.Settings.Models"
              xmlns:types="clr-namespace:SkEditor.Utilities.Settings.Models.Types"
+             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="vms:SettingsPageViewModel"
@@ -38,7 +39,8 @@
 
 
     <controls:FANavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,16,0,16"
-                               PaneDisplayMode="Auto" OpenPaneLength="280"
+                               PaneDisplayMode="Auto" OpenPaneLength="250"
+                               CompactModeThresholdWidth="180"
                                MaxWidth="1080"
                                MenuItemsSource="{Binding SettingsCategories}"
                                SelectedItem="{Binding CurrentSection, Mode=TwoWay}"
@@ -52,7 +54,10 @@
 
         <controls:FANavigationView.Content>
             <ScrollViewer Name="ScrollViewer" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                          Padding="24,4,24,24" VerticalScrollBarVisibility="Hidden">
+                          Padding="24,4,24,24" VerticalScrollBarVisibility="Auto">
+                <Interaction.Behaviors>
+                    <behaviors:VerticalScrollViewerAnimatedBehavior />
+                </Interaction.Behaviors>
                 <ItemsRepeater ItemsSource="{Binding CurrentSection.Settings}">
                     <ItemsRepeater.Layout>
                         <StackLayout Spacing="8"

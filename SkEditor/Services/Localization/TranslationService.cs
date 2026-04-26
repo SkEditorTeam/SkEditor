@@ -40,6 +40,11 @@ public class TranslationService : ITranslationService
 
     public string Get(TranslationKey key, params string?[] parameters)
     {
+        if (key == TranslationKey.None)
+        {
+            throw new ArgumentException("Translation key cannot be None");
+        }
+
         object? translation = null;
         Application.Current?.TryGetResource(key.ToString(), ThemeVariant.Default, out translation);
         string translationString = translation?.ToString() ?? key.ToString();

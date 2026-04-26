@@ -1,33 +1,24 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Models;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
-using Symbol = FluentIcons.Common.Symbol;
-using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 
 namespace SkEditor.ViewModels.Pages;
 
 public partial class SettingsPageViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private SettingSection _currentSection;
-
-    public SettingsPageViewModel(AppSettings appSettings, ITranslationService translation)
+    public SettingsPageViewModel(AppSettings appSettings)
     {
-        List<SettingElement> settings = appSettings.GetToggleSettingsSections();
-        SettingsCategories =
-        [
-            new SettingSection(
-                translation.GetObservable(TranslationKey.SettingsGeneralTitle),
-                new SymbolIconSource { Symbol = Symbol.Settings },
-                settings
-            )
-        ];
+        SettingsCategories = appSettings.GetSettingsTree();
 
-        _currentSection = SettingsCategories[0];
+        if (SettingsCategories.Count > 0)
+        {
+            CurrentSection = SettingsCategories[0];
+        }
     }
+
+    [ObservableProperty]
+    public partial SettingSection? CurrentSection { get; set; }
 
     public List<SettingSection> SettingsCategories { get; }
 }

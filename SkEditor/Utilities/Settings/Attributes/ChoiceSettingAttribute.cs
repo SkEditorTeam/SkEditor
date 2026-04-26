@@ -11,6 +11,5 @@ namespace SkEditor.Utilities.Settings.Attributes;
 public class ChoiceSettingAttribute(
     TranslationKey titleKey,
     Type providerType,
-    TranslationKey categoryKey = TranslationKey.None,
     TranslationKey descriptionKey = TranslationKey.None)
-    : BaseSettingAttribute(titleKey, categoryKey, descriptionKey);
+    : BaseSettingAttribute(titleKey, descriptionKey);

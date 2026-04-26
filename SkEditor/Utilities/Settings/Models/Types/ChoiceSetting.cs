@@ -24,6 +24,7 @@ public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
         : base(name, icon, desc)
     {
         _set = set;
+
         Options = provider.GetValues().Cast<T>().ToList();
         SelectedOption = get();
     }
