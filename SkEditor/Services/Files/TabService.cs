@@ -51,6 +51,17 @@ public class TabService(IFileFeatureService featureService) : ITabService
         }
     }
 
+    public void OpenUniqueTab<T>(Func<T> factory) where T : Tab
+    {
+        if (Tabs.OfType<T>().FirstOrDefault() is { } existing)
+        {
+            SelectedTab = existing;
+            return;
+        }
+
+        OpenTab(factory());
+    }
+
     private void OnTabCloseRequested(object? sender, EventArgs e)
     {
         if (sender is Tab tab) CloseTab(tab);

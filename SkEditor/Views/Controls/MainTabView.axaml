@@ -43,7 +43,7 @@
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type tabs:SettingsTab}">
-                    <pages:SettingsPage />
+                    <pages:SettingsPage DataContext="{Binding PageViewModel}" />
                 </DataTemplate>
             </ui:TabView.DataTemplates>
             <ui:TabView.TabItemTemplate>

@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Models.Tabs;
 using SkEditor.Models.Welcome;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Icons;
@@ -19,16 +20,19 @@ namespace SkEditor.Services;
 
 public class WelcomeService : IWelcomeService
 {
-    private readonly IFilePickerService _filePickerService;
-    private readonly IFileService _fileService;
+    private readonly IFileService _files;
+
     private readonly SortedObservableCollection<WelcomeScreenRecentItem> _recentItems;
+    private readonly Func<SettingsTab> _settingsTabFactory;
+    private readonly ITabService _tabs;
 
     private DispatcherTimer _timeUpdater;
 
-    public WelcomeService(IFileService fileService, IFilePickerService filePickerService)
+    public WelcomeService(IFileService fileService, ITabService tabService, Func<SettingsTab> settingsTabFactory)
     {
-        _fileService = fileService;
-        _filePickerService = filePickerService;
+        _files = fileService;
+        _tabs = tabService;
+        _settingsTabFactory = settingsTabFactory;
 
         _recentItems = new SortedObservableCollection<WelcomeScreenRecentItem>(
             Comparer<WelcomeScreenRecentItem>.Create((a, b) => b.LastOpened.CompareTo(a.LastOpened))
@@ -78,16 +82,16 @@ public class WelcomeService : IWelcomeService
             new TranslatableString(TranslationKey.WelcomePageGettingStarted),
             [
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
-                    new RelayCommand(() => _fileService.NewFile()), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
+                    new RelayCommand(() => _files.NewFile()), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
-                    new AsyncRelayCommand(async () => await _fileService.OpenFileAsync()),
+                    new AsyncRelayCommand(async () => await _files.OpenFileAsync()),
                     Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,
                     new AsyncRelayCommand(() => Task.CompletedTask),
                     Icons.CreateSymbolIcon(Symbol.FolderOpen)).Disable(),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedSettings,
-                    new AsyncRelayCommand(() => Task.CompletedTask),
-                    Icons.CreateSymbolIcon(Symbol.Settings)).Disable()
+                    new RelayCommand(() => _tabs.OpenUniqueTab(_settingsTabFactory)),
+                    Icons.CreateSymbolIcon(Symbol.Settings))
             ]
         );
 

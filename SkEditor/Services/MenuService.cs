@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
@@ -8,7 +9,7 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services;
 
-public class MenuService(IFileService files, ITabService tabs) : IMenuService
+public class MenuService(IFileService files, ITabService tabs, Func<SettingsTab> settingsTabFactory) : IMenuService
 {
     public IEnumerable<MainMenuItem> GetMainMenuItems()
     {
@@ -18,7 +19,7 @@ public class MenuService(IFileService files, ITabService tabs) : IMenuService
         ];
 
         MainMenuItem settings =
-            MainMenuItem.IconOnly(Symbol.Settings).WithCommand(() => tabs.OpenTab(new SettingsTab()));
+            MainMenuItem.IconOnly(Symbol.Settings).WithCommand(() => tabs.OpenUniqueTab(settingsTabFactory));
 
         items.Add(settings);
 

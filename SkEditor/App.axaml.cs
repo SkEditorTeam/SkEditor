@@ -13,6 +13,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Models.Tabs;
 using SkEditor.Services;
 using SkEditor.Services.Files;
 using SkEditor.Services.Files.Features;
@@ -145,13 +146,18 @@ public class App : Application
         services.AddTransient<ThemePageViewModel>();
         services.AddTransient<WhatsNewPageViewModel>();
         services.AddTransient<WelcomePageViewModel>();
+        services.AddTransient<SettingsPageViewModel>();
         services.AddTransient<PublishWindowViewModel>();
 
         services.AddTransient<MainWindow>();
         services.AddTransient<SplashScreen>();
         services.AddTransient<RemoteConnectionWindow>();
-        services.AddTransient<WhatsNewPage>();
+        services.AddTransient<SettingsPage>();
         services.AddTransient<PublishWindow>();
+
+        services.AddTransient<WhatsNewPage>();
+        services.AddTransient<SettingsTab>();
+        services.AddSingleton<Func<SettingsTab>>(sp => sp.GetRequiredService<SettingsTab>);
 
         services.AddSingleton<IFileFeatureService, FileFeatureService>();
         services.AddEditorFeatures();

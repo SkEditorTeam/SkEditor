@@ -14,9 +14,6 @@ public partial class MainWindowViewModel : ObservableRecipient
     private readonly IFileService _fileService;
     private readonly ITabService _tabService;
 
-    [ObservableProperty]
-    private Tab? _selectedTab;
-
     public MainWindowViewModel(ITabService tabService, IFileService fileService, AppSettings appSettings,
         MainMenuViewModel mainMenu,
         WelcomePageViewModel welcomePage)
@@ -32,6 +29,9 @@ public partial class MainWindowViewModel : ObservableRecipient
         _tabService.SelectedTabChanged += tab =>
             SelectedTab = tab;
     }
+
+    [ObservableProperty]
+    public partial Tab? SelectedTab { get; set; }
 
     public AppSettings AppSettings { get; }
     public MainMenuViewModel MainMenu { get; }

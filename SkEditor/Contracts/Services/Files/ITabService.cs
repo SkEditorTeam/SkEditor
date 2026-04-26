@@ -11,4 +11,6 @@ public interface ITabService
     event Action<Tab?>? SelectedTabChanged;
     void OpenTab(Tab tab);
     void CloseTab(Tab tab);
+
+    void OpenUniqueTab<T>(Func<T> factory) where T : Tab;
 }
