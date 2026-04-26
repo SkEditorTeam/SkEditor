@@ -138,25 +138,30 @@ public class SettingsGenerator : IIncrementalGenerator
         {
             AttributeData? attr = member.GetAttributes()
                 .FirstOrDefault(a => a.AttributeClass?.ToDisplayString() == CategoryMetadataAttributeFullName);
+
             if (attr == null)
             {
                 continue;
             }
 
             string id = member.Name;
-
-            string titleKey = attr.ConstructorArguments.Length > 0
-                ? attr.ConstructorArguments[0].ToCSharpString()
-                : "SkEditor.Utilities.Localization.TranslationKey.None";
-
-            string symbol = attr.ConstructorArguments.Length > 1
-                ? attr.ConstructorArguments[1].ToCSharpString()
-                : "FluentIcons.Common.Symbol.Settings";
+            string titleKey = "SkEditor.Utilities.Localization.TranslationKey.None";
+            string symbol = "FluentIcons.Common.Symbol.Settings";
             string parentId = "null";
 
             if (attr.ApplicationSyntaxReference?.GetSyntax() is AttributeSyntax { ArgumentList: not null } syntax)
             {
                 SeparatedSyntaxList<AttributeArgumentSyntax> args = syntax.ArgumentList.Arguments;
+
+                if (args.Count > 0 && args[0].NameEquals == null)
+                {
+                    titleKey = args[0].Expression.ToString();
+                }
+
+                if (args.Count > 1 && args[1].NameEquals == null)
+                {
+                    symbol = args[1].Expression.ToString();
+                }
 
                 AttributeArgumentSyntax? parentArg =
                     args.FirstOrDefault(na => na.NameEquals?.Name.Identifier.Text == "Parent");
@@ -175,10 +180,35 @@ public class SettingsGenerator : IIncrementalGenerator
     private static string GenerateTreeBuilder(Dictionary<string, CategoryMeta> categories,
         Dictionary<string, List<string>> settings)
     {
+        HashSet<string> usedCategories = [];
+
+        foreach (CategoryMeta cat in categories.Values)
+        {
+            if (!settings.ContainsKey(cat.Id))
+            {
+                continue;
+            }
+
+            usedCategories.Add(cat.Id);
+
+            string currentParent = cat.ParentId;
+            while (currentParent != "null" && categories.ContainsKey(currentParent))
+            {
+                usedCategories.Add(currentParent);
+                currentParent = categories[currentParent].ParentId;
+            }
+        }
+
+        if (usedCategories.Count == 0)
+        {
+            return "return new System.Collections.Generic.List<SettingSection>();";
+        }
+
         StringBuilder sb = new();
 
-        foreach (CategoryMeta? cat in categories.Values)
+        foreach (string catId in usedCategories)
         {
+            CategoryMeta cat = categories[catId];
             sb.AppendLine(
                 $"var cat_{cat.Id} = new SettingSection(new TranslatableString({cat.TitleKey}), new FluentIcons.Avalonia.Fluent.SymbolIconSource {{ Symbol = (FluentIcons.Common.Symbol){cat.Symbol} }}, []);");
 
@@ -194,11 +224,12 @@ public class SettingsGenerator : IIncrementalGenerator
         }
 
         sb.AppendLine();
-        sb.AppendLine("var roots = new List<SettingSection>();");
+        sb.AppendLine("var roots = new System.Collections.Generic.List<SettingSection>();");
 
-        foreach (CategoryMeta? cat in categories.Values)
+        foreach (string catId in usedCategories)
         {
-            if (cat.ParentId != "null" && categories.ContainsKey(cat.ParentId))
+            CategoryMeta cat = categories[catId];
+            if (cat.ParentId != "null" && usedCategories.Contains(cat.ParentId))
             {
                 sb.AppendLine($"cat_{cat.ParentId}.Subsections.Add(cat_{cat.Id});");
             }
