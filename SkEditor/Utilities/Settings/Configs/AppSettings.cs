@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FluentIcons.Common;
-using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Attributes;
-using SkEditor.Utilities.Settings.Models;
-using SkEditor.Utilities.Settings.Providers;
 
 namespace SkEditor.Utilities.Settings.Configs;
 
@@ -30,26 +26,18 @@ public partial class AppSettings : BaseConfig<AppSettings>
     ///     Whether to enable the developer mode.
     /// </summary>
     [ObservableProperty]
-    [ToggleSetting(TranslationKey.SettingsAboutDevMode, TranslationKey.SettingsAboutDevModeDescription)]
-    [SettingCategory(SettingsCategory.Advanced)]
-    [SettingSymbolIcon(Symbol.Flash)]
     public partial bool IsDevModeEnabled { get; set; } = false;
 
     /// <summary>
     ///     The application language code.
     /// </summary>
     [ObservableProperty]
-    [ChoiceSetting(TranslationKey.SettingsGeneralLanguage, typeof(LanguageSettingsProvider))]
-    [SettingSymbolIcon(Symbol.Globe)]
     public partial string Language { get; set; } = "English";
 
     /// <summary>
     ///     The current application theme file name.
     /// </summary>
     [ObservableProperty]
-    [ChoiceSetting(TranslationKey.SettingsThemeCurrentTheme, typeof(ThemeSettingsProvider),
-        TranslationKey.SettingsThemeCurrentThemeDescription)]
-    [SettingSymbolIcon(Symbol.PaintBrush)]
     public partial string CurrentTheme { get; set; } = "Default.json";
 
     /// <summary>
@@ -62,10 +50,6 @@ public partial class AppSettings : BaseConfig<AppSettings>
     ///     Whether to check for application updates on startup.
     /// </summary>
     [ObservableProperty]
-    [ToggleSetting(TranslationKey.SettingsGeneralCheckForUpdates,
-        TranslationKey.SettingsGeneralCheckForUpdatesDescription)]
-    [SettingSymbolIcon(Symbol.CloudSync)]
-    [SettingCategory(SettingsCategory.Updates)]
     public partial bool CheckForAppUpdates { get; set; } = true;
 
     /// <summary>
@@ -90,8 +74,6 @@ public partial class AppSettings : BaseConfig<AppSettings>
     ///     Whether to use Discord Rich Presence integration.
     /// </summary>
     [ObservableProperty]
-    [ToggleSetting(TranslationKey.SettingsGeneralRpc, TranslationKey.SettingsGeneralRpcDescription)]
-    [SettingPathIcon("DiscordIcon")]
     public partial bool IsDiscordRichPresenceEnabled { get; set; } = true;
 
     /// <summary>

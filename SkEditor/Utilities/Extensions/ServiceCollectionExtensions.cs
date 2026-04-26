@@ -3,6 +3,7 @@ using SkEditor.Features;
 using SkEditor.Services.Settings;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Utilities.Settings.Providers;
 
 namespace SkEditor.Utilities.Extensions;
 
@@ -31,6 +32,10 @@ public static class ServiceCollectionExtensions
             AddConfig(binarySettings);
 
             services.AddSingleton<SettingsObserverService>();
+
+            services.AddSingleton<LanguageSettingsProvider>();
+            services.AddSingleton<ThemeSettingsProvider>();
+
             return;
 
             void AddConfig<TConfig>(TConfig config) where TConfig : class, IConfig

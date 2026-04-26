@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Providers;
 
@@ -19,7 +19,7 @@ public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
 {
     private readonly Action<T> _set;
 
-    public ChoiceSetting(TranslatableString name, FAIconSource icon, TranslatableString? desc,
+    public ChoiceSetting(TranslatableString name, Symbol icon, TranslatableString? desc,
         ISettingsProvider provider, Func<T> get, Action<T> set)
         : base(name, icon, desc)
     {
