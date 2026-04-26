@@ -179,8 +179,6 @@ public class TranslationService : ITranslationService
 
     private void PropagateLanguageChange(string language)
     {
-        _appSettings.Language = language;
-        _ = _appSettings.Save();
         LanguageChanged?.Invoke(this, language);
     }
 
