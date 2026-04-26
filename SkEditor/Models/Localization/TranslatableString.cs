@@ -118,6 +118,11 @@ public partial class TranslatableString : ObservableObject, IDisposable
         return new TranslatableString(value, true);
     }
 
+    public override string ToString()
+    {
+        return Value;
+    }
+
     private static void OnGlobalLanguageChanged(object? sender, string language)
     {
         lock (Instances)
