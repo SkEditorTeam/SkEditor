@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using Avalonia.Threading;
 using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Styling;
@@ -14,7 +15,7 @@ public class SettingsObserverService(AppSettings appSettings, IThemeService them
         appSettings.PropertyChanged += OnAppSettingsChanged;
     }
 
-    private async void OnAppSettingsChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnAppSettingsChanged(object? sender, PropertyChangedEventArgs e)
     {
         try
         {
@@ -27,7 +28,7 @@ public class SettingsObserverService(AppSettings appSettings, IThemeService them
 
                     if (theme != null)
                     {
-                        await themeService.SetThemeAsync(theme);
+                        _ = Dispatcher.UIThread.InvokeAsync(async () => { await themeService.SetThemeAsync(theme); });
                     }
 
                     break;

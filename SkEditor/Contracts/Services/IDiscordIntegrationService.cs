@@ -3,6 +3,11 @@
 public interface IDiscordIntegrationService
 {
     /// <summary>
+    ///     Sets up the Discord RPC integration by listening to config changes and updating the presence accordingly.
+    /// </summary>
+    void SetUp();
+
+    /// <summary>
     ///     Initializes the Discord RPC integration. This method should be called when the application starts to connect to
     ///     Discord and set up all the info.
     /// </summary>

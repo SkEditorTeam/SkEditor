@@ -1,20 +1,54 @@
 ﻿using System.Text.RegularExpressions;
 using DiscordRPC;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Localization;
+using SkEditor.Models.Tabs;
+using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Services;
 
-public partial class DiscordIntegrationService : IDiscordIntegrationService
+public partial class DiscordIntegrationService(
+    AppSettings appSettings,
+    ITabService tabs,
+    ITranslationService translations)
+    : IDiscordIntegrationService
 {
     private const string ApplicationId = "1152625623777431662";
     private DiscordRpcClient? _client;
 
+    public void SetUp()
+    {
+        appSettings.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName != nameof(AppSettings.IsDiscordRichPresenceEnabled))
+            {
+                return;
+            }
+
+            if (appSettings.IsDiscordRichPresenceEnabled)
+            {
+                Initialize();
+            }
+            else
+            {
+                Uninitialize();
+            }
+        };
+
+        if (appSettings.IsDiscordRichPresenceEnabled)
+        {
+            Initialize();
+        }
+    }
+
     public void Initialize()
     {
-        // if (!SkEditorAPI.Configs.GetAppSettings().IsDiscordRichPresenceEnabled)
-        // {
-        //     return;
-        // }
+        if (!appSettings.IsDiscordRichPresenceEnabled)
+        {
+            return;
+        }
 
         _client = new DiscordRpcClient(ApplicationId);
         _client.Initialize();
@@ -29,42 +63,29 @@ public partial class DiscordIntegrationService : IDiscordIntegrationService
             }
         });
 
-        // TabView? tabView = SkEditorAPI.Files.GetTabView();
-        //
-        // if (tabView == null)
-        // {
-        //     return;
-        // }
-        //
-        // tabView.SelectionChanged += (_, _) =>
-        // {
-        //     if (!_client.IsInitialized)
-        //     {
-        //         return;
-        //     }
-        //
-        //     if (SkEditorAPI.Files.IsFileOpen())
-        //     {
-        //         if (tabView.SelectedItem is not TabViewItem tab)
-        //         {
-        //             return;
-        //         }
-        //
-        //         string tabName = tab.Header?.ToString()?.TrimEnd('*') ?? "";
-        //         tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
-        //         string translation = Translation.Get(TranslationKey.DiscordRpcEditing, tabName);
-        //         if (translation.Length > 128)
-        //         {
-        //             translation = translation[..125] + "...";
-        //         }
-        //
-        //         _client.UpdateDetails(translation);
-        //     }
-        //     else
-        //     {
-        //         _client.UpdateDetails("");
-        //     }
-        // };
+        tabs.SelectedTabChanged += tab =>
+        {
+            if (!_client.IsInitialized)
+            {
+                return;
+            }
+
+            if (tab is not FileTab fileTab)
+            {
+                _client.UpdateDetails("");
+                return;
+            }
+
+            string tabName = fileTab.Header.Value;
+            tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
+            string translation = translations.Get(TranslationKey.DiscordRpcEditing, tabName);
+            if (translation.Length > 128)
+            {
+                translation = translation[..125] + "...";
+            }
+
+            _client.UpdateDetails(translation);
+        };
     }
 
     public void Uninitialize()

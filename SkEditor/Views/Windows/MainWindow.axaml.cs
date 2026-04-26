@@ -17,6 +17,7 @@ public partial class MainWindow : FAAppWindow
 {
     private readonly AppSettings _appSettings;
     private readonly IConfigService _configs;
+    private readonly IDiscordIntegrationService _discordIntegration;
     private readonly IThemeService _themes;
     private readonly ITranslationService _translation;
 
@@ -27,6 +28,7 @@ public partial class MainWindow : FAAppWindow
         _appSettings = null!;
         _translation = null!;
         _themes = null!;
+        _discordIntegration = null!;
     }
 
     public MainWindow(
@@ -36,7 +38,8 @@ public partial class MainWindow : FAAppWindow
         AppSettings appSettings,
         IThemeService themes,
         ITranslationService translation,
-        DragDropService dragDropService)
+        DragDropService dragDropService,
+        IDiscordIntegrationService discordIntegration)
         : this()
     {
         DataContext = viewModel;
@@ -44,6 +47,7 @@ public partial class MainWindow : FAAppWindow
         _appSettings = appSettings;
         _translation = translation;
         _themes = themes;
+        _discordIntegration = discordIntegration;
 
         KeyboardShortcutHandler shortcutHandler = new(this);
         shortcutHandler.Initialize();
@@ -89,6 +93,8 @@ public partial class MainWindow : FAAppWindow
         SplashScreenHandler.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
 
         await SplashScreen.TryUpdateStatusAsync("Initializing main window...");
+
+        _discordIntegration.SetUp();
 
         Dispatcher.Post(() =>
         {
