@@ -82,7 +82,8 @@ public class SettingsGenerator : IIncrementalGenerator
                     string titleKey = args.Count > 0 ? args[0] : "TranslationKey.None";
                     string categoryKey = args.Count > 1 ? args[1] : "TranslationKey.SettingsGeneralTitle";
                     string? descriptionKey = args.Count > 2 ? args[2] : null;
-                    string descriptionPart = descriptionKey != null ? $"new TranslatableString({descriptionKey})" : "null";
+                    string descriptionPart =
+                        descriptionKey != null ? $"new TranslatableString({descriptionKey})" : "null";
 
                     settingsSectionsBuilder.AppendLine($"""
                                                         new ToggleSetting(
@@ -106,18 +107,19 @@ public class SettingsGenerator : IIncrementalGenerator
 
                     string titleKey = args.Count > 0 ? args[0] : "TranslationKey.None";
                     AttributeSyntax attributeSyntax = (AttributeSyntax)attr.ApplicationSyntaxReference!.GetSyntax();
-                    string providerTypeName = GetFullyQualifiedTypeName(attributeSyntax, 1, compilation);
+                    string providerInstantiation = GetProviderInstantiationCode(attributeSyntax, 1, compilation);
                     string categoryKey = args.Count > 2 ? args[2] : "TranslationKey.None";
                     string? descriptionKey = args.Count > 3 ? args[3] : null;
-                    
-                    string descriptionPart = descriptionKey != null ? $"new TranslatableString({descriptionKey})" : "null";
+
+                    string descriptionPart =
+                        descriptionKey != null ? $"new TranslatableString({descriptionKey})" : "null";
 
                     settingsSectionsBuilder.AppendLine($"""
                                                         new ChoiceSetting<{propertyType}>(
                                                             new TranslatableString({titleKey}),
                                                             {icon},
                                                             {descriptionPart},
-                                                            new {providerTypeName}(),
+                                                            {providerInstantiation},
                                                             () => {choiceProperty.Name},
                                                             (value) => {choiceProperty.Name} = value
                                                         ),
@@ -185,29 +187,48 @@ public class SettingsGenerator : IIncrementalGenerator
             .ToList();
     }
 
-    private static string GetFullyQualifiedTypeName(AttributeSyntax attributeSyntax, int argumentIndex,
+    private static string GetProviderInstantiationCode(AttributeSyntax attributeSyntax, int argumentIndex,
         Compilation compilation)
     {
         AttributeArgumentListSyntax? argList = attributeSyntax.ArgumentList;
         if (argList is null || argList.Arguments.Count <= argumentIndex)
         {
-            return "object";
+            return "null";
         }
 
         ExpressionSyntax expression = argList.Arguments[argumentIndex].Expression;
         if (expression is not TypeOfExpressionSyntax typeOfExpr)
         {
-            return expression.ToString().Replace("typeof(", "").TrimEnd(')');
+            string fallbackType = expression.ToString().Replace("typeof(", "").TrimEnd(')');
+            return $"new {fallbackType}()";
         }
 
         SemanticModel model = compilation.GetSemanticModel(typeOfExpr.SyntaxTree);
         SymbolInfo symbolInfo = model.GetSymbolInfo(typeOfExpr.Type);
+
         if (symbolInfo.Symbol is INamedTypeSymbol typeSymbol)
         {
-            return typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            string typeName = typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+            IMethodSymbol? ctor = typeSymbol.Constructors
+                .Where(c => c.DeclaredAccessibility == Accessibility.Public)
+                .OrderByDescending(c => c.Parameters.Length)
+                .FirstOrDefault();
+
+            if (ctor == null || ctor.Parameters.Length == 0)
+            {
+                return $"new {typeName}()";
+            }
+
+            IEnumerable<string> arguments = ctor.Parameters.Select(p =>
+                $"Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)}>(SkEditor.App.Services)"
+            );
+
+            return $"new {typeName}({string.Join(", ", arguments)})";
         }
 
-        return expression.ToString().Replace("typeof(", "").TrimEnd(')');
+        string fallback = expression.ToString().Replace("typeof(", "").TrimEnd(')');
+        return $"new {fallback}()";
     }
 
     private static string GetIconString(IPropertySymbol toggleProperty)
