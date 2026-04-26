@@ -39,8 +39,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     ///     The application language code.
     /// </summary>
     [ObservableProperty]
-    [ChoiceSetting(TranslationKey.SettingsGeneralLanguage, typeof(LanguageSettingsProvider),
-        TranslationKey.SettingsGeneralTitle)]
+    [ChoiceSetting(TranslationKey.SettingsGeneralLanguage, typeof(LanguageSettingsProvider))]
     [SettingSymbolIcon(Symbol.Globe)]
     public partial string Language { get; set; } = "English";
 
