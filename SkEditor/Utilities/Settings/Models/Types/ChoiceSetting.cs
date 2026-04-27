@@ -14,24 +14,24 @@ public interface IChoiceSetting
     object? SelectedItem { get; set; }
 }
 
-public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
+public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement(name), IChoiceSetting
 {
-    private readonly Action<T> _set;
-
-    public ChoiceSetting(TranslatableString name, SettingIcon icon, TranslatableString? desc,
-        ISettingsProvider provider, (Func<T> Get, Action<T> Set) property)
-        : base(name, icon, desc)
+    public (Func<T> Get, Action<T> Set) Property
     {
-        _set = property.Set;
-
-        Options = provider.GetValues().Cast<T>().ToList();
-        SelectedOption = property.Get();
+        get => (field.Get, field.Set);
+        set
+        {
+            field = value;
+            SelectedOption = value.Get();
+        }
     }
+
+    public ISettingsProvider? Provider { get; protected set; }
 
     [ObservableProperty]
     public partial T SelectedOption { get; set; }
 
-    public List<T> Options { get; }
+    public List<T> Options { get; protected set; } = [];
 
     IEnumerable IChoiceSetting.Options => Options;
 
@@ -41,8 +41,43 @@ public partial class ChoiceSetting<T> : SettingElement, IChoiceSetting
         set => SelectedOption = (T)value!;
     }
 
+    public static ChoiceSetting<T> Create(TranslatableString name)
+    {
+        return new ChoiceSetting<T>(name);
+    }
+
+    public ChoiceSetting<T> WithIcon(SettingIcon icon)
+    {
+        Icon = icon;
+        return this;
+    }
+
+    public ChoiceSetting<T> WithDescription(TranslatableString description)
+    {
+        Description = description;
+        return this;
+    }
+
+    public ChoiceSetting<T> WithProperty((Func<T> Get, Action<T> Set) property)
+    {
+        Property = property;
+        return this;
+    }
+
+    public ChoiceSetting<T> WithProvider(ISettingsProvider provider)
+    {
+        Provider = provider;
+        Options = provider.GetValues().Cast<T>().ToList();
+        SelectedOption = Property.Get();
+
+        return this;
+    }
+
     partial void OnSelectedOptionChanged(T? oldValue, T newValue)
     {
-        _set(newValue);
+        if (!EqualityComparer<T>.Default.Equals(oldValue, newValue))
+        {
+            Property.Set(newValue);
+        }
     }
 }

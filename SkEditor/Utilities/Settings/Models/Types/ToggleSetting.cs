@@ -4,23 +4,49 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Models.Types;
 
-public partial class ToggleSetting : SettingElement
+public partial class ToggleSetting(TranslatableString name) : SettingElement(name)
 {
-    private readonly Action<bool> _set;
-
-    public ToggleSetting(TranslatableString name, SettingIcon icon, TranslatableString? desc,
-        (Func<bool> Get, Action<bool> Set) property)
-        : base(name, icon, desc)
+    public (Func<bool> Get, Action<bool> Set) Property
     {
-        _set = property.Set;
-        IsEnabled = property.Get();
+        get => (field.Get, field.Set);
+        set
+        {
+            field = value;
+            IsEnabled = value.Get();
+        }
     }
 
     [ObservableProperty]
     public partial bool IsEnabled { get; set; }
 
+    public static ToggleSetting Create(TranslatableString name)
+    {
+        return new ToggleSetting(name);
+    }
+
+    public ToggleSetting WithIcon(SettingIcon icon)
+    {
+        Icon = icon;
+        return this;
+    }
+
+    public ToggleSetting WithDescription(TranslatableString description)
+    {
+        Description = description;
+        return this;
+    }
+
+    public ToggleSetting WithProperty((Func<bool> Get, Action<bool> Set) property)
+    {
+        Property = property;
+        return this;
+    }
+
     partial void OnIsEnabledChanged(bool oldValue, bool newValue)
     {
-        _set(newValue);
+        if (oldValue != newValue)
+        {
+            Property.Set(newValue);
+        }
     }
 }

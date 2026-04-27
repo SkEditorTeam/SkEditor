@@ -13,24 +13,32 @@ public partial class SettingsPageViewModel : ObservableObject
 {
     public SettingsPageViewModel(AppSettings appSettings, LanguageSettingsProvider languageSettingsProvider)
     {
-        SettingsCategories =
-        [
-            new SettingSection(TranslationKey.SettingsHomeGeneral, Symbol.Wrench, new List<SettingElement>
-            {
-                new ChoiceSetting<string>(TranslationKey.SettingsGeneralLanguage, Symbol.Earth,
-                    null,
-                    languageSettingsProvider,
-                    appSettings.GetProperty<string>(nameof(appSettings.Language))),
+        SettingsCategories = [];
 
-                new ToggleSetting(TranslationKey.SettingsGeneralCheckForUpdates, Symbol.CloudSync,
-                    TranslationKey.SettingsGeneralCheckForUpdatesDescription,
-                    appSettings.GetProperty<bool>(nameof(appSettings.CheckForAppUpdates))),
+        SettingSection general = SettingSection.Create(TranslationKey.SettingsHomeGeneral)
+            .WithIcon(Symbol.Wrench)
+            .WithSettings(
+            [
+                ChoiceSetting<string>
+                    .Create(TranslationKey.SettingsGeneralLanguage)
+                    .WithIcon(Symbol.Earth)
+                    .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.Language)))
+                    .WithProvider(languageSettingsProvider),
 
-                new ToggleSetting(TranslationKey.SettingsGeneralRpc, "DiscordIcon",
-                    TranslationKey.SettingsGeneralRpcDescription,
-                    appSettings.GetProperty<bool>(nameof(appSettings.IsDiscordRichPresenceEnabled)))
-            })
-        ];
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralCheckForUpdates)
+                    .WithDescription(TranslationKey.SettingsGeneralCheckForUpdatesDescription)
+                    .WithIcon(Symbol.CloudSync)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.CheckForAppUpdates))),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralRpc)
+                    .WithDescription(TranslationKey.SettingsGeneralRpcDescription)
+                    .WithIcon("DiscordIcon")
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsDiscordRichPresenceEnabled)))
+            ]);
+
+        SettingsCategories.Add(general);
 
         CurrentSection = SettingsCategories[0];
     }
