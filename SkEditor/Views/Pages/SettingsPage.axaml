@@ -20,7 +20,7 @@
         <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
         <Thickness x:Key="SettingsExpanderPadding">16</Thickness>
         <!-- ReSharper restore Xaml.RedundantResource -->
-        <converters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
+        <converters:SettingIconSourceConverter x:Key="SettingIconSourceConverter" />
     </UserControl.Resources>
 
     <UserControl.DataTemplates>
@@ -40,7 +40,7 @@
     </UserControl.DataTemplates>
 
 
-    <controls:FANavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,16,0,16"
+    <controls:FANavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,24,0,16"
                                PaneDisplayMode="Auto" OpenPaneLength="250"
                                CompactModeThresholdWidth="180"
                                MaxWidth="1080"
@@ -49,7 +49,8 @@
                                IsSettingsVisible="False" IsPaneToggleButtonVisible="False">
         <controls:FANavigationView.MenuItemTemplate>
             <DataTemplate DataType="models:SettingSection">
-                <controls:FANavigationViewItem Content="{Binding Name.Value}" IconSource="{Binding Icon}"
+                <controls:FANavigationViewItem Content="{Binding Name.Value}"
+                                               IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
                                                MenuItemsSource="{Binding Subsections}" />
             </DataTemplate>
         </controls:FANavigationView.MenuItemTemplate>
@@ -60,7 +61,7 @@
                 <Interaction.Behaviors>
                     <behaviors:VerticalScrollViewerAnimatedBehavior />
                 </Interaction.Behaviors>
-                <ItemsRepeater ItemsSource="{Binding CurrentSection.Settings}">
+                <ItemsRepeater ItemsSource="{Binding CurrentSection.Settings, FallbackValue={x:Null}}">
                     <ItemsRepeater.Layout>
                         <StackLayout Spacing="8"
                                      Orientation="Vertical" />
@@ -68,7 +69,7 @@
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate DataType="models:SettingElement">
                             <controls:FASettingsExpander Header="{Binding Name.Value}"
-                                                         IconSource="{Binding Icon, Converter={StaticResource SymbolIconSourceConverter}}"
+                                                         IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
                                                          Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                                          Footer="{Binding}" />
                         </DataTemplate>

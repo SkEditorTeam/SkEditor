@@ -11,23 +11,29 @@ namespace SkEditor.ViewModels.Pages;
 
 public partial class SettingsPageViewModel : ObservableObject
 {
-    public SettingsPageViewModel(AppSettings appSettings, LanguageSettingsProvider languageSettingsProvider) =>
+    public SettingsPageViewModel(AppSettings appSettings, LanguageSettingsProvider languageSettingsProvider)
+    {
         SettingsCategories =
         [
             new SettingSection(TranslationKey.SettingsHomeGeneral, Symbol.Wrench, new List<SettingElement>
             {
-                new ToggleSetting(TranslationKey.SettingsGeneralRpc, Symbol.BookOpenMicrophone,
-                    TranslationKey.SettingsGeneralRpcDescription,
-                    () => appSettings.IsDiscordRichPresenceEnabled,
-                    value => appSettings.IsDiscordRichPresenceEnabled = value),
-
-                new ChoiceSetting<string>(TranslationKey.SettingsGeneralLanguage, Symbol.Globe,
+                new ChoiceSetting<string>(TranslationKey.SettingsGeneralLanguage, Symbol.Earth,
                     null,
                     languageSettingsProvider,
-                    () => appSettings.Language,
-                    value => appSettings.Language = value)
+                    appSettings.GetProperty<string>(nameof(appSettings.Language))),
+
+                new ToggleSetting(TranslationKey.SettingsGeneralCheckForUpdates, Symbol.CloudSync,
+                    TranslationKey.SettingsGeneralCheckForUpdatesDescription,
+                    appSettings.GetProperty<bool>(nameof(appSettings.CheckForAppUpdates))),
+
+                new ToggleSetting(TranslationKey.SettingsGeneralRpc, "DiscordIcon",
+                    TranslationKey.SettingsGeneralRpcDescription,
+                    appSettings.GetProperty<bool>(nameof(appSettings.IsDiscordRichPresenceEnabled)))
             })
         ];
+
+        CurrentSection = SettingsCategories[0];
+    }
 
     [ObservableProperty]
     public partial SettingSection? CurrentSection { get; set; }

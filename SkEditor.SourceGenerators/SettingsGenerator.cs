@@ -42,6 +42,8 @@ public class SettingsGenerator : IIncrementalGenerator
                     [..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p => p.SetMethod != null)];
 
                 string rawCode = $$"""
+                                   using System;
+                                   using System.Collections;
                                    using System.Collections.Generic;
                                    using SkEditor.ViewModels.Pages;
                                    using SkEditor.Utilities.Localization;
@@ -51,11 +53,35 @@ public class SettingsGenerator : IIncrementalGenerator
                                    namespace {{namespaceName}};
                                    public partial class {{className}}
                                    {
+                                        private readonly Dictionary<string, object> _getters;
+                                        private readonly Dictionary<string, object> _setters;
+
+                                        public {{className}}()
+                                        {
+                                            _getters = new()
+                                            {
+                                                {{string.Join(",\n", properties.Select(p => $"[\"{p.Name}\"] = (Func<{p.Type}>)(() => {p.Name})"))}}
+                                            };
+                                            _setters = new()
+                                            {
+                                                {{string.Join(",\n", properties.Select(p => $"[\"{p.Name}\"] = (Action<{p.Type}>)(v => {p.Name} = v)"))}}
+                                            };
+                                        }
+
                                         protected override void CopyFrom({{className}} other)
                                         {
                                            if (other == null) return;
                                            {{string.Join("\n", properties.Select(p => $"{p.Name} = other.{p.Name};"))}}
                                         }
+
+                                        public Func<T> GetGetter<T>(string property) =>
+                                            _getters.TryGetValue(property, out var v) ? (Func<T>)v : null;
+
+                                        public Action<T> GetSetter<T>(string property) =>
+                                            _setters.TryGetValue(property, out var v) ? (Action<T>)v : null;
+                                            
+                                        public (Func<T> Get, Action<T> Set) GetProperty<T>(string property) =>
+                                            (GetGetter<T>(property), GetSetter<T>(property));
                                    }
                                    """;
 
