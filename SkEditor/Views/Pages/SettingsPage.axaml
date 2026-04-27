@@ -30,7 +30,8 @@
 
         <DataTemplate DataType="{x:Type types:IChoiceSetting}">
             <ComboBox ItemsSource="{Binding Options}"
-                      SelectedItem="{Binding SelectedItem}" />
+                      SelectedItem="{Binding SelectedItem}"
+                      DisplayMemberBinding="{Binding Display}" />
         </DataTemplate>
 
         <!-- <DataTemplate DataType="{x:Type vms:ActionSetting}"> -->

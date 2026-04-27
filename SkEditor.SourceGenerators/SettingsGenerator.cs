@@ -41,6 +41,20 @@ public class SettingsGenerator : IIncrementalGenerator
                 ImmutableArray<IPropertySymbol> properties =
                     [..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p => p.SetMethod != null)];
 
+                bool generateCopyFrom = classSymbol.GetAttributes()
+                    .FirstOrDefault(ad => ad.AttributeClass?.ToDisplayString() == SettingsConfigAttributeFullName)
+                    ?.ConstructorArguments.FirstOrDefault().Value as bool? ?? true;
+
+                string copyFromMethod = generateCopyFrom
+                    ? $$"""
+                        protected override void CopyFrom({{className}} other)
+                        {
+                           if (other == null) return;
+                           {{string.Join("\n", properties.Select(p => $"{p.Name} = other.{p.Name};"))}}
+                        }
+                        """
+                    : "";
+
                 string rawCode = $$"""
                                    using System;
                                    using System.Collections;
@@ -68,11 +82,7 @@ public class SettingsGenerator : IIncrementalGenerator
                                             };
                                         }
 
-                                        protected override void CopyFrom({{className}} other)
-                                        {
-                                           if (other == null) return;
-                                           {{string.Join("\n", properties.Select(p => $"{p.Name} = other.{p.Name};"))}}
-                                        }
+                                        {{copyFromMethod}}
 
                                         public Func<T> GetGetter<T>(string property) =>
                                             _getters.TryGetValue(property, out var v) ? (Func<T>)v : null;

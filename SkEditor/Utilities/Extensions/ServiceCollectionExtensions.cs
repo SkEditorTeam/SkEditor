@@ -35,6 +35,7 @@ public static class ServiceCollectionExtensions
 
             services.AddSingleton<LanguageSettingsProvider>();
             services.AddSingleton<ThemeSettingsProvider>();
+            services.AddSingleton<StartupModeSettingsProvider>();
 
             return;
 

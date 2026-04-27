@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -8,9 +7,11 @@ using SkEditor.Utilities.Settings.Providers;
 
 namespace SkEditor.Utilities.Settings.Models.Types;
 
+public record OptionItem(object Value, string Display);
+
 public interface IChoiceSetting
 {
-    IEnumerable Options { get; }
+    IEnumerable<OptionItem> Options { get; }
     object? SelectedItem { get; set; }
 }
 
@@ -33,12 +34,15 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement(
 
     public List<T> Options { get; protected set; } = [];
 
-    IEnumerable IChoiceSetting.Options => Options;
+    public List<OptionItem> WrappedOptions { get; private set; } = [];
+
+    IEnumerable<OptionItem> IChoiceSetting.Options => WrappedOptions;
 
     object? IChoiceSetting.SelectedItem
     {
-        get => SelectedOption;
-        set => SelectedOption = (T)value!;
+        get => WrappedOptions.FirstOrDefault(o =>
+            EqualityComparer<T>.Default.Equals((T)o.Value, SelectedOption));
+        set => SelectedOption = value is OptionItem item ? (T)item.Value : default!;
     }
 
     public static ChoiceSetting<T> Create(TranslatableString name)
@@ -68,8 +72,13 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement(
     {
         Provider = provider;
         Options = provider.GetValues().Cast<T>().ToList();
-        SelectedOption = Property.Get();
 
+        WrappedOptions = Options
+            .Where(o => o != null)
+            .Select(o => new OptionItem(o!, provider.GetDisplayValue(o!)))
+            .ToList();
+
+        SelectedOption = Property.Get();
         return this;
     }
 

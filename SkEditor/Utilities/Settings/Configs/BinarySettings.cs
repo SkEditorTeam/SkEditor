@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Serilog;
+using SkEditor.Utilities.Settings.Attributes;
 using SkEditor.Utilities.Startup;
 
 namespace SkEditor.Utilities.Settings.Configs;
@@ -12,24 +13,21 @@ namespace SkEditor.Utilities.Settings.Configs;
 /// <summary>
 ///     Manages application settings stored in a binary file next to the executable.
 /// </summary>
+[SettingsConfig(false)]
 public partial class BinarySettings : ObservableObject, IConfig
 {
     private const string ConfigFileName = "settings.bin";
 
     private readonly string _binaryFilePath = Path.Combine(AppContext.BaseDirectory, ConfigFileName);
-    private readonly List<IBinarySettingHandler> _registry;
 
-    public BinarySettings()
-    {
-        _registry =
-        [
-            new BinarySettingHandler<byte>(() => (byte)SplashScreenMode, v => SplashScreenMode = (StartupMode)v,
-                r => r.ReadByte(), (w, v) => w.Write(v)),
+    private List<IBinarySettingHandler> Registry => field ??=
+    [
+        new BinarySettingHandler<byte>(() => (byte)SplashScreenMode, v => SplashScreenMode = (StartupMode)v,
+            r => r.ReadByte(), (w, v) => w.Write(v)),
 
-            new BinarySettingHandler<int>(() => AverageStartupTime, v => AverageStartupTime = v, r => r.ReadInt32(),
-                (w, v) => w.Write(v)),
-        ];
-    }
+        new BinarySettingHandler<int>(() => AverageStartupTime, v => AverageStartupTime = v, r => r.ReadInt32(),
+            (w, v) => w.Write(v))
+    ];
 
     [ObservableProperty]
     public partial int AverageStartupTime { get; set; }
@@ -58,7 +56,7 @@ public partial class BinarySettings : ObservableObject, IConfig
         try
         {
             using BinaryReader reader = new(File.OpenRead(_binaryFilePath));
-            foreach (IBinarySettingHandler handler in _registry.Where(_ =>
+            foreach (IBinarySettingHandler handler in Registry.Where(_ =>
                          reader.BaseStream.Position < reader.BaseStream.Length))
             {
                 handler.Load(reader);
@@ -80,7 +78,7 @@ public partial class BinarySettings : ObservableObject, IConfig
         try
         {
             using BinaryWriter writer = new(File.OpenWrite(_binaryFilePath));
-            foreach (IBinarySettingHandler handler in _registry)
+            foreach (IBinarySettingHandler handler in Registry)
             {
                 handler.Save(writer);
             }
