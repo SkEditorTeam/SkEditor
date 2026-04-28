@@ -27,4 +27,10 @@ public class SettingSection(TranslatableString name) : ObservableObject
         Settings = settings;
         return this;
     }
+    
+    public SettingSection WithSubsections(List<SettingSection> subsections)
+    {
+        Subsections = subsections;
+        return this;
+    }
 }

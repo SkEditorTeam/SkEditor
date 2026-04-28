@@ -21,7 +21,7 @@ public partial class SettingsPageViewModel : ObservableObject
         SettingsCategories = [];
 
         SettingSection general = SettingSection.Create(TranslationKey.SettingsHomeGeneral)
-            .WithIcon(Symbol.Wrench)
+            .WithIcon(Symbol.Home)
             .WithSettings(
             [
                 ChoiceSetting<string>
@@ -36,12 +36,6 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithIcon(Symbol.CloudSync)
                     .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.CheckForAppUpdates))),
 
-                ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralRpc)
-                    .WithDescription(TranslationKey.SettingsGeneralRpcDescription)
-                    .WithIcon("DiscordIcon")
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsDiscordRichPresenceEnabled))),
-
                 ChoiceSetting<StartupMode>
                     .Create(TranslationKey.SettingsGeneralUseSplashScreen)
                     .WithDescription(TranslationKey.SettingsGeneralUseSplashScreenDescription)
@@ -49,6 +43,70 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithProperty(binarySettings.GetProperty<StartupMode>(nameof(binarySettings.SplashScreenMode)))
                     .WithProvider(startupModeSettingsProvider)
             ]);
+
+        SettingSection editor = SettingSection.Create(TranslatableString.FromRawString("Editor"))
+            .WithIcon(Symbol.Code);
+
+        SettingSection editorBehavior = SettingSection.Create(TranslatableString.FromRawString("Behavior"))
+            .WithIcon(Symbol.EditSettings)
+            .WithSettings(
+            [
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralWrapping)
+                    .WithDescription(TranslationKey.SettingsGeneralWrappingDescription)
+                    .WithIcon(Symbol.TextWrap)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsWordWrapEnabled))),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralAutoSave)
+                    .WithDescription(TranslationKey.SettingsGeneralAutoSaveDescription)
+                    .WithIcon(Symbol.SaveSync)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsAutoSaveEnabled))),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralChangeChecker)
+                    .WithDescription(TranslationKey.SettingsGeneralChangeCheckerDescription)
+                    .WithIcon(Symbol.DocumentSync)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.CheckForExternalFileChanges))),
+
+                ToggleSetting
+                    .Create(TranslatableString.FromRawString("Smooth scrolling"))
+                    .WithDescription(TranslatableString.FromRawString("Enables smooth scrolling in the editor."))
+                    .WithIcon(Symbol.ArrowCircleDown)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsEditorSmoothScrollEnabled))),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralZoomSync)
+                    .WithDescription(TranslationKey.SettingsGeneralZoomSyncDescription)
+                    .WithIcon(Symbol.ZoomIn)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsEditorZoomLevelSyncEnabled)))
+            ]);
+
+        SettingSection editorIndentation = SettingSection
+            .Create(TranslatableString.FromRawString("Indentation & Typing"))
+            .WithIcon(Symbol.TextIndentIncrease)
+            .WithSettings(
+            [
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralAutoIndent)
+                    .WithDescription(TranslationKey.SettingsGeneralAutoIndentDescription)
+                    .WithIcon(Symbol.ArrowAutofitWidth)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsAutoIndentEnabled))),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralAutoPairing)
+                    .WithDescription(TranslationKey.SettingsGeneralAutoPairingDescription)
+                    .WithIcon(Symbol.TextQuote)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsAutoPairingEnabled))),
+                
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralPasteIndent)
+                    .WithDescription(TranslationKey.SettingsGeneralPasteIndentDescription)
+                    .WithIcon(Symbol.ClipboardTextEdit)
+                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsPasteIndentationEnabled))),
+            ]);
+
+        editor.WithSubsections([editorBehavior, editorIndentation]);
 
         SettingSection appearrance = SettingSection.Create(TranslationKey.SettingsHomeAppearance)
             .WithIcon(Symbol.PaintBrush)
@@ -68,7 +126,7 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsSidebarAnimationEnabled)))
             ]);
 
-        SettingsCategories.AddRange([general, appearrance]);
+        SettingsCategories.AddRange([general, editor, appearrance]);
 
         CurrentSection = SettingsCategories[0];
     }
