@@ -11,6 +11,8 @@ public class SettingSection(TranslatableString name) : ObservableObject
     public List<SettingElement> Settings { get; private set; } = [];
     public List<SettingSection> Subsections { get; private set; } = [];
 
+    public bool Selectable => !(Subsections.Count > 0 || Settings.Count == 0);
+
     public static SettingSection Create(TranslatableString name)
     {
         return new SettingSection(name);
@@ -27,7 +29,7 @@ public class SettingSection(TranslatableString name) : ObservableObject
         Settings = settings;
         return this;
     }
-    
+
     public SettingSection WithSubsections(List<SettingSection> subsections)
     {
         Subsections = subsections;

@@ -259,7 +259,7 @@
   "SettingsGeneralProjectSingleFolderClick": "Open Project Folder on Single Click",
   "SettingsGeneralProjectSingleFolderClickDescription": "When enabled, opens a folder with a single click instead of a double click.",
   "SettingsGeneralUseSplashScreen": "Startup Splash Screen",
-  "SettingsGeneralUseSplashScreenDescription": "Visual feedback during initialization. 'Auto' will intelligently hide it if SkEditor starts instantly on your hardware.",
+  "SettingsGeneralUseSplashScreenDescription": "Visual feedback during initialization.\n'Auto' will intelligently hide it if SkEditor starts instantly on your hardware.",
   "SettingsGeneralUseSplashScreenAuto": "Auto (Recommended)",
   "SettingsGeneralUseSplashScreenEnabled": "Always On",
   "SettingsGeneralUseSplashScreenDisabled": "Instant Start (Off)",
