@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentIcons.Common;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Models;
@@ -138,6 +139,19 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithIcon(Symbol.PaintBrush)
                     .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.CurrentTheme)))
                     .WithProvider(themeSettingsProvider),
+
+                ActionSetting.Create(TranslatableString.FromRawString("Open Themes Folder"))
+                    .WithDescription(
+                        TranslatableString.FromRawString("Opens the themes folder where you can add custom themes."))
+                    .WithIcon(Symbol.OpenFolder)
+                    .WithAction(TranslationKey.SettingsThemeOpenFolder,
+                        () => LinkOpener.OpenFolder(@"C:\Users\Notro\AppData\Roaming\SkEditor\Themes")),
+
+                ClickableActionSetting.Create(TranslatableString.FromRawString("Get More Themes"))
+                    .WithDescription(TranslatableString.FromRawString(
+                        "Opens the SkEditor themes website where you can find and download more themes."))
+                    .WithIcon(Symbol.Globe)
+                    .WithAction(() => LinkOpener.OpenLink("https://skeditor.dev"))
             ]);
 
         appearrance.WithSubsections([appearranceTheme]);

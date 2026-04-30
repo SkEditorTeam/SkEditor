@@ -8,6 +8,7 @@
              xmlns:types="clr-namespace:SkEditor.Utilities.Settings.Models.Types"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:converters="clr-namespace:SkEditor.Converters"
+             xmlns:pages="clr-namespace:SkEditor.Views.Pages"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="vms:SettingsPageViewModel"
@@ -36,6 +37,10 @@
                       DisplayMemberBinding="{Binding Display}" />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type types:ActionSetting}">
+            <Button Content="{Binding Text}" Command="{Binding Command}" />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type types:CompoundSetting}">
             <ItemsControl ItemsSource="{Binding Children}">
                 <ItemsControl.ItemsPanel>
@@ -50,7 +55,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </DataTemplate>
-        
+
         <!-- <DataTemplate DataType="{x:Type vms:ActionSetting}"> -->
         <!--     <Button Content="{Binding ButtonText}" /> -->
         <!-- </DataTemplate> -->
@@ -90,13 +95,27 @@
                                     <StackLayout Spacing="8" Orientation="Vertical" />
                                 </ItemsRepeater.Layout>
                                 <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate DataType="models:SettingElement">
-                                        <controls:FASettingsExpander
-                                            Header="{Binding Name.Value}"
-                                            IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
-                                            Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                            Footer="{Binding}" />
-                                    </DataTemplate>
+                                    <pages:SettingElementTemplateSelector>
+                                        <pages:SettingElementTemplateSelector.StandardTemplate>
+                                            <DataTemplate x:DataType="models:SettingElement">
+                                                <controls:FASettingsExpander
+                                                    Header="{Binding Name.Value}"
+                                                    IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                                    Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                    Footer="{Binding}" />
+                                            </DataTemplate>
+                                        </pages:SettingElementTemplateSelector.StandardTemplate>
+                                        <pages:SettingElementTemplateSelector.ClickableTemplate>
+                                            <DataTemplate x:DataType="types:ClickableActionSetting">
+                                                <controls:FASettingsExpander
+                                                    Header="{Binding Name.Value}"
+                                                    IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                                    Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                    IsClickEnabled="True"
+                                                    Command="{Binding Command}" />
+                                            </DataTemplate>
+                                        </pages:SettingElementTemplateSelector.ClickableTemplate>
+                                    </pages:SettingElementTemplateSelector>
                                 </ItemsRepeater.ItemTemplate>
                             </ItemsRepeater>
                         </DataTemplate>
