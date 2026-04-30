@@ -98,7 +98,7 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithDescription(TranslationKey.SettingsGeneralAutoPairingDescription)
                     .WithIcon(Symbol.TextQuote)
                     .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsAutoPairingEnabled))),
-                
+
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralPasteIndent)
                     .WithDescription(TranslationKey.SettingsGeneralPasteIndentDescription)
@@ -109,7 +109,10 @@ public partial class SettingsPageViewModel : ObservableObject
         editor.WithSubsections([editorBehavior, editorIndentation]);
 
         SettingSection appearrance = SettingSection.Create(TranslationKey.SettingsHomeAppearance)
-            .WithIcon(Symbol.PaintBrush)
+            .WithIcon(Symbol.PaintBrush);
+
+        SettingSection appearranceTheme = SettingSection.Create(TranslatableString.FromRawString("Theme"))
+            .WithIcon(Symbol.Color)
             .WithSettings(
             [
                 ChoiceSetting<string>
@@ -119,12 +122,21 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.CurrentTheme)))
                     .WithProvider(themeSettingsProvider),
 
-                ToggleSetting
-                    .Create(TranslationKey.SettingsPersonalizationSidebarAnimations)
-                    .WithDescription(TranslationKey.SettingsPersonalizationSidebarAnimationsDescription)
-                    .WithIcon(Symbol.SlideTransition)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsSidebarAnimationEnabled)))
+                CompoundSetting.Create(TranslatableString.FromRawString("Font"))
+                    .WithIcon(Symbol.TextFont)
+                    .WithDescription(
+                        TranslatableString.FromRawString("Configure the font family and size used in the editor."))
+                    .WithChildren(
+                        ChoiceSetting<string>
+                            .Create(TranslatableString.FromRawString("Font family"))
+                            .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.EditorFontFamily))),
+                        ChoiceSetting<int>
+                            .Create(TranslatableString.FromRawString("Font size"))
+                            .WithProperty(appSettings.GetProperty<int>(nameof(appSettings.EditorFontSize)))
+                    )
             ]);
+
+        appearrance.WithSubsections([appearranceTheme]);
 
         SettingsCategories.AddRange([general, editor, appearrance]);
 
