@@ -14,7 +14,7 @@ public partial class TranslatableString : ObservableObject, IDisposable
     private static readonly HashSet<WeakReference<TranslatableString>> Instances = [];
     private static bool _eventSubscribed;
 
-    private readonly string[] _parameters = [];
+    private string[] _parameters = [];
 
     /// <summary>
     ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key.
@@ -116,6 +116,12 @@ public partial class TranslatableString : ObservableObject, IDisposable
     public static TranslatableString FromRawString(string value)
     {
         return new TranslatableString(value, true);
+    }
+
+    public void UpdateParameters(params string[] parameters)
+    {
+        _parameters = parameters;
+        OnPropertyChanged(nameof(Value));
     }
 
     public override string ToString()

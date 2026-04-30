@@ -40,4 +40,18 @@ public class ActionSetting(TranslatableString name) : SettingElement(name)
         Command = new AsyncRelayCommand(action);
         return this;
     }
+
+    public ActionSetting WithAction(TranslatableString text, Action<ActionSetting> action)
+    {
+        Text = text;
+        Command = new RelayCommand(() => action(this));
+        return this;
+    }
+
+    public ActionSetting WithAction(TranslatableString text, Func<ActionSetting, Task> action)
+    {
+        Text = text;
+        Command = new AsyncRelayCommand(() => action(this));
+        return this;
+    }
 }

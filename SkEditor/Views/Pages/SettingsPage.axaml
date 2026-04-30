@@ -8,7 +8,7 @@
              xmlns:types="clr-namespace:SkEditor.Utilities.Settings.Models.Types"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:converters="clr-namespace:SkEditor.Converters"
-             xmlns:pages="clr-namespace:SkEditor.Views.Pages"
+             xmlns:dataTemplates="clr-namespace:SkEditor.DataTemplates"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="vms:SettingsPageViewModel"
@@ -95,8 +95,8 @@
                                     <StackLayout Spacing="8" Orientation="Vertical" />
                                 </ItemsRepeater.Layout>
                                 <ItemsRepeater.ItemTemplate>
-                                    <pages:SettingElementTemplateSelector>
-                                        <pages:SettingElementTemplateSelector.StandardTemplate>
+                                    <dataTemplates:SettingElementTemplateSelector>
+                                        <dataTemplates:SettingElementTemplateSelector.StandardTemplate>
                                             <DataTemplate x:DataType="models:SettingElement">
                                                 <controls:FASettingsExpander
                                                     Header="{Binding Name.Value}"
@@ -104,8 +104,8 @@
                                                     Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                                     Footer="{Binding}" />
                                             </DataTemplate>
-                                        </pages:SettingElementTemplateSelector.StandardTemplate>
-                                        <pages:SettingElementTemplateSelector.ClickableTemplate>
+                                        </dataTemplates:SettingElementTemplateSelector.StandardTemplate>
+                                        <dataTemplates:SettingElementTemplateSelector.ClickableTemplate>
                                             <DataTemplate x:DataType="types:ClickableActionSetting">
                                                 <controls:FASettingsExpander
                                                     Header="{Binding Name.Value}"
@@ -114,8 +114,8 @@
                                                     IsClickEnabled="True"
                                                     Command="{Binding Command}" />
                                             </DataTemplate>
-                                        </pages:SettingElementTemplateSelector.ClickableTemplate>
-                                    </pages:SettingElementTemplateSelector>
+                                        </dataTemplates:SettingElementTemplateSelector.ClickableTemplate>
+                                    </dataTemplates:SettingElementTemplateSelector>
                                 </ItemsRepeater.ItemTemplate>
                             </ItemsRepeater>
                         </DataTemplate>

@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentIcons.Common;
+using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Localization;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
@@ -8,6 +12,7 @@ using SkEditor.Utilities.Settings.Models;
 using SkEditor.Utilities.Settings.Models.Types;
 using SkEditor.Utilities.Settings.Providers;
 using SkEditor.Utilities.Startup;
+using SkEditor.Views.Windows;
 using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
 
 namespace SkEditor.ViewModels.Pages;
@@ -15,6 +20,9 @@ namespace SkEditor.ViewModels.Pages;
 public partial class SettingsPageViewModel : ObservableObject
 {
     public SettingsPageViewModel(AppSettings appSettings, BinarySettings binarySettings,
+        ITranslationService translations,
+        IThemeService themes,
+        WindowRegistry windowRegistry,
         LanguageSettingsProvider languageSettingsProvider,
         ThemeSettingsProvider themeSettingsProvider,
         StartupModeSettingsProvider startupModeSettingsProvider,
@@ -140,21 +148,31 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.CurrentTheme)))
                     .WithProvider(themeSettingsProvider),
 
-                ActionSetting.Create(TranslatableString.FromRawString("Open Themes Folder"))
+                ActionSetting.Create(TranslatableString.FromRawString("Themes Folder"))
                     .WithDescription(
-                        TranslatableString.FromRawString("Opens the themes folder where you can add custom themes."))
-                    .WithIcon(Symbol.OpenFolder)
+                        TranslatableString.FromRawString("Open the Themes folder to create or add new themes."))
+                    .WithIcon(Symbol.FolderOpen)
                     .WithAction(TranslationKey.SettingsThemeOpenFolder,
-                        () => LinkOpener.OpenFolder(@"C:\Users\Notro\AppData\Roaming\SkEditor\Themes")),
-
-                ClickableActionSetting.Create(TranslatableString.FromRawString("Get More Themes"))
-                    .WithDescription(TranslatableString.FromRawString(
-                        "Opens the SkEditor themes website where you can find and download more themes."))
-                    .WithIcon(Symbol.Globe)
-                    .WithAction(() => LinkOpener.OpenLink("https://skeditor.dev"))
+                        () => LinkOpener.OpenFolder(themes.ThemeFolderPath))
             ]);
 
-        appearrance.WithSubsections([appearranceTheme]);
+        SettingSection appearranceFontDisplay = SettingSection
+            .Create(TranslatableString.FromRawString("Font & Display"))
+            .WithIcon(Symbol.TextFont)
+            .WithSettings(
+            [
+                ActionSetting.Create(TranslatableString.FromRawString("Font Family"))
+                    .WithDescription(translations.GetObservable(TranslationKey.SettingsPersonalizationFontDescription,
+                        appSettings.EditorFontFamily ?? "Default"))
+                    .WithIcon(Symbol.TextFont)
+                    .WithAction(TranslationKey.ButtonSelect, async s =>
+                    {
+                        await SelectFont(appSettings, windowRegistry);
+                        s.Description?.UpdateParameters(appSettings.EditorFontFamily ?? "Default");
+                    })
+            ]);
+
+        appearrance.WithSubsections([appearranceTheme, appearranceFontDisplay]);
 
         SettingsCategories.AddRange([general, editor, appearrance]);
 
@@ -165,4 +183,21 @@ public partial class SettingsPageViewModel : ObservableObject
     public partial SettingSection? CurrentSection { get; set; }
 
     public List<SettingSection> SettingsCategories { get; }
+
+    private async Task SelectFont(AppSettings appSettings, WindowRegistry windowRegistry)
+    {
+        if (windowRegistry.Active is not { } mainWindow)
+        {
+            return;
+        }
+
+        FontSelectionWindow window = new();
+        string result = await window.ShowDialog<string>(mainWindow);
+        if (result is null)
+        {
+            return;
+        }
+
+        appSettings.EditorFontFamily = result;
+    }
 }
