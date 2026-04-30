@@ -16,7 +16,9 @@ public partial class SettingsPageViewModel : ObservableObject
     public SettingsPageViewModel(AppSettings appSettings, BinarySettings binarySettings,
         LanguageSettingsProvider languageSettingsProvider,
         ThemeSettingsProvider themeSettingsProvider,
-        StartupModeSettingsProvider startupModeSettingsProvider)
+        StartupModeSettingsProvider startupModeSettingsProvider,
+        IndentAmountProvider indentAmountProvider,
+        IndentTypeProvider indentTypeProvider)
     {
         SettingsCategories = [];
 
@@ -87,6 +89,21 @@ public partial class SettingsPageViewModel : ObservableObject
             .WithIcon(Symbol.TextIndentIncrease)
             .WithSettings(
             [
+                CompoundSetting.Create(TranslationKey.SettingsGeneralTabType)
+                    .WithDescription(TranslationKey.SettingsGeneralTabTypeDescription)
+                    .WithIcon(Symbol.TextIndentIncrease)
+                    .WithChildren(
+                        ChoiceSetting<bool>
+                            .Create(TranslatableString.FromRawString("Indentation Type"))
+                            .WithProperty(
+                                appSettings.GetProperty<bool>(nameof(appSettings.UseEditorTabsForIndentation)))
+                            .WithProvider(indentTypeProvider),
+                        ChoiceSetting<int>
+                            .Create(TranslatableString.FromRawString("Indentation Amount"))
+                            .WithProperty(appSettings.GetProperty<int>(nameof(appSettings.EditorTabSize)))
+                            .WithProvider(indentAmountProvider)
+                    ),
+
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralAutoIndent)
                     .WithDescription(TranslationKey.SettingsGeneralAutoIndentDescription)
@@ -121,19 +138,6 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithIcon(Symbol.PaintBrush)
                     .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.CurrentTheme)))
                     .WithProvider(themeSettingsProvider),
-
-                CompoundSetting.Create(TranslatableString.FromRawString("Font"))
-                    .WithIcon(Symbol.TextFont)
-                    .WithDescription(
-                        TranslatableString.FromRawString("Configure the font family and size used in the editor."))
-                    .WithChildren(
-                        ChoiceSetting<string>
-                            .Create(TranslatableString.FromRawString("Font family"))
-                            .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.EditorFontFamily))),
-                        ChoiceSetting<int>
-                            .Create(TranslatableString.FromRawString("Font size"))
-                            .WithProperty(appSettings.GetProperty<int>(nameof(appSettings.EditorFontSize)))
-                    )
             ]);
 
         appearrance.WithSubsections([appearranceTheme]);

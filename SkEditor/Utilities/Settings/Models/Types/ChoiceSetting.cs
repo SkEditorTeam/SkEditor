@@ -30,7 +30,7 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement(
     public ISettingsProvider? Provider { get; protected set; }
 
     [ObservableProperty]
-    public partial T SelectedOption { get; set; }
+    public partial T? SelectedOption { get; set; }
 
     public List<T> Options { get; protected set; } = [];
 
@@ -70,6 +70,11 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement(
 
     public ChoiceSetting<T> WithProvider(ISettingsProvider provider)
     {
+        if (Property.Get == null || Property.Set == null)
+        {
+            throw new InvalidOperationException("Property must be set before setting provider.");
+        }
+
         Provider = provider;
         Options = provider.GetValues().Cast<T>().ToList();
 
@@ -82,9 +87,9 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement(
         return this;
     }
 
-    partial void OnSelectedOptionChanged(T? oldValue, T newValue)
+    partial void OnSelectedOptionChanged(T? oldValue, T? newValue)
     {
-        if (!EqualityComparer<T>.Default.Equals(oldValue, newValue))
+        if (!EqualityComparer<T>.Default.Equals(oldValue, newValue) && newValue is not null)
         {
             Property.Set(newValue);
         }

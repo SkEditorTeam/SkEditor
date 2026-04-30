@@ -36,6 +36,8 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<LanguageSettingsProvider>();
             services.AddSingleton<ThemeSettingsProvider>();
             services.AddSingleton<StartupModeSettingsProvider>();
+            services.AddSingleton<IndentAmountProvider>();
+            services.AddSingleton<IndentTypeProvider>();
 
             return;
 
