@@ -44,6 +44,10 @@
                            Value="{Binding Value, Mode=TwoWay}" />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type types:TextSetting}">
+            <TextBox Text="{Binding Text, Mode=TwoWay}" PasswordChar="{Binding PasswordChar}" />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type types:ActionSetting}">
             <Button Content="{Binding Text}" Command="{Binding Command}" />
         </DataTemplate>
