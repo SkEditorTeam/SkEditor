@@ -20,7 +20,7 @@ public partial class TextSetting(TranslatableString name) : SettingElement<TextS
     public override double Width { get; set; }
 
     [ObservableProperty]
-    public partial string Text { get; set; }
+    public partial string? Text { get; set; }
 
     public string Value
     {
