@@ -50,9 +50,15 @@
 
         <DataTemplate DataType="{x:Type types:CompoundSetting}">
             <ItemsControl ItemsSource="{Binding Children}">
+                <ItemsControl.Styles>
+                    <Style Selector="ContentControl > :is(Control)">
+                        <Setter Property="HorizontalAlignment"
+                                Value="{Binding $parent[ItemsControl].((types:CompoundSetting)DataContext).ChildrenHorizontalAlignment, FallbackValue=Right}" />
+                    </Style>
+                </ItemsControl.Styles>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="8" />
+                        <StackPanel Orientation="{Binding LayoutOrientation}" Spacing="8" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
