@@ -60,6 +60,18 @@ public partial class TextSetting(TranslatableString name) : SettingElement(name)
         return this;
     }
 
+    public TextSetting WithPassword(bool isPassword = true)
+    {
+        IsPassword = isPassword;
+        return this;
+    }
+
+    public TextSetting WithWidth(double width)
+    {
+        Width = width;
+        return this;
+    }
+
     partial void OnTextChanged(string oldValue, string newValue)
     {
         if (oldValue == newValue)

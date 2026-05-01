@@ -215,9 +215,49 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsProjectSingleClickEnabled))
             ]);
 
-        appearrance.WithSubsections([appearranceTheme, appearranceFontDisplay]);
+        appearrance.WithSubsections([appearranceTheme, appearranceFontDisplay, appearranceSidebarLayout]);
 
-        SettingsCategories.AddRange([general, editor, appearrance]);
+        SettingSection integrations = SettingSection.Create(TranslatableString.FromRawString("Integrations"))
+            .WithIcon(Symbol.PlugConnected);
+
+        SettingSection integrationsDiscord = SettingSection.Create(TranslatableString.FromRawString("Discord"))
+            .WithIcon("DiscordIcon")
+            .WithSettings(
+            [
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralRpc)
+                    .WithDescription(TranslationKey.SettingsGeneralRpcDescription)
+                    .WithIcon(Symbol.Games)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDiscordRichPresenceEnabled))
+            ]);
+
+        SettingSection integrationsApiKeys = SettingSection.Create(TranslatableString.FromRawString("API Keys"))
+            .WithIcon(Symbol.Key)
+            .WithSettings(
+            [
+                CompoundSetting
+                    .Create(TranslatableString.FromRawString("skUnity"))
+                    .WithDescription(
+                        TranslatableString.FromRawString(
+                            "Used as a documentation provider and a script host (via skUnity Parser)"))
+                    .WithIcon("AppIcon")
+                    .WithVerticalLayout()
+                    .WithChildren(
+                        ActionSetting
+                            .Create(TranslationKey.SettingsConnectionsDashboardButton)
+                            .WithAction(TranslationKey.SettingsConnectionsDashboardButton,
+                                () => LinkOpener.OpenLink("https://skeditor.dev")),
+                        TextSetting
+                            .Create(TranslatableString.FromRawString("API Key"))
+                            .WithProperty(secrets.GetProperty<string>(SecretsConfigProperty.SkUnityApiKey))
+                            .WithPassword()
+                            .WithWidth(200)
+                    )
+            ]);
+
+        integrations.WithSubsections([integrationsDiscord, integrationsApiKeys]);
+
+        SettingsCategories.AddRange([general, editor, appearrance, integrations]);
 
         CurrentSection = SettingsCategories[0];
     }
