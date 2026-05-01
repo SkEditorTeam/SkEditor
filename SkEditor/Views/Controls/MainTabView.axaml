@@ -1,19 +1,17 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:avaloniaedit="using:AvaloniaEdit"
              xmlns:tabs="clr-namespace:SkEditor.Models.Tabs"
              xmlns:pages="clr-namespace:SkEditor.Views.Pages"
              xmlns:converters="clr-namespace:SkEditor.Converters"
-             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:windows="clr-namespace:SkEditor.Views.Windows"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Windows"
+             xmlns:dataTemplates="clr-namespace:SkEditor.DataTemplates"
              x:Class="SkEditor.Views.Controls.MainTabView"
              x:DataType="vms:MainWindowViewModel">
 
     <UserControl.Resources>
         <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
-        <converters:EditorFontFamilyConverter x:Key="EditorFontFamilyConverter" />
         <converters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
     </UserControl.Resources>
 
@@ -26,25 +24,7 @@
             TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
             AddTabButtonCommand="{Binding NewTabCommand}">
             <ui:TabView.DataTemplates>
-                <DataTemplate DataType="{x:Type tabs:FileTab}">
-                    <avaloniaedit:TextEditor Document="{Binding Document}"
-                                             ShowLineNumbers="True"
-                                             Foreground="{DynamicResource EditorTextColor}"
-                                             Background="{DynamicResource EditorBackgroundColor}"
-                                             LineNumbersForeground="{DynamicResource LineNumbersColor}"
-                                             FontSize="{Binding FontSize}"
-                                             WordWrap="{Binding WordWrap}"
-                                             ScrollOffset="{Binding ScrollOffset, Mode=TwoWay}"
-                                             FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}">
-                        <Interaction.Behaviors>
-                            <behaviors:TextEditorLoadBehavior />
-                        </Interaction.Behaviors>
-                    </avaloniaedit:TextEditor>
-                </DataTemplate>
-
-                <DataTemplate DataType="{x:Type tabs:SettingsTab}">
-                    <pages:SettingsPage DataContext="{Binding PageViewModel}" />
-                </DataTemplate>
+                <dataTemplates:TabViewLocator />
             </ui:TabView.DataTemplates>
             <ui:TabView.TabItemTemplate>
                 <DataTemplate x:DataType="tabs:Tab">
