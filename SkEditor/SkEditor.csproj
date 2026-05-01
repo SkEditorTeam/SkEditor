@@ -56,21 +56,21 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="12.0.1"/>
-        <PackageReference Include="Avalonia.Desktop" Version="12.0.1"/>
-        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="12.0.1"/>
+        <PackageReference Include="Avalonia" Version="12.0.2"/>
+        <PackageReference Include="Avalonia.Desktop" Version="12.0.2"/>
+        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="12.0.2"/>
         <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0"/>
-        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="12.0.1"/>
+        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="12.0.2"/>
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1"/>
 
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.1"/>
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.1"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.2"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.2"/>
         <PackageReference Include="SkFluentIcons.Avalonia.Fluent" Version="2.0.972"/>
-        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.6"/>
-        <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="12.0.0.3"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.7"/>
+        <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="12.0.0.5"/>
         <PackageReference Include="Xaml.Behaviors.Avalonia" Version="12.0.0"/>
         <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.8.0"/>
-        <PackageReference Include="Svg.Skia" Version="4.3.0"/>
+        <PackageReference Include="Svg.Skia" Version="4.5.0"/>
         <!--        <PackageReference Include="SkAvaloniaEdit" Version="12.0.0-rc4" />-->
         <!--        <PackageReference Include="SkFluentAvalonia" Version="3.0.0-preview1"/>-->
 
@@ -78,7 +78,7 @@
         <PackageReference Include="Octokit" Version="14.0.0"/>
         <PackageReference Include="Serilog" Version="4.3.1"/>
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7"/>
         <PackageReference Include="SSH.NET" Version="2025.1.0"/>
         <PackageReference Include="Devlooped.CredentialManager" Version="2.7.0"/>
 
