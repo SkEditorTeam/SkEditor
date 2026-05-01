@@ -15,7 +15,7 @@ public interface IChoiceSetting
     object? SelectedItem { get; set; }
 }
 
-public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement(name), IChoiceSetting
+public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement<ChoiceSetting<T>>(name), IChoiceSetting
 {
     public (Func<T> Get, Action<T> Set) Property
     {
@@ -48,18 +48,6 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement(
     public static ChoiceSetting<T> Create(TranslatableString name)
     {
         return new ChoiceSetting<T>(name);
-    }
-
-    public ChoiceSetting<T> WithIcon(SettingIcon icon)
-    {
-        Icon = icon;
-        return this;
-    }
-
-    public ChoiceSetting<T> WithDescription(TranslatableString description)
-    {
-        Description = description;
-        return this;
     }
 
     public ChoiceSetting<T> WithProperty((Func<T> Get, Action<T> Set) property)

@@ -5,7 +5,7 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Models.Types;
 
-public class CompoundSetting(TranslatableString name) : SettingElement(name)
+public class CompoundSetting(TranslatableString name) : SettingElement<CompoundSetting>(name)
 {
     public List<SettingElement> Children { get; } = [];
 
@@ -20,18 +20,6 @@ public class CompoundSetting(TranslatableString name) : SettingElement(name)
     public override double Width => Children.Count == 0 ? base.Width : Children.Max(c => c.Width);
 
     public static CompoundSetting Create(TranslatableString name) => new(name);
-
-    public CompoundSetting WithIcon(SettingIcon icon)
-    {
-        Icon = icon;
-        return this;
-    }
-
-    public CompoundSetting WithDescription(TranslatableString description)
-    {
-        Description = description;
-        return this;
-    }
 
     public CompoundSetting WithChild(SettingElement child)
     {

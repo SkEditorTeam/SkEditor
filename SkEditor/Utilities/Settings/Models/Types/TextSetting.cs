@@ -4,7 +4,7 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Models.Types;
 
-public partial class TextSetting(TranslatableString name) : SettingElement(name)
+public partial class TextSetting(TranslatableString name) : SettingElement<TextSetting>(name)
 {
     public (Func<string> Get, Action<string> Set) Property
     {
@@ -38,18 +38,6 @@ public partial class TextSetting(TranslatableString name) : SettingElement(name)
     public static TextSetting Create(TranslatableString name)
     {
         return new TextSetting(name);
-    }
-
-    public TextSetting WithIcon(SettingIcon icon)
-    {
-        Icon = icon;
-        return this;
-    }
-
-    public TextSetting WithDescription(TranslatableString description)
-    {
-        Description = description;
-        return this;
     }
 
     public TextSetting WithProperty((Func<string> Get, Action<string> Set) property)

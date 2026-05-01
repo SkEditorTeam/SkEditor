@@ -5,7 +5,7 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Models.Types;
 
-public class ActionSetting(TranslatableString name) : SettingElement(name)
+public class ActionSetting(TranslatableString name) : SettingElement<ActionSetting>(name)
 {
     public IRelayCommand? Command { get; private set; }
     public TranslatableString? Text { get; private set; }
@@ -13,18 +13,6 @@ public class ActionSetting(TranslatableString name) : SettingElement(name)
     public static ActionSetting Create(TranslatableString name)
     {
         return new ActionSetting(name);
-    }
-
-    public ActionSetting WithIcon(SettingIcon icon)
-    {
-        Icon = icon;
-        return this;
-    }
-
-    public ActionSetting WithDescription(TranslatableString description)
-    {
-        Description = description;
-        return this;
     }
 
     public ActionSetting WithAction(TranslatableString text, Action action)

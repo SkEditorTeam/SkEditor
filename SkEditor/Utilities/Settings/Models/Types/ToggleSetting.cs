@@ -4,7 +4,7 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Models.Types;
 
-public partial class ToggleSetting(TranslatableString name) : SettingElement(name)
+public partial class ToggleSetting(TranslatableString name) : SettingElement<ToggleSetting>(name)
 {
     public (Func<bool> Get, Action<bool> Set) Property
     {
@@ -22,18 +22,6 @@ public partial class ToggleSetting(TranslatableString name) : SettingElement(nam
     public static ToggleSetting Create(TranslatableString name)
     {
         return new ToggleSetting(name);
-    }
-
-    public ToggleSetting WithIcon(SettingIcon icon)
-    {
-        Icon = icon;
-        return this;
-    }
-
-    public ToggleSetting WithDescription(TranslatableString description)
-    {
-        Description = description;
-        return this;
     }
 
     public ToggleSetting WithProperty((Func<bool> Get, Action<bool> Set) property)

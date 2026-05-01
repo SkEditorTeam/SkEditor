@@ -12,3 +12,19 @@ public abstract class SettingElement(TranslatableString name)
 
     public virtual double Width { get; set; } = double.NaN;
 }
+
+public abstract class SettingElement<T>(TranslatableString name) : SettingElement(name)
+    where T : SettingElement<T>
+{
+    public T WithIcon(SettingIcon icon)
+    {
+        Icon = icon;
+        return (T)this;
+    }
+
+    public T WithDescription(TranslatableString description)
+    {
+        Description = description;
+        return (T)this;
+    }
+}

@@ -15,7 +15,7 @@ public interface INumberSetting
 }
 
 public partial class NumberSetting<T>(TranslatableString name)
-    : SettingElement(name), INumberSetting where T : struct, INumber<T>
+    : SettingElement<NumberSetting<T>>(name), INumberSetting where T : struct, INumber<T>
 {
     public (Func<T> Get, Action<T> Set) Property
     {
@@ -57,18 +57,6 @@ public partial class NumberSetting<T>(TranslatableString name)
     public static NumberSetting<T> Create(TranslatableString name)
     {
         return new NumberSetting<T>(name);
-    }
-
-    public NumberSetting<T> WithIcon(SettingIcon icon)
-    {
-        Icon = icon;
-        return this;
-    }
-
-    public NumberSetting<T> WithDescription(TranslatableString description)
-    {
-        Description = description;
-        return this;
     }
 
     public NumberSetting<T> WithProperty((Func<T> Get, Action<T> Set) property)
