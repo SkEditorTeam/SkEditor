@@ -37,6 +37,13 @@
                       DisplayMemberBinding="{Binding Display}" />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type types:INumberSetting}">
+            <NumericUpDown Minimum="{Binding MinValue}"
+                           Maximum="{Binding MaxValue}"
+                           FormatString="{Binding FormatString}"
+                           Value="{Binding Value, Mode=TwoWay}" />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type types:ActionSetting}">
             <Button Content="{Binding Text}" Command="{Binding Command}" />
         </DataTemplate>

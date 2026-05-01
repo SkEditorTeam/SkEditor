@@ -165,11 +165,19 @@ public partial class SettingsPageViewModel : ObservableObject
                     .WithDescription(translations.GetObservable(TranslationKey.SettingsPersonalizationFontDescription,
                         appSettings.EditorFontFamily ?? "Default"))
                     .WithIcon(Symbol.TextFont)
-                    .WithAction(TranslationKey.ButtonSelect, async s =>
+                    .WithAction(TranslationKey.ButtonChange, async s =>
                     {
                         await SelectFont(appSettings, windowRegistry);
                         s.Description?.UpdateParameters(appSettings.EditorFontFamily ?? "Default");
-                    })
+                    }),
+
+                NumberSetting<int>.Create(TranslatableString.FromRawString("Font Size"))
+                    .WithDescription(TranslatableString.FromRawString("Change the font size used in the editor."))
+                    .WithIcon(Symbol.TextFont)
+                    .WithProperty(appSettings.GetProperty<int>(nameof(appSettings.EditorFontSize)))
+                    .WithMinValue(8)
+                    .WithMaxValue(48)
+                    .WithFormatString()
             ]);
 
         appearrance.WithSubsections([appearranceTheme, appearranceFontDisplay]);
