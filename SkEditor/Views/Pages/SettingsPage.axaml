@@ -12,6 +12,7 @@
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="vms:SettingsPageViewModel"
+             Focusable="True"
              x:Class="SkEditor.Views.Pages.SettingsPage">
 
     <UserControl.Resources>
@@ -25,6 +26,14 @@
         <!-- ReSharper restore Xaml.RedundantResource -->
         <converters:SettingIconSourceConverter x:Key="SettingIconSourceConverter" />
     </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="controls|FASettingsExpanderItem /template/ ContentPresenter#FooterPresenter"
+               x:DataType="models:SettingElement">
+            <Setter Property="MaxWidth" Value="500" />
+            <Setter Property="Width" Value="{Binding Width, FallbackValue=Auto}" />
+        </Style>
+    </UserControl.Styles>
 
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type types:ToggleSetting}">

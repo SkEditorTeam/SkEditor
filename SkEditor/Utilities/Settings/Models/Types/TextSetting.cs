@@ -12,6 +12,11 @@ public partial class TextSetting(TranslatableString name) : SettingElement(name)
         set;
     }
 
+    public bool IsPassword { get; set; }
+    public char PasswordChar => IsPassword ? '●' : '\0';
+
+    public override double Width { get; set; }
+
     [ObservableProperty]
     public partial string Text { get; set; }
 

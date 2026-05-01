@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Layout;
 using SkEditor.Utilities.Localization;
 
@@ -15,6 +16,8 @@ public class CompoundSetting(TranslatableString name) : SettingElement(name)
         LayoutOrientation == Orientation.Vertical
             ? HorizontalAlignment.Stretch
             : HorizontalAlignment.Left;
+
+    public override double Width => Children.Count == 0 ? base.Width : Children.Max(c => c.Width);
 
     public static CompoundSetting Create(TranslatableString name) => new(name);
 
