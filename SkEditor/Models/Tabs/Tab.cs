@@ -37,6 +37,12 @@ public abstract partial class Tab(TranslatableString header, Symbol? icon = null
     public abstract IRelayCommand? CloseCommand { get; }
 
     /// <summary>
+    ///     Indicates whether the tab's content should be cached when switching tabs.
+    ///     If true, the content will not get recreated when the user switches back to the tab.
+    /// </summary>
+    public virtual bool IsCacheable => false;
+
+    /// <summary>
     ///     Event that is raised when the tab requests to be closed.
     /// </summary>
     public event EventHandler? CloseRequested;

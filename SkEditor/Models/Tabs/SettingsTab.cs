@@ -12,6 +12,8 @@ public partial class SettingsTab(SettingsPageViewModel pageViewModel)
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
 
+    public override bool IsCacheable => true;
+
     [RelayCommand]
     private void CloseTab()
     {

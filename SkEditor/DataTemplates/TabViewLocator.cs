@@ -19,7 +19,9 @@ public class TabViewLocator : IDataTemplate
         }
 
         if (_viewCache.TryGetValue(data, out Control? cachedView))
+        {
             return cachedView;
+        }
 
         if (!_viewFactories.TryGetValue(data.GetType(), out Func<object, Control>? factory))
         {
@@ -27,7 +29,11 @@ public class TabViewLocator : IDataTemplate
         }
 
         Control view = factory(data);
-        _viewCache[data] = view;
+        if (data is Tab { IsCacheable: true })
+        {
+            _viewCache[data] = view;
+        }
+
         return view;
     }
 
