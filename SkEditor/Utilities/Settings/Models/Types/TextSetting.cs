@@ -27,11 +27,6 @@ public partial class TextSetting(TranslatableString name) : SettingElement<TextS
         get => Property.Get();
         set
         {
-            if (Property.Get() == value)
-            {
-                return;
-            }
-
             Property.Set(value);
             Text = value;
         }
