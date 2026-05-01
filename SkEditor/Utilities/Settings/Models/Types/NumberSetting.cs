@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Localization;
 
@@ -13,7 +14,8 @@ public interface INumberSetting
     object? Value { get; set; }
 }
 
-public partial class NumberSetting<T>(TranslatableString name) : SettingElement(name), INumberSetting
+public partial class NumberSetting<T>(TranslatableString name)
+    : SettingElement(name), INumberSetting where T : struct, INumber<T>
 {
     public (Func<T> Get, Action<T> Set) Property
     {
@@ -109,9 +111,9 @@ public partial class NumberSetting<T>(TranslatableString name) : SettingElement(
         return this;
     }
 
-    partial void OnGenericValueChanged(T? oldValue, T? newValue)
+    partial void OnGenericValueChanged(T oldValue, T newValue)
     {
-        if (!EqualityComparer<T>.Default.Equals(oldValue, newValue) && newValue is not null)
+        if (!EqualityComparer<T>.Default.Equals(oldValue, newValue))
         {
             Property.Set(newValue);
         }
