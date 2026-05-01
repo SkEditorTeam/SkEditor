@@ -13,13 +13,16 @@ using SkEditor.Utilities.Settings.Models.Types;
 using SkEditor.Utilities.Settings.Providers;
 using SkEditor.Utilities.Startup;
 using SkEditor.Views.Windows;
-using AppSettings = SkEditor.Utilities.Settings.Configs.AppSettings;
+using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
+using BinarySettingsProperty = SkEditor.Utilities.Settings.Configs.BinarySettings.BinarySettingsProperty;
+using SecretsConfigProperty = SkEditor.Utilities.Settings.Configs.SecretsConfig.SecretsConfigProperty;
 
 namespace SkEditor.ViewModels.Pages;
 
 public partial class SettingsPageViewModel : ObservableObject
 {
     public SettingsPageViewModel(AppSettings appSettings, BinarySettings binarySettings,
+        SecretsConfig secrets,
         ITranslationService translations,
         IThemeService themes,
         WindowRegistry windowRegistry,
@@ -38,20 +41,20 @@ public partial class SettingsPageViewModel : ObservableObject
                 ChoiceSetting<string>
                     .Create(TranslationKey.SettingsGeneralLanguage)
                     .WithIcon(Symbol.Earth)
-                    .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.Language)))
+                    .WithProperty(appSettings.GetProperty<string>(AppSettingsProperty.Language))
                     .WithProvider(languageSettingsProvider),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralCheckForUpdates)
                     .WithDescription(TranslationKey.SettingsGeneralCheckForUpdatesDescription)
                     .WithIcon(Symbol.CloudSync)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.CheckForAppUpdates))),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForAppUpdates)),
 
                 ChoiceSetting<StartupMode>
                     .Create(TranslationKey.SettingsGeneralUseSplashScreen)
                     .WithDescription(TranslationKey.SettingsGeneralUseSplashScreenDescription)
                     .WithIcon(Symbol.Image)
-                    .WithProperty(binarySettings.GetProperty<StartupMode>(nameof(binarySettings.SplashScreenMode)))
+                    .WithProperty(binarySettings.GetProperty<StartupMode>(BinarySettingsProperty.SplashScreenMode))
                     .WithProvider(startupModeSettingsProvider)
             ]);
 
@@ -66,31 +69,31 @@ public partial class SettingsPageViewModel : ObservableObject
                     .Create(TranslationKey.SettingsGeneralWrapping)
                     .WithDescription(TranslationKey.SettingsGeneralWrappingDescription)
                     .WithIcon(Symbol.TextWrap)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsWordWrapEnabled))),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsWordWrapEnabled)),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralAutoSave)
                     .WithDescription(TranslationKey.SettingsGeneralAutoSaveDescription)
                     .WithIcon(Symbol.SaveSync)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsAutoSaveEnabled))),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoSaveEnabled)),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralChangeChecker)
                     .WithDescription(TranslationKey.SettingsGeneralChangeCheckerDescription)
                     .WithIcon(Symbol.DocumentSync)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.CheckForExternalFileChanges))),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForExternalFileChanges)),
 
                 ToggleSetting
                     .Create(TranslatableString.FromRawString("Smooth scrolling"))
                     .WithDescription(TranslatableString.FromRawString("Enables smooth scrolling in the editor."))
                     .WithIcon(Symbol.ArrowCircleDown)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsEditorSmoothScrollEnabled))),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorSmoothScrollEnabled)),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralZoomSync)
                     .WithDescription(TranslationKey.SettingsGeneralZoomSyncDescription)
                     .WithIcon(Symbol.ZoomIn)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsEditorZoomLevelSyncEnabled)))
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorZoomLevelSyncEnabled))
             ]);
 
         SettingSection editorIndentation = SettingSection
@@ -105,11 +108,11 @@ public partial class SettingsPageViewModel : ObservableObject
                         ChoiceSetting<bool>
                             .Create(TranslatableString.FromRawString("Indentation Type"))
                             .WithProperty(
-                                appSettings.GetProperty<bool>(nameof(appSettings.UseEditorTabsForIndentation)))
+                                appSettings.GetProperty<bool>(AppSettingsProperty.UseEditorTabsForIndentation))
                             .WithProvider(indentTypeProvider),
                         ChoiceSetting<int>
                             .Create(TranslatableString.FromRawString("Indentation Amount"))
-                            .WithProperty(appSettings.GetProperty<int>(nameof(appSettings.EditorTabSize)))
+                            .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorTabSize))
                             .WithProvider(indentAmountProvider)
                     ),
 
@@ -117,19 +120,19 @@ public partial class SettingsPageViewModel : ObservableObject
                     .Create(TranslationKey.SettingsGeneralAutoIndent)
                     .WithDescription(TranslationKey.SettingsGeneralAutoIndentDescription)
                     .WithIcon(Symbol.ArrowAutofitWidth)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsAutoIndentEnabled))),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoIndentEnabled)),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralAutoPairing)
                     .WithDescription(TranslationKey.SettingsGeneralAutoPairingDescription)
                     .WithIcon(Symbol.TextQuote)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsAutoPairingEnabled))),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoPairingEnabled)),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralPasteIndent)
                     .WithDescription(TranslationKey.SettingsGeneralPasteIndentDescription)
                     .WithIcon(Symbol.ClipboardTextEdit)
-                    .WithProperty(appSettings.GetProperty<bool>(nameof(appSettings.IsPasteIndentationEnabled))),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsPasteIndentationEnabled))
             ]);
 
         editor.WithSubsections([editorBehavior, editorIndentation]);
@@ -145,10 +148,11 @@ public partial class SettingsPageViewModel : ObservableObject
                     .Create(TranslationKey.SettingsPersonalizationTheme)
                     .WithDescription(TranslationKey.SettingsPersonalizationThemeDescription)
                     .WithIcon(Symbol.PaintBrush)
-                    .WithProperty(appSettings.GetProperty<string>(nameof(appSettings.CurrentTheme)))
+                    .WithProperty(appSettings.GetProperty<string>(AppSettingsProperty.CurrentTheme))
                     .WithProvider(themeSettingsProvider),
 
-                ActionSetting.Create(TranslatableString.FromRawString("Themes Folder"))
+                ActionSetting
+                    .Create(TranslatableString.FromRawString("Themes Folder"))
                     .WithDescription(
                         TranslatableString.FromRawString("Open the Themes folder to create or add new themes."))
                     .WithIcon(Symbol.FolderOpen)
@@ -161,7 +165,8 @@ public partial class SettingsPageViewModel : ObservableObject
             .WithIcon(Symbol.TextFont)
             .WithSettings(
             [
-                ActionSetting.Create(TranslatableString.FromRawString("Font Family"))
+                ActionSetting
+                    .Create(TranslatableString.FromRawString("Font Family"))
                     .WithDescription(translations.GetObservable(TranslationKey.SettingsPersonalizationFontDescription,
                         appSettings.EditorFontFamily ?? "Default"))
                     .WithIcon(Symbol.TextFont)
@@ -171,13 +176,43 @@ public partial class SettingsPageViewModel : ObservableObject
                         s.Description?.UpdateParameters(appSettings.EditorFontFamily ?? "Default");
                     }),
 
-                NumberSetting<int>.Create(TranslatableString.FromRawString("Font Size"))
+                NumberSetting<int>
+                    .Create(TranslatableString.FromRawString("Font Size"))
                     .WithDescription(TranslatableString.FromRawString("Change the font size used in the editor."))
                     .WithIcon(Symbol.TextFont)
-                    .WithProperty(appSettings.GetProperty<int>(nameof(appSettings.EditorFontSize)))
+                    .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorFontSize))
                     .WithMinValue(8)
                     .WithMaxValue(48)
-                    .WithFormatString()
+                    .WithFormatString(),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsPersonalizationHighlightCurrentLine)
+                    .WithIcon(Symbol.Highlight)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.HighlightCurrentLine))
+            ]);
+
+        SettingSection appearranceSidebarLayout = SettingSection
+            .Create(TranslatableString.FromRawString("Sidebar & Layout"))
+            .WithIcon(Symbol.LayoutColumnTwo)
+            .WithSettings(
+            [
+                ToggleSetting
+                    .Create(TranslationKey.SettingsPersonalizationSidebarAnimations)
+                    .WithDescription(TranslationKey.SettingsPersonalizationSidebarAnimationsDescription)
+                    .WithIcon(Symbol.SlideTransition)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSidebarAnimationEnabled)),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralSidebarWidthSync)
+                    .WithDescription(TranslationKey.SettingsGeneralSidebarWidthSyncDescription)
+                    .WithIcon(Symbol.ColumnArrowRight)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSidebarWidthSyncEnabled)),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralProjectSingleFolderClick)
+                    .WithDescription(TranslationKey.SettingsGeneralProjectSingleFolderClickDescription)
+                    .WithIcon(Symbol.FolderArrowRight)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsProjectSingleClickEnabled))
             ]);
 
         appearrance.WithSubsections([appearranceTheme, appearranceFontDisplay]);

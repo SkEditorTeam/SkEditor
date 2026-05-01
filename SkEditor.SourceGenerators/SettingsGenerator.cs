@@ -67,31 +67,23 @@ public class SettingsGenerator : IIncrementalGenerator
                                    namespace {{namespaceName}};
                                    public partial class {{className}}
                                    {
-                                        private readonly Dictionary<string, object> _getters;
-                                        private readonly Dictionary<string, object> _setters;
-
-                                        public {{className}}()
+                                        public enum {{className}}Property
                                         {
-                                            _getters = new()
-                                            {
-                                                {{string.Join(",\n", properties.Select(p => $"[\"{p.Name}\"] = (Func<{p.Type}>)(() => {p.Name})"))}}
-                                            };
-                                            _setters = new()
-                                            {
-                                                {{string.Join(",\n", properties.Select(p => $"[\"{p.Name}\"] = (Action<{p.Type}>)(v => {p.Name} = v)"))}}
-                                            };
+                                            {{string.Join(",\n", properties.Select(p => p.Name))}}
                                         }
 
                                         {{copyFromMethod}}
 
-                                        public Func<T> GetGetter<T>(string property) =>
-                                            _getters.TryGetValue(property, out var v) ? (Func<T>)v : null;
-
-                                        public Action<T> GetSetter<T>(string property) =>
-                                            _setters.TryGetValue(property, out var v) ? (Action<T>)v : null;
-                                            
-                                        public (Func<T> Get, Action<T> Set) GetProperty<T>(string property) =>
-                                            (GetGetter<T>(property), GetSetter<T>(property));
+                                        public (Func<T> Get, Action<T> Set) GetProperty<T>({{className}}Property property)
+                                        {
+                                            return property switch
+                                           {
+                                               {{string.Join(",\n", properties.Select(p =>
+                                                   $"{className}Property.{p.Name} => ((Func<T>)(object)(Func<{p.Type.ToDisplayString()}>)(() => {p.Name}), (Action<T>)(object)(Action<{p.Type.ToDisplayString()}>)(value => {p.Name} = ({p.Type.ToDisplayString()})(object)value))"
+                                               ))}},
+                                               _ => throw new ArgumentOutOfRangeException()
+                                           };
+                                        }
                                    }
                                    """;
 
