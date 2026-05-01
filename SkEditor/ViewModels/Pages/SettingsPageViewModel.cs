@@ -250,6 +250,7 @@ public partial class SettingsPageViewModel : ObservableObject
                         TextSetting
                             .Create(TranslatableString.FromRawString("API Key"))
                             .WithProperty(secrets.GetProperty<string>(SecretsConfigProperty.SkUnityApiKey))
+                            .WithPlaceholder(TranslatableString.FromRawString("Your skUnity API key"))
                             .WithPassword()
                             .WithWidth(200)
                     )

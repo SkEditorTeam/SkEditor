@@ -12,6 +12,8 @@ public partial class TextSetting(TranslatableString name) : SettingElement<TextS
         set;
     }
 
+    public TranslatableString? Placeholder { get; set; }
+
     public bool IsPassword { get; set; }
     public char PasswordChar => IsPassword ? '●' : '\0';
 
@@ -57,6 +59,12 @@ public partial class TextSetting(TranslatableString name) : SettingElement<TextS
     public TextSetting WithWidth(double width)
     {
         Width = width;
+        return this;
+    }
+
+    public TextSetting WithPlaceholder(TranslatableString placeholder)
+    {
+        Placeholder = placeholder;
         return this;
     }
 

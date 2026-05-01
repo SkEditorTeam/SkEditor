@@ -54,7 +54,8 @@
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type types:TextSetting}">
-            <TextBox Text="{Binding Text, Mode=TwoWay}" PasswordChar="{Binding PasswordChar}" />
+            <TextBox Text="{Binding Text, Mode=TwoWay}" PasswordChar="{Binding PasswordChar}"
+                     PlaceholderText="{Binding Placeholder.Value, FallbackValue={x:Null}}" />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type types:ActionSetting}">
