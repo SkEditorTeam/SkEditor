@@ -1,4 +1,5 @@
-﻿using Avalonia.Input;
+﻿using System;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using SkEditor.Contracts.Services.Files.Features;
@@ -20,6 +21,7 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         _editor = editor;
 
         OnGlobalZoomChanged(zoomService.GlobalFontSize);
+        CheckFontSize(editor);
 
         zoomService.ZoomChanged += OnGlobalZoomChanged;
 
@@ -49,6 +51,15 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         _tab.FontSize = newSize;
 
         FixScrollOffset(oldLineHeight);
+    }
+
+    private void CheckFontSize(TextEditor editor)
+    {
+        int fontSize = appSettings.EditorFontSize;
+        if (Math.Abs(fontSize - editor.FontSize) > 0.01)
+        {
+            editor.FontSize = fontSize;
+        }
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
