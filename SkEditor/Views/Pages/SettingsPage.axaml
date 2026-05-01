@@ -84,11 +84,8 @@
                 <Interaction.Behaviors>
                     <behaviors:VerticalScrollViewerAnimatedBehavior />
                 </Interaction.Behaviors>
-                <TransitioningContentControl Content="{Binding CurrentSection}">
-                    <TransitioningContentControl.PageTransition>
-                        <CrossFade Duration="0:00:00.150" />
-                    </TransitioningContentControl.PageTransition>
-                    <TransitioningContentControl.ContentTemplate>
+                <ContentControl Content="{Binding CurrentSection}">
+                    <ContentControl.ContentTemplate>
                         <DataTemplate DataType="models:SettingSection">
                             <ItemsRepeater ItemsSource="{Binding Settings}">
                                 <ItemsRepeater.Layout>
@@ -119,8 +116,8 @@
                                 </ItemsRepeater.ItemTemplate>
                             </ItemsRepeater>
                         </DataTemplate>
-                    </TransitioningContentControl.ContentTemplate>
-                </TransitioningContentControl>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
             </ScrollViewer>
         </controls:FANavigationView.Content>
     </controls:FANavigationView>

@@ -161,6 +161,8 @@ public class App : Application
 
         services.AddSingleton<IFileFeatureService, FileFeatureService>();
         services.AddEditorFeatures();
+
+        services.AddTabViewLocator();
     }
 
     public static string GetInformationalVersion()

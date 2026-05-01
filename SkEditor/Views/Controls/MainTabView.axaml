@@ -6,7 +6,6 @@
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:windows="clr-namespace:SkEditor.Views.Windows"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Windows"
-             xmlns:dataTemplates="clr-namespace:SkEditor.DataTemplates"
              x:Class="SkEditor.Views.Controls.MainTabView"
              x:DataType="vms:MainWindowViewModel">
 
@@ -17,15 +16,13 @@
 
     <Panel VerticalAlignment="Stretch">
         <ui:TabView
+            Name="TabView"
             Opacity="{Binding !!Tabs.Count, Converter={StaticResource BoolToOpacityConverter}}"
             IsHitTestVisible="{Binding !!Tabs.Count}"
             Margin="0,-10,0,0" CanDragTabs="True"
             CanReorderTabs="True" VerticalAlignment="Stretch"
             TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
             AddTabButtonCommand="{Binding NewTabCommand}">
-            <ui:TabView.DataTemplates>
-                <dataTemplates:TabViewLocator />
-            </ui:TabView.DataTemplates>
             <ui:TabView.TabItemTemplate>
                 <DataTemplate x:DataType="tabs:Tab">
                     <ui:TabViewItem Content="{Binding .}"

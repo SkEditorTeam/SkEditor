@@ -72,7 +72,7 @@
         <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.8.0"/>
         <PackageReference Include="Svg.Skia" Version="4.3.0"/>
         <!--        <PackageReference Include="SkAvaloniaEdit" Version="12.0.0-rc4" />-->
-        <PackageReference Include="SkFluentAvalonia" Version="3.0.0-preview1"/>
+        <!--        <PackageReference Include="SkFluentAvalonia" Version="3.0.0-preview1"/>-->
 
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/>
         <PackageReference Include="Octokit" Version="14.0.0"/>
@@ -82,7 +82,7 @@
         <PackageReference Include="SSH.NET" Version="2025.1.0"/>
         <PackageReference Include="Devlooped.CredentialManager" Version="2.7.0"/>
 
-<!--        <PackageReference Include="HotAvalonia" Version="3.1.0" PrivateAssets="All"/>-->
+        <!--        <PackageReference Include="HotAvalonia" Version="3.1.0" PrivateAssets="All"/>-->
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" Condition="'$(RuntimeIdentifier)' == 'linux-x64'"/>
 
         <PackageReference Include="Xaml.Behaviors.SourceGenerators" Version="12.0.0">
@@ -93,7 +93,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\External\DiscordRPC\DiscordRPC.csproj"/>
-        <!--        <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj"/>-->
+        <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj"/>
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj"/>
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit.TextMate\AvaloniaEdit.TextMate.csproj"/>
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false"/>

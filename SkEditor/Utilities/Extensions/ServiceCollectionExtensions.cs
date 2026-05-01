@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SkEditor.DataTemplates;
 using SkEditor.Features;
+using SkEditor.Models.Tabs;
 using SkEditor.Services.Settings;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers;
+using SkEditor.Views.Pages;
 
 namespace SkEditor.Utilities.Extensions;
 
@@ -46,6 +49,25 @@ public static class ServiceCollectionExtensions
                 services.AddSingleton(config);
                 services.AddSingleton<IConfig>(sp => sp.GetRequiredService<TConfig>());
             }
+        }
+
+        public void AddTabViewLocator()
+        {
+            services.AddSingleton<TabViewLocator>(sp =>
+            {
+                TabViewLocator locator = new();
+
+                locator.Register<SettingsTab>(tab =>
+                {
+                    SettingsPage page = sp.GetRequiredService<SettingsPage>();
+                    page.DataContext = ((SettingsTab)tab).PageViewModel;
+                    return page;
+                });
+
+                locator.Register<FileTab>(tab => new FileTabView { DataContext = tab });
+
+                return locator;
+            });
         }
     }
 }
