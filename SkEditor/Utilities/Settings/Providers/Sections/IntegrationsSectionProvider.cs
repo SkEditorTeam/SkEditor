@@ -28,7 +28,7 @@ public class IntegrationsSectionProvider(
     private SettingSection CreateDiscordSection()
     {
         return SettingSection.Create(TranslatableString.FromRawString("Discord"))
-            .WithIcon("DiscordIcon")
+            .WithIcon("DiscordIconOutline")
             .WithSettings(
             [
                 ToggleSetting
