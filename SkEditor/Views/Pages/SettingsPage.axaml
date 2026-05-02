@@ -25,6 +25,7 @@
         <GridLength x:Key="ToggleSwitchPostContentMargin">2</GridLength>
         <!-- ReSharper restore Xaml.RedundantResource -->
         <converters:SettingIconSourceConverter x:Key="SettingIconSourceConverter" />
+        <converters:InfoBarSeverityConverter x:Key="InfoBarSeverityConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -148,6 +149,15 @@
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         IsClickEnabled="True"
                                         Command="{Binding Command}" />
+                                </DataTemplate>
+
+                                <DataTemplate x:Key="InfoTemplate" x:DataType="types:InfoSetting">
+                                    <controls:FAInfoBar
+                                        Title="{Binding Name.Value}"
+                                        IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                        Message="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                        IsOpen="True" IsClosable="False"
+                                        Severity="{Binding Type, Converter={StaticResource InfoBarSeverityConverter}}" />
                                 </DataTemplate>
 
                                 <DataTemplate x:Key="ExpandableTemplate" x:DataType="types:ExpandableSetting">

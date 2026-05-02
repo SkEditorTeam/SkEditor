@@ -11,6 +11,7 @@ public class SettingElementTemplateFactory : RecyclingElementFactory
         {
             ClickableActionSetting => "ClickableTemplate",
             ExpandableSetting => "ExpandableTemplate",
+            InfoSetting => "InfoTemplate",
             _ => "StandardTemplate"
         };
     }
