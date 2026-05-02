@@ -1,4 +1,5 @@
-﻿using FluentIcons.Common;
+﻿using System;
+using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Models;
@@ -45,25 +46,33 @@ public class IntegrationsSectionProvider(
             .WithIcon(Symbol.Key)
             .WithSettings(
             [
-                CompoundSetting
-                    .Create(TranslatableString.FromRawString("skUnity"))
-                    .WithDescription(
-                        TranslatableString.FromRawString(
-                            "Used as a documentation provider and a script host (via skUnity Parser)"))
-                    .WithIcon("AppIcon")
-                    .WithVerticalLayout()
-                    .WithChildren(
-                        ActionSetting
-                            .Create(TranslationKey.SettingsConnectionsDashboardButton)
-                            .WithAction(TranslationKey.SettingsConnectionsDashboardButton,
-                                () => LinkOpener.OpenLink("https://skeditor.dev")),
-                        TextSetting
-                            .Create(TranslatableString.FromRawString("API Key"))
-                            .WithProperty(secrets.GetProperty<string>(SecretsConfigProperty.SkUnityApiKey))
-                            .WithPlaceholder(TranslatableString.FromRawString("Your skUnity API key"))
-                            .WithPassword()
-                            .WithWidth(200)
-                    )
+                CreateApiKeySetting(
+                    "skUnity",
+                    "Used as a documentation provider and a script host (via skUnity Parser)",
+                    "skUnityIcon",
+                    "https://skeditor.dev",
+                    secrets.GetProperty<string>(SecretsConfigProperty.SkUnityApiKey))
             ]);
+    }
+
+    private static ExpandableSetting CreateApiKeySetting(string name, string description, string icon, string link,
+        (Func<string> Get, Action<string> Set) property)
+    {
+        return ExpandableSetting
+            .Create(TranslatableString.FromRawString(name))
+            .WithDescription(
+                TranslatableString.FromRawString(description))
+            .WithIcon(icon)
+            .WithChildren(
+                ActionSetting
+                    .Create(TranslatableString.FromRawString("Dashboard"))
+                    .WithAction(TranslationKey.SettingsConnectionsDashboardButton, () => LinkOpener.OpenLink(link)),
+                TextSetting
+                    .Create(TranslatableString.FromRawString("API Key"))
+                    .WithProperty(property)
+                    .WithPlaceholder(TranslatableString.FromRawString($"Your {name} API key"))
+                    .WithPassword()
+                    .WithWidth(200)
+            );
     }
 }
