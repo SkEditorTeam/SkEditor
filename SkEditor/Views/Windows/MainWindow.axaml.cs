@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
@@ -56,6 +57,8 @@ public partial class MainWindow : FAAppWindow
 
         WindowStyler.Style(this);
         _themes.LoadThemes();
+
+        LayoutTransform.LayoutTransform = new ScaleTransform(appSettings.CustomUiScale, appSettings.CustomUiScale);
 
         AttachEvents(dragDropService);
     }
