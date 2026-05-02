@@ -68,12 +68,7 @@ public class LegacyConfigMigrator(IConfigService config)
             stateConfig.SidebarPanelSizes = oldAppConfig.SidebarPanelSizes;
 
             experimentsConfig.AutoCompletionPrototypeEnabled = oldAppConfig.EnableAutoCompletionExperiment;
-            experimentsConfig.ProjectsEnabled = oldAppConfig.EnableProjectsExperiment;
             experimentsConfig.HexPreviewEnabled = oldAppConfig.EnableHexPreview;
-            experimentsConfig.CodeParserEnabled = oldAppConfig.EnableCodeParser;
-            experimentsConfig.FoldingEnabled = oldAppConfig.EnableFolding;
-            experimentsConfig.SessionRestoringEnabled = oldAppConfig.EnableSessionRestoring;
-            experimentsConfig.RealtimeCodeParserEnabled = oldAppConfig.EnableRealtimeCodeParser;
 
             secretsConfig.SkUnityApiKey = oldAppConfig.SkUnityApiKey;
             secretsConfig.SkriptMcApiKey = oldAppConfig.SkriptMcApiKey;

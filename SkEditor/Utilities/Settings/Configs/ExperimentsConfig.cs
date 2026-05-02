@@ -16,40 +16,10 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     public partial bool AutoCompletionPrototypeEnabled { get; set; } = false;
 
     /// <summary>
-    ///     Enables the Projects feature.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool ProjectsEnabled { get; set; } = false;
-
-    /// <summary>
     ///     Enables the Hex Preview feature.
     /// </summary>
     [ObservableProperty]
     public partial bool HexPreviewEnabled { get; set; } = false;
-
-    /// <summary>
-    ///     Enables the Code Parser feature.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool CodeParserEnabled { get; set; } = false;
-
-    /// <summary>
-    ///     Makes the Code Parser run in real-time as you type.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool RealtimeCodeParserEnabled { get; set; } = false;
-
-    /// <summary>
-    ///     Enables the Folding feature.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool FoldingEnabled { get; set; } = false;
-
-    /// <summary>
-    ///     Enables the Session Restoring feature.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool SessionRestoringEnabled { get; set; } = false;
 
     protected override string GetFileName()
     {
