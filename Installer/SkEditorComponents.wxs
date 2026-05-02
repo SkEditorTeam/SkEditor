@@ -31,6 +31,13 @@
                           Target="[#SkEditorExe]"
                           WorkingDirectory="INSTALLFOLDER"
                           Icon="SkEditorIcon.exe"/>
+
+                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor" Value="URL:SkEditor Protocol" Type="string"/>
+                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor" Name="URL Protocol" Value="" Type="string"/>
+                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor\DefaultIcon"
+                               Value="[INSTALLFOLDER]SkEditor.exe,0" Type="string"/>
+                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor\shell\open\command"
+                               Value="&quot;[INSTALLFOLDER]SkEditor.exe&quot; &quot;%1&quot;" Type="string"/>
             </Component>
         </ComponentGroup>
 
