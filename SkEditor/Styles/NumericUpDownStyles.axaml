@@ -34,19 +34,21 @@
                                     Orientation="Horizontal"
                                     IsVisible="{TemplateBinding ShowButtonSpinner}"
                                     Grid.Column="0"
-                                    Margin="4"
+                                    Margin="3"
                                     Background="Transparent">
                             <RepeatButton Name="PART_IncreaseButton"
                                           Theme="{StaticResource ButtonSpinnerButton}"
+                                          Foreground="{TemplateBinding Foreground}"
                                           VerticalContentAlignment="Center"
-                                          Foreground="{TemplateBinding Foreground}">
+                                          MinWidth="28">
                                 <fluent:SymbolIcon Symbol="ChevronUp" FontSize="14" />
                             </RepeatButton>
 
                             <RepeatButton Name="PART_DecreaseButton"
                                           Theme="{StaticResource ButtonSpinnerButton}"
                                           Foreground="{TemplateBinding Foreground}"
-                                          VerticalContentAlignment="Center">
+                                          VerticalContentAlignment="Center"
+                                          MinWidth="28">
                                 <fluent:SymbolIcon Symbol="ChevronDown" FontSize="14" />
                             </RepeatButton>
                         </StackPanel>
