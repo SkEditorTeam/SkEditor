@@ -118,6 +118,13 @@ public partial class TranslatableString : ObservableObject, IDisposable
         return new TranslatableString(value, true);
     }
 
+    public static TranslatableString FromRawString(string template, params string[] parameters)
+    {
+        TranslatableString translatableString = new(template, true);
+        translatableString.UpdateParameters(parameters);
+        return translatableString;
+    }
+
     public void UpdateParameters(params string[] parameters)
     {
         _parameters = parameters;
