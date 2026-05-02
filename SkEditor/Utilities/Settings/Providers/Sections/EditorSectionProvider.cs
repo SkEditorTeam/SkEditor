@@ -52,7 +52,7 @@ public class EditorSectionProvider(
                 ToggleSetting
                     .Create(TranslatableString.FromRawString("Smooth scrolling"))
                     .WithDescription(TranslatableString.FromRawString("Enables smooth scrolling in the editor."))
-                    .WithIcon(Symbol.ArrowCircleDown)
+                    .WithIcon(Symbol.Stream)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorSmoothScrollEnabled)),
 
                 ToggleSetting
