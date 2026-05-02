@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Avalonia.Layout;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Models.Types;
@@ -10,12 +9,6 @@ public class CompoundSetting(TranslatableString name) : SettingElement<CompoundS
     public List<SettingElement> Children { get; } = [];
 
     public bool IsVertical { get; set; }
-    public Orientation LayoutOrientation => IsVertical ? Orientation.Vertical : Orientation.Horizontal;
-
-    public HorizontalAlignment ChildrenHorizontalAlignment =>
-        LayoutOrientation == Orientation.Vertical
-            ? HorizontalAlignment.Stretch
-            : HorizontalAlignment.Left;
 
     public override double Width => Children.Count == 0 ? base.Width : Children.Max(c => c.Width);
 

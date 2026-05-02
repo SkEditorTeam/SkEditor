@@ -26,6 +26,8 @@
         <!-- ReSharper restore Xaml.RedundantResource -->
         <converters:SettingIconSourceConverter x:Key="SettingIconSourceConverter" />
         <converters:InfoBarSeverityConverter x:Key="InfoBarSeverityConverter" />
+        <converters:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
+        <converters:OrientationConverter x:Key="OrientationConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -88,12 +90,13 @@
                 <ItemsControl.Styles>
                     <Style Selector="ContentControl > :is(Control)">
                         <Setter Property="HorizontalAlignment"
-                                Value="{Binding $parent[ItemsControl].((types:CompoundSetting)DataContext).ChildrenHorizontalAlignment, FallbackValue=Right}" />
+                                Value="{Binding $parent[ItemsControl].((types:CompoundSetting)DataContext).IsVertical, Converter={StaticResource HorizontalAlignmentConverter}, FallbackValue=Right}" />
                     </Style>
                 </ItemsControl.Styles>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="{Binding LayoutOrientation}" Spacing="8" />
+                        <StackPanel Orientation="{Binding IsVertical, Converter={StaticResource OrientationConverter}}"
+                                    Spacing="8" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
