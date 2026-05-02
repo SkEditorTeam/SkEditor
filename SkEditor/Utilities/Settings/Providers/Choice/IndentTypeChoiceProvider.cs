@@ -2,9 +2,9 @@
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Utilities.Settings.Providers;
+namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class IndentTypeProvider(ITranslationService translationService) : ISettingsProvider
+public class IndentTypeChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider
 {
     public IEnumerable<object> GetValues()
     {

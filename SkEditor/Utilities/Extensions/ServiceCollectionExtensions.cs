@@ -5,7 +5,8 @@ using SkEditor.Models.Tabs;
 using SkEditor.Services.Settings;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Settings.Providers;
+using SkEditor.Utilities.Settings.Providers.Choice;
+using SkEditor.Utilities.Settings.Providers.Sections;
 using SkEditor.Views.Pages;
 
 namespace SkEditor.Utilities.Extensions;
@@ -36,11 +37,8 @@ public static class ServiceCollectionExtensions
 
             services.AddSingleton<SettingsObserverService>();
 
-            services.AddSingleton<LanguageSettingsProvider>();
-            services.AddSingleton<ThemeSettingsProvider>();
-            services.AddSingleton<StartupModeSettingsProvider>();
-            services.AddSingleton<IndentAmountProvider>();
-            services.AddSingleton<IndentTypeProvider>();
+            services.AddChoiceProviders();
+            services.AddSectionProviders();
 
             return;
 
@@ -49,6 +47,23 @@ public static class ServiceCollectionExtensions
                 services.AddSingleton(config);
                 services.AddSingleton<IConfig>(sp => sp.GetRequiredService<TConfig>());
             }
+        }
+
+        private void AddChoiceProviders()
+        {
+            services.AddSingleton<LanguageChoiceProvider>();
+            services.AddSingleton<ThemeChoiceProvider>();
+            services.AddSingleton<StartupModeChoiceProvider>();
+            services.AddSingleton<IndentAmountChoiceProvider>();
+            services.AddSingleton<IndentTypeChoiceProvider>();
+        }
+
+        private void AddSectionProviders()
+        {
+            services.AddSingleton<ISettingsSectionProvider, GeneralSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, EditorSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, AppearanceSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, IntegrationsSectionProvider>();
         }
 
         public void AddTabViewLocator()

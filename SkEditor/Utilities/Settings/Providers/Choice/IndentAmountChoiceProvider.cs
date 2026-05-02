@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace SkEditor.Utilities.Settings.Providers;
+namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class IndentAmountProvider : ISettingsProvider
+public class IndentAmountChoiceProvider : ISettingsChoiceProvider
 {
     public IEnumerable<object> GetValues()
     {

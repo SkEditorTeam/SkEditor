@@ -2,9 +2,9 @@
 using System.Linq;
 using SkEditor.Contracts.Services;
 
-namespace SkEditor.Utilities.Settings.Providers;
+namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class ThemeSettingsProvider(IThemeService themeService) : ISettingsProvider
+public class ThemeChoiceProvider(IThemeService themeService) : ISettingsChoiceProvider
 {
     public IEnumerable<object> GetValues()
     {

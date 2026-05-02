@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace SkEditor.Utilities.Settings.Providers;
+namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public interface ISettingsProvider
+public interface ISettingsChoiceProvider
 {
     IEnumerable<object> GetValues();
 

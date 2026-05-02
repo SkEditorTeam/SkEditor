@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Providers;
+using SkEditor.Utilities.Settings.Providers.Choice;
 
 namespace SkEditor.Utilities.Settings.Models.Types;
 
@@ -27,7 +27,7 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement<
         }
     }
 
-    public ISettingsProvider? Provider { get; protected set; }
+    public ISettingsChoiceProvider? Provider { get; protected set; }
 
     [ObservableProperty]
     public partial T? SelectedOption { get; set; }
@@ -56,7 +56,7 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement<
         return this;
     }
 
-    public ChoiceSetting<T> WithProvider(ISettingsProvider provider)
+    public ChoiceSetting<T> WithProvider(ISettingsChoiceProvider provider)
     {
         if (Property.Get == null || Property.Set == null)
         {

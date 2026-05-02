@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 using SkEditor.Contracts.Services.Localization;
 
-namespace SkEditor.Utilities.Settings.Providers;
+namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class LanguageSettingsProvider(ITranslationService translationService) : ISettingsProvider
+public class LanguageChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider
 {
     public IEnumerable<object> GetValues()
     {

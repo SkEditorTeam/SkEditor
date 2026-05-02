@@ -4,9 +4,9 @@ using SkEditor.Contracts.Services.Localization;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Startup;
 
-namespace SkEditor.Utilities.Settings.Providers;
+namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class StartupModeSettingsProvider(ITranslationService translationService) : ISettingsProvider
+public class StartupModeChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider
 {
     public IEnumerable<object> GetValues()
     {
