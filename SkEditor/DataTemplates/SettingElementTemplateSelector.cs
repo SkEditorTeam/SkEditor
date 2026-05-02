@@ -10,6 +10,7 @@ public class SettingElementTemplateSelector : IDataTemplate
 {
     public DataTemplate StandardTemplate { get; set; } = null!;
     public DataTemplate ClickableTemplate { get; set; } = null!;
+    public DataTemplate ExpandableTemplate { get; set; } = null!;
 
     public bool Match(object? data)
     {
@@ -18,8 +19,11 @@ public class SettingElementTemplateSelector : IDataTemplate
 
     public Control? Build(object? param)
     {
-        return param is ClickableActionSetting
-            ? ClickableTemplate.Build(param)
-            : StandardTemplate.Build(param);
+        return param switch
+        {
+            ClickableActionSetting => ClickableTemplate.Build(param),
+            ExpandableSetting => ExpandableTemplate.Build(param),
+            _ => StandardTemplate.Build(param)
+        };
     }
 }

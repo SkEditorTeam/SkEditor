@@ -82,11 +82,6 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </DataTemplate>
-
-        <!-- <DataTemplate DataType="{x:Type vms:ActionSetting}"> -->
-        <!--     <Button Content="{Binding ButtonText}" /> -->
-        <!-- </DataTemplate> -->
-        <!-- -->
     </UserControl.DataTemplates>
 
     <controls:FANavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,24,0,16"
@@ -114,11 +109,13 @@
                 <ContentControl Content="{Binding CurrentSection}">
                     <ContentControl.ContentTemplate>
                         <DataTemplate DataType="models:SettingSection">
-                            <ItemsRepeater ItemsSource="{Binding Settings}">
-                                <ItemsRepeater.Layout>
-                                    <StackLayout Spacing="8" Orientation="Vertical" />
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
+                            <ItemsControl ItemsSource="{Binding Settings}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Spacing="8" Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
                                     <dataTemplates:SettingElementTemplateSelector>
                                         <dataTemplates:SettingElementTemplateSelector.StandardTemplate>
                                             <DataTemplate x:DataType="models:SettingElement">
@@ -139,9 +136,29 @@
                                                     Command="{Binding Command}" />
                                             </DataTemplate>
                                         </dataTemplates:SettingElementTemplateSelector.ClickableTemplate>
+                                        <dataTemplates:SettingElementTemplateSelector.ExpandableTemplate>
+                                            <DataTemplate x:DataType="types:ExpandableSetting">
+                                                <controls:FASettingsExpander
+                                                    Header="{Binding Name.Value}"
+                                                    IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                                    Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                    ItemsSource="{Binding Children}">
+
+                                                    <controls:FASettingsExpander.ItemTemplate>
+                                                        <DataTemplate DataType="models:SettingElement">
+                                                            <controls:FASettingsExpanderItem
+                                                                Content="{Binding Name.Value}"
+                                                                Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                                IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                                                Footer="{Binding}" />
+                                                        </DataTemplate>
+                                                    </controls:FASettingsExpander.ItemTemplate>
+                                                </controls:FASettingsExpander>
+                                            </DataTemplate>
+                                        </dataTemplates:SettingElementTemplateSelector.ExpandableTemplate>
                                     </dataTemplates:SettingElementTemplateSelector>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </DataTemplate>
                     </ContentControl.ContentTemplate>
                 </ContentControl>

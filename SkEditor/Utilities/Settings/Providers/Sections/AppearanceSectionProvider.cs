@@ -64,25 +64,29 @@ public class AppearanceSectionProvider(
             .WithIcon(Symbol.TextFont)
             .WithSettings(
             [
-                ActionSetting
-                    .Create(TranslatableString.FromRawString("Font Family"))
-                    .WithDescription(translations.GetObservable(TranslationKey.SettingsPersonalizationFontDescription,
-                        appSettings.EditorFontFamily ?? "Default"))
+                ExpandableSetting
+                    .Create(TranslatableString.FromRawString("Editor Font"))
+                    .WithDescription(
+                        TranslatableString.FromRawString("Change the font family and size used in the editor."))
                     .WithIcon(Symbol.TextFont)
-                    .WithAction(TranslationKey.ButtonChange, async s =>
-                    {
-                        await SelectFont();
-                        s.Description?.UpdateParameters(appSettings.EditorFontFamily ?? "Default");
-                    }),
-
-                NumberSetting<int>
-                    .Create(TranslatableString.FromRawString("Font Size"))
-                    .WithDescription(TranslatableString.FromRawString("Change the font size used in the editor."))
-                    .WithIcon(Symbol.TextFont)
-                    .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorFontSize))
-                    .WithMinValue(8)
-                    .WithMaxValue(48)
-                    .WithFormatString(),
+                    .WithChildren(
+                        ActionSetting
+                            .Create(TranslatableString.FromRawString("Font Family"))
+                            .WithDescription(translations.GetObservable(
+                                TranslationKey.SettingsPersonalizationFontDescription,
+                                appSettings.EditorFontFamily ?? "Default"))
+                            .WithAction(TranslationKey.ButtonChange, async s =>
+                            {
+                                await SelectFont();
+                                s.Description?.UpdateParameters(appSettings.EditorFontFamily ?? "Default");
+                            }),
+                        NumberSetting<int>
+                            .Create(TranslatableString.FromRawString("Font Size"))
+                            .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorFontSize))
+                            .WithMinValue(8)
+                            .WithMaxValue(48)
+                            .WithFormatString()
+                    ),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsPersonalizationHighlightCurrentLine)
