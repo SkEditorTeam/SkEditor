@@ -20,7 +20,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     ///    Whether this is (likely) the first time the user runs the application. Used to show the tutorial.
     /// </summary>
     [ObservableProperty]
-    public partial string IsFirstRun { get; set; } = string.Empty;
+    public partial bool IsFirstRun { get; set; } = true;
 
     /// <summary>
     ///     Whether to enable the developer mode.
