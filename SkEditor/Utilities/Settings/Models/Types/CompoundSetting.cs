@@ -23,12 +23,18 @@ public class CompoundSetting(TranslatableString name) : SettingElement<CompoundS
 
     public CompoundSetting WithChild(SettingElement child)
     {
+        child.Parent = this;
         Children.Add(child);
         return this;
     }
 
     public CompoundSetting WithChildren(params SettingElement[] children)
     {
+        foreach (SettingElement settingElement in children)
+        {
+            settingElement.Parent = this;
+        }
+
         Children.AddRange(children);
         return this;
     }

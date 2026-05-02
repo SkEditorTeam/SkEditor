@@ -10,6 +10,8 @@ public abstract class SettingElement(TranslatableString name)
     public SettingIcon? Icon { get; protected set; }
     public TranslatableString? Description { get; protected set; }
 
+    public SettingElement? Parent { get; set; }
+
     public virtual double Width { get; set; } = double.NaN;
 }
 
