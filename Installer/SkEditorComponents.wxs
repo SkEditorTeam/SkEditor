@@ -7,6 +7,12 @@
 
             <Component Id="MainExecutable">
                 <File Id="SkEditorExe" Source="$(var.PublishDir)\SkEditor.exe"/>
+
+                <ProgId Id="SkEditor.sk" Description="Skript File" Icon="SkEditorExe">
+                    <Extension Id="sk" ContentType="text/plain">
+                        <Verb Id="open" Command="Open" TargetFile="SkEditorExe" Argument="&quot;%1&quot;"/>
+                    </Extension>
+                </ProgId>
             </Component>
 
             <Component Id="ApplicationShortcuts" Guid="{bf08e1b2-e449-4bf6-9e61-e80cd00d68ac}">
