@@ -30,6 +30,7 @@
                 <ResourceInclude Source="avares://SkEditor/Styles/LiteComboBoxStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/ComboBoxStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/NumericUpDownStyles.axaml" />
+                <ResourceInclude Source="avares://SkEditor/Styles/NavigationViewStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
             </ResourceDictionary.MergedDictionaries>
