@@ -33,6 +33,26 @@
             <Setter Property="MaxWidth" Value="500" />
             <Setter Property="Width" Value="{Binding Width, FallbackValue=Auto}" />
         </Style>
+
+        <Style Selector="controls|FANavigationView /template/ ScrollViewer#MenuItemsScrollViewer">
+            <Setter Property="Interaction.Behaviors">
+                <BehaviorCollectionTemplate>
+                    <BehaviorCollection>
+                        <behaviors:VerticalScrollViewerAnimatedBehavior />
+                    </BehaviorCollection>
+                </BehaviorCollectionTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="controls|FANavigationView /template/ ScrollViewer#FooterItemsScrollViewer">
+            <Setter Property="Interaction.Behaviors">
+                <BehaviorCollectionTemplate>
+                    <BehaviorCollection>
+                        <behaviors:VerticalScrollViewerAnimatedBehavior />
+                    </BehaviorCollection>
+                </BehaviorCollectionTemplate>
+            </Setter>
+        </Style>
     </UserControl.Styles>
 
     <UserControl.DataTemplates>
