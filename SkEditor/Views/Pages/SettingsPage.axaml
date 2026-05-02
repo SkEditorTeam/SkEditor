@@ -106,62 +106,51 @@
                 <Interaction.Behaviors>
                     <behaviors:VerticalScrollViewerAnimatedBehavior />
                 </Interaction.Behaviors>
-                <ContentControl Content="{Binding CurrentSection}">
-                    <ContentControl.ContentTemplate>
-                        <DataTemplate DataType="models:SettingSection">
-                            <ItemsControl ItemsSource="{Binding Settings}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Spacing="8" Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <dataTemplates:SettingElementTemplateSelector>
-                                        <dataTemplates:SettingElementTemplateSelector.StandardTemplate>
-                                            <DataTemplate x:DataType="models:SettingElement">
-                                                <controls:FASettingsExpander
-                                                    Header="{Binding Name.Value}"
-                                                    IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                <ItemsRepeater ItemsSource="{Binding CurrentSection.Settings, FallbackValue={x:Null}}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Spacing="8" Orientation="Vertical" />
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <dataTemplates:SettingElementTemplateFactory>
+                            <dataTemplates:SettingElementTemplateFactory.Templates>
+                                <DataTemplate x:Key="StandardTemplate" x:DataType="models:SettingElement">
+                                    <controls:FASettingsExpander
+                                        Header="{Binding Name.Value}"
+                                        IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                        Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                        Footer="{Binding}" />
+                                </DataTemplate>
+
+                                <DataTemplate x:Key="ClickableTemplate" x:DataType="types:ClickableActionSetting">
+                                    <controls:FASettingsExpander
+                                        Header="{Binding Name.Value}"
+                                        IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                        Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                        IsClickEnabled="True"
+                                        Command="{Binding Command}" />
+                                </DataTemplate>
+
+                                <DataTemplate x:Key="ExpandableTemplate" x:DataType="types:ExpandableSetting">
+                                    <controls:FASettingsExpander
+                                        Header="{Binding Name.Value}"
+                                        IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                        Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                        ItemsSource="{Binding Children}">
+                                        <controls:FASettingsExpander.ItemTemplate>
+                                            <DataTemplate DataType="models:SettingElement">
+                                                <controls:FASettingsExpanderItem
+                                                    Content="{Binding Name.Value}"
                                                     Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                    IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
                                                     Footer="{Binding}" />
                                             </DataTemplate>
-                                        </dataTemplates:SettingElementTemplateSelector.StandardTemplate>
-                                        <dataTemplates:SettingElementTemplateSelector.ClickableTemplate>
-                                            <DataTemplate x:DataType="types:ClickableActionSetting">
-                                                <controls:FASettingsExpander
-                                                    Header="{Binding Name.Value}"
-                                                    IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
-                                                    Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                    IsClickEnabled="True"
-                                                    Command="{Binding Command}" />
-                                            </DataTemplate>
-                                        </dataTemplates:SettingElementTemplateSelector.ClickableTemplate>
-                                        <dataTemplates:SettingElementTemplateSelector.ExpandableTemplate>
-                                            <DataTemplate x:DataType="types:ExpandableSetting">
-                                                <controls:FASettingsExpander
-                                                    Header="{Binding Name.Value}"
-                                                    IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
-                                                    Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                    ItemsSource="{Binding Children}">
-
-                                                    <controls:FASettingsExpander.ItemTemplate>
-                                                        <DataTemplate DataType="models:SettingElement">
-                                                            <controls:FASettingsExpanderItem
-                                                                Content="{Binding Name.Value}"
-                                                                Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                                IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
-                                                                Footer="{Binding}" />
-                                                        </DataTemplate>
-                                                    </controls:FASettingsExpander.ItemTemplate>
-                                                </controls:FASettingsExpander>
-                                            </DataTemplate>
-                                        </dataTemplates:SettingElementTemplateSelector.ExpandableTemplate>
-                                    </dataTemplates:SettingElementTemplateSelector>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </ContentControl.ContentTemplate>
-                </ContentControl>
+                                        </controls:FASettingsExpander.ItemTemplate>
+                                    </controls:FASettingsExpander>
+                                </DataTemplate>
+                            </dataTemplates:SettingElementTemplateFactory.Templates>
+                        </dataTemplates:SettingElementTemplateFactory>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
             </ScrollViewer>
         </controls:FANavigationView.Content>
     </controls:FANavigationView>
