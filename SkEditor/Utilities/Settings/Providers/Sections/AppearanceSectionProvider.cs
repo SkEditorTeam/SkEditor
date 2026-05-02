@@ -136,6 +136,8 @@ public class AppearanceSectionProvider(
             return;
         }
 
-        appSettings.EditorFontFamily = result;
+        appSettings.EditorFontFamily = result == "Default"
+            ? null
+            : result;
     }
 }
