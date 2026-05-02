@@ -64,6 +64,8 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<ISettingsSectionProvider, EditorSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, AppearanceSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, IntegrationsSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, ExperimentsSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, AdvancedSectionProvider>();
         }
 
         public void AddTabViewLocator()

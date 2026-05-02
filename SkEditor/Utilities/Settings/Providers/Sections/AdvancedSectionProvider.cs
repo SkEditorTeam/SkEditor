@@ -1,0 +1,46 @@
+﻿using FluentIcons.Common;
+using SkEditor.Contracts.Services;
+using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Utilities.Settings.Models;
+using SkEditor.Utilities.Settings.Models.Types;
+using SkEditor.Utilities.Settings.Providers.Choice;
+using SkEditor.Utilities.Startup;
+using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
+using BinarySettingsProperty = SkEditor.Utilities.Settings.Configs.BinarySettings.BinarySettingsProperty;
+
+namespace SkEditor.Utilities.Settings.Providers.Sections;
+
+public class AdvancedSectionProvider(
+    IConfigService configs,
+    AppSettings appSettings,
+    BinarySettings binarySettings,
+    StartupModeChoiceProvider startupModeProvider) : ISettingsSectionProvider
+{
+    public SettingSection GetSection()
+    {
+        return SettingSection.Create(TranslatableString.FromRawString("Advanced"))
+            .WithIcon(Symbol.Wrench)
+            .WithSettings(
+            [
+                ChoiceSetting<StartupMode>
+                    .Create(TranslationKey.SettingsGeneralUseSplashScreen)
+                    .WithDescription(TranslationKey.SettingsGeneralUseSplashScreenDescription)
+                    .WithIcon(Symbol.Image)
+                    .WithProperty(
+                        binarySettings.GetProperty<StartupMode>(BinarySettingsProperty.SplashScreenMode))
+                    .WithProvider(startupModeProvider),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsAboutDevMode)
+                    .WithDescription(TranslationKey.SettingsAboutDevModeDescription)
+                    .WithIcon(Symbol.Flash)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDevModeEnabled)),
+
+                ClickableActionSetting
+                    .Create(TranslationKey.SettingsAboutAppdata)
+                    .WithIcon(Symbol.Folder)
+                    .WithAction(() => LinkOpener.OpenFolder(configs.GetAppDataPath()))
+            ]);
+    }
+}
