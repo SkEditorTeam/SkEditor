@@ -146,7 +146,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     ///     The font size used in the code editor.
     /// </summary>
     [ObservableProperty]
-    public partial int EditorFontSize { get; set; } = 16;
+    public partial int EditorFontSize { get; set; } = 14;
 
     /// <summary>
     ///     The font family used in the code editor. If null, the default font is used.
