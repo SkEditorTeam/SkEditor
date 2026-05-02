@@ -16,3 +16,15 @@ public class SettingElementTemplateFactory : RecyclingElementFactory
         };
     }
 }
+
+public class ExpanderItemTemplateFactory : RecyclingElementFactory
+{
+    protected override string OnSelectTemplateKeyCore(object? dataContext, Control? owner)
+    {
+        return dataContext switch
+        {
+            ClickableActionSetting => "ClickableExpanderItemTemplate",
+            _ => "StandardExpanderItemTemplate"
+        };
+    }
+}

@@ -170,13 +170,28 @@
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         ItemsSource="{Binding Children}">
                                         <controls:FASettingsExpander.ItemTemplate>
-                                            <DataTemplate DataType="models:SettingElement">
-                                                <controls:FASettingsExpanderItem
-                                                    Content="{Binding Name.Value}"
-                                                    Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                    IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
-                                                    Footer="{Binding}" />
-                                            </DataTemplate>
+                                            <dataTemplates:ExpanderItemTemplateFactory>
+                                                <dataTemplates:ExpanderItemTemplateFactory.Templates>
+                                                    <DataTemplate x:Key="StandardExpanderItemTemplate"
+                                                                  DataType="models:SettingElement">
+                                                        <controls:FASettingsExpanderItem
+                                                            Content="{Binding Name.Value}"
+                                                            Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                            IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                                            Footer="{Binding}" />
+                                                    </DataTemplate>
+
+                                                    <DataTemplate x:Key="ClickableExpanderItemTemplate"
+                                                                  DataType="types:ClickableActionSetting">
+                                                        <controls:FASettingsExpanderItem
+                                                            Content="{Binding Name.Value}"
+                                                            Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                            IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                                            IsClickEnabled="True"
+                                                            Command="{Binding Command}" />
+                                                    </DataTemplate>
+                                                </dataTemplates:ExpanderItemTemplateFactory.Templates>
+                                            </dataTemplates:ExpanderItemTemplateFactory>
                                         </controls:FASettingsExpander.ItemTemplate>
                                     </controls:FASettingsExpander>
                                 </DataTemplate>
