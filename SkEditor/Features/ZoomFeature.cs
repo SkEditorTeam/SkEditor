@@ -88,6 +88,11 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
 
     private void OnZoom(object? sender, PointerWheelEventArgs e)
     {
+        if (!appSettings.IsMouseWheelZoomEnabled)
+        {
+            return;
+        }
+
         if (e.KeyModifiers != KeyUtility.GetControlModifier())
         {
             return;

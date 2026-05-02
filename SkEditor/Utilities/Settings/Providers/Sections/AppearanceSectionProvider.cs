@@ -85,7 +85,12 @@ public class AppearanceSectionProvider(
                             .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorFontSize))
                             .WithMinValue(8)
                             .WithMaxValue(48)
-                            .WithFormatString()
+                            .WithFormatString(),
+                        ToggleSetting
+                            .Create(TranslatableString.FromRawString("Mouse Wheel Zoom"))
+                            .WithDescription(TranslatableString.FromRawString(
+                                "Zoom the editor font size by holding Ctrl and scrolling the mouse wheel."))
+                            .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsMouseWheelZoomEnabled))
                     ),
 
                 ToggleSetting

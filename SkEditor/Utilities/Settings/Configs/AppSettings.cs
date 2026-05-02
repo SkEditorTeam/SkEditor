@@ -149,6 +149,12 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial int EditorFontSize { get; set; } = 14;
 
     /// <summary>
+    ///     Whether to enable zooming the editor font size by holding Ctrl and scrolling the mouse wheel.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsMouseWheelZoomEnabled { get; set; } = true;
+
+    /// <summary>
     ///     The font family used in the code editor. If null, the default font is used.
     /// </summary>
     [ObservableProperty]
