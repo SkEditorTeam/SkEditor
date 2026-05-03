@@ -131,7 +131,7 @@ public partial class FileTab(
         {
             Dialog dialog = Dialog
                 .Create(TranslationKey.UnsavedFileTitle)
-                .WithMessage(TranslationKey.UnsavedFileMessage)
+                .WithMessage(new TranslatableString(TranslationKey.UnsavedFileMessage, Header))
                 .WithIcon(Symbol.Save)
                 .WithButtons(
                     new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
