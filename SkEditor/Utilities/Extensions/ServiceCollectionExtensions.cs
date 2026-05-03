@@ -58,6 +58,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<WindowStateService>();
             services.AddSingleton<WindowErrorService>();
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IWindowDialogService, WindowDialogService>();
             services.AddSingleton<IZoomService, ZoomService>();
         }
 
