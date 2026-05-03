@@ -70,7 +70,7 @@ public class TranslationService : ITranslationService
         return new TranslatableString(key);
     }
 
-    public TranslatableString GetObservable(TranslationKey key, params string[]? parameters)
+    public TranslatableString GetObservable(TranslationKey key, params object[]? parameters)
     {
         return new TranslatableString(key, parameters);
     }

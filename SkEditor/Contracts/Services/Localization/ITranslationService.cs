@@ -26,7 +26,7 @@ public interface ITranslationService
     public string Get(TranslationKey key, params string?[] parameters);
 
     public TranslatableString GetObservable(TranslationKey key);
-    public TranslatableString GetObservable(TranslationKey key, params string[]? parameters);
+    TranslatableString GetObservable(TranslationKey key, params object[]? parameters);
 
     /// <summary>
     ///     Changes the application's language to the specified language.

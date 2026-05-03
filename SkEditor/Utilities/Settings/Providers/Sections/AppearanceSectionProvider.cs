@@ -72,11 +72,11 @@ public class AppearanceSectionProvider(
                             .Create(TranslationKey.SettingsAppearanceFontFamily)
                             .WithDescription(translations.GetObservable(
                                 TranslationKey.SettingsAppearanceCurrentFontDescription,
-                                appSettings.EditorFontFamily ?? "Default"))
+                                GetFontName()))
                             .WithAction(TranslationKey.ButtonChange, async s =>
                             {
                                 await SelectFont();
-                                s.Description?.UpdateParameters(appSettings.EditorFontFamily ?? "Default");
+                                s.Description?.UpdateParameters(GetFontName());
                             }),
                         NumberSetting<int>
                             .Create(TranslationKey.SettingsAppearanceFontSize)
@@ -141,5 +141,15 @@ public class AppearanceSectionProvider(
         appSettings.EditorFontFamily = result == "Default"
             ? null
             : result;
+    }
+
+    private object GetFontName()
+    {
+        if (appSettings.EditorFontFamily is not null)
+        {
+            return appSettings.EditorFontFamily;
+        }
+
+        return (TranslatableString)TranslationKey.SettingsAppearanceCurrentFontDescriptionDefault;
     }
 }

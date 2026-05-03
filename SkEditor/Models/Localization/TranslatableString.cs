@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Services.Localization;
 
@@ -14,7 +15,7 @@ public partial class TranslatableString : ObservableObject, IDisposable
     private static readonly HashSet<WeakReference<TranslatableString>> Instances = [];
     private static bool _eventSubscribed;
 
-    private string[] _parameters = [];
+    private object[] _parameters = [];
 
     /// <summary>
     ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key.
@@ -62,7 +63,7 @@ public partial class TranslatableString : ObservableObject, IDisposable
     ///     The parameters to use for formatting the translated string. These parameters will be passed to
     ///     the translation system and can be used in the translation templates.
     /// </param>
-    public TranslatableString(TranslationKey key, params string[]? parameters) : this(key) =>
+    public TranslatableString(TranslationKey key, params object[]? parameters) : this(key) =>
         _parameters = parameters ?? [];
 
     [ObservableProperty]
@@ -82,11 +83,21 @@ public partial class TranslatableString : ObservableObject, IDisposable
 
             var translationService = TranslationService.Current;
 
-            return _parameters == null || _parameters.Length == 0
-                ? translationService.Get(EnumKey)
-                : translationService.Get(EnumKey, _parameters);
+            if (_parameters == null || _parameters.Length == 0)
+            {
+                return translationService.Get(EnumKey);
+            }
+
+            string[] resolvedParameters = _parameters.Select(p => p switch
+            {
+                TranslatableString ts => ts.Value,
+                _ => p?.ToString() ?? string.Empty
+            }).ToArray();
+
+            return translationService.Get(EnumKey, resolvedParameters);
         }
     }
+
 
     public void Dispose()
     {
@@ -118,14 +129,14 @@ public partial class TranslatableString : ObservableObject, IDisposable
         return new TranslatableString(value, true);
     }
 
-    public static TranslatableString FromRawString(string template, params string[] parameters)
+    public static TranslatableString FromRawString(string template, params object[] parameters)
     {
         TranslatableString translatableString = new(template, true);
         translatableString.UpdateParameters(parameters);
         return translatableString;
     }
 
-    public void UpdateParameters(params string[] parameters)
+    public void UpdateParameters(params object[] parameters)
     {
         _parameters = parameters;
         OnPropertyChanged(nameof(Value));
