@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Pages;
 
 namespace SkEditor.Models.Tabs;
 
-public partial class SettingsTab(SettingsPageViewModel pageViewModel)
+public partial class SettingsTab(SettingsPageViewModel pageViewModel, IConfigService configs)
     : Tab(TranslationKey.SettingsHomeTitle, Symbol.Settings)
 {
     public SettingsPageViewModel PageViewModel { get; } = pageViewModel;
@@ -17,6 +18,7 @@ public partial class SettingsTab(SettingsPageViewModel pageViewModel)
     [RelayCommand]
     private void CloseTab()
     {
+        _ = configs.SaveAllConfigsAsync();
         RequestClose();
     }
 }
