@@ -14,6 +14,8 @@ using SkEditor.Services.Files.Features;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
+using SkEditor.Utilities.Menu;
+using SkEditor.Utilities.Menu.Providers;
 using SkEditor.Utilities.Publishing;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
@@ -34,7 +36,6 @@ public static class ServiceCollectionExtensions
         public void AddCoreServices()
         {
             services.AddSingleton<IStartupService, StartupService>();
-            services.AddSingleton<IMenuService, MenuService>();
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<ILogService, LogService>();
             services.AddSingleton<IconProvider>();
@@ -48,6 +49,9 @@ public static class ServiceCollectionExtensions
 
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
             services.AddHttpClient<IPublishService, PublishService>();
+
+            services.AddSingleton<IMenuService, MenuService>();
+            services.AddMainMenuProviders();
         }
 
         public void AddWindowing()
@@ -156,6 +160,12 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<ISettingsSectionProvider, IntegrationsSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, ExperimentsSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, AdvancedSectionProvider>();
+        }
+
+        private void AddMainMenuProviders()
+        {
+            services.AddSingleton<IMenuProvider, FileMenuProvider>();
+            services.AddSingleton<IMenuProvider, SettingsMenuProvider>();
         }
 
         public void AddTabViewLocator()
