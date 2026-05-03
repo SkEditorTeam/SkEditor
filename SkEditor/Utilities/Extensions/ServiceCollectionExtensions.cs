@@ -14,6 +14,7 @@ using SkEditor.Services.Files.Features;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
+using SkEditor.Utilities.Editor.Commands;
 using SkEditor.Utilities.Menu;
 using SkEditor.Utilities.Menu.Providers;
 using SkEditor.Utilities.Publishing;
@@ -119,6 +120,13 @@ public static class ServiceCollectionExtensions
             services.AddTransient<IEditorFeature, HexColorFeature>();
             services.AddTransient<IEditorFeature, EditorSmoothScrollFeature>();
             services.AddTransient<IEditorFeature, EditorCommandsFeature>();
+        }
+
+        public void AddEditorCommands()
+        {
+            services.AddSingleton<IEditorCommand, CommentCommand>();
+            services.AddSingleton<IEditorCommand, DuplicateCommand>();
+            services.AddSingleton<IEditorCommand, TrimWhitespaceCommand>();
         }
 
         public void AddConfigs(BinarySettings binarySettings)

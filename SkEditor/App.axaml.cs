@@ -101,6 +101,7 @@ public class App : Application
 
         services.AddConfigs(binarySettings);
         services.AddEditorFeatures();
+        services.AddEditorCommands();
         services.AddTabViewLocator();
     }
 
