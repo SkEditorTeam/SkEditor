@@ -4,7 +4,6 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Tabs;
-using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Services;
@@ -72,13 +71,13 @@ public partial class DiscordIntegrationService(
 
             if (tab is not FileTab fileTab)
             {
-                _client.UpdateDetails("");
+                _client.UpdateDetails("Idle");
                 return;
             }
 
             string tabName = fileTab.Header.Value;
             tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
-            string translation = translations.Get(TranslationKey.DiscordRpcEditing, tabName);
+            string translation = $"Editing: {tabName}";
             if (translation.Length > 128)
             {
                 translation = translation[..125] + "...";

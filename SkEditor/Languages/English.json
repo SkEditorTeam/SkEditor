@@ -305,7 +305,6 @@
   "SettingsExperimentsHexPreview": "Hex Preview",
   "SettingsExperimentsHexPreviewDescription": "Preview hex colors in the editor.",
   "FileViewImageAA": "Antialiasing",
-  "DiscordRpcEditing": "Editing: {0}",
   "BottomBarLine": "Line {0}",
   "BottomBarColumn": "Column {0}",
   "BottomBarDocumentSize": "Length {0}",

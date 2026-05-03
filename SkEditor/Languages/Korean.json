@@ -122,7 +122,6 @@
   "SettingsIntegrationsDiscordRichPresence": "Discord 활동 상태 (RPC)",
   "SettingsIntegrationsDiscordRichPresenceDescription": "Discord 상태에 SkEditor 상태를 표시합니다.",
   "FileViewImageAA": "안티 앨리어싱",
-  "DiscordRpcEditing": "{0} 편집중",
   "BottomBarLine": "줄 {0}",
   "BottomBarColumn": "열 {0}",
   "GuiGeneratorTitle": "제목",

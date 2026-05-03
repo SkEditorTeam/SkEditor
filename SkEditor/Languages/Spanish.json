@@ -89,7 +89,6 @@
   "SettingsEditorAutoPairingDescription": "Añade automáticamente el carácter de cierre cuando ingreses el carácter de apertura para ciertos símbolos.",
   "SettingsIntegrationsDiscordRichPresence": "Presencia en Discord",
   "SettingsIntegrationsDiscordRichPresenceDescription": "Muestra SkEditor en tu estado de Discord.",
-  "DiscordRpcEditing": "Editando: {0}",
   "BottomBarLine": "Línea {0}",
   "BottomBarColumn": "Columna {0}",
   "GuiGeneratorTitle": "Título",
