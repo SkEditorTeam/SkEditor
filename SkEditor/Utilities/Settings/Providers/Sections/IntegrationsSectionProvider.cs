@@ -50,14 +50,14 @@ public class IntegrationsSectionProvider(
                     "skUnity",
                     "Used as a documentation provider and a script host (via skUnity Parser)",
                     "skUnityIcon",
-                    "https://skeditor.dev",
+                    "https://skunity.com/dashboard/skunity-api",
                     secrets.GetProperty<string>(SecretsConfigProperty.SkUnityApiKey)),
 
                 CreateApiKeySetting(
                     "Pastebin",
                     "Used as a script host",
                     "PastebinIcon",
-                    "https://skeditor.dev",
+                    "https://pastebin.com/doc_api",
                     secrets.GetProperty<string>(SecretsConfigProperty.PastebinApiKey))
             ]);
     }
@@ -73,6 +73,8 @@ public class IntegrationsSectionProvider(
             .WithChildren(
                 ActionSetting
                     .Create(TranslatableString.FromRawString("Dashboard"))
+                    .WithDescription(
+                        TranslatableString.FromRawString("Retrieve your API key from there. Remember to log in first!"))
                     .WithAction(TranslationKey.SettingsConnectionsDashboardButton, () => LinkOpener.OpenLink(link)),
                 TextSetting
                     .Create(TranslatableString.FromRawString("API Key"))
