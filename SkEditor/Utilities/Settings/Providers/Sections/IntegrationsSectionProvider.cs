@@ -15,7 +15,7 @@ public class IntegrationsSectionProvider(
 {
     public SettingSection GetSection()
     {
-        SettingSection integrations = SettingSection.Create(TranslatableString.FromRawString("Integrations"))
+        SettingSection integrations = SettingSection.Create(TranslationKey.SettingsSectionIntegrations)
             .WithIcon(Symbol.PlugConnected);
 
         SettingSection integrationsDiscord = CreateDiscordSection();
@@ -28,13 +28,13 @@ public class IntegrationsSectionProvider(
 
     private SettingSection CreateDiscordSection()
     {
-        return SettingSection.Create(TranslatableString.FromRawString("Discord"))
+        return SettingSection.Create(TranslationKey.SettingsIntegrationsSubsectionDiscord)
             .WithIcon("DiscordIconOutline")
             .WithSettings(
             [
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralRpc)
-                    .WithDescription(TranslationKey.SettingsGeneralRpcDescription)
+                    .Create(TranslationKey.SettingsIntegrationsDiscordRichPresence)
+                    .WithDescription(TranslationKey.SettingsIntegrationsDiscordRichPresenceDescription)
                     .WithIcon(Symbol.Games)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDiscordRichPresenceEnabled))
             ]);
@@ -42,44 +42,52 @@ public class IntegrationsSectionProvider(
 
     private SettingSection CreateApiKeysSection()
     {
-        return SettingSection.Create(TranslatableString.FromRawString("API Keys"))
+        return SettingSection.Create(TranslationKey.SettingsIntegrationsSubsectionApiKeys)
             .WithIcon(Symbol.Key)
             .WithSettings(
             [
                 CreateApiKeySetting(
+                    TranslationKey.SettingsIntegrationsApiKeysSkUnity,
+                    TranslationKey.SettingsIntegrationsApiKeysSkUnityDescription,
                     "skUnity",
-                    "Used as a documentation provider and a script host (via skUnity Parser)",
                     "skUnityIcon",
                     "https://skunity.com/dashboard/skunity-api",
                     secrets.GetProperty<string>(SecretsConfigProperty.SkUnityApiKey)),
 
                 CreateApiKeySetting(
+                    TranslationKey.SettingsIntegrationsApiKeysPastebin,
+                    TranslationKey.SettingsIntegrationsApiKeysPastebinDescription,
                     "Pastebin",
-                    "Used as a script host",
                     "PastebinIcon",
                     "https://pastebin.com/doc_api",
                     secrets.GetProperty<string>(SecretsConfigProperty.PastebinApiKey))
             ]);
     }
 
-    private static ExpandableSetting CreateApiKeySetting(string name, string description, string icon, string link,
+    private static ExpandableSetting CreateApiKeySetting(
+        TranslationKey nameKey,
+        TranslationKey descriptionKey,
+        string serviceName,
+        string icon,
+        string link,
         (Func<string> Get, Action<string> Set) property)
     {
         return ExpandableSetting
-            .Create(TranslatableString.FromRawString(name))
-            .WithDescription(
-                TranslatableString.FromRawString(description))
+            .Create(nameKey)
+            .WithDescription(descriptionKey)
             .WithIcon(icon)
             .WithChildren(
                 ActionSetting
-                    .Create(TranslatableString.FromRawString("Dashboard"))
-                    .WithDescription(
-                        TranslatableString.FromRawString("Retrieve your API key from there. Remember to log in first!"))
-                    .WithAction(TranslationKey.SettingsConnectionsDashboardButton, () => LinkOpener.OpenLink(link)),
+                    .Create(TranslationKey.SettingsIntegrationsApiKeysDashboard)
+                    .WithDescription(TranslationKey.SettingsIntegrationsApiKeysDashboardDescription)
+                    .WithAction(TranslationKey.SettingsIntegrationsApiKeysDashboardButton,
+                        () => LinkOpener.OpenLink(link)),
                 TextSetting
-                    .Create(TranslatableString.FromRawString("API Key"))
+                    .Create(TranslationKey.SettingsIntegrationsApiKeysApiKey)
                     .WithProperty(property)
-                    .WithPlaceholder(TranslatableString.FromRawString($"Your {name} API key"))
+                    .WithPlaceholder(new TranslatableString(
+                        TranslationKey.SettingsIntegrationsApiKeysApiKeyPlaceholder,
+                        serviceName))
                     .WithPassword()
                     .WithWidth(200)
             );

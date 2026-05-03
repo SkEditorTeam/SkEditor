@@ -15,7 +15,7 @@ public class EditorSectionProvider(
 {
     public SettingSection GetSection()
     {
-        SettingSection editor = SettingSection.Create(TranslatableString.FromRawString("Editor"))
+        SettingSection editor = SettingSection.Create(TranslationKey.SettingsSectionEditor)
             .WithIcon(Symbol.Code);
         SettingSection editorBehavior = CreateBehaviorSection();
         SettingSection editorIndentation = CreateIndentationSection();
@@ -27,37 +27,37 @@ public class EditorSectionProvider(
 
     private SettingSection CreateBehaviorSection()
     {
-        return SettingSection.Create(TranslatableString.FromRawString("Behavior"))
+        return SettingSection.Create(TranslationKey.SettingsEditorSubsectionBehavior)
             .WithIcon(Symbol.EditSettings)
             .WithSettings(
             [
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralWrapping)
-                    .WithDescription(TranslationKey.SettingsGeneralWrappingDescription)
+                    .Create(TranslationKey.SettingsEditorWordWrap)
+                    .WithDescription(TranslationKey.SettingsEditorWordWrapDescription)
                     .WithIcon(Symbol.TextWrap)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsWordWrapEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralAutoSave)
-                    .WithDescription(TranslationKey.SettingsGeneralAutoSaveDescription)
+                    .Create(TranslationKey.SettingsEditorAutosave)
+                    .WithDescription(TranslationKey.SettingsEditorAutosaveDescription)
                     .WithIcon(Symbol.SaveSync)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoSaveEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralChangeChecker)
-                    .WithDescription(TranslationKey.SettingsGeneralChangeCheckerDescription)
+                    .Create(TranslationKey.SettingsEditorExternalChangeChecker)
+                    .WithDescription(TranslationKey.SettingsEditorExternalChangeCheckerDescription)
                     .WithIcon(Symbol.DocumentSync)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForExternalFileChanges)),
 
                 ToggleSetting
-                    .Create(TranslatableString.FromRawString("Smooth scrolling"))
-                    .WithDescription(TranslatableString.FromRawString("Enables smooth scrolling in the editor."))
+                    .Create(TranslationKey.SettingsEditorSmoothScrolling)
+                    .WithDescription(TranslationKey.SettingsEditorSmoothScrollingDescription)
                     .WithIcon(Symbol.Stream)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorSmoothScrollEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralZoomSync)
-                    .WithDescription(TranslationKey.SettingsGeneralZoomSyncDescription)
+                    .Create(TranslationKey.SettingsEditorZoomSync)
+                    .WithDescription(TranslationKey.SettingsEditorZoomSyncDescription)
                     .WithIcon(Symbol.ZoomIn)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorZoomLevelSyncEnabled))
             ]);
@@ -66,40 +66,40 @@ public class EditorSectionProvider(
     private SettingSection CreateIndentationSection()
     {
         return SettingSection
-            .Create(TranslatableString.FromRawString("Indentation & Typing"))
+            .Create(TranslationKey.SettingsEditorSubsectionIndentationTyping)
             .WithIcon(Symbol.TextIndentIncrease)
             .WithSettings(
             [
-                CompoundSetting.Create(TranslationKey.SettingsGeneralTabType)
-                    .WithDescription(TranslationKey.SettingsGeneralTabTypeDescription)
+                CompoundSetting.Create(TranslationKey.SettingsEditorTabType)
+                    .WithDescription(TranslationKey.SettingsEditorTabTypeDescription)
                     .WithIcon(Symbol.TextIndentIncrease)
                     .WithChildren(
                         ChoiceSetting<bool>
-                            .Create(TranslatableString.FromRawString("Indentation Type"))
+                            .Create(TranslationKey.SettingsEditorIndentationType)
                             .WithProperty(
                                 appSettings.GetProperty<bool>(AppSettingsProperty.UseEditorTabsForIndentation))
                             .WithProvider(indentTypeProvider),
                         ChoiceSetting<int>
-                            .Create(TranslatableString.FromRawString("Indentation Amount"))
+                            .Create(TranslationKey.SettingsEditorIndentationAmount)
                             .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorTabSize))
                             .WithProvider(indentAmountProvider)
                     ),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralAutoIndent)
-                    .WithDescription(TranslationKey.SettingsGeneralAutoIndentDescription)
+                    .Create(TranslationKey.SettingsEditorAutoIndent)
+                    .WithDescription(TranslationKey.SettingsEditorAutoIndentDescription)
                     .WithIcon(Symbol.ArrowAutofitWidth)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoIndentEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralAutoPairing)
-                    .WithDescription(TranslationKey.SettingsGeneralAutoPairingDescription)
+                    .Create(TranslationKey.SettingsEditorAutoPairing)
+                    .WithDescription(TranslationKey.SettingsEditorAutoPairingDescription)
                     .WithIcon(Symbol.TextQuote)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoPairingEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralPasteIndent)
-                    .WithDescription(TranslationKey.SettingsGeneralPasteIndentDescription)
+                    .Create(TranslationKey.SettingsEditorPasteIndent)
+                    .WithDescription(TranslationKey.SettingsEditorPasteIndentDescription)
                     .WithIcon(Symbol.ClipboardTextEdit)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsPasteIndentationEnabled))
             ]);

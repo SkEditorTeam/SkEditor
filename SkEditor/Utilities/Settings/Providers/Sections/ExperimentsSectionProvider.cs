@@ -10,28 +10,25 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
 {
     public SettingSection GetSection()
     {
-        return SettingSection.Create(TranslationKey.SettingsHomeExperiments)
+        return SettingSection.Create(TranslationKey.SettingsSectionExperiments)
             .WithIcon(Symbol.Beaker)
             .WithSettings(
             [
                 InfoSetting
-                    .Create(TranslatableString.FromRawString("Attention!"))
-                    .WithDescription(
-                        TranslatableString.FromRawString(
-                            "These features are experimental and may cause issues. Use with caution!"))
+                    .Create(TranslationKey.Attention)
+                    .WithDescription(TranslationKey.SettingsExperimentsWarningDescription)
                     .WithIcon(Symbol.Warning)
                     .WithType(InfoSetting.InfoType.Warning),
 
                 ToggleSetting
-                    .Create(TranslatableString.FromRawString("Auto-Completion Prototype"))
-                    .WithDescription(
-                        TranslatableString.FromRawString("Early prototype of auto completion, not very helpful."))
+                    .Create(TranslationKey.SettingsExperimentsAutoCompletionPrototype)
+                    .WithDescription(TranslationKey.SettingsExperimentsAutoCompletionPrototypeDescription)
                     .WithIcon(Symbol.Wand)
                     .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AutoCompletionPrototypeEnabled)),
 
                 ToggleSetting
-                    .Create(TranslatableString.FromRawString("Hex Preview"))
-                    .WithDescription(TranslatableString.FromRawString("Preview hex colors in the editor."))
+                    .Create(TranslationKey.SettingsExperimentsHexPreview)
+                    .WithDescription(TranslationKey.SettingsExperimentsHexPreviewDescription)
                     .WithIcon(Symbol.Color)
                     .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.HexPreviewEnabled))
             ]);

@@ -22,7 +22,7 @@ public class AppearanceSectionProvider(
 {
     public SettingSection GetSection()
     {
-        SettingSection appearance = SettingSection.Create(TranslationKey.SettingsHomeAppearance)
+        SettingSection appearance = SettingSection.Create(TranslationKey.SettingsSectionAppearance)
             .WithIcon(Symbol.PaintBrush);
 
         SettingSection appearanceTheme = CreateThemeSection();
@@ -36,23 +36,22 @@ public class AppearanceSectionProvider(
 
     private SettingSection CreateThemeSection()
     {
-        return SettingSection.Create(TranslatableString.FromRawString("Theme"))
+        return SettingSection.Create(TranslationKey.SettingsAppearanceSubsectionTheme)
             .WithIcon(Symbol.Color)
             .WithSettings(
             [
                 ChoiceSetting<string>
-                    .Create(TranslationKey.SettingsPersonalizationTheme)
-                    .WithDescription(TranslationKey.SettingsPersonalizationThemeDescription)
+                    .Create(TranslationKey.SettingsAppearanceThemeSelectedTheme)
+                    .WithDescription(TranslationKey.SettingsAppearanceThemeSelectedThemeDescription)
                     .WithIcon(Symbol.PaintBrush)
                     .WithProperty(appSettings.GetProperty<string>(AppSettingsProperty.CurrentTheme))
                     .WithProvider(themeProvider),
 
                 ActionSetting
-                    .Create(TranslatableString.FromRawString("Themes Folder"))
-                    .WithDescription(
-                        TranslatableString.FromRawString("Open the Themes folder to create or add new themes."))
+                    .Create(TranslationKey.SettingsAppearanceThemeThemesFolder)
+                    .WithDescription(TranslationKey.SettingsAppearanceThemeThemesFolderDescription)
                     .WithIcon(Symbol.FolderOpen)
-                    .WithAction(TranslationKey.SettingsThemeOpenFolder,
+                    .WithAction(TranslationKey.SettingsAppearanceThemeOpenFolderButton,
                         () => LinkOpener.OpenFolder(themes.ThemeFolderPath))
             ]);
     }
@@ -60,20 +59,19 @@ public class AppearanceSectionProvider(
     private SettingSection CreateFontDisplaySection()
     {
         return SettingSection
-            .Create(TranslatableString.FromRawString("Font & Display"))
+            .Create(TranslationKey.SettingsAppearanceSubsectionFontDisplay)
             .WithIcon(Symbol.TextFont)
             .WithSettings(
             [
                 ExpandableSetting
-                    .Create(TranslatableString.FromRawString("Editor Font"))
-                    .WithDescription(
-                        TranslatableString.FromRawString("Change the font family and size used in the editor."))
+                    .Create(TranslationKey.SettingsAppearanceEditorFont)
+                    .WithDescription(TranslationKey.SettingsAppearanceEditorFontDescription)
                     .WithIcon(Symbol.TextFont)
                     .WithChildren(
                         ActionSetting
-                            .Create(TranslatableString.FromRawString("Font Family"))
+                            .Create(TranslationKey.SettingsAppearanceFontFamily)
                             .WithDescription(translations.GetObservable(
-                                TranslationKey.SettingsPersonalizationFontDescription,
+                                TranslationKey.SettingsAppearanceCurrentFontDescription,
                                 appSettings.EditorFontFamily ?? "Default"))
                             .WithAction(TranslationKey.ButtonChange, async s =>
                             {
@@ -81,20 +79,19 @@ public class AppearanceSectionProvider(
                                 s.Description?.UpdateParameters(appSettings.EditorFontFamily ?? "Default");
                             }),
                         NumberSetting<int>
-                            .Create(TranslatableString.FromRawString("Font Size"))
+                            .Create(TranslationKey.SettingsAppearanceFontSize)
                             .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorFontSize))
                             .WithMinValue(8)
                             .WithMaxValue(48)
                             .WithFormatString(),
                         ToggleSetting
-                            .Create(TranslatableString.FromRawString("Mouse Wheel Zoom"))
-                            .WithDescription(TranslatableString.FromRawString(
-                                "Zoom the editor font size by holding Ctrl and scrolling the mouse wheel."))
+                            .Create(TranslationKey.SettingsAppearanceMouseWheelZoom)
+                            .WithDescription(TranslationKey.SettingsAppearanceMouseWheelZoomDescription)
                             .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsMouseWheelZoomEnabled))
                     ),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsPersonalizationHighlightCurrentLine)
+                    .Create(TranslationKey.SettingsAppearanceHighlightCurrentLine)
                     .WithIcon(Symbol.Highlight)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.HighlightCurrentLine))
             ]);
@@ -103,25 +100,25 @@ public class AppearanceSectionProvider(
     private SettingSection CreateSidebarLayoutSection()
     {
         return SettingSection
-            .Create(TranslatableString.FromRawString("Sidebar & Layout"))
+            .Create(TranslationKey.SettingsAppearanceSubsectionSidebarLayout)
             .WithIcon(Symbol.LayoutColumnTwo)
             .WithSettings(
             [
                 ToggleSetting
-                    .Create(TranslationKey.SettingsPersonalizationSidebarAnimations)
-                    .WithDescription(TranslationKey.SettingsPersonalizationSidebarAnimationsDescription)
+                    .Create(TranslationKey.SettingsAppearanceSidebarAnimations)
+                    .WithDescription(TranslationKey.SettingsAppearanceSidebarAnimationsDescription)
                     .WithIcon(Symbol.SlideTransition)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSidebarAnimationEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralSidebarWidthSync)
-                    .WithDescription(TranslationKey.SettingsGeneralSidebarWidthSyncDescription)
+                    .Create(TranslationKey.SettingsAppearanceSyncSidebarWidth)
+                    .WithDescription(TranslationKey.SettingsAppearanceSyncSidebarWidthDescription)
                     .WithIcon(Symbol.ColumnArrowRight)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSidebarWidthSyncEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralProjectSingleFolderClick)
-                    .WithDescription(TranslationKey.SettingsGeneralProjectSingleFolderClickDescription)
+                    .Create(TranslationKey.SettingsAppearanceProjectSingleFolderClick)
+                    .WithDescription(TranslationKey.SettingsAppearanceProjectSingleFolderClickDescription)
                     .WithIcon(Symbol.FolderArrowRight)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsProjectSingleClickEnabled))
             ]);

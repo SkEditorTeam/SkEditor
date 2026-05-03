@@ -19,26 +19,26 @@ public class AdvancedSectionProvider(
 {
     public SettingSection GetSection()
     {
-        return SettingSection.Create(TranslatableString.FromRawString("Advanced"))
+        return SettingSection.Create(TranslationKey.SettingsSectionAdvanced)
             .WithIcon(Symbol.Wrench)
             .WithSettings(
             [
                 ToggleSetting
-                    .Create(TranslationKey.SettingsAboutDevMode)
-                    .WithDescription(TranslationKey.SettingsAboutDevModeDescription)
+                    .Create(TranslationKey.SettingsAdvancedDeveloperMode)
+                    .WithDescription(TranslationKey.SettingsAdvancedDeveloperModeDescription)
                     .WithIcon(Symbol.Flash)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDevModeEnabled)),
 
                 ChoiceSetting<StartupMode>
-                    .Create(TranslationKey.SettingsGeneralUseSplashScreen)
-                    .WithDescription(TranslationKey.SettingsGeneralUseSplashScreenDescription)
+                    .Create(TranslationKey.SettingsAdvancedStartupSplashScreen)
+                    .WithDescription(TranslationKey.SettingsAdvancedStartupSplashScreenDescription)
                     .WithIcon(Symbol.Image)
                     .WithProperty(
                         binarySettings.GetProperty<StartupMode>(BinarySettingsProperty.SplashScreenMode))
                     .WithProvider(startupModeProvider),
 
                 ClickableActionSetting
-                    .Create(TranslationKey.SettingsAboutAppdata)
+                    .Create(TranslationKey.SettingsAdvancedOpenAppDataFolder)
                     .WithIcon(Symbol.Folder)
                     .WithAction(() => LinkOpener.OpenFolder(configs.GetAppDataPath()))
             ]);
