@@ -242,6 +242,7 @@
   "SettingsAppearanceEditorFontDescription": "Change the font family and size used in the editor.",
   "SettingsAppearanceFontFamily": "Font Family",
   "SettingsAppearanceCurrentFontDescription": "Current font: {0}",
+  "SettingsAppearanceCurrentFontDescriptionDefault": "Default",
   "SettingsAppearanceFontSize": "Font Size",
   "SettingsAppearanceMouseWheelZoom": "Mouse Wheel Zoom",
   "SettingsAppearanceMouseWheelZoomDescription": "Zoom the editor font size by holding Ctrl and scrolling the mouse wheel.",
