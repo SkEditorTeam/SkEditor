@@ -36,7 +36,14 @@ public class IntegrationsSectionProvider(
                     .Create(TranslationKey.SettingsIntegrationsDiscordRichPresence)
                     .WithDescription(TranslationKey.SettingsIntegrationsDiscordRichPresenceDescription)
                     .WithIcon(Symbol.Games)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDiscordRichPresenceEnabled))
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDiscordRichPresenceEnabled)),
+
+                ToggleSetting
+                    .Create(TranslationKey.SettingsIntegrationsDiscordRichPresenceShowDetails)
+                    .WithDescription(TranslationKey.SettingsIntegrationsDiscordRichPresenceShowDetailsDescription)
+                    .WithIcon(Symbol.TextBulletListSquare)
+                    .WithProperty(
+                        appSettings.GetProperty<bool>(AppSettingsProperty.IsDiscordRichPresenceDetailsEnabled))
             ]);
     }
 

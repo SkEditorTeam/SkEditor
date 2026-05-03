@@ -21,18 +21,21 @@ public partial class DiscordIntegrationService(
     {
         appSettings.PropertyChanged += (_, e) =>
         {
-            if (e.PropertyName != nameof(AppSettings.IsDiscordRichPresenceEnabled))
+            switch (e.PropertyName)
             {
-                return;
-            }
-
-            if (appSettings.IsDiscordRichPresenceEnabled)
-            {
-                Initialize();
-            }
-            else
-            {
-                Uninitialize();
+                case nameof(AppSettings.IsDiscordRichPresenceEnabled) when appSettings.IsDiscordRichPresenceEnabled:
+                    Initialize();
+                    break;
+                case nameof(AppSettings.IsDiscordRichPresenceEnabled):
+                    Uninitialize();
+                    break;
+                case nameof(AppSettings.IsDiscordRichPresenceDetailsEnabled)
+                    when appSettings.IsDiscordRichPresenceDetailsEnabled:
+                    UpdateDetails(tabs.SelectedTab);
+                    break;
+                case nameof(AppSettings.IsDiscordRichPresenceDetailsEnabled):
+                    _client?.UpdateDetails(string.Empty);
+                    break;
             }
         };
 
@@ -64,26 +67,12 @@ public partial class DiscordIntegrationService(
 
         tabs.SelectedTabChanged += tab =>
         {
-            if (!_client.IsInitialized)
+            if (!appSettings.IsDiscordRichPresenceEnabled || !appSettings.IsDiscordRichPresenceDetailsEnabled)
             {
                 return;
             }
 
-            if (tab is not FileTab fileTab)
-            {
-                _client.UpdateDetails("Idle");
-                return;
-            }
-
-            string tabName = fileTab.Header.Value;
-            tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
-            string translation = $"Editing: {tabName}";
-            if (translation.Length > 128)
-            {
-                translation = translation[..125] + "...";
-            }
-
-            _client.UpdateDetails(translation);
+            UpdateDetails(tab);
         };
     }
 
@@ -96,6 +85,30 @@ public partial class DiscordIntegrationService(
 
         _client.ClearPresence();
         _client.Dispose();
+    }
+
+    private void UpdateDetails(Tab? tab)
+    {
+        if (_client?.IsInitialized != true)
+        {
+            return;
+        }
+
+        if (tab is not FileTab fileTab)
+        {
+            _client.UpdateDetails("Idle");
+            return;
+        }
+
+        string tabName = fileTab.Header.Value;
+        tabName = UnicodeControlCharacterFilter().Replace(tabName, string.Empty);
+        string translation = $"Editing: {tabName}";
+        if (translation.Length > 128)
+        {
+            translation = translation[..125] + "...";
+        }
+
+        _client.UpdateDetails(translation);
     }
 
     [GeneratedRegex(@"[^\P{C}\n]+")]

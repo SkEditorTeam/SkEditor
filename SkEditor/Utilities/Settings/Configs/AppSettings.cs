@@ -77,6 +77,12 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial bool IsDiscordRichPresenceEnabled { get; set; } = true;
 
     /// <summary>
+    ///     Whether to show the current file name in Discord Rich Presence details.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsDiscordRichPresenceDetailsEnabled { get; set; } = true;
+
+    /// <summary>
     ///     Whether to enable single-click to open project folders in the Project Sidebar.
     /// </summary>
     [ObservableProperty]

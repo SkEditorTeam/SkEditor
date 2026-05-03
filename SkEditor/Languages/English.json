@@ -281,6 +281,8 @@
   "SettingsIntegrationsSubsectionDiscord": "Discord",
   "SettingsIntegrationsDiscordRichPresence": "Discord Rich Presence",
   "SettingsIntegrationsDiscordRichPresenceDescription": "Show SkEditor in your Discord status.",
+  "SettingsIntegrationsDiscordRichPresenceShowDetails": "Show details",
+  "SettingsIntegrationsDiscordRichPresenceShowDetailsDescription": "Show details about what you're doing in SkEditor (e.g. what file are you editing).",
   "SettingsIntegrationsSubsectionApiKeys": "API Keys",
   "SettingsIntegrationsApiKeysSkUnity": "skUnity",
   "SettingsIntegrationsApiKeysSkUnityDescription": "Used as a documentation provider and a script host (via skUnity Parser)",
