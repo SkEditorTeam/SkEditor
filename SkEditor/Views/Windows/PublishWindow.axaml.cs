@@ -24,14 +24,6 @@ public partial class PublishWindow : FAAppWindow
         WindowStyler.Style(this);
         TitleBar.ExtendsContentIntoTitleBar = false;
 
-        // WebsiteComboBox.SelectedIndex = SkEditorAPI.Configs.GetStateConfig().LastUsedPublishService switch
-        // {
-        //     "Pastebin" => 0,
-        //     "code.skript.pl" => 1,
-        //     "skUnity Parser" => 2,
-        //     _ => 0
-        // };
-
         KeyDown += (_, e) =>
         {
             if (e.Key == Key.Escape)

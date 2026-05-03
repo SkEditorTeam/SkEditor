@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Menu;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services;
 
-public class MenuService(IFileService files, ITabService tabs, Func<SettingsTab> settingsTabFactory) : IMenuService
+public class MenuService(
+    IFileService files,
+    ITabService tabs,
+    Func<SettingsTab> settingsTabFactory,
+    IWindowDialogService windowDialogs) : IMenuService
 {
     public IEnumerable<MainMenuItem> GetMainMenuItems()
     {
@@ -55,6 +60,11 @@ public class MenuService(IFileService files, ITabService tabs, Func<SettingsTab>
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAll, Symbol.SaveMultiple)
             .WithCommand(files.SaveAllAsync)
             .WithInputGesture("Ctrl+Alt+S")
+            .AddTo(fileMenu);
+
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPublish, Symbol.Share)
+            .WithCommand(windowDialogs.ShowPublishDialogAsync)
+            .WithInputGesture("Ctrl+Shift+P")
             .AddTo(fileMenu);
 
         return fileMenu;

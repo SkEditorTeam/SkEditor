@@ -7,7 +7,7 @@
         xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.PublishWindow" Icon="/Assets/SkEditor.ico"
-        Title="{localization:Translate WindowTitlePublish}" Height="400" Width="350" CanResize="False"
+        Title="{localization:Translate WindowTitlePublish}" Height="180" Width="300" CanResize="False"
         x:DataType="windows:PublishWindowViewModel"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
@@ -29,9 +29,11 @@
                          Grid.Column="0" />
                 <Button Width="35" Height="35" HorizontalAlignment="Right" Grid.Column="1"
                         Command="{Binding CopyCommand}"
-                        FontSize="18">
+                        Padding="8">
                     <Button.Content>
-                        <icons:SymbolIcon Symbol="Copy" />
+                        <Viewbox>
+                            <icons:SymbolIcon Symbol="Copy" />
+                        </Viewbox>
                     </Button.Content>
                 </Button>
             </Grid>
