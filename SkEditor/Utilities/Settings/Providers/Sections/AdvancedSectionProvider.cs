@@ -23,6 +23,12 @@ public class AdvancedSectionProvider(
             .WithIcon(Symbol.Wrench)
             .WithSettings(
             [
+                ToggleSetting
+                    .Create(TranslationKey.SettingsAboutDevMode)
+                    .WithDescription(TranslationKey.SettingsAboutDevModeDescription)
+                    .WithIcon(Symbol.Flash)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDevModeEnabled)),
+
                 ChoiceSetting<StartupMode>
                     .Create(TranslationKey.SettingsGeneralUseSplashScreen)
                     .WithDescription(TranslationKey.SettingsGeneralUseSplashScreenDescription)
@@ -30,12 +36,6 @@ public class AdvancedSectionProvider(
                     .WithProperty(
                         binarySettings.GetProperty<StartupMode>(BinarySettingsProperty.SplashScreenMode))
                     .WithProvider(startupModeProvider),
-
-                ToggleSetting
-                    .Create(TranslationKey.SettingsAboutDevMode)
-                    .WithDescription(TranslationKey.SettingsAboutDevModeDescription)
-                    .WithIcon(Symbol.Flash)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDevModeEnabled)),
 
                 ClickableActionSetting
                     .Create(TranslationKey.SettingsAboutAppdata)
