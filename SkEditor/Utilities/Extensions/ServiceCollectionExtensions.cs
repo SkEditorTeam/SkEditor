@@ -1,13 +1,29 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Files.Features;
+using SkEditor.Contracts.Services.Localization;
+using SkEditor.Contracts.Services.Windowing;
 using SkEditor.DataTemplates;
 using SkEditor.Features;
 using SkEditor.Models.Tabs;
+using SkEditor.Services;
+using SkEditor.Services.Files;
+using SkEditor.Services.Files.Features;
+using SkEditor.Services.Localization;
 using SkEditor.Services.Settings;
+using SkEditor.Services.Windowing;
+using SkEditor.Utilities.Publishing;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
 using SkEditor.Utilities.Settings.Providers.Sections;
+using SkEditor.ViewModels.Controls;
+using SkEditor.ViewModels.Pages;
+using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Pages;
+using SkEditor.Views.Windows;
 
 namespace SkEditor.Utilities.Extensions;
 
@@ -15,8 +31,77 @@ public static class ServiceCollectionExtensions
 {
     extension(IServiceCollection services)
     {
+        public void AddCoreServices()
+        {
+            services.AddSingleton<IStartupService, StartupService>();
+            services.AddSingleton<IMenuService, MenuService>();
+            services.AddSingleton<INotificationService, NotificationService>();
+            services.AddSingleton<ILogService, LogService>();
+            services.AddSingleton<IconProvider>();
+            services.AddSingleton<CrashChecker>();
+            services.AddSingleton<IThemeService, ThemeService>();
+            services.AddSingleton<IWelcomeService, WelcomeService>();
+            services.AddSingleton<ITranslationService, TranslationService>();
+            services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
+            services.AddSingleton<IClipboardService, ClipboardService>();
+            services.AddSingleton<NamedPipeServer>();
+
+            services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
+            services.AddHttpClient<IPublishService, PublishService>();
+        }
+
+        public void AddWindowing()
+        {
+            services.AddSingleton<MainWindowFactory>();
+            services.AddSingleton<WindowRegistry>();
+            services.AddSingleton<WindowInstanceService>();
+            services.AddSingleton<WindowStateService>();
+            services.AddSingleton<WindowErrorService>();
+            services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IZoomService, ZoomService>();
+        }
+
+        public void AddFileServices()
+        {
+            services.AddSingleton<ITabService, TabService>();
+            services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<IFileTabFactory, FileTabFactory>();
+            services.AddSingleton<DragDropService>();
+            services.AddSingleton<IFilePickerService, FilePickerService>();
+        }
+
+        public void AddViewModels()
+        {
+            services.AddTransient<MainWindowViewModel>();
+            services.AddTransient<MainMenuViewModel>();
+            services.AddTransient<RemoteConnectionViewModel>();
+            services.AddTransient<RemoteSidebarViewModel>();
+            services.AddTransient<FileTreeViewModel>();
+            services.AddTransient<ThemePageViewModel>();
+            services.AddTransient<WhatsNewPageViewModel>();
+            services.AddTransient<WelcomePageViewModel>();
+            services.AddTransient<SettingsPageViewModel>();
+            services.AddTransient<PublishWindowViewModel>();
+        }
+
+        public void AddViews()
+        {
+            services.AddTransient<MainWindow>();
+            services.AddTransient<SplashScreen>();
+            services.AddTransient<RemoteConnectionWindow>();
+            services.AddTransient<SettingsPage>();
+            services.AddTransient<WhatsNewPage>();
+
+            services.AddTransient<PublishWindow>();
+            services.AddSingleton<Func<PublishWindow>>(sp => sp.GetRequiredService<PublishWindow>);
+
+            services.AddTransient<SettingsTab>();
+            services.AddSingleton<Func<SettingsTab>>(sp => sp.GetRequiredService<SettingsTab>);
+        }
+
         public void AddEditorFeatures()
         {
+            services.AddSingleton<IFileFeatureService, FileFeatureService>();
             services.AddTransient<IEditorFeature, SaveIndicatorFeature>();
             services.AddTransient<IEditorFeature, ZoomFeature>();
             services.AddTransient<IEditorFeature, EditorOptionsFeature>();
@@ -28,6 +113,9 @@ public static class ServiceCollectionExtensions
 
         public void AddConfigs(BinarySettings binarySettings)
         {
+            services.AddSingleton<IConfigService, ConfigService>();
+            services.AddSingleton<LegacyConfigMigrator>();
+
             AddConfig(new AppSettings());
             AddConfig(new ConnectionsConfig());
             AddConfig(new ExperimentsConfig());
