@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Integrations;
+using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Windows;
@@ -11,20 +12,23 @@ namespace SkEditor.ViewModels.Windows;
 public partial class PublishWindowViewModel : ObservableObject
 {
     public PublishWindowViewModel(IPublishService publishService, INotificationService notifications,
-        IClipboardService clipboard, SecretsConfig secretsConfig)
+        IClipboardService clipboard, SecretsConfig secretsConfig, ITabService tabs)
     {
         SelectedType = PublishTypes[0];
-        SelectedLanguage = Languages[0];
 
         PublishCommand = new AsyncRelayCommand(async () =>
         {
-            string code = "Test code, todo: change it!";
+            if (tabs.SelectedTab is not FileTab fileTab)
+            {
+                notifications.ShowError("No file selected",
+                    "You need to have a file open and selected to publish its code. Please open a file and try again.");
+                return;
+            }
 
             string? apiKey = SelectedType switch
             {
                 { Type: PublishType.Pastebin } => secretsConfig.PastebinApiKey,
                 { Type: PublishType.SkUnity } => secretsConfig.SkUnityApiKey,
-                { Type: PublishType.CodeSkriptPl } => secretsConfig.CodeSkriptPlApiKey,
                 _ => null
             };
 
@@ -35,8 +39,9 @@ public partial class PublishWindowViewModel : ObservableObject
                 return;
             }
 
-            string language = SelectedLanguage.ToLower();
-            string? result = await publishService.PublishCodeAsync(code, apiKey, SelectedType.Type, language, false);
+            string code = fileTab.Document.Text;
+
+            string? result = await publishService.PublishCodeAsync(code, apiKey, SelectedType.Type);
             if (result is null)
             {
                 notifications.ShowError("Failed to publish code",
@@ -64,23 +69,14 @@ public partial class PublishWindowViewModel : ObservableObject
     public List<PublishTypeEntry> PublishTypes { get; } =
     [
         new(PublishType.Pastebin, "Pastebin"),
-        new(PublishType.SkUnity, "skUnity Parser"),
-        new(PublishType.CodeSkriptPl, "code.skript.pl")
-    ];
-
-    public List<string> Languages { get; } =
-    [
-        "Skript", "YAML", "Text"
+        new(PublishType.SkUnity, "skUnity Parser")
     ];
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(AreExtraFlagsSupported))]
     public partial PublishTypeEntry SelectedType { get; set; }
 
     [ObservableProperty]
     public partial string SelectedLanguage { get; set; }
-
-    public bool AreExtraFlagsSupported => SelectedType.Type == PublishType.CodeSkriptPl;
 
     public IRelayCommand PublishCommand { get; }
     public IRelayCommand CopyCommand { get; }

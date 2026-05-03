@@ -3,6 +3,5 @@
 public enum PublishType
 {
     Pastebin,
-    CodeSkriptPl,
     SkUnity
 }

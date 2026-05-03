@@ -21,13 +21,6 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <ComboBox IsVisible="{Binding AreExtraFlagsSupported}" HorizontalAlignment="Stretch" DockPanel.Dock="Top"
-                  ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
-
-        <CheckBox IsVisible="{Binding AreExtraFlagsSupported}"
-                  Content="{localization:Translate PublishWindowAnonymously}"
-                  DockPanel.Dock="Top" />
-
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Spacing="12">
             <Grid ColumnDefinitions="*,auto" VerticalAlignment="Bottom" ColumnSpacing="6">
                 <TextBox IsReadOnly="True" Focusable="False"

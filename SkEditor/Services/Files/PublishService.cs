@@ -8,18 +8,17 @@ using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Integrations;
+using SkEditor.Models.Tabs;
 
 namespace SkEditor.Utilities.Publishing;
 
-public class PublishService(HttpClient httpClient, ILogService logs) : IPublishService
+public class PublishService(HttpClient httpClient, ILogService logs, ITabService tabs) : IPublishService
 {
-    public async Task<string?> PublishCodeAsync(string code, string apiKey, PublishType type, string language,
-        bool isAnonymous)
+    public async Task<string?> PublishCodeAsync(string code, string apiKey, PublishType type)
     {
         return type switch
         {
             PublishType.Pastebin => await PublishPastebin(code, apiKey),
-            PublishType.CodeSkriptPl => await PublishCodeSkriptPl(code, apiKey, language, isAnonymous),
             PublishType.SkUnity => await PublishSkUnity(code, apiKey),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
@@ -53,38 +52,6 @@ public class PublishService(HttpClient httpClient, ILogService logs) : IPublishS
         return null;
     }
 
-    public async Task<string?> PublishCodeSkriptPl(string code, string apiKey, string language, bool isAnonymous)
-    {
-        try
-        {
-            string json = JsonSerializer.Serialize(new CodeSkriptPlCreateRequest
-            {
-                Key = apiKey,
-                Language = language,
-                Content = code,
-                Anonymous = isAnonymous
-            }, PublishingJsonContext.Default.CodeSkriptPlCreateRequest);
-
-            HttpResponseMessage response = await httpClient.PostAsync("https://code.skript.pl/api/v1/codes/create",
-                new StringContent(json, Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-
-            string responseString = await response.Content.ReadAsStringAsync();
-
-            CodeSkriptPlCreateResponse? result = JsonSerializer.Deserialize<CodeSkriptPlCreateResponse>(responseString,
-                PublishingJsonContext.Default.CodeSkriptPlCreateResponse);
-
-            string? url = result?.Url;
-            return url;
-        }
-        catch (Exception e)
-        {
-            logs.Error(e, "Failed to publish code to code.skript.pl");
-        }
-
-        return null;
-    }
-
     public async Task<string?> PublishSkUnity(string code, string apiKey)
     {
         try
@@ -92,9 +59,12 @@ public class PublishService(HttpClient httpClient, ILogService logs) : IPublishS
             string json = JsonSerializer.Serialize(new SkUnityCreateRequest { Content = code },
                 PublishingJsonContext.Default.SkUnityCreateRequest);
 
-            // TODO: add file name
-            // string? fileName = SkEditorAPI.Files.GetCurrentOpenedFile()?.Name;
-            string fileName = "skeditor-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".sk";
+            if (tabs.SelectedTab is not FileTab fileTab)
+            {
+                return null;
+            }
+
+            string fileName = $"{fileTab.Header}.sk";
 
             HttpRequestMessage request = new(HttpMethod.Post,
                 $"https://api.skunity.com/v1/{apiKey}/parser/savenewfile/{fileName}");
