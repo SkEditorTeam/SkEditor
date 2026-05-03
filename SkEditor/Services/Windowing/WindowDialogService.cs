@@ -22,6 +22,11 @@ public class WindowDialogService(
         await ShowDialogAsync(publishWindowFactory);
     }
 
+    public async Task ShowGoToLineDialogAsync()
+    {
+        await ShowDialogAsync(goToLineWindowFactory);
+    }
+
     private async Task ShowDialogAsync<T>(Func<T> windowFactory) where T : Window
     {
         if (windowRegistry.Active is not { } mainWindow)

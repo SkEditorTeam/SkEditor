@@ -101,6 +101,9 @@ public static class ServiceCollectionExtensions
             services.AddTransient<PublishWindow>();
             services.AddSingleton<Func<PublishWindow>>(sp => sp.GetRequiredService<PublishWindow>);
 
+            services.AddTransient<GoToLineWindow>();
+            services.AddSingleton<Func<GoToLineWindow>>(sp => sp.GetRequiredService<GoToLineWindow>);
+
             services.AddTransient<SettingsTab>();
             services.AddSingleton<Func<SettingsTab>>(sp => sp.GetRequiredService<SettingsTab>);
         }
@@ -115,6 +118,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<IEditorFeature, TextMateFeature>();
             services.AddTransient<IEditorFeature, HexColorFeature>();
             services.AddTransient<IEditorFeature, EditorSmoothScrollFeature>();
+            services.AddTransient<IEditorFeature, EditorCommandsFeature>();
         }
 
         public void AddConfigs(BinarySettings binarySettings)
@@ -165,6 +169,7 @@ public static class ServiceCollectionExtensions
         private void AddMainMenuProviders()
         {
             services.AddSingleton<IMenuProvider, FileMenuProvider>();
+            services.AddSingleton<IMenuProvider, EditMenuProvider>();
             services.AddSingleton<IMenuProvider, SettingsMenuProvider>();
         }
 
