@@ -7,6 +7,16 @@ namespace SkEditor.Utilities.Settings.Providers.Choice;
 
 public class LanguageChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider
 {
+    private static readonly Comparer<string> Comparer = Comparer<string>.Create((x, y) =>
+    {
+        if (x == "English")
+        {
+            return -1;
+        }
+
+        return y == "English" ? 1 : string.CompareOrdinal(x, y);
+    });
+
     public IEnumerable<object> GetValues()
     {
         List<string> availableLanguages = [];
@@ -18,7 +28,7 @@ public class LanguageChoiceProvider(ITranslationService translationService) : IS
             .Cast<string>());
 
         availableLanguages.Add("English");
-        availableLanguages.Sort();
+        availableLanguages.Sort(Comparer);
 
         return availableLanguages.Distinct();
     }
