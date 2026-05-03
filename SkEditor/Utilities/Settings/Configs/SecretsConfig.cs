@@ -21,18 +21,6 @@ public partial class SecretsConfig : BaseConfig<SecretsConfig>
     [ObservableProperty]
     public partial string PastebinApiKey { get; set; } = string.Empty;
 
-    /// <summary>
-    ///     The skript-mc.fr API key.
-    /// </summary>
-    [ObservableProperty]
-    public partial string SkriptMcApiKey { get; set; } = string.Empty;
-
-    /// <summary>
-    ///     The code.skript.pl API key.
-    /// </summary>
-    [ObservableProperty]
-    public partial string CodeSkriptPlApiKey { get; set; } = string.Empty;
-
     protected override string GetFileName()
     {
         return "secrets.json";

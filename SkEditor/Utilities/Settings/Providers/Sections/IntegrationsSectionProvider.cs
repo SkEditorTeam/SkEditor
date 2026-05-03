@@ -51,7 +51,14 @@ public class IntegrationsSectionProvider(
                     "Used as a documentation provider and a script host (via skUnity Parser)",
                     "skUnityIcon",
                     "https://skeditor.dev",
-                    secrets.GetProperty<string>(SecretsConfigProperty.SkUnityApiKey))
+                    secrets.GetProperty<string>(SecretsConfigProperty.SkUnityApiKey)),
+
+                CreateApiKeySetting(
+                    "Pastebin",
+                    "Used as a script host",
+                    "PastebinIcon",
+                    "https://skeditor.dev",
+                    secrets.GetProperty<string>(SecretsConfigProperty.PastebinApiKey))
             ]);
     }
 

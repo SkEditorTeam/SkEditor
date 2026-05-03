@@ -71,9 +71,7 @@ public class LegacyConfigMigrator(IConfigService config)
             experimentsConfig.HexPreviewEnabled = oldAppConfig.EnableHexPreview;
 
             secretsConfig.SkUnityApiKey = oldAppConfig.SkUnityApiKey;
-            secretsConfig.SkriptMcApiKey = oldAppConfig.SkriptMcApiKey;
             secretsConfig.PastebinApiKey = oldAppConfig.PastebinApiKey;
-            secretsConfig.CodeSkriptPlApiKey = oldAppConfig.CodeSkriptPlApiKey;
 
             await config.SaveAllConfigsAsync();
             File.Delete(oldSettings);
