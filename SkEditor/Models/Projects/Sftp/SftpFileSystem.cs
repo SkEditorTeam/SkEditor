@@ -5,13 +5,14 @@ using Renci.SshNet;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Sftp;
 
 public class SftpFileSystem(
     RemoteConnection connection,
     IRemoteConnectionService connectionService,
-    INotificationService notificationService,
+    INotificationService notifications,
     ILogService logService) : IFileSystem
 {
     public SftpClient Client { get; private set; } = null!;
@@ -36,7 +37,8 @@ public class SftpFileSystem(
 
             if (!Client.IsConnected || cancellationToken.IsCancellationRequested)
             {
-                notificationService.ShowError("Connection Failed", $"Failed to connect to {Connection.Name}");
+                notifications.ShowError(TranslatableString.FromRawString("Connection Failed"),
+                    TranslatableString.FromRawString("Failed to connect to {0}", Connection.Name));
                 return false;
             }
 
@@ -49,7 +51,8 @@ public class SftpFileSystem(
         }
         catch (Exception ex)
         {
-            notificationService.ShowError("Connection Error", ex.Message);
+            notifications.ShowError(TranslatableString.FromRawString("Connection Error"),
+                TranslatableString.FromRawString("Failed to connect to {0}: {1}", Connection.Name, ex.Message));
             Client.Dispose();
             return false;
         }

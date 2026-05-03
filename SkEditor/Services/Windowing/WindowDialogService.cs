@@ -4,6 +4,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Tabs;
+using SkEditor.Utilities.Localization;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Services.Windowing;
@@ -23,7 +24,7 @@ public class WindowDialogService(
 
         if (tabs.SelectedTab is not FileTab)
         {
-            notifications.ShowError("No file", "You must have a file open to publish.");
+            notifications.ShowError(TranslationKey.NoFileNotificationTitle, TranslationKey.NoFileNotificationMessage);
             return;
         }
 

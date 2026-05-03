@@ -3,6 +3,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using SkEditor.Contracts.Services;
 using SkEditor.Services.Windowing;
+using SkEditor.Utilities.Localization;
 using SkEditor.Views.Controls.Notifications;
 
 namespace SkEditor.Services;
@@ -10,6 +11,13 @@ namespace SkEditor.Services;
 public class NotificationService(WindowRegistry windowRegistry) : INotificationService
 {
     private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(4);
+
+    public void Show(TranslatableString title, TranslatableString message,
+        NotificationType type = NotificationType.Information,
+        TimeSpan? duration = null)
+    {
+        Show(title.Value, message.Value, type, duration);
+    }
 
     public void Show(string title, string message,
         NotificationType type = NotificationType.Information,
@@ -22,17 +30,17 @@ public class NotificationService(WindowRegistry windowRegistry) : INotificationS
         });
     }
 
-    public void ShowSuccess(string title, string message)
+    public void ShowSuccess(TranslatableString title, TranslatableString message)
     {
         Show(title, message, NotificationType.Success);
     }
 
-    public void ShowError(string title, string message)
+    public void ShowError(TranslatableString title, TranslatableString message)
     {
         Show(title, message, NotificationType.Error, TimeSpan.FromSeconds(8));
     }
 
-    public void ShowWarning(string title, string message)
+    public void ShowWarning(TranslatableString title, TranslatableString message)
     {
         Show(title, message, NotificationType.Warning);
     }

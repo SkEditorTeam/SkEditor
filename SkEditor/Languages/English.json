@@ -105,6 +105,8 @@
   "DeleteStorageElement": "Are you sure you want to delete {0} from the file system?",
   "UnsavedFileTitle": "Unsaved Changes",
   "UnsavedFileMessage": "This file has unsaved changes. Do you want to save them before closing?",
+  "NoFileNotificationTitle": "No file",
+  "NoFileNotificationMessage": "This action requires an open file. Please open a file first.",
   "AddonUpdateAvailableTitle": "Addon Update Available",
   "AddonUpdateAvailableMessage": "An update is available for '{0}'.\\n\\nVisit the Marketplace to update it for the latest fixes and SkEditor compatibility.",
   "AddonLoadErrorsTitle": "Addons with errors!",

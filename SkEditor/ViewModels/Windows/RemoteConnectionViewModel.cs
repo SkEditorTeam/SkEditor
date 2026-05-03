@@ -53,8 +53,8 @@ public partial class RemoteConnectionViewModel(
                 $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
 
             notificationService.Show(
-                translation.Get(TranslationKey.RemoteConnectionAddSuccessTitle),
-                translation.Get(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort),
+                TranslationKey.RemoteConnectionAddSuccessTitle,
+                new TranslatableString(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort),
                 NotificationType.Success,
                 TimeSpan.FromSeconds(5)
             );
