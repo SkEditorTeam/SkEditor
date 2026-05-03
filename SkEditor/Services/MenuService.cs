@@ -13,6 +13,7 @@ namespace SkEditor.Services;
 public class MenuService(
     IFileService files,
     ITabService tabs,
+    ITabCloseService tabClose,
     Func<SettingsTab> settingsTabFactory,
     IWindowDialogService windowDialogs) : IMenuService
 {
@@ -62,9 +63,35 @@ public class MenuService(
             .WithInputGesture("Ctrl+Alt+S")
             .AddTo(fileMenu);
 
+        MainMenuItem.Separator.AddTo(fileMenu);
+
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPublish, Symbol.Share)
             .WithCommand(windowDialogs.ShowPublishDialogAsync)
             .WithInputGesture("Ctrl+Shift+P")
+            .AddTo(fileMenu);
+
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderClose, Symbol.Dismiss)
+            .WithItems([
+                MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseCurrentFile, Symbol.Document)
+                    .WithCommand(tabs.SelectedTab?.CloseCommand)
+                    .WithInputGesture("Ctrl+W"),
+
+                MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAll, Symbol.DocumentMultiple)
+                    .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.All))
+                    .WithInputGesture("Ctrl+Shift+W"),
+
+                MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAllButCurrent, Symbol.DocumentMultiple)
+                    .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.AllButCurrent)),
+
+                MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseUnsaved, Symbol.DocumentMultiple)
+                    .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.Unsaved)),
+
+                MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseLeft, Symbol.DocumentArrowLeft)
+                    .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.Left)),
+
+                MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseRight, Symbol.DocumentArrowRight)
+                    .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.Right))
+            ])
             .AddTo(fileMenu);
 
         return fileMenu;

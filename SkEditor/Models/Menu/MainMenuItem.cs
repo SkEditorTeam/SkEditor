@@ -60,7 +60,7 @@ public partial class MainMenuItem : ObservableObject
         return this;
     }
 
-    public MainMenuItem WithCommand(IRelayCommand command)
+    public MainMenuItem WithCommand(IRelayCommand? command)
     {
         Command = command;
         return this;

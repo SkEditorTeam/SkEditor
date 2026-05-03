@@ -7,7 +7,7 @@ using SkEditor.Models.Tabs;
 
 namespace SkEditor.Services.Files;
 
-public class TabService(IFileFeatureService featureService) : ITabService
+public class TabService(IFileFeatureService features) : ITabService
 {
     public ObservableCollection<Tab> Tabs { get; } = [];
 
@@ -30,7 +30,7 @@ public class TabService(IFileFeatureService featureService) : ITabService
 
         if (tab is FileTab fileTab)
         {
-            featureService.OnTabOpened(fileTab);
+            features.OnTabOpened(fileTab);
         }
 
         Tabs.Add(tab);
@@ -47,13 +47,13 @@ public class TabService(IFileFeatureService featureService) : ITabService
 
         if (tab is FileTab fileTab)
         {
-            featureService.OnTabClosed(fileTab);
+            features.OnTabClosed(fileTab);
         }
     }
 
-    public void OpenUniqueTab<T>(Func<T> factory) where T : Tab
+    public void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple) where T : Tab
     {
-        if (Tabs.OfType<T>().FirstOrDefault() is { } existing)
+        if (!allowMultiple && Tabs.OfType<T>().FirstOrDefault() is { } existing)
         {
             SelectedTab = existing;
             return;
