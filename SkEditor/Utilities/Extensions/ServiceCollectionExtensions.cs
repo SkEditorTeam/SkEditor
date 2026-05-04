@@ -64,7 +64,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<WindowErrorService>();
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IWindowDialogService, WindowDialogService>();
-            services.AddSingleton<IZoomService, ZoomService>();
+            services.AddSingleton<ShortcutsService>();
         }
 
         public void AddFileServices()
@@ -73,8 +73,9 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<ITabCloseService, TabCloseService>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IFileTabFactory, FileTabFactory>();
-            services.AddSingleton<DragDropService>();
+            services.AddSingleton<IZoomService, ZoomService>();
             services.AddSingleton<IFilePickerService, FilePickerService>();
+            services.AddSingleton<DragDropService>();
         }
 
         public void AddViewModels()

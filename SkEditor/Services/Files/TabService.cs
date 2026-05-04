@@ -24,6 +24,12 @@ public class TabService(IFileFeatureService features) : ITabService
 
     public event Action<Tab?>? SelectedTabChanged;
 
+    public void SwitchTab(int index)
+    {
+        if (index < 0 || index >= Tabs.Count) return;
+        SelectedTab = Tabs[index];
+    }
+
     public void OpenTab(Tab tab)
     {
         tab.CloseRequested += OnTabCloseRequested;

@@ -40,6 +40,7 @@ public partial class MainWindow : FAAppWindow
         IThemeService themes,
         ITranslationService translation,
         DragDropService dragDropService,
+        ShortcutsService shortcutsService,
         IDiscordIntegrationService discordIntegration)
         : this()
     {
@@ -60,16 +61,17 @@ public partial class MainWindow : FAAppWindow
 
         LayoutTransform.LayoutTransform = new ScaleTransform(appSettings.CustomUiScale, appSettings.CustomUiScale);
 
-        AttachEvents(dragDropService);
+        AttachEvents(dragDropService, shortcutsService);
     }
 
     public new SplashScreen? SplashScreen { get; set; }
 
-    private void AttachEvents(DragDropService dragDropService)
+    private void AttachEvents(DragDropService dragDropService, ShortcutsService shortcutsService)
     {
         Loaded += async (_, _) => await OnLoaded();
         Closing += async (_, _) => await OnClosing();
         dragDropService.AttachDragDropEvents(this);
+        shortcutsService.AttachKeyEvents(this);
     }
 
     public async Task OnClosing()
