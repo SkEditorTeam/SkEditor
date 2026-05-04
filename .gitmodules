@@ -1,6 +1,8 @@
 [submodule "External/SkFluentAvalonia"]
 	path = External/SkFluentAvalonia
 	url = https://github.com/SkEditorTeam/SkFluentAvalonia
+	branch = FAv3
 [submodule "External/SkAvaloniaEdit"]
 	path = External/SkAvaloniaEdit
 	url = https://github.com/SkEditorTeam/SkAvaloniaEdit
+	branch = master
