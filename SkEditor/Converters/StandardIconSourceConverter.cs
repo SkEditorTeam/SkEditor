@@ -3,16 +3,17 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
+using SkEditor.Models.UI;
 using SkEditor.Utilities.Icons;
 using SkEditor.Utilities.Settings.Models;
 
 namespace SkEditor.Converters;
 
-public class SettingIconSourceConverter : IValueConverter
+public class StandardIconSourceConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not SettingIcon settingIcon)
+        if (value is not StandardIcon settingIcon)
         {
             return null;
         }

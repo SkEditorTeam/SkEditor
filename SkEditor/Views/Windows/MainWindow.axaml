@@ -8,6 +8,7 @@
         xmlns:controls="clr-namespace:SkEditor.Views.Controls"
         xmlns:notifications="clr-namespace:SkEditor.Views.Controls.Notifications"
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
+        xmlns:sidebar="clr-namespace:SkEditor.Views.Controls.Sidebar"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         x:DataType="windows:MainWindowViewModel"
@@ -62,7 +63,8 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Sidebar -->
-                    <!-- <controls:FASideBarControl Name="SideBar" Grid.Column="0" Grid.Row="0" MinWidth="48" /> -->
+                    <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0"
+                                            MinWidth="48" />
                     <Border Name="SidebarContentBorder" Grid.Column="2" Grid.Row="0" ClipToBounds="True" />
                     <GridSplitter Name="Splitter" Grid.Column="3" Grid.Row="0" Width="10" Background="Transparent"
                                   ResizeDirection="Columns" />

@@ -24,7 +24,7 @@
         <GridLength x:Key="ToggleSwitchPreContentMargin">2</GridLength>
         <GridLength x:Key="ToggleSwitchPostContentMargin">2</GridLength>
         <!-- ReSharper restore Xaml.RedundantResource -->
-        <converters:SettingIconSourceConverter x:Key="SettingIconSourceConverter" />
+        <converters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
         <converters:InfoBarSeverityConverter x:Key="InfoBarSeverityConverter" />
         <converters:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
         <converters:OrientationConverter x:Key="OrientationConverter" />
@@ -119,7 +119,7 @@
             <DataTemplate DataType="models:SettingSection">
                 <controls:FANavigationViewItem Content="{Binding Name.Value}"
                                                SelectsOnInvoked="{Binding Selectable}"
-                                               IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                               IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                                MenuItemsSource="{Binding Subsections}" />
             </DataTemplate>
         </controls:FANavigationView.MenuItemTemplate>
@@ -140,7 +140,7 @@
                                 <DataTemplate x:Key="StandardTemplate" x:DataType="models:SettingElement">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
-                                        IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                        IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         Footer="{Binding}" />
                                 </DataTemplate>
@@ -148,7 +148,7 @@
                                 <DataTemplate x:Key="ClickableTemplate" x:DataType="types:ClickableActionSetting">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
-                                        IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                        IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         IsClickEnabled="True"
                                         Command="{Binding Command}" />
@@ -157,7 +157,7 @@
                                 <DataTemplate x:Key="InfoTemplate" x:DataType="types:InfoSetting">
                                     <controls:FAInfoBar
                                         Title="{Binding Name.Value}"
-                                        IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                        IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Message="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         IsOpen="True" IsClosable="False"
                                         Severity="{Binding Type, Converter={StaticResource InfoBarSeverityConverter}}" />
@@ -166,7 +166,7 @@
                                 <DataTemplate x:Key="ExpandableTemplate" x:DataType="types:ExpandableSetting">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
-                                        IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                        IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         ItemsSource="{Binding Children}">
                                         <controls:FASettingsExpander.ItemTemplate>
@@ -177,7 +177,7 @@
                                                         <controls:FASettingsExpanderItem
                                                             Content="{Binding Name.Value}"
                                                             Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                            IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                                            IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                                             Footer="{Binding}" />
                                                     </DataTemplate>
 
@@ -186,7 +186,7 @@
                                                         <controls:FASettingsExpanderItem
                                                             Content="{Binding Name.Value}"
                                                             Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                            IconSource="{Binding Icon, Converter={StaticResource SettingIconSourceConverter}}"
+                                                            IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                                             IsClickEnabled="True"
                                                             Command="{Binding Command}" />
                                                     </DataTemplate>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Models;
@@ -7,7 +8,7 @@ namespace SkEditor.Utilities.Settings.Models;
 public class SettingSection(TranslatableString name) : ObservableObject
 {
     public TranslatableString Name { get; init; } = name;
-    public SettingIcon Icon { get; private set; }
+    public StandardIcon Icon { get; private set; }
     public List<SettingElement> Settings { get; private set; } = [];
     public List<SettingSection> Subsections { get; private set; } = [];
 
@@ -18,7 +19,7 @@ public class SettingSection(TranslatableString name) : ObservableObject
         return new SettingSection(name);
     }
 
-    public SettingSection WithIcon(SettingIcon icon)
+    public SettingSection WithIcon(StandardIcon icon)
     {
         Icon = icon;
         return this;

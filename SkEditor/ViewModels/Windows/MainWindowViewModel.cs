@@ -16,6 +16,7 @@ public partial class MainWindowViewModel : ObservableRecipient
 
     public MainWindowViewModel(ITabService tabService, IFileService fileService, AppSettings appSettings,
         MainMenuViewModel mainMenu,
+        SidebarViewModel sidebar,
         WelcomePageViewModel welcomePage)
     {
         _tabService = tabService;
@@ -24,6 +25,7 @@ public partial class MainWindowViewModel : ObservableRecipient
         AppSettings = appSettings;
 
         MainMenu = mainMenu;
+        Sidebar = sidebar;
         WelcomePage = welcomePage;
 
         _tabService.SelectedTabChanged += tab =>
@@ -35,6 +37,7 @@ public partial class MainWindowViewModel : ObservableRecipient
 
     public AppSettings AppSettings { get; }
     public MainMenuViewModel MainMenu { get; }
+    public SidebarViewModel Sidebar { get; }
     public WelcomePageViewModel WelcomePage { get; }
 
     public ObservableCollection<Tab> Tabs => _tabService.Tabs;
