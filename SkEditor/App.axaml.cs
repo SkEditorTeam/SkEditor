@@ -103,6 +103,7 @@ public class App : Application
         services.AddEditorFeatures();
         services.AddEditorCommands();
         services.AddTabViewLocator();
+        services.AddSidebar();
     }
 
     public static string GetInformationalVersion()

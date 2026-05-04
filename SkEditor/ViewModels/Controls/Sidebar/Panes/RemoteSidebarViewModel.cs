@@ -9,7 +9,7 @@ using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 
-namespace SkEditor.ViewModels.Controls;
+namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 
 public partial class RemoteSidebarViewModel(
     FileTreeViewModel fileTree,

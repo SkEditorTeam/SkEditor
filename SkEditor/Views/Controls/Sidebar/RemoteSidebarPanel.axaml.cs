@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls;
-using SkEditor.ViewModels.Controls;
+using RemoteSidebarViewModel = SkEditor.ViewModels.Controls.Sidebar.Panes.RemoteSidebarViewModel;
 
 namespace SkEditor.Views.Controls.Sidebar;
 

@@ -23,10 +23,13 @@ using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
 using SkEditor.Utilities.Settings.Providers.Sections;
 using SkEditor.ViewModels.Controls;
+using SkEditor.ViewModels.Controls.Sidebar.Panes;
 using SkEditor.ViewModels.Pages;
 using SkEditor.ViewModels.Windows;
+using SkEditor.Views.Controls.Sidebar;
 using SkEditor.Views.Pages;
 using SkEditor.Views.Windows;
+using RemoteSidebarViewModel = SkEditor.ViewModels.Controls.Sidebar.Panes.RemoteSidebarViewModel;
 
 namespace SkEditor.Utilities.Extensions;
 
@@ -200,6 +203,17 @@ public static class ServiceCollectionExtensions
 
                 return locator;
             });
+        }
+
+        public void AddSidebar()
+        {
+            services.AddTransient<ISidebarPanelViewModel, ExplorerViewModel>();
+
+            services.AddSingleton<SidebarViewModel>();
+
+            SidebarPaneViewLocator viewLocator = new();
+            viewLocator.Register<ExplorerViewModel, ExplorerView>();
+            services.AddSingleton(viewLocator);
         }
     }
 }
