@@ -25,7 +25,6 @@ public partial class RemoteExplorerViewModel(
 
     public ObservableCollection<RemoteConnection> RemoteConnections { get; } = new(connectionsConfig.Connections);
 
-    public bool NoSelectedConnection => SelectedConnection == null;
     public string Name => "Remote Explorer";
     public StandardIcon Icon => "RemoteDesktopIcon";
 
@@ -35,8 +34,6 @@ public partial class RemoteExplorerViewModel(
         {
             _ = HandleConnectionChangedAsync(value);
         }
-
-        OnPropertyChanged(nameof(NoSelectedConnection));
     }
 
     private async Task HandleConnectionChangedAsync(RemoteConnection value)

@@ -2,7 +2,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:panes="clr-namespace:SkEditor.ViewModels.Controls.Sidebar.Panes"
+             xmlns:projects="clr-namespace:SkEditor.Views.Controls.Projects"
+             xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="panes:ExplorerViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.ExplorerView">
-    Welcome to Avalonia!
+
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12"
+                    IsVisible="{Binding FolderPath, Converter={x:Static ObjectConverters.IsNull}}">
+            <Viewbox Height="60" Opacity="0.5">
+                <controls:FAIconSourceElement IconSource="{StaticResource FolderDismissIcon}"
+                                              HorizontalAlignment="Center" />
+            </Viewbox>
+            <StackPanel Spacing="12">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="No folder opened" HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
+
+                    <TextBlock Text="Open a local folder to manage your scripts."
+                               HorizontalAlignment="Center" TextAlignment="Center"
+                               FontSize="13" MaxWidth="220" Opacity="0.6" Margin="0,0,0,8" />
+                </StackPanel>
+
+                <Button HorizontalAlignment="Center" Content="Open Folder" />
+            </StackPanel>
+        </StackPanel>
+
+        <projects:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}"
+                               IsVisible="{Binding $parent[UserControl].((panes:ExplorerViewModel)DataContext)?.FolderPath, Converter={x:Static ObjectConverters.IsNotNull}}"
+                               Margin="4,12,4,8" />
+    </Grid>
 </UserControl>

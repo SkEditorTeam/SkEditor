@@ -8,7 +8,7 @@
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:panes="clr-namespace:SkEditor.ViewModels.Controls.Sidebar.Panes"
              x:DataType="panes:RemoteExplorerViewModel"
-             x:Class="SkEditor.Views.Controls.Sidebar.RemoteSidebarPane">
+             x:Class="SkEditor.Views.Controls.Sidebar.RemoteExplorerView">
 
     <UserControl.Styles>
         <Style Selector="Button.barButton">
@@ -47,12 +47,12 @@
             </ComboBox>
         </DockPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" Spacing="12"
-                    IsVisible="{Binding NoSelectedConnection}">
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12"
+                    IsVisible="{Binding SelectedConnection, Converter={x:Static ObjectConverters.IsNull}}">
             <Viewbox Height="64" Opacity="0.5">
                 <icons:SymbolIcon Symbol="CloudOff" HorizontalAlignment="Center" />
             </Viewbox>
-            <StackPanel Orientation="Vertical" Spacing="4">
+            <StackPanel Spacing="4">
                 <TextBlock Text="No remote connection" HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
                 <TextBlock Text="Create a remote connection to view and edit files on a remote server."
                            HorizontalAlignment="Center" TextAlignment="Center"
@@ -60,7 +60,7 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" Spacing="12"
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12"
                     IsVisible="{Binding FileTree.IsLoading}">
             <Viewbox Height="64" Opacity="0.5" OpacityMask="White">
                 <controls:FAProgressRing HorizontalAlignment="Center" />
