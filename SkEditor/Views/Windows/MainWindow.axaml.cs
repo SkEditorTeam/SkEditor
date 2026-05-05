@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
@@ -73,35 +72,6 @@ public partial class MainWindow : FAAppWindow
         Closing += async (_, _) => await OnClosing();
         dragDropService.AttachDragDropEvents(this);
         shortcutsService.AttachKeyEvents(this);
-
-        DataContextChanged += (s, e) =>
-        {
-            if (DataContext is MainWindowViewModel vm)
-            {
-                vm.Sidebar.PropertyChanged += Sidebar_PropertyChanged;
-            }
-        };
-    }
-
-    private void Sidebar_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(SidebarViewModel.SelectedItem))
-        {
-            return;
-        }
-
-        SidebarViewModel sidebarVm = (SidebarViewModel)sender!;
-        if (sidebarVm.SelectedItem != null)
-        {
-            return;
-        }
-
-        if (CoreGrid.ColumnDefinitions.Count == 0)
-        {
-            return;
-        }
-
-        CoreGrid.ColumnDefinitions[0].Width = GridLength.Auto;
     }
 
     public async Task OnClosing()

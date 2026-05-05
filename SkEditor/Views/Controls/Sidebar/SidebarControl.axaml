@@ -5,6 +5,7 @@
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:layout="clr-namespace:SkEditor.Converters.Layout"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.Sidebar.SidebarControl"
              x:DataType="vms:SidebarViewModel">
@@ -32,12 +33,15 @@
 
     <UserControl.Resources>
         <converters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
+        <layout:SidebarWidthConverter x:Key="SidebarWidthConverter" />
+        <layout:SidebarMinWidthConverter x:Key="SidebarMinWidthConverter" />
     </UserControl.Resources>
 
     <Grid Name="GridPanels">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" MinWidth="400" />
+            <ColumnDefinition Width="{Binding SelectedItem, Converter={StaticResource SidebarWidthConverter}}"
+                              MinWidth="{Binding SelectedItem, Converter={StaticResource SidebarMinWidthConverter}}" />
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" Width="50" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"

@@ -25,11 +25,19 @@ public partial class MainWindowViewModel : ObservableRecipient
         AppSettings = appSettings;
 
         MainMenu = mainMenu;
-        Sidebar = sidebar;
         WelcomePage = welcomePage;
 
         _tabService.SelectedTabChanged += tab =>
             SelectedTab = tab;
+
+        Sidebar = sidebar;
+        Sidebar.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(SidebarViewModel.SelectedItem) && Sidebar.SelectedItem == null)
+            {
+                SidebarColumnWidth = null;
+            }
+        };
     }
 
     [ObservableProperty]
@@ -39,6 +47,9 @@ public partial class MainWindowViewModel : ObservableRecipient
     public MainMenuViewModel MainMenu { get; }
     public SidebarViewModel Sidebar { get; }
     public WelcomePageViewModel WelcomePage { get; }
+
+    [ObservableProperty]
+    public partial double? SidebarColumnWidth { get; set; } = null;
 
     public ObservableCollection<Tab> Tabs => _tabService.Tabs;
 
