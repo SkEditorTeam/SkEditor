@@ -29,7 +29,6 @@ using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Controls.Sidebar;
 using SkEditor.Views.Pages;
 using SkEditor.Views.Windows;
-using RemoteSidebarViewModel = SkEditor.ViewModels.Controls.Sidebar.Panes.RemoteSidebarViewModel;
 
 namespace SkEditor.Utilities.Extensions;
 
@@ -87,7 +86,6 @@ public static class ServiceCollectionExtensions
             services.AddTransient<MainMenuViewModel>();
             services.AddTransient<SidebarViewModel>();
             services.AddTransient<RemoteConnectionViewModel>();
-            services.AddTransient<RemoteSidebarViewModel>();
             services.AddTransient<FileTreeViewModel>();
             services.AddTransient<ThemePageViewModel>();
             services.AddTransient<WhatsNewPageViewModel>();
