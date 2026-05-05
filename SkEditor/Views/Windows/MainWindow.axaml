@@ -63,7 +63,7 @@
                         <ColumnDefinition
                             Width="{Binding SidebarColumnWidth, Mode=TwoWay, Converter={StaticResource DoubleToGridLengthConverter}}"
                             MinWidth="{Binding SidebarColumnWidth, Converter={StaticResource SidebarColumnMinWidthConverter}}"
-                            MaxWidth="600" />
+                            MaxWidth="800" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" MinWidth="300" />
                     </Grid.ColumnDefinitions>
@@ -71,7 +71,8 @@
                     <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" />
 
                     <GridSplitter Name="Splitter" Grid.Column="1" Background="Transparent" ResizeDirection="Columns"
-                                  IsVisible="{Binding Sidebar.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                  Width="10"
+                                  IsHitTestVisible="{Binding Sidebar.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
                     <controls:MainTabView Grid.Column="2" VerticalAlignment="Stretch" />
                 </Grid>
