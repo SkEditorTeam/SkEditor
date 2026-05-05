@@ -11,23 +11,8 @@
              x:DataType="vms:SidebarViewModel">
 
     <UserControl.Styles>
-        <Style Selector="Grid#GridPanels > Border">
-            <Setter Property="Padding" Value="6" />
-        </Style>
-
-        <Style Selector="Button.barButton">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="#CCFFFFFF" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="CornerRadius" Value="7" />
-            <Setter Property="Padding" Value="8" />
-            <Setter Property="Width" Value="38" />
-        </Style>
         <Style Selector="Separator">
             <Setter Property="Margin" Value="0,1" />
-        </Style>
-        <Style Selector="TreeViewItem">
-            <Setter Property="FontWeight" Value="Regular" />
         </Style>
     </UserControl.Styles>
 
@@ -57,8 +42,9 @@
                     <Style Selector="ListBoxItem">
                         <Setter Property="CornerRadius" Value="7" />
                         <Setter Property="Padding" Value="8" />
-                        <Setter Property="Width" Value="24" />
-                        <Setter Property="Height" Value="24" />
+                        <Setter Property="MinWidth" Value="40" />
+                        <Setter Property="Width" Value="40" />
+                        <Setter Property="Height" Value="40" />
                         <Setter Property="HorizontalAlignment" Value="Center" />
                         <Setter Property="Margin" Value="0,0,0,8" />
                         <Setter Property="Foreground" Value="#CCFFFFFF" />
@@ -79,7 +65,15 @@
 
         <Border Grid.Column="1" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
                 Margin="10,0,0,0" IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
-            <ContentControl Content="{Binding SelectedItem}" />
+            <Grid RowDefinitions="Auto,Auto,*">
+                <TextBlock Grid.Row="0" Text="{Binding SelectedItem.Name, FallbackValue={x:Null}}"
+                           FontWeight="DemiBold"
+                           Margin="20,10,20,10" />
+
+                <Separator Grid.Row="1" Margin="0,0,0,10" />
+
+                <ContentControl Grid.Row="2" Content="{Binding SelectedItem}" />
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

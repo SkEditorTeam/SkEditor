@@ -18,25 +18,10 @@
             <Setter Property="Width" Value="30" />
             <Setter Property="Height" Value="30" />
         </Style>
-        <Style Selector="Separator">
-            <Setter Property="Margin" Value="8,4" />
-        </Style>
-        <Style Selector="TreeViewItem">
-            <Setter Property="FontWeight" Value="Regular" />
-        </Style>
-
-        <Style Selector="icons|SymbolIcon">
-            <Setter Property="FontSize" Value="18.5" />
-        </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*">
-        <TextBlock Grid.Row="0" Text="Remote Connections" FontWeight="DemiBold"
-                   Margin="20,10,20,10" />
-
-        <Separator Grid.Row="1" Margin="0,0,0,10" />
-
-        <DockPanel Grid.Row="2" Margin="12,0,12,0" HorizontalSpacing="8">
+    <Grid RowDefinitions="Auto,*">
+        <DockPanel Grid.Row="0" Margin="12,0,12,0" HorizontalSpacing="8">
             <Button Classes="barButton" Command="{Binding NewRemoteConnectionCommand}" DockPanel.Dock="Right"
                     ToolTip.Tip="Add Remote Connection"
                     VerticalAlignment="Center">
@@ -62,7 +47,7 @@
             </ComboBox>
         </DockPanel>
 
-        <StackPanel Grid.Row="3" Orientation="Vertical" VerticalAlignment="Center" Spacing="12"
+        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" Spacing="12"
                     IsVisible="{Binding NoSelectedConnection}">
             <Viewbox Height="64" Opacity="0.5">
                 <icons:SymbolIcon Symbol="CloudOff" HorizontalAlignment="Center" />
@@ -75,7 +60,7 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="3" Orientation="Vertical" VerticalAlignment="Center" Spacing="12"
+        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" Spacing="12"
                     IsVisible="{Binding FileTree.IsLoading}">
             <Viewbox Height="64" Opacity="0.5" OpacityMask="White">
                 <controls:FAProgressRing HorizontalAlignment="Center" />
@@ -83,7 +68,7 @@
             <TextBlock Text="Connecting..." HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
         </StackPanel>
 
-        <projects:FileTreeView Grid.Row="3" DataContext="{Binding FileTree}"
+        <projects:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}"
                                Margin="4,12,4,8" />
     </Grid>
 </UserControl>

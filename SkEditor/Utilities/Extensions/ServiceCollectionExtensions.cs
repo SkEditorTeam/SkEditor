@@ -208,11 +208,13 @@ public static class ServiceCollectionExtensions
         public void AddSidebar()
         {
             services.AddTransient<ISidebarPanelViewModel, ExplorerViewModel>();
+            services.AddTransient<ISidebarPanelViewModel, RemoteExplorerViewModel>();
 
             services.AddSingleton<SidebarViewModel>();
 
             SidebarPaneViewLocator viewLocator = new();
             viewLocator.Register<ExplorerViewModel, ExplorerView>();
+            viewLocator.Register<RemoteExplorerViewModel, RemoteSidebarPanel>();
             services.AddSingleton(viewLocator);
         }
     }
