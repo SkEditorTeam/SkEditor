@@ -64,7 +64,6 @@ public class LegacyConfigMigrator(IConfigService config)
 
             stateConfig.LastUsedPublishService = oldAppConfig.LastUsedPublishService;
             stateConfig.GuiGeneratorSkriptGuiAddonUsed = oldAppConfig.UseSkriptGui;
-            stateConfig.SidebarPanelSizes = oldAppConfig.SidebarPanelSizes;
 
             experimentsConfig.AutoCompletionPrototypeEnabled = oldAppConfig.EnableAutoCompletionExperiment;
             experimentsConfig.HexPreviewEnabled = oldAppConfig.EnableHexPreview;

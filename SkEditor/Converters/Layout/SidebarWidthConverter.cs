@@ -5,19 +5,6 @@ using Avalonia.Data.Converters;
 
 namespace SkEditor.Converters.Layout;
 
-public class SidebarWidthConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return value != null ? new GridLength(1, GridUnitType.Star) : GridLength.Auto;
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
 public class SidebarColumnMinWidthConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

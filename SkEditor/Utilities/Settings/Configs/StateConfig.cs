@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization.Metadata;
+﻿using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Settings.Attributes;
 
@@ -17,10 +16,10 @@ public partial class StateConfig : BaseConfig<StateConfig>
     public partial string LastUsedPublishService { get; set; } = "Pastebin";
 
     /// <summary>
-    ///     The sizes of the sidebar panels.
+    ///     The size of the sidebar pane.
     /// </summary>
     [ObservableProperty]
-    public partial Dictionary<string, int> SidebarPanelSizes { get; set; } = new();
+    public partial double SidebarPaneSize { get; set; } = 250;
 
     /// <summary>
     ///     Whether to use the skript-gui addon syntax in the GUI Generator instead of the default Skript syntax.
