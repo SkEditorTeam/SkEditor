@@ -19,7 +19,7 @@ public partial class StateConfig : BaseConfig<StateConfig>
     ///     The size of the sidebar pane.
     /// </summary>
     [ObservableProperty]
-    public partial double SidebarPaneSize { get; set; } = 250;
+    public partial double SidebarPaneSize { get; set; } = 320;
 
     /// <summary>
     ///     Whether to use the skript-gui addon syntax in the GUI Generator instead of the default Skript syntax.
