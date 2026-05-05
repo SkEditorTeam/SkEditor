@@ -212,7 +212,7 @@ public static class ServiceCollectionExtensions
 
             SidebarPaneViewLocator viewLocator = new();
             viewLocator.Register<ExplorerViewModel, ExplorerView>();
-            viewLocator.Register<RemoteExplorerViewModel, RemoteSidebarPanel>();
+            viewLocator.Register<RemoteExplorerViewModel, RemoteSidebarPane>();
             services.AddSingleton(viewLocator);
         }
     }

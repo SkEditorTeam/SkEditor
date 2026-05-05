@@ -8,7 +8,7 @@
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:panes="clr-namespace:SkEditor.ViewModels.Controls.Sidebar.Panes"
              x:DataType="panes:RemoteExplorerViewModel"
-             x:Class="SkEditor.Views.Controls.Sidebar.RemoteSidebarPanel">
+             x:Class="SkEditor.Views.Controls.Sidebar.RemoteSidebarPane">
 
     <UserControl.Styles>
         <Style Selector="Button.barButton">
@@ -56,7 +56,7 @@
                 <TextBlock Text="No remote connection" HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
                 <TextBlock Text="Create a remote connection to view and edit files on a remote server."
                            HorizontalAlignment="Center" TextAlignment="Center"
-                           FontSize="13" TextWrapping="Wrap" Width="250" Opacity="0.6" />
+                           FontSize="13" MaxWidth="250" Opacity="0.6" />
             </StackPanel>
         </StackPanel>
 
