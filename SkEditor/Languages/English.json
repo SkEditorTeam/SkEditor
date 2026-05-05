@@ -256,8 +256,6 @@
   "SettingsAppearanceSubsectionSidebarLayout": "Sidebar & Layout",
   "SettingsAppearanceSidebarAnimations": "Sidebar Animations",
   "SettingsAppearanceSidebarAnimationsDescription": "Enable or disable animations when opening and closing sidebar panels.",
-  "SettingsAppearanceSyncSidebarWidth": "Synchronize Sidebar Width",
-  "SettingsAppearanceSyncSidebarWidthDescription": "When enabled, changing the width of one sidebar panel will apply the same width to all other panels.",
   "SettingsAppearanceProjectSingleFolderClick": "Open Project Folder on Single Click",
   "SettingsAppearanceProjectSingleFolderClickDescription": "When enabled, opens a folder with a single click instead of a double click.",
   "SettingsEditorSubsectionBehavior": "Behavior",

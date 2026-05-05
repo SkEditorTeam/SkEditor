@@ -58,7 +58,6 @@ public class LegacyConfigMigrator(IConfigService config)
             appSettings.IsSidebarAnimationEnabled = oldAppConfig.IsSidebarAnimationEnabled;
             appSettings.IsWordWrapEnabled = oldAppConfig.IsWrappingEnabled;
             appSettings.IsEditorZoomLevelSyncEnabled = oldAppConfig.IsZoomSyncEnabled;
-            appSettings.IsSidebarWidthSyncEnabled = oldAppConfig.IsSidebarWidthSyncEnabled;
             appSettings.Language = oldAppConfig.Language;
             appSettings.EditorTabSize = oldAppConfig.TabSize;
             appSettings.UseEditorTabsForIndentation = !oldAppConfig.UseSpacesInsteadOfTabs;

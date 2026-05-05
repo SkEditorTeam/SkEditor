@@ -83,8 +83,6 @@
   "SettingsAppearanceHighlightCurrentLine": "Ressalta la línia actual",
   "SettingsAppearanceSidebarAnimations": "Animacions de la barra lateral",
   "SettingsAppearanceSidebarAnimationsDescription": "Activa o desactiva les animacions en obrir i tancar els panells laterals.",
-  "SettingsAppearanceSyncSidebarWidth": "Sincronitza l’amplada de la barra lateral",
-  "SettingsAppearanceSyncSidebarWidthDescription": "Quan està activat, canviar l’amplada d’una barra lateral s’aplicarà a totes les altres.",
   "SettingsAppearanceProjectSingleFolderClick": "Obre la carpeta del projecte amb un sol clic",
   "SettingsAppearanceProjectSingleFolderClickDescription": "Quan està activat, obre una carpeta amb un sol clic en lloc d’un doble clic.",
   "SettingsEditorWordWrap": "Ajust de línia",

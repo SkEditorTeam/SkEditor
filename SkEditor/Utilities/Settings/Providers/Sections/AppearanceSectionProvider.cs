@@ -111,12 +111,6 @@ public class AppearanceSectionProvider(
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSidebarAnimationEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsAppearanceSyncSidebarWidth)
-                    .WithDescription(TranslationKey.SettingsAppearanceSyncSidebarWidthDescription)
-                    .WithIcon(Symbol.ColumnArrowRight)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSidebarWidthSyncEnabled)),
-
-                ToggleSetting
                     .Create(TranslationKey.SettingsAppearanceProjectSingleFolderClick)
                     .WithDescription(TranslationKey.SettingsAppearanceProjectSingleFolderClickDescription)
                     .WithIcon(Symbol.FolderArrowRight)

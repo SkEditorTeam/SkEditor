@@ -95,12 +95,6 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial bool IsSidebarAnimationEnabled { get; set; }
 
     /// <summary>
-    ///     Whether to synchronize the width of all panels in the sidebar.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool IsSidebarWidthSyncEnabled { get; set; }
-
-    /// <summary>
     ///     Automatically saves the user files after every change if enabled.
     /// </summary>
     [ObservableProperty]

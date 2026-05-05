@@ -213,8 +213,6 @@
   "SettingsAppearanceHighlightCurrentLine": "Aktuális sor kiemelése",
   "SettingsAppearanceSidebarAnimations": "Oldalsáv animációk",
   "SettingsAppearanceSidebarAnimationsDescription": "Oldalsáv panelek megnyitásakor és bezárásakor megjelenő animációk engedélyezése vagy letiltása.",
-  "SettingsAppearanceSyncSidebarWidth": "Oldalsáv szélességének szinkronizálása",
-  "SettingsAppearanceSyncSidebarWidthDescription": "Ha engedélyezve van, akkor az egyik oldalsáv panel szélességének megváltoztatása az összes többi panelre is vonatkozik.",
   "SettingsAppearanceProjectSingleFolderClick": "Projekt mappa megnyitása egy kattintással",
   "SettingsAppearanceProjectSingleFolderClickDescription": "Ha engedélyezve van, egyetlen kattintással megnyit egy mappát dupla kattintás helyett.",
   "SettingsEditorWordWrap": "Tördelés",

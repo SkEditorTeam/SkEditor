@@ -253,8 +253,6 @@
   "SettingsAppearanceSubsectionSidebarLayout": "Pasek boczny i układ",
   "SettingsAppearanceSidebarAnimations": "Animacje paska bocznego",
   "SettingsAppearanceSidebarAnimationsDescription": "Włącz lub wyłącz animacje podczas otwierania i zamykania paneli paska bocznego.",
-  "SettingsAppearanceSyncSidebarWidth": "Synchronizuj szerokość paneli bocznych",
-  "SettingsAppearanceSyncSidebarWidthDescription": "Synchronizuje szerokość między wszystkimi panelami paska bocznego.",
   "SettingsAppearanceProjectSingleFolderClick": "Otwórz folder projektu pojedynczym kliknięciem",
   "SettingsAppearanceProjectSingleFolderClickDescription": "Po włączeniu, otwiera folder pojedynczym kliknięciem zamiast podwójnym.",
   "SettingsEditorSubsectionBehavior": "Zachowanie",

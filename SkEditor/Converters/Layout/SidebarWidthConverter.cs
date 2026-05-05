@@ -18,19 +18,6 @@ public class SidebarWidthConverter : IValueConverter
     }
 }
 
-public class SidebarMinWidthConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return value != null ? 400.0 : 0.0;
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
 public class SidebarColumnMinWidthConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

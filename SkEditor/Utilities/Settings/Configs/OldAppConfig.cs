@@ -26,7 +26,6 @@ public class OldAppConfig
     public required bool IsSidebarAnimationEnabled { get; set; }
     public required bool IsWrappingEnabled { get; set; }
     public required bool IsZoomSyncEnabled { get; set; }
-    public required bool IsSidebarWidthSyncEnabled { get; set; }
     public required string Language { get; set; }
     public required string LastUsedPublishService { get; set; }
 

@@ -222,8 +222,6 @@
   "SettingsAppearanceHighlightCurrentLine": "Выделение текущей строки",
   "SettingsAppearanceSidebarAnimations": "Анимация панелей",
   "SettingsAppearanceSidebarAnimationsDescription": "Включить анимацию открытия/закрытия панелей.",
-  "SettingsAppearanceSyncSidebarWidth": "Синхронизация ширины панелей",
-  "SettingsAppearanceSyncSidebarWidthDescription": "Ширина одной панели применяется ко всем.",
   "SettingsAppearanceProjectSingleFolderClick": "Одинарный клик для папок",
   "SettingsAppearanceProjectSingleFolderClickDescription": "Открытие папки одним кликом вместо двойного.",
   "SettingsEditorWordWrap": "Перенос строк",

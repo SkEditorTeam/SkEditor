@@ -228,8 +228,6 @@
   "SettingsAppearanceHighlightCurrentLine": "Aktuelle Zeile hervorheben",
   "SettingsAppearanceSidebarAnimations": "Seitenleisten Animationen",
   "SettingsAppearanceSidebarAnimationsDescription": "Aktivier oder deaktiviere Animationen beim öffnen und schließen von Seitenleisten",
-  "SettingsAppearanceSyncSidebarWidth": "Seitenleisten-Breite synchronisieren",
-  "SettingsAppearanceSyncSidebarWidthDescription": "Wenn aktiviert, ändern der Breite eines Tabs ändert die Breite aller andern Tabs ebenfalls. ",
   "SettingsAppearanceProjectSingleFolderClick": "Projektordner mit einem Klick öffnen",
   "SettingsAppearanceProjectSingleFolderClickDescription": "Wenn aktiviert, werden Ordner mit einem Klick anstatt einem Doppelklick geöffnet.",
   "SettingsEditorWordWrap": "Umbruch",

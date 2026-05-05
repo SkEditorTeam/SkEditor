@@ -19,14 +19,12 @@
     <UserControl.Resources>
         <converters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
         <layout:SidebarWidthConverter x:Key="SidebarWidthConverter" />
-        <layout:SidebarMinWidthConverter x:Key="SidebarMinWidthConverter" />
     </UserControl.Resources>
 
     <Grid Name="GridPanels">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="{Binding SelectedItem, Converter={StaticResource SidebarWidthConverter}}"
-                              MinWidth="{Binding SelectedItem, Converter={StaticResource SidebarMinWidthConverter}}" />
+            <ColumnDefinition Width="{Binding ColumnWidth}" />
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" Width="50" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
