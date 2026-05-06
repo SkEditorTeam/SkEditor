@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services.Files;
 
-public class FilePickerService(ITranslationService translations) : IFilePickerService
+public class FilePickerService(ITranslationService translations, INotificationService notificationService, ILogService logService) : IFilePickerService
 {
     public async Task<string[]?> PickFilesAsync(bool allowMultiple = true)
     {
@@ -45,7 +47,13 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
         };
 
         IReadOnlyList<IStorageFolder> result = await storageProvider.OpenFolderPickerAsync(dialogOptions);
-        return result.Count == 0 ? null : result.Select(x => x.Path.LocalPath).ToArray();
+        return result.Count == 0 ? null : result.Select(x =>
+        {
+            string localPath = x.Path.IsAbsoluteUri
+                ? x.Path.LocalPath
+                : Uri.UnescapeDataString(x.Path.OriginalString);
+            return localPath;
+        }).ToArray();
     }
 
     public async Task<string?> SaveFileAsync(string fileName)
