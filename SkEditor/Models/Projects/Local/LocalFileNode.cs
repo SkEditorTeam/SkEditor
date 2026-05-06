@@ -8,6 +8,9 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
 {
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
+    public override bool CanOpen => true;
+    public override bool CanOpenInExplorer => true;
+
     [RelayCommand]
     public void OpenFile()
     {

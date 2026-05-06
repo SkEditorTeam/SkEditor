@@ -3,19 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 
 namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
-    public override MenuFlyout ContextMenu => new()
-    {
-        Items =
-        {
-            new MenuItem { Header = "Hello" }
-        }
-    };
+    public override bool CanOpenInExplorer => true;
 
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {

@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Projects;
+using SkEditor.Utilities;
 
 namespace SkEditor.ViewModels.Controls;
 
@@ -66,5 +68,18 @@ public partial class FileTreeViewModel(ILogService logs) : ObservableObject
 
         IsLoading = false;
         return true;
+    }
+
+    [RelayCommand]
+    public void OpenInExplorer(FileSystemNode node)
+    {
+        if (node.IsDirectory)
+        {
+            LinkOpener.OpenFolder(node.Path);
+        }
+        else
+        {
+            LinkOpener.OpenFolderWithFileSelection(node.Path);
+        }
     }
 }

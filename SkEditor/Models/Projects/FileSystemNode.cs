@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -18,19 +17,20 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public partial bool IsRenaming { get; set; }
 
     [ObservableProperty]
-    private string _name = name;
+    public partial string Name { get; set; } = name;
 
-    protected string Path { get; set; } = path;
+    public string Path { get; set; } = path;
     public bool IsDirectory { get; set; } = isDirectory;
     public bool IsRoot { get; set; }
 
     public ObservableCollection<FileSystemNode> Children { get; } = [];
 
-    public virtual MenuFlyout? ContextMenu => null;
-
     public virtual IRelayCommand? OpenCommand => null;
 
     protected bool HasLoadedChildren { get; set; }
+
+    public virtual bool CanOpen => false;
+    public virtual bool CanOpenInExplorer => false;
 
     public abstract Task LoadChildren();
 }

@@ -21,6 +21,19 @@
         <TreeView.Styles>
             <Style Selector="TreeViewItem" x:DataType="projects:FileSystemNode">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <Setter Property="ContextFlyout">
+                    <MenuFlyout>
+                        <MenuItem Header="Open"
+                                  IsVisible="{Binding CanOpen}"
+                                  Command="{Binding OpenCommand}" />
+
+                        <MenuItem Header="Open in Explorer"
+                                  IsVisible="{Binding CanOpenInExplorer}"
+                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.OpenInExplorerCommand}"
+                                  CommandParameter="{Binding}" />
+
+                    </MenuFlyout>
+                </Setter>
             </Style>
 
             <Style Selector="TextBox">

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace SkEditor.Utilities;
 
@@ -17,5 +19,33 @@ public static class LinkOpener
             UseShellExecute = true,
             Verb = "open"
         });
+    }
+
+    public static void OpenFolderWithFileSelection(string filePath)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            string windowsPath = filePath.Replace("/", "\\");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = $"/select,\"{windowsPath}\"",
+                UseShellExecute = true
+            });
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            Process.Start("open", $"-R \"{filePath}\"");
+        }
+        else
+        {
+            string? folderPath = Path.GetDirectoryName(filePath);
+            if (folderPath == null)
+            {
+                throw new ArgumentException("Invalid file path");
+            }
+
+            Process.Start(new ProcessStartInfo(folderPath) { UseShellExecute = true });
+        }
     }
 }
