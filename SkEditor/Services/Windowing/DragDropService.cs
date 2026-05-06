@@ -2,6 +2,7 @@
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Models.Files;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Services.Windowing;
@@ -33,7 +34,7 @@ public class DragDropService(IFileService files)
                 continue;
             }
 
-            _ = files.OpenFileAsync(file.Path.LocalPath);
+            _ = files.OpenFileAsync(new LocalFile(file.Path.LocalPath));
         }
 
         args.Handled = true;

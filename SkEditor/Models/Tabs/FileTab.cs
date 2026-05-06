@@ -22,7 +22,9 @@ public partial class FileTab(
     TranslatableString header,
     AppSettings appSettings,
     IDialogService dialogs,
-    IFilePickerService filePicker)
+    INotificationService notifications,
+    IFilePickerService filePicker,
+    ILogService logs)
     : Tab(header, Symbol.Document)
 {
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
@@ -105,6 +107,14 @@ public partial class FileTab(
         try
         {
             await File.SaveAsync(memoryStream, token);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            logs.Error(ex, "Failed to save file due to unauthorized access.");
+            notifications.ShowError(TranslatableString.FromRawString("Save Failed"),
+                TranslatableString.FromRawString(
+                    "Unable to save the file. You do not have permission to write to this location."));
+            return false;
         }
         finally
         {

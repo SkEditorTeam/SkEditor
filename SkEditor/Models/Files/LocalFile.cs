@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace SkEditor.Models.Files;
 
-public class LocalFile(string? path = null) : BaseFile(path)
+public class LocalFile(string? path = null, string? name = null)
+    : BaseFile(path, name ?? System.IO.Path.GetFileName(path))
 {
     public override ValueTask<Stream> LoadAsync()
     {

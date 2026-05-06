@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Files;
@@ -8,17 +8,25 @@ using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Services.Files;
 
-public class FileTabFactory(AppSettings appSettings, IDialogService dialogService, IFilePickerService filePicker)
-    : IFileTabFactory
+public class FileTabFactory(
+    AppSettings appSettings,
+    IDialogService dialogService,
+    IFilePickerService filePicker,
+    INotificationService notifications,
+    ILogService logs) : IFileTabFactory
 {
-    public FileTab CreateFromFile(string path)
+    public FileTab CreateFromFile(BaseFile file)
     {
-        string fileName = Path.GetFileName(path);
-        var header = TranslatableString.FromRawString(fileName);
-
-        return new FileTab(header, appSettings, dialogService, filePicker)
+        if (file.Name is null)
         {
-            File = new LocalFile(path)
+            throw new ArgumentException("File name cannot be null in this method");
+        }
+
+        TranslatableString header = TranslatableString.FromRawString(file.Name);
+
+        return new FileTab(header, appSettings, dialogService, notifications, filePicker, logs)
+        {
+            File = file
         };
     }
 
@@ -26,9 +34,9 @@ public class FileTabFactory(AppSettings appSettings, IDialogService dialogServic
     {
         TranslatableString header = TranslatableString.FromRawString(name);
 
-        return new FileTab(header, appSettings, dialogService, filePicker)
+        return new FileTab(header, appSettings, dialogService, notifications, filePicker, logs)
         {
-            File = new LocalFile(),
+            File = new LocalFile(name: name),
             IsSaved = true
         };
     }

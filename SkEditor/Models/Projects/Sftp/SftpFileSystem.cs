@@ -42,9 +42,6 @@ public class SftpFileSystem(
                 return false;
             }
 
-            string workingDirectory = Client.WorkingDirectory;
-            logService.Info($"Working directory: {workingDirectory}");
-
             Root = new SftpFolderNode(Connection.Name, Client.WorkingDirectory, true, Client) { IsRoot = true };
             await Root.LoadChildren();
             return true;

@@ -1,3 +1,5 @@
-﻿namespace SkEditor.Models.Projects;
+﻿using SkEditor.Models.Files;
 
-public record OpenFileMessage(string FilePath);
+namespace SkEditor.Models.Projects;
+
+public record OpenFileMessage(BaseFile File);

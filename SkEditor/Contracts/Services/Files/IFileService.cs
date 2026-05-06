@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using SkEditor.Models.Files;
 
 namespace SkEditor.Contracts.Services.Files;
 
@@ -15,10 +16,10 @@ public interface IFileService
     Task OpenFileAsync();
 
     /// <summary>
-    ///     Opens the file at the specified path in a new tab.
+    ///     Opens the specified file in a new tab.
     /// </summary>
-    /// <param name="path">The path of the file to open.</param>
-    Task OpenFileAsync(string path);
+    /// <param name="file">The file to open.</param>
+    Task OpenFileAsync(BaseFile file);
 
     /// <summary>
     ///     Saves the currently active file. If the file has not been saved before, it prompts the user to select a location to

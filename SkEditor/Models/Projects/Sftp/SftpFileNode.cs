@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
 using Renci.SshNet;
-using SkEditor.Contracts.Services;
+using SkEditor.Models.Files;
 
 namespace SkEditor.Models.Projects.Sftp;
 
@@ -12,6 +12,6 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
     [RelayCommand]
     public void OpenFile()
     {
-        App.Services.GetRequiredService<INotificationService>().Show("Opened", "This file has been opened.");
+        WeakReferenceMessenger.Default.Send(new OpenFileMessage(new SftpFile(Path, Name, client)));
     }
 }

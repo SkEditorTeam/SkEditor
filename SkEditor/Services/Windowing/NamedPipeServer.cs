@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using Serilog;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Models.Files;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Services.Windowing;
@@ -82,7 +83,7 @@ public class NamedPipeServer(WindowRegistry windowRegistry, IFileService fileSer
 
         foreach (string file in files)
         {
-            await fileService.OpenFileAsync(file);
+            await fileService.OpenFileAsync(new LocalFile(file));
         }
     }
 

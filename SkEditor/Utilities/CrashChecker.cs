@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Models.Files;
 using SkEditor.Services.Windowing;
 using CrashWindow = SkEditor.Views.Windows.CrashWindow;
 using Path = System.IO.Path;
@@ -38,7 +39,7 @@ public class CrashChecker(
                 {
                     foreach (string file in files)
                     {
-                        await fileService.OpenFileAsync(file);
+                        await fileService.OpenFileAsync(new LocalFile(file));
                     }
 
                     await WaitForUnlock(files);

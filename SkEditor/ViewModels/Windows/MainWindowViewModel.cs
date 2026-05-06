@@ -49,7 +49,7 @@ public partial class MainWindowViewModel : ObservableRecipient
 
     private void RegisterMessengers(IFileService files)
     {
-        WeakReferenceMessenger.Default.Register<OpenFileMessage>(this, (_, m) => { files.OpenFileAsync(m.FilePath); });
+        WeakReferenceMessenger.Default.Register<OpenFileMessage>(this, (_, m) => { files.OpenFileAsync(m.File); });
     }
 
     partial void OnSelectedTabChanged(Tab? value)

@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Models.Files;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 
@@ -35,13 +36,13 @@ public class FileService(
 
         foreach (string path in paths)
         {
-            await OpenFileAsync(path);
+            await OpenFileAsync(new LocalFile(path));
         }
     }
 
-    public async Task OpenFileAsync(string path)
+    public async Task OpenFileAsync(BaseFile file)
     {
-        FileTab? existingTab = tabs.Tabs.OfType<FileTab>().FirstOrDefault(tab => tab.File.Path == path);
+        FileTab? existingTab = tabs.Tabs.OfType<FileTab>().FirstOrDefault(tab => tab.File.Path == file.Path);
 
         if (existingTab is not null)
         {
@@ -49,7 +50,7 @@ public class FileService(
             return;
         }
 
-        FileTab fileTab = fileTabFactory.CreateFromFile(path);
+        FileTab fileTab = fileTabFactory.CreateFromFile(file);
         await fileTab.LoadContentAsync();
         tabs.OpenTab(fileTab);
     }
