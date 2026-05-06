@@ -105,7 +105,7 @@
                             MinHeight="{TemplateBinding MinHeight}"
                             CornerRadius="{TemplateBinding CornerRadius}"
                             TemplatedControl.IsTemplateFocusTarget="True"
-                            Margin="2,2,16,2">
+                            Margin="2">
                         <Panel>
                             <Rectangle Name="SelectionIndicator"
                                        Width="3"

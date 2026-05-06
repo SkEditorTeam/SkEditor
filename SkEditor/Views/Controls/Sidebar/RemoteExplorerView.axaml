@@ -18,6 +18,10 @@
             <Setter Property="Width" Value="30" />
             <Setter Property="Height" Value="30" />
         </Style>
+
+        <Style Selector="projects|FileTreeView TextBlock">
+            <Setter Property="TextWrapping" Value="NoWrap" />
+        </Style>
     </UserControl.Styles>
 
     <Grid RowDefinitions="Auto,*" Margin="4,12,4,8">

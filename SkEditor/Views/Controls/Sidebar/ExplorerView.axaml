@@ -9,6 +9,12 @@
              x:DataType="panes:ExplorerViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.ExplorerView">
 
+    <UserControl.Styles>
+        <Style Selector="projects|FileTreeView TextBlock">
+            <Setter Property="TextWrapping" Value="NoWrap" />
+        </Style>
+    </UserControl.Styles>
+
     <Grid RowDefinitions="Auto,*" Margin="4,8,4,8">
         <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12"
                     IsVisible="{Binding !FileTree.RootItems.Count}">
@@ -30,6 +36,6 @@
         </StackPanel>
 
         <projects:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}"
-                               IsVisible="{Binding !!RootItems.Count}"/>
+                               IsVisible="{Binding !!RootItems.Count}" />
     </Grid>
 </UserControl>
