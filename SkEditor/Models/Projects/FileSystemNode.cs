@@ -9,13 +9,13 @@ namespace SkEditor.Models.Projects;
 public abstract partial class FileSystemNode(string name, string path, bool isDirectory) : ObservableObject
 {
     [ObservableProperty]
-    private bool _isExpanded;
+    public partial bool IsExpanded { get; set; }
 
     [ObservableProperty]
-    private bool _isLoadingChildren;
+    public partial bool IsLoadingChildren { get; set; }
 
     [ObservableProperty]
-    private bool _isRenaming;
+    public partial bool IsRenaming { get; set; }
 
     [ObservableProperty]
     private string _name = name;

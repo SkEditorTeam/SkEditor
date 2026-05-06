@@ -9,7 +9,7 @@
              x:DataType="panes:ExplorerViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.ExplorerView">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,*" Margin="4,8,4,8">
         <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12"
                     IsVisible="{Binding !FileTree.RootItems.Count}">
             <Viewbox Height="60" Opacity="0.5">
@@ -30,7 +30,6 @@
         </StackPanel>
 
         <projects:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}"
-                               IsVisible="{Binding !!RootItems.Count}"
-                               Margin="4,12,4,8" />
+                               IsVisible="{Binding !!RootItems.Count}"/>
     </Grid>
 </UserControl>
