@@ -10,6 +10,8 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
 
     public override bool CanOpen => true;
     public override bool CanOpenInExplorer => true;
+    public override bool CanRenameDelete => true;
+    public override bool CanCopyRelativePath => true;
 
     [RelayCommand]
     public void OpenFile()

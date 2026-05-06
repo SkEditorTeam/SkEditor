@@ -31,6 +31,8 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public virtual bool CanOpen => false;
     public virtual bool CanOpenInExplorer => false;
+    public virtual bool CanRenameDelete => false;
+    public virtual bool CanCopyRelativePath => false;
 
     public abstract Task LoadChildren();
 }
