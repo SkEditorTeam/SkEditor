@@ -39,20 +39,11 @@ public partial class TranslatableString : ObservableObject, IDisposable
         }
     }
 
-    // ReSharper disable once UnusedParameter.Local
-    private TranslatableString(string rawValue, bool _)
+    private TranslatableString(string rawValue, params object[]? parameters)
     {
         Key = string.Empty;
         Value = rawValue;
-    }
-
-    /// <summary>
-    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key as a string.
-    /// </summary>
-    /// <param name="key">The translation key as a string to use for retrieving the translated string.</param>
-    /// <remarks>This constructor should NOT be used for raw string values. Use <see cref="FromRawString(string)" /> instead.</remarks>
-    public TranslatableString(string key) : this(Enum.Parse<TranslationKey>(key))
-    {
+        _parameters = parameters ?? [];
     }
 
     /// <summary>
@@ -79,7 +70,13 @@ public partial class TranslatableString : ObservableObject, IDisposable
     {
         get
         {
-            if (field != null) return field;
+            // if field is not null, then that's a raw value
+            if (field != null)
+            {
+                return _parameters == null
+                    ? field
+                    : string.Format(field, _parameters.Select(p => p?.ToString() ?? string.Empty).ToArray());
+            }
 
             var translationService = TranslationService.Current;
 
@@ -126,13 +123,12 @@ public partial class TranslatableString : ObservableObject, IDisposable
     /// <returns>A new instance of <see cref="TranslatableString" /> with the specified raw string value.</returns>
     public static TranslatableString FromRawString(string value)
     {
-        return new TranslatableString(value, true);
+        return new TranslatableString(value);
     }
 
     public static TranslatableString FromRawString(string template, params object[] parameters)
     {
-        TranslatableString translatableString = new(template, true);
-        translatableString.UpdateParameters(parameters);
+        TranslatableString translatableString = new(template, parameters);
         return translatableString;
     }
 
