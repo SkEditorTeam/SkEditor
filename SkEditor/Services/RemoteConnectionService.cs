@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -13,11 +14,33 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services;
 
-public class RemoteConnectionService(ITranslationService translation) : IRemoteConnectionService
+public class RemoteConnectionService(ITranslationService translation, ILogService logs)
+    : IRemoteConnectionService, IDisposable
 {
     private const string CredentialNamespace = "SkEditor Remote Connections";
     private const string CredentialTarget = "skeditor://sftp-connections";
+
+    private readonly Dictionary<RemoteConnection, SftpClient> _activeConnections = new();
+    private readonly SemaphoreSlim _connectionLock = new(1, 1);
     private readonly ICredentialStore _store = CredentialManager.Create(CredentialNamespace);
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+
+        foreach (SftpClient client in _activeConnections.Values)
+        {
+            if (client.IsConnected)
+            {
+                client.Disconnect();
+            }
+
+            client.Dispose();
+        }
+
+        _activeConnections.Clear();
+        _connectionLock.Dispose();
+    }
 
     public async Task<RemoteConnectionTestResult> TestConnectionAsync(RemoteConnectionInfo connectionInfo)
     {
@@ -65,6 +88,81 @@ public class RemoteConnectionService(ITranslationService translation) : IRemoteC
     {
         ICredential? cred = _store.Get(CredentialTarget, connection.Id.ToString());
         return cred.Password;
+    }
+
+    public async Task<SftpClient> GetOrConnectSftpClientAsync(RemoteConnection connection,
+        CancellationToken cancellationToken = default)
+    {
+        await _connectionLock.WaitAsync(cancellationToken);
+        try
+        {
+            if (_activeConnections.TryGetValue(connection, out SftpClient? existingClient))
+            {
+                if (existingClient.IsConnected)
+                {
+                    return existingClient;
+                }
+
+                existingClient.Dispose();
+                _activeConnections.Remove(connection);
+            }
+
+            AuthenticationMethod authMethod = GetAuthMethod(connection);
+            ConnectionInfo info = new(connection.Host, connection.Port, connection.Username, authMethod)
+            {
+                Timeout = TimeSpan.FromSeconds(30)
+            };
+
+            SftpClient newClient = new(info)
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(60)
+            };
+
+            await newClient.ConnectAsync(cancellationToken);
+
+            _activeConnections[connection] = newClient;
+
+            return newClient;
+        }
+        finally
+        {
+            _connectionLock.Release();
+        }
+    }
+
+    public void Disconnect(RemoteConnection connection)
+    {
+        if (!_activeConnections.TryGetValue(connection, out SftpClient? client))
+        {
+            return;
+        }
+
+        client.Dispose();
+        _activeConnections.Remove(connection);
+    }
+
+    private AuthenticationMethod GetAuthMethod(RemoteConnection connection)
+    {
+        AuthenticationMethod authMethod;
+
+        if (connection.AuthMethod == RemoteAuthMethod.Password)
+        {
+            string? password = GetPassword(connection);
+            if (password == null)
+            {
+                logs.Error($"No password found for connection: {connection.Name}");
+                throw new InvalidOperationException("No password found for connection.");
+            }
+
+            authMethod = new PasswordAuthenticationMethod(connection.Username, password);
+        }
+        else
+        {
+            authMethod = new PrivateKeyAuthenticationMethod(connection.Username,
+                new PrivateKeyFile(connection.KeyFilePath));
+        }
+
+        return authMethod;
     }
 
     private static async Task<bool> TryConnect(RemoteConnectionInfo connectionInfo)

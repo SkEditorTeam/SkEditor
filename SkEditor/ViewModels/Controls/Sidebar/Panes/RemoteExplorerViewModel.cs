@@ -17,7 +17,7 @@ public partial class RemoteExplorerViewModel(
     FileTreeViewModel fileTree,
     ILogService logs,
     INotificationService notifications,
-    IRemoteConnectionService remoteConnectionService,
+    IRemoteConnectionService remoteConnections,
     WindowRegistry windowRegistry,
     ConnectionsConfig connectionsConfig) : ObservableObject, ISidebarPanelViewModel
 {
@@ -47,7 +47,7 @@ public partial class RemoteExplorerViewModel(
             SelectedConnection = null;
         }
     }
-    
+
     private async Task<bool> ChangeConnection(RemoteConnection connection)
     {
         if (connection == null)
@@ -55,8 +55,8 @@ public partial class RemoteExplorerViewModel(
             logs.Warning("Selected connection is null!");
             return false;
         }
-        
-        FileTree.FileSystem = new SftpFileSystem(connection, remoteConnectionService, notifications, logs);
+
+        FileTree.FileSystem = new SftpFileSystem(connection, remoteConnections, notifications);
 
         bool success = await FileTree.LoadFileSystemAsync();
         return success;
@@ -82,7 +82,7 @@ public partial class RemoteExplorerViewModel(
 
         if (connection.AuthMethod == RemoteAuthMethod.Password)
         {
-            remoteConnectionService.SavePassword(connection, info.Password);
+            remoteConnections.SavePassword(connection, info.Password);
         }
 
         connectionsConfig.Connections.Add(connection);
