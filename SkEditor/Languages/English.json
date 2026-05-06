@@ -5,6 +5,7 @@
   "WindowTitleFontSelector": "Select Font",
   "WindowTitleSaveFilePicker": "Save \"{0}\" as...",
   "WindowTitleOpenFilePicker": "Open File",
+  "WindowTitleOpenFolderPicker": "Open Folder",
   "WindowTitleGuiGenerator": "Generate GUI",
   "WindowTitleCommandGenerator": "Generate Command",
   "WindowTitleItemSelector": "Select Item",

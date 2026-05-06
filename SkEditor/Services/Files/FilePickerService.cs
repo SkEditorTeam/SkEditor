@@ -13,7 +13,7 @@ namespace SkEditor.Services.Files;
 
 public class FilePickerService(ITranslationService translations) : IFilePickerService
 {
-    public async Task<string[]?> PickFilesAsync()
+    public async Task<string[]?> PickFilesAsync(bool allowMultiple = true)
     {
         IStorageProvider? storageProvider = GetStorageProvider();
         if (storageProvider == null)
@@ -24,9 +24,27 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
         FilePickerOpenOptions dialogOptions = new()
         {
             Title = translations.Get(TranslationKey.WindowTitleOpenFilePicker),
-            AllowMultiple = true
+            AllowMultiple = allowMultiple
         };
         IReadOnlyList<IStorageFile> result = await storageProvider.OpenFilePickerAsync(dialogOptions);
+        return result.Count == 0 ? null : result.Select(x => x.Path.LocalPath).ToArray();
+    }
+
+    public async Task<string[]?> PickFoldersAsync(bool allowMultiple = true)
+    {
+        IStorageProvider? storageProvider = GetStorageProvider();
+        if (storageProvider == null)
+        {
+            return null;
+        }
+
+        FolderPickerOpenOptions dialogOptions = new()
+        {
+            Title = translations.Get(TranslationKey.WindowTitleOpenFolderPicker),
+            AllowMultiple = allowMultiple
+        };
+
+        IReadOnlyList<IStorageFolder> result = await storageProvider.OpenFolderPickerAsync(dialogOptions);
         return result.Count == 0 ? null : result.Select(x => x.Path.LocalPath).ToArray();
     }
 
