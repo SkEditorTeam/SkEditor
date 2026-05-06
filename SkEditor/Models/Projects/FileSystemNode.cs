@@ -30,9 +30,14 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     protected bool HasLoadedChildren { get; set; }
 
     public virtual bool CanOpen => false;
+    public virtual bool CanDownload => false;
     public virtual bool CanOpenInExplorer => false;
     public virtual bool CanRenameDelete => false;
     public virtual bool CanCopyRelativePath => false;
+    public virtual bool CanRefresh => false;
+    public virtual bool CanEditConnection => false;
+    public virtual bool CanCloseWorkspace => false;
+    public virtual bool CanDisconnect => false;
 
     public abstract Task LoadChildren();
 }

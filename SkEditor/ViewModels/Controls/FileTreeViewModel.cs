@@ -128,4 +128,34 @@ public partial class FileTreeViewModel(ILogService logs, INotificationService no
     {
         notifs.Debug("CopyRelativePath is not implemented yet.");
     }
+
+    [RelayCommand]
+    public void Download(FileSystemNode node)
+    {
+        notifs.Debug("Download is not implemented yet.");
+    }
+
+    [RelayCommand]
+    public void Refresh(FileSystemNode node)
+    {
+        notifs.Debug("Refresh is not implemented yet.");
+    }
+
+    [RelayCommand]
+    public void EditConnection(FileSystemNode node)
+    {
+        notifs.Debug("EditConnection is not implemented yet.");
+    }
+
+    [RelayCommand]
+    public void CloseWorkspace(FileSystemNode node)
+    {
+        notifs.Debug("CloseWorkspace is not implemented yet.");
+    }
+
+    [RelayCommand]
+    public void Disconnect(FileSystemNode node)
+    {
+        notifs.Debug("Disconnect is not implemented yet.");
+    }
 }
