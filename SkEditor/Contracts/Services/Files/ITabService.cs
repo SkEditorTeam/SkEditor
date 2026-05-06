@@ -23,7 +23,12 @@ public interface ITabService
     ///     Raised when the selected tab changes.
     /// </summary>
     event Action<Tab?>? SelectedTabChanged;
-    
+
+    /// <summary>
+    ///     Raised when a tab is closed.
+    /// </summary>
+    event Action<Tab>? TabClosed;
+
     /// <summary>
     ///     Switches to the tab at the given index. Does nothing if the index is out of range.
     /// </summary>

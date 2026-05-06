@@ -23,6 +23,7 @@ public class TabService(IFileFeatureService features) : ITabService
     }
 
     public event Action<Tab?>? SelectedTabChanged;
+    public event Action<Tab>? TabClosed;
 
     public void SwitchTab(int index)
     {
@@ -55,6 +56,8 @@ public class TabService(IFileFeatureService features) : ITabService
         {
             features.OnTabClosed(fileTab);
         }
+
+        TabClosed?.Invoke(tab);
     }
 
     public void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple) where T : Tab
