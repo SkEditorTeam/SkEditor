@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Serilog;
 using SkEditor.Contracts.Models;
 
 namespace SkEditor.Models.Projects.Local;
@@ -14,7 +16,12 @@ public class LocalFileSystem : IFileSystem
             throw new DirectoryNotFoundException($"The directory '{rootDirectory}' does not exist.");
         }
 
-        string rootName = Path.GetFileName(rootDirectory);
+        string rootName = new DirectoryInfo(rootDirectory).Name;
+        if (string.IsNullOrEmpty(rootName))
+        {
+            throw new ArgumentException($"The provided root directory '{rootDirectory}' is invalid.");
+        }
+
         Root = new LocalFolderNode(rootName, rootDirectory, true) { IsRoot = true };
     }
 

@@ -72,7 +72,7 @@
                            TextWrapping="NoWrap"
                            Margin="20,10,20,10" />
 
-                <Separator Grid.Row="1" Margin="0,0,0,10" />
+                <Separator Grid.Row="1" Margin="0" />
 
                 <ContentControl Grid.Row="2" Content="{Binding SelectedItem}" />
             </Grid>

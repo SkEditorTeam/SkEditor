@@ -64,8 +64,6 @@ public partial class FileTreeViewModel(ILogService logs) : ObservableObject
             RootItems.Add(FileSystem.Root);
         }
 
-        logs.Info($"Loaded file system in {stopwatch.ElapsedMilliseconds} ms");
-
         IsLoading = false;
         return true;
     }
