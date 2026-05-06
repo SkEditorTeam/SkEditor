@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Contracts.Services;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace SkEditor.Models.Projects.Local;
 
@@ -11,6 +10,6 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
     [RelayCommand]
     public void OpenFile()
     {
-        App.Services.GetRequiredService<INotificationService>().Show("Opened", "This file has been opened.");
+        WeakReferenceMessenger.Default.Send(new OpenFileMessage(Path));
     }
 }
