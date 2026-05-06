@@ -7,54 +7,25 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Projects;
-using SkEditor.Models.Projects.Local;
-using SkEditor.Models.Projects.Sftp;
-using SkEditor.Models.Remote;
 
 namespace SkEditor.ViewModels.Controls;
 
-public partial class FileTreeViewModel(
-    IRemoteConnectionService remoteConnectionService,
-    INotificationService notificationService,
-    ILogService logService)
-    : ObservableObject
+public partial class FileTreeViewModel(ILogService logs) : ObservableObject
 {
     private CancellationTokenSource? _cts;
 
     [ObservableProperty]
-    private IFileSystem? _fileSystem;
+    public partial IFileSystem? FileSystem { get; set; }
 
     [ObservableProperty]
-    private bool _isLoading;
+    public partial bool IsLoading { get; set; }
 
     public ObservableCollection<FileSystemNode> RootItems { get; } = [];
 
-    public async Task<bool> ChangeConnection(RemoteConnection connection)
-    {
-        if (connection == null)
-        {
-            logService.Warning("Selected connection is null!");
-            return false;
-        }
-
-        const bool isRemote = false;
-
-        if (isRemote)
-#pragma warning disable CS0162 // Unreachable code detected
-        {
-            FileSystem = new SftpFileSystem(connection, remoteConnectionService, notificationService, logService);
-        }
-        // ReSharper disable RedundantIfElseBlock
-        else
-        {
-            FileSystem = new LocalFileSystem(@"C:\Users\Notro\Documents");
-        }
-#pragma warning restore CS0162 // Unreachable code detected
-
-        bool success = await LoadFileSystemAsync();
-        return success;
-    }
-
+    /// <summary>
+    ///     Loads the file system and populates the root items.
+    /// </summary>
+    /// <returns>True if success</returns>
     public async Task<bool> LoadFileSystemAsync()
     {
         if (_cts != null)
@@ -71,7 +42,7 @@ public partial class FileTreeViewModel(
 
         if (FileSystem == null)
         {
-            logService.Warning("File system is null, cannot load!");
+            logs.Warning("File system is null, cannot load!");
             IsLoading = false;
             return false;
         }
@@ -93,7 +64,7 @@ public partial class FileTreeViewModel(
             RootItems.Add(FileSystem.Root);
         }
 
-        logService.Info($"Loaded file system in {stopwatch.ElapsedMilliseconds} ms");
+        logs.Info($"Loaded file system in {stopwatch.ElapsedMilliseconds} ms");
 
         IsLoading = false;
         return true;

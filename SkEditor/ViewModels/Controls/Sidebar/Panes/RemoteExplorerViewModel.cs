@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
 using SkEditor.Models.UI;
 using SkEditor.Services.Windowing;
@@ -14,6 +15,8 @@ namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 
 public partial class RemoteExplorerViewModel(
     FileTreeViewModel fileTree,
+    ILogService logs,
+    INotificationService notifications,
     IRemoteConnectionService remoteConnectionService,
     WindowRegistry windowRegistry,
     ConnectionsConfig connectionsConfig) : ObservableObject, ISidebarPanelViewModel
@@ -38,11 +41,25 @@ public partial class RemoteExplorerViewModel(
 
     private async Task HandleConnectionChangedAsync(RemoteConnection value)
     {
-        bool success = await FileTree.ChangeConnection(value);
+        bool success = await ChangeConnection(value);
         if (!success)
         {
             SelectedConnection = null;
         }
+    }
+    
+    private async Task<bool> ChangeConnection(RemoteConnection connection)
+    {
+        if (connection == null)
+        {
+            logs.Warning("Selected connection is null!");
+            return false;
+        }
+        
+        FileTree.FileSystem = new SftpFileSystem(connection, remoteConnectionService, notifications, logs);
+
+        bool success = await FileTree.LoadFileSystemAsync();
+        return success;
     }
 
     [RelayCommand]

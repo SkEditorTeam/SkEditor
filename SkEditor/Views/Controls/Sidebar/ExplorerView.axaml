@@ -11,7 +11,7 @@
 
     <Grid RowDefinitions="Auto,*">
         <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12"
-                    IsVisible="{Binding FolderPath, Converter={x:Static ObjectConverters.IsNull}}">
+                    IsVisible="{Binding !FileTree.RootItems.Count}">
             <Viewbox Height="60" Opacity="0.5">
                 <controls:FAIconSourceElement IconSource="{StaticResource FolderDismissIcon}"
                                               HorizontalAlignment="Center" />
@@ -25,12 +25,12 @@
                                FontSize="13" MaxWidth="220" Opacity="0.6" Margin="0,0,0,8" />
                 </StackPanel>
 
-                <Button HorizontalAlignment="Center" Content="Open Folder" />
+                <Button HorizontalAlignment="Center" Content="Open Folder" Command="{Binding OpenFolderCommand}" />
             </StackPanel>
         </StackPanel>
 
         <projects:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}"
-                               IsVisible="{Binding $parent[UserControl].((panes:ExplorerViewModel)DataContext)?.FolderPath, Converter={x:Static ObjectConverters.IsNotNull}}"
+                               IsVisible="{Binding !!RootItems.Count}"
                                Margin="4,12,4,8" />
     </Grid>
 </UserControl>
