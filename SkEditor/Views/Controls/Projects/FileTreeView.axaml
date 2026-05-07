@@ -24,6 +24,10 @@
                 <Setter Property="Margin" Value="8,4" />
             </Style>
 
+            <Style Selector="MenuItem icons|SymbolIcon">
+                <Setter Property="FontSize" Value="18.5" />
+            </Style>
+
             <Style Selector="TreeViewItem" x:DataType="projects:FileSystemNode">
                 <Setter Property="Theme" Value="{DynamicResource FileTreeViewItem}" />
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
