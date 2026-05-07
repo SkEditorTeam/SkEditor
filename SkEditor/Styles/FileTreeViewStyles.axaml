@@ -7,6 +7,7 @@
                     x:CompileBindings="True">
 
     <converters1:StandardIconConverter x:Key="StandardIconConverter" />
+    <converters1:ContextMenuHeaderConverter x:Key="ContextMenuHeaderConverter" />
 
     <x:Double x:Key="TreeViewItemIndent">16</x:Double>
     <x:Double x:Key="TreeViewItemExpandCollapseChevronSize">18</x:Double>
@@ -99,11 +100,17 @@
                                 <MenuFlyout.ItemContainerTheme>
                                     <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
                                                   x:DataType="projects:ContextMenuItem">
-                                        <Setter Property="Header" Value="{Binding Header}" />
                                         <Setter Property="Icon"
                                                 Value="{Binding Icon, Converter={StaticResource StandardIconConverter}}" />
                                         <Setter Property="Command" Value="{Binding Command}" />
-                                        <Setter Property="IsVisible" Value="{Binding !IsSeparator}" />
+                                        <Setter Property="Header">
+                                            <Setter.Value>
+                                                <MultiBinding Converter="{StaticResource ContextMenuHeaderConverter}">
+                                                    <Binding Path="Header" />
+                                                    <Binding Path="IsSeparator" />
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
                                     </ControlTheme>
                                 </MenuFlyout.ItemContainerTheme>
                             </MenuFlyout>
