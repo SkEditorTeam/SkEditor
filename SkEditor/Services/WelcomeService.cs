@@ -82,7 +82,7 @@ public class WelcomeService : IWelcomeService
             new TranslatableString(TranslationKey.WelcomePageGettingStarted),
             [
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
-                    new RelayCommand(() => _files.NewFile()), Icons.CreateSymbolIcon(Symbol.DocumentAdd)),
+                    new RelayCommand(() => _files.NewFile()), Icons.CreateSymbolIcon(Symbol.Document)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
                     new AsyncRelayCommand(async () => await _files.OpenFileAsync()),
                     Icons.CreateSymbolIcon(Symbol.DocumentSearch)),

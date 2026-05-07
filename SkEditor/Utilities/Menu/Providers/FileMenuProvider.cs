@@ -22,7 +22,7 @@ public class FileMenuProvider(
             .WithInputGesture("Ctrl+N")
             .AddTo(fileMenu);
 
-        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderOpen, Symbol.DocumentArrowUp)
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderOpen, Symbol.DocumentSearch)
             .WithCommand(files.OpenFileAsync)
             .WithInputGesture("Ctrl+O")
             .AddTo(fileMenu);
