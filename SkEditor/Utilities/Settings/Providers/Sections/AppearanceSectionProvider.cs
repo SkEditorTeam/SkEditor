@@ -27,9 +27,9 @@ public class AppearanceSectionProvider(
 
         SettingSection appearanceTheme = CreateThemeSection();
         SettingSection appearanceFontDisplay = CreateFontDisplaySection();
-        SettingSection appearanceSidebarLayout = CreateSidebarLayoutSection();
+        //SettingSection appearanceSidebarLayout = CreateSidebarLayoutSection();
 
-        appearance.WithSubsections([appearanceTheme, appearanceFontDisplay, appearanceSidebarLayout]);
+        appearance.WithSubsections([appearanceTheme, appearanceFontDisplay]);
 
         return appearance;
     }
