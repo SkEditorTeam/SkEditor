@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -31,33 +30,13 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     protected bool HasLoadedChildren { get; set; }
 
-    public ObservableCollection<ContextMenuItem> ContextMenuItems => field ??= GetCleanedContextMenuItems();
+    public ObservableCollection<ContextMenuItem> ContextMenuItems =>
+        field ??= new ObservableCollection<ContextMenuItem>(GetRawContextMenuItems());
 
     public abstract Task LoadChildren();
 
     protected virtual IEnumerable<ContextMenuItem> GetRawContextMenuItems()
     {
         yield break;
-    }
-
-    private ObservableCollection<ContextMenuItem> GetCleanedContextMenuItems()
-    {
-        var rawItems = GetRawContextMenuItems();
-        var cleaned = new ObservableCollection<ContextMenuItem>();
-
-        foreach (var item in rawItems)
-        {
-            if (item.IsSeparator && (cleaned.Count == 0 || cleaned.Last().IsSeparator))
-                continue;
-
-            cleaned.Add(item);
-        }
-
-        if (cleaned.Count > 0 && cleaned.Last().IsSeparator)
-        {
-            cleaned.RemoveAt(cleaned.Count - 1);
-        }
-
-        return cleaned;
     }
 }
