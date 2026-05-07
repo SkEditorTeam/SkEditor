@@ -84,7 +84,6 @@ public static class ServiceCollectionExtensions
         {
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<MainMenuViewModel>();
-            services.AddTransient<SidebarViewModel>();
             services.AddTransient<RemoteConnectionViewModel>();
             services.AddTransient<FileTreeViewModel>();
             services.AddTransient<ThemePageViewModel>();
