@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
-using Serilog;
 using SkEditor.Models.Files;
 
 namespace SkEditor.Models.Projects.Local;
@@ -13,8 +12,6 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
 
     protected override IEnumerable<ContextMenuItem> GetRawContextMenuItems()
     {
-        Log.Information($"Getting context menu items for file: {Path}");
-        
         yield return new ContextMenuItem { Header = "Hello", Icon = Symbol.Open, Command = OpenFileCommand };
     }
 

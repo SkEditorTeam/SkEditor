@@ -5,7 +5,6 @@ using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Icons;
-using SkEditor.Utilities.Settings.Models;
 
 namespace SkEditor.Converters;
 
@@ -25,7 +24,7 @@ public class StandardIconSourceConverter : IValueConverter
 
         if (settingIcon.IsPath)
         {
-            return Icons.GetPathIcon((string)settingIcon.Value);
+            return Icons.GetPathIconSource((string)settingIcon.Value);
         }
 
         return null;

@@ -15,31 +15,19 @@
     <UserControl.Resources>
         <converters:NodeToIconConverter x:Key="NodeToIconConverter" />
         <converters:NodeToColorConverter x:Key="NodeToColorConverter" />
-        <converters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
     </UserControl.Resources>
 
-    <TreeView Name="FileTree" ItemsSource="{Binding RootItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+    <TreeView Name="FileTree" Theme="{DynamicResource FileTreeView}" ItemsSource="{Binding RootItems}"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <TreeView.Styles>
             <Style Selector="Separator">
                 <Setter Property="Margin" Value="8,4" />
             </Style>
 
             <Style Selector="TreeViewItem" x:DataType="projects:FileSystemNode">
+                <Setter Property="Theme" Value="{DynamicResource FileTreeViewItem}" />
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                <Setter Property="ContextFlyout">
-                    <MenuFlyout ItemsSource="{Binding ContextMenuItems}">
-                        <MenuFlyout.ItemTemplate>
-                            <DataTemplate x:DataType="projects:ContextMenuItem">
-                                <MenuItem Header="{Binding Header}" 
-                                          Icon="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
-                                          Command="{Binding Command}" 
-                                          CommandParameter="{Binding CommandParameter}"
-                                          IsVisible="{Binding !IsSeparator}">
-                                </MenuItem>
-                            </DataTemplate>
-                        </MenuFlyout.ItemTemplate>
-                    </MenuFlyout>
-                </Setter>
+                <Setter Property="Padding" Value="0" />
             </Style>
 
             <Style Selector="TextBox">

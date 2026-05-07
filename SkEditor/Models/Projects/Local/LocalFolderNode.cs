@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentIcons.Common;
 
 namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
+    protected override IEnumerable<ContextMenuItem> GetRawContextMenuItems()
+    {
+        yield return new ContextMenuItem { Header = "Hello2", Icon = Symbol.Open };
+    }
+
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
         List<LocalFolderNode> folders = [];

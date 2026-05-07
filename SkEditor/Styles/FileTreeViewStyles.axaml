@@ -2,25 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
                     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+                    xmlns:projects="clr-namespace:SkEditor.Models.Projects"
+                    xmlns:converters1="clr-namespace:SkEditor.Converters"
                     x:CompileBindings="True">
-    <Design.PreviewWith>
-        <Border Padding="30" MinWidth="350">
-            <TreeView>
-                <TreeViewItem Header="Item 1" />
-                <TreeViewItem Header="Item 2">
-                    <TreeViewItem Header="SubItem1" />
-                    <TreeViewItem Header="SubItem2" />
-                    <TreeViewItem Header="SubItem3">
-                        <TreeViewItem Header="SubItem Item1" />
-                        <TreeViewItem Header="SubItem Item2" />
-                        <TreeViewItem Header="SubItem Item3" />
-                    </TreeViewItem>
-                </TreeViewItem>
-                <TreeViewItem Header="Item3" />
-                <TreeViewItem Header="Item4" />
-            </TreeView>
-        </Border>
-    </Design.PreviewWith>
+
+    <converters1:StandardIconConverter x:Key="StandardIconConverter" />
 
     <x:Double x:Key="TreeViewItemIndent">16</x:Double>
     <x:Double x:Key="TreeViewItemExpandCollapseChevronSize">18</x:Double>
@@ -29,7 +15,7 @@
                                           Left="True"
                                           x:Key="TreeViewItemLeftMarginConverter" />
 
-    <ControlTheme TargetType="TreeView" x:Key="{x:Type TreeView}">
+    <ControlTheme TargetType="TreeView" x:Key="FileTreeView">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
@@ -82,7 +68,7 @@
         </Style>
     </ControlTheme>
 
-    <ControlTheme TargetType="TreeViewItem" x:Key="{x:Type TreeViewItem}">
+    <ControlTheme TargetType="TreeViewItem" x:Key="FileTreeViewItem">
         <Setter Property="Padding" Value="0" />
         <Setter Property="Background" Value="{DynamicResource TreeViewItemBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource TreeViewItemBorderBrush}" />
@@ -94,7 +80,7 @@
         <Setter Property="Width"
                 Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=Bounds.Width}" />
         <Setter Property="Template">
-            <ControlTemplate>
+            <ControlTemplate x:DataType="projects:FileSystemNode">
                 <StackPanel>
                     <Border Name="PART_LayoutRoot"
                             Classes="TreeViewItemLayoutRoot"
@@ -106,6 +92,23 @@
                             CornerRadius="{TemplateBinding CornerRadius}"
                             TemplatedControl.IsTemplateFocusTarget="True"
                             Margin="2">
+
+                        <Border.ContextFlyout>
+                            <MenuFlyout
+                                ItemsSource="{Binding $parent[TreeViewItem].((projects:FileSystemNode)DataContext)?.ContextMenuItems}">
+                                <MenuFlyout.ItemContainerTheme>
+                                    <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
+                                                  x:DataType="projects:ContextMenuItem">
+                                        <Setter Property="Header" Value="{Binding Header}" />
+                                        <Setter Property="Icon"
+                                                Value="{Binding Icon, Converter={StaticResource StandardIconConverter}}" />
+                                        <Setter Property="Command" Value="{Binding Command}" />
+                                        <Setter Property="IsVisible" Value="{Binding !IsSeparator}" />
+                                    </ControlTheme>
+                                </MenuFlyout.ItemContainerTheme>
+                            </MenuFlyout>
+                        </Border.ContextFlyout>
+
                         <Panel>
                             <Rectangle Name="SelectionIndicator"
                                        Width="3"

@@ -14,6 +14,6 @@ public record WhatsNewFeaturedItem(FAIconSource Icon, string Title, string Descr
 
     public static WhatsNewFeaturedItem Create(string pathIconName, string title, string description)
     {
-        return new WhatsNewFeaturedItem(Icons.GetPathIcon(pathIconName), title, description);
+        return new WhatsNewFeaturedItem(Icons.GetPathIconSource(pathIconName), title, description);
     }
 }

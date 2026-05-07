@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentIcons.Common;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 
@@ -11,6 +12,11 @@ namespace SkEditor.Models.Projects.Sftp;
 public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client)
     : BaseFolderNode(name, path, isRoot)
 {
+    protected override IEnumerable<ContextMenuItem> GetRawContextMenuItems()
+    {
+        yield return new ContextMenuItem { Header = "Hello4", Icon = Symbol.Open };
+    }
+
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
         List<SftpFolderNode> folders = [];

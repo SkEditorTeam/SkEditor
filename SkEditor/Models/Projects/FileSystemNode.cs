@@ -30,16 +30,16 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public virtual IRelayCommand? OpenCommand => null;
 
     protected bool HasLoadedChildren { get; set; }
-    
+
+    public ObservableCollection<ContextMenuItem> ContextMenuItems => field ??= GetCleanedContextMenuItems();
+
     public abstract Task LoadChildren();
-    
-    public ObservableCollection<ContextMenuItem> ContextMenuItems => GetCleanedContextMenuItems();
 
     protected virtual IEnumerable<ContextMenuItem> GetRawContextMenuItems()
     {
         yield break;
     }
-    
+
     private ObservableCollection<ContextMenuItem> GetCleanedContextMenuItems()
     {
         var rawItems = GetRawContextMenuItems();
@@ -49,7 +49,7 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
         {
             if (item.IsSeparator && (cleaned.Count == 0 || cleaned.Last().IsSeparator))
                 continue;
-            
+
             cleaned.Add(item);
         }
 

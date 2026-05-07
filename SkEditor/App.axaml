@@ -22,7 +22,7 @@
                 <ResourceInclude Source="avares://SkEditor/Styles/SearchBoxStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/DialogStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/SearchPanelStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/TreeViewStyles.axaml" />
+                <ResourceInclude Source="avares://SkEditor/Styles/FileTreeViewStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/NotificationStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/InfoBarStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/TabViewItemStyles.axaml" />

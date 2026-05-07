@@ -100,12 +100,12 @@ public class WelcomeService : IWelcomeService
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDiscordServer,
                 new RelayCommand(() =>
                     LinkOpener.OpenLink("https://discord.skeditor.dev")),
-                Icons.GetPathIcon("DiscordIcon")),
+                Icons.GetPathIconSource("DiscordIcon")),
 
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksGitHub,
                 new RelayCommand(() =>
                     LinkOpener.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
-                Icons.GetPathIcon("GitHubIcon")),
+                Icons.GetPathIconSource("GitHubIcon")),
 
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDocumentation,
                 new RelayCommand(() => LinkOpener.OpenLink("https://docs.skeditor.dev")),
