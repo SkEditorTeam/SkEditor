@@ -12,7 +12,15 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
 
     protected override IEnumerable<ContextMenuItem> GetRawContextMenuItems()
     {
-        yield return new ContextMenuItem { Header = "Hello", Icon = Symbol.Open, Command = OpenFileCommand };
+        yield return new ContextMenuItem { Header = "Open", Icon = Symbol.Open, Command = OpenFileCommand };
+        yield return ContextMenuItem.Separator;
+        yield return new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy };
+        yield return new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename };
+        yield return new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete };
+        yield return ContextMenuItem.Separator;
+        yield return new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard };
+        yield return new ContextMenuItem { Header = "Copy Relative Path", Icon = Symbol.ClipboardLink };
+        yield return new ContextMenuItem { Header = "Show in Explorer", Icon = Symbol.FolderOpen };
     }
 
     [RelayCommand]
