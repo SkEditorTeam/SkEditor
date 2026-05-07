@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -28,16 +30,34 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public virtual IRelayCommand? OpenCommand => null;
 
     protected bool HasLoadedChildren { get; set; }
-
-    public virtual bool CanOpen => false;
-    public virtual bool CanDownload => false;
-    public virtual bool CanOpenInExplorer => false;
-    public virtual bool CanRenameDelete => false;
-    public virtual bool CanCopyRelativePath => false;
-    public virtual bool CanRefresh => false;
-    public virtual bool CanEditConnection => false;
-    public virtual bool CanCloseWorkspace => false;
-    public virtual bool CanDisconnect => false;
-
+    
     public abstract Task LoadChildren();
+    
+    public ObservableCollection<ContextMenuItem> ContextMenuItems => GetCleanedContextMenuItems();
+
+    protected virtual IEnumerable<ContextMenuItem> GetRawContextMenuItems()
+    {
+        yield break;
+    }
+    
+    private ObservableCollection<ContextMenuItem> GetCleanedContextMenuItems()
+    {
+        var rawItems = GetRawContextMenuItems();
+        var cleaned = new ObservableCollection<ContextMenuItem>();
+
+        foreach (var item in rawItems)
+        {
+            if (item.IsSeparator && (cleaned.Count == 0 || cleaned.Last().IsSeparator))
+                continue;
+            
+            cleaned.Add(item);
+        }
+
+        if (cleaned.Count > 0 && cleaned.Last().IsSeparator)
+        {
+            cleaned.RemoveAt(cleaned.Count - 1);
+        }
+
+        return cleaned;
+    }
 }

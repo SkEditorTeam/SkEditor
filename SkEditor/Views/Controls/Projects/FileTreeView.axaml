@@ -8,7 +8,6 @@
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:markup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="controls:FileTreeViewModel"
              x:Class="SkEditor.Views.Controls.Projects.FileTreeView">
@@ -16,106 +15,29 @@
     <UserControl.Resources>
         <converters:NodeToIconConverter x:Key="NodeToIconConverter" />
         <converters:NodeToColorConverter x:Key="NodeToColorConverter" />
+        <converters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
     </UserControl.Resources>
 
     <TreeView Name="FileTree" ItemsSource="{Binding RootItems}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <TreeView.Styles>
             <Style Selector="Separator">
-                <Setter Property="IsVisible" Value="False" />
+                <Setter Property="Margin" Value="8,4" />
             </Style>
 
             <Style Selector="TreeViewItem" x:DataType="projects:FileSystemNode">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                 <Setter Property="ContextFlyout">
-                    <MenuFlyout>
-                        <MenuItem Header="Open"
-                                  Icon="{markup:SymbolIcon Symbol=Open}"
-                                  IsVisible="{Binding CanOpen}"
-                                  Command="{Binding OpenCommand}" />
-
-                        <MenuItem Header="Download"
-                                  Icon="{markup:SymbolIcon Symbol=ArrowDownload}"
-                                  IsVisible="{Binding CanDownload}"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.DownloadCommand}"
-                                  CommandParameter="{Binding}" />
-
-                        <MenuItem Header="-" IsVisible="{Binding IsDirectory}" />
-
-                        <MenuItem Header="New..."
-                                  Icon="{markup:SymbolIcon Symbol=Add}"
-                                  IsVisible="{Binding IsDirectory}">
-                            <MenuItem Header="File"
-                                      Icon="{markup:SymbolIcon Symbol=DocumentAdd}"
-                                      Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.NewFileCommand}"
-                                      CommandParameter="{Binding}" />
-                            <MenuItem Header="Folder"
-                                      Icon="{markup:SymbolIcon Symbol=FolderAdd}"
-                                      Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.NewFolderCommand}"
-                                      CommandParameter="{Binding}" />
-                        </MenuItem>
-
-                        <MenuItem Header="-" IsVisible="{Binding CanRenameDelete}" />
-                        <MenuItem Header="Rename"
-                                  Icon="{markup:SymbolIcon Symbol=Rename}"
-                                  IsVisible="{Binding CanRenameDelete}"
-                                  HotKey="F2" InputGesture="F2"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.RenameCommand}"
-                                  CommandParameter="{Binding}" />
-
-                        <MenuItem Header="Delete"
-                                  Icon="{markup:SymbolIcon Symbol=Delete}"
-                                  IsVisible="{Binding CanRenameDelete}"
-                                  HotKey="Delete" InputGesture="Delete"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.DeleteCommand}"
-                                  CommandParameter="{Binding}" />
-
-                        <MenuItem Header="-" />
-
-                        <MenuItem Header="Copy Path"
-                                  Icon="{markup:SymbolIcon Symbol=Copy}"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.CopyPathCommand}"
-                                  CommandParameter="{Binding}" />
-
-                        <MenuItem Header="Copy Relative Path"
-                                  Icon="{markup:SymbolIcon Symbol=Link}"
-                                  IsVisible="{Binding CanCopyRelativePath}"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.CopyRelativePathCommand}"
-                                  CommandParameter="{Binding}" />
-
-                        <MenuItem Header="Open in Explorer"
-                                  Icon="{markup:SymbolIcon Symbol=FolderOpen}"
-                                  IsVisible="{Binding CanOpenInExplorer}"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.OpenInExplorerCommand}"
-                                  CommandParameter="{Binding}" />
-
-                        <MenuItem Header="-" IsVisible="{Binding IsRoot}" />
-
-                        <MenuItem Header="Refresh"
-                                  Icon="{markup:SymbolIcon Symbol=ArrowClockwise}"
-                                  IsVisible="{Binding CanRefresh}"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.RefreshCommand}"
-                                  CommandParameter="{Binding}" />
-
-                        <MenuItem Header="Edit Connection"
-                                  Icon="{markup:SymbolIcon Symbol=Server}"
-                                  IsVisible="{Binding CanEditConnection}"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.EditConnectionCommand}"
-                                  CommandParameter="{Binding}" />
-
-                        <MenuItem Header="Close Workspace"
-                                  IsVisible="{Binding CanCloseWorkspace}"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.CloseWorkspaceCommand}"
-                                  CommandParameter="{Binding}">
-                            <MenuItem.Icon>
-                                <fa:FAIconSourceElement IconSource="{StaticResource FolderDismissIcon}" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-
-                        <MenuItem Header="Disconnect"
-                                  Icon="{markup:SymbolIcon Symbol=PlugDisconnected}"
-                                  IsVisible="{Binding CanDisconnect}"
-                                  Command="{Binding $parent[UserControl].((controls:FileTreeViewModel)DataContext)?.DisconnectCommand}"
-                                  CommandParameter="{Binding}" />
+                    <MenuFlyout ItemsSource="{Binding ContextMenuItems}">
+                        <MenuFlyout.ItemTemplate>
+                            <DataTemplate x:DataType="projects:ContextMenuItem">
+                                <MenuItem Header="{Binding Header}" 
+                                          Icon="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
+                                          Command="{Binding Command}" 
+                                          CommandParameter="{Binding CommandParameter}"
+                                          IsVisible="{Binding !IsSeparator}">
+                                </MenuItem>
+                            </DataTemplate>
+                        </MenuFlyout.ItemTemplate>
                     </MenuFlyout>
                 </Setter>
             </Style>

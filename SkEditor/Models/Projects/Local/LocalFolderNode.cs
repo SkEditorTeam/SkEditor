@@ -8,11 +8,6 @@ namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
-    public override bool CanOpenInExplorer => true;
-    public override bool CanRenameDelete => !IsRoot;
-    public override bool CanRefresh => IsRoot;
-    public override bool CanCloseWorkspace => IsRoot;
-
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
         List<LocalFolderNode> folders = [];

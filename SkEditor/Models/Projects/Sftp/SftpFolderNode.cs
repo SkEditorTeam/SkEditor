@@ -11,13 +11,6 @@ namespace SkEditor.Models.Projects.Sftp;
 public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client)
     : BaseFolderNode(name, path, isRoot)
 {
-    public override bool CanRenameDelete => !IsRoot;
-    public override bool CanDownload => true;
-    public override bool CanRefresh => IsRoot;
-    public override bool CanEditConnection => IsRoot;
-    public override bool CanCloseWorkspace => IsRoot;
-    public override bool CanDisconnect => IsRoot;
-
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
         List<SftpFolderNode> folders = [];
