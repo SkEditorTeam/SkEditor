@@ -27,12 +27,8 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
         _notifications = notifications;
         FileTree = fileTree;
 
-        WeakReferenceMessenger.Default.Register<OpenExplorerFolderMessage>(this, (__, m) =>
-        {
-            _ = m.FolderPath is not null
-                ? OpenFolder(m.FolderPath)
-                : OpenFolder();
-        });
+        WeakReferenceMessenger.Default.Register<OpenExplorerFolderMessage>(this,
+            (__, m) => { _ = HandleOpenExplorerFolderMessageAsync(m); });
     }
 
     public required FileTreeViewModel FileTree { get; init; }
@@ -40,20 +36,44 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
     public string Name => "Explorer";
     public StandardIcon Icon => Symbol.Folder;
 
+    private async Task HandleOpenExplorerFolderMessageAsync(
+        OpenExplorerFolderMessage m)
+    {
+        if (m.FolderPath is not null)
+        {
+            await OpenFolder(m.FolderPath);
+        }
+        else
+        {
+            bool success = await OpenFolder();
+            if (!success)
+            {
+                return;
+            }
+        }
+
+        WeakReferenceMessenger.Default.Send(new RequestPaneOpenMessage(Name));
+    }
+
     [RelayCommand]
-    public async Task OpenFolder()
+    public async Task<bool> OpenFolder()
     {
         string? path = (await _filePicker.PickFoldersAsync(false))?.FirstOrDefault();
-        if (path is null) return;
+        if (path is null)
+        {
+            return false;
+        }
+
         if (!Directory.Exists(path))
         {
             _notifications.ShowError(
                 TranslatableString.FromRawString("Oops!"),
                 TranslatableString.FromRawString("The selected folder does not exist"));
-            return;
+            return false;
         }
 
         await OpenFolder(path);
+        return true;
     }
 
     public async Task OpenFolder(string path)

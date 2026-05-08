@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using SkEditor.Models.Messages;
 using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Controls;
@@ -19,6 +22,9 @@ public partial class SidebarViewModel : ObservableObject
         _savedColumnWidth = _stateConfig.SidebarPaneSize;
 
         PropertyChanged += OnPropertyChanged;
+
+        WeakReferenceMessenger.Default.Register<RequestPaneOpenMessage>(this,
+            (_, m) => { SelectedItem = Items.FirstOrDefault(p => p.Name == m.PaneName); });
     }
 
     public ObservableCollection<ISidebarPanelViewModel> Items { get; }
