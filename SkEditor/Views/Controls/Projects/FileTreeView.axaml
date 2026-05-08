@@ -22,7 +22,7 @@
               SelectionMode="Multiple"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <TreeView.ContextFlyout>
-            <MenuFlyout ItemsSource="{Binding ContextMenuItems}">
+            <MenuFlyout ItemsSource="{Binding ContextMenuItems}" OverlayDismissEventPassThrough="True">
                 <MenuFlyout.ItemContainerTheme>
                     <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
                                   x:DataType="projects:ContextMenuItem">
