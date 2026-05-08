@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentIcons.Common;
 
 namespace SkEditor.Models.Projects;
 
@@ -33,4 +34,14 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public abstract Task LoadChildren();
 
     public abstract List<ContextMenuItem> GetMenuItems();
+
+    public static IEnumerable<ContextMenuItem> GetCommonMenuItems()
+    {
+        yield return ContextMenuItem.Item("Duplicate").WithIcon(Symbol.DocumentCopy);
+        yield return ContextMenuItem.Item("Rename").WithIcon(Symbol.Rename).AllowOneItemOnly();
+        yield return ContextMenuItem.Item("Delete").WithIcon(Symbol.Delete);
+        yield return ContextMenuItem.Separator;
+        yield return ContextMenuItem.Item("Copy Path").WithIcon(Symbol.Clipboard);
+        yield return ContextMenuItem.Item("Copy Relative Path").WithIcon(Symbol.ClipboardLink);
+    }
 }

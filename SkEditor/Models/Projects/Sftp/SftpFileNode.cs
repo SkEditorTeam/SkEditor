@@ -21,15 +21,10 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
     {
         return
         [
-            new ContextMenuItem { Header = "Open", Icon = Symbol.Open, Command = OpenFileCommand },
-            new ContextMenuItem { Header = "Download", Icon = Symbol.ArrowDownload },
+            ContextMenuItem.Item("Open").WithIcon(Symbol.Open).WithCommand(OpenFileCommand),
+            ContextMenuItem.Item("Download").WithIcon(Symbol.ArrowDownload),
             ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
-            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename },
-            new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete },
-            ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
-            new ContextMenuItem { Header = "Copy Relative Path", Icon = Symbol.ClipboardLink }
+            .. GetCommonMenuItems()
         ];
     }
 }

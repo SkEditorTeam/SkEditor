@@ -44,33 +44,28 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         {
             return
             [
-                new ContextMenuItem { Header = "New File", Icon = Symbol.DocumentAdd, AllowForOneItemOnly = true },
-                new ContextMenuItem { Header = "New Folder", Icon = Symbol.FolderAdd, AllowForOneItemOnly = true },
+                ContextMenuItem.Item("New File").WithIcon(Symbol.DocumentAdd).AllowOneItemOnly(),
+                ContextMenuItem.Item("New Folder").WithIcon(Symbol.FolderAdd).AllowOneItemOnly(),
                 ContextMenuItem.Separator,
-                new ContextMenuItem { Header = "Upload", Icon = Symbol.ArrowUpload, AllowForOneItemOnly = true },
-                new ContextMenuItem { Header = "Download", Icon = Symbol.ArrowDownload },
+                ContextMenuItem.Item("Upload").WithIcon(Symbol.ArrowUpload).AllowOneItemOnly(),
+                ContextMenuItem.Item("Download").WithIcon(Symbol.ArrowDownload),
                 ContextMenuItem.Separator,
-                new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
+                ContextMenuItem.Item("Copy Path").WithIcon(Symbol.Clipboard),
                 ContextMenuItem.Separator,
-                new ContextMenuItem { Header = "Refresh", Icon = Symbol.ArrowClockwise },
-                new ContextMenuItem { Header = "Disconnect", Icon = Symbol.PlugDisconnected }
+                ContextMenuItem.Item("Refresh").WithIcon(Symbol.ArrowClockwise),
+                ContextMenuItem.Item("Disconnect").WithIcon(Symbol.PlugDisconnected)
             ];
         }
 
         return
         [
-            new ContextMenuItem { Header = "New File", Icon = Symbol.DocumentAdd, AllowForOneItemOnly = true },
-            new ContextMenuItem { Header = "New Folder", Icon = Symbol.FolderAdd, AllowForOneItemOnly = true },
+            ContextMenuItem.Item("New File").WithIcon(Symbol.DocumentAdd).AllowOneItemOnly(),
+            ContextMenuItem.Item("New Folder").WithIcon(Symbol.FolderAdd).AllowOneItemOnly(),
             ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Upload", Icon = Symbol.ArrowUpload, AllowForOneItemOnly = true },
-            new ContextMenuItem { Header = "Download", Icon = Symbol.ArrowDownload },
+            ContextMenuItem.Item("Upload").WithIcon(Symbol.ArrowUpload).AllowOneItemOnly(),
+            ContextMenuItem.Item("Download").WithIcon(Symbol.ArrowDownload),
             ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
-            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename, AllowForOneItemOnly = true },
-            new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete },
-            ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
-            new ContextMenuItem { Header = "Copy Relative Path", Icon = Symbol.ClipboardLink }
+            .. GetCommonMenuItems()
         ];
     }
 }

@@ -20,16 +20,11 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
     {
         return
         [
-            new ContextMenuItem { Header = "Open", Icon = Symbol.Open, Command = OpenFileCommand },
+            ContextMenuItem.Item("Open").WithIcon(Symbol.Open).WithCommand(OpenFileCommand),
             ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
-            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename, AllowForOneItemOnly = false },
-            new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete },
+            .. GetCommonMenuItems(),
             ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
-            new ContextMenuItem { Header = "Copy Relative Path", Icon = Symbol.ClipboardLink },
-            ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Show in Explorer", Icon = Symbol.FolderOpen }
+            ContextMenuItem.Item("Show in Explorer").WithIcon(Symbol.FolderOpen)
         ];
     }
 }

@@ -53,30 +53,25 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         {
             return
             [
-                new ContextMenuItem { Header = "New File", Icon = Symbol.DocumentAdd, AllowForOneItemOnly = true },
-                new ContextMenuItem { Header = "New Folder", Icon = Symbol.FolderAdd, AllowForOneItemOnly = true },
+                ContextMenuItem.Item("New File").WithIcon(Symbol.DocumentAdd).AllowOneItemOnly(),
+                ContextMenuItem.Item("New Folder").WithIcon(Symbol.FolderAdd).AllowOneItemOnly(),
                 ContextMenuItem.Separator,
-                new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
+                ContextMenuItem.Item("Copy Path").WithIcon(Symbol.Clipboard),
                 ContextMenuItem.Separator,
-                new ContextMenuItem { Header = "Show in Explorer", Icon = Symbol.FolderOpen },
-                new ContextMenuItem { Header = "Open in Terminal", Icon = Symbol.CodeBlock }
+                ContextMenuItem.Item("Show in Explorer").WithIcon(Symbol.FolderOpen),
+                ContextMenuItem.Item("Open in Terminal").WithIcon(Symbol.CodeBlock).AllowOneItemOnly()
             ];
         }
 
         return
         [
-            new ContextMenuItem { Header = "New File", Icon = Symbol.DocumentAdd, AllowForOneItemOnly = true },
-            new ContextMenuItem { Header = "New Folder", Icon = Symbol.FolderAdd, AllowForOneItemOnly = true },
+            ContextMenuItem.Item("New File").WithIcon(Symbol.DocumentAdd).AllowOneItemOnly(),
+            ContextMenuItem.Item("New Folder").WithIcon(Symbol.FolderAdd).AllowOneItemOnly(),
             ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
-            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename, AllowForOneItemOnly = true },
-            new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete },
+            .. GetCommonMenuItems(),
             ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
-            new ContextMenuItem { Header = "Copy Relative Path", Icon = Symbol.ClipboardLink },
-            ContextMenuItem.Separator,
-            new ContextMenuItem { Header = "Show in Explorer", Icon = Symbol.FolderOpen },
-            new ContextMenuItem { Header = "Open in Terminal", Icon = Symbol.CodeBlock }
+            ContextMenuItem.Item("Show in Explorer").WithIcon(Symbol.FolderOpen),
+            ContextMenuItem.Item("Open in Terminal").WithIcon(Symbol.CodeBlock).AllowOneItemOnly()
         ];
     }
 }
