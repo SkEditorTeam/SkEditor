@@ -109,6 +109,7 @@ public partial class FileTreeViewModel : ObservableObject
 
         List<ContextMenuItem> filteredMenu = templateMenu
             .Where(item => item.IsSeparator || commonHeaders.Contains(item.Header))
+            .Where(item => !item.AllowForOneItemOnly || SelectedNodes.Count == 1)
             .ToList();
 
         ContextMenuItems.AddRange(CleanUpSeparators(filteredMenu));

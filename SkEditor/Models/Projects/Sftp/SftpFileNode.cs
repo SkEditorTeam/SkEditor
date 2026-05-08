@@ -22,6 +22,7 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
         return
         [
             new ContextMenuItem { Header = "Open", Icon = Symbol.Open, Command = OpenFileCommand },
+            new ContextMenuItem { Header = "Download", Icon = Symbol.ArrowDownload },
             ContextMenuItem.Separator,
             new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
             new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename },

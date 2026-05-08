@@ -11,4 +11,6 @@ public record ContextMenuItem
     public IRelayCommand? Command { get; init; }
     public object? CommandParameter { get; init; }
     public bool IsSeparator { get; init; }
+
+    public bool AllowForOneItemOnly { get; init; }
 }

@@ -23,7 +23,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
             new ContextMenuItem { Header = "Open", Icon = Symbol.Open, Command = OpenFileCommand },
             ContextMenuItem.Separator,
             new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
-            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename },
+            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename, AllowForOneItemOnly = false },
             new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete },
             ContextMenuItem.Separator,
             new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
