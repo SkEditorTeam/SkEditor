@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using SkEditor.Models.Files;
+using SkEditor.Models.Messages;
 
 namespace SkEditor.Models.Projects.Local;
 

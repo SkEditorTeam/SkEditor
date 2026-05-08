@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Projects;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls;

@@ -1,7 +1,9 @@
-﻿using FluentIcons.Common;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using FluentIcons.Common;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Menu;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 
@@ -25,6 +27,11 @@ public class FileMenuProvider(
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderOpen, Symbol.DocumentSearch)
             .WithCommand(files.OpenFileAsync)
             .WithInputGesture("Ctrl+O")
+            .AddTo(fileMenu);
+
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderOpenFolder, Symbol.FolderOpen)
+            .WithCommand(() => WeakReferenceMessenger.Default.Send(new OpenExplorerFolderMessage()))
+            .WithInputGesture("Ctrl+Shift+O")
             .AddTo(fileMenu);
 
         MainMenuItem.Separator.AddTo(fileMenu);

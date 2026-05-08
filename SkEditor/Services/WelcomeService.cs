@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Tabs;
 using SkEditor.Models.Welcome;
 using SkEditor.Utilities;
@@ -87,8 +88,8 @@ public class WelcomeService : IWelcomeService
                     new AsyncRelayCommand(async () => await _files.OpenFileAsync()),
                     Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,
-                    new AsyncRelayCommand(() => Task.CompletedTask),
-                    Icons.CreateSymbolIcon(Symbol.FolderOpen)).Disable(),
+                    new RelayCommand(() => WeakReferenceMessenger.Default.Send(new OpenExplorerFolderMessage())),
+                    Icons.CreateSymbolIcon(Symbol.FolderOpen)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedSettings,
                     new RelayCommand(() => _tabs.OpenUniqueTab(_settingsTabFactory)),
                     Icons.CreateSymbolIcon(Symbol.Settings))

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using Renci.SshNet;
 using SkEditor.Models.Files;
+using SkEditor.Models.Messages;
 
 namespace SkEditor.Models.Projects.Sftp;
 

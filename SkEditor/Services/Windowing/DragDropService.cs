@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Files;
+using SkEditor.Models.Messages;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Services.Windowing;
@@ -29,12 +31,17 @@ public class DragDropService(IFileService files)
 
         foreach (IDataTransferItem dataTransferItem in items)
         {
-            if (dataTransferItem.TryGetFile() is not IStorageFile file)
-            {
-                continue;
-            }
+            IStorageItem? storageItem = dataTransferItem.TryGetFile();
 
-            _ = files.OpenFileAsync(new LocalFile(file.Path.LocalPath));
+            switch (storageItem)
+            {
+                case IStorageFile file:
+                    _ = files.OpenFileAsync(new LocalFile(file.Path.LocalPath));
+                    break;
+                case IStorageFolder folder:
+                    WeakReferenceMessenger.Default.Send(new OpenExplorerFolderMessage(folder.Path.LocalPath));
+                    break;
+            }
         }
 
         args.Handled = true;
