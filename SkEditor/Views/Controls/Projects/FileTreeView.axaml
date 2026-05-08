@@ -17,8 +17,31 @@
         <converters:NodeToColorConverter x:Key="NodeToColorConverter" />
     </UserControl.Resources>
 
-    <TreeView Name="FileTree" Theme="{DynamicResource FileTreeView}" ItemsSource="{Binding RootItems}"
+    <TreeView Name="FileTree" Theme="{DynamicResource FileTreeView}"
+              ItemsSource="{Binding RootItems}" SelectedItems="{Binding SelectedNodes, Mode=TwoWay}"
+              SelectionMode="Multiple"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <TreeView.ContextFlyout>
+            <MenuFlyout ItemsSource="{Binding ContextMenuItems}">
+                <MenuFlyout.ItemContainerTheme>
+                    <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
+                                  x:DataType="projects:ContextMenuItem">
+                        <Setter Property="Icon"
+                                Value="{Binding Icon, Converter={StaticResource StandardIconConverter}}" />
+                        <Setter Property="Command" Value="{Binding Command}" />
+                        <Setter Property="Header">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource ContextMenuHeaderConverter}">
+                                    <Binding Path="Header" />
+                                    <Binding Path="IsSeparator" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </ControlTheme>
+                </MenuFlyout.ItemContainerTheme>
+            </MenuFlyout>
+        </TreeView.ContextFlyout>
+
         <TreeView.Styles>
             <Style Selector="Separator">
                 <Setter Property="Margin" Value="8,4" />

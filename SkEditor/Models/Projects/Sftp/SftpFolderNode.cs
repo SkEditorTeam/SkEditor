@@ -12,11 +12,6 @@ namespace SkEditor.Models.Projects.Sftp;
 public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client)
     : BaseFolderNode(name, path, isRoot)
 {
-    protected override IEnumerable<ContextMenuItem> GetRawContextMenuItems()
-    {
-        yield return new ContextMenuItem { Header = "Hello4", Icon = Symbol.Open };
-    }
-
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
         List<SftpFolderNode> folders = [];
@@ -41,5 +36,35 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
 
         return folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
+    }
+
+    public override List<ContextMenuItem> GetMenuItems()
+    {
+        if (IsRoot)
+        {
+            return
+            [
+                new ContextMenuItem { Header = "New File", Icon = Symbol.DocumentAdd },
+                new ContextMenuItem { Header = "New Folder", Icon = Symbol.FolderAdd },
+                ContextMenuItem.Separator,
+                new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
+                ContextMenuItem.Separator,
+                new ContextMenuItem { Header = "Refresh", Icon = Symbol.ArrowClockwise },
+                new ContextMenuItem { Header = "Disconnect", Icon = Symbol.PlugDisconnected }
+            ];
+        }
+
+        return
+        [
+            new ContextMenuItem { Header = "New File", Icon = Symbol.DocumentAdd },
+            new ContextMenuItem { Header = "New Folder", Icon = Symbol.FolderAdd },
+            ContextMenuItem.Separator,
+            new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
+            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename },
+            new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete },
+            ContextMenuItem.Separator,
+            new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
+            new ContextMenuItem { Header = "Copy Relative Path", Icon = Symbol.ClipboardLink }
+        ];
     }
 }

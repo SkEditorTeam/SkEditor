@@ -93,29 +93,6 @@
                             CornerRadius="{TemplateBinding CornerRadius}"
                             TemplatedControl.IsTemplateFocusTarget="True"
                             Margin="2">
-
-                        <Border.ContextFlyout>
-                            <MenuFlyout
-                                ItemsSource="{Binding $parent[TreeViewItem].((projects:FileSystemNode)DataContext)?.ContextMenuItems}">
-                                <MenuFlyout.ItemContainerTheme>
-                                    <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}"
-                                                  x:DataType="projects:ContextMenuItem">
-                                        <Setter Property="Icon"
-                                                Value="{Binding Icon, Converter={StaticResource StandardIconConverter}}" />
-                                        <Setter Property="Command" Value="{Binding Command}" />
-                                        <Setter Property="Header">
-                                            <Setter.Value>
-                                                <MultiBinding Converter="{StaticResource ContextMenuHeaderConverter}">
-                                                    <Binding Path="Header" />
-                                                    <Binding Path="IsSeparator" />
-                                                </MultiBinding>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </ControlTheme>
-                                </MenuFlyout.ItemContainerTheme>
-                            </MenuFlyout>
-                        </Border.ContextFlyout>
-
                         <Panel>
                             <Rectangle Name="SelectionIndicator"
                                        Width="3"

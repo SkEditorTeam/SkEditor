@@ -9,11 +9,6 @@ namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
-    protected override IEnumerable<ContextMenuItem> GetRawContextMenuItems()
-    {
-        yield return new ContextMenuItem { Header = "Hello2", Icon = Symbol.Open };
-    }
-
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
         List<LocalFolderNode> folders = [];
@@ -50,5 +45,38 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         return entry.Attributes.HasFlag(FileAttributes.ReparsePoint) ||
                (entry.Attributes.HasFlag(FileAttributes.Hidden) &&
                 entry.Attributes.HasFlag(FileAttributes.System));
+    }
+
+    public override List<ContextMenuItem> GetMenuItems()
+    {
+        if (IsRoot)
+        {
+            return
+            [
+                new ContextMenuItem { Header = "New File", Icon = Symbol.DocumentAdd },
+                new ContextMenuItem { Header = "New Folder", Icon = Symbol.FolderAdd },
+                ContextMenuItem.Separator,
+                new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
+                ContextMenuItem.Separator,
+                new ContextMenuItem { Header = "Show in Explorer", Icon = Symbol.FolderOpen },
+                new ContextMenuItem { Header = "Open in Terminal", Icon = Symbol.CodeBlock }
+            ];
+        }
+
+        return
+        [
+            new ContextMenuItem { Header = "New File", Icon = Symbol.DocumentAdd },
+            new ContextMenuItem { Header = "New Folder", Icon = Symbol.FolderAdd },
+            ContextMenuItem.Separator,
+            new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
+            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename },
+            new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete },
+            ContextMenuItem.Separator,
+            new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
+            new ContextMenuItem { Header = "Copy Relative Path", Icon = Symbol.ClipboardLink },
+            ContextMenuItem.Separator,
+            new ContextMenuItem { Header = "Show in Explorer", Icon = Symbol.FolderOpen },
+            new ContextMenuItem { Header = "Open in Terminal", Icon = Symbol.CodeBlock }
+        ];
     }
 }

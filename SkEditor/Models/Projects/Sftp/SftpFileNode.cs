@@ -11,14 +11,24 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
 {
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
-    protected override IEnumerable<ContextMenuItem> GetRawContextMenuItems()
-    {
-        yield return new ContextMenuItem { Header = "Hello3", Icon = Symbol.Open };
-    }
-
     [RelayCommand]
     public void OpenFile()
     {
         WeakReferenceMessenger.Default.Send(new OpenFileMessage(new SftpFile(Path, Name, client)));
+    }
+
+    public override List<ContextMenuItem> GetMenuItems()
+    {
+        return
+        [
+            new ContextMenuItem { Header = "Open", Icon = Symbol.Open, Command = OpenFileCommand },
+            ContextMenuItem.Separator,
+            new ContextMenuItem { Header = "Duplicate", Icon = Symbol.DocumentCopy },
+            new ContextMenuItem { Header = "Rename", Icon = Symbol.Rename },
+            new ContextMenuItem { Header = "Delete", Icon = Symbol.Delete },
+            ContextMenuItem.Separator,
+            new ContextMenuItem { Header = "Copy Path", Icon = Symbol.Clipboard },
+            new ContextMenuItem { Header = "Copy Relative Path", Icon = Symbol.ClipboardLink }
+        ];
     }
 }

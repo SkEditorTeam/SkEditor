@@ -30,13 +30,7 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     protected bool HasLoadedChildren { get; set; }
 
-    public ObservableCollection<ContextMenuItem> ContextMenuItems =>
-        field ??= new ObservableCollection<ContextMenuItem>(GetRawContextMenuItems());
-
     public abstract Task LoadChildren();
 
-    protected virtual IEnumerable<ContextMenuItem> GetRawContextMenuItems()
-    {
-        yield break;
-    }
+    public abstract List<ContextMenuItem> GetMenuItems();
 }
