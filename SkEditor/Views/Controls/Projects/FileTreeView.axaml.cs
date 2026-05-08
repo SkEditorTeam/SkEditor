@@ -15,6 +15,7 @@ public partial class FileTreeView : UserControl
         InitializeComponent();
         FileTree.AddHandler(DoubleTappedEvent, OnTreeViewDoubleTapped, RoutingStrategies.Bubble);
         FileTree.AddHandler(KeyDownEvent, OnTreeViewKeyDown, RoutingStrategies.Bubble);
+        FileTree.AddHandler(ContextRequestedEvent, OnContextRequested, RoutingStrategies.Tunnel);
     }
 
     public FileTreeView(FileTreeViewModel viewModel) : this() => DataContext = viewModel;
@@ -57,6 +58,19 @@ public partial class FileTreeView : UserControl
         if (e.Key == Key.F2)
         {
             node.IsRenaming = !node.IsRenaming;
+        }
+    }
+
+    private static void OnContextRequested(object? sender, ContextRequestedEventArgs e)
+    {
+        if (e.Source is not Control source)
+        {
+            return;
+        }
+
+        if (source.FindAncestorOfType<TreeViewItem>(true) is null)
+        {
+            e.Handled = true;
         }
     }
 }
