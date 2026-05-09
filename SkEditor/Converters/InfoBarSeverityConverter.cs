@@ -2,7 +2,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities.Settings.Models.Types;
+using SkEditor.Models.Settings.Types;
 
 namespace SkEditor.Converters;
 

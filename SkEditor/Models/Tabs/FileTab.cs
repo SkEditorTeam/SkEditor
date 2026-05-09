@@ -12,7 +12,6 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Files;
-using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 
@@ -169,12 +168,5 @@ public partial class FileTab(
         }
 
         RequestClose();
-    }
-
-    public event Action<EditorActionType>? EditorActionRequested;
-
-    public void RequestEditorAction(EditorActionType actionType)
-    {
-        EditorActionRequested?.Invoke(actionType);
     }
 }

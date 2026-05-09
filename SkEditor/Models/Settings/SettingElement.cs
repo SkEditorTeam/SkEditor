@@ -2,7 +2,7 @@
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Utilities.Settings.Models;
+namespace SkEditor.Models.Settings;
 
 public abstract class SettingElement(TranslatableString name)
     : ObservableObject

@@ -8,7 +8,7 @@ namespace SkEditor.Utilities.Editor.Commands;
 
 public class TrimWhitespaceCommand : IEditorCommand
 {
-    public EditorActionType ActionType => EditorActionType.TrimWhitespace;
+    public EditorCommandType CommandType => EditorCommandType.TrimWhitespace;
 
     public void Execute(TextDocument document, TextEditor editor)
     {

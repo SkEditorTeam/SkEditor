@@ -7,7 +7,7 @@ namespace SkEditor.Utilities.Editor.Commands;
 
 public class CommentCommand : IEditorCommand
 {
-    public EditorActionType ActionType => EditorActionType.Comment;
+    public EditorCommandType CommandType => EditorCommandType.Comment;
 
     public void Execute(TextDocument document, TextEditor editor)
     {

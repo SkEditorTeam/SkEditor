@@ -70,6 +70,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IWindowDialogService, WindowDialogService>();
             services.AddSingleton<ShortcutsService>();
+            services.AddSingleton<SplashScreenService>();
         }
 
         public void AddFileServices()
@@ -125,6 +126,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<IEditorFeature, HexColorFeature>();
             services.AddTransient<IEditorFeature, EditorSmoothScrollFeature>();
             services.AddTransient<IEditorFeature, EditorCommandsFeature>();
+            services.AddTransient<IEditorFeature, EditorActionsFeature>();
         }
 
         public void AddEditorCommands()

@@ -7,7 +7,7 @@ namespace SkEditor.Utilities.Editor.Commands;
 
 public class DuplicateCommand : IEditorCommand
 {
-    public EditorActionType ActionType => EditorActionType.Duplicate;
+    public EditorCommandType CommandType => EditorCommandType.Duplicate;
 
     public void Execute(TextDocument document, TextEditor editor)
     {

@@ -2,11 +2,11 @@
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Models.Settings;
+using SkEditor.Models.Settings.Types;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Settings.Models;
-using SkEditor.Utilities.Settings.Models.Types;
 using SkEditor.Utilities.Settings.Providers.Choice;
 using SkEditor.Views.Windows;
 using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
@@ -77,8 +77,7 @@ public class AppearanceSectionProvider(
                             {
                                 await SelectFont();
                                 s.Description?.UpdateParameters(GetFontName());
-                            }),
-                        NumberSetting<int>
+                            }), NumberSetting<int>
                             .Create(TranslationKey.SettingsAppearanceFontSize)
                             .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorFontSize))
                             .WithMinValue(8)

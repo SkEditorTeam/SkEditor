@@ -2,7 +2,6 @@
 using DiscordRPC;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
 
@@ -10,8 +9,7 @@ namespace SkEditor.Services;
 
 public partial class DiscordIntegrationService(
     AppSettings appSettings,
-    ITabService tabs,
-    ITranslationService translations)
+    ITabService tabs)
     : IDiscordIntegrationService
 {
     private const string ApplicationId = "1152625623777431662";

@@ -1,7 +1,7 @@
 ﻿using FluentIcons.Common;
+using SkEditor.Models.Settings;
+using SkEditor.Models.Settings.Types;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Models;
-using SkEditor.Utilities.Settings.Models.Types;
 using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.ExperimentsConfigProperty;
 
 namespace SkEditor.Utilities.Settings.Providers.Sections;

@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls;
-using SkEditor.Utilities.Settings.Models.Types;
+using SkEditor.Models.Settings.Types;
 
 namespace SkEditor.DataTemplates;
 

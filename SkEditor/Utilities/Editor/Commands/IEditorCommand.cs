@@ -5,7 +5,7 @@ namespace SkEditor.Utilities.Editor.Commands;
 
 public interface IEditorCommand
 {
-    EditorActionType ActionType { get; }
+    EditorCommandType CommandType { get; }
 
     void Execute(TextDocument document, TextEditor editor);
 }

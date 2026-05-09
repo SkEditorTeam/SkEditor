@@ -1,4 +1,4 @@
-﻿using SkEditor.Utilities.Settings.Models;
+﻿using SkEditor.Models.Settings;
 
 namespace SkEditor.Utilities.Settings.Providers.Sections;
 

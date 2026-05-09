@@ -1,5 +1,7 @@
 ﻿using System;
 
+#pragma warning disable CS9113 // Parameter is unread.
+
 namespace SkEditor.Utilities.Settings.Attributes;
 
 /// <summary>

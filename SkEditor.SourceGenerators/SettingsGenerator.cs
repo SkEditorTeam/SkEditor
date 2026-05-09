@@ -56,13 +56,15 @@ public class SettingsGenerator : IIncrementalGenerator
                     : "";
 
                 string rawCode = $$"""
+                                   #nullable enable
+
                                    using System;
                                    using System.Collections;
                                    using System.Collections.Generic;
                                    using SkEditor.ViewModels.Pages;
                                    using SkEditor.Utilities.Localization;
-                                   using SkEditor.Utilities.Settings.Models;
-                                   using SkEditor.Utilities.Settings.Models.Types;
+                                   using SkEditor.Models.Settings;
+                                   using SkEditor.Models.Settings.Types;
 
                                    namespace {{namespaceName}};
                                    public partial class {{className}}
@@ -79,7 +81,7 @@ public class SettingsGenerator : IIncrementalGenerator
                                             return property switch
                                            {
                                                {{string.Join(",\n", properties.Select(p =>
-                                                   $"{className}Property.{p.Name} => ((Func<T>)(object)(Func<{p.Type.ToDisplayString()}>)(() => {p.Name}), (Action<T>)(object)(Action<{p.Type.ToDisplayString()}>)(value => {p.Name} = ({p.Type.ToDisplayString()})(object)value))"
+                                                   $"{className}Property.{p.Name} => ((Func<T>)(object)(Func<{p.Type.ToDisplayString()}>)(() => {p.Name}), (Action<T>)(object)(Action<{p.Type.ToDisplayString()}>)(value => {p.Name} = ({p.Type.ToDisplayString()})(object{(p.NullableAnnotation == NullableAnnotation.Annotated ? "?" : "")})value))"
                                                ))}},
                                                _ => throw new ArgumentOutOfRangeException()
                                            };

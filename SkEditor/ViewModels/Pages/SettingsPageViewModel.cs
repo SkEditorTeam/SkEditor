@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Utilities.Settings.Models;
+using SkEditor.Models.Settings;
 using SkEditor.Utilities.Settings.Providers.Sections;
 
 namespace SkEditor.ViewModels.Pages;

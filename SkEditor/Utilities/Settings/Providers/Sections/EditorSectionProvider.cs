@@ -1,8 +1,8 @@
 ﻿using FluentIcons.Common;
+using SkEditor.Models.Settings;
+using SkEditor.Models.Settings.Types;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Settings.Models;
-using SkEditor.Utilities.Settings.Models.Types;
 using SkEditor.Utilities.Settings.Providers.Choice;
 using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
 
@@ -73,13 +73,11 @@ public class EditorSectionProvider(
                 CompoundSetting.Create(TranslationKey.SettingsEditorTabType)
                     .WithDescription(TranslationKey.SettingsEditorTabTypeDescription)
                     .WithIcon(Symbol.TextIndentIncrease)
-                    .WithChildren(
-                        ChoiceSetting<bool>
+                    .WithChildren(ChoiceSetting<bool>
                             .Create(TranslationKey.SettingsEditorIndentationType)
                             .WithProperty(
                                 appSettings.GetProperty<bool>(AppSettingsProperty.UseEditorTabsForIndentation))
-                            .WithProvider(indentTypeProvider),
-                        ChoiceSetting<int>
+                            .WithProvider(indentTypeProvider), ChoiceSetting<int>
                             .Create(TranslationKey.SettingsEditorIndentationAmount)
                             .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorTabSize))
                             .WithProvider(indentAmountProvider)

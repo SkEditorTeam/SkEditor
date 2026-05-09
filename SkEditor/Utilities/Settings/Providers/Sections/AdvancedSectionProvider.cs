@@ -1,9 +1,9 @@
 ﻿using FluentIcons.Common;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Settings;
+using SkEditor.Models.Settings.Types;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Settings.Models;
-using SkEditor.Utilities.Settings.Models.Types;
 using SkEditor.Utilities.Settings.Providers.Choice;
 using SkEditor.Utilities.Startup;
 using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
@@ -28,7 +28,6 @@ public class AdvancedSectionProvider(
                     .WithDescription(TranslationKey.SettingsAdvancedDeveloperModeDescription)
                     .WithIcon(Symbol.Flash)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDevModeEnabled)),
-
                 ChoiceSetting<StartupMode>
                     .Create(TranslationKey.SettingsAdvancedStartupSplashScreen)
                     .WithDescription(TranslationKey.SettingsAdvancedStartupSplashScreenDescription)

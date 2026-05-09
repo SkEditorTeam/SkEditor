@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Utilities.Settings.Models.Types;
+namespace SkEditor.Models.Settings.Types;
 
 public class ExpandableSetting(TranslatableString name) : SettingElement<ExpandableSetting>(name)
 {

@@ -17,54 +17,54 @@ public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEdit
         _tab = tab;
         _editor = editor;
 
-        _tab.EditorActionRequested += OnActionRequested;
+        _tab.EditorCommandRequested += OnCommandRequested;
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
     {
         if (_tab != null)
         {
-            _tab.EditorActionRequested -= OnActionRequested;
+            _tab.EditorCommandRequested -= OnCommandRequested;
         }
 
         _tab = null;
         _editor = null;
     }
 
-    private void OnActionRequested(EditorActionType actionType)
+    private void OnCommandRequested(EditorCommandType commandType)
     {
         if (_editor == null || _tab == null)
         {
             return;
         }
 
-        switch (actionType)
+        switch (commandType)
         {
-            case EditorActionType.Copy:
+            case EditorCommandType.Copy:
                 _editor.Copy();
                 break;
-            case EditorActionType.Paste:
+            case EditorCommandType.Paste:
                 _editor.Paste();
                 break;
-            case EditorActionType.Cut:
+            case EditorCommandType.Cut:
                 _editor.Cut();
                 break;
-            case EditorActionType.Undo:
+            case EditorCommandType.Undo:
                 _editor.Undo();
                 break;
-            case EditorActionType.Redo:
+            case EditorCommandType.Redo:
                 _editor.Redo();
                 break;
-            case EditorActionType.Find:
+            case EditorCommandType.Find:
                 _editor.SearchPanel.Open();
                 break;
-            case EditorActionType.Replace:
+            case EditorCommandType.Replace:
                 _editor.SearchPanel.IsReplaceMode = true;
                 _editor.SearchPanel.Open();
                 break;
 
             default:
-                commands.FirstOrDefault(c => c.ActionType == actionType)?.Execute(_editor.Document, _editor);
+                commands.FirstOrDefault(c => c.CommandType == commandType)?.Execute(_editor.Document, _editor);
                 break;
         }
     }

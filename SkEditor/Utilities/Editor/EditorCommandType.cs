@@ -1,6 +1,6 @@
 ﻿namespace SkEditor.Utilities.Editor;
 
-public enum EditorActionType
+public enum EditorCommandType
 {
     Copy,
     Paste,

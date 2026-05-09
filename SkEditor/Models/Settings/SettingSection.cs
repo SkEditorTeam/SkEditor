@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Utilities.Settings.Models;
+namespace SkEditor.Models.Settings;
 
 public class SettingSection(TranslatableString name) : ObservableObject
 {

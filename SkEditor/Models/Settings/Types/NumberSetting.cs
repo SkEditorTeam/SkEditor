@@ -4,7 +4,7 @@ using System.Numerics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Utilities.Settings.Models.Types;
+namespace SkEditor.Models.Settings.Types;
 
 public interface INumberSetting
 {

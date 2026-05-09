@@ -13,9 +13,9 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Settings;
+using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Startup;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 
@@ -75,7 +75,7 @@ public class App : Application
             return;
         }
 
-        if (SplashScreenHandler.ShouldShowSplash())
+        if (Services.GetRequiredService<SplashScreenService>().ShouldShowSplash())
         {
             SplashScreen splashScreen = Services.GetRequiredService<SplashScreen>();
             _splashScreen = splashScreen;

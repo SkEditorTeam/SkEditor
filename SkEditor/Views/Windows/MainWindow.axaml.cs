@@ -7,7 +7,6 @@ using SkEditor.Contracts.Services.Localization;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Input;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Startup;
 using SkEditor.Utilities.Styling;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Windows;
@@ -19,6 +18,7 @@ public partial class MainWindow : FAAppWindow
     private readonly AppSettings _appSettings;
     private readonly IConfigService _configs;
     private readonly IDiscordIntegrationService _discordIntegration;
+    private readonly SplashScreenService _splashScreenService;
     private readonly IThemeService _themes;
     private readonly ITranslationService _translation;
 
@@ -30,6 +30,7 @@ public partial class MainWindow : FAAppWindow
         _translation = null!;
         _themes = null!;
         _discordIntegration = null!;
+        _splashScreenService = null!;
     }
 
     public MainWindow(
@@ -41,7 +42,8 @@ public partial class MainWindow : FAAppWindow
         ITranslationService translation,
         DragDropService dragDropService,
         ShortcutsService shortcutsService,
-        IDiscordIntegrationService discordIntegration)
+        IDiscordIntegrationService discordIntegration,
+        SplashScreenService splashScreenService)
         : this()
     {
         DataContext = viewModel;
@@ -50,6 +52,7 @@ public partial class MainWindow : FAAppWindow
         _translation = translation;
         _themes = themes;
         _discordIntegration = discordIntegration;
+        _splashScreenService = splashScreenService;
 
         KeyboardShortcutHandler shortcutHandler = new(this);
         shortcutHandler.Initialize();
@@ -95,7 +98,7 @@ public partial class MainWindow : FAAppWindow
         await _themes.SetThemeAsync(_themes.CurrentTheme);
 
         App.Stopwatch.Stop();
-        SplashScreenHandler.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
+        _splashScreenService.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
 
         await SplashScreen.TryUpdateStatusAsync("Initializing main window...");
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Utilities.Settings.Models.Types;
+namespace SkEditor.Models.Settings.Types;
 
 public class ActionSetting(TranslatableString name) : SettingElement<ActionSetting>(name)
 {

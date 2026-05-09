@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Utilities.Settings.Models.Types;
+namespace SkEditor.Models.Settings.Types;
 
 public partial class TextSetting(TranslatableString name) : SettingElement<TextSetting>(name)
 {
@@ -20,7 +20,7 @@ public partial class TextSetting(TranslatableString name) : SettingElement<TextS
     public override double Width { get; set; }
 
     [ObservableProperty]
-    public partial string? Text { get; set; }
+    public partial string Text { get; set; } = string.Empty;
 
     public string Value
     {

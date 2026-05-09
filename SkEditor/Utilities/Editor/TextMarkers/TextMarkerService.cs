@@ -7,14 +7,17 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
+using SkEditor.Models.Tabs;
 
 namespace SkEditor.Utilities.Editor.TextMarkers;
 
-public sealed class TextMarkerService(TextDocument document) : DocumentColorizingTransformer, IBackgroundRenderer,
+public sealed class TextMarkerService(FileTab fileTab) : DocumentColorizingTransformer, IBackgroundRenderer,
     ITextMarkerService
 {
-    private readonly TextDocument _document = document ?? throw new ArgumentNullException(nameof(document));
-    private readonly TextSegmentCollection<TextMarker> _markers = new(document);
+    private readonly TextDocument _document =
+        fileTab.Document ?? throw new ArgumentNullException(nameof(fileTab.Document));
+
+    private readonly TextSegmentCollection<TextMarker> _markers = new(fileTab.Document);
 
     public KnownLayer Layer => KnownLayer.Selection;
 
@@ -75,32 +78,26 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
                     StreamGeometry geometry = new();
 
-                    using (StreamGeometryContext ctx = geometry.Open())
+                    using StreamGeometryContext ctx = geometry.Open();
+                    Point[] points = CreatePoints(startPoint, endPoint, offset, count).ToArray();
+
+                    ctx.BeginFigure(points[0], false);
+
+                    for (int i = 0; i < points.Length; i++)
                     {
-                        Point[] points = CreatePoints(startPoint, endPoint, offset, count).ToArray();
-
-                        ctx.BeginFigure(points[0], false);
-
-                        for (int i = 0; i < points.Length; i++)
+                        if (i + 1 < points.Length)
                         {
-                            if (i + 1 < points.Length)
-                            {
-                                ctx.QuadraticBezierTo(points[i], new Point((points[i].X + points[i + 1].X) / 2,
-                                    (points[i].Y + points[i + 1].Y) / 2));
-                            }
+                            ctx.QuadraticBezierTo(points[i], new Point((points[i].X + points[i + 1].X) / 2,
+                                (points[i].Y + points[i + 1].Y) / 2));
                         }
                     }
 
-                    // double? fontSize = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.FontSize;
-                    // if (fontSize == null)
-                    // {
-                    //     return;
-                    // }
-                    //
-                    // float strokeThickness = (float)Math.Max(fontSize.Value / 15, 1);
-                    //
-                    // Pen usedPen = new(usedBrush, strokeThickness);
-                    // drawingContext.DrawGeometry(Brushes.Transparent, usedPen, geometry);
+                    double fontSize = fileTab.FontSize;
+
+                    double strokeThickness = Math.Max(fontSize / 15, 1);
+
+                    Pen usedPen = new(usedBrush, strokeThickness);
+                    drawingContext.DrawGeometry(Brushes.Transparent, usedPen, geometry);
                 }
 
                 if ((marker.MarkerTypes & TextMarkerTypes.NormalUnderline) != 0)
@@ -157,8 +154,8 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
 
     public void Redraw(ISegment segment)
     {
-        // RedrawRequested?.Invoke(this, EventArgs.Empty);
-        // SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.TextArea.TextView.Redraw(segment);
+        RedrawRequested?.Invoke(this, EventArgs.Empty);
+        fileTab.RequestRedraw(segment);
     }
 
     public event EventHandler? RedrawRequested;
@@ -167,29 +164,22 @@ public sealed class TextMarkerService(TextDocument document) : DocumentColorizin
     {
     }
 
-    private static IEnumerable<Point> CreatePoints(Point start, Point end, double offset, int count)
+    private IEnumerable<Point> CreatePoints(Point start, Point end, double offset, int count)
     {
-        // double? fontSize = SkEditorAPI.Files.GetCurrentOpenedFile()?.Editor?.FontSize;
-        // if (fontSize == null)
-        // {
-        //     yield break;
-        // }
-        //
-        // double multiplier = fontSize.Value * 0.075;
-        //
-        // for (int i = 0; i < count; i++)
-        // {
-        //     double yOffset = (i + 1) % 2 == 0 ? offset : 0;
-        //     yOffset -= 2.5;
-        //     if (start.X + (i * offset * multiplier) > end.X)
-        //     {
-        //         yield return end;
-        //         yield break;
-        //     }
-        //
-        //     yield return new Point(start.X + (i * offset * multiplier), start.Y + (yOffset * multiplier));
-        // }
-        yield break;
+        double multiplier = fileTab.FontSize * 0.075;
+
+        for (int i = 0; i < count; i++)
+        {
+            double yOffset = (i + 1) % 2 == 0 ? offset : 0;
+            yOffset -= 2.5;
+            if (start.X + (i * offset * multiplier) > end.X)
+            {
+                yield return end;
+                yield break;
+            }
+
+            yield return new Point(start.X + (i * offset * multiplier), start.Y + (yOffset * multiplier));
+        }
     }
 }
 

@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Providers.Choice;
 
-namespace SkEditor.Utilities.Settings.Models.Types;
+namespace SkEditor.Models.Settings.Types;
 
 public record OptionItem(object Value, string Display);
 

@@ -1,8 +1,8 @@
 ﻿using FluentIcons.Common;
+using SkEditor.Models.Settings;
+using SkEditor.Models.Settings.Types;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Settings.Models;
-using SkEditor.Utilities.Settings.Models.Types;
 using SkEditor.Utilities.Settings.Providers.Choice;
 using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
 

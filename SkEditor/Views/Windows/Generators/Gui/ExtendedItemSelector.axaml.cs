@@ -163,7 +163,7 @@ public partial class ExtendedItemSelector : FAAppWindow
         _contextFlyout = menuFlyout;
 
         FirstLoreLine.LineTextBox.ContextFlyout = menuFlyout;
-        FirstLoreLine.LineTextBox.Watermark =
+        FirstLoreLine.LineTextBox.PlaceholderText =
             TranslationService.Current.Get(TranslationKey.GuiGeneratorLoreLineWatermark);
     }
 }
