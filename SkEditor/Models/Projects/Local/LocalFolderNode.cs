@@ -88,16 +88,35 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
     {
         if (IsRoot || System.IO.Path.GetDirectoryName(Path) is not { } parentDirectory) return Task.CompletedTask;
 
-        string newPath;
+        char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
+        if (newName.IndexOfAny(invalidChars) >= 0)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
+
+            return Task.CompletedTask;
+        }
+        
+        string newPath= System.IO.Path.Combine(parentDirectory, newName);
+        
+        if (Directory.Exists(newPath))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return Task.CompletedTask;
+        }
+        
         try
         {
-            newPath = System.IO.Path.Combine(parentDirectory, newName);
             Directory.Move(Path, newPath);
         }
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+                TranslationKey.ProjectRenameFailedTitle, TranslatableString.FromRawString(ex.Message), NotificationType.Error));
             
             Log.Error(ex, "Failed to rename folder {Path} to {NewName}", Path, newName);
             return Task.CompletedTask;

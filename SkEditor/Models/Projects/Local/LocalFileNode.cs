@@ -40,22 +40,42 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
     public override Task Rename(string newName)
     {
         if (System.IO.Path.GetDirectoryName(Path) is not { } directory) return Task.CompletedTask;
+        
+        char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
+        if (newName.IndexOfAny(invalidChars) >= 0)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
 
-        string newPath;
+            return Task.CompletedTask;
+        }
+
+        string newPath = System.IO.Path.Combine(directory, newName);
+        
+        if (System.IO.File.Exists(newPath))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return Task.CompletedTask;
+        }
+
         try
         {
-            newPath = System.IO.Path.Combine(directory, newName);
             System.IO.File.Move(Path, newPath);
         }
         catch (System.Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message), NotificationType.Error));
-            
+                TranslationKey.ProjectRenameFailedTitle, TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
             Log.Error(ex, "Failed to rename file {Path} to {NewName}", Path, newName);
             return Task.CompletedTask;
         }
-        
+
         Name = newName;
         Path = newPath;
 

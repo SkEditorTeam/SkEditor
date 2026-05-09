@@ -6,6 +6,7 @@ using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Projects;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Controls;
 
@@ -23,7 +24,7 @@ public partial class FileTreeViewModel
             { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
         };
     }
-    
+
     private bool CanOpen() => SelectedNodes.All(n => !n.IsRenaming);
 
     [RelayCommand(CanExecute = nameof(CanOpen))]
@@ -38,9 +39,9 @@ public partial class FileTreeViewModel
     {
         if (SelectedNodes.Count != 1) return;
         FileSystemNode node = SelectedNodes[0];
-        
+
         if (!node.GetSupportedActions().Contains(ProjectAction.Rename)) return;
-        
+
         node.IsRenaming = true;
 
         node.Renamed += OnNodeOnRenamed;
@@ -51,9 +52,23 @@ public partial class FileTreeViewModel
             _ = Task.Run(async () =>
             {
                 node.IsRenaming = false;
-                await node.Rename(args.NewName);
 
-                node.Renamed -= OnNodeOnRenamed;
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(args.NewName))
+                    {
+                        _notifs.ShowError(TranslationKey.ProjectRenameFailedTitle,
+                            TranslationKey.ProjectRenameErrorNameEmpty);
+
+                        return;
+                    }
+
+                    await node.Rename(args.NewName);
+                }
+                finally
+                {
+                    node.Renamed -= OnNodeOnRenamed;
+                }
             });
         }
     }

@@ -189,7 +189,7 @@
   "ProjectExplorerTitle": "Explorer",
   "ProjectExplorerInfoText": "You don't have any folders opened yet.",
   "ProjectExplorerInfoButton": "Open Folder",
-  "ProjectRenameText": "Renaming to...",
+  "ProjectRenameFailedTitle": "Rename Failed",
   "ProjectRenameErrorNameEmpty": "Name cannot be empty.",
   "ProjectRenameErrorNameInvalid": "Name is invalid.",
   "ProjectRenameErrorParentNull": "Parent cannot be null.",

@@ -38,11 +38,10 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
 
     public override async Task Rename(string newName)
     {
-        string newPath;
+        string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
         
         try
         {
-            newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
             await client.RenameFileAsync(Path, newPath, CancellationToken.None);
         }
         catch (System.Exception ex)
