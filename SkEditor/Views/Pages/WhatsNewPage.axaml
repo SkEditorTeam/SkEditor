@@ -39,15 +39,12 @@
                    VerticalSpacing="32">
 
             <StackPanel HorizontalAlignment="Center" Spacing="12" DockPanel.Dock="Top">
-                <Svg Path="/Assets/SkEditor.svg"
-                     Height="80" Width="80"
-                     HorizontalAlignment="Center">
-                    <Svg.Effect>
-                        <DropShadowEffect Color="#40000000"
-                                          BlurRadius="20"
-                                          OffsetX="0" OffsetY="4" />
-                    </Svg.Effect>
-                </Svg>
+                <Image Source="{StaticResource SkEditorLogo}" Height="80" Width="80"
+                       HorizontalAlignment="Center">
+                    <Image.Effect>
+                        <DropShadowEffect Color="#40000000" BlurRadius="20" OffsetX="0" OffsetY="4" />
+                    </Image.Effect>
+                </Image>
 
                 <StackPanel Spacing="4" HorizontalAlignment="Center">
                     <TextBlock Text="{localization:Translate WhatsNewPageTitle}"

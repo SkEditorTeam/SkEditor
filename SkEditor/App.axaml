@@ -3,6 +3,7 @@
              xmlns:sty="using:FluentAvalonia.Styling"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              xmlns:converters="clr-namespace:SkEditor.Converters"
+             xmlns:assets="clr-namespace:SkEditor.Assets"
              x:Class="SkEditor.App"
              x:CompileBindings="True"
              RequestedThemeVariant="Dark">
@@ -36,6 +37,8 @@
                 <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+
+        <SKPictureImage x:Key="SkEditorLogo" Source="{x:Static assets:SkEditorLogo.Picture}" />
 
         <converters:TranslationConverter x:Key="TranslationConverter" />
 

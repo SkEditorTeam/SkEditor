@@ -56,11 +56,11 @@
     <Grid Name="MainGrid" ColumnDefinitions="450, *" Margin="24">
         <Grid Grid.Column="0" Margin="16" RowSpacing="48" RowDefinitions="Auto,*" VerticalAlignment="Top">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="24">
-                <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="100" Width="100">
-                    <Svg.Effect>
+                <Image Source="{StaticResource SkEditorLogo}" Height="100" Width="100">
+                    <Image.Effect>
                         <DropShadowEffect Color="#64000000" BlurRadius="15" OffsetX="0" OffsetY="5" />
-                    </Svg.Effect>
-                </Svg>
+                    </Image.Effect>
+                </Image>
                 <StackPanel VerticalAlignment="Center" Margin="0,0,0,8">
                     <TextBlock Text="SkEditor" FontSize="36" FontWeight="DemiBold"
                                Effect="{StaticResource WelcomeScreenTextShadowEffect}" />

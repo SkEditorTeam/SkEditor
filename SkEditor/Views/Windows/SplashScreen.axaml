@@ -8,12 +8,12 @@
         Title="SkEditor">
 
     <Grid RowDefinitions="*, Auto" Margin="20">
-        <Svg Path="/Assets/SkEditor.svg" Grid.Row="0" Width="150" Height="150" HorizontalAlignment="Center"
-             VerticalAlignment="Center">
-            <Svg.Effect>
+        <Image Source="{StaticResource SkEditorLogo}" Grid.Row="0" Width="150" Height="150"
+               HorizontalAlignment="Center">
+            <Image.Effect>
                 <DropShadowEffect Color="#64000000" BlurRadius="15" OffsetX="0" OffsetY="5" />
-            </Svg.Effect>
-        </Svg>
+            </Image.Effect>
+        </Image>
         <TextBlock x:Name="StatusText" Grid.Row="1" Text="Initializing..." TextAlignment="Center" Margin="0, 5, 0, 0" />
     </Grid>
 </Window>

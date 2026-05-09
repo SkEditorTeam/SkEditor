@@ -56,7 +56,7 @@ public partial class DiscordIntegrationService(
         _client.SetPresence(new RichPresence
         {
             Timestamps = Timestamps.Now,
-            Assets = new Assets
+            Assets = new DiscordRPC.Assets
             {
                 LargeImageKey = "image_large",
                 LargeImageText = "SkEditor"

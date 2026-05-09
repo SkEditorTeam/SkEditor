@@ -44,7 +44,8 @@
         <AvaloniaXaml Remove="Assets\*.axaml"/>
         <AvaloniaResource Include="Styles\**"/>
 
-        <AvaloniaResource Include="Assets\**"/>
+        <AvaloniaResource Include="Assets\**" Exclude="Assets\SkEditor.svg"/>
+        <AdditionalFiles Include="Assets\SkEditor.svg" NamespaceName="SkEditor.Assets" ClassName="SkEditor"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -88,24 +89,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="12.0.0.6">
-            <ExcludeAssets>none</ExcludeAssets>
-        </PackageReference>
-        <PackageReference Include="Svg.Skia" Version="4.6.0">
-            <ExcludeAssets>none</ExcludeAssets>
-        </PackageReference>
-        <PackageReference Include="Svg.Animation" Version="4.6.0">
-            <IncludeAssets>none</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Svg.JavaScript" Version="4.6.0">
-            <IncludeAssets>none</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Jint" Version="4.8.0">
-            <IncludeAssets>none</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="Skia.Controls.Avalonia" Version="12.0.0.6"/>
     </ItemGroup>
 
     <ItemGroup>

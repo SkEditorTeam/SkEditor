@@ -42,8 +42,8 @@
                           VerticalAlignment="Top">
 
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="8,6,4,2" Spacing="8">
-                            <Svg Name="SkEditorIcon" Path="/Assets/SkEditor.svg" Height="18" Width="18"
-                                 HorizontalAlignment="Left" />
+                            <Image Source="{StaticResource SkEditorLogo}" Height="18" Width="18"
+                                   HorizontalAlignment="Left" />
 
                             <TextBlock Name="TitleText"
                                        Text="{TemplateBinding Title}"
