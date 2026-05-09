@@ -1,4 +1,5 @@
 ﻿using System;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
@@ -55,6 +56,8 @@ public static class ServiceCollectionExtensions
 
             services.AddSingleton<IMenuService, MenuService>();
             services.AddMainMenuProviders();
+
+            services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
         }
 
         public void AddWindowing()

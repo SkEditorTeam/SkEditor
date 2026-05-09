@@ -9,12 +9,12 @@ using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Controls;
 
-public partial class SidebarViewModel : ObservableObject
+public partial class SidebarViewModel : ObservableObject, IRecipient<RequestPaneOpenMessage>
 {
     private readonly StateConfig _stateConfig;
     private double _savedColumnWidth;
 
-    public SidebarViewModel(IEnumerable<ISidebarPanelViewModel> panels, StateConfig stateConfig)
+    public SidebarViewModel(IEnumerable<ISidebarPanelViewModel> panels, StateConfig stateConfig, IMessenger messenger)
     {
         Items = new ObservableCollection<ISidebarPanelViewModel>(panels);
         _stateConfig = stateConfig;
@@ -23,8 +23,7 @@ public partial class SidebarViewModel : ObservableObject
 
         PropertyChanged += OnPropertyChanged;
 
-        WeakReferenceMessenger.Default.Register<RequestPaneOpenMessage>(this,
-            (_, m) => { SelectedItem = Items.FirstOrDefault(p => p.Name == m.PaneName); });
+        messenger.Register(this);
     }
 
     public ObservableCollection<ISidebarPanelViewModel> Items { get; }
@@ -34,6 +33,11 @@ public partial class SidebarViewModel : ObservableObject
 
     [ObservableProperty]
     public partial double? ColumnWidth { get; set; } = null;
+
+    public void Receive(RequestPaneOpenMessage message)
+    {
+        SelectedItem = Items.FirstOrDefault(p => p.Name == message.PaneName);
+    }
 
     private void OnPropertyChanged(object? _, PropertyChangedEventArgs e)
     {

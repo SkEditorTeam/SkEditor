@@ -14,46 +14,34 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 
-public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewModel
+public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewModel, IRecipient<OpenExplorerFolderMessage>
 {
     private readonly IFilePickerService _filePicker;
+    private readonly IMessenger _messenger;
     private readonly INotificationService _notifications;
 
     public ExplorerViewModel(FileTreeViewModel fileTree,
         IFilePickerService filePicker,
-        INotificationService notifications)
+        INotificationService notifications,
+        IMessenger messenger)
     {
         _filePicker = filePicker;
         _notifications = notifications;
         FileTree = fileTree;
 
-        WeakReferenceMessenger.Default.Register<OpenExplorerFolderMessage>(this,
-            (__, m) => { _ = HandleOpenExplorerFolderMessageAsync(m); });
+        _messenger = messenger;
+        _messenger.Register(this);
     }
 
     public required FileTreeViewModel FileTree { get; init; }
 
+    public void Receive(OpenExplorerFolderMessage message)
+    {
+        _ = HandleOpenExplorerFolderMessageAsync(message);
+    }
+
     public string Name => "Explorer";
     public StandardIcon Icon => Symbol.Folder;
-
-    private async Task HandleOpenExplorerFolderMessageAsync(
-        OpenExplorerFolderMessage m)
-    {
-        if (m.FolderPath is not null)
-        {
-            await OpenFolder(m.FolderPath);
-        }
-        else
-        {
-            bool success = await OpenFolder();
-            if (!success)
-            {
-                return;
-            }
-        }
-
-        WeakReferenceMessenger.Default.Send(new RequestPaneOpenMessage(Name));
-    }
 
     [RelayCommand]
     public async Task<bool> OpenFolder()
@@ -81,5 +69,24 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
         LocalFileSystem localFileSystem = new(path);
         FileTree.FileSystem = localFileSystem;
         await FileTree.LoadFileSystemAsync();
+    }
+
+    private async Task HandleOpenExplorerFolderMessageAsync(
+        OpenExplorerFolderMessage m)
+    {
+        if (m.FolderPath is not null)
+        {
+            await OpenFolder(m.FolderPath);
+        }
+        else
+        {
+            bool success = await OpenFolder();
+            if (!success)
+            {
+                return;
+            }
+        }
+
+        _messenger.Send(new RequestPaneOpenMessage(Name));
     }
 }

@@ -11,7 +11,7 @@ using SkEditor.ViewModels.Pages;
 
 namespace SkEditor.ViewModels.Windows;
 
-public partial class MainWindowViewModel : ObservableRecipient
+public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenFileMessage>
 {
     private readonly IFileService _files;
     private readonly ITabService _tabs;
@@ -19,7 +19,8 @@ public partial class MainWindowViewModel : ObservableRecipient
     public MainWindowViewModel(ITabService tabs, IFileService files, AppSettings appSettings,
         MainMenuViewModel mainMenu,
         SidebarViewModel sidebar,
-        WelcomePageViewModel welcomePage)
+        WelcomePageViewModel welcomePage,
+        IMessenger messenger)
     {
         _tabs = tabs;
         _files = files;
@@ -34,7 +35,7 @@ public partial class MainWindowViewModel : ObservableRecipient
 
         Sidebar = sidebar;
 
-        RegisterMessengers(files);
+        messenger.Register(this);
     }
 
     [ObservableProperty]
@@ -47,9 +48,9 @@ public partial class MainWindowViewModel : ObservableRecipient
 
     public ObservableCollection<Tab> Tabs => _tabs.Tabs;
 
-    private void RegisterMessengers(IFileService files)
+    public void Receive(OpenFileMessage message)
     {
-        WeakReferenceMessenger.Default.Register<OpenFileMessage>(this, (_, m) => { files.OpenFileAsync(m.File); });
+        _files.OpenFileAsync(message.File);
     }
 
     partial void OnSelectedTabChanged(Tab? value)
