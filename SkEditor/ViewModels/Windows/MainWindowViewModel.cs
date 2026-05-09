@@ -50,7 +50,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 
     public void Receive(OpenFileMessage message)
     {
-        _files.OpenFileAsync(message.File);
+        _ = _files.OpenFileAsync(message.File);
     }
 
     partial void OnSelectedTabChanged(Tab? value)
