@@ -17,16 +17,17 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
     {
         base.OnAttached();
         AssociatedObject?.PropertyChanged += OnIsVisibleChanged;
-        AssociatedObject?.KeyDown += OnKeyDown;
         AssociatedObject?.LostFocus += OnLostFocus;
+        
+        AssociatedObject?.AddHandler(InputElement.KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
     }
 
     protected override void OnDetaching()
     {
         base.OnDetaching();
         AssociatedObject?.PropertyChanged -= OnIsVisibleChanged;
-        AssociatedObject?.KeyDown -= OnKeyDown;
         AssociatedObject?.LostFocus -= OnLostFocus;
+        AssociatedObject?.RemoveHandler(InputElement.KeyDownEvent, OnKeyDown);
     }
 
     private void OnIsVisibleChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
@@ -42,11 +43,21 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
         }
 
         _originalName = node.Name;
+        AssociatedObject.Text = node.Name;
 
         Dispatcher.UIThread.Post(() =>
         {
             AssociatedObject.Focus();
-            AssociatedObject.CaretIndex = AssociatedObject.Text?.Length ?? 0;
+            if (node.IsDirectory || node.Name.LastIndexOf('.') == -1)
+            {
+                AssociatedObject.SelectAll();
+            }
+            else
+            {
+                int extensionIndex = node.Name.LastIndexOf('.');
+                AssociatedObject.SelectionStart = 0;
+                AssociatedObject.SelectionEnd = extensionIndex;
+            }
         });
     }
 
@@ -81,19 +92,17 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
             return;
         }
 
-        node.IsRenaming = false;
+        node.OnRenamed(_originalName, AssociatedObject.Text ?? _originalName);
         ReturnFocus();
     }
 
     private void Cancel()
     {
-        if (AssociatedObject?.DataContext is not FileSystemNode node)
+        if (AssociatedObject?.DataContext is not FileSystemNode)
         {
             return;
         }
-
-        node.Name = _originalName;
-        node.IsRenaming = false;
+        
         ReturnFocus();
     }
 

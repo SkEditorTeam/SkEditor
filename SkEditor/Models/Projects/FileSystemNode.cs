@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -33,4 +34,19 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public abstract Task LoadChildren();
 
     public abstract IEnumerable<ProjectAction> GetSupportedActions();
+
+    public event EventHandler<NodeRenamedEventArgs>? Renamed;
+
+    public void OnRenamed(string oldName, string newName)
+    {
+        Renamed?.Invoke(this, new NodeRenamedEventArgs(oldName, newName));
+    }
+    
+    public abstract Task Rename(string newName);
+}
+
+public class NodeRenamedEventArgs(string oldName, string newName) : EventArgs
+{
+    public string OldName { get; } = oldName;
+    public string NewName { get; } = newName;
 }

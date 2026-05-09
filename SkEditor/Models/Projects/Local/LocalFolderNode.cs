@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
+using CommunityToolkit.Mvvm.Messaging;
+using Serilog;
+using SkEditor.Models.Messages;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Local;
 
@@ -77,5 +82,30 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             ProjectAction.ShowInExplorer,
             ProjectAction.OpenInTerminal
         ];
+    }
+
+    public override Task Rename(string newName)
+    {
+        if (IsRoot || System.IO.Path.GetDirectoryName(Path) is not { } parentDirectory) return Task.CompletedTask;
+
+        string newPath;
+        try
+        {
+            newPath = System.IO.Path.Combine(parentDirectory, newName);
+            Directory.Move(Path, newPath);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+            
+            Log.Error(ex, "Failed to rename folder {Path} to {NewName}", Path, newName);
+            return Task.CompletedTask;
+        }
+
+        Name = newName;
+        Path = newPath;
+
+        return Task.CompletedTask;
     }
 }

@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Projects;
@@ -94,6 +89,7 @@ public partial class FileTreeViewModel : ObservableObject
 
     public void OnSelectedNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        OpenCommand.NotifyCanExecuteChanged();
         UpdateContextMenuItems();
     }
 }

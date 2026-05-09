@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
+using CommunityToolkit.Mvvm.Messaging;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
+using Serilog;
+using SkEditor.Models.Messages;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Sftp;
 
@@ -36,7 +41,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         return folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
-    
+
     public override IEnumerable<ProjectAction> GetSupportedActions()
     {
         if (IsRoot)
@@ -71,5 +76,28 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
             ProjectAction.CopyPath,
             ProjectAction.CopyRelativePath
         ];
+    }
+
+    public override async Task Rename(string newName)
+    {
+        string newPath;
+
+        try
+        {
+            newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
+            await client.RenameFileAsync(Path, newPath, CancellationToken.None);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
+            Log.Error(ex, "Failed to rename folder {Path} to {NewName}", Path, newName);
+            return;
+        }
+
+        Path = newPath;
+        Name = newName;
     }
 }

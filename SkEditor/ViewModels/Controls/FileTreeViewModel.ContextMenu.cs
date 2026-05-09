@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using AvaloniaEdit.Utils;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Projects;
 using SkEditor.Utilities;
 
@@ -10,34 +11,67 @@ namespace SkEditor.ViewModels.Controls;
 
 public partial class FileTreeViewModel
 {
-    private Dictionary<ProjectAction, Action<List<FileSystemNode>>> _commandMap;
-    
+    private Dictionary<ProjectAction, IRelayCommand> _commandMap;
+
     [MemberNotNull(nameof(_commandMap))]
     private void InitializeCommandMap()
     {
-        _commandMap = new Dictionary<ProjectAction, Action<List<FileSystemNode>>>
+        _commandMap = new Dictionary<ProjectAction, IRelayCommand>
         {
-            { ProjectAction.ShowInExplorer, OpenInExplorer },
+            { ProjectAction.Open, OpenCommand },
+            { ProjectAction.Rename, RenameCommand },
+            { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
         };
     }
     
-    private static void OpenInExplorer(List<FileSystemNode> nodes)
+    private bool CanOpen() => SelectedNodes.All(n => !n.IsRenaming);
+
+    [RelayCommand(CanExecute = nameof(CanOpen))]
+    private void Open()
     {
-        foreach (var node in nodes)
+        foreach (var node in SelectedNodes)
+            node.OpenCommand?.Execute(null);
+    }
+
+    [RelayCommand]
+    private void Rename()
+    {
+        if (SelectedNodes.Count != 1) return;
+        FileSystemNode node = SelectedNodes[0];
+        
+        if (!node.GetSupportedActions().Contains(ProjectAction.Rename)) return;
+        
+        node.IsRenaming = true;
+
+        node.Renamed += OnNodeOnRenamed;
+        return;
+
+        void OnNodeOnRenamed(object? __, NodeRenamedEventArgs args)
         {
-            if (node.IsDirectory)
-                LinkOpener.OpenFolder(node.Path);
-            else
-                LinkOpener.OpenFolderWithFileSelection(node.Path);
+            _ = Task.Run(async () =>
+            {
+                node.IsRenaming = false;
+                await node.Rename(args.NewName);
+
+                node.Renamed -= OnNodeOnRenamed;
+            });
         }
     }
-    
+
+    [RelayCommand]
+    private void ShowInExplorer()
+    {
+        foreach (var node in SelectedNodes)
+        {
+            if (node.IsDirectory) LinkOpener.OpenFolder(node.Path);
+            else LinkOpener.OpenFolderWithFileSelection(node.Path);
+        }
+    }
+
     private void UpdateContextMenuItems()
     {
         ContextMenuItems.Clear();
         if (SelectedNodes.Count == 0) return;
-        
-        var selectedNodes = SelectedNodes.ToList();
 
         var actionsTemplate = SelectedNodes.First().GetSupportedActions();
         var commonActions = SelectedNodes
@@ -56,14 +90,14 @@ public partial class FileTreeViewModel
             if (!commonActions.Contains(action)) continue;
 
             var template = ProjectMenuRegistry.Templates[action];
-        
+
             if (template.AllowOneItemOnly && SelectedNodes.Count > 1) continue;
 
-            _commandMap.TryGetValue(action, out Action<List<FileSystemNode>>? handler);
-            handler ??= _ => { };
+            _commandMap.TryGetValue(action, out IRelayCommand? command);
             var item = ContextMenuItem.Item(template.Header)
                 .WithIcon(template.Icon)
-                .WithCommand(() => handler(selectedNodes));
+                .WithInputGesture(template.InputGestureText)
+                .WithCommand(command);
 
             ContextMenuItems.Add(item);
         }

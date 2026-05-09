@@ -15,7 +15,13 @@
     <UserControl.Resources>
         <converters:NodeToIconConverter x:Key="NodeToIconConverter" />
         <converters:NodeToColorConverter x:Key="NodeToColorConverter" />
+        <converters:KeyGestureConverter x:Key="KeyGestureConverter" />
     </UserControl.Resources>
+
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="F2" Command="{Binding RenameCommand}" />
+        <KeyBinding Gesture="Enter" Command="{Binding OpenCommand}" />
+    </UserControl.KeyBindings>
 
     <TreeView Name="FileTree" Theme="{DynamicResource FileTreeView}"
               ItemsSource="{Binding RootItems}" SelectedItems="{Binding SelectedNodes, Mode=TwoWay}"
@@ -29,6 +35,8 @@
                         <Setter Property="Icon"
                                 Value="{Binding Icon, Converter={StaticResource StandardIconConverter}}" />
                         <Setter Property="Command" Value="{Binding Command}" />
+                        <Setter Property="InputGesture"
+                                Value="{Binding InputGestureText, Converter={StaticResource KeyGestureConverter}}" />
                         <Setter Property="Header">
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ContextMenuHeaderConverter}">
@@ -97,7 +105,6 @@
                                    TextTrimming="CharacterEllipsis" />
 
                         <TextBox IsVisible="{Binding IsRenaming}"
-                                 Text="{Binding Name}"
                                  Margin="-5,-3">
                             <Interaction.Behaviors>
                                 <behaviors:FileTreeRenameBehavior />

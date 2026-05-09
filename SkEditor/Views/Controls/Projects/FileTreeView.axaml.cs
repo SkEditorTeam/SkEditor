@@ -14,7 +14,6 @@ public partial class FileTreeView : UserControl
     {
         InitializeComponent();
         FileTree.AddHandler(DoubleTappedEvent, OnTreeViewDoubleTapped, RoutingStrategies.Bubble);
-        FileTree.AddHandler(KeyDownEvent, OnTreeViewKeyDown, RoutingStrategies.Bubble);
         FileTree.AddHandler(ContextRequestedEvent, OnContextRequested, RoutingStrategies.Tunnel);
     }
 
@@ -38,26 +37,6 @@ public partial class FileTreeView : UserControl
             node.OpenCommand.CanExecute(null))
         {
             node.OpenCommand.Execute(null);
-        }
-    }
-
-    private static void OnTreeViewKeyDown(object? sender, KeyEventArgs e)
-    {
-        if (e.Source is not Control source)
-        {
-            return;
-        }
-
-        TreeViewItem? treeViewItem = source.FindAncestorOfType<TreeViewItem>(true);
-        if (treeViewItem?.DataContext is not FileSystemNode { OpenCommand: not null } node ||
-            !node.OpenCommand.CanExecute(null))
-        {
-            return;
-        }
-
-        if (e.Key == Key.F2)
-        {
-            node.IsRenaming = !node.IsRenaming;
         }
     }
 
