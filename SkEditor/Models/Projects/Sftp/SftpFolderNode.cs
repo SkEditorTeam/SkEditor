@@ -80,11 +80,29 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
 
     public override async Task Rename(string newName)
     {
-        string newPath;
+        char[] invalidChars = [ '/', '\\', '\0' ];
+        if (newName.IndexOfAny(invalidChars) >= 0)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
+
+            return;
+        }
+
+        string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
+
+        if (await client.ExistsAsync(newPath, CancellationToken.None))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return;
+        }
 
         try
         {
-            newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
             await client.RenameFileAsync(Path, newPath, CancellationToken.None);
         }
         catch (Exception ex)

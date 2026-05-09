@@ -38,8 +38,27 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
 
     public override async Task Rename(string newName)
     {
-        string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
+        char[] invalidChars = [ '/', '\\', '\0' ];
+        if (newName.IndexOfAny(invalidChars) >= 0)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
+
+            return;
+        }
         
+        string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
+
+        if (await client.ExistsAsync(newPath, CancellationToken.None))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return;
+        }
+
         try
         {
             await client.RenameFileAsync(Path, newPath, CancellationToken.None);
