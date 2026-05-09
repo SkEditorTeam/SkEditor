@@ -14,6 +14,8 @@ namespace SkEditor.Models.Projects.Sftp;
 
 public partial class SftpFileNode(string name, string path, SftpClient client) : BaseFileNode(name, path)
 {
+    public static readonly char[] InvalidSftpChars = [ '/', '\\', '\0' ];
+    
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
     [RelayCommand]
@@ -38,8 +40,7 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
 
     public override async Task Rename(string newName)
     {
-        char[] invalidChars = [ '/', '\\', '\0' ];
-        if (newName.IndexOfAny(invalidChars) >= 0)
+        if (newName.IndexOfAny(InvalidSftpChars) >= 0)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 TranslationKey.ProjectRenameFailedTitle,

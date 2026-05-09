@@ -80,8 +80,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
 
     public override async Task Rename(string newName)
     {
-        char[] invalidChars = [ '/', '\\', '\0' ];
-        if (newName.IndexOfAny(invalidChars) >= 0)
+        if (newName.IndexOfAny(SftpFileNode.InvalidSftpChars) >= 0)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 TranslationKey.ProjectRenameFailedTitle,

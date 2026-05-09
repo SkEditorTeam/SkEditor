@@ -12,6 +12,8 @@ namespace SkEditor.Models.Projects.Local;
 
 public partial class LocalFileNode(string name, string path) : BaseFileNode(name, path)
 {
+    public static readonly char[] InvalidChars = System.IO.Path.GetInvalidFileNameChars();
+    
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
     [RelayCommand]
@@ -41,8 +43,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
     {
         if (System.IO.Path.GetDirectoryName(Path) is not { } directory) return Task.CompletedTask;
         
-        char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
-        if (newName.IndexOfAny(invalidChars) >= 0)
+        if (newName.IndexOfAny(InvalidChars) >= 0)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 TranslationKey.ProjectRenameFailedTitle,

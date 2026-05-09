@@ -88,8 +88,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
     {
         if (IsRoot || System.IO.Path.GetDirectoryName(Path) is not { } parentDirectory) return Task.CompletedTask;
 
-        char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
-        if (newName.IndexOfAny(invalidChars) >= 0)
+        if (newName.IndexOfAny(LocalFileNode.InvalidChars) >= 0)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 TranslationKey.ProjectRenameFailedTitle,
