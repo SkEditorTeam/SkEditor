@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentIcons.Common;
 
 namespace SkEditor.Models.Projects;
 
@@ -33,15 +32,5 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public abstract Task LoadChildren();
 
-    public abstract List<ContextMenuItem> GetMenuItems();
-
-    protected static IEnumerable<ContextMenuItem> GetCommonMenuItems()
-    {
-        yield return ProjectMenuItems.Duplicate;
-        yield return ProjectMenuItems.Rename;
-        yield return ProjectMenuItems.Delete;
-        yield return ContextMenuItem.Separator;
-        yield return ProjectMenuItems.CopyPath;
-        yield return ProjectMenuItems.CopyRelativePath;
-    }
+    public abstract IEnumerable<ProjectAction> GetSupportedActions();
 }

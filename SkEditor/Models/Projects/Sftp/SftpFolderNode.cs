@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentIcons.Common;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 
@@ -37,35 +36,40 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         return folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
-
-    public override List<ContextMenuItem> GetMenuItems()
+    
+    public override IEnumerable<ProjectAction> GetSupportedActions()
     {
         if (IsRoot)
         {
             return
             [
-                ProjectMenuItems.NewFile,
-                ProjectMenuItems.NewFolder,
-                ContextMenuItem.Separator,
-                ProjectMenuItems.Upload,
-                ProjectMenuItems.Download,
-                ContextMenuItem.Separator,
-                ProjectMenuItems.CopyPath,
-                ContextMenuItem.Separator,
-                ProjectMenuItems.Refresh,
-                ProjectMenuItems.Disconnect
+                ProjectAction.NewFile,
+                ProjectAction.NewFolder,
+                ProjectAction.Separator,
+                ProjectAction.Upload,
+                ProjectAction.Download,
+                ProjectAction.Separator,
+                ProjectAction.CopyPath,
+                ProjectAction.Separator,
+                ProjectAction.Refresh,
+                ProjectAction.Disconnect
             ];
         }
 
         return
         [
-            ProjectMenuItems.NewFile,
-            ProjectMenuItems.NewFolder,
-            ContextMenuItem.Separator,
-            ProjectMenuItems.Upload,
-            ProjectMenuItems.Download,
-            ContextMenuItem.Separator,
-            .. GetCommonMenuItems()
+            ProjectAction.NewFile,
+            ProjectAction.NewFolder,
+            ProjectAction.Separator,
+            ProjectAction.Upload,
+            ProjectAction.Download,
+            ProjectAction.Separator,
+            ProjectAction.Duplicate,
+            ProjectAction.Rename,
+            ProjectAction.Delete,
+            ProjectAction.Separator,
+            ProjectAction.CopyPath,
+            ProjectAction.CopyRelativePath
         ];
     }
 }

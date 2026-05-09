@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Projects;
@@ -19,6 +21,7 @@ public partial class FileTreeViewModel : ObservableObject
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
     private CancellationTokenSource? _cts;
+    
 
     public FileTreeViewModel(ILogService logs, INotificationService notifs)
     {
@@ -26,6 +29,8 @@ public partial class FileTreeViewModel : ObservableObject
         _notifs = notifs;
 
         SelectedNodes.CollectionChanged += OnSelectedNodesChanged;
+        
+        InitializeCommandMap();
     }
 
     [ObservableProperty]
@@ -90,61 +95,5 @@ public partial class FileTreeViewModel : ObservableObject
     public void OnSelectedNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         UpdateContextMenuItems();
-    }
-
-    public void UpdateContextMenuItems()
-    {
-        ContextMenuItems.Clear();
-
-        if (SelectedNodes.Count == 0)
-        {
-            return;
-        }
-
-        List<ContextMenuItem> templateMenu = SelectedNodes.First().GetMenuItems();
-
-        HashSet<string?> commonHeaders = SelectedNodes
-            .Select(node => node.GetMenuItems().Where(m => !m.IsSeparator).Select(m => m.Header))
-            .Aggregate((prev, next) => prev.Intersect(next).ToList())
-            .ToHashSet();
-
-        List<ContextMenuItem> filteredMenu = templateMenu
-            .Where(item => item.IsSeparator || commonHeaders.Contains(item.Header))
-            .Where(item => !item.AllowForOneItemOnly || SelectedNodes.Count == 1)
-            .ToList();
-
-        ContextMenuItems.AddRange(CleanUpSeparators(filteredMenu));
-    }
-
-    public List<ContextMenuItem> CleanUpSeparators(IEnumerable<ContextMenuItem> menuItems)
-    {
-        List<ContextMenuItem> cleaned = new();
-        bool lastWasSeparator = true;
-
-        foreach (ContextMenuItem item in menuItems)
-        {
-            if (item.IsSeparator)
-            {
-                if (lastWasSeparator)
-                {
-                    continue;
-                }
-
-                cleaned.Add(item);
-                lastWasSeparator = true;
-            }
-            else
-            {
-                cleaned.Add(item);
-                lastWasSeparator = false;
-            }
-        }
-
-        if (cleaned.Count > 0 && cleaned[^1].IsSeparator)
-        {
-            cleaned.RemoveAt(cleaned.Count - 1);
-        }
-
-        return cleaned;
     }
 }

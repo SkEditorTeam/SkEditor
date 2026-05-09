@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentIcons.Common;
 
 namespace SkEditor.Models.Projects.Local;
 
@@ -47,31 +46,36 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
                 entry.Attributes.HasFlag(FileAttributes.System));
     }
 
-    public override List<ContextMenuItem> GetMenuItems()
+    public override IEnumerable<ProjectAction> GetSupportedActions()
     {
         if (IsRoot)
         {
             return
             [
-                ProjectMenuItems.NewFile,
-                ProjectMenuItems.NewFolder,
-                ContextMenuItem.Separator,
-                ProjectMenuItems.CopyPath,
-                ContextMenuItem.Separator,
-                ProjectMenuItems.ShowInExplorer,
-                ProjectMenuItems.OpenInTerminal
+                ProjectAction.NewFile,
+                ProjectAction.NewFolder,
+                ProjectAction.Separator,
+                ProjectAction.CopyPath,
+                ProjectAction.Separator,
+                ProjectAction.ShowInExplorer,
+                ProjectAction.OpenInTerminal
             ];
         }
 
         return
         [
-            ProjectMenuItems.NewFile,
-            ProjectMenuItems.NewFolder,
-            ContextMenuItem.Separator,
-            .. GetCommonMenuItems(),
-            ContextMenuItem.Separator,
-            ProjectMenuItems.ShowInExplorer,
-            ProjectMenuItems.OpenInTerminal
+            ProjectAction.NewFile,
+            ProjectAction.NewFolder,
+            ProjectAction.Separator,
+            ProjectAction.Duplicate,
+            ProjectAction.Rename,
+            ProjectAction.Delete,
+            ProjectAction.Separator,
+            ProjectAction.CopyPath,
+            ProjectAction.CopyRelativePath,
+            ProjectAction.Separator,
+            ProjectAction.ShowInExplorer,
+            ProjectAction.OpenInTerminal
         ];
     }
 }

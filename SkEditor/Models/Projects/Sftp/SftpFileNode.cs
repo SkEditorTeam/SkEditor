@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using FluentIcons.Common;
 using Renci.SshNet;
 using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
@@ -17,15 +16,18 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
     {
         WeakReferenceMessenger.Default.Send(new OpenFileMessage(new SftpFile(Path, Name, client)));
     }
-
-    public override List<ContextMenuItem> GetMenuItems()
-    {
-        return
-        [
-            ContextMenuItem.Item("Open").WithIcon(Symbol.Open).WithCommand(OpenFileCommand),
-            ProjectMenuItems.Download,
-            ContextMenuItem.Separator,
-            .. GetCommonMenuItems()
-        ];
-    }
+    
+    public override IEnumerable<ProjectAction> GetSupportedActions() =>
+    [
+        ProjectAction.Open,
+        ProjectAction.Separator,
+        ProjectAction.Download,
+        ProjectAction.Separator,
+        ProjectAction.Duplicate,
+        ProjectAction.Rename,
+        ProjectAction.Delete,
+        ProjectAction.Separator,
+        ProjectAction.CopyPath,
+        ProjectAction.CopyRelativePath
+    ];
 }

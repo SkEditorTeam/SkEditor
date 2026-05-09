@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using FluentIcons.Common;
 using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 
@@ -17,15 +16,17 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
         WeakReferenceMessenger.Default.Send(new OpenFileMessage(new LocalFile(Path, Name)));
     }
 
-    public override List<ContextMenuItem> GetMenuItems()
-    {
-        return
-        [
-            ContextMenuItem.Item("Open").WithIcon(Symbol.Open).WithCommand(OpenFileCommand),
-            ContextMenuItem.Separator,
-            .. GetCommonMenuItems(),
-            ContextMenuItem.Separator,
-            ProjectMenuItems.ShowInExplorer
-        ];
-    }
+    public override IEnumerable<ProjectAction> GetSupportedActions() =>
+    [
+        ProjectAction.Open,
+        ProjectAction.Separator,
+        ProjectAction.Duplicate,
+        ProjectAction.Rename,
+        ProjectAction.Delete,
+        ProjectAction.Separator,
+        ProjectAction.CopyPath,
+        ProjectAction.CopyRelativePath,
+        ProjectAction.Separator,
+        ProjectAction.ShowInExplorer
+    ];
 }
