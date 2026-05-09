@@ -80,6 +80,7 @@ public partial class FileTreeViewModel : ObservableObject
         {
             RootItems.Clear();
             RootItems.Add(FileSystem.Root);
+            FileSystem.Root.IsExpanded = true;
         }
 
         IsLoading = false;
