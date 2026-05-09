@@ -68,9 +68,14 @@ public partial class FileTreeView : UserControl
             return;
         }
 
-        if (source.FindAncestorOfType<TreeViewItem>(true) is null)
+        var treeViewItem = source.FindAncestorOfType<TreeViewItem>(true);
+        if (treeViewItem is null)
         {
             e.Handled = true;
+        }
+        else
+        {
+            treeViewItem.Focus();
         }
     }
 }
