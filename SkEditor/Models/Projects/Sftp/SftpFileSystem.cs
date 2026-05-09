@@ -26,6 +26,10 @@ public class SftpFileSystem(
             await Root.LoadChildren();
             return true;
         }
+        catch (OperationCanceledException)
+        {
+            return false;
+        }
         catch (Exception ex)
         {
             notifications.ShowError(TranslatableString.FromRawString("Connection Error"),

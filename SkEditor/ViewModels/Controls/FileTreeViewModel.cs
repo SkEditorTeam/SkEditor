@@ -16,7 +16,6 @@ public partial class FileTreeViewModel : ObservableObject
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
     private CancellationTokenSource? _cts;
-    
 
     public FileTreeViewModel(ILogService logs, INotificationService notifs)
     {
@@ -66,11 +65,24 @@ public partial class FileTreeViewModel : ObservableObject
         }
 
         _cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        bool isSuccess = await FileSystem.LoadAsync(_cts.Token);
+        var thisCts = _cts;
+        
+        bool isSuccess;
+        try
+        {
+            isSuccess = await FileSystem.LoadAsync(_cts.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            if (ReferenceEquals(_cts, thisCts))
+                IsLoading = false;
+            return false;
+        }
 
         if (!isSuccess)
         {
-            IsLoading = false;
+            if (ReferenceEquals(_cts, thisCts))
+                IsLoading = false;
             return false;
         }
 
@@ -83,7 +95,8 @@ public partial class FileTreeViewModel : ObservableObject
             FileSystem.Root.IsExpanded = true;
         }
 
-        IsLoading = false;
+        if (ReferenceEquals(_cts, thisCts))
+            IsLoading = false;
         return true;
     }
 

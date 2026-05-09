@@ -42,7 +42,7 @@ public partial class RemoteExplorerViewModel(
     private async Task HandleConnectionChangedAsync(RemoteConnection value)
     {
         bool success = await ChangeConnection(value);
-        if (!success)
+        if (!success && ReferenceEquals(SelectedConnection, value))
         {
             SelectedConnection = null;
         }
