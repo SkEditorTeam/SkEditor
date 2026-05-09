@@ -13,7 +13,7 @@ public class MenuHeaderConverter : IMultiValueConverter
 {
     public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
-        object? headerKey = values[0];
+        object? header = values[0];
         object? iconSymbol = values[1];
         bool isSeparator = values[2] is true;
 
@@ -22,9 +22,9 @@ public class MenuHeaderConverter : IMultiValueConverter
             return "-";
         }
 
-        if (headerKey is TranslationKey translationKey)
+        if (header is string headerString)
         {
-            return TranslationService.Current.GetObservable(translationKey);
+            return headerString;
         }
 
         if (iconSymbol is Symbol symbol)

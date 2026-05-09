@@ -12,8 +12,8 @@ public partial class MainMenuItem : ObservableObject
 {
     [ObservableProperty]
     public partial bool IsVisible { get; set; } = true;
-
-    public TranslationKey? HeaderKey { get; private set; }
+    
+    public TranslatableString? Header { get; private set; }
     public Symbol? IconSymbol { get; private set; }
     public IRelayCommand? Command { get; private set; }
     public IEnumerable<MainMenuItem>? SubItems { get; private set; }
@@ -23,9 +23,9 @@ public partial class MainMenuItem : ObservableObject
 
     public static MainMenuItem Separator => new() { IsSeparator = true };
 
-    public static MainMenuItem HeaderOnly(TranslationKey headerKey)
+    public static MainMenuItem HeaderOnly(TranslatableString header)
     {
-        return new MainMenuItem { HeaderKey = headerKey };
+        return new MainMenuItem { Header = header };
     }
 
     public static MainMenuItem IconOnly(Symbol iconSymbol)
@@ -33,11 +33,11 @@ public partial class MainMenuItem : ObservableObject
         return new MainMenuItem { IconSymbol = iconSymbol };
     }
 
-    public static MainMenuItem HeaderWithIcon(TranslationKey headerKey, Symbol iconSymbol)
+    public static MainMenuItem HeaderWithIcon(TranslatableString header, Symbol iconSymbol)
     {
         return new MainMenuItem
         {
-            HeaderKey = headerKey,
+            Header = header,
             IconSymbol = iconSymbol
         };
     }

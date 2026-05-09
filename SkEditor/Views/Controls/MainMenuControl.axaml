@@ -39,7 +39,7 @@
                 <Setter Property="Header">
                     <Setter.Value>
                         <MultiBinding Converter="{StaticResource MenuHeaderConverter}">
-                            <Binding Path="HeaderKey" />
+                            <Binding Path="Header?.Value" />
                             <Binding Path="IconSymbol" />
                             <Binding Path="IsSeparator" />
                         </MultiBinding>
