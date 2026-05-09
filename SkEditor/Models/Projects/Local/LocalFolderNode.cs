@@ -53,25 +53,25 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         {
             return
             [
-                ContextMenuItem.Item("New File").WithIcon(Symbol.DocumentAdd).AllowOneItemOnly(),
-                ContextMenuItem.Item("New Folder").WithIcon(Symbol.FolderAdd).AllowOneItemOnly(),
+                ProjectMenuItems.NewFile,
+                ProjectMenuItems.NewFolder,
                 ContextMenuItem.Separator,
-                ContextMenuItem.Item("Copy Path").WithIcon(Symbol.Clipboard),
+                ProjectMenuItems.CopyPath,
                 ContextMenuItem.Separator,
-                ContextMenuItem.Item("Show in Explorer").WithIcon(Symbol.FolderOpen),
-                ContextMenuItem.Item("Open in Terminal").WithIcon(Symbol.CodeBlock).AllowOneItemOnly()
+                ProjectMenuItems.ShowInExplorer,
+                ProjectMenuItems.OpenInTerminal
             ];
         }
 
         return
         [
-            ContextMenuItem.Item("New File").WithIcon(Symbol.DocumentAdd).AllowOneItemOnly(),
-            ContextMenuItem.Item("New Folder").WithIcon(Symbol.FolderAdd).AllowOneItemOnly(),
+            ProjectMenuItems.NewFile,
+            ProjectMenuItems.NewFolder,
             ContextMenuItem.Separator,
             .. GetCommonMenuItems(),
             ContextMenuItem.Separator,
-            ContextMenuItem.Item("Show in Explorer").WithIcon(Symbol.FolderOpen),
-            ContextMenuItem.Item("Open in Terminal").WithIcon(Symbol.CodeBlock).AllowOneItemOnly()
+            ProjectMenuItems.ShowInExplorer,
+            ProjectMenuItems.OpenInTerminal
         ];
     }
 }

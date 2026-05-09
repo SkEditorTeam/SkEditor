@@ -35,13 +35,13 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public abstract List<ContextMenuItem> GetMenuItems();
 
-    public static IEnumerable<ContextMenuItem> GetCommonMenuItems()
+    protected static IEnumerable<ContextMenuItem> GetCommonMenuItems()
     {
-        yield return ContextMenuItem.Item("Duplicate").WithIcon(Symbol.DocumentCopy);
-        yield return ContextMenuItem.Item("Rename").WithIcon(Symbol.Rename).AllowOneItemOnly();
-        yield return ContextMenuItem.Item("Delete").WithIcon(Symbol.Delete);
+        yield return ProjectMenuItems.Duplicate;
+        yield return ProjectMenuItems.Rename;
+        yield return ProjectMenuItems.Delete;
         yield return ContextMenuItem.Separator;
-        yield return ContextMenuItem.Item("Copy Path").WithIcon(Symbol.Clipboard);
-        yield return ContextMenuItem.Item("Copy Relative Path").WithIcon(Symbol.ClipboardLink);
+        yield return ProjectMenuItems.CopyPath;
+        yield return ProjectMenuItems.CopyRelativePath;
     }
 }

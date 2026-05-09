@@ -44,26 +44,26 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         {
             return
             [
-                ContextMenuItem.Item("New File").WithIcon(Symbol.DocumentAdd).AllowOneItemOnly(),
-                ContextMenuItem.Item("New Folder").WithIcon(Symbol.FolderAdd).AllowOneItemOnly(),
+                ProjectMenuItems.NewFile,
+                ProjectMenuItems.NewFolder,
                 ContextMenuItem.Separator,
-                ContextMenuItem.Item("Upload").WithIcon(Symbol.ArrowUpload).AllowOneItemOnly(),
-                ContextMenuItem.Item("Download").WithIcon(Symbol.ArrowDownload),
+                ProjectMenuItems.Upload,
+                ProjectMenuItems.Download,
                 ContextMenuItem.Separator,
-                ContextMenuItem.Item("Copy Path").WithIcon(Symbol.Clipboard),
+                ProjectMenuItems.CopyPath,
                 ContextMenuItem.Separator,
-                ContextMenuItem.Item("Refresh").WithIcon(Symbol.ArrowClockwise),
-                ContextMenuItem.Item("Disconnect").WithIcon(Symbol.PlugDisconnected)
+                ProjectMenuItems.Refresh,
+                ProjectMenuItems.Disconnect
             ];
         }
 
         return
         [
-            ContextMenuItem.Item("New File").WithIcon(Symbol.DocumentAdd).AllowOneItemOnly(),
-            ContextMenuItem.Item("New Folder").WithIcon(Symbol.FolderAdd).AllowOneItemOnly(),
+            ProjectMenuItems.NewFile,
+            ProjectMenuItems.NewFolder,
             ContextMenuItem.Separator,
-            ContextMenuItem.Item("Upload").WithIcon(Symbol.ArrowUpload).AllowOneItemOnly(),
-            ContextMenuItem.Item("Download").WithIcon(Symbol.ArrowDownload),
+            ProjectMenuItems.Upload,
+            ProjectMenuItems.Download,
             ContextMenuItem.Separator,
             .. GetCommonMenuItems()
         ];

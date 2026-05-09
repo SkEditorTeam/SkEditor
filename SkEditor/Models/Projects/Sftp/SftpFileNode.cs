@@ -23,7 +23,7 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
         return
         [
             ContextMenuItem.Item("Open").WithIcon(Symbol.Open).WithCommand(OpenFileCommand),
-            ContextMenuItem.Item("Download").WithIcon(Symbol.ArrowDownload),
+            ProjectMenuItems.Download,
             ContextMenuItem.Separator,
             .. GetCommonMenuItems()
         ];

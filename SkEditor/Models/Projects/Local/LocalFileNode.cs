@@ -25,7 +25,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
             ContextMenuItem.Separator,
             .. GetCommonMenuItems(),
             ContextMenuItem.Separator,
-            ContextMenuItem.Item("Show in Explorer").WithIcon(Symbol.FolderOpen)
+            ProjectMenuItems.ShowInExplorer
         ];
     }
 }
