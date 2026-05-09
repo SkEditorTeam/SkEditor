@@ -99,4 +99,10 @@
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit.TextMate\AvaloniaEdit.TextMate.csproj"/>
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false"/>
     </ItemGroup>
+
+    <Target Name="RemoveNativePdbFiles" AfterTargets="ComputeFilesToPublish">
+        <ItemGroup>
+            <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb' And '%(Filename)' != '$(TargetName)'" />
+        </ItemGroup>
+    </Target>
 </Project>
