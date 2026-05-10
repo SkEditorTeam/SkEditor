@@ -51,8 +51,12 @@ public class FileService(
         }
 
         FileTab fileTab = fileTabFactory.CreateFromFile(file);
-        await fileTab.LoadContentAsync();
-        tabs.OpenTab(fileTab);
+        bool success = await fileTab.LoadContentAsync();
+        
+        if (success)
+        {
+            tabs.OpenTab(fileTab);
+        }
     }
 
     public async Task SaveFileAsync()
