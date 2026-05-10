@@ -23,6 +23,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     private readonly IRemoteConnectionService _remoteConnections;
     private readonly WindowRegistry _windowRegistry;
 
+    private int _connectionChangeId;
     private bool _isChangingConnection;
 
     public RemoteExplorerViewModel(FileTreeViewModel fileTree,
@@ -76,6 +77,12 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     private async Task HandleConnectionChangedAsync(RemoteConnection value)
     {
         bool success = await ChangeConnection(value);
+
+        if (SelectedConnection != value)
+        {
+            return;
+        }
+
         if (!success)
         {
             SelectedConnection = null;
@@ -84,17 +91,21 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
 
     private async Task<bool> ChangeConnection(RemoteConnection connection)
     {
-        if (connection == null)
-        {
-            return false;
-        }
-
+        int currentId = ++_connectionChangeId;
         _isChangingConnection = true;
+
         try
         {
             if (FileTree.FileSystem != null)
             {
                 await FileTree.CloseFileSystemAsync();
+
+                if (_connectionChangeId != currentId)
+                {
+                    return false;
+                }
+
+                FileTree.FileSystem = null;
             }
 
             FileTree.FileSystem = new SftpFileSystem(connection, _remoteConnections, _notifications);
@@ -103,7 +114,10 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         }
         finally
         {
-            _isChangingConnection = false;
+            if (_connectionChangeId == currentId)
+            {
+                _isChangingConnection = false;
+            }
         }
     }
 

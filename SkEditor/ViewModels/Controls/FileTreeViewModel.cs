@@ -57,9 +57,7 @@ public partial class FileTreeViewModel : ObservableObject
 
         RootItems.Clear();
         IsLoading = true;
-
-        Stopwatch stopwatch = Stopwatch.StartNew();
-
+        
         if (FileSystem == null)
         {
             _logs.Warning("File system is null, cannot load!");
@@ -88,8 +86,11 @@ public partial class FileTreeViewModel : ObservableObject
                 IsLoading = false;
             return false;
         }
-
-        stopwatch.Stop();
+        
+        if (!ReferenceEquals(_cts, thisCts))
+        {
+            return false;
+        }
 
         if (FileSystem.Root != null)
         {
@@ -98,8 +99,7 @@ public partial class FileTreeViewModel : ObservableObject
             FileSystem.Root.IsExpanded = true;
         }
 
-        if (ReferenceEquals(_cts, thisCts))
-            IsLoading = false;
+        IsLoading = false;
         return true;
     }
 

@@ -56,7 +56,6 @@ public partial class FileTreeViewModel
 
         RootItems.Clear();
         SelectedNodes.Clear();
-        ContextMenuItems.Clear();
         FileSystem = null;
         IsLoading = false;
     }
