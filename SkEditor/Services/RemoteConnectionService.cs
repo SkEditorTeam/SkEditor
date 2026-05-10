@@ -130,6 +130,16 @@ public class RemoteConnectionService(ITranslationService translation, ILogServic
         }
     }
 
+    public SftpClient? GetSftpClient(RemoteConnection connection)
+    {
+        if (_activeConnections.TryGetValue(connection, out SftpClient? client) && client.IsConnected)
+        {
+            return client;
+        }
+
+        return null;
+    }
+
     public void Disconnect(RemoteConnection connection)
     {
         if (!_activeConnections.TryGetValue(connection, out SftpClient? client))
@@ -137,8 +147,19 @@ public class RemoteConnectionService(ITranslationService translation, ILogServic
             return;
         }
 
-        client.Dispose();
-        _activeConnections.Remove(connection);
+        try
+        {
+            if (client.IsConnected) client.Disconnect();
+        }
+        catch (Exception ex)
+        {
+            logs.Error($"Error disconnecting from {connection.Name}: {ex.Message}");
+        }
+        finally
+        {
+            client.Dispose();
+            _activeConnections.Remove(connection);
+        }
     }
 
     private AuthenticationMethod GetAuthMethod(RemoteConnection connection)

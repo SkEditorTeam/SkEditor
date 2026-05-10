@@ -5,8 +5,8 @@ using System.IO;
 using Avalonia.Data.Converters;
 using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Sftp;
+using SkEditor.Models.Projects.Types;
 using SkEditor.Services;
 
 namespace SkEditor.Converters;

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Renci.SshNet;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Projects.Types;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
 
@@ -36,5 +37,20 @@ public class SftpFileSystem(
                 TranslatableString.FromRawString("Failed to connect to {0}: {1}", connection.Name, ex.Message));
             return false;
         }
+    }
+
+    public void Disconnect()
+    {
+        if (Root is not SftpFolderNode)
+        {
+            return;
+        }
+
+        SftpClient? client = connections.GetSftpClient(connection);
+        client?.Disconnect();
+
+        connections.Disconnect(connection);
+
+        Root = null;
     }
 }

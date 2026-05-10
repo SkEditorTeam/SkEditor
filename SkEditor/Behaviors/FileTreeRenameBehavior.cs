@@ -5,7 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
-using SkEditor.Models.Projects;
+using SkEditor.Models.Projects.Types;
 
 namespace SkEditor.Behaviors;
 

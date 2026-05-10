@@ -5,9 +5,12 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Projects;
+using SkEditor.Models.Projects.Types;
 
 namespace SkEditor.ViewModels.Controls;
 
@@ -104,5 +107,10 @@ public partial class FileTreeViewModel : ObservableObject
     {
         OpenCommand.NotifyCanExecuteChanged();
         UpdateContextMenuItems();
+    }
+    
+    partial void OnFileSystemChanged(IFileSystem? value)
+    {
+        WeakReferenceMessenger.Default.Send(new FileSystemChangedMessage(value));
     }
 }

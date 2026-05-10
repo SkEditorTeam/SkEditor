@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Projects.Local;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Models.Projects.Types;
 
 public abstract partial class BaseFolderNode : FileSystemNode
 {

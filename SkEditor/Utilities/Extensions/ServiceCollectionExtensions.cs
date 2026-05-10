@@ -209,8 +209,8 @@ public static class ServiceCollectionExtensions
 
         public void AddSidebar()
         {
-            services.AddTransient<ISidebarPanelViewModel, ExplorerViewModel>();
-            services.AddTransient<ISidebarPanelViewModel, RemoteExplorerViewModel>();
+            services.AddSingleton<ISidebarPanelViewModel, ExplorerViewModel>();
+            services.AddSingleton<ISidebarPanelViewModel, RemoteExplorerViewModel>();
 
             services.AddSingleton<SidebarViewModel>();
 

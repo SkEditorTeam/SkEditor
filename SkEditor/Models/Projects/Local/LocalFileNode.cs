@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Serilog;
 using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
+using SkEditor.Models.Projects.Types;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Local;

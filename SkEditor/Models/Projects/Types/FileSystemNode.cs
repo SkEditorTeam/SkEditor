@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Models.Projects.Types;
 
 public abstract partial class FileSystemNode(string name, string path, bool isDirectory) : ObservableObject
 {
@@ -19,9 +19,9 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public partial bool IsRenaming { get; set; }
 
     [ObservableProperty]
-    public partial string Name { get; set; } = name;
+    public partial string Name { get; protected set; } = name;
 
-    public string Path { get; set; } = path;
+    public string Path { get; protected set; } = path;
     public bool IsDirectory { get; set; } = isDirectory;
     public bool IsRoot { get; set; }
 

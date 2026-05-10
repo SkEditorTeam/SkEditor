@@ -5,8 +5,8 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Sftp;
+using SkEditor.Models.Projects.Types;
 using SkEditor.Services;
 
 namespace SkEditor.Converters;

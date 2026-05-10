@@ -3,7 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
-using SkEditor.Models.Projects;
+using SkEditor.Models.Projects.Types;
 using SkEditor.ViewModels.Controls;
 
 namespace SkEditor.Views.Controls.Projects;

@@ -4,6 +4,7 @@
                     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
                     xmlns:projects="clr-namespace:SkEditor.Models.Projects"
                     xmlns:converters1="clr-namespace:SkEditor.Converters"
+                    xmlns:types="clr-namespace:SkEditor.Models.Projects.Types"
                     x:CompileBindings="True">
 
     <converters1:StandardIconConverter x:Key="StandardIconConverter" />
@@ -82,7 +83,7 @@
                 Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=Bounds.Width}" />
         <Setter Property="FocusAdorner" Value="{x:Null}"/>
         <Setter Property="Template">
-            <ControlTemplate x:DataType="projects:FileSystemNode">
+            <ControlTemplate x:DataType="types:FileSystemNode">
                 <StackPanel>
                     <Border Name="PART_LayoutRoot"
                             Classes="TreeViewItemLayoutRoot"

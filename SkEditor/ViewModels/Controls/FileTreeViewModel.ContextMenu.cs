@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Projects;
+using SkEditor.Models.Projects.Sftp;
+using SkEditor.Models.Projects.Types;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 
@@ -22,7 +24,41 @@ public partial class FileTreeViewModel
             { ProjectAction.Open, OpenCommand },
             { ProjectAction.Rename, RenameCommand },
             { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
+            { ProjectAction.Disconnect, DisconnectCommand },
         };
+    }
+
+    [RelayCommand]
+    private async Task Disconnect()
+    {
+        if (SelectedNodes.Count != 1) return;
+        FileSystemNode node = SelectedNodes[0];
+    
+        if (FileSystem is SftpFileSystem && node.IsRoot)
+        {
+            await CloseFileSystemAsync();
+        }
+    }
+    
+    public async Task CloseFileSystemAsync()
+    {
+        if (_cts != null)
+        {
+            await _cts.CancelAsync();
+            _cts.Dispose();
+            _cts = null;
+        }
+
+        if (FileSystem is SftpFileSystem sftp)
+        {
+            sftp.Disconnect();
+        }
+
+        RootItems.Clear();
+        SelectedNodes.Clear();
+        ContextMenuItems.Clear();
+        FileSystem = null;
+        IsLoading = false;
     }
 
     private bool CanOpen() => SelectedNodes.All(n => !n.IsRenaming);
