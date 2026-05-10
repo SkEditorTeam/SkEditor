@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
@@ -6,6 +7,7 @@ using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Dialogs;
+using SkEditor.Models.Dialogs.Elements;
 using SkEditor.Services.Windowing;
 using SkEditor.Views.Windows;
 
@@ -27,7 +29,7 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
 
         object result = await taskDialog.ShowAsync(true);
 
-        return result as DialogResult ?? throw new InvalidOperationException("Unexpected dialog result type.");
+        return result as DialogResult ?? DialogResult.Cancel;
     }
 
     private static FATaskDialog BuildTaskDialog(Dialog dialog)
@@ -62,6 +64,8 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
             };
         }
 
+        taskDialog.Closing += OnTaskDialogOnClosing;
+
         foreach (DialogButton button in dialog.Buttons)
         {
             taskDialog.Buttons.Add(new FATaskDialogButton(button.Text.Value, button.Result)
@@ -69,5 +73,37 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
         }
 
         return taskDialog;
+
+        void OnTaskDialogOnClosing(FATaskDialog _, FATaskDialogClosingEventArgs args)
+        {
+            if (args.Result is FATaskDialogStandardResult.None)
+            {
+                if (!dialog.AllowIgnore)
+                {
+                    args.Cancel = true;
+                }
+
+                return;
+            }
+            
+            if (DialogResult.Cancel.Equals(args.Result))
+            {
+                return;
+            }
+
+            if (dialog.Elements.Any(e => e is TextDialogElement { ValidationFunc: not null }))
+            {
+                bool valid = dialog.Elements.OfType<TextDialogElement>()
+                    .Select(e => e.Validate())
+                    .Aggregate(true, (acc, v) => acc && v);
+
+                args.Cancel = !valid;
+            }
+            
+            if (!args.Cancel)
+            {
+                taskDialog.Closing -= OnTaskDialogOnClosing;
+            }
+        }
     }
 }

@@ -31,12 +31,18 @@ public class Dialog
     ///     <see cref="WithButtons" /> method.
     /// </summary>
     public List<DialogButton> Buttons { get; init; } = [];
-    
+
     /// <summary>
     ///     The elements that will be displayed in the dialog. This is an optional property and can be set using the
     ///     <see cref="WithElements" /> method. Elements can be used to display additional content in the dialog.
     /// </summary>
     public List<DialogElement> Elements { get; init; } = [];
+
+    /// <summary>
+    ///     Whether user should be able to use Esc key to close the dialog with a <see cref="DialogResult" /> of
+    ///     <see cref="StandardDialogResult.Cancel" /> (even if there is no Cancel button)
+    /// </summary>
+    public bool AllowIgnore { get; set; } = true;
 
     /// <summary>
     ///     Creates a new dialog with the specified title, message, and buttons.
@@ -104,8 +110,8 @@ public class Dialog
         Buttons.AddRange(buttons);
         return this;
     }
-    
-    
+
+
     /// <summary>
     ///     Adds the specified elements to the dialog and returns the dialog instance for chaining. This method can be used to
     ///     add elements to the dialog after it has been created using the <see cref="Create(TranslatableString)" /> method.
@@ -115,6 +121,17 @@ public class Dialog
     public Dialog WithElements(params DialogElement[] elements)
     {
         Elements.AddRange(elements);
+        return this;
+    }
+    
+    /// <summary>
+    ///     Disallows the user from ignoring the dialog by pressing the Esc key. When this method is called, pressing the Esc key
+    ///     will not close the dialog.
+    /// </summary>
+    /// <returns>The dialog instance with the updated AllowIgnore property.</returns>
+    public Dialog DisallowIgnore()
+    {
+        AllowIgnore = false;
         return this;
     }
 }

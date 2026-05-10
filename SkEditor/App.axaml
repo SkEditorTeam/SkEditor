@@ -87,7 +87,16 @@
         </DataTemplate>
         
         <DataTemplate DataType="{x:Type dialogs:TextDialogElement}">
-            <TextBox Text="{Binding Text, Mode=TwoWay}" PlaceholderText="{Binding PlaceholderText}" />
+            <StackPanel Spacing="4">
+                <TextBox Text="{Binding Text, Mode=TwoWay}"
+                         PlaceholderText="{Binding PlaceholderText}"
+                         Classes.error="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                <TextBlock Text="{Binding ErrorMessage}"
+                           IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                           Theme="{DynamicResource BodyTextBlockStyle}"
+                           Foreground="{DynamicResource SystemFillColorCriticalBrush}"
+                           FontSize="12" />
+            </StackPanel>
         </DataTemplate>
     </Application.DataTemplates>
 </Application>
