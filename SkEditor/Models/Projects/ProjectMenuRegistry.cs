@@ -21,7 +21,6 @@ public static class ProjectMenuRegistry
         { ProjectAction.Delete, new MenuTemplate("Delete", Symbol.Delete) },
         
         { ProjectAction.ShowInExplorer, new MenuTemplate("Show in Explorer", Symbol.FolderOpen) },
-        { ProjectAction.OpenInTerminal, new MenuTemplate("Open in Terminal", Symbol.WindowConsole, AllowOneItemOnly: true) },
         
         { ProjectAction.Upload, new MenuTemplate("Upload", Symbol.ArrowUpload, AllowOneItemOnly: true) },
         { ProjectAction.Download, new MenuTemplate("Download", Symbol.ArrowDownload) },

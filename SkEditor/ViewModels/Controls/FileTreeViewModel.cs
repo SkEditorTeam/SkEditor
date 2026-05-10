@@ -18,12 +18,14 @@ public partial class FileTreeViewModel : ObservableObject
 {
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
+    private readonly IClipboardService _clipboard;
     private CancellationTokenSource? _cts;
 
-    public FileTreeViewModel(ILogService logs, INotificationService notifs)
+    public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard)
     {
         _logs = logs;
         _notifs = notifs;
+        _clipboard = clipboard;
 
         SelectedNodes.CollectionChanged += OnSelectedNodesChanged;
         

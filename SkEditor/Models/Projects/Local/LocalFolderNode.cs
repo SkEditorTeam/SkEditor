@@ -63,8 +63,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
                 ProjectAction.Separator,
                 ProjectAction.CopyPath,
                 ProjectAction.Separator,
-                ProjectAction.ShowInExplorer,
-                ProjectAction.OpenInTerminal
+                ProjectAction.ShowInExplorer
             ];
         }
 
@@ -80,8 +79,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             ProjectAction.CopyPath,
             ProjectAction.CopyRelativePath,
             ProjectAction.Separator,
-            ProjectAction.ShowInExplorer,
-            ProjectAction.OpenInTerminal
+            ProjectAction.ShowInExplorer
         ];
     }
 

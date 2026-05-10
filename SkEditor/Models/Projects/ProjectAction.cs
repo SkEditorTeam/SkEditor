@@ -13,7 +13,6 @@ public enum ProjectAction
     CopyPath,
     CopyRelativePath,
     ShowInExplorer,
-    OpenInTerminal,
 
     Upload,
     Download,

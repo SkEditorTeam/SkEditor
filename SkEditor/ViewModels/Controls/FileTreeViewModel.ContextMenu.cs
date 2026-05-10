@@ -24,9 +24,33 @@ public partial class FileTreeViewModel
         {
             { ProjectAction.Open, OpenCommand },
             { ProjectAction.Rename, RenameCommand },
+            { ProjectAction.CopyPath, CopyPathCommand },
+            { ProjectAction.CopyRelativePath, CopyRelativePathCommand },
             { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
             { ProjectAction.Disconnect, DisconnectCommand },
         };
+    }
+
+    [RelayCommand]
+    private void CopyPath()
+    {
+        if (SelectedNodes.Count == 0) return;
+
+        string paths = string.Join("\n", SelectedNodes.Select(n => n.Path));
+        _clipboard.SetTextAsync(paths);
+    }
+
+    [RelayCommand]
+    private void CopyRelativePath()
+    {
+        if (SelectedNodes.Count == 0) return;
+        if (FileSystem?.Root == null) return;
+
+        string basePath = FileSystem.Root.Path;
+        string paths = string.Join("\n",
+            SelectedNodes.Select(n =>
+                n.Path.StartsWith(basePath) ? n.Path[basePath.Length..].TrimStart('/', '\\') : n.Path));
+        _clipboard.SetTextAsync(paths);
     }
 
     [RelayCommand]
