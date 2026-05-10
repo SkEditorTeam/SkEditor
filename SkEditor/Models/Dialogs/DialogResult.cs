@@ -82,6 +82,32 @@ public class DialogResult
     {
         return left.Result != right;
     }
+    
+    /// <summary>
+    ///     Compares two <see cref="DialogResult" /> instances for equality. If both results are custom, their associated data will be compared for equality. Otherwise, their standard results will be compared.
+    /// </summary>
+    /// <returns>True if the two <see cref="DialogResult" /> instances are considered equal; otherwise, false.</returns>
+    public static bool operator ==(DialogResult left, DialogResult right)
+    {
+        if (ReferenceEquals(left, right)) return true;
+        if (left is null || right is null) return false;
+
+        if (left.Result == StandardDialogResult.Custom && right.Result == StandardDialogResult.Custom)
+        {
+            return left.Data == right.Data;
+        }
+
+        return left.Result == right.Result;
+    }
+    
+    /// <summary>
+    ///     Compares two <see cref="DialogResult" /> instances for inequality. If both results are custom, their associated data will be compared for inequality. Otherwise, their standard results will be compared.
+    /// </summary>
+    /// <returns>True if the two <see cref="DialogResult" /> instances are considered not equal; otherwise, false.</returns>
+    public static bool operator !=(DialogResult left, DialogResult right)
+    {
+        return !(left == right);
+    }
 
     /// <summary>
     ///     Compares the specified object with the current <see cref="DialogResult" /> for equality. This will include other

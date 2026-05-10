@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Controls.Templates;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
 using SkEditor.Contracts.Services;
@@ -44,6 +46,20 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
         if (dialog.Icon is not null)
         {
             taskDialog.IconSource = new SymbolIconSource { Symbol = dialog.Icon.Value };
+        }
+
+        if (dialog.Elements.Count > 0)
+        {
+            taskDialog.Content = new ItemsControl
+            {
+                ItemsPanel = new FuncTemplate<Panel?>(() =>
+                    new StackPanel
+                    {
+                        Orientation = Avalonia.Layout.Orientation.Vertical,
+                        Spacing = 8
+                    }),
+                ItemsSource = dialog.Elements
+            };
         }
 
         foreach (DialogButton button in dialog.Buttons)

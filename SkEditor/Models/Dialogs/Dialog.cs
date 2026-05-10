@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentIcons.Common;
+using SkEditor.Models.Dialogs.Elements;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Dialogs;
@@ -30,13 +31,19 @@ public class Dialog
     ///     <see cref="WithButtons" /> method.
     /// </summary>
     public List<DialogButton> Buttons { get; init; } = [];
+    
+    /// <summary>
+    ///     The elements that will be displayed in the dialog. This is an optional property and can be set using the
+    ///     <see cref="WithElements" /> method. Elements can be used to display additional content in the dialog.
+    /// </summary>
+    public List<DialogElement> Elements { get; init; } = [];
 
     /// <summary>
     ///     Creates a new dialog with the specified title, message, and buttons.
     /// </summary>
     /// <param name="title">The title of the dialog.</param>
     /// <param name="message">The message of the dialog.</param>
-    /// <param name="buttons">The buttons that will be displayed in the dialog.</param
+    /// <param name="buttons">The buttons that will be displayed in the dialog.</param>
     /// <returns>>A new instance of the <see cref="Dialog" /> class with the specified title, message, and buttons.</returns>
     public static Dialog Create(TranslatableString title, TranslatableString message, params DialogButton[] buttons)
     {
@@ -66,7 +73,7 @@ public class Dialog
     ///     Sets the message of the dialog and returns the dialog instance for chaining. This method can be used to set the
     ///     message of the dialog after it has been created using the <see cref="Create(TranslatableString)" /> method.
     /// </summary>
-    /// <param name="message"></param>
+    /// <param name="message">The message that will be displayed in the dialog.</param>
     /// <returns>>The dialog instance with the updated message.</returns>
     public Dialog WithMessage(TranslatableString message)
     {
@@ -90,11 +97,24 @@ public class Dialog
     ///     Adds the specified buttons to the dialog and returns the dialog instance for chaining. This method can be used to
     ///     add buttons to the dialog after it has been created using the <see cref="Create(TranslatableString)" /> method.
     /// </summary>
-    /// <param name="buttons"></param>
-    /// <returns></returns>
+    /// <param name="buttons">The buttons to add to the dialog.</param>
+    /// <returns>The dialog instance with the updated buttons.</returns>
     public Dialog WithButtons(params DialogButton[] buttons)
     {
         Buttons.AddRange(buttons);
+        return this;
+    }
+    
+    
+    /// <summary>
+    ///     Adds the specified elements to the dialog and returns the dialog instance for chaining. This method can be used to
+    ///     add elements to the dialog after it has been created using the <see cref="Create(TranslatableString)" /> method.
+    /// </summary>
+    /// <param name="elements">The elements to add to the dialog.</param>
+    /// <returns>The dialog instance with the updated elements.</returns>
+    public Dialog WithElements(params DialogElement[] elements)
+    {
+        Elements.AddRange(elements);
         return this;
     }
 }

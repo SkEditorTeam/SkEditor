@@ -4,6 +4,7 @@
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:assets="clr-namespace:SkEditor.Assets"
+             xmlns:dialogs="clr-namespace:SkEditor.Models.Dialogs.Elements"
              x:Class="SkEditor.App"
              x:CompileBindings="True"
              RequestedThemeVariant="Dark">
@@ -83,6 +84,10 @@
     <Application.DataTemplates>
         <DataTemplate DataType="localization:TranslatableString">
             <TextBlock Text="{Binding Value}" />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type dialogs:TextDialogElement}">
+            <TextBox Text="{Binding Text, Mode=TwoWay}" PlaceholderText="{Binding PlaceholderText}" />
         </DataTemplate>
     </Application.DataTemplates>
 </Application>
