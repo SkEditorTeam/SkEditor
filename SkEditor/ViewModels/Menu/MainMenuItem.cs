@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Models.Menu;
+namespace SkEditor.ViewModels.Menu;
 
 public partial class MainMenuItem : ObservableObject
 {

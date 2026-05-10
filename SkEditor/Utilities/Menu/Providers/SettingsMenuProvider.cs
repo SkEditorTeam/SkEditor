@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Menu;
 using SkEditor.Models.Tabs;
+using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
 namespace SkEditor.Utilities.Menu.Providers;
 

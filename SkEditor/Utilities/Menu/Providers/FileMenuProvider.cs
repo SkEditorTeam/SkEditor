@@ -2,10 +2,10 @@
 using FluentIcons.Common;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Menu;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
+using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
 namespace SkEditor.Utilities.Menu.Providers;
 

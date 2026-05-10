@@ -1,4 +1,4 @@
-﻿using SkEditor.Models.Menu;
+﻿using SkEditor.ViewModels.Menu;
 
 namespace SkEditor.Utilities.Menu;
 

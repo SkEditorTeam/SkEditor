@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SkEditor.Models.Menu;
+using SkEditor.ViewModels.Menu;
 
 namespace SkEditor.Contracts.Services;
 

@@ -3,7 +3,7 @@
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:converters="clr-namespace:SkEditor.Converters"
-             xmlns:menu="clr-namespace:SkEditor.Models.Menu"
+             xmlns:menu="clr-namespace:SkEditor.ViewModels.Menu"
              x:DataType="vms:MainMenuViewModel"
              x:Class="SkEditor.Views.Controls.MainMenuControl">
 
