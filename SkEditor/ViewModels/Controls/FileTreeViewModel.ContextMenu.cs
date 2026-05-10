@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Projects;
@@ -29,14 +30,17 @@ public partial class FileTreeViewModel
     }
 
     [RelayCommand]
-    private async Task Disconnect()
+    private void Disconnect()
     {
         if (SelectedNodes.Count != 1) return;
         FileSystemNode node = SelectedNodes[0];
-    
+
         if (FileSystem is SftpFileSystem && node.IsRoot)
         {
-            await CloseFileSystemAsync();
+            Dispatcher.UIThread.Post(() =>
+            {
+                _ = CloseFileSystemAsync();
+            });
         }
     }
     
