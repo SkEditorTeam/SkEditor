@@ -32,7 +32,8 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
     {
         FATaskDialog taskDialog = new()
         {
-            Header = dialog.Title.Value
+            Header = dialog.Title.Value,
+            Focusable = true
         };
 
         if (dialog.Message is not null)
