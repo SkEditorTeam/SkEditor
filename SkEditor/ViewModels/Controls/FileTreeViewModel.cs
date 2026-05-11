@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -18,13 +17,15 @@ public partial class FileTreeViewModel : ObservableObject
 {
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
+    private readonly IDialogService _dialogs;
     private readonly IClipboardService _clipboard;
     private CancellationTokenSource? _cts;
 
-    public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard)
+    public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard, IDialogService dialogs)
     {
         _logs = logs;
         _notifs = notifs;
+        _dialogs = dialogs;
         _clipboard = clipboard;
 
         SelectedNodes.CollectionChanged += OnSelectedNodesChanged;

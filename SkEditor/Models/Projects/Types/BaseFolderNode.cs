@@ -67,4 +67,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
     }
 
     protected abstract Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders();
+    
+    //public abstract Task NewFile(string name);
+    //public abstract Task NewFolder(string name);
 }

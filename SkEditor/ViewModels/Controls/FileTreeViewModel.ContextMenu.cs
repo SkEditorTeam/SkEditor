@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
+using FluentIcons.Common;
+using Serilog;
+using SkEditor.Models.Dialogs;
+using SkEditor.Models.Dialogs.Elements;
 using SkEditor.Models.Projects;
+using SkEditor.Models.Projects.Local;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
 using SkEditor.Utilities;
@@ -23,12 +29,49 @@ public partial class FileTreeViewModel
         _commandMap = new Dictionary<ProjectAction, IRelayCommand>
         {
             { ProjectAction.Open, OpenCommand },
+            { ProjectAction.NewFile, NewFileCommand },
+            // { ProjectAction.NewFolder, NewFolderCommand },
             { ProjectAction.Rename, RenameCommand },
             { ProjectAction.CopyPath, CopyPathCommand },
             { ProjectAction.CopyRelativePath, CopyRelativePathCommand },
             { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
             { ProjectAction.Disconnect, DisconnectCommand },
         };
+    }
+    
+    [RelayCommand]
+    private async Task NewFile()
+    {
+        if (SelectedNodes.Count != 1) return;
+        FileSystemNode node = SelectedNodes[0];
+
+        if (node is not BaseFolderNode folderNode || !folderNode.GetSupportedActions().Contains(ProjectAction.NewFile)) return;
+        
+        TextDialogElement inputElement = new()
+        {
+            PlaceholderText = "Enter file name",
+            ValidationFunc = name =>
+            {
+                if (string.IsNullOrWhiteSpace(name)) return "Name cannot be empty";
+                if (name.IndexOfAny(LocalFileNode.InvalidChars) >= 0) return "Name contains invalid characters";
+                if (folderNode.Children.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))) return "A file or folder with this name already exists";
+                return null;
+            }
+        };
+
+        Dialog dialog = Dialog
+            .Create(TranslatableString.FromRawString("Create New File"),
+                TranslatableString.FromRawString("Enter the name of the new file:"))
+            .WithIcon(Symbol.DocumentAdd)
+            .WithElements(inputElement)
+            .WithButtons(new DialogButton(TranslationKey.ButtonConfirm, DialogResult.Ok, true), DialogButton.Cancel);
+
+        DialogResult result = await _dialogs.ShowDialogAsync(dialog);
+
+        if (result == DialogResult.Ok)
+        {
+            Log.Information("Creating new file '{FileName}' in '{FolderPath}'", inputElement.Text, folderNode.Path);
+        }
     }
 
     [RelayCommand]
@@ -61,13 +104,10 @@ public partial class FileTreeViewModel
 
         if (FileSystem is SftpFileSystem && node.IsRoot)
         {
-            Dispatcher.UIThread.Post(() =>
-            {
-                _ = CloseFileSystemAsync();
-            });
+            Dispatcher.UIThread.Post(() => { _ = CloseFileSystemAsync(); });
         }
     }
-    
+
     public async Task CloseFileSystemAsync()
     {
         if (_cts != null)
