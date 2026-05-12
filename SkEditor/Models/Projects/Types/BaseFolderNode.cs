@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Serilog;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Local;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Types;
 
@@ -23,6 +28,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
     public override IRelayCommand OpenCommand => OpenFolderCommand;
 
     public bool HasChildren => Children.Any() && Children.First() != DummyNode;
+
+    protected abstract Func<string, Task<bool>> AlreadyExistsPredicate { get; }
+    protected abstract Func<string, Task> CreateFileAction { get; }
+    protected abstract Func<string, Task> CreateFolderAction { get; }
 
     [RelayCommand]
     public void OpenFolder()
@@ -84,7 +93,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
     {
         node.PropertyChanged += OnChildPropertyChanged;
         node.Deleted += OnChildDeleted;
-        
+
         if (add)
         {
             Children.Insert(FindInsertionIndex(node), node);
@@ -100,17 +109,31 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
     private void OnChildDeleted(object? sender, EventArgs e)
     {
-        if (sender is not FileSystemNode node) return;
+        if (sender is not FileSystemNode node)
+        {
+            return;
+        }
+
         RemoveChild(node);
     }
 
     private void OnChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(Name)) return;
-        if (sender is not FileSystemNode node) return;
+        if (e.PropertyName != nameof(Name))
+        {
+            return;
+        }
+
+        if (sender is not FileSystemNode node)
+        {
+            return;
+        }
 
         int oldIndex = Children.IndexOf(node);
-        if (oldIndex < 0) return;
+        if (oldIndex < 0)
+        {
+            return;
+        }
 
         int newIndex = CalculateRenameIndex(node, oldIndex);
 
@@ -129,7 +152,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
         for (int i = startIndex; i < endIndex; i++)
         {
-            if (i == oldIndex) continue;
+            if (i == oldIndex)
+            {
+                continue;
+            }
 
             if (StringComparer.OrdinalIgnoreCase.Compare(Children[i].Name, node.Name) > 0)
             {
@@ -157,7 +183,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         foreach (FileSystemNode node in nodes)
         {
             Children.Add(node);
-            AddChild(node, add: false);
+            AddChild(node, false);
         }
 
         HasLoadedChildren = true;
@@ -167,6 +193,64 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
     protected abstract Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders();
 
-    public abstract Task NewFile(string name);
-    public abstract Task NewFolder(string name);
+    public async Task NewFile(string name)
+    {
+        string newFilePath = System.IO.Path.Combine(Path, name);
+
+        if (await AlreadyExistsPredicate(newFilePath))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("File Creation Failed"),
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return;
+        }
+
+        try
+        {
+            await CreateFileAction(newFilePath);
+
+            FileSystemNode newNode = CreateFileNode(name, newFilePath);
+            AddChild(newNode);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("File Creation Failed"),
+                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+
+            Log.Error(ex, "Failed to create file {FilePath}", newFilePath);
+        }
+    }
+
+    public async Task NewFolder(string name)
+    {
+        string newFolderPath = System.IO.Path.Combine(Path, name);
+
+        if (await AlreadyExistsPredicate(newFolderPath))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Folder Creation Failed"),
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return;
+        }
+
+        try
+        {
+            await CreateFolderAction(newFolderPath);
+
+            FileSystemNode newNode = CreateFolderNode(name, newFolderPath);
+            AddChild(newNode);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Folder Creation Failed"),
+                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+        }
+    }
+
+    protected abstract FileSystemNode CreateFileNode(string name, string path);
+    protected abstract FileSystemNode CreateFolderNode(string name, string path);
 }

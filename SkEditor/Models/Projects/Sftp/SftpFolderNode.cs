@@ -43,68 +43,6 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
 
-    public override async Task NewFile(string name)
-    {
-        string newFilePath = System.IO.Path.Combine(Path, name);
-
-        bool exists = await client.ExistsAsync(newFilePath, CancellationToken.None);
-
-        if (exists)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Creation Failed"),
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
-
-            return;
-        }
-
-        try
-        {
-            await client.Create(newFilePath).DisposeAsync();
-
-            FileSystemNode newNode = new SftpFileNode(name, newFilePath, client);
-            AddChild(newNode);
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Creation Failed"),
-                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
-
-            Log.Error(ex, "Failed to create file {FilePath}", newFilePath);
-        }
-    }
-
-    public override async Task NewFolder(string name)
-    {
-        string newFolderPath = System.IO.Path.Combine(Path, name);
-        
-        bool exists = await client.ExistsAsync(newFolderPath, CancellationToken.None);
-
-        if (exists)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Folder Creation Failed"),
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
-
-            return;
-        }
-
-        try
-        {
-            await client.CreateDirectoryAsync(newFolderPath);
-
-            FileSystemNode newNode = new SftpFolderNode(name, newFolderPath, false, client);
-            AddChild(newNode);
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Folder Creation Failed"),
-                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
-        }
-    }
-
     public override IEnumerable<ProjectAction> GetSupportedActions()
     {
         if (IsRoot)
@@ -180,7 +118,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         Path = newPath;
         Name = newName;
     }
-    
+
     public override async Task<bool> DeleteAsync()
     {
         try
@@ -199,4 +137,19 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
             return false;
         }
     }
+
+    protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
+        async path => await client.ExistsAsync(path, CancellationToken.None);
+    
+    protected override Func<string, Task> CreateFileAction =>
+        async path => await client.Create(path).DisposeAsync();
+    
+    protected override FileSystemNode CreateFileNode(string name, string path) =>
+        new SftpFileNode(name, path, client);
+    
+    protected override Func<string, Task> CreateFolderAction =>
+        async path => await client.CreateDirectoryAsync(path, CancellationToken.None);
+    
+    protected override FileSystemNode CreateFolderNode(string name, string path) =>
+        new SftpFolderNode(name, path, false, client);
 }

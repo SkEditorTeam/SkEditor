@@ -35,12 +35,12 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
                     case DirectoryInfo subDirectory:
                     {
                         var folderNode = new LocalFolderNode(subDirectory.Name, subDirectory.FullName, false);
-    
+
                         if (!HasVisibleContents(subDirectory.FullName))
                         {
                             folderNode.Children.Clear();
                         }
-    
+
                         folders.Add(folderNode);
                         break;
                     }
@@ -56,66 +56,6 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
 
-    public override async Task NewFile(string name)
-    {
-        string newFilePath = System.IO.Path.Combine(Path, name);
-
-        if (File.Exists(newFilePath) || Directory.Exists(newFilePath))
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Creation Failed"),
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
-
-            return;
-        }
-
-        try
-        {
-            await File.Create(newFilePath).DisposeAsync();
-
-            FileSystemNode newNode = new LocalFileNode(name, newFilePath);
-            AddChild(newNode);
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Creation Failed"),
-                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
-
-            Log.Error(ex, "Failed to create file {FilePath}", newFilePath);
-        }
-    }
-
-    public override Task NewFolder(string name)
-    {
-        string newFolderPath = System.IO.Path.Combine(Path, name);
-
-        if (File.Exists(newFolderPath) || Directory.Exists(newFolderPath))
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Folder Creation Failed"),
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
-
-            return Task.CompletedTask;
-        }
-
-        try
-        {
-            Directory.CreateDirectory(newFolderPath);
-
-            FileSystemNode newNode = new LocalFolderNode(name, newFolderPath, false);
-            AddChild(newNode);
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Folder Creation Failed"),
-                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
-        }
-        
-        return Task.CompletedTask;
-    }
-    
     private static bool HasVisibleContents(string path)
     {
         try
@@ -126,7 +66,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         }
         catch (Exception)
         {
-            return false; 
+            return false;
         }
     }
 
@@ -212,7 +152,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
 
         return Task.CompletedTask;
     }
-    
+
     public override Task<bool> DeleteAsync()
     {
         try
@@ -231,4 +171,19 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             return Task.FromResult(false);
         }
     }
+    
+    protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
+        path => Task.FromResult(File.Exists(path) || Directory.Exists(path));
+    
+    protected override Func<string, Task> CreateFileAction =>
+        async path => await File.Create(path).DisposeAsync();
+    
+    protected override FileSystemNode CreateFileNode(string name, string path) =>
+        new LocalFileNode(name, path);
+    
+    protected override Func<string, Task> CreateFolderAction =>
+        async path => await Task.Run(() => Directory.CreateDirectory(path));
+    
+    protected override FileSystemNode CreateFolderNode(string name, string path) =>
+        new LocalFolderNode(name, path, false);
 }
