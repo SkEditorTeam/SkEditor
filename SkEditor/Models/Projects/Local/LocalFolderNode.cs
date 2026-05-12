@@ -45,6 +45,66 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
 
+    public override async Task NewFile(string name)
+    {
+        string newFilePath = System.IO.Path.Combine(Path, name);
+
+        if (File.Exists(newFilePath) || Directory.Exists(newFilePath))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("File Creation Failed"),
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return;
+        }
+
+        try
+        {
+            await File.Create(newFilePath).DisposeAsync();
+
+            FileSystemNode newNode = new LocalFileNode(name, newFilePath);
+            Children.Add(newNode);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("File Creation Failed"),
+                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+
+            Log.Error(ex, "Failed to create file {FilePath}", newFilePath);
+        }
+    }
+
+    public override Task NewFolder(string name)
+    {
+        string newFolderPath = System.IO.Path.Combine(Path, name);
+
+        if (File.Exists(newFolderPath) || Directory.Exists(newFolderPath))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Folder Creation Failed"),
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return Task.CompletedTask;
+        }
+
+        try
+        {
+            Directory.CreateDirectory(newFolderPath);
+
+            FileSystemNode newNode = new LocalFolderNode(name, newFolderPath, false);
+            Children.Add(newNode);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Folder Creation Failed"),
+                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+        }
+        
+        return Task.CompletedTask;
+    }
+
     private static bool IsSystemJunk(FileSystemInfo entry)
     {
         return entry.Attributes.HasFlag(FileAttributes.ReparsePoint) ||
@@ -95,9 +155,9 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
 
             return Task.CompletedTask;
         }
-        
-        string newPath= System.IO.Path.Combine(parentDirectory, newName);
-        
+
+        string newPath = System.IO.Path.Combine(parentDirectory, newName);
+
         if (Directory.Exists(newPath))
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
@@ -106,7 +166,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
 
             return Task.CompletedTask;
         }
-        
+
         try
         {
             Directory.Move(Path, newPath);
@@ -114,8 +174,9 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle, TranslatableString.FromRawString(ex.Message), NotificationType.Error));
-            
+                TranslationKey.ProjectRenameFailedTitle, TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
             Log.Error(ex, "Failed to rename folder {Path} to {NewName}", Path, newName);
             return Task.CompletedTask;
         }

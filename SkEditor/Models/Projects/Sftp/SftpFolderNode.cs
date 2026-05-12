@@ -43,6 +43,16 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
 
+    public override Task NewFile(string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override Task NewFolder(string name)
+    {
+        throw new NotImplementedException();
+    }
+
     public override IEnumerable<ProjectAction> GetSupportedActions()
     {
         if (IsRoot)
