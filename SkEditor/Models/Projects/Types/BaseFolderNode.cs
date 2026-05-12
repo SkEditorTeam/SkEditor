@@ -41,7 +41,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
         if (IsExpanded && !HasLoadedChildren)
         {
-            _ = LoadChildren();
+            _ = LoadChildrenAsync();
         }
     }
 
@@ -130,7 +130,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         return targetIndex;
     }
 
-    public override async Task LoadChildren()
+    public override async Task LoadChildrenAsync()
     {
         if (HasLoadedChildren)
         {

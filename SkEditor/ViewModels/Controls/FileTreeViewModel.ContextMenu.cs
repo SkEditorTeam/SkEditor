@@ -219,7 +219,7 @@ public partial class FileTreeViewModel
                         return;
                     }
 
-                    await node.Rename(args.NewName);
+                    await node.RenameAsync(args.NewName);
                 }
                 finally
                 {

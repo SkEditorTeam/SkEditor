@@ -169,7 +169,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         ];
     }
 
-    public override Task Rename(string newName)
+    public override Task RenameAsync(string newName)
     {
         if (IsRoot || System.IO.Path.GetDirectoryName(Path) is not { } parentDirectory) return Task.CompletedTask;
 

@@ -34,7 +34,7 @@ public class LocalFileSystem : IFileSystem
             return false;
         }
 
-        await Root.LoadChildren();
+        await Root.LoadChildrenAsync();
         return true;
     }
 }

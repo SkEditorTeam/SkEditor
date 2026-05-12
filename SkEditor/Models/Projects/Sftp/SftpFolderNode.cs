@@ -141,7 +141,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         ];
     }
 
-    public override async Task Rename(string newName)
+    public override async Task RenameAsync(string newName)
     {
         if (newName.IndexOfAny(SftpFileNode.InvalidSftpChars) >= 0)
         {

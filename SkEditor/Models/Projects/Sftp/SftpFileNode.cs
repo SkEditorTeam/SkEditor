@@ -39,7 +39,7 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
         ProjectAction.CopyRelativePath
     ];
 
-    public override async Task Rename(string newName)
+    public override async Task RenameAsync(string newName)
     {
         if (newName.IndexOfAny(InvalidSftpChars) >= 0)
         {

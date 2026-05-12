@@ -31,7 +31,7 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     protected bool HasLoadedChildren { get; set; }
 
-    public abstract Task LoadChildren();
+    public abstract Task LoadChildrenAsync();
 
     public abstract IEnumerable<ProjectAction> GetSupportedActions();
 
@@ -43,6 +43,7 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     }
     
     public abstract Task Rename(string newName);
+    public abstract Task RenameAsync(string newName);
 }
 
 public class NodeRenamedEventArgs(string oldName, string newName) : EventArgs

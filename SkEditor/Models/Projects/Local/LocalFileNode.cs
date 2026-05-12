@@ -40,7 +40,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
         ];
     }
 
-    public override Task Rename(string newName)
+    public override Task RenameAsync(string newName)
     {
         if (System.IO.Path.GetDirectoryName(Path) is not { } directory) return Task.CompletedTask;
         
