@@ -194,6 +194,8 @@ public partial class FileTreeViewModel
             {
                 node.IsRenaming = false;
 
+                if (args.OldName == args.NewName) return;
+                
                 try
                 {
                     if (string.IsNullOrWhiteSpace(args.NewName))
