@@ -147,8 +147,9 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
                 ProjectAction.NewFolder,
                 ProjectAction.Separator,
                 ProjectAction.CopyPath,
+                ProjectAction.ShowInExplorer,
                 ProjectAction.Separator,
-                ProjectAction.ShowInExplorer
+                ProjectAction.Close
             ];
         }
 

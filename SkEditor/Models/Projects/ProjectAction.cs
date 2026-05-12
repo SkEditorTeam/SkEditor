@@ -17,6 +17,7 @@ public enum ProjectAction
     Upload,
     Download,
     Disconnect,
+    Close,
 
     Separator
 }

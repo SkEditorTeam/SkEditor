@@ -35,6 +35,7 @@ public partial class FileTreeViewModel
             { ProjectAction.CopyRelativePath, CopyRelativePathCommand },
             { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
             { ProjectAction.Disconnect, DisconnectCommand },
+            { ProjectAction.Close, CloseLocalCommand },
         };
     }
 
@@ -141,6 +142,18 @@ public partial class FileTreeViewModel
         FileSystemNode node = SelectedNodes[0];
 
         if (FileSystem is SftpFileSystem && node.IsRoot)
+        {
+            Dispatcher.UIThread.Post(() => { _ = CloseFileSystemAsync(); });
+        }
+    }
+    
+    [RelayCommand]
+    private void CloseLocal()
+    {
+        if (SelectedNodes.Count != 1) return;
+        FileSystemNode node = SelectedNodes[0];
+
+        if (FileSystem is LocalFileSystem && node.IsRoot)
         {
             Dispatcher.UIThread.Post(() => { _ = CloseFileSystemAsync(); });
         }

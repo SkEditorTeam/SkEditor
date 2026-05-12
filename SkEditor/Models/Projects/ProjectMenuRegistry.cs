@@ -27,5 +27,7 @@ public static class ProjectMenuRegistry
         
         { ProjectAction.Refresh, new MenuTemplate("Refresh", Symbol.ArrowClockwise) },
         { ProjectAction.Disconnect, new MenuTemplate("Disconnect", Symbol.PlugDisconnected) },
+        
+        { ProjectAction.Close, new MenuTemplate("Close", Symbol.Dismiss) },
     };
 }
