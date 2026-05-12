@@ -34,7 +34,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
     protected abstract Func<string, Task> CreateFolderAction { get; }
     protected abstract Func<string, Task> DeleteAction { get; }
     protected abstract Func<string, string, Task> RenameFileAction { get; }
-    
+
     protected abstract char[] InvalidChars { get; }
 
     [RelayCommand]
@@ -254,7 +254,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
                 TranslatableString.FromRawString(ex.Message), NotificationType.Error));
         }
     }
-    
+
     public override async Task<bool> DeleteAsync()
     {
         try
@@ -273,7 +273,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
             return false;
         }
     }
-    
+
     public override async Task RenameAsync(string newName)
     {
         if (newName.IndexOfAny(InvalidChars) >= 0)

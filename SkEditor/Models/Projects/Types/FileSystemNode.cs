@@ -42,12 +42,12 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     {
         Renamed?.Invoke(this, new NodeRenamedEventArgs(oldName, newName));
     }
-    
+
     public void OnDeleted()
     {
         Deleted?.Invoke(this, EventArgs.Empty);
     }
-    
+
     public abstract Task RenameAsync(string newName);
     public abstract Task<bool> DeleteAsync();
 }

@@ -16,8 +16,8 @@ namespace SkEditor.Models.Projects.Sftp;
 
 public partial class SftpFileNode(string name, string path, SftpClient client) : BaseFileNode(name, path)
 {
-    public static readonly char[] InvalidSftpChars = [ '/', '\\', '\0' ];
-    
+    public static readonly char[] InvalidSftpChars = ['/', '\\', '\0'];
+
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
     [RelayCommand]
@@ -26,19 +26,22 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
         WeakReferenceMessenger.Default.Send(new OpenFileMessage(new SftpFile(Path, Name, client)));
     }
 
-    public override IEnumerable<ProjectAction> GetSupportedActions() =>
-    [
-        ProjectAction.Open,
-        ProjectAction.Separator,
-        ProjectAction.Download,
-        ProjectAction.Separator,
-        ProjectAction.Duplicate,
-        ProjectAction.Rename,
-        ProjectAction.Delete,
-        ProjectAction.Separator,
-        ProjectAction.CopyPath,
-        ProjectAction.CopyRelativePath
-    ];
+    public override IEnumerable<ProjectAction> GetSupportedActions()
+    {
+        return
+        [
+            ProjectAction.Open,
+            ProjectAction.Separator,
+            ProjectAction.Download,
+            ProjectAction.Separator,
+            ProjectAction.Duplicate,
+            ProjectAction.Rename,
+            ProjectAction.Delete,
+            ProjectAction.Separator,
+            ProjectAction.CopyPath,
+            ProjectAction.CopyRelativePath
+        ];
+    }
 
     public override async Task RenameAsync(string newName)
     {
@@ -50,7 +53,7 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
 
             return;
         }
-        
+
         string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
 
         if (await client.ExistsAsync(newPath, CancellationToken.None))
@@ -69,16 +72,17 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message), NotificationType.Error));
-            
+                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
             Log.Error(ex, "Failed to rename file {Path} to {NewName}", Path, newName);
             return;
         }
-        
+
         Path = newPath;
         Name = newName;
     }
-    
+
     public override async Task<bool> DeleteAsync()
     {
         try

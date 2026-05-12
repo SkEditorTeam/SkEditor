@@ -3,20 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
-using CommunityToolkit.Mvvm.Messaging;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
-using Serilog;
-using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Types;
-using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Sftp;
 
 public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client)
     : BaseFolderNode(name, path, isRoot)
 {
+    protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
+        async path => await client.ExistsAsync(path, CancellationToken.None);
+
+    protected override Func<string, Task> CreateFileAction =>
+        async path => await client.Create(path).DisposeAsync();
+
+    protected override Func<string, Task> CreateFolderAction =>
+        async path => await client.CreateDirectoryAsync(path, CancellationToken.None);
+
+    protected override Func<string, Task> DeleteAction =>
+        async path => await client.DeleteDirectoryAsync(path, CancellationToken.None);
+
+    protected override Func<string, string, Task> RenameFileAction =>
+        async (oldPath, newPath) => await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
+
+    protected override char[] InvalidChars { get; } = ['/', '\\', '\0'];
+
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
         List<SftpFolderNode> folders = [];
@@ -79,26 +91,13 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         ];
     }
 
-    protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
-        async path => await client.ExistsAsync(path, CancellationToken.None);
+    protected override FileSystemNode CreateFileNode(string name, string path)
+    {
+        return new SftpFileNode(name, path, client);
+    }
 
-    protected override Func<string, Task> CreateFileAction =>
-        async path => await client.Create(path).DisposeAsync();
-
-    protected override FileSystemNode CreateFileNode(string name, string path) =>
-        new SftpFileNode(name, path, client);
-
-    protected override Func<string, Task> CreateFolderAction =>
-        async path => await client.CreateDirectoryAsync(path, CancellationToken.None);
-
-    protected override Func<string, Task> DeleteAction =>
-        async path => await client.DeleteDirectoryAsync(path, CancellationToken.None);
-
-    protected override Func<string, string, Task> RenameFileAction =>
-        async (oldPath, newPath) => await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
-
-    protected override char[] InvalidChars { get; } = ['/', '\\', '\0'];
-
-    protected override FileSystemNode CreateFolderNode(string name, string path) =>
-        new SftpFolderNode(name, path, false, client);
+    protected override FileSystemNode CreateFolderNode(string name, string path)
+    {
+        return new SftpFolderNode(name, path, false, client);
+    }
 }

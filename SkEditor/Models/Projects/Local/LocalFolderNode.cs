@@ -3,17 +3,29 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
-using CommunityToolkit.Mvvm.Messaging;
-using Serilog;
-using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Types;
-using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
+    protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
+        path => Task.FromResult(File.Exists(path) || Directory.Exists(path));
+
+    protected override Func<string, Task> CreateFileAction =>
+        async path => await File.Create(path).DisposeAsync();
+
+    protected override Func<string, Task> CreateFolderAction =>
+        async path => await Task.Run(() => Directory.CreateDirectory(path));
+
+    protected override Func<string, Task> DeleteAction =>
+        async path => await Task.Run(() => Directory.Delete(path, true));
+
+    protected override Func<string, string, Task> RenameFileAction =>
+        async (oldPath, newPath) => await Task.Run(() => Directory.Move(oldPath, newPath));
+
+    protected override char[] InvalidChars { get; } = System.IO.Path.GetInvalidFileNameChars();
+
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
         List<LocalFolderNode> folders = [];
@@ -34,7 +46,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
                 {
                     case DirectoryInfo subDirectory:
                     {
-                        var folderNode = new LocalFolderNode(subDirectory.Name, subDirectory.FullName, false);
+                        LocalFolderNode folderNode = new(subDirectory.Name, subDirectory.FullName, false);
 
                         if (!HasVisibleContents(subDirectory.FullName))
                         {
@@ -109,26 +121,13 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         ];
     }
 
-    protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
-        path => Task.FromResult(File.Exists(path) || Directory.Exists(path));
+    protected override FileSystemNode CreateFileNode(string name, string path)
+    {
+        return new LocalFileNode(name, path);
+    }
 
-    protected override Func<string, Task> CreateFileAction =>
-        async path => await File.Create(path).DisposeAsync();
-
-    protected override FileSystemNode CreateFileNode(string name, string path) =>
-        new LocalFileNode(name, path);
-
-    protected override Func<string, Task> CreateFolderAction =>
-        async path => await Task.Run(() => Directory.CreateDirectory(path));
-
-    protected override Func<string, Task> DeleteAction =>
-        async path => await Task.Run(() => Directory.Delete(path, true));
-
-    protected override Func<string, string, Task> RenameFileAction =>
-        async (oldPath, newPath) => await Task.Run(() => Directory.Move(oldPath, newPath));
-
-    protected override char[] InvalidChars { get; } = System.IO.Path.GetInvalidFileNameChars();
-
-    protected override FileSystemNode CreateFolderNode(string name, string path) =>
-        new LocalFolderNode(name, path, false);
+    protected override FileSystemNode CreateFolderNode(string name, string path)
+    {
+        return new LocalFolderNode(name, path, false);
+    }
 }

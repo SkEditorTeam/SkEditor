@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Input;
@@ -43,7 +44,10 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
 
     public override Task RenameAsync(string newName)
     {
-        if (System.IO.Path.GetDirectoryName(Path) is not { } directory) return Task.CompletedTask;
+        if (System.IO.Path.GetDirectoryName(Path) is not { } directory)
+        {
+            return Task.CompletedTask;
+        }
 
         if (newName.IndexOfAny(InvalidChars) >= 0)
         {
@@ -56,7 +60,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
 
         string newPath = System.IO.Path.Combine(directory, newName);
 
-        if (System.IO.File.Exists(newPath))
+        if (File.Exists(newPath))
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 TranslationKey.ProjectRenameFailedTitle,
@@ -67,9 +71,9 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
 
         try
         {
-            System.IO.File.Move(Path, newPath);
+            File.Move(Path, newPath);
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 TranslationKey.ProjectRenameFailedTitle, TranslatableString.FromRawString(ex.Message),
@@ -89,7 +93,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
     {
         try
         {
-            System.IO.File.Delete(Path);
+            File.Delete(Path);
             return Task.FromResult(true);
         }
         catch (Exception ex)

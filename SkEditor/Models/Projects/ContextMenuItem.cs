@@ -30,7 +30,7 @@ public class ContextMenuItem
         Command = command;
         return this;
     }
-    
+
     public ContextMenuItem WithInputGesture(string? gestureText)
     {
         InputGestureText = gestureText;
