@@ -18,8 +18,9 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
         base.OnAttached();
         AssociatedObject?.PropertyChanged += OnIsVisibleChanged;
         AssociatedObject?.LostFocus += OnLostFocus;
-        
+
         AssociatedObject?.AddHandler(InputElement.KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
+        AssociatedObject?.AddHandler(InputElement.KeyDownEvent, OnArrowKeyDown, RoutingStrategies.Bubble);
     }
 
     protected override void OnDetaching()
@@ -28,6 +29,7 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
         AssociatedObject?.PropertyChanged -= OnIsVisibleChanged;
         AssociatedObject?.LostFocus -= OnLostFocus;
         AssociatedObject?.RemoveHandler(InputElement.KeyDownEvent, OnKeyDown);
+        AssociatedObject?.RemoveHandler(InputElement.KeyDownEvent, OnArrowKeyDown);
     }
 
     private void OnIsVisibleChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
@@ -76,6 +78,15 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
                 break;
         }
     }
+    
+    private void OnArrowKeyDown(object? sender, KeyEventArgs e)
+    {
+        e.Handled = e.Key switch
+        {
+            Key.Left or Key.Right or Key.Up or Key.Down or Key.Home or Key.End => true,
+            _ => e.Handled
+        };
+    }
 
     private void OnLostFocus(object? sender, RoutedEventArgs e)
     {
@@ -102,7 +113,7 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
         {
             return;
         }
-        
+
         ReturnFocus();
     }
 
