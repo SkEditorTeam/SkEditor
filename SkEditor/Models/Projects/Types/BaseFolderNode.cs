@@ -80,6 +80,30 @@ public abstract partial class BaseFolderNode : FileSystemNode
         return lo;
     }
 
+    protected void AddChild(FileSystemNode node)
+    {
+        node.Renamed += OnChildRenamed;
+        Children.Insert(FindInsertionIndex(node), node);
+    }
+
+    protected void RemoveChild(FileSystemNode node)
+    {
+        node.Renamed -= OnChildRenamed;
+        Children.Remove(node);
+    }
+
+    private void OnChildRenamed(object? sender, NodeRenamedEventArgs e)
+    {
+        if (sender is not FileSystemNode node) return;
+
+        int oldIndex = Children.IndexOf(node);
+        if (oldIndex < 0) return;
+
+        Children.RemoveAt(oldIndex);
+        int newIndex = FindInsertionIndex(node);
+        Children.Insert(newIndex, node);
+    }
+
     public override async Task LoadChildren()
     {
         if (HasLoadedChildren)

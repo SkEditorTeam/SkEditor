@@ -63,7 +63,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             await File.Create(newFilePath).DisposeAsync();
 
             FileSystemNode newNode = new LocalFileNode(name, newFilePath);
-            Children.Insert(FindInsertionIndex(newNode), newNode);
+            AddChild(newNode);
         }
         catch (Exception ex)
         {
@@ -93,7 +93,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             Directory.CreateDirectory(newFolderPath);
 
             FileSystemNode newNode = new LocalFolderNode(name, newFolderPath, false);
-            Children.Insert(FindInsertionIndex(newNode), newNode);
+            AddChild(newNode);
         }
         catch (Exception ex)
         {
