@@ -32,6 +32,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
     protected abstract Func<string, Task<bool>> AlreadyExistsPredicate { get; }
     protected abstract Func<string, Task> CreateFileAction { get; }
     protected abstract Func<string, Task> CreateFolderAction { get; }
+    protected abstract Func<string, Task> DeleteAction { get; }
+    protected abstract Func<string, string, Task> RenameFileAction { get; }
+    
+    protected abstract char[] InvalidChars { get; }
 
     [RelayCommand]
     public void OpenFolder()
@@ -249,6 +253,65 @@ public abstract partial class BaseFolderNode : FileSystemNode
                 TranslatableString.FromRawString("Folder Creation Failed"),
                 TranslatableString.FromRawString(ex.Message), NotificationType.Error));
         }
+    }
+    
+    public override async Task<bool> DeleteAsync()
+    {
+        try
+        {
+            await DeleteAction(Path);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("File Delete Failed"),
+                TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
+            Log.Error(ex, "Failed to delete file {Path}", Path);
+            return false;
+        }
+    }
+    
+    public override async Task RenameAsync(string newName)
+    {
+        if (newName.IndexOfAny(InvalidChars) >= 0)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
+
+            return;
+        }
+
+        string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
+
+        if (await AlreadyExistsPredicate(newPath))
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslationKey.ProjectRenameFailedTitle,
+                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+
+            return;
+        }
+
+        try
+        {
+            await RenameFileAction(Path, newPath);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
+            Log.Error(ex, "Failed to rename folder {Path} to {NewName}", Path, newName);
+            return;
+        }
+
+        Path = newPath;
+        Name = newName;
     }
 
     protected abstract FileSystemNode CreateFileNode(string name, string path);

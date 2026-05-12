@@ -109,81 +109,26 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         ];
     }
 
-    public override Task RenameAsync(string newName)
-    {
-        if (IsRoot || System.IO.Path.GetDirectoryName(Path) is not { } parentDirectory) return Task.CompletedTask;
-
-        if (newName.IndexOfAny(LocalFileNode.InvalidChars) >= 0)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
-
-            return Task.CompletedTask;
-        }
-
-        string newPath = System.IO.Path.Combine(parentDirectory, newName);
-
-        if (Directory.Exists(newPath))
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
-
-            return Task.CompletedTask;
-        }
-
-        try
-        {
-            Directory.Move(Path, newPath);
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle, TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
-
-            Log.Error(ex, "Failed to rename folder {Path} to {NewName}", Path, newName);
-            return Task.CompletedTask;
-        }
-
-        Path = newPath;
-        Name = newName;
-
-        return Task.CompletedTask;
-    }
-
-    public override Task<bool> DeleteAsync()
-    {
-        try
-        {
-            Directory.Delete(Path, true);
-            return Task.FromResult(true);
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Folder Delete Failed"),
-                TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
-
-            Log.Error(ex, "Failed to delete folder {Path}", Path);
-            return Task.FromResult(false);
-        }
-    }
-    
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
         path => Task.FromResult(File.Exists(path) || Directory.Exists(path));
-    
+
     protected override Func<string, Task> CreateFileAction =>
         async path => await File.Create(path).DisposeAsync();
-    
+
     protected override FileSystemNode CreateFileNode(string name, string path) =>
         new LocalFileNode(name, path);
-    
+
     protected override Func<string, Task> CreateFolderAction =>
         async path => await Task.Run(() => Directory.CreateDirectory(path));
-    
+
+    protected override Func<string, Task> DeleteAction =>
+        async path => await Task.Run(() => Directory.Delete(path, true));
+
+    protected override Func<string, string, Task> RenameFileAction =>
+        async (oldPath, newPath) => await Task.Run(() => Directory.Move(oldPath, newPath));
+
+    protected override char[] InvalidChars { get; } = System.IO.Path.GetInvalidFileNameChars();
+
     protected override FileSystemNode CreateFolderNode(string name, string path) =>
         new LocalFolderNode(name, path, false);
 }

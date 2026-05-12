@@ -79,77 +79,26 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         ];
     }
 
-    public override async Task RenameAsync(string newName)
-    {
-        if (newName.IndexOfAny(SftpFileNode.InvalidSftpChars) >= 0)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
-
-            return;
-        }
-
-        string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
-
-        if (await client.ExistsAsync(newPath, CancellationToken.None))
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
-
-            return;
-        }
-
-        try
-        {
-            await client.RenameFileAsync(Path, newPath, CancellationToken.None);
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
-
-            Log.Error(ex, "Failed to rename folder {Path} to {NewName}", Path, newName);
-            return;
-        }
-
-        Path = newPath;
-        Name = newName;
-    }
-
-    public override async Task<bool> DeleteAsync()
-    {
-        try
-        {
-            await client.DeleteDirectoryAsync(Path, CancellationToken.None);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Delete Failed"),
-                TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
-
-            Log.Error(ex, "Failed to delete file {Path}", Path);
-            return false;
-        }
-    }
-
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
         async path => await client.ExistsAsync(path, CancellationToken.None);
-    
+
     protected override Func<string, Task> CreateFileAction =>
         async path => await client.Create(path).DisposeAsync();
-    
+
     protected override FileSystemNode CreateFileNode(string name, string path) =>
         new SftpFileNode(name, path, client);
-    
+
     protected override Func<string, Task> CreateFolderAction =>
         async path => await client.CreateDirectoryAsync(path, CancellationToken.None);
-    
+
+    protected override Func<string, Task> DeleteAction =>
+        async path => await client.DeleteDirectoryAsync(path, CancellationToken.None);
+
+    protected override Func<string, string, Task> RenameFileAction =>
+        async (oldPath, newPath) => await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
+
+    protected override char[] InvalidChars { get; } = ['/', '\\', '\0'];
+
     protected override FileSystemNode CreateFolderNode(string name, string path) =>
         new SftpFolderNode(name, path, false, client);
 }
