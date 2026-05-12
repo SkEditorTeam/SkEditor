@@ -180,4 +180,23 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         Path = newPath;
         Name = newName;
     }
+    
+    public override async Task<bool> DeleteAsync()
+    {
+        try
+        {
+            await client.DeleteDirectoryAsync(Path, CancellationToken.None);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("File Delete Failed"),
+                TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
+            Log.Error(ex, "Failed to delete file {Path}", Path);
+            return false;
+        }
+    }
 }

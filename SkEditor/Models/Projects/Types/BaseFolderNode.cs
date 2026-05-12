@@ -80,16 +80,28 @@ public abstract partial class BaseFolderNode : FileSystemNode
         return lo;
     }
 
-    protected void AddChild(FileSystemNode node)
+    protected void AddChild(FileSystemNode node, bool add = true)
     {
         node.PropertyChanged += OnChildPropertyChanged;
-        Children.Insert(FindInsertionIndex(node), node);
+        node.Deleted += OnChildDeleted;
+        
+        if (add)
+        {
+            Children.Insert(FindInsertionIndex(node), node);
+        }
     }
 
     protected void RemoveChild(FileSystemNode node)
     {
         node.PropertyChanged -= OnChildPropertyChanged;
+        node.Deleted -= OnChildDeleted;
         Children.Remove(node);
+    }
+
+    private void OnChildDeleted(object? sender, EventArgs e)
+    {
+        if (sender is not FileSystemNode node) return;
+        RemoveChild(node);
     }
 
     private void OnChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -145,7 +157,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         foreach (FileSystemNode node in nodes)
         {
             Children.Add(node);
-            node.PropertyChanged += OnChildPropertyChanged;
+            AddChild(node, add: false);
         }
 
         HasLoadedChildren = true;

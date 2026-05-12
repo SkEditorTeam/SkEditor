@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
@@ -65,7 +66,7 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
         {
             await client.RenameFileAsync(Path, newPath, CancellationToken.None);
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message), NotificationType.Error));
@@ -76,5 +77,24 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
         
         Path = newPath;
         Name = newName;
+    }
+    
+    public override async Task<bool> DeleteAsync()
+    {
+        try
+        {
+            await client.DeleteFileAsync(Path, CancellationToken.None);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("File Delete Failed"),
+                TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
+            Log.Error(ex, "Failed to delete file {Path}", Path);
+            return false;
+        }
     }
 }

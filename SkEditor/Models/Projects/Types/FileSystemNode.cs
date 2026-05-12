@@ -36,14 +36,20 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public abstract IEnumerable<ProjectAction> GetSupportedActions();
 
     public event EventHandler<NodeRenamedEventArgs>? Renamed;
+    public event EventHandler? Deleted;
 
     public void OnRenamed(string oldName, string newName)
     {
         Renamed?.Invoke(this, new NodeRenamedEventArgs(oldName, newName));
     }
     
-    public abstract Task Rename(string newName);
+    public void OnDeleted()
+    {
+        Deleted?.Invoke(this, EventArgs.Empty);
+    }
+    
     public abstract Task RenameAsync(string newName);
+    public abstract Task<bool> DeleteAsync();
 }
 
 public class NodeRenamedEventArgs(string oldName, string newName) : EventArgs

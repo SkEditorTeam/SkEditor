@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Input;
@@ -14,7 +15,7 @@ namespace SkEditor.Models.Projects.Local;
 public partial class LocalFileNode(string name, string path) : BaseFileNode(name, path)
 {
     public static readonly char[] InvalidChars = System.IO.Path.GetInvalidFileNameChars();
-    
+
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
     [RelayCommand]
@@ -43,7 +44,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
     public override Task RenameAsync(string newName)
     {
         if (System.IO.Path.GetDirectoryName(Path) is not { } directory) return Task.CompletedTask;
-        
+
         if (newName.IndexOfAny(InvalidChars) >= 0)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
@@ -54,7 +55,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
         }
 
         string newPath = System.IO.Path.Combine(directory, newName);
-        
+
         if (System.IO.File.Exists(newPath))
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
@@ -82,5 +83,24 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
         Name = newName;
 
         return Task.CompletedTask;
+    }
+
+    public override Task<bool> DeleteAsync()
+    {
+        try
+        {
+            System.IO.File.Delete(Path);
+            return Task.FromResult(true);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("File Delete Failed"),
+                TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
+            Log.Error(ex, "Failed to delete file {Path}", Path);
+            return Task.FromResult(false);
+        }
     }
 }

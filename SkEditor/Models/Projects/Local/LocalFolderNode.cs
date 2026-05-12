@@ -212,4 +212,23 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
 
         return Task.CompletedTask;
     }
+    
+    public override Task<bool> DeleteAsync()
+    {
+        try
+        {
+            Directory.Delete(Path, true);
+            return Task.FromResult(true);
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Folder Delete Failed"),
+                TranslatableString.FromRawString(ex.Message),
+                NotificationType.Error));
+
+            Log.Error(ex, "Failed to delete folder {Path}", Path);
+            return Task.FromResult(false);
+        }
+    }
 }

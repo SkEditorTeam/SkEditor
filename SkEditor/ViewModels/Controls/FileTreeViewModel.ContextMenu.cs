@@ -31,6 +31,7 @@ public partial class FileTreeViewModel
             { ProjectAction.NewFile, NewFileCommand },
             { ProjectAction.NewFolder, NewFolderCommand },
             { ProjectAction.Rename, RenameCommand },
+            { ProjectAction.Delete, DeleteCommand },
             { ProjectAction.CopyPath, CopyPathCommand },
             { ProjectAction.CopyRelativePath, CopyRelativePathCommand },
             { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
@@ -75,7 +76,7 @@ public partial class FileTreeViewModel
             await folderNode.NewFile(inputElement.Text);
         }
     }
-    
+
     [RelayCommand]
     private async Task NewFolder()
     {
@@ -146,7 +147,7 @@ public partial class FileTreeViewModel
             Dispatcher.UIThread.Post(() => { _ = CloseFileSystemAsync(); });
         }
     }
-    
+
     [RelayCommand]
     private void CloseLocal()
     {
@@ -208,7 +209,7 @@ public partial class FileTreeViewModel
                 node.IsRenaming = false;
 
                 if (args.OldName == args.NewName) return;
-                
+
                 try
                 {
                     if (string.IsNullOrWhiteSpace(args.NewName))
@@ -226,6 +227,30 @@ public partial class FileTreeViewModel
                     node.Renamed -= OnNodeOnRenamed;
                 }
             });
+        }
+    }
+
+    [RelayCommand]
+    private async Task Delete()
+    {
+        Dialog dialog = Dialog
+            .Create(TranslatableString.FromRawString("Confirm Deletion"),
+                TranslatableString.FromRawString(SelectedNodes.Count == 1
+                    ? $"Are you sure you want to delete '{SelectedNodes[0].Name}'?"
+                    : $"Are you sure you want to delete these {SelectedNodes.Count} items?"))
+            .WithIcon(Symbol.Delete)
+            .WithButtons(new DialogButton(TranslationKey.ButtonDelete, DialogResult.Ok), DialogButton.Cancel);
+        
+        DialogResult result = await _dialogs.ShowDialogAsync(dialog);
+        
+        if (result != DialogResult.Ok) return;
+        
+        List<FileSystemNode> nodesToDelete = SelectedNodes.ToList();
+        foreach (var node in nodesToDelete)
+        {
+            bool isSuccess = await node.DeleteAsync();
+
+            if (isSuccess) node.OnDeleted();
         }
     }
 
