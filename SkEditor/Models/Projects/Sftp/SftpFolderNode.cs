@@ -63,7 +63,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
             await client.Create(newFilePath).DisposeAsync();
 
             FileSystemNode newNode = new SftpFileNode(name, newFilePath, client);
-            Children.Add(newNode);
+            Children.Insert(FindInsertionIndex(newNode), newNode);
         }
         catch (Exception ex)
         {
@@ -95,7 +95,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
             await client.CreateDirectoryAsync(newFolderPath);
 
             FileSystemNode newNode = new SftpFolderNode(name, newFolderPath, false, client);
-            Children.Add(newNode);
+            Children.Insert(FindInsertionIndex(newNode), newNode);
         }
         catch (Exception ex)
         {

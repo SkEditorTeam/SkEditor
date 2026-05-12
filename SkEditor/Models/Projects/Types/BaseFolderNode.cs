@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,41 @@ public abstract partial class BaseFolderNode : FileSystemNode
         }
     }
 
+    protected int FindInsertionIndex(FileSystemNode newNode)
+    {
+        bool newIsFolder = newNode is BaseFolderNode;
+
+        int lo = 0;
+        int hi = Children.Count;
+
+        if (newIsFolder)
+        {
+            hi = Children.TakeWhile(c => c is BaseFolderNode).Count();
+        }
+        else
+        {
+            lo = Children.TakeWhile(c => c is BaseFolderNode).Count();
+        }
+
+        while (lo < hi)
+        {
+            int mid = (lo + hi) / 2;
+            int cmp = StringComparer.OrdinalIgnoreCase.Compare(
+                Children[mid].Name, newNode.Name);
+
+            if (cmp < 0)
+            {
+                lo = mid + 1;
+            }
+            else
+            {
+                hi = mid;
+            }
+        }
+
+        return lo;
+    }
+
     public override async Task LoadChildren()
     {
         if (HasLoadedChildren)
@@ -67,7 +103,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
     }
 
     protected abstract Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders();
-    
+
     public abstract Task NewFile(string name);
     public abstract Task NewFolder(string name);
 }
