@@ -82,26 +82,34 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
     protected void AddChild(FileSystemNode node)
     {
-        node.Renamed += OnChildRenamed;
+        node.PropertyChanged += OnChildPropertyChanged;
         Children.Insert(FindInsertionIndex(node), node);
     }
 
     protected void RemoveChild(FileSystemNode node)
     {
-        node.Renamed -= OnChildRenamed;
+        node.PropertyChanged -= OnChildPropertyChanged;
         Children.Remove(node);
     }
 
-    private void OnChildRenamed(object? sender, NodeRenamedEventArgs e)
+    private void OnChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (e.PropertyName != nameof(Name))
+        {
+            return;
+        }
+
         if (sender is not FileSystemNode node) return;
 
         int oldIndex = Children.IndexOf(node);
         if (oldIndex < 0) return;
 
-        Children.RemoveAt(oldIndex);
         int newIndex = FindInsertionIndex(node);
-        Children.Insert(newIndex, node);
+
+        if (oldIndex != newIndex)
+        {
+            Children.Move(oldIndex, newIndex);
+        }
     }
 
     public override async Task LoadChildren()
@@ -119,6 +127,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         foreach (FileSystemNode node in nodes)
         {
             Children.Add(node);
+            node.PropertyChanged += OnChildPropertyChanged;
         }
 
         HasLoadedChildren = true;
