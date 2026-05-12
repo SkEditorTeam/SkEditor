@@ -78,8 +78,8 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
             return Task.CompletedTask;
         }
 
-        Name = newName;
         Path = newPath;
+        Name = newName;
 
         return Task.CompletedTask;
     }

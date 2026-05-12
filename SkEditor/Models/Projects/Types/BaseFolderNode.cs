@@ -94,22 +94,40 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
     private void OnChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(Name))
-        {
-            return;
-        }
-
+        if (e.PropertyName != nameof(Name)) return;
         if (sender is not FileSystemNode node) return;
 
         int oldIndex = Children.IndexOf(node);
         if (oldIndex < 0) return;
 
-        int newIndex = FindInsertionIndex(node);
+        int newIndex = CalculateRenameIndex(node, oldIndex);
 
         if (oldIndex != newIndex)
         {
             Children.Move(oldIndex, newIndex);
         }
+    }
+
+    private int CalculateRenameIndex(FileSystemNode node, int oldIndex)
+    {
+        int startIndex = node is BaseFolderNode ? 0 : Children.TakeWhile(c => c is BaseFolderNode).Count();
+        int endIndex = node is BaseFolderNode ? Children.TakeWhile(c => c is BaseFolderNode).Count() : Children.Count;
+
+        int targetIndex = startIndex;
+
+        for (int i = startIndex; i < endIndex; i++)
+        {
+            if (i == oldIndex) continue;
+
+            if (StringComparer.OrdinalIgnoreCase.Compare(Children[i].Name, node.Name) > 0)
+            {
+                break;
+            }
+
+            targetIndex++;
+        }
+
+        return targetIndex;
     }
 
     public override async Task LoadChildren()

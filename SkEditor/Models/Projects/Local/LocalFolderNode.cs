@@ -181,8 +181,8 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             return Task.CompletedTask;
         }
 
-        Name = newName;
         Path = newPath;
+        Name = newName;
 
         return Task.CompletedTask;
     }
