@@ -28,14 +28,9 @@ public abstract partial class BaseFolderNode : FileSystemNode
     public override IRelayCommand OpenCommand => OpenFolderCommand;
 
     public bool HasChildren => Children.Any() && Children.First() != DummyNode;
-
-    protected abstract Func<string, Task<bool>> AlreadyExistsPredicate { get; }
+    
     protected abstract Func<string, Task> CreateFileAction { get; }
     protected abstract Func<string, Task> CreateFolderAction { get; }
-    protected abstract Func<string, Task> DeleteAction { get; }
-    protected abstract Func<string, string, Task> RenameFileAction { get; }
-
-    protected abstract char[] InvalidChars { get; }
 
     [RelayCommand]
     public void OpenFolder()

@@ -55,7 +55,11 @@ public partial class FileTreeViewModel
             ValidationFunc = name =>
             {
                 if (string.IsNullOrWhiteSpace(name)) return "Name cannot be empty";
-                if (name.IndexOfAny(LocalFileNode.InvalidChars) >= 0) return "Name contains invalid characters";
+                if (name.IndexOfAny(node.InvalidChars) >= 0)
+                {
+                    return "Name contains invalid characters";
+                }
+
                 return folderNode.Children.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     ? "A file or folder with this name already exists"
                     : null;
@@ -92,7 +96,11 @@ public partial class FileTreeViewModel
             ValidationFunc = name =>
             {
                 if (string.IsNullOrWhiteSpace(name)) return "Name cannot be empty";
-                if (name.IndexOfAny(LocalFileNode.InvalidChars) >= 0) return "Name contains invalid characters";
+                if (name.IndexOfAny(node.InvalidChars) >= 0)
+                {
+                    return "Name contains invalid characters";
+                }
+
                 return folderNode.Children.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     ? "A file or folder with this name already exists"
                     : null;

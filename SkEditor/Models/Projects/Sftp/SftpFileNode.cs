@@ -2,23 +2,29 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Renci.SshNet;
-using Serilog;
 using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Types;
-using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Sftp;
 
 public partial class SftpFileNode(string name, string path, SftpClient client) : BaseFileNode(name, path)
 {
-    public static readonly char[] InvalidSftpChars = ['/', '\\', '\0'];
+    protected override Func<string, string, Task> RenameFileAction => async (oldPath, newPath) =>
+        await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
+
+    public override char[] InvalidChars { get; } = ['/', '\\', '\0'];
 
     public override IRelayCommand OpenCommand => OpenFileCommand;
+
+    protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
+        async path => await client.ExistsAsync(path, CancellationToken.None);
+
+    protected override Func<string, Task> DeleteAction =>
+        async path => await client.DeleteFileAsync(path, CancellationToken.None);
 
     [RelayCommand]
     public void OpenFile()
@@ -41,64 +47,5 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
             ProjectAction.CopyPath,
             ProjectAction.CopyRelativePath
         ];
-    }
-
-    public override async Task RenameAsync(string newName)
-    {
-        if (newName.IndexOfAny(InvalidSftpChars) >= 0)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
-
-            return;
-        }
-
-        string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
-
-        if (await client.ExistsAsync(newPath, CancellationToken.None))
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
-
-            return;
-        }
-
-        try
-        {
-            await client.RenameFileAsync(Path, newPath, CancellationToken.None);
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
-
-            Log.Error(ex, "Failed to rename file {Path} to {NewName}", Path, newName);
-            return;
-        }
-
-        Path = newPath;
-        Name = newName;
-    }
-
-    public override async Task<bool> DeleteAsync()
-    {
-        try
-        {
-            await client.DeleteFileAsync(Path, CancellationToken.None);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Delete Failed"),
-                TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
-
-            Log.Error(ex, "Failed to delete file {Path}", Path);
-            return false;
-        }
     }
 }

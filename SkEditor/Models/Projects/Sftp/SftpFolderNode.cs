@@ -27,7 +27,7 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
     protected override Func<string, string, Task> RenameFileAction =>
         async (oldPath, newPath) => await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
 
-    protected override char[] InvalidChars { get; } = ['/', '\\', '\0'];
+    public override char[] InvalidChars { get; } = ['/', '\\', '\0'];
 
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {

@@ -24,7 +24,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
     protected override Func<string, string, Task> RenameFileAction =>
         async (oldPath, newPath) => await Task.Run(() => Directory.Move(oldPath, newPath));
 
-    protected override char[] InvalidChars { get; } = System.IO.Path.GetInvalidFileNameChars();
+    public override char[] InvalidChars { get; } = System.IO.Path.GetInvalidFileNameChars();
 
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {

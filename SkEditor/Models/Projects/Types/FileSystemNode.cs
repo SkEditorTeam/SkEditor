@@ -29,6 +29,13 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public virtual IRelayCommand? OpenCommand => null;
 
+    protected abstract Func<string, Task<bool>> AlreadyExistsPredicate { get; }
+
+    protected abstract Func<string, Task> DeleteAction { get; }
+    protected abstract Func<string, string, Task> RenameFileAction { get; }
+
+    public abstract char[] InvalidChars { get; }
+
     protected bool HasLoadedChildren { get; set; }
 
     public abstract Task LoadChildrenAsync();
