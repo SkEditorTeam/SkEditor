@@ -33,11 +33,22 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
                 switch (entry)
                 {
                     case DirectoryInfo subDirectory:
-                        folders.Add(new LocalFolderNode(subDirectory.Name, subDirectory.FullName, false));
+                    {
+                        var folderNode = new LocalFolderNode(subDirectory.Name, subDirectory.FullName, false);
+    
+                        if (!HasVisibleContents(subDirectory.FullName))
+                        {
+                            folderNode.Children.Clear();
+                        }
+    
+                        folders.Add(folderNode);
                         break;
+                    }
                     case FileInfo file:
+                    {
                         files.Add(new LocalFileNode(file.Name, file.FullName));
                         break;
+                    }
                 }
             }
         });
@@ -103,6 +114,20 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         }
         
         return Task.CompletedTask;
+    }
+    
+    private static bool HasVisibleContents(string path)
+    {
+        try
+        {
+            return new DirectoryInfo(path)
+                .EnumerateFileSystemInfos("*.*", SearchOption.TopDirectoryOnly)
+                .Any(entry => !IsSystemJunk(entry));
+        }
+        catch (Exception)
+        {
+            return false; 
+        }
     }
 
     private static bool IsSystemJunk(FileSystemInfo entry)
