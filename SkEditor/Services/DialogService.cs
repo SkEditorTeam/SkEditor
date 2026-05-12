@@ -62,6 +62,9 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
                     }),
                 ItemsSource = dialog.Elements
             };
+            
+            var firstText = dialog.Elements.OfType<TextDialogElement>().FirstOrDefault();
+            firstText?.AutoFocus = true;
         }
 
         taskDialog.Closing += OnTaskDialogOnClosing;

@@ -5,6 +5,7 @@
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:assets="clr-namespace:SkEditor.Assets"
              xmlns:dialogs="clr-namespace:SkEditor.Models.Dialogs.Elements"
+             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              x:Class="SkEditor.App"
              x:CompileBindings="True"
              RequestedThemeVariant="Dark">
@@ -85,12 +86,16 @@
         <DataTemplate DataType="localization:TranslatableString">
             <TextBlock Text="{Binding Value}" />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type dialogs:TextDialogElement}">
             <StackPanel Spacing="4">
                 <TextBox Text="{Binding Text, Mode=TwoWay}"
                          PlaceholderText="{Binding PlaceholderText}"
-                         Classes.error="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                         Classes.error="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    <Interaction.Behaviors>
+                        <behaviors:FocusOnLoadedBehavior ShouldFocus="{Binding AutoFocus}" />
+                    </Interaction.Behaviors>
+                </TextBox>
                 <TextBlock Text="{Binding ErrorMessage}"
                            IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                            Foreground="#FFFF99A4"
