@@ -9,8 +9,7 @@ namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
-    protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
-        path => Task.FromResult(File.Exists(path) || Directory.Exists(path));
+    protected override Func<string, Task<bool>> AlreadyExistsPredicate => LocalFileSystem.AlreadyExistsPredicate;
 
     protected override Func<string, Task> CreateFileAction =>
         async path => await File.Create(path).DisposeAsync();
@@ -24,7 +23,7 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
     protected override Func<string, string, Task> RenameFileAction =>
         async (oldPath, newPath) => await Task.Run(() => Directory.Move(oldPath, newPath));
 
-    public override char[] InvalidChars { get; } = System.IO.Path.GetInvalidFileNameChars();
+    public override char[] InvalidChars => LocalFileSystem.InvalidChars;
 
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {

@@ -16,12 +16,12 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
     protected override Func<string, string, Task> RenameFileAction => async (oldPath, newPath) =>
         await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
 
-    public override char[] InvalidChars { get; } = ['/', '\\', '\0'];
+    public override char[] InvalidChars => SftpFileSystem.InvalidChars;
 
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
-        async path => await client.ExistsAsync(path, CancellationToken.None);
+        SftpFileSystem.GetAlreadyExistsPredicate(client);
 
     protected override Func<string, Task> DeleteAction =>
         async path => await client.DeleteFileAsync(path, CancellationToken.None);

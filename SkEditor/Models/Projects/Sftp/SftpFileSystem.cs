@@ -15,6 +15,7 @@ public class SftpFileSystem(
     IRemoteConnectionService connections,
     INotificationService notifications) : IFileSystem
 {
+    public static readonly char[] InvalidChars = ['/', '\\', '\0'];
     public FileSystemNode? Root { get; private set; }
 
     public async Task<bool> LoadAsync(CancellationToken cancellationToken)
@@ -52,5 +53,10 @@ public class SftpFileSystem(
         connections.Disconnect(connection);
 
         Root = null;
+    }
+
+    public static Func<string, Task<bool>> GetAlreadyExistsPredicate(SftpClient client)
+    {
+        return async path => await client.ExistsAsync(path, CancellationToken.None);
     }
 }

@@ -9,6 +9,12 @@ namespace SkEditor.Models.Projects.Local;
 
 public class LocalFileSystem : IFileSystem
 {
+    public static readonly char[] InvalidChars =
+        Path.GetInvalidFileNameChars();
+
+    public static readonly Func<string, Task<bool>> AlreadyExistsPredicate =
+        path => Task.FromResult(File.Exists(path) || Directory.Exists(path));
+
     public LocalFileSystem(string rootDirectory)
     {
         if (!Directory.Exists(rootDirectory))
