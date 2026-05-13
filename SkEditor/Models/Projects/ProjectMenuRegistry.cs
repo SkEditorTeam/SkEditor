@@ -5,6 +5,7 @@ namespace SkEditor.Models.Projects;
 
 public record MenuTemplate(string Header, Symbol Icon, string? InputGestureText = null, bool AllowOneItemOnly = false);
 
+// todo: complete the commented actions
 public static class ProjectMenuRegistry
 {
     public static readonly Dictionary<ProjectAction, MenuTemplate> Templates = new()
@@ -16,16 +17,16 @@ public static class ProjectMenuRegistry
         { ProjectAction.CopyPath, new MenuTemplate("Copy Path", Symbol.ClipboardLink) },
         { ProjectAction.CopyRelativePath, new MenuTemplate("Copy Relative Path", Symbol.ClipboardArrowRight) },
 
-        { ProjectAction.Duplicate, new MenuTemplate("Duplicate", Symbol.DocumentCopy) },
+        // { ProjectAction.Duplicate, new MenuTemplate("Duplicate", Symbol.DocumentCopy) },
         { ProjectAction.Rename, new MenuTemplate("Rename", Symbol.Rename, "F2", true) },
         { ProjectAction.Delete, new MenuTemplate("Delete", Symbol.Delete, "Delete") },
 
         { ProjectAction.ShowInExplorer, new MenuTemplate("Show in Explorer", Symbol.FolderOpen) },
 
-        { ProjectAction.Upload, new MenuTemplate("Upload", Symbol.ArrowUpload, AllowOneItemOnly: true) },
-        { ProjectAction.Download, new MenuTemplate("Download", Symbol.ArrowDownload) },
+        //{ ProjectAction.Upload, new MenuTemplate("Upload", Symbol.ArrowUpload, AllowOneItemOnly: true) },
+        //{ ProjectAction.Download, new MenuTemplate("Download", Symbol.ArrowDownload) },
 
-        { ProjectAction.Refresh, new MenuTemplate("Refresh", Symbol.ArrowClockwise) },
+        //{ ProjectAction.Refresh, new MenuTemplate("Refresh", Symbol.ArrowClockwise) },
         { ProjectAction.Disconnect, new MenuTemplate("Disconnect", Symbol.PlugDisconnected) },
 
         { ProjectAction.Close, new MenuTemplate("Close", Symbol.Dismiss) }
