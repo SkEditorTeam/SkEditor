@@ -4,6 +4,7 @@
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:menu="clr-namespace:SkEditor.ViewModels.Menu"
+             xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              x:DataType="vms:MainMenuViewModel"
              x:Class="SkEditor.Views.Controls.MainMenuControl">
 
@@ -22,7 +23,7 @@
     </UserControl.Styles>
 
     <UserControl.Resources>
-        <converters:SymbolIconConverter x:Key="SymbolIconConverter" />
+        <iconverters:SymbolIconConverter x:Key="SymbolIconConverter" />
         <converters:MenuHeaderConverter x:Key="MenuHeaderConverter" />
         <converters:KeyGestureConverter x:Key="KeyGestureConverter" />
     </UserControl.Resources>

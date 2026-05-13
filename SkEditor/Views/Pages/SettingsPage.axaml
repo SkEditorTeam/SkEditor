@@ -9,6 +9,8 @@
              xmlns:dataTemplates="clr-namespace:SkEditor.DataTemplates"
              xmlns:models="clr-namespace:SkEditor.Models.Settings"
              xmlns:types="clr-namespace:SkEditor.Models.Settings.Types"
+             xmlns:lconverters="clr-namespace:SkEditor.Converters.Layout"
+             xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="vms:SettingsPageViewModel"
@@ -24,10 +26,10 @@
         <GridLength x:Key="ToggleSwitchPreContentMargin">2</GridLength>
         <GridLength x:Key="ToggleSwitchPostContentMargin">2</GridLength>
         <!-- ReSharper restore Xaml.RedundantResource -->
-        <converters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
+        <iconverters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
         <converters:InfoBarSeverityConverter x:Key="InfoBarSeverityConverter" />
-        <converters:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
-        <converters:OrientationConverter x:Key="OrientationConverter" />
+        <lconverters:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
+        <lconverters:OrientationConverter x:Key="OrientationConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>

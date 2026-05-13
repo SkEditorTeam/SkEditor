@@ -9,7 +9,7 @@ using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
 using SkEditor.Services;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Converters.Icons;
 
 public class NodeToColorConverter : IValueConverter
 {

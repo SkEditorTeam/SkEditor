@@ -4,11 +4,10 @@ using Avalonia.Data.Converters;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
 using SkEditor.Models.UI;
-using SkEditor.Utilities.Icons;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Converters.Icons;
 
-public class StandardIconSourceConverter : IValueConverter
+public class StandardIconConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -19,15 +18,12 @@ public class StandardIconSourceConverter : IValueConverter
 
         if (settingIcon.IsSymbol)
         {
-            return new SymbolIconSource { Symbol = (Symbol)settingIcon.Value };
+            return new SymbolIcon { Symbol = (Symbol)settingIcon.Value };
         }
 
-        if (settingIcon.IsPath)
-        {
-            return Icons.GetPathIconSource((string)settingIcon.Value);
-        }
-
-        return null;
+        return settingIcon.IsPath
+            ? Utilities.Icons.Icons.GetPathIcon((string)settingIcon.Value)
+            : null;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

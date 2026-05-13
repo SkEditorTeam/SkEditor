@@ -6,12 +6,13 @@
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:windows="clr-namespace:SkEditor.Views.Windows"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Windows"
+             xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              x:Class="SkEditor.Views.Controls.MainTabView"
              x:DataType="vms:MainWindowViewModel">
 
     <UserControl.Resources>
         <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
-        <converters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
+        <iconverters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
     </UserControl.Resources>
 
     <Panel VerticalAlignment="Stretch">

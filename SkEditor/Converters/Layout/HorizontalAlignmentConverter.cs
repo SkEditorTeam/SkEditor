@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using FluentIcons.Avalonia.Fluent;
-using FluentIcons.Common;
+using Avalonia.Layout;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Converters.Layout;
 
-public class SymbolIconSourceConverter : IValueConverter
+public class HorizontalAlignmentConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is Symbol symbol)
+        if (value is not bool isVertical)
         {
-            return new SymbolIconSource { Symbol = symbol };
+            return null;
         }
 
-        return null;
+        return isVertical
+            ? HorizontalAlignment.Stretch
+            : HorizontalAlignment.Left;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

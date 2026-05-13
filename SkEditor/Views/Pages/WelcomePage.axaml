@@ -6,10 +6,10 @@
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
-             xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              xmlns:welcome="clr-namespace:SkEditor.Models.Welcome"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
+             xmlns:lconverters="clr-namespace:SkEditor.Converters.Layout"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
              x:DataType="vms:WelcomePageViewModel"
              x:CompileBindings="True"
@@ -18,8 +18,8 @@
     <UserControl.Resources>
         <system:TimeSpan x:Key="ButtonTransitionDuration">0:0:0.1</system:TimeSpan>
 
-        <converters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
-        <converters:ScrollVisibleToPaddingConverter x:Key="ScrollVisibleToPaddingConverter" />
+        <lconverters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
+        <lconverters:ScrollVisibleToPaddingConverter x:Key="ScrollVisibleToPaddingConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>

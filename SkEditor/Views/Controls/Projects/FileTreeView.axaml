@@ -9,13 +9,14 @@
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:types="clr-namespace:SkEditor.Models.Projects.Types"
+             xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="controls:FileTreeViewModel"
              x:Class="SkEditor.Views.Controls.Projects.FileTreeView">
 
     <UserControl.Resources>
-        <converters:NodeToIconConverter x:Key="NodeToIconConverter" />
-        <converters:NodeToColorConverter x:Key="NodeToColorConverter" />
+        <iconverters:NodeToIconConverter x:Key="NodeToIconConverter" />
+        <iconverters:NodeToColorConverter x:Key="NodeToColorConverter" />
         <converters:KeyGestureConverter x:Key="KeyGestureConverter" />
     </UserControl.Resources>
 

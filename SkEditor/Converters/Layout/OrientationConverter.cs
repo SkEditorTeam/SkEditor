@@ -3,9 +3,9 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Layout;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Converters.Layout;
 
-public class HorizontalAlignmentConverter : IValueConverter
+public class OrientationConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -14,9 +14,7 @@ public class HorizontalAlignmentConverter : IValueConverter
             return null;
         }
 
-        return isVertical
-            ? HorizontalAlignment.Stretch
-            : HorizontalAlignment.Left;
+        return isVertical ? Orientation.Vertical : Orientation.Horizontal;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
