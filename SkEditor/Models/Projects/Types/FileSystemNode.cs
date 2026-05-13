@@ -23,7 +23,7 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public string Path { get; protected set; } = path;
     public bool IsDirectory { get; set; } = isDirectory;
-    public bool IsRoot { get; set; }
+    public bool IsRoot { get; init; }
 
     public ObservableCollection<FileSystemNode> Children { get; } = [];
 

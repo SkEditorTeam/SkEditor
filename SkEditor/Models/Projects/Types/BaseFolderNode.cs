@@ -8,14 +8,13 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Serilog;
 using SkEditor.Models.Messages;
-using SkEditor.Models.Projects.Local;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Types;
 
 public abstract partial class BaseFolderNode : FileSystemNode
 {
-    private static readonly FileSystemNode DummyNode = new LocalFileNode("Loading...", "...");
+    private static readonly FileSystemNode DummyNode = new DummyFileNode();
 
     protected BaseFolderNode(string name, string path, bool isRoot) : base(name, path, true)
     {
@@ -28,7 +27,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
     public override IRelayCommand OpenCommand => OpenFolderCommand;
 
     public bool HasChildren => Children.Any() && Children.First() != DummyNode;
-    
+
     protected abstract Func<string, Task> CreateFileAction { get; }
     protected abstract Func<string, Task> CreateFolderAction { get; }
 
@@ -177,16 +176,32 @@ public abstract partial class BaseFolderNode : FileSystemNode
         IsLoadingChildren = true;
         Children.Clear();
 
-        IEnumerable<FileSystemNode> nodes = await LoadFilesAndFolders();
-
-        foreach (FileSystemNode node in nodes)
+        try
         {
-            Children.Add(node);
-            AddChild(node, false);
+            IEnumerable<FileSystemNode> nodes = await LoadFilesAndFolders();
+
+            foreach (FileSystemNode node in nodes)
+            {
+                Children.Add(node);
+                AddChild(node, false);
+            }
+
+            HasLoadedChildren = true;
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                TranslatableString.FromRawString("Load Failed"),
+                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+
+            Log.Error(ex, "Failed to load children of folder {Path}", Path);
+            HasLoadedChildren = false;
+        }
+        finally
+        {
+            IsLoadingChildren = false;
         }
 
-        HasLoadedChildren = true;
-        IsLoadingChildren = false;
         OnPropertyChanged(nameof(IsExpanded));
     }
 
