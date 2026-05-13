@@ -19,7 +19,7 @@ public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFea
 
     public bool CanAttach(FileTab tab)
     {
-        return experiments.HexPreviewEnabled;
+        return experiments.HexPreviewEnabled && tab.GetExtension() is "sk";
     }
 
     public void OnViewAttached(FileTab tab, TextEditor editor)

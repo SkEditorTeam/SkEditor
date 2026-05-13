@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Files;
 using SkEditor.Utilities.Extensions;
@@ -24,6 +25,7 @@ public partial class FileTab(
     IDialogService dialogs,
     INotificationService notifications,
     IFilePickerService filePicker,
+    IFileFeatureService features,
     ILogService logs)
     : Tab(header, Symbol.Document)
 {
@@ -102,6 +104,8 @@ public partial class FileTab(
 
         File.Path = path;
         UpdateHeader();
+        features.UpdateFeatures(this);
+        
         return await PerformSaveAsync();
     }
 
@@ -159,7 +163,7 @@ public partial class FileTab(
 
     public string? GetExtension()
     {
-        return Path.GetExtension(File.Path ?? null);
+        return Path.GetExtension(File.Path ?? null)?.TrimStart('.').ToLowerInvariant();
     }
 
     [RelayCommand]

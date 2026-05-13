@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Settings;
 
-public interface IConfig
+public interface IConfig : INotifyPropertyChanged
 {
     string FileName { get; }
     Task Load();
