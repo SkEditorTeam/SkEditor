@@ -15,11 +15,11 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
         return Task.CompletedTask;
     }
 
-    public override Task RenameAsync(string newName)
+    public override async Task RenameAsync(string newName)
     {
         if (System.IO.Path.GetDirectoryName(Path) is not { } directory)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         if (newName.IndexOfAny(InvalidChars) >= 0)
@@ -28,7 +28,7 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
                 TranslationKey.ProjectRenameFailedTitle,
                 TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
 
-            return Task.CompletedTask;
+            return;
         }
 
         string newPath = System.IO.Path.Combine(directory, newName);
@@ -39,12 +39,12 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
                 TranslationKey.ProjectRenameFailedTitle,
                 TranslationKey.ProjectErrorNameExists, NotificationType.Error));
 
-            return Task.CompletedTask;
+            return;
         }
 
         try
         {
-            RenameFileAction(Path, newPath).Wait();
+            await RenameFileAction(Path, newPath);
         }
         catch (Exception ex)
         {
@@ -53,13 +53,11 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
                 NotificationType.Error));
 
             Log.Error(ex, "Failed to rename file {Path} to {NewName}", Path, newName);
-            return Task.CompletedTask;
+            return;
         }
 
         Path = newPath;
         Name = newName;
-
-        return Task.CompletedTask;
     }
 
     public override async Task<bool> DeleteAsync()
