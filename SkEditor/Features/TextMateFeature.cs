@@ -32,6 +32,8 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
 
         if (extension is null or "sk")
         {
+            _registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
+            
             _installation.SetGrammar("source.sk");
             _installation.SetTheme(_registryOptions.GetTheme("dark_skript"));
         }
