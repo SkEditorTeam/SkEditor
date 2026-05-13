@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Models.Remote;
@@ -16,6 +17,14 @@ public partial class RemoteConnectionWindow : FAAppWindow
     {
         InitializeComponent();
         Focusable = true;
+
+        KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
+        };
     }
 
     public RemoteConnectionWindow(RemoteConnectionViewModel viewModel) : this()
