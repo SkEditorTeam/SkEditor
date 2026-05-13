@@ -19,7 +19,7 @@ namespace SkEditor.Features;
 
 public class TextMateFeature(INotificationService notifications) : IEditorFeature
 {
-    private readonly SkEditorRegistryOptions _registryOptions = new(ThemeName.DarkPlus);
+    private IRegistryOptions _registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
     private TextMate.Installation? _installation;
 
     public bool CanAttach(FileTab tab) => true;
@@ -28,8 +28,24 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
     {
         _installation = editor.InstallTextMate(_registryOptions);
 
-        _installation.SetGrammar("source.sk");
-        _installation.SetTheme(_registryOptions.GetTheme("dark_skript"));
+        string? extension = tab.GetExtension();
+
+        if (extension is null or "sk")
+        {
+            _installation.SetGrammar("source.sk");
+            _installation.SetTheme(_registryOptions.GetTheme("dark_skript"));
+        }
+        else
+        {
+            RegistryOptions registryOptions = new(ThemeName.DarkPlus);
+            _registryOptions = registryOptions;
+            string? scope = registryOptions.GetScopeByExtension(extension);
+            if (scope is not null)
+            {
+                _installation.SetGrammar(scope);
+                _installation.SetTheme(registryOptions.GetDefaultTheme());
+            }
+        }
 
         editor.TextArea.AddHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown, RoutingStrategies.Tunnel,
             handledEventsToo: true);

@@ -157,6 +157,11 @@ public partial class FileTab(
         Header = TranslatableString.FromRawString(fileName);
     }
 
+    public string? GetExtension()
+    {
+        return Path.GetExtension(File.Path ?? null);
+    }
+
     [RelayCommand]
     private async Task CloseTab()
     {
