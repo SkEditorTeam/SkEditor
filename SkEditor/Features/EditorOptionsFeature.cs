@@ -21,6 +21,7 @@ public class EditorOptionsFeature(AppSettings appSettings) : IEditorFeature
 
         LineNumberMargin? lineNumberMargin = editor.TextArea.LeftMargins.OfType<LineNumberMargin>().FirstOrDefault();
         lineNumberMargin?.Margin = new Thickness(10, 0);
+        lineNumberMargin?.MinWidthInDigits = 3;
 
         editor.Options.AllowScrollBelowDocument = true;
         editor.Options.CutCopyWholeLine = true;
