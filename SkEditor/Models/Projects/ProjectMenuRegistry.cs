@@ -18,7 +18,7 @@ public static class ProjectMenuRegistry
 
         { ProjectAction.Duplicate, new MenuTemplate("Duplicate", Symbol.DocumentCopy) },
         { ProjectAction.Rename, new MenuTemplate("Rename", Symbol.Rename, "F2", true) },
-        { ProjectAction.Delete, new MenuTemplate("Delete", Symbol.Delete) },
+        { ProjectAction.Delete, new MenuTemplate("Delete", Symbol.Delete, "Delete") },
 
         { ProjectAction.ShowInExplorer, new MenuTemplate("Show in Explorer", Symbol.FolderOpen) },
 

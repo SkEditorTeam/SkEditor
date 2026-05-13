@@ -241,6 +241,11 @@ public partial class FileTreeViewModel
     [RelayCommand]
     private async Task Delete()
     {
+        if (SelectedNodes.Any(n => n.IsRoot))
+        {
+            return;
+        }
+
         Dialog dialog = Dialog
             .Create(TranslatableString.FromRawString("Confirm Deletion"),
                 TranslatableString.FromRawString(SelectedNodes.Count == 1
@@ -293,7 +298,11 @@ public partial class FileTreeViewModel
 
             if (!commonActions.Contains(action)) continue;
 
-            var template = ProjectMenuRegistry.Templates[action];
+            ProjectMenuRegistry.Templates.TryGetValue(action, out MenuTemplate? template);
+            if (template == null)
+            {
+                continue;
+            }
 
             if (template.AllowOneItemOnly && SelectedNodes.Count > 1) continue;
 

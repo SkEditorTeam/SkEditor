@@ -22,6 +22,7 @@
 
     <UserControl.KeyBindings>
         <KeyBinding Gesture="F2" Command="{Binding RenameCommand}" />
+        <KeyBinding Gesture="Delete" Command="{Binding DeleteCommand}" />
         <KeyBinding Gesture="Enter" Command="{Binding OpenCommand}" />
     </UserControl.KeyBindings>
 
