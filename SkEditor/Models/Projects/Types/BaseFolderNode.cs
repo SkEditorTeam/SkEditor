@@ -320,8 +320,18 @@ public abstract partial class BaseFolderNode : FileSystemNode
             return;
         }
 
-        Path = newPath;
         Name = newName;
+        UpdatePath(newPath);
+    }
+
+    public override void UpdatePath(string newPath)
+    {
+        Path = newPath;
+
+        foreach (FileSystemNode child in Children)
+        {
+            child.UpdatePath(System.IO.Path.Combine(Path, child.Name));
+        }
     }
 
     protected abstract FileSystemNode CreateFileNode(string name, string path);

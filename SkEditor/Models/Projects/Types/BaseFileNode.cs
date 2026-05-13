@@ -56,7 +56,7 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
             return;
         }
 
-        Path = newPath;
+        UpdatePath(newPath);
         Name = newName;
     }
 
@@ -77,5 +77,10 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
             Log.Error(ex, "Failed to delete file {Path}", Path);
             return false;
         }
+    }
+
+    public override void UpdatePath(string newPath)
+    {
+        Path = newPath;
     }
 }

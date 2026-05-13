@@ -57,6 +57,8 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public abstract Task RenameAsync(string newName);
     public abstract Task<bool> DeleteAsync();
+
+    public abstract void UpdatePath(string newPath);
 }
 
 public class NodeRenamedEventArgs(string oldName, string newName) : EventArgs

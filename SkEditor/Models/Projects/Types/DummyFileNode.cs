@@ -30,4 +30,9 @@ public sealed class DummyFileNode() : FileSystemNode("Loading...", "...", false)
     {
         throw new NotImplementedException();
     }
+
+    public override void UpdatePath(string newPath)
+    {
+        Path = newPath;
+    }
 }
