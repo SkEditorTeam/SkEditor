@@ -10,6 +10,9 @@ public class SettingsMenuProvider(ITabService tabs, Func<SettingsTab> settingsTa
 {
     public MainMenuItem GetMainMenuItem()
     {
-        return MainMenuItem.IconOnly(Symbol.Settings).WithCommand(() => tabs.OpenUniqueTab(settingsTabFactory));
+        return MainMenuItem
+            .IconOnly(Symbol.Settings)
+            .WithInputGesture("Ctrl+,")
+            .WithCommand(() => tabs.OpenUniqueTab(settingsTabFactory));
     }
 }
