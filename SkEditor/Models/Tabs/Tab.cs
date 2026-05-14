@@ -31,6 +31,8 @@ public abstract partial class Tab(TranslatableString header, Symbol? icon = null
     [ObservableProperty]
     public partial bool IsSaved { get; set; } = true;
 
+    [ObservableProperty] public partial bool IsLoading { get; set; } = false;
+
     /// <summary>
     ///     Command that is executed when the user attempts to close the tab.
     /// </summary>

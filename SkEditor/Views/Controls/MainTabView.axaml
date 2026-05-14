@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
         <iconverters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
+        <iconverters:TabIconConverter x:Key="TabIconConverter" />
     </UserControl.Resources>
 
     <Panel VerticalAlignment="Stretch">
@@ -26,19 +27,39 @@
             AddTabButtonCommand="{Binding NewTabCommand}">
             <ui:TabView.TabItemTemplate>
                 <DataTemplate x:DataType="tabs:Tab">
-                    <ui:TabViewItem Content="{Binding .}"
-                                    IconSource="{Binding Icon, Converter={StaticResource SymbolIconSourceConverter}}">
+                    <ui:TabViewItem Content="{Binding .}">
+                        <ui:TabViewItem.IconSource>
+                            <MultiBinding Converter="{StaticResource TabIconConverter}">
+                                <Binding Path="Icon" Converter="{StaticResource SymbolIconSourceConverter}" />
+                                <Binding Path="IsLoading" />
+                            </MultiBinding>
+                        </ui:TabViewItem.IconSource>
                         <ui:TabViewItem.Header>
-                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                <TextBlock Text="{Binding Header.Value}"
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Panel Grid.Column="0"
+                                       IsVisible="{Binding IsLoading}"
+                                       Width="16" Height="16"
+                                       Margin="0,0,8,0">
+                                    <ui:FAProgressRing Width="14" Height="14"
+                                                       IsIndeterminate="True"
+                                                       BorderThickness="1.5"
+                                                       Foreground="{Binding $parent[ContentPresenter].Foreground}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+                                </Panel>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Header.Value}"
                                            ToolTip.Tip="{Binding Header.Value}"
-                                           TextTrimming="CharacterEllipsis" />
-                                <Ellipse
-                                    Grid.Column="1"
-                                    IsVisible="{Binding !IsSaved}"
-                                    Width="4" Height="4"
-                                    Fill="{Binding $parent[ContentPresenter].Foreground}"
-                                    VerticalAlignment="Center" />
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0" />
+
+                                <Ellipse Grid.Column="2"
+                                         IsVisible="{Binding !IsSaved}"
+                                         Width="4" Height="4"
+                                         Fill="{Binding $parent[ContentPresenter].Foreground}"
+                                         VerticalAlignment="Center" />
                             </Grid>
                         </ui:TabViewItem.Header>
                         <Interaction.Behaviors>

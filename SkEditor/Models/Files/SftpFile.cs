@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet;
 using Renci.SshNet.Common;
+using Renci.SshNet.Sftp;
 
 namespace SkEditor.Models.Files;
 
@@ -16,7 +17,16 @@ public class SftpFile(string path, string name, SftpClient client) : BaseFile(pa
             throw new InvalidOperationException("Path cannot be null for SftpFile when loading.");
         }
 
-        return await client.OpenAsync(Path, FileMode.Open, FileAccess.Read, CancellationToken.None);
+        try
+        {
+            SftpFileStream stream =
+                await client.OpenAsync(Path, FileMode.Open, FileAccess.Read, CancellationToken.None);
+            return stream;
+        }
+        catch (SftpPermissionDeniedException ex)
+        {
+            throw new UnauthorizedAccessException($"Permission denied when trying to load file at {Path}.", ex);
+        }
     }
 
     public override async Task SaveAsync(Stream stream, CancellationToken token)

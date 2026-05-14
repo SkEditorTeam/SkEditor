@@ -39,14 +39,11 @@ public partial class FileTab(
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
 
-    [ObservableProperty]
-    public partial double FontSize { get; set; } = appSettings.EditorFontSize;
+    [ObservableProperty] public partial double FontSize { get; set; } = appSettings.EditorFontSize;
 
-    [ObservableProperty]
-    public partial bool WordWrap { get; set; } = appSettings.IsWordWrapEnabled;
+    [ObservableProperty] public partial bool WordWrap { get; set; } = appSettings.IsWordWrapEnabled;
 
-    [ObservableProperty]
-    public partial Vector ScrollOffset { get; set; } = Vector.Zero;
+    [ObservableProperty] public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
     public async Task<bool> LoadContentAsync()
     {
@@ -55,32 +52,53 @@ public partial class FileTab(
             return false;
         }
 
-        await using Stream stream = await File.LoadAsync();
-        
-        if (await stream.IsLikelyBinaryAsync())
+        try
         {
-            Dialog dialog = Dialog
-                .Create(TranslationKey.BinaryFileTitle)
-                .WithMessage(TranslationKey.BinaryFileFound)
-                .WithIcon(Symbol.DocumentCube)
-                .WithButtons(
-                    new DialogButton(TranslationKey.ButtonOpen, DialogResult.Yes),
-                    new DialogButton(TranslationKey.ButtonCancel, DialogResult.Cancel)
-                );
+            await using Stream stream = await File.LoadAsync();
 
-            DialogResult result = await dialogs.ShowDialogAsync(dialog);
-            
-            if (result == StandardDialogResult.Cancel)
+            if (await stream.IsLikelyBinaryAsync())
             {
-                return false;
-            }
-        }
-        
-        using StreamReader reader = new(stream);
+                Dialog dialog = Dialog
+                    .Create(TranslationKey.BinaryFileTitle)
+                    .WithMessage(TranslationKey.BinaryFileFound)
+                    .WithIcon(Symbol.DocumentCube)
+                    .WithButtons(
+                        new DialogButton(TranslationKey.ButtonOpen, DialogResult.Yes),
+                        new DialogButton(TranslationKey.ButtonCancel, DialogResult.Cancel)
+                    );
 
-        Document.Text = await reader.ReadToEndAsync();
+                DialogResult result = await dialogs.ShowDialogAsync(dialog);
+
+                if (result == StandardDialogResult.Cancel)
+                {
+                    return false;
+                }
+            }
+
+            using StreamReader reader = new(stream);
+
+            Document.Text = await reader.ReadToEndAsync();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
+                TranslatableString.FromRawString(
+                    "Unable to load the file. You do not have permission to read this file."));
+            return false;
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Failed to load file.");
+            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
+                TranslatableString.FromRawString("An error occurred while loading the file. Please try again."));
+            return false;
+        }
+
         Document.UndoStack.ClearAll();
         Document.UndoStack.MarkAsOriginalFile();
+
+        IsLoading = false;
+
         return true;
     }
 
@@ -105,7 +123,7 @@ public partial class FileTab(
         File.Path = path;
         UpdateHeader();
         features.UpdateFeatures(this);
-        
+
         return await PerformSaveAsync();
     }
 
