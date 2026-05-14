@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -55,36 +54,17 @@ public class FileService(
             return;
         }
 
-        Stream stream;
-        try
-        {
-            stream = await file.LoadAsync();
-        }
-        catch (UnauthorizedAccessException)
-        {
-            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
-                TranslatableString.FromRawString("Unable to load the file. You do not have permission."));
-            return;
-        }
-        catch (Exception ex)
-        {
-            logs.Error(ex, "Failed to load file.");
-            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
-                TranslatableString.FromRawString("An error occurred while loading the file."));
-            return;
-        }
-
         FileTab fileTab = fileTabFactory.CreateFromFile(file);
 
-        Task<bool> loadContentTask = fileTab.LoadContentFromStreamAsync(stream);
+        Task<bool> fullLoadTask = LoadAndReadFileAsync(fileTab);
 
-        Task timeoutTask = Task.Delay(150);
+        Task timeoutTask = Task.Delay(100);
 
-        Task completedTask = await Task.WhenAny(loadContentTask, timeoutTask);
+        Task completedTask = await Task.WhenAny(fullLoadTask, timeoutTask);
 
-        if (completedTask == loadContentTask)
+        if (completedTask == fullLoadTask)
         {
-            bool isSuccess = await loadContentTask;
+            bool isSuccess = await fullLoadTask;
             if (isSuccess)
             {
                 fileTab.IsLoading = false;
@@ -96,7 +76,7 @@ public class FileService(
             fileTab.IsLoading = true;
             tabs.OpenTab(fileTab);
 
-            bool isSuccess = await loadContentTask;
+            bool isSuccess = await fullLoadTask;
 
             fileTab.IsLoading = false;
 
@@ -104,6 +84,27 @@ public class FileService(
             {
                 tabs.CloseTab(fileTab);
             }
+        }
+    }
+
+    private async Task<bool> LoadAndReadFileAsync(FileTab fileTab)
+    {
+        try
+        {
+            return await fileTab.LoadContentAsync();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
+                TranslatableString.FromRawString("Unable to load the file. You do not have permission."));
+            return false;
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Failed to load file.");
+            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
+                TranslatableString.FromRawString("An error occurred while loading the file."));
+            return false;
         }
     }
 

@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -46,53 +45,40 @@ public partial class FileTab(
 
     [ObservableProperty] public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
-    public async Task<bool> LoadContentFromStreamAsync(Stream stream) 
+    public async Task<bool> LoadContentAsync()
     {
-        CancellationTokenSource cts = new();
-        _ = Task.Delay(200, cts.Token).ContinueWith(t => 
+        if (string.IsNullOrEmpty(File.Path))
         {
-            if (!t.IsCanceled)
-            {
-                Dispatcher.UIThread.Post(() => IsLoading = true);
-            }
-        }, TaskScheduler.Default);
-
-        try
-        {
-            await using (stream)
-            {
-                if (await stream.IsLikelyBinaryAsync())
-                {
-                    Dialog dialog = Dialog
-                        .Create(TranslationKey.BinaryFileTitle)
-                        .WithMessage(TranslationKey.BinaryFileFound)
-                        .WithIcon(Symbol.DocumentCube)
-                        .WithButtons(
-                            new DialogButton(TranslationKey.ButtonOpen, DialogResult.Yes),
-                            new DialogButton(TranslationKey.ButtonCancel, DialogResult.Cancel)
-                        );
-
-                    DialogResult result = await dialogs.ShowDialogAsync(dialog);
-
-                    if (result == StandardDialogResult.Cancel)
-                    {
-                        return false;
-                    }
-                }
-
-                using StreamReader reader = new(stream);
-                Document.Text = await reader.ReadToEndAsync(cts.Token);
-            }
-
-            Document.UndoStack.ClearAll();
-            Document.UndoStack.MarkAsOriginalFile();
-            return true;
+            return false;
         }
-        finally
+
+        await using Stream stream = await File.LoadAsync();
+
+        if (await stream.IsLikelyBinaryAsync())
         {
-            await cts.CancelAsync();
-            IsLoading = false;
+            Dialog dialog = Dialog
+                .Create(TranslationKey.BinaryFileTitle)
+                .WithMessage(TranslationKey.BinaryFileFound)
+                .WithIcon(Symbol.DocumentCube)
+                .WithButtons(
+                    new DialogButton(TranslationKey.ButtonOpen, DialogResult.Yes),
+                    new DialogButton(TranslationKey.ButtonCancel, DialogResult.Cancel)
+                );
+
+            DialogResult result = await dialogs.ShowDialogAsync(dialog);
+
+            if (result == StandardDialogResult.Cancel)
+            {
+                return false;
+            }
         }
+
+        using StreamReader reader = new(stream);
+
+        Document.Text = await reader.ReadToEndAsync();
+        Document.UndoStack.ClearAll();
+        Document.UndoStack.MarkAsOriginalFile();
+        return true;
     }
 
     public async Task<bool> SaveAsync()
