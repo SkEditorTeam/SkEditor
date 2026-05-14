@@ -30,7 +30,7 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
 
         string? extension = tab.GetExtension();
 
-        if (extension is null or "sk")
+        if (extension is null or ".sk")
         {
             _registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
             

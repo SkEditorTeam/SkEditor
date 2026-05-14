@@ -160,7 +160,7 @@ public partial class FileTab(
 
     public string? GetExtension()
     {
-        return Path.GetExtension(File.Path ?? null)?.TrimStart('.').ToLowerInvariant();
+        return Path.GetExtension(File.Path ?? null)?.ToLowerInvariant();
     }
 
     [RelayCommand]
