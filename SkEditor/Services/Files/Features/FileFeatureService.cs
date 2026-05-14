@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AvaloniaEdit;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Features;
 using SkEditor.Models.Tabs;
@@ -10,13 +12,13 @@ namespace SkEditor.Services.Files.Features;
 
 public class FileFeatureService : IFileFeatureService
 {
-    private readonly Dictionary<FileTab, List<IEditorFeature>> _attachedFeatures = [];
     private readonly Dictionary<FileTab, TextEditor> _activeEditors = [];
-    private readonly IEnumerable<IEditorFeature> _allFeatures;
+    private readonly Dictionary<FileTab, List<IEditorFeature>> _attachedFeatures = [];
+    private readonly IServiceProvider _serviceProvider;
 
-    public FileFeatureService(IEnumerable<IEditorFeature> allFeatures, IEnumerable<IConfig> configs)
+    public FileFeatureService(IServiceProvider serviceProvider, IEnumerable<IConfig> configs)
     {
-        _allFeatures = allFeatures;
+        _serviceProvider = serviceProvider;
 
         foreach (IConfig config in configs)
         {
@@ -26,7 +28,7 @@ public class FileFeatureService : IFileFeatureService
 
     public void OnTabOpened(FileTab tab)
     {
-        List<IEditorFeature> features = _allFeatures
+        List<IEditorFeature> features = CreateAllFeatures()
             .Where(f => f.CanAttach(tab))
             .ToList();
 
@@ -36,18 +38,28 @@ public class FileFeatureService : IFileFeatureService
         {
             feature.Attach(tab);
         }
+
+        if (!_activeEditors.TryGetValue(tab, out TextEditor? editor))
+        {
+            return;
+        }
+
+        foreach (IEditorFeature feature in features)
+        {
+            feature.OnViewAttached(tab, editor);
+        }
     }
 
     public void OnTabClosed(FileTab tab)
     {
-        if (!_attachedFeatures.TryGetValue(tab, out var features))
+        if (!_attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? features))
         {
             return;
         }
 
         bool hasView = _activeEditors.TryGetValue(tab, out TextEditor? editor);
 
-        foreach (var feature in features)
+        foreach (IEditorFeature feature in features)
         {
             if (hasView)
             {
@@ -61,14 +73,44 @@ public class FileFeatureService : IFileFeatureService
         _activeEditors.Remove(tab);
     }
 
+    public void OnViewLoaded(FileTab tab, TextEditor editor)
+    {
+        _activeEditors[tab] = editor;
+
+        if (!_attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? features))
+        {
+            return;
+        }
+
+        foreach (IEditorFeature feature in features)
+        {
+            feature.OnViewAttached(tab, editor);
+        }
+    }
+
+    public void OnViewUnloaded(FileTab tab, TextEditor editor)
+    {
+        _activeEditors.Remove(tab);
+
+        if (!_attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? features))
+        {
+            return;
+        }
+
+        foreach (IEditorFeature feature in features)
+        {
+            feature.OnViewDetached(tab, editor);
+        }
+    }
+
     public IEnumerable<IEditorFeature> GetFeaturesForTab(FileTab tab)
     {
-        return _attachedFeatures.TryGetValue(tab, out var features) ? features : [];
+        return _attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? features) ? features : [];
     }
 
     public void UpdateAllFeatures()
     {
-        foreach (FileTab tab in _attachedFeatures.Keys)
+        foreach (FileTab tab in _attachedFeatures.Keys.ToList())
         {
             UpdateFeatures(tab);
         }
@@ -81,12 +123,25 @@ public class FileFeatureService : IFileFeatureService
             return;
         }
 
-        HashSet<IEditorFeature> desired = _allFeatures.Where(f => f.CanAttach(tab)).ToHashSet();
-        HashSet<IEditorFeature> current = currentFeatures.ToHashSet();
-
         bool hasView = _activeEditors.TryGetValue(tab, out TextEditor? editor);
 
-        foreach (IEditorFeature feature in current.Except(desired))
+        List<IEditorFeature> newCandidateFeatures = CreateAllFeatures()
+            .Where(f => f.CanAttach(tab))
+            .ToList();
+
+        HashSet<Type> currentTypes = currentFeatures
+            .Select(f => f.GetType())
+            .ToHashSet();
+
+        HashSet<Type> desiredTypes = newCandidateFeatures
+            .Select(f => f.GetType())
+            .ToHashSet();
+
+        IEnumerable<IEditorFeature> toDetach = currentFeatures
+            .ToList()
+            .Where(feature => !desiredTypes.Contains(feature.GetType()));
+
+        foreach (IEditorFeature feature in toDetach)
         {
             if (hasView)
             {
@@ -94,41 +149,26 @@ public class FileFeatureService : IFileFeatureService
             }
 
             feature.Detach(tab);
+            currentFeatures.Remove(feature);
         }
 
-        foreach (IEditorFeature feature in desired.Except(current))
+        IEnumerable<IEditorFeature> toAttach = newCandidateFeatures
+            .Where(newFeature => !currentTypes.Contains(newFeature.GetType()));
+
+        foreach (IEditorFeature newFeature in toAttach)
         {
-            feature.Attach(tab);
+            newFeature.Attach(tab);
             if (hasView)
             {
-                feature.OnViewAttached(tab, editor!);
+                newFeature.OnViewAttached(tab, editor!);
             }
-        }
 
-        _attachedFeatures[tab] = [..desired];
-    }
-
-    public void OnViewLoaded(FileTab tab, TextEditor editor)
-    {
-        _activeEditors[tab] = editor;
-        
-        if (!_attachedFeatures.TryGetValue(tab, out var features)) return;
-
-        foreach (var feature in features)
-        {
-            feature.OnViewAttached(tab, editor);
+            currentFeatures.Add(newFeature);
         }
     }
 
-    public void OnViewUnloaded(FileTab tab, TextEditor editor)
+    private IEnumerable<IEditorFeature> CreateAllFeatures()
     {
-        _activeEditors.Remove(tab);
-        
-        if (!_attachedFeatures.TryGetValue(tab, out var features)) return;
-        
-        foreach (var feature in features)
-        {
-            feature.OnViewDetached(tab, editor);
-        }
+        return _serviceProvider.GetServices<IEditorFeature>();
     }
 }
