@@ -34,7 +34,7 @@ public abstract partial class Tab(TranslatableString header, Symbol? icon = null
     /// <summary>
     ///     Command that is executed when the user attempts to close the tab.
     /// </summary>
-    public abstract IRelayCommand? CloseCommand { get; }
+    public abstract IRelayCommand CloseCommand { get; }
 
     /// <summary>
     ///     Indicates whether the tab's content should be cached when switching tabs.

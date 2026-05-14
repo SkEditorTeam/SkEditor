@@ -61,7 +61,7 @@ public class FileMenuProvider(
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderClose, Symbol.Dismiss)
             .WithItems([
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseCurrentFile, Symbol.Document)
-                    .WithCommand(tabs.SelectedTab?.CloseCommand)
+                    .WithCommand(() => tabs.SelectedTab?.CloseCommand.Execute(null))
                     .WithInputGesture("Ctrl+W"),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAll, Symbol.DocumentMultiple)
