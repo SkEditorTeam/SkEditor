@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Files;
@@ -14,7 +17,9 @@ public class FileService(
     ITabService tabs,
     ITranslationService translation,
     IFileTabFactory fileTabFactory,
-    IFilePickerService filePicker)
+    IFilePickerService filePicker,
+    INotificationService notifications,
+    ILogService logs)
     : IFileService
 {
     public void NewFile()
@@ -50,15 +55,55 @@ public class FileService(
             return;
         }
 
+        Stream stream;
+        try
+        {
+            stream = await file.LoadAsync();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
+                TranslatableString.FromRawString("Unable to load the file. You do not have permission."));
+            return;
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Failed to load file.");
+            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
+                TranslatableString.FromRawString("An error occurred while loading the file."));
+            return;
+        }
+
         FileTab fileTab = fileTabFactory.CreateFromFile(file);
 
-        Task<bool> loadContentTask = fileTab.LoadContentAsync();
-        tabs.OpenTab(fileTab);
+        Task<bool> loadContentTask = fileTab.LoadContentFromStreamAsync(stream);
 
-        bool isSuccess = await loadContentTask;
-        if (!isSuccess)
+        Task timeoutTask = Task.Delay(150);
+
+        Task completedTask = await Task.WhenAny(loadContentTask, timeoutTask);
+
+        if (completedTask == loadContentTask)
         {
-            tabs.CloseTab(fileTab);
+            bool isSuccess = await loadContentTask;
+            if (isSuccess)
+            {
+                fileTab.IsLoading = false;
+                tabs.OpenTab(fileTab);
+            }
+        }
+        else
+        {
+            fileTab.IsLoading = true;
+            tabs.OpenTab(fileTab);
+
+            bool isSuccess = await loadContentTask;
+
+            fileTab.IsLoading = false;
+
+            if (!isSuccess)
+            {
+                tabs.CloseTab(fileTab);
+            }
         }
     }
 

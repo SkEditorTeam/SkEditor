@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -45,61 +46,53 @@ public partial class FileTab(
 
     [ObservableProperty] public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
-    public async Task<bool> LoadContentAsync()
+    public async Task<bool> LoadContentFromStreamAsync(Stream stream) 
     {
-        if (string.IsNullOrEmpty(File.Path))
+        CancellationTokenSource cts = new();
+        _ = Task.Delay(200, cts.Token).ContinueWith(t => 
         {
-            return false;
-        }
+            if (!t.IsCanceled)
+            {
+                Dispatcher.UIThread.Post(() => IsLoading = true);
+            }
+        }, TaskScheduler.Default);
 
         try
         {
-            await using Stream stream = await File.LoadAsync();
-
-            if (await stream.IsLikelyBinaryAsync())
+            await using (stream)
             {
-                Dialog dialog = Dialog
-                    .Create(TranslationKey.BinaryFileTitle)
-                    .WithMessage(TranslationKey.BinaryFileFound)
-                    .WithIcon(Symbol.DocumentCube)
-                    .WithButtons(
-                        new DialogButton(TranslationKey.ButtonOpen, DialogResult.Yes),
-                        new DialogButton(TranslationKey.ButtonCancel, DialogResult.Cancel)
-                    );
-
-                DialogResult result = await dialogs.ShowDialogAsync(dialog);
-
-                if (result == StandardDialogResult.Cancel)
+                if (await stream.IsLikelyBinaryAsync())
                 {
-                    return false;
+                    Dialog dialog = Dialog
+                        .Create(TranslationKey.BinaryFileTitle)
+                        .WithMessage(TranslationKey.BinaryFileFound)
+                        .WithIcon(Symbol.DocumentCube)
+                        .WithButtons(
+                            new DialogButton(TranslationKey.ButtonOpen, DialogResult.Yes),
+                            new DialogButton(TranslationKey.ButtonCancel, DialogResult.Cancel)
+                        );
+
+                    DialogResult result = await dialogs.ShowDialogAsync(dialog);
+
+                    if (result == StandardDialogResult.Cancel)
+                    {
+                        return false;
+                    }
                 }
+
+                using StreamReader reader = new(stream);
+                Document.Text = await reader.ReadToEndAsync(cts.Token);
             }
 
-            using StreamReader reader = new(stream);
-
-            Document.Text = await reader.ReadToEndAsync();
+            Document.UndoStack.ClearAll();
+            Document.UndoStack.MarkAsOriginalFile();
+            return true;
         }
-        catch (UnauthorizedAccessException)
+        finally
         {
-            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
-                TranslatableString.FromRawString(
-                    "Unable to load the file. You do not have permission to read this file."));
-            return false;
+            await cts.CancelAsync();
+            IsLoading = false;
         }
-        catch (Exception ex)
-        {
-            logs.Error(ex, "Failed to load file.");
-            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
-                TranslatableString.FromRawString("An error occurred while loading the file. Please try again."));
-            return false;
-        }
-
-        Document.UndoStack.ClearAll();
-        Document.UndoStack.MarkAsOriginalFile();
-
-        IsLoading = false;
-
-        return true;
     }
 
     public async Task<bool> SaveAsync()

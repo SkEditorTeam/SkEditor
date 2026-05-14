@@ -17,7 +17,9 @@
     </UserControl.Resources>
 
     <Panel>
-        <avaloniaEdit:TextEditor IsVisible="{Binding !IsLoading}"
+        <avaloniaEdit:TextEditor x:Name="Editor"
+                                 Opacity="{Binding !IsLoading}"
+                                 IsHitTestVisible="{Binding !IsLoading}"
                                  Document="{Binding Document}"
                                  ShowLineNumbers="True"
                                  Foreground="{DynamicResource EditorTextColor}"
@@ -30,12 +32,42 @@
             <Interaction.Behaviors>
                 <behaviors:TextEditorLoadBehavior />
             </Interaction.Behaviors>
+            <avaloniaEdit:TextEditor.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.2"
+                                      Easing="CubicEaseOut" />
+                </Transitions>
+            </avaloniaEdit:TextEditor.Transitions>
+            <avaloniaEdit:TextEditor.Styles>
+                <Style Selector="avaloniaEdit|TextEditor[IsHitTestVisible=False]">
+                    <Setter Property="RenderTransform" Value="translateY(10px)" />
+                </Style>
+                <Style Selector="avaloniaEdit|TextEditor[IsHitTestVisible=True]">
+                    <Setter Property="RenderTransform" Value="translateY(0px)" />
+                    <Setter Property="Transitions">
+                        <Transitions>
+                            <TransformOperationsTransition Property="RenderTransform"
+                                                           Duration="0:0:0.2"
+                                                           Easing="CubicEaseOut" />
+                        </Transitions>
+                    </Setter>
+                </Style>
+            </avaloniaEdit:TextEditor.Styles>
         </avaloniaEdit:TextEditor>
 
-        <StackPanel IsVisible="{Binding IsLoading}"
+        <StackPanel Opacity="{Binding IsLoading}"
+                    IsHitTestVisible="{Binding IsLoading}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Spacing="16">
+
+            <StackPanel.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.15" />
+                </Transitions>
+            </StackPanel.Transitions>
 
             <controls:FAProgressRing IsIndeterminate="True"
                                      Width="32" Height="32"

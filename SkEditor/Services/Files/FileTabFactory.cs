@@ -28,8 +28,7 @@ public class FileTabFactory(
 
         return new FileTab(header, appSettings, dialogService, notifications, filePicker, features, logs)
         {
-            File = file,
-            IsLoading = true
+            File = file
         };
     }
 
