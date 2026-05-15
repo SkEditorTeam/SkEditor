@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sty="using:FluentAvalonia.Styling"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
-             xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:assets="clr-namespace:SkEditor.Assets"
              xmlns:dialogs="clr-namespace:SkEditor.Models.Dialogs.Elements"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
@@ -41,8 +40,6 @@
         </ResourceDictionary>
 
         <SKPictureImage x:Key="SkEditorLogo" Source="{x:Static assets:SkEditorLogo.Picture}" />
-
-        <converters:TranslationConverter x:Key="TranslationConverter" />
 
         <Brush x:Key="BackgroundColor">#1f1f1f</Brush>
         <Brush x:Key="TitleBarBackground">#00000000</Brush>
