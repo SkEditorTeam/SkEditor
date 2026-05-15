@@ -28,7 +28,7 @@ public partial class ExtendedItemSelector : FAAppWindow
 
         CheckForEditing();
 
-        WindowStyler.Style(this);
+        this.Style();
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         AssignCommands(item);

@@ -4,7 +4,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services;
-using SkEditor.Utilities.Styling;
+using Theme = SkEditor.Models.UI.Theme;
 
 namespace SkEditor.ViewModels.Pages;
 

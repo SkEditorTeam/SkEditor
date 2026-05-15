@@ -21,7 +21,7 @@ public partial class PublishWindow : FAAppWindow
 
     private void InitializeUi()
     {
-        WindowStyler.Style(this);
+        this.Style();
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         KeyDown += (_, e) =>

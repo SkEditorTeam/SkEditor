@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using SkEditor.Utilities.Styling;
+using Theme = SkEditor.Models.UI.Theme;
 
 namespace SkEditor.Contracts.Services;
 

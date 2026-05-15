@@ -26,7 +26,7 @@ public partial class ItemSelector : FAAppWindow
     {
         InitializeComponent();
 
-        WindowStyler.Style(this);
+        this.Style();
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         SelectButton.Command = new RelayCommand(() =>

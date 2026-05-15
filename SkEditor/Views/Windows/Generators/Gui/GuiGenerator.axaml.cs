@@ -29,7 +29,7 @@ public partial class GuiGenerator : FAAppWindow
 
         Instance = this;
 
-        WindowStyler.Style(this);
+        this.Style();
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         RowQuantityTextBox.TextChanged += (_, _) => UpdateRows();

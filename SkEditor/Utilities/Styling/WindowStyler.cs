@@ -11,7 +11,7 @@ public static class WindowStyler
     private static readonly Color ButtonPressedColor = Color.Parse("#20ffffff");
     private static readonly Color ButtonInactiveColor = Color.Parse("#99ffffff");
 
-    public static void Style(FAAppWindow window)
+    public static void Style(this FAAppWindow window)
     {
         window.TitleBar.ExtendsContentIntoTitleBar = true;
         window.TitleBar.TitleBarHitTestType = FATitleBarHitTestType.Complex;

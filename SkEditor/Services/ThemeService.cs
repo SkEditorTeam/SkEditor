@@ -13,8 +13,9 @@ using FluentAvalonia.Styling;
 using SkEditor.Contracts.Services;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Styling;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
+using Theme = SkEditor.Models.UI.Theme;
+using ThemeJsonContext = SkEditor.Models.UI.ThemeJsonContext;
 
 namespace SkEditor.Services;
 

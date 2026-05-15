@@ -4,7 +4,7 @@ using System.Linq;
 using Avalonia.Threading;
 using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Styling;
+using Theme = SkEditor.Models.UI.Theme;
 
 namespace SkEditor.Services.Settings;
 
