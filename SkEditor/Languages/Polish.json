@@ -429,5 +429,12 @@
   "RemoteConnectionTestFailed": "Nie udało się połączyć z {0}",
   "WhatsNewPageTitle": "Co nowego?",
   "WhatsNewPageAlsoInThisRelease": "Również w tej aktualizacji",
-  "WhatsNewPageContinueToSkEditor": "Przejdź do SkEditora"
+  "WhatsNewPageContinueToSkEditor": "Przejdź do SkEditora",
+  "AboutDescription": "Otwartoźródłowe IDE do Skripta, zbudowane w Avalonia UI i C#.",
+  "AboutVersion": "Wersja: {0} (Build {1})",
+  "AboutReleaseDate": "Wydana {0}",
+  "AboutRunningOn": "Działa na:",
+  "AboutAuthor": "Autor: {0}",
+  "AboutCopySystemInfo": "Kopiuj info o systemie",
+  "AboutSupportUs": "Wesprzyj SkEditor"
 }

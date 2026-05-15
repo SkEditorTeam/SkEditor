@@ -128,7 +128,7 @@ public partial class FileTreeViewModel
         if (SelectedNodes.Count == 0) return;
 
         string paths = string.Join("\n", SelectedNodes.Select(n => n.Path));
-        _clipboard.SetTextAsync(paths);
+        _clipboard.CopyTextAsync(paths);
     }
 
     [RelayCommand]
@@ -141,7 +141,7 @@ public partial class FileTreeViewModel
         string paths = string.Join("\n",
             SelectedNodes.Select(n =>
                 n.Path.StartsWith(basePath) ? n.Path[basePath.Length..].TrimStart('/', '\\') : n.Path));
-        _clipboard.SetTextAsync(paths);
+        _clipboard.CopyTextAsync(paths);
     }
 
     [RelayCommand]

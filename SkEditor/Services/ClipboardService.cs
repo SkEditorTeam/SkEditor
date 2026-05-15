@@ -9,7 +9,7 @@ namespace SkEditor.Services;
 
 public class ClipboardService : IClipboardService
 {
-    public Task SetTextAsync(string text)
+    public Task CopyTextAsync(string text)
         => GetClipboard()?.SetTextAsync(text) ?? Task.CompletedTask;
 
     private static IClipboard? GetClipboard()

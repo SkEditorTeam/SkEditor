@@ -434,5 +434,12 @@
   "RemoteConnectionTestFailed": "Failed to connect to {0}",
   "WhatsNewPageTitle": "What's New",
   "WhatsNewPageAlsoInThisRelease": "Also in this release",
-  "WhatsNewPageContinueToSkEditor": "Continue to SkEditor"
+  "WhatsNewPageContinueToSkEditor": "Continue to SkEditor",
+  "AboutDescription": "An open-source Skript IDE, built with Avalonia UI and C#.",
+  "AboutVersion": "Version: {0} (Build {1})",
+  "AboutReleaseDate": "Released on {0}",
+  "AboutRunningOn": "Running on:",
+  "AboutAuthor": "By {0}",
+  "AboutCopySystemInfo": "Copy system info",
+  "AboutSupportUs": "Support SkEditor"
 }

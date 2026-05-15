@@ -15,26 +15,32 @@ public class WindowDialogService(
     INotificationService notifications,
     Func<PublishWindow> publishWindowFactory,
     Func<GoToLineWindow> goToLineWindowFactory,
+    Func<AboutWindow> aboutWindowFactory,
     ITabService tabs) : IWindowDialogService
 {
     public async Task ShowPublishDialogAsync()
     {
-        await ShowDialogAsync(publishWindowFactory);
+        await ShowDialogAsync(publishWindowFactory, true);
     }
 
     public async Task ShowGoToLineDialogAsync()
     {
-        await ShowDialogAsync(goToLineWindowFactory);
+        await ShowDialogAsync(goToLineWindowFactory, true);
     }
 
-    private async Task ShowDialogAsync<T>(Func<T> windowFactory) where T : Window
+    public async Task ShowAboutDialogAsync()
+    {
+        await ShowDialogAsync(aboutWindowFactory);
+    }
+
+    private async Task ShowDialogAsync<T>(Func<T> windowFactory, bool requireFile = false) where T : Window
     {
         if (windowRegistry.Active is not { } mainWindow)
         {
             return;
         }
 
-        if (tabs.SelectedTab is not FileTab)
+        if (requireFile && tabs.SelectedTab is not FileTab)
         {
             notifications.ShowError(TranslationKey.NoFileNotificationTitle, TranslationKey.NoFileNotificationMessage);
             return;

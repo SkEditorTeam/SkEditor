@@ -63,7 +63,7 @@ public partial class PublishWindowViewModel : ObservableObject
                 return;
             }
 
-            await clipboard.SetTextAsync(Result);
+            await clipboard.CopyTextAsync(Result);
         });
     }
 

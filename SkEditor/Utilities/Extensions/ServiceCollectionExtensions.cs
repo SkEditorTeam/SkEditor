@@ -95,6 +95,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<WelcomePageViewModel>();
             services.AddTransient<SettingsPageViewModel>();
             services.AddTransient<PublishWindowViewModel>();
+            services.AddTransient<AboutWindowViewModel>();
         }
 
         public void AddViews()
@@ -110,6 +111,9 @@ public static class ServiceCollectionExtensions
 
             services.AddTransient<GoToLineWindow>();
             services.AddSingleton<Func<GoToLineWindow>>(sp => sp.GetRequiredService<GoToLineWindow>);
+
+            services.AddTransient<AboutWindow>();
+            services.AddSingleton<Func<AboutWindow>>(sp => sp.GetRequiredService<AboutWindow>);
 
             services.AddTransient<SettingsTab>();
             services.AddSingleton<Func<SettingsTab>>(sp => sp.GetRequiredService<SettingsTab>);
@@ -186,6 +190,7 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton<IMenuProvider, FileMenuProvider>();
             services.AddSingleton<IMenuProvider, EditMenuProvider>();
+            services.AddSingleton<IMenuProvider, HelpMenuProvider>();
             services.AddSingleton<IMenuProvider, SettingsMenuProvider>();
         }
 
