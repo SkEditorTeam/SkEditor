@@ -2,6 +2,7 @@
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Contracts.Services;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Views.Windows;
 using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
@@ -24,13 +25,20 @@ public partial class MainMenuViewModel : ObservableObject
         foreach (MainMenuItem item in items)
         {
             if (!item.RegisterHotKey) continue;
-            
+
             if (!string.IsNullOrEmpty(item.InputGestureText) && item.Command is not null)
             {
+                string gestureText = item.InputGestureText;
+                string command = KeyModifiers.Command.ToString();
+                if (gestureText.Contains("Ctrl") || gestureText.Contains("Control"))
+                {
+                    gestureText = gestureText.Replace("Ctrl", command).Replace("Control", command);
+                }
+
                 KeyBinding keyBinding = new()
                 {
                     Command = item.Command,
-                    Gesture = KeyGesture.Parse(item.InputGestureText)
+                    Gesture = KeyGesture.Parse(gestureText)
                 };
                 mainWindow.KeyBindings.Add(keyBinding);
             }
