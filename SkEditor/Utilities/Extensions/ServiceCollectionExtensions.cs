@@ -119,6 +119,7 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton<IFileFeatureService, FileFeatureService>();
             services.AddTransient<IEditorFeature, SaveIndicatorFeature>();
+            services.AddTransient<IEditorFeature, AutoSaveFeature>();
             services.AddTransient<IEditorFeature, ZoomFeature>();
             services.AddTransient<IEditorFeature, EditorOptionsFeature>();
             services.AddTransient<IEditorFeature, EditorShortcutsFeature>();

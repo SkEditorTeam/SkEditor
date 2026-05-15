@@ -43,7 +43,7 @@ public abstract partial class Tab(TranslatableString header, Symbol? icon = null
     ///     If true, the content will not get recreated when the user switches back to the tab.
     /// </summary>
     public virtual bool IsCacheable => false;
-
+    
     /// <summary>
     ///     Event that is raised when the tab requests to be closed.
     /// </summary>

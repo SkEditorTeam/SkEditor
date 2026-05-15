@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,11 +40,14 @@ public partial class FileTab(
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
 
-    [ObservableProperty] public partial double FontSize { get; set; } = appSettings.EditorFontSize;
+    [ObservableProperty]
+    public partial double FontSize { get; set; } = appSettings.EditorFontSize;
 
-    [ObservableProperty] public partial bool WordWrap { get; set; } = appSettings.IsWordWrapEnabled;
+    [ObservableProperty]
+    public partial bool WordWrap { get; set; } = appSettings.IsWordWrapEnabled;
 
-    [ObservableProperty] public partial Vector ScrollOffset { get; set; } = Vector.Zero;
+    [ObservableProperty]
+    public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
     public async Task<bool> LoadContentAsync()
     {
@@ -81,6 +85,10 @@ public partial class FileTab(
         return true;
     }
 
+    /// <summary>
+    ///     Saves the file. If the file lacks a path, it will do a "Save As" instead
+    /// </summary>
+    /// <returns>True if success, false otherwise (cancelled, failed)</returns>
     public async Task<bool> SaveAsync()
     {
         if (File.Path == null)
@@ -91,6 +99,10 @@ public partial class FileTab(
         return await PerformSaveAsync();
     }
 
+    /// <summary>
+    ///     Prompts the user to select a save location and saves the file there. Updates the tab's header and path accordingly
+    /// </summary>
+    /// <returns>True if success, false otherwise (cancelled, failed)</returns>
     public async Task<bool> SaveAsAsync()
     {
         string? path = await filePicker.SaveFileAsync(Header.Value);
@@ -106,7 +118,11 @@ public partial class FileTab(
         return await PerformSaveAsync();
     }
 
-    public async Task<bool> PerformSaveAsync()
+    /// <summary>
+    ///     Performs the actual save operation
+    /// </summary>
+    /// <returns>True if success, false otherwise (failed)</returns>
+    private async Task<bool> PerformSaveAsync()
     {
         if (_saveCts is not null)
         {
@@ -163,9 +179,22 @@ public partial class FileTab(
         return Path.GetExtension(File.Path ?? null)?.ToLowerInvariant();
     }
 
+    /// <summary>
+    ///     Fired before the close logic begins. Allows async features (like AutoSave) to flush data.
+    /// </summary>
+    public event Func<Task>? ClosingAsync;
+
     [RelayCommand]
     private async Task CloseTab()
     {
+        if (ClosingAsync is not null)
+        {
+            foreach (Func<Task> handler in ClosingAsync.GetInvocationList().Cast<Func<Task>>())
+            {
+                await handler();
+            }
+        }
+        
         if (!IsSaved)
         {
             Dialog dialog = Dialog
