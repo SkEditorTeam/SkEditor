@@ -8,13 +8,13 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Tabs;
-using SkEditor.Utilities.Input;
+using SkEditor.Utilities.Extensions;
 
 namespace SkEditor.Features;
 
 public class EditorShortcutsFeature : IEditorFeature
 {
-    private static readonly KeyModifiers ControlModifier = KeyUtility.GetControlModifier();
+    private static readonly KeyModifiers ControlModifier = KeyModifiers.Command;
     private Dictionary<(KeyGesture, KeyGesture), Action> _chordShortcuts = [];
 
     private List<KeyBinding> _currentKeyBindings = [];

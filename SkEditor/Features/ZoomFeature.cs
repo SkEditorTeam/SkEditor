@@ -3,7 +3,7 @@ using Avalonia.Interactivity;
 using AvaloniaEdit;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Models.Tabs;
-using SkEditor.Utilities.Input;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings.Configs;
 using Vector = Avalonia.Vector;
 
@@ -58,7 +58,7 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.KeyModifiers != KeyUtility.GetControlModifier())
+        if (e.KeyModifiers != KeyModifiers.Command)
         {
             return;
         }
@@ -87,7 +87,7 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
             return;
         }
 
-        if (e.KeyModifiers != KeyUtility.GetControlModifier())
+        if (e.KeyModifiers != KeyModifiers.Command)
         {
             return;
         }

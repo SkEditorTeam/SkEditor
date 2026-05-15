@@ -5,7 +5,6 @@ using FluentAvalonia.UI.Windowing;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Services.Windowing;
-using SkEditor.Utilities.Input;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Styling;
 using SkEditor.ViewModels.Controls;
@@ -53,10 +52,7 @@ public partial class MainWindow : FAAppWindow
         _themes = themes;
         _discordIntegration = discordIntegration;
         _splashScreenService = splashScreenService;
-
-        KeyboardShortcutHandler shortcutHandler = new(this);
-        shortcutHandler.Initialize();
-
+        
         menuViewModel.RegisterHotKeys(this);
 
         WindowStyler.Style(this);
