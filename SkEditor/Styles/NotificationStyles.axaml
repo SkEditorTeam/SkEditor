@@ -245,4 +245,112 @@
             </Setter>
         </Style>
     </ControlTheme>
+
+    <ControlTheme x:Key="StaticNotificationCardTheme" TargetType="NotificationCard">
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Width" Value="375" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="RenderTransformOrigin" Value="50%,75%" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource MenuFlyoutPresenterBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource MenuFlyoutPresenterBackground}" />
+        <Setter Property="CornerRadius" Value="7" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="RenderTransform">
+            <TransformGroup>
+                <ScaleTransform />
+                <TranslateTransform />
+            </TransformGroup>
+        </Setter>
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <LayoutTransformControl Name="PART_LayoutTransformControl" UseRenderTransform="True">
+                    <Border CornerRadius="{TemplateBinding CornerRadius}">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                ClipToBounds="True"
+                                Padding="12">
+
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">
+                                <Border Name="PART_IconBorder" Grid.Column="0" CornerRadius="100"
+                                        Height="24" Width="24"
+                                        VerticalAlignment="Center">
+                                    <Viewbox Height="12" Width="12">
+                                        <controls:FAIconSourceElement Name="PART_Icon" VerticalAlignment="Center"
+                                                                      HorizontalAlignment="Center" />
+                                    </Viewbox>
+                                </Border>
+
+                                <ContentControl Name="PART_Content" Grid.Column="1"
+                                                Content="{TemplateBinding Content}"
+                                                MinHeight="40" VerticalContentAlignment="Center" />
+                            </Grid>
+
+                        </Border>
+                    </Border>
+                </LayoutTransformControl>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^[IsClosing=true] /template/ LayoutTransformControl#PART_LayoutTransformControl">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+
+        <Style Selector="^[IsClosing=true]">
+            <Style.Animations>
+                <Animation Duration="0:0:0.001" FillMode="Forward">
+                    <KeyFrame Cue="100%">
+                        <Setter Property="IsClosed" Value="True" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <Style Selector="^:information /template/ Border#PART_IconBorder">
+            <Setter Property="Background" Value="#20325AFF" />
+        </Style>
+        <Style Selector="^:information /template/ controls|FAIconSourceElement#PART_Icon">
+            <Setter Property="IconSource" Value="{StaticResource InfoNoCircleIcon}" />
+            <Setter Property="Foreground" Value="#29AEFF" />
+            <Setter Property="RenderTransform">
+                <TranslateTransform X="0.5" />
+            </Setter>
+        </Style>
+
+        <Style Selector="^:success /template/ Border#PART_IconBorder">
+            <Setter Property="Background" Value="#2056FF20" />
+        </Style>
+        <Style Selector="^:success /template/ controls|FAIconSourceElement#PART_Icon">
+            <Setter Property="IconSource">
+                <icons:SymbolIconSource Symbol="Checkmark" IconVariant="Filled" />
+            </Setter>
+            <Setter Property="Foreground" Value="#56FF20" />
+        </Style>
+
+        <Style Selector="^:warning /template/ Border#PART_IconBorder">
+            <Setter Property="Background" Value="#20FF6A3D" />
+        </Style>
+        <Style Selector="^:warning /template/ controls|FAIconSourceElement#PART_Icon">
+            <Setter Property="IconSource" Value="{StaticResource ExclamationMarkIcon}" />
+            <Setter Property="Foreground" Value="#FF7B34" />
+        </Style>
+
+        <Style Selector="^:error /template/ Border#PART_IconBorder">
+            <Setter Property="Background" Value="#20FF1B3E" />
+        </Style>
+        <Style Selector="^:error /template/ controls|FAIconSourceElement#PART_Icon">
+            <Setter Property="IconSource">
+                <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled" />
+            </Setter>
+            <Setter Property="Foreground" Value="#FF4E37" />
+            <Setter Property="RenderTransform">
+                <TranslateTransform X="-1" />
+            </Setter>
+        </Style>
+    </ControlTheme>
 </ResourceDictionary>

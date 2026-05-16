@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
+             xmlns:converters="clr-namespace:SkEditor.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vms:StatusBarViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.StatusBarControl">
@@ -13,6 +14,10 @@
             <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
         </Style>
     </UserControl.Styles>
+
+    <UserControl.Resources>
+        <converters:NotificationTypeConverter x:Key="NotificationTypeConverter" />
+    </UserControl.Resources>
 
     <Border HorizontalAlignment="Stretch" Height="36" Background="{DynamicResource SkEditorBorderBackground}"
             CornerRadius="7"
@@ -35,15 +40,71 @@
                 <fluent:SymbolIcon Symbol="Alert" FontSize="16" />
                 <Button.Flyout>
                     <Flyout Placement="TopEdgeAlignedRight" VerticalOffset="-16">
-                        <Border Width="300" Height="400" Padding="12">
-                            <StackPanel Spacing="16" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Viewbox Height="128">
-                                    <fluent:SymbolIcon Symbol="LeafTwo"
-                                                       Foreground="{DynamicResource ForegroundSecondaryColor}" />
-                                </Viewbox>
-                                <TextBlock FontSize="16" Text="There's nothing here. Just peace and quiet."
-                                           TextWrapping="Wrap" TextAlignment="Center" />
-                            </StackPanel>
+                        <Border Width="400" Height="500" Padding="0">
+                            <Panel>
+                                <StackPanel IsVisible="{Binding !Notifications.Count}" Spacing="16"
+                                            HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Viewbox Height="128">
+                                        <fluent:SymbolIcon Symbol="LeafTwo"
+                                                           Foreground="{DynamicResource ForegroundSecondaryColor}" />
+                                    </Viewbox>
+                                    <TextBlock FontSize="16" Text="There's nothing here. Just peace and quiet."
+                                               TextWrapping="Wrap" TextAlignment="Center" />
+                                </StackPanel>
+
+                                <Grid RowDefinitions="Auto,*" Margin="4"
+                                      RowSpacing="6">
+                                    <Panel Margin="0,0,0,8">
+                                        <TextBlock VerticalAlignment="Center" Margin="4,0,0,0"
+                                                   Foreground="{StaticResource ForegroundColor}"
+                                                   FontSize="16" FontWeight="DemiBold" Text="Notifications" />
+
+                                        <Button IsVisible="{Binding Notifications.Count}"
+                                                VerticalAlignment="Center" HorizontalAlignment="Right" Padding="8,4"
+                                                Background="Transparent"
+                                                Foreground="{StaticResource ForegroundSecondaryColor}"
+                                                BorderThickness="0" CornerRadius="6"
+                                                Command="{Binding ClearAllNotificationsCommand}"
+                                                Content="Clear all" />
+                                    </Panel>
+                                    <ScrollViewer IsVisible="{Binding Notifications.Count}" Grid.Row="1"
+                                                  Margin="0,0,-8,0">
+                                        <ItemsControl ItemsSource="{Binding Notifications}" Padding="0,0,14,0">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Panel Margin="0,0,0,8">
+                                                        <NotificationCard
+                                                            Theme="{StaticResource StaticNotificationCardTheme}"
+                                                            NotificationType="{Binding Type, Converter={StaticResource NotificationTypeConverter}}"
+                                                            Width="NaN" HorizontalAlignment="Stretch" Margin="0">
+
+                                                            <StackPanel Margin="0,0,20,0" VerticalAlignment="Center"
+                                                                        TextElement.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                                                                <TextBlock FontWeight="DemiBold" Text="{Binding Title}"
+                                                                           TextWrapping="Wrap" />
+                                                                <TextBlock MaxHeight="80" Text="{Binding Message}"
+                                                                           TextWrapping="Wrap" Opacity="0.8" />
+                                                            </StackPanel>
+                                                        </NotificationCard>
+
+                                                        <Button VerticalAlignment="Top"
+                                                                HorizontalAlignment="Right"
+                                                                Margin="0,8,8,0"
+                                                                Padding="4"
+                                                                Background="Transparent" BorderThickness="0"
+                                                                CornerRadius="6"
+                                                                Command="{Binding $parent[UserControl].((vms:StatusBarViewModel)DataContext)?.ClearNotificationCommand}"
+                                                                CommandParameter="{Binding .}">
+                                                            <fluent:SymbolIcon Symbol="Dismiss" FontSize="12"
+                                                                               Foreground="{StaticResource ForegroundSecondaryColor}" />
+                                                        </Button>
+                                                    </Panel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Panel>
                         </Border>
                     </Flyout>
                 </Button.Flyout>

@@ -1,9 +1,11 @@
 ﻿using System;
-using Avalonia.Controls.Notifications;
+using System.Collections.Generic;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Services;
+using SkEditor.Converters;
 using SkEditor.Models.Messages;
+using SkEditor.Models.Notifications;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Views.Controls.Notifications;
@@ -15,7 +17,7 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
 {
     private readonly WindowRegistry _windowRegistry;
 
-    public List<Notification> History { get; } = [];
+    private readonly List<Notification> _history = [];
 
     public NotificationService(WindowRegistry windowRegistry, IMessenger messenger)
     {
@@ -25,18 +27,6 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
     }
 
     private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(4);
-
-    private static NotificationType ToAvaloniaType(Models.Notifications.NotificationType type)
-    {
-        return type switch
-        {
-            Models.Notifications.NotificationType.Information => NotificationType.Information,
-            Models.Notifications.NotificationType.Success => NotificationType.Success,
-            Models.Notifications.NotificationType.Warning => NotificationType.Warning,
-            Models.Notifications.NotificationType.Error => NotificationType.Error,
-            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-        };
-    }
 
     public void Receive(ShowNotificationMessage message)
     {
@@ -51,11 +41,11 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
             manager?.Show(
                 notification.Title.Value,
                 notification.Message?.Value ?? string.Empty,
-                ToAvaloniaType(notification.Type),
+                NotificationTypeConverter.ToAvaloniaType(notification.Type),
                 notification.Duration ?? DefaultDuration);
         });
 
-        History.Add(notification);
+        _history.Add(notification);
     }
 
     public void Debug(string message)
@@ -63,9 +53,24 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
         Notification notification = Notification
             .Create(TranslatableString.FromRawString("Debug"))
             .WithMessage(TranslatableString.FromRawString(message))
-            .WithType(Models.Notifications.NotificationType.Information)
+            .WithType(NotificationType.Information)
             .WithDuration(TimeSpan.FromSeconds(10));
 
         Show(notification);
+    }
+
+    public IEnumerable<Notification> GetHistory()
+    {
+        return _history;
+    }
+
+    public void ClearHistory()
+    {
+        _history.Clear();
+    }
+
+    public void RemoveFromHistory(Notification notification)
+    {
+        _history.Remove(notification);
     }
 }
