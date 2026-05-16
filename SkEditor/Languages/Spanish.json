@@ -85,8 +85,6 @@
   "SettingsEditorAutosaveDescription": "Guarda automáticamente tu archivo cada vez que realizas un cambio.",
   "SettingsEditorAutoIndent": "Autoindentación",
   "SettingsEditorAutoIndentDescription": "Inserta automáticamente una tabulación en una nueva línea si la línea anterior termina con dos puntos.",
-  "SettingsEditorAutoPairing": "Emparejamiento automático",
-  "SettingsEditorAutoPairingDescription": "Añade automáticamente el carácter de cierre cuando ingreses el carácter de apertura para ciertos símbolos.",
   "SettingsIntegrationsDiscordRichPresence": "Presencia en Discord",
   "SettingsIntegrationsDiscordRichPresenceDescription": "Muestra SkEditor en tu estado de Discord.",
   "BottomBarLine": "Línea {0}",

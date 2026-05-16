@@ -227,8 +227,6 @@
   "SettingsEditorIndentationType": "Behúzás típusa",
   "SettingsEditorAutoIndent": "Automatikus behúzás",
   "SettingsEditorAutoIndentDescription": "Automatikusan beszúr egy tabulátort egy új sorba, ha az előző sor kettőspontra végződik.",
-  "SettingsEditorAutoPairing": "Automatikus párosítás",
-  "SettingsEditorAutoPairingDescription": "Automatikusan hozzáadja a záró karaktert, amikor beírod a nyitó karaktert bizonyos szimbólumokhoz.",
   "SettingsEditorPasteIndent": "Automatikus behúzás beillesztésnél",
   "SettingsEditorPasteIndentDescription": "Automatikusan beállítja a beillesztett szöveg behúzását, hogy az megfeleljen az előző sor formátumának.",
   "SettingsIntegrationsDiscordRichPresence": "Discord Rich Presence",

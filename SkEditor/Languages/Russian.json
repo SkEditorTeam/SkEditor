@@ -236,8 +236,6 @@
   "SettingsEditorIndentationType": "Тип отступа",
   "SettingsEditorAutoIndent": "Автоотступ",
   "SettingsEditorAutoIndentDescription": "Добавляет отступ после строк с двоеточием.",
-  "SettingsEditorAutoPairing": "Автозакрытие парных символов",
-  "SettingsEditorAutoPairingDescription": "Автоматическое добавление закрывающего символа.",
   "SettingsEditorPasteIndent": "Автоотступ при вставке",
   "SettingsEditorPasteIndentDescription": "Автокоррекция отступа при вставке текста.",
   "SettingsIntegrationsDiscordRichPresence": "Discord Rich Presence",

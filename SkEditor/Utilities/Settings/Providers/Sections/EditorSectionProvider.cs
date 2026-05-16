@@ -90,8 +90,8 @@ public class EditorSectionProvider(
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoIndentEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsEditorAutoPairing)
-                    .WithDescription(TranslationKey.SettingsEditorAutoPairingDescription)
+                    .Create(TranslationKey.SettingsEditorSmartAutoPairing)
+                    .WithDescription(TranslationKey.SettingsEditorSmartAutoPairingDescription)
                     .WithIcon(Symbol.TextQuote)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoPairingEnabled)),
 

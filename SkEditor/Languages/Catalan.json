@@ -236,8 +236,6 @@
   "SettingsEditorIndentationType": "Tipus de sagnat",
   "SettingsEditorAutoIndent": "Sagnat automàtic",
   "SettingsEditorAutoIndentDescription": "Insereix automàticament una tabulació en una línia nova si la línia anterior acaba amb dos punts.",
-  "SettingsEditorAutoPairing": "Aparellament automàtic",
-  "SettingsEditorAutoPairingDescription": "Afegeix automàticament el caràcter de tancament en introduir el caràcter d’obertura per a certs símbols.",
   "SettingsEditorPasteIndent": "Sagnat automàtic en enganxar",
   "SettingsEditorPasteIndentDescription": "Ajusta automàticament el sagnat del text enganxat per coincidir amb el format de la línia anterior.",
   "SettingsIntegrationsDiscordRichPresence": "Presència rica de Discord",

@@ -242,8 +242,6 @@
   "SettingsEditorIndentationType": "Einrückungstyp",
   "SettingsEditorAutoIndent": "Automatischer Tab",
   "SettingsEditorAutoIndentDescription": "Fügt automatisch einen Tab in einer neuen Zeile ein, wenn die vorherige Zeile mit einem Doppelpunkt endet.",
-  "SettingsEditorAutoPairing": "Automatische Paarung",
-  "SettingsEditorAutoPairingDescription": "Fügt automatisch das schließende Zeichen hinzu, wenn Sie das öffnende Zeichen für bestimmte Symbole eingeben.",
   "SettingsEditorPasteIndent": "Auto-indent kopieren",
   "SettingsEditorPasteIndentDescription": "Passt automatisch die indention des eingefügten Textes ein, sodass es mit dem vorherigen Format übereinstimmt",
   "SettingsIntegrationsDiscordRichPresence": "Discord Rich Presence",

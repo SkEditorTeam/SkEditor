@@ -233,8 +233,6 @@
   "SettingsEditorIndentationType": "Type d'indentation",
   "SettingsEditorAutoIndent": "Auto-indentation",
   "SettingsEditorAutoIndentDescription": "Insère automatiquement une tabulation sur une nouvelle ligne si la ligne précédente se termine par deux points.",
-  "SettingsEditorAutoPairing": "Appariement automatique",
-  "SettingsEditorAutoPairingDescription": "Ajoute automatiquement le caractère de fermeture lorsque vous entrez le caractère d'ouverture pour certains symboles.",
   "SettingsEditorPasteIndent": "Collage avec indentation automatique",
   "SettingsEditorPasteIndentDescription": "Ajuste automatiquement l'indentation du texte collé pour correspondre au format de la ligne précédente.",
   "SettingsIntegrationsDiscordRichPresence": "Présence riche Discord",

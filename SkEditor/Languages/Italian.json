@@ -222,8 +222,6 @@
   "SettingsEditorIndentationType": "Tipo di indentazione",
   "SettingsEditorAutoIndent": "Auto-indentazione",
   "SettingsEditorAutoIndentDescription": "Inserisce automaticamente una tabulazione in una nuova riga se la riga precedente termina con due punti.",
-  "SettingsEditorAutoPairing": "Auto-Accoppiamento",
-  "SettingsEditorAutoPairingDescription": "Aggiunge automaticamente il carattere di chiusura quando si immette il carattere di apertura per determinati simboli.",
   "SettingsEditorPasteIndent": "Incolla con Indentazione automatica",
   "SettingsEditorPasteIndentDescription": "Regola automaticamente l'indentazione del testo incollato in modo che corrisponda al formato della riga precedente.",
   "SettingsIntegrationsDiscordRichPresence": "Mostra stato su profilo discord (RPC)",

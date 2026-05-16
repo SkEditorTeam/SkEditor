@@ -117,8 +117,6 @@
   "SettingsEditorIndentationType": "들여 쓰기",
   "SettingsEditorAutoIndent": "자동 들여 쓰기",
   "SettingsEditorAutoIndentDescription": "이전 줄이 콜론으로 끝나면 다음 줄을 자동으로 들여 씁니다.",
-  "SettingsEditorAutoPairing": "자동 닫기 문자",
-  "SettingsEditorAutoPairingDescription": "열기 문자를 입력하면 자동으로 커서 뒤에 닫기 문자를 추가합니다.",
   "SettingsIntegrationsDiscordRichPresence": "Discord 활동 상태 (RPC)",
   "SettingsIntegrationsDiscordRichPresenceDescription": "Discord 상태에 SkEditor 상태를 표시합니다.",
   "FileViewImageAA": "안티 앨리어싱",
