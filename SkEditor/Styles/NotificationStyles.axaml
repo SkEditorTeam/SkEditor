@@ -101,6 +101,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource MenuFlyoutPresenterBorderBrush}" />
         <Setter Property="Background" Value="{DynamicResource MenuFlyoutPresenterBackground}" />
         <Setter Property="CornerRadius" Value="7" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="RenderTransform">
             <TransformGroup>
                 <ScaleTransform />

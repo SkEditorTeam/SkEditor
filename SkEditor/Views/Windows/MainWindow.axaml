@@ -87,7 +87,8 @@
                 Grid.Row="1"
                 Position="BottomRight"
                 MaxItems="6"
-                Margin="24"
+                Margin="0,0,0,48"
+                ClipToBounds="False"
                 ZIndex="1000" />
         </Grid>
     </LayoutTransformControl>
