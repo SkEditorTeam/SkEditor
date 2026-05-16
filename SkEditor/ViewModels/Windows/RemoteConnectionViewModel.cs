@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Models.Notifications;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Windows;
 
 public partial class RemoteConnectionViewModel(
-    IRemoteConnectionService connectionService,
-    INotificationService notificationService,
+    IRemoteConnectionService connections,
+    INotificationService notifications,
     ITranslationService translation) : ObservableObject
 {
     [ObservableProperty]
@@ -38,7 +38,7 @@ public partial class RemoteConnectionViewModel(
     [RelayCommand]
     private async Task AddConnection()
     {
-        RemoteConnectionTestResult result = await connectionService.TestConnectionAsync(ConnectionInfo);
+        RemoteConnectionTestResult result = await connections.TestConnectionAsync(ConnectionInfo);
         if (!result.IsSuccess)
         {
             InfoBarMessage = translation.Get(TranslationKey.RemoteConnectionCannotAddConnection);
@@ -52,12 +52,13 @@ public partial class RemoteConnectionViewModel(
             string hostPort =
                 $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
 
-            notificationService.Show(
-                TranslationKey.RemoteConnectionAddSuccessTitle,
-                new TranslatableString(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort),
-                NotificationType.Success,
-                TimeSpan.FromSeconds(5)
-            );
+            Notification notification = Notification
+                .Create(TranslationKey.RemoteConnectionAddSuccessTitle)
+                .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort))
+                .WithType(NotificationType.Success)
+                .WithDuration(TimeSpan.FromSeconds(5));
+
+            notifications.Show(notification);
 
             CloseRequested?.Invoke(this, EventArgs.Empty);
             Clear();
@@ -67,7 +68,7 @@ public partial class RemoteConnectionViewModel(
     [RelayCommand]
     private async Task<bool> TestConnection()
     {
-        RemoteConnectionTestResult result = await connectionService.TestConnectionAsync(ConnectionInfo);
+        RemoteConnectionTestResult result = await connections.TestConnectionAsync(ConnectionInfo);
 
         InfoBarMessage = result.Message;
         InfoBarSeverity = result.IsSuccess ? FAInfoBarSeverity.Success : FAInfoBarSeverity.Error;

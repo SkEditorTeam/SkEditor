@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
+using SkEditor.Models.Notifications;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 using SkEditor.Views.Windows;
@@ -42,7 +43,12 @@ public class WindowDialogService(
 
         if (requireFile && tabs.SelectedTab is not FileTab)
         {
-            notifications.ShowError(TranslationKey.NoFileNotificationTitle, TranslationKey.NoFileNotificationMessage);
+            Notification notification = Notification
+                .Create(TranslationKey.NoFileNotificationTitle)
+                .WithMessage(TranslationKey.NoFileNotificationMessage)
+                .WithType(NotificationType.Error);
+
+            notifications.Show(notification);
             return;
         }
 

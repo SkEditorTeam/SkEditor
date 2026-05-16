@@ -33,6 +33,20 @@
 
             <Button BorderThickness="0" Background="Transparent" Height="28" Width="28" Padding="0" CornerRadius="7">
                 <fluent:SymbolIcon Symbol="Alert" FontSize="16" />
+                <Button.Flyout>
+                    <Flyout Placement="TopEdgeAlignedRight" VerticalOffset="-16">
+                        <Border Width="300" Height="400" Padding="12">
+                            <StackPanel Spacing="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Viewbox Height="128">
+                                    <fluent:SymbolIcon Symbol="LeafTwo"
+                                                       Foreground="{DynamicResource ForegroundSecondaryColor}" />
+                                </Viewbox>
+                                <TextBlock FontSize="16" Text="There's nothing here. Just peace and quiet."
+                                           TextWrapping="Wrap" TextAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                    </Flyout>
+                </Button.Flyout>
             </Button>
         </StackPanel>
     </Border>

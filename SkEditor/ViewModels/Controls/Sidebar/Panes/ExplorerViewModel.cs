@@ -8,6 +8,7 @@ using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
+using SkEditor.Models.Notifications;
 using SkEditor.Models.Projects.Local;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
@@ -54,9 +55,12 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
 
         if (!Directory.Exists(path))
         {
-            _notifications.ShowError(
-                TranslatableString.FromRawString("Oops!"),
-                TranslatableString.FromRawString("The selected folder does not exist"));
+            Notification notification = Notification
+                .Create(TranslatableString.FromRawString("Oops!"))
+                .WithMessage(TranslatableString.FromRawString("The selected folder does not exist"))
+                .WithType(NotificationType.Error);
+
+            _notifications.Show(notification);
             return false;
         }
 

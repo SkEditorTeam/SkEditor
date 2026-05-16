@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Messaging;
 using Serilog;
 using SkEditor.Models.Messages;
+using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Types;

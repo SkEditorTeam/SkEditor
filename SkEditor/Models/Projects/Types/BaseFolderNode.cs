@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Serilog;
 using SkEditor.Models.Messages;
+using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Projects.Types;

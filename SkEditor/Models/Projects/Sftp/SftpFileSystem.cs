@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Renci.SshNet;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Notifications;
 using SkEditor.Models.Projects.Types;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
@@ -34,8 +35,13 @@ public class SftpFileSystem(
         }
         catch (Exception ex)
         {
-            notifications.ShowError(TranslatableString.FromRawString("Connection Error"),
-                TranslatableString.FromRawString("Failed to connect to {0}: {1}", connection.Name, ex.Message));
+            Notification notification = Notification
+                .Create(TranslatableString.FromRawString("Connection Error"))
+                .WithMessage(TranslatableString.FromRawString("Failed to connect to {0}: {1}", connection.Name,
+                    ex.Message))
+                .WithType(NotificationType.Error);
+
+            notifications.Show(notification);
             return false;
         }
     }

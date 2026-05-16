@@ -1,5 +1,5 @@
 ﻿using System;
-using Avalonia.Controls.Notifications;
+using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Messages;

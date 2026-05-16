@@ -14,6 +14,7 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Files;
+using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
@@ -149,9 +150,13 @@ public partial class FileTab(
         catch (UnauthorizedAccessException ex)
         {
             logs.Error(ex, "Failed to save file due to unauthorized access.");
-            notifications.ShowError(TranslatableString.FromRawString("Save Failed"),
-                TranslatableString.FromRawString(
-                    "Unable to save the file. You do not have permission to write to this location."));
+            Notification notification = Notification
+                .Create(TranslatableString.FromRawString("Save Failed"))
+                .WithMessage(TranslatableString.FromRawString(
+                    "Unable to save the file. You do not have permission to write to this location."))
+                .WithType(NotificationType.Error);
+
+            notifications.Show(notification);
             return false;
         }
         finally

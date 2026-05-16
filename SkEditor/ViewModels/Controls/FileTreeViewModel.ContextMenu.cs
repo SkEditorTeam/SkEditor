@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Dialogs.Elements;
+using SkEditor.Models.Notifications;
 using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Local;
 using SkEditor.Models.Projects.Sftp;
@@ -222,8 +223,12 @@ public partial class FileTreeViewModel
                 {
                     if (string.IsNullOrWhiteSpace(args.NewName))
                     {
-                        _notifs.ShowError(TranslationKey.ProjectRenameFailedTitle,
-                            TranslationKey.ProjectRenameErrorNameEmpty);
+                        Notification notification = Notification
+                            .Create(TranslationKey.ProjectRenameFailedTitle)
+                            .WithMessage(TranslationKey.ProjectRenameErrorNameEmpty)
+                            .WithType(NotificationType.Error);
+
+                        _notifs.Show(notification);
 
                         return;
                     }

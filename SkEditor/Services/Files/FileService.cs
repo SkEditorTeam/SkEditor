@@ -7,6 +7,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Files;
+using SkEditor.Models.Notifications;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 
@@ -95,15 +96,23 @@ public class FileService(
         }
         catch (UnauthorizedAccessException)
         {
-            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
-                TranslatableString.FromRawString("Unable to load the file. You do not have permission."));
+            Notification notification = Notification
+                .Create(TranslatableString.FromRawString("Load Failed"))
+                .WithMessage(TranslatableString.FromRawString("Unable to load the file. You do not have permission."))
+                .WithType(NotificationType.Error);
+
+            notifications.Show(notification);
             return false;
         }
         catch (Exception ex)
         {
             logs.Error(ex, "Failed to load file.");
-            notifications.ShowError(TranslatableString.FromRawString("Load Failed"),
-                TranslatableString.FromRawString("An error occurred while loading the file."));
+            Notification notification = Notification
+                .Create(TranslatableString.FromRawString("Load Failed"))
+                .WithMessage(TranslatableString.FromRawString("An error occurred while loading the file."))
+                .WithType(NotificationType.Error);
+
+            notifications.Show(notification);
             return false;
         }
     }

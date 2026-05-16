@@ -7,6 +7,7 @@ using SkEditor.Models.Messages;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Views.Controls.Notifications;
+using Notification = SkEditor.Models.Notifications.Notification;
 
 namespace SkEditor.Services;
 
@@ -17,52 +18,49 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
     public NotificationService(WindowRegistry windowRegistry, IMessenger messenger)
     {
         _windowRegistry = windowRegistry;
-        
+
         messenger.Register(this);
     }
 
     private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(4);
 
-    public void Show(TranslatableString title, TranslatableString message,
-        NotificationType type = NotificationType.Information,
-        TimeSpan? duration = null)
-    {
-        Show(title.Value, message.Value, type, duration);
-    }
-
-    public void Show(string title, string message,
-        NotificationType type = NotificationType.Information,
+    private void Show(TranslatableString title, TranslatableString? message,
+        NotificationType type =
+            NotificationType.Information,
         TimeSpan? duration = null)
     {
         Dispatcher.UIThread.Post(() =>
         {
             SkEditorNotificationManager? manager = _windowRegistry.Active?.NotificationManager;
-            manager?.Show(title, message, type, duration ?? DefaultDuration);
+            manager?.Show(title.Value, message?.Value ?? string.Empty, type, duration ?? DefaultDuration);
         });
     }
 
-    public void ShowSuccess(TranslatableString title, TranslatableString message)
+    private static NotificationType ToAvaloniaType(Models.Notifications.NotificationType type)
     {
-        Show(title, message, NotificationType.Success);
-    }
-
-    public void ShowError(TranslatableString title, TranslatableString message)
-    {
-        Show(title, message, NotificationType.Error, TimeSpan.FromSeconds(8));
-    }
-
-    public void ShowWarning(TranslatableString title, TranslatableString message)
-    {
-        Show(title, message, NotificationType.Warning);
-    }
-
-    public void Debug(string message)
-    {
-        Show("Debug", message, NotificationType.Information, TimeSpan.FromSeconds(10));
+        return type switch
+        {
+            Models.Notifications.NotificationType.Information => NotificationType.Information,
+            Models.Notifications.NotificationType.Success => NotificationType.Success,
+            Models.Notifications.NotificationType.Warning => NotificationType.Warning,
+            Models.Notifications.NotificationType.Error => NotificationType.Error,
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
     }
 
     public void Receive(ShowNotificationMessage message)
     {
-        Show(message.Title, message.Message, message.Type, message.Duration);
+        Show(message.Title, message.Message, ToAvaloniaType(message.Type), message.Duration);
+    }
+
+    public void Show(Notification notification)
+    {
+        Show(notification.Title, notification.Message, ToAvaloniaType(notification.Type), notification.Duration);
+    }
+
+    public void Debug(string message)
+    {
+        Show(TranslatableString.FromRawString("Debug"), TranslatableString.FromRawString(message),
+            NotificationType.Information, TimeSpan.FromSeconds(10));
     }
 }
