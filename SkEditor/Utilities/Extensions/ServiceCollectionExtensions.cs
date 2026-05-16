@@ -97,6 +97,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<SettingsPageViewModel>();
             services.AddTransient<PublishWindowViewModel>();
             services.AddTransient<AboutWindowViewModel>();
+            services.AddTransient<GoToLineWindowViewModel>();
         }
 
         public void AddViews()
@@ -133,6 +134,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<IEditorFeature, EditorSmoothScrollFeature>();
             services.AddTransient<IEditorFeature, EditorCommandsFeature>();
             services.AddTransient<IEditorFeature, EditorActionsFeature>();
+            services.AddTransient<IEditorFeature, EditorGoToLineFeature>();
             services.AddTransient<IEditorFeature, AutoIndentFeature>();
             services.AddTransient<IEditorFeature, SmartAutoPairingFeature>();
         }

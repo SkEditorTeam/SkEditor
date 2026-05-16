@@ -3,13 +3,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+        xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
         mc:Ignorable="d" d:DesignWidth="180" d:DesignHeight="100"
         x:Class="SkEditor.Views.Windows.GoToLineWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate GoToLine}" Height="100" Width="180" CanResize="False"
+        x:DataType="windows:GoToLineWindowViewModel"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
-    <Grid Margin="15,0,15,10" ColumnDefinitions="*,auto">
-        <TextBox Grid.Column="0" Name="GoToLineInput" Height="20" Margin="0,0,15,0" />
-        <Button Grid.Column="1" Name="GoToLineButton" Content="Go" />
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Enter" Command="{Binding ExecuteCommand}" />
+    </Window.KeyBindings>
+
+    <Grid Margin="15,0,15,10" ColumnDefinitions="*,auto" ColumnSpacing="16">
+        <TextBox Text="{Binding Input, Mode=TwoWay}" Height="20">
+            <Interaction.Behaviors>
+                <FocusOnAttachedBehavior />
+            </Interaction.Behaviors>
+        </TextBox>
+        <Button Grid.Column="1" Content="Go" Command="{Binding ExecuteCommand}" />
     </Grid>
 </Window>

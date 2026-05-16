@@ -50,6 +50,9 @@ public partial class FileTab(
     [ObservableProperty]
     public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
+    [ObservableProperty]
+    public partial int CaretOffset { get; set; } = 0;
+
     public async Task<bool> LoadContentAsync()
     {
         if (string.IsNullOrEmpty(File.Path))

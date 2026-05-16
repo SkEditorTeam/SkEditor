@@ -19,4 +19,11 @@ public partial class FileTab
     {
         RedrawRequested?.Invoke(segment);
     }
+
+    public event Action<TextLocation>? GoToLocationRequested;
+
+    public void RequestGoToLocation(TextLocation location)
+    {
+        GoToLocationRequested?.Invoke(location);
+    }
 }
