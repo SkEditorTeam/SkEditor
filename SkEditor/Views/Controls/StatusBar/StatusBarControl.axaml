@@ -59,7 +59,7 @@
 
                                 <StackPanel IsVisible="{Binding !Notifications.Count}" Grid.Row="1" Spacing="16"
                                             HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Viewbox Height="128">
+                                    <Viewbox Height="96">
                                         <fluent:SymbolIcon Symbol="LeafTwo"
                                                            Foreground="{DynamicResource ForegroundSecondaryColor}" />
                                     </Viewbox>
