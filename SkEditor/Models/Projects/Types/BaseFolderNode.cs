@@ -191,8 +191,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Load Failed"),
-                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+                Notification
+                    .Create(TranslatableString.FromRawString("Load Failed"))
+                    .WithMessage(TranslatableString.FromRawString(ex.Message))
+                    .WithType(NotificationType.Error)));
 
             Log.Error(ex, "Failed to load children of folder {Path}", Path);
             HasLoadedChildren = false;
@@ -214,8 +216,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         if (await AlreadyExistsPredicate(newFilePath))
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Creation Failed"),
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+                Notification
+                    .Create(TranslatableString.FromRawString("File Creation Failed"))
+                    .WithMessage(TranslationKey.ProjectErrorNameExists)
+                    .WithType(NotificationType.Error)));
 
             return;
         }
@@ -230,8 +234,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Creation Failed"),
-                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+                Notification
+                    .Create(TranslatableString.FromRawString("File Creation Failed"))
+                    .WithMessage(TranslatableString.FromRawString(ex.Message))
+                    .WithType(NotificationType.Error)));
 
             Log.Error(ex, "Failed to create file {FilePath}", newFilePath);
         }
@@ -244,8 +250,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         if (await AlreadyExistsPredicate(newFolderPath))
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Folder Creation Failed"),
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+                Notification
+                    .Create(TranslatableString.FromRawString("Folder Creation Failed"))
+                    .WithMessage(TranslationKey.ProjectErrorNameExists)
+                    .WithType(NotificationType.Error)));
 
             return;
         }
@@ -260,8 +268,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Folder Creation Failed"),
-                TranslatableString.FromRawString(ex.Message), NotificationType.Error));
+                Notification
+                    .Create(TranslatableString.FromRawString("Folder Creation Failed"))
+                    .WithMessage(TranslatableString.FromRawString(ex.Message))
+                    .WithType(NotificationType.Error)));
         }
     }
 
@@ -275,9 +285,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Delete Failed"),
-                TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
+                Notification
+                    .Create(TranslatableString.FromRawString("File Delete Failed"))
+                    .WithMessage(TranslatableString.FromRawString(ex.Message))
+                    .WithType(NotificationType.Error)));
 
             Log.Error(ex, "Failed to delete file {Path}", Path);
             return false;
@@ -289,8 +300,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         if (newName.IndexOfAny(InvalidChars) >= 0)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
+                Notification
+                    .Create(TranslationKey.ProjectRenameFailedTitle)
+                    .WithMessage(TranslationKey.ProjectRenameErrorNameInvalid)
+                    .WithType(NotificationType.Error)));
 
             return;
         }
@@ -300,8 +313,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         if (await AlreadyExistsPredicate(newPath))
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+                Notification
+                    .Create(TranslationKey.ProjectRenameFailedTitle)
+                    .WithMessage(TranslationKey.ProjectErrorNameExists)
+                    .WithType(NotificationType.Error)));
 
             return;
         }
@@ -313,8 +328,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("Rename failed"), TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
+                Notification
+                    .Create(TranslatableString.FromRawString("Rename failed"))
+                    .WithMessage(TranslatableString.FromRawString(ex.Message))
+                    .WithType(NotificationType.Error)));
 
             Log.Error(ex, "Failed to rename folder {Path} to {NewName}", Path, newName);
             return;

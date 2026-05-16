@@ -25,8 +25,10 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
         if (newName.IndexOfAny(InvalidChars) >= 0)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectRenameErrorNameInvalid, NotificationType.Error));
+                Notification
+                    .Create(TranslationKey.ProjectRenameFailedTitle)
+                    .WithMessage(TranslationKey.ProjectRenameErrorNameInvalid)
+                    .WithType(NotificationType.Error)));
 
             return;
         }
@@ -36,8 +38,10 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
         if (AlreadyExistsPredicate(newPath).Result)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle,
-                TranslationKey.ProjectErrorNameExists, NotificationType.Error));
+                Notification
+                    .Create(TranslationKey.ProjectRenameFailedTitle)
+                    .WithMessage(TranslationKey.ProjectErrorNameExists)
+                    .WithType(NotificationType.Error)));
 
             return;
         }
@@ -49,8 +53,10 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslationKey.ProjectRenameFailedTitle, TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
+                Notification
+                    .Create(TranslationKey.ProjectRenameFailedTitle)
+                    .WithMessage(TranslatableString.FromRawString(ex.Message))
+                    .WithType(NotificationType.Error)));
 
             Log.Error(ex, "Failed to rename file {Path} to {NewName}", Path, newName);
             return;
@@ -70,9 +76,10 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
         catch (Exception ex)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
-                TranslatableString.FromRawString("File Delete Failed"),
-                TranslatableString.FromRawString(ex.Message),
-                NotificationType.Error));
+                Notification
+                    .Create(TranslatableString.FromRawString("File Delete Failed"))
+                    .WithMessage(TranslatableString.FromRawString(ex.Message))
+                    .WithType(NotificationType.Error)));
 
             Log.Error(ex, "Failed to delete file {Path}", Path);
             return false;

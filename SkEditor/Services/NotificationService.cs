@@ -15,6 +15,8 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
 {
     private readonly WindowRegistry _windowRegistry;
 
+    public List<Notification> History { get; } = [];
+
     public NotificationService(WindowRegistry windowRegistry, IMessenger messenger)
     {
         _windowRegistry = windowRegistry;
@@ -23,18 +25,6 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
     }
 
     private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(4);
-
-    private void Show(TranslatableString title, TranslatableString? message,
-        NotificationType type =
-            NotificationType.Information,
-        TimeSpan? duration = null)
-    {
-        Dispatcher.UIThread.Post(() =>
-        {
-            SkEditorNotificationManager? manager = _windowRegistry.Active?.NotificationManager;
-            manager?.Show(title.Value, message?.Value ?? string.Empty, type, duration ?? DefaultDuration);
-        });
-    }
 
     private static NotificationType ToAvaloniaType(Models.Notifications.NotificationType type)
     {
@@ -50,17 +40,32 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
 
     public void Receive(ShowNotificationMessage message)
     {
-        Show(message.Title, message.Message, ToAvaloniaType(message.Type), message.Duration);
+        Show(message.Notification);
     }
 
     public void Show(Notification notification)
     {
-        Show(notification.Title, notification.Message, ToAvaloniaType(notification.Type), notification.Duration);
+        Dispatcher.UIThread.Post(() =>
+        {
+            SkEditorNotificationManager? manager = _windowRegistry.Active?.NotificationManager;
+            manager?.Show(
+                notification.Title.Value,
+                notification.Message?.Value ?? string.Empty,
+                ToAvaloniaType(notification.Type),
+                notification.Duration ?? DefaultDuration);
+        });
+
+        History.Add(notification);
     }
 
     public void Debug(string message)
     {
-        Show(TranslatableString.FromRawString("Debug"), TranslatableString.FromRawString(message),
-            NotificationType.Information, TimeSpan.FromSeconds(10));
+        Notification notification = Notification
+            .Create(TranslatableString.FromRawString("Debug"))
+            .WithMessage(TranslatableString.FromRawString(message))
+            .WithType(Models.Notifications.NotificationType.Information)
+            .WithDuration(TimeSpan.FromSeconds(10));
+
+        Show(notification);
     }
 }
