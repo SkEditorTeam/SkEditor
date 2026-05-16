@@ -18,6 +18,7 @@
         <TextBox Text="{Binding Input, Mode=TwoWay}" Height="20">
             <Interaction.Behaviors>
                 <FocusOnAttachedBehavior />
+                <SelectAllOnFocusBehavior />
             </Interaction.Behaviors>
         </TextBox>
         <Button Grid.Column="1" Content="Go" Command="{Binding ExecuteCommand}" />

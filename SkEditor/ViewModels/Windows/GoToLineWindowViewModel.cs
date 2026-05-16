@@ -8,8 +8,23 @@ using SkEditor.Models.Tabs;
 
 namespace SkEditor.ViewModels.Windows;
 
-public partial class GoToLineWindowViewModel(ITabService tabs) : ObservableObject
+public partial class GoToLineWindowViewModel : ObservableObject
 {
+    private readonly ITabService _tabs;
+
+    public GoToLineWindowViewModel(ITabService tabs)
+    {
+        _tabs = tabs;
+
+        if (_tabs.SelectedTab is not FileTab fileTab)
+        {
+            return;
+        }
+
+        TextLocation location = fileTab.Document.GetLocation(fileTab.CaretOffset);
+        Input = $"{location.Line}:{location.Column}";
+    }
+
     [ObservableProperty]
     public partial string Input { get; set; } = string.Empty;
 
@@ -24,7 +39,7 @@ public partial class GoToLineWindowViewModel(ITabService tabs) : ObservableObjec
             return;
         }
 
-        if (tabs.SelectedTab is not FileTab fileTab)
+        if (_tabs.SelectedTab is not FileTab fileTab)
         {
             return;
         }
@@ -64,7 +79,7 @@ public partial class GoToLineWindowViewModel(ITabService tabs) : ObservableObjec
             column = 1;
         }
 
-        if (tabs.SelectedTab is not FileTab fileTab)
+        if (_tabs.SelectedTab is not FileTab fileTab)
         {
             return false;
         }

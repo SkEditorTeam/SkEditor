@@ -24,6 +24,7 @@ using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
 using SkEditor.Utilities.Settings.Providers.Sections;
+using SkEditor.Utilities.StatusBar;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.Sidebar.Panes;
 using SkEditor.ViewModels.Pages;
@@ -235,6 +236,8 @@ public static class ServiceCollectionExtensions
         public void AddStatusBar()
         {
             services.AddSingleton<StatusBarViewModel>();
+
+            services.AddSingleton<IStatusBarProvider, EditorInfoStatusBarProvider>();
         }
     }
 }
