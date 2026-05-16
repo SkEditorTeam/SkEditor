@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,5 +59,13 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
         }
 
         _currentTab = newTab;
+
+        if (newTab != null && AssociatedObject != null)
+        {
+            Dispatcher.UIThread.Post(
+                () => AssociatedObject.TextArea.Focus(),
+                DispatcherPriority.Loaded);
+        }
+
     }
 }
