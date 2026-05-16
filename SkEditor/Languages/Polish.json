@@ -430,6 +430,7 @@
   "WhatsNewPageTitle": "Co nowego?",
   "WhatsNewPageAlsoInThisRelease": "Również w tej aktualizacji",
   "WhatsNewPageContinueToSkEditor": "Przejdź do SkEditora",
+  "AboutTitle": "O SkEditorze",
   "AboutDescription": "Otwartoźródłowe IDE do Skripta, zbudowane w Avalonia UI i C#.",
   "AboutVersion": "Wersja: {0} (Build {1})",
   "AboutReleaseDate": "Wydana {0}",

@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="180" d:DesignHeight="100"
         x:Class="SkEditor.Views.Windows.AboutWindow" Icon="/Assets/SkEditor.ico"
         x:DataType="windows:AboutWindowViewModel"
-        Title="About SkEditor" Height="330" Width="580" CanResize="False"
+        Title="{localization:Translate AboutTitle}" Height="330" Width="580" CanResize="False"
         WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
 
     <Window.Styles>

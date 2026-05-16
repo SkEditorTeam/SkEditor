@@ -435,6 +435,7 @@
   "WhatsNewPageTitle": "What's New",
   "WhatsNewPageAlsoInThisRelease": "Also in this release",
   "WhatsNewPageContinueToSkEditor": "Continue to SkEditor",
+  "AboutTitle": "About SkEditor",
   "AboutDescription": "An open-source Skript IDE, built with Avalonia UI and C#.",
   "AboutVersion": "Version: {0} (Build {1})",
   "AboutReleaseDate": "Released on {0}",
