@@ -31,7 +31,6 @@ public partial class GoToLineWindowViewModel(ITabService tabs) : ObservableObjec
 
         if (!TryParseLocation(out TextLocation? location))
         {
-            UpdateInput();
             return;
         }
 
@@ -43,39 +42,42 @@ public partial class GoToLineWindowViewModel(ITabService tabs) : ObservableObjec
     private bool TryParseLocation([NotNullWhen(true)] out TextLocation? location)
     {
         location = null;
+
+        int line;
+        int column;
+
         if (Input.Contains(':'))
         {
             string[] parts = Input.Split(':');
-            if (parts.Length != 2 || !int.TryParse(parts[0], out int line) || !int.TryParse(parts[1], out int column))
+            if (parts.Length != 2 || !int.TryParse(parts[0], out line) || !int.TryParse(parts[1], out column))
             {
                 return false;
             }
-
-            location = new TextLocation(line, column);
         }
         else
         {
-            if (!int.TryParse(Input, out int lineNumber))
+            if (!int.TryParse(Input, out line))
             {
                 return false;
             }
 
-            location = new TextLocation(lineNumber, 0);
+            column = 1;
         }
 
-        return true;
-    }
-
-    private void UpdateInput()
-    {
         if (tabs.SelectedTab is not FileTab fileTab)
         {
-            Input = string.Empty;
-            return;
+            return false;
         }
 
-        int offset = fileTab.CaretOffset;
-        TextLocation location = fileTab.Document.GetLocation(offset);
-        Input = $"{location.Line}:{location.Column}";
+        if (line < 1 || column < 1)
+        {
+            return false;
+        }
+
+        line = Math.Clamp(line, 1, fileTab.Document.LineCount);
+        column = Math.Clamp(column, 1, fileTab.Document.GetLineByNumber(line).Length + 1);
+
+        location = new TextLocation(line, column);
+        return true;
     }
 }
