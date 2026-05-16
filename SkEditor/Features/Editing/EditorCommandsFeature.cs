@@ -5,7 +5,7 @@ using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Editor.Commands;
 
-namespace SkEditor.Features;
+namespace SkEditor.Features.Editing;
 
 public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEditorFeature
 {

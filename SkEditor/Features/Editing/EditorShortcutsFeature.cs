@@ -10,7 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Extensions;
 
-namespace SkEditor.Features;
+namespace SkEditor.Features.Editing;
 
 public class EditorShortcutsFeature : IEditorFeature
 {
