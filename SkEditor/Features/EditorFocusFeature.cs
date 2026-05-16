@@ -29,6 +29,6 @@ public class EditorFocusFeature : IEditorFeature
 
     private void OnFocusRequested()
     {
-        _editor?.Focus();
+        _editor?.TextArea.Focus();
     }
 }
