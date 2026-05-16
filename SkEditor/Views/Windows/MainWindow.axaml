@@ -58,7 +58,7 @@
                        Background="{DynamicResource WindowBorderBrush}" />
 
             <Border Grid.Row="1" Padding="10,12,10,10" Background="{DynamicResource MainWindowGridBackground}">
-                <Grid Name="CoreGrid">
+                <Grid Name="CoreGrid" RowDefinitions="*,Auto" RowSpacing="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition
                             Width="{Binding Sidebar.ColumnWidth, Mode=TwoWay, Converter={StaticResource DoubleToGridLengthConverter}}"
@@ -68,13 +68,17 @@
                         <ColumnDefinition Width="*" MinWidth="300" />
                     </Grid.ColumnDefinitions>
 
-                    <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" />
+                    <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0" />
 
-                    <GridSplitter Name="Splitter" Grid.Column="1" Background="Transparent" ResizeDirection="Columns"
+                    <sidebar:StatusBarControl DataContext="{Binding StatusBar}" Grid.Column="0" Grid.Row="1"
+                                              Grid.ColumnSpan="3" />
+
+                    <GridSplitter Name="Splitter" Grid.Column="1" Grid.Row="0" Background="Transparent"
+                                  ResizeDirection="Columns"
                                   Width="10"
                                   IsHitTestVisible="{Binding Sidebar.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
-                    <controls:MainTabView Grid.Column="2" VerticalAlignment="Stretch" />
+                    <controls:MainTabView Grid.Column="2" Grid.Row="0" VerticalAlignment="Stretch" />
                 </Grid>
             </Border>
 

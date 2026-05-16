@@ -228,5 +228,10 @@ public static class ServiceCollectionExtensions
             viewLocator.Register<RemoteExplorerViewModel, RemoteExplorerView>();
             services.AddSingleton(viewLocator);
         }
+
+        public void AddStatusBar()
+        {
+            services.AddSingleton<StatusBarViewModel>();
+        }
     }
 }

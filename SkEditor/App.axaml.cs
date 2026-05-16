@@ -104,6 +104,7 @@ public class App : Application
         services.AddEditorCommands();
         services.AddTabViewLocator();
         services.AddSidebar();
+        services.AddStatusBar();
     }
 
     public static string GetInformationalVersion()

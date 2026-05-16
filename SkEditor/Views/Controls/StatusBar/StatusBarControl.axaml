@@ -1,0 +1,39 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vms:StatusBarViewModel"
+             x:Class="SkEditor.Views.Controls.Sidebar.StatusBarControl">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        </Style>
+    </UserControl.Styles>
+
+    <Border HorizontalAlignment="Stretch" Height="36" Background="{DynamicResource SkEditorBorderBackground}"
+            CornerRadius="7"
+            Padding="4">
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Spacing="4">
+            <Button BorderThickness="0" Background="Transparent" Height="28" Padding="8,0" CornerRadius="7">
+                <TextBlock Text="Skript" VerticalAlignment="Center" />
+            </Button>
+
+            <Button BorderThickness="0" Background="Transparent" Height="28" Padding="8,0" CornerRadius="7">
+                <TextBlock Text="Tabs: 4" VerticalAlignment="Center" />
+            </Button>
+
+            <Button BorderThickness="0" Background="Transparent" Height="28" Padding="8,0" CornerRadius="7"
+                    Command="{Binding OpenGoToLineDialogCommand}">
+                <TextBlock Text="10:74 (27 chars)" VerticalAlignment="Center" />
+            </Button>
+
+            <Button BorderThickness="0" Background="Transparent" Height="28" Width="28" Padding="0" CornerRadius="7">
+                <fluent:SymbolIcon Symbol="Alert" FontSize="16" />
+            </Button>
+        </StackPanel>
+    </Border>
+</UserControl>

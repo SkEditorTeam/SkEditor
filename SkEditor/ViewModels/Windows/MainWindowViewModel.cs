@@ -19,6 +19,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public MainWindowViewModel(ITabService tabs, IFileService files, AppSettings appSettings,
         MainMenuViewModel mainMenu,
         SidebarViewModel sidebar,
+        StatusBarViewModel statusBar,
         WelcomePageViewModel welcomePage,
         IMessenger messenger)
     {
@@ -34,6 +35,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
             SelectedTab = tab;
 
         Sidebar = sidebar;
+        StatusBar = statusBar;
 
         messenger.Register(this);
     }
@@ -44,6 +46,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public AppSettings AppSettings { get; }
     public MainMenuViewModel MainMenu { get; }
     public SidebarViewModel Sidebar { get; }
+    public StatusBarViewModel StatusBar { get; }
     public WelcomePageViewModel WelcomePage { get; }
 
     public ObservableCollection<Tab> Tabs => _tabs.Tabs;
