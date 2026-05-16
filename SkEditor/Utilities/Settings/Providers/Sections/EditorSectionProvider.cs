@@ -43,11 +43,11 @@ public class EditorSectionProvider(
                     .WithIcon(Symbol.SaveSync)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoSaveEnabled)),
 
-                ToggleSetting
-                    .Create(TranslationKey.SettingsEditorExternalChangeChecker)
-                    .WithDescription(TranslationKey.SettingsEditorExternalChangeCheckerDescription)
-                    .WithIcon(Symbol.DocumentSync)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForExternalFileChanges)),
+                // ToggleSetting
+                //     .Create(TranslationKey.SettingsEditorExternalChangeChecker)
+                //     .WithDescription(TranslationKey.SettingsEditorExternalChangeCheckerDescription)
+                //     .WithIcon(Symbol.DocumentSync)
+                //     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForExternalFileChanges)),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsEditorSmoothScrolling)
