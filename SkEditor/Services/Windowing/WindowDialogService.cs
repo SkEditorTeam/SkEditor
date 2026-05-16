@@ -54,5 +54,10 @@ public class WindowDialogService(
 
         T window = windowFactory();
         await window.ShowDialog(mainWindow);
+
+        if (tabs.SelectedTab is FileTab fileTab)
+        {
+            fileTab.RequestFocus();
+        }
     }
 }

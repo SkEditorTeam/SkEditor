@@ -26,4 +26,11 @@ public partial class FileTab
     {
         GoToLocationRequested?.Invoke(location);
     }
+
+    public event Action? FocusRequested;
+
+    public void RequestFocus()
+    {
+        FocusRequested?.Invoke();
+    }
 }

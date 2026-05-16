@@ -4,7 +4,7 @@ using SkEditor.Models.Tabs;
 
 namespace SkEditor.Features;
 
-public class EditorActionsFeature : IEditorFeature
+public class EditorRedrawFeature : IEditorFeature
 {
     private TextEditor? _editor;
     private FileTab? _tab;
