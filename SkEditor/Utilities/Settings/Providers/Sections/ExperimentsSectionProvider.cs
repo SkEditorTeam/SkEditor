@@ -27,10 +27,10 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                 //     .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AutoCompletionPrototypeEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsExperimentsHexPreview)
-                    .WithDescription(TranslationKey.SettingsExperimentsHexPreviewDescription)
+                    .Create(TranslationKey.SettingsExperimentsColorPreview)
+                    .WithDescription(TranslationKey.SettingsExperimentsColorPreviewDescription)
                     .WithIcon(Symbol.Color)
-                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.HexPreviewEnabled))
+                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.ColorPreviewEnabled))
             ]);
     }
 }

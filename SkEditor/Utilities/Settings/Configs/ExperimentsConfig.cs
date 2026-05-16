@@ -16,10 +16,10 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     public partial bool AutoCompletionPrototypeEnabled { get; set; } = false;
 
     /// <summary>
-    ///     Enables the Hex Preview feature.
+    ///     Enables the Color Preview feature.
     /// </summary>
     [ObservableProperty]
-    public partial bool HexPreviewEnabled { get; set; } = false;
+    public partial bool ColorPreviewEnabled { get; set; } = false;
 
     protected override string GetFileName()
     {

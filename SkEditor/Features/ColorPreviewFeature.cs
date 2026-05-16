@@ -13,13 +13,13 @@ using SkEditor.Views.Controls.Editor;
 
 namespace SkEditor.Features;
 
-public partial class HexColorFeature(ExperimentsConfig experiments) : IEditorFeature
+public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEditorFeature
 {
     private readonly HexColorElementGenerator _colorGenerator = new(ShowColorFlyout);
 
     public bool CanAttach(FileTab tab)
     {
-        return experiments.HexPreviewEnabled && tab.GetExtension() is ".sk";
+        return experiments.ColorPreviewEnabled && tab.GetExtension() is null or ".sk";
     }
 
     public void OnViewAttached(FileTab tab, TextEditor editor)

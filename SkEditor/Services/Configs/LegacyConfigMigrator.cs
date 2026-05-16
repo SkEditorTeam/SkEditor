@@ -66,7 +66,7 @@ public class LegacyConfigMigrator(IConfigService config)
             stateConfig.GuiGeneratorSkriptGuiAddonUsed = oldAppConfig.UseSkriptGui;
 
             experimentsConfig.AutoCompletionPrototypeEnabled = oldAppConfig.EnableAutoCompletionExperiment;
-            experimentsConfig.HexPreviewEnabled = oldAppConfig.EnableHexPreview;
+            experimentsConfig.ColorPreviewEnabled = oldAppConfig.EnableHexPreview;
 
             secretsConfig.SkUnityApiKey = oldAppConfig.SkUnityApiKey;
             secretsConfig.PastebinApiKey = oldAppConfig.PastebinApiKey;
