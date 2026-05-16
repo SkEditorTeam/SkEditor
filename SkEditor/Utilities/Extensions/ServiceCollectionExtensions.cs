@@ -8,6 +8,7 @@ using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.DataTemplates;
 using SkEditor.Features;
+using SkEditor.Features.Editing;
 using SkEditor.Models.Tabs;
 using SkEditor.Services;
 using SkEditor.Services.Files;
@@ -132,6 +133,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<IEditorFeature, EditorSmoothScrollFeature>();
             services.AddTransient<IEditorFeature, EditorCommandsFeature>();
             services.AddTransient<IEditorFeature, EditorActionsFeature>();
+            services.AddTransient<IEditorFeature, AutoIndentFeature>();
         }
 
         public void AddEditorCommands()
