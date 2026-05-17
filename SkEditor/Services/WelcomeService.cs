@@ -33,6 +33,7 @@ public class WelcomeService : IWelcomeService
         _tabs = tabService;
         _settingsTabFactory = settingsTabFactory;
 
+        RecentItems = new ReadOnlyObservableCollection<WelcomeScreenRecentItem>(_recentItemsSource);
         _ = LoadRecents(recents);
 
         BuildSections();
@@ -40,14 +41,23 @@ public class WelcomeService : IWelcomeService
         StartDateTimer();
     }
 
-    public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; private set; } = new([]);
+    private readonly ObservableCollection<WelcomeScreenRecentItem> _recentItemsSource = [];
+    public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
 
     public ObservableCollection<WelcomeScreenSection> WelcomeSections { get; } = [];
 
     private async Task LoadRecents(IRecentFileService recents)
     {
         await recents.LoadRecentItemsAsync();
-        RecentItems = recents.RecentItems; 
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            _recentItemsSource.Clear();
+            foreach (WelcomeScreenRecentItem item in recents.RecentItems)
+            {
+                _recentItemsSource.Add(item);
+            }
+        });
     }
     
     private void BuildSections()
