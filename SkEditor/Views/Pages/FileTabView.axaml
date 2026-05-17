@@ -20,6 +20,7 @@
         <avaloniaEdit:TextEditor x:Name="Editor"
                                  Opacity="{Binding !IsLoading}"
                                  IsHitTestVisible="{Binding !IsLoading}"
+                                 Focusable="{Binding !IsLoading}"
                                  Document="{Binding Document}"
                                  ShowLineNumbers="True"
                                  Foreground="{DynamicResource EditorTextColor}"
@@ -53,6 +54,10 @@
                                                            Easing="CubicEaseOut" />
                         </Transitions>
                     </Setter>
+                </Style>
+                <Style Selector="avaloniaEdit|TextEditor avaloniaEdit|TextArea">
+                    <Setter Property="Focusable"
+                            Value="{Binding IsHitTestVisible, RelativeSource={RelativeSource AncestorType=avaloniaEdit:TextEditor}}" />
                 </Style>
             </avaloniaEdit:TextEditor.Styles>
         </avaloniaEdit:TextEditor>

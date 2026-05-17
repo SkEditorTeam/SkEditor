@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Layout;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
 using SkEditor.Contracts.Services;
@@ -26,6 +27,8 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
 
         FATaskDialog taskDialog = BuildTaskDialog(dialog);
         taskDialog.XamlRoot = mainWindow;
+
+        taskDialog.Focus();
 
         object result = await taskDialog.ShowAsync(true);
 
@@ -57,7 +60,7 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
                 ItemsPanel = new FuncTemplate<Panel?>(() =>
                     new StackPanel
                     {
-                        Orientation = Avalonia.Layout.Orientation.Vertical,
+                        Orientation = Orientation.Vertical,
                         Spacing = 8
                     }),
                 ItemsSource = dialog.Elements
