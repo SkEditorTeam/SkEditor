@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Styling;
 using LoreLineEditor = SkEditor.Views.Controls.LoreLineEditor;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 using Symbol = FluentIcons.Common.Symbol;
@@ -27,6 +28,7 @@ public partial class ExtendedItemSelector : FAAppWindow
 
         CheckForEditing();
 
+        this.Style();
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         AssignCommands(item);

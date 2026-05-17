@@ -12,6 +12,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
+using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
@@ -28,6 +29,7 @@ public partial class GuiGenerator : FAAppWindow
 
         Instance = this;
 
+        this.Style();
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         RowQuantityTextBox.TextChanged += (_, _) => UpdateRows();

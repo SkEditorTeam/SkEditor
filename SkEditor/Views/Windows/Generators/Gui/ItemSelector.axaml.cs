@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
+using SkEditor.Utilities.Styling;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
@@ -25,6 +26,7 @@ public partial class ItemSelector : FAAppWindow
     {
         InitializeComponent();
 
+        this.Style();
         TitleBar.ExtendsContentIntoTitleBar = false;
 
         SelectButton.Command = new RelayCommand(() =>

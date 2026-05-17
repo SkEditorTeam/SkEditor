@@ -12,7 +12,6 @@
     <Application.Styles>
         <sty:FluentAvaloniaTheme />
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
-        <StyleInclude Source="avares://SkEditor/Styles/MainWindowStyles.axaml" />
     </Application.Styles>
 
     <Application.Resources>
