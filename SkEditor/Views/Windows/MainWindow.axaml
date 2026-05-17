@@ -23,17 +23,17 @@
             <Setter Property="CornerRadius" Value="0,7,7,7" />
             <Setter Property="ClipToBounds" Value="True" />
         </Style>
-        <Style Selector="ui|FATabView /template/ ContentPresenter#TabContentPresenter">
+        <Style Selector="ui|TabView /template/ ContentPresenter#TabContentPresenter">
             <Setter Property="CornerRadius" Value="0,7,7,7" />
             <Setter Property="ClipToBounds" Value="True" />
         </Style>
-        <Style Selector="ui|FATabView /template/ uip|FATabViewListView#TabListView">
+        <Style Selector="ui|TabView /template/ uip|TabViewListView#TabListView">
             <Setter Property="Margin" Value="-10,0,0,0" />
         </Style>
-        <Style Selector="ui|FATabViewItem">
+        <Style Selector="ui|TabViewItem">
             <Setter Property="BorderThickness" Value="1,1,1,0" />
         </Style>
-        <Style Selector="ui|FATabViewItem:icon /template/ Viewbox#IconBox">
+        <Style Selector="ui|TabViewItem:icon /template/ Viewbox#IconBox">
             <Setter Property="Margin" Value="0,0,8,0" />
             <Setter Property="Width" Value="14" />
             <Setter Property="Height" Value="14" />

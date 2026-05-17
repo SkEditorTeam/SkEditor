@@ -17,24 +17,24 @@
     </UserControl.Resources>
 
     <Panel VerticalAlignment="Stretch">
-        <ui:FATabView
+        <ui:TabView
             Name="TabView"
             Opacity="{Binding !!Tabs.Count, Converter={StaticResource BoolToOpacityConverter}}"
             IsHitTestVisible="{Binding !!Tabs.Count}"
             Margin="0,-10,0,0" CanDragTabs="True"
             CanReorderTabs="True" VerticalAlignment="Stretch"
-            TabItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
+            TabItems="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
             AddTabButtonCommand="{Binding NewTabCommand}">
-            <ui:FATabView.TabItemTemplate>
+            <ui:TabView.TabItemTemplate>
                 <DataTemplate x:DataType="tabs:Tab">
-                    <ui:FATabViewItem Content="{Binding .}">
-                        <ui:FATabViewItem.IconSource>
+                    <ui:TabViewItem Content="{Binding .}">
+                        <ui:TabViewItem.IconSource>
                             <MultiBinding Converter="{StaticResource TabIconConverter}">
                                 <Binding Path="Icon" Converter="{StaticResource SymbolIconSourceConverter}" />
                                 <Binding Path="IsLoading" />
                             </MultiBinding>
-                        </ui:FATabViewItem.IconSource>
-                        <ui:FATabViewItem.Header>
+                        </ui:TabViewItem.IconSource>
+                        <ui:TabViewItem.Header>
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <Panel Grid.Column="0"
                                        IsVisible="{Binding IsLoading}"
@@ -61,15 +61,15 @@
                                          Fill="{Binding $parent[ContentPresenter].Foreground}"
                                          VerticalAlignment="Center" />
                             </Grid>
-                        </ui:FATabViewItem.Header>
+                        </ui:TabViewItem.Header>
                         <Interaction.Behaviors>
-                            <ui:FATabViewItemCloseRequestedEventCommandTrigger
+                            <ui:TabViewItemCloseRequestedEventCommandTrigger
                                 Command="{Binding CloseCommand}" />
                         </Interaction.Behaviors>
-                    </ui:FATabViewItem>
+                    </ui:TabViewItem>
                 </DataTemplate>
-            </ui:FATabView.TabItemTemplate>
-        </ui:FATabView>
+            </ui:TabView.TabItemTemplate>
+        </ui:TabView>
 
         <pages:WelcomePage VerticalAlignment="Stretch" DataContext="{Binding WelcomePage}"
                            IsVisible="{Binding !$parent[windows:MainWindow].((vms:MainWindowViewModel)DataContext).Tabs.Count}" />

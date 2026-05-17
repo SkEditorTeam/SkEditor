@@ -1,4 +1,5 @@
-﻿using FluentAvalonia.UI.Windowing;
+﻿using Avalonia.Media;
+using FluentAvalonia.UI.Windowing;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Utilities.Styling;
@@ -6,9 +7,18 @@ namespace SkEditor.Utilities.Styling;
 public static class WindowStyler
 {
     private const int TitleBarHeight = 50;
+    private static readonly Color ButtonHoverColor = Color.Parse("#25ffffff");
+    private static readonly Color ButtonPressedColor = Color.Parse("#20ffffff");
+    private static readonly Color ButtonInactiveColor = Color.Parse("#99ffffff");
 
     public static void Style(this FAAppWindow window)
     {
+        window.TitleBar.ExtendsContentIntoTitleBar = true;
+        window.TitleBar.TitleBarHitTestType = FATitleBarHitTestType.Complex;
+        window.TitleBar.ButtonHoverBackgroundColor = ButtonHoverColor;
+        window.TitleBar.ButtonPressedBackgroundColor = ButtonPressedColor;
+        window.TitleBar.ButtonInactiveForegroundColor = ButtonInactiveColor;
+
         if (window is MainWindow)
         {
             window.TitleBar.Height = TitleBarHeight;
