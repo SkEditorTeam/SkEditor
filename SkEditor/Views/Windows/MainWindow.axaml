@@ -2,9 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="using:FluentAvalonia.UI.Controls"
-        xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
-        xmlns:avaloniaedit="using:AvaloniaEdit"
         xmlns:controls="clr-namespace:SkEditor.Views.Controls"
         xmlns:notifications="clr-namespace:SkEditor.Views.Controls.Notifications"
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
@@ -18,45 +15,24 @@
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
         Title="SkEditor" WindowStartupLocation="Manual" DragDrop.AllowDrop="True">
 
-    <Window.Styles>
-        <Style Selector="avaloniaedit|TextEditor /template/ Border">
-            <Setter Property="CornerRadius" Value="0,7,7,7" />
-            <Setter Property="ClipToBounds" Value="True" />
-        </Style>
-        <Style Selector="ui|FATabView /template/ ContentPresenter#TabContentPresenter">
-            <Setter Property="CornerRadius" Value="0,7,7,7" />
-            <Setter Property="ClipToBounds" Value="True" />
-        </Style>
-        <Style Selector="ui|FATabView /template/ uip|FATabViewListView#TabListView">
-            <Setter Property="Margin" Value="-10,0,0,0" />
-        </Style>
-        <Style Selector="ui|FATabViewItem">
-            <Setter Property="BorderThickness" Value="1,1,1,0" />
-        </Style>
-        <Style Selector="ui|FATabViewItem:icon /template/ Viewbox#IconBox">
-            <Setter Property="Margin" Value="0,0,8,0" />
-            <Setter Property="Width" Value="14" />
-            <Setter Property="Height" Value="14" />
-        </Style>
-    </Window.Styles>
-
     <Window.Resources>
         <layout:DoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
         <layout:SidebarColumnMinWidthConverter x:Key="SidebarColumnMinWidthConverter" />
     </Window.Resources>
-
+    
     <LayoutTransformControl Name="LayoutTransform">
         <Grid RowDefinitions="Auto,*">
             <Border Grid.Row="0" Padding="5" VerticalAlignment="Top" HorizontalAlignment="Stretch"
-                    Background="{DynamicResource TitleBarBackground}">
+                    Background="{DynamicResource TitleBarBackground}" WindowDecorationProperties.ElementRole="TitleBar">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Image Source="{StaticResource SkEditorLogo}" Margin="12,0,0,0" Height="20" Width="20" />
-                    <controls:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0" />
+                    <controls:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0"
+                                              WindowDecorationProperties.ElementRole="User" />
                 </StackPanel>
             </Border>
             <Separator Grid.Row="0" Height="1" Margin="0,1,0,0" VerticalAlignment="Bottom"
                        Background="{DynamicResource WindowBorderBrush}" />
-
+    
             <Border Grid.Row="1" Padding="10,12,10,10" Background="{DynamicResource MainWindowGridBackground}">
                 <Grid Name="CoreGrid" RowDefinitions="*,Auto" RowSpacing="10">
                     <Grid.ColumnDefinitions>
@@ -67,21 +43,21 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" MinWidth="300" />
                     </Grid.ColumnDefinitions>
-
+    
                     <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0" />
-
+    
                     <sidebar:StatusBarControl DataContext="{Binding StatusBar}" Grid.Column="0" Grid.Row="1"
                                               Grid.ColumnSpan="3" />
-
+    
                     <GridSplitter Name="Splitter" Grid.Column="1" Grid.Row="0" Background="Transparent"
                                   ResizeDirection="Columns"
                                   Width="10"
                                   IsHitTestVisible="{Binding Sidebar.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}" />
-
+    
                     <controls:MainTabView Grid.Column="2" Grid.Row="0" VerticalAlignment="Stretch" />
                 </Grid>
             </Border>
-
+    
             <notifications:SkEditorNotificationManager
                 x:Name="NotificationManager"
                 Grid.Row="1"
