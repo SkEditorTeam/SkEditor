@@ -95,11 +95,11 @@ public class EditorSectionProvider(
                     .WithIcon(Symbol.TextQuote)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoPairingEnabled)),
 
-                ToggleSetting
-                    .Create(TranslationKey.SettingsEditorPasteIndent)
-                    .WithDescription(TranslationKey.SettingsEditorPasteIndentDescription)
-                    .WithIcon(Symbol.ClipboardTextEdit)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsPasteIndentationEnabled))
+                // ToggleSetting
+                //     .Create(TranslationKey.SettingsEditorPasteIndent)
+                //     .WithDescription(TranslationKey.SettingsEditorPasteIndentDescription)
+                //     .WithIcon(Symbol.ClipboardTextEdit)
+                //     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsPasteIndentationEnabled))
             ]);
     }
 }
