@@ -48,6 +48,11 @@ public class FileService(
 
     public async Task OpenFileAsync(BaseFile file)
     {
+        if (file is LocalFile && file.Name is not null && file.Path is not null)
+        {
+            recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
+        }
+        
         FileTab? existingTab = tabs.Tabs.OfType<FileTab>().FirstOrDefault(tab => tab.File.Path == file.Path);
 
         if (existingTab is not null)
@@ -86,11 +91,6 @@ public class FileService(
             {
                 tabs.CloseTab(fileTab);
             }
-        }
-
-        if (file.Name is not null && file.Path is not null)
-        {
-            recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
         }
     }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -33,32 +32,17 @@ public class WelcomeService : IWelcomeService
         _tabs = tabService;
         _settingsTabFactory = settingsTabFactory;
 
-        RecentItems = new ReadOnlyObservableCollection<WelcomeScreenRecentItem>(_recentItemsSource);
-        _ = LoadRecents(recents);
+        RecentItems = recents.RecentItems;
+        _ = recents.LoadRecentItemsAsync();
 
         BuildSections();
 
         StartDateTimer();
     }
 
-    private readonly ObservableCollection<WelcomeScreenRecentItem> _recentItemsSource = [];
     public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
 
     public ObservableCollection<WelcomeScreenSection> WelcomeSections { get; } = [];
-
-    private async Task LoadRecents(IRecentFileService recents)
-    {
-        await recents.LoadRecentItemsAsync();
-
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            _recentItemsSource.Clear();
-            foreach (WelcomeScreenRecentItem item in recents.RecentItems)
-            {
-                _recentItemsSource.Add(item);
-            }
-        });
-    }
     
     private void BuildSections()
     {
