@@ -55,7 +55,6 @@ public partial class MainWindow : FAAppWindow
         menuViewModel.RegisterHotKeys(this);
 
         _themes.LoadThemes();
-        Style();
 
         LayoutTransform.LayoutTransform = new ScaleTransform(appSettings.CustomUiScale, appSettings.CustomUiScale);
 

@@ -19,23 +19,23 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://SkEditor/Styles/CustomMenuItemStyle.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/ToggleSwitchStyle.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/SearchBoxStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/DialogStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/SearchPanelStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/FileTreeViewStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/NotificationStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/InfoBarStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/TabViewItemStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/TaskDialogStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/LiteComboBoxStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/ComboBoxStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/NumericUpDownStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/NavigationViewStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/SettingsExpanderItemStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/ToggleSwitchStyle.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/OnlyCloseButtonWindow.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/SearchBoxStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/DialogStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/SearchPanelStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/FileTreeViewStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/NotificationStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/InfoBarStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/TabViewItemStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/TaskDialogStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/LiteComboBoxStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/ComboBoxStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/NumericUpDownStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/NavigationViewStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/SettingsExpanderItemStyles.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" /> -->
+                <!-- <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" /> -->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
