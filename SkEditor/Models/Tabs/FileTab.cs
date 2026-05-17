@@ -28,6 +28,7 @@ public partial class FileTab(
     INotificationService notifications,
     IFilePickerService filePicker,
     IFileFeatureService features,
+    IRecentFileService recentFiles,
     ILogService logs)
     : Tab(header, Symbol.Document)
 {
@@ -109,6 +110,8 @@ public partial class FileTab(
     /// <returns>True if success, false otherwise (cancelled, failed)</returns>
     public async Task<bool> SaveAsAsync()
     {
+        string? oldPath = File.Path;
+        
         string? path = await filePicker.SaveFileAsync(Header.Value);
         if (path == null)
         {
@@ -118,6 +121,7 @@ public partial class FileTab(
         File.Path = path;
         UpdateHeader();
         features.UpdateFeatures(this);
+        recentFiles.UpdateRecentItem(oldPath, path);
 
         return await PerformSaveAsync();
     }

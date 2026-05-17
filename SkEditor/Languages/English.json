@@ -406,7 +406,7 @@
   "WelcomePageRecentTimeTraveler": "Long before time had a name...",
   "WelcomePageRecentInTheFuture": "Back from the future?",
   "WelcomePageRecentTitle": "Recent",
-  "WelcomePageRecentEmpty": "No recent files or folders found",
+  "WelcomePageRecentEmpty": "No recent files or folders",
   "RemoteConnectionNewWindowTitle": "New Remote Connection",
   "RemoteConnectionTestConnectionTooltip": "Test the connection settings",
   "RemoteConnectionAddConnectionMissingFields": "Please fill in all required fields first",

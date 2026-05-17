@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Avalonia.Threading;
-using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
@@ -15,7 +14,6 @@ using SkEditor.Models.Welcome;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Icons;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Types;
 
 namespace SkEditor.Services;
 
@@ -23,60 +21,35 @@ public class WelcomeService : IWelcomeService
 {
     private readonly IFileService _files;
 
-    private readonly SortedObservableCollection<WelcomeScreenRecentItem> _recentItems;
     private readonly Func<SettingsTab> _settingsTabFactory;
     private readonly ITabService _tabs;
 
     private DispatcherTimer _timeUpdater;
 
-    public WelcomeService(IFileService fileService, ITabService tabService, Func<SettingsTab> settingsTabFactory)
+    public WelcomeService(IFileService fileService, ITabService tabService, IRecentFileService recents,
+        Func<SettingsTab> settingsTabFactory)
     {
         _files = fileService;
         _tabs = tabService;
         _settingsTabFactory = settingsTabFactory;
 
-        _recentItems = new SortedObservableCollection<WelcomeScreenRecentItem>(
-            Comparer<WelcomeScreenRecentItem>.Create((a, b) => b.LastOpened.CompareTo(a.LastOpened))
-        );
-        RecentItems = new ReadOnlyObservableCollection<WelcomeScreenRecentItem>(_recentItems);
+        _ = LoadRecents(recents);
 
         BuildSections();
-        BuildRecentItems();
 
         StartDateTimer();
     }
 
-    public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
+    public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; private set; } = new([]);
 
     public ObservableCollection<WelcomeScreenSection> WelcomeSections { get; } = [];
 
-    private void BuildRecentItems()
+    private async Task LoadRecents(IRecentFileService recents)
     {
-        List<WelcomeScreenRecentItem> recentItems =
-        [
-            new("core.sk", @"C:\Users\NotroDev\Documents\Server\plugins\Skript\scripts\core.sk",
-                false, DateTime.Now.AddMinutes(-12)),
-            new("SurvivalCore", @"D:\Projects\Minecraft\SurvivalCore", true,
-                DateTime.Now.AddHours(-3)),
-            new("economy.sk", @"C:\Users\Admin\Desktop\OLD_PROJECTS\backup_2025\economy.sk",
-                false, DateTime.Now.AddDays(-1).AddHours(2)),
-            new("scripts", @"Z:\NetworkDrive\Public\ServerFiles\Skript\scripts", true,
-                DateTime.Now.AddDays(-4)),
-            new("very_long_name_of_a_script_that_can_destroy_your_beautiful_ui_test.sk",
-                @"C:\Temp\very_long_name_of_a_script_that_can_destroy_your_beautiful_ui_test.sk", false,
-                DateTime.Now.AddDays(-10)),
-            new("MiniGames", @"E:\Work\Java\SpigotServer\plugins\Skript\scripts\MiniGames",
-                true, DateTime.Now.AddMinutes(-45)),
-            new("adminchat_final_version.sk",
-                @"C:\Users\NotroDev\Desktop\syf\adminchat_final_version.sk", false,
-                new DateTime(2025, 03, 24, 10, 30, 0)),
-            new("ChatManager", @"C:\Users\NotroDev\AppData\Roaming\SkEditor\temp\ChatManager",
-                true, DateTime.Now.AddSeconds(-30))
-        ];
-
-        _recentItems.AddRange(recentItems);
+        await recents.LoadRecentItemsAsync();
+        RecentItems = recents.RecentItems; 
     }
-
+    
     private void BuildSections()
     {
         WelcomeScreenSection gettingStarted = new(
@@ -126,7 +99,7 @@ public class WelcomeService : IWelcomeService
     {
         _timeUpdater = new DispatcherTimer
         {
-            Interval = TimeSpan.FromMinutes(1)
+            Interval = TimeSpan.FromSeconds(15)
         };
 
         _timeUpdater.Tick += (_, _) =>

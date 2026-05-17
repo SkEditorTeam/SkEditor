@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -18,15 +19,18 @@ namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewModel, IRecipient<OpenExplorerFolderMessage>
 {
     private readonly IFilePickerService _filePicker;
+    private readonly IRecentFileService _recents;
     private readonly IMessenger _messenger;
     private readonly INotificationService _notifications;
 
     public ExplorerViewModel(FileTreeViewModel fileTree,
         IFilePickerService filePicker,
+        IRecentFileService recents,
         INotificationService notifications,
         IMessenger messenger)
     {
         _filePicker = filePicker;
+        _recents = recents;
         _notifications = notifications;
         FileTree = fileTree;
 
@@ -72,6 +76,13 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
     {
         LocalFileSystem localFileSystem = new(path);
         FileTree.FileSystem = localFileSystem;
+
+        string? name = Path.GetFileName(Path.GetDirectoryName(path));
+        if (name is not null)
+        {
+            _recents.AddRecentItem(name, path, true, DateTime.Now);
+        }
+
         await FileTree.LoadFileSystemAsync();
     }
 

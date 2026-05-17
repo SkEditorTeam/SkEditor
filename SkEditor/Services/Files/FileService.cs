@@ -18,6 +18,7 @@ public class FileService(
     ITranslationService translation,
     IFileTabFactory fileTabFactory,
     IFilePickerService filePicker,
+    IRecentFileService recentFiles,
     INotificationService notifications,
     ILogService logs)
     : IFileService
@@ -85,6 +86,11 @@ public class FileService(
             {
                 tabs.CloseTab(fileTab);
             }
+        }
+
+        if (file.Name is not null && file.Path is not null)
+        {
+            recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
         }
     }
 

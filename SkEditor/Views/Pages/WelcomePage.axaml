@@ -164,7 +164,9 @@
                         <ItemsRepeater.ItemTemplate>
                             <DataTemplate DataType="welcome:WelcomeScreenRecentItem">
                                 <Button HorizontalContentAlignment="Stretch"
-                                        VerticalContentAlignment="Center">
+                                        VerticalContentAlignment="Center"
+                                        Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.OpenRecentCommand}"
+                                        CommandParameter="{Binding}">
                                     <DockPanel LastChildFill="True">
                                         <Viewbox Width="20" Height="20"
                                                  DockPanel.Dock="Left"

@@ -83,6 +83,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IFileTabFactory, FileTabFactory>();
             services.AddSingleton<IZoomService, ZoomService>();
             services.AddSingleton<IFilePickerService, FilePickerService>();
+            services.AddSingleton<IRecentFileService, RecentFileService>();
             services.AddSingleton<DragDropService>();
         }
 

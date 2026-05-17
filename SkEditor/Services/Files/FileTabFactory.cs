@@ -14,6 +14,7 @@ public class FileTabFactory(
     IDialogService dialogService,
     IFilePickerService filePicker,
     IFileFeatureService features,
+    IRecentFileService recentFiles,
     INotificationService notifications,
     ILogService logs) : IFileTabFactory
 {
@@ -26,7 +27,7 @@ public class FileTabFactory(
 
         TranslatableString header = TranslatableString.FromRawString(file.Name);
 
-        return new FileTab(header, appSettings, dialogService, notifications, filePicker, features, logs)
+        return new FileTab(header, appSettings, dialogService, notifications, filePicker, features, recentFiles, logs)
         {
             File = file
         };
@@ -36,7 +37,7 @@ public class FileTabFactory(
     {
         TranslatableString header = TranslatableString.FromRawString(name);
 
-        return new FileTab(header, appSettings, dialogService, notifications, filePicker, features, logs)
+        return new FileTab(header, appSettings, dialogService, notifications, filePicker, features, recentFiles, logs)
         {
             File = new LocalFile(name: name),
             IsSaved = true
