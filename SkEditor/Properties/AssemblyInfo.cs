@@ -1,4 +1,3 @@
-﻿using FluentAvalonia.UI.Controls;
-using Xaml.Behaviors.SourceGenerators;
+﻿using Xaml.Behaviors.SourceGenerators;
 
-[assembly: GenerateEventCommand(typeof(TabViewItem), "CloseRequested")]
+[assembly: GenerateEventCommand(typeof(FATabViewItem), "CloseRequested")]
