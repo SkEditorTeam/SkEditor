@@ -27,7 +27,7 @@
                 <ResourceInclude Source="avares://SkEditor/Styles/FileTreeViewStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/NotificationStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/InfoBarStyles.axaml" />
-                <ResourceInclude Source="avares://SkEditor/Styles/TabViewItemStyles.axaml" />
+                <!-- <ResourceInclude Source="avares://SkEditor/Styles/TabViewItemStyles.axaml" /> -->
                 <ResourceInclude Source="avares://SkEditor/Styles/TaskDialogStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/LiteComboBoxStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/ComboBoxStyles.axaml" />
