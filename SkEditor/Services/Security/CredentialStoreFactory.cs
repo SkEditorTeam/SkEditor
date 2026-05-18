@@ -15,7 +15,7 @@ public class CredentialStoreFactory(IConfigService configs) : ICredentialStoreFa
             return new WindowsCredentialStore();
         }
 
-        string keyPath = Path.Combine(configs.GetAppDataPath(), "SkEditor", "master.key");
+        string keyPath = Path.Combine(configs.GetAppDataPath(), "master.key");
 
         return new UnixCredentialStore(keyPath);
     }
