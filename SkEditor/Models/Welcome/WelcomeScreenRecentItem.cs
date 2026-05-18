@@ -56,7 +56,7 @@ public sealed class WelcomeScreenRecentItem(string name, string path, bool isFol
         if (!(span.TotalDays < 1))
         {
             return date.Date == DateTime.Today.AddDays(-1)
-                ? new TranslatableString(GetKey("WelcomePageRecentYesterdayAt", GetPluralKey(1)),
+                ? new TranslatableString(TranslationKey.WelcomePageRecentYesterdayAt,
                     date.ToString("t", appCulture))
                 : TranslatableString.FromRawString(date.ToString("g", appCulture));
         }
