@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
+using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Files;
 using SkEditor.Services.Windowing;
 using CrashWindow = SkEditor.Views.Windows.CrashWindow;

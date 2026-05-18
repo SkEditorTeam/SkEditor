@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 

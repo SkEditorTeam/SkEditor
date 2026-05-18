@@ -2,7 +2,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using SkEditor.Views.Windows;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Contracts.Services.Windowing;
 
 public interface IStartupService
 {
