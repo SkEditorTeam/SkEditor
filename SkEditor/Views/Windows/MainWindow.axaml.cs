@@ -6,7 +6,6 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Styling;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Windows;
 
@@ -52,10 +51,9 @@ public partial class MainWindow : FAAppWindow
         _themes = themes;
         _discordIntegration = discordIntegration;
         _splashScreenService = splashScreenService;
-        
+
         menuViewModel.RegisterHotKeys(this);
 
-        this.Style();
         _themes.LoadThemes();
 
         LayoutTransform.LayoutTransform = new ScaleTransform(appSettings.CustomUiScale, appSettings.CustomUiScale);
@@ -71,6 +69,16 @@ public partial class MainWindow : FAAppWindow
         Closing += async (_, _) => await OnClosing();
         dragDropService.AttachDragDropEvents(this);
         shortcutsService.AttachKeyEvents(this);
+    }
+
+    private void Style()
+    {
+        const double titleBarHeight = 50;
+
+        TitleBar.ExtendsContentIntoTitleBar = true;
+
+        TitleBar.Height = titleBarHeight;
+        ExtendClientAreaTitleBarHeightHint = titleBarHeight;
     }
 
     public async Task OnClosing()
