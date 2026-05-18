@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:iconsMarkup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
@@ -167,6 +168,28 @@
                                         VerticalContentAlignment="Center"
                                         Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.OpenRecentCommand}"
                                         CommandParameter="{Binding}">
+                                    <Button.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Open}" Header="Open"
+                                                      Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.OpenRecentCommand}"
+                                                      CommandParameter="{Binding}" />
+
+                                            <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardLink}"
+                                                      Header="Copy Path"
+                                                      Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.CopyPathCommand}"
+                                                      CommandParameter="{Binding}" />
+
+                                            <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FolderOpen}"
+                                                      Header="Show in Explorer"
+                                                      Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.ShowInExplorerCommand}"
+                                                      CommandParameter="{Binding}" />
+
+                                            <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Delete}"
+                                                      Header="Remove from Recent"
+                                                      Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.RemoveCommand}"
+                                                      CommandParameter="{Binding}" />
+                                        </MenuFlyout>
+                                    </Button.ContextFlyout>
                                     <DockPanel LastChildFill="True">
                                         <Viewbox Width="20" Height="20"
                                                  DockPanel.Dock="Left"
