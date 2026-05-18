@@ -12,7 +12,6 @@
         <Setter Property="Height" Value="{DynamicResource TabViewItemHeaderCloseButtonHeight}" />
         <Setter Property="Background" Value="{DynamicResource TabViewItemHeaderCloseButtonBackground}" />
         <Setter Property="Foreground" Value="{DynamicResource TabViewItemHeaderCloseButtonForeground}" />
-        <Setter Property="Foreground" Value="{DynamicResource TabViewItemHeaderCloseButtonForeground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource TabViewItemHeaderCloseButtonBorderBrush}" />
         <Setter Property="BorderThickness" Value="{DynamicResource TabViewItemHeaderCloseButtonBorderThickness}" />
         <Setter Property="Template">
