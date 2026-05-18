@@ -16,9 +16,9 @@ public abstract partial class BaseFolderNode : FileSystemNode
 {
     private static readonly FileSystemNode DummyNode = new DummyFileNode();
 
-    protected BaseFolderNode(string name, string path, bool isRoot) : base(name, path, true)
+    protected BaseFolderNode(string name, string path, bool isRoot, bool addDummy = true) : base(name, path, true)
     {
-        if (!isRoot)
+        if (!isRoot && addDummy)
         {
             Children.Add(DummyNode);
         }
@@ -211,7 +211,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
     public async Task NewFile(string name)
     {
-        string newFilePath = System.IO.Path.Combine(Path, name);
+        string newFilePath = CombinePath(Path, name);
 
         if (await AlreadyExistsPredicate(newFilePath))
         {
@@ -245,7 +245,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
     public async Task NewFolder(string name)
     {
-        string newFolderPath = System.IO.Path.Combine(Path, name);
+        string newFolderPath = CombinePath(Path, name);
 
         if (await AlreadyExistsPredicate(newFolderPath))
         {
@@ -273,6 +273,11 @@ public abstract partial class BaseFolderNode : FileSystemNode
                     .WithMessage(TranslatableString.FromRawString(ex.Message))
                     .WithType(NotificationType.Error)));
         }
+    }
+
+    protected virtual string CombinePath(string folderPath, string itemName)
+    {
+        return System.IO.Path.Combine(folderPath, itemName);
     }
 
     public override async Task<bool> DeleteAsync()

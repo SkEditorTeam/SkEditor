@@ -9,8 +9,8 @@ using SkEditor.Models.Projects.Types;
 
 namespace SkEditor.Models.Projects.Sftp;
 
-public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client)
-    : BaseFolderNode(name, path, isRoot)
+public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client, bool addDummy = true)
+    : BaseFolderNode(name, path, isRoot, addDummy)
 {
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
         SftpFileSystem.GetAlreadyExistsPredicate(client);
@@ -91,6 +91,11 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         ];
     }
 
+    protected override string CombinePath(string folderPath, string itemName)
+    {
+        return $"{folderPath.TrimEnd('/')}/{itemName}";
+    }
+
     protected override FileSystemNode CreateFileNode(string name, string path)
     {
         return new SftpFileNode(name, path, client);
@@ -98,6 +103,6 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
 
     protected override FileSystemNode CreateFolderNode(string name, string path)
     {
-        return new SftpFolderNode(name, path, false, client);
+        return new SftpFolderNode(name, path, false, client, false);
     }
 }
