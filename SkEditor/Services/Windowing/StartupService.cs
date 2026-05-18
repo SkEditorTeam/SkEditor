@@ -6,12 +6,10 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.Contracts.Services;
-using SkEditor.Services.Windowing;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 
-namespace SkEditor.Services;
+namespace SkEditor.Services.Windowing;
 
 public class StartupService(
     MainWindowFactory mainWindowFactory,
