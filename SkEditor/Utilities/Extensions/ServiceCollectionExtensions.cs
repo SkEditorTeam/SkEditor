@@ -5,6 +5,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Contracts.Services.Security;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.DataTemplates;
 using SkEditor.Features;
@@ -14,6 +15,7 @@ using SkEditor.Services;
 using SkEditor.Services.Files;
 using SkEditor.Services.Files.Features;
 using SkEditor.Services.Localization;
+using SkEditor.Services.Security;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Editor.Commands;
@@ -54,6 +56,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<NamedPipeServer>();
 
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
+            services.AddSingleton<ICredentialStoreFactory, CredentialStoreFactory>();
             services.AddHttpClient<IPublishService, PublishService>();
 
             services.AddSingleton<IMenuService, MenuService>();

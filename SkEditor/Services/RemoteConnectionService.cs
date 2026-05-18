@@ -4,25 +4,26 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using GitCredentialManager;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Contracts.Services.Security;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Security;
 
 namespace SkEditor.Services;
 
-public class RemoteConnectionService(ITranslationService translation, ILogService logs)
+public class RemoteConnectionService(
+    ITranslationService translation,
+    ILogService logs,
+    ICredentialStoreFactory credentialStoreFactory)
     : IRemoteConnectionService, IDisposable
 {
-    private const string CredentialNamespace = "SkEditor Remote Connections";
-    private const string CredentialTarget = "skeditor://sftp-connections";
-
     private readonly Dictionary<RemoteConnection, SftpClient> _activeConnections = new();
     private readonly SemaphoreSlim _connectionLock = new(1, 1);
-    private readonly ICredentialStore _store = CredentialManager.Create(CredentialNamespace);
+    private readonly ICredentialStore _store = credentialStoreFactory.Create();
 
     public void Dispose()
     {
@@ -81,13 +82,26 @@ public class RemoteConnectionService(ITranslationService translation, ILogServic
 
     public void SavePassword(RemoteConnection connection, string password)
     {
-        _store.AddOrUpdate(CredentialTarget, connection.Id.ToString(), password);
+        string hash = _store.Protect(password);
+        connection.PasswordHash = hash;
     }
 
     public string? GetPassword(RemoteConnection connection)
     {
-        ICredential? cred = _store.Get(CredentialTarget, connection.Id.ToString());
-        return cred.Password;
+        if (string.IsNullOrEmpty(connection.PasswordHash))
+        {
+            return null;
+        }
+
+        try
+        {
+            return _store.Unprotect(connection.PasswordHash);
+        }
+        catch (Exception ex)
+        {
+            logs.Error($"Error retrieving password for connection {connection.Name}: {ex.Message}");
+            return null;
+        }
     }
 
     public async Task<SftpClient> GetOrConnectSftpClientAsync(RemoteConnection connection,

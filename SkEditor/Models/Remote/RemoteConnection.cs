@@ -28,4 +28,5 @@ public class RemoteConnection
     public RemoteAuthMethod AuthMethod { get; set; } = RemoteAuthMethod.Password;
 
     public string KeyFilePath { get; set; } = string.Empty;
+    public string PasswordHash { get; set; } = string.Empty;
 }
