@@ -15,13 +15,14 @@ namespace SkEditor.ViewModels.Controls;
 
 public partial class FileTreeViewModel : ObservableObject
 {
+    private readonly IClipboardService _clipboard;
+    private readonly IDialogService _dialogs;
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
-    private readonly IDialogService _dialogs;
-    private readonly IClipboardService _clipboard;
     private CancellationTokenSource? _cts;
 
-    public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard, IDialogService dialogs)
+    public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard,
+        IDialogService dialogs)
     {
         _logs = logs;
         _notifs = notifs;
@@ -29,7 +30,7 @@ public partial class FileTreeViewModel : ObservableObject
         _clipboard = clipboard;
 
         SelectedNodes.CollectionChanged += OnSelectedNodesChanged;
-        
+
         InitializeCommandMap();
     }
 
@@ -60,7 +61,7 @@ public partial class FileTreeViewModel : ObservableObject
 
         RootItems.Clear();
         IsLoading = true;
-        
+
         if (FileSystem == null)
         {
             _logs.Warning("File system is null, cannot load!");
@@ -69,8 +70,8 @@ public partial class FileTreeViewModel : ObservableObject
         }
 
         _cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        var thisCts = _cts;
-        
+        CancellationTokenSource? thisCts = _cts;
+
         bool isSuccess;
         try
         {
@@ -79,17 +80,23 @@ public partial class FileTreeViewModel : ObservableObject
         catch (OperationCanceledException)
         {
             if (ReferenceEquals(_cts, thisCts))
+            {
                 IsLoading = false;
+            }
+
             return false;
         }
 
         if (!isSuccess)
         {
             if (ReferenceEquals(_cts, thisCts))
+            {
                 IsLoading = false;
+            }
+
             return false;
         }
-        
+
         if (!ReferenceEquals(_cts, thisCts))
         {
             return false;
@@ -111,7 +118,7 @@ public partial class FileTreeViewModel : ObservableObject
         OpenCommand.NotifyCanExecuteChanged();
         UpdateContextMenuItems();
     }
-    
+
     partial void OnFileSystemChanged(IFileSystem? value)
     {
         WeakReferenceMessenger.Default.Send(new FileSystemChangedMessage(value));

@@ -66,26 +66,18 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     public string Name => "Remote Explorer";
     public StandardIcon Icon => "RemoteDesktopIcon";
 
-    partial void OnSelectedConnectionChanged(RemoteConnection? value)
+    [RelayCommand]
+    private async Task Connect(RemoteConnection? connection)
     {
-        if (value != null)
-        {
-            _ = HandleConnectionChangedAsync(value);
-        }
-    }
-
-    private async Task HandleConnectionChangedAsync(RemoteConnection value)
-    {
-        bool success = await ChangeConnection(value);
-
-        if (SelectedConnection != value)
+        if (connection == null)
         {
             return;
         }
 
+        bool success = await ChangeConnection(connection);
         if (!success)
         {
-            SelectedConnection = null;
+            SelectedConnection = null; 
         }
     }
 

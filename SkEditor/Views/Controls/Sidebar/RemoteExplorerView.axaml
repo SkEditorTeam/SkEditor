@@ -7,6 +7,7 @@
              xmlns:projects="clr-namespace:SkEditor.Views.Controls.Projects"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:panes="clr-namespace:SkEditor.ViewModels.Controls.Sidebar.Panes"
+             xmlns:primitives="clr-namespace:Avalonia.Controls.Primitives"
              x:DataType="panes:RemoteExplorerViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.RemoteExplorerView">
 
@@ -48,6 +49,10 @@
                         <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
+                <Interaction.Behaviors>
+                    <primitives:SelectingItemsControlSelectionChangedEventCommandTrigger
+                        Command="{Binding ConnectCommand}" Parameter="{Binding $parent[ComboBox].SelectedItem}" />
+                </Interaction.Behaviors>
             </ComboBox>
         </DockPanel>
 
