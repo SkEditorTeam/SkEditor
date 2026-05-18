@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.SourceGenerators;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 
@@ -24,7 +25,7 @@ public partial class AboutWindowViewModel(IClipboardService clipboard, ITranslat
 
     public string VersionString => translations.Get(TranslationKey.AboutVersion, InformationalVersion, AssemblyVersion);
 
-    public DateTime ReleaseDate => new(2026, 5, 15);
+    public DateTime ReleaseDate => BuildInfo.ReleaseDate;
     public string DateString => translations.Get(TranslationKey.AboutReleaseDate, FormatDateNoDayOfWeek(ReleaseDate));
 
     public string Author => "Notro";
