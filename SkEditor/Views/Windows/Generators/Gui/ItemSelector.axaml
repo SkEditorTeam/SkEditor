@@ -8,8 +8,7 @@
         x:CompileBindings="True"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         WindowStartupLocation="CenterOwner"
-        Title="{localization:Translate WindowTitleItemSelector}" Height="400" Width="450" CanResize="False"
-        Theme="{StaticResource SmallWindowTheme}">
+        Title="{localization:Translate WindowTitleItemSelector}" Height="400" Width="450" CanResize="False">
 
     <Window.Resources>
         <ResourceDictionary>

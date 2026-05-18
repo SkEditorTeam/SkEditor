@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.RefactorWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate WindowTitleRefactor}" Height="400" Width="350" CanResize="False"
-        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+        WindowStartupLocation="CenterOwner">
 
     <Grid RowDefinitions="auto,*" Margin="20">
         <StackPanel Spacing="0">

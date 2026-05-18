@@ -1,24 +1,13 @@
-using Avalonia.Input;
-using FluentAvalonia.UI.Windowing;
 using SkEditor.ViewModels.Windows;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows;
 
-public partial class GoToLineWindow : FAAppWindow
+public partial class GoToLineWindow : SkEditorWindow
 {
     public GoToLineWindow()
     {
         InitializeComponent();
-
-        KeyDown += (_, e) =>
-        {
-            switch (e.Key)
-            {
-                case Key.Escape:
-                    Close();
-                    break;
-            }
-        };
     }
 
     public GoToLineWindow(GoToLineWindowViewModel viewModel) : this()

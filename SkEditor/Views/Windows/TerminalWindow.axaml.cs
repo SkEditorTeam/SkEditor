@@ -12,12 +12,12 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using AvaloniaEdit.Document;
-using FluentAvalonia.UI.Windowing;
 using Serilog;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows;
 
-public partial class TerminalWindow : FAAppWindow
+public partial class TerminalWindow : SkEditorWindow
 {
     private const char EscapeChar = '\x1b';
     private const string CrSplitPattern = "(?=\r)";
@@ -29,7 +29,6 @@ public partial class TerminalWindow : FAAppWindow
     public TerminalWindow()
     {
         InitializeComponent();
-        Focusable = true;
 
         LoadTerminal();
         AssignEvents();

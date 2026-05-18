@@ -9,16 +9,16 @@
         x:Class="SkEditor.Views.Windows.AboutWindow" Icon="/Assets/SkEditor.ico"
         x:DataType="windows:AboutWindowViewModel"
         Title="{localization:Translate AboutTitle}" Height="330" Width="580" CanResize="False"
-        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
-
-    <Window.Styles>
-        <Style Selector="Grid#AboutGrid TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSecondaryColor}" />
-            <Setter Property="FontSize" Value="14" />
-        </Style>
-    </Window.Styles>
+        WindowStartupLocation="CenterOwner">
 
     <Grid Name="AboutGrid" Margin="24" RowDefinitions="*,Auto">
+        <Grid.Styles>
+            <Style Selector="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundSecondaryColor}" />
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+        </Grid.Styles>
+        
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="32">
             <Image Source="{StaticResource SkEditorLogo}" Height="96" Width="96"
                    HorizontalAlignment="Left" VerticalAlignment="Top" />

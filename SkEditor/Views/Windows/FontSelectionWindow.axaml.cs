@@ -2,23 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
-using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Windowing;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows;
 
 // TODO: rework the entire font selection window
-public partial class FontSelectionWindow : FAAppWindow
+public partial class FontSelectionWindow : SkEditorWindow
 {
     private static FontInfo? _selectedFont;
 
     public FontSelectionWindow()
     {
         InitializeComponent();
-        Focusable = true;
 
         SetUp();
         LoadFonts();
@@ -42,14 +40,6 @@ public partial class FontSelectionWindow : FAAppWindow
         };
 
         FontListBox.SelectionChanged += (_, _) => { _selectedFont = FontListBox.SelectedItem as FontInfo; };
-
-        KeyDown += (_, e) =>
-        {
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
-        };
     }
 
     private void LoadFonts()

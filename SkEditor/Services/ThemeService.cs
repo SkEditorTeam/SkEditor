@@ -29,8 +29,6 @@ public class ThemeService(
 
     public Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 
-    public ControlTheme? SmallWindowTheme { get; private set; }
-
     public List<Theme> Themes { get; set; } = [];
     public Theme CurrentTheme { get; set; } = new();
 
@@ -149,7 +147,6 @@ public class ThemeService(
         styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
         styles.PreferUserAccentColor = true;
 
-        ApplyMica();
         UpdateFont();
 
         await Task.WhenAll(tasks);
@@ -212,54 +209,6 @@ public class ThemeService(
 
         string serializedTheme = JsonSerializer.Serialize(theme, ThemeJsonContext.Default.Theme);
         File.WriteAllText(path, serializedTheme);
-    }
-
-    private void ApplyMica()
-    {
-        Application? currentApp = Application.Current;
-        if (currentApp == null)
-        {
-            log.Error("Application.Current is null. Cannot apply Mica.", true);
-            return;
-        }
-
-        if (!currentApp.Resources.TryGetResource("SmallWindowTheme", ThemeVariant.Default,
-                out object? smallWindowTheme))
-        {
-            log.Error("Failed to get SmallWindowTheme resource.", true);
-            return;
-        }
-
-        ControlTheme? smallWindow = (ControlTheme?)smallWindowTheme;
-        WindowTransparencyLevel[] levels =
-            [WindowTransparencyLevel.Mica, WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur];
-
-        if (CurrentTheme.UseMicaEffect)
-        {
-            Setter? existingSetter = smallWindow?.Setters.OfType<Setter>()
-                .FirstOrDefault(x => x.Property?.Name == "TransparencyLevelHint");
-            if (existingSetter != null)
-            {
-                smallWindow?.Setters.Remove(existingSetter);
-            }
-
-            smallWindow?.Setters.Add(new Setter(TopLevel.TransparencyLevelHintProperty, levels));
-            MainWindow? mainWindow = windowRegistry.Active;
-            mainWindow?.TransparencyLevelHint = levels;
-        }
-        else
-        {
-            Setter? existingSetter = smallWindow?.Setters.OfType<Setter>()
-                .FirstOrDefault(x => x.Property?.Name == "TransparencyLevelHint");
-            if (existingSetter != null)
-            {
-                smallWindow?.Setters.Remove(existingSetter);
-            }
-
-            windowRegistry.Active?.TransparencyLevelHint = [WindowTransparencyLevel.None];
-        }
-
-        SmallWindowTheme = smallWindow;
     }
 
     private void CaptureNewDefaultColors(Theme themeToApply)

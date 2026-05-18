@@ -5,17 +5,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
-public partial class GuiGenerator : FAAppWindow
+public partial class GuiGenerator : SkEditorWindow
 {
     // public readonly string ItemPath = Path.Combine(SkEditorAPI.Configs.GetAppDataPath(), "Items");
     public readonly string ItemPath = string.Empty;
@@ -24,11 +23,8 @@ public partial class GuiGenerator : FAAppWindow
     public GuiGenerator()
     {
         InitializeComponent();
-        Focusable = true;
 
         Instance = this;
-
-        TitleBar.ExtendsContentIntoTitleBar = false;
 
         RowQuantityTextBox.TextChanged += (_, _) => UpdateRows();
 
@@ -42,14 +38,6 @@ public partial class GuiGenerator : FAAppWindow
         {
             await FileDownloader.CheckForMissingItemFiles(this);
             TitleTextBox.Focus();
-        };
-
-        KeyDown += (_, e) =>
-        {
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
         };
     }
 

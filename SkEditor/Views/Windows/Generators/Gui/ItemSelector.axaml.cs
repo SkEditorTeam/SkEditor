@@ -13,19 +13,17 @@ using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
-public partial class ItemSelector : FAAppWindow
+public partial class ItemSelector : SkEditorWindow
 {
     public ItemSelector()
     {
         InitializeComponent();
-
-        TitleBar.ExtendsContentIntoTitleBar = false;
 
         SelectButton.Command = new RelayCommand(() =>
         {
@@ -51,9 +49,6 @@ public partial class ItemSelector : FAAppWindow
             {
                 case Key.Enter:
                     SelectButton.Command.Execute(null);
-                    break;
-                case Key.Escape:
-                    Close();
                     break;
             }
         };

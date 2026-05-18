@@ -1,30 +1,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Platform.Storage;
-using FluentAvalonia.UI.Windowing;
 using SkEditor.Models.Remote;
 using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Windows;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows;
 
-public partial class RemoteConnectionWindow : FAAppWindow
+public partial class RemoteConnectionWindow : SkEditorWindow
 {
     public RemoteConnectionWindow()
     {
         InitializeComponent();
-        Focusable = true;
-
-        KeyDown += (_, e) =>
-        {
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
-        };
     }
 
     public RemoteConnectionWindow(RemoteConnectionViewModel viewModel) : this()

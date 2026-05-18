@@ -1,0 +1,110 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:wnd="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia">
+
+    <ControlTemplate x:Key="AppWindowOnWindowsTemplate" TargetType="{x:Type wnd:FAAppWindow}">
+        <VisualLayerManager Name="PART_VisualLayerManager">
+            <!-- Because we use the System Border, we don't specify anything like that here.-->
+            <Border Background="{DynamicResource SmallWindowBackgroundColor}"
+                    Padding="{TemplateBinding Padding}"
+                    Name="RootBorder">
+                <Panel>
+                    <Panel Name="DefaultTitleBar"
+                           Height="{Binding TemplateSettings.TitleBarHeight, RelativeSource={RelativeSource TemplatedParent}}"
+                           Background="{DynamicResource TitleBarBackground}"
+                           TextElement.Foreground="{DynamicResource TitleBarForeground}"
+                           VerticalAlignment="Top"
+                           WindowDecorationProperties.ElementRole="TitleBar">
+
+                        <Image Source="{TemplateBinding Icon}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Width="16" Height="16"
+                               IsVisible="{Binding TemplateSettings.IsTitleBarContentVisible, RelativeSource={RelativeSource TemplatedParent}}"
+                               Margin="8 0 0 0"
+                               Name="Icon" />
+
+                        <TextBlock Name="TitleText"
+                                   Text="{TemplateBinding Title}"
+                                   Margin="12 0 0 0"
+                                   FontSize="12"
+                                   IsVisible="{Binding TemplateSettings.IsTitleBarContentVisible, RelativeSource={RelativeSource TemplatedParent}}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left" />
+                    </Panel>
+
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      ClipToBounds="False"
+                                      Margin="{Binding TemplateSettings.ContentMargin, RelativeSource={RelativeSource TemplatedParent}}"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}" />
+
+                    <wnd:FAAppSplashScreen Name="SplashHost"
+                                           IsVisible="False" />
+                </Panel>
+            </Border>
+        </VisualLayerManager>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="AppWindowDefaultTemplate" TargetType="{x:Type wnd:FAAppWindow}">
+        <Panel>
+            <Border Name="PART_TransparencyFallback" IsHitTestVisible="False" />
+            <Border Background="{TemplateBinding Background}" IsHitTestVisible="False" />
+            <Panel Background="Transparent" Margin="{TemplateBinding WindowDecorationMargin}" />
+            <VisualLayerManager Name="PART_VisualLayerManager">
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Content="{TemplateBinding Content}"
+                                  Margin="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </VisualLayerManager>
+            <wnd:FAAppSplashScreen Name="SplashHost"
+                                   IsVisible="False" />
+        </Panel>
+    </ControlTemplate>
+
+
+    <ControlTheme TargetType="wnd:FAAppWindow" x:Key="{x:Type wnd:FAAppWindow}">
+        <Setter Property="TransparencyBackgroundFallback" Value="{DynamicResource ApplicationPageBackgroundThemeBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+        <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
+        <Setter Property="Background" Value="{DynamicResource ApplicationPageBackgroundThemeBrush}" />
+        <Setter Property="Template" Value="{StaticResource AppWindowDefaultTemplate}" />
+
+        <Style Selector="^:windows">
+            <Setter Property="Template" Value="{StaticResource AppWindowOnWindowsTemplate}" />
+
+            <Style Selector="^:icon">
+                <Style Selector="^ /template/ Image#Icon">
+                    <Setter Property="IsVisible" Value="True" />
+                </Style>
+                <Style Selector="^ /template/ TextBlock#TitleText">
+                    <Setter Property="Margin" Value="32 0 0 0" />
+                </Style>
+            </Style>
+
+            <Style Selector="^[WindowState=FullScreen]">
+                <Style Selector="^ /template/ Panel#DefaultTitleBar">
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+            </Style>
+
+            <Style Selector="^[IsActive=False]">
+                <Style Selector="^ /template/ Panel#DefaultTitleBar">
+                    <Setter Property="Background" Value="{DynamicResource TitleBarBackgroundInactive}" />
+                    <Setter Property="TextElement.Foreground" Value="{DynamicResource TitleBarForegroundInactive}" />
+                </Style>
+            </Style>
+        </Style>
+
+        <Style Selector="^:splashOpen">
+            <Style Selector="^ /template/ wnd|FAAppSplashScreen#SplashHost">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

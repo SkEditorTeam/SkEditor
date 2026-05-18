@@ -1,16 +1,14 @@
 ﻿using System;
-using Avalonia.Input;
-using FluentAvalonia.UI.Windowing;
 using SkEditor.Utilities;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows;
 
-public partial class CrashWindow : FAAppWindow
+public partial class CrashWindow : SkEditorWindow
 {
     public CrashWindow(string exception)
     {
         InitializeComponent();
-        Focusable = true;
 
         CrashStackTrace.Text = exception;
         AssignCommands();
@@ -23,13 +21,6 @@ public partial class CrashWindow : FAAppWindow
     {
         DiscordButton.Click += (_, _) => OpenDiscord();
         CloseButton.Click += (_, _) => Close();
-        KeyDown += (_, e) =>
-        {
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
-        };
     }
 
     public static void OpenDiscord()

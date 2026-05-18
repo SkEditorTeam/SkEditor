@@ -1,26 +1,17 @@
 using System.Linq;
 using System.Text;
-using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Windowing;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows.Generators;
 
-public partial class CommandGenerator : FAAppWindow
+public partial class CommandGenerator : SkEditorWindow
 {
     public CommandGenerator()
     {
         InitializeComponent();
-        Focusable = true;
 
         GenerateButton.Command = new RelayCommand(Generate);
-        KeyDown += (_, e) =>
-        {
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
-        };
         Loaded += (_, _) => NameTextBox.Focus();
     }
 

@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Avalonia.Input;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Windowing;
@@ -11,16 +10,8 @@ public partial class RefactorWindow : FAAppWindow
     public RefactorWindow()
     {
         InitializeComponent();
-        Focusable = true;
 
         ApplyButton.Command = new AsyncRelayCommand(Apply);
-        KeyDown += (_, e) =>
-        {
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
-        };
     }
 
     private async Task Apply()

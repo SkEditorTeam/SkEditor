@@ -9,8 +9,7 @@
         Title="Logs"
         Height="600" Width="800"
         CanResize="True"
-        WindowStartupLocation="CenterOwner"
-        Theme="{StaticResource SmallWindowTheme}">
+        WindowStartupLocation="CenterOwner">
     <Grid Margin="20" RowDefinitions="Auto,*" RowSpacing="20">
         <TextBlock Text="Logs" FontSize="28" FontWeight="SemiBold" />
 

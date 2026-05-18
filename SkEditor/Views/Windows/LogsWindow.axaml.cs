@@ -1,35 +1,25 @@
 ﻿using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using FluentAvalonia.UI.Windowing;
 using Serilog.Events;
+using SkEditor.Views.Controls;
 using LogEventLevel = Serilog.Events.LogEventLevel;
 
 namespace SkEditor.Views.Windows;
 
-public partial class LogsWindow : FAAppWindow
+public partial class LogsWindow : SkEditorWindow
 {
     public static readonly List<LogEvent> Logs = [];
 
     public LogsWindow()
     {
         InitializeComponent();
-        Focusable = true;
 
         RenderDocument();
-
-        KeyDown += (_, e) =>
-        {
-            if (e.Key == Key.Escape)
-            {
-                Close();
-            }
-        };
     }
 
     public void RenderDocument()

@@ -3,16 +3,16 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
-using FluentAvalonia.UI.Windowing;
 using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
+using SkEditor.Views.Controls;
 using LoreLineEditor = SkEditor.Views.Controls.LoreLineEditor;
 using SymbolIcon = FluentIcons.Avalonia.Fluent.SymbolIcon;
 using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Views.Windows.Generators.Gui;
 
-public partial class ExtendedItemSelector : FAAppWindow
+public partial class ExtendedItemSelector : SkEditorWindow
 {
     private readonly Item _item;
 
@@ -21,13 +21,9 @@ public partial class ExtendedItemSelector : FAAppWindow
     public ExtendedItemSelector(Item item)
     {
         InitializeComponent();
-        Focusable = true;
-
         _item = item;
 
         CheckForEditing();
-
-        TitleBar.ExtendsContentIntoTitleBar = false;
 
         AssignCommands(item);
         SetContextMenu();

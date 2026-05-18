@@ -11,24 +11,23 @@
         x:Class="SkEditor.Views.Windows.RemoteConnectionWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate RemoteConnectionNewWindowTitle}" Height="500" Width="375" CanResize="False"
         x:DataType="windows:RemoteConnectionViewModel"
-        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
-
-    <Window.Styles>
-        <Style Selector="StackPanel > TextBlock">
-            <Setter Property="Margin" Value="2,0,0,0" />
-        </Style>
-
-        <Style Selector="ComboBox">
-            <Setter Property="Padding" Value="12,6,0,6" />
-        </Style>
-    </Window.Styles>
+        WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
         <converters:AuthMethodConverter x:Key="AuthMethodConverter" />
     </Window.Resources>
 
     <DockPanel Margin="20,12,20,20">
+        <DockPanel.Styles>
+            <Style Selector="StackPanel > TextBlock">
+                <Setter Property="Margin" Value="2,0,0,0" />
+            </Style>
 
+            <Style Selector="ComboBox">
+                <Setter Property="Padding" Value="12,6,0,6" />
+            </Style>
+        </DockPanel.Styles>
+        
         <Grid DockPanel.Dock="Bottom" ColumnDefinitions="Auto,*" ColumnSpacing="8">
             <Button Name="TestConnectionButton"
                     ToolTip.Tip="{localization:Translate RemoteConnectionTestConnectionTooltip}"

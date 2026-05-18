@@ -9,7 +9,7 @@
         x:CompileBindings="True"
         x:DataType="configs:StateConfig"
         Title="{localization:Translate WindowTitleGuiGenerator}" Height="500" Width="900" CanResize="False"
-        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+        WindowStartupLocation="CenterOwner">
 
     <Grid RowDefinitions="auto, *, auto">
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">

@@ -8,8 +8,7 @@
         Icon="/Assets/SkEditor.ico"
         Title="Application Crashed!"
         Height="600" Width="800"
-        WindowStartupLocation="CenterOwner"
-        Theme="{StaticResource SmallWindowTheme}">
+        WindowStartupLocation="CenterOwner">
     <Grid Margin="25"
           RowDefinitions="Auto,*,Auto" RowSpacing="20"
           ColumnDefinitions="*,*" ColumnSpacing="10">

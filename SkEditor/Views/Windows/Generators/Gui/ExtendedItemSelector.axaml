@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.Generators.Gui.ExtendedItemSelector" Icon="/Assets/SkEditor.ico"
         WindowStartupLocation="CenterOwner"
-        Title="Enter item information" Height="350" Width="700" CanResize="False"
-        Theme="{StaticResource SmallWindowTheme}">
+        Title="Enter item information" Height="350" Width="700" CanResize="False">
 
     <Grid RowDefinitions="*,auto" Margin="15" HorizontalAlignment="Stretch">
         <StackPanel Grid.Row="0" Spacing="10" HorizontalAlignment="Center">

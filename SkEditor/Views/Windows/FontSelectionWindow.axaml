@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.FontSelectionWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate WindowTitleFontSelector}" Height="400" Width="350" CanResize="False"
-        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+        WindowStartupLocation="CenterOwner">
 
     <Grid ColumnDefinitions="auto,*" Margin="20">
         <Grid Grid.Column="0" RowDefinitions="auto,*">
