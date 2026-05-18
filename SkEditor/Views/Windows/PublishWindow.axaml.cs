@@ -20,8 +20,6 @@ public partial class PublishWindow : FAAppWindow
 
     private void InitializeUi()
     {
-        TitleBar.ExtendsContentIntoTitleBar = false;
-
         KeyDown += (_, e) =>
         {
             if (e.Key == Key.Escape)

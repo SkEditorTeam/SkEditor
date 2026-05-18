@@ -7,11 +7,12 @@
         xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.PublishWindow" Icon="/Assets/SkEditor.ico"
-        Title="{localization:Translate WindowTitlePublish}" Height="180" Width="300" CanResize="False"
+        Title="{localization:Translate WindowTitlePublish}" Height="250" Width="300"
+        CanResize="False" CanMinimize="False" CanMaximize="False"
         x:DataType="windows:PublishWindowViewModel"
-        WindowStartupLocation="CenterOwner" Theme="{StaticResource SmallWindowTheme}">
+        WindowStartupLocation="CenterOwner">
 
-    <DockPanel Margin="20" VerticalSpacing="12">
+    <DockPanel Margin="20,48,20,20" VerticalSpacing="12">
         <ComboBox HorizontalAlignment="Stretch" DockPanel.Dock="Top"
                   ItemsSource="{Binding PublishTypes}" SelectedItem="{Binding SelectedType, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
