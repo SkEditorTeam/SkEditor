@@ -23,12 +23,13 @@ public class LegacyConfigMigrator(IConfigService config)
             return;
         }
 
-        if (!Directory.Exists(oldPath) || Directory.Exists(newPath))
+        string oldSettings = Path.Combine(oldPath, "settings.json");
+
+        if (!Directory.Exists(oldPath) || Directory.Exists(newPath) || !File.Exists(oldSettings))
         {
             return;
         }
 
-        string oldSettings = Path.Combine(oldPath, "settings.json");
         string json = await File.ReadAllTextAsync(oldSettings);
 
         OldAppConfig? oldAppConfig =
