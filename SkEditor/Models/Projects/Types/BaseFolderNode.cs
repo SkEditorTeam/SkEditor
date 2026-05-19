@@ -168,6 +168,19 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
     public override async Task LoadChildrenAsync()
     {
+        bool folderExists = await AlreadyExistsPredicate(Path);
+        if (!folderExists)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                Notification
+                    .Create(TranslatableString.FromRawString("Load Failed"))
+                    .WithMessage(TranslatableString.FromRawString("Folder does not exist"))
+                    .WithType(NotificationType.Error)));
+
+            Log.Error("Failed to load children of folder {Path} because it does not exist", Path);
+            return;
+        }
+
         if (HasLoadedChildren)
         {
             return;
