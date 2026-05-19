@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -84,9 +85,13 @@ public partial class FileTab(
 
         using StreamReader reader = new(stream);
 
-        Document.Text = await reader.ReadToEndAsync();
-        Document.UndoStack.ClearAll();
-        Document.UndoStack.MarkAsOriginalFile();
+        string text = await reader.ReadToEndAsync();
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            Document.Text = text;
+            Document.UndoStack.ClearAll();
+            Document.UndoStack.MarkAsOriginalFile();
+        });
         return true;
     }
 
@@ -111,7 +116,7 @@ public partial class FileTab(
     public async Task<bool> SaveAsAsync()
     {
         string? oldPath = File.Path;
-        
+
         string? path = await filePicker.SaveFileAsync(Header.Value);
         if (path == null)
         {
@@ -206,7 +211,7 @@ public partial class FileTab(
                 await handler();
             }
         }
-        
+
         if (!IsSaved)
         {
             Dialog dialog = Dialog

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -61,7 +62,9 @@ public class App : Application
         ServiceCollection collection = new();
         collection.AddSingleton<ILogger>(serilogLogger);
 
-        ConfigureServices(collection, _binarySettings);
+        string[] appArgs = Environment.GetCommandLineArgs().Skip(1).ToArray();
+
+        ConfigureServices(collection, _binarySettings, appArgs);
         Services = collection.BuildServiceProvider();
         TranslationService.Current = Services.GetRequiredService<ITranslationService>();
 
@@ -90,8 +93,10 @@ public class App : Application
         }, DispatcherPriority.Background);
     }
 
-    private static void ConfigureServices(IServiceCollection services, BinarySettings binarySettings)
+    private static void ConfigureServices(IServiceCollection services, BinarySettings binarySettings, string[] args)
     {
+        services.AddSingleton(args);
+
         services.AddCoreServices();
         services.AddWindowing();
         services.AddFileServices();

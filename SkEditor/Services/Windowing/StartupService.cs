@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -6,7 +7,9 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
+using SkEditor.Models.Files;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 
@@ -21,7 +24,9 @@ public class StartupService(
     IconProvider iconProvider,
     IConfigService config,
     AppSettings appSettings,
-    LegacyConfigMigrator configMigrator) : IStartupService
+    LegacyConfigMigrator configMigrator,
+    IFileService files,
+    string[] args) : IStartupService
 {
     public string[]? StartupArguments { get; set; }
 
@@ -79,11 +84,24 @@ public class StartupService(
 
         namedPipeServer.Start();
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
+        await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             windowStateService.RecoverMainWindowState(mainWindow);
             desktop.MainWindow = mainWindow;
             mainWindow.ApplyTemplate();
+
+            await CheckArgs();
         });
+    }
+
+    private async Task CheckArgs()
+    {
+        foreach (string path in args)
+        {
+            if (File.Exists(path))
+            {
+                await files.OpenFileAsync(new LocalFile(path));
+            }
+        }
     }
 }
