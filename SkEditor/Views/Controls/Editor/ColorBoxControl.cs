@@ -14,12 +14,13 @@ public class ColorBoxControl : Control
 
     private readonly TextRunProperties _properties;
 
-    public ColorBoxControl(Color color, TextView textView, TextRunProperties properties,
+    public ColorBoxControl(Color color, bool isPrefixed, TextView textView, TextRunProperties properties,
         Action<ColorBoxControl> clickAction,
         int documentOffset,
         int documentLength)
     {
         Color = color;
+        IsPrefixed = isPrefixed;
         TextView = textView;
         _properties = properties;
         _clickAction = clickAction;
@@ -31,6 +32,8 @@ public class ColorBoxControl : Control
     }
 
     public Color Color { get; }
+    public bool IsPrefixed { get; }
+    
     public int DocumentOffset { get; }
     public int DocumentLength { get; }
     public TextView TextView { get; }

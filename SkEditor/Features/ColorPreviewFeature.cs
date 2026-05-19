@@ -84,7 +84,9 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
         colorPicker.ColorChanged += (_, e) =>
         {
             Color newColor = e.NewColor;
-            string newHex = $"<#{newColor.R:X2}{newColor.G:X2}{newColor.B:X2}>";
+            string newHex = control.IsPrefixed
+                ? $"<color:#{newColor.R:X2}{newColor.G:X2}{newColor.B:X2}>"
+                : $"<#{newColor.R:X2}{newColor.G:X2}{newColor.B:X2}>";
 
             document.Replace(capturedOffset, capturedLength, newHex);
             capturedLength = newHex.Length;

@@ -86,13 +86,13 @@ public partial class HexColorElementGenerator(Action<ColorBoxControl> clickActio
             return null!;
         }
 
-        string? hexValue = ResolveColor(m);
-        if (hexValue is null || !Color.TryParse(hexValue, out Color color))
+        ResolvedColor? resolvedColor = ResolveColor(m);
+        if (resolvedColor is null || !Color.TryParse(resolvedColor.HexValue, out Color color))
         {
             return null!;
         }
 
-        ColorBoxControl control = new(color, CurrentContext.TextView,
+        ColorBoxControl control = new(color, resolvedColor.IsPrefixed, CurrentContext.TextView,
             CurrentContext.GlobalTextRunProperties, clickAction, offset, m.Length);
 
         TextBlock.SetBaselineOffset(control, CurrentContext.GlobalTextRunProperties.FontRenderingEmSize);
@@ -101,18 +101,18 @@ public partial class HexColorElementGenerator(Action<ColorBoxControl> clickActio
         return new InlineObjectElement(0, control);
     }
 
-    private static string? ResolveColor(Match m)
+    private static ResolvedColor? ResolveColor(Match m)
     {
         if (m.Groups["hex"].Success)
         {
             string raw = m.Groups["hex"].Value;
-            return raw.StartsWith('#') ? raw : $"#{raw}";
+            return raw.StartsWith('#') ? new ResolvedColor(raw) : new ResolvedColor($"#{raw}");
         }
 
         if (m.Groups["legacy"].Success &&
             LegacyColorMap.TryGetValue(m.Groups["legacy"].Value, out string? legacyHex))
         {
-            return legacyHex;
+            return new ResolvedColor(legacyHex);
         }
 
         if (m.Groups["prefixed"].Success)
@@ -120,19 +120,19 @@ public partial class HexColorElementGenerator(Action<ColorBoxControl> clickActio
             string val = m.Groups["prefixed"].Value;
             if (OnlyHexRegex.IsMatch(val))
             {
-                return val.StartsWith('#') ? val : $"#{val}";
+                return val.StartsWith('#') ? new ResolvedColor(val, true) : new ResolvedColor($"#{val}", true);
             }
 
             if (NamedColorMap.TryGetValue(val, out string? prefixedHex))
             {
-                return prefixedHex;
+                return new ResolvedColor(prefixedHex, true);
             }
         }
 
         if (m.Groups["named"].Success &&
             NamedColorMap.TryGetValue(m.Groups["named"].Value, out string? namedHex))
         {
-            return namedHex;
+            return new ResolvedColor(namedHex);
         }
 
         return null;
@@ -140,4 +140,6 @@ public partial class HexColorElementGenerator(Action<ColorBoxControl> clickActio
 
     [GeneratedRegex(@"^#?(?:[0-9a-fA-F]{3}){1,2}$")]
     private static partial Regex OnlyHexRegexGen();
+
+    private record ResolvedColor(string HexValue, bool IsPrefixed = false);
 }
