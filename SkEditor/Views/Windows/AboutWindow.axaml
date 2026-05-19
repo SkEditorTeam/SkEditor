@@ -8,17 +8,17 @@
         mc:Ignorable="d" d:DesignWidth="180" d:DesignHeight="100"
         x:Class="SkEditor.Views.Windows.AboutWindow" Icon="/Assets/SkEditor.ico"
         x:DataType="windows:AboutWindowViewModel"
-        Title="{localization:Translate AboutTitle}" Height="330" Width="580" CanResize="False"
+        Title="{localization:Translate AboutTitle}" Height="336" Width="580" CanResize="False"
         WindowStartupLocation="CenterOwner">
 
-    <Grid Name="AboutGrid" Margin="24" RowDefinitions="*,Auto">
+    <Grid Name="AboutGrid" Margin="24,8,24,24" RowDefinitions="*,Auto">
         <Grid.Styles>
             <Style Selector="TextBlock">
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundSecondaryColor}" />
                 <Setter Property="FontSize" Value="14" />
             </Style>
         </Grid.Styles>
-        
+
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="32">
             <Image Source="{StaticResource SkEditorLogo}" Height="96" Width="96"
                    HorizontalAlignment="Left" VerticalAlignment="Top" />
