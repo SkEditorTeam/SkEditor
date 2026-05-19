@@ -5,23 +5,34 @@ using Avalonia.Controls.Templates;
 
 namespace SkEditor.DataTemplates;
 
-public class SidebarPaneViewLocator : IDataTemplate
+public class SidebarPaneViewLocator : IRecyclingDataTemplate
 {
+    private readonly Dictionary<Type, Control> _built = new();
     private readonly Dictionary<Type, Func<Control>> _registry = new();
 
     public Control? Build(object? data)
     {
+        return Build(data, null);
+    }
+
+    public Control? Build(object? data, Control? existing)
+    {
         if (data is null)
-        {
             return null;
-        }
 
-        if (_registry.TryGetValue(data.GetType(), out Func<Control>? factory))
+        if (!_registry.TryGetValue(data.GetType(), out Func<Control>? factory))
         {
-            return factory();
+            return new TextBlock { Text = $"No view registered for {data.GetType().Name}" };
         }
 
-        return new TextBlock { Text = $"No view registered for {data.GetType().Name}" };
+        if (!_built.TryGetValue(data.GetType(), out Control? control))
+        {
+            control = factory();
+            _built[data.GetType()] = control;
+        }
+
+        control.DataContext = data;
+        return control;
     }
 
     public bool Match(object? data)
