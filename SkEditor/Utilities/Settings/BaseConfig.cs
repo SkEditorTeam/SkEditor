@@ -17,7 +17,7 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
 
     // ReSharper disable once ReplaceWithFieldKeyword
     private readonly string _appDataFolderPath =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor", "v3.0");
 
     private readonly SemaphoreSlim _saveLock = new(1, 1);
     private CancellationTokenSource? _saveCts;

@@ -15,7 +15,7 @@ public class ConfigService(IEnumerable<IConfig> configs)
 
     public string GetAppDataPath()
     {
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor");
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor", "v3.0");
     }
 
     public async Task LoadAllConfigsAsync() =>
@@ -32,7 +32,7 @@ public class ConfigService(IEnumerable<IConfig> configs)
     public void AddConfig<T>(T config) where T : IConfig
     {
         if (_configs.Any(c => c.GetType() == typeof(T)))
-            throw new InvalidOperationException($"Config {typeof(T).Name} już tu siedzi!");
+            throw new InvalidOperationException($"Config {typeof(T).Name} already exists!");
 
         _configs.Add(config);
     }

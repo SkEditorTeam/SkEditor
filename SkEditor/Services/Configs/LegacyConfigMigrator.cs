@@ -15,12 +15,20 @@ public class LegacyConfigMigrator(IConfigService config)
     /// <returns>>A task representing the asynchronous operation.</returns>
     public async Task MigrateConfigsAsync()
     {
-        string oldSettings = Path.Combine(config.GetAppDataPath(), "settings.json");
-        if (!File.Exists(oldSettings))
+        string newPath = config.GetAppDataPath();
+        string? oldPath = Directory.GetParent(newPath)?.FullName;
+
+        if (string.IsNullOrEmpty(oldPath))
         {
             return;
         }
 
+        if (!Directory.Exists(oldPath) || Directory.Exists(newPath))
+        {
+            return;
+        }
+
+        string oldSettings = Path.Combine(oldPath, "settings.json");
         string json = await File.ReadAllTextAsync(oldSettings);
 
         OldAppConfig? oldAppConfig =
@@ -72,7 +80,6 @@ public class LegacyConfigMigrator(IConfigService config)
             secretsConfig.PastebinApiKey = oldAppConfig.PastebinApiKey;
 
             await config.SaveAllConfigsAsync();
-            File.Delete(oldSettings);
         }
     }
 }
