@@ -121,6 +121,6 @@ public partial class FileTreeViewModel : ObservableObject
 
     partial void OnFileSystemChanged(IFileSystem? value)
     {
-        WeakReferenceMessenger.Default.Send(new FileSystemChangedMessage(value));
+        WeakReferenceMessenger.Default.Send(new FileSystemChangedMessage(this, value));
     }
 }

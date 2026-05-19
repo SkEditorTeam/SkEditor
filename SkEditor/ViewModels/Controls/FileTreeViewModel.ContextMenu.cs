@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
@@ -146,26 +145,26 @@ public partial class FileTreeViewModel
     }
 
     [RelayCommand]
-    private void Disconnect()
+    private async Task Disconnect()
     {
         if (SelectedNodes.Count != 1) return;
         FileSystemNode node = SelectedNodes[0];
 
         if (FileSystem is SftpFileSystem && node.IsRoot)
         {
-            Dispatcher.UIThread.Post(() => { _ = CloseFileSystemAsync(); });
+            await CloseFileSystemAsync();
         }
     }
 
     [RelayCommand]
-    private void CloseLocal()
+    private async Task CloseLocal()
     {
         if (SelectedNodes.Count != 1) return;
         FileSystemNode node = SelectedNodes[0];
 
         if (FileSystem is LocalFileSystem && node.IsRoot)
         {
-            Dispatcher.UIThread.Post(() => { _ = CloseFileSystemAsync(); });
+            await CloseFileSystemAsync();
         }
     }
 
@@ -258,11 +257,11 @@ public partial class FileTreeViewModel
                     : $"Are you sure you want to delete these {SelectedNodes.Count} items?"))
             .WithIcon(Symbol.Delete)
             .WithButtons(new DialogButton(TranslationKey.ButtonDelete, DialogResult.Ok), DialogButton.Cancel);
-        
+
         DialogResult result = await _dialogs.ShowDialogAsync(dialog);
-        
+
         if (result != DialogResult.Ok) return;
-        
+
         List<FileSystemNode> nodesToDelete = SelectedNodes.ToList();
         foreach (var node in nodesToDelete)
         {

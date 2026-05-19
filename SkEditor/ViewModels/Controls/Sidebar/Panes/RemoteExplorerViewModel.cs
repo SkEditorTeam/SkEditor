@@ -52,7 +52,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
 
     public void Receive(FileSystemChangedMessage message)
     {
-        if (_isChangingConnection)
+        if (message.Sender != FileTree || _isChangingConnection)
         {
             return;
         }
@@ -77,7 +77,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         bool success = await ChangeConnection(connection);
         if (!success)
         {
-            SelectedConnection = null; 
+            SelectedConnection = null;
         }
     }
 
