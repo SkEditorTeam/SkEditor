@@ -33,6 +33,8 @@ public partial class FileTab(
     ILogService logs)
     : Tab(header, Symbol.Document)
 {
+    private static readonly Encoding Utf8NoBom = new UTF8Encoding(false);
+
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
 
     private CancellationTokenSource? _saveCts;
@@ -146,7 +148,7 @@ public partial class FileTab(
         CancellationToken token = _saveCts.Token;
 
         using MemoryStream memoryStream = new();
-        await using StreamWriter writer = new(memoryStream, Encoding.UTF8, leaveOpen: true);
+        await using StreamWriter writer = new(memoryStream, Utf8NoBom, leaveOpen: true);
 
         ITextSource? snapshot = Document.CreateSnapshot();
         snapshot.WriteTextTo(writer);
