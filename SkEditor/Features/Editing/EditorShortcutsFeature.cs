@@ -80,18 +80,30 @@ public class EditorShortcutsFeature : IEditorFeature
     private void DeletePreviousWord()
     {
         if (_tab?.Document is not { } doc || _editor is not { } editor)
-        {
             return;
-        }
 
         int caretOffset = editor.CaretOffset;
+        DocumentLine currentLine = doc.GetLineByOffset(caretOffset);
+        int lineStartOffset = currentLine.Offset;
+        int lengthToCaret = caretOffset - lineStartOffset;
+
+        if (lengthToCaret > 0)
+        {
+            ReadOnlySpan<char> textToCaret =
+                doc.GetTextAsMemory(lineStartOffset, lengthToCaret).Span;
+
+            if (textToCaret.TrimStart().IsEmpty)
+            {
+                doc.Remove(lineStartOffset, lengthToCaret);
+                return;
+            }
+        }
+
         int wordStart = TextUtilities.GetNextCaretPosition(
             doc, caretOffset, LogicalDirection.Backward, CaretPositioningMode.WordStartOrSymbol);
 
         if (wordStart >= 0)
-        {
             doc.Remove(wordStart, caretOffset - wordStart);
-        }
     }
 
     private static Action FromCommand(ICommand command)
