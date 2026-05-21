@@ -43,12 +43,12 @@ public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService ta
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderDuplicate, Symbol.CopySelect)
             .WithCommand(() => RequestAction(EditorCommandType.Duplicate))
-            .WithInputGesture("Ctrl+D", false)
+            .WithInputGesture("Ctrl+D")
             .AddTo(edit);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderComment, Symbol.Comment)
             .WithCommand(() => RequestAction(EditorCommandType.Comment))
-            .WithInputGesture("Ctrl+OemQuestion", false)
+            .WithInputGesture("Ctrl+OemQuestion")
             .AddTo(edit);
 
         MainMenuItem
