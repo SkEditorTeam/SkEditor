@@ -10,6 +10,8 @@ namespace SkEditor.Features.Editing;
 
 public class AutoIndentFeature(AppSettings appSettings) : IEditorFeature
 {
+    private bool _undoGroupOpen;
+
     public bool CanAttach(FileTab tab)
     {
         return appSettings.IsAutoIndentEnabled;
@@ -17,15 +19,17 @@ public class AutoIndentFeature(AppSettings appSettings) : IEditorFeature
 
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
+        editor.TextArea.TextEntering += OnTextEntering;
         editor.TextArea.TextEntered += OnTextEntered;
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
     {
+        editor.TextArea.TextEntering -= OnTextEntering;
         editor.TextArea.TextEntered -= OnTextEntered;
     }
 
-    private void OnTextEntered(object? sender, TextInputEventArgs e)
+    private void OnTextEntering(object? sender, TextInputEventArgs e)
     {
         if (e.Text != "\n")
         {
@@ -37,29 +41,58 @@ public class AutoIndentFeature(AppSettings appSettings) : IEditorFeature
             return;
         }
 
-        TextDocument? doc = area.Document;
-        int caretLine = area.Caret.Line;
+        area.Document.UndoStack.StartUndoGroup();
+        _undoGroupOpen = true;
+    }
 
-        DocumentLine? prevLine = doc.GetLineByNumber(caretLine - 1);
-        ReadOnlySpan<char> prevText = doc.GetTextAsMemory(prevLine.Offset, prevLine.Length).Span;
-
-        bool useTabs = appSettings.UseEditorTabsForIndentation;
-        int tabSize = appSettings.EditorTabSize;
-
-        if (!prevText.TrimEnd().EndsWith(':'))
+    private void OnTextEntered(object? sender, TextInputEventArgs e)
+    {
+        if (!_undoGroupOpen)
         {
             return;
         }
 
-        string indent = useTabs ? "\t" : new string(' ', tabSize);
-
-        if (indent.Length <= 0)
+        if (sender is not TextArea area)
         {
             return;
         }
 
-        int insertOffset = area.Caret.Offset;
-        doc.Insert(insertOffset, indent);
-        area.Caret.Offset = insertOffset + indent.Length;
+        try
+        {
+            if (e.Text != "\n")
+            {
+                return;
+            }
+
+            TextDocument doc = area.Document;
+            int caretLine = area.Caret.Line;
+
+            DocumentLine prevLine = doc.GetLineByNumber(caretLine - 1);
+            ReadOnlySpan<char> prevText =
+                doc.GetTextAsMemory(prevLine.Offset, prevLine.Length).Span;
+
+            if (!prevText.TrimEnd().EndsWith(':'))
+            {
+                return;
+            }
+
+            bool useTabs = appSettings.UseEditorTabsForIndentation;
+            int tabSize = appSettings.EditorTabSize;
+            string indent = useTabs ? "\t" : new string(' ', tabSize);
+
+            if (indent.Length == 0)
+            {
+                return;
+            }
+
+            int insertOffset = area.Caret.Offset;
+            doc.Insert(insertOffset, indent);
+            area.Caret.Offset = insertOffset + indent.Length;
+        }
+        finally
+        {
+            area.Document.UndoStack.EndUndoGroup();
+            _undoGroupOpen = false;
+        }
     }
 }
