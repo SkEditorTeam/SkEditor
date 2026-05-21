@@ -8,8 +8,8 @@ namespace SkEditor.DataTemplates;
 
 public class TabViewLocator : IDataTemplate
 {
-    private readonly Dictionary<object, Control> _viewCache = new();
-    private readonly Dictionary<Type, Func<object, Control>> _viewFactories = new();
+    private readonly Dictionary<Tab, Control> _viewCache = new();
+    private readonly Dictionary<Type, Func<Tab, Control>> _viewFactories = new();
 
     public Control Build(object? data)
     {
@@ -18,20 +18,25 @@ public class TabViewLocator : IDataTemplate
             return new TextBlock { Text = "Null data" };
         }
 
-        if (_viewCache.TryGetValue(data, out Control? cachedView))
+        if (data is not Tab tab)
+        {
+            return new TextBlock { Text = "Invalid data type" };
+        }
+
+        if (_viewCache.TryGetValue(tab, out Control? cachedView))
         {
             return cachedView;
         }
 
-        if (!_viewFactories.TryGetValue(data.GetType(), out Func<object, Control>? factory))
+        if (!_viewFactories.TryGetValue(tab.GetType(), out Func<Tab, Control>? factory))
         {
             return new TextBlock { Text = $"No registered view for {data.GetType().Name}" };
         }
 
-        Control view = factory(data);
-        if (data is Tab { IsCacheable: true })
+        Control view = factory(tab);
+        if (tab.IsCacheable)
         {
-            _viewCache[data] = view;
+            _viewCache[tab] = view;
         }
 
         return view;
@@ -42,8 +47,13 @@ public class TabViewLocator : IDataTemplate
         return data is Tab;
     }
 
-    public void Register<TTab>(Func<object, Control> factory) where TTab : Tab
+    public void Register<TTab>(Func<Tab, Control> factory) where TTab : Tab
     {
         _viewFactories[typeof(TTab)] = factory;
+    }
+
+    public void RemoveFromCache(Tab tab)
+    {
+        _viewCache.Remove(tab);
     }
 }
