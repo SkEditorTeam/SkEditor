@@ -69,7 +69,7 @@
         </Border>
 
         <Border Grid.Column="1" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
-                Margin="10,0,0,0" IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+                Margin="10,0,0,0" IsVisible="{Binding IsPanelVisible}">
             <Grid RowDefinitions="Auto,Auto,*">
                 <TextBlock Grid.Row="0" Text="{Binding SelectedItem.Name, FallbackValue={x:Null}}"
                            FontWeight="DemiBold"
@@ -78,7 +78,7 @@
 
                 <Separator Grid.Row="1" Margin="0" />
 
-                <ContentControl Grid.Row="2" Content="{Binding SelectedItem}" />
+                <ContentControl Grid.Row="2" Content="{Binding LastSelectedItem}" />
             </Grid>
         </Border>
     </Grid>

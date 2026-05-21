@@ -28,8 +28,25 @@ public partial class SidebarViewModel : ObservableObject, IRecipient<RequestPane
 
     public ObservableCollection<ISidebarPanelViewModel> Items { get; }
 
-    [ObservableProperty]
-    public partial ISidebarPanelViewModel? SelectedItem { get; set; }
+    public ISidebarPanelViewModel? SelectedItem
+    {
+        get;
+        set
+        {
+            field = value;
+            if (value is not null)
+            {
+                LastSelectedItem = value;
+            }
+
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(LastSelectedItem));
+            OnPropertyChanged(nameof(IsPanelVisible));
+        }
+    }
+
+    public ISidebarPanelViewModel? LastSelectedItem { get; private set; }
+    public bool IsPanelVisible => SelectedItem is not null;
 
     [ObservableProperty]
     public partial double? ColumnWidth { get; set; } = null;
