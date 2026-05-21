@@ -57,6 +57,8 @@ public partial class FileTab(
     [ObservableProperty]
     public partial int CaretOffset { get; set; } = 0;
 
+    public override bool IsCacheable => true;
+    
     public async Task<bool> LoadContentAsync()
     {
         if (string.IsNullOrEmpty(File.Path))
