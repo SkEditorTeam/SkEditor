@@ -42,6 +42,8 @@ if (-not $SkipBuild) {
     Write-Step "Building for $Arch..."
     Push-Location $ProjectDir
     dotnet publish -c Release -r $Arch `
+        --source https://api.nuget.org/v3/index.json `
+	    -p:PublishAot=false `
         -p:PublishSingleFile=true `
         -p:PublishReadyToRun=true `
         --no-self-contained `
@@ -58,6 +60,7 @@ Assert-Exists $PlistSrc    "Info.plist"
 Assert-Exists $PngSrc      "SkEditor.png"
 
 $MagickAvailable = $null -ne (Get-Command magick -ErrorAction SilentlyContinue)
+$WslAvailable    = $null -ne (Get-Command wsl    -ErrorAction SilentlyContinue)
 
 Write-Step "converting png to icns"
 
