@@ -35,10 +35,10 @@ public class LegacyConfigMigrator(IConfigService config)
         OldAppConfig? oldAppConfig =
             JsonSerializer.Deserialize<OldAppConfig>(json, OldAppJsonContext.Default.OldAppConfig);
 
-        var appSettings = config.GetConfig<AppSettings>();
-        var stateConfig = config.GetConfig<StateConfig>();
-        var experimentsConfig = config.GetConfig<ExperimentsConfig>();
-        var secretsConfig = config.GetConfig<SecretsConfig>();
+        AppSettings? appSettings = config.GetConfig<AppSettings>();
+        StateConfig? stateConfig = config.GetConfig<StateConfig>();
+        ExperimentsConfig? experimentsConfig = config.GetConfig<ExperimentsConfig>();
+        SecretsConfig? secretsConfig = config.GetConfig<SecretsConfig>();
 
         if (appSettings == null || stateConfig == null || experimentsConfig == null || secretsConfig == null)
         {

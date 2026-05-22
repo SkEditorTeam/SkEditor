@@ -19,9 +19,9 @@ namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewModel, IRecipient<OpenExplorerFolderMessage>
 {
     private readonly IFilePickerService _filePicker;
-    private readonly IRecentFileService _recents;
     private readonly IMessenger _messenger;
     private readonly INotificationService _notifications;
+    private readonly IRecentFileService _recents;
 
     public ExplorerViewModel(FileTreeViewModel fileTree,
         IFilePickerService filePicker,

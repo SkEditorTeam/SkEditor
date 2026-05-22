@@ -8,12 +8,11 @@ namespace SkEditor.Features;
 
 public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
 {
-    private FileTab? _tab;
-    private CancellationTokenSource? _cts;
-
     private readonly TimeSpan _debounceDelay = TimeSpan.FromSeconds(1);
     private readonly TimeSpan _maxDelay = TimeSpan.FromSeconds(10);
+    private CancellationTokenSource? _cts;
     private DateTime _lastChangeAt = DateTime.MinValue;
+    private FileTab? _tab;
 
     public bool CanAttach(FileTab tab)
     {

@@ -19,10 +19,13 @@ namespace SkEditor.Features;
 
 public class TextMateFeature(INotificationService notifications) : IEditorFeature
 {
-    private IRegistryOptions _registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
     private TextMate.Installation? _installation;
+    private IRegistryOptions _registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
 
-    public bool CanAttach(FileTab tab) => true;
+    public bool CanAttach(FileTab tab)
+    {
+        return true;
+    }
 
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
@@ -33,7 +36,7 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
         if (extension is null or ".sk")
         {
             _registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
-            
+
             _installation.SetGrammar("source.sk");
             _installation.SetTheme(_registryOptions.GetTheme("dark_skript"));
         }
@@ -50,7 +53,7 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
         }
 
         editor.TextArea.AddHandler(InputElement.KeyDownEvent, OnEditorPreviewKeyDown, RoutingStrategies.Tunnel,
-            handledEventsToo: true);
+            true);
     }
 
     public void OnViewDetached(FileTab tab, TextEditor editor)
@@ -85,8 +88,8 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme) : IRegistryOptions
             return _defaultRegistry.GetGrammar(scopeName);
         }
 
-        using var stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/skript.tmLanguage.json"));
-        using var reader = new StreamReader(stream);
+        using Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/skript.tmLanguage.json"));
+        using StreamReader reader = new(stream);
         return GrammarReader.ReadGrammarSync(reader);
     }
 
@@ -97,12 +100,23 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme) : IRegistryOptions
             return _defaultRegistry.GetTheme(scopeName);
         }
 
-        using var stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/dark_skript.json"));
-        using var reader = new StreamReader(stream);
+        using Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/dark_skript.json"));
+        using StreamReader reader = new(stream);
         return ThemeReader.ReadThemeSync(reader);
     }
 
-    public IRawTheme GetDefaultTheme() => _defaultRegistry.GetDefaultTheme();
-    public ICollection<string> GetInjections(string scopeName) => _defaultRegistry.GetInjections(scopeName);
-    public IRawTheme LoadTheme(ThemeName name) => _defaultRegistry.LoadTheme(name);
+    public IRawTheme GetDefaultTheme()
+    {
+        return _defaultRegistry.GetDefaultTheme();
+    }
+
+    public ICollection<string> GetInjections(string scopeName)
+    {
+        return _defaultRegistry.GetInjections(scopeName);
+    }
+
+    public IRawTheme LoadTheme(ThemeName name)
+    {
+        return _defaultRegistry.LoadTheme(name);
+    }
 }

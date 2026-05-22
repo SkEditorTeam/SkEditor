@@ -20,8 +20,8 @@ public class LocalFile(string? path = null, string? name = null)
             FileMode.Open,
             FileAccess.Read,
             FileShare.ReadWrite,
-            bufferSize: 4096,
-            options: FileOptions.Asynchronous | FileOptions.SequentialScan
+            4096,
+            FileOptions.Asynchronous | FileOptions.SequentialScan
         );
 
         return ValueTask.FromResult(stream);
@@ -49,8 +49,8 @@ public class LocalFile(string? path = null, string? name = null)
 
         try
         {
-            await using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write,
-                             FileShare.None, bufferSize: 4096, options: FileOptions.Asynchronous))
+            await using (FileStream fileStream = new(tempFilePath, FileMode.Create, FileAccess.Write,
+                             FileShare.None, 4096, FileOptions.Asynchronous))
             {
                 await stream.CopyToAsync(fileStream, token);
                 await fileStream.FlushAsync(token);

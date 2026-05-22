@@ -3,7 +3,7 @@
 namespace SkEditor.Models.UI;
 
 /// <summary>
-/// Represents an icon that can be either a symbol or a path icon (represented by a string resource name)
+///     Represents an icon that can be either a symbol or a path icon (represented by a string resource name)
 /// </summary>
 public readonly record struct StandardIcon
 {

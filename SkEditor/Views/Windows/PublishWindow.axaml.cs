@@ -5,13 +5,7 @@ namespace SkEditor.Views.Windows;
 
 public partial class PublishWindow : FAAppWindow
 {
-    public PublishWindow()
-    {
-        InitializeComponent();
-    }
+    public PublishWindow() => InitializeComponent();
 
-    public PublishWindow(PublishWindowViewModel viewModel) : this()
-    {
-        DataContext = viewModel;
-    }
+    public PublishWindow(PublishWindowViewModel viewModel) : this() => DataContext = viewModel;
 }

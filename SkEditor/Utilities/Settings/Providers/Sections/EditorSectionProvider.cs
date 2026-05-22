@@ -93,7 +93,7 @@ public class EditorSectionProvider(
                     .Create(TranslationKey.SettingsEditorSmartAutoPairing)
                     .WithDescription(TranslationKey.SettingsEditorSmartAutoPairingDescription)
                     .WithIcon(Symbol.TextQuote)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoPairingEnabled)),
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoPairingEnabled))
 
                 // ToggleSetting
                 //     .Create(TranslationKey.SettingsEditorPasteIndent)

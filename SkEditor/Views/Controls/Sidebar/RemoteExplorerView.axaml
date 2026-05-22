@@ -78,6 +78,6 @@
         </StackPanel>
 
         <projects:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}" Margin="0,12,0,0"
-                               IsVisible="{Binding $parent.((panes:RemoteExplorerViewModel)DataContext)?.SelectedConnection, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                               IsVisible="{Binding $parent.((panes:RemoteExplorerViewModel)DataContext)?.SelectedConnection, Converter={x:Static ObjectConverters.IsNotNull}}" />
     </Grid>
 </UserControl>

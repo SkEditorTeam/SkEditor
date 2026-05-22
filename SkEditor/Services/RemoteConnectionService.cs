@@ -163,7 +163,10 @@ public class RemoteConnectionService(
 
         try
         {
-            if (client.IsConnected) client.Disconnect();
+            if (client.IsConnected)
+            {
+                client.Disconnect();
+            }
         }
         catch (Exception ex)
         {

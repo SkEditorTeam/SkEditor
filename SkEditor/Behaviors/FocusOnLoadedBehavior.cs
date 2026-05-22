@@ -31,6 +31,8 @@ public class FocusOnLoadedBehavior : Behavior<Control>
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         if (ShouldFocus)
+        {
             AssociatedObject!.Focus();
+        }
     }
 }

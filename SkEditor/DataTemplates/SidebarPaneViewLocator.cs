@@ -18,7 +18,9 @@ public class SidebarPaneViewLocator : IRecyclingDataTemplate
     public Control? Build(object? data, Control? existing)
     {
         if (data is null)
+        {
             return null;
+        }
 
         if (!_registry.TryGetValue(data.GetType(), out Func<Control>? factory))
         {

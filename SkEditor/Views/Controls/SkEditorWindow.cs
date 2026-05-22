@@ -6,8 +6,6 @@ namespace SkEditor.Views.Controls;
 
 public class SkEditorWindow : FAAppWindow
 {
-    protected override Type StyleKeyOverride => typeof(FAAppWindow);
-
     protected SkEditorWindow()
     {
         Focusable = true;
@@ -24,4 +22,6 @@ public class SkEditorWindow : FAAppWindow
         CanMinimize = false;
         CanResize = false;
     }
+
+    protected override Type StyleKeyOverride => typeof(FAAppWindow);
 }

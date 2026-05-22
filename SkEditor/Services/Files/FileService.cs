@@ -52,7 +52,7 @@ public class FileService(
         {
             recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
         }
-        
+
         FileTab? existingTab = tabs.Tabs.OfType<FileTab>().FirstOrDefault(tab => tab.File.Path == file.Path);
 
         if (existingTab is not null)
@@ -94,6 +94,32 @@ public class FileService(
         }
     }
 
+    public async Task SaveFileAsync()
+    {
+        if (tabs.SelectedTab is FileTab fileTab)
+        {
+            await fileTab.SaveAsync();
+        }
+    }
+
+    public async Task SaveAsFileAsync()
+    {
+        if (tabs.SelectedTab is FileTab fileTab)
+        {
+            await fileTab.SaveAsAsync();
+        }
+    }
+
+    public async Task SaveAllAsync()
+    {
+        IEnumerable<FileTab> fileTabs = tabs.Tabs.OfType<FileTab>();
+
+        foreach (FileTab fileTab in fileTabs)
+        {
+            await fileTab.SaveAsync();
+        }
+    }
+
     private async Task<bool> LoadAndReadFileAsync(FileTab fileTab)
     {
         try
@@ -123,39 +149,13 @@ public class FileService(
         }
     }
 
-    public async Task SaveFileAsync()
-    {
-        if (tabs.SelectedTab is FileTab fileTab)
-        {
-            await fileTab.SaveAsync();
-        }
-    }
-
-    public async Task SaveAsFileAsync()
-    {
-        if (tabs.SelectedTab is FileTab fileTab)
-        {
-            await fileTab.SaveAsAsync();
-        }
-    }
-
-    public async Task SaveAllAsync()
-    {
-        IEnumerable<FileTab> fileTabs = tabs.Tabs.OfType<FileTab>();
-
-        foreach (FileTab fileTab in fileTabs)
-        {
-            await fileTab.SaveAsync();
-        }
-    }
-
     private int GetNewFileNumber()
     {
         string template = translation.Get(TranslationKey.NewFileNameFormat);
         string pattern = Regex.Escape(template).Replace(@"\{0}", @"(\d+)");
         Regex regex = new(pattern);
 
-        var existingNumbers = tabs.Tabs
+        HashSet<int> existingNumbers = tabs.Tabs
             .Select(tab => regex.Match(tab.Header.Value))
             .Where(m => m.Success)
             .Select(m => int.Parse(m.Groups[1].Value))

@@ -123,9 +123,10 @@ public class Dialog
         Elements.AddRange(elements);
         return this;
     }
-    
+
     /// <summary>
-    ///     Disallows the user from ignoring the dialog by pressing the Esc key. When this method is called, pressing the Esc key
+    ///     Disallows the user from ignoring the dialog by pressing the Esc key. When this method is called, pressing the Esc
+    ///     key
     ///     will not close the dialog.
     /// </summary>
     /// <returns>The dialog instance with the updated AllowIgnore property.</returns>

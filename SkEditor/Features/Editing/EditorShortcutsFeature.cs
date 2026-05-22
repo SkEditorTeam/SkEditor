@@ -80,7 +80,9 @@ public class EditorShortcutsFeature : IEditorFeature
     private void DeletePreviousWord()
     {
         if (_tab?.Document is not { } doc || _editor is not { } editor)
+        {
             return;
+        }
 
         int caretOffset = editor.CaretOffset;
         DocumentLine currentLine = doc.GetLineByOffset(caretOffset);
@@ -103,7 +105,9 @@ public class EditorShortcutsFeature : IEditorFeature
             doc, caretOffset, LogicalDirection.Backward, CaretPositioningMode.WordStartOrSymbol);
 
         if (wordStart >= 0)
+        {
             doc.Remove(wordStart, caretOffset - wordStart);
+        }
     }
 
     private static Action FromCommand(ICommand command)
@@ -120,9 +124,11 @@ public class EditorShortcutsFeature : IEditorFeature
     private void OnEditorPreviewKeyDown(object? sender, KeyEventArgs e)
     {
         if (e.Key is Key.LeftCtrl or Key.RightCtrl or Key.LeftShift or Key.RightShift or Key.LeftAlt or Key.RightAlt)
+        {
             return;
+        }
 
-        var exactGesture = new KeyGesture(e.Key, e.KeyModifiers);
+        KeyGesture exactGesture = new(e.Key, e.KeyModifiers);
 
         if (_editor == null || _tab == null)
         {
@@ -139,7 +145,7 @@ public class EditorShortcutsFeature : IEditorFeature
             }
             else if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
             {
-                var strippedGesture = new KeyGesture(e.Key, e.KeyModifiers & ~KeyModifiers.Control);
+                KeyGesture strippedGesture = new(e.Key, e.KeyModifiers & ~KeyModifiers.Control);
                 (KeyGesture _pendingChordPrefix, KeyGesture strippedGesture) strippedChord =
                     (_pendingChordPrefix, strippedGesture);
 

@@ -5,10 +5,7 @@ namespace SkEditor.Views.Windows;
 
 public partial class GoToLineWindow : SkEditorWindow
 {
-    public GoToLineWindow()
-    {
-        InitializeComponent();
-    }
+    public GoToLineWindow() => InitializeComponent();
 
     public GoToLineWindow(GoToLineWindowViewModel viewModel) : this()
     {

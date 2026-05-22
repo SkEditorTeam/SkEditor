@@ -27,13 +27,13 @@ public class ColorBoxControl : Control
         DocumentOffset = documentOffset;
         DocumentLength = documentLength;
 
-        this.Cursor = new Cursor(StandardCursorType.Hand);
-        this.Margin = new Thickness(2, 0, 2, 0);
+        Cursor = new Cursor(StandardCursorType.Hand);
+        Margin = new Thickness(2, 0, 2, 0);
     }
 
     public Color Color { get; }
     public bool IsPrefixed { get; }
-    
+
     public int DocumentOffset { get; }
     public int DocumentLength { get; }
     public TextView TextView { get; }

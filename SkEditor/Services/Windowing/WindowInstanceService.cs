@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Serilog;
-using SkEditor.Utilities;
 
 namespace SkEditor.Services.Windowing;
 

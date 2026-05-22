@@ -20,9 +20,13 @@ public class SortedObservableCollection<T>(IComparer<T>? comparer = null) : Obse
         {
             int mid = (lo + hi) / 2;
             if (_comparer.Compare(Items[mid], item) <= 0)
+            {
                 lo = mid + 1;
+            }
             else
+            {
                 hi = mid;
+            }
         }
 
         return lo;

@@ -18,11 +18,15 @@ public class ConfigService(IEnumerable<IConfig> configs)
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor", "v3.0");
     }
 
-    public async Task LoadAllConfigsAsync() =>
+    public async Task LoadAllConfigsAsync()
+    {
         await Task.WhenAll(_configs.Select(c => c.Load()));
+    }
 
-    public async Task SaveAllConfigsAsync() =>
+    public async Task SaveAllConfigsAsync()
+    {
         await Task.WhenAll(_configs.Select(c => c.Save()));
+    }
 
     public async Task SaveAllConfigsImmediateAsync()
     {
@@ -32,7 +36,9 @@ public class ConfigService(IEnumerable<IConfig> configs)
     public void AddConfig<T>(T config) where T : IConfig
     {
         if (_configs.Any(c => c.GetType() == typeof(T)))
+        {
             throw new InvalidOperationException($"Config {typeof(T).Name} already exists!");
+        }
 
         _configs.Add(config);
     }

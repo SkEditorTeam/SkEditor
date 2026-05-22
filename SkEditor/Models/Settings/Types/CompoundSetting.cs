@@ -12,7 +12,10 @@ public class CompoundSetting(TranslatableString name) : SettingElement<CompoundS
 
     public override double Width => Children.Count == 0 ? base.Width : Children.Max(c => c.Width);
 
-    public static CompoundSetting Create(TranslatableString name) => new(name);
+    public static CompoundSetting Create(TranslatableString name)
+    {
+        return new CompoundSetting(name);
+    }
 
     public CompoundSetting WithChild(SettingElement child)
     {

@@ -31,7 +31,8 @@ public abstract partial class Tab(TranslatableString header, Symbol? icon = null
     [ObservableProperty]
     public partial bool IsSaved { get; set; } = true;
 
-    [ObservableProperty] public partial bool IsLoading { get; set; } = false;
+    [ObservableProperty]
+    public partial bool IsLoading { get; set; } = false;
 
     /// <summary>
     ///     Command that is executed when the user attempts to close the tab.
@@ -43,7 +44,7 @@ public abstract partial class Tab(TranslatableString header, Symbol? icon = null
     ///     If true, the content will not get recreated when the user switches back to the tab.
     /// </summary>
     public virtual bool IsCacheable => false;
-    
+
     /// <summary>
     ///     Event that is raised when the tab requests to be closed.
     /// </summary>
@@ -52,5 +53,8 @@ public abstract partial class Tab(TranslatableString header, Symbol? icon = null
     /// <summary>
     ///     Raises the <see cref="CloseRequested" /> event to signal that the tab should be closed.
     /// </summary>
-    protected void RequestClose() => CloseRequested?.Invoke(this, EventArgs.Empty);
+    protected void RequestClose()
+    {
+        CloseRequested?.Invoke(this, EventArgs.Empty);
+    }
 }

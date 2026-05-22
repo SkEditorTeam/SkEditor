@@ -43,7 +43,7 @@ public class WelcomeService : IWelcomeService
     public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
 
     public ObservableCollection<WelcomeScreenSection> WelcomeSections { get; } = [];
-    
+
     private void BuildSections()
     {
         WelcomeScreenSection gettingStarted = new(

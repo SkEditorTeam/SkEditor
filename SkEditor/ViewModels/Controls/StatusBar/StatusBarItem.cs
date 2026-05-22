@@ -9,6 +9,12 @@ namespace SkEditor.ViewModels.Controls;
 
 public partial class StatusBarItem : ObservableObject
 {
+    public enum ItemAlignment
+    {
+        Left,
+        Right
+    }
+
     [ObservableProperty]
     public partial TranslatableString? Text { get; set; }
 
@@ -20,12 +26,6 @@ public partial class StatusBarItem : ObservableObject
 
     [ObservableProperty]
     public partial bool IsVisible { get; set; } = true;
-
-    public enum ItemAlignment
-    {
-        Left,
-        Right
-    }
 
     public ItemAlignment Alignment { get; private set; } = ItemAlignment.Right;
 

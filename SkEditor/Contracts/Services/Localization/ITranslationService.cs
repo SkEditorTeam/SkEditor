@@ -9,7 +9,7 @@ public interface ITranslationService
     /// <summary>
     ///     The folder where language files are stored.
     /// </summary>
-    public string LanguagesFolder { get; }
+    string LanguagesFolder { get; }
 
     /// <summary>
     ///     Event triggered when the application's language is changed. The event handler receives the new language as a
@@ -23,9 +23,9 @@ public interface ITranslationService
     /// <param name="key">The translation key.</param>
     /// <param name="parameters">Optional parameters to format the translated string.</param>
     /// <returns>The translated and formatted string.</returns>
-    public string Get(TranslationKey key, params string?[] parameters);
+    string Get(TranslationKey key, params string?[] parameters);
 
-    public TranslatableString GetObservable(TranslationKey key);
+    TranslatableString GetObservable(TranslationKey key);
     TranslatableString GetObservable(TranslationKey key, params object[]? parameters);
 
     /// <summary>

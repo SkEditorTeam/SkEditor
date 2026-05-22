@@ -14,7 +14,7 @@ public interface IRemoteConnectionService
 
     Task<SftpClient> GetOrConnectSftpClientAsync(RemoteConnection connection,
         CancellationToken cancellationToken = default);
-    
+
     SftpClient? GetSftpClient(RemoteConnection connection);
 
     void Disconnect(RemoteConnection connection);

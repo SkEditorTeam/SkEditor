@@ -11,8 +11,8 @@ namespace SkEditor.Utilities.StatusBar;
 
 public class EditorInfoStatusBarProvider : IStatusBarProvider
 {
-    private readonly ITabService _tabService;
     private readonly StatusBarItem _cursorItem;
+    private readonly ITabService _tabService;
 
     private Tab? _currentTab;
 
@@ -29,6 +29,11 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider
         UpdateState();
     }
 
+    public IEnumerable<StatusBarItem> GetItems()
+    {
+        yield return _cursorItem;
+    }
+
     private void OnTabChanged(Tab? tab)
     {
         _currentTab?.PropertyChanged -= OnTabPropertyChanged;
@@ -37,11 +42,6 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider
         tab?.PropertyChanged += OnTabPropertyChanged;
 
         UpdateState();
-    }
-
-    public IEnumerable<StatusBarItem> GetItems()
-    {
-        yield return _cursorItem;
     }
 
     private void UpdateState()

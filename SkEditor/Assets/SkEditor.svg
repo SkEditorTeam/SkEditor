@@ -1,40 +1,40 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
     <mask id="mask0_16_2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
         <path d="M497.697 221.471L290.528 14.3021C271.459 -4.76736 240.541 -4.76736 221.472 14.3021L14.3021 221.471C-4.76735 240.542 -4.76735 271.459 14.3021 290.528L221.472 497.698C240.541 516.767 271.459 516.767 290.528 497.698L497.697 290.528C516.768 271.459 516.768 240.542 497.697 221.471Z"
-              fill="white"/>
+              fill="white" />
     </mask>
     <g mask="url(#mask0_16_2)">
         <path d="M325.057 48.8304L256 -20.2262L186.943 48.8304L256 117.887L325.057 48.8304Z" fill="#1F1F1F"
-              stroke="#1F1F1F" stroke-width="3"/>
+              stroke="#1F1F1F" stroke-width="3" />
         <path d="M394.112 117.887L325.056 48.8304L255.999 117.887L325.056 186.944L394.112 117.887Z" fill="#2A2A2A"
-              stroke="#2A2A2A" stroke-width="3"/>
+              stroke="#2A2A2A" stroke-width="3" />
         <path d="M463.169 186.944L394.112 117.887L325.056 186.944L394.112 255.999L463.169 186.944Z" fill="#1DCCE7"
-              stroke="#1DCCE7" stroke-width="3"/>
+              stroke="#1DCCE7" stroke-width="3" />
         <path d="M532.226 256L463.169 186.944L394.112 256L463.169 325.056L532.226 256Z" fill="#14B1E4" stroke="#14B1E4"
-              stroke-width="3"/>
+              stroke-width="3" />
         <path d="M256 117.887L186.943 48.8304L117.886 117.887L186.943 186.944L256 117.887Z" fill="#2A2A2A"
-              stroke="#2A2A2A" stroke-width="3"/>
+              stroke="#2A2A2A" stroke-width="3" />
         <path d="M325.057 186.944L256 117.887L186.943 186.944L256 255.999L325.057 186.944Z" fill="#333333"
-              stroke="#333333" stroke-width="3"/>
+              stroke="#333333" stroke-width="3" />
         <path d="M394.112 256L325.056 186.944L255.999 256L325.056 325.056L394.112 256Z" fill="#25E4E2" stroke="#25E4E2"
-              stroke-width="3"/>
+              stroke-width="3" />
         <path d="M463.169 325.057L394.112 256L325.056 325.057L394.112 394.113L463.169 325.057Z" fill="#1DCCE7"
-              stroke="#1DCCE7" stroke-width="3"/>
+              stroke="#1DCCE7" stroke-width="3" />
         <path d="M186.943 186.944L117.886 117.887L48.8296 186.944L117.886 255.999L186.943 186.944Z" fill="#5DCE4A"
-              stroke="#5DCE4A" stroke-width="3"/>
+              stroke="#5DCE4A" stroke-width="3" />
         <path d="M256 256L186.943 186.944L117.886 256L186.943 325.056L256 256Z" fill="#81E45B" stroke="#81E45B"
-              stroke-width="3"/>
+              stroke-width="3" />
         <path d="M325.057 325.057L256 256L186.943 325.057L256 394.113L325.057 325.057Z" fill="#333333" stroke="#333333"
-              stroke-width="3"/>
+              stroke-width="3" />
         <path d="M394.112 394.113L325.056 325.056L255.999 394.113L325.056 463.169L394.112 394.113Z" fill="#2A2A2A"
-              stroke="#2A2A2A" stroke-width="3"/>
+              stroke="#2A2A2A" stroke-width="3" />
         <path d="M117.886 256L48.83 186.944L-20.2266 256L48.83 325.056L117.886 256Z" fill="#3CB636" stroke="#3CB636"
-              stroke-width="3"/>
+              stroke-width="3" />
         <path d="M186.943 325.057L117.886 256L48.8296 325.057L117.886 394.113L186.943 325.057Z" fill="#5DCE4A"
-              stroke="#5DCE4A" stroke-width="3"/>
+              stroke="#5DCE4A" stroke-width="3" />
         <path d="M256 394.113L186.943 325.056L117.886 394.113L186.943 463.169L256 394.113Z" fill="#2A2A2A"
-              stroke="#2A2A2A" stroke-width="3"/>
+              stroke="#2A2A2A" stroke-width="3" />
         <path d="M325.057 463.17L256 394.113L186.943 463.17L256 532.226L325.057 463.17Z" fill="#1F1F1F" stroke="#1F1F1F"
-              stroke-width="3"/>
+              stroke-width="3" />
     </g>
 </svg>

@@ -76,7 +76,10 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
     private static IStorageProvider? GetStorageProvider()
     {
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
             return TopLevel.GetTopLevel(desktop.MainWindow)?.StorageProvider;
+        }
+
         return null;
     }
 }

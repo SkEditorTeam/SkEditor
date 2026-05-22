@@ -17,7 +17,7 @@
         <Style Selector="TextBlock">
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="TextTrimming" Value="CharacterEllipsis" />
-            
+
             <Style Selector="^#PlaceholderTextBlock">
                 <Setter Property="TextWrapping" Value="NoWrap" />
             </Style>

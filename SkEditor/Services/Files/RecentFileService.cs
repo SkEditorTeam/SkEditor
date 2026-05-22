@@ -15,9 +15,9 @@ namespace SkEditor.Services.Files;
 public class RecentFileService : IRecentFileService
 {
     private const int MaxItems = 20;
+    private readonly ILogService _logs;
     private readonly ObservableCollection<WelcomeScreenRecentItem> _recentItems = [];
     private readonly string _savePath;
-    private readonly ILogService _logs;
 
     public RecentFileService(IConfigService configs, ILogService logs)
     {

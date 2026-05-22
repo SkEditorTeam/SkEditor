@@ -27,7 +27,7 @@
         <key>CFBundleVersion</key>
         <string>1</string>
         <key>CSResourcesFileMapped</key>
-        <true/>
+        <true />
         <key>LSMinimumSystemVersion</key>
         <string>10.14</string>
         <key>NSPrincipalClass</key>

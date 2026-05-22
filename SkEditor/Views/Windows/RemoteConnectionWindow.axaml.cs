@@ -12,10 +12,7 @@ namespace SkEditor.Views.Windows;
 
 public partial class RemoteConnectionWindow : SkEditorWindow
 {
-    public RemoteConnectionWindow()
-    {
-        InitializeComponent();
-    }
+    public RemoteConnectionWindow() => InitializeComponent();
 
     public RemoteConnectionWindow(RemoteConnectionViewModel viewModel) : this()
     {

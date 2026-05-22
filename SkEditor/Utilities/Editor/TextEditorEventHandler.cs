@@ -97,7 +97,10 @@ public partial class TextEditorEventHandler
 
         editor.FontSize += value;
 
-        if (editor.FontSize < 5) editor.FontSize = 5;
+        if (editor.FontSize < 5)
+        {
+            editor.FontSize = 5;
+        }
 
         double lineHeight = editor.TextArea.TextView.DefaultLineHeight;
 

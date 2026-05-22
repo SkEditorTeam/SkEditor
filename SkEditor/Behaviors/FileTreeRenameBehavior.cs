@@ -78,7 +78,7 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
                 break;
         }
     }
-    
+
     private void OnArrowKeyDown(object? sender, KeyEventArgs e)
     {
         e.Handled = e.Key switch

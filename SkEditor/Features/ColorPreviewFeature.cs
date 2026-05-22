@@ -34,11 +34,11 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
 
     private static void ShowColorFlyout(ColorBoxControl control)
     {
-        var topLevel = TopLevel.GetTopLevel(control)!;
+        TopLevel topLevel = TopLevel.GetTopLevel(control)!;
 
         Point topLeft = control.TranslatePoint(new Point(0, 0), topLevel) ?? new Point();
 
-        var flyout = new Flyout
+        Flyout flyout = new()
         {
             Placement = PlacementMode.Custom,
             CustomPopupPlacementCallback = placement =>
@@ -49,7 +49,7 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
                     topLeft.X,
                     topLeft.Y - offset,
                     control.Bounds.Width,
-                    control.Bounds.Height + offset * 2);
+                    control.Bounds.Height + (offset * 2));
 
                 placement.Anchor = PopupAnchor.BottomLeft;
                 placement.Gravity = PopupGravity.BottomRight;

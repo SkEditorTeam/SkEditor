@@ -10,7 +10,7 @@ namespace SkEditor.Services.Windowing;
 public class WindowStateService(StateConfig stateConfig, WindowRegistry windowRegistry)
 {
     private WindowState _preFullScreenState = WindowState.Normal;
-    
+
     public void RecoverMainWindowState(MainWindow mainWindow)
     {
         if (stateConfig is { MainWindowWidth: > 0, MainWindowHeight: > 0 })

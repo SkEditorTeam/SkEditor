@@ -103,8 +103,7 @@
                                                       HorizontalContentAlignment="Stretch"
                                                       VerticalContentAlignment="Stretch"
                                                       HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Stretch"
-                                                      Grid.Row="2">
+                                                      VerticalAlignment="Stretch">
                                         <ContentPresenter.Styles>
                                             <Style Selector="TextBlock">
                                                 <Setter Property="TextWrapping" Value="Wrap" />
@@ -113,11 +112,9 @@
                                     </ContentPresenter>
 
                                     <ProgressBar Name="ProgressBar"
-                                                 Grid.Row="3"
                                                  IsVisible="False" />
 
-                                    <ItemsControl Name="CommandsHost"
-                                                  Grid.Row="4">
+                                    <ItemsControl Name="CommandsHost">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Spacing="2" />
@@ -126,7 +123,6 @@
                                     </ItemsControl>
 
                                     <StackPanel Name="MoreDetailsPanel"
-                                                Grid.Row="5"
                                                 IsVisible="False">
                                         <Button Classes="TaskDialog_MoreDetails"
                                                 Theme="{StaticResource TaskDialogMoreDetailsButton}"

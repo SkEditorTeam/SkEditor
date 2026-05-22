@@ -15,7 +15,10 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
     protected override void OnAttached()
     {
         base.OnAttached();
-        if (AssociatedObject is not { } textEditor) return;
+        if (AssociatedObject is not { } textEditor)
+        {
+            return;
+        }
 
         textEditor.PropertyChanged += OnEditorPropertyChanged;
 
@@ -28,7 +31,10 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
     protected override void OnDetaching()
     {
         base.OnDetaching();
-        if (AssociatedObject is not { } textEditor) return;
+        if (AssociatedObject is not { } textEditor)
+        {
+            return;
+        }
 
         textEditor.PropertyChanged -= OnEditorPropertyChanged;
         UpdateTabBinding(_currentTab, null);
@@ -44,9 +50,12 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
 
     private void UpdateTabBinding(FileTab? oldTab, FileTab? newTab)
     {
-        if (ReferenceEquals(oldTab, newTab)) return;
+        if (ReferenceEquals(oldTab, newTab))
+        {
+            return;
+        }
 
-        var featureService = App.Services.GetRequiredService<IFileFeatureService>();
+        IFileFeatureService featureService = App.Services.GetRequiredService<IFileFeatureService>();
 
         if (oldTab != null && AssociatedObject != null)
         {
@@ -66,6 +75,5 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
                 () => AssociatedObject.TextArea.Focus(),
                 DispatcherPriority.Loaded);
         }
-
     }
 }

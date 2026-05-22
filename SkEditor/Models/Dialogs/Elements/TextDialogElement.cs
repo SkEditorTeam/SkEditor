@@ -11,10 +11,11 @@ public partial class TextDialogElement : DialogElement
 
     [ObservableProperty]
     public partial string? ErrorMessage { get; set; }
+
     public string? PlaceholderText { get; init; }
-    
+
     public Func<string, string?>? ValidationFunc { get; init; }
-    
+
     public bool Validate()
     {
         ErrorMessage = ValidationFunc?.Invoke(Text);

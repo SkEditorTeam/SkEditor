@@ -4,8 +4,6 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
-using SkEditor.Services.Localization;
-using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Converters;
 

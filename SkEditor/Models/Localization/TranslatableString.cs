@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.Contracts.Services.Localization;
 using SkEditor.Services.Localization;
 
 namespace SkEditor.Utilities.Localization;
@@ -78,7 +79,7 @@ public partial class TranslatableString : ObservableObject, IDisposable
                     : string.Format(field, _parameters.Select(p => p?.ToString() ?? string.Empty).ToArray());
             }
 
-            var translationService = TranslationService.Current;
+            ITranslationService translationService = TranslationService.Current;
 
             if (_parameters == null || _parameters.Length == 0)
             {

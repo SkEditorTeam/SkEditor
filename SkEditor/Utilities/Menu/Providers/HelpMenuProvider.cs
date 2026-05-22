@@ -14,7 +14,7 @@ public class HelpMenuProvider(IWindowDialogService windowDialogs) : IMenuProvide
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderAppWiki, Symbol.BookQuestionMark)
             .WithCommand(() => LinkOpener.OpenLink("https://docs.skeditor.dev/"))
             .AddTo(helpMenu);
-        
+
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCommunitySupport, Symbol.ChatHelp)
             .WithCommand(() => LinkOpener.OpenLink("https://discord.skeditor.dev/"))
             .AddTo(helpMenu);

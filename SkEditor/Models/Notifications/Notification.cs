@@ -5,12 +5,11 @@ namespace SkEditor.Models.Notifications;
 
 public class Notification
 {
+    private Notification(TranslatableString title) => Title = title;
     public TranslatableString Title { get; }
     public TranslatableString? Message { get; private set; }
     public NotificationType Type { get; private set; } = NotificationType.Information;
     public TimeSpan? Duration { get; private set; }
-
-    private Notification(TranslatableString title) => Title = title;
 
     public static Notification Create(TranslatableString title, TranslatableString? message = null,
         NotificationType type = NotificationType.Information, TimeSpan? duration = null)

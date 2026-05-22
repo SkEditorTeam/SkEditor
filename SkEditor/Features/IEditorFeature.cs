@@ -10,8 +10,13 @@ public interface IEditorFeature
         return true;
     }
 
-    void Attach(FileTab tab) {}
-    void Detach(FileTab tab) {}
+    void Attach(FileTab tab)
+    {
+    }
+
+    void Detach(FileTab tab)
+    {
+    }
 
     void OnViewAttached(FileTab tab, TextEditor editor)
     {

@@ -10,7 +10,7 @@ public interface IFilePickerService
     /// <param name="allowMultiple">Whether to allow selecting multiple files.</param>
     /// <returns>The file paths of the selected files, or null if the operation was cancelled.</returns>
     Task<string[]?> PickFilesAsync(bool allowMultiple = true);
-    
+
     /// <summary>
     ///     Opens a folder picker dialog and allows the user to select one or more folders.
     /// </summary>

@@ -16,7 +16,11 @@ public class TabService(IFileFeatureService features) : ITabService
         get;
         set
         {
-            if (Equals(field, value)) return;
+            if (Equals(field, value))
+            {
+                return;
+            }
+
             field = value;
             SelectedTabChanged?.Invoke(value);
         }
@@ -27,7 +31,11 @@ public class TabService(IFileFeatureService features) : ITabService
 
     public void SwitchTab(int index)
     {
-        if (index < 0 || index >= Tabs.Count) return;
+        if (index < 0 || index >= Tabs.Count)
+        {
+            return;
+        }
+
         SelectedTab = Tabs[index];
     }
 
@@ -50,7 +58,9 @@ public class TabService(IFileFeatureService features) : ITabService
         Tabs.Remove(tab);
 
         if (SelectedTab == tab)
+        {
             SelectedTab = Tabs.LastOrDefault();
+        }
 
         if (tab is FileTab fileTab)
         {
@@ -73,6 +83,9 @@ public class TabService(IFileFeatureService features) : ITabService
 
     private void OnTabCloseRequested(object? sender, EventArgs e)
     {
-        if (sender is Tab tab) CloseTab(tab);
+        if (sender is Tab tab)
+        {
+            CloseTab(tab);
+        }
     }
 }

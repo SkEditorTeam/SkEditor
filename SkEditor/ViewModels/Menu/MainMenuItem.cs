@@ -12,7 +12,7 @@ public partial class MainMenuItem : ObservableObject
 {
     [ObservableProperty]
     public partial bool IsVisible { get; set; } = true;
-    
+
     public TranslatableString? Header { get; private set; }
     public Symbol? IconSymbol { get; private set; }
     public IRelayCommand? Command { get; private set; }

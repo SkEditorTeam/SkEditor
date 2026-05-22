@@ -36,25 +36,36 @@ public partial class FileTreeViewModel
             { ProjectAction.CopyRelativePath, CopyRelativePathCommand },
             { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
             { ProjectAction.Disconnect, DisconnectCommand },
-            { ProjectAction.Close, CloseLocalCommand },
+            { ProjectAction.Close, CloseLocalCommand }
         };
     }
 
     [RelayCommand]
     private async Task NewFile()
     {
-        if (SelectedNodes.Count != 1) return;
+        if (SelectedNodes.Count != 1)
+        {
+            return;
+        }
+
         FileSystemNode node = SelectedNodes[0];
 
         if (node is not BaseFolderNode folderNode ||
-            !folderNode.GetSupportedActions().Contains(ProjectAction.NewFile)) return;
+            !folderNode.GetSupportedActions().Contains(ProjectAction.NewFile))
+        {
+            return;
+        }
 
         TextDialogElement inputElement = new()
         {
             PlaceholderText = "Enter file name",
             ValidationFunc = name =>
             {
-                if (string.IsNullOrWhiteSpace(name)) return "Name cannot be empty";
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return "Name cannot be empty";
+                }
+
                 if (name.IndexOfAny(node.InvalidChars) >= 0)
                 {
                     return "Name contains invalid characters";
@@ -84,18 +95,29 @@ public partial class FileTreeViewModel
     [RelayCommand]
     private async Task NewFolder()
     {
-        if (SelectedNodes.Count != 1) return;
+        if (SelectedNodes.Count != 1)
+        {
+            return;
+        }
+
         FileSystemNode node = SelectedNodes[0];
 
         if (node is not BaseFolderNode folderNode ||
-            !folderNode.GetSupportedActions().Contains(ProjectAction.NewFolder)) return;
+            !folderNode.GetSupportedActions().Contains(ProjectAction.NewFolder))
+        {
+            return;
+        }
 
         TextDialogElement inputElement = new()
         {
             PlaceholderText = "Enter folder name",
             ValidationFunc = name =>
             {
-                if (string.IsNullOrWhiteSpace(name)) return "Name cannot be empty";
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return "Name cannot be empty";
+                }
+
                 if (name.IndexOfAny(node.InvalidChars) >= 0)
                 {
                     return "Name contains invalid characters";
@@ -125,7 +147,10 @@ public partial class FileTreeViewModel
     [RelayCommand]
     private void CopyPath()
     {
-        if (SelectedNodes.Count == 0) return;
+        if (SelectedNodes.Count == 0)
+        {
+            return;
+        }
 
         string paths = string.Join("\n", SelectedNodes.Select(n => n.Path));
         _clipboard.CopyTextAsync(paths);
@@ -134,8 +159,15 @@ public partial class FileTreeViewModel
     [RelayCommand]
     private void CopyRelativePath()
     {
-        if (SelectedNodes.Count == 0) return;
-        if (FileSystem?.Root == null) return;
+        if (SelectedNodes.Count == 0)
+        {
+            return;
+        }
+
+        if (FileSystem?.Root == null)
+        {
+            return;
+        }
 
         string basePath = FileSystem.Root.Path;
         string paths = string.Join("\n",
@@ -147,7 +179,11 @@ public partial class FileTreeViewModel
     [RelayCommand]
     private async Task Disconnect()
     {
-        if (SelectedNodes.Count != 1) return;
+        if (SelectedNodes.Count != 1)
+        {
+            return;
+        }
+
         FileSystemNode node = SelectedNodes[0];
 
         if (FileSystem is SftpFileSystem && node.IsRoot)
@@ -159,7 +195,11 @@ public partial class FileTreeViewModel
     [RelayCommand]
     private async Task CloseLocal()
     {
-        if (SelectedNodes.Count != 1) return;
+        if (SelectedNodes.Count != 1)
+        {
+            return;
+        }
+
         FileSystemNode node = SelectedNodes[0];
 
         if (FileSystem is LocalFileSystem && node.IsRoot)
@@ -188,22 +228,34 @@ public partial class FileTreeViewModel
         IsLoading = false;
     }
 
-    private bool CanOpen() => SelectedNodes.All(n => !n.IsRenaming);
+    private bool CanOpen()
+    {
+        return SelectedNodes.All(n => !n.IsRenaming);
+    }
 
     [RelayCommand(CanExecute = nameof(CanOpen))]
     private void Open()
     {
-        foreach (var node in SelectedNodes)
+        foreach (FileSystemNode node in SelectedNodes)
+        {
             node.OpenCommand?.Execute(null);
+        }
     }
 
     [RelayCommand]
     private void Rename()
     {
-        if (SelectedNodes.Count != 1) return;
+        if (SelectedNodes.Count != 1)
+        {
+            return;
+        }
+
         FileSystemNode node = SelectedNodes[0];
 
-        if (!node.GetSupportedActions().Contains(ProjectAction.Rename)) return;
+        if (!node.GetSupportedActions().Contains(ProjectAction.Rename))
+        {
+            return;
+        }
 
         node.IsRenaming = true;
 
@@ -216,7 +268,10 @@ public partial class FileTreeViewModel
             {
                 node.IsRenaming = false;
 
-                if (args.OldName == args.NewName) return;
+                if (args.OldName == args.NewName)
+                {
+                    return;
+                }
 
                 try
                 {
@@ -260,39 +315,54 @@ public partial class FileTreeViewModel
 
         DialogResult result = await _dialogs.ShowDialogAsync(dialog);
 
-        if (result != DialogResult.Ok) return;
+        if (result != DialogResult.Ok)
+        {
+            return;
+        }
 
         List<FileSystemNode> nodesToDelete = SelectedNodes.ToList();
-        foreach (var node in nodesToDelete)
+        foreach (FileSystemNode node in nodesToDelete)
         {
             bool isSuccess = await node.DeleteAsync();
 
-            if (isSuccess) node.OnDeleted();
+            if (isSuccess)
+            {
+                node.OnDeleted();
+            }
         }
     }
 
     [RelayCommand]
     private void ShowInExplorer()
     {
-        foreach (var node in SelectedNodes)
+        foreach (FileSystemNode node in SelectedNodes)
         {
-            if (node.IsDirectory) LinkOpener.OpenFolder(node.Path);
-            else LinkOpener.OpenFolderWithFileSelection(node.Path);
+            if (node.IsDirectory)
+            {
+                LinkOpener.OpenFolder(node.Path);
+            }
+            else
+            {
+                LinkOpener.OpenFolderWithFileSelection(node.Path);
+            }
         }
     }
 
     private void UpdateContextMenuItems()
     {
         ContextMenuItems.Clear();
-        if (SelectedNodes.Count == 0) return;
+        if (SelectedNodes.Count == 0)
+        {
+            return;
+        }
 
-        var actionsTemplate = SelectedNodes.First().GetSupportedActions();
-        var commonActions = SelectedNodes
+        IEnumerable<ProjectAction> actionsTemplate = SelectedNodes.First().GetSupportedActions();
+        HashSet<ProjectAction> commonActions = SelectedNodes
             .Select(n => n.GetSupportedActions().Where(a => a != ProjectAction.Separator))
             .Aggregate((prev, next) => prev.Intersect(next))
             .ToHashSet();
 
-        foreach (var action in actionsTemplate)
+        foreach (ProjectAction action in actionsTemplate)
         {
             if (action == ProjectAction.Separator)
             {
@@ -300,7 +370,10 @@ public partial class FileTreeViewModel
                 continue;
             }
 
-            if (!commonActions.Contains(action)) continue;
+            if (!commonActions.Contains(action))
+            {
+                continue;
+            }
 
             ProjectMenuRegistry.Templates.TryGetValue(action, out MenuTemplate? template);
             if (template == null)
@@ -308,10 +381,13 @@ public partial class FileTreeViewModel
                 continue;
             }
 
-            if (template.AllowOneItemOnly && SelectedNodes.Count > 1) continue;
+            if (template.AllowOneItemOnly && SelectedNodes.Count > 1)
+            {
+                continue;
+            }
 
             _commandMap.TryGetValue(action, out IRelayCommand? command);
-            var item = ContextMenuItem.Item(template.Header)
+            ContextMenuItem item = ContextMenuItem.Item(template.Header)
                 .WithIcon(template.Icon)
                 .WithInputGesture(template.InputGestureText)
                 .WithCommand(command);
@@ -319,7 +395,7 @@ public partial class FileTreeViewModel
             ContextMenuItems.Add(item);
         }
 
-        var cleaned = CleanUpSeparators(ContextMenuItems.ToList());
+        List<ContextMenuItem> cleaned = CleanUpSeparators(ContextMenuItems.ToList());
         ContextMenuItems.Clear();
         ContextMenuItems.AddRange(cleaned);
     }

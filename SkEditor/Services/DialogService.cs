@@ -65,8 +65,8 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
                     }),
                 ItemsSource = dialog.Elements
             };
-            
-            var firstText = dialog.Elements.OfType<TextDialogElement>().FirstOrDefault();
+
+            TextDialogElement? firstText = dialog.Elements.OfType<TextDialogElement>().FirstOrDefault();
             firstText?.AutoFocus = true;
         }
 
@@ -91,7 +91,7 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
 
                 return;
             }
-            
+
             if (DialogResult.Cancel.Equals(args.Result))
             {
                 return;
@@ -105,7 +105,7 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
 
                 args.Cancel = !valid;
             }
-            
+
             if (!args.Cancel)
             {
                 taskDialog.Closing -= OnTaskDialogOnClosing;

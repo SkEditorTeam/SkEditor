@@ -10,10 +10,10 @@ namespace SkEditor.ViewModels.Controls;
 
 public partial class MainMenuViewModel : ObservableObject
 {
+    public MainMenuViewModel(IMenuService menuService) => Items = menuService.GetMainMenuItems();
+
     [ObservableProperty]
     public partial IEnumerable<MainMenuItem> Items { get; set; }
-
-    public MainMenuViewModel(IMenuService menuService) => Items = menuService.GetMainMenuItems();
 
     public void RegisterHotKeys(MainWindow mainWindow)
     {
@@ -24,7 +24,10 @@ public partial class MainMenuViewModel : ObservableObject
     {
         foreach (MainMenuItem item in items)
         {
-            if (!item.RegisterHotKey) continue;
+            if (!item.RegisterHotKey)
+            {
+                continue;
+            }
 
             if (!string.IsNullOrEmpty(item.InputGestureText) && item.Command is not null)
             {

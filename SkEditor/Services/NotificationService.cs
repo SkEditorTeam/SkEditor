@@ -15,22 +15,16 @@ namespace SkEditor.Services;
 
 public class NotificationService : INotificationService, IRecipient<ShowNotificationMessage>
 {
-    private readonly WindowRegistry _windowRegistry;
+    private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(4);
 
     private readonly List<Notification> _history = [];
+    private readonly WindowRegistry _windowRegistry;
 
     public NotificationService(WindowRegistry windowRegistry, IMessenger messenger)
     {
         _windowRegistry = windowRegistry;
 
         messenger.Register(this);
-    }
-
-    private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(4);
-
-    public void Receive(ShowNotificationMessage message)
-    {
-        Show(message.Notification);
     }
 
     public void Show(Notification notification)
@@ -72,5 +66,10 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
     public void RemoveFromHistory(Notification notification)
     {
         _history.Remove(notification);
+    }
+
+    public void Receive(ShowNotificationMessage message)
+    {
+        Show(message.Notification);
     }
 }

@@ -17,7 +17,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial string Version { get; set; } = string.Empty;
 
     /// <summary>
-    ///    Whether this is (likely) the first time the user runs the application. Used to show the tutorial.
+    ///     Whether this is (likely) the first time the user runs the application. Used to show the tutorial.
     /// </summary>
     [ObservableProperty]
     public partial bool IsFirstRun { get; set; } = true;

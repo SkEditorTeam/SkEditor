@@ -81,7 +81,7 @@
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
         <Setter Property="Width"
                 Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=Bounds.Width}" />
-        <Setter Property="FocusAdorner" Value="{x:Null}"/>
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="Template">
             <ControlTemplate x:DataType="types:FileSystemNode">
                 <StackPanel>
