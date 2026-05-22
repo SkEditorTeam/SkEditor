@@ -351,13 +351,16 @@ public partial class FileTreeViewModel
     private void UpdateContextMenuItems()
     {
         ContextMenuItems.Clear();
-        if (SelectedNodes.Count == 0)
+
+        List<FileSystemNode> selectedNodes = SelectedNodes.Where(n => n is not DummyFileNode).ToList();
+
+        if (selectedNodes.Count == 0)
         {
             return;
         }
 
-        IEnumerable<ProjectAction> actionsTemplate = SelectedNodes.First().GetSupportedActions();
-        HashSet<ProjectAction> commonActions = SelectedNodes
+        IEnumerable<ProjectAction> actionsTemplate = selectedNodes.First().GetSupportedActions();
+        HashSet<ProjectAction> commonActions = selectedNodes
             .Select(n => n.GetSupportedActions().Where(a => a != ProjectAction.Separator))
             .Aggregate((prev, next) => prev.Intersect(next))
             .ToHashSet();
@@ -381,7 +384,7 @@ public partial class FileTreeViewModel
                 continue;
             }
 
-            if (template.AllowOneItemOnly && SelectedNodes.Count > 1)
+            if (template.AllowOneItemOnly && selectedNodes.Count > 1)
             {
                 continue;
             }
