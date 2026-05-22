@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet;
+using Renci.SshNet.Common;
 using Renci.SshNet.Sftp;
 using SkEditor.Models.Projects.Types;
 
@@ -34,21 +35,30 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
         List<SftpFolderNode> folders = [];
         List<SftpFileNode> files = [];
 
-        await foreach (ISftpFile file in client.ListDirectoryAsync(Path, CancellationToken.None))
+        try
         {
-            if (file.IsDirectory)
-            {
-                if (file.Name is "." or "..")
-                {
-                    continue;
-                }
+            IAsyncEnumerable<ISftpFile> fileEnumerable = client.ListDirectoryAsync(Path, CancellationToken.None);
 
-                folders.Add(new SftpFolderNode(file.Name, file.FullName, false, client));
-            }
-            else if (file.IsRegularFile)
+            await foreach (ISftpFile file in fileEnumerable)
             {
-                files.Add(new SftpFileNode(file.Name, file.FullName, client));
+                if (file.IsDirectory)
+                {
+                    if (file.Name is "." or "..")
+                    {
+                        continue;
+                    }
+
+                    folders.Add(new SftpFolderNode(file.Name, file.FullName, false, client));
+                }
+                else if (file.IsRegularFile)
+                {
+                    files.Add(new SftpFileNode(file.Name, file.FullName, client));
+                }
             }
+        }
+        catch (SftpPermissionDeniedException)
+        {
+            throw new UnauthorizedAccessException($"You do not have permission to access the folder '{Path}'.");
         }
 
         return folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)

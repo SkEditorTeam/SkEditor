@@ -37,12 +37,19 @@ public abstract partial class BaseFolderNode : FileSystemNode
         IsExpanded = !IsExpanded;
     }
 
+    private bool _ignoreNextExpandedChange;
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
 
         if (e.PropertyName != nameof(IsExpanded))
         {
+            return;
+        }
+
+        if (_ignoreNextExpandedChange)
+        {
+            _ignoreNextExpandedChange = false;
             return;
         }
 
@@ -190,7 +197,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
                 Log.Error("Failed to load children of folder {Path} because it does not exist", Path);
                 return;
             }
-            
+
             IEnumerable<FileSystemNode> nodes = await LoadFilesAndFolders();
 
             foreach (FileSystemNode node in nodes)
@@ -200,6 +207,17 @@ public abstract partial class BaseFolderNode : FileSystemNode
             }
 
             HasLoadedChildren = true;
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
+                Notification
+                    .Create(TranslatableString.FromRawString("Load Failed"))
+                    .WithMessage(TranslatableString.FromRawString("You don't have permission to access this folder"))
+                    .WithType(NotificationType.Error)));
+
+            Log.Error(ex, "Failed to load children of folder {Path} due to unauthorized access", Path);
+            HasLoadedChildren = false;
         }
         catch (Exception ex)
         {
@@ -217,6 +235,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
             IsLoadingChildren = false;
         }
 
+        _ignoreNextExpandedChange = true;
         OnPropertyChanged(nameof(IsExpanded));
     }
 
