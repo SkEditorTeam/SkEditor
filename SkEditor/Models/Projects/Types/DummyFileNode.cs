@@ -13,22 +13,22 @@ public sealed class DummyFileNode() : FileSystemNode("Loading...", "...", false)
 
     public override Task LoadChildrenAsync()
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public override IEnumerable<ProjectAction> GetSupportedActions()
     {
-        throw new NotImplementedException();
+        return [];
     }
 
     public override Task RenameAsync(string newName)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public override Task<bool> DeleteAsync()
     {
-        throw new NotImplementedException();
+        return Task.FromResult(true);
     }
 
     public override void UpdatePath(string newPath)
