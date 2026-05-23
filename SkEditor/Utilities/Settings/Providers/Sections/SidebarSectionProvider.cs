@@ -16,8 +16,8 @@ public class SidebarSectionProvider(AppSettings appSettings) : ISettingsSectionP
             .WithSettings(
             [
                 ToggleSetting
-                    .Create(TranslationKey.SettingsAppearanceProjectSingleFolderClick)
-                    .WithDescription(TranslationKey.SettingsAppearanceProjectSingleFolderClickDescription)
+                    .Create(TranslationKey.SettingsSidebarSingleFolderClick)
+                    .WithDescription(TranslationKey.SettingsSidebarSingleFolderClickDescription)
                     .WithIcon(Symbol.CursorClick)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsProjectSingleClickEnabled))
             ]);

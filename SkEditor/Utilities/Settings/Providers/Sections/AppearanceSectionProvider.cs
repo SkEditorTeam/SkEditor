@@ -110,8 +110,8 @@ public class AppearanceSectionProvider(
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSidebarAnimationEnabled)),
 
                 ToggleSetting
-                    .Create(TranslationKey.SettingsAppearanceProjectSingleFolderClick)
-                    .WithDescription(TranslationKey.SettingsAppearanceProjectSingleFolderClickDescription)
+                    .Create(TranslationKey.SettingsSidebarSingleFolderClick)
+                    .WithDescription(TranslationKey.SettingsSidebarSingleFolderClickDescription)
                     .WithIcon(Symbol.FolderArrowRight)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsProjectSingleClickEnabled))
             ]);
