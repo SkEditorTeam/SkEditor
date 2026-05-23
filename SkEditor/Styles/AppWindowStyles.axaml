@@ -5,7 +5,7 @@
     <ControlTemplate x:Key="AppWindowOnWindowsTemplate" TargetType="{x:Type wnd:FAAppWindow}">
         <VisualLayerManager Name="PART_VisualLayerManager">
             <!-- Because we use the System Border, we don't specify anything like that here.-->
-            <Border Background="{DynamicResource SmallWindowBackgroundColor}"
+            <Border Background="{TemplateBinding Background}"
                     Padding="{TemplateBinding Padding}"
                     Name="RootBorder">
                 <Panel>
