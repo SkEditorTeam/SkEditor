@@ -21,6 +21,7 @@ public class SkEditorWindow : FAAppWindow
         CanMaximize = false;
         CanMinimize = false;
         CanResize = false;
+        ShowAsDialog = true;
     }
 
     protected override Type StyleKeyOverride => typeof(FAAppWindow);
