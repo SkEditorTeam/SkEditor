@@ -7,7 +7,7 @@ using SkEditor.Utilities.Settings.Providers.Choice;
 
 namespace SkEditor.Models.Settings.Types;
 
-public record OptionItem(object Value, string Display);
+public record OptionItem(object Value, TranslatableString Display);
 
 public interface IChoiceSetting
 {

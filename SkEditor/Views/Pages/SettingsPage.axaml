@@ -68,7 +68,7 @@
         <DataTemplate DataType="{x:Type types:IChoiceSetting}">
             <ComboBox ItemsSource="{Binding Options}"
                       SelectedItem="{Binding SelectedItem}"
-                      DisplayMemberBinding="{Binding Display}" />
+                      DisplayMemberBinding="{Binding Display.Value}" />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type types:INumberSetting}">

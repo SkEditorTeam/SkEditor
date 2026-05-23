@@ -8,6 +8,7 @@
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:panes="clr-namespace:SkEditor.ViewModels.Controls.Sidebar.Panes"
              xmlns:primitives="clr-namespace:Avalonia.Controls.Primitives"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              x:DataType="panes:RemoteExplorerViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.RemoteExplorerView">
 
@@ -28,7 +29,7 @@
     <Grid RowDefinitions="Auto,*" Margin="4,12,4,8">
         <DockPanel Grid.Row="0" Margin="12,0,12,0" HorizontalSpacing="8">
             <Button Classes="barButton" Command="{Binding NewRemoteConnectionCommand}" DockPanel.Dock="Right"
-                    ToolTip.Tip="Add Remote Connection"
+                    ToolTip.Tip="{localization:Translate RemoteConnectionNewWindowTitle}"
                     VerticalAlignment="Center">
                 <Viewbox Height="14">
                     <icons:SymbolIcon Symbol="Add" />
@@ -37,9 +38,9 @@
 
             <ComboBox Theme="{DynamicResource LiteComboBox}" HorizontalAlignment="Stretch"
                       VerticalContentAlignment="Center"
-                      PlaceholderText="Select connection..."
+                      PlaceholderText="{localization:Translate RemoteConnectionSelectConnection}"
                       SelectedItem="{Binding SelectedConnection, Mode=TwoWay}"
-                      ToolTip.Tip="Add a connection first!"
+                      ToolTip.Tip="{localization:Translate RemoteConnectionNoConnectionTooltip}"
                       ToolTip.ShowOnDisabled="True"
                       ToolTip.ServiceEnabled="{Binding !RemoteConnections.Count}"
                       IsEnabled="{Binding !!RemoteConnections.Count}"
@@ -62,8 +63,9 @@
                 <icons:SymbolIcon Symbol="CloudOff" HorizontalAlignment="Center" />
             </Viewbox>
             <StackPanel Spacing="4">
-                <TextBlock Text="No remote connection" HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
-                <TextBlock Text="Create a remote connection to view and edit files on a remote server."
+                <TextBlock Text="{localization:Translate RemoteConnectionNoConnectionTitle}"
+                           HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
+                <TextBlock Text="{localization:Translate RemoteConnectionNoConnectionMessage}"
                            HorizontalAlignment="Center" TextAlignment="Center"
                            FontSize="13" MaxWidth="250" Opacity="0.6" />
             </StackPanel>
@@ -74,7 +76,8 @@
             <Viewbox Height="64" Opacity="0.5" OpacityMask="White">
                 <controls:FAProgressRing HorizontalAlignment="Center" />
             </Viewbox>
-            <TextBlock Text="Connecting..." HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
+            <TextBlock Text="{localization:Translate RemoteConnectionNoConnecting}" HorizontalAlignment="Center"
+                       FontSize="18" Opacity="0.75" />
         </StackPanel>
 
         <projects:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}" Margin="0,12,0,0"

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Providers.Choice;
 
@@ -6,8 +7,8 @@ public interface ISettingsChoiceProvider
 {
     IEnumerable<object> GetValues();
 
-    string GetDisplayValue(object value)
+    TranslatableString GetDisplayValue(object value)
     {
-        return value?.ToString() ?? string.Empty;
+        return TranslatableString.FromRawString(value.ToString() ?? string.Empty);
     }
 }

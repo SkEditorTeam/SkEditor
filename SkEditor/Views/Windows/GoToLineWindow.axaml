@@ -21,6 +21,6 @@
                 <SelectAllOnFocusBehavior />
             </Interaction.Behaviors>
         </TextBox>
-        <Button Grid.Column="1" Content="Go" Command="{Binding ExecuteCommand}" />
+        <Button Grid.Column="1" Content="{localization:Translate GoToLineButton}" Command="{Binding ExecuteCommand}" />
     </Grid>
 </Window>

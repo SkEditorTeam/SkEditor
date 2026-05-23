@@ -6,6 +6,7 @@
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vms:StatusBarViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.StatusBarControl">
@@ -79,7 +80,8 @@
                                     <Panel Height="30">
                                         <TextBlock VerticalAlignment="Center" Margin="4,0,0,0"
                                                    Foreground="{StaticResource ForegroundColor}"
-                                                   FontSize="16" FontWeight="DemiBold" Text="Notifications" />
+                                                   FontSize="16" FontWeight="DemiBold"
+                                                   Text="{localization:Translate NotificationCenterTitle}" />
 
                                         <Button IsVisible="{Binding Notifications.Count}"
                                                 VerticalAlignment="Center" HorizontalAlignment="Right" Padding="8,4"
@@ -87,7 +89,7 @@
                                                 Foreground="{StaticResource ForegroundSecondaryColor}"
                                                 BorderThickness="0" CornerRadius="6"
                                                 Command="{Binding ClearAllNotificationsCommand}"
-                                                Content="Clear all" />
+                                                Content="{localization:Translate NotificationCenterClearAll}" />
                                     </Panel>
 
                                     <StackPanel IsVisible="{Binding !Notifications.Count}" Grid.Row="1" Spacing="16"
@@ -96,7 +98,8 @@
                                             <fluent:SymbolIcon Symbol="LeafTwo"
                                                                Foreground="{DynamicResource ForegroundSecondaryColor}" />
                                         </Viewbox>
-                                        <TextBlock FontSize="16" Text="There's nothing here. Just peace and quiet."
+                                        <TextBlock FontSize="16"
+                                                   Text="{localization:Translate NotificationCenterEmpty}"
                                                    TextWrapping="Wrap" TextAlignment="Center" />
                                     </StackPanel>
 

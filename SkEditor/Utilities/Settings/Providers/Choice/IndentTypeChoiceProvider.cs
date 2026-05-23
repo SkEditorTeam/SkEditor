@@ -15,13 +15,13 @@ public class IndentTypeChoiceProvider(ITranslationService translationService) : 
         ];
     }
 
-    public string GetDisplayValue(object value)
+    public TranslatableString GetDisplayValue(object value)
     {
         return value switch
         {
-            false => translationService.Get(TranslationKey.SettingsGeneralTabTypeSpaces),
-            true => translationService.Get(TranslationKey.SettingsGeneralTabTypeTabs),
-            _ => value.ToString() ?? string.Empty
+            false => translationService.GetObservable(TranslationKey.SettingsGeneralTabTypeSpaces),
+            true => translationService.GetObservable(TranslationKey.SettingsGeneralTabTypeTabs),
+            _ => TranslatableString.FromRawString(value.ToString() ?? string.Empty)
         };
     }
 }
