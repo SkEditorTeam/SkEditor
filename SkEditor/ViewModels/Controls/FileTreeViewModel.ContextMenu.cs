@@ -337,16 +337,19 @@ public partial class FileTreeViewModel
     [RelayCommand]
     private void ShowInExplorer()
     {
-        foreach (FileSystemNode node in SelectedNodes)
+        FileSystemNode? node = SelectedNodes.FirstOrDefault();
+        if (node == null)
         {
-            if (node.IsDirectory)
-            {
-                LinkOpener.OpenFolder(node.Path);
-            }
-            else
-            {
-                LinkOpener.OpenFolderWithFileSelection(node.Path);
-            }
+            return;
+        }
+
+        if (node.IsDirectory)
+        {
+            LinkOpener.OpenFolder(node.Path);
+        }
+        else
+        {
+            LinkOpener.OpenFolderWithFileSelection(node.Path);
         }
     }
 
