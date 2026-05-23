@@ -26,6 +26,11 @@ public partial class MainMenuViewModel : ObservableObject
         {
             if (!item.RegisterHotKey)
             {
+                if (item.SubItems is not null)
+                {
+                    RegisterHotKeysRecursive(item.SubItems, mainWindow);
+                }
+
                 continue;
             }
 
