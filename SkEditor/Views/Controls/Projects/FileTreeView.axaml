@@ -43,7 +43,7 @@
                         <Setter Property="Header">
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource ContextMenuHeaderConverter}">
-                                    <Binding Path="Header" />
+                                    <Binding Path="Header?.Value" />
                                     <Binding Path="IsSeparator" />
                                 </MultiBinding>
                             </Setter.Value>

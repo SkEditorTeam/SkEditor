@@ -66,7 +66,7 @@
   "MenuHeaderRename": "이름 변경",
   "MenuHeaderNewFile": "새 파일",
   "MenuHeaderNewFolder": "새 폴더",
-  "MenuHeaderCloseProject": "프로젝트 닫기",
+  "MenuHeaderDisconnect": "연결 끊기",
   "ButtonYes": "예",
   "ButtonNo": "아니오",
   "ButtonOkay": "알겠습니다",

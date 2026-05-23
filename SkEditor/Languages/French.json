@@ -66,7 +66,7 @@
   "MenuHeaderRename": "Renommer",
   "MenuHeaderNewFile": "Nouveau fichier",
   "MenuHeaderNewFolder": "Nouveau dossier",
-  "MenuHeaderCloseProject": "Fermer le projet",
+  "MenuHeaderDisconnect": "Se déconnecter",
   "ButtonYes": "Oui",
   "ButtonNo": "Non",
   "ButtonOkay": "OK",
