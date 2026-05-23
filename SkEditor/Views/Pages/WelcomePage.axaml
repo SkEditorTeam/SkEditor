@@ -170,22 +170,23 @@
                                         CommandParameter="{Binding}">
                                     <Button.ContextFlyout>
                                         <MenuFlyout>
-                                            <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Open}" Header="Open"
+                                            <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Open}"
+                                                      Header="{localization:Translate MenuHeaderOpen}"
                                                       Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.OpenRecentCommand}"
                                                       CommandParameter="{Binding}" />
 
                                             <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardLink}"
-                                                      Header="Copy Path"
+                                                      Header="{localization:Translate MenuHeaderCopyAbsolutePath}"
                                                       Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.CopyPathCommand}"
                                                       CommandParameter="{Binding}" />
 
                                             <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FolderOpen}"
-                                                      Header="Show in Explorer"
+                                                      Header="{localization:Translate WelcomePageRecentCopyPath}"
                                                       Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.ShowInExplorerCommand}"
                                                       CommandParameter="{Binding}" />
 
                                             <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Delete}"
-                                                      Header="Remove from Recent"
+                                                      Header="{localization:Translate WelcomePageRecentRemove}"
                                                       Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.RemoveCommand}"
                                                       CommandParameter="{Binding}" />
                                         </MenuFlyout>
