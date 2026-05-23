@@ -105,7 +105,6 @@
   "PublishWindowWarning": "Vos clés API peuvent maintenant être gérées dans Paramètres -> Connexions.",
   "LocalDocsManagerWindowTitle": "Gestionnaire de la documentation locale",
   "LocalDocsManagerWindowInfo": "À partir de là, vous pouvez gérer les éléments de documentation que vous avez téléchargés.",
-  "LocalDocsManagerWindowDeleteEverything": "v",
   "LocalDocsManagerWindowGroupBy": "Regrouper par",
   "LocalDocsManagerWindowGroupByProvider": "Source",
   "LocalDocsManagerWindowGroupByType": "Type",

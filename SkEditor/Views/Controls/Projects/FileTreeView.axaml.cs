@@ -13,13 +13,24 @@ public partial class FileTreeView : UserControl
     public FileTreeView()
     {
         InitializeComponent();
+        FileTree.AddHandler(TappedEvent, OnTreeViewSingleTapped, RoutingStrategies.Bubble);
         FileTree.AddHandler(DoubleTappedEvent, OnTreeViewDoubleTapped, RoutingStrategies.Bubble);
         FileTree.AddHandler(ContextRequestedEvent, OnContextRequested, RoutingStrategies.Tunnel);
     }
 
     public FileTreeView(FileTreeViewModel viewModel) : this() => DataContext = viewModel;
 
-    private static void OnTreeViewDoubleTapped(object? sender, TappedEventArgs e)
+    private void OnTreeViewSingleTapped(object? sender, TappedEventArgs e)
+    {
+        CheckTap(e, false);
+    }
+
+    private void OnTreeViewDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        CheckTap(e, true);
+    }
+
+    private void CheckTap(TappedEventArgs e, bool isDoubleTap)
     {
         if (e.Source is not Control source)
         {
@@ -33,10 +44,10 @@ public partial class FileTreeView : UserControl
         }
 
         TreeViewItem? treeViewItem = source.FindAncestorOfType<TreeViewItem>(true);
-        if (treeViewItem?.DataContext is FileSystemNode { OpenCommand: not null } node &&
-            node.OpenCommand.CanExecute(null))
+        if (DataContext is FileTreeViewModel vm &&
+            treeViewItem?.DataContext is FileSystemNode { OpenCommand: not null } node)
         {
-            node.OpenCommand.Execute(null);
+            vm.HandleNodeClick(node, isDoubleTap);
         }
     }
 

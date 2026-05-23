@@ -10,6 +10,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Types;
+using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Controls;
 
@@ -19,15 +20,17 @@ public partial class FileTreeViewModel : ObservableObject
     private readonly IDialogService _dialogs;
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
+    private readonly AppSettings _appSettings;
     private CancellationTokenSource? _cts;
 
     public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard,
-        IDialogService dialogs)
+        IDialogService dialogs, AppSettings appSettings)
     {
         _logs = logs;
         _notifs = notifs;
         _dialogs = dialogs;
         _clipboard = clipboard;
+        _appSettings = appSettings;
 
         SelectedNodes.CollectionChanged += OnSelectedNodesChanged;
 
@@ -122,5 +125,15 @@ public partial class FileTreeViewModel : ObservableObject
     partial void OnFileSystemChanged(IFileSystem? value)
     {
         WeakReferenceMessenger.Default.Send(new FileSystemChangedMessage(this, value));
+    }
+
+    public void HandleNodeClick(FileSystemNode node, bool isDoubleClick)
+    {
+        bool singleClickEnabled = _appSettings.IsProjectSingleClickEnabled;
+
+        if (isDoubleClick || singleClickEnabled)
+        {
+            node.OpenCommand?.Execute(null);
+        }
     }
 }
