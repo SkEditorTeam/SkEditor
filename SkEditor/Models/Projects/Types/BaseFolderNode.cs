@@ -190,8 +190,8 @@ public abstract partial class BaseFolderNode : FileSystemNode
             {
                 WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                     Notification
-                        .Create(TranslatableString.FromRawString("Load Failed"))
-                        .WithMessage(TranslatableString.FromRawString("Folder does not exist"))
+                        .Create(TranslationKey.FileExplorerLoadFailedTitle)
+                        .WithMessage(TranslationKey.FileExplorerErrorDoesntExist)
                         .WithType(NotificationType.Error)));
 
                 Log.Error("Failed to load children of folder {Path} because it does not exist", Path);
@@ -212,8 +212,8 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("Load Failed"))
-                    .WithMessage(TranslatableString.FromRawString("You don't have permission to access this folder"))
+                    .Create(TranslationKey.FileExplorerLoadFailedTitle)
+                    .WithMessage(TranslationKey.FileExplorerErrorNoPermission)
                     .WithType(NotificationType.Error)));
 
             Log.Error(ex, "Failed to load children of folder {Path} due to unauthorized access", Path);
@@ -223,7 +223,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("Load Failed"))
+                    .Create(TranslationKey.FileExplorerLoadFailedTitle)
                     .WithMessage(TranslatableString.FromRawString(ex.Message))
                     .WithType(NotificationType.Error)));
 
@@ -249,7 +249,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("File Creation Failed"))
+                    .Create(TranslationKey.FileExplorerCreationFailedTitle)
                     .WithMessage(TranslationKey.ProjectErrorNameExists)
                     .WithType(NotificationType.Error)));
 
@@ -267,7 +267,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("File Creation Failed"))
+                    .Create(TranslationKey.FileExplorerCreationFailedTitle)
                     .WithMessage(TranslatableString.FromRawString(ex.Message))
                     .WithType(NotificationType.Error)));
 
@@ -283,7 +283,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("Folder Creation Failed"))
+                    .Create(TranslationKey.FileExplorerCreationFailedTitle)
                     .WithMessage(TranslationKey.ProjectErrorNameExists)
                     .WithType(NotificationType.Error)));
 
@@ -301,7 +301,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("Folder Creation Failed"))
+                    .Create(TranslationKey.FileExplorerCreationFailedTitle)
                     .WithMessage(TranslatableString.FromRawString(ex.Message))
                     .WithType(NotificationType.Error)));
         }
@@ -323,7 +323,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("File Delete Failed"))
+                    .Create(TranslationKey.FileExplorerDeleteFailedTitle)
                     .WithMessage(TranslatableString.FromRawString(ex.Message))
                     .WithType(NotificationType.Error)));
 
@@ -366,7 +366,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("Rename failed"))
+                    .Create(TranslationKey.FileExplorerRenameFailedTitle)
                     .WithMessage(TranslatableString.FromRawString(ex.Message))
                     .WithType(NotificationType.Error)));
 

@@ -53,7 +53,7 @@ public partial class SidebarViewModel : ObservableObject, IRecipient<RequestPane
 
     public void Receive(RequestPaneOpenMessage message)
     {
-        SelectedItem = Items.FirstOrDefault(p => p.Name == message.PaneName);
+        SelectedItem = Items.FirstOrDefault(p => p.Name.Value == message.PaneName);
     }
 
     private void OnPropertyChanged(object? _, PropertyChangedEventArgs e)

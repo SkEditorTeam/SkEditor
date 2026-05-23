@@ -71,7 +71,7 @@
         <Border Grid.Column="1" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
                 Margin="10,0,0,0" IsVisible="{Binding IsPanelVisible}">
             <Grid RowDefinitions="Auto,Auto,*">
-                <TextBlock Grid.Row="0" Text="{Binding SelectedItem.Name, FallbackValue={x:Null}}"
+                <TextBlock Grid.Row="0" Text="{Binding SelectedItem.Name.Value, FallbackValue={x:Null}}"
                            FontWeight="DemiBold"
                            TextWrapping="NoWrap"
                            Margin="20,10,20,10" />

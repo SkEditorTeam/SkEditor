@@ -129,8 +129,8 @@ public class FileService(
         catch (UnauthorizedAccessException)
         {
             Notification notification = Notification
-                .Create(TranslatableString.FromRawString("Load Failed"))
-                .WithMessage(TranslatableString.FromRawString("Unable to load the file. You do not have permission."))
+                .Create(TranslationKey.FileLoadFailedTitle)
+                .WithMessage(TranslationKey.FileLoadFailedPermissionMessage)
                 .WithType(NotificationType.Error);
 
             notifications.Show(notification);
@@ -140,8 +140,8 @@ public class FileService(
         {
             logs.Error(ex, "Failed to load file.");
             Notification notification = Notification
-                .Create(TranslatableString.FromRawString("Load Failed"))
-                .WithMessage(TranslatableString.FromRawString("An error occurred while loading the file."))
+                .Create(TranslationKey.FileLoadFailedTitle)
+                .WithMessage(TranslationKey.FileLoadFailedGenericMessage)
                 .WithType(NotificationType.Error);
 
             notifications.Show(notification);

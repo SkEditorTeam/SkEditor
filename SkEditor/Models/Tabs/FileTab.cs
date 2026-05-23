@@ -167,9 +167,8 @@ public partial class FileTab(
         {
             logs.Error(ex, "Failed to save file due to unauthorized access.");
             Notification notification = Notification
-                .Create(TranslatableString.FromRawString("Save Failed"))
-                .WithMessage(TranslatableString.FromRawString(
-                    "Unable to save the file. You do not have permission to write to this location."))
+                .Create(TranslationKey.FileExplorerSaveFailedTitle)
+                .WithMessage(TranslationKey.FileExplorerSaveFailedPermission)
                 .WithType(NotificationType.Error);
 
             notifications.Show(notification);

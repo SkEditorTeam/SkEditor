@@ -23,9 +23,8 @@ public partial class PublishWindowViewModel : ObservableObject
             if (tabs.SelectedTab is not FileTab fileTab)
             {
                 Notification notification = Notification
-                    .Create(TranslatableString.FromRawString("No file selected"))
-                    .WithMessage(TranslatableString.FromRawString(
-                        "You need to have a file open and selected to publish its code. Please open a file and try again."))
+                    .Create(TranslationKey.NoFileNotificationTitle)
+                    .WithMessage(TranslationKey.NoFileNotificationMessage)
                     .WithType(NotificationType.Error);
 
                 notifications.Show(notification);
@@ -42,9 +41,8 @@ public partial class PublishWindowViewModel : ObservableObject
             if (string.IsNullOrWhiteSpace(apiKey))
             {
                 Notification notification = Notification
-                    .Create(TranslatableString.FromRawString("API key missing"))
-                    .WithMessage(TranslatableString.FromRawString(
-                        "The selected publish type requires an API key, but it is not set. Please set the API key in the settings and try again."))
+                    .Create(TranslationKey.PublishWindowApiKeyMissingTitle)
+                    .WithMessage(TranslationKey.PublishWindowApiKeyMissingMessage)
                     .WithType(NotificationType.Error);
 
                 notifications.Show(notification);
@@ -57,9 +55,8 @@ public partial class PublishWindowViewModel : ObservableObject
             if (result is null)
             {
                 Notification notification = Notification
-                    .Create(TranslatableString.FromRawString("Failed to publish code"))
-                    .WithMessage(TranslatableString.FromRawString(
-                        "An error occurred while trying to publish the code. Please check your API key and internet connection, and try again."))
+                    .Create(TranslationKey.PublishWindowErrorTitle)
+                    .WithMessage(TranslationKey.PublishWindowErrorMessage)
                     .WithType(NotificationType.Error);
 
                 notifications.Show(notification);

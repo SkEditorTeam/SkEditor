@@ -58,28 +58,28 @@ public partial class FileTreeViewModel
 
         TextDialogElement inputElement = new()
         {
-            PlaceholderText = "Enter file name",
+            PlaceholderText = TranslationKey.FileExplorerCreateNewEnterName,
             ValidationFunc = name =>
             {
                 if (string.IsNullOrWhiteSpace(name))
                 {
-                    return "Name cannot be empty";
+                    return TranslationKey.FileExplorerCreateNewNameEmpty;
                 }
 
                 if (name.IndexOfAny(node.InvalidChars) >= 0)
                 {
-                    return "Name contains invalid characters";
+                    return TranslationKey.FileExplorerCreateNewNameInvalidChars;
                 }
 
                 return folderNode.Children.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                    ? "A file or folder with this name already exists"
+                    ? TranslationKey.FileExplorerCreateNewNameAlreadyExists
                     : null;
             }
         };
 
         Dialog dialog = Dialog
-            .Create(TranslatableString.FromRawString("Create New File"),
-                TranslatableString.FromRawString("Enter the name of the new file:"))
+            .Create(TranslationKey.FileExplorerCreateNewFileTitle,
+                TranslationKey.FileExplorerCreateNewFileMessage)
             .WithIcon(Symbol.DocumentAdd)
             .WithElements(inputElement)
             .WithButtons(new DialogButton(TranslationKey.ButtonConfirm, DialogResult.Ok, true), DialogButton.Cancel);
@@ -110,28 +110,28 @@ public partial class FileTreeViewModel
 
         TextDialogElement inputElement = new()
         {
-            PlaceholderText = "Enter folder name",
+            PlaceholderText = TranslationKey.FileExplorerCreateNewEnterName,
             ValidationFunc = name =>
             {
                 if (string.IsNullOrWhiteSpace(name))
                 {
-                    return "Name cannot be empty";
+                    return TranslationKey.FileExplorerCreateNewNameEmpty;
                 }
 
                 if (name.IndexOfAny(node.InvalidChars) >= 0)
                 {
-                    return "Name contains invalid characters";
+                    return TranslationKey.FileExplorerCreateNewNameInvalidChars;
                 }
 
                 return folderNode.Children.Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                    ? "A file or folder with this name already exists"
+                    ? TranslationKey.FileExplorerCreateNewNameAlreadyExists
                     : null;
             }
         };
 
         Dialog dialog = Dialog
-            .Create(TranslatableString.FromRawString("Create New Folder"),
-                TranslatableString.FromRawString("Enter the name of the new folder:"))
+            .Create(TranslationKey.FileExplorerCreateNewFolderTitle,
+                TranslationKey.FileExplorerCreateNewFolderMessage)
             .WithIcon(Symbol.FolderAdd)
             .WithElements(inputElement)
             .WithButtons(new DialogButton(TranslationKey.ButtonConfirm, DialogResult.Ok, true), DialogButton.Cancel);
@@ -305,11 +305,13 @@ public partial class FileTreeViewModel
             return;
         }
 
+        TranslatableString message = SelectedNodes.Count == 1
+            ? new TranslatableString(TranslationKey.FileExplorerConfirmDeleteOneMessage, SelectedNodes[0].Name)
+            : new TranslatableString(TranslationKey.FileExplorerConfirmDeleteMultipleMessage, SelectedNodes.Count);
+
         Dialog dialog = Dialog
-            .Create(TranslatableString.FromRawString("Confirm Deletion"),
-                TranslatableString.FromRawString(SelectedNodes.Count == 1
-                    ? $"Are you sure you want to delete '{SelectedNodes[0].Name}'?"
-                    : $"Are you sure you want to delete these {SelectedNodes.Count} items?"))
+            .Create(TranslationKey.FileExplorerConfirmDeleteTitle)
+            .WithMessage(message)
             .WithIcon(Symbol.Delete)
             .WithButtons(new DialogButton(TranslationKey.ButtonDelete, DialogResult.Ok), DialogButton.Cancel);
 

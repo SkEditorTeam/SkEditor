@@ -11,7 +11,7 @@ public class SidebarSectionProvider(AppSettings appSettings) : ISettingsSectionP
 {
     public SettingSection GetSection()
     {
-        return SettingSection.Create(TranslatableString.FromRawString("Sidebar"))
+        return SettingSection.Create(TranslationKey.SettingsSectionSidebar)
             .WithIcon(Symbol.PanelLeft)
             .WithSettings(
             [

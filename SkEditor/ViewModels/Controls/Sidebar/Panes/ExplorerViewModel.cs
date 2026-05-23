@@ -45,7 +45,7 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
         _ = HandleOpenExplorerFolderMessageAsync(message);
     }
 
-    public string Name => "Explorer";
+    public TranslatableString Name => TranslationKey.LocalExplorerTitle;
     public StandardIcon Icon => Symbol.Folder;
 
     [RelayCommand]
@@ -60,8 +60,8 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
         if (!Directory.Exists(path))
         {
             Notification notification = Notification
-                .Create(TranslatableString.FromRawString("Oops!"))
-                .WithMessage(TranslatableString.FromRawString("The selected folder does not exist"))
+                .Create(TranslationKey.FileExplorerFolderDoesntExistTitle)
+                .WithMessage(TranslationKey.FileExplorerFolderDoesntExistMessage)
                 .WithType(NotificationType.Error);
 
             _notifications.Show(notification);
@@ -102,6 +102,6 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
             }
         }
 
-        _messenger.Send(new RequestPaneOpenMessage(Name));
+        _messenger.Send(new RequestPaneOpenMessage(Name.Value));
     }
 }

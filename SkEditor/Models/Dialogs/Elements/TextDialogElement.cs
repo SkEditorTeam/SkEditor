@@ -1,5 +1,6 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Dialogs.Elements;
 
@@ -10,11 +11,11 @@ public partial class TextDialogElement : DialogElement
     public partial string Text { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string? ErrorMessage { get; set; }
+    public partial TranslatableString? ErrorMessage { get; set; }
 
-    public string? PlaceholderText { get; init; }
+    public TranslatableString? PlaceholderText { get; init; }
 
-    public Func<string, string?>? ValidationFunc { get; init; }
+    public Func<string, TranslatableString?>? ValidationFunc { get; init; }
 
     public bool Validate()
     {

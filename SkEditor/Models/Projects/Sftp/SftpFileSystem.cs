@@ -36,8 +36,8 @@ public class SftpFileSystem(
         catch (Exception ex)
         {
             Notification notification = Notification
-                .Create(TranslatableString.FromRawString("Connection Error"))
-                .WithMessage(TranslatableString.FromRawString("Failed to connect to {0}: {1}", connection.Name,
+                .Create(TranslationKey.RemoteConnectionErrorTitle)
+                .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionErrorMessage, connection.Name,
                     ex.Message))
                 .WithType(NotificationType.Error);
 

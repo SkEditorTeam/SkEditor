@@ -77,7 +77,7 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
-                    .Create(TranslatableString.FromRawString("File Delete Failed"))
+                    .Create(TranslationKey.FileExplorerDeleteFailedTitle)
                     .WithMessage(TranslatableString.FromRawString(ex.Message))
                     .WithType(NotificationType.Error)));
 

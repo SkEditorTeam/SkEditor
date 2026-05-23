@@ -71,9 +71,8 @@ public partial class WelcomePageViewModel(
         if (!File.Exists(item.Path))
         {
             Notification notif = Notification
-                .Create(TranslatableString.FromRawString("File not found"))
-                .WithMessage(TranslatableString.FromRawString(
-                    $"The file at path \"{item.Path}\" could not be found. It may have been moved or deleted."))
+                .Create(TranslationKey.FileExplorerFileNotFoundTitle)
+                .WithMessage(new TranslatableString(TranslationKey.FileExplorerFileNotFoundMessage, item.Name))
                 .WithDuration(TimeSpan.FromSeconds(10))
                 .WithType(NotificationType.Error);
 
@@ -91,9 +90,8 @@ public partial class WelcomePageViewModel(
         if (!Directory.Exists(item.Path))
         {
             Notification notif = Notification
-                .Create(TranslatableString.FromRawString("Folder not found"))
-                .WithMessage(TranslatableString.FromRawString(
-                    $"The folder at path \"{item.Path}\" could not be found. It may have been moved or deleted."))
+                .Create(TranslationKey.FileExplorerFolderNotFoundTitle)
+                .WithMessage(new TranslatableString(TranslationKey.FileExplorerFolderNotFoundMessage, item.Name))
                 .WithDuration(TimeSpan.FromSeconds(10))
                 .WithType(NotificationType.Error);
 

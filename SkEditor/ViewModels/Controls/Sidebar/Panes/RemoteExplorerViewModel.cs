@@ -10,6 +10,7 @@ using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
 using SkEditor.Models.UI;
 using SkEditor.Services.Windowing;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 
@@ -63,7 +64,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         }
     }
 
-    public string Name => "Remote Explorer";
+    public TranslatableString Name => TranslationKey.RemoteExplorerTitle;
     public StandardIcon Icon => "RemoteDesktopIcon";
 
     [RelayCommand]

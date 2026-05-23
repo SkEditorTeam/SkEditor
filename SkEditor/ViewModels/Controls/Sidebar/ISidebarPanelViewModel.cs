@@ -1,9 +1,10 @@
 ﻿using SkEditor.Models.UI;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Controls;
 
 public interface ISidebarPanelViewModel
 {
-    string Name { get; }
+    TranslatableString Name { get; }
     StandardIcon Icon { get; }
 }
