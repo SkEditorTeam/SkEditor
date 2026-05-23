@@ -62,11 +62,11 @@ public class FileMenuProvider(
             .WithItems([
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseCurrentFile, Symbol.Document)
                     .WithCommand(() => tabs.SelectedTab?.CloseCommand.Execute(null))
-                    .WithInputGesture("Ctrl+W"),
+                    .WithInputGesture("Ctrl+F4"),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAll, Symbol.DocumentMultiple)
                     .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.All))
-                    .WithInputGesture("Ctrl+Shift+W"),
+                    .WithInputGesture("Ctrl+Shift+F4"),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAllButCurrent, Symbol.DocumentMultiple)
                     .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.AllButCurrent)),
