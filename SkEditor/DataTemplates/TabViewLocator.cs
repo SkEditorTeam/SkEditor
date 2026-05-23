@@ -52,6 +52,7 @@ public class TabViewLocator : IDataTemplate
         _viewFactories[typeof(TTab)] = factory;
     }
 
+    // TODO: call it!
     public void RemoveFromCache(Tab tab)
     {
         _viewCache.Remove(tab);
