@@ -204,6 +204,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IMenuProvider, FileMenuProvider>();
             services.AddSingleton<IMenuProvider, EditMenuProvider>();
             services.AddSingleton<IMenuProvider, HelpMenuProvider>();
+            services.AddSingleton<IMenuProvider, DevMenuProvider>();
             services.AddSingleton<IMenuProvider, SettingsMenuProvider>();
         }
 
