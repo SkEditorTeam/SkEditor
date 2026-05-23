@@ -439,7 +439,7 @@
   "RemoteConnectionTestFailed": "Błąd połączenia z {0}",
   "RemoteConnectionErrorTitle": "Błąd połączenia",
   "RemoteConnectionErrorMessage": "Wystąpił błąd podczas próby połączenia z {0}:\\n{1}",
-  "LocalExplorerTitle": "Eksplorator lokalny",
+  "LocalExplorerTitle": "Eksplorator",
   "RemoteExplorerTitle": "Eksplorator zdalny",
   "FileExplorerLoading": "Ładowanie...",
   "FileExplorerLoadFailedTitle": "Błąd ładowania",
