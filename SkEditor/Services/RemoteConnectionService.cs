@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Security;
+using SkEditor.Models.Files;
 using SkEditor.Models.Remote;
+using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Security;
 
@@ -17,6 +21,7 @@ namespace SkEditor.Services;
 
 public class RemoteConnectionService(
     ITranslationService translation,
+    ITabService tabs,
     ILogService logs,
     ICredentialStoreFactory credentialStoreFactory)
     : IRemoteConnectionService, IDisposable
@@ -176,6 +181,20 @@ public class RemoteConnectionService(
         {
             client.Dispose();
             _activeConnections.Remove(connection);
+
+            CloseConnectionTabs(connection);
+        }
+    }
+
+    private void CloseConnectionTabs(RemoteConnection connection)
+    {
+        List<FileTab> openTabs = tabs.Tabs.OfType<FileTab>()
+            .Where(tab => tab.File is SftpFile sftpFile && sftpFile.Connection == connection)
+            .ToList();
+
+        foreach (FileTab tab in openTabs)
+        {
+            tabs.CloseTab(tab);
         }
     }
 

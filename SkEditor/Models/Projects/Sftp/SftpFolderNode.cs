@@ -7,10 +7,17 @@ using Renci.SshNet;
 using Renci.SshNet.Common;
 using Renci.SshNet.Sftp;
 using SkEditor.Models.Projects.Types;
+using SkEditor.Models.Remote;
 
 namespace SkEditor.Models.Projects.Sftp;
 
-public class SftpFolderNode(string name, string path, bool isRoot, SftpClient client, bool addDummy = true)
+public class SftpFolderNode(
+    string name,
+    string path,
+    bool isRoot,
+    RemoteConnection connection,
+    SftpClient client,
+    bool addDummy = true)
     : BaseFolderNode(name, path, isRoot, addDummy)
 {
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
@@ -48,11 +55,11 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
                         continue;
                     }
 
-                    folders.Add(new SftpFolderNode(file.Name, file.FullName, false, client));
+                    folders.Add(new SftpFolderNode(file.Name, file.FullName, false, connection, client));
                 }
                 else if (file.IsRegularFile)
                 {
-                    files.Add(new SftpFileNode(file.Name, file.FullName, client));
+                    files.Add(new SftpFileNode(file.Name, file.FullName, connection, client));
                 }
             }
         }
@@ -108,11 +115,11 @@ public class SftpFolderNode(string name, string path, bool isRoot, SftpClient cl
 
     protected override FileSystemNode CreateFileNode(string name, string path)
     {
-        return new SftpFileNode(name, path, client);
+        return new SftpFileNode(name, path, connection, client);
     }
 
     protected override FileSystemNode CreateFolderNode(string name, string path)
     {
-        return new SftpFolderNode(name, path, false, client, false);
+        return new SftpFolderNode(name, path, false, connection, client, false);
     }
 }

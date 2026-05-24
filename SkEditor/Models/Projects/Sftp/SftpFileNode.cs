@@ -8,10 +8,12 @@ using Renci.SshNet;
 using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Types;
+using SkEditor.Models.Remote;
 
 namespace SkEditor.Models.Projects.Sftp;
 
-public partial class SftpFileNode(string name, string path, SftpClient client) : BaseFileNode(name, path)
+public partial class SftpFileNode(string name, string path, RemoteConnection connection, SftpClient client)
+    : BaseFileNode(name, path)
 {
     protected override Func<string, string, Task> RenameFileAction => async (oldPath, newPath) =>
         await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
@@ -29,7 +31,7 @@ public partial class SftpFileNode(string name, string path, SftpClient client) :
     [RelayCommand]
     public void OpenFile()
     {
-        WeakReferenceMessenger.Default.Send(new OpenFileMessage(new SftpFile(Path, Name, client)));
+        WeakReferenceMessenger.Default.Send(new OpenFileMessage(new SftpFile(Path, Name, connection, client)));
     }
 
     public override IEnumerable<ProjectAction> GetSupportedActions()

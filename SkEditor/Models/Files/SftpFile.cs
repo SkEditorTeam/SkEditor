@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using Renci.SshNet.Sftp;
+using SkEditor.Models.Remote;
 
 namespace SkEditor.Models.Files;
 
-public class SftpFile(string path, string name, SftpClient client) : BaseFile(path, name)
+public class SftpFile(string path, string name, RemoteConnection connection, SftpClient client) : BaseFile(path, name)
 {
+    public RemoteConnection Connection { get; } = connection;
+    
     public override async ValueTask<Stream> LoadAsync()
     {
         if (Path is null)

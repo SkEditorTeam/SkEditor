@@ -25,7 +25,8 @@ public class SftpFileSystem(
         {
             SftpClient client = await connections.GetOrConnectSftpClientAsync(connection, cancellationToken);
 
-            Root = new SftpFolderNode(connection.Name, client.WorkingDirectory, true, client) { IsRoot = true };
+            Root = new SftpFolderNode(connection.Name, client.WorkingDirectory, true, connection, client)
+                { IsRoot = true };
             await Root.LoadChildrenAsync();
             return true;
         }

@@ -184,6 +184,18 @@ public partial class FileTreeViewModel
             return;
         }
 
+        Dialog dialog = Dialog
+            .Create(TranslationKey.RemoteConnectionDisconnectTitle)
+            .WithMessage(TranslationKey.RemoteConnectionDisconnectMessage)
+            .WithIcon(Symbol.PlugDisconnected)
+            .WithButtons(new DialogButton(TranslationKey.ButtonDisconnect, DialogResult.Ok), DialogButton.Cancel);
+
+        DialogResult result = await _dialogs.ShowDialogAsync(dialog);
+        if (result != DialogResult.Ok)
+        {
+            return;
+        }
+
         FileSystemNode node = SelectedNodes[0];
 
         if (FileSystem is SftpFileSystem && node.IsRoot)
