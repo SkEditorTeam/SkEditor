@@ -109,7 +109,7 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
             return false;
         }
 
-        if (FileSystem.Root != null)
+        if (FileSystem?.Root != null)
         {
             RootItems.Clear();
             RootItems.Add(FileSystem.Root);
@@ -146,13 +146,13 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
 
     public void Receive(RemoteConnectionStateChangedMessage message)
     {
-        if (FileSystem is not SftpFileSystem sftpFileSystem || sftpFileSystem.Connection != message.Connection)
-        {
-            return;
-        }
-
         Dispatcher.UIThread.Post(() =>
         {
+            if (FileSystem is not SftpFileSystem sftpFileSystem || sftpFileSystem.Connection != message.Connection)
+            {
+                return;
+            }
+            
             switch (message.State)
             {
                 case RemoteConnectionState.Reconnecting:
