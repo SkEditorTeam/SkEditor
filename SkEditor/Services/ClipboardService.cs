@@ -14,6 +14,17 @@ public class ClipboardService : IClipboardService
         return GetClipboard()?.SetTextAsync(text) ?? Task.CompletedTask;
     }
 
+    public async Task<string?> GetTextAsync()
+    {
+        IClipboard? clipboard = GetClipboard();
+        if (clipboard == null)
+        {
+            return null;
+        }
+
+        return await clipboard.TryGetTextAsync();
+    }
+
     private static IClipboard? GetClipboard()
     {
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

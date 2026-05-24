@@ -12,4 +12,10 @@ public interface IClipboardService
     /// </summary>
     /// <param name="text">The text to copy to the clipboard.</param>
     Task CopyTextAsync(string text);
+
+    /// <summary>
+    ///     Retrieves text from the system clipboard, if available.
+    /// </summary>
+    /// <returns>The text from the clipboard, or null if no text is available.</returns>
+    Task<string?> GetTextAsync();
 }

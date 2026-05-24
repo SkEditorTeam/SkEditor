@@ -7,31 +7,31 @@ public partial class RemoteConnectionInfo : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled), nameof(IsPasswordAuth),
         nameof(IsPrivateKeyAuth))]
-    private RemoteAuthMethod _authMethod;
+    public partial RemoteAuthMethod AuthMethod { get; set; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _host = "";
+    public partial string Host { get; set; } = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _keyFilePath = "";
+    public partial string KeyFilePath { get; set; } = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _name = "";
+    public partial string Name { get; set; } = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _password = "";
+    public partial string Password { get; set; } = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _port = "";
+    public partial string Port { get; set; } = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    private string _username = "";
+    public partial string Username { get; set; } = "";
 
     public bool IsPasswordAuth => AuthMethod == RemoteAuthMethod.Password;
     public bool IsPrivateKeyAuth => AuthMethod == RemoteAuthMethod.PrivateKey;

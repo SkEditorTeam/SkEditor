@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,6 +11,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Notifications;
 using SkEditor.Models.Remote;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Windows;
@@ -17,6 +19,7 @@ namespace SkEditor.ViewModels.Windows;
 public partial class RemoteConnectionViewModel(
     IRemoteConnectionService connections,
     INotificationService notifications,
+    IClipboardService clipboard,
     ITranslationService translation) : ObservableObject
 {
     [ObservableProperty]
@@ -90,6 +93,35 @@ public partial class RemoteConnectionViewModel(
         {
             ConnectionInfo.KeyFilePath = path;
         }
+    }
+
+    public event Action? PasteCompleted;
+
+    [RelayCommand]
+    private async Task HandlePaste(RoutedEventArgs e)
+    {
+        string? pasted = await clipboard.GetTextAsync();
+        if (string.IsNullOrWhiteSpace(pasted))
+        {
+            return;
+        }
+
+        if (!SftpConnectionStringParser.TryParse(pasted, out SftpConnectionInfo? connectionInfo))
+        {
+            return;
+        }
+
+        e.Handled = true;
+
+        ConnectionInfo.Host = connectionInfo.Host;
+        ConnectionInfo.Port = connectionInfo.Port.ToString();
+        ConnectionInfo.Username = connectionInfo.Username ?? "";
+        ConnectionInfo.Password = connectionInfo.Password ?? "";
+        ConnectionInfo.AuthMethod = connectionInfo.Password != null
+            ? RemoteAuthMethod.Password
+            : ConnectionInfo.AuthMethod;
+
+        PasteCompleted?.Invoke();
     }
 
     private void Clear()

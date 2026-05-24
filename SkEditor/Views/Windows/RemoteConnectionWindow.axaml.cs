@@ -39,6 +39,7 @@ public partial class RemoteConnectionWindow : SkEditorWindow
         };
 
         vm.RequestKeyFilePicker = SelectKeyFile;
+        vm.PasteCompleted += () => HostTextBox.CaretIndex = HostTextBox.Text?.Length ?? 0;
     }
 
     private async Task<string?> SelectKeyFile()

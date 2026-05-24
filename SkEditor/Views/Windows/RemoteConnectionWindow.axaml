@@ -7,6 +7,7 @@
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
         xmlns:converters="clr-namespace:SkEditor.Converters"
         xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+        xmlns:aControls="clr-namespace:Avalonia.Controls"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.RemoteConnectionWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate RemoteConnectionNewWindowTitle}" Height="510" Width="375" CanResize="False"
@@ -67,7 +68,12 @@
             <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">
                 <StackPanel Spacing="4">
                     <TextBlock Text="{localization:Translate RemoteConnectionFieldHost}" />
-                    <TextBox Name="HostTextBox" PlaceholderText="192.168.0.1" Text="{Binding ConnectionInfo.Host}" />
+                    <TextBox Name="HostTextBox" PlaceholderText="192.168.0.1" Text="{Binding ConnectionInfo.Host}">
+                        <Interaction.Behaviors>
+                            <aControls:TextBoxPastingFromClipboardEventCommandTrigger
+                                Command="{Binding HandlePasteCommand}" />
+                        </Interaction.Behaviors>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Spacing="4">
                     <TextBlock Text="{localization:Translate RemoteConnectionFieldPort}" />
