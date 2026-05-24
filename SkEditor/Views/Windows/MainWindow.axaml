@@ -13,6 +13,7 @@
         x:Name="Root"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
+        Focusable="True"
         Title="SkEditor" WindowStartupLocation="Manual" DragDrop.AllowDrop="True">
 
     <Window.Resources>
