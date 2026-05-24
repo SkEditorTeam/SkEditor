@@ -135,7 +135,10 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
     {
         bool singleClickEnabled = _appSettings.IsProjectSingleClickEnabled;
 
-        if (isDoubleClick || singleClickEnabled)
+        bool doubleClick = !singleClickEnabled && isDoubleClick;
+        bool singleClick = singleClickEnabled && !isDoubleClick;
+
+        if (doubleClick || singleClick)
         {
             node.OpenCommand?.Execute(null);
         }
