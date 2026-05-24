@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "Wystąpił błąd podczas próby połączenia z {0}:\n{1}",
   "RemoteConnectionDisconnectTitle": "Rozłącz",
   "RemoteConnectionDisconnectMessage": "Czy na pewno chcesz się rozłączyć z tym serwerem? Wszelkie niezapisane zmiany w zdalnych plikach zostaną utracone.",
+  "RemoteConnectionLostConnectionTitle": "Połączenie utracone",
+  "RemoteConnectionLostConnectionMessage": "Połączenie z serwerem {0} zostało utracone. Sprawdź swoje połączenie i spróbuj ponownie.",
   "LocalExplorerTitle": "Eksplorator",
   "RemoteExplorerTitle": "Eksplorator zdalny",
   "FileExplorerLoading": "Ładowanie...",

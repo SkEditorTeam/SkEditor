@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "Произошла ошибка при попытке подключиться к {0}:\\n{1}",
   "RemoteConnectionDisconnectTitle": "Отключение",
   "RemoteConnectionDisconnectMessage": "Вы уверены, что хотите отключиться от этого сервера? Все несохраненные изменения в удаленных файлах будут утеряны.",
+  "RemoteConnectionLostConnectionTitle": "Соединение потеряно",
+  "RemoteConnectionLostConnectionMessage": "Соединение с сервером {0} было утеряно. Пожалуйста, проверьте подключение и попробуйте еще раз.",
   "LocalExplorerTitle": "Проводник",
   "RemoteExplorerTitle": "Удаленный проводник",
   "FileExplorerLoading": "Загрузка...",

@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "Ocurrió un error al intentar conectar a {0}:\\n{1}",
   "RemoteConnectionDisconnectTitle": "Desconectar",
   "RemoteConnectionDisconnectMessage": "¿Está seguro de que desea desconectarse de este servidor? Se perderá cualquier cambio no guardado en los archivos remotos.",
+  "RemoteConnectionLostConnectionTitle": "Conexión perdida",
+  "RemoteConnectionLostConnectionMessage": "Se ha perdido la conexión con el servidor {0}. Por favor, comprueba tu conexión e inténtalo de nuevo.",
   "LocalExplorerTitle": "Explorador",
   "RemoteExplorerTitle": "Explorador remoto",
   "FileExplorerLoading": "Cargando...",

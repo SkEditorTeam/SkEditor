@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "尝试连接至 {0} 时发生错误：\\n{1}",
   "RemoteConnectionDisconnectTitle": "断开连接",
   "RemoteConnectionDisconnectMessage": "您确定要断开与此服务器的连接吗？所有未保存的远程文件修改都将丢失。",
+  "RemoteConnectionLostConnectionTitle": "连接已断开",
+  "RemoteConnectionLostConnectionMessage": "与服务器 {0} 的连接已断开。请检查您的连接并重试。",
   "LocalExplorerTitle": "资源管理器",
   "RemoteExplorerTitle": "远程资源管理器",
   "FileExplorerLoading": "正在加载...",

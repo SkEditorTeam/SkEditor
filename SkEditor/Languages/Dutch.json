@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "Er is een fout opgetreden bij het verbinden met {0}:\\n{1}",
   "RemoteConnectionDisconnectTitle": "Verbinding verbreken",
   "RemoteConnectionDisconnectMessage": "Weet u zeker dat u de verbinding met deze server wilt verbreken? Alle niet-opgeslagen wijzigingen in externe bestanden gaan verloren.",
+  "RemoteConnectionLostConnectionTitle": "Verbinding verbroken",
+  "RemoteConnectionLostConnectionMessage": "De verbinding met de {0}-server is verbroken. Controleer uw verbinding en probeer het opnieuw.",
   "LocalExplorerTitle": "Verkenner",
   "RemoteExplorerTitle": "Externe verkenner",
   "FileExplorerLoading": "Laden...",

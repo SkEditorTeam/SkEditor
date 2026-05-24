@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "{0}에 연결하는 중 오류가 발생했습니다:\\n{1}",
   "RemoteConnectionDisconnectTitle": "연결 끊기",
   "RemoteConnectionDisconnectMessage": "이 서버와의 연결을 끊으시겠습니까? 저장되지 않은 원격 파일의 변경 사항은 모두 손실됩니다.",
+  "RemoteConnectionLostConnectionTitle": "연결 끊김",
+  "RemoteConnectionLostConnectionMessage": "{0} 서버와의 연결이 끊겼습니다. 연결 상태를 확인하고 다시 시도해 주세요.",
   "LocalExplorerTitle": "탐색기",
   "RemoteExplorerTitle": "원격 탐색기",
   "FileExplorerLoading": "불러오는 중...",

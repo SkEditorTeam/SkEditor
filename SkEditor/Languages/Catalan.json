@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "S'ha produït un error en intentar connectar amb {0}:\\n{1}",
   "RemoteConnectionDisconnectTitle": "Desconnecta",
   "RemoteConnectionDisconnectMessage": "Esteu segur que us voleu desconnectar d’aquest servidor? Es perdran tots els canvis no desats als fitxers remots.",
+  "RemoteConnectionLostConnectionTitle": "S'ha perdut la connexió",
+  "RemoteConnectionLostConnectionMessage": "S'ha perdut la connexió amb el servidor {0}. Comproveu la vostra connexió i torneu-ho a provar.",
   "LocalExplorerTitle": "Explorador",
   "RemoteExplorerTitle": "Explorador remot",
   "FileExplorerLoading": "Carregant...",

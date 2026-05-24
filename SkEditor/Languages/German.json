@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "Beim Versuch, eine Verbindung zu {0} herzustellen, ist ein Fehler aufgetreten:\n{1}",
   "RemoteConnectionDisconnectTitle": "Verbindung trennen",
   "RemoteConnectionDisconnectMessage": "Sind Sie sicher, dass Sie die Verbindung zu diesem Server trennen möchten? Ungespeicherte Änderungen an Remote-Dateien gehen verloren.",
+  "RemoteConnectionLostConnectionTitle": "Verbindung verloren",
+  "RemoteConnectionLostConnectionMessage": "Die Verbindung zum Server {0} wurde unterbrochen. Überprüfe die Verbindung und versuche es erneut.",
   "LocalExplorerTitle": "Explorer",
   "RemoteExplorerTitle": "Remote-Explorer",
   "FileExplorerLoading": "Wird geladen...",

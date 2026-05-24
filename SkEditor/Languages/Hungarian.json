@@ -447,6 +447,8 @@
   "RemoteConnectionErrorMessage": "Hiba történt a(z) {0} szerverhez való csatlakozás során:\\n{1}",
   "RemoteConnectionDisconnectTitle": "Kapcsolat bontása",
   "RemoteConnectionDisconnectMessage": "Biztosan le szeretne csatlakozni erről a szerverről? A távoli fájlokon végzett mentetlen módosítások elvesznek.",
+  "RemoteConnectionLostConnectionTitle": "Kapcsolat megszakadt",
+  "RemoteConnectionLostConnectionMessage": "A kapcsolat a(z) {0} szerverrel megszakadt. Kérjük, ellenőrizze a kapcsolatot, majd próbálja újra.",
   "LocalExplorerTitle": "Helyi intéző",
   "RemoteExplorerTitle": "Távoli intéző",
   "FileExplorerLoading": "Betöltés...",
