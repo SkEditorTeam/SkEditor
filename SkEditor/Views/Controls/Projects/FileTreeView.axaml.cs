@@ -36,7 +36,7 @@ public partial class FileTreeView : UserControl
             return;
         }
 
-        BehaviorCollection collection = new() { new VerticalScrollViewerAnimatedBehavior() };
+        BehaviorCollection collection = [new VerticalScrollViewerAnimatedBehavior()];
         Interaction.SetBehaviors(scrollViewer, collection);
     }
 
