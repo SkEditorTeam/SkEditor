@@ -373,3 +373,6 @@ FodyWeavers.xsd
 
 # lock file
 External/DiscordRPC/packages.lock.json
+
+# Package script
+package-skeditor.ps1
