@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Renci.SshNet;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Types;
@@ -12,26 +12,35 @@ using SkEditor.Models.Remote;
 
 namespace SkEditor.Models.Projects.Sftp;
 
-public partial class SftpFileNode(string name, string path, RemoteConnection connection, SftpClient client)
+public partial class SftpFileNode(
+    string name,
+    string path,
+    RemoteConnection connection,
+    IRemoteConnectionService service)
     : BaseFileNode(name, path)
 {
     protected override Func<string, string, Task> RenameFileAction => async (oldPath, newPath) =>
-        await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
+    {
+        await service.ExecuteSafeAsync(connection,
+            async c => await c.RenameFileAsync(oldPath, newPath, CancellationToken.None));
+    };
 
     public override char[] InvalidChars => SftpFileSystem.InvalidChars;
 
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
-        SftpFileSystem.GetAlreadyExistsPredicate(client);
+        SftpFileSystem.GetAlreadyExistsPredicate(service, connection);
 
     protected override Func<string, Task> DeleteAction =>
-        async path => await client.DeleteFileAsync(path, CancellationToken.None);
+        async path =>
+            await service.ExecuteSafeAsync(connection,
+                async c => await c.DeleteFileAsync(path, CancellationToken.None));
 
     [RelayCommand]
     public void OpenFile()
     {
-        WeakReferenceMessenger.Default.Send(new OpenFileMessage(new SftpFile(Path, Name, connection, client)));
+        WeakReferenceMessenger.Default.Send(new OpenFileMessage(new SftpFile(Path, Name, connection, service)));
     }
 
     public override IEnumerable<ProjectAction> GetSupportedActions()

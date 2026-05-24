@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Renci.SshNet;
 using Renci.SshNet.Common;
 using Renci.SshNet.Sftp;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Projects.Types;
 using SkEditor.Models.Remote;
 
@@ -16,24 +16,27 @@ public class SftpFolderNode(
     string path,
     bool isRoot,
     RemoteConnection connection,
-    SftpClient client,
+    IRemoteConnectionService service,
     bool addDummy = true)
     : BaseFolderNode(name, path, isRoot, addDummy)
 {
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
-        SftpFileSystem.GetAlreadyExistsPredicate(client);
+        SftpFileSystem.GetAlreadyExistsPredicate(service, connection);
 
     protected override Func<string, Task> CreateFileAction =>
-        async path => await client.Create(path).DisposeAsync();
+        async path => await service.ExecuteSafeAsync(connection,
+            async c => await c.Create(path).DisposeAsync());
 
     protected override Func<string, Task> CreateFolderAction =>
-        async path => await client.CreateDirectoryAsync(path, CancellationToken.None);
+        async path => await service.ExecuteSafeAsync(connection,
+            async c => await c.CreateDirectoryAsync(path));
 
     protected override Func<string, Task> DeleteAction =>
-        async path => await client.DeleteDirectoryAsync(path, CancellationToken.None);
+        async path => await service.ExecuteSafeAsync(connection, async c => await c.DeleteDirectoryAsync(path));
 
     protected override Func<string, string, Task> RenameFileAction =>
-        async (oldPath, newPath) => await client.RenameFileAsync(oldPath, newPath, CancellationToken.None);
+        async (oldPath, newPath) => await service.ExecuteSafeAsync(connection,
+            async c => await c.RenameFileAsync(oldPath, newPath, CancellationToken.None));
 
     public override char[] InvalidChars => SftpFileSystem.InvalidChars;
 
@@ -44,9 +47,18 @@ public class SftpFolderNode(
 
         try
         {
-            IAsyncEnumerable<ISftpFile> fileEnumerable = client.ListDirectoryAsync(Path, CancellationToken.None);
+            List<ISftpFile> remoteFiles = await service.ExecuteSafeAsync(connection, async c =>
+            {
+                List<ISftpFile> list = [];
+                await foreach (ISftpFile file in c.ListDirectoryAsync(Path, CancellationToken.None))
+                {
+                    list.Add(file);
+                }
 
-            await foreach (ISftpFile file in fileEnumerable)
+                return list;
+            });
+
+            foreach (ISftpFile file in remoteFiles)
             {
                 if (file.IsDirectory)
                 {
@@ -55,11 +67,11 @@ public class SftpFolderNode(
                         continue;
                     }
 
-                    folders.Add(new SftpFolderNode(file.Name, file.FullName, false, connection, client));
+                    folders.Add(new SftpFolderNode(file.Name, file.FullName, false, connection, service));
                 }
                 else if (file.IsRegularFile)
                 {
-                    files.Add(new SftpFileNode(file.Name, file.FullName, connection, client));
+                    files.Add(new SftpFileNode(file.Name, file.FullName, connection, service));
                 }
             }
         }
@@ -115,11 +127,11 @@ public class SftpFolderNode(
 
     protected override FileSystemNode CreateFileNode(string name, string path)
     {
-        return new SftpFileNode(name, path, connection, client);
+        return new SftpFileNode(name, path, connection, service);
     }
 
     protected override FileSystemNode CreateFolderNode(string name, string path)
     {
-        return new SftpFolderNode(name, path, false, connection, client, false);
+        return new SftpFolderNode(name, path, false, connection, service, false);
     }
 }

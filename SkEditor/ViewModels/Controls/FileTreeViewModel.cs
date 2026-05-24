@@ -3,18 +3,20 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects;
+using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
 using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Controls;
 
-public partial class FileTreeViewModel : ObservableObject
+public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConnectionStateChangedMessage>
 {
     private readonly IClipboardService _clipboard;
     private readonly IDialogService _dialogs;
@@ -24,7 +26,7 @@ public partial class FileTreeViewModel : ObservableObject
     private CancellationTokenSource? _cts;
 
     public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard,
-        IDialogService dialogs, AppSettings appSettings)
+        IDialogService dialogs, AppSettings appSettings, IMessenger messenger)
     {
         _logs = logs;
         _notifs = notifs;
@@ -35,6 +37,8 @@ public partial class FileTreeViewModel : ObservableObject
         SelectedNodes.CollectionChanged += OnSelectedNodesChanged;
 
         InitializeCommandMap();
+
+        messenger.Register(this);
     }
 
     [ObservableProperty]
@@ -135,5 +139,34 @@ public partial class FileTreeViewModel : ObservableObject
         {
             node.OpenCommand?.Execute(null);
         }
+    }
+
+    public void Receive(RemoteConnectionStateChangedMessage message)
+    {
+        if (FileSystem is not SftpFileSystem sftpFileSystem || sftpFileSystem.Connection != message.Connection)
+        {
+            return;
+        }
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            switch (message.State)
+            {
+                case RemoteConnectionState.Reconnecting:
+                    IsLoading = true;
+                    break;
+
+                case RemoteConnectionState.Connected:
+                    IsLoading = false;
+                    break;
+
+                case RemoteConnectionState.Disconnected:
+                    IsLoading = false;
+                    RootItems.Clear();
+                    SelectedNodes.Clear();
+                    FileSystem = null;
+                    break;
+            }
+        });
     }
 }

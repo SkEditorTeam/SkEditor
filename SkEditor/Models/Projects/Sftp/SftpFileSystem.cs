@@ -18,6 +18,7 @@ public class SftpFileSystem(
 {
     public static readonly char[] InvalidChars = ['/', '\\', '\0'];
     public FileSystemNode? Root { get; private set; }
+    public RemoteConnection Connection => connection;
 
     public async Task<bool> LoadAsync(CancellationToken cancellationToken)
     {
@@ -25,7 +26,7 @@ public class SftpFileSystem(
         {
             SftpClient client = await connections.GetOrConnectSftpClientAsync(connection, cancellationToken);
 
-            Root = new SftpFolderNode(connection.Name, client.WorkingDirectory, true, connection, client)
+            Root = new SftpFolderNode(connection.Name, client.WorkingDirectory, true, connection, connections)
                 { IsRoot = true };
             await Root.LoadChildrenAsync();
             return true;
@@ -62,8 +63,20 @@ public class SftpFileSystem(
         Root = null;
     }
 
-    public static Func<string, Task<bool>> GetAlreadyExistsPredicate(SftpClient client)
+    public static Func<string, Task<bool>> GetAlreadyExistsPredicate(IRemoteConnectionService service,
+        RemoteConnection connection)
     {
-        return async path => await client.ExistsAsync(path, CancellationToken.None);
+        return async path =>
+        {
+            try
+            {
+                return await service.ExecuteSafeAsync(connection,
+                    async c => await c.ExistsAsync(path, CancellationToken.None));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        };
     }
 }

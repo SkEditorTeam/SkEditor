@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using SkEditor.Contracts.Services;
@@ -12,6 +14,9 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Security;
 using SkEditor.Models.Files;
+using SkEditor.Models.Messages;
+using SkEditor.Models.Notifications;
+using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
@@ -23,6 +28,7 @@ public class RemoteConnectionService(
     ITranslationService translation,
     ITabService tabs,
     ILogService logs,
+    INotificationService notifications,
     ICredentialStoreFactory credentialStoreFactory)
     : IRemoteConnectionService, IDisposable
 {
@@ -161,29 +167,28 @@ public class RemoteConnectionService(
 
     public void Disconnect(RemoteConnection connection)
     {
-        if (!_activeConnections.TryGetValue(connection, out SftpClient? client))
+        if (_activeConnections.Remove(connection, out SftpClient? client))
         {
-            return;
-        }
-
-        try
-        {
-            if (client.IsConnected)
+            try
             {
-                client.Disconnect();
+                if (client.IsConnected)
+                {
+                    client.Disconnect();
+                }
+            }
+            catch (Exception ex)
+            {
+                logs.Error($"Error disconnecting from {connection.Name}: {ex.Message}");
+            }
+            finally
+            {
+                client.Dispose();
             }
         }
-        catch (Exception ex)
-        {
-            logs.Error($"Error disconnecting from {connection.Name}: {ex.Message}");
-        }
-        finally
-        {
-            client.Dispose();
-            _activeConnections.Remove(connection);
 
-            CloseConnectionTabs(connection);
-        }
+        CloseConnectionTabs(connection);
+        WeakReferenceMessenger.Default.Send(
+            new RemoteConnectionStateChangedMessage(connection, RemoteConnectionState.Disconnected));
     }
 
     private void CloseConnectionTabs(RemoteConnection connection)
@@ -239,5 +244,82 @@ public class RemoteConnectionService(
         await client.ConnectAsync(cts.Token);
 
         return client.IsConnected;
+    }
+
+    public async Task ExecuteSafeAsync(RemoteConnection connection, Func<SftpClient, Task> action,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            SftpClient client = await GetOrConnectSftpClientAsync(connection, cancellationToken);
+
+            if (!client.IsConnected)
+            {
+                await client.ConnectAsync(cancellationToken);
+            }
+
+            await action(client);
+        }
+        catch (Exception ex) when (ex is IOException or SshConnectionException or SocketException)
+        {
+            logs.Warning($"Sftp connection lost for {connection.Name}. Attempting to reconnect...");
+
+            WeakReferenceMessenger.Default.Send(
+                new RemoteConnectionStateChangedMessage(connection, RemoteConnectionState.Reconnecting));
+
+            try
+            {
+                ResetClient(connection);
+                SftpClient client = await GetOrConnectSftpClientAsync(connection, cancellationToken);
+
+                await action(client);
+                WeakReferenceMessenger.Default.Send(
+                    new RemoteConnectionStateChangedMessage(connection, RemoteConnectionState.Connected));
+            }
+            catch (Exception retryEx)
+            {
+                logs.Error($"Failed to reconnect and execute operation for {connection.Name}: {retryEx.Message}");
+
+                notifications.Show(Notification
+                    .Create(TranslationKey.RemoteConnectionLostConnectionTitle)
+                    .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionLostConnectionMessage,
+                        connection.Name))
+                    .WithType(NotificationType.Error));
+
+                Disconnect(connection);
+            }
+        }
+    }
+
+    public async Task<T> ExecuteSafeAsync<T>(RemoteConnection connection, Func<SftpClient, Task<T>> action,
+        CancellationToken cancellationToken = default)
+    {
+        T result = default!;
+        await ExecuteSafeAsync(connection, async client => { result = await action(client); }, cancellationToken);
+        return result;
+    }
+
+    private void ResetClient(RemoteConnection connection)
+    {
+        if (!_activeConnections.Remove(connection, out SftpClient? client))
+        {
+            return;
+        }
+
+        try
+        {
+            if (client.IsConnected)
+            {
+                client.Disconnect();
+            }
+        }
+        catch
+        {
+            // ignored
+        }
+        finally
+        {
+            client.Dispose();
+        }
     }
 }

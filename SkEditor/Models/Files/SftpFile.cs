@@ -2,16 +2,16 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Renci.SshNet;
 using Renci.SshNet.Common;
-using Renci.SshNet.Sftp;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Remote;
 
 namespace SkEditor.Models.Files;
 
-public class SftpFile(string path, string name, RemoteConnection connection, SftpClient client) : BaseFile(path, name)
+public class SftpFile(string path, string name, RemoteConnection connection, IRemoteConnectionService service)
+    : BaseFile(path, name)
 {
-    public RemoteConnection Connection { get; } = connection;
+    public RemoteConnection Connection => connection;
     
     public override async ValueTask<Stream> LoadAsync()
     {
@@ -22,9 +22,8 @@ public class SftpFile(string path, string name, RemoteConnection connection, Sft
 
         try
         {
-            SftpFileStream stream =
-                await client.OpenAsync(Path, FileMode.Open, FileAccess.Read, CancellationToken.None);
-            return stream;
+            return await service.ExecuteSafeAsync(Connection, async client =>
+                await client.OpenAsync(Path, FileMode.Open, FileAccess.Read, CancellationToken.None));
         }
         catch (SftpPermissionDeniedException ex)
         {
@@ -43,7 +42,8 @@ public class SftpFile(string path, string name, RemoteConnection connection, Sft
 
         try
         {
-            await client.UploadFileAsync(stream, Path, token);
+            await service.ExecuteSafeAsync(Connection, async client =>
+                await client.UploadFileAsync(stream, Path, token), token);
         }
         catch (SftpPermissionDeniedException ex)
         {
