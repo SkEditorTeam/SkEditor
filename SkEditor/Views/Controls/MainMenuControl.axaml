@@ -33,6 +33,7 @@
         <Menu.Styles>
             <Style Selector="Menu MenuItem" x:DataType="menu:MainMenuItem">
                 <Setter Property="IsVisible" Value="{Binding IsVisible}" />
+                <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
                 <Setter Property="Command" Value="{Binding Command}" />
                 <Setter Property="ItemsSource" Value="{Binding SubItems}" />
                 <Setter Property="InputGesture"
@@ -47,6 +48,9 @@
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Icon" Value="{Binding IconSymbol, Converter={StaticResource SymbolIconConverter}}" />
+            </Style>
+            <Style Selector="Menu MenuItem:disabled icons|SymbolIcon">
+                <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabled}" />
             </Style>
         </Menu.Styles>
     </Menu>

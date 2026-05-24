@@ -73,7 +73,23 @@ public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService ta
             .WithInputGesture("Ctrl+H", false)
             .AddTo(edit);
 
+        UpdateVisibility(edit);
+        tabs.SelectedTabChanged += _ => { UpdateVisibility(edit); };
+
         return edit;
+    }
+
+    private void UpdateVisibility(MainMenuItem edit)
+    {
+        if (edit.SubItems is null)
+        {
+            return;
+        }
+
+        foreach (MainMenuItem mainMenuItem in edit.SubItems)
+        {
+            mainMenuItem.IsEnabled = tabs.SelectedTab is FileTab;
+        }
     }
 
     private void RequestAction(EditorCommandType commandType)

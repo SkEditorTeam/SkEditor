@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using System.Linq;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
@@ -36,37 +37,35 @@ public class FileMenuProvider(
 
         MainMenuItem.Separator.AddTo(fileMenu);
 
-        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
+        var saveItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
             .WithCommand(files.SaveFileAsync)
-            .WithInputGesture("Ctrl+S")
-            .AddTo(fileMenu);
+            .WithInputGesture("Ctrl+S");
+        saveItem.AddTo(fileMenu);
 
-        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
+        var saveAsItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
             .WithCommand(files.SaveAsFileAsync)
-            .WithInputGesture("Ctrl+Shift+S")
-            .AddTo(fileMenu);
+            .WithInputGesture("Ctrl+Shift+S");
+        saveAsItem.AddTo(fileMenu);
 
-        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAll, Symbol.SaveMultiple)
+        var saveAllItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAll, Symbol.SaveMultiple)
             .WithCommand(files.SaveAllAsync)
-            .WithInputGesture("Ctrl+Alt+S")
-            .AddTo(fileMenu);
+            .WithInputGesture("Ctrl+Alt+S");
+        saveAllItem.AddTo(fileMenu);
 
         MainMenuItem.Separator.AddTo(fileMenu);
 
-        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPublish, Symbol.Share)
+        var publishItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPublish, Symbol.Share)
             .WithCommand(windowDialogs.ShowPublishDialogAsync)
-            .WithInputGesture("Ctrl+Shift+P")
-            .AddTo(fileMenu);
+            .WithInputGesture("Ctrl+Shift+P");
+        publishItem.AddTo(fileMenu);
 
-        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderClose, Symbol.Dismiss)
+        var closeItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderClose, Symbol.Dismiss)
             .WithItems([
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseCurrentFile, Symbol.Document)
                     .WithCommand(() => tabs.SelectedTab?.CloseCommand.Execute(null)),
-                // .WithInputGesture("Ctrl+F4"),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAll, Symbol.DocumentMultiple)
                     .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.All)),
-                // .WithInputGesture("Ctrl+Shift+F4"),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAllButCurrent, Symbol.DocumentMultiple)
                     .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.AllButCurrent)),
@@ -79,9 +78,28 @@ public class FileMenuProvider(
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseRight, Symbol.DocumentArrowRight)
                     .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.Right))
-            ])
-            .AddTo(fileMenu);
+            ]);
+        closeItem.AddTo(fileMenu);
+
+        UpdateStates(saveItem, saveAsItem, saveAllItem, publishItem, closeItem);
+        tabs.SelectedTabChanged += _ => UpdateStates(saveItem, saveAsItem, saveAllItem, publishItem, closeItem);
 
         return fileMenu;
+    }
+
+    private void UpdateStates(MainMenuItem saveItem, MainMenuItem saveAsItem, MainMenuItem saveAllItem,
+        MainMenuItem publishItem, MainMenuItem closeItem)
+    {
+        bool hasTabs = tabs.Tabs.Count > 0;
+        bool isFileTab = tabs.SelectedTab is FileTab;
+
+        saveItem.IsEnabled = isFileTab;
+        saveAsItem.IsEnabled = isFileTab;
+
+        saveAllItem.IsEnabled = hasTabs && tabs.Tabs.Any(t => t is FileTab);
+
+        publishItem.IsEnabled = isFileTab;
+
+        closeItem.IsEnabled = hasTabs;
     }
 }
