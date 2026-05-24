@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaEdit.Utils;
@@ -357,10 +358,20 @@ public partial class FileTreeViewModel
 
         if (node.IsDirectory)
         {
+            if (!Directory.Exists(node.Path))
+            {
+                return;
+            }
+
             LinkOpener.OpenFolder(node.Path);
         }
         else
         {
+            if (!File.Exists(node.Path))
+            {
+                return;
+            }
+
             LinkOpener.OpenFolderWithFileSelection(node.Path);
         }
     }
