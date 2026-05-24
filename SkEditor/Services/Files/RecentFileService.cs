@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
@@ -18,6 +19,7 @@ public class RecentFileService : IRecentFileService
     private readonly ILogService _logs;
     private readonly ObservableCollection<WelcomeScreenRecentItem> _recentItems = [];
     private readonly string _savePath;
+    private CancellationTokenSource? _cts;
 
     public RecentFileService(IConfigService configs, ILogService logs)
     {
@@ -46,18 +48,19 @@ public class RecentFileService : IRecentFileService
             _recentItems.RemoveAt(_recentItems.Count - 1);
         }
 
-        _ = SaveRecentItemsAsync();
+        QueueSave();
     }
 
     public void RemoveRecentItem(string path)
     {
         WelcomeScreenRecentItem? existing = _recentItems.FirstOrDefault(i => i.Path == path);
-        if (existing != null)
+        if (existing == null)
         {
-            _recentItems.Remove(existing);
-
-            _ = SaveRecentItemsAsync();
+            return;
         }
+
+        _recentItems.Remove(existing);
+        QueueSave();
     }
 
     public void UpdateRecentItem(string? oldPath, string newPath)
@@ -74,7 +77,7 @@ public class RecentFileService : IRecentFileService
         int index = _recentItems.IndexOf(existing);
         _recentItems[index] = updatedItem;
 
-        _ = SaveRecentItemsAsync();
+        QueueSave();
     }
 
     public async Task LoadRecentItemsAsync()
@@ -108,7 +111,27 @@ public class RecentFileService : IRecentFileService
         }
     }
 
-    public async Task SaveRecentItemsAsync()
+    private void QueueSave()
+    {
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        CancellationToken token = _cts.Token;
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(500, token);
+                await SaveRecentItemsAsync();
+            }
+            catch (TaskCanceledException)
+            {
+                // ignored
+            }
+        }, token);
+    }
+
+    private async Task SaveRecentItemsAsync()
     {
         List<WelcomeScreenRecentItem> itemsToSave = RecentItems.ToList();
 

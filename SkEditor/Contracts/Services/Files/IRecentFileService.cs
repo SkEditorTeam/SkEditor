@@ -14,5 +14,4 @@ public interface IRecentFileService
     void UpdateRecentItem(string? oldPath, string newPath);
 
     Task LoadRecentItemsAsync();
-    Task SaveRecentItemsAsync();
 }
