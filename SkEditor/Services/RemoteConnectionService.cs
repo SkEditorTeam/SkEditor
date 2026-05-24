@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -33,7 +34,7 @@ public class RemoteConnectionService(
     : IRemoteConnectionService, IDisposable
 {
     private readonly Dictionary<RemoteConnection, SftpClient> _activeConnections = new();
-    private readonly SemaphoreSlim _connectionLock = new(1, 1);
+    private readonly ConcurrentDictionary<RemoteConnection, SemaphoreSlim> _connectionLocks = new();
     private readonly ICredentialStore _store = credentialStoreFactory.Create();
 
     public void Dispose()
@@ -51,7 +52,12 @@ public class RemoteConnectionService(
         }
 
         _activeConnections.Clear();
-        _connectionLock.Dispose();
+        foreach (SemaphoreSlim semaphore in _connectionLocks.Values)
+        {
+            semaphore.Dispose();
+        }
+
+        _connectionLocks.Clear();
     }
 
     public async Task<RemoteConnectionTestResult> TestConnectionAsync(RemoteConnectionInfo connectionInfo)
@@ -118,7 +124,9 @@ public class RemoteConnectionService(
     public async Task<SftpClient> GetOrConnectSftpClientAsync(RemoteConnection connection,
         CancellationToken cancellationToken = default)
     {
-        await _connectionLock.WaitAsync(cancellationToken);
+        SemaphoreSlim connectionLock = _connectionLocks.GetOrAdd(connection, _ => new SemaphoreSlim(1, 1));
+
+        await connectionLock.WaitAsync(cancellationToken);
         try
         {
             if (_activeConnections.TryGetValue(connection, out SftpClient? existingClient))
@@ -151,7 +159,7 @@ public class RemoteConnectionService(
         }
         finally
         {
-            _connectionLock.Release();
+            connectionLock.Release();
         }
     }
 

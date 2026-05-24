@@ -45,25 +45,26 @@
                       VerticalContentAlignment="Center"
                       PlaceholderText="{localization:Translate RemoteConnectionSelectConnection}"
                       SelectedItem="{Binding SelectedConnection, Mode=TwoWay}"
+                      DisplayMemberBinding="{Binding Name}"
                       ToolTip.Tip="{localization:Translate RemoteConnectionNoConnectionTooltip}"
                       ToolTip.ShowOnDisabled="True"
                       ToolTip.ServiceEnabled="{Binding !RemoteConnections.Count}"
                       IsEnabled="{Binding !!RemoteConnections.Count}"
                       ItemsSource="{Binding RemoteConnections}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
                 <Interaction.Behaviors>
                     <primitives:SelectingItemsControlSelectionChangedEventCommandTrigger
-                        Command="{Binding ConnectCommand}" Parameter="{Binding $parent[ComboBox].SelectedItem}" />
+                        Command="{Binding ConnectCommand}" />
                 </Interaction.Behaviors>
             </ComboBox>
         </DockPanel>
 
-        <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12"
-                    IsVisible="{Binding SelectedConnection, Converter={x:Static ObjectConverters.IsNull}}">
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12">
+            <StackPanel.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!FileTree.IsLoading" />
+                    <Binding Path="SelectedConnection" Converter="{x:Static ObjectConverters.IsNull}" />
+                </MultiBinding>
+            </StackPanel.IsVisible>
             <Viewbox Height="64" Opacity="0.5">
                 <icons:SymbolIcon Symbol="CloudOff" HorizontalAlignment="Center" />
             </Viewbox>

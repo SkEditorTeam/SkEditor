@@ -43,9 +43,11 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
 
         messenger.Register(this);
     }
-
+    
     [ObservableProperty]
     public partial RemoteConnection? SelectedConnection { get; set; }
+
+    public RemoteConnection? CurrentConnection { get; set; }
 
     public required FileTreeViewModel FileTree { get; init; }
 
@@ -58,31 +60,46 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
             return;
         }
 
-        if (message.NewFileSystem == null)
+        if (message.NewFileSystem != null)
         {
-            SelectedConnection = null;
+            return;
         }
+
+        CurrentConnection = null;
+        SelectedConnection = null;
     }
 
     public TranslatableString Name => TranslationKey.RemoteExplorerTitle;
     public StandardIcon Icon => "RemoteDesktopIcon";
 
-    [RelayCommand]
-    private async Task Connect(RemoteConnection? connection)
+    [RelayCommand(AllowConcurrentExecutions = true)]
+    private async Task Connect()
     {
-        if (connection == null)
+        RemoteConnection? targetedConnection = SelectedConnection;
+        if (targetedConnection == null)
         {
             return;
         }
 
-        bool success = await ChangeConnection(connection);
-        if (!success)
+        bool success = await ChangeConnection(targetedConnection);
+
+        if (SelectedConnection != targetedConnection)
         {
+            return;
+        }
+
+        if (success)
+        {
+            CurrentConnection = SelectedConnection;
+        }
+        else
+        {
+            CurrentConnection = null;
             SelectedConnection = null;
         }
     }
 
-    private async Task<bool> ChangeConnection(RemoteConnection connection)
+    private async Task<bool> ChangeConnection(RemoteConnection target)
     {
         int currentId = ++_connectionChangeId;
         _isChangingConnection = true;
@@ -101,8 +118,9 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
                 FileTree.FileSystem = null;
             }
 
-            FileTree.FileSystem = new SftpFileSystem(connection, _remoteConnections, _notifications);
+            FileTree.FileSystem = new SftpFileSystem(target, _remoteConnections, _notifications);
             bool success = await FileTree.LoadFileSystemAsync();
+        
             return success;
         }
         finally
