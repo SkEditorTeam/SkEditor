@@ -1,5 +1,8 @@
 ﻿using System;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
 
 namespace SkEditor.Views.Controls;
@@ -22,6 +25,8 @@ public class SkEditorWindow : FAAppWindow
         CanMinimize = false;
         CanResize = false;
         ShowAsDialog = true;
+
+        Background = Application.Current?.FindResource("SmallWindowBackgroundColor") as IBrush;
     }
 
     protected override Type StyleKeyOverride => typeof(FAAppWindow);
