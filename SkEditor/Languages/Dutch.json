@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "Voeg eerst een verbinding toe!",
   "RemoteConnectionNoConnectionTitle": "Geen externe verbinding",
   "RemoteConnectionNoConnectionMessage": "Maak een externe verbinding om bestanden op een externe server te bekijken en te bewerken.",
-  "RemoteConnectionNoConnecting": "Verbinden...",
+  "RemoteConnectionConnecting": "Verbinden...",
   "RemoteConnectionAddConnectionMissingFields": "Vul eerst alle verplichte velden in",
   "RemoteConnectionAddButton": "Verbinding toevoegen",
   "RemoteConnectionFieldName": "Naam",

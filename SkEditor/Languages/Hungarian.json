@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "Először adjon hozzá egy kapcsolatot!",
   "RemoteConnectionNoConnectionTitle": "Nincs távoli kapcsolat",
   "RemoteConnectionNoConnectionMessage": "Hozzon létre egy távoli kapcsolatot a fájlok távoli szerveren történő megtekintéséhez és szerkesztéséhez.",
-  "RemoteConnectionNoConnecting": "Csatlakozás...",
+  "RemoteConnectionConnecting": "Csatlakozás...",
   "RemoteConnectionAddConnectionMissingFields": "Kérjük, először töltsön ki minden kötelező mezőt!",
   "RemoteConnectionAddButton": "Kapcsolat hozzáadása",
   "RemoteConnectionFieldName": "Név",

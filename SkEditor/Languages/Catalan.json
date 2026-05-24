@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "Afegeix una connexió primer!",
   "RemoteConnectionNoConnectionTitle": "Sense connexió remota",
   "RemoteConnectionNoConnectionMessage": "Crea una connexió remota per a veure i editar fitxers en un servidor remot.",
-  "RemoteConnectionNoConnecting": "Connectant...",
+  "RemoteConnectionConnecting": "Connectant...",
   "RemoteConnectionAddConnectionMissingFields": "Si us plau, omple primer tots els camps obligatoris",
   "RemoteConnectionAddButton": "Afegeix connexió",
   "RemoteConnectionFieldName": "Nom",

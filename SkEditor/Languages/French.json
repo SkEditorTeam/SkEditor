@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "Ajoutez d'abord une connexion !",
   "RemoteConnectionNoConnectionTitle": "Pas de connexion distante",
   "RemoteConnectionNoConnectionMessage": "Créez une connexion distante pour afficher et modifier des fichiers sur un serveur distant.",
-  "RemoteConnectionNoConnecting": "Connexion en cours...",
+  "RemoteConnectionConnecting": "Connexion en cours...",
   "RemoteConnectionAddConnectionMissingFields": "Veuillez d'abord remplir tous les champs obligatoires",
   "RemoteConnectionAddButton": "Ajouter la connexion",
   "RemoteConnectionFieldName": "Nom",

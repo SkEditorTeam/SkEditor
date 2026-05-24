@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "Сначала добавьте подключение!",
   "RemoteConnectionNoConnectionTitle": "Нет удаленного подключения",
   "RemoteConnectionNoConnectionMessage": "Создайте удаленное подключение для просмотра и редактирования файлов на удаленном сервере.",
-  "RemoteConnectionNoConnecting": "Подключение...",
+  "RemoteConnectionConnecting": "Подключение...",
   "RemoteConnectionAddConnectionMissingFields": "Пожалуйста, сначала заполните все обязательные поля",
   "RemoteConnectionAddButton": "Добавить подключение",
   "RemoteConnectionFieldName": "Имя",

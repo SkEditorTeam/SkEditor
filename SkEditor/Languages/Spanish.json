@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "¡Añade una conexión primero!",
   "RemoteConnectionNoConnectionTitle": "Sin conexión remota",
   "RemoteConnectionNoConnectionMessage": "Crea una conexión remota para ver y editar archivos en un servidor remoto.",
-  "RemoteConnectionNoConnecting": "Conectando...",
+  "RemoteConnectionConnecting": "Conectando...",
   "RemoteConnectionAddConnectionMissingFields": "Por favor, completa primero todos los campos obligatorios",
   "RemoteConnectionAddButton": "Añadir conexión",
   "RemoteConnectionFieldName": "Nombre",

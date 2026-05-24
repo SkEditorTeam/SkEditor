@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "Add a connection first!",
   "RemoteConnectionNoConnectionTitle": "No remote connection",
   "RemoteConnectionNoConnectionMessage": "Create a remote connection to view and edit files on a remote server.",
-  "RemoteConnectionNoConnecting": "Connecting...",
+  "RemoteConnectionConnecting": "Connecting...",
   "RemoteConnectionAddConnectionMissingFields": "Please fill in all required fields first",
   "RemoteConnectionAddButton": "Add Connection",
   "RemoteConnectionFieldName": "Name",

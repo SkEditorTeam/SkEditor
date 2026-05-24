@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "먼저 연결을 추가하세요!",
   "RemoteConnectionNoConnectionTitle": "원격 연결 없음",
   "RemoteConnectionNoConnectionMessage": "원격 서버의 파일을 보고 편집하려면 원격 연결을 생성하세요.",
-  "RemoteConnectionNoConnecting": "연결 중...",
+  "RemoteConnectionConnecting": "연결 중...",
   "RemoteConnectionAddConnectionMissingFields": "필수 필드를 모두 입력해 주세요",
   "RemoteConnectionAddButton": "연결 추가",
   "RemoteConnectionFieldName": "이름",

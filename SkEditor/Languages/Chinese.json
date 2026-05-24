@@ -419,7 +419,7 @@
   "RemoteConnectionNoConnectionTooltip": "请先添加连接！",
   "RemoteConnectionNoConnectionTitle": "无远程连接",
   "RemoteConnectionNoConnectionMessage": "创建远程连接以查看和编辑远程服务器上的文件。",
-  "RemoteConnectionNoConnecting": "正在连接...",
+  "RemoteConnectionConnecting": "正在连接...",
   "RemoteConnectionAddConnectionMissingFields": "请先填写所有必填字段",
   "RemoteConnectionAddButton": "添加连接",
   "RemoteConnectionFieldName": "名称",

@@ -81,7 +81,7 @@
             <Viewbox Height="64" Opacity="0.5" OpacityMask="White">
                 <controls:FAProgressRing HorizontalAlignment="Center" />
             </Viewbox>
-            <TextBlock Text="{localization:Translate RemoteConnectionNoConnecting}" HorizontalAlignment="Center"
+            <TextBlock Text="{localization:Translate RemoteConnectionConnecting}" HorizontalAlignment="Center"
                        FontSize="18" Opacity="0.75" />
         </StackPanel>
 
