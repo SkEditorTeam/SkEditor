@@ -40,7 +40,10 @@ public static class ProjectMenuRegistry
         //{ ProjectAction.Upload, new MenuTemplate("Upload", Symbol.ArrowUpload, AllowOneItemOnly: true) },
         //{ ProjectAction.Download, new MenuTemplate("Download", Symbol.ArrowDownload) },
 
-        //{ ProjectAction.Refresh, new MenuTemplate("Refresh", Symbol.ArrowClockwise) },
+        {
+            ProjectAction.Refresh,
+            new MenuTemplate(TranslationKey.MenuHeaderRefresh, Symbol.ArrowClockwise, AllowOneItemOnly: true)
+        },
         { ProjectAction.Disconnect, new MenuTemplate(TranslationKey.MenuHeaderDisconnect, Symbol.PlugDisconnected) },
 
         { ProjectAction.Close, new MenuTemplate(TranslationKey.MenuHeaderClose, Symbol.Dismiss) }

@@ -66,6 +66,7 @@
   "MenuHeaderRename": "Rename",
   "MenuHeaderNewFile": "New File",
   "MenuHeaderNewFolder": "New Folder",
+  "MenuHeaderRefresh": "Refresh",
   "MenuHeaderDisconnect": "Disconnect",
   "ButtonYes": "Yes",
   "ButtonNo": "No",

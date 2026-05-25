@@ -38,7 +38,7 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     protected bool HasLoadedChildren { get; set; }
 
-    public abstract Task LoadChildrenAsync();
+    public abstract Task LoadChildrenAsync(bool force = false);
 
     public abstract IEnumerable<ProjectAction> GetSupportedActions();
 

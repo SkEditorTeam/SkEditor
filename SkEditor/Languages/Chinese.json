@@ -66,6 +66,7 @@
   "MenuHeaderRename": "重命名",
   "MenuHeaderNewFile": "新建文件",
   "MenuHeaderNewFolder": "新建文件夹",
+  "MenuHeaderRefresh": "刷新",
   "MenuHeaderDisconnect": "断开连接",
   "ButtonYes": "是",
   "ButtonNo": "否",

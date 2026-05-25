@@ -116,7 +116,9 @@ public class SftpFolderNode(
             ProjectAction.Delete,
             ProjectAction.Separator,
             ProjectAction.CopyPath,
-            ProjectAction.CopyRelativePath
+            ProjectAction.CopyRelativePath,
+            ProjectAction.Separator,
+            ProjectAction.Refresh
         ];
     }
 

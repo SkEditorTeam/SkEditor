@@ -11,7 +11,7 @@ public sealed class DummyFileNode() : FileSystemNode("Loading...", "...", false)
     protected override Func<string, string, Task> RenameFileAction => (_, _) => Task.CompletedTask;
     public override char[] InvalidChars => [];
 
-    public override Task LoadChildrenAsync()
+    public override Task LoadChildrenAsync(bool force = false)
     {
         return Task.CompletedTask;
     }

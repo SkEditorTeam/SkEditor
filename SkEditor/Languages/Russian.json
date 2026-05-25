@@ -66,6 +66,7 @@
   "MenuHeaderRename": "Переименовать",
   "MenuHeaderNewFile": "Создать файл",
   "MenuHeaderNewFolder": "Создать папку",
+  "MenuHeaderRefresh": "Обновить",
   "MenuHeaderDisconnect": "Отключить",
   "ButtonYes": "Да",
   "ButtonNo": "Нет",

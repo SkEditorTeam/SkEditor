@@ -173,8 +173,13 @@ public abstract partial class BaseFolderNode : FileSystemNode
         return targetIndex;
     }
 
-    public override async Task LoadChildrenAsync()
+    public override async Task LoadChildrenAsync(bool force = false)
     {
+        if (force)
+        {
+            HasLoadedChildren = false;
+        }
+        
         if (HasLoadedChildren)
         {
             return;

@@ -36,6 +36,7 @@ public partial class FileTreeViewModel
             { ProjectAction.CopyPath, CopyPathCommand },
             { ProjectAction.CopyRelativePath, CopyRelativePathCommand },
             { ProjectAction.ShowInExplorer, ShowInExplorerCommand },
+            { ProjectAction.Refresh, RefreshCommand },
             { ProjectAction.Disconnect, DisconnectCommand },
             { ProjectAction.Close, CloseLocalCommand }
         };
@@ -175,6 +176,23 @@ public partial class FileTreeViewModel
             SelectedNodes.Select(n =>
                 n.Path.StartsWith(basePath) ? n.Path[basePath.Length..].TrimStart('/', '\\') : n.Path));
         _clipboard.CopyTextAsync(paths);
+    }
+
+    [RelayCommand]
+    private async Task Refresh()
+    {
+        if (SelectedNodes.Count != 1)
+        {
+            return;
+        }
+
+        FileSystemNode node = SelectedNodes[0];
+        if (node is not BaseFolderNode folderNode)
+        {
+            return;
+        }
+
+        await folderNode.LoadChildrenAsync(true);
     }
 
     [RelayCommand]

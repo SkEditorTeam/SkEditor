@@ -66,6 +66,7 @@
   "MenuHeaderRename": "Umbenennen",
   "MenuHeaderNewFile": "Neue Datei",
   "MenuHeaderNewFolder": "Neuer Ordner",
+  "MenuHeaderRefresh": "Aktualisieren",
   "MenuHeaderDisconnect": "Verbindung trennen",
   "ButtonYes": "Ja",
   "ButtonNo": "Nein",
