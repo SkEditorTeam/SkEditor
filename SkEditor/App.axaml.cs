@@ -15,7 +15,6 @@ using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
@@ -54,7 +53,6 @@ public class App : Application
             .MinimumLevel.Debug()
             .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "SkEditor/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
-            .WriteTo.Sink(new LogsHandler())
             .CreateLogger();
 
         Log.Logger = serilogLogger;

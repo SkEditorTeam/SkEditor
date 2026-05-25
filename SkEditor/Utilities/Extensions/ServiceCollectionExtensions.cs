@@ -48,7 +48,6 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<ILogService, LogService>();
             services.AddSingleton<IconProvider>();
-            services.AddSingleton<CrashChecker>();
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<IWelcomeService, WelcomeService>();
             services.AddSingleton<ITranslationService, TranslationService>();
