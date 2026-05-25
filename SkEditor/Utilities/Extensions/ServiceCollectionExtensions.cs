@@ -144,6 +144,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<IEditorFeature, EditorGoToLineFeature>();
             services.AddTransient<IEditorFeature, AutoIndentFeature>();
             services.AddTransient<IEditorFeature, SmartAutoPairingFeature>();
+            services.AddTransient<IEditorFeature, SelectionOccurencesFeature>();
         }
 
         public void AddEditorCommands()
