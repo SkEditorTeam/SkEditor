@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Avalonia.Media;
 using SkEditor.Converters;
-using SkEditor.Utilities.Styling.Attributes;
+using SkEditor.Utilities.Styling;
 using Brush = Avalonia.Media.Immutable.ImmutableSolidColorBrush;
 
 namespace SkEditor.Models.UI;

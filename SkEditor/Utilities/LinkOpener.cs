@@ -4,6 +4,7 @@ using System.IO;
 
 namespace SkEditor.Utilities;
 
+// todo: move to a service
 public static class LinkOpener
 {
     /// <summary>

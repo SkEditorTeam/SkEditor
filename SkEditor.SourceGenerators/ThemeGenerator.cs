@@ -12,7 +12,10 @@ namespace SkEditor.SourceGenerators;
 public class ThemeGenerator : IIncrementalGenerator
 {
     private const string ThemeAttributeFullName =
-        "SkEditor.Utilities.Styling.Attributes.ThemeAttribute";
+        "SkEditor.Utilities.Styling.ThemeAttribute";
+
+    private const string ThemeResourceAttributeFullName =
+        "SkEditor.Utilities.Styling.ThemeResourceAttribute";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -41,8 +44,7 @@ public class ThemeGenerator : IIncrementalGenerator
                     ..classSymbol.GetMembers().OfType<IPropertySymbol>().Where(p =>
                         p.SetMethod != null && p.Type.ToDisplayString() ==
                         "Avalonia.Media.Immutable.ImmutableSolidColorBrush" && p.GetAttributes().Any(attr =>
-                            attr.AttributeClass?.ToDisplayString() ==
-                            "SkEditor.Utilities.Styling.Attributes.ThemeResourceAttribute"))
+                            attr.AttributeClass?.ToDisplayString() == ThemeResourceAttributeFullName))
                 ];
 
                 StringBuilder getBrushSwitchArms = new();
@@ -65,8 +67,7 @@ public class ThemeGenerator : IIncrementalGenerator
                 foreach (IPropertySymbol? prop in properties)
                 {
                     AttributeData attr = prop.GetAttributes().First(a =>
-                        a.AttributeClass?.ToDisplayString() ==
-                        "SkEditor.Utilities.Styling.Attributes.ThemeResourceAttribute");
+                        a.AttributeClass?.ToDisplayString() == ThemeResourceAttributeFullName);
 
                     List<string> keys = attr.ConstructorArguments.Length > 0
                         ? attr.ConstructorArguments[0].Values.Select(v => v.Value?.ToString() ?? "").ToList()
