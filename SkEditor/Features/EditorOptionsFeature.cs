@@ -5,12 +5,13 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Features;
 
-public class EditorOptionsFeature(AppSettings appSettings) : IEditorFeature
+public class EditorOptionsFeature(AppSettings appSettings, IThemeService themes) : IEditorFeature
 {
     public void OnViewAttached(FileTab tab, TextEditor editor)
     {
@@ -29,14 +30,8 @@ public class EditorOptionsFeature(AppSettings appSettings) : IEditorFeature
         editor.Options.ConvertTabsToSpaces = !appSettings.UseEditorTabsForIndentation;
         editor.Options.IndentationSize = appSettings.EditorTabSize;
 
-        // TODO:
-        // editor.TextArea.TextView.CurrentLineBackground = ThemeEditor.CurrentTheme.CurrentLineBackground;
-        // editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(ThemeEditor.CurrentTheme.CurrentLineBorder, 2);
-        // editor.Options.HighlightCurrentLine = SkEditorAPI.Core.GetAppConfig().HighlightCurrentLine;
-
-        editor.TextArea.TextView.CurrentLineBackground = new ImmutableSolidColorBrush(Color.Parse("#05FFFFFF"));
-        editor.TextArea.TextView.CurrentLineBorder =
-            new ImmutablePen(new ImmutableSolidColorBrush(Color.Parse("#0DFFFFFF")));
+        editor.TextArea.TextView.CurrentLineBackground = themes.CurrentTheme.CurrentLineBackground;
+        editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(themes.CurrentTheme.CurrentLineBorder, 2);
         editor.Options.HighlightCurrentLine = appSettings.HighlightCurrentLine;
     }
 }
