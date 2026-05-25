@@ -14,7 +14,7 @@ using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
 using SkEditor.Utilities.Settings.Configs;
 
-namespace SkEditor.ViewModels.Controls;
+namespace SkEditor.ViewModels.Controls.FileTree;
 
 public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConnectionStateChangedMessage>
 {
@@ -122,7 +122,6 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
 
     public void OnSelectedNodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        OpenCommand.NotifyCanExecuteChanged();
         UpdateContextMenuItems();
     }
 

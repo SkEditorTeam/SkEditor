@@ -12,6 +12,7 @@ using SkEditor.Models.UI;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Controls.FileTree;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.ViewModels.Controls.Sidebar.Panes;

@@ -8,7 +8,7 @@ using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
 using SkEditor.Behaviors;
 using SkEditor.Models.Projects.Types;
-using SkEditor.ViewModels.Controls;
+using SkEditor.ViewModels.Controls.FileTree;
 
 namespace SkEditor.Views.Controls.Projects;
 

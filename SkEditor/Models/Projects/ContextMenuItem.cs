@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using System.Collections.Generic;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 
@@ -12,7 +13,7 @@ public class ContextMenuItem
     public StandardIcon? Icon { get; private set; }
     public IRelayCommand? Command { get; private set; }
     public string? InputGestureText { get; private set; }
-    public bool IsSeparator { get; private set; }
+    public bool IsSeparator { get; private init; }
     public bool AllowForOneItemOnly { get; private set; }
 
     public static ContextMenuItem Item(TranslatableString header)
@@ -43,4 +44,37 @@ public class ContextMenuItem
         AllowForOneItemOnly = true;
         return this;
     }
+
+    public static List<ContextMenuItem> CleanUpSeparators(IEnumerable<ContextMenuItem> menuItems)
+    {
+        List<ContextMenuItem> cleaned = [];
+        bool lastWasSeparator = true;
+
+        foreach (ContextMenuItem item in menuItems)
+        {
+            if (item.IsSeparator)
+            {
+                if (lastWasSeparator)
+                {
+                    continue;
+                }
+
+                cleaned.Add(item);
+                lastWasSeparator = true;
+            }
+            else
+            {
+                cleaned.Add(item);
+                lastWasSeparator = false;
+            }
+        }
+
+        if (cleaned.Count > 0 && cleaned[^1].IsSeparator)
+        {
+            cleaned.RemoveAt(cleaned.Count - 1);
+        }
+
+        return cleaned;
+    }
 }
+

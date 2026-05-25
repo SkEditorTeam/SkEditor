@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
+using AvaloniaEdit.Utils;
+using CommunityToolkit.Mvvm.Input;
+using SkEditor.Models.Projects;
+using SkEditor.Models.Projects.Sftp;
+using SkEditor.Models.Projects.Types;
+
+namespace SkEditor.ViewModels.Controls.FileTree;
+
+public partial class FileTreeViewModel
+{
+    private FileTreeCommandHandler _commandHandler;
+    private Dictionary<ProjectAction, IRelayCommand> _commandMap;
+
+    [MemberNotNull(nameof(_commandMap), nameof(_commandHandler))]
+    private void InitializeCommandMap()
+    {
+        _commandHandler = new FileTreeCommandHandler(this, _dialogs, _clipboard, _notifs);
+        
+        _commandMap = new Dictionary<ProjectAction, IRelayCommand>
+        {
+            { ProjectAction.Open, FromAction(_commandHandler.Open) },
+            { ProjectAction.NewFile, FromAction(_commandHandler.NewFile) },
+            { ProjectAction.NewFolder, FromAction(_commandHandler.NewFolder) },
+            { ProjectAction.Rename, FromAction(_commandHandler.Rename) },
+            { ProjectAction.Delete, FromAction(_commandHandler.Delete) },
+            { ProjectAction.CopyPath, FromAction(_commandHandler.CopyPath) },
+            { ProjectAction.CopyRelativePath, FromAction(_commandHandler.CopyRelativePath) },
+            { ProjectAction.ShowInExplorer, FromAction(_commandHandler.ShowInExplorer) },
+            { ProjectAction.Refresh, FromAction(_commandHandler.Refresh) },
+            { ProjectAction.Disconnect, FromAction(_commandHandler.Disconnect) },
+            { ProjectAction.Close, FromAction(_commandHandler.CloseLocal) }
+        };
+    }
+
+    private static RelayCommand FromAction(Action action)
+    {
+        return new RelayCommand(action);
+    }
+
+    private static AsyncRelayCommand FromAction(Func<Task> action)
+    {
+        return new AsyncRelayCommand(action);
+    }
+
+    public async Task CloseFileSystemAsync()
+    {
+        if (_cts != null)
+        {
+            await _cts.CancelAsync();
+            _cts.Dispose();
+            _cts = null;
+        }
+
+        if (FileSystem is SftpFileSystem sftp)
+        {
+            sftp.Disconnect();
+        }
+
+        RootItems.Clear();
+        SelectedNodes.Clear();
+        FileSystem = null;
+        IsLoading = false;
+    }
+
+    private void UpdateContextMenuItems()
+    {
+        ContextMenuItems.Clear();
+
+        List<FileSystemNode> selectedNodes = SelectedNodes.Where(n => n is not DummyFileNode).ToList();
+
+        if (selectedNodes.Count == 0)
+        {
+            return;
+        }
+
+        IEnumerable<ProjectAction> actionsTemplate = selectedNodes.First().GetSupportedActions();
+        HashSet<ProjectAction> commonActions = selectedNodes
+            .Select(n => n.GetSupportedActions().Where(a => a != ProjectAction.Separator))
+            .Aggregate((prev, next) => prev.Intersect(next))
+            .ToHashSet();
+
+        foreach (ProjectAction action in actionsTemplate)
+        {
+            if (action == ProjectAction.Separator)
+            {
+                ContextMenuItems.Add(ContextMenuItem.Separator);
+                continue;
+            }
+
+            if (!commonActions.Contains(action))
+            {
+                continue;
+            }
+
+            ProjectMenuRegistry.Templates.TryGetValue(action, out MenuTemplate? template);
+            if (template == null)
+            {
+                continue;
+            }
+
+            if (template.AllowOneItemOnly && selectedNodes.Count > 1)
+            {
+                continue;
+            }
+
+            _commandMap.TryGetValue(action, out IRelayCommand? command);
+            ContextMenuItem item = ContextMenuItem.Item(template.Header)
+                .WithIcon(template.Icon)
+                .WithInputGesture(template.InputGestureText)
+                .WithCommand(command);
+
+            ContextMenuItems.Add(item);
+        }
+
+        List<ContextMenuItem> cleaned = ContextMenuItem.CleanUpSeparators(ContextMenuItems.ToList());
+        ContextMenuItems.Clear();
+        ContextMenuItems.AddRange(cleaned);
+    }
+
+    [RelayCommand]
+    private void Rename()
+    {
+        _commandHandler.Rename();
+    }
+
+    [RelayCommand]
+    private async Task Delete()
+    {
+        await _commandHandler.Delete();
+    }
+
+    [RelayCommand]
+    private void Open()
+    {
+        _commandHandler.Open();
+    }
+}

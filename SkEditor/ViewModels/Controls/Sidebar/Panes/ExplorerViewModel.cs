@@ -13,6 +13,7 @@ using SkEditor.Models.Notifications;
 using SkEditor.Models.Projects.Local;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
+using SkEditor.ViewModels.Controls.FileTree;
 
 namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 

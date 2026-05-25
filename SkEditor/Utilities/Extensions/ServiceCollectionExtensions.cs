@@ -28,6 +28,7 @@ using SkEditor.Utilities.Settings.Providers.Choice;
 using SkEditor.Utilities.Settings.Providers.Sections;
 using SkEditor.Utilities.StatusBar;
 using SkEditor.ViewModels.Controls;
+using SkEditor.ViewModels.Controls.FileTree;
 using SkEditor.ViewModels.Controls.Sidebar.Panes;
 using SkEditor.ViewModels.Pages;
 using SkEditor.ViewModels.Windows;
