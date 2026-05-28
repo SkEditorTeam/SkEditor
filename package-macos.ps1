@@ -140,4 +140,9 @@ if ($WslAvailable) {
     Compress-Archive -Path $AppDir -DestinationPath $ZipOut
 }
 
+Write-Step "Deleting .app temp folder"
+if (Test-Path $AppDir) {
+    Remove-Item $AppDir -Recurse -Force
+}
+
 Write-Host "  done!" -ForegroundColor Green
