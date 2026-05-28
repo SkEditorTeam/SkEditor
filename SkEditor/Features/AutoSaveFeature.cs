@@ -73,6 +73,8 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
         {
             await Task.Delay(delay, token);
 
+            await _tab.SaveAsync();
+
             if (!token.IsCancellationRequested)
             {
                 _lastChangeAt = DateTime.MinValue;
