@@ -110,7 +110,6 @@ public static class ServiceCollectionExtensions
         {
             services.AddTransient<MainWindow>();
             services.AddTransient<SplashScreen>();
-            services.AddTransient<RemoteConnectionWindow>();
             services.AddTransient<SettingsPage>();
             services.AddTransient<WhatsNewPage>();
 
@@ -122,6 +121,10 @@ public static class ServiceCollectionExtensions
 
             services.AddTransient<AboutWindow>();
             services.AddSingleton<Func<AboutWindow>>(sp => sp.GetRequiredService<AboutWindow>);
+
+            services.AddTransient<ManageRemoteConnectionsWindow>();
+            services.AddSingleton<Func<ManageRemoteConnectionsWindow>>(sp =>
+                sp.GetRequiredService<ManageRemoteConnectionsWindow>);
 
             services.AddTransient<SettingsTab>();
             services.AddSingleton<Func<SettingsTab>>(sp => sp.GetRequiredService<SettingsTab>);

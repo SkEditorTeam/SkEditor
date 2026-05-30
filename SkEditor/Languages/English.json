@@ -418,7 +418,7 @@
   "WelcomePageRecentEmpty": "No recent files or folders",
   "WelcomePageRecentCopyPath": "Copy Path",
   "WelcomePageRecentRemove": "Remove from Recent",
-  "RemoteConnectionNewWindowTitle": "New Remote Connection",
+  "RemoteConnectionManageWindowTitle": "Manage Remote Connections",
   "RemoteConnectionTestConnectionTooltip": "Test the connection settings",
   "RemoteConnectionSelectConnection": "Select connection...",
   "RemoteConnectionNoConnectionTooltip": "Add a connection first!",

@@ -33,6 +33,13 @@ public partial class RemoteConnectionInfo : ObservableObject
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
     public partial string Username { get; set; } = "";
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PasswordPlaceholder), nameof(ConnectionFieldsFilled),
+        nameof(RequiredFieldsFilled))]
+    public partial bool IsPasswordSaved { get; set; }
+
+    public string PasswordPlaceholder => IsPasswordSaved ? "●●●●●●●●" : "Enter password";
+
     public bool IsPasswordAuth => AuthMethod == RemoteAuthMethod.Password;
     public bool IsPrivateKeyAuth => AuthMethod == RemoteAuthMethod.PrivateKey;
 
@@ -40,7 +47,7 @@ public partial class RemoteConnectionInfo : ObservableObject
         !string.IsNullOrWhiteSpace(Host) &&
         !string.IsNullOrWhiteSpace(Username) &&
         (IsPasswordAuth
-            ? !string.IsNullOrWhiteSpace(Password)
+            ? !string.IsNullOrWhiteSpace(Password) || IsPasswordSaved
             : !string.IsNullOrWhiteSpace(KeyFilePath));
 
     public bool RequiredFieldsFilled =>

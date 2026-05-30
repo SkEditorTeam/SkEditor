@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
@@ -13,7 +13,6 @@ using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls.FileTree;
-using SkEditor.Views.Windows;
 
 namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 
@@ -24,6 +23,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     private readonly INotificationService _notifications;
     private readonly IRemoteConnectionService _remoteConnections;
     private readonly WindowRegistry _windowRegistry;
+    private readonly IWindowDialogService _windowDialogs;
 
     private int _connectionChangeId;
     private bool _isChangingConnection;
@@ -32,12 +32,14 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         INotificationService notifications,
         IRemoteConnectionService remoteConnections,
         WindowRegistry windowRegistry,
+        IWindowDialogService windowDialogs,
         ConnectionsConfig connectionsConfig,
         IMessenger messenger)
     {
         _notifications = notifications;
         _remoteConnections = remoteConnections;
         _windowRegistry = windowRegistry;
+        _windowDialogs = windowDialogs;
         _connectionsConfig = connectionsConfig;
         FileTree = fileTree;
         RemoteConnections = new ObservableCollection<RemoteConnection>(connectionsConfig.Connections);
@@ -136,29 +138,6 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     [RelayCommand]
     private async Task NewRemoteConnection()
     {
-        RemoteConnectionWindow window = App.Services.GetRequiredService<RemoteConnectionWindow>();
-
-        if (_windowRegistry.Active is not { } mainWindow)
-        {
-            return;
-        }
-
-        RemoteConnectionInfo? info = await window.ShowDialog<RemoteConnectionInfo>(mainWindow);
-        if (info == null)
-        {
-            return;
-        }
-
-        RemoteConnection connection = new(info);
-
-        if (connection.AuthMethod == RemoteAuthMethod.Password)
-        {
-            _remoteConnections.SavePassword(connection, info.Password);
-        }
-
-        _connectionsConfig.Connections.Add(connection);
-        _ = _connectionsConfig.Save();
-
-        RemoteConnections.Add(connection);
+        await _windowDialogs.ShowManageRemoteConnectionsDialogAsync();
     }
 }

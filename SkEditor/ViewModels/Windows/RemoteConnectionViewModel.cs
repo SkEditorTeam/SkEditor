@@ -13,6 +13,8 @@ using SkEditor.Models.Notifications;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Configs;
+using Notification = SkEditor.Models.Notifications.Notification;
 
 namespace SkEditor.ViewModels.Windows;
 
@@ -20,6 +22,7 @@ public partial class RemoteConnectionViewModel(
     IRemoteConnectionService connections,
     INotificationService notifications,
     IClipboardService clipboard,
+    ConnectionsConfig connectionsConfig,
     ITranslationService translation) : ObservableObject
 {
     [ObservableProperty]
@@ -30,6 +33,11 @@ public partial class RemoteConnectionViewModel(
 
     [ObservableProperty]
     public partial FAInfoBarSeverity InfoBarSeverity { get; set; } = FAInfoBarSeverity.Informational;
+
+    public IReadOnlyList<RemoteConnection> Connections { get; } = connectionsConfig.Connections;
+
+    [ObservableProperty]
+    public partial RemoteConnection? SelectedConnection { get; set; }
 
     public IReadOnlyList<RemoteAuthMethod> AuthMethods { get; } =
         Enum.GetValues<RemoteAuthMethod>().ToList();
@@ -113,15 +121,38 @@ public partial class RemoteConnectionViewModel(
 
         e.Handled = true;
 
-        ConnectionInfo.Host = connectionInfo.Host;
-        ConnectionInfo.Port = connectionInfo.Port.ToString();
-        ConnectionInfo.Username = connectionInfo.Username ?? "";
-        ConnectionInfo.Password = connectionInfo.Password ?? "";
-        ConnectionInfo.AuthMethod = connectionInfo.Password != null
-            ? RemoteAuthMethod.Password
-            : ConnectionInfo.AuthMethod;
+        ConnectionInfo = new RemoteConnectionInfo
+        {
+            Host = connectionInfo.Host,
+            Port = connectionInfo.Port.ToString(),
+            Username = connectionInfo.Username ?? "",
+            Password = connectionInfo.Password ?? "",
+            AuthMethod = connectionInfo.Password != null
+                ? RemoteAuthMethod.Password
+                : ConnectionInfo.AuthMethod
+        };
 
         PasteCompleted?.Invoke();
+    }
+
+    partial void OnSelectedConnectionChanged(RemoteConnection? value)
+    {
+        if (value == null)
+        {
+            return;
+        }
+
+        ConnectionInfo = new RemoteConnectionInfo
+        {
+            Name = value.Name,
+            Host = value.Host,
+            Port = value.Port.ToString(),
+            Username = value.Username,
+            AuthMethod = value.AuthMethod,
+            KeyFilePath = value.AuthMethod == RemoteAuthMethod.PrivateKey ? value.KeyFilePath : "",
+            IsPasswordSaved = value.AuthMethod == RemoteAuthMethod.Password &&
+                              !string.IsNullOrWhiteSpace(value.PasswordHash)
+        };
     }
 
     private void Clear()

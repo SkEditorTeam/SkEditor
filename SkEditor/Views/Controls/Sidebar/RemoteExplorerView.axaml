@@ -34,10 +34,10 @@
     <Grid RowDefinitions="Auto,*" Margin="4,12,4,8">
         <DockPanel Grid.Row="0" Margin="12,0,12,0" HorizontalSpacing="8">
             <Button Classes="barButton" Command="{Binding NewRemoteConnectionCommand}" DockPanel.Dock="Right"
-                    ToolTip.Tip="{localization:Translate RemoteConnectionNewWindowTitle}"
+                    ToolTip.Tip="{localization:Translate RemoteConnectionManageWindowTitle}"
                     VerticalAlignment="Center">
                 <Viewbox Height="14">
-                    <icons:SymbolIcon Symbol="Add" />
+                    <icons:SymbolIcon Symbol="Options" />
                 </Viewbox>
             </Button>
 

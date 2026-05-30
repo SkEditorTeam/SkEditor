@@ -7,4 +7,5 @@ public interface IWindowDialogService
     Task ShowPublishDialogAsync();
     Task ShowGoToLineDialogAsync();
     Task ShowAboutDialogAsync();
+    Task ShowManageRemoteConnectionsDialogAsync();
 }

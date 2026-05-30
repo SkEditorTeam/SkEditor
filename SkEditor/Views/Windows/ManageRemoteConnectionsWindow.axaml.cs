@@ -10,11 +10,11 @@ using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows;
 
-public partial class RemoteConnectionWindow : SkEditorWindow
+public partial class ManageRemoteConnectionsWindow : SkEditorWindow
 {
-    public RemoteConnectionWindow() => InitializeComponent();
+    public ManageRemoteConnectionsWindow() => InitializeComponent();
 
-    public RemoteConnectionWindow(RemoteConnectionViewModel viewModel) : this()
+    public ManageRemoteConnectionsWindow(RemoteConnectionViewModel viewModel) : this()
     {
         DataContext = viewModel;
         SetupViewModelEvents(viewModel);
