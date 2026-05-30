@@ -42,7 +42,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         _windowDialogs = windowDialogs;
         _connectionsConfig = connectionsConfig;
         FileTree = fileTree;
-        RemoteConnections = new ObservableCollection<RemoteConnection>(connectionsConfig.Connections);
+        RemoteConnections = connectionsConfig.Connections;
 
         messenger.Register(this);
     }

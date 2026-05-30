@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Models.Remote;
@@ -12,7 +12,7 @@ public partial class ConnectionsConfig : BaseConfig<ConnectionsConfig>
     protected override JsonTypeInfo<ConnectionsConfig> TypeInfo => AppJsonContext.Default.ConnectionsConfig;
 
     [ObservableProperty]
-    public partial List<RemoteConnection> Connections { get; set; } = [];
+    public partial ObservableCollection<RemoteConnection> Connections { get; set; } = [];
 
     protected override string GetFileName()
     {

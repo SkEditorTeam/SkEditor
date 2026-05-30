@@ -34,7 +34,7 @@ public partial class RemoteConnectionViewModel(
     [ObservableProperty]
     public partial FAInfoBarSeverity InfoBarSeverity { get; set; } = FAInfoBarSeverity.Informational;
 
-    public ObservableCollection<RemoteConnection> Connections { get; } = new(connectionsConfig.Connections);
+    public ObservableCollection<RemoteConnection> Connections { get; } = connectionsConfig.Connections;
 
     [ObservableProperty]
     public partial RemoteConnection? SelectedConnection { get; set; }
@@ -109,6 +109,16 @@ public partial class RemoteConnectionViewModel(
     }
 
     [RelayCommand]
+    private void AddConnection()
+    {
+        Clear();
+        SelectedConnection = new RemoteConnection
+        {
+            IsAdded = false
+        };
+    }
+
+    [RelayCommand]
     private async Task DeleteConnection()
     {
         if (SelectedConnection is null)
@@ -130,7 +140,7 @@ public partial class RemoteConnectionViewModel(
 
         Connections.Remove(SelectedConnection);
         connectionsConfig.Connections.Remove(SelectedConnection);
-        _ = connectionsConfig.Save();
+        await connectionsConfig.Save();
 
         Clear();
     }

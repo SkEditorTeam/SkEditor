@@ -425,6 +425,8 @@
   "RemoteConnectionNoConnectionTooltip": "Add a connection first!",
   "RemoteConnectionNoConnectionTitle": "No remote connection",
   "RemoteConnectionNoConnectionMessage": "Create a remote connection to view and edit files on a remote server.",
+  "RemoteConnectionNoConnectionsYetTitle": "No connections yet",
+  "RemoteConnectionNoConnectionsYetMessage": "You haven't added any remote connections yet.",
   "RemoteConnectionConnecting": "Connecting...",
   "RemoteConnectionAddConnectionMissingFields": "Please fill in all required fields first",
   "RemoteConnectionAddButton": "Add Connection",

@@ -18,12 +18,12 @@
         <converters:AuthMethodConverter x:Key="AuthMethodConverter" />
     </Window.Resources>
 
-    <Grid ColumnDefinitions="*,1.5*" ColumnSpacing="32" Margin="16">
+    <Grid ColumnDefinitions="*,2*" ColumnSpacing="32" Margin="16">
         <GroupBox Grid.Column="0" Header="{localization:Translate RemoteConnectionManageConnectionsTitle}"
                   Margin="0,0,0,-8">
             <DockPanel>
                 <Grid ColumnDefinitions="*,*" DockPanel.Dock="Bottom" ColumnSpacing="8" Margin="0,12,0,0">
-                    <Button HorizontalAlignment="Stretch">
+                    <Button HorizontalAlignment="Stretch" Command="{Binding AddConnectionCommand}">
                         <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                             <fluent:SymbolIcon Symbol="Add" FontSize="16" />
                         </StackPanel>
@@ -41,105 +41,122 @@
             </DockPanel>
         </GroupBox>
 
-        <DockPanel Grid.Column="1" Margin="0,0,0,0">
-            <DockPanel.Styles>
-                <Style Selector="StackPanel > TextBlock">
-                    <Setter Property="Margin" Value="2,0,0,0" />
-                </Style>
-                <Style Selector="ComboBox">
-                    <Setter Property="Padding" Value="12,6,0,6" />
-                </Style>
-            </DockPanel.Styles>
-
-            <Grid DockPanel.Dock="Bottom" ColumnDefinitions="Auto,*" ColumnSpacing="8" Margin="0,0,0,0">
-                <Button ToolTip.Tip="{localization:Translate RemoteConnectionTestConnectionTooltip}"
-                        HorizontalAlignment="Left" IsEnabled="{Binding ConnectionInfo.ConnectionFieldsFilled}"
-                        Command="{Binding TestConnectionCommand}">
-                    <fluent:SymbolIcon Symbol="Pulse" FontSize="18" />
-                </Button>
-                <Button Grid.Column="1" HorizontalAlignment="Stretch"
-                        IsEnabled="{Binding ConnectionInfo.RequiredFieldsFilled}"
-                        Command="{Binding SaveConnectionCommand}"
-                        ToolTip.Tip="{localization:Translate RemoteConnectionAddConnectionMissingFields}"
-                        ToolTip.ShowOnDisabled="True"
-                        ToolTip.ServiceEnabled="{Binding !ConnectionInfo.RequiredFieldsFilled}">
-                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center"
-                                HorizontalAlignment="Center">
-                        <fluent:SymbolIcon Symbol="Save" FontSize="18" />
-                        <TextBlock Text="{localization:Translate RemoteConnectionSaveButton}" FontSize="14" />
-                    </StackPanel>
-                </Button>
-            </Grid>
-
-            <controls:FAInfoBar DockPanel.Dock="Bottom"
-                                Theme="{DynamicResource LiteInfoBarTheme}"
-                                IsClosable="False"
-                                FontSize="14"
-                                Severity="{Binding InfoBarSeverity}"
-                                IsOpen="{Binding InfoBarMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                Message="{Binding InfoBarMessage}"
-                                Margin="0,0,0,12"
-                                MinHeight="32" MaxHeight="72" />
-
-            <StackPanel Spacing="14" Margin="2,0,8,0">
+        <Panel Grid.Column="1">
+            <StackPanel VerticalAlignment="Center" Spacing="12"
+                        IsVisible="{Binding SelectedConnection, Converter={x:Static ObjectConverters.IsNull}}">
+                <Viewbox Height="64" Opacity="0.5">
+                    <fluent:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
+                </Viewbox>
                 <StackPanel Spacing="4">
-                    <TextBlock Text="{localization:Translate RemoteConnectionFieldName}" />
-                    <TextBox PlaceholderText="{localization:Translate RemoteConnectionFieldNamePlaceholder}"
-                             Text="{Binding ConnectionInfo.Name}" />
-                </StackPanel>
-
-                <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">
-                    <StackPanel Spacing="4">
-                        <TextBlock Text="{localization:Translate RemoteConnectionFieldHost}" />
-                        <TextBox Name="HostTextBox" PlaceholderText="192.168.0.1"
-                                 Text="{Binding ConnectionInfo.Host}">
-                            <Interaction.Behaviors>
-                                <aControls:TextBoxPastingFromClipboardEventCommandTrigger
-                                    Command="{Binding HandlePasteCommand}" />
-                            </Interaction.Behaviors>
-                        </TextBox>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Spacing="4">
-                        <TextBlock Text="{localization:Translate RemoteConnectionFieldPort}" />
-                        <TextBox PlaceholderText="22" Text="{Binding ConnectionInfo.Port}" />
-                    </StackPanel>
-                </Grid>
-
-                <StackPanel Spacing="4">
-                    <TextBlock Text="{localization:Translate RemoteConnectionFieldUsername}" />
-                    <TextBox PlaceholderText="{localization:Translate RemoteConnectionFieldUsernamePlaceholder}"
-                             Text="{Binding ConnectionInfo.Username}" />
-                </StackPanel>
-
-                <StackPanel Spacing="4">
-                    <TextBlock Text="{localization:Translate RemoteConnectionFieldAuthMethod}" />
-                    <ComboBox HorizontalAlignment="Stretch"
-                              ItemsSource="{Binding AuthMethods}"
-                              SelectedItem="{Binding ConnectionInfo.AuthMethod}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource AuthMethodConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-
-                <StackPanel Spacing="4" IsVisible="{Binding ConnectionInfo.IsPasswordAuth}">
-                    <TextBlock Text="{localization:Translate RemoteConnectionFieldPassword}" />
-                    <TextBox PasswordChar="●" Text="{Binding ConnectionInfo.Password}"
-                             PlaceholderText="{Binding ConnectionInfo.PasswordPlaceholder}" />
-                </StackPanel>
-
-                <StackPanel Spacing="4" IsVisible="{Binding ConnectionInfo.IsPrivateKeyAuth}">
-                    <TextBlock Text="{localization:Translate RemoteConnectionFieldKeyFile}" />
-                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                        <TextBox Text="{Binding ConnectionInfo.KeyFileName}" />
-                        <Button Grid.Column="1" Content="{localization:Translate ButtonBrowse}"
-                                HorizontalAlignment="Right"
-                                Command="{Binding BrowseKeyCommand}" />
-                    </Grid>
+                    <TextBlock Text="{localization:Translate RemoteConnectionNoConnectionsYetTitle}"
+                               HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
+                    <TextBlock Text="{localization:Translate RemoteConnectionNoConnectionsYetMessage}"
+                               HorizontalAlignment="Center" TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               FontSize="13" MaxWidth="300" Opacity="0.6" />
                 </StackPanel>
             </StackPanel>
-        </DockPanel>
+
+            <DockPanel IsVisible="{Binding SelectedConnection, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <DockPanel.Styles>
+                    <Style Selector="StackPanel > TextBlock">
+                        <Setter Property="Margin" Value="2,0,0,0" />
+                    </Style>
+                    <Style Selector="ComboBox">
+                        <Setter Property="Padding" Value="12,6,0,6" />
+                    </Style>
+                </DockPanel.Styles>
+
+                <Grid DockPanel.Dock="Bottom" ColumnDefinitions="Auto,*" ColumnSpacing="8" Margin="0,0,0,0">
+                    <Button ToolTip.Tip="{localization:Translate RemoteConnectionTestConnectionTooltip}"
+                            HorizontalAlignment="Left" IsEnabled="{Binding ConnectionInfo.ConnectionFieldsFilled}"
+                            Command="{Binding TestConnectionCommand}">
+                        <fluent:SymbolIcon Symbol="Pulse" FontSize="18" />
+                    </Button>
+                    <Button Grid.Column="1" HorizontalAlignment="Stretch"
+                            IsEnabled="{Binding ConnectionInfo.RequiredFieldsFilled}"
+                            Command="{Binding SaveConnectionCommand}"
+                            ToolTip.Tip="{localization:Translate RemoteConnectionAddConnectionMissingFields}"
+                            ToolTip.ShowOnDisabled="True"
+                            ToolTip.ServiceEnabled="{Binding !ConnectionInfo.RequiredFieldsFilled}">
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+                            <fluent:SymbolIcon Symbol="Save" FontSize="18" />
+                            <TextBlock Text="{localization:Translate RemoteConnectionSaveButton}" FontSize="14" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <controls:FAInfoBar DockPanel.Dock="Bottom"
+                                    Theme="{DynamicResource LiteInfoBarTheme}"
+                                    IsClosable="False"
+                                    FontSize="14"
+                                    Severity="{Binding InfoBarSeverity}"
+                                    IsOpen="{Binding InfoBarMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Message="{Binding InfoBarMessage}"
+                                    Margin="0,0,0,12"
+                                    MinHeight="32" MaxHeight="72" />
+
+                <StackPanel Spacing="14" Margin="2,0,8,0">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{localization:Translate RemoteConnectionFieldName}" />
+                        <TextBox PlaceholderText="{localization:Translate RemoteConnectionFieldNamePlaceholder}"
+                                 Text="{Binding ConnectionInfo.Name}" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="{localization:Translate RemoteConnectionFieldHost}" />
+                            <TextBox Name="HostTextBox" PlaceholderText="192.168.0.1"
+                                     Text="{Binding ConnectionInfo.Host}">
+                                <Interaction.Behaviors>
+                                    <aControls:TextBoxPastingFromClipboardEventCommandTrigger
+                                        Command="{Binding HandlePasteCommand}" />
+                                </Interaction.Behaviors>
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock Text="{localization:Translate RemoteConnectionFieldPort}" />
+                            <TextBox PlaceholderText="22" Text="{Binding ConnectionInfo.Port}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{localization:Translate RemoteConnectionFieldUsername}" />
+                        <TextBox PlaceholderText="{localization:Translate RemoteConnectionFieldUsernamePlaceholder}"
+                                 Text="{Binding ConnectionInfo.Username}" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{localization:Translate RemoteConnectionFieldAuthMethod}" />
+                        <ComboBox HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding AuthMethods}"
+                                  SelectedItem="{Binding ConnectionInfo.AuthMethod}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource AuthMethodConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Spacing="4" IsVisible="{Binding ConnectionInfo.IsPasswordAuth}">
+                        <TextBlock Text="{localization:Translate RemoteConnectionFieldPassword}" />
+                        <TextBox PasswordChar="●" Text="{Binding ConnectionInfo.Password}"
+                                 PlaceholderText="{Binding ConnectionInfo.PasswordPlaceholder}" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="4" IsVisible="{Binding ConnectionInfo.IsPrivateKeyAuth}">
+                        <TextBlock Text="{localization:Translate RemoteConnectionFieldKeyFile}" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                            <TextBox Text="{Binding ConnectionInfo.KeyFileName}" />
+                            <Button Grid.Column="1" Content="{localization:Translate ButtonBrowse}"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding BrowseKeyCommand}" />
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+        </Panel>
     </Grid>
 </Window>
