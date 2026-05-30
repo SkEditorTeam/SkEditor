@@ -52,7 +52,7 @@ public class App : Application
         Logger serilogLogger = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SkEditor/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
+                "SkEditor/v3.0/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
             .CreateLogger();
 
         Log.Logger = serilogLogger;
