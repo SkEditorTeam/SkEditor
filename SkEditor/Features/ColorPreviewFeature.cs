@@ -19,7 +19,9 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
 
     public bool CanAttach(FileTab tab)
     {
-        return experiments.ColorPreviewEnabled && tab.GetExtension() is null or ".sk";
+        return
+            experiments.ColorPreviewEnabled &&
+            (experiments.GlobalColorPreviewEnabled || tab.GetExtension() is null or ".sk");
     }
 
     public void OnViewAttached(FileTab tab, TextEditor editor)

@@ -15,6 +15,12 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     [ObservableProperty]
     public partial bool ColorPreviewEnabled { get; set; } = false;
 
+    /// <summary>
+    ///     Whether the Color Preview feature should be enabled for all the file types or just Skript files
+    /// </summary>
+    [ObservableProperty]
+    public partial bool GlobalColorPreviewEnabled { get; set; } = false;
+
     protected override string GetFileName()
     {
         return "experiments.json";

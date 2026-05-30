@@ -20,11 +20,21 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                     .WithIcon(Symbol.Warning)
                     .WithType(InfoSetting.InfoType.Warning),
 
-                ToggleSetting
+
+                ExpandableSetting
                     .Create(TranslationKey.SettingsExperimentsColorPreview)
                     .WithDescription(TranslationKey.SettingsExperimentsColorPreviewDescription)
                     .WithIcon(Symbol.Color)
-                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.ColorPreviewEnabled))
+                    .WithChildren(
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsExperimentsColorPreviewOption)
+                            .WithDescription(TranslationKey.SettingsExperimentsColorPreviewOptionDescription)
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.ColorPreviewEnabled)),
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsExperimentsColorPreviewGlobal)
+                            .WithDescription(TranslationKey.SettingsExperimentsColorPreviewGlobalDescription)
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.GlobalColorPreviewEnabled))
+                    )
             ]);
     }
 }
