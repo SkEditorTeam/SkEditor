@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
@@ -34,7 +35,7 @@ public partial class RemoteConnectionViewModel(
     [ObservableProperty]
     public partial FAInfoBarSeverity InfoBarSeverity { get; set; } = FAInfoBarSeverity.Informational;
 
-    public ObservableCollection<RemoteConnection> Connections { get; } = connectionsConfig.Connections;
+    public ObservableCollection<RemoteConnection> Connections { get; } = new(connectionsConfig.Connections);
 
     [ObservableProperty]
     public partial RemoteConnection? SelectedConnection { get; set; }
@@ -87,7 +88,7 @@ public partial class RemoteConnectionViewModel(
         {
             SelectedConnection.PasswordHash = string.Empty;
         }
-
+        
         _ = connectionsConfig.Save();
 
         string hostPort =
@@ -111,11 +112,22 @@ public partial class RemoteConnectionViewModel(
     [RelayCommand]
     private void AddConnection()
     {
-        Clear();
-        SelectedConnection = new RemoteConnection
+        if (SelectedConnection is { IsAdded: false })
         {
+            Connections.Remove(SelectedConnection);
+        }
+
+        SelectedConnection = null;
+        Clear();
+
+        RemoteConnection newConnection = new()
+        {
+            Name = translation.Get(TranslationKey.RemoteConnectionNewConnectionName),
             IsAdded = false
         };
+
+        Connections.Add(newConnection);
+        SelectedConnection = newConnection;
     }
 
     [RelayCommand]
@@ -126,28 +138,34 @@ public partial class RemoteConnectionViewModel(
             return;
         }
 
-        Dialog dialog = Dialog
-            .Create(TranslationKey.RemoteConnectionDeleteTitle)
-            .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionDeleteMessage, SelectedConnection.Name))
-            .WithIcon(Symbol.Delete)
-            .WithButtons(new DialogButton(TranslationKey.ButtonDelete, DialogResult.Ok), DialogButton.Cancel);
-
-        DialogResult result = await dialogs.ShowDialogAsync(dialog);
-        if (result != DialogResult.Ok)
+        if (SelectedConnection.IsAdded)
         {
-            return;
+            Dialog dialog = Dialog
+                .Create(TranslationKey.RemoteConnectionDeleteTitle)
+                .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionDeleteMessage,
+                    SelectedConnection.Name))
+                .WithIcon(Symbol.Delete)
+                .WithButtons(new DialogButton(TranslationKey.ButtonDelete, DialogResult.Ok), DialogButton.Cancel);
+
+            DialogResult result = await dialogs.ShowDialogAsync(dialog);
+            if (result != DialogResult.Ok)
+            {
+                return;
+            }
         }
 
-        Connections.Remove(SelectedConnection);
-        connectionsConfig.Connections.Remove(SelectedConnection);
-        await connectionsConfig.Save();
-
+        RemoteConnection toDelete = SelectedConnection;
         Clear();
+        SelectedConnection = null;
+
+        Connections.Remove(toDelete);
+        connectionsConfig.Connections.Remove(toDelete);
+        _ = connectionsConfig.Save();
     }
 
     [RelayCommand]
     private async Task BrowseKey()
-    {
+    {   
         if (RequestKeyFilePicker == null)
         {
             return;
@@ -193,9 +211,14 @@ public partial class RemoteConnectionViewModel(
         PasteCompleted?.Invoke();
     }
 
-    partial void OnSelectedConnectionChanged(RemoteConnection? value)
+    partial void OnSelectedConnectionChanged(RemoteConnection? oldValue, RemoteConnection? newValue)
     {
-        if (value == null)
+        if (oldValue is { IsAdded: false })
+        {
+            Dispatcher.UIThread.Post(() => Connections.Remove(oldValue));
+        }
+
+        if (newValue == null || ReferenceEquals(oldValue, newValue))
         {
             return;
         }
@@ -204,15 +227,15 @@ public partial class RemoteConnectionViewModel(
 
         ConnectionInfo = new RemoteConnectionInfo
         {
-            Name = value.Name,
-            Host = value.Host,
-            Port = value.Port.ToString(),
-            Username = value.Username,
-            AuthMethod = value.AuthMethod,
-            KeyFilePath = value.AuthMethod == RemoteAuthMethod.PrivateKey ? value.KeyFilePath : "",
-            PasswordHash = value.PasswordHash,
-            IsPasswordSaved = value.AuthMethod == RemoteAuthMethod.Password &&
-                              !string.IsNullOrWhiteSpace(value.PasswordHash)
+            Name = newValue.Name,
+            Host = newValue.Host,
+            Port = newValue.Port.ToString(),
+            Username = newValue.Username,
+            AuthMethod = newValue.AuthMethod,
+            KeyFilePath = newValue.AuthMethod == RemoteAuthMethod.PrivateKey ? newValue.KeyFilePath : "",
+            PasswordHash = newValue.PasswordHash,
+            IsPasswordSaved = newValue.AuthMethod == RemoteAuthMethod.Password &&
+                              !string.IsNullOrWhiteSpace(newValue.PasswordHash)
         };
     }
 

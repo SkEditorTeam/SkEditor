@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SkEditor.Models.Remote;
 
-public class RemoteConnection
+public partial class RemoteConnection : ObservableObject
 {
     public RemoteConnection()
     {
@@ -23,13 +24,25 @@ public class RemoteConnection
 
     [JsonIgnore]
     public bool IsAdded { get; set; } = true;
-    public string Name { get; set; } = string.Empty;
-    public string Host { get; set; } = string.Empty;
-    public int Port { get; set; } = 22;
-    public string Username { get; set; } = string.Empty;
 
-    public RemoteAuthMethod AuthMethod { get; set; } = RemoteAuthMethod.Password;
+    [ObservableProperty]
+    public partial string Name { get; set; } = string.Empty;
 
-    public string KeyFilePath { get; set; } = string.Empty;
-    public string PasswordHash { get; set; } = string.Empty;
+    [ObservableProperty]
+    public partial string Host { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial int Port { get; set; } = 22;
+
+    [ObservableProperty]
+    public partial string Username { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial RemoteAuthMethod AuthMethod { get; set; } = RemoteAuthMethod.Password;
+
+    [ObservableProperty]
+    public partial string KeyFilePath { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string PasswordHash { get; set; } = string.Empty;
 }

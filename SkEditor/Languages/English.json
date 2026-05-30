@@ -429,6 +429,7 @@
   "RemoteConnectionNoConnectionsYetMessage": "You haven't added any remote connections yet.",
   "RemoteConnectionConnecting": "Connecting...",
   "RemoteConnectionAddConnectionMissingFields": "Please fill in all required fields first",
+  "RemoteConnectionNewConnectionName": "New Connection",
   "RemoteConnectionAddButton": "Add Connection",
   "RemoteConnectionSaveButton": "Save Connection",
   "RemoteConnectionFieldName": "Name",

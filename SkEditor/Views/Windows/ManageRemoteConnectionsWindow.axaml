@@ -18,7 +18,7 @@
         <converters:AuthMethodConverter x:Key="AuthMethodConverter" />
     </Window.Resources>
 
-    <Grid ColumnDefinitions="*,2*" ColumnSpacing="32" Margin="16">
+    <Grid ColumnDefinitions="*,1.8*" ColumnSpacing="32" Margin="16">
         <GroupBox Grid.Column="0" Header="{localization:Translate RemoteConnectionManageConnectionsTitle}"
                   Margin="0,0,0,-8">
             <DockPanel>
