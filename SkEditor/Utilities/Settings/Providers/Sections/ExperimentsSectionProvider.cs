@@ -20,12 +20,6 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                     .WithIcon(Symbol.Warning)
                     .WithType(InfoSetting.InfoType.Warning),
 
-                // ToggleSetting
-                //     .Create(TranslationKey.SettingsExperimentsAutoCompletionPrototype)
-                //     .WithDescription(TranslationKey.SettingsExperimentsAutoCompletionPrototypeDescription)
-                //     .WithIcon(Symbol.Wand)
-                //     .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AutoCompletionPrototypeEnabled)),
-
                 ToggleSetting
                     .Create(TranslationKey.SettingsExperimentsColorPreview)
                     .WithDescription(TranslationKey.SettingsExperimentsColorPreviewDescription)

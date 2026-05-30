@@ -74,7 +74,6 @@ public class LegacyConfigMigrator(IConfigService config)
             stateConfig.LastUsedPublishService = oldAppConfig.LastUsedPublishService;
             stateConfig.GuiGeneratorSkriptGuiAddonUsed = oldAppConfig.UseSkriptGui;
 
-            experimentsConfig.AutoCompletionPrototypeEnabled = oldAppConfig.EnableAutoCompletionExperiment;
             experimentsConfig.ColorPreviewEnabled = oldAppConfig.EnableHexPreview;
 
             secretsConfig.SkUnityApiKey = oldAppConfig.SkUnityApiKey;

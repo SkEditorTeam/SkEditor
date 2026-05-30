@@ -10,12 +10,6 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     protected override JsonTypeInfo<ExperimentsConfig> TypeInfo => AppJsonContext.Default.ExperimentsConfig;
 
     /// <summary>
-    ///     Enables the Auto-Completion Prototype feature.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool AutoCompletionPrototypeEnabled { get; set; } = false;
-
-    /// <summary>
     ///     Enables the Color Preview feature.
     /// </summary>
     [ObservableProperty]
