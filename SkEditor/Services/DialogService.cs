@@ -24,9 +24,9 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
         {
             throw new InvalidOperationException("No active window found.");
         }
-
+        
         FATaskDialog taskDialog = BuildTaskDialog(dialog);
-        taskDialog.XamlRoot = mainWindow;
+        taskDialog.XamlRoot = windowRegistry.FindTopmostWindow(mainWindow);
 
         taskDialog.Focus();
 

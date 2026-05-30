@@ -94,6 +94,8 @@ public class App : Application
     private static void ConfigureServices(IServiceCollection services, BinarySettings binarySettings, string[] args)
     {
         services.AddSingleton(args);
+        services.AddSingleton<IClassicDesktopStyleApplicationLifetime>(_ =>
+            (IClassicDesktopStyleApplicationLifetime)Current!.ApplicationLifetime!);
 
         services.AddCoreServices();
         services.AddWindowing();

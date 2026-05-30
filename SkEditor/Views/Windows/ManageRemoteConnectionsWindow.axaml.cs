@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using SkEditor.Models.Remote;
 using SkEditor.Services.Localization;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Windows;
@@ -22,22 +21,6 @@ public partial class ManageRemoteConnectionsWindow : SkEditorWindow
 
     private void SetupViewModelEvents(RemoteConnectionViewModel vm)
     {
-        vm.CloseRequested += (_, _) =>
-        {
-            RemoteConnectionInfo info = vm.ConnectionInfo;
-            RemoteConnectionInfo infoSnapshot = new()
-            {
-                Name = info.Name,
-                Host = info.Host,
-                Port = info.Port,
-                Username = info.Username,
-                AuthMethod = info.AuthMethod,
-                Password = info.Password,
-                KeyFilePath = info.KeyFilePath
-            };
-            Close(infoSnapshot);
-        };
-
         vm.RequestKeyFilePicker = SelectKeyFile;
         vm.PasteCompleted += () => HostTextBox.CaretIndex = HostTextBox.Text?.Length ?? 0;
     }

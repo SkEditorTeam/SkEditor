@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.IO;
+using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Remote;
 
@@ -14,16 +16,12 @@ public partial class RemoteConnectionInfo : ObservableObject
     public partial string Host { get; set; } = "";
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
+    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled), nameof(KeyFileName))]
     public partial string KeyFilePath { get; set; } = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
     public partial string Name { get; set; } = "";
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
-    public partial string Password { get; set; } = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
@@ -34,11 +32,20 @@ public partial class RemoteConnectionInfo : ObservableObject
     public partial string Username { get; set; } = "";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(RequiredFieldsFilled), nameof(ConnectionFieldsFilled))]
+    public partial string Password { get; set; } = "";
+
+    [ObservableProperty]
+    public partial string PasswordHash { get; set; } = string.Empty;
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PasswordPlaceholder), nameof(ConnectionFieldsFilled),
         nameof(RequiredFieldsFilled))]
     public partial bool IsPasswordSaved { get; set; }
 
-    public string PasswordPlaceholder => IsPasswordSaved ? "●●●●●●●●" : "Enter password";
+    public TranslatableString PasswordPlaceholder => IsPasswordSaved
+        ? TranslatableString.FromRawString("●●●●●●●●")
+        : TranslationKey.RemoteConnectionFieldPasswordPlaceholder;
 
     public bool IsPasswordAuth => AuthMethod == RemoteAuthMethod.Password;
     public bool IsPrivateKeyAuth => AuthMethod == RemoteAuthMethod.PrivateKey;
@@ -53,4 +60,8 @@ public partial class RemoteConnectionInfo : ObservableObject
     public bool RequiredFieldsFilled =>
         !string.IsNullOrWhiteSpace(Name) &&
         ConnectionFieldsFilled;
+
+    public string? KeyFileName => IsPrivateKeyAuth && !string.IsNullOrWhiteSpace(KeyFilePath)
+        ? Path.GetFileName(KeyFilePath)
+        : null;
 }

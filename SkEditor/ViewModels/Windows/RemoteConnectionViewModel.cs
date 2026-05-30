@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
+using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
-using SkEditor.Models.Notifications;
+using SkEditor.Models.Dialogs;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
-using Notification = SkEditor.Models.Notifications.Notification;
 
 namespace SkEditor.ViewModels.Windows;
 
 public partial class RemoteConnectionViewModel(
     IRemoteConnectionService connections,
-    INotificationService notifications,
     IClipboardService clipboard,
     ConnectionsConfig connectionsConfig,
+    IDialogService dialogs,
     ITranslationService translation) : ObservableObject
 {
     [ObservableProperty]
@@ -34,7 +34,7 @@ public partial class RemoteConnectionViewModel(
     [ObservableProperty]
     public partial FAInfoBarSeverity InfoBarSeverity { get; set; } = FAInfoBarSeverity.Informational;
 
-    public IReadOnlyList<RemoteConnection> Connections { get; } = connectionsConfig.Connections;
+    public ObservableCollection<RemoteConnection> Connections { get; } = new(connectionsConfig.Connections);
 
     [ObservableProperty]
     public partial RemoteConnection? SelectedConnection { get; set; }
@@ -44,36 +44,57 @@ public partial class RemoteConnectionViewModel(
 
     public Func<Task<string?>>? RequestKeyFilePicker { get; set; }
 
-    public event EventHandler? CloseRequested;
-
     [RelayCommand]
-    private async Task AddConnection()
+    private async Task SaveConnection()
     {
+        if (SelectedConnection is null)
+        {
+            return;
+        }
+
         RemoteConnectionTestResult result = await connections.TestConnectionAsync(ConnectionInfo);
         if (!result.IsSuccess)
         {
             InfoBarMessage = translation.Get(TranslationKey.RemoteConnectionCannotAddConnection);
             InfoBarSeverity = FAInfoBarSeverity.Error;
-
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
+        SelectedConnection.Name = ConnectionInfo.Name;
+        SelectedConnection.Host = ConnectionInfo.Host;
+        SelectedConnection.Port = int.TryParse(ConnectionInfo.Port, out int port) ? port : 22;
+        SelectedConnection.Username = ConnectionInfo.Username;
+        SelectedConnection.AuthMethod = ConnectionInfo.AuthMethod;
+        SelectedConnection.KeyFilePath = ConnectionInfo.KeyFilePath;
+
+        if (!SelectedConnection.IsAdded)
         {
-            string hostPort =
-                $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
+            connectionsConfig.Connections.Add(SelectedConnection);
+            SelectedConnection.IsAdded = true;
+        }
 
-            Notification notification = Notification
-                .Create(TranslationKey.RemoteConnectionAddSuccessTitle)
-                .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort))
-                .WithType(NotificationType.Success)
-                .WithDuration(TimeSpan.FromSeconds(5));
+        if (ConnectionInfo.IsPasswordAuth)
+        {
+            if (!string.IsNullOrWhiteSpace(ConnectionInfo.Password))
+            {
+                connections.SavePassword(SelectedConnection, ConnectionInfo.Password);
+                ConnectionInfo.PasswordHash = SelectedConnection.PasswordHash;
+                ConnectionInfo.IsPasswordSaved = true;
+                ConnectionInfo.Password = string.Empty;
+            }
+        }
+        else
+        {
+            SelectedConnection.PasswordHash = string.Empty;
+        }
 
-            notifications.Show(notification);
+        _ = connectionsConfig.Save();
 
-            CloseRequested?.Invoke(this, EventArgs.Empty);
-            Clear();
-        });
+        string hostPort =
+            $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
+
+        InfoBarMessage = translation.Get(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort);
+        InfoBarSeverity = FAInfoBarSeverity.Success;
     }
 
     [RelayCommand]
@@ -85,6 +106,33 @@ public partial class RemoteConnectionViewModel(
         InfoBarSeverity = result.IsSuccess ? FAInfoBarSeverity.Success : FAInfoBarSeverity.Error;
 
         return result.IsSuccess;
+    }
+
+    [RelayCommand]
+    private async Task DeleteConnection()
+    {
+        if (SelectedConnection is null)
+        {
+            return;
+        }
+
+        Dialog dialog = Dialog
+            .Create(TranslationKey.RemoteConnectionDeleteTitle)
+            .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionDeleteMessage, SelectedConnection.Name))
+            .WithIcon(Symbol.Delete)
+            .WithButtons(new DialogButton(TranslationKey.ButtonDelete, DialogResult.Ok), DialogButton.Cancel);
+
+        DialogResult result = await dialogs.ShowDialogAsync(dialog);
+        if (result != DialogResult.Ok)
+        {
+            return;
+        }
+
+        Connections.Remove(SelectedConnection);
+        connectionsConfig.Connections.Remove(SelectedConnection);
+        _ = connectionsConfig.Save();
+
+        Clear();
     }
 
     [RelayCommand]
@@ -142,6 +190,8 @@ public partial class RemoteConnectionViewModel(
             return;
         }
 
+        Clear();
+
         ConnectionInfo = new RemoteConnectionInfo
         {
             Name = value.Name,
@@ -150,6 +200,7 @@ public partial class RemoteConnectionViewModel(
             Username = value.Username,
             AuthMethod = value.AuthMethod,
             KeyFilePath = value.AuthMethod == RemoteAuthMethod.PrivateKey ? value.KeyFilePath : "",
+            PasswordHash = value.PasswordHash,
             IsPasswordSaved = value.AuthMethod == RemoteAuthMethod.Password &&
                               !string.IsNullOrWhiteSpace(value.PasswordHash)
         };

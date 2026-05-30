@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace SkEditor.Models.Remote;
 
@@ -20,6 +21,8 @@ public class RemoteConnection
 
     public Guid Id { get; set; } = Guid.NewGuid();
 
+    [JsonIgnore]
+    public bool IsAdded { get; set; } = true;
     public string Name { get; set; } = string.Empty;
     public string Host { get; set; } = string.Empty;
     public int Port { get; set; } = 22;

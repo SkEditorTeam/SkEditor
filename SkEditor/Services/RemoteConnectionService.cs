@@ -21,7 +21,8 @@ using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Security;
+using ICredentialStore = SkEditor.Utilities.Security.ICredentialStore;
+using Notification = SkEditor.Models.Notifications.Notification;
 
 namespace SkEditor.Services;
 
@@ -73,8 +74,10 @@ public class RemoteConnectionService(
 
         try
         {
+            RemoteConnectionInfo resolvedInfo = GetConnectionInfoForTesting(connectionInfo);
+            
             Stopwatch sw = Stopwatch.StartNew();
-            bool connected = await TryConnect(connectionInfo);
+            bool connected = await TryConnect(resolvedInfo);
             sw.Stop();
 
             if (connected)
@@ -199,6 +202,91 @@ public class RemoteConnectionService(
             new RemoteConnectionStateChangedMessage(connection, RemoteConnectionState.Disconnected));
     }
 
+    public async Task ExecuteSafeAsync(RemoteConnection connection, Func<SftpClient, Task> action,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            SftpClient client = await GetOrConnectSftpClientAsync(connection, cancellationToken);
+
+            if (!client.IsConnected)
+            {
+                await client.ConnectAsync(cancellationToken);
+            }
+
+            await action(client);
+        }
+        catch (Exception ex) when (ex is IOException or SshConnectionException or SocketException)
+        {
+            logs.Warning($"Sftp connection lost for {connection.Name}. Attempting to reconnect...");
+
+            WeakReferenceMessenger.Default.Send(
+                new RemoteConnectionStateChangedMessage(connection, RemoteConnectionState.Reconnecting));
+
+            try
+            {
+                ResetClient(connection);
+                SftpClient client = await GetOrConnectSftpClientAsync(connection, cancellationToken);
+
+                await action(client);
+                WeakReferenceMessenger.Default.Send(
+                    new RemoteConnectionStateChangedMessage(connection, RemoteConnectionState.Connected));
+            }
+            catch (Exception retryEx)
+            {
+                logs.Error($"Failed to reconnect and execute operation for {connection.Name}: {retryEx.Message}");
+
+                notifications.Show(Notification
+                    .Create(TranslationKey.RemoteConnectionLostConnectionTitle)
+                    .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionLostConnectionMessage,
+                        connection.Name))
+                    .WithType(NotificationType.Error));
+
+                Disconnect(connection);
+            }
+        }
+    }
+
+    public async Task<T> ExecuteSafeAsync<T>(RemoteConnection connection, Func<SftpClient, Task<T>> action,
+        CancellationToken cancellationToken = default)
+    {
+        T result = default!;
+        await ExecuteSafeAsync(connection, async client => { result = await action(client); }, cancellationToken);
+        return result;
+    }
+
+    private RemoteConnectionInfo GetConnectionInfoForTesting(RemoteConnectionInfo connectionInfo)
+    {
+        RemoteConnectionInfo testInfo = new()
+        {
+            Name = connectionInfo.Name,
+            Host = connectionInfo.Host,
+            Port = connectionInfo.Port,
+            Username = connectionInfo.Username,
+            AuthMethod = connectionInfo.AuthMethod,
+            KeyFilePath = connectionInfo.KeyFilePath,
+            Password = connectionInfo.Password
+        };
+
+        if (!testInfo.IsPasswordAuth || !string.IsNullOrEmpty(testInfo.Password)
+                                     || !connectionInfo.IsPasswordSaved ||
+                                     string.IsNullOrEmpty(connectionInfo.PasswordHash))
+        {
+            return testInfo;
+        }
+
+        try
+        {
+            testInfo.Password = _store.Unprotect(connectionInfo.PasswordHash);
+        }
+        catch (Exception ex)
+        {
+            logs.Error($"Error decrypting password for testing: {ex.Message}");
+        }
+
+        return testInfo;
+    }
+
     private void CloseConnectionTabs(RemoteConnection connection)
     {
         List<FileTab> openTabs = tabs.Tabs.OfType<FileTab>()
@@ -252,59 +340,6 @@ public class RemoteConnectionService(
         await client.ConnectAsync(cts.Token);
 
         return client.IsConnected;
-    }
-
-    public async Task ExecuteSafeAsync(RemoteConnection connection, Func<SftpClient, Task> action,
-        CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            SftpClient client = await GetOrConnectSftpClientAsync(connection, cancellationToken);
-
-            if (!client.IsConnected)
-            {
-                await client.ConnectAsync(cancellationToken);
-            }
-
-            await action(client);
-        }
-        catch (Exception ex) when (ex is IOException or SshConnectionException or SocketException)
-        {
-            logs.Warning($"Sftp connection lost for {connection.Name}. Attempting to reconnect...");
-
-            WeakReferenceMessenger.Default.Send(
-                new RemoteConnectionStateChangedMessage(connection, RemoteConnectionState.Reconnecting));
-
-            try
-            {
-                ResetClient(connection);
-                SftpClient client = await GetOrConnectSftpClientAsync(connection, cancellationToken);
-
-                await action(client);
-                WeakReferenceMessenger.Default.Send(
-                    new RemoteConnectionStateChangedMessage(connection, RemoteConnectionState.Connected));
-            }
-            catch (Exception retryEx)
-            {
-                logs.Error($"Failed to reconnect and execute operation for {connection.Name}: {retryEx.Message}");
-
-                notifications.Show(Notification
-                    .Create(TranslationKey.RemoteConnectionLostConnectionTitle)
-                    .WithMessage(new TranslatableString(TranslationKey.RemoteConnectionLostConnectionMessage,
-                        connection.Name))
-                    .WithType(NotificationType.Error));
-
-                Disconnect(connection);
-            }
-        }
-    }
-
-    public async Task<T> ExecuteSafeAsync<T>(RemoteConnection connection, Func<SftpClient, Task<T>> action,
-        CancellationToken cancellationToken = default)
-    {
-        T result = default!;
-        await ExecuteSafeAsync(connection, async client => { result = await action(client); }, cancellationToken);
-        return result;
     }
 
     private void ResetClient(RemoteConnection connection)
