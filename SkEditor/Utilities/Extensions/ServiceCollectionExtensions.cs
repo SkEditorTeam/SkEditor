@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
@@ -112,21 +113,10 @@ public static class ServiceCollectionExtensions
             services.AddTransient<SettingsTabView>();
             services.AddTransient<WhatsNewPage>();
 
-            services.AddTransient<PublishWindow>();
-            services.AddSingleton<Func<PublishWindow>>(sp => sp.GetRequiredService<PublishWindow>);
-
-            services.AddTransient<GoToLineWindow>();
-            services.AddSingleton<Func<GoToLineWindow>>(sp => sp.GetRequiredService<GoToLineWindow>);
-
-            services.AddTransient<AboutWindow>();
-            services.AddSingleton<Func<AboutWindow>>(sp => sp.GetRequiredService<AboutWindow>);
-
-            services.AddTransient<ManageRemoteConnectionsWindow>();
-            services.AddSingleton<Func<ManageRemoteConnectionsWindow>>(sp =>
-                sp.GetRequiredService<ManageRemoteConnectionsWindow>);
-
-            services.AddTransient<SettingsTabViewModel>();
-            services.AddSingleton<Func<SettingsTabViewModel>>(sp => sp.GetRequiredService<SettingsTabViewModel>);
+            services.AddTransientWithFactory<PublishWindow>();
+            services.AddTransientWithFactory<GoToLineWindow>();
+            services.AddTransientWithFactory<AboutWindow>();
+            services.AddTransientWithFactory<ManageRemoteConnectionsWindow>();
         }
 
         public void AddEditorFeatures()
@@ -205,24 +195,36 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton<IMenuProvider, FileMenuProvider>();
             services.AddSingleton<IMenuProvider, EditMenuProvider>();
+            services.AddSingleton<IMenuProvider, ToolsMenuProvider>();
             services.AddSingleton<IMenuProvider, HelpMenuProvider>();
             services.AddSingleton<IMenuProvider, DevMenuProvider>();
             services.AddSingleton<IMenuProvider, SettingsMenuProvider>();
         }
 
-        public void AddTabViewLocator()
+        public void AddTabs()
         {
+            services.AddTransientWithFactory<SettingsTabViewModel>();
+            services.AddTransientWithFactory<DocumentationTabViewModel>();
+            
             services.AddSingleton<TabViewLocator>(_ =>
             {
                 var locator = new TabViewLocator();
         
                 locator.Register<SettingsTabViewModel, SettingsTabView>();
+                locator.Register<DocumentationTabViewModel, DocumentationTabView>();
                 locator.Register<FileTabViewModel, FileTabView>();
 
                 return locator;
             });
         }
 
+        public void AddTransientWithFactory<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>() where T : class
+        {
+            services.AddTransient<T>();
+            services.AddSingleton<Func<T>>(sp => sp.GetRequiredService<T>);
+        }
+        
         public void AddSidebar()
         {
             services.AddSingleton<ISidebarPanelViewModel, ExplorerViewModel>();
