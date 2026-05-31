@@ -63,7 +63,7 @@ public class LegacyConfigMigrator(IConfigService config)
             appSettings.IsDevModeEnabled = oldAppConfig.IsDevModeEnabled;
             appSettings.IsDiscordRichPresenceEnabled = oldAppConfig.IsDiscordRpcEnabled;
             appSettings.IsPasteIndentationEnabled = oldAppConfig.IsPasteIndentationEnabled;
-            appSettings.IsProjectSingleClickEnabled = oldAppConfig.IsProjectSingleClickEnabled;
+            appSettings.IsExplorerSingleClickOpenEnabled = oldAppConfig.IsProjectSingleClickEnabled;
             appSettings.IsSidebarAnimationEnabled = oldAppConfig.IsSidebarAnimationEnabled;
             appSettings.IsWordWrapEnabled = oldAppConfig.IsWrappingEnabled;
             appSettings.IsEditorZoomLevelSyncEnabled = oldAppConfig.IsZoomSyncEnabled;

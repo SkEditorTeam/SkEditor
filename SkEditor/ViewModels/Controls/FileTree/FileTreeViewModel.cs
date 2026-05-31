@@ -132,7 +132,7 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
 
     public void HandleNodeClick(FileSystemNode node, bool isDoubleClick)
     {
-        bool singleClickEnabled = _appSettings.IsProjectSingleClickEnabled;
+        bool singleClickEnabled = _appSettings.IsExplorerSingleClickOpenEnabled;
 
         bool doubleClick = !singleClickEnabled && isDoubleClick;
         bool singleClick = singleClickEnabled && !isDoubleClick;

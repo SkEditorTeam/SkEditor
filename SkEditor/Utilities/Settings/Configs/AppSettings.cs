@@ -83,10 +83,10 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial bool IsDiscordRichPresenceDetailsEnabled { get; set; } = true;
 
     /// <summary>
-    ///     Whether to enable single-click to open project folders in the Project Sidebar.
+    ///     Whether to open files and expand folders in the explorer with a single click instead of a double click
     /// </summary>
     [ObservableProperty]
-    public partial bool IsProjectSingleClickEnabled { get; set; }
+    public partial bool IsExplorerSingleClickOpenEnabled { get; set; }
 
     /// <summary>
     ///     Whether to enable sidebar animations.

@@ -27,9 +27,9 @@ public class AppearanceSectionProvider(
 
         SettingSection appearanceTheme = CreateThemeSection();
         SettingSection appearanceFontDisplay = CreateFontDisplaySection();
-        //SettingSection appearanceSidebarLayout = CreateSidebarLayoutSection();
+        SettingSection appearanceSidebarLayout = CreateSidebarLayoutSection();
 
-        appearance.WithSubsections([appearanceTheme, appearanceFontDisplay]);
+        appearance.WithSubsections([appearanceTheme, appearanceFontDisplay, appearanceSidebarLayout]);
 
         return appearance;
     }
@@ -100,20 +100,14 @@ public class AppearanceSectionProvider(
     {
         return SettingSection
             .Create(TranslationKey.SettingsAppearanceSubsectionSidebarLayout)
-            .WithIcon(Symbol.LayoutColumnTwo)
+            .WithIcon(Symbol.PanelLeft)
             .WithSettings(
             [
                 ToggleSetting
-                    .Create(TranslationKey.SettingsAppearanceSidebarAnimations)
-                    .WithDescription(TranslationKey.SettingsAppearanceSidebarAnimationsDescription)
-                    .WithIcon(Symbol.SlideTransition)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSidebarAnimationEnabled)),
-
-                ToggleSetting
-                    .Create(TranslationKey.SettingsSidebarSingleFolderClick)
-                    .WithDescription(TranslationKey.SettingsSidebarSingleFolderClickDescription)
-                    .WithIcon(Symbol.FolderArrowRight)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsProjectSingleClickEnabled))
+                    .Create(TranslationKey.SettingsExplorerSingleClickOpen)
+                    .WithDescription(TranslationKey.SettingsExplorerSingleClickOpenDescription)
+                    .WithIcon(Symbol.CursorClick)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsExplorerSingleClickOpenEnabled))
             ]);
     }
 
