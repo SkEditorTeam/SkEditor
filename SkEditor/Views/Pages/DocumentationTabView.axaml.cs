@@ -22,5 +22,11 @@ public partial class DocumentationTabView : UserControl
         PatternEditor.TextArea.SelectionBrush =
             (ImmutableSolidColorBrush?)Application.Current?.FindResource("SelectionColor");
         PatternEditor.TextArea.CaretBrush = Brushes.Transparent;
+        PatternEditor.Options.LineHeightFactor = 1.3;
+    }
+
+    public void InitializeComponentState()
+    {
+        OnLoaded(null, new RoutedEventArgs());
     }
 }
