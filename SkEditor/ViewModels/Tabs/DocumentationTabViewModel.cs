@@ -82,7 +82,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     partial void OnSelectedEntryChanged(DocumentationEntry? value)
     {
-        PatternDocument.Text = "-| -> => !=";
+        PatternDocument.Text = value?.Patterns ?? string.Empty;
     }
 
     partial void OnSelectedSyntaxTypeChanged(DocumentationSyntaxType? value)
