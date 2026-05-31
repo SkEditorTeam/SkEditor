@@ -6,6 +6,8 @@
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:converters="clr-namespace:Avalonia.Markup.Xaml.Converters;assembly=Avalonia.Markup.Xaml"
+             xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:DocumentationTabViewModel"
@@ -14,12 +16,16 @@
 
     <UserControl.Resources>
         <iconverters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
+        <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
     </UserControl.Resources>
 
-    <Grid RowDefinitions="Auto,*" Margin="16" RowSpacing="32">
-        <Button HorizontalAlignment="Center" VerticalAlignment="Top" Command="{Binding TestDocsCommand}" Content="Test" />
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*" Margin="16" RowSpacing="32" ColumnSpacing="32">
+        <Button Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top"
+                Command="{Binding TestDocsCommand}" Content="Test" />
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding DocumentationEntries}" Width="300" HorizontalAlignment="Left">
+        <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding DocumentationEntries}" Width="300"
+                 HorizontalAlignment="Left" SelectionMode="AlwaysSelected"
+                 SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
             <ListBox.Styles>
                 <Style Selector="ListBox /template/ ScrollViewer">
                     <Setter Property="Interaction.Behaviors">
@@ -35,12 +41,49 @@
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <controls:FAIconSourceElement
                             IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
+                            Foreground="{Binding TypeColor, Converter={StaticResource ColorToBrushConverter}}"
                             Width="24" Height="24" VerticalAlignment="Center" />
                         <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="DemiBold" TextWrapping="NoWrap"
-                                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="240" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
+                Padding="24">
+            <StackPanel Spacing="24">
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                    <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Padding="20,8">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Viewbox Height="18" VerticalAlignment="Center">
+                                <controls:FAIconSourceElement
+                                    Foreground="{Binding SelectedEntry?.TypeColor, Converter={StaticResource ColorToBrushConverter}}"
+                                    IconSource="{Binding SelectedEntry?.Icon, Converter={StaticResource StandardIconSourceConverter}}" />
+                            </Viewbox>
+                            <TextBlock Text="{Binding SelectedEntry?.TypeName}" FontSize="16"
+                                       VerticalAlignment="Center" Padding="0,0,0,1" />
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="{Binding SelectedEntry?.Name}" FontSize="24" FontWeight="DemiBold"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <TextBlock Text="{Binding SelectedEntry?.Description}" FontSize="16" TextWrapping="Wrap"
+                           Margin="8,0,0,0" />
+
+                <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Padding="20,12">
+                    <avaloniaEdit:TextEditor Name="PatternEditor" ShowLineNumbers="False"
+                                             IsReadOnly="True"
+                                             WordWrap="True"
+                                             Document="{Binding PatternDocument}"
+                                             Foreground="{DynamicResource EditorTextColor}"
+                                             Background="Transparent"
+                                             LineNumbersForeground="{DynamicResource LineNumbersColor}"
+                                             FontSize="16"
+                                             FontFamily="{DynamicResource JetBrainsFont}" />
+                </Border>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

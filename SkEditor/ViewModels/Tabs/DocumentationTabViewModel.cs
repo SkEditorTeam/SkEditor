@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Platform;
+using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
@@ -25,6 +27,11 @@ public partial class DocumentationTabViewModel(HttpClient httpClient, INotificat
 
     [ObservableProperty]
     public partial List<DocumentationEntry>? DocumentationEntries { get; private set; }
+
+    [ObservableProperty]
+    public partial DocumentationEntry? SelectedEntry { get; set; }
+
+    public TextDocument PatternDocument { get; set; } = new();
 
     [RelayCommand]
     private void CloseTab()
@@ -49,20 +56,25 @@ public partial class DocumentationTabViewModel(HttpClient httpClient, INotificat
             notifs.Debug("Failed to deserialize SkUnityResponse.");
             return;
         }
-
+        
         DocumentationEntries = response.ResultDto.Docs.Values.Select(doc => new DocumentationEntry
         {
             Name = doc.Name,
             Type = doc.Type,
-            Description = doc.Description,
+            Description = WebUtility.HtmlDecode(doc.Description),
             Addon = doc.Addon,
             Version = doc.Version,
-            Patterns = doc.Pattern.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+            Patterns = WebUtility.HtmlDecode(doc.Pattern)
         }).ToList();
 
         stopwatch.Stop();
 
         notifs.Debug(
             $"docsów: {response.ResultDto.Docs.Count} items, deserialized in {stopwatch.ElapsedMilliseconds}ms.");
+    }
+
+    partial void OnSelectedEntryChanged(DocumentationEntry? value)
+    {
+        PatternDocument.Text = value?.Patterns ?? string.Empty;
     }
 }
