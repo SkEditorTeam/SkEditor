@@ -4,7 +4,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features.Editing;
 
@@ -22,12 +22,12 @@ public class SmartAutoPairingFeature(AppSettings appSettings) : IEditorFeature
 
     private BracketEditingHandler? _bracketHandler;
 
-    public bool CanAttach(FileTabViewModel tab)
+    public bool CanAttach(IFeatureTab tab)
     {
         return appSettings.IsAutoPairingEnabled;
     }
 
-    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
         editor.TextArea.TextEntering += OnTextEntering;
 
@@ -35,7 +35,7 @@ public class SmartAutoPairingFeature(AppSettings appSettings) : IEditorFeature
         editor.TextArea.PushStackedInputHandler(_bracketHandler);
     }
 
-    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
         editor.TextArea.TextEntering -= OnTextEntering;
 

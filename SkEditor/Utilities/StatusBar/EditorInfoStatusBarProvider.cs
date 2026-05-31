@@ -6,6 +6,7 @@ using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Utilities.StatusBar;
@@ -47,12 +48,12 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider
 
     private void UpdateState()
     {
-        if (_tabService.SelectedTab is FileTabViewModel fileTab)
+        if (_tabService.SelectedTab is ITextEditorTab editorTab)
         {
             _cursorItem.IsVisible = true;
 
-            int offset = fileTab.CaretOffset;
-            TextLocation location = fileTab.Document.GetLocation(offset);
+            int offset = editorTab.CaretOffset;
+            TextLocation location = editorTab.Document.GetLocation(offset);
 
             _cursorItem.Text = TranslatableString.FromRawString($"{location.Line}:{location.Column}");
         }

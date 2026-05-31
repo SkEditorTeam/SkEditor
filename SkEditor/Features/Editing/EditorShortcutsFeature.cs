@@ -8,7 +8,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Utilities.Extensions;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features.Editing;
 
@@ -23,9 +23,9 @@ public class EditorShortcutsFeature : IEditorFeature
 
     private KeyGesture? _pendingChordPrefix;
     private Dictionary<KeyGesture, Action> _shortcuts = [];
-    private FileTabViewModel? _tab;
+    private IFeatureTab? _tab;
 
-    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
         _tab = tab;
         _editor = editor;
@@ -63,7 +63,7 @@ public class EditorShortcutsFeature : IEditorFeature
             RoutingStrategies.Tunnel, true);
     }
 
-    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
         foreach (KeyBinding binding in _currentKeyBindings)
         {

@@ -8,7 +8,6 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using SkEditor.ElementGenerators;
 using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs;
 using SkEditor.Views.Controls.Editor;
 
 namespace SkEditor.Features;
@@ -17,19 +16,19 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
 {
     private readonly HexColorElementGenerator _colorGenerator = new(ShowColorFlyout);
 
-    public bool CanAttach(FileTabViewModel tab)
+    public bool CanAttach(IFeatureTab tab)
     {
         return
             experiments.ColorPreviewEnabled &&
             (experiments.GlobalColorPreviewEnabled || tab.GetExtension() is null or ".sk");
     }
 
-    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
         editor.TextArea.TextView.ElementGenerators.Add(_colorGenerator);
     }
 
-    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
         editor.TextArea.TextView.ElementGenerators.Remove(_colorGenerator);
     }

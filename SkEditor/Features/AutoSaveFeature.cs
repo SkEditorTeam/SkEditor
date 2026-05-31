@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
 
@@ -12,14 +12,14 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
     private readonly TimeSpan _maxDelay = TimeSpan.FromSeconds(10);
     private CancellationTokenSource? _cts;
     private DateTime _lastChangeAt = DateTime.MinValue;
-    private FileTabViewModel? _tab;
+    private IFeatureTab? _tab;
 
-    public bool CanAttach(FileTabViewModel tab)
+    public bool CanAttach(IFeatureTab tab)
     {
         return appSettings.IsAutoSaveEnabled;
     }
 
-    public void Attach(FileTabViewModel tab)
+    public void Attach(IFeatureTab tab)
     {
         _tab = tab;
 
@@ -27,7 +27,7 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
         tab.ClosingAsync += OnClosingAsync;
     }
 
-    public void Detach(FileTabViewModel tab)
+    public void Detach(IFeatureTab tab)
     {
         _tab = null;
         _cts?.Cancel();

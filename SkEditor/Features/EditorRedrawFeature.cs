@@ -1,15 +1,14 @@
 ﻿using AvaloniaEdit;
 using AvaloniaEdit.Document;
-using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Features;
 
 public class EditorRedrawFeature : IEditorFeature
 {
     private TextEditor? _editor;
-    private FileTabViewModel? _tab;
+    private IFeatureTab? _tab;
 
-    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
         _tab = tab;
         _editor = editor;
@@ -17,7 +16,7 @@ public class EditorRedrawFeature : IEditorFeature
         _tab.RedrawRequested += OnRedrawRequested;
     }
 
-    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
         if (_tab != null)
         {

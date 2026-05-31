@@ -7,13 +7,12 @@ using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Features;
 
 public class EditorOptionsFeature(AppSettings appSettings, IThemeService themes) : IEditorFeature
 {
-    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
         editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));
         editor.TextArea.TextView.LinkTextUnderline = true;

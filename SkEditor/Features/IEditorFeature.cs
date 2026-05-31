@@ -1,28 +1,28 @@
 ﻿using AvaloniaEdit;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
 
 public interface IEditorFeature
 {
-    bool CanAttach(FileTabViewModel tab)
+    bool CanAttach(IFeatureTab tab)
     {
         return true;
     }
 
-    void Attach(FileTabViewModel tab)
+    void Attach(IFeatureTab tab)
     {
     }
 
-    void Detach(FileTabViewModel tab)
+    void Detach(IFeatureTab tab)
     {
     }
 
-    void OnViewAttached(FileTabViewModel tab, TextEditor editor)
+    void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
     }
 
-    void OnViewDetached(FileTabViewModel tab, TextEditor editor)
+    void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
     }
 }

@@ -10,6 +10,7 @@ using SkEditor.Models.Files;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Services.Files;
 
@@ -96,17 +97,17 @@ public class FileService(
 
     public async Task SaveFileAsync()
     {
-        if (tabs.SelectedTab is FileTabViewModel fileTab)
+        if (tabs.SelectedTab is ISaveableTab saveableTab)
         {
-            await fileTab.SaveAsync();
+            await saveableTab.SaveAsync();
         }
     }
 
     public async Task SaveAsFileAsync()
     {
-        if (tabs.SelectedTab is FileTabViewModel fileTab)
+        if (tabs.SelectedTab is ISaveableTab saveableTab)
         {
-            await fileTab.SaveAsAsync();
+            await saveableTab.SaveAsAsync();
         }
     }
 

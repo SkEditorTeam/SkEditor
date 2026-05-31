@@ -19,6 +19,7 @@ using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Tabs;
 
@@ -31,7 +32,7 @@ public partial class FileTabViewModel(
     IFileFeatureService features,
     IRecentFileService recentFiles,
     ILogService logs)
-    : TabViewModelBase(header, Symbol.Document)
+    : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab, ISaveableTab
 {
     private static readonly Encoding Utf8NoBom = new UTF8Encoding(false);
 

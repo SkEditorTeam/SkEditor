@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using AvaloniaEdit.Document;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Features;
 
@@ -9,7 +8,7 @@ public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
 {
     private PropertyChangedEventHandler? _handler;
 
-    public void Attach(FileTabViewModel tab)
+    public void Attach(IFeatureTab tab)
     {
         _handler = (_, e) =>
         {
@@ -29,7 +28,7 @@ public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
         tab.Document.UndoStack.PropertyChanged += _handler;
     }
 
-    public void Detach(FileTabViewModel tab)
+    public void Detach(IFeatureTab tab)
     {
         tab.Document.UndoStack.PropertyChanged -= _handler;
     }

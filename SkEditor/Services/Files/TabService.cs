@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Services.Files;
@@ -44,9 +44,9 @@ public class TabService(IFileFeatureService features) : ITabService
     {
         tab.CloseRequested += OnTabCloseRequested;
 
-        if (tab is FileTabViewModel fileTab)
+        if (tab is IFeatureTab featureTab)
         {
-            features.OnTabOpened(fileTab);
+            features.OnTabOpened(featureTab);
         }
 
         Tabs.Add(tab);
@@ -63,9 +63,9 @@ public class TabService(IFileFeatureService features) : ITabService
             SelectedTab = Tabs.LastOrDefault();
         }
 
-        if (tab is FileTabViewModel fileTab)
+        if (tab is IFeatureTab featureTab)
         {
-            features.OnTabClosed(fileTab);
+            features.OnTabClosed(featureTab);
         }
 
         TabClosed?.Invoke(tab);

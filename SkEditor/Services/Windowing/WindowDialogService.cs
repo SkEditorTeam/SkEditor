@@ -6,7 +6,7 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Services.Windowing;
@@ -50,7 +50,7 @@ public class WindowDialogService(
             return null;
         }
 
-        if (requireFile && tabs.SelectedTab is not FileTabViewModel)
+        if (requireFile && tabs.SelectedTab is not ITextEditorTab)
         {
             Notification notification = Notification
                 .Create(TranslationKey.NoFileNotificationTitle)
@@ -69,9 +69,9 @@ public class WindowDialogService(
         }
         finally
         {
-            if (tabs.SelectedTab is FileTabViewModel fileTab)
+            if (tabs.SelectedTab is IFocusableTab focusableTab)
             {
-                fileTab.RequestFocus();
+                focusableTab.RequestFocus();
             }
         }
     }

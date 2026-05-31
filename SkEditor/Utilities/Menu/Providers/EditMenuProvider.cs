@@ -4,6 +4,7 @@ using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
 namespace SkEditor.Utilities.Menu.Providers;
@@ -88,7 +89,7 @@ public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService ta
 
         foreach (MainMenuItem mainMenuItem in edit.SubItems)
         {
-            mainMenuItem.IsEnabled = tabs.SelectedTab is FileTabViewModel;
+            mainMenuItem.IsEnabled = tabs.SelectedTab is ITextEditorTab;
         }
     }
 

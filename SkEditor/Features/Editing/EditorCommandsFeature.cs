@@ -3,28 +3,31 @@ using System.Linq;
 using AvaloniaEdit;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Editor.Commands;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features.Editing;
 
 public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEditorFeature
 {
     private TextEditor? _editor;
-    private FileTabViewModel? _tab;
+    private IFeatureTab? _tab;
 
-    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
         _tab = tab;
         _editor = editor;
 
-        _tab.EditorCommandRequested += OnCommandRequested;
+        if (tab is ITextEditorTab editorTab)
+        {
+            editorTab.EditorCommandRequested += OnCommandRequested;
+        }
     }
 
-    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
+    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
-        if (_tab != null)
+        if (_tab is ITextEditorTab editorTab)
         {
-            _tab.EditorCommandRequested -= OnCommandRequested;
+            editorTab.EditorCommandRequested -= OnCommandRequested;
         }
 
         _tab = null;

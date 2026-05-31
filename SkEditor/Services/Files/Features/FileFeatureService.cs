@@ -6,14 +6,14 @@ using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Features;
 using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Services.Files.Features;
 
 public class FileFeatureService : IFileFeatureService
 {
-    private readonly Dictionary<FileTabViewModel, TextEditor> _activeEditors = [];
-    private readonly Dictionary<FileTabViewModel, List<IEditorFeature>> _attachedFeatures = [];
+    private readonly Dictionary<IFeatureTab, TextEditor> _activeEditors = [];
+    private readonly Dictionary<IFeatureTab, List<IEditorFeature>> _attachedFeatures = [];
     private readonly IServiceProvider _serviceProvider;
 
     public FileFeatureService(IServiceProvider serviceProvider, IEnumerable<IConfig> configs)
@@ -26,7 +26,7 @@ public class FileFeatureService : IFileFeatureService
         }
     }
 
-    public void OnTabOpened(FileTabViewModel tab)
+    public void OnTabOpened(IFeatureTab tab)
     {
         List<IEditorFeature> features = CreateAllFeatures()
             .Where(f => f.CanAttach(tab))
@@ -50,7 +50,7 @@ public class FileFeatureService : IFileFeatureService
         }
     }
 
-    public void OnTabClosed(FileTabViewModel tab)
+    public void OnTabClosed(IFeatureTab tab)
     {
         if (!_attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? features))
         {
@@ -73,7 +73,7 @@ public class FileFeatureService : IFileFeatureService
         _activeEditors.Remove(tab);
     }
 
-    public void OnViewLoaded(FileTabViewModel tab, TextEditor editor)
+    public void OnViewLoaded(IFeatureTab tab, TextEditor editor)
     {
         _activeEditors[tab] = editor;
 
@@ -88,7 +88,7 @@ public class FileFeatureService : IFileFeatureService
         }
     }
 
-    public void OnViewUnloaded(FileTabViewModel tab, TextEditor editor)
+    public void OnViewUnloaded(IFeatureTab tab, TextEditor editor)
     {
         _activeEditors.Remove(tab);
 
@@ -103,20 +103,20 @@ public class FileFeatureService : IFileFeatureService
         }
     }
 
-    public IEnumerable<IEditorFeature> GetFeaturesForTab(FileTabViewModel tab)
+    public IEnumerable<IEditorFeature> GetFeaturesForTab(IFeatureTab tab)
     {
         return _attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? features) ? features : [];
     }
 
     public void UpdateAllFeatures()
     {
-        foreach (FileTabViewModel tab in _attachedFeatures.Keys.ToList())
+        foreach (IFeatureTab tab in _attachedFeatures.Keys.ToList())
         {
             UpdateFeatures(tab);
         }
     }
 
-    public void UpdateFeatures(FileTabViewModel tab)
+    public void UpdateFeatures(IFeatureTab tab)
     {
         if (!_attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? currentFeatures))
         {
