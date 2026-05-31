@@ -7,6 +7,7 @@ using Avalonia.Platform;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
 using SkEditor.Contracts.Services;
+using SkEditor.ViewModels.Tabs.Capabilities;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;
 using TextMateSharp.Internal.Themes.Reader;
@@ -23,16 +24,21 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
 
     public bool CanAttach(IFeatureTab tab)
     {
-        return true;
+        return tab is IFileTab;
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
         _installation = editor.InstallTextMate(_registryOptions);
 
-        string? extension = tab.GetExtension();
+        if (tab is not IFileTab fileTab)
+        {
+            return;
+        }
 
-        if (extension is null or ".sk")
+        string? extension = Path.GetExtension(fileTab.Path ?? string.Empty)?.ToLowerInvariant();
+
+        if (string.IsNullOrEmpty(extension) || extension == ".sk")
         {
             _registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
 

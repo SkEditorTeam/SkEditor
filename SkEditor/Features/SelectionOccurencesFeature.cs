@@ -7,12 +7,18 @@ using AvaloniaEdit.Rendering;
 using SkEditor.Contracts.Services;
 using SkEditor.Tranformers;
 using SkEditor.Utilities.Editor;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
 
 public class SelectionOccurencesFeature(IThemeService themes) : IEditorFeature
 {
     private TextEditor? _editor;
+
+    public bool CanAttach(IFeatureTab tab)
+    {
+        return tab is ITextEditorTab;
+    }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {

@@ -23,11 +23,21 @@ public class EditorShortcutsFeature : IEditorFeature
 
     private KeyGesture? _pendingChordPrefix;
     private Dictionary<KeyGesture, Action> _shortcuts = [];
-    private IFeatureTab? _tab;
+    private ITextEditorTab? _tab;
+
+    public bool CanAttach(IFeatureTab tab)
+    {
+        return tab is ITextEditorTab;
+    }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
-        _tab = tab;
+        if (tab is not ITextEditorTab textEditorTab)
+        {
+            return;
+        }
+
+        _tab = textEditorTab;
         _editor = editor;
         _currentKeyBindings = [];
 
@@ -48,7 +58,7 @@ public class EditorShortcutsFeature : IEditorFeature
         {
             {
                 (new KeyGesture(Key.E, KeyModifiers.Control), new KeyGesture(Key.W)),
-                () => { _tab.WordWrap = !_tab.WordWrap; }
+                () => { _tab!.WordWrap = !_tab.WordWrap; }
             }
         };
 

@@ -24,7 +24,7 @@ public class SmartAutoPairingFeature(AppSettings appSettings) : IEditorFeature
 
     public bool CanAttach(IFeatureTab tab)
     {
-        return appSettings.IsAutoPairingEnabled;
+        return appSettings.IsAutoPairingEnabled && tab is ITextEditorTab;
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)

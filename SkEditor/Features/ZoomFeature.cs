@@ -4,6 +4,7 @@ using AvaloniaEdit;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 using Vector = Avalonia.Vector;
 
 namespace SkEditor.Features;
@@ -11,11 +12,21 @@ namespace SkEditor.Features;
 public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IEditorFeature
 {
     private TextEditor? _editor;
-    private IFeatureTab? _tab;
+    private ITextEditorTab? _tab;
+
+    public bool CanAttach(IFeatureTab tab)
+    {
+        return tab is ITextEditorTab;
+    }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
-        _tab = tab;
+        if (tab is not ITextEditorTab textEditorTab)
+        {
+            return;
+        }
+
+        _tab = textEditorTab;
         _editor = editor;
 
         if (appSettings.IsEditorZoomLevelSyncEnabled)
@@ -63,7 +74,7 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         }
 
         e.Handled = true;
-        if (sender is not TextEditor { DataContext: IFeatureTab })
+        if (sender is not TextEditor { DataContext: ITextEditorTab })
         {
             return;
         }

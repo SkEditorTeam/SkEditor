@@ -1,15 +1,26 @@
 ﻿using AvaloniaEdit;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
 
 public class EditorFocusFeature : IEditorFeature
 {
     private TextEditor? _editor;
-    private IFeatureTab? _tab;
+    private IFocusableTab? _tab;
+
+    public bool CanAttach(IFeatureTab tab)
+    {
+        return tab is IFocusableTab;
+    }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
-        _tab = tab;
+        if (tab is not IFocusableTab focusableTab)
+        {
+            return;
+        }
+
+        _tab = focusableTab;
         _editor = editor;
 
         _tab.FocusRequested += OnFocusRequested;

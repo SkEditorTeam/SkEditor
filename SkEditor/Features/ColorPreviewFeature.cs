@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.IO;
+using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
@@ -8,6 +9,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using SkEditor.ElementGenerators;
 using SkEditor.Utilities.Settings;
+using SkEditor.ViewModels.Tabs.Capabilities;
 using SkEditor.Views.Controls.Editor;
 
 namespace SkEditor.Features;
@@ -18,9 +20,16 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
 
     public bool CanAttach(IFeatureTab tab)
     {
+        if (tab is not IFileTab fileTab)
+        {
+            return false;
+        }
+
+        string? extension = Path.GetExtension(fileTab.Path ?? string.Empty)?.ToLowerInvariant();
+
         return
             experiments.ColorPreviewEnabled &&
-            (experiments.GlobalColorPreviewEnabled || tab.GetExtension() is null or ".sk");
+            (experiments.GlobalColorPreviewEnabled || string.IsNullOrEmpty(extension) || extension == ".sk");
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)

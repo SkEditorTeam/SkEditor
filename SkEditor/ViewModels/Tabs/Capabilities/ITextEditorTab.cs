@@ -8,6 +8,7 @@ namespace SkEditor.ViewModels.Tabs.Capabilities;
 public interface ITextEditorTab
 {
     int CaretOffset { get; set; }
+    double FontSize { get; set; }
     Vector ScrollOffset { get; set; }
     bool WordWrap { get; set; }
     TextDocument Document { get; }

@@ -32,7 +32,8 @@ public partial class FileTabViewModel(
     IFileFeatureService features,
     IRecentFileService recentFiles,
     ILogService logs)
-    : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab, ISaveableTab
+    : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab, ISaveableTab,
+        IFileTab, IClosableTab, ISaveStateTab
 {
     private static readonly Encoding Utf8NoBom = new UTF8Encoding(false);
 
@@ -40,6 +41,7 @@ public partial class FileTabViewModel(
 
     private CancellationTokenSource? _saveCts;
     public required BaseFile File { get; init; }
+    public string? Path => File.Path;
     public TextDocument Document { get; } = new();
 
     public AppSettings AppSettings { get; } = appSettings;
@@ -191,13 +193,13 @@ public partial class FileTabViewModel(
             return;
         }
 
-        string fileName = Path.GetFileName(File.Path);
+        string fileName = System.IO.Path.GetFileName(File.Path);
         Header = TranslatableString.FromRawString(fileName);
     }
 
     public string? GetExtension()
     {
-        return Path.GetExtension(File.Path ?? null)?.ToLowerInvariant();
+        return System.IO.Path.GetExtension(File.Path ?? null)?.ToLowerInvariant();
     }
 
     /// <summary>

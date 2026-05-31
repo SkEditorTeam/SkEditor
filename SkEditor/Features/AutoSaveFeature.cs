@@ -12,35 +12,64 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
     private readonly TimeSpan _maxDelay = TimeSpan.FromSeconds(10);
     private CancellationTokenSource? _cts;
     private DateTime _lastChangeAt = DateTime.MinValue;
-    private IFeatureTab? _tab;
+    private IClosableTab? _closableTab;
+    private IFileTab? _fileTab;
+    private ISaveableTab? _saveableTab;
+    private ITextEditorTab? _textEditorTab;
 
     public bool CanAttach(IFeatureTab tab)
     {
-        return appSettings.IsAutoSaveEnabled;
+        if (!appSettings.IsAutoSaveEnabled)
+        {
+            return false;
+        }
+
+        return tab is ITextEditorTab and ISaveableTab and IClosableTab and IFileTab;
     }
 
     public void Attach(IFeatureTab tab)
     {
-        _tab = tab;
+        if (tab is not ITextEditorTab textEditorTab ||
+            tab is not ISaveableTab saveableTab ||
+            tab is not IClosableTab closableTab ||
+            tab is not IFileTab fileTab)
+        {
+            return;
+        }
 
-        tab.Document.TextChanged += OnTextChanged;
-        tab.ClosingAsync += OnClosingAsync;
+        _textEditorTab = textEditorTab;
+        _saveableTab = saveableTab;
+        _closableTab = closableTab;
+        _fileTab = fileTab;
+
+        _textEditorTab.Document.TextChanged += OnTextChanged;
+        _closableTab.ClosingAsync += OnClosingAsync;
     }
 
     public void Detach(IFeatureTab tab)
     {
-        _tab = null;
+        if (_textEditorTab != null)
+        {
+            _textEditorTab.Document.TextChanged -= OnTextChanged;
+        }
+
+        if (_closableTab != null)
+        {
+            _closableTab.ClosingAsync -= OnClosingAsync;
+        }
+
+        _textEditorTab = null;
+        _saveableTab = null;
+        _closableTab = null;
+        _fileTab = null;
         _cts?.Cancel();
         _cts?.Dispose();
         _cts = null;
-
-        tab.Document.TextChanged -= OnTextChanged;
-        tab.ClosingAsync -= OnClosingAsync;
     }
 
     private void OnTextChanged(object? sender, EventArgs e)
     {
-        if (_tab?.File.Path is null)
+        if (_fileTab?.Path is null)
         {
             return;
         }
@@ -64,7 +93,7 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
 
     private async Task SaveAfterDelayAsync(TimeSpan delay, CancellationToken token)
     {
-        if (_tab is null)
+        if (_saveableTab is null)
         {
             return;
         }
@@ -73,7 +102,7 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
         {
             await Task.Delay(delay, token);
 
-            await _tab.SaveAsync();
+            await _saveableTab.SaveAsync();
 
             if (!token.IsCancellationRequested)
             {

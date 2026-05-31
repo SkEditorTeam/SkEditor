@@ -14,7 +14,7 @@ public class AutoIndentFeature(AppSettings appSettings) : IEditorFeature
 
     public bool CanAttach(IFeatureTab tab)
     {
-        return appSettings.IsAutoIndentEnabled;
+        return appSettings.IsAutoIndentEnabled && tab is ITextEditorTab;
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)

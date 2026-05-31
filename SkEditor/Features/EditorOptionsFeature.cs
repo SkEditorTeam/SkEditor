@@ -7,11 +7,17 @@ using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
 
 public class EditorOptionsFeature(AppSettings appSettings, IThemeService themes) : IEditorFeature
 {
+    public bool CanAttach(IFeatureTab tab)
+    {
+        return tab is ITextEditorTab;
+    }
+
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
         editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));

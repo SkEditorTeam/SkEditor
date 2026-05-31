@@ -10,24 +10,31 @@ namespace SkEditor.Features.Editing;
 public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEditorFeature
 {
     private TextEditor? _editor;
-    private IFeatureTab? _tab;
+    private ITextEditorTab? _tab;
+
+    public bool CanAttach(IFeatureTab tab)
+    {
+        return tab is ITextEditorTab;
+    }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
-        _tab = tab;
+        if (tab is not ITextEditorTab editorTab)
+        {
+            return;
+        }
+
+        _tab = editorTab;
         _editor = editor;
 
-        if (tab is ITextEditorTab editorTab)
-        {
-            editorTab.EditorCommandRequested += OnCommandRequested;
-        }
+        editorTab.EditorCommandRequested += OnCommandRequested;
     }
 
     public void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
-        if (_tab is ITextEditorTab editorTab)
+        if (_tab is not null)
         {
-            editorTab.EditorCommandRequested -= OnCommandRequested;
+            _tab.EditorCommandRequested -= OnCommandRequested;
         }
 
         _tab = null;

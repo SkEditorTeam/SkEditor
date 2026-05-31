@@ -4,6 +4,7 @@ using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using SkEditor.Behaviors;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
 
@@ -11,7 +12,7 @@ public class EditorSmoothScrollFeature(AppSettings appSettings) : IEditorFeature
 {
     public bool CanAttach(IFeatureTab tab)
     {
-        return appSettings.IsEditorSmoothScrollEnabled;
+        return appSettings.IsEditorSmoothScrollEnabled && tab is ITextEditorTab;
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
