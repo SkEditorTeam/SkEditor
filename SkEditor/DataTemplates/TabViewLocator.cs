@@ -8,35 +8,51 @@ namespace SkEditor.DataTemplates;
 
 public class TabViewLocator : IDataTemplate
 {
-    private readonly Dictionary<Type, Control> _viewCache = new();
     private readonly Dictionary<Type, Func<Control>> _registry = new();
+    private readonly Dictionary<TabViewModelBase, Control> _viewCache = new();
 
     public Control Build(object? data)
     {
         if (data is not TabViewModelBase tabVm)
+        {
             return new TextBlock { Text = "Invalid data type" };
+        }
 
-        if (_viewCache.TryGetValue(tabVm.GetType(), out var cachedView))
+        if (_viewCache.TryGetValue(tabVm, out Control? cachedView))
+        {
             return cachedView;
+        }
 
-        if (!_registry.TryGetValue(tabVm.GetType(), out var factory))
+        if (!_registry.TryGetValue(tabVm.GetType(), out Func<Control>? factory))
+        {
             return new TextBlock { Text = $"No registered view for {tabVm.GetType().Name}" };
+        }
 
-        var view = factory();
+        Control view = factory();
         view.DataContext = tabVm;
 
         if (tabVm.IsCacheable)
-            _viewCache[tabVm.GetType()] = view;
+        {
+            _viewCache[tabVm] = view;
+        }
 
         return view;
     }
 
-    public bool Match(object? data) => data is TabViewModelBase;
+    public bool Match(object? data)
+    {
+        return data is TabViewModelBase;
+    }
 
     public void Register<TViewModel, TView>()
         where TViewModel : TabViewModelBase
         where TView : Control, new()
     {
         _registry[typeof(TViewModel)] = () => new TView();
+    }
+
+    public void RemoveFromCache(TabViewModelBase tabVm)
+    {
+        _viewCache.Remove(tabVm);
     }
 }
