@@ -316,5 +316,6 @@
   "AboutRunningOn": "Running on:",
   "AboutAuthor": "By {0}",
   "AboutCopySystemInfo": "Copy system info",
-  "AboutSupportUs": "Support SkEditor"
+  "AboutSupportUs": "Support SkEditor",
+  "DocumentationTabTitle": "Documentation"
 }
