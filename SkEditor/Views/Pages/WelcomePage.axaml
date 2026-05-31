@@ -75,7 +75,7 @@
                           MaxHeight="600">
                 <Interaction.Behaviors>
                     <BehaviorCollection>
-                        <behaviors:VerticalScrollViewerAnimatedBehavior />
+                        <behaviors:SmoothScrollBehavior />
                     </BehaviorCollection>
                 </Interaction.Behaviors>
                 <ScrollViewer.Padding>
@@ -155,7 +155,7 @@
                               VerticalScrollBarVisibility="Auto" IsVisible="{Binding !!RecentItems.Count}">
                     <Interaction.Behaviors>
                         <BehaviorCollection>
-                            <behaviors:VerticalScrollViewerAnimatedBehavior />
+                            <behaviors:SmoothScrollBehavior />
                         </BehaviorCollection>
                     </Interaction.Behaviors>
                     <ItemsRepeater ItemsSource="{Binding RecentItems}">

@@ -31,7 +31,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled">
         <Interaction.Behaviors>
-            <behaviors:VerticalScrollViewerAnimatedBehavior />
+            <behaviors:SmoothScrollBehavior />
         </Interaction.Behaviors>
         <DockPanel MaxWidth="1000"
                    HorizontalAlignment="Center"

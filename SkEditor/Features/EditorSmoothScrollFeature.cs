@@ -32,7 +32,7 @@ public class EditorSmoothScrollFeature(AppSettings appSettings) : IEditorFeature
             return;
         }
 
-        VerticalScrollViewerAnimatedBehavior behavior = new()
+        SmoothScrollBehavior behavior = new()
         {
             AnimationDuration = 250,
             ScrollEasing = new CubicEaseOut()

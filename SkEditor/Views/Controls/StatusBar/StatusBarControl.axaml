@@ -107,7 +107,7 @@
                                                   Margin="0,8,-8,0">
                                         <Interaction.Behaviors>
                                             <BehaviorCollection>
-                                                <behaviors:VerticalScrollViewerAnimatedBehavior />
+                                                <behaviors:SmoothScrollBehavior />
                                             </BehaviorCollection>
                                         </Interaction.Behaviors>
                                         <ItemsControl ItemsSource="{Binding Notifications}" Padding="0,0,14,0">

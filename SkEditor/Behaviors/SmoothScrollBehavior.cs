@@ -14,7 +14,7 @@ using SkEditor.Utilities.Extensions;
 
 namespace SkEditor.Behaviors;
 
-public class VerticalScrollViewerAnimatedBehavior : StyledElementBehavior<ScrollViewer>
+public class SmoothScrollBehavior : StyledElementBehavior<ScrollViewer>
 {
     public enum ChangeSize
     {
@@ -22,13 +22,13 @@ public class VerticalScrollViewerAnimatedBehavior : StyledElementBehavior<Scroll
         Page
     }
 
-    public static readonly DirectProperty<VerticalScrollViewerAnimatedBehavior, double> ScrollStepSizeProperty =
-        AvaloniaProperty.RegisterDirect<VerticalScrollViewerAnimatedBehavior, double>(nameof(ScrollStepSize),
+    public static readonly DirectProperty<SmoothScrollBehavior, double> ScrollStepSizeProperty =
+        AvaloniaProperty.RegisterDirect<SmoothScrollBehavior, double>(nameof(ScrollStepSize),
             o => o.ScrollStepSize,
             (o, v) => o.ScrollStepSize = v);
 
     public static readonly StyledProperty<ChangeSize> ScrollChangeSizeProperty =
-        AvaloniaProperty.Register<VerticalScrollViewerAnimatedBehavior, ChangeSize>(nameof(ScrollChangeSize));
+        AvaloniaProperty.Register<SmoothScrollBehavior, ChangeSize>(nameof(ScrollChangeSize));
 
     private DateTime _animationStartTime;
 

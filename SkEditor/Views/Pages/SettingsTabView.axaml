@@ -43,7 +43,7 @@
             <Setter Property="Interaction.Behaviors">
                 <BehaviorCollectionTemplate>
                     <BehaviorCollection>
-                        <behaviors:VerticalScrollViewerAnimatedBehavior />
+                        <behaviors:SmoothScrollBehavior />
                     </BehaviorCollection>
                 </BehaviorCollectionTemplate>
             </Setter>
@@ -53,7 +53,7 @@
             <Setter Property="Interaction.Behaviors">
                 <BehaviorCollectionTemplate>
                     <BehaviorCollection>
-                        <behaviors:VerticalScrollViewerAnimatedBehavior />
+                        <behaviors:SmoothScrollBehavior />
                     </BehaviorCollection>
                 </BehaviorCollectionTemplate>
             </Setter>
@@ -130,7 +130,7 @@
             <ScrollViewer Name="ScrollViewer" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                           Padding="24,4,24,24" VerticalScrollBarVisibility="Auto">
                 <Interaction.Behaviors>
-                    <behaviors:VerticalScrollViewerAnimatedBehavior />
+                    <behaviors:SmoothScrollBehavior />
                 </Interaction.Behaviors>
                 <ItemsRepeater ItemsSource="{Binding CurrentSection.Settings, FallbackValue={x:Null}}">
                     <ItemsRepeater.Layout>
