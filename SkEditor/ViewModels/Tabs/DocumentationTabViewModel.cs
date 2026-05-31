@@ -37,14 +37,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     [ObservableProperty]
     public partial DocumentationEntry? SelectedEntry { get; set; }
 
-    public List<DocumentationSyntaxType> SyntaxTypes =>
-        DocumentationEntries is null
-            ? [DocumentationSyntaxType.All]
-            : DocumentationEntries
-                .Select(entry => entry.Type)
-                .Distinct()
-                .Prepend(DocumentationSyntaxType.All)
-                .ToList();
+    public List<DocumentationSyntaxType> SyntaxTypes { get; } = Enum.GetValues<DocumentationSyntaxType>().ToList();
 
     [ObservableProperty]
     public partial DocumentationSyntaxType? SelectedSyntaxType { get; set; }
@@ -89,7 +82,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     partial void OnSelectedEntryChanged(DocumentationEntry? value)
     {
-        PatternDocument.Text = value?.Patterns ?? string.Empty;
+        PatternDocument.Text = "-| -> => !=";
     }
 
     partial void OnSelectedSyntaxTypeChanged(DocumentationSyntaxType? value)
