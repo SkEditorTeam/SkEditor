@@ -3,8 +3,8 @@ using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Features.Editing;
 
@@ -12,18 +12,18 @@ public class AutoIndentFeature(AppSettings appSettings) : IEditorFeature
 {
     private bool _undoGroupOpen;
 
-    public bool CanAttach(FileTab tab)
+    public bool CanAttach(FileTabViewModel tab)
     {
         return appSettings.IsAutoIndentEnabled;
     }
 
-    public void OnViewAttached(FileTab tab, TextEditor editor)
+    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
     {
         editor.TextArea.TextEntering += OnTextEntering;
         editor.TextArea.TextEntered += OnTextEntered;
     }
 
-    public void OnViewDetached(FileTab tab, TextEditor editor)
+    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
     {
         editor.TextArea.TextEntering -= OnTextEntering;
         editor.TextArea.TextEntered -= OnTextEntered;

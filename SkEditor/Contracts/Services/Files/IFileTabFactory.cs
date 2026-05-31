@@ -1,10 +1,10 @@
 ﻿using SkEditor.Models.Files;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Contracts.Services.Files;
 
 public interface IFileTabFactory
 {
-    FileTab CreateFromFile(BaseFile file);
-    FileTab CreateNewFile(string name);
+    FileTabViewModel CreateFromFile(BaseFile file);
+    FileTabViewModel CreateNewFile(string name);
 }

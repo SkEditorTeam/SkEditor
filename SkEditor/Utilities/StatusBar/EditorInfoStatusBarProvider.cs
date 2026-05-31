@@ -3,9 +3,10 @@ using System.ComponentModel;
 using AvaloniaEdit.Document;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Controls;
+using SkEditor.ViewModels.Tabs;
+using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Utilities.StatusBar;
 
@@ -14,7 +15,7 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider
     private readonly StatusBarItem _cursorItem;
     private readonly ITabService _tabService;
 
-    private Tab? _currentTab;
+    private TabViewModelBase? _currentTab;
 
     public EditorInfoStatusBarProvider(ITabService tabService, IWindowDialogService windowDialogs)
     {
@@ -34,7 +35,7 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider
         yield return _cursorItem;
     }
 
-    private void OnTabChanged(Tab? tab)
+    private void OnTabChanged(TabViewModelBase? tab)
     {
         _currentTab?.PropertyChanged -= OnTabPropertyChanged;
         _currentTab = tab;
@@ -46,7 +47,7 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider
 
     private void UpdateState()
     {
-        if (_tabService.SelectedTab is FileTab fileTab)
+        if (_tabService.SelectedTab is FileTabViewModel fileTab)
         {
             _cursorItem.IsVisible = true;
 
@@ -63,7 +64,7 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider
 
     private void OnTabPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(FileTab.CaretOffset))
+        if (e.PropertyName == nameof(FileTabViewModel.CaretOffset))
         {
             UpdateState();
         }

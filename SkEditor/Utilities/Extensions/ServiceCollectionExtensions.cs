@@ -10,7 +10,6 @@ using SkEditor.Contracts.Services.Windowing;
 using SkEditor.DataTemplates;
 using SkEditor.Features;
 using SkEditor.Features.Editing;
-using SkEditor.Models.Tabs;
 using SkEditor.Services;
 using SkEditor.Services.Files;
 using SkEditor.Services.Files.Features;
@@ -31,6 +30,7 @@ using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.FileTree;
 using SkEditor.ViewModels.Controls.Sidebar.Panes;
 using SkEditor.ViewModels.Pages;
+using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Controls.Sidebar;
 using SkEditor.Views.Pages;
@@ -100,7 +100,6 @@ public static class ServiceCollectionExtensions
             services.AddTransient<ThemePageViewModel>();
             services.AddTransient<WhatsNewPageViewModel>();
             services.AddTransient<WelcomePageViewModel>();
-            services.AddTransient<SettingsPageViewModel>();
             services.AddTransient<PublishWindowViewModel>();
             services.AddTransient<AboutWindowViewModel>();
             services.AddTransient<GoToLineWindowViewModel>();
@@ -110,7 +109,7 @@ public static class ServiceCollectionExtensions
         {
             services.AddTransient<MainWindow>();
             services.AddTransient<SplashScreen>();
-            services.AddTransient<SettingsPage>();
+            services.AddTransient<SettingsTabView>();
             services.AddTransient<WhatsNewPage>();
 
             services.AddTransient<PublishWindow>();
@@ -126,8 +125,8 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<Func<ManageRemoteConnectionsWindow>>(sp =>
                 sp.GetRequiredService<ManageRemoteConnectionsWindow>);
 
-            services.AddTransient<SettingsTab>();
-            services.AddSingleton<Func<SettingsTab>>(sp => sp.GetRequiredService<SettingsTab>);
+            services.AddTransient<SettingsTabViewModel>();
+            services.AddSingleton<Func<SettingsTabViewModel>>(sp => sp.GetRequiredService<SettingsTabViewModel>);
         }
 
         public void AddEditorFeatures()
@@ -213,18 +212,12 @@ public static class ServiceCollectionExtensions
 
         public void AddTabViewLocator()
         {
-            services.AddSingleton<TabViewLocator>(sp =>
+            services.AddSingleton<TabViewLocator>(_ =>
             {
-                TabViewLocator locator = new();
-
-                locator.Register<SettingsTab>(tab =>
-                {
-                    SettingsPage page = sp.GetRequiredService<SettingsPage>();
-                    page.DataContext = ((SettingsTab)tab).PageViewModel;
-                    return page;
-                });
-
-                locator.Register<FileTab>(tab => new FileTabView { DataContext = tab });
+                var locator = new TabViewLocator();
+        
+                locator.Register<SettingsTabViewModel, SettingsTabView>();
+                locator.Register<FileTabViewModel, FileTabView>();
 
                 return locator;
             });

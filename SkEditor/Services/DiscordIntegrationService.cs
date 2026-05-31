@@ -2,8 +2,9 @@
 using DiscordRPC;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs;
+using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Services;
 
@@ -85,14 +86,14 @@ public partial class DiscordIntegrationService(
         _client.Dispose();
     }
 
-    private void UpdateDetails(Tab? tab)
+    private void UpdateDetails(TabViewModelBase? tab)
     {
         if (_client?.IsInitialized != true)
         {
             return;
         }
 
-        if (tab is not FileTab fileTab)
+        if (tab is not FileTabViewModel fileTab)
         {
             _client.UpdateDetails("Idle");
             return;

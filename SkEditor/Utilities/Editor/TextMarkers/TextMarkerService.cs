@@ -7,11 +7,11 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Utilities.Editor.TextMarkers;
 
-public sealed class TextMarkerService(FileTab fileTab) : DocumentColorizingTransformer, IBackgroundRenderer,
+public sealed class TextMarkerService(FileTabViewModel fileTab) : DocumentColorizingTransformer, IBackgroundRenderer,
     ITextMarkerService
 {
     private readonly TextDocument _document =

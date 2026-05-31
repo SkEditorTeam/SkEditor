@@ -6,6 +6,7 @@ using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
+using SkEditor.ViewModels.Tabs;
 using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
 namespace SkEditor.Utilities.Menu.Providers;
@@ -91,12 +92,12 @@ public class FileMenuProvider(
         MainMenuItem publishItem, MainMenuItem closeItem)
     {
         bool hasTabs = tabs.Tabs.Count > 0;
-        bool isFileTab = tabs.SelectedTab is FileTab;
+        bool isFileTab = tabs.SelectedTab is FileTabViewModel;
 
         saveItem.IsEnabled = isFileTab;
         saveAsItem.IsEnabled = isFileTab;
 
-        saveAllItem.IsEnabled = hasTabs && tabs.Tabs.Any(t => t is FileTab);
+        saveAllItem.IsEnabled = hasTabs && tabs.Tabs.Any(t => t is FileTabViewModel);
 
         publishItem.IsEnabled = isFileTab;
 

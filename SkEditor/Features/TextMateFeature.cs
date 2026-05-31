@@ -7,7 +7,7 @@ using Avalonia.Platform;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
 using SkEditor.Contracts.Services;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;
 using TextMateSharp.Internal.Themes.Reader;
@@ -22,12 +22,12 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
     private TextMate.Installation? _installation;
     private IRegistryOptions _registryOptions = new SkEditorRegistryOptions(ThemeName.DarkPlus);
 
-    public bool CanAttach(FileTab tab)
+    public bool CanAttach(FileTabViewModel tab)
     {
         return true;
     }
 
-    public void OnViewAttached(FileTab tab, TextEditor editor)
+    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
     {
         _installation = editor.InstallTextMate(_registryOptions);
 
@@ -56,7 +56,7 @@ public class TextMateFeature(INotificationService notifications) : IEditorFeatur
             true);
     }
 
-    public void OnViewDetached(FileTab tab, TextEditor editor)
+    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
     {
         _installation?.Dispose();
 

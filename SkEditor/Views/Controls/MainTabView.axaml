@@ -1,12 +1,12 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:tabs="clr-namespace:SkEditor.Models.Tabs"
              xmlns:pages="clr-namespace:SkEditor.Views.Pages"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:windows="clr-namespace:SkEditor.Views.Windows"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Windows"
              xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
+             xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
              x:Class="SkEditor.Views.Controls.MainTabView"
              x:DataType="vms:MainWindowViewModel">
 
@@ -26,7 +26,7 @@
             TabItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
             AddTabButtonCommand="{Binding NewTabCommand}">
             <ui:FATabView.TabItemTemplate>
-                <DataTemplate x:DataType="tabs:Tab">
+                <DataTemplate x:DataType="tabs:TabViewModelBase">
                     <ui:FATabViewItem Content="{Binding .}">
                         <ui:FATabViewItem.IconSource>
                             <MultiBinding Converter="{StaticResource TabIconConverter}">

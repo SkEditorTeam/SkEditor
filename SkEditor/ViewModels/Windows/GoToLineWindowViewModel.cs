@@ -4,7 +4,7 @@ using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.ViewModels.Windows;
 
@@ -16,7 +16,7 @@ public partial class GoToLineWindowViewModel : ObservableObject
     {
         _tabs = tabs;
 
-        if (_tabs.SelectedTab is not FileTab fileTab)
+        if (_tabs.SelectedTab is not FileTabViewModel fileTab)
         {
             return;
         }
@@ -39,7 +39,7 @@ public partial class GoToLineWindowViewModel : ObservableObject
             return;
         }
 
-        if (_tabs.SelectedTab is not FileTab fileTab)
+        if (_tabs.SelectedTab is not FileTabViewModel fileTab)
         {
             return;
         }
@@ -79,7 +79,7 @@ public partial class GoToLineWindowViewModel : ObservableObject
             column = 1;
         }
 
-        if (_tabs.SelectedTab is not FileTab fileTab)
+        if (_tabs.SelectedTab is not FileTabViewModel fileTab)
         {
             return false;
         }

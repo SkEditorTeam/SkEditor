@@ -8,6 +8,8 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
+using SkEditor.ViewModels.Tabs;
+using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Services.Files;
 
@@ -15,19 +17,19 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
 {
     public async Task CloseMultipleAsync(CloseType closeType)
     {
-        List<Tab> tabsToClose = GetTabsToClose(closeType);
+        List<TabViewModelBase> tabsToClose = GetTabsToClose(closeType);
         if (tabsToClose.Count == 0)
         {
             return;
         }
 
-        List<FileTab> unsavedTabs = tabsToClose.OfType<FileTab>().Where(t => !t.IsSaved).ToList();
+        List<FileTabViewModel> unsavedTabs = tabsToClose.OfType<FileTabViewModel>().Where(t => !t.IsSaved).ToList();
 
         switch (unsavedTabs.Count)
         {
             case 1:
             {
-                Tab tab = tabsToClose.First(t => !t.IsSaved);
+                TabViewModelBase tab = tabsToClose.First(t => !t.IsSaved);
                 tab.CloseCommand?.Execute(null);
 
                 if (tabs.Tabs.Contains(tab))
@@ -50,13 +52,13 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
             }
         }
 
-        foreach (Tab tab in tabsToClose)
+        foreach (TabViewModelBase tab in tabsToClose)
         {
             tabs.CloseTab(tab);
         }
     }
 
-    private async Task<bool> AskForConfirmation(List<FileTab> unsavedTabs)
+    private async Task<bool> AskForConfirmation(List<FileTabViewModel> unsavedTabs)
     {
         Dialog dialog = Dialog
             .Create(TranslationKey.UnsavedFilesCloseAllTitle)
@@ -81,7 +83,7 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
         }
 
         bool savedAll = true;
-        foreach (FileTab unsavedTab in unsavedTabs)
+        foreach (FileTabViewModel unsavedTab in unsavedTabs)
         {
             bool saved = await unsavedTab.SaveAsync();
             if (saved)
@@ -96,7 +98,7 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
         return savedAll;
     }
 
-    private List<Tab> GetTabsToClose(CloseType closeType)
+    private List<TabViewModelBase> GetTabsToClose(CloseType closeType)
     {
         return closeType switch
         {

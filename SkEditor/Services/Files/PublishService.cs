@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Integrations;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Utilities.Publishing;
 
@@ -59,7 +59,7 @@ public class PublishService(HttpClient httpClient, ILogService logs, ITabService
             string json = JsonSerializer.Serialize(new SkUnityCreateRequest { Content = code },
                 PublishingJsonContext.Default.SkUnityCreateRequest);
 
-            if (tabs.SelectedTab is not FileTab fileTab)
+            if (tabs.SelectedTab is not FileTabViewModel fileTab)
             {
                 return null;
             }

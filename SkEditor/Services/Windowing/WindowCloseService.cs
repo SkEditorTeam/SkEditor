@@ -7,9 +7,9 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Dialogs;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Services.Windowing;
 
@@ -24,8 +24,8 @@ public class WindowCloseService(ITabService tabs, IDialogService dialogs, IConfi
             return true;
         }
 
-        List<FileTab> unsavedTabs = tabs.Tabs
-            .OfType<FileTab>()
+        List<FileTabViewModel> unsavedTabs = tabs.Tabs
+            .OfType<FileTabViewModel>()
             .Where(t => !t.IsSaved)
             .ToList();
 
@@ -51,7 +51,7 @@ public class WindowCloseService(ITabService tabs, IDialogService dialogs, IConfi
             if (result == DialogResult.Yes)
             {
                 bool allSaved = true;
-                foreach (FileTab tab in unsavedTabs)
+                foreach (FileTabViewModel tab in unsavedTabs)
                 {
                     bool saved = await tab.SaveAsync();
                     if (saved)

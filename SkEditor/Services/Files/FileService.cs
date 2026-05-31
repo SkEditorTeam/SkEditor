@@ -8,8 +8,8 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Files;
 using SkEditor.Models.Notifications;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Services.Files;
 
@@ -28,7 +28,7 @@ public class FileService(
         TranslatableString header =
             translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
 
-        FileTab newFileTab = fileTabFactory.CreateNewFile(header.Value);
+        FileTabViewModel newFileTab = fileTabFactory.CreateNewFile(header.Value);
         tabs.OpenTab(newFileTab);
     }
 
@@ -53,7 +53,7 @@ public class FileService(
             recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
         }
 
-        FileTab? existingTab = tabs.Tabs.OfType<FileTab>().FirstOrDefault(tab => tab.File.Path == file.Path);
+        FileTabViewModel? existingTab = tabs.Tabs.OfType<FileTabViewModel>().FirstOrDefault(tab => tab.File.Path == file.Path);
 
         if (existingTab is not null)
         {
@@ -61,7 +61,7 @@ public class FileService(
             return;
         }
 
-        FileTab fileTab = fileTabFactory.CreateFromFile(file);
+        FileTabViewModel fileTab = fileTabFactory.CreateFromFile(file);
 
         Task<bool> fullLoadTask = LoadAndReadFileAsync(fileTab);
 
@@ -96,7 +96,7 @@ public class FileService(
 
     public async Task SaveFileAsync()
     {
-        if (tabs.SelectedTab is FileTab fileTab)
+        if (tabs.SelectedTab is FileTabViewModel fileTab)
         {
             await fileTab.SaveAsync();
         }
@@ -104,7 +104,7 @@ public class FileService(
 
     public async Task SaveAsFileAsync()
     {
-        if (tabs.SelectedTab is FileTab fileTab)
+        if (tabs.SelectedTab is FileTabViewModel fileTab)
         {
             await fileTab.SaveAsAsync();
         }
@@ -112,15 +112,15 @@ public class FileService(
 
     public async Task SaveAllAsync()
     {
-        IEnumerable<FileTab> fileTabs = tabs.Tabs.OfType<FileTab>();
+        IEnumerable<FileTabViewModel> fileTabs = tabs.Tabs.OfType<FileTabViewModel>();
 
-        foreach (FileTab fileTab in fileTabs)
+        foreach (FileTabViewModel fileTab in fileTabs)
         {
             await fileTab.SaveAsync();
         }
     }
 
-    private async Task<bool> LoadAndReadFileAsync(FileTab fileTab)
+    private async Task<bool> LoadAndReadFileAsync(FileTabViewModel fileTab)
     {
         try
         {

@@ -1,9 +1,9 @@
 ﻿using FluentIcons.Common;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Localization;
+using SkEditor.ViewModels.Tabs;
 using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
 namespace SkEditor.Utilities.Menu.Providers;
@@ -88,13 +88,13 @@ public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService ta
 
         foreach (MainMenuItem mainMenuItem in edit.SubItems)
         {
-            mainMenuItem.IsEnabled = tabs.SelectedTab is FileTab;
+            mainMenuItem.IsEnabled = tabs.SelectedTab is FileTabViewModel;
         }
     }
 
     private void RequestAction(EditorCommandType commandType)
     {
-        if (tabs.SelectedTab is not FileTab fileTab)
+        if (tabs.SelectedTab is not FileTabViewModel fileTab)
         {
             return;
         }

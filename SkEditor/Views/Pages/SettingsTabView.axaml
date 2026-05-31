@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-             xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:dataTemplates="clr-namespace:SkEditor.DataTemplates"
@@ -11,11 +10,12 @@
              xmlns:types="clr-namespace:SkEditor.Models.Settings.Types"
              xmlns:lconverters="clr-namespace:SkEditor.Converters.Layout"
              xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
+             xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
-             x:DataType="vms:SettingsPageViewModel"
+             x:DataType="tabs:SettingsTabViewModel"
              Focusable="True"
-             x:Class="SkEditor.Views.Pages.SettingsPage">
+             x:Class="SkEditor.Views.Pages.SettingsTabView">
 
     <UserControl.Resources>
         <!-- ReSharper disable Xaml.RedundantResource -->

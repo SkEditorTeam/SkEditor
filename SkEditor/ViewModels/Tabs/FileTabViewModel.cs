@@ -20,9 +20,9 @@ using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 
-namespace SkEditor.Models.Tabs;
+namespace SkEditor.ViewModels.Tabs;
 
-public partial class FileTab(
+public partial class FileTabViewModel(
     TranslatableString header,
     AppSettings appSettings,
     IDialogService dialogs,
@@ -31,7 +31,7 @@ public partial class FileTab(
     IFileFeatureService features,
     IRecentFileService recentFiles,
     ILogService logs)
-    : Tab(header, Symbol.Document)
+    : TabViewModelBase(header, Symbol.Document)
 {
     private static readonly Encoding Utf8NoBom = new UTF8Encoding(false);
 

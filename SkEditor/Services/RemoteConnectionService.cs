@@ -19,8 +19,8 @@ using SkEditor.Models.Messages;
 using SkEditor.Models.Notifications;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
+using SkEditor.ViewModels.Tabs;
 using ICredentialStore = SkEditor.Utilities.Security.ICredentialStore;
 using Notification = SkEditor.Models.Notifications.Notification;
 
@@ -289,11 +289,11 @@ public class RemoteConnectionService(
 
     private void CloseConnectionTabs(RemoteConnection connection)
     {
-        List<FileTab> openTabs = tabs.Tabs.OfType<FileTab>()
+        List<FileTabViewModel> openTabs = tabs.Tabs.OfType<FileTabViewModel>()
             .Where(tab => tab.File is SftpFile sftpFile && sftpFile.Connection == connection)
             .ToList();
 
-        foreach (FileTab tab in openTabs)
+        foreach (FileTabViewModel tab in openTabs)
         {
             tabs.CloseTab(tab);
         }

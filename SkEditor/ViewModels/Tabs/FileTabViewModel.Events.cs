@@ -2,9 +2,9 @@
 using AvaloniaEdit.Document;
 using SkEditor.Utilities.Editor;
 
-namespace SkEditor.Models.Tabs;
+namespace SkEditor.ViewModels.Tabs;
 
-public partial class FileTab
+public partial class FileTabViewModel
 {
     public event Action<EditorCommandType>? EditorCommandRequested;
 

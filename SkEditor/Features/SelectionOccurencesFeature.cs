@@ -5,9 +5,9 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using SkEditor.Contracts.Services;
-using SkEditor.Models.Tabs;
 using SkEditor.Tranformers;
 using SkEditor.Utilities.Editor;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Features;
 
@@ -15,13 +15,13 @@ public class SelectionOccurencesFeature(IThemeService themes) : IEditorFeature
 {
     private TextEditor? _editor;
 
-    public void OnViewAttached(FileTab tab, TextEditor editor)
+    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
     {
         _editor = editor;
         editor.TextArea.SelectionChanged += OnSelectionChanged;
     }
 
-    public void OnViewDetached(FileTab tab, TextEditor editor)
+    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
     {
         _editor = null;
         editor.TextArea.SelectionChanged -= OnSelectionChanged;

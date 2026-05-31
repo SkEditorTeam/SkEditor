@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using AvaloniaEdit;
 using SkEditor.Features;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Contracts.Services.Files.Features;
 
 public interface IFileFeatureService
 {
-    void OnTabOpened(FileTab tab);
+    void OnTabOpened(FileTabViewModel tab);
 
-    void OnTabClosed(FileTab tab);
+    void OnTabClosed(FileTabViewModel tab);
 
-    IEnumerable<IEditorFeature> GetFeaturesForTab(FileTab tab);
+    IEnumerable<IEditorFeature> GetFeaturesForTab(FileTabViewModel tab);
     void UpdateAllFeatures();
-    void UpdateFeatures(FileTab tab);
+    void UpdateFeatures(FileTabViewModel tab);
 
-    void OnViewLoaded(FileTab tab, TextEditor editor);
-    void OnViewUnloaded(FileTab tab, TextEditor editor);
+    void OnViewLoaded(FileTabViewModel tab, TextEditor editor);
+    void OnViewUnloaded(FileTabViewModel tab, TextEditor editor);
 }

@@ -5,15 +5,15 @@ using AvaloniaEdit;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Features;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Services.Files.Features;
 
 public class FileFeatureService : IFileFeatureService
 {
-    private readonly Dictionary<FileTab, TextEditor> _activeEditors = [];
-    private readonly Dictionary<FileTab, List<IEditorFeature>> _attachedFeatures = [];
+    private readonly Dictionary<FileTabViewModel, TextEditor> _activeEditors = [];
+    private readonly Dictionary<FileTabViewModel, List<IEditorFeature>> _attachedFeatures = [];
     private readonly IServiceProvider _serviceProvider;
 
     public FileFeatureService(IServiceProvider serviceProvider, IEnumerable<IConfig> configs)
@@ -26,7 +26,7 @@ public class FileFeatureService : IFileFeatureService
         }
     }
 
-    public void OnTabOpened(FileTab tab)
+    public void OnTabOpened(FileTabViewModel tab)
     {
         List<IEditorFeature> features = CreateAllFeatures()
             .Where(f => f.CanAttach(tab))
@@ -50,7 +50,7 @@ public class FileFeatureService : IFileFeatureService
         }
     }
 
-    public void OnTabClosed(FileTab tab)
+    public void OnTabClosed(FileTabViewModel tab)
     {
         if (!_attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? features))
         {
@@ -73,7 +73,7 @@ public class FileFeatureService : IFileFeatureService
         _activeEditors.Remove(tab);
     }
 
-    public void OnViewLoaded(FileTab tab, TextEditor editor)
+    public void OnViewLoaded(FileTabViewModel tab, TextEditor editor)
     {
         _activeEditors[tab] = editor;
 
@@ -88,7 +88,7 @@ public class FileFeatureService : IFileFeatureService
         }
     }
 
-    public void OnViewUnloaded(FileTab tab, TextEditor editor)
+    public void OnViewUnloaded(FileTabViewModel tab, TextEditor editor)
     {
         _activeEditors.Remove(tab);
 
@@ -103,20 +103,20 @@ public class FileFeatureService : IFileFeatureService
         }
     }
 
-    public IEnumerable<IEditorFeature> GetFeaturesForTab(FileTab tab)
+    public IEnumerable<IEditorFeature> GetFeaturesForTab(FileTabViewModel tab)
     {
         return _attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? features) ? features : [];
     }
 
     public void UpdateAllFeatures()
     {
-        foreach (FileTab tab in _attachedFeatures.Keys.ToList())
+        foreach (FileTabViewModel tab in _attachedFeatures.Keys.ToList())
         {
             UpdateFeatures(tab);
         }
     }
 
-    public void UpdateFeatures(FileTab tab)
+    public void UpdateFeatures(FileTabViewModel tab)
     {
         if (!_attachedFeatures.TryGetValue(tab, out List<IEditorFeature>? currentFeatures))
         {

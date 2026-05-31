@@ -5,9 +5,9 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Integrations;
 using SkEditor.Models.Notifications;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.ViewModels.Windows;
 
@@ -20,7 +20,7 @@ public partial class PublishWindowViewModel : ObservableObject
 
         PublishCommand = new AsyncRelayCommand(async () =>
         {
-            if (tabs.SelectedTab is not FileTab fileTab)
+            if (tabs.SelectedTab is not FileTabViewModel fileTab)
             {
                 Notification notification = Notification
                     .Create(TranslationKey.NoFileNotificationTitle)

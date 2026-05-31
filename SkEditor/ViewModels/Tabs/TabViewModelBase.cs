@@ -4,14 +4,14 @@ using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.Models.Tabs;
+namespace SkEditor.ViewModels.Tabs;
 
 /// <summary>
 ///     Represents a tab in the app. This is an abstract class that should be inherited by specific types of tabs (file
 ///     tabs, settings tabs, etc.).
 /// </summary>
 /// <param name="header">The header text of the tab, which is displayed on the tab itself.</param>
-public abstract partial class Tab(TranslatableString header, Symbol? icon = null) : ObservableObject
+public abstract partial class TabViewModelBase(TranslatableString header, Symbol? icon = null) : ObservableObject
 {
     /// <summary>
     ///     The header text of the tab, which is displayed on the tab itself.

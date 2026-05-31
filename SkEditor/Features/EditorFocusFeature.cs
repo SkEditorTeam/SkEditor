@@ -1,14 +1,14 @@
 ﻿using AvaloniaEdit;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Features;
 
 public class EditorFocusFeature : IEditorFeature
 {
     private TextEditor? _editor;
-    private FileTab? _tab;
+    private FileTabViewModel? _tab;
 
-    public void OnViewAttached(FileTab tab, TextEditor editor)
+    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
     {
         _tab = tab;
         _editor = editor;
@@ -16,7 +16,7 @@ public class EditorFocusFeature : IEditorFeature
         _tab.FocusRequested += OnFocusRequested;
     }
 
-    public void OnViewDetached(FileTab tab, TextEditor editor)
+    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
     {
         if (_tab != null)
         {

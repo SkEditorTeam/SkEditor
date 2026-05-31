@@ -2,9 +2,9 @@
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs;
 using Vector = Avalonia.Vector;
 
 namespace SkEditor.Features;
@@ -12,9 +12,9 @@ namespace SkEditor.Features;
 public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IEditorFeature
 {
     private TextEditor? _editor;
-    private FileTab? _tab;
+    private FileTabViewModel? _tab;
 
-    public void OnViewAttached(FileTab tab, TextEditor editor)
+    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
     {
         _tab = tab;
         _editor = editor;
@@ -32,7 +32,7 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         _editor.AddHandler(InputElement.KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
     }
 
-    public void OnViewDetached(FileTab tab, TextEditor editor)
+    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
     {
         zoomService.ZoomChanged -= OnGlobalZoomChanged;
 
@@ -64,7 +64,7 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         }
 
         e.Handled = true;
-        if (sender is not TextEditor { DataContext: FileTab })
+        if (sender is not TextEditor { DataContext: FileTabViewModel })
         {
             return;
         }

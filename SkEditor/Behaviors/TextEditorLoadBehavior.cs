@@ -4,13 +4,13 @@ using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Behaviors;
 
 public class TextEditorLoadBehavior : Behavior<TextEditor>
 {
-    private FileTab? _currentTab;
+    private FileTabViewModel? _currentTab;
 
     protected override void OnAttached()
     {
@@ -22,7 +22,7 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
 
         textEditor.PropertyChanged += OnEditorPropertyChanged;
 
-        if (textEditor.DataContext is FileTab tab)
+        if (textEditor.DataContext is FileTabViewModel tab)
         {
             UpdateTabBinding(null, tab);
         }
@@ -44,11 +44,11 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
     {
         if (e.Property == StyledElement.DataContextProperty)
         {
-            UpdateTabBinding(e.OldValue as FileTab, e.NewValue as FileTab);
+            UpdateTabBinding(e.OldValue as FileTabViewModel, e.NewValue as FileTabViewModel);
         }
     }
 
-    private void UpdateTabBinding(FileTab? oldTab, FileTab? newTab)
+    private void UpdateTabBinding(FileTabViewModel? oldTab, FileTabViewModel? newTab)
     {
         if (ReferenceEquals(oldTab, newTab))
         {

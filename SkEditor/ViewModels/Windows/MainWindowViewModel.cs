@@ -4,10 +4,10 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Pages;
+using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.ViewModels.Windows;
 
@@ -41,7 +41,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     }
 
     [ObservableProperty]
-    public partial Tab? SelectedTab { get; set; }
+    public partial TabViewModelBase? SelectedTab { get; set; }
 
     public AppSettings AppSettings { get; }
     public MainMenuViewModel MainMenu { get; }
@@ -49,14 +49,14 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public StatusBarViewModel StatusBar { get; }
     public WelcomePageViewModel WelcomePage { get; }
 
-    public ObservableCollection<Tab> Tabs => _tabs.Tabs;
+    public ObservableCollection<TabViewModelBase> Tabs => _tabs.Tabs;
 
     public void Receive(OpenFileMessage message)
     {
         _ = _files.OpenFileAsync(message.File);
     }
 
-    partial void OnSelectedTabChanged(Tab? value)
+    partial void OnSelectedTabChanged(TabViewModelBase? value)
     {
         if (_tabs.SelectedTab != value)
         {

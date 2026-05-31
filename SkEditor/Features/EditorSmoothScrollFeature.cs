@@ -3,24 +3,24 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using SkEditor.Behaviors;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Features;
 
 public class EditorSmoothScrollFeature(AppSettings appSettings) : IEditorFeature
 {
-    public bool CanAttach(FileTab tab)
+    public bool CanAttach(FileTabViewModel tab)
     {
         return appSettings.IsEditorSmoothScrollEnabled;
     }
 
-    public void OnViewAttached(FileTab tab, TextEditor editor)
+    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
     {
         editor.TemplateApplied += OnEditorTemplateApplied;
     }
 
-    public void OnViewDetached(FileTab tab, TextEditor editor)
+    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
     {
         editor.TemplateApplied -= OnEditorTemplateApplied;
     }

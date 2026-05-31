@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AvaloniaEdit;
-using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Editor;
 using SkEditor.Utilities.Editor.Commands;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Features.Editing;
 
 public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEditorFeature
 {
     private TextEditor? _editor;
-    private FileTab? _tab;
+    private FileTabViewModel? _tab;
 
-    public void OnViewAttached(FileTab tab, TextEditor editor)
+    public void OnViewAttached(FileTabViewModel tab, TextEditor editor)
     {
         _tab = tab;
         _editor = editor;
@@ -20,7 +20,7 @@ public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEdit
         _tab.EditorCommandRequested += OnCommandRequested;
     }
 
-    public void OnViewDetached(FileTab tab, TextEditor editor)
+    public void OnViewDetached(FileTabViewModel tab, TextEditor editor)
     {
         if (_tab != null)
         {

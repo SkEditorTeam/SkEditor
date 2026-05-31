@@ -3,15 +3,16 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.Models.Tabs;
+using SkEditor.ViewModels.Tabs;
+using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Services.Files;
 
 public class TabService(IFileFeatureService features) : ITabService
 {
-    public ObservableCollection<Tab> Tabs { get; } = [];
+    public ObservableCollection<TabViewModelBase> Tabs { get; } = [];
 
-    public Tab? SelectedTab
+    public TabViewModelBase? SelectedTab
     {
         get;
         set
@@ -26,8 +27,8 @@ public class TabService(IFileFeatureService features) : ITabService
         }
     }
 
-    public event Action<Tab?>? SelectedTabChanged;
-    public event Action<Tab>? TabClosed;
+    public event Action<TabViewModelBase?>? SelectedTabChanged;
+    public event Action<TabViewModelBase>? TabClosed;
 
     public void SwitchTab(int index)
     {
@@ -39,11 +40,11 @@ public class TabService(IFileFeatureService features) : ITabService
         SelectedTab = Tabs[index];
     }
 
-    public void OpenTab(Tab tab)
+    public void OpenTab(TabViewModelBase tab)
     {
         tab.CloseRequested += OnTabCloseRequested;
 
-        if (tab is FileTab fileTab)
+        if (tab is FileTabViewModel fileTab)
         {
             features.OnTabOpened(fileTab);
         }
@@ -52,7 +53,7 @@ public class TabService(IFileFeatureService features) : ITabService
         SelectedTab = tab;
     }
 
-    public void CloseTab(Tab tab)
+    public void CloseTab(TabViewModelBase tab)
     {
         tab.CloseRequested -= OnTabCloseRequested;
         Tabs.Remove(tab);
@@ -62,7 +63,7 @@ public class TabService(IFileFeatureService features) : ITabService
             SelectedTab = Tabs.LastOrDefault();
         }
 
-        if (tab is FileTab fileTab)
+        if (tab is FileTabViewModel fileTab)
         {
             features.OnTabClosed(fileTab);
         }
@@ -70,7 +71,7 @@ public class TabService(IFileFeatureService features) : ITabService
         TabClosed?.Invoke(tab);
     }
 
-    public void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple) where T : Tab
+    public void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple) where T : TabViewModelBase
     {
         if (!allowMultiple && Tabs.OfType<T>().FirstOrDefault() is { } existing)
         {
@@ -83,7 +84,7 @@ public class TabService(IFileFeatureService features) : ITabService
 
     private void OnTabCloseRequested(object? sender, EventArgs e)
     {
-        if (sender is Tab tab)
+        if (sender is TabViewModelBase tab)
         {
             CloseTab(tab);
         }

@@ -2,59 +2,41 @@
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using SkEditor.Models.Tabs;
+using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.DataTemplates;
 
 public class TabViewLocator : IDataTemplate
 {
-    private readonly Dictionary<Tab, Control> _viewCache = new();
-    private readonly Dictionary<Type, Func<Tab, Control>> _viewFactories = new();
+    private readonly Dictionary<Type, Control> _viewCache = new();
+    private readonly Dictionary<Type, Func<Control>> _registry = new();
 
     public Control Build(object? data)
     {
-        if (data is null)
-        {
-            return new TextBlock { Text = "Null data" };
-        }
-
-        if (data is not Tab tab)
-        {
+        if (data is not TabViewModelBase tabVm)
             return new TextBlock { Text = "Invalid data type" };
-        }
 
-        if (_viewCache.TryGetValue(tab, out Control? cachedView))
-        {
+        if (_viewCache.TryGetValue(tabVm.GetType(), out var cachedView))
             return cachedView;
-        }
 
-        if (!_viewFactories.TryGetValue(tab.GetType(), out Func<Tab, Control>? factory))
-        {
-            return new TextBlock { Text = $"No registered view for {data.GetType().Name}" };
-        }
+        if (!_registry.TryGetValue(tabVm.GetType(), out var factory))
+            return new TextBlock { Text = $"No registered view for {tabVm.GetType().Name}" };
 
-        Control view = factory(tab);
-        if (tab.IsCacheable)
-        {
-            _viewCache[tab] = view;
-        }
+        var view = factory();
+        view.DataContext = tabVm;
+
+        if (tabVm.IsCacheable)
+            _viewCache[tabVm.GetType()] = view;
 
         return view;
     }
 
-    public bool Match(object? data)
-    {
-        return data is Tab;
-    }
+    public bool Match(object? data) => data is TabViewModelBase;
 
-    public void Register<TTab>(Func<Tab, Control> factory) where TTab : Tab
+    public void Register<TViewModel, TView>()
+        where TViewModel : TabViewModelBase
+        where TView : Control, new()
     {
-        _viewFactories[typeof(TTab)] = factory;
-    }
-
-    // TODO: call it!
-    public void RemoveFromCache(Tab tab)
-    {
-        _viewCache.Remove(tab);
+        _registry[typeof(TViewModel)] = () => new TView();
     }
 }

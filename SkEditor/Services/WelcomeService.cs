@@ -8,11 +8,11 @@ using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
-using SkEditor.Models.Tabs;
 using SkEditor.Models.Welcome;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Icons;
 using SkEditor.Utilities.Localization;
+using SettingsTabViewModel = SkEditor.ViewModels.Tabs.SettingsTabViewModel;
 
 namespace SkEditor.Services;
 
@@ -20,13 +20,13 @@ public class WelcomeService : IWelcomeService
 {
     private readonly IFileService _files;
 
-    private readonly Func<SettingsTab> _settingsTabFactory;
+    private readonly Func<SettingsTabViewModel> _settingsTabFactory;
     private readonly ITabService _tabs;
 
     private DispatcherTimer _timeUpdater;
 
     public WelcomeService(IFileService fileService, ITabService tabService, IRecentFileService recents,
-        Func<SettingsTab> settingsTabFactory)
+        Func<SettingsTabViewModel> settingsTabFactory)
     {
         _files = fileService;
         _tabs = tabService;
