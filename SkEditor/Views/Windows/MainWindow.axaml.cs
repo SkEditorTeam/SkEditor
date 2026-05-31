@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
+using HotAvalonia;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Windowing;
@@ -117,5 +118,12 @@ public partial class MainWindow : FAAppWindow
 
             SplashScreen?.Close();
         });
+    }
+
+    [AvaloniaHotReload]
+    public void Reload()
+    {
+        _ = _translation.ChangeLanguageAsync(_appSettings.Language);
+        _ = _themes.SetThemeAsync(_themes.CurrentTheme);
     }
 }
