@@ -107,7 +107,12 @@ public class SmoothScrollBehavior : StyledElementBehavior<ScrollViewer>
                     break;
                 }
 
-                if ((e.Delta.Y > 0 && scp2.Offset.Y == 0) ||
+                ScrollViewer? nestedScrollViewer = scp2.FindAncestorOfType<ScrollViewer>();
+                bool isVerticalScrollDisabled = nestedScrollViewer is
+                    { VerticalScrollBarVisibility: ScrollBarVisibility.Disabled };
+
+                if (isVerticalScrollDisabled ||
+                    (e.Delta.Y > 0 && scp2.Offset.Y == 0) ||
                     (e.Delta.Y < 0 &&
                      Math.Abs(scp2.Offset.Y - (scp2.Extent.Height - scp2.Viewport.Height)) < 0.1))
                 {
