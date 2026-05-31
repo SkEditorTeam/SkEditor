@@ -18,6 +18,7 @@ public class DocumentationSyntaxIconConverter : IValueConverter
 
         Symbol symbol = type switch
         {
+            DocumentationSyntaxType.All => Symbol.Apps,
             DocumentationSyntaxType.Event => Symbol.Flash,
             DocumentationSyntaxType.Effect => Symbol.Wand,
             DocumentationSyntaxType.Expression => Symbol.BracesVariable,

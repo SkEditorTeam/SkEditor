@@ -17,7 +17,13 @@ namespace SkEditor.ViewModels.Tabs;
 
 public partial class DocumentationTabViewModel : TabViewModelBase
 {
-    public DocumentationTabViewModel() : base(TranslationKey.DocumentationTabTitle, Symbol.Book) => _ = LoadDocs();
+    public DocumentationTabViewModel() : base(TranslationKey.DocumentationTabTitle, Symbol.Book) =>
+        _ = Task.Run(async () =>
+        {
+            await LoadDocs();
+
+            SelectedSyntaxType = DocumentationSyntaxType.All;
+        });
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
 
@@ -28,11 +34,23 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     [ObservableProperty]
     public partial List<DocumentationEntry>? FilteredEntries { get; set; }
 
-    public List<DocumentationSyntaxType>? SyntaxTypes =>
-        DocumentationEntries?.Select(entry => entry.Type).Distinct().ToList();
-
     [ObservableProperty]
     public partial DocumentationEntry? SelectedEntry { get; set; }
+
+    public List<DocumentationSyntaxType> SyntaxTypes =>
+        DocumentationEntries is null
+            ? [DocumentationSyntaxType.All]
+            : DocumentationEntries
+                .Select(entry => entry.Type)
+                .Distinct()
+                .Prepend(DocumentationSyntaxType.All)
+                .ToList();
+
+    [ObservableProperty]
+    public partial DocumentationSyntaxType? SelectedSyntaxType { get; set; }
+
+    [ObservableProperty]
+    public partial string SearchText { get; set; } = string.Empty;
 
     public TextDocument PatternDocument { get; set; } = new();
 
@@ -72,5 +90,33 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     partial void OnSelectedEntryChanged(DocumentationEntry? value)
     {
         PatternDocument.Text = value?.Patterns ?? string.Empty;
+    }
+
+    partial void OnSelectedSyntaxTypeChanged(DocumentationSyntaxType? value)
+    {
+        Filter();
+    }
+
+    partial void OnSearchTextChanged(string value)
+    {
+        Filter();
+    }
+
+    private void Filter()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            FilteredEntries = DocumentationEntries?
+                .Where(entry => SelectedSyntaxType == DocumentationSyntaxType.All || entry.Type == SelectedSyntaxType)
+                .ToList();
+        }
+        else
+        {
+            FilteredEntries = DocumentationEntries?
+                .Where(entry =>
+                    (SelectedSyntaxType == DocumentationSyntaxType.All || entry.Type == SelectedSyntaxType) &&
+                    entry.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
     }
 }

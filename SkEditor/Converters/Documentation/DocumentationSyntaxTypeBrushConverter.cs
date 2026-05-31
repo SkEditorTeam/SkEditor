@@ -18,6 +18,7 @@ public class DocumentationSyntaxTypeBrushConverter : IValueConverter
 
         Color color = type switch
         {
+            DocumentationSyntaxType.All => Color.Parse("#FFF0F0F0"),
             DocumentationSyntaxType.Event => Color.Parse("#FFFFE07F"),
             DocumentationSyntaxType.Effect => Color.Parse("#FFC99EFF"),
             DocumentationSyntaxType.Expression => Color.Parse("#FF9DFFA7"),
