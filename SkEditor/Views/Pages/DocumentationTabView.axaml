@@ -136,6 +136,7 @@
                                                      LineNumbersForeground="{DynamicResource LineNumbersColor}"
                                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                     FontFeatures="-liga,-calt,-clig"
                                                      FontSize="16"
                                                      FontFamily="{DynamicResource JetBrainsFont}" />
                         </Border>
