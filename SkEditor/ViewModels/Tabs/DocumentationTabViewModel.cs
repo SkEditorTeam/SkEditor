@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Models.Documentation;
+using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Tabs;
@@ -42,6 +43,18 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     [ObservableProperty]
     public partial DocumentationSyntaxType? SelectedSyntaxType { get; set; }
 
+    private const string AllAddonsValue = "All Addons";
+
+    public List<string> AvailableAddons => DocumentationEntries?
+        .Select(entry => entry.Addon)
+        .Where(addon => !string.IsNullOrEmpty(addon))
+        .Prepend(AllAddonsValue)
+        .Distinct()
+        .ToList() ?? [];
+
+    [ObservableProperty]
+    public partial string SelectedAddon { get; set; } = AllAddonsValue;
+
     [ObservableProperty]
     public partial string SearchText { get; set; } = string.Empty;
 
@@ -69,11 +82,11 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
         DocumentationEntries = response.ResultDto.Docs.Values.Select(doc => new DocumentationEntry
         {
-            Name = doc.Name,
+            Name = WebUtility.HtmlDecode(doc.Name),
             Type = DocumentationSyntaxType.FromString(doc.Type),
             Description = WebUtility.HtmlDecode(doc.Description),
-            Addon = doc.Addon,
-            Version = doc.Version,
+            Addon = WebUtility.HtmlDecode(doc.Addon),
+            Version = WebUtility.HtmlDecode(doc.Version),
             Patterns = WebUtility.HtmlDecode(doc.Pattern)
         }).ToList();
 
@@ -95,67 +108,14 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         Filter();
     }
 
-    private void Filter()
+    partial void OnSelectedAddonChanged(string value)
     {
-        if (string.IsNullOrWhiteSpace(SearchText))
-        {
-            FilteredEntries = DocumentationEntries?
-                .Where(entry => SelectedSyntaxType == DocumentationSyntaxType.All || entry.Type == SelectedSyntaxType)
-                .ToList();
-            return;
-        }
-
-        string[] searchTerms = SearchText
-            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-            .Select(t => t.Trim())
-            .ToArray();
-
-        FilteredEntries = DocumentationEntries?
-            .Where(entry => SelectedSyntaxType == DocumentationSyntaxType.All || entry.Type == SelectedSyntaxType)
-            .Select(entry => new { Entry = entry, Score = CalculateScore(entry, searchTerms) })
-            .Where(x => x.Score > 0)
-            .OrderByDescending(x => x.Score)
-            .Select(x => x.Entry)
-            .ToList();
+        Filter();
     }
 
-    private static int CalculateScore(DocumentationEntry entry, string[] terms)
+    private void Filter()
     {
-        int score = 0;
-
-        foreach (string term in terms)
-        {
-            int termScore = 0;
-
-            if (entry.Name.Equals(term, StringComparison.OrdinalIgnoreCase))
-            {
-                termScore += 100;
-            }
-            else if (entry.Name.Contains(term, StringComparison.OrdinalIgnoreCase))
-            {
-                termScore += 50;
-            }
-
-            if (!string.IsNullOrEmpty(entry.Patterns) &&
-                entry.Patterns.Contains(term, StringComparison.OrdinalIgnoreCase))
-            {
-                termScore += 40;
-            }
-
-            if (!string.IsNullOrEmpty(entry.Description) &&
-                entry.Description.Contains(term, StringComparison.OrdinalIgnoreCase))
-            {
-                termScore += 10;
-            }
-
-            if (termScore == 0)
-            {
-                return 0;
-            }
-
-            score += termScore;
-        }
-
-        return score;
+        FilteredEntries = DocumentationSearchEngine.Filter(SearchText, DocumentationEntries,
+            SelectedSyntaxType ?? DocumentationSyntaxType.All, SelectedAddon);
     }
 }

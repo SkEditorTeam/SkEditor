@@ -23,10 +23,10 @@
     <Grid RowDefinitions="Auto,*" Margin="16" RowSpacing="32" ColumnSpacing="32">
 
         <!-- Filters and search -->
-        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="12" HorizontalAlignment="Center">
+        <Grid ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="12" HorizontalAlignment="Center">
             <ComboBox ItemsSource="{Binding SyntaxTypes}"
                       SelectedItem="{Binding SelectedSyntaxType, Mode=TwoWay}"
-                      Width="150" Padding="16,8">
+                      Width="180" Padding="16,8">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Spacing="12">
@@ -44,6 +44,22 @@
 
             <TextBox Grid.Column="1" Width="400" PlaceholderText="Type your query..."
                      Text="{Binding SearchText, Mode=TwoWay}" />
+
+            <ComboBox Grid.Column="2" ItemsSource="{Binding AvailableAddons}"
+                      SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
+                      Width="180" Padding="16,8">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Viewbox Height="18">
+                                <fluent:SymbolIcon Symbol="PuzzlePiece" />
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" Text="{Binding .}" Margin="0,-1,0,0" MaxWidth="100"
+                                       TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding .}" />
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
 
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="32"

@@ -16,7 +16,7 @@ public class DocumentationSyntaxTypeNameConverter : IValueConverter
 
         return type switch
         {
-            DocumentationSyntaxType.All => "All",
+            DocumentationSyntaxType.All => "All Types",
             DocumentationSyntaxType.Event => "Event",
             DocumentationSyntaxType.Effect => "Effect",
             DocumentationSyntaxType.Expression => "Expression",
