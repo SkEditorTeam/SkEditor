@@ -226,14 +226,7 @@
         <Setter Property="Padding" Value="{DynamicResource ComboBoxItemThemePadding}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="FocusAdorner">
-            <FocusAdornerTemplate>
-                <Border BorderThickness="{DynamicResource SystemControlFocusVisualPrimaryThickness}"
-                        BorderBrush="{DynamicResource SystemControlFocusVisualPrimaryBrush}"
-                        Margin="-3">
-                    <Border BorderThickness="{DynamicResource SystemControlFocusVisualSecondaryThickness}"
-                            BorderBrush="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
-                </Border>
-            </FocusAdornerTemplate>
+            <FocusAdornerTemplate />
         </Setter>
         <Setter Property="Template">
             <ControlTemplate>
@@ -267,6 +260,16 @@
         </Setter>
 
         <Style Selector="^:pointerover">
+            <Style Selector="^ /template/ Border#LayoutRoot">
+                <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackgroundPointerOver}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxItemBorderBrushPointerOver}" />
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#ContentPresenter">
+                <Setter Property="Foreground" Value="{DynamicResource ComboBoxItemForegroundPointerOver}" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:focus">
             <Style Selector="^ /template/ Border#LayoutRoot">
                 <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackgroundPointerOver}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxItemBorderBrushPointerOver}" />
