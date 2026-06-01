@@ -102,14 +102,60 @@ public partial class DocumentationTabViewModel : TabViewModelBase
             FilteredEntries = DocumentationEntries?
                 .Where(entry => SelectedSyntaxType == DocumentationSyntaxType.All || entry.Type == SelectedSyntaxType)
                 .ToList();
+            return;
         }
-        else
+
+        string[] searchTerms = SearchText
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Select(t => t.Trim())
+            .ToArray();
+
+        FilteredEntries = DocumentationEntries?
+            .Where(entry => SelectedSyntaxType == DocumentationSyntaxType.All || entry.Type == SelectedSyntaxType)
+            .Select(entry => new { Entry = entry, Score = CalculateScore(entry, searchTerms) })
+            .Where(x => x.Score > 0)
+            .OrderByDescending(x => x.Score)
+            .Select(x => x.Entry)
+            .ToList();
+    }
+
+    private static int CalculateScore(DocumentationEntry entry, string[] terms)
+    {
+        int score = 0;
+
+        foreach (string term in terms)
         {
-            FilteredEntries = DocumentationEntries?
-                .Where(entry =>
-                    (SelectedSyntaxType == DocumentationSyntaxType.All || entry.Type == SelectedSyntaxType) &&
-                    entry.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            int termScore = 0;
+
+            if (entry.Name.Equals(term, StringComparison.OrdinalIgnoreCase))
+            {
+                termScore += 100;
+            }
+            else if (entry.Name.Contains(term, StringComparison.OrdinalIgnoreCase))
+            {
+                termScore += 50;
+            }
+
+            if (!string.IsNullOrEmpty(entry.Patterns) &&
+                entry.Patterns.Contains(term, StringComparison.OrdinalIgnoreCase))
+            {
+                termScore += 40;
+            }
+
+            if (!string.IsNullOrEmpty(entry.Description) &&
+                entry.Description.Contains(term, StringComparison.OrdinalIgnoreCase))
+            {
+                termScore += 10;
+            }
+
+            if (termScore == 0)
+            {
+                return 0;
+            }
+
+            score += termScore;
         }
+
+        return score;
     }
 }
