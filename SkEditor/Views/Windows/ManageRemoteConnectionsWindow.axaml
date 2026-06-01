@@ -21,8 +21,12 @@
     <Grid ColumnDefinitions="*,1.8*" ColumnSpacing="32" Margin="16">
         <GroupBox Grid.Column="0" Header="{localization:Translate RemoteConnectionManageConnectionsTitle}"
                   Margin="0,0,0,-8">
-            <DockPanel>
-                <Grid ColumnDefinitions="*,*" DockPanel.Dock="Bottom" ColumnSpacing="8" Margin="0,12,0,0">
+            <Grid RowDefinitions="*,Auto">
+                <ListBox Grid.Row="0" SelectionMode="AlwaysSelected"
+                         ItemsSource="{Binding Connections}" DisplayMemberBinding="{Binding Name}"
+                         SelectedItem="{Binding SelectedConnection, Mode=TwoWay}" />
+
+                <Grid Grid.Row="1" ColumnDefinitions="*,*" DockPanel.Dock="Bottom" ColumnSpacing="8" Margin="0,12,0,0">
                     <Button HorizontalAlignment="Stretch" Command="{Binding AddConnectionCommand}">
                         <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                             <fluent:SymbolIcon Symbol="Add" FontSize="16" />
@@ -34,11 +38,7 @@
                         </StackPanel>
                     </Button>
                 </Grid>
-
-                <ListBox SelectionMode="AlwaysSelected"
-                         ItemsSource="{Binding Connections}" DisplayMemberBinding="{Binding Name}"
-                         SelectedItem="{Binding SelectedConnection, Mode=TwoWay}" />
-            </DockPanel>
+            </Grid>
         </GroupBox>
 
         <Panel Grid.Column="1">
@@ -57,47 +57,18 @@
                 </StackPanel>
             </StackPanel>
 
-            <DockPanel IsVisible="{Binding SelectedConnection, Converter={x:Static ObjectConverters.IsNotNull}}">
-                <DockPanel.Styles>
+            <Grid RowDefinitions="*,Auto,Auto"
+                  IsVisible="{Binding SelectedConnection, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Grid.Styles>
                     <Style Selector="StackPanel > TextBlock">
                         <Setter Property="Margin" Value="2,0,0,0" />
                     </Style>
                     <Style Selector="ComboBox">
                         <Setter Property="Padding" Value="12,6,0,6" />
                     </Style>
-                </DockPanel.Styles>
+                </Grid.Styles>
 
-                <Grid DockPanel.Dock="Bottom" ColumnDefinitions="Auto,*" ColumnSpacing="8" Margin="0,0,0,0">
-                    <Button ToolTip.Tip="{localization:Translate RemoteConnectionTestConnectionTooltip}"
-                            HorizontalAlignment="Left" IsEnabled="{Binding ConnectionInfo.ConnectionFieldsFilled}"
-                            Command="{Binding TestConnectionCommand}">
-                        <fluent:SymbolIcon Symbol="Pulse" FontSize="18" />
-                    </Button>
-                    <Button Grid.Column="1" HorizontalAlignment="Stretch"
-                            IsEnabled="{Binding ConnectionInfo.RequiredFieldsFilled}"
-                            Command="{Binding SaveConnectionCommand}"
-                            ToolTip.Tip="{localization:Translate RemoteConnectionAddConnectionMissingFields}"
-                            ToolTip.ShowOnDisabled="True"
-                            ToolTip.ServiceEnabled="{Binding !ConnectionInfo.RequiredFieldsFilled}">
-                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center"
-                                    HorizontalAlignment="Center">
-                            <fluent:SymbolIcon Symbol="Save" FontSize="18" />
-                            <TextBlock Text="{localization:Translate RemoteConnectionSaveButton}" FontSize="14" />
-                        </StackPanel>
-                    </Button>
-                </Grid>
-
-                <controls:FAInfoBar DockPanel.Dock="Bottom"
-                                    Theme="{DynamicResource LiteInfoBarTheme}"
-                                    IsClosable="False"
-                                    FontSize="14"
-                                    Severity="{Binding InfoBarSeverity}"
-                                    IsOpen="{Binding InfoBarMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                    Message="{Binding InfoBarMessage}"
-                                    Margin="0,0,0,12"
-                                    MinHeight="32" MaxHeight="72" />
-
-                <StackPanel Spacing="14" Margin="2,0,8,0">
+                <StackPanel Grid.Row="0" Spacing="14">
                     <StackPanel Spacing="4">
                         <TextBlock Text="{localization:Translate RemoteConnectionFieldName}" />
                         <TextBox PlaceholderText="{localization:Translate RemoteConnectionFieldNamePlaceholder}"
@@ -156,7 +127,37 @@
                         </Grid>
                     </StackPanel>
                 </StackPanel>
-            </DockPanel>
+
+                <controls:FAInfoBar Grid.Row="1"
+                                    Theme="{DynamicResource LiteInfoBarTheme}"
+                                    IsClosable="False"
+                                    FontSize="14"
+                                    Severity="{Binding InfoBarSeverity}"
+                                    IsOpen="{Binding InfoBarMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Message="{Binding InfoBarMessage}"
+                                    Margin="0,0,0,12"
+                                    MinHeight="32" MaxHeight="72" />
+
+                <Grid Grid.Row="2" ColumnDefinitions="Auto,*" ColumnSpacing="8" Margin="0,0,0,0">
+                    <Button ToolTip.Tip="{localization:Translate RemoteConnectionTestConnectionTooltip}"
+                            HorizontalAlignment="Left" IsEnabled="{Binding ConnectionInfo.ConnectionFieldsFilled}"
+                            Command="{Binding TestConnectionCommand}">
+                        <fluent:SymbolIcon Symbol="Pulse" FontSize="18" />
+                    </Button>
+                    <Button Grid.Column="1" HorizontalAlignment="Stretch"
+                            IsEnabled="{Binding ConnectionInfo.RequiredFieldsFilled}"
+                            Command="{Binding SaveConnectionCommand}"
+                            ToolTip.Tip="{localization:Translate RemoteConnectionAddConnectionMissingFields}"
+                            ToolTip.ShowOnDisabled="True"
+                            ToolTip.ServiceEnabled="{Binding !ConnectionInfo.RequiredFieldsFilled}">
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+                            <fluent:SymbolIcon Symbol="Save" FontSize="18" />
+                            <TextBlock Text="{localization:Translate RemoteConnectionSaveButton}" FontSize="14" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
         </Panel>
     </Grid>
 </Window>
