@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Avalonia.Platform;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Models.Documentation;
 using SkEditor.Utilities.Docs;
+using SkEditor.Utilities.Docs.Providers;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Tabs;
@@ -68,27 +65,8 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     public async Task LoadDocs()
     {
-        Uri jsonFile = new("avares://SkEditor/Assets/skunity-docs.json");
-        await using Stream stream = AssetLoader.Open(jsonFile);
-
-        SkUnityResponseDto? response =
-            await JsonSerializer.DeserializeAsync<SkUnityResponseDto>(stream,
-                SkUnityResponseContext.Default.SkUnityResponseDto);
-
-        if (response is null)
-        {
-            return;
-        }
-
-        DocumentationEntries = response.ResultDto.Docs.Values.Select(doc => new DocumentationEntry
-        {
-            Name = WebUtility.HtmlDecode(doc.Name),
-            Type = DocumentationSyntaxType.FromString(doc.Type),
-            Description = WebUtility.HtmlDecode(doc.Description),
-            Addon = WebUtility.HtmlDecode(doc.Addon),
-            Version = WebUtility.HtmlDecode(doc.Version),
-            Patterns = WebUtility.HtmlDecode(doc.Pattern)
-        }).ToList();
+        IDocumentationProvider provider = new SkDocsProvider();
+        DocumentationEntries = await provider.GetDocumentationEntriesAsync();
 
         FilteredEntries = DocumentationEntries.ToList();
     }

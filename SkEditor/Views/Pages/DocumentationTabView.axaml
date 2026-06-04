@@ -65,32 +65,40 @@
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="32"
               IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}">
             <!-- List of all elements -->
-            <ListBox Grid.Column="0" ItemsSource="{Binding FilteredEntries}" Width="300"
-                     HorizontalAlignment="Left" SelectionMode="AlwaysSelected"
-                     SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
-                <ListBox.Styles>
-                    <Style Selector="ListBox /template/ ScrollViewer">
-                        <Setter Property="Interaction.Behaviors">
-                            <BehaviorCollection>
-                                <behaviors:SmoothScrollBehavior />
-                            </BehaviorCollection>
-                        </Setter>
-                    </Style>
-                </ListBox.Styles>
+            <Panel Grid.Column="0">
+                <TextBlock HorizontalAlignment="Center" Margin="0,-32,0,0" FontSize="16" FontWeight="DemiBold">
+                    <Run Text="{Binding FilteredEntries?.Count}" />
+                    <Run Text="results" />
+                </TextBlock>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <controls:FAIconSourceElement
-                                IconSource="{Binding Type, Converter={StaticResource SyntaxIconConverter}}"
-                                Foreground="{Binding Type, Converter={StaticResource SyntaxTypeColorConverter}}"
-                                Width="24" Height="24" VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding Name}" FontSize="16" TextWrapping="NoWrap"
-                                       TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="240" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                <ListBox ItemsSource="{Binding FilteredEntries}" Width="300"
+                         HorizontalAlignment="Left" SelectionMode="AlwaysSelected" ClipToBounds="False"
+                         SelectedItem="{Binding SelectedEntry, Mode=TwoWay}" Padding="0,0,16,0">
+                    <ListBox.Styles>
+                        <Style Selector="ListBox /template/ ScrollViewer">
+                            <Setter Property="Margin" Value="0,0,-8,0" />
+                            <Setter Property="Interaction.Behaviors">
+                                <BehaviorCollection>
+                                    <behaviors:SmoothScrollBehavior />
+                                </BehaviorCollection>
+                            </Setter>
+                        </Style>
+                    </ListBox.Styles>
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <controls:FAIconSourceElement
+                                    IconSource="{Binding Type, Converter={StaticResource SyntaxIconConverter}}"
+                                    Foreground="{Binding Type, Converter={StaticResource SyntaxTypeColorConverter}}"
+                                    Width="24" Height="24" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Name}" FontSize="16" TextWrapping="NoWrap"
+                                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="240" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Panel>
 
             <!-- Selected item view -->
             <Border Grid.Column="1"
