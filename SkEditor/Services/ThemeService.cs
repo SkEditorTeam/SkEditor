@@ -8,6 +8,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using Avalonia.Platform;
 using Avalonia.Styling;
 using FluentAvalonia.Styling;
 using SkEditor.Contracts.Services;
@@ -53,15 +54,57 @@ public class ThemeService(
 
         Themes = [.. Themes.OrderBy(x => x.FileName.Equals("Default.json") ? 0 : 1)];
 
+        LoadBuiltInThemes();
+
         CurrentTheme = GetUsedTheme();
     }
 
-    public Theme LoadThemeAsync(string path)
+    private void LoadBuiltInThemes()
+    {
+        Uri themesUri = new("avares://SkEditor/Assets/Themes/");
+        IEnumerable<Uri> themes = AssetLoader.GetAssets(themesUri, themesUri);
+
+        foreach (Uri theme in themes)
+        {
+            try
+            {
+                using Stream stream = AssetLoader.Open(theme);
+                Theme? deserializedTheme = JsonSerializer.Deserialize(stream, ThemeJsonContext.Default.Theme);
+
+                if (deserializedTheme == null)
+                {
+                    continue;
+                }
+
+                deserializedTheme.FileName = Path.GetFileName(theme.LocalPath);
+                deserializedTheme.IsBuiltIn = true;
+                Themes.Add(deserializedTheme);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to load built-in theme from {theme}: {ex.Message}");
+            }
+        }
+    }
+
+    public Theme LoadThemeAsync(string path, bool isBuiltIn = false)
     {
         Theme? theme;
         try
         {
-            string json = File.ReadAllText(path);
+            string json;
+
+            if (isBuiltIn)
+            {
+                using Stream stream = AssetLoader.Open(new Uri(path));
+                using StreamReader reader = new(stream);
+                json = reader.ReadToEnd();
+            }
+            else
+            {
+                json = File.ReadAllText(path);
+            }
+            
             theme = JsonSerializer.Deserialize<Theme>(json, ThemeJsonContext.Default.Theme);
 
             if (theme == null)
@@ -70,7 +113,16 @@ public class ThemeService(
                 theme = GetDefaultTheme();
             }
 
-            theme.FileName = Path.GetFileName(path);
+            if (isBuiltIn)
+            {
+                theme.IsBuiltIn = true;
+                theme.FileName = Path.GetFileName(new Uri(path).LocalPath);
+            }
+            else
+            {
+                theme.FileName = Path.GetFileName(path);
+            }
+            
             Themes.Add(theme);
         }
         catch (Exception ex)
@@ -154,11 +206,13 @@ public class ThemeService(
 
     public async Task ReloadCurrentThemeAsync()
     {
-        string themePath = Path.Combine(ThemeFolderPath, CurrentTheme.FileName);
+        string themePath = CurrentTheme.IsBuiltIn
+            ? $"avares://SkEditor/Assets/Themes/{CurrentTheme.FileName}"
+            : Path.Combine(ThemeFolderPath, CurrentTheme.FileName);
 
         Themes.RemoveAll(t => t.FileName == CurrentTheme.FileName);
 
-        Theme reloadedTheme = LoadThemeAsync(themePath);
+        Theme reloadedTheme = LoadThemeAsync(themePath, CurrentTheme.IsBuiltIn);
         CurrentTheme = reloadedTheme;
 
         await ApplyThemeAsync();
@@ -313,14 +367,6 @@ public class ThemeService(
 
     private void UpdateFont()
     {
-        // if (OSVersionHelper.IsWindows())
-        // {
-        //     fontName = OSVersionHelper.IsWindows11() ? "Segoe UI Variable Text" : "Segoe UI";
-        // }
-        // else
-        // {
-        //     fontName = FontFamily.Default.Name;
-        // }
         string fontName = CurrentTheme.CustomFont ?? FontFamily.Default.Name;
 
         if (Application.Current != null)

@@ -10,7 +10,7 @@ public interface IThemeService
     Theme CurrentTheme { get; set; }
     string ThemeFolderPath { get; set; }
     void LoadThemes();
-    Theme LoadThemeAsync(string path);
+    Theme LoadThemeAsync(string path, bool isBuiltIn = false);
     void SaveAllThemes();
     Task ReloadCurrentThemeAsync();
     Task SetThemeAsync(Theme theme);

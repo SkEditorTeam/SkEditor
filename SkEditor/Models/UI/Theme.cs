@@ -13,6 +13,9 @@ public partial class Theme
     [JsonIgnore]
     public string FileName { get; set; } = string.Empty;
 
+    [JsonIgnore]
+    public bool IsBuiltIn { get; set; }
+
     public string Name { get; set; } = string.Empty;
 
     [ThemeResource]

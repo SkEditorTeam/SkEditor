@@ -1,0 +1,31 @@
+{
+  "Name": "Midnight Cherry",
+  "BackgroundColor": "#ff140c10",
+  "SmallWindowBackgroundColor": "#ff140c10",
+  "DialogTopBackgroundColor": "#ff1a0f14",
+  "DialogTopBorderColor": "#00000000",
+  "DialogBackgroundColor": "#ff140c10",
+  "EditorBackgroundColor": "#ff1d1619",
+  "EditorTextColor": "#fff0dfe4",
+  "LineNumbersColor": "#ff8a6f7a",
+  "SelectionColor": "#38d359ad",
+  "SelectedTabItemBackground": "#ff1d1619",
+  "SelectedTabItemBorder": "Transparent",
+  "MenuBackground": "#180e13",
+  "MenuBorder": "#362a2f",
+  "NotificationBackground": "#140c10",
+  "NotificationBorderBrush": "#362a2f",
+  "TextBoxFocusedBackground": "#ff24141a",
+  "CurrentLineBackground": "#08d36fb8",
+  "CurrentLineBorder": "#10d36fb8",
+  "AccentColor": "#ffd36fb8",
+  "CustomFont": null,
+  "UseMicaEffect": false,
+  "CustomColorChanges": {
+    "TextControlSelectionHighlightColor": "#25ffffff",
+    "ContentDialogTopOverlay": "#ff1e0f15",
+    "ToggleButtonBackgroundChecked": "#59d32f2f",
+    "ToggleButtonBackgroundCheckedPointerOver": "#66d32f2f",
+    "TextControlledSelectionHighlightColor": "#40d32f2f"
+  }
+}
