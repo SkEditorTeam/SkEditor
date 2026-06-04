@@ -98,8 +98,8 @@
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         <Setter Property="RenderTransformOrigin" Value="50%,75%" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource MenuFlyoutPresenterBorderBrush}" />
-        <Setter Property="Background" Value="{DynamicResource MenuFlyoutPresenterBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource NotificationBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource NotificationBackground}" />
         <Setter Property="CornerRadius" Value="7" />
         <Setter Property="Margin" Value="0,0,10,0" />
         <Setter Property="ClipToBounds" Value="False" />
@@ -253,8 +253,8 @@
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         <Setter Property="RenderTransformOrigin" Value="50%,75%" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource MenuFlyoutPresenterBorderBrush}" />
-        <Setter Property="Background" Value="{DynamicResource MenuFlyoutPresenterBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource NotificationBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource NotificationBackground}" />
         <Setter Property="CornerRadius" Value="7" />
         <Setter Property="Margin" Value="0,0,10,0" />
         <Setter Property="ClipToBounds" Value="False" />

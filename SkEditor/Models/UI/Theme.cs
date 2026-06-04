@@ -58,6 +58,12 @@ public partial class Theme
         MapPropertyName = false)]
     public Brush MenuBorder { get; set; } = C("#ff262626");
 
+    [ThemeResource]
+    public Brush NotificationBackground { get; set; } = C("#ff151515");
+
+    [ThemeResource]
+    public Brush NotificationBorderBrush { get; set; } = C("#ff262626");
+
     [ThemeResource("TextControlBackgroundFocused", MapPropertyName = false)]
     public Brush TextBoxFocusedBackground { get; set; } = C("#ff191919");
 

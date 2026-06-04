@@ -64,6 +64,9 @@
         <Brush x:Key="TextControlPlaceholderForeground">#33FFFFFF</Brush>
         <Brush x:Key="TextControlPlaceholderForegroundPointerOver">#4DFFFFFF</Brush>
 
+        <Brush x:Key="NotificationBackground">#2c2c2c</Brush>
+        <Brush x:Key="NotificationBorderBrush">#75161616</Brush>
+
         <Brush x:Key="SkEditorBorderBackground">#0affffff</Brush>
         <Brush x:Key="MessageBoxBackground">#0d0d0d</Brush>
 
