@@ -376,3 +376,6 @@ External/DiscordRPC/packages.lock.json
 
 # Package script
 package-skeditor.ps1
+
+# temporary Skript documentation API dumps
+SkEditor/Assets/*docs.json
