@@ -40,22 +40,29 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     [ObservableProperty]
     public partial DocumentationSyntaxType? SelectedSyntaxType { get; set; }
 
-    private const string AllAddonsValue = "All Addons";
-
-    public List<string> AvailableAddons => DocumentationEntries?
+    public List<string?> AvailableAddons => DocumentationEntries?
         .Select(entry => entry.Addon)
         .Where(addon => !string.IsNullOrEmpty(addon))
-        .Prepend(AllAddonsValue)
+        .Prepend(null)
         .Distinct()
         .ToList() ?? [];
 
     [ObservableProperty]
-    public partial string SelectedAddon { get; set; } = AllAddonsValue;
+    public partial string? SelectedAddon { get; set; } = null;
 
     [ObservableProperty]
     public partial string SearchText { get; set; } = string.Empty;
 
     public TextDocument PatternDocument { get; set; } = new();
+
+    public List<IDocumentationProvider> Providers { get; } =
+    [
+        new SkDocsProvider(),
+        new SkUnityProvider()
+    ];
+
+    [ObservableProperty]
+    public partial IDocumentationProvider? SelectedProvider { get; set; }
 
     [RelayCommand]
     private void CloseTab()
@@ -65,10 +72,16 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     public async Task LoadDocs()
     {
-        IDocumentationProvider provider = new SkDocsProvider();
-        DocumentationEntries = await provider.GetDocumentationEntriesAsync();
+        SelectedProvider ??= Providers.FirstOrDefault();
 
-        FilteredEntries = DocumentationEntries.ToList();
+        IDocumentationProvider? provider = SelectedProvider;
+        if (provider is null)
+        {
+            return;
+        }
+
+        DocumentationEntries = await provider.GetDocumentationEntriesAsync();
+        Filter();
     }
 
     partial void OnSelectedEntryChanged(DocumentationEntry? value)
@@ -86,9 +99,16 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         Filter();
     }
 
-    partial void OnSelectedAddonChanged(string value)
+    partial void OnSelectedAddonChanged(string? value)
     {
         Filter();
+    }
+
+    partial void OnSelectedProviderChanged(IDocumentationProvider? value)
+    {
+        OnPropertyChanged(nameof(AvailableAddons));
+
+        _ = Task.Run(async () => { await LoadDocs(); });
     }
 
     private void Filter()

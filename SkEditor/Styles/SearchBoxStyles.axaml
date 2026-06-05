@@ -100,7 +100,8 @@
                                                            TextWrapping="{TemplateBinding TextWrapping}"
                                                            IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                           Margin="0,0,0,1" />
 
                                                 <TextPresenter Name="PART_TextPresenter"
                                                                Text="{TemplateBinding Text, Mode=TwoWay}"

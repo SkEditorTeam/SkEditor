@@ -12,6 +12,8 @@ namespace SkEditor.Utilities.Docs.Providers;
 
 public class SkDocsProvider : IDocumentationProvider
 {
+    public string Name => "SkDocs";
+
     public async Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync()
     {
         Uri jsonFile = new("avares://SkEditor/Assets/skdocs.json");

@@ -7,11 +7,9 @@ namespace SkEditor.Utilities.Docs;
 
 public static class DocumentationSearchEngine
 {
-    private const string AllAddonsValue = "All Addons";
-
     public static List<DocumentationEntry>? Filter(string searchText,
         IReadOnlyList<DocumentationEntry>? documentationEntries,
-        DocumentationSyntaxType selectedSyntaxType, string selectedAddon)
+        DocumentationSyntaxType selectedSyntaxType, string? selectedAddon)
     {
         List<DocumentationEntry>? filteredEntries;
 
@@ -20,7 +18,7 @@ public static class DocumentationSearchEngine
             filteredEntries = documentationEntries?
                 .Where(entry => selectedSyntaxType == DocumentationSyntaxType.All || entry.Type == selectedSyntaxType)
                 .Where(entry =>
-                    selectedAddon == AllAddonsValue ||
+                    selectedAddon == null ||
                     entry.Addon.Equals(selectedAddon, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
@@ -38,7 +36,7 @@ public static class DocumentationSearchEngine
 
         filteredEntries = documentationEntries?
             .Where(entry => selectedSyntaxType == DocumentationSyntaxType.All || entry.Type == selectedSyntaxType)
-            .Where(entry => selectedAddon == AllAddonsValue ||
+            .Where(entry => selectedAddon == null ||
                             entry.Addon.Equals(selectedAddon, StringComparison.OrdinalIgnoreCase))
             .Where(entry => CheckAdvancedMatch(entry, searchTerms))
             .Select(entry => new

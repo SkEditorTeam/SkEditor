@@ -18,15 +18,43 @@
         <documentation:DocumentationSyntaxIconConverter x:Key="SyntaxIconConverter" />
         <documentation:DocumentationSyntaxTypeNameConverter x:Key="SyntaxTypeNameConverter" />
         <documentation:DocumentationSyntaxTypeBrushConverter x:Key="SyntaxTypeColorConverter" />
+        <documentation:DocumentationNullableAddonNameConverter x:Key="AddonNameConverter" />
     </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="ComboBox">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Width" Value="170" />
+            <Setter Property="MaxWidth" Value="170" />
+            <Setter Property="MinWidth" Value="60" />
+        </Style>
+    </UserControl.Styles>
 
     <Grid RowDefinitions="Auto,*" Margin="16" RowSpacing="32" ColumnSpacing="32">
 
-        <!-- Filters and search -->
-        <Grid ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="12" HorizontalAlignment="Center">
-            <ComboBox ItemsSource="{Binding SyntaxTypes}"
+        <!-- Filters, provider and search -->
+        <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12" MaxWidth="1100" HorizontalAlignment="Stretch">
+            <ComboBox Grid.Column="0"
+                      ItemsSource="{Binding Providers}"
+                      SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
+                      Padding="16,8">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Viewbox Height="18">
+                                <fluent:SymbolIcon Symbol="Library" />
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0,-1,0,0" MaxWidth="100"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Name}" />
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <ComboBox Grid.Column="1" ItemsSource="{Binding SyntaxTypes}"
                       SelectedItem="{Binding SelectedSyntaxType, Mode=TwoWay}"
-                      Width="180" Padding="16,8">
+                      Padding="16,8">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Spacing="12">
@@ -36,26 +64,33 @@
                                     Foreground="{Binding ., Converter={StaticResource SyntaxTypeColorConverter}}" />
                             </Viewbox>
                             <TextBlock Text="{Binding ., Converter={StaticResource SyntaxTypeNameConverter}}"
+                                       VerticalAlignment="Center"
                                        Margin="0,-1,0,0" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBox Grid.Column="1" Width="400" PlaceholderText="Type your query..."
-                     Text="{Binding SearchText, Mode=TwoWay}" />
+            <TextBox Grid.Column="2" PlaceholderText="Type your query..."
+                     VerticalContentAlignment="Center"
+                     Theme="{StaticResource SearchBoxTheme}"
+                     Text="{Binding SearchText, Mode=TwoWay}" HorizontalAlignment="Stretch" />
 
-            <ComboBox Grid.Column="2" ItemsSource="{Binding AvailableAddons}"
+            <ComboBox Grid.Column="3" ItemsSource="{Binding AvailableAddons}"
                       SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
-                      Width="180" Padding="16,8">
+                      Padding="16,8">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                             <Viewbox Height="18">
                                 <fluent:SymbolIcon Symbol="PuzzlePiece" />
                             </Viewbox>
-                            <TextBlock Grid.Column="1" Text="{Binding .}" Margin="0,-1,0,0" MaxWidth="100"
-                                       TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding .}" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ., Converter={StaticResource AddonNameConverter}}"
+                                       Margin="0,-1,0,0" MaxWidth="100"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"
+                                       ToolTip.Tip="{Binding ., Converter={StaticResource AddonNameConverter}}" />
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -65,40 +100,33 @@
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="32"
               IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}">
             <!-- List of all elements -->
-            <Panel Grid.Column="0">
-                <TextBlock HorizontalAlignment="Center" Margin="0,-32,0,0" FontSize="16" FontWeight="DemiBold">
-                    <Run Text="{Binding FilteredEntries?.Count}" />
-                    <Run Text="results" />
-                </TextBlock>
+            <ListBox Grid.Column="0" ItemsSource="{Binding FilteredEntries}" Width="300"
+                     HorizontalAlignment="Left" SelectionMode="AlwaysSelected" ClipToBounds="False"
+                     SelectedItem="{Binding SelectedEntry, Mode=TwoWay}" Padding="0,0,16,0">
+                <ListBox.Styles>
+                    <Style Selector="ListBox /template/ ScrollViewer">
+                        <Setter Property="Margin" Value="0,0,-8,0" />
+                        <Setter Property="Interaction.Behaviors">
+                            <BehaviorCollection>
+                                <behaviors:SmoothScrollBehavior />
+                            </BehaviorCollection>
+                        </Setter>
+                    </Style>
+                </ListBox.Styles>
 
-                <ListBox ItemsSource="{Binding FilteredEntries}" Width="300"
-                         HorizontalAlignment="Left" SelectionMode="AlwaysSelected" ClipToBounds="False"
-                         SelectedItem="{Binding SelectedEntry, Mode=TwoWay}" Padding="0,0,16,0">
-                    <ListBox.Styles>
-                        <Style Selector="ListBox /template/ ScrollViewer">
-                            <Setter Property="Margin" Value="0,0,-8,0" />
-                            <Setter Property="Interaction.Behaviors">
-                                <BehaviorCollection>
-                                    <behaviors:SmoothScrollBehavior />
-                                </BehaviorCollection>
-                            </Setter>
-                        </Style>
-                    </ListBox.Styles>
-
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <controls:FAIconSourceElement
-                                    IconSource="{Binding Type, Converter={StaticResource SyntaxIconConverter}}"
-                                    Foreground="{Binding Type, Converter={StaticResource SyntaxTypeColorConverter}}"
-                                    Width="24" Height="24" VerticalAlignment="Center" />
-                                <TextBlock Text="{Binding Name}" FontSize="16" TextWrapping="NoWrap"
-                                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="240" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Panel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <controls:FAIconSourceElement
+                                IconSource="{Binding Type, Converter={StaticResource SyntaxIconConverter}}"
+                                Foreground="{Binding Type, Converter={StaticResource SyntaxTypeColorConverter}}"
+                                Width="24" Height="24" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Name}" FontSize="16" TextWrapping="NoWrap"
+                                       TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="240" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
             <!-- Selected item view -->
             <Border Grid.Column="1"

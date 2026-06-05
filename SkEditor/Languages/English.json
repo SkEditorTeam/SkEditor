@@ -317,5 +317,6 @@
   "AboutAuthor": "By {0}",
   "AboutCopySystemInfo": "Copy system info",
   "AboutSupportUs": "Support SkEditor",
-  "DocumentationTabTitle": "Documentation"
+  "DocumentationTabTitle": "Documentation",
+  "DocumentationAllAddons": "All Addons"
 }

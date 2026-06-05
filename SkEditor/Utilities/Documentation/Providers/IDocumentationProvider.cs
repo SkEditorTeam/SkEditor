@@ -6,5 +6,6 @@ namespace SkEditor.Utilities.Docs.Providers;
 
 public interface IDocumentationProvider
 {
+    string Name { get; }
     Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync();
 }
