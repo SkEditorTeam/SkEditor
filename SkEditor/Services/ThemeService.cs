@@ -113,7 +113,7 @@ public class ThemeService(
             {
                 json = File.ReadAllText(path);
             }
-            
+
             theme = JsonSerializer.Deserialize<Theme>(json, ThemeJsonContext.Default.Theme);
 
             if (theme == null)
@@ -215,13 +215,41 @@ public class ThemeService(
             return Task.CompletedTask;
         }));
 
-        FluentAvaloniaTheme styles = currentApp.Styles.OfType<FluentAvaloniaTheme>().First();
-        styles.CustomAccentColor = CurrentTheme.AccentColor.Color;
-        styles.PreferUserAccentColor = true;
+
+        UpdateAccentColor(currentApp);
+        currentApp.PlatformSettings?.ColorValuesChanged += (_, _) => { UpdateAccentColor(currentApp); };
 
         UpdateFont();
 
         await Task.WhenAll(tasks);
+    }
+
+    private void UpdateAccentColor(Application app)
+    {
+        FluentAvaloniaTheme styles = app.Styles.OfType<FluentAvaloniaTheme>().First();
+
+        Color accent;
+
+        if (CurrentTheme.AccentColor is null)
+        {
+            Color rawSystemColor = app.PlatformSettings?.GetColorValues().AccentColor1 ?? Colors.White;
+
+            HsvColor hsv = rawSystemColor.ToHsv();
+
+            double targetS = Math.Clamp(hsv.S * 0.65, 0.40, 0.55);
+            double targetV = Math.Clamp(hsv.V, 0.80, 0.90);
+
+            HsvColor newHsv = new(rawSystemColor.A, hsv.H, targetS, targetV);
+
+            accent = newHsv.ToRgb();
+        }
+        else
+        {
+            accent = CurrentTheme.AccentColor.Color;
+        }
+
+        styles.PreferUserAccentColor = false;
+        styles.CustomAccentColor = accent;
     }
 
     public async Task ReloadCurrentThemeAsync()
@@ -239,7 +267,7 @@ public class ThemeService(
             log.Error($"Failed to reload theme from {themePath}. Keeping the current theme.");
             return;
         }
-        
+
         CurrentTheme = reloadedTheme;
 
         await ApplyThemeAsync();

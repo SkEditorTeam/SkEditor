@@ -77,7 +77,7 @@ public partial class Theme
     public Brush CurrentLineBorder { get; set; } = C("#0DFFFFFF");
 
     [ThemeResource]
-    public Brush AccentColor { get; set; } = C("#FFFFFF");
+    public Brush? AccentColor { get; set; } = C("#FFFFFF");
 
     public string? CustomFont { get; set; }
     public bool UseMicaEffect { get; set; }

@@ -16,7 +16,7 @@
   "TextBoxFocusedBackground": "#ff191919",
   "CurrentLineBackground": "#05ffffff",
   "CurrentLineBorder": "#0dffffff",
-  "AccentColor": "White",
+  "AccentColor": null,
   "CustomFont": null,
   "UseMicaEffect": true,
   "CustomColorChanges": {
