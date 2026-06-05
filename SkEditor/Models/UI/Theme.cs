@@ -21,14 +21,8 @@ public partial class Theme
     [ThemeResource]
     public Brush BackgroundColor { get; set; } = C("#ff0d0d0d");
 
-    [ThemeResource("ContentDialogBackground", "TaskDialogButtonAreaBackground")]
+    [ThemeResource("TaskDialogButtonAreaBackground")]
     public Brush SmallWindowBackgroundColor { get; set; } = C("#ff0f0f0f");
-
-    [ThemeResource]
-    public Brush DialogTopBackgroundColor { get; set; } = C("#121212");
-
-    [ThemeResource]
-    public Brush DialogTopBorderColor { get; set; } = C("#75161616");
 
     [ThemeResource]
     public Brush DialogBackgroundColor { get; set; } = C("#ff0d0d0d");

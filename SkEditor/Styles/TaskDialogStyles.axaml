@@ -39,7 +39,7 @@
     </ControlTheme>
 
     <ControlTheme x:Key="{x:Type ui:FATaskDialog}" TargetType="ui:FATaskDialog">
-        <Setter Property="Background" Value="{DynamicResource ContentDialogBackground}" />
+        <Setter Property="Background" Value="{DynamicResource DialogBackgroundColor}" />
         <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
         <Setter Property="Template">
             <ControlTemplate>
@@ -142,7 +142,7 @@
                             </ScrollViewer>
 
                             <Border Name="ButtonBorder" Grid.Row="3"
-                                    Background="{DynamicResource TaskDialogButtonAreaBackground}">
+                                    Background="{DynamicResource DialogBackgroundColor}">
                                 <ItemsControl Name="ButtonsHost"
                                               KeyboardNavigation.TabNavigation="Continue">
                                     <ItemsControl.ItemsPanel>
