@@ -1,0 +1,29 @@
+{
+  "Name": "Mica",
+  "BackgroundColor": "#80000000",
+  "SmallWindowBackgroundColor": "#80000000",
+  "DialogTopBackgroundColor": "#ff121212",
+  "DialogTopBorderColor": "#75161616",
+  "DialogBackgroundColor": "#ff0d0d0d",
+  "EditorBackgroundColor": "#00ffffff",
+  "EditorTextColor": "#ffcdcaca",
+  "LineNumbersColor": "#ff8a8a8a",
+  "SelectionColor": "#641a6096",
+  "SelectedTabItemBackground": "#08ffffff",
+  "SelectedTabItemBorder": "#00181818",
+  "MenuBackground": "#ff151515",
+  "MenuBorder": "#ff262626",
+  "TextBoxFocusedBackground": "#ff191919",
+  "CurrentLineBackground": "#05ffffff",
+  "CurrentLineBorder": "#0dffffff",
+  "AccentColor": "White",
+  "CustomFont": null,
+  "UseMicaEffect": true,
+  "CustomColorChanges": {
+    "TextControlSelectionHighlightColor": "#25ffffff",
+    "ContentDialogTopOverlay": "#ff141414",
+    "ToggleButtonBackgroundChecked": "#40ffffff",
+    "ToggleButtonBackgroundCheckedPointerOver": "#40ffffff",
+    "SkEditorBorderBackground": "#08ffffff"
+  }
+}
