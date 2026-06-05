@@ -1,9 +1,9 @@
-using FluentAvalonia.UI.Windowing;
 using SkEditor.ViewModels.Windows;
+using SkEditor.Views.Controls;
 
 namespace SkEditor.Views.Windows;
 
-public partial class PublishWindow : FAAppWindow
+public partial class PublishWindow : SkEditorWindow
 {
     public PublishWindow() => InitializeComponent();
 
