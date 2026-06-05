@@ -50,7 +50,16 @@ public class ThemeService(
         string[] files = Directory.GetFiles(ThemeFolderPath);
 
         Themes.Clear();
-        files.Where(x => Path.GetExtension(x) == ".json").ToList().ForEach(x => LoadThemeAsync(x));
+
+        IEnumerable<Theme> loadedThemes = files
+            .Where(x => Path.GetExtension(x).Equals(".json", StringComparison.OrdinalIgnoreCase))
+            .Select(themeFile => LoadTheme(themeFile))
+            .OfType<Theme>();
+
+        foreach (Theme theme in loadedThemes)
+        {
+            Themes.Add(theme);
+        }
 
         Themes = [.. Themes.OrderBy(x => x.FileName.Equals("Default.json") ? 0 : 1)];
 
@@ -87,7 +96,7 @@ public class ThemeService(
         }
     }
 
-    public Theme? LoadThemeAsync(string path, bool isBuiltIn = false)
+    public Theme? LoadTheme(string path, bool isBuiltIn = false)
     {
         Theme? theme;
         try
@@ -126,13 +135,11 @@ public class ThemeService(
             {
                 theme.FileName = Path.GetFileName(path);
             }
-            
-            Themes.Add(theme);
         }
         catch (Exception ex)
         {
             log.Error($"Failed to load theme from {path}: {ex.Message}");
-            theme = GetDefaultTheme();
+            return null;
         }
 
         return theme;
@@ -225,7 +232,7 @@ public class ThemeService(
 
         Themes.RemoveAll(t => t.FileName == CurrentTheme.FileName);
 
-        Theme? reloadedTheme = LoadThemeAsync(themePath, CurrentTheme.IsBuiltIn);
+        Theme? reloadedTheme = LoadTheme(themePath, CurrentTheme.IsBuiltIn);
 
         if (reloadedTheme == null)
         {
