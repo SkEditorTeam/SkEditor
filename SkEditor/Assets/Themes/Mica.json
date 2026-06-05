@@ -19,6 +19,7 @@
   "UseMicaEffect": true,
   "CustomColorChanges": {
     "TextControlSelectionHighlightColor": "#25ffffff",
+    "TextControlBackgroundFocused": "#0F000000",
     "ContentDialogTopOverlay": "#ff141414",
     "ToggleButtonBackgroundChecked": "#40ffffff",
     "ToggleButtonBackgroundCheckedPointerOver": "#40ffffff",
