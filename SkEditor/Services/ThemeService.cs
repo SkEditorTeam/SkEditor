@@ -87,7 +87,7 @@ public class ThemeService(
         }
     }
 
-    public Theme LoadThemeAsync(string path, bool isBuiltIn = false)
+    public Theme? LoadThemeAsync(string path, bool isBuiltIn = false)
     {
         Theme? theme;
         try
@@ -109,8 +109,12 @@ public class ThemeService(
 
             if (theme == null)
             {
-                File.Delete(path);
-                theme = GetDefaultTheme();
+                return null;
+            }
+
+            if (theme.UseMicaEffect && !OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
+            {
+                return null;
             }
 
             if (isBuiltIn)
@@ -141,10 +145,19 @@ public class ThemeService(
 
     public async Task SetThemeAsync(Theme theme)
     {
-        if (CurrentTheme.UseMicaEffect && !theme.UseMicaEffect)
+        bool oldMica = CurrentTheme.UseMicaEffect;
+        bool newMica = theme.UseMicaEffect;
+
+        if (oldMica && !newMica)
         {
             MainWindow? mainWindow = windowRegistry.Active;
             mainWindow?.TransparencyLevelHint = [WindowTransparencyLevel.None];
+        }
+
+        if (newMica)
+        {
+            MainWindow? mainWindow = windowRegistry.Active;
+            mainWindow?.TransparencyLevelHint = [WindowTransparencyLevel.Mica];
         }
 
         CurrentTheme = theme;
@@ -212,7 +225,14 @@ public class ThemeService(
 
         Themes.RemoveAll(t => t.FileName == CurrentTheme.FileName);
 
-        Theme reloadedTheme = LoadThemeAsync(themePath, CurrentTheme.IsBuiltIn);
+        Theme? reloadedTheme = LoadThemeAsync(themePath, CurrentTheme.IsBuiltIn);
+
+        if (reloadedTheme == null)
+        {
+            log.Error($"Failed to reload theme from {themePath}. Keeping the current theme.");
+            return;
+        }
+        
         CurrentTheme = reloadedTheme;
 
         await ApplyThemeAsync();
