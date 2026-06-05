@@ -8,6 +8,8 @@
              xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
              xmlns:documentation="clr-namespace:SkEditor.Converters.Documentation"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:layout="clr-namespace:SkEditor.Converters.Layout"
+             xmlns:documentationUtils="clr-namespace:SkEditor.Models.Documentation"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:DocumentationTabViewModel"
@@ -19,6 +21,10 @@
         <documentation:DocumentationSyntaxTypeNameConverter x:Key="SyntaxTypeNameConverter" />
         <documentation:DocumentationSyntaxTypeBrushConverter x:Key="SyntaxTypeColorConverter" />
         <documentation:DocumentationNullableAddonNameConverter x:Key="AddonNameConverter" />
+        <documentation:DocumentationBadgeVisibilityConverter x:Key="BadgeVisibilityConverter" />
+
+        <layout:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
+        <layout:ScrollVisibleToPaddingConverter x:Key="ScrollVisibleToPaddingConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -37,7 +43,11 @@
             <ComboBox Grid.Column="0"
                       ItemsSource="{Binding Providers}"
                       SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
-                      Padding="16,8">
+                      Padding="16,8"
+                      IsVisible="{Binding Bounds.Width, 
+                                   RelativeSource={RelativeSource AncestorType=Grid}, 
+                                   Converter={StaticResource WidthToVisibilityConverter}, 
+                                   ConverterParameter=700}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
@@ -78,7 +88,11 @@
 
             <ComboBox Grid.Column="3" ItemsSource="{Binding AvailableAddons}"
                       SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
-                      Padding="16,8">
+                      Padding="16,8"
+                      IsVisible="{Binding Bounds.Width, 
+                                   RelativeSource={RelativeSource AncestorType=Grid}, 
+                                   Converter={StaticResource WidthToVisibilityConverter}, 
+                                   ConverterParameter=550}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
@@ -97,12 +111,18 @@
             </ComboBox>
         </Grid>
 
-        <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="32"
+        <Grid Grid.Row="1" ColumnSpacing="32"
               IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="300" MinWidth="100" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
             <!-- List of all elements -->
-            <ListBox Grid.Column="0" ItemsSource="{Binding FilteredEntries}" Width="300"
-                     HorizontalAlignment="Left" SelectionMode="AlwaysSelected" ClipToBounds="False"
-                     SelectedItem="{Binding SelectedEntry, Mode=TwoWay}" Padding="0,0,16,0">
+            <ListBox Grid.Column="0" ItemsSource="{Binding FilteredEntries}" MaxWidth="300"
+                     HorizontalAlignment="Stretch" SelectionMode="AlwaysSelected" ClipToBounds="False"
+                     SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
                 <ListBox.Styles>
                     <Style Selector="ListBox /template/ ScrollViewer">
                         <Setter Property="Margin" Value="0,0,-8,0" />
@@ -111,19 +131,31 @@
                                 <behaviors:SmoothScrollBehavior />
                             </BehaviorCollection>
                         </Setter>
+
+                        <Setter Property="Padding">
+                            <Binding Path="ScrollBarMaximum"
+                                     RelativeSource="{RelativeSource Self}"
+                                     Converter="{StaticResource ScrollVisibleToPaddingConverter}" />
+                        </Setter>
+                    </Style>
+
+                    <Style Selector="ListBoxItem" x:DataType="documentationUtils:DocumentationEntry">
+                        <Setter Property="ToolTip.Tip" Value="{Binding Name}" />
+                        <Setter Property="ToolTip.BetweenShowDelay" Value="100" />
+                        <Setter Property="ToolTip.ShowDelay" Value="1000" />
                     </Style>
                 </ListBox.Styles>
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                             <controls:FAIconSourceElement
                                 IconSource="{Binding Type, Converter={StaticResource SyntaxIconConverter}}"
                                 Foreground="{Binding Type, Converter={StaticResource SyntaxTypeColorConverter}}"
                                 Width="24" Height="24" VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding Name}" FontSize="16" TextWrapping="NoWrap"
+                            <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="16" TextWrapping="NoWrap"
                                        TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="240" />
-                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -137,20 +169,32 @@
                         <behaviors:SmoothScrollBehavior />
                     </Interaction.Behaviors>
                     <DockPanel VerticalSpacing="24" LastChildFill="False">
-                        <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="16" DockPanel.Dock="Top">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16" DockPanel.Dock="Top" Height="40">
                             <Viewbox Height="28" VerticalAlignment="Center">
                                 <controls:FAIconSourceElement
                                     Foreground="{Binding SelectedEntry?.Type, Converter={StaticResource SyntaxTypeColorConverter}}"
                                     IconSource="{Binding SelectedEntry?.Type, Converter={StaticResource SyntaxIconConverter}}" />
                             </Viewbox>
-                            <TextBlock Grid.Column="1" Text="{Binding SelectedEntry?.Name}" FontSize="24"
+                            <TextBlock x:Name="TitleTextBlock" Grid.Column="1" Text="{Binding SelectedEntry?.Name}"
+                                       FontSize="24" TextTrimming="CharacterEllipsis"
                                        FontWeight="DemiBold"
                                        VerticalAlignment="Center" Margin="0,-1,0,0" />
 
                             <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal"
                                         Spacing="8">
+
                                 <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
                                         Padding="20,8">
+                                    <Border.IsVisible>
+                                        <MultiBinding Converter="{StaticResource BadgeVisibilityConverter}"
+                                                      ConverterParameter="Addon">
+                                            <Binding Path="Bounds.Width"
+                                                     RelativeSource="{RelativeSource AncestorType=Grid}" />
+                                            <Binding Path="SelectedEntry.Name" FallbackValue="" />
+                                            <Binding Path="SelectedEntry.Addon" FallbackValue="" />
+                                            <Binding Path="SelectedEntry.Version" FallbackValue="" />
+                                        </MultiBinding>
+                                    </Border.IsVisible>
                                     <StackPanel Orientation="Horizontal" Spacing="12">
                                         <Viewbox Height="18" VerticalAlignment="Center">
                                             <fluent:SymbolIcon Symbol="PuzzlePiece" />
@@ -159,8 +203,19 @@
                                                    VerticalAlignment="Center" Padding="0,0,0,1" />
                                     </StackPanel>
                                 </Border>
+
                                 <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
                                         Padding="20,8">
+                                    <Border.IsVisible>
+                                        <MultiBinding Converter="{StaticResource BadgeVisibilityConverter}"
+                                                      ConverterParameter="Version">
+                                            <Binding Path="Bounds.Width"
+                                                     RelativeSource="{RelativeSource AncestorType=Grid}" />
+                                            <Binding Path="SelectedEntry.Name" FallbackValue="" />
+                                            <Binding Path="SelectedEntry.Addon" FallbackValue="" />
+                                            <Binding Path="SelectedEntry.Version" FallbackValue="" />
+                                        </MultiBinding>
+                                    </Border.IsVisible>
                                     <StackPanel Orientation="Horizontal" Spacing="12">
                                         <Viewbox Height="18" VerticalAlignment="Center">
                                             <fluent:SymbolIcon Symbol="History" />
@@ -169,6 +224,7 @@
                                                    VerticalAlignment="Center" Padding="0,0,0,1" />
                                     </StackPanel>
                                 </Border>
+
                             </StackPanel>
                         </Grid>
 
