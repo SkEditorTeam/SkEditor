@@ -75,24 +75,14 @@ public class ThemeService(
 
         foreach (Uri theme in themes)
         {
-            try
-            {
-                using Stream stream = AssetLoader.Open(theme);
-                Theme? deserializedTheme = JsonSerializer.Deserialize(stream, ThemeJsonContext.Default.Theme);
+            Theme? deserializedTheme = LoadTheme(theme.ToString(), true);
 
-                if (deserializedTheme == null)
-                {
-                    continue;
-                }
-
-                deserializedTheme.FileName = Path.GetFileName(theme.LocalPath);
-                deserializedTheme.IsBuiltIn = true;
-                Themes.Add(deserializedTheme);
-            }
-            catch (Exception ex)
+            if (deserializedTheme == null)
             {
-                log.Error($"Failed to load built-in theme from {theme}: {ex.Message}");
+                continue;
             }
+
+            Themes.Add(deserializedTheme);
         }
     }
 
