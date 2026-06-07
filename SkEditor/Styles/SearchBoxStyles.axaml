@@ -17,6 +17,8 @@
     <SolidColorBrush x:Key="SearchBoxForegroundPointerOver" Color="#E6FFFFFF" />
     <sys:TimeSpan x:Key="SearchBoxBackgroundTransitionDuration">0:0:0.2</sys:TimeSpan>
     <sys:TimeSpan x:Key="SearchBoxForegroundTransitionDuration">0:0:0.2</sys:TimeSpan>
+    <sys:Double x:Key="SearchBoxIconSize">16</sys:Double>
+    <Thickness x:Key="SearchBoxIconMargin">12,0,12,0</Thickness>
 
     <LinearGradientBrush x:Key="SearchBoxBorderBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#17FFFFFF" />
@@ -39,6 +41,14 @@
         <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        <Setter Property="InnerLeftContent">
+            <Template>
+                <ic:SymbolIcon Symbol="Search"
+                               FontSize="{DynamicResource SearchBoxIconSize}"
+                               Margin="{DynamicResource SearchBoxIconMargin}"
+                               VerticalAlignment="Center" />
+            </Template>
+        </Setter>
         <Setter Property="Transitions">
             <Transitions>
                 <BrushTransition Property="Foreground"
@@ -74,7 +84,7 @@
                                 <DockPanel x:Name="PART_InnerDockPanel"
                                            Grid.Column="1"
                                            Cursor="IBeam"
-                                           Margin="10,6,10,6">
+                                           Margin="0,0,10,0">
                                     <TextBlock Name="PART_FloatingWatermark"
                                                Foreground="{DynamicResource SystemAccentColor}"
                                                FontSize="{TemplateBinding FontSize}"
@@ -86,40 +96,33 @@
                                         VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
                                         IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
                                         AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
-                                        <Grid ColumnDefinitions="Auto,*">
-                                            <ic:SymbolIcon Grid.Column="0"
-                                                           Symbol="Search"
-                                                           FontSize="16"
-                                                           Margin="2,0,12,0" />
+                                        <Grid>
+                                            <TextBlock Name="PART_Watermark"
+                                                       Foreground="{DynamicResource SearchBoxForeground}"
+                                                       Text="{TemplateBinding Watermark}"
+                                                       TextAlignment="{TemplateBinding TextAlignment}"
+                                                       TextWrapping="{TemplateBinding TextWrapping}"
+                                                       IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                       Margin="0,0,0,1" />
 
-                                            <Grid Grid.Column="1">
-                                                <TextBlock Name="PART_Watermark"
-                                                           Foreground="{DynamicResource SearchBoxForeground}"
-                                                           Text="{TemplateBinding Watermark}"
+                                            <TextPresenter Name="PART_TextPresenter"
+                                                           Text="{TemplateBinding Text, Mode=TwoWay}"
+                                                           CaretIndex="{TemplateBinding CaretIndex}"
+                                                           SelectionStart="{TemplateBinding SelectionStart}"
+                                                           SelectionEnd="{TemplateBinding SelectionEnd}"
                                                            TextAlignment="{TemplateBinding TextAlignment}"
                                                            TextWrapping="{TemplateBinding TextWrapping}"
-                                                           IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                           LineHeight="{TemplateBinding LineHeight}"
+                                                           LetterSpacing="{TemplateBinding LetterSpacing}"
+                                                           PasswordChar="{TemplateBinding PasswordChar}"
+                                                           RevealPassword="{TemplateBinding RevealPassword}"
+                                                           SelectionBrush="{TemplateBinding SelectionBrush}"
+                                                           SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                                           CaretBrush="{TemplateBinding CaretBrush}"
                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                           Margin="0,0,0,1" />
-
-                                                <TextPresenter Name="PART_TextPresenter"
-                                                               Text="{TemplateBinding Text, Mode=TwoWay}"
-                                                               CaretIndex="{TemplateBinding CaretIndex}"
-                                                               SelectionStart="{TemplateBinding SelectionStart}"
-                                                               SelectionEnd="{TemplateBinding SelectionEnd}"
-                                                               TextAlignment="{TemplateBinding TextAlignment}"
-                                                               TextWrapping="{TemplateBinding TextWrapping}"
-                                                               LineHeight="{TemplateBinding LineHeight}"
-                                                               LetterSpacing="{TemplateBinding LetterSpacing}"
-                                                               PasswordChar="{TemplateBinding PasswordChar}"
-                                                               RevealPassword="{TemplateBinding RevealPassword}"
-                                                               SelectionBrush="{TemplateBinding SelectionBrush}"
-                                                               SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-                                                               CaretBrush="{TemplateBinding CaretBrush}"
-                                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                            </Grid>
+                                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                                         </Grid>
                                     </ScrollViewer>
                                 </DockPanel>
