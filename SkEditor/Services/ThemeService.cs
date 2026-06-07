@@ -248,7 +248,14 @@ public class ThemeService(
             ? $"avares://SkEditor/Assets/Themes/{CurrentTheme.FileName}"
             : Path.Combine(ThemeFolderPath, CurrentTheme.FileName);
 
-        Themes.RemoveAll(t => t.FileName == CurrentTheme.FileName);
+        Theme? existingTheme = Themes.FirstOrDefault(t => t.FileName == CurrentTheme.FileName);
+        int themeIndex = Themes.Count - 1;
+
+        if (existingTheme != null)
+        {
+            themeIndex = Themes.IndexOf(existingTheme);
+            Themes.Remove(existingTheme);
+        }
 
         Theme? reloadedTheme = LoadTheme(themePath, CurrentTheme.IsBuiltIn);
 
@@ -258,6 +265,7 @@ public class ThemeService(
             return;
         }
 
+        Themes.Insert(themeIndex, reloadedTheme);
         CurrentTheme = reloadedTheme;
 
         await ApplyThemeAsync();
