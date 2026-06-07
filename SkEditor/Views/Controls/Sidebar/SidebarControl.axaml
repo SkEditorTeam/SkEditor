@@ -59,7 +59,7 @@
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Viewbox>
+                        <Viewbox Margin="{Binding IconOffset}">
                             <controls:FAIconSourceElement
                                 IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}" />
                         </Viewbox>
