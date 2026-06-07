@@ -6,17 +6,20 @@
 
     <Design.PreviewWith>
         <TextBox PlaceholderText="Search quick actions"
-                 Theme="{StaticResource SearchBoxTheme}"
+                 Theme="{DynamicResource SearchBoxTheme}"
                  Width="500" />
     </Design.PreviewWith>
 
-    <SolidColorBrush x:Key="SearchBoxBackground" Color="#0FFFFFFF" />
     <SolidColorBrush x:Key="SearchBoxForeground" Color="#C7FFFFFF" />
-    <SolidColorBrush x:Key="SearchBoxBackgroundPointerOver" Color="#14FFFFFF" />
-    <SolidColorBrush x:Key="SearchBoxBackgroundFocused" Color="#1A000000" />
     <SolidColorBrush x:Key="SearchBoxForegroundPointerOver" Color="#E6FFFFFF" />
-    <sys:TimeSpan x:Key="SearchBoxBackgroundTransitionDuration">0:0:0.2</sys:TimeSpan>
-    <sys:TimeSpan x:Key="SearchBoxForegroundTransitionDuration">0:0:0.2</sys:TimeSpan>
+    <SolidColorBrush x:Key="SearchBoxBackgroundColor" Color="#0FFFFFFF" />
+    <SolidColorBrush x:Key="SearchBoxBackgroundPointerOverColor" Color="#14FFFFFF" />
+    <SolidColorBrush x:Key="SearchBoxBackgroundFocusedColor" Color="#06FFFFFF" />
+    <SolidColorBrush x:Key="SearchBoxPlaceholderForeground" Color="#8AFFFFFF" />
+    <SolidColorBrush x:Key="SearchBoxPlaceholderForegroundFocused" Color="#8AFFFFFF" />
+
+    <sys:TimeSpan x:Key="SearchBoxBackgroundTransitionDuration">0:0:0.1</sys:TimeSpan>
+    <sys:TimeSpan x:Key="SearchBoxForegroundTransitionDuration">0:0:0.1</sys:TimeSpan>
     <sys:Double x:Key="SearchBoxIconSize">16</sys:Double>
     <Thickness x:Key="SearchBoxIconMargin">12,0,12,0</Thickness>
 
@@ -25,13 +28,19 @@
         <GradientStop Offset="1" Color="#12FFFFFF" />
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="SearchBoxBorderBrushFocused" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#21FFFFFF" />
+        <GradientStop Offset="1" Color="#1CFFFFFF" />
+    </LinearGradientBrush>
+
     <ControlTheme TargetType="TextBox" x:Key="SearchBoxTheme">
         <Setter Property="Foreground" Value="{DynamicResource SearchBoxForeground}" />
-        <Setter Property="Background" Value="{DynamicResource SearchBoxBackground}" />
+        <Setter Property="Background" Value="{DynamicResource SearchBoxBackgroundColor}" />
         <Setter Property="CaretBrush" Value="{DynamicResource SearchBoxForeground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource SearchBoxBorderBrush}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource TextControlSelectionHighlightColor}" />
         <Setter Property="SelectionForegroundBrush" Value="{DynamicResource TextOnAccentFillColorSelectedTextBrush}" />
+        <Setter Property="PlaceholderForeground" Value="{DynamicResource SearchBoxPlaceholderForeground}" />
         <Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
         <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
         <Setter Property="MinHeight" Value="{DynamicResource TextControlThemeMinHeight}" />
@@ -49,13 +58,21 @@
                                VerticalAlignment="Center" />
             </Template>
         </Setter>
+        
         <Setter Property="Transitions">
             <Transitions>
                 <BrushTransition Property="Foreground"
-                                 Duration="{DynamicResource SearchBoxForegroundTransitionDuration}"
-                                 Easing="CubicEaseOut" />
+                                 Duration="{StaticResource SearchBoxForegroundTransitionDuration}"
+                                 Easing="SineEaseOut" />
+                <BrushTransition Property="Background"
+                                 Duration="{StaticResource SearchBoxBackgroundTransitionDuration}"
+                                 Easing="LinearEasing" />
+                <BrushTransition Property="BorderBrush"
+                                 Duration="{StaticResource SearchBoxBackgroundTransitionDuration}"
+                                 Easing="LinearEasing" />
             </Transitions>
         </Setter>
+        
         <Setter Property="Template">
             <ControlTemplate>
                 <DataValidationErrors>
@@ -66,16 +83,7 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="{TemplateBinding CornerRadius}"
                                 MinWidth="{TemplateBinding MinWidth}"
-                                MinHeight="{TemplateBinding MinHeight}">
-
-                            <Border.Transitions>
-                                <Transitions>
-                                    <BrushTransition Property="Background"
-                                                     Duration="{DynamicResource SearchBoxBackgroundTransitionDuration}"
-                                                     Easing="CubicEaseOut" />
-                                </Transitions>
-                            </Border.Transitions>
-                        </Border>
+                                MinHeight="{TemplateBinding MinHeight}" />
 
                         <Border Margin="{TemplateBinding BorderThickness}">
                             <Grid ColumnDefinitions="Auto,*,Auto">
@@ -138,11 +146,8 @@
         <!-- Disabled State -->
         <Style Selector="^:disabled">
             <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundDisabled}" />
-
-            <Style Selector="^ /template/ Border#PART_BorderElement">
-                <Setter Property="Background" Value="{DynamicResource TextControlBackgroundDisabled}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}" />
-            </Style>
+            <Setter Property="Background" Value="{DynamicResource TextControlBackgroundDisabled}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}" />
 
             <Style Selector="^ /template/ TextBlock#PART_Watermark, ^ /template/ TextBlock#PART_FloatingWatermark">
                 <Setter Property="Foreground" Value="{DynamicResource TextControlPlaceholderForegroundDisabled}" />
@@ -151,7 +156,7 @@
 
         <!-- PointerOver State-->
         <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="{DynamicResource SearchBoxBackgroundPointerOver}" />
+            <Setter Property="Background" Value="{DynamicResource SearchBoxBackgroundPointerOverColor}" />
 
             <Style Selector="^ /template/ TextBlock#PART_Watermark">
                 <Setter Property="Foreground" Value="{DynamicResource SearchBoxForegroundPointerOver}" />
@@ -161,13 +166,12 @@
         <!-- Focused State -->
         <Style Selector="^:focus">
             <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundFocused}" />
+            <Setter Property="Background" Value="{DynamicResource SearchBoxBackgroundFocusedColor}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SearchBoxBorderBrushFocused}" />
+            <Setter Property="PlaceholderForeground" Value="{DynamicResource SearchBoxPlaceholderForegroundFocused}" />
 
             <Style Selector="^ /template/ TextBlock#PART_Watermark">
                 <Setter Property="Foreground" Value="{DynamicResource TextControlPlaceholderForegroundFocused}" />
-            </Style>
-
-            <Style Selector="^ /template/ Border#PART_BorderElement">
-                <Setter Property="Background" Value="{DynamicResource SearchBoxBackgroundFocused}" />
             </Style>
         </Style>
     </ControlTheme>
