@@ -9,7 +9,6 @@ using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
 using SkEditor.Models.UI;
-using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls.FileTree;
@@ -19,10 +18,8 @@ namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelViewModel,
     IRecipient<FileSystemChangedMessage>
 {
-    private readonly ConnectionsConfig _connectionsConfig;
     private readonly INotificationService _notifications;
     private readonly IRemoteConnectionService _remoteConnections;
-    private readonly WindowRegistry _windowRegistry;
     private readonly IWindowDialogService _windowDialogs;
 
     private int _connectionChangeId;
@@ -31,16 +28,13 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     public RemoteExplorerViewModel(FileTreeViewModel fileTree,
         INotificationService notifications,
         IRemoteConnectionService remoteConnections,
-        WindowRegistry windowRegistry,
         IWindowDialogService windowDialogs,
         ConnectionsConfig connectionsConfig,
         IMessenger messenger)
     {
         _notifications = notifications;
         _remoteConnections = remoteConnections;
-        _windowRegistry = windowRegistry;
         _windowDialogs = windowDialogs;
-        _connectionsConfig = connectionsConfig;
         FileTree = fileTree;
         RemoteConnections = connectionsConfig.Connections;
 
