@@ -30,6 +30,68 @@
         <Setter Property="Padding" Value="4" />
         <Setter Property="MinWidth" Value="22" />
         <Setter Property="MinHeight" Value="20" />
+        <Setter Property="CornerRadius" Value="4" />
+
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#C5FFFFFF" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1" />
+
+        <Style Selector="^:pointerover">
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#0DFFFFFF" />
+                <Setter Property="Foreground" Value="#FFFFFFFF" />
+                <Setter Property="BorderBrush" Value="#15FFFFFF" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:pressed">
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#08FFFFFF" />
+                <Setter Property="Foreground" Value="#C5FFFFFF" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:disabled">
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="#5DFFFFFF" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:checked">
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#1AFFFFFF" />
+                <Setter Property="Foreground" Value="#FFFFFFFF" />
+                <Setter Property="BorderBrush" Value="#2BFFFFFF" />
+            </Style>
+
+            <Style Selector="^:pointerover">
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#24FFFFFF" />
+                    <Setter Property="Foreground" Value="#FFFFFFFF" />
+                    <Setter Property="BorderBrush" Value="#3AFFFFFF" />
+                </Style>
+            </Style>
+
+            <Style Selector="^:pressed">
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#15FFFFFF" />
+                    <Setter Property="Foreground" Value="#C5FFFFFF" />
+                    <Setter Property="BorderBrush" Value="#20FFFFFF" />
+                </Style>
+            </Style>
+
+            <Style Selector="^:disabled">
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#0DFFFFFF" />
+                    <Setter Property="Foreground" Value="#5DFFFFFF" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                </Style>
+            </Style>
+        </Style>
     </ControlTheme>
 
     <ControlTheme x:Key="{x:Type search:SearchPanel}" TargetType="search:SearchPanel">
@@ -156,7 +218,14 @@
                                      IsVisible="{Binding IsReplaceMode, RelativeSource={RelativeSource TemplatedParent}}"
                                      Width="265"
                                      Margin="0 0 0 0"
-                                     Text="{Binding ReplacePattern, RelativeSource={RelativeSource TemplatedParent}}" />
+                                     Text="{Binding ReplacePattern, RelativeSource={RelativeSource TemplatedParent}}">
+                                <TextBox.InnerLeftContent>
+                                    <fluent:SymbolIcon Symbol="ArrowSwap"
+                                                       FontSize="{DynamicResource SearchBoxIconSize}"
+                                                       Margin="{DynamicResource SearchBoxIconMargin}"
+                                                       VerticalAlignment="Center" />
+                                </TextBox.InnerLeftContent>
+                            </TextBox>
                             <Button Margin="5, 0, 0, 0"
                                     VerticalAlignment="Stretch"
                                     Width="34" Height="34"

@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="300"
+             xmlns:panes="clr-namespace:SkEditor.ViewModels.Controls.Sidebar.Panes"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             x:DataType="panes:SearchPaneViewModel"
+             x:Class="SkEditor.Views.Controls.Sidebar.SearchPaneView">
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.search">
+            <Setter Property="Theme" Value="{DynamicResource SearchBoxTheme}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="MinHeight" Value="28" />
+            <Setter Property="Height" Value="28" />
+        </Style>
+    </UserControl.Styles>
+
+    <UserControl.Resources>
+        <!-- ReSharper disable once Xaml.RedundantResource -->
+        <system:Double x:Key="SearchBoxIconSize">14</system:Double>
+    </UserControl.Resources>
+
+    <StackPanel Margin="12" Spacing="8">
+        <TextBox Classes="search"
+                 PlaceholderText="Search">
+            <TextBox.InnerRightContent>
+                <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,2,0">
+                    <ToggleButton Theme="{StaticResource SearchPanelTextBoxButton}"
+                                  VerticalAlignment="Center">
+                        <Viewbox Height="12" Width="12">
+                            <fluent:SymbolIcon Symbol="TextCaseTitle"
+                                               Foreground="{Binding $parent[ToggleButton].Foreground}" />
+                        </Viewbox>
+                    </ToggleButton>
+                    <ToggleButton Theme="{StaticResource SearchPanelTextBoxButton}"
+                                  VerticalAlignment="Center">
+                        <Viewbox Height="12" Width="12">
+                            <fluent:SymbolIcon Symbol="TextWholeWord"
+                                               Foreground="{Binding $parent[ToggleButton].Foreground}" />
+                        </Viewbox>
+                    </ToggleButton>
+                    <ToggleButton Theme="{StaticResource SearchPanelTextBoxButton}"
+                                  VerticalAlignment="Center">
+                        <Viewbox Height="12" Width="12">
+                            <fluent:SymbolIcon Symbol="TextPeriodAsterisk"
+                                               Foreground="{Binding $parent[ToggleButton].Foreground}" />
+                        </Viewbox>
+                    </ToggleButton>
+                </StackPanel>
+            </TextBox.InnerRightContent>
+        </TextBox>
+
+        <TextBox Classes="search"
+                 PlaceholderText="Replace">
+            <TextBox.InnerLeftContent>
+                <fluent:SymbolIcon Symbol="ArrowSwap"
+                                   FontSize="{DynamicResource SearchBoxIconSize}"
+                                   Margin="{DynamicResource SearchBoxIconMargin}"
+                                   VerticalAlignment="Center" />
+            </TextBox.InnerLeftContent>
+        </TextBox>
+    </StackPanel>
+</UserControl>
