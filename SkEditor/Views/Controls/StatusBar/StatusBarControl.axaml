@@ -7,6 +7,7 @@
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+             xmlns:aConverters="clr-namespace:Avalonia.Markup.Xaml.Converters;assembly=Avalonia.Markup.Xaml"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vms:StatusBarViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.StatusBarControl">
@@ -30,43 +31,52 @@
 
     <UserControl.Resources>
         <converters:NotificationTypeConverter x:Key="NotificationTypeConverter" />
+
+        <aConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+
+        <DataTemplate x:Key="StatusBarItemTemplate" DataType="vms:StatusBarItem">
+            <Button BorderThickness="0" Background="Transparent" Height="28" Padding="8,0"
+                    CornerRadius="7"
+                    Command="{Binding Command}"
+                    IsVisible="{Binding IsVisible}">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <Viewbox Width="18" Height="18">
+                        <fluent:SymbolIcon Width="20" Height="20" FontSize="18"
+                                           Symbol="{Binding IconSymbol}"
+                                           IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Foreground="{Binding ForegroundColor, Converter={StaticResource ColorToBrushConverter}}" />
+                    </Viewbox>
+                    <TextBlock Text="{Binding Text}"
+                               IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Border HorizontalAlignment="Stretch" Height="36" Background="{DynamicResource SkEditorBorderBackground}"
             CornerRadius="7" Padding="4">
         <Grid>
-            <ItemsControl ItemsSource="{Binding LeftItems}" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <!-- Left -->
+            <ItemsControl ItemsSource="{Binding LeftItems}"
+                          HorizontalAlignment="Left" VerticalAlignment="Center"
+                          ItemTemplate="{StaticResource StatusBarItemTemplate}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="4" />
+                        <StackPanel Orientation="Horizontal" Spacing="8" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
 
+            <!-- Right -->
             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
-                <ItemsControl ItemsSource="{Binding RightItems}">
+                <ItemsControl ItemsSource="{Binding RightItems}"
+                              ItemTemplate="{StaticResource StatusBarItemTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" Spacing="8" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="vms:StatusBarItem">
-                            <Button BorderThickness="0" Background="Transparent" Height="28" Padding="8,0"
-                                    CornerRadius="7"
-                                    Command="{Binding Command}"
-                                    IsVisible="{Binding IsVisible}">
-                                <StackPanel Orientation="Horizontal" Spacing="4">
-                                    <fluent:SymbolIcon Symbol="{Binding IconSymbol}"
-                                                       IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                       FontSize="16" />
-                                    <TextBlock Text="{Binding Text}"
-                                               IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
                 <Button BorderThickness="0" Background="Transparent" Height="28" Width="28" Padding="0"
@@ -149,7 +159,6 @@
                         </Flyout>
                     </Button.Flyout>
                 </Button>
-
             </StackPanel>
         </Grid>
     </Border>

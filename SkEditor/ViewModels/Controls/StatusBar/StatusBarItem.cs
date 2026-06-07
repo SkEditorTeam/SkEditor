@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
@@ -26,6 +27,9 @@ public partial class StatusBarItem : ObservableObject
 
     [ObservableProperty]
     public partial bool IsVisible { get; set; } = true;
+
+    [ObservableProperty]
+    public partial Color? ForegroundColor { get; set; }
 
     public ItemAlignment Alignment { get; private set; } = ItemAlignment.Right;
 
@@ -72,6 +76,12 @@ public partial class StatusBarItem : ObservableObject
     public StatusBarItem WithAlignment(ItemAlignment alignment)
     {
         Alignment = alignment;
+        return this;
+    }
+
+    public StatusBarItem WithColor(Color color)
+    {
+        ForegroundColor = color;
         return this;
     }
 }
