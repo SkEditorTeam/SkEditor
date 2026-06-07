@@ -50,6 +50,7 @@
         <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
         <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="InnerLeftContent">
             <Template>
                 <ic:SymbolIcon Symbol="Search"
