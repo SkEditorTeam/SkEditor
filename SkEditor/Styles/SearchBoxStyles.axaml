@@ -16,7 +16,7 @@
     <SolidColorBrush x:Key="SearchBoxBackgroundPointerOverColor" Color="#14FFFFFF" />
     <SolidColorBrush x:Key="SearchBoxBackgroundFocusedColor" Color="#06FFFFFF" />
     <SolidColorBrush x:Key="SearchBoxPlaceholderForeground" Color="#8AFFFFFF" />
-    <SolidColorBrush x:Key="SearchBoxPlaceholderForegroundFocused" Color="#8AFFFFFF" />
+    <SolidColorBrush x:Key="SearchBoxPlaceholderForegroundFocused" Color="#4BFFFFFF" />
 
     <sys:TimeSpan x:Key="SearchBoxBackgroundTransitionDuration">0:0:0.1</sys:TimeSpan>
     <sys:TimeSpan x:Key="SearchBoxForegroundTransitionDuration">0:0:0.1</sys:TimeSpan>
@@ -58,7 +58,7 @@
                                VerticalAlignment="Center" />
             </Template>
         </Setter>
-        
+
         <Setter Property="Transitions">
             <Transitions>
                 <BrushTransition Property="Foreground"
@@ -72,7 +72,7 @@
                                  Easing="LinearEasing" />
             </Transitions>
         </Setter>
-        
+
         <Setter Property="Template">
             <ControlTemplate>
                 <DataValidationErrors>
@@ -93,31 +93,45 @@
                                            Grid.Column="1"
                                            Cursor="IBeam"
                                            Margin="0,0,10,0">
-                                    <TextBlock Name="PART_FloatingWatermark"
-                                               Foreground="{DynamicResource SystemAccentColor}"
+                                    <TextBlock Name="PART_FloatingPlaceholder"
+                                               Foreground="{TemplateBinding PlaceholderForeground}"
                                                FontSize="{TemplateBinding FontSize}"
                                                IsVisible="False"
-                                               Text="{TemplateBinding Watermark}"
+                                               Text="{TemplateBinding PlaceholderText}"
                                                DockPanel.Dock="Top" />
                                     <ScrollViewer
                                         HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
                                         VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
                                         IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
                                         AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
-                                        <Grid>
-                                            <TextBlock Name="PART_Watermark"
-                                                       Foreground="{DynamicResource SearchBoxForeground}"
-                                                       Text="{TemplateBinding Watermark}"
+                                        <ScrollViewer.Styles>
+                                            <Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+                                                <Setter Property="Cursor" Value="IBeam" />
+                                            </Style>
+                                        </ScrollViewer.Styles>
+
+                                        <Panel>
+                                            <TextBlock Name="PART_Placeholder"
+                                                       Foreground="{TemplateBinding PlaceholderForeground}"
+                                                       Text="{TemplateBinding PlaceholderText}"
                                                        TextAlignment="{TemplateBinding TextAlignment}"
                                                        TextWrapping="{TemplateBinding TextWrapping}"
-                                                       IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                       Margin="0,0,0,1" />
-
+                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                <TextBlock.IsVisible>
+                                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                        <Binding ElementName="PART_TextPresenter" Path="PreeditText"
+                                                                 Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                                        <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                                 Path="Text"
+                                                                 Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                                    </MultiBinding>
+                                                </TextBlock.IsVisible>
+                                            </TextBlock>
                                             <TextPresenter Name="PART_TextPresenter"
                                                            Text="{TemplateBinding Text, Mode=TwoWay}"
                                                            CaretIndex="{TemplateBinding CaretIndex}"
+                                                           CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
                                                            SelectionStart="{TemplateBinding SelectionStart}"
                                                            SelectionEnd="{TemplateBinding SelectionEnd}"
                                                            TextAlignment="{TemplateBinding TextAlignment}"
@@ -131,7 +145,7 @@
                                                            CaretBrush="{TemplateBinding CaretBrush}"
                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                                        </Grid>
+                                        </Panel>
                                     </ScrollViewer>
                                 </DockPanel>
                                 <ContentPresenter Grid.Column="2"
@@ -149,16 +163,16 @@
             <Setter Property="Background" Value="{DynamicResource TextControlBackgroundDisabled}" />
             <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}" />
 
-            <Style Selector="^ /template/ TextBlock#PART_Watermark, ^ /template/ TextBlock#PART_FloatingWatermark">
+            <Style Selector="^ /template/ TextBlock#PART_Placeholder, ^ /template/ TextBlock#PART_FloatingPlaceholder">
                 <Setter Property="Foreground" Value="{DynamicResource TextControlPlaceholderForegroundDisabled}" />
             </Style>
         </Style>
 
-        <!-- PointerOver State-->
+        <!-- PointerOver State -->
         <Style Selector="^:pointerover">
             <Setter Property="Background" Value="{DynamicResource SearchBoxBackgroundPointerOverColor}" />
 
-            <Style Selector="^ /template/ TextBlock#PART_Watermark">
+            <Style Selector="^ /template/ TextBlock#PART_Placeholder">
                 <Setter Property="Foreground" Value="{DynamicResource SearchBoxForegroundPointerOver}" />
             </Style>
         </Style>
@@ -170,8 +184,8 @@
             <Setter Property="BorderBrush" Value="{DynamicResource SearchBoxBorderBrushFocused}" />
             <Setter Property="PlaceholderForeground" Value="{DynamicResource SearchBoxPlaceholderForegroundFocused}" />
 
-            <Style Selector="^ /template/ TextBlock#PART_Watermark">
-                <Setter Property="Foreground" Value="{DynamicResource TextControlPlaceholderForegroundFocused}" />
+            <Style Selector="^ /template/ TextBlock#PART_Placeholder">
+                <Setter Property="Foreground" Value="{DynamicResource SearchBoxPlaceholderForegroundFocused}" />
             </Style>
         </Style>
     </ControlTheme>
