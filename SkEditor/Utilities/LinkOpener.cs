@@ -61,6 +61,11 @@ public static class LinkOpener
         {
             Process.Start("open", $"-R \"{filePath}\"");
         }
+        else if (OperatingSystem.IsLinux() && CheckDbusExisting())
+        {
+            Process.Start("dbus-send",
+                $"--session --dest=org.freedesktop.FileManager1 --type=method_call --print-reply /org/freedesktop/FileManager1 org.freedesktop.FileManager1.ShowItems array:string:\"file://{filePath}\" string:\"\"");
+        }
         else
         {
             string? folderPath = Path.GetDirectoryName(filePath);
@@ -70,6 +75,20 @@ public static class LinkOpener
             }
 
             OpenFolder(folderPath);
+        }
+    }
+
+    private static bool CheckDbusExisting()
+    {
+        try
+        {
+            Process.Start("dbus-send",
+                "--session --dest=org.freedesktop.DBus --type=method_call --print-reply / org.freedesktop.DBus.ListNames");
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 }
