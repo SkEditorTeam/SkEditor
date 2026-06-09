@@ -58,7 +58,7 @@
             </ComboBox>
         </DockPanel>
 
-        <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12">
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="12" Margin="8,0">
             <StackPanel.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="!FileTree.IsLoading" />
@@ -70,7 +70,7 @@
             </Viewbox>
             <StackPanel Spacing="4">
                 <TextBlock Text="{localization:Translate RemoteConnectionNoConnectionTitle}"
-                           HorizontalAlignment="Center" FontSize="18" Opacity="0.75" />
+                           HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" Opacity="0.75" />
                 <TextBlock Text="{localization:Translate RemoteConnectionNoConnectionMessage}"
                            HorizontalAlignment="Center" TextAlignment="Center"
                            FontSize="13" MaxWidth="250" Opacity="0.6" />
