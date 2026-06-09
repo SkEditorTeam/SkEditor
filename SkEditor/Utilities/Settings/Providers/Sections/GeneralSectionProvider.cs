@@ -24,11 +24,11 @@ public class GeneralSectionProvider(
                     .WithProperty(appSettings.GetProperty<string>(AppSettingsProperty.Language))
                     .WithProvider(languageProvider),
 
-                ToggleSetting
-                    .Create(TranslationKey.SettingsGeneralCheckForUpdates)
-                    .WithDescription(TranslationKey.SettingsGeneralCheckForUpdatesDescription)
-                    .WithIcon(Symbol.CloudSync)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForAppUpdates))
+                // ToggleSetting
+                //     .Create(TranslationKey.SettingsGeneralCheckForUpdates)
+                //     .WithDescription(TranslationKey.SettingsGeneralCheckForUpdatesDescription)
+                //     .WithIcon(Symbol.CloudSync)
+                //     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForAppUpdates))
             ]);
     }
 }
