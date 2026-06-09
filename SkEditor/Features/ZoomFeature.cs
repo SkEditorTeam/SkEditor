@@ -74,7 +74,6 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
             return;
         }
 
-        e.Handled = true;
         if (sender is not TextEditor { DataContext: ITextEditorTab })
         {
             return;
@@ -83,9 +82,11 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         switch (e.Key)
         {
             case Key.OemPlus:
+                e.Handled = true;
                 ApplyZoom(1.0);
                 break;
             case Key.OemMinus:
+                e.Handled = true;
                 ApplyZoom(-1.0);
                 break;
         }
