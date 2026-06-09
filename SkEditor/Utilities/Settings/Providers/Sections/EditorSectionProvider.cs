@@ -53,13 +53,7 @@ public class EditorSectionProvider(
                     .Create(TranslationKey.SettingsEditorSmoothScrolling)
                     .WithDescription(TranslationKey.SettingsEditorSmoothScrollingDescription)
                     .WithIcon(Symbol.Stream)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorSmoothScrollEnabled)),
-
-                ToggleSetting
-                    .Create(TranslationKey.SettingsEditorZoomSync)
-                    .WithDescription(TranslationKey.SettingsEditorZoomSyncDescription)
-                    .WithIcon(Symbol.ZoomIn)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorZoomLevelSyncEnabled))
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorSmoothScrollEnabled))
             ]);
     }
 

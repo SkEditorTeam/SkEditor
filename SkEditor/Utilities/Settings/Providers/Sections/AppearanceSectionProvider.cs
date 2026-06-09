@@ -84,10 +84,16 @@ public class AppearanceSectionProvider(
                             .WithMinValue(8)
                             .WithMaxValue(48)
                             .WithFormatString(),
+                        
                         ToggleSetting
                             .Create(TranslationKey.SettingsAppearanceMouseWheelZoom)
                             .WithDescription(TranslationKey.SettingsAppearanceMouseWheelZoomDescription)
-                            .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsMouseWheelZoomEnabled))
+                            .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsMouseWheelZoomEnabled)),
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsEditorZoomSync)
+                            .WithDescription(TranslationKey.SettingsEditorZoomSyncDescription)
+                            .WithProperty(
+                                appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorZoomLevelSyncEnabled))
                     ),
 
                 ToggleSetting
