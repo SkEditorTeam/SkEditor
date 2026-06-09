@@ -80,6 +80,7 @@
   "ButtonBrowse": "Tallózás",
   "ButtonOpen": "Megnyitás",
   "ButtonDisconnect": "Kapcsolat bontása",
+  "ButtonOpenFolder": "Mappa megnyitása",
   "Error": "Hiba",
   "Success": "Siker",
   "Attention": "Figyelem!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "Az alkalmazás színeinek testreszabása.",
   "SettingsAppearanceThemeThemesFolder": "Témák mappája",
   "SettingsAppearanceThemeThemesFolderDescription": "Nyissa meg a Témák mappát új témák létrehozásához vagy hozzáadásához.",
-  "SettingsAppearanceThemeOpenFolderButton": "Mappa megnyitása",
   "SettingsAppearanceSubsectionFontDisplay": "Betűtípus és Megjelenítés",
   "SettingsAppearanceEditorFont": "Szerkesztő betűtípusa",
   "SettingsAppearanceEditorFontDescription": "A szerkesztőben használt betűcsalád és betűméret módosítása.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Automatikus (Ajánlott)",
   "SettingsGeneralUseSplashScreenEnabled": "Mindig bekapcsolva",
   "SettingsGeneralUseSplashScreenDisabled": "Azonnali indítás (Kikapcsolva)",
-  "SettingsAdvancedOpenAppDataFolder": "AppData mappa megnyitása",
+  "SettingsAdvancedOpenAppDataFolder": "Konfigurációs mappa megnyitása",
+  "SettingsAdvancedOpenAppDataFolderDescription": "Nyisd meg azt a mappát, ahol a SkEditor a konfigurációs fájljait, témáit és egyéb adatait tárolja.",
   "SettingsExperimentsWarningDescription": "Ezek a kísérleti funkciók hibákat okozhatnak. Óvatosan használja őket!",
   "SettingsExperimentsAutoCompletionPrototype": "Automatikus kiegészítés prototípusa",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "Az automatikus kiegészítés korai prototípusa, még nem túl hasznos.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "Már létezik ilyen nevű fájl vagy mappa.",
   "FileExplorerNoFolderOpenedTitle": "Nincs mappa megnyitva",
   "FileExplorerNoFolderOpenedMessage": "Nyisson meg egy helyi mappát a szkriptek kezeléséhez.",
-  "FileExplorerOpenFolder": "Mappa megnyitása",
   "FileLoadFailedTitle": "Sikertelen betöltés",
   "FileLoadFailedPermissionMessage": "Nincs jogosultsága a fájl megnyitásához.",
   "FileLoadFailedGenericMessage": "Hiba történt a fájl megnyitása során.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "Futási környezet:",
   "AboutAuthor": "Fejlesztette: {0}",
   "AboutCopySystemInfo": "Rendszerinformációk másolása",
-  "AboutSupportUs": "A SkEditor támogatása"
+  "AboutSupportUs": "A SkEditor támogatása",
+  "DocumentationTabTitle": "Dokumentáció",
+  "DocumentationAllAddons": "Összes addon"
 }

@@ -80,6 +80,7 @@
   "ButtonBrowse": "찾아보기",
   "ButtonOpen": "열기",
   "ButtonDisconnect": "연결 끊기",
+  "ButtonOpenFolder": "폴더 열기",
   "Error": "오류",
   "Success": "성공",
   "Attention": "주의!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "앱의 색상을 사용자 지정합니다.",
   "SettingsAppearanceThemeThemesFolder": "테마 폴더",
   "SettingsAppearanceThemeThemesFolderDescription": "새 테마를 추가하거나 만들기 위해 테마 폴더를 엽니다.",
-  "SettingsAppearanceThemeOpenFolderButton": "폴더 열기",
   "SettingsAppearanceSubsectionFontDisplay": "글꼴 및 디스플레이",
   "SettingsAppearanceEditorFont": "편집기 글꼴",
   "SettingsAppearanceEditorFontDescription": "편집기에서 사용되는 글꼴 패밀리와 크기를 변경합니다.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "자동 (권장)",
   "SettingsGeneralUseSplashScreenEnabled": "항상 켬",
   "SettingsGeneralUseSplashScreenDisabled": "즉시 시작 (끔)",
-  "SettingsAdvancedOpenAppDataFolder": "AppData 폴더 열기",
+  "SettingsAdvancedOpenAppDataFolder": "설정 폴더 열기",
+  "SettingsAdvancedOpenAppDataFolderDescription": "SkEditor의 설정 파일, 테마 및 기타 데이터가 저장되는 폴더를 엽니다.",
   "SettingsExperimentsWarningDescription": "이 기능들은 실험적이며 문제가 발생할 수 있습니다. 주의해서 사용하세요!",
   "SettingsExperimentsAutoCompletionPrototype": "자동 완성 프로토타입",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "유용하지 않은 초기 단계의 자동 완성 프로토타입입니다.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "같은 이름의 파일 또는 폴더가 이미 존재합니다",
   "FileExplorerNoFolderOpenedTitle": "열린 폴더 없음",
   "FileExplorerNoFolderOpenedMessage": "스크립트를 관리하려면 로컬 폴더를 여세요.",
-  "FileExplorerOpenFolder": "폴더 열기",
   "FileLoadFailedTitle": "로드 실패",
   "FileLoadFailedPermissionMessage": "이 파일을 열 권한이 없습니다.",
   "FileLoadFailedGenericMessage": "이 파일을 여는 중에 오류가 발생했습니다.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "실행 환경:",
   "AboutAuthor": "개발자: {0}",
   "AboutCopySystemInfo": "시스템 정보 복사",
-  "AboutSupportUs": "SkEditor 후원"
+  "AboutSupportUs": "SkEditor 후원",
+  "DocumentationTabTitle": "문서",
+  "DocumentationAllAddons": "모든 애드온"
 }

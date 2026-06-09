@@ -80,6 +80,7 @@
   "ButtonBrowse": "Navega",
   "ButtonOpen": "Obre",
   "ButtonDisconnect": "Desconnecta",
+  "ButtonOpenFolder": "Obre carpeta",
   "Error": "Error",
   "Success": "Èxit",
   "Attention": "Atenció!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "Personalitza els colors de l’aplicació.",
   "SettingsAppearanceThemeThemesFolder": "Carpeta de temes",
   "SettingsAppearanceThemeThemesFolderDescription": "Obre la carpeta de temes per crear o afegir temes nous.",
-  "SettingsAppearanceThemeOpenFolderButton": "Obre carpeta",
   "SettingsAppearanceSubsectionFontDisplay": "Font i pantalla",
   "SettingsAppearanceEditorFont": "Font de l'editor",
   "SettingsAppearanceEditorFontDescription": "Canvia la família i la mida de la font utilitzada a l'editor.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Auto (Recomanat)",
   "SettingsGeneralUseSplashScreenEnabled": "Sempre activat",
   "SettingsGeneralUseSplashScreenDisabled": "Inici instantani (Desactivat)",
-  "SettingsAdvancedOpenAppDataFolder": "Obre la carpeta AppData",
+  "SettingsAdvancedOpenAppDataFolder": "Obre la carpeta de configuració",
+  "SettingsAdvancedOpenAppDataFolderDescription": "Obre la carpeta on SkEditor desa els seus fitxers de configuració, temes i altres dades.",
   "SettingsExperimentsWarningDescription": "Aquestes funcions són experimentals i poden causar problemes. Utilitza-les amb precaució!",
   "SettingsExperimentsAutoCompletionPrototype": "Prototip d'autocompletat",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "Prototip primerenc d'autocompletat, poc útil.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "Ja existeix un fitxer o carpeta amb aquest nom",
   "FileExplorerNoFolderOpenedTitle": "Cap carpeta oberta",
   "FileExplorerNoFolderOpenedMessage": "Obre una carpeta local per a gestionar els teus scripts.",
-  "FileExplorerOpenFolder": "Obre carpeta",
   "FileLoadFailedTitle": "Error de càrrega",
   "FileLoadFailedPermissionMessage": "No tens permís per obrir aquest fitxer.",
   "FileLoadFailedGenericMessage": "S'ha produït un error en intentar obrir aquest fitxer.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "S'executa en:",
   "AboutAuthor": "Per {0}",
   "AboutCopySystemInfo": "Copia la informació del sistema",
-  "AboutSupportUs": "Dona suport a l'SkEditor"
+  "AboutSupportUs": "Dona suport a l'SkEditor",
+  "DocumentationTabTitle": "Documentació",
+  "DocumentationAllAddons": "Tots els complements"
 }

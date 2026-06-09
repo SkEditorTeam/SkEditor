@@ -80,6 +80,7 @@
   "ButtonBrowse": "Bladeren",
   "ButtonOpen": "Openen",
   "ButtonDisconnect": "Verbinding verbreken",
+  "ButtonOpenFolder": "Map openen",
   "Error": "Fout",
   "Success": "Succes",
   "Attention": "Let op!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "Pas de kleuren van de app aan.",
   "SettingsAppearanceThemeThemesFolder": "Themamap",
   "SettingsAppearanceThemeThemesFolderDescription": "Open de themamap om nieuwe thema's te maken of toe te voegen.",
-  "SettingsAppearanceThemeOpenFolderButton": "Map openen",
   "SettingsAppearanceSubsectionFontDisplay": "Lettertype & Weergave",
   "SettingsAppearanceEditorFont": "Editorlettertype",
   "SettingsAppearanceEditorFontDescription": "Wijzig de lettertypefamilie en de grootte die in de editor worden gebruikt.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Automatisch (Aanbevolen)",
   "SettingsGeneralUseSplashScreenEnabled": "Altijd aan",
   "SettingsGeneralUseSplashScreenDisabled": "Direct starten (Uit)",
-  "SettingsAdvancedOpenAppDataFolder": "AppData-map openen",
+  "SettingsAdvancedOpenAppDataFolder": "Configuratiemap openen",
+  "SettingsAdvancedOpenAppDataFolderDescription": "Open de map waarin SkEditor zijn configuratiebestanden, thema's en andere gegevens opslaat.",
   "SettingsExperimentsWarningDescription": "Deze functies zijn experimenteel en kunnen problemen veroorzaken. Gebruik met voorzichtigheid!",
   "SettingsExperimentsAutoCompletionPrototype": "Prototype voor automatische aanvulling",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "Vroeg prototype van automatische aanvulling, nog niet erg nuttig.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "Er bestaat al een bestand of map met deze naam",
   "FileExplorerNoFolderOpenedTitle": "Geen map geopend",
   "FileExplorerNoFolderOpenedMessage": "Open een lokale map om uw scripts te beheren.",
-  "FileExplorerOpenFolder": "Map openen",
   "FileLoadFailedTitle": "Laden mislukt",
   "FileLoadFailedPermissionMessage": "U hebt geen toestemming om dit bestand te openen.",
   "FileLoadFailedGenericMessage": "Er is een fout opgetreden tijdens het openen van dit bestand.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "Draait op:",
   "AboutAuthor": "Door {0}",
   "AboutCopySystemInfo": "Systeeminformatie kopiëren",
-  "AboutSupportUs": "Steun SkEditor"
+  "AboutSupportUs": "Steun SkEditor",
+  "DocumentationTabTitle": "Documentatie",
+  "DocumentationAllAddons": "Alle add-ons"
 }

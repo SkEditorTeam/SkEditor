@@ -80,6 +80,7 @@
   "ButtonBrowse": "Examinar",
   "ButtonOpen": "Abrir",
   "ButtonDisconnect": "Desconectar",
+  "ButtonOpenFolder": "Abrir carpeta",
   "Error": "Error",
   "Success": "Éxito",
   "Attention": "¡Atención!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "Personaliza los colores de la aplicación.",
   "SettingsAppearanceThemeThemesFolder": "Carpeta de temas",
   "SettingsAppearanceThemeThemesFolderDescription": "Abre la carpeta de temas para crear o añadir nuevos temas.",
-  "SettingsAppearanceThemeOpenFolderButton": "Abrir carpeta",
   "SettingsAppearanceSubsectionFontDisplay": "Fuente y visualización",
   "SettingsAppearanceEditorFont": "Fuente del editor",
   "SettingsAppearanceEditorFontDescription": "Cambia la familia y el tamaño de la fuente utilizada en el editor.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Automático (Recomendado)",
   "SettingsGeneralUseSplashScreenEnabled": "Siempre encendido",
   "SettingsGeneralUseSplashScreenDisabled": "Inicio instantáneo (Apagado)",
-  "SettingsAdvancedOpenAppDataFolder": "Abrir carpeta AppData",
+  "SettingsAdvancedOpenAppDataFolder": "Abrir carpeta de configuración",
+  "SettingsAdvancedOpenAppDataFolderDescription": "Abre la carpeta donde SkEditor almacena sus archivos de configuración, temas y otros datos.",
   "SettingsExperimentsWarningDescription": "Estas funciones son experimentales y pueden causar problemas. ¡Úsalas con precaución!",
   "SettingsExperimentsAutoCompletionPrototype": "Prototipo de autocompletado",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "Prototipo temprano de autocompletado, no muy útil por el momento.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "Ya existe un archivo o carpeta con este nombre",
   "FileExplorerNoFolderOpenedTitle": "Ninguna carpeta abierta",
   "FileExplorerNoFolderOpenedMessage": "Abre una carpeta local para gestionar tus scripts.",
-  "FileExplorerOpenFolder": "Abrir carpeta",
   "FileLoadFailedTitle": "Error al cargar",
   "FileLoadFailedPermissionMessage": "No tienes permiso para abrir este archivo.",
   "FileLoadFailedGenericMessage": "Ocurrió un error al intentar abrir este archivo.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "Ejecutándose en:",
   "AboutAuthor": "Por {0}",
   "AboutCopySystemInfo": "Copiar información del sistema",
-  "AboutSupportUs": "Apoyar a SkEditor"
+  "AboutSupportUs": "Apoyar a SkEditor",
+  "DocumentationTabTitle": "Documentación",
+  "DocumentationAllAddons": "Todos los complementos"
 }

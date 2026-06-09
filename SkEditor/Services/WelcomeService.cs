@@ -9,16 +9,16 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Welcome;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Icons;
 using SkEditor.Utilities.Localization;
-using SettingsTabViewModel = SkEditor.ViewModels.Tabs.SettingsTabViewModel;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Services;
 
 public class WelcomeService : IWelcomeService
 {
     private readonly IFileService _files;
+    private readonly ILinkService _links;
 
     private readonly Func<SettingsTabViewModel> _settingsTabFactory;
     private readonly ITabService _tabs;
@@ -26,9 +26,11 @@ public class WelcomeService : IWelcomeService
     private DispatcherTimer _timeUpdater;
 
     public WelcomeService(IFileService fileService, ITabService tabService, IRecentFileService recents,
+        ILinkService links,
         Func<SettingsTabViewModel> settingsTabFactory)
     {
         _files = fileService;
+        _links = links;
         _tabs = tabService;
         _settingsTabFactory = settingsTabFactory;
 
@@ -67,20 +69,20 @@ public class WelcomeService : IWelcomeService
         [
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDiscordServer,
                 new RelayCommand(() =>
-                    LinkOpener.OpenLink("https://discord.skeditor.dev")),
+                    _links.OpenLink("https://discord.skeditor.dev")),
                 Icons.GetPathIconSource("DiscordIcon")),
 
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksGitHub,
                 new RelayCommand(() =>
-                    LinkOpener.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
+                    _links.OpenLink("https://github.com/SkEditorTeam/SkEditor")),
                 Icons.GetPathIconSource("GitHubIcon")),
 
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksDocumentation,
-                new RelayCommand(() => LinkOpener.OpenLink("https://docs.skeditor.dev")),
+                new RelayCommand(() => _links.OpenLink("https://docs.skeditor.dev")),
                 Icons.CreateSymbolIcon(Symbol.Book)),
 
             WelcomeScreenElement.Create(TranslationKey.WelcomePageUsefulLinksSupportUs,
-                new RelayCommand(() => LinkOpener.OpenLink("https://ko-fi.com/notro")),
+                new RelayCommand(() => _links.OpenLink("https://ko-fi.com/notro")),
                 Icons.CreateSymbolIcon(Symbol.Heart))
         ]);
 

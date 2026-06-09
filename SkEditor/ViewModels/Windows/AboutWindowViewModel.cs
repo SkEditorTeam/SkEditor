@@ -10,12 +10,14 @@ using CommunityToolkit.Mvvm.Input;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.SourceGenerators;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Windows;
 
-public partial class AboutWindowViewModel(IClipboardService clipboard, ITranslationService translations)
+public partial class AboutWindowViewModel(
+    IClipboardService clipboard,
+    ITranslationService translations,
+    ILinkService links)
     : ObservableObject
 {
     public string OperatingSystem => RuntimeInformation.OSDescription;
@@ -41,13 +43,13 @@ public partial class AboutWindowViewModel(IClipboardService clipboard, ITranslat
     [RelayCommand]
     public void OpenSupport()
     {
-        LinkOpener.OpenLink("https://ko-fi.com/notro");
+        links.OpenLink("https://ko-fi.com/notro");
     }
 
     [RelayCommand]
     public void OpenAuthor()
     {
-        LinkOpener.OpenLink("https://github.com/NotroDev");
+        links.OpenLink("https://github.com/NotroDev");
     }
 
     private static string FormatDateNoDayOfWeek(DateTime date)

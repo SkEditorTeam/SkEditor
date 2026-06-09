@@ -18,7 +18,8 @@ public class AppearanceSectionProvider(
     ThemeChoiceProvider themeProvider,
     IThemeService themes,
     ITranslationService translations,
-    WindowRegistry windowRegistry) : ISettingsSectionProvider
+    WindowRegistry windowRegistry,
+    ILinkService links) : ISettingsSectionProvider
 {
     public SettingSection GetSection()
     {
@@ -51,8 +52,8 @@ public class AppearanceSectionProvider(
                     .Create(TranslationKey.SettingsAppearanceThemeThemesFolder)
                     .WithDescription(TranslationKey.SettingsAppearanceThemeThemesFolderDescription)
                     .WithIcon(Symbol.FolderOpen)
-                    .WithAction(TranslationKey.SettingsAppearanceThemeOpenFolderButton,
-                        () => LinkOpener.OpenFolder(themes.ThemeFolderPath))
+                    .WithAction(TranslationKey.ButtonOpenFolder,
+                        () => links.OpenFolder(themes.ThemeFolderPath))
             ]);
     }
 

@@ -80,6 +80,7 @@
   "ButtonBrowse": "Sfoglia",
   "ButtonOpen": "Apri",
   "ButtonDisconnect": "Disconnetti",
+  "ButtonOpenFolder": "Apri cartella",
   "Error": "Errore",
   "Success": "Operazione riuscita",
   "Attention": "Attenzione!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "Personalizza i colori dell'applicazione.",
   "SettingsAppearanceThemeThemesFolder": "Cartella dei temi",
   "SettingsAppearanceThemeThemesFolderDescription": "Apri la cartella dei temi per creare o aggiungere nuovi temi.",
-  "SettingsAppearanceThemeOpenFolderButton": "Apri cartella",
   "SettingsAppearanceSubsectionFontDisplay": "Carattere e visualizzazione",
   "SettingsAppearanceEditorFont": "Carattere dell'editor",
   "SettingsAppearanceEditorFontDescription": "Modifica la famiglia e la dimensione del carattere utilizzato nell'editor.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Auto (Consigliato)",
   "SettingsGeneralUseSplashScreenEnabled": "Sempre attiva",
   "SettingsGeneralUseSplashScreenDisabled": "Avvio istantaneo (Disattivata)",
-  "SettingsAdvancedOpenAppDataFolder": "Apri cartella AppData",
+  "SettingsAdvancedOpenAppDataFolder": "Apri la cartella di configurazione",
+  "SettingsAdvancedOpenAppDataFolderDescription": "Apri la cartella in cui SkEditor memorizza i suoi file di configurazione, temi e altri dati.",
   "SettingsExperimentsWarningDescription": "Queste funzionalità sono sperimentali e potrebbero causare problemi. Usa con cautela!",
   "SettingsExperimentsAutoCompletionPrototype": "Prototipo di completamento automatico",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "Prototipo iniziale di completamento automatico, non molto utile.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "Un file o una cartella con questo nome esiste già",
   "FileExplorerNoFolderOpenedTitle": "Nessuna cartella aperta",
   "FileExplorerNoFolderOpenedMessage": "Apri una cartella locale per gestire i tuoi script.",
-  "FileExplorerOpenFolder": "Apri cartella",
   "FileLoadFailedTitle": "Caricamento non riuscito",
   "FileLoadFailedPermissionMessage": "Non hai i permessi necessari per aprire questo file.",
   "FileLoadFailedGenericMessage": "Si è verificato un errore durante il tentativo di aprire questo file.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "In esecuzione su:",
   "AboutAuthor": "Di {0}",
   "AboutCopySystemInfo": "Copia informazioni di sistema",
-  "AboutSupportUs": "Sostieni SkEditor"
+  "AboutSupportUs": "Sostieni SkEditor",
+  "DocumentationTabTitle": "Documentazione",
+  "DocumentationAllAddons": "Tutti gli addon"
 }

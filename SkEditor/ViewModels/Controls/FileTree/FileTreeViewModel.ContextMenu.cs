@@ -19,7 +19,7 @@ public partial class FileTreeViewModel
     [MemberNotNull(nameof(_commandMap), nameof(_commandHandler))]
     private void InitializeCommandMap()
     {
-        _commandHandler = new FileTreeCommandHandler(this, _dialogs, _clipboard, _notifs);
+        _commandHandler = new FileTreeCommandHandler(this, _dialogs, _clipboard, _notifs, _links);
         
         _commandMap = new Dictionary<ProjectAction, IRelayCommand>
         {

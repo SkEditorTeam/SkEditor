@@ -12,7 +12,6 @@ using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Local;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Controls.FileTree;
@@ -21,7 +20,8 @@ public class FileTreeCommandHandler(
     FileTreeViewModel fileTree,
     IDialogService dialogs,
     IClipboardService clipboard,
-    INotificationService notifs)
+    INotificationService notifs,
+    ILinkService links)
 {
     public async Task NewFile()
     {
@@ -327,7 +327,7 @@ public class FileTreeCommandHandler(
                 return;
             }
 
-            LinkOpener.OpenFolder(node.Path);
+            links.OpenFolder(node.Path);
         }
         else
         {
@@ -336,7 +336,7 @@ public class FileTreeCommandHandler(
                 return;
             }
 
-            LinkOpener.OpenFolderWithFileSelection(node.Path);
+            links.OpenFolderWithFileSelection(node.Path);
         }
     }
 }

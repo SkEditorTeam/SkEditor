@@ -1,26 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using SkEditor.Contracts.Services;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Services;
 
-// todo: move to a service
-public static class LinkOpener
+public class LinkService : ILinkService
 {
-    /// <summary>
-    ///     Opens the specified URL in the default web browser.
-    /// </summary>
-    /// <param name="url">The URL to open.</param>
-    public static void OpenLink(string url)
+    public void OpenLink(string url)
     {
         Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 
-    /// <summary>
-    ///     Opens the specified folder in the system's file explorer.
-    /// </summary>
-    /// <param name="path">The path of the folder to open.</param>
-    public static void OpenFolder(string path)
+    public void OpenFolder(string path)
     {
         if (OperatingSystem.IsWindows())
         {
@@ -40,12 +32,7 @@ public static class LinkOpener
         }
     }
 
-    /// <summary>
-    ///     Opens the folder containing the specified file and selects the file in the file explorer.
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <remarks>Supported on Windows and macOS. On Linux, it will open the folder but not select the file.</remarks>
-    public static void OpenFolderWithFileSelection(string filePath)
+    public void OpenFolderWithFileSelection(string filePath)
     {
         if (OperatingSystem.IsWindows())
         {

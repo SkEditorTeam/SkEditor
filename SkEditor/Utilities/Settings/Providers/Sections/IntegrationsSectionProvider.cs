@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentIcons.Common;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
 using SkEditor.Utilities.Localization;
@@ -11,7 +12,8 @@ namespace SkEditor.Utilities.Settings.Providers.Sections;
 
 public class IntegrationsSectionProvider(
     AppSettings appSettings,
-    SecretsConfig secrets) : ISettingsSectionProvider
+    SecretsConfig secrets,
+    ILinkService links) : ISettingsSectionProvider
 {
     public SettingSection GetSection()
     {
@@ -71,7 +73,7 @@ public class IntegrationsSectionProvider(
             ]);
     }
 
-    private static ExpandableSetting CreateApiKeySetting(
+    private ExpandableSetting CreateApiKeySetting(
         TranslationKey nameKey,
         TranslationKey descriptionKey,
         string serviceName,
@@ -88,7 +90,7 @@ public class IntegrationsSectionProvider(
                     .Create(TranslationKey.SettingsIntegrationsApiKeysDashboard)
                     .WithDescription(TranslationKey.SettingsIntegrationsApiKeysDashboardDescription)
                     .WithAction(TranslationKey.SettingsIntegrationsApiKeysDashboardButton,
-                        () => LinkOpener.OpenLink(link)),
+                        () => links.OpenLink(link)),
                 TextSetting
                     .Create(TranslationKey.SettingsIntegrationsApiKeysApiKey)
                     .WithProperty(property)

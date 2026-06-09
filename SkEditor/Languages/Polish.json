@@ -80,6 +80,7 @@
   "ButtonBrowse": "Przeglądaj",
   "ButtonOpen": "Otwórz",
   "ButtonDisconnect": "Rozłącz",
+  "ButtonOpenFolder": "Otwórz folder",
   "Error": "Błąd",
   "Success": "Sukces",
   "Attention": "Uwaga!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "Dostosuj kolory aplikacji.",
   "SettingsAppearanceThemeThemesFolder": "Folder motywów",
   "SettingsAppearanceThemeThemesFolderDescription": "Otwórz folder z motywami, aby tworzyć lub dodawać nowe motywy.",
-  "SettingsAppearanceThemeOpenFolderButton": "Otwórz folder",
   "SettingsAppearanceSubsectionFontDisplay": "Czcionka i wyświetlanie",
   "SettingsAppearanceEditorFont": "Czcionka edytora",
   "SettingsAppearanceEditorFontDescription": "Zmień czcionkę oraz jej rozmiar używane w edytorze.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Auto (zalecane)",
   "SettingsGeneralUseSplashScreenEnabled": "Zawsze włączony",
   "SettingsGeneralUseSplashScreenDisabled": "Szybki start (wyłączone)",
-  "SettingsAdvancedOpenAppDataFolder": "Otwórz folder AppData",
+  "SettingsAdvancedOpenAppDataFolder": "Otwórz folder konfiguracji",
+  "SettingsAdvancedOpenAppDataFolderDescription": "Otwórz folder, w którym SkEditor przechowuje swoje pliki konfiguracyjne, motywy i inne dane.",
   "SettingsExperimentsWarningDescription": "Te funkcje mają charakter eksperymentalny i mogą powodować błędy. Używaj z ostrożnością!",
   "SettingsExperimentsAutoCompletionPrototype": "Prototyp autouzupełniania",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "Wczesny prototyp autouzupełniania – obecnie mało przydatny.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "Plik lub folder o takiej nazwie już istnieje",
   "FileExplorerNoFolderOpenedTitle": "Brak otwartego folderu",
   "FileExplorerNoFolderOpenedMessage": "Otwórz lokalny folder, aby zarządzać swoimi skryptami.",
-  "FileExplorerOpenFolder": "Otwórz folder",
   "FileLoadFailedTitle": "Błąd odczytu pliku",
   "FileLoadFailedPermissionMessage": "Brak uprawnień do otwarcia tego pliku.",
   "FileLoadFailedGenericMessage": "Wystąpił błąd podczas próby otwarcia tego pliku.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "Uruchomiono na:",
   "AboutAuthor": "Autor: {0}",
   "AboutCopySystemInfo": "Skopiuj informacje o systemie",
-  "AboutSupportUs": "Wesprzyj SkEditor"
+  "AboutSupportUs": "Wesprzyj SkEditor",
+  "DocumentationTabTitle": "Dokumentacja",
+  "DocumentationAllAddons": "Wszystkie dodatki"
 }

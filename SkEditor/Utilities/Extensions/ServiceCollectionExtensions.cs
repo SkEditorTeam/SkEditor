@@ -45,16 +45,17 @@ public static class ServiceCollectionExtensions
     {
         public void AddCoreServices()
         {
+            services.AddSingleton<IconProvider>();
+            services.AddSingleton<NamedPipeServer>();
             services.AddSingleton<IStartupService, StartupService>();
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<ILogService, LogService>();
-            services.AddSingleton<IconProvider>();
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<IWelcomeService, WelcomeService>();
             services.AddSingleton<ITranslationService, TranslationService>();
             services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
             services.AddSingleton<IClipboardService, ClipboardService>();
-            services.AddSingleton<NamedPipeServer>();
+            services.AddSingleton<ILinkService, LinkService>();
 
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
             services.AddSingleton<ICredentialStoreFactory, CredentialStoreFactory>();

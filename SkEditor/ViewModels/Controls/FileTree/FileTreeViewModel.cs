@@ -22,15 +22,18 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
     private readonly IDialogService _dialogs;
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
+    private readonly ILinkService _links;
     private readonly AppSettings _appSettings;
     private CancellationTokenSource? _cts;
 
     public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard,
-        IDialogService dialogs, AppSettings appSettings, IMessenger messenger)
+        IDialogService dialogs, ILinkService links, AppSettings appSettings, IMessenger messenger)
     {
         _logs = logs;
         _notifs = notifs;
         _dialogs = dialogs;
+        _links = links;
+        
         _clipboard = clipboard;
         _appSettings = appSettings;
 

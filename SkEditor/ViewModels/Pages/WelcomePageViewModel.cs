@@ -11,7 +11,6 @@ using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Notifications;
 using SkEditor.Models.Welcome;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Pages;
@@ -21,7 +20,8 @@ public partial class WelcomePageViewModel(
     IFileService files,
     IRecentFileService recents,
     IClipboardService clipboard,
-    INotificationService notifications) : ObservableObject
+    INotificationService notifications,
+    ILinkService links) : ObservableObject
 {
     public string Version { get; } = $"v{App.GetInformationalVersion()}";
 
@@ -52,11 +52,11 @@ public partial class WelcomePageViewModel(
     {
         if (item.IsFolder)
         {
-            LinkOpener.OpenFolder(item.Path);
+            links.OpenFolder(item.Path);
         }
         else
         {
-            LinkOpener.OpenFolderWithFileSelection(item.Path);
+            links.OpenFolderWithFileSelection(item.Path);
         }
     }
 

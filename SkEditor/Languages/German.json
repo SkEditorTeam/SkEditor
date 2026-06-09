@@ -80,6 +80,7 @@
   "ButtonBrowse": "Durchsuchen",
   "ButtonOpen": "Öffnen",
   "ButtonDisconnect": "Verbindung trennen",
+  "ButtonOpenFolder": "Ordner öffnen",
   "Error": "Fehler",
   "Success": "Erfolg",
   "Attention": "Achtung!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "Passe die Farben der Anwendung an.",
   "SettingsAppearanceThemeThemesFolder": "Design-Ordner",
   "SettingsAppearanceThemeThemesFolderDescription": "Öffne den Design-Ordner, um neue Designs zu erstellen oder hinzuzufügen.",
-  "SettingsAppearanceThemeOpenFolderButton": "Ordner öffnen",
   "SettingsAppearanceSubsectionFontDisplay": "Schriftart & Anzeige",
   "SettingsAppearanceEditorFont": "Editor-Schriftart",
   "SettingsAppearanceEditorFontDescription": "Ändere die Schriftart und -größe im Editor.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Auto (Empfohlen)",
   "SettingsGeneralUseSplashScreenEnabled": "Immer an",
   "SettingsGeneralUseSplashScreenDisabled": "Sofortiger Start (Aus)",
-  "SettingsAdvancedOpenAppDataFolder": "AppData-Ordner öffnen",
+  "SettingsAdvancedOpenAppDataFolder": "Konfigurationsordner öffnen",
+  "SettingsAdvancedOpenAppDataFolderDescription": "Öffne den Ordner, in dem SkEditor seine Konfigurationsdateien, Themes und andere Daten speichert.",
   "SettingsExperimentsWarningDescription": "Diese Funktionen sind experimentell und können Probleme verursachen. Mit Vorsicht verwenden!",
   "SettingsExperimentsAutoCompletionPrototype": "Autovervollständigung (Prototyp)",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "Früher Prototyp der Autovervollständigung, noch nicht sehr hilfreich.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "Eine Datei oder ein Ordner mit diesem Namen existiert bereits",
   "FileExplorerNoFolderOpenedTitle": "Kein Ordner geöffnet",
   "FileExplorerNoFolderOpenedMessage": "Öffne einen lokalen Ordner, um deine Skripte zu verwalten.",
-  "FileExplorerOpenFolder": "Ordner öffnen",
   "FileLoadFailedTitle": "Laden fehlgeschlagen",
   "FileLoadFailedPermissionMessage": "Du hast keine Berechtigung, diese Datei zu öffnen.",
   "FileLoadFailedGenericMessage": "Beim Öffnen dieser Datei ist ein Fehler aufgetreten.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "Läuft auf:",
   "AboutAuthor": "Von {0}",
   "AboutCopySystemInfo": "Systeminfo kopieren",
-  "AboutSupportUs": "SkEditor unterstützen"
+  "AboutSupportUs": "SkEditor unterstützen",
+  "DocumentationTabTitle": "Dokumentation",
+  "DocumentationAllAddons": "Alle Addons"
 }

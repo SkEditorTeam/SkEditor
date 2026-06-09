@@ -15,7 +15,8 @@ public class AdvancedSectionProvider(
     IConfigService configs,
     AppSettings appSettings,
     BinarySettings binarySettings,
-    StartupModeChoiceProvider startupModeProvider) : ISettingsSectionProvider
+    StartupModeChoiceProvider startupModeProvider,
+    ILinkService links) : ISettingsSectionProvider
 {
     public SettingSection GetSection()
     {
@@ -36,10 +37,12 @@ public class AdvancedSectionProvider(
                         binarySettings.GetProperty<StartupMode>(BinarySettingsProperty.SplashScreenMode))
                     .WithProvider(startupModeProvider),
 
-                ClickableActionSetting
+                ActionSetting
                     .Create(TranslationKey.SettingsAdvancedOpenAppDataFolder)
-                    .WithIcon(Symbol.Folder)
-                    .WithAction(() => LinkOpener.OpenFolder(configs.GetAppDataPath()))
+                    .WithDescription(TranslationKey.SettingsAdvancedOpenAppDataFolderDescription)
+                    .WithIcon(Symbol.FolderOpen)
+                    .WithAction(TranslationKey.ButtonOpenFolder,
+                        () => links.OpenFolder(configs.GetAppDataPath()))
             ]);
     }
 }

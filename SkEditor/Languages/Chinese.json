@@ -80,6 +80,7 @@
   "ButtonBrowse": "浏览",
   "ButtonOpen": "打开",
   "ButtonDisconnect": "断开连接",
+  "ButtonOpenFolder": "打开文件夹",
   "Error": "错误",
   "Success": "成功",
   "Attention": "注意！",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "自定义应用的颜色外观。",
   "SettingsAppearanceThemeThemesFolder": "主题文件夹",
   "SettingsAppearanceThemeThemesFolderDescription": "打开主题文件夹以创建或添加新主题。",
-  "SettingsAppearanceThemeOpenFolderButton": "打开文件夹",
   "SettingsAppearanceSubsectionFontDisplay": "字体与显示",
   "SettingsAppearanceEditorFont": "编辑器字体",
   "SettingsAppearanceEditorFontDescription": "修改编辑器中使用的字体和大小。",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "自动（推荐）",
   "SettingsGeneralUseSplashScreenEnabled": "始终开启",
   "SettingsGeneralUseSplashScreenDisabled": "即时启动（关闭）",
-  "SettingsAdvancedOpenAppDataFolder": "打开 AppData 文件夹",
+  "SettingsAdvancedOpenAppDataFolder": "打开配置文件夹",
+  "SettingsAdvancedOpenAppDataFolderDescription": "打开 SkEditor 存储其配置文件、主题和其他数据的文件夹。",
   "SettingsExperimentsWarningDescription": "这些功能目前仍是实验性的，可能会导致不稳定的问题。请谨慎使用！",
   "SettingsExperimentsAutoCompletionPrototype": "自动补全原型",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "自动补全功能的早期原型，目前实用性有限。",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "已存在同名的文件或文件夹",
   "FileExplorerNoFolderOpenedTitle": "未打开文件夹",
   "FileExplorerNoFolderOpenedMessage": "打开本地文件夹以管理您的脚本。",
-  "FileExplorerOpenFolder": "打开文件夹",
   "FileLoadFailedTitle": "加载失败",
   "FileLoadFailedPermissionMessage": "您没有权限打开此文件。",
   "FileLoadFailedGenericMessage": "打开此文件时出错。",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "运行环境：",
   "AboutAuthor": "作者：{0}",
   "AboutCopySystemInfo": "复制系统信息",
-  "AboutSupportUs": "赞助 SkEditor"
+  "AboutSupportUs": "赞助 SkEditor",
+  "DocumentationTabTitle": "文档",
+  "DocumentationAllAddons": "所有插件"
 }

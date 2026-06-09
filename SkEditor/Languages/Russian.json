@@ -80,6 +80,7 @@
   "ButtonBrowse": "Обзор",
   "ButtonOpen": "Открыть",
   "ButtonDisconnect": "Отключиться",
+  "ButtonOpenFolder": "Открыть папку",
   "Error": "Ошибка",
   "Success": "Успешно",
   "Attention": "Внимание!",
@@ -125,7 +126,6 @@
   "SettingsAppearanceThemeSelectedThemeDescription": "Настроить цвета приложения.",
   "SettingsAppearanceThemeThemesFolder": "Папка тем",
   "SettingsAppearanceThemeThemesFolderDescription": "Открыть папку тем для создания или добавления новых тем.",
-  "SettingsAppearanceThemeOpenFolderButton": "Открыть папку",
   "SettingsAppearanceSubsectionFontDisplay": "Шрифт и отображение",
   "SettingsAppearanceEditorFont": "Шрифт редактора",
   "SettingsAppearanceEditorFontDescription": "Изменить семейство и размер шрифта, используемые в редакторе.",
@@ -185,7 +185,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Авто (рекомендуется)",
   "SettingsGeneralUseSplashScreenEnabled": "Всегда включен",
   "SettingsGeneralUseSplashScreenDisabled": "Мгновенный запуск (выкл)",
-  "SettingsAdvancedOpenAppDataFolder": "Открыть папку AppData",
+  "SettingsAdvancedOpenAppDataFolder": "Открыть папку конфигурации",
+  "SettingsAdvancedOpenAppDataFolderDescription": "Открыть папку, в которой SkEditor хранит свои файлы конфигурации, темы и другие данные.",
   "SettingsExperimentsWarningDescription": "Это экспериментальные функции, они могут вызвать проблемы. Используйте с осторожностью!",
   "SettingsExperimentsAutoCompletionPrototype": "Прототип автодополнения",
   "SettingsExperimentsAutoCompletionPrototypeDescription": "Ранний прототип автодополнения, пока малополезен.",
@@ -299,7 +300,6 @@
   "FileExplorerCreateNewNameAlreadyExists": "Файл или папка с таким именем уже существует",
   "FileExplorerNoFolderOpenedTitle": "Нет открытых папок",
   "FileExplorerNoFolderOpenedMessage": "Откройте локальную папку для управления вашими скриптами.",
-  "FileExplorerOpenFolder": "Открыть папку",
   "FileLoadFailedTitle": "Ошибка загрузки",
   "FileLoadFailedPermissionMessage": "У вас нет прав для открытия этого файла.",
   "FileLoadFailedGenericMessage": "Произошла ошибка при попытке открыть этот файл.",
@@ -316,5 +316,7 @@
   "AboutRunningOn": "Запущено на:",
   "AboutAuthor": "Автор: {0}",
   "AboutCopySystemInfo": "Копировать системную информацию",
-  "AboutSupportUs": "Поддержать SkEditor"
+  "AboutSupportUs": "Поддержать SkEditor",
+  "DocumentationTabTitle": "Документация",
+  "DocumentationAllAddons": "Все аддоны"
 }
