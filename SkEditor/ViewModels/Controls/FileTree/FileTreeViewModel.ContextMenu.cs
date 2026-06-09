@@ -139,4 +139,16 @@ public partial class FileTreeViewModel
     {
         _commandHandler.Open();
     }
+
+    [RelayCommand]
+    private async Task NewFile()
+    {
+        await _commandHandler.NewFile();
+    }
+
+    [RelayCommand]
+    private async Task NewFolder()
+    {
+        await _commandHandler.NewFolder();
+    }
 }

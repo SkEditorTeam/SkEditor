@@ -18,11 +18,11 @@ public static class ProjectMenuRegistry
         { ProjectAction.Open, new MenuTemplate(TranslationKey.MenuHeaderOpen, Symbol.Open) },
         {
             ProjectAction.NewFile,
-            new MenuTemplate(TranslationKey.MenuHeaderNewFile, Symbol.DocumentAdd, AllowOneItemOnly: true)
+            new MenuTemplate(TranslationKey.MenuHeaderNewFile, Symbol.DocumentAdd, "Ctrl+N", true)
         },
         {
             ProjectAction.NewFolder,
-            new MenuTemplate(TranslationKey.MenuHeaderNewFolder, Symbol.FolderAdd, AllowOneItemOnly: true)
+            new MenuTemplate(TranslationKey.MenuHeaderNewFolder, Symbol.FolderAdd, "Ctrl+Shift+N", true)
         },
 
         { ProjectAction.CopyPath, new MenuTemplate(TranslationKey.MenuHeaderCopyAbsolutePath, Symbol.ClipboardLink) },

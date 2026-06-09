@@ -24,6 +24,8 @@
         <KeyBinding Gesture="F2" Command="{Binding RenameCommand}" />
         <KeyBinding Gesture="Delete" Command="{Binding DeleteCommand}" />
         <KeyBinding Gesture="Enter" Command="{Binding OpenCommand}" />
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewFileCommand}" />
+        <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding NewFolderCommand}" />
     </UserControl.KeyBindings>
 
     <TreeView Name="FileTree" Theme="{DynamicResource FileTreeView}"
