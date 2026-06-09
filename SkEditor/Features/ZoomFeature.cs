@@ -1,4 +1,5 @@
-﻿using Avalonia.Input;
+﻿using System;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using SkEditor.Contracts.Services.Files.Features;
@@ -123,7 +124,7 @@ public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IE
         }
         else
         {
-            _tab.FontSize += delta;
+            _tab.FontSize = Math.Clamp(_tab.FontSize + delta, 5, 200);
             FixScrollOffset(oldLineHeight);
         }
     }
