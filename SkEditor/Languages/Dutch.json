@@ -185,7 +185,7 @@
   "SettingsGeneralUseSplashScreenAuto": "Automatisch (Aanbevolen)",
   "SettingsGeneralUseSplashScreenEnabled": "Altijd aan",
   "SettingsGeneralUseSplashScreenDisabled": "Direct starten (Uit)",
-  "SettingsAdvancedOpenAppDataFolder": "Configuratiemap openen",
+  "SettingsAdvancedOpenAppDataFolder": "Configuratiemap",
   "SettingsAdvancedOpenAppDataFolderDescription": "Open de map waarin SkEditor zijn configuratiebestanden, thema's en andere gegevens opslaat.",
   "SettingsExperimentsWarningDescription": "Deze functies zijn experimenteel en kunnen problemen veroorzaken. Gebruik met voorzichtigheid!",
   "SettingsExperimentsAutoCompletionPrototype": "Prototype voor automatische aanvulling",

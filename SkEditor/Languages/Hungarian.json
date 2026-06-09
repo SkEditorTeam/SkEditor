@@ -185,7 +185,7 @@
   "SettingsGeneralUseSplashScreenAuto": "Automatikus (Ajánlott)",
   "SettingsGeneralUseSplashScreenEnabled": "Mindig bekapcsolva",
   "SettingsGeneralUseSplashScreenDisabled": "Azonnali indítás (Kikapcsolva)",
-  "SettingsAdvancedOpenAppDataFolder": "Konfigurációs mappa megnyitása",
+  "SettingsAdvancedOpenAppDataFolder": "Konfigurációs mappa",
   "SettingsAdvancedOpenAppDataFolderDescription": "Nyisd meg azt a mappát, ahol a SkEditor a konfigurációs fájljait, témáit és egyéb adatait tárolja.",
   "SettingsExperimentsWarningDescription": "Ezek a kísérleti funkciók hibákat okozhatnak. Óvatosan használja őket!",
   "SettingsExperimentsAutoCompletionPrototype": "Automatikus kiegészítés prototípusa",

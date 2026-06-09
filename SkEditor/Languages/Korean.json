@@ -185,7 +185,7 @@
   "SettingsGeneralUseSplashScreenAuto": "자동 (권장)",
   "SettingsGeneralUseSplashScreenEnabled": "항상 켬",
   "SettingsGeneralUseSplashScreenDisabled": "즉시 시작 (끔)",
-  "SettingsAdvancedOpenAppDataFolder": "설정 폴더 열기",
+  "SettingsAdvancedOpenAppDataFolder": "설정 폴더",
   "SettingsAdvancedOpenAppDataFolderDescription": "SkEditor의 설정 파일, 테마 및 기타 데이터가 저장되는 폴더를 엽니다.",
   "SettingsExperimentsWarningDescription": "이 기능들은 실험적이며 문제가 발생할 수 있습니다. 주의해서 사용하세요!",
   "SettingsExperimentsAutoCompletionPrototype": "자동 완성 프로토타입",

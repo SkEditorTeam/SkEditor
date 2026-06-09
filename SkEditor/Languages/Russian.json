@@ -185,7 +185,7 @@
   "SettingsGeneralUseSplashScreenAuto": "Авто (рекомендуется)",
   "SettingsGeneralUseSplashScreenEnabled": "Всегда включен",
   "SettingsGeneralUseSplashScreenDisabled": "Мгновенный запуск (выкл)",
-  "SettingsAdvancedOpenAppDataFolder": "Открыть папку конфигурации",
+  "SettingsAdvancedOpenAppDataFolder": "Папка конфигурации",
   "SettingsAdvancedOpenAppDataFolderDescription": "Открыть папку, в которой SkEditor хранит свои файлы конфигурации, темы и другие данные.",
   "SettingsExperimentsWarningDescription": "Это экспериментальные функции, они могут вызвать проблемы. Используйте с осторожностью!",
   "SettingsExperimentsAutoCompletionPrototype": "Прототип автодополнения",

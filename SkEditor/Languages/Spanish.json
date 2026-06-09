@@ -185,7 +185,7 @@
   "SettingsGeneralUseSplashScreenAuto": "Automático (Recomendado)",
   "SettingsGeneralUseSplashScreenEnabled": "Siempre encendido",
   "SettingsGeneralUseSplashScreenDisabled": "Inicio instantáneo (Apagado)",
-  "SettingsAdvancedOpenAppDataFolder": "Abrir carpeta de configuración",
+  "SettingsAdvancedOpenAppDataFolder": "Carpeta de configuración",
   "SettingsAdvancedOpenAppDataFolderDescription": "Abre la carpeta donde SkEditor almacena sus archivos de configuración, temas y otros datos.",
   "SettingsExperimentsWarningDescription": "Estas funciones son experimentales y pueden causar problemas. ¡Úsalas con precaución!",
   "SettingsExperimentsAutoCompletionPrototype": "Prototipo de autocompletado",

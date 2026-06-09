@@ -185,7 +185,7 @@
   "SettingsGeneralUseSplashScreenAuto": "Auto (Recomanat)",
   "SettingsGeneralUseSplashScreenEnabled": "Sempre activat",
   "SettingsGeneralUseSplashScreenDisabled": "Inici instantani (Desactivat)",
-  "SettingsAdvancedOpenAppDataFolder": "Obre la carpeta de configuració",
+  "SettingsAdvancedOpenAppDataFolder": "Carpeta de configuració",
   "SettingsAdvancedOpenAppDataFolderDescription": "Obre la carpeta on SkEditor desa els seus fitxers de configuració, temes i altres dades.",
   "SettingsExperimentsWarningDescription": "Aquestes funcions són experimentals i poden causar problemes. Utilitza-les amb precaució!",
   "SettingsExperimentsAutoCompletionPrototype": "Prototip d'autocompletat",

@@ -185,7 +185,7 @@
   "SettingsGeneralUseSplashScreenAuto": "自动（推荐）",
   "SettingsGeneralUseSplashScreenEnabled": "始终开启",
   "SettingsGeneralUseSplashScreenDisabled": "即时启动（关闭）",
-  "SettingsAdvancedOpenAppDataFolder": "打开配置文件夹",
+  "SettingsAdvancedOpenAppDataFolder": "配置文件夹",
   "SettingsAdvancedOpenAppDataFolderDescription": "打开 SkEditor 存储其配置文件、主题和其他数据的文件夹。",
   "SettingsExperimentsWarningDescription": "这些功能目前仍是实验性的，可能会导致不稳定的问题。请谨慎使用！",
   "SettingsExperimentsAutoCompletionPrototype": "自动补全原型",
