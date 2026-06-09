@@ -230,14 +230,14 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton<ISidebarPanelViewModel, ExplorerViewModel>();
             services.AddSingleton<ISidebarPanelViewModel, RemoteExplorerViewModel>();
-            services.AddSingleton<ISidebarPanelViewModel, SearchPaneViewModel>();
+            // services.AddSingleton<ISidebarPanelViewModel, SearchPaneViewModel>();
 
             services.AddSingleton<SidebarViewModel>();
 
             SidebarPaneViewLocator viewLocator = new();
             viewLocator.Register<ExplorerViewModel, ExplorerView>();
             viewLocator.Register<RemoteExplorerViewModel, RemoteExplorerView>();
-            viewLocator.Register<SearchPaneViewModel, SearchPaneView>();
+            // viewLocator.Register<SearchPaneViewModel, SearchPaneView>();
             
             services.AddSingleton(viewLocator);
         }
