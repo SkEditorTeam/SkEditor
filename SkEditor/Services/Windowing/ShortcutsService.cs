@@ -2,7 +2,6 @@
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Services.Windowing;
@@ -18,7 +17,7 @@ public class ShortcutsService(ITabService tabs, WindowStateService windowState)
     {
         switch (args)
         {
-            case { Key: >= Key.D1 and <= Key.D9 } when args.KeyModifiers.HasFlag(KeyModifiers.Command):
+            case { Key: >= Key.D1 and <= Key.D9 } when args.KeyModifiers.HasFlag(KeyModifiers.Control):
             {
                 tabs.SwitchTab(args.Key - Key.D1);
                 break;

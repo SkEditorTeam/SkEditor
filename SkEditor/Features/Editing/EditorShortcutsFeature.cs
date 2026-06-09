@@ -7,14 +7,12 @@ using Avalonia.Interactivity;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Utilities.Extensions;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features.Editing;
 
 public class EditorShortcutsFeature : IEditorFeature
 {
-    private static readonly KeyModifiers ControlModifier = KeyModifiers.Command;
     private Dictionary<(KeyGesture, KeyGesture), Action> _chordShortcuts = [];
 
     private List<KeyBinding> _currentKeyBindings = [];
@@ -43,15 +41,15 @@ public class EditorShortcutsFeature : IEditorFeature
 
         _shortcuts = new Dictionary<KeyGesture, Action>
         {
-            { new KeyGesture(Key.C, ControlModifier), FromCommand(ApplicationCommands.Copy) },
-            { new KeyGesture(Key.V, ControlModifier), FromCommand(ApplicationCommands.Paste) },
-            { new KeyGesture(Key.X, ControlModifier), FromCommand(ApplicationCommands.Cut) },
-            { new KeyGesture(Key.Z, ControlModifier), FromCommand(ApplicationCommands.Undo) },
-            { new KeyGesture(Key.R, ControlModifier), FromCommand(ApplicationCommands.Redo) },
-            { new KeyGesture(Key.A, ControlModifier), FromCommand(ApplicationCommands.SelectAll) },
-            { new KeyGesture(Key.F, ControlModifier), FromCommand(ApplicationCommands.Find) },
-            { new KeyGesture(Key.H, ControlModifier), FromCommand(ApplicationCommands.Replace) },
-            { new KeyGesture(Key.Back, ControlModifier), DeletePreviousWord }
+            { new KeyGesture(Key.C, KeyModifiers.Control), FromCommand(ApplicationCommands.Copy) },
+            { new KeyGesture(Key.V, KeyModifiers.Control), FromCommand(ApplicationCommands.Paste) },
+            { new KeyGesture(Key.X, KeyModifiers.Control), FromCommand(ApplicationCommands.Cut) },
+            { new KeyGesture(Key.Z, KeyModifiers.Control), FromCommand(ApplicationCommands.Undo) },
+            { new KeyGesture(Key.R, KeyModifiers.Control), FromCommand(ApplicationCommands.Redo) },
+            { new KeyGesture(Key.A, KeyModifiers.Control), FromCommand(ApplicationCommands.SelectAll) },
+            { new KeyGesture(Key.F, KeyModifiers.Control), FromCommand(ApplicationCommands.Find) },
+            { new KeyGesture(Key.H, KeyModifiers.Control), FromCommand(ApplicationCommands.Replace) },
+            { new KeyGesture(Key.Back, KeyModifiers.Control), DeletePreviousWord }
         };
 
         _chordShortcuts = new Dictionary<(KeyGesture, KeyGesture), Action>
