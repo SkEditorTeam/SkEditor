@@ -122,25 +122,25 @@ public partial class FileTreeViewModel
         ContextMenuItems.AddRange(cleaned);
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsNotRenaming))]
     private void Rename()
     {
         _commandHandler.Rename();
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(IsNotRenaming))]
     private async Task Delete()
     {
         await _commandHandler.Delete();
     }
 
-    [RelayCommand(CanExecute = nameof(CanOpen))]
+    [RelayCommand(CanExecute = nameof(IsNotRenaming))]
     private void Open()
     {
         _commandHandler.Open();
     }
 
-    private bool CanOpen()
+    private bool IsNotRenaming()
     {
         if (SelectedNodes.Count != 1)
         {

@@ -68,7 +68,6 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
         switch (e.Key)
         {
             case Key.Enter:
-            case Key.F2:
                 e.Handled = true;
                 Confirm();
                 break;
@@ -113,6 +112,8 @@ public class FileTreeRenameBehavior : Behavior<TextBox>
         {
             return;
         }
+
+        AssociatedObject.Text = _originalName;
 
         ReturnFocus();
     }
