@@ -127,6 +127,12 @@ public class SftpFolderNode(
         return $"{folderPath.TrimEnd('/')}/{itemName}";
     }
 
+    protected override string GetDirectoryName(string path)
+    {
+        int lastSlash = path.LastIndexOf('/');
+        return lastSlash <= 0 ? "/" : path[..lastSlash];
+    }
+
     protected override FileSystemNode CreateFileNode(string name, string path)
     {
         return new SftpFileNode(name, path, connection, service);

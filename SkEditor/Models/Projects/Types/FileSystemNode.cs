@@ -59,6 +59,16 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public abstract Task<bool> DeleteAsync();
 
     public abstract void UpdatePath(string newPath);
+
+    protected virtual string CombinePath(string directory, string name)
+    {
+        return System.IO.Path.Combine(directory, name);
+    }
+
+    protected virtual string GetDirectoryName(string path)
+    {
+        return System.IO.Path.GetDirectoryName(path) ?? string.Empty;
+    }
 }
 
 public class NodeRenamedEventArgs(string oldName, string newName) : EventArgs

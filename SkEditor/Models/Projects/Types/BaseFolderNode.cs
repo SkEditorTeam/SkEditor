@@ -38,6 +38,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
     }
 
     private bool _ignoreNextExpandedChange;
+
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
@@ -179,7 +180,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             HasLoadedChildren = false;
         }
-        
+
         if (HasLoadedChildren)
         {
             return;
@@ -312,11 +313,6 @@ public abstract partial class BaseFolderNode : FileSystemNode
         }
     }
 
-    protected virtual string CombinePath(string folderPath, string itemName)
-    {
-        return System.IO.Path.Combine(folderPath, itemName);
-    }
-
     public override async Task<bool> DeleteAsync()
     {
         try
@@ -350,7 +346,8 @@ public abstract partial class BaseFolderNode : FileSystemNode
             return;
         }
 
-        string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path)!, newName);
+        string directory = GetDirectoryName(Path);
+        string newPath = CombinePath(directory, newName);
 
         if (await AlreadyExistsPredicate(newPath))
         {
@@ -389,7 +386,8 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
         foreach (FileSystemNode child in Children)
         {
-            child.UpdatePath(System.IO.Path.Combine(Path, child.Name));
+            // child.UpdatePath(System.IO.Path.Combine(Path, child.Name));
+            child.UpdatePath(CombinePath(Path, child.Name));
         }
     }
 

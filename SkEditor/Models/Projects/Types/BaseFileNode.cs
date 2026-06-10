@@ -17,11 +17,6 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
 
     public override async Task RenameAsync(string newName)
     {
-        if (System.IO.Path.GetDirectoryName(Path) is not { } directory)
-        {
-            return;
-        }
-
         if (newName.IndexOfAny(InvalidChars) >= 0)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
@@ -33,7 +28,8 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
             return;
         }
 
-        string newPath = System.IO.Path.Combine(directory, newName);
+        string directory = GetDirectoryName(Path);
+        string newPath = CombinePath(directory, newName);
 
         if (AlreadyExistsPredicate(newPath).Result)
         {

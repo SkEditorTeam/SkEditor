@@ -59,4 +59,15 @@ public partial class SftpFileNode(
             ProjectAction.CopyRelativePath
         ];
     }
+
+    protected override string CombinePath(string folderPath, string itemName)
+    {
+        return $"{folderPath.TrimEnd('/')}/{itemName}";
+    }
+
+    protected override string GetDirectoryName(string path)
+    {
+        int lastSlash = path.LastIndexOf('/');
+        return lastSlash <= 0 ? "/" : path[..lastSlash];
+    }
 }
