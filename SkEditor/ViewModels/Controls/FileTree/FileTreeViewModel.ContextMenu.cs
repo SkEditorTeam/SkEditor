@@ -134,10 +134,22 @@ public partial class FileTreeViewModel
         await _commandHandler.Delete();
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanOpen))]
     private void Open()
     {
         _commandHandler.Open();
+    }
+
+    private bool CanOpen()
+    {
+        if (SelectedNodes.Count != 1)
+        {
+            return false;
+        }
+
+        FileSystemNode node = SelectedNodes[0];
+
+        return !node.IsRenaming;
     }
 
     [RelayCommand]
