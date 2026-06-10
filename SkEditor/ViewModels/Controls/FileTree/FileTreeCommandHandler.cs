@@ -171,13 +171,8 @@ public class FileTreeCommandHandler(
         await folderNode.LoadChildrenAsync(true);
     }
 
-    public async Task Disconnect()
+    public async Task<bool> Disconnect()
     {
-        if (fileTree.SelectedNodes.Count != 1)
-        {
-            return;
-        }
-
         Dialog dialog = Dialog
             .Create(TranslationKey.RemoteConnectionDisconnectTitle)
             .WithMessage(TranslationKey.RemoteConnectionDisconnectMessage)
@@ -187,15 +182,15 @@ public class FileTreeCommandHandler(
         DialogResult result = await dialogs.ShowDialogAsync(dialog);
         if (result != DialogResult.Ok)
         {
-            return;
+            return false;
         }
 
-        FileSystemNode node = fileTree.SelectedNodes[0];
-
-        if (fileTree.FileSystem is SftpFileSystem && node.IsRoot)
+        if (fileTree.FileSystem is SftpFileSystem)
         {
             await fileTree.CloseFileSystemAsync();
         }
+
+        return true;
     }
 
     public async Task CloseLocal()

@@ -1,10 +1,13 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
+using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
@@ -12,6 +15,7 @@ using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls.FileTree;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 
@@ -21,6 +25,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     private readonly INotificationService _notifications;
     private readonly IRemoteConnectionService _remoteConnections;
     private readonly IWindowDialogService _windowDialogs;
+    private readonly ITabService _tabs;
 
     private int _connectionChangeId;
     private bool _isChangingConnection;
@@ -29,12 +34,15 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         INotificationService notifications,
         IRemoteConnectionService remoteConnections,
         IWindowDialogService windowDialogs,
+        ITabService tabs,
         ConnectionsConfig connectionsConfig,
         IMessenger messenger)
     {
         _notifications = notifications;
         _remoteConnections = remoteConnections;
         _windowDialogs = windowDialogs;
+        _tabs = tabs;
+        
         FileTree = fileTree;
         RemoteConnections = connectionsConfig.Connections;
 
@@ -69,9 +77,29 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     public TranslatableString Name => TranslationKey.RemoteExplorerTitle;
     public StandardIcon Icon => "RemoteDesktopIcon";
 
+    private bool _ignoreNextConnectionChange;
+
     [RelayCommand(AllowConcurrentExecutions = true)]
     private async Task Connect()
     {
+        if (_ignoreNextConnectionChange)
+        {
+            _ignoreNextConnectionChange = false;
+            return;
+        }
+
+        if (CurrentConnection is not null && _tabs.Tabs.OfType<IFileTab>().Any(t => t.File is SftpFile))
+        {
+            bool canDisconnect = await FileTree.Disconnect();
+
+            if (!canDisconnect)
+            {
+                _ignoreNextConnectionChange = true;
+                SelectedConnection = CurrentConnection;
+                return;
+            }
+        }
+        
         RemoteConnection? targetedConnection = SelectedConnection;
         if (targetedConnection == null)
         {

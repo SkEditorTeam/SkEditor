@@ -20,7 +20,7 @@ public partial class FileTreeViewModel
     private void InitializeCommandMap()
     {
         _commandHandler = new FileTreeCommandHandler(this, _dialogs, _clipboard, _notifs, _links);
-        
+
         _commandMap = new Dictionary<ProjectAction, IRelayCommand>
         {
             { ProjectAction.Open, FromAction(_commandHandler.Open) },
@@ -32,7 +32,7 @@ public partial class FileTreeViewModel
             { ProjectAction.CopyRelativePath, FromAction(_commandHandler.CopyRelativePath) },
             { ProjectAction.ShowInExplorer, FromAction(_commandHandler.ShowInExplorer) },
             { ProjectAction.Refresh, FromAction(_commandHandler.Refresh) },
-            { ProjectAction.Disconnect, FromAction(_commandHandler.Disconnect) },
+            { ProjectAction.Disconnect, FromAction(DisconnectWithChecks) },
             { ProjectAction.Close, FromAction(_commandHandler.CloseLocal) }
         };
     }
@@ -162,5 +162,26 @@ public partial class FileTreeViewModel
     private async Task NewFolder()
     {
         await _commandHandler.NewFolder();
+    }
+
+    private async Task DisconnectWithChecks()
+    {
+        if (SelectedNodes.Count != 1)
+        {
+            return;
+        }
+
+        FileSystemNode node = SelectedNodes[0];
+        if (!node.IsRoot)
+        {
+            return;
+        }
+
+        await Disconnect();
+    }
+
+    public async Task<bool> Disconnect()
+    {
+        return await _commandHandler.Disconnect();
     }
 }
