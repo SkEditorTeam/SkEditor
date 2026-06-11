@@ -1,11 +1,15 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
+using SkEditor.Models.Dialogs;
+using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
@@ -13,6 +17,7 @@ using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls.FileTree;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 
@@ -23,6 +28,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     private readonly IRemoteConnectionService _remoteConnections;
     private readonly IWindowDialogService _windowDialogs;
     private readonly ITabService _tabs;
+    private readonly IDialogService _dialogs;
 
     private int _connectionChangeId;
     private bool _isChangingConnection;
@@ -32,6 +38,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         IRemoteConnectionService remoteConnections,
         IWindowDialogService windowDialogs,
         ITabService tabs,
+        IDialogService dialogs,
         ConnectionsConfig connectionsConfig,
         IMessenger messenger)
     {
@@ -39,13 +46,14 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         _remoteConnections = remoteConnections;
         _windowDialogs = windowDialogs;
         _tabs = tabs;
-        
+        _dialogs = dialogs;
+
         FileTree = fileTree;
         RemoteConnections = connectionsConfig.Connections;
 
         messenger.Register(this);
     }
-    
+
     [ObservableProperty]
     public partial RemoteConnection? SelectedConnection { get; set; }
 
@@ -85,18 +93,23 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
             return;
         }
 
-        if (CurrentConnection is not null)
+        if (CurrentConnection is not null && _tabs.Tabs.OfType<IFileTab>().Any(t => t.File is SftpFile))
         {
-            bool canDisconnect = await FileTree.Disconnect();
+            Dialog dialog = Dialog
+                .Create(TranslationKey.RemoteConnectionDisconnectTitle)
+                .WithMessage(TranslationKey.RemoteConnectionDisconnectMessage)
+                .WithIcon(Symbol.PlugDisconnected)
+                .WithButtons(new DialogButton(TranslationKey.ButtonDisconnect, DialogResult.Ok), DialogButton.Cancel);
 
-            if (!canDisconnect)
+            DialogResult result = await _dialogs.ShowDialogAsync(dialog);
+            if (result != DialogResult.Ok)
             {
                 _ignoreNextConnectionChange = true;
                 SelectedConnection = CurrentConnection;
                 return;
             }
         }
-        
+
         RemoteConnection? targetedConnection = SelectedConnection;
         if (targetedConnection == null)
         {
@@ -142,7 +155,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
 
             FileTree.FileSystem = new SftpFileSystem(target, _remoteConnections, _notifications);
             bool success = await FileTree.LoadFileSystemAsync();
-        
+
             return success;
         }
         finally
