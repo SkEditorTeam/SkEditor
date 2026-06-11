@@ -10,7 +10,7 @@
         xmlns:aControls="clr-namespace:Avalonia.Controls"
         mc:Ignorable="d"
         x:Class="SkEditor.Views.Windows.ManageRemoteConnectionsWindow" Icon="/Assets/SkEditor.ico"
-        Title="{localization:Translate RemoteConnectionManageWindowTitle}" Height="530" Width="600" CanResize="False"
+        Title="{localization:Translate RemoteConnectionManageWindowTitle}" Height="530" Width="610" CanResize="False"
         x:DataType="windows:RemoteConnectionViewModel"
         WindowStartupLocation="CenterOwner">
 
@@ -118,7 +118,8 @@
                                           SelectedItem="{Binding ConnectionInfo.AuthMethod}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource AuthMethodConverter}}" />
+                                            <TextBlock Text="{Binding Converter={StaticResource AuthMethodConverter}}"
+                                                       TextTrimming="WordEllipsis" />
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
