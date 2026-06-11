@@ -272,7 +272,7 @@
   "RemoteConnectionLostConnectionTitle": "Connection lost",
   "RemoteConnectionLostConnectionMessage": "The connection to the {0} server was lost. Please check your connection and try again.",
   "RemoteRootPathNotFoundTitle": "Root path not found",
-  "RemoteRootPathNotFoundMessage": "The specified root path couldn't be found on the server. Please check the path and try again.",
+  "RemoteRootPathNotFoundMessage": "The specified root path couldn't be found on the server.",
   "LocalExplorerTitle": "Explorer",
   "RemoteExplorerTitle": "Remote explorer",
   "FileExplorerLoading": "Loading...",

@@ -75,20 +75,25 @@ public class RemoteConnectionService(
         try
         {
             RemoteConnectionInfo resolvedInfo = GetConnectionInfoForTesting(connectionInfo);
-            
+
             Stopwatch sw = Stopwatch.StartNew();
-            bool connected = await TryConnect(resolvedInfo);
+            (bool isConnected, bool rootExists) = await TryConnect(resolvedInfo);
             sw.Stop();
 
-            if (connected)
+            if (!isConnected)
             {
-                return RemoteConnectionTestResult.Success(translation.Get(TranslationKey.RemoteConnectionTestSuccess,
-                    connectionInfo.Host,
-                    $"{sw.ElapsedMilliseconds:N0}"));
+                return RemoteConnectionTestResult.Error(
+                    translation.Get(TranslationKey.RemoteConnectionTestFailed, connectionInfo.Host));
             }
 
-            return RemoteConnectionTestResult.Error(
-                translation.Get(TranslationKey.RemoteConnectionTestFailed, connectionInfo.Host));
+            if (!rootExists)
+            {
+                return RemoteConnectionTestResult.Error(translation.Get(TranslationKey.RemoteRootPathNotFoundMessage));
+            }
+
+            return RemoteConnectionTestResult.Success(translation.Get(TranslationKey.RemoteConnectionTestSuccess,
+                connectionInfo.Host,
+                $"{sw.ElapsedMilliseconds:N0}"));
         }
         catch (SshException ex) when (ex.Message == "Invalid private key file.")
         {
@@ -265,7 +270,8 @@ public class RemoteConnectionService(
             Username = connectionInfo.Username,
             AuthMethod = connectionInfo.AuthMethod,
             KeyFilePath = connectionInfo.KeyFilePath,
-            Password = connectionInfo.Password
+            Password = connectionInfo.Password,
+            CustomRootPath = connectionInfo.CustomRootPath
         };
 
         if (!testInfo.IsPasswordAuth || !string.IsNullOrEmpty(testInfo.Password)
@@ -323,7 +329,7 @@ public class RemoteConnectionService(
         return authMethod;
     }
 
-    private static async Task<bool> TryConnect(RemoteConnectionInfo connectionInfo)
+    private static async Task<(bool isConnected, bool rootExists)> TryConnect(RemoteConnectionInfo connectionInfo)
     {
         int port = int.TryParse(connectionInfo.Port, out int p) ? p : 22;
 
@@ -339,7 +345,13 @@ public class RemoteConnectionService(
 
         await client.ConnectAsync(cts.Token);
 
-        return client.IsConnected;
+        string rootPath = string.IsNullOrWhiteSpace(connectionInfo.CustomRootPath)
+            ? client.WorkingDirectory
+            : connectionInfo.CustomRootPath ?? client.WorkingDirectory;
+
+        bool rootPathExists = await client.ExistsAsync(rootPath, cts.Token);
+
+        return (client.IsConnected, rootPathExists);
     }
 
     private void ResetClient(RemoteConnection connection)
