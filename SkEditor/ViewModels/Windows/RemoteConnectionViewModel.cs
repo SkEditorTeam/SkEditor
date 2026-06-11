@@ -46,18 +46,10 @@ public partial class RemoteConnectionViewModel(
     public Func<Task<string?>>? RequestKeyFilePicker { get; set; }
 
     [RelayCommand]
-    private async Task SaveConnection()
+    private void SaveConnection()
     {
         if (SelectedConnection is null)
         {
-            return;
-        }
-
-        RemoteConnectionTestResult result = await connections.TestConnectionAsync(ConnectionInfo);
-        if (!result.IsSuccess)
-        {
-            InfoBarMessage = translation.Get(TranslationKey.RemoteConnectionCannotAddConnection);
-            InfoBarSeverity = FAInfoBarSeverity.Error;
             return;
         }
 
@@ -88,14 +80,10 @@ public partial class RemoteConnectionViewModel(
         {
             SelectedConnection.PasswordHash = string.Empty;
         }
-        
+
         _ = connectionsConfig.Save();
 
-        string hostPort =
-            $"{ConnectionInfo.Host}:{(!string.IsNullOrWhiteSpace(ConnectionInfo.Port) ? ConnectionInfo.Port : "22")}";
-
-        InfoBarMessage = translation.Get(TranslationKey.RemoteConnectionAddSuccessMessage, hostPort);
-        InfoBarSeverity = FAInfoBarSeverity.Success;
+        InfoBarMessage = null;
     }
 
     [RelayCommand]
@@ -165,7 +153,7 @@ public partial class RemoteConnectionViewModel(
 
     [RelayCommand]
     private async Task BrowseKey()
-    {   
+    {
         if (RequestKeyFilePicker == null)
         {
             return;
