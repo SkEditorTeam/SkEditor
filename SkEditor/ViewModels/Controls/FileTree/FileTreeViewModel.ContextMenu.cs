@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Models.Projects;
@@ -164,7 +165,7 @@ public partial class FileTreeViewModel
         await _commandHandler.NewFolder();
     }
 
-    private async Task DisconnectWithChecks()
+    private void DisconnectWithChecks()
     {
         if (SelectedNodes.Count != 1)
         {
@@ -177,7 +178,7 @@ public partial class FileTreeViewModel
             return;
         }
 
-        await Disconnect();
+        Dispatcher.UIThread.Post(() => { _ = Disconnect(); });
     }
 
     public async Task<bool> Disconnect()
