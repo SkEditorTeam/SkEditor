@@ -25,6 +25,7 @@ public partial class ManageRemoteConnectionsWindow : SkEditorWindow
         vm.PasteCompleted += () => HostTextBox.CaretIndex = HostTextBox.Text?.Length ?? 0;
     }
 
+    // move this to the view model !!!
     private async Task<string?> SelectKeyFile()
     {
         TopLevel? topLevel = GetTopLevel(this);
