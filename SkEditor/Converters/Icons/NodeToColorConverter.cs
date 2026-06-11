@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Avalonia.Data.Converters;
@@ -11,9 +12,19 @@ using SkEditor.Services;
 
 namespace SkEditor.Converters.Icons;
 
-public class NodeToColorConverter : IValueConverter
+public class NodeToColorConverter : IMultiValueConverter, IValueConverter
 {
     private readonly IconProvider _iconProvider = App.Services.GetRequiredService<IconProvider>();
+
+    public object Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (values.Count < 1 || values[0] is not FileSystemNode node)
+        {
+            return Brushes.White;
+        }
+
+        return Convert(node, targetType, parameter, culture);
+    }
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
