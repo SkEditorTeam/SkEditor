@@ -39,6 +39,9 @@ public partial class RemoteConnectionInfo : ObservableObject
     public partial string PasswordHash { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial string? CustomRootPath { get; set; }
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PasswordPlaceholder), nameof(ConnectionFieldsFilled),
         nameof(RequiredFieldsFilled))]
     public partial bool IsPasswordSaved { get; set; }

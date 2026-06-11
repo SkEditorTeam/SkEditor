@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Models;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Sftp;
@@ -22,16 +23,18 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
     private readonly IDialogService _dialogs;
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
+    private readonly ITabService _tabs;
     private readonly ILinkService _links;
     private readonly AppSettings _appSettings;
     private CancellationTokenSource? _cts;
 
     public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard,
-        IDialogService dialogs, ILinkService links, AppSettings appSettings, IMessenger messenger)
+        IDialogService dialogs, ILinkService links, ITabService tabs, AppSettings appSettings, IMessenger messenger)
     {
         _logs = logs;
         _notifs = notifs;
         _dialogs = dialogs;
+        _tabs = tabs;
         _links = links;
         
         _clipboard = clipboard;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -7,7 +6,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Remote;
@@ -15,7 +13,6 @@ using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls.FileTree;
-using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 
@@ -88,7 +85,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
             return;
         }
 
-        if (CurrentConnection is not null && _tabs.Tabs.OfType<IFileTab>().Any(t => t.File is SftpFile))
+        if (CurrentConnection is not null)
         {
             bool canDisconnect = await FileTree.Disconnect();
 

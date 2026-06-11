@@ -5,14 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Dialogs.Elements;
+using SkEditor.Models.Files;
 using SkEditor.Models.Notifications;
 using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Local;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
 using SkEditor.Utilities.Localization;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Controls.FileTree;
 
@@ -21,6 +24,7 @@ public class FileTreeCommandHandler(
     IDialogService dialogs,
     IClipboardService clipboard,
     INotificationService notifs,
+    ITabService tabs,
     ILinkService links)
 {
     public async Task NewFile()
@@ -173,16 +177,19 @@ public class FileTreeCommandHandler(
 
     public async Task<bool> Disconnect()
     {
-        Dialog dialog = Dialog
-            .Create(TranslationKey.RemoteConnectionDisconnectTitle)
-            .WithMessage(TranslationKey.RemoteConnectionDisconnectMessage)
-            .WithIcon(Symbol.PlugDisconnected)
-            .WithButtons(new DialogButton(TranslationKey.ButtonDisconnect, DialogResult.Ok), DialogButton.Cancel);
-
-        DialogResult result = await dialogs.ShowDialogAsync(dialog);
-        if (result != DialogResult.Ok)
+        if (tabs.Tabs.OfType<IFileTab>().Any(t => t.File is SftpFile))
         {
-            return false;
+            Dialog dialog = Dialog
+                .Create(TranslationKey.RemoteConnectionDisconnectTitle)
+                .WithMessage(TranslationKey.RemoteConnectionDisconnectMessage)
+                .WithIcon(Symbol.PlugDisconnected)
+                .WithButtons(new DialogButton(TranslationKey.ButtonDisconnect, DialogResult.Ok), DialogButton.Cancel);
+
+            DialogResult result = await dialogs.ShowDialogAsync(dialog);
+            if (result != DialogResult.Ok)
+            {
+                return false;
+            }   
         }
 
         if (fileTree.FileSystem is SftpFileSystem)

@@ -45,4 +45,7 @@ public partial class RemoteConnection : ObservableObject
 
     [ObservableProperty]
     public partial string PasswordHash { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string? CustomRootPath { get; set; }
 }

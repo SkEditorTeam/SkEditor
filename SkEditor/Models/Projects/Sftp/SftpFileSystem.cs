@@ -26,8 +26,27 @@ public class SftpFileSystem(
         {
             SftpClient client = await connections.GetOrConnectSftpClientAsync(connection, cancellationToken);
 
-            Root = new SftpFolderNode(connection.Name, client.WorkingDirectory, true, connection, connections)
+            string rootPath = string.IsNullOrWhiteSpace(connection.CustomRootPath)
+                ? client.WorkingDirectory
+                : connection.CustomRootPath ?? client.WorkingDirectory;
+
+            bool rootPathExists = await connections.ExecuteSafeAsync(connection,
+                async c => await c.ExistsAsync(rootPath, cancellationToken), cancellationToken);
+
+            if (!rootPathExists)
+            {
+                Notification notification = Notification
+                    .Create(TranslationKey.RemoteRootPathNotFoundTitle)
+                    .WithMessage(TranslationKey.RemoteRootPathNotFoundMessage)
+                    .WithType(NotificationType.Error);
+
+                notifications.Show(notification);
+                return false;
+            }
+
+            Root = new SftpFolderNode(connection.Name, rootPath, true, connection, connections)
                 { IsRoot = true };
+
             await Root.LoadChildrenAsync();
             return true;
         }

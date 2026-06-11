@@ -74,65 +74,81 @@
                     </Style>
                 </Grid.Styles>
 
-                <StackPanel Grid.Row="0" Spacing="14">
-                    <StackPanel Spacing="4">
-                        <TextBlock Text="{localization:Translate RemoteConnectionFieldName}" />
-                        <TextBox PlaceholderText="{localization:Translate RemoteConnectionFieldNamePlaceholder}"
-                                 Text="{Binding ConnectionInfo.Name}" />
-                    </StackPanel>
+                <ScrollViewer Grid.Row="0"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Margin="0,0,-12,16" Padding="0,0,12,0">
 
-                    <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">
+                    <StackPanel Spacing="14">
                         <StackPanel Spacing="4">
-                            <TextBlock Text="{localization:Translate RemoteConnectionFieldHost}" />
-                            <TextBox Name="HostTextBox" PlaceholderText="192.168.0.1"
-                                     Text="{Binding ConnectionInfo.Host}">
-                                <Interaction.Behaviors>
-                                    <aControls:TextBoxPastingFromClipboardEventCommandTrigger
-                                        Command="{Binding HandlePasteCommand}" />
-                                </Interaction.Behaviors>
-                            </TextBox>
+                            <TextBlock Text="{localization:Translate RemoteConnectionFieldName}" />
+                            <TextBox PlaceholderText="{localization:Translate RemoteConnectionFieldNamePlaceholder}"
+                                     Text="{Binding ConnectionInfo.Name}" />
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Spacing="4">
-                            <TextBlock Text="{localization:Translate RemoteConnectionFieldPort}" />
-                            <TextBox PlaceholderText="22" Text="{Binding ConnectionInfo.Port}" />
-                        </StackPanel>
-                    </Grid>
 
-                    <StackPanel Spacing="4">
-                        <TextBlock Text="{localization:Translate RemoteConnectionFieldUsername}" />
-                        <TextBox PlaceholderText="{localization:Translate RemoteConnectionFieldUsernamePlaceholder}"
-                                 Text="{Binding ConnectionInfo.Username}" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="4">
-                        <TextBlock Text="{localization:Translate RemoteConnectionFieldAuthMethod}" />
-                        <ComboBox HorizontalAlignment="Stretch"
-                                  ItemsSource="{Binding AuthMethods}"
-                                  SelectedItem="{Binding ConnectionInfo.AuthMethod}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource AuthMethodConverter}}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </StackPanel>
-
-                    <StackPanel Spacing="4" IsVisible="{Binding ConnectionInfo.IsPasswordAuth}">
-                        <TextBlock Text="{localization:Translate RemoteConnectionFieldPassword}" />
-                        <TextBox PasswordChar="●" Text="{Binding ConnectionInfo.Password}"
-                                 PlaceholderText="{Binding ConnectionInfo.PasswordPlaceholder}" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="4" IsVisible="{Binding ConnectionInfo.IsPrivateKeyAuth}">
-                        <TextBlock Text="{localization:Translate RemoteConnectionFieldKeyFile}" />
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                            <TextBox Text="{Binding ConnectionInfo.KeyFileName}" />
-                            <Button Grid.Column="1" Content="{localization:Translate ButtonBrowse}"
-                                    HorizontalAlignment="Right"
-                                    Command="{Binding BrowseKeyCommand}" />
+                        <Grid ColumnDefinitions="2*,*" ColumnSpacing="8">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{localization:Translate RemoteConnectionFieldHost}" />
+                                <TextBox Name="HostTextBox" PlaceholderText="192.168.0.1"
+                                         Text="{Binding ConnectionInfo.Host}">
+                                    <Interaction.Behaviors>
+                                        <aControls:TextBoxPastingFromClipboardEventCommandTrigger
+                                            Command="{Binding HandlePasteCommand}" />
+                                    </Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBlock Text="{localization:Translate RemoteConnectionFieldPort}" />
+                                <TextBox PlaceholderText="22" Text="{Binding ConnectionInfo.Port}" />
+                            </StackPanel>
                         </Grid>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{localization:Translate RemoteConnectionFieldUsername}" />
+                                <TextBox
+                                    PlaceholderText="{localization:Translate RemoteConnectionFieldUsernamePlaceholder}"
+                                    Text="{Binding ConnectionInfo.Username}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBlock Text="{localization:Translate RemoteConnectionFieldAuthMethod}" />
+                                <ComboBox HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding AuthMethods}"
+                                          SelectedItem="{Binding ConnectionInfo.AuthMethod}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource AuthMethodConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Spacing="4" IsVisible="{Binding ConnectionInfo.IsPasswordAuth}">
+                            <TextBlock Text="{localization:Translate RemoteConnectionFieldPassword}" />
+                            <TextBox PasswordChar="●" Text="{Binding ConnectionInfo.Password}"
+                                     PlaceholderText="{Binding ConnectionInfo.PasswordPlaceholder}" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="4" IsVisible="{Binding ConnectionInfo.IsPrivateKeyAuth}">
+                            <TextBlock Text="{localization:Translate RemoteConnectionFieldKeyFile}" />
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                <TextBox Text="{Binding ConnectionInfo.KeyFileName}" />
+                                <Button Grid.Column="1" Content="{localization:Translate ButtonBrowse}"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding BrowseKeyCommand}" />
+                            </Grid>
+                        </StackPanel>
+
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="{localization:Translate RemoteConnectionFieldRootPath}" />
+                            <TextBox
+                                PlaceholderText="{localization:Translate RemoteConnectionFieldRootPathPlaceholder}"
+                                Text="{Binding ConnectionInfo.CustomRootPath}" />
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </ScrollViewer>
 
                 <controls:FAInfoBar Grid.Row="1"
                                     Theme="{DynamicResource LiteInfoBarTheme}"

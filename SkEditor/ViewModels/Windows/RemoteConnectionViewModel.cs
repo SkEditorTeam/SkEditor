@@ -59,6 +59,7 @@ public partial class RemoteConnectionViewModel(
         SelectedConnection.Username = ConnectionInfo.Username;
         SelectedConnection.AuthMethod = ConnectionInfo.AuthMethod;
         SelectedConnection.KeyFilePath = ConnectionInfo.KeyFilePath;
+        SelectedConnection.CustomRootPath = ConnectionInfo.CustomRootPath;
 
         if (!SelectedConnection.IsAdded)
         {
@@ -221,6 +222,7 @@ public partial class RemoteConnectionViewModel(
             Username = newValue.Username,
             AuthMethod = newValue.AuthMethod,
             KeyFilePath = newValue.AuthMethod == RemoteAuthMethod.PrivateKey ? newValue.KeyFilePath : "",
+            CustomRootPath = newValue.CustomRootPath,
             PasswordHash = newValue.PasswordHash,
             IsPasswordSaved = newValue.AuthMethod == RemoteAuthMethod.Password &&
                               !string.IsNullOrWhiteSpace(newValue.PasswordHash)
