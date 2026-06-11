@@ -164,7 +164,12 @@
                     <Button ToolTip.Tip="{localization:Translate RemoteConnectionTestConnectionTooltip}"
                             HorizontalAlignment="Left" IsEnabled="{Binding ConnectionInfo.ConnectionFieldsFilled}"
                             Command="{Binding TestConnectionCommand}">
-                        <fluent:SymbolIcon Symbol="Pulse" FontSize="18" />
+                        <Panel>
+                            <fluent:SymbolIcon IsVisible="{Binding !IsTesting}" Symbol="Pulse" FontSize="18" />
+
+                            <controls:FAProgressRing IsVisible="{Binding IsTesting}" IsIndeterminate="True"
+                                                     Width="18" Height="18" HorizontalAlignment="Center" />
+                        </Panel>
                     </Button>
                     <Button Grid.Column="1" HorizontalAlignment="Stretch"
                             IsEnabled="{Binding ConnectionInfo.RequiredFieldsFilled}"

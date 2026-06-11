@@ -35,6 +35,9 @@ public partial class RemoteConnectionViewModel(
     [ObservableProperty]
     public partial FAInfoBarSeverity InfoBarSeverity { get; set; } = FAInfoBarSeverity.Informational;
 
+    [ObservableProperty]
+    public partial bool IsTesting { get; set; }
+
     public ObservableCollection<RemoteConnection> Connections { get; } = new(connectionsConfig.Connections);
 
     [ObservableProperty]
@@ -90,11 +93,14 @@ public partial class RemoteConnectionViewModel(
     [RelayCommand]
     private async Task<bool> TestConnection()
     {
+        IsTesting = true;
+        
         RemoteConnectionTestResult result = await connections.TestConnectionAsync(ConnectionInfo);
 
         InfoBarMessage = result.Message;
         InfoBarSeverity = result.IsSuccess ? FAInfoBarSeverity.Success : FAInfoBarSeverity.Error;
 
+        IsTesting = false;
         return result.IsSuccess;
     }
 
