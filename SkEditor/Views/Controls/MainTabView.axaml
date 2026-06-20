@@ -63,7 +63,7 @@
     <Panel VerticalAlignment="Stretch">
         <Grid IsVisible="{Binding !!MainTabs.Count}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="300" />
+                <ColumnDefinition MinWidth="300" Width="*" />
                 <ColumnDefinition
                     Width="{Binding IsSplitActive, Converter={x:Static controls:MainTabView.VisibleToAuto}}" />
                 <ColumnDefinition
@@ -80,11 +80,15 @@
                           TabItemsSource="{Binding MainTabs}"
                           SelectedItem="{Binding SelectedMainTab, Mode=TwoWay}"
                           TabItemTemplate="{StaticResource SharedTabItemTemplate}"
+                          CornerRadius="7" ClipToBounds="True"
                           AddTabButtonCommand="{Binding NewTabCommand}" />
 
-            <GridSplitter Grid.Column="1" Width="4" Background="Transparent"
-                          ResizeDirection="Columns"
+            <GridSplitter Grid.Column="1" Width="8" Background="Transparent"
+                          ResizeDirection="Columns" Margin="8,0"
                           IsVisible="{Binding IsSplitActive}" />
+
+            <Border IsHitTestVisible="False" Grid.Column="1" Width="1" Margin="0,8" VerticalAlignment="Stretch"
+                    Background="{DynamicResource SkEditorBorderBackground}" />
 
             <ui:FATabView Grid.Column="2"
                           Name="SplitTabView"
@@ -94,6 +98,7 @@
                           TabItemsSource="{Binding SplitTabs}"
                           SelectedItem="{Binding SelectedSplitTab, Mode=TwoWay}"
                           TabItemTemplate="{StaticResource SharedTabItemTemplate}"
+                          CornerRadius="7" ClipToBounds="True"
                           AddTabButtonCommand="{Binding NewTabCommand}" />
         </Grid>
 
