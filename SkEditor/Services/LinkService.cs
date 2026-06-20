@@ -24,11 +24,15 @@ public class LinkService : ILinkService
         }
         else if (OperatingSystem.IsMacOS())
         {
-            Process.Start("open", path);
+            ProcessStartInfo psi = new("open");
+            psi.ArgumentList.Add(path);
+            Process.Start(psi);
         }
         else if (OperatingSystem.IsLinux())
         {
-            Process.Start("xdg-open", path);
+            ProcessStartInfo psi = new("xdg-open");
+            psi.ArgumentList.Add(path);
+            Process.Start(psi);
         }
     }
 
@@ -46,7 +50,10 @@ public class LinkService : ILinkService
         }
         else if (OperatingSystem.IsMacOS())
         {
-            Process.Start("open", $"-R \"{filePath}\"");
+            ProcessStartInfo psi = new("open");
+            psi.ArgumentList.Add("-R");
+            psi.ArgumentList.Add(filePath);
+            Process.Start(psi);
         }
         else if (OperatingSystem.IsLinux() && CheckDbusExisting())
         {
