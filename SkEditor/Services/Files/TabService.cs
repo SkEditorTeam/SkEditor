@@ -210,7 +210,6 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         if (sender is TabViewModelBase tab)
         {
             SelectedTab = tab;
-            notifs.Debug($"Focus requested for tab {tab.Header}, selected tab is now {SelectedTab?.Header}");
         }
     }
 }
