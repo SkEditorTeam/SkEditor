@@ -6,6 +6,7 @@ using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Tabs.Capabilities;
 using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
@@ -15,6 +16,7 @@ public class FileMenuProvider(
     IFileService files,
     ITabService tabs,
     ITabCloseService tabClose,
+    ExperimentsConfig experiments,
     IWindowDialogService windowDialogs) : IMenuProvider
 {
     public MainMenuItem GetMainMenuItem()
@@ -38,29 +40,40 @@ public class FileMenuProvider(
 
         MainMenuItem.Separator.AddTo(fileMenu);
 
-        var saveItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
+        MainMenuItem saveItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
             .WithCommand(files.SaveFileAsync)
             .WithInputGesture("Ctrl+S");
         saveItem.AddTo(fileMenu);
 
-        var saveAsItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
+        MainMenuItem saveAsItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
             .WithCommand(files.SaveAsFileAsync)
             .WithInputGesture("Ctrl+Shift+S");
         saveAsItem.AddTo(fileMenu);
 
-        var saveAllItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAll, Symbol.SaveMultiple)
+        MainMenuItem saveAllItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAll, Symbol.SaveMultiple)
             .WithCommand(files.SaveAllAsync)
             .WithInputGesture("Ctrl+Alt+S");
         saveAllItem.AddTo(fileMenu);
 
         MainMenuItem.Separator.AddTo(fileMenu);
 
-        var publishItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPublish, Symbol.Share)
+        MainMenuItem publishItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderPublish, Symbol.Share)
             .WithCommand(windowDialogs.ShowPublishDialogAsync)
             .WithInputGesture("Ctrl+Shift+P");
         publishItem.AddTo(fileMenu);
 
-        var closeItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderClose, Symbol.Dismiss)
+        MainMenuItem splitTabsItem = MainMenuItem
+            .HeaderWithIcon(TranslatableString.FromRawString("Split tabs"), Symbol.DocumentLandscapeSplitHint)
+            .WithCommand(() =>
+            {
+                if (tabs.SelectedTab is not null)
+                {
+                    tabs.SplitTab(tabs.SelectedTab);
+                }
+            });
+        splitTabsItem.AddTo(fileMenu);
+
+        MainMenuItem closeItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderClose, Symbol.Dismiss)
             .WithItems([
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseCurrentFile, Symbol.Document)
                     .WithCommand(() => tabs.SelectedTab?.CloseCommand.Execute(null)),
@@ -82,26 +95,32 @@ public class FileMenuProvider(
             ]);
         closeItem.AddTo(fileMenu);
 
-        UpdateStates(saveItem, saveAsItem, saveAllItem, publishItem, closeItem);
-        tabs.SelectedTabChanged += _ => UpdateStates(saveItem, saveAsItem, saveAllItem, publishItem, closeItem);
+        UpdateStates(saveItem, saveAsItem, saveAllItem, publishItem, closeItem, splitTabsItem);
+        tabs.SelectedTabChanged += _ =>
+            UpdateStates(saveItem, saveAsItem, saveAllItem, publishItem, closeItem, splitTabsItem);
+
+        splitTabsItem.IsVisible = experiments.SplitViewEnabled;
+        experiments.PropertyChanged += (_, _) => splitTabsItem.IsVisible = experiments.SplitViewEnabled;
 
         return fileMenu;
     }
 
     private void UpdateStates(MainMenuItem saveItem, MainMenuItem saveAsItem, MainMenuItem saveAllItem,
-        MainMenuItem publishItem, MainMenuItem closeItem)
+        MainMenuItem publishItem, MainMenuItem closeItem, MainMenuItem splitTabsItem)
     {
-        bool hasTabs = tabs.Tabs.Count > 0;
+        bool hasTabs = tabs.AllTabs.Any();
         bool isSaveableTab = tabs.SelectedTab is ISaveableTab;
         bool isTextEditorTab = tabs.SelectedTab is ITextEditorTab;
 
         saveItem.IsEnabled = isSaveableTab;
         saveAsItem.IsEnabled = isSaveableTab;
 
-        saveAllItem.IsEnabled = hasTabs && tabs.Tabs.Any(t => t is ISaveableTab);
+        saveAllItem.IsEnabled = hasTabs && tabs.AllTabs.Any(t => t is ISaveableTab);
 
         publishItem.IsEnabled = isTextEditorTab;
 
         closeItem.IsEnabled = hasTabs;
+
+        splitTabsItem.IsEnabled = tabs.SelectedTab is not null && tabs.AllTabs.Count() > 1;
     }
 }

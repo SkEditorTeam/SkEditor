@@ -3,10 +3,11 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:pages="clr-namespace:SkEditor.Views.Pages"
              xmlns:converters="clr-namespace:SkEditor.Converters"
-             xmlns:windows="clr-namespace:SkEditor.Views.Windows"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Windows"
              xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
+             xmlns:windows="clr-namespace:SkEditor.Views.Windows"
+             xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              x:Class="SkEditor.Views.Controls.MainTabView"
              x:DataType="vms:MainWindowViewModel">
 
@@ -14,64 +15,89 @@
         <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
         <iconverters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
         <iconverters:TabIconConverter x:Key="TabIconConverter" />
+
+        <DataTemplate x:Key="SharedTabItemTemplate" x:DataType="tabs:TabViewModelBase">
+            <ui:FATabViewItem Content="{Binding .}">
+                <ui:FATabViewItem.IconSource>
+                    <MultiBinding Converter="{StaticResource TabIconConverter}">
+                        <Binding Path="Icon" Converter="{StaticResource SymbolIconSourceConverter}" />
+                        <Binding Path="IsLoading" />
+                    </MultiBinding>
+                </ui:FATabViewItem.IconSource>
+                <ui:FATabViewItem.Header>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Panel Grid.Column="0"
+                               IsVisible="{Binding IsLoading}"
+                               Width="16" Height="16"
+                               Margin="0,0,8,0">
+                            <ui:FAProgressRing Width="14" Height="14"
+                                               IsIndeterminate="True"
+                                               BorderThickness="1.5"
+                                               Foreground="{Binding $parent[ContentPresenter].Foreground}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                        </Panel>
+
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Header.Value}"
+                                   ToolTip.Tip="{Binding Header.Value}"
+                                   TextTrimming="CharacterEllipsis"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0" />
+
+                        <Ellipse Grid.Column="2"
+                                 IsVisible="{Binding !IsSaved}"
+                                 Width="4" Height="4"
+                                 Fill="{Binding $parent[ContentPresenter].Foreground}"
+                                 VerticalAlignment="Center" />
+                    </Grid>
+                </ui:FATabViewItem.Header>
+                <Interaction.Behaviors>
+                    <ui:FATabViewItemCloseRequestedEventCommandTrigger
+                        Command="{Binding CloseCommand}" />
+                </Interaction.Behaviors>
+            </ui:FATabViewItem>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Panel VerticalAlignment="Stretch">
-        <ui:FATabView
-            Name="TabView"
-            Opacity="{Binding !!Tabs.Count, Converter={StaticResource BoolToOpacityConverter}}"
-            IsHitTestVisible="{Binding !!Tabs.Count}"
-            Margin="0,-10,0,0" CanDragTabs="True"
-            CanReorderTabs="True" VerticalAlignment="Stretch"
-            TabItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
-            AddTabButtonCommand="{Binding NewTabCommand}">
-            <ui:FATabView.TabItemTemplate>
-                <DataTemplate x:DataType="tabs:TabViewModelBase">
-                    <ui:FATabViewItem Content="{Binding .}">
-                        <ui:FATabViewItem.IconSource>
-                            <MultiBinding Converter="{StaticResource TabIconConverter}">
-                                <Binding Path="Icon" Converter="{StaticResource SymbolIconSourceConverter}" />
-                                <Binding Path="IsLoading" />
-                            </MultiBinding>
-                        </ui:FATabViewItem.IconSource>
-                        <ui:FATabViewItem.Header>
-                            <Grid ColumnDefinitions="Auto,*,Auto">
-                                <Panel Grid.Column="0"
-                                       IsVisible="{Binding IsLoading}"
-                                       Width="16" Height="16"
-                                       Margin="0,0,8,0">
-                                    <ui:FAProgressRing Width="14" Height="14"
-                                                       IsIndeterminate="True"
-                                                       BorderThickness="1.5"
-                                                       Foreground="{Binding $parent[ContentPresenter].Foreground}"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
-                                </Panel>
+        <Grid IsVisible="{Binding !!MainTabs.Count}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="300" />
+                <ColumnDefinition
+                    Width="{Binding IsSplitActive, Converter={x:Static controls:MainTabView.VisibleToAuto}}" />
+                <ColumnDefinition
+                    MinWidth="{Binding IsSplitActive, Converter={x:Static controls:MainTabView.VisibleToMinWidth}}"
+                    Width="{Binding IsSplitActive, Converter={x:Static controls:MainTabView.VisibleToStar}}" />
+            </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="1"
-                                           Text="{Binding Header.Value}"
-                                           ToolTip.Tip="{Binding Header.Value}"
-                                           TextTrimming="CharacterEllipsis"
-                                           VerticalAlignment="Center"
-                                           Margin="0,0,8,0" />
+            <ui:FATabView Grid.Column="0"
+                          Name="TabView"
+                          Opacity="{Binding !!MainTabs.Count, Converter={StaticResource BoolToOpacityConverter}}"
+                          IsHitTestVisible="{Binding !!MainTabs.Count}"
+                          Margin="0,-10,0,0" CanDragTabs="True"
+                          CanReorderTabs="True" VerticalAlignment="Stretch"
+                          TabItemsSource="{Binding MainTabs}"
+                          SelectedItem="{Binding SelectedMainTab, Mode=TwoWay}"
+                          TabItemTemplate="{StaticResource SharedTabItemTemplate}"
+                          AddTabButtonCommand="{Binding NewTabCommand}" />
 
-                                <Ellipse Grid.Column="2"
-                                         IsVisible="{Binding !IsSaved}"
-                                         Width="4" Height="4"
-                                         Fill="{Binding $parent[ContentPresenter].Foreground}"
-                                         VerticalAlignment="Center" />
-                            </Grid>
-                        </ui:FATabViewItem.Header>
-                        <Interaction.Behaviors>
-                            <ui:FATabViewItemCloseRequestedEventCommandTrigger
-                                Command="{Binding CloseCommand}" />
-                        </Interaction.Behaviors>
-                    </ui:FATabViewItem>
-                </DataTemplate>
-            </ui:FATabView.TabItemTemplate>
-        </ui:FATabView>
+            <GridSplitter Grid.Column="1" Width="4" Background="Transparent"
+                          ResizeDirection="Columns"
+                          IsVisible="{Binding IsSplitActive}" />
+
+            <ui:FATabView Grid.Column="2"
+                          Name="SplitTabView"
+                          IsVisible="{Binding IsSplitActive}"
+                          Margin="0,-10,0,0" CanDragTabs="True"
+                          CanReorderTabs="True" VerticalAlignment="Stretch"
+                          TabItemsSource="{Binding SplitTabs}"
+                          SelectedItem="{Binding SelectedSplitTab, Mode=TwoWay}"
+                          TabItemTemplate="{StaticResource SharedTabItemTemplate}"
+                          AddTabButtonCommand="{Binding NewTabCommand}" />
+        </Grid>
 
         <pages:WelcomePage VerticalAlignment="Stretch" DataContext="{Binding WelcomePage}"
-                           IsVisible="{Binding !$parent[windows:MainWindow].((vms:MainWindowViewModel)DataContext).Tabs.Count}" />
+                           IsVisible="{Binding !$parent[windows:MainWindow].((vms:MainWindowViewModel)DataContext).AnyTabsOpen}" />
     </Panel>
 </UserControl>

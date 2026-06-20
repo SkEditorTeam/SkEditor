@@ -177,7 +177,7 @@ public class FileTreeCommandHandler(
 
     public async Task<bool> Disconnect()
     {
-        if (tabs.Tabs.OfType<IFileTab>().Any(t => t.File is SftpFile))
+        if (tabs.AllTabs.OfType<IFileTab>().Any(t => t.File is SftpFile))
         {
             Dialog dialog = Dialog
                 .Create(TranslationKey.RemoteConnectionDisconnectTitle)

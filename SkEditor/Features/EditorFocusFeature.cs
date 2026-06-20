@@ -1,4 +1,5 @@
-﻿using AvaloniaEdit;
+﻿using System;
+using AvaloniaEdit;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
@@ -37,7 +38,7 @@ public class EditorFocusFeature : IEditorFeature
         _editor = null;
     }
 
-    private void OnFocusRequested()
+    private void OnFocusRequested(object? sender, EventArgs e)
     {
         _editor?.TextArea.Focus();
     }

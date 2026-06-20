@@ -249,4 +249,10 @@ public partial class FileTabViewModel(
 
         RequestClose();
     }
+
+    [RelayCommand]
+    public void OnFocus()
+    {
+        RequestFocus();
+    }
 }

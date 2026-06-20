@@ -4,6 +4,6 @@ namespace SkEditor.ViewModels.Tabs.Capabilities;
 
 public interface IFocusableTab
 {
-    event Action? FocusRequested;
+    event EventHandler? FocusRequested;
     void RequestFocus();
 }

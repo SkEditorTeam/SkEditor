@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
@@ -10,14 +11,27 @@ namespace SkEditor.Contracts.Services.Files;
 public interface ITabService
 {
     /// <summary>
-    ///     The collection of all the opened tabs.
+    ///     The collection of main tabs, which are opened in the main view.
     /// </summary>
-    ObservableCollection<TabViewModelBase> Tabs { get; }
+    ObservableCollection<TabViewModelBase> MainTabs { get; }
+
+    /// <summary>
+    ///     The collection of split tabs, which are opened in the split view.
+    /// </summary>
+    ObservableCollection<TabViewModelBase> SplitTabs { get; }
+
+    /// <summary>
+    ///     All the opened tabs, including both main and split tabs.
+    /// </summary>
+    IEnumerable<TabViewModelBase> AllTabs { get; }
 
     /// <summary>
     ///     The currently selected tab. Can be null if no tabs are opened.
     /// </summary>
     TabViewModelBase? SelectedTab { get; set; }
+
+    TabViewModelBase? SelectedMainTab { get; set; }
+    TabViewModelBase? SelectedSplitTab { get; set; }
 
     /// <summary>
     ///     Raised when the selected tab changes.
@@ -58,4 +72,8 @@ public interface ITabService
     /// <param name="tab">The tab to close.</param>
     /// <remarks>This force-closes the tab and normally should only be used after the closing is handled by the tab itself.</remarks>
     void CloseTab(TabViewModelBase tab);
+
+    // todo: docs
+    void SplitTab(TabViewModelBase tab);
+    void MergeTab(TabViewModelBase tab);
 }

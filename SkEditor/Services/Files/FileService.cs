@@ -54,7 +54,8 @@ public class FileService(
             recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
         }
 
-        FileTabViewModel? existingTab = tabs.Tabs.OfType<FileTabViewModel>().FirstOrDefault(tab => tab.File.Path == file.Path);
+        FileTabViewModel? existingTab =
+            tabs.AllTabs.OfType<FileTabViewModel>().FirstOrDefault(tab => tab.File.Path == file.Path);
 
         if (existingTab is not null)
         {
@@ -113,7 +114,7 @@ public class FileService(
 
     public async Task SaveAllAsync()
     {
-        IEnumerable<FileTabViewModel> fileTabs = tabs.Tabs.OfType<FileTabViewModel>();
+        IEnumerable<FileTabViewModel> fileTabs = tabs.AllTabs.OfType<FileTabViewModel>();
 
         foreach (FileTabViewModel fileTab in fileTabs)
         {
@@ -156,7 +157,7 @@ public class FileService(
         string pattern = Regex.Escape(template).Replace(@"\{0}", @"(\d+)");
         Regex regex = new(pattern);
 
-        HashSet<int> existingNumbers = tabs.Tabs
+        HashSet<int> existingNumbers = tabs.AllTabs
             .Select(tab => regex.Match(tab.Header.Value))
             .Where(m => m.Success)
             .Select(m => int.Parse(m.Groups[1].Value))

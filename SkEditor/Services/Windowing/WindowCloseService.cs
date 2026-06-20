@@ -24,7 +24,7 @@ public class WindowCloseService(ITabService tabs, IDialogService dialogs, IConfi
             return true;
         }
 
-        List<FileTabViewModel> unsavedTabs = tabs.Tabs
+        List<FileTabViewModel> unsavedTabs = tabs.AllTabs
             .OfType<FileTabViewModel>()
             .Where(t => !t.IsSaved)
             .ToList();

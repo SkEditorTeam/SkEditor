@@ -21,6 +21,12 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     [ObservableProperty]
     public partial bool GlobalColorPreviewEnabled { get; set; } = false;
 
+    /// <summary>
+    ///     Enables the Split View feature.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool SplitViewEnabled { get; set; } = false;
+
     protected override string GetFileName()
     {
         return "experiments.json";

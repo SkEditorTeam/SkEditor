@@ -32,7 +32,7 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
                 TabViewModelBase tab = tabsToClose.First(t => !t.IsSaved);
                 tab.CloseCommand?.Execute(null);
 
-                if (tabs.Tabs.Contains(tab))
+                if (tabs.AllTabs.Contains(tab))
                 {
                     // user cancelled the close operation
                     return;
@@ -102,11 +102,11 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
     {
         return closeType switch
         {
-            CloseType.All => tabs.Tabs.ToList(),
-            CloseType.AllButCurrent => tabs.Tabs.Where(t => t != tabs.SelectedTab).ToList(),
-            CloseType.Unsaved => tabs.Tabs.Where(t => !t.IsSaved).ToList(),
-            CloseType.Left => tabs.Tabs.TakeWhile(t => t != tabs.SelectedTab).ToList(),
-            CloseType.Right => tabs.Tabs.SkipWhile(t => t != tabs.SelectedTab).Skip(1).ToList(),
+            CloseType.All => tabs.AllTabs.ToList(),
+            CloseType.AllButCurrent => tabs.AllTabs.Where(t => t != tabs.SelectedTab).ToList(),
+            CloseType.Unsaved => tabs.AllTabs.Where(t => !t.IsSaved).ToList(),
+            CloseType.Left => tabs.AllTabs.TakeWhile(t => t != tabs.SelectedTab).ToList(),
+            CloseType.Right => tabs.AllTabs.SkipWhile(t => t != tabs.SelectedTab).Skip(1).ToList(),
             _ => throw new ArgumentOutOfRangeException(nameof(closeType), closeType, null)
         };
     }

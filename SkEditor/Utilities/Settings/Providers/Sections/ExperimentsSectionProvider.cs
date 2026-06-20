@@ -34,7 +34,14 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                             .Create(TranslationKey.SettingsExperimentsColorPreviewGlobal)
                             .WithDescription(TranslationKey.SettingsExperimentsColorPreviewGlobalDescription)
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.GlobalColorPreviewEnabled))
-                    )
+                    ),
+
+                ToggleSetting
+                    .Create(TranslatableString.FromRawString("Split View"))
+                    .WithDescription(TranslatableString.FromRawString(
+                        "Enables the Split View feature. THIS FEATURE IS VERY EARLY IN DEVELOPMENT!"))
+                    .WithIcon(Symbol.DocumentLandscapeSplitHint)
+                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled))
             ]);
     }
 }

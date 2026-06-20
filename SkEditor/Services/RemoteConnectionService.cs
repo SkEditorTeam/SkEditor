@@ -295,7 +295,7 @@ public class RemoteConnectionService(
 
     private void CloseConnectionTabs(RemoteConnection connection)
     {
-        List<FileTabViewModel> openTabs = tabs.Tabs.OfType<FileTabViewModel>()
+        List<FileTabViewModel> openTabs = tabs.AllTabs.OfType<FileTabViewModel>()
             .Where(tab => tab.File is SftpFile sftpFile && sftpFile.Connection == connection)
             .ToList();
 

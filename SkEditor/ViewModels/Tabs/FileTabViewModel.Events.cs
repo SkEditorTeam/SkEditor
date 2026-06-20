@@ -27,10 +27,10 @@ public partial class FileTabViewModel
         GoToLocationRequested?.Invoke(location);
     }
 
-    public event Action? FocusRequested;
+    public event EventHandler? FocusRequested;
 
     public void RequestFocus()
     {
-        FocusRequested?.Invoke();
+        FocusRequested?.Invoke(this, EventArgs.Empty);
     }
 }

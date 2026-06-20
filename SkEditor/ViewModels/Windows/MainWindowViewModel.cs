@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -32,7 +34,13 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         WelcomePage = welcomePage;
 
         _tabs.SelectedTabChanged += tab =>
+        {
             SelectedTab = tab;
+            OnPropertyChanged(nameof(SelectedMainTab));
+            OnPropertyChanged(nameof(SelectedSplitTab));
+            OnPropertyChanged(nameof(AnyTabsOpen));
+            OnPropertyChanged(nameof(IsSplitActive));
+        };
 
         Sidebar = sidebar;
         StatusBar = statusBar;
@@ -49,7 +57,42 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public StatusBarViewModel StatusBar { get; }
     public WelcomePageViewModel WelcomePage { get; }
 
-    public ObservableCollection<TabViewModelBase> Tabs => _tabs.Tabs;
+    public ObservableCollection<TabViewModelBase> MainTabs => _tabs.MainTabs;
+    public ObservableCollection<TabViewModelBase> SplitTabs => _tabs.SplitTabs;
+    public IEnumerable<TabViewModelBase> AllTabs => _tabs.AllTabs;
+
+    public bool AnyTabsOpen => _tabs.AllTabs.Any();
+    public bool IsSplitActive => SplitTabs.Count > 0;
+
+    public TabViewModelBase? SelectedMainTab
+    {
+        get => _tabs.SelectedMainTab;
+        set
+        {
+            if (_tabs.SelectedMainTab == value)
+            {
+                return;
+            }
+
+            _tabs.SelectedMainTab = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public TabViewModelBase? SelectedSplitTab
+    {
+        get => _tabs.SelectedSplitTab;
+        set
+        {
+            if (_tabs.SelectedSplitTab == value)
+            {
+                return;
+            }
+
+            _tabs.SelectedSplitTab = value;
+            OnPropertyChanged();
+        }
+    }
 
     public void Receive(OpenFileMessage message)
     {
