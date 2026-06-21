@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using Avalonia.Controls;
+using FluentAvalonia.UI.Controls;
 using HotAvalonia;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.DataTemplates;
+using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Windows;
 
 namespace SkEditor.Views.Controls;
@@ -11,7 +13,7 @@ namespace SkEditor.Views.Controls;
 public partial class MainTabView : UserControl
 {
     private GridLength _savedSplitWidth = new(1, GridUnitType.Star);
-    
+
     public MainTabView()
     {
         InitializeComponent();
@@ -34,6 +36,41 @@ public partial class MainTabView : UserControl
 
             _savedSplitWidth = TabGrid.ColumnDefinitions[2].Width;
         };
+
+        TabView.TabDragCompleted += OnTabDragDrop;
+        SplitTabView.TabDragCompleted += OnTabDragDrop;
+
+        if (DataContext is MainWindowViewModel mainVm)
+        {
+            UpdateSplitState(mainVm.IsSplitActive);
+        }
+    }
+
+    private void OnTabDragDrop(FATabView source, FATabViewTabDragCompletedEventArgs e)
+    {
+        if (e.Tab.DataContext is not TabViewModelBase tabVm)
+        {
+            return;
+        }
+
+        if (DataContext is not MainWindowViewModel mainVm)
+        {
+            return;
+        }
+
+        if (!mainVm.IsSplitActive)
+        {
+            return;
+        }
+
+        if (source.Name == nameof(TabView))
+        {
+            mainVm.SplitTab(tabVm);
+        }
+        else
+        {
+            mainVm.MergeTab(tabVm);
+        }
     }
 
     protected override void OnDataContextChanged(EventArgs e)

@@ -6,6 +6,8 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.DataTemplates;
+using SkEditor.Models.Notifications;
+using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs.Capabilities;
 using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
@@ -173,6 +175,16 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
     {
         if (!MainTabs.Contains(tab))
         {
+            return;
+        }
+
+        if (MainTabs.Count == 1)
+        {
+            notifs.Show(Notification
+                .Create(TranslatableString.FromRawString("Oops!"))
+                .WithMessage(TranslatableString.FromRawString("You can't split the only tab open in the main view."))
+                .WithType(NotificationType.Warning));
+
             return;
         }
 

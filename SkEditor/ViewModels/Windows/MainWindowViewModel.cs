@@ -66,7 +66,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 
     public ObservableCollection<TabViewModelBase> MainTabs => _tabs.MainTabs;
     public ObservableCollection<TabViewModelBase> SplitTabs => _tabs.SplitTabs;
-    
+
     public IEnumerable<TabViewModelBase> AllTabs => _tabs.AllTabs;
 
     public bool AnyTabsOpen => _tabs.AllTabs.Any();
@@ -113,6 +113,16 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         {
             _tabs.SelectedTab = value;
         }
+    }
+
+    public void SplitTab(TabViewModelBase tab)
+    {
+        _tabs.SplitTab(tab);
+    }
+
+    public void MergeTab(TabViewModelBase tab)
+    {
+        _tabs.MergeTab(tab);
     }
 
     [RelayCommand]
