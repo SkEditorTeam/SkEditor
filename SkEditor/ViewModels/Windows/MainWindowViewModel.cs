@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -39,8 +40,14 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
             OnPropertyChanged(nameof(SelectedMainTab));
             OnPropertyChanged(nameof(SelectedSplitTab));
             OnPropertyChanged(nameof(AnyTabsOpen));
-            OnPropertyChanged(nameof(IsSplitActive));
         };
+
+        SplitTabs.CollectionChanged += (_, _) => OnPropertyChanged(nameof(IsSplitActive));
+
+        if (_tabs.AllTabs is INotifyCollectionChanged allTabs)
+        {
+            allTabs.CollectionChanged += (_, _) => OnPropertyChanged(nameof(AllTabs));
+        }
 
         Sidebar = sidebar;
         StatusBar = statusBar;
@@ -59,6 +66,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 
     public ObservableCollection<TabViewModelBase> MainTabs => _tabs.MainTabs;
     public ObservableCollection<TabViewModelBase> SplitTabs => _tabs.SplitTabs;
+    
     public IEnumerable<TabViewModelBase> AllTabs => _tabs.AllTabs;
 
     public bool AnyTabsOpen => _tabs.AllTabs.Any();
