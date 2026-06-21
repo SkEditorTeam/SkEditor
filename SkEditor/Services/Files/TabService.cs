@@ -117,9 +117,16 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
             features.OnTabOpened(featureTab);
         }
 
-        MainTabs.Add(tab);
-        SelectedTab = tab;
-        SelectedMainTab = tab;
+        if (SelectedTab is not null && SplitTabs.Contains(SelectedTab))
+        {
+            SplitTabs.Add(tab);
+            SelectedSplitTab = tab;
+        }
+        else
+        {
+            MainTabs.Add(tab);
+            SelectedMainTab = tab;
+        }
     }
 
     public void CloseTab(TabViewModelBase tab)
