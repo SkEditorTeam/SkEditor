@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Avalonia.Controls;
+using Avalonia.Input;
 using FluentAvalonia.UI.Controls;
 using HotAvalonia;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,8 +38,11 @@ public partial class MainTabView : UserControl
             _savedSplitWidth = TabGrid.ColumnDefinitions[2].Width;
         };
 
+
         TabView.TabDragCompleted += OnTabDragDrop;
         SplitTabView.TabDragCompleted += OnTabDragDrop;
+        TabView.TabStripDragOver += OnTabStripDragOver;
+        SplitTabView.TabStripDragOver += OnTabStripDragOver;
 
         if (DataContext is MainWindowViewModel mainVm)
         {
@@ -46,6 +50,12 @@ public partial class MainTabView : UserControl
         }
     }
 
+    private static void OnTabStripDragOver(object? sender, DragEventArgs e)
+    {
+        e.DragEffects = DragDropEffects.Move;
+        e.Handled = true;
+    }
+    
     private void OnTabDragDrop(FATabView source, FATabViewTabDragCompletedEventArgs e)
     {
         if (e.Tab.DataContext is not TabViewModelBase tabVm)
@@ -63,14 +73,22 @@ public partial class MainTabView : UserControl
             return;
         }
 
-        if (source.Name == nameof(TabView))
+        if (e.DropResult != DragDropEffects.None)
         {
-            mainVm.SplitTab(tabVm);
+            return;
         }
-        else
+
+        Dispatcher.InvokeAsync(() =>
         {
-            mainVm.MergeTab(tabVm);
-        }
+            if (source.Name == nameof(TabView))
+            {
+                mainVm.SplitTab(tabVm);
+            }
+            else
+            {
+                mainVm.MergeTab(tabVm);
+            }
+        });
     }
 
     protected override void OnDataContextChanged(EventArgs e)
