@@ -7,7 +7,6 @@
              xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
              xmlns:windows="clr-namespace:SkEditor.Views.Windows"
-             xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              x:Class="SkEditor.Views.Controls.MainTabView"
              x:DataType="vms:MainWindowViewModel">
 
@@ -61,14 +60,11 @@
     </UserControl.Resources>
 
     <Panel VerticalAlignment="Stretch">
-        <Grid IsVisible="{Binding !!MainTabs.Count}">
+        <Grid Name="TabGrid" IsVisible="{Binding !!MainTabs.Count}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="300" Width="*" />
-                <ColumnDefinition
-                    Width="{Binding IsSplitActive, Converter={x:Static controls:MainTabView.VisibleToAuto}}" />
-                <ColumnDefinition
-                    MinWidth="{Binding IsSplitActive, Converter={x:Static controls:MainTabView.VisibleToMinWidth}}"
-                    Width="{Binding IsSplitActive, Converter={x:Static controls:MainTabView.VisibleToStar}}" />
+                <ColumnDefinition Width="0" />
+                <ColumnDefinition MinWidth="0" Width="0" />
             </Grid.ColumnDefinitions>
 
             <ui:FATabView Grid.Column="0"
@@ -83,7 +79,7 @@
                           CornerRadius="7" ClipToBounds="True"
                           AddTabButtonCommand="{Binding NewTabCommand}" />
 
-            <GridSplitter Grid.Column="1" Width="8" Background="Transparent"
+            <GridSplitter Name="Splitter" Grid.Column="1" Width="8" Background="Transparent"
                           ResizeDirection="Columns" Margin="8,0"
                           IsVisible="{Binding IsSplitActive}" />
 
