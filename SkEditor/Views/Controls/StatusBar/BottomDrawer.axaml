@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls"
+             xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:BottomDrawerViewModel"
              x:Class="SkEditor.Views.Controls.StatusBar.BottomDrawer">
@@ -10,9 +11,9 @@
             Background="{DynamicResource SkEditorBorderBackground}"
             CornerRadius="7" Padding="20,12">
 
-        <TabStrip>
-            <TabStripItem>Errors</TabStripItem>
-            <TabStripItem>Terminal</TabStripItem>
-        </TabStrip>
+        <controls:SkEditorTabStrip>
+            <controls:SkEditorTabStripItem>Errors</controls:SkEditorTabStripItem>
+            <controls:SkEditorTabStripItem>Terminal</controls:SkEditorTabStripItem>
+        </controls:SkEditorTabStrip>
     </Border>
 </UserControl>
