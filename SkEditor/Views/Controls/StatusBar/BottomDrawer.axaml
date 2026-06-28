@@ -8,5 +8,11 @@
              x:Class="SkEditor.Views.Controls.StatusBar.BottomDrawer">
     <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
             Background="{DynamicResource SkEditorBorderBackground}"
-            CornerRadius="7" Padding="12" />
+            CornerRadius="7" Padding="20,12">
+
+        <TabStrip>
+            <TabStripItem>Errors</TabStripItem>
+            <TabStripItem>Terminal</TabStripItem>
+        </TabStrip>
+    </Border>
 </UserControl>

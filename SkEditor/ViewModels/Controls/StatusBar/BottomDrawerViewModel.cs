@@ -6,10 +6,10 @@ namespace SkEditor.ViewModels.Controls;
 public partial class BottomDrawerViewModel : ObservableObject
 {
     [ObservableProperty]
-    public partial double? DrawerHeight { get; set; } = 200;
+    public partial double? DrawerHeight { get; set; } = 0;
 
     [ObservableProperty]
-    public partial bool IsDrawerOpen { get; private set; } = true;
+    public partial bool IsDrawerOpen { get; private set; } = false;
 
     private double _lastHeight = 200;
 
