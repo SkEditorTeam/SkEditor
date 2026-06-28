@@ -245,8 +245,10 @@ public static class ServiceCollectionExtensions
         public void AddStatusBar()
         {
             services.AddSingleton<StatusBarViewModel>();
+            services.AddSingleton<BottomDrawerViewModel>();
 
             services.AddSingleton<IStatusBarProvider, EditorInfoStatusBarProvider>();
+            services.AddSingleton<IStatusBarProvider, EditorErrorStatusBarProvider>();
         }
     }
 }

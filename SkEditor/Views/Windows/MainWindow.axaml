@@ -7,6 +7,7 @@
         xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
         xmlns:sidebar="clr-namespace:SkEditor.Views.Controls.Sidebar"
         xmlns:layout="clr-namespace:SkEditor.Converters.Layout"
+        xmlns:statusBar="clr-namespace:SkEditor.Views.Controls.StatusBar"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         x:DataType="windows:MainWindowViewModel"
@@ -19,6 +20,7 @@
     <Window.Resources>
         <layout:DoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
         <layout:SidebarColumnMinWidthConverter x:Key="SidebarColumnMinWidthConverter" />
+        <layout:BottomDrawerMinWidthConverter x:Key="BottomDrawerMinWidthConverter" />
     </Window.Resources>
 
     <LayoutTransformControl Name="LayoutTransform">
@@ -35,7 +37,7 @@
                        Background="{DynamicResource WindowBorderBrush}" />
 
             <Border Grid.Row="1" Padding="10,12,10,10" Background="{DynamicResource MainWindowGridBackground}">
-                <Grid Name="CoreGrid" RowDefinitions="*,Auto" RowSpacing="10">
+                <Grid Name="CoreGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition
                             Width="{Binding Sidebar.ColumnWidth, Mode=TwoWay, Converter={StaticResource DoubleToGridLengthConverter}}"
@@ -45,15 +47,37 @@
                         <ColumnDefinition Width="*" MinWidth="300" />
                     </Grid.ColumnDefinitions>
 
-                    <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition
+                            Height="{Binding BottomDrawer.DrawerHeight, Mode=TwoWay, Converter={StaticResource DoubleToGridLengthConverter}}"
+                            MinHeight="{Binding BottomDrawer.IsDrawerOpen, Converter={StaticResource BottomDrawerMinWidthConverter}}"
+                            MaxHeight="400" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                    <sidebar:StatusBarControl DataContext="{Binding StatusBar}" Grid.Column="0" Grid.Row="1"
-                                              Grid.ColumnSpan="3" />
+                    <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0"
+                                            Grid.RowSpan="3" />
 
-                    <GridSplitter Name="Splitter" Grid.Column="1" Grid.Row="0" Background="Transparent"
+                    <GridSplitter Name="Splitter" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
+                                  Background="Transparent"
                                   ResizeDirection="Columns"
                                   Width="10"
                                   IsHitTestVisible="{Binding Sidebar.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}" />
+
+                    <statusBar:BottomDrawer Name="Drawer" DataContext="{Binding BottomDrawer}"
+                                            Grid.Column="2" Grid.Row="2"
+                                            IsVisible="{Binding IsDrawerOpen}" />
+
+                    <sidebar:StatusBarControl DataContext="{Binding StatusBar}" Grid.Column="0" Grid.Row="3"
+                                              Margin="0,10,0,0"
+                                              Grid.ColumnSpan="3" />
+
+                    <GridSplitter Name="RowSplitter" Grid.Column="2" Grid.Row="1" Background="Transparent"
+                                  ResizeDirection="Rows"
+                                  IsVisible="{Binding BottomDrawer.IsDrawerOpen}"
+                                  Height="10" />
 
                     <controls:MainTabView Grid.Column="2" Grid.Row="0" VerticalAlignment="Stretch" />
                 </Grid>

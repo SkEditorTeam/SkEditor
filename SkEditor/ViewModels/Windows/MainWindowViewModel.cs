@@ -23,6 +23,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         MainMenuViewModel mainMenu,
         SidebarViewModel sidebar,
         StatusBarViewModel statusBar,
+        BottomDrawerViewModel bottomDrawer,
         WelcomePageViewModel welcomePage,
         IMessenger messenger)
     {
@@ -51,6 +52,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 
         Sidebar = sidebar;
         StatusBar = statusBar;
+        BottomDrawer = bottomDrawer;
 
         messenger.Register(this);
     }
@@ -62,6 +64,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public MainMenuViewModel MainMenu { get; }
     public SidebarViewModel Sidebar { get; }
     public StatusBarViewModel StatusBar { get; }
+    public BottomDrawerViewModel BottomDrawer { get; }
     public WelcomePageViewModel WelcomePage { get; }
 
     public ObservableCollection<TabViewModelBase> MainTabs => _tabs.MainTabs;

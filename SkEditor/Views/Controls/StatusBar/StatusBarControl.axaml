@@ -39,8 +39,8 @@
                     CornerRadius="7"
                     Command="{Binding Command}"
                     IsVisible="{Binding IsVisible}">
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                    <Viewbox Width="18" Height="18">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Viewbox Width="18" Height="18" VerticalAlignment="Center" Margin="0,1,0,0">
                         <fluent:SymbolIcon Width="20" Height="20" FontSize="18"
                                            Symbol="{Binding IconSymbol}"
                                            IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
