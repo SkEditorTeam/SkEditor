@@ -1,10 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Contracts.Services;
 
 namespace SkEditor.ViewModels.Controls;
 
-public partial class BottomDrawerViewModel(INotificationService notifs) : ObservableObject
+public partial class BottomDrawerViewModel(IEnumerable<IDrawerPaneViewModel> panes) : ObservableObject
 {
     [ObservableProperty]
     public partial double? DrawerHeight { get; set; } = 0;
@@ -13,6 +14,11 @@ public partial class BottomDrawerViewModel(INotificationService notifs) : Observ
     public partial bool IsDrawerOpen { get; private set; } = false;
 
     private double _lastHeight = 200;
+
+    public ObservableCollection<IDrawerPaneViewModel> Items { get; } = new(panes);
+
+    [ObservableProperty]
+    public partial IDrawerPaneViewModel? SelectedItem { get; set; }
 
     [RelayCommand]
     public void CloseDrawer()
@@ -38,11 +44,5 @@ public partial class BottomDrawerViewModel(INotificationService notifs) : Observ
         {
             OpenDrawer();
         }
-    }
-
-    [RelayCommand]
-    public void ErrorClick()
-    {
-        notifs.Debug("you clicked the error");
     }
 }

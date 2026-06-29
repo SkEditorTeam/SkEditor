@@ -4,8 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
-             xmlns:statusBar="clr-namespace:SkEditor.Views.Controls.StatusBar"
-             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:BottomDrawerViewModel"
              x:Class="SkEditor.Views.Controls.StatusBar.BottomDrawer">
@@ -15,31 +13,17 @@
 
         <Grid RowDefinitions="Auto,*" RowSpacing="8">
             <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Padding="16,8,8,0">
-                <controls:SkEditorTabStrip>
-                    <controls:SkEditorTabStripItem>Errors</controls:SkEditorTabStripItem>
+                <controls:SkEditorTabStrip ItemsSource="{Binding Items}"
+                                           SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                    <controls:SkEditorTabStrip.ItemTemplate>
+                        <DataTemplate x:DataType="vm:IDrawerPaneViewModel">
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </controls:SkEditorTabStrip.ItemTemplate>
                 </controls:SkEditorTabStrip>
             </Border>
 
-            <Grid Grid.Row="1" RowDefinitions="Auto,*" Margin="8,4,0,8">
-                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
-                              Margin="0,0,-6,0">
-                    <Interaction.Behaviors>
-                        <BehaviorCollection>
-                            <behaviors:SmoothScrollBehavior />
-                        </BehaviorCollection>
-                    </Interaction.Behaviors>
-                    <StackPanel Spacing="6" Margin="0,0,14,0">
-                        <statusBar:DrawerErrorEntry
-                            ErrorMessage="Can't understand this condition/effect: set yaml value &quot;log&quot; from file &quot;spigot.yml&quot; to false"
-                            Type="Error" ErrorLine="54" ErrorSource="login.sk"
-                            ErrorClickCommand="{Binding ErrorClickCommand}" />
-                        <statusBar:DrawerErrorEntry
-                            ErrorMessage="Can't understand this condition: 'file &quot;plugins/Skript/scripts/players/%the sender%.yml&quot; exists'"
-                            Type="Error" ErrorLine="67" ErrorSource="login.sk"
-                            ErrorClickCommand="{Binding ErrorClickCommand}" />
-                    </StackPanel>
-                </ScrollViewer>
-            </Grid>
+            <ContentControl Grid.Row="1" Content="{Binding SelectedItem}" />
         </Grid>
     </Border>
 </UserControl>

@@ -29,11 +29,13 @@ using SkEditor.Utilities.Settings.Providers.Sections;
 using SkEditor.Utilities.StatusBar;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.FileTree;
+using SkEditor.ViewModels.Controls.Panes;
 using SkEditor.ViewModels.Controls.Sidebar.Panes;
 using SkEditor.ViewModels.Pages;
 using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Windows;
 using SkEditor.Views.Controls.Sidebar;
+using SkEditor.Views.Controls.StatusBar.Panes;
 using SkEditor.Views.Pages;
 using SkEditor.Views.Windows;
 
@@ -206,11 +208,11 @@ public static class ServiceCollectionExtensions
         {
             services.AddTransientWithFactory<SettingsTabViewModel>();
             services.AddTransientWithFactory<DocumentationTabViewModel>();
-            
+
             services.AddSingleton<TabViewLocator>(_ =>
             {
                 var locator = new TabViewLocator();
-        
+
                 locator.Register<SettingsTabViewModel, SettingsTabView>();
                 locator.Register<DocumentationTabViewModel, DocumentationTabView>();
                 locator.Register<FileTabViewModel, FileTabView>();
@@ -220,12 +222,13 @@ public static class ServiceCollectionExtensions
         }
 
         public void AddTransientWithFactory<
-            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>() where T : class
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+            T>() where T : class
         {
             services.AddTransient<T>();
             services.AddSingleton<Func<T>>(sp => sp.GetRequiredService<T>);
         }
-        
+
         public void AddSidebar()
         {
             services.AddSingleton<ISidebarPanelViewModel, ExplorerViewModel>();
@@ -238,17 +241,29 @@ public static class ServiceCollectionExtensions
             viewLocator.Register<ExplorerViewModel, ExplorerView>();
             viewLocator.Register<RemoteExplorerViewModel, RemoteExplorerView>();
             // viewLocator.Register<SearchPaneViewModel, SearchPaneView>();
-            
+
             services.AddSingleton(viewLocator);
         }
 
         public void AddStatusBar()
         {
             services.AddSingleton<StatusBarViewModel>();
-            services.AddSingleton<BottomDrawerViewModel>();
+            services.AddDrawer();
 
             services.AddSingleton<IStatusBarProvider, EditorInfoStatusBarProvider>();
             services.AddSingleton<IStatusBarProvider, EditorErrorStatusBarProvider>();
+        }
+
+        private void AddDrawer()
+        {
+            services.AddSingleton<BottomDrawerViewModel>();
+
+            services.AddSingleton<IDrawerPaneViewModel, ErrorListPaneViewModel>();
+
+            DrawerPaneViewLocator viewLocator = new();
+            viewLocator.Register<ErrorListPaneViewModel, ErrorListPaneView>();
+
+            services.AddSingleton(viewLocator);
         }
     }
 }
