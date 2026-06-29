@@ -65,7 +65,6 @@
 
         <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.5" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.5" />
-        <PackageReference Include="Iciclecreek.Avalonia.Terminal" Version="2.0.3" />
         <PackageReference Include="SkFluentIcons.Avalonia.Fluent" Version="2.0.972" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.9" />
         <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.9" />
@@ -98,6 +97,7 @@
         <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj" />
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit.TextMate\AvaloniaEdit.TextMate.csproj" />
+        <ProjectReference Include="..\External\SkTerminal\src\Iciclecreek.Avalonia.TerminalWindow\Iciclecreek.Avalonia.Terminal.csproj" />
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false" />
     </ItemGroup>
 
