@@ -23,9 +23,9 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
     public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer)
     {
         _item = new StatusBarItem()
-            .WithIcon(Symbol.CheckmarkCircle)
-            .WithText(TranslatableString.FromRawString("0"))
-            .WithColor(Color.Parse("#FF9BF99B"))
+            .WithIcon(Symbol.ErrorCircle)
+            .WithText(TranslatableString.FromRawString("2"))
+            .WithColor(Color.Parse("#FFFF3559"))
             .WithAlignment(StatusBarItem.ItemAlignment.Left);
 
         RelayCommand command = new(drawer.ToggleDrawer);

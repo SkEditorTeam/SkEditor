@@ -26,7 +26,7 @@
     <ControlTheme x:Key="{x:Type controls:SkEditorTabStripItem}" TargetType="controls:SkEditorTabStripItem">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundSecondaryColor}" />
+        <Setter Property="Foreground" Value="#78FFFFFF" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Transitions">
             <Transitions>
