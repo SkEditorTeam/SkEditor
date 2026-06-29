@@ -5,13 +5,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Iciclecreek.Terminal;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.ViewModels.Controls.Panes;
+namespace SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
 
 public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDisposable
 {
     public TranslatableString Name => TranslatableString.FromRawString("Terminal");
+    public IDrawerToolbarViewModel? Toolbar { get; }
 
     public TerminalControl TerminalControl => field ??= CreateTerminal();
+
+    public TerminalPaneViewModel() => Toolbar = new TerminalToolbarViewModel(this);
 
     private TerminalControl CreateTerminal()
     {

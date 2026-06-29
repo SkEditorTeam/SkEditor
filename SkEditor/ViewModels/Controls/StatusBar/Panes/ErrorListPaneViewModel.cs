@@ -5,7 +5,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Models.Analyzer;
 using SkEditor.Utilities.Localization;
 
-namespace SkEditor.ViewModels.Controls.Panes;
+namespace SkEditor.ViewModels.Controls.StatusBar.Panes;
 
 public partial class ErrorListPaneViewModel(INotificationService notifs) : ObservableObject, IDrawerPaneViewModel
 {

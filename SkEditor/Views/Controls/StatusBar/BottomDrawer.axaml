@@ -12,15 +12,21 @@
             CornerRadius="7" Padding="10">
 
         <Grid RowDefinitions="Auto,*" RowSpacing="8">
-            <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Padding="16,8,8,0">
-                <controls:SkEditorTabStrip ItemsSource="{Binding Items}"
-                                           SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                    <controls:SkEditorTabStrip.ItemTemplate>
-                        <DataTemplate x:DataType="vm:IDrawerPaneViewModel">
-                            <TextBlock Text="{Binding Name}" />
-                        </DataTemplate>
-                    </controls:SkEditorTabStrip.ItemTemplate>
-                </controls:SkEditorTabStrip>
+            <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Height="36">
+                <Grid ColumnDefinitions="*, Auto">
+                    <controls:SkEditorTabStrip Grid.Column="0" Padding="16,8,8,0"
+                                               ItemsSource="{Binding Items}"
+                                               SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                        <controls:SkEditorTabStrip.ItemTemplate>
+                            <DataTemplate x:DataType="vm:IDrawerPaneViewModel">
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </controls:SkEditorTabStrip.ItemTemplate>
+                    </controls:SkEditorTabStrip>
+                    <ContentControl Grid.Column="1"
+                                    Content="{Binding SelectedItem?.Toolbar}"
+                                    VerticalAlignment="Center" />
+                </Grid>
             </Border>
 
             <ContentControl Grid.Row="1" Content="{Binding SelectedItem}" />

@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls.Panes"
+             xmlns:terminal="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.Panes.TerminalPaneView"
-             x:DataType="vm:TerminalPaneViewModel"
+             x:DataType="terminal:TerminalPaneViewModel"
              Name="Root">
     <Border Background="#05FFFFFF" BorderBrush="#10FFFFFF" BorderThickness="1" CornerRadius="7" Padding="12">
         <ContentControl Content="{Binding TerminalControl}"

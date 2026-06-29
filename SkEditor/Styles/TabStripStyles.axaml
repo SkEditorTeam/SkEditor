@@ -22,7 +22,6 @@
         </Setter>
     </ControlTheme>
 
-
     <ControlTheme x:Key="{x:Type controls:SkEditorTabStripItem}" TargetType="controls:SkEditorTabStripItem">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Background" Value="Transparent" />
@@ -51,7 +50,7 @@
                                           FontFamily="{TemplateBinding FontFamily}"
                                           FontSize="{TemplateBinding FontSize}"
                                           FontWeight="{TemplateBinding FontWeight}"
-                                          Margin="0,0,0,8" />
+                                          Margin="0,0,0,9" />
                         <Rectangle Name="PART_SelectedPipe"
                                    Fill="{DynamicResource PivotHeaderItemSelectedPipeFill}"
                                    RadiusX="2"
@@ -101,6 +100,30 @@
 
         <Style Selector="^:disabled">
             <Setter Property="Foreground" Value="#64FFFFFF" />
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme x:Key="ToolbarButton" TargetType="Button">
+        <Setter Property="Background" Value="#05FFFFFF" />
+        <Setter Property="BorderBrush" Value="#10FFFFFF" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Padding" Value="8,5" />
+
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Duration="0:0:0.075" Property="Background" />
+                <BrushTransition Duration="0:0:0.075" Property="BorderBrush" />
+            </Transitions>
+        </Setter>
+
+        <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="#0CFFFFFF" />
+            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+        </Style>
+        <Style Selector="^:pressed">
+            <Setter Property="Background" Value="#14FFFFFF" />
+            <Setter Property="BorderBrush" Value="#28FFFFFF" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>

@@ -106,8 +106,12 @@
             <DependentUpon>SearchPaneView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Controls\StatusBar\Panes\TerminalPaneView.axaml.cs">
+        <Compile Update="Views\Controls\StatusBar\Panes\Terminal\TerminalPaneView.axaml.cs">
             <DependentUpon>TerminalPaneView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Controls\StatusBar\Panes\Terminal\TerminalToolbarView.axaml.cs">
+            <DependentUpon>TerminalToolbarView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>

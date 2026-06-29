@@ -29,8 +29,8 @@ using SkEditor.Utilities.Settings.Providers.Sections;
 using SkEditor.Utilities.StatusBar;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.FileTree;
-using SkEditor.ViewModels.Controls.Panes;
 using SkEditor.ViewModels.Controls.Sidebar.Panes;
+using SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
 using SkEditor.ViewModels.Pages;
 using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Windows;
@@ -38,6 +38,7 @@ using SkEditor.Views.Controls.Sidebar;
 using SkEditor.Views.Controls.StatusBar.Panes;
 using SkEditor.Views.Pages;
 using SkEditor.Views.Windows;
+using ErrorListPaneViewModel = SkEditor.ViewModels.Controls.StatusBar.Panes.ErrorListPaneViewModel;
 
 namespace SkEditor.Utilities.Extensions;
 
@@ -264,6 +265,7 @@ public static class ServiceCollectionExtensions
             DrawerPaneViewLocator viewLocator = new();
             viewLocator.Register<ErrorListPaneViewModel, ErrorListPaneView>();
             viewLocator.Register<TerminalPaneViewModel, TerminalPaneView>();
+            viewLocator.Register<TerminalToolbarViewModel, TerminalToolbarView>();
 
             services.AddSingleton(viewLocator);
         }
