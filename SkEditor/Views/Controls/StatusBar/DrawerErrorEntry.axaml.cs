@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using SkEditor.Models.Analyzer;
 
 namespace SkEditor.Views.Controls.StatusBar;
 
@@ -18,17 +19,10 @@ public partial class DrawerErrorEntry : UserControl
         set => SetValue(ErrorMessageProperty, value);
     }
 
-    public enum ErrorType
-    {
-        Info,
-        Warning,
-        Error
-    }
+    public static readonly StyledProperty<AnalyzerErrorType> ErrorTypeProperty =
+        AvaloniaProperty.Register<DrawerErrorEntry, AnalyzerErrorType>(nameof(ErrorType));
 
-    public static readonly StyledProperty<ErrorType> ErrorTypeProperty =
-        AvaloniaProperty.Register<DrawerErrorEntry, ErrorType>(nameof(ErrorType));
-
-    public ErrorType Type
+    public AnalyzerErrorType ErrorType
     {
         get => GetValue(ErrorTypeProperty);
         set => SetValue(ErrorTypeProperty, value);
@@ -61,7 +55,7 @@ public partial class DrawerErrorEntry : UserControl
     {
         get;
         private set => SetAndRaise(ErrorIconProperty, ref field, value);
-    } = Symbol.Info;
+    } = Symbol.QuestionCircle;
 
     public static readonly DirectProperty<DrawerErrorEntry, ImmutableSolidColorBrush> ErrorColorProperty =
         AvaloniaProperty.RegisterDirect<DrawerErrorEntry, ImmutableSolidColorBrush>(
@@ -72,7 +66,7 @@ public partial class DrawerErrorEntry : UserControl
     {
         get;
         private set => SetAndRaise(ErrorColorProperty, ref field, value);
-    } = new(Color.Parse("#4D9AFF"));
+    } = new(Color.Parse("#c4c4c4"));
 
     public static readonly StyledProperty<IRelayCommand> ErrorClickCommandProperty =
         AvaloniaProperty.Register<DrawerErrorEntry, IRelayCommand>(nameof(ErrorClickCommand));
@@ -82,8 +76,12 @@ public partial class DrawerErrorEntry : UserControl
         get => GetValue(ErrorClickCommandProperty);
         set => SetValue(ErrorClickCommandProperty, value);
     }
-    
-    public DrawerErrorEntry() => InitializeComponent();
+
+    public DrawerErrorEntry()
+    {
+        InitializeComponent();
+        UpdateIconAndColor();
+    }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -97,20 +95,18 @@ public partial class DrawerErrorEntry : UserControl
 
     private void UpdateIconAndColor()
     {
-        ErrorIcon = Type switch
+        ErrorIcon = ErrorType switch
         {
-            ErrorType.Info => Symbol.Info,
-            ErrorType.Warning => Symbol.Warning,
-            ErrorType.Error => Symbol.ErrorCircle,
-            _ => Symbol.Info
+            AnalyzerErrorType.Warning => Symbol.Warning,
+            AnalyzerErrorType.Error => Symbol.ErrorCircle,
+            _ => Symbol.QuestionCircle
         };
 
-        ErrorColor = Type switch
+        ErrorColor = ErrorType switch
         {
-            ErrorType.Error => new ImmutableSolidColorBrush(Color.Parse("#FF3559")),
-            ErrorType.Warning => new ImmutableSolidColorBrush(Color.Parse("#FFB800")),
-            ErrorType.Info => new ImmutableSolidColorBrush(Color.Parse("#4D9AFF")),
-            _ => new ImmutableSolidColorBrush(Color.Parse("#FF4D4D"))
+            AnalyzerErrorType.Error => new ImmutableSolidColorBrush(Color.Parse("#FF3559")),
+            AnalyzerErrorType.Warning => new ImmutableSolidColorBrush(Color.Parse("#FFB800")),
+            _ => new ImmutableSolidColorBrush(Color.Parse("#c4c4c4"))
         };
     }
 }
