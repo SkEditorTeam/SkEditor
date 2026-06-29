@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Avalonia.Media;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Iciclecreek.Terminal;
 using SkEditor.Utilities.Localization;
@@ -35,7 +37,11 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
             control.Process = Environment.GetEnvironmentVariable("SHELL") ?? "bash";
         }
 
-        _ = control.LaunchProcess();
+        _ = Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            await control.ClearAsync();
+            await control.LaunchProcess();
+        });
 
         return control;
     }
@@ -64,5 +70,16 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
     {
         GC.SuppressFinalize(this);
         TerminalControl?.Kill();
+    }
+
+    public async Task RestartTerminal()
+    {
+        await TerminalControl.ClearAsync();
+        await TerminalControl.LaunchProcess();
+    }
+
+    public async Task Clear()
+    {
+        await TerminalControl.ClearAsync();
     }
 }

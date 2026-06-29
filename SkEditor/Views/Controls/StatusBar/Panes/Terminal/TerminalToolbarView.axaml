@@ -9,14 +9,14 @@
              x:DataType="terminal:TerminalToolbarViewModel"
              Name="Root">
     <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,8,0">
-        <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center">
+        <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center" Command="{Binding ClearCommand}">
             <Viewbox Height="14">
                 <fluent:SymbolIcon Symbol="Delete" />
             </Viewbox>
         </Button>
-        <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center">
+        <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center" Command="{Binding ResetCommand}">
             <Viewbox Height="14">
-                <fluent:SymbolIcon Symbol="Add" />
+                <fluent:SymbolIcon Symbol="ArrowClockwise" />
             </Viewbox>
         </Button>
     </StackPanel>

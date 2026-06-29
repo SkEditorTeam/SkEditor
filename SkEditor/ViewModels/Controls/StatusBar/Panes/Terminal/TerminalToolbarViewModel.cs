@@ -1,5 +1,21 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
 
-public class TerminalToolbarViewModel(TerminalPaneViewModel terminalPane) : ObservableObject, IDrawerToolbarViewModel;
+public partial class TerminalToolbarViewModel(TerminalPaneViewModel terminalPane)
+    : ObservableObject, IDrawerToolbarViewModel
+{
+    [RelayCommand]
+    public async Task Reset()
+    {
+        await terminalPane.RestartTerminal();
+    }
+
+    [RelayCommand]
+    public async Task Clear()
+    {
+        await terminalPane.Clear();
+    }
+}
