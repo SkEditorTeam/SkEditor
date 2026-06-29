@@ -259,9 +259,11 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<BottomDrawerViewModel>();
 
             services.AddSingleton<IDrawerPaneViewModel, ErrorListPaneViewModel>();
+            services.AddSingleton<IDrawerPaneViewModel, TerminalPaneViewModel>();
 
             DrawerPaneViewLocator viewLocator = new();
             viewLocator.Register<ErrorListPaneViewModel, ErrorListPaneView>();
+            viewLocator.Register<TerminalPaneViewModel, TerminalPaneView>();
 
             services.AddSingleton(viewLocator);
         }
