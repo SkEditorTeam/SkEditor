@@ -11,12 +11,12 @@ using Avalonia.Media.Immutable;
 using Avalonia.Platform;
 using Avalonia.Styling;
 using FluentAvalonia.Styling;
+using Iciclecreek.Avalonia.Terminal;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.UI;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Settings.Configs;
 using MainWindow = SkEditor.Views.Windows.MainWindow;
-using Theme = SkEditor.Models.UI.Theme;
-using ThemeJsonContext = SkEditor.Models.UI.ThemeJsonContext;
 
 namespace SkEditor.Services;
 
@@ -198,6 +198,7 @@ public class ThemeService(
         }
 
         UpdateTextEditorColors();
+        ApplyTerminalTheme();
 
         tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
         {
@@ -205,13 +206,36 @@ public class ThemeService(
             return Task.CompletedTask;
         }));
 
-
         UpdateAccentColor(currentApp);
         currentApp.PlatformSettings?.ColorValuesChanged += (_, _) => { UpdateAccentColor(currentApp); };
 
         UpdateFont();
 
         await Task.WhenAll(tasks);
+    }
+
+    public void ApplyTerminalTheme()
+    {
+        ConsolePalette? palette = ConsolePalette.CreateDefault();
+
+        foreach ((string key, string hex) in CurrentTheme.TerminalColors)
+        {
+            if (key.Length < 3)
+            {
+                continue;
+            }
+
+            bool isBg = key.StartsWith("Bg", StringComparison.OrdinalIgnoreCase);
+            string colorName = key[2..];
+
+            if (Enum.TryParse<AnsiColor>(colorName, true, out AnsiColor ansiColor) &&
+                Color.TryParse(hex, out Color color))
+            {
+                palette[ansiColor, isBg] = color;
+            }
+        }
+
+        BufferCellExtensions.ActivePalette = palette;
     }
 
     private void UpdateAccentColor(Application app)

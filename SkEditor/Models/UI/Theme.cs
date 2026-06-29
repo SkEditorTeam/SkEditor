@@ -84,6 +84,8 @@ public partial class Theme
         { "ToggleButtonBackgroundCheckedPointerOver", C("#40ffffff") }
     };
 
+    public Dictionary<string, string> TerminalColors { get; set; } = new();
+
     private static Brush C(string hex)
     {
         return new Brush(Color.Parse(hex));
