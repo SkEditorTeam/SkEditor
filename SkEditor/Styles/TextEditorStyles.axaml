@@ -23,4 +23,38 @@
             </ControlTemplate>
         </Setter>
     </ControlTheme>
+
+    <ControlTheme x:Key="{x:Type avaloniaedit:TextArea}" TargetType="avaloniaedit:TextArea">
+        <Setter Property="SelectionBrush" Value="{DynamicResource TextAreaSelectionBrush}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DockPanel Focusable="False" Background="Transparent">
+                    <ItemsControl DockPanel.Dock="Left"
+                                  Focusable="False"
+                                  ItemsSource="{TemplateBinding LeftMargins}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                    <Panel>
+                        <ContentPresenter Name="PART_CP"
+                                          Cursor="IBeam"
+                                          Focusable="False"
+                                          Background="Transparent" />
+                        <TextBlock Name="PART_Watermark"
+                                   Opacity="0.5"
+                                   Text="{TemplateBinding Watermark}"
+                                   Foreground="{TemplateBinding Foreground}">
+                            <TextBlock.IsVisible>
+                                <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Document.Text"
+                                         Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                            </TextBlock.IsVisible>
+                        </TextBlock>
+                    </Panel>
+                </DockPanel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
 </ResourceDictionary>
