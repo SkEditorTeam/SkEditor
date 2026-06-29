@@ -1,12 +1,7 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avaloniaedit="https://github.com/avaloniaui/avaloniaedit"
         xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
         xmlns:uip="clr-namespace:FluentAvalonia.UI.Controls.Primitives;assembly=FluentAvalonia">
-    <Style Selector="avaloniaedit|TextEditor /template/ Border">
-        <Setter Property="CornerRadius" Value="0,7,7,7" />
-        <Setter Property="ClipToBounds" Value="True" />
-    </Style>
     <Style Selector="ui|FATabView /template/ ContentPresenter#TabContentPresenter">
         <Setter Property="CornerRadius" Value="0,7,7,7" />
         <Setter Property="ClipToBounds" Value="True" />

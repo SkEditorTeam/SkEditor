@@ -34,6 +34,7 @@
                 <ResourceInclude Source="avares://SkEditor/Styles/NumericUpDownStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/NavigationViewStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/SettingsExpanderItemStyles.axaml" />
+                <ResourceInclude Source="avares://SkEditor/Styles/TextEditorStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/AppWindowStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/ThemeColors.axaml" />
