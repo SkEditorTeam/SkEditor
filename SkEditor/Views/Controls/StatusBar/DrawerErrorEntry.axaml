@@ -3,31 +3,62 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:input="clr-namespace:Avalonia.Input"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.DrawerErrorEntry"
-             DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Border Background="#05FFFFFF" BorderBrush="#10FFFFFF" BorderThickness="1" CornerRadius="5"
-            Padding="8,4">
+             x:Name="Root">
+    <UserControl.Resources>
+        <ControlTheme x:Key="ButtonTheme" TargetType="Button">
+            <Setter Property="Background" Value="#05FFFFFF" />
+            <Setter Property="BorderBrush" Value="#10FFFFFF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Padding" Value="8,4" />
+
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Duration="0:0:0.075" Property="Background" />
+                    <BrushTransition Duration="0:0:0.075" Property="BorderBrush" />
+                </Transitions>
+            </Setter>
+
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="#0CFFFFFF" />
+                <Setter Property="BorderBrush" Value="#20FFFFFF" />
+            </Style>
+            <Style Selector="^:pressed">
+                <Setter Property="Background" Value="#14FFFFFF" />
+                <Setter Property="BorderBrush" Value="#28FFFFFF" />
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Theme="{DynamicResource ButtonTheme}">
+        <Interaction.Behaviors>
+            <input:InputElementDoubleTappedEventCommandTrigger Command="{Binding #Root.ErrorClickCommand}" />
+        </Interaction.Behaviors>
+        
         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
             <Viewbox Grid.Column="0" Height="18" Width="18">
-                <icons:SymbolIcon Symbol="{Binding ErrorIcon}" Foreground="{Binding ErrorColor}" Height="24" Width="24" />
+                <icons:SymbolIcon Symbol="{Binding #Root.ErrorIcon}" Foreground="{Binding #Root.ErrorColor}"
+                                  Height="24" Width="24" />
             </Viewbox>
 
             <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
                 <TextBlock FontSize="12" TextWrapping="Wrap"
                            Foreground="{DynamicResource ForegroundColor}"
-                           Text="{Binding ErrorMessage}" />
+                           Text="{Binding #Root.ErrorMessage}" />
             </StackPanel>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="24">
                 <TextBlock FontSize="11" Foreground="{DynamicResource ForegroundSecondaryColor}"
-                           VerticalAlignment="Center" FontWeight="Medium" Text="{Binding ErrorSource}" />
+                           VerticalAlignment="Center" FontWeight="Medium" Text="{Binding #Root.ErrorSource}" />
                 <TextBlock FontSize="11" Foreground="{DynamicResource ForegroundSecondaryColor}"
                            VerticalAlignment="Center" TextAlignment="Right">
                     <Run Text="Line " />
-                    <Run Text="{Binding ErrorLine}" />
+                    <Run Text="{Binding #Root.ErrorLine}" />
                 </TextBlock>
             </StackPanel>
         </Grid>
-    </Border>
+    </Button>
 </UserControl>

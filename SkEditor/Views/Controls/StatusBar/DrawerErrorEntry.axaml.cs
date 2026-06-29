@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 
 namespace SkEditor.Views.Controls.StatusBar;
@@ -73,6 +74,15 @@ public partial class DrawerErrorEntry : UserControl
         private set => SetAndRaise(ErrorColorProperty, ref field, value);
     } = new(Color.Parse("#4D9AFF"));
 
+    public static readonly StyledProperty<IRelayCommand> ErrorClickCommandProperty =
+        AvaloniaProperty.Register<DrawerErrorEntry, IRelayCommand>(nameof(ErrorClickCommand));
+
+    public IRelayCommand ErrorClickCommand
+    {
+        get => GetValue(ErrorClickCommandProperty);
+        set => SetValue(ErrorClickCommandProperty, value);
+    }
+    
     public DrawerErrorEntry() => InitializeComponent();
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

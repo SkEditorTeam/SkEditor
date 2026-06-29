@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Contracts.Services;
 
 namespace SkEditor.ViewModels.Controls;
 
-public partial class BottomDrawerViewModel : ObservableObject
+public partial class BottomDrawerViewModel(INotificationService notifs) : ObservableObject
 {
     [ObservableProperty]
     public partial double? DrawerHeight { get; set; } = 0;
@@ -37,5 +38,11 @@ public partial class BottomDrawerViewModel : ObservableObject
         {
             OpenDrawer();
         }
+    }
+
+    [RelayCommand]
+    public void ErrorClick()
+    {
+        notifs.Debug("you clicked the error");
     }
 }
