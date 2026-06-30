@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Theme = SkEditor.Models.UI.Theme;
 
@@ -15,4 +16,6 @@ public interface IThemeService
     Task ReloadCurrentThemeAsync();
     Task SetThemeAsync(Theme theme);
     Task ApplyThemeAsync();
+
+    event Action ThemeChanged;
 }

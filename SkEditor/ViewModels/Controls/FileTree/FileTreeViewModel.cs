@@ -29,7 +29,8 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
     private CancellationTokenSource? _cts;
 
     public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard,
-        IDialogService dialogs, ILinkService links, ITabService tabs, AppSettings appSettings, IMessenger messenger)
+        IDialogService dialogs, ILinkService links, ITabService tabs, AppSettings appSettings, IThemeService themes,
+        IMessenger messenger)
     {
         _logs = logs;
         _notifs = notifs;
@@ -45,6 +46,8 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
         InitializeCommandMap();
 
         messenger.Register(this);
+
+        themes.ThemeChanged += () => Dispatcher.UIThread.Post(() => ThemeVersion++);
     }
 
     [ObservableProperty]
@@ -53,6 +56,9 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
     [ObservableProperty]
     public partial bool IsLoading { get; set; }
 
+    [ObservableProperty]
+    public partial int ThemeVersion { get; set; }
+    
     public ObservableCollection<FileSystemNode> RootItems { get; } = [];
 
     public ObservableCollection<FileSystemNode> SelectedNodes { get; } = [];

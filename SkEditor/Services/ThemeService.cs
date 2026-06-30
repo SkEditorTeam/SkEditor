@@ -24,6 +24,7 @@ public class ThemeService(
     ILogService log,
     IConfigService config,
     AppSettings appSettings,
+    IconProvider iconProvider,
     WindowRegistry windowRegistry) : IThemeService
 {
     private bool _defaultColorsCollected;
@@ -34,6 +35,8 @@ public class ThemeService(
     public Theme CurrentTheme { get; set; } = new();
 
     public string ThemeFolderPath { get; set; } = Path.Combine(config.GetAppDataPath(), "Themes");
+
+    public event Action? ThemeChanged;
 
     public void LoadThemes()
     {
@@ -199,6 +202,7 @@ public class ThemeService(
 
         UpdateTextEditorColors();
         ApplyTerminalTheme();
+        await UpdateExplorerIcons();
 
         tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
         {
@@ -211,10 +215,17 @@ public class ThemeService(
 
         UpdateFont();
 
+        ThemeChanged?.Invoke();
+
         await Task.WhenAll(tasks);
     }
 
-    public void ApplyTerminalTheme()
+    private async Task UpdateExplorerIcons()
+    {
+        await iconProvider.LoadIcons(CurrentTheme.ExplorerIconColors);
+    }
+
+    private void ApplyTerminalTheme()
     {
         ConsolePalette? palette = ConsolePalette.CreateDefault();
 
@@ -228,7 +239,7 @@ public class ThemeService(
             bool isBg = key.StartsWith("Bg", StringComparison.OrdinalIgnoreCase);
             string colorName = key[2..];
 
-            if (Enum.TryParse<AnsiColor>(colorName, true, out AnsiColor ansiColor) &&
+            if (Enum.TryParse(colorName, true, out AnsiColor ansiColor) &&
                 Color.TryParse(hex, out Color color))
             {
                 palette[ansiColor, isBg] = color;

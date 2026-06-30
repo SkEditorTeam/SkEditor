@@ -21,7 +21,6 @@ public class StartupService(
     WindowStateService windowStateService,
     WindowErrorService windowErrorService,
     NamedPipeServer namedPipeServer,
-    IconProvider iconProvider,
     IConfigService config,
     AppSettings appSettings,
     LegacyConfigMigrator configMigrator,
@@ -78,7 +77,6 @@ public class StartupService(
 
         await configMigrator.MigrateConfigsAsync();
         await config.LoadAllConfigsAsync();
-        await iconProvider.LoadIcons();
 
         MainWindow mainWindow = await Dispatcher.UIThread.InvokeAsync(() => mainWindowFactory.Create(splashScreen));
 

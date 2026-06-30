@@ -86,6 +86,37 @@ public partial class Theme
 
     public Dictionary<string, string> TerminalColors { get; set; } = new();
 
+    public Dictionary<string, string> ExplorerIconColors { get; set; } = new()
+    {
+        { "sftp-root", "#8CA9FF" },
+        { "folder", "#FFCF40" },
+        { "skript", "#00C853" },
+        { "database", "#BEF26F" },
+        { "table", "#FF8A30" },
+        { "yaml", "#49B7E3" },
+        { "json", "#FFB300" },
+        { "settings", "#49B7E3" },
+        { "xml", "#44D468" },
+        { "schematic", "#FF9800" },
+        { "nbt", "#607D8B" },
+        { "image", "#29B6F6" },
+        { "audio", "#BCF02E" },
+        { "video", "#FF5252" },
+        { "text", "#CFD8DC" },
+        { "log", "#BDCFD9" },
+        { "markdown", "#4FC3F7" },
+        { "binary", "#F53D3D" },
+        { "executable", "#35D4B4" },
+        { "jar", "#F03765" },
+        { "class", "#D32F2F" },
+        { "shell", "#4AB9ED" },
+        { "archive", "#FF87B7" },
+        { "key", "#E38B2D" },
+        { "git", "#F26A3D" },
+        { "pdf", "#FF595C" },
+        { "code", "#7ED4E6" }
+    };
+
     private static Brush C(string hex)
     {
         return new Brush(Color.Parse(hex));

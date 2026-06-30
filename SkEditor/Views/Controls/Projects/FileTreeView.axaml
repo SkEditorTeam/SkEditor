@@ -12,6 +12,7 @@
              xmlns:fileTree="clr-namespace:SkEditor.ViewModels.Controls.FileTree"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="fileTree:FileTreeViewModel"
+             Name="Root"
              x:Class="SkEditor.Views.Controls.Projects.FileTreeView">
 
     <UserControl.Resources>
@@ -91,6 +92,7 @@
                                     <MultiBinding Converter="{StaticResource NodeToColorConverter}">
                                         <Binding Path="." />
                                         <Binding Path="Name" />
+                                        <Binding Path="#Root.((fileTree:FileTreeViewModel)DataContext)?.ThemeVersion" />
                                     </MultiBinding>
                                 </icons:SymbolIcon.Foreground>
                                 <icons:SymbolIcon.Symbol>

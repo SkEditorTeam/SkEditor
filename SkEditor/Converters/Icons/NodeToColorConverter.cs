@@ -31,9 +31,9 @@ public class NodeToColorConverter : IMultiValueConverter, IValueConverter
         switch (value)
         {
             case SftpFolderNode { IsRoot: true }:
-                return new ImmutableSolidColorBrush(Color.Parse("#8CA9FF"));
+                return new ImmutableSolidColorBrush(Color.Parse(_iconProvider.GetColorForId("sftp-root")));
             case BaseFolderNode:
-                return new ImmutableSolidColorBrush(Color.Parse("#FFCF40"));
+                return new ImmutableSolidColorBrush(Color.Parse(_iconProvider.GetColorForId("folder")));
             case BaseFileNode file:
             {
                 string ext = Path.GetExtension(file.Name);

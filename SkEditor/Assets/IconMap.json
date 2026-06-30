@@ -1,14 +1,24 @@
 ﻿[
   {
+    "id": "sftp-root",
+    "icon": "Desktop",
+    "extensions": []
+  },
+  {
+    "id": "folder",
+    "icon": "Folder",
+    "extensions": []
+  },
+  {
+    "id": "skript",
     "icon": "Script",
-    "color": "#00C853",
     "extensions": [
       ".sk"
     ]
   },
   {
+    "id": "database",
     "icon": "Database",
-    "color": "#BEF26F",
     "extensions": [
       ".sql",
       ".db",
@@ -17,24 +27,24 @@
     ]
   },
   {
+    "id": "table",
     "icon": "DocumentTable",
-    "color": "#FF8A30",
     "extensions": [
       ".csv",
       ".tsv"
     ]
   },
   {
+    "id": "yaml",
     "icon": "DocumentYml",
-    "color": "#49B7E3",
     "extensions": [
       ".yml",
       ".yaml"
     ]
   },
   {
+    "id": "json",
     "icon": "Braces",
-    "color": "#FFB300",
     "extensions": [
       ".json",
       ".json5",
@@ -43,8 +53,8 @@
     ]
   },
   {
+    "id": "settings",
     "icon": "DocumentSettings",
-    "color": "#49B7E3",
     "extensions": [
       ".toml",
       ".properties",
@@ -57,15 +67,15 @@
     ]
   },
   {
+    "id": "xml",
     "icon": "Code",
-    "color": "#44D468",
     "extensions": [
       ".xml"
     ]
   },
   {
+    "id": "schematic",
     "icon": "DocumentCube",
-    "color": "#FF9800",
     "extensions": [
       ".schem",
       ".schematic",
@@ -74,8 +84,8 @@
     ]
   },
   {
+    "id": "nbt",
     "icon": "DocumentCube",
-    "color": "#607D8B",
     "extensions": [
       ".nbt",
       ".dat",
@@ -83,8 +93,8 @@
     ]
   },
   {
+    "id": "image",
     "icon": "Image",
-    "color": "#29B6F6",
     "extensions": [
       ".png",
       ".jpg",
@@ -97,8 +107,8 @@
     ]
   },
   {
+    "id": "audio",
     "icon": "MusicNote2",
-    "color": "#BCF02E",
     "extensions": [
       ".mp3",
       ".wav",
@@ -110,8 +120,8 @@
     ]
   },
   {
+    "id": "video",
     "icon": "Video",
-    "color": "#FF5252",
     "extensions": [
       ".mp4",
       ".mkv",
@@ -121,30 +131,30 @@
     ]
   },
   {
+    "id": "text",
     "icon": "DocumentText",
-    "color": "#CFD8DC",
     "extensions": [
       ".txt",
       ".info"
     ]
   },
   {
+    "id": "log",
     "icon": "DocumentHeader",
-    "color": "#BDCFD9",
     "extensions": [
       ".log"
     ]
   },
   {
+    "id": "markdown",
     "icon": "DocumentBulletList",
-    "color": "#4FC3F7",
     "extensions": [
       ".md"
     ]
   },
   {
+    "id": "binary",
     "icon": "DocumentCube",
-    "color": "#F53D3D",
     "extensions": [
       ".dll",
       ".so",
@@ -153,30 +163,30 @@
     ]
   },
   {
+    "id": "executable",
     "icon": "Play",
-    "color": "#35D4B4",
     "extensions": [
       ".exe",
       ".msi"
     ]
   },
   {
+    "id": "jar",
     "icon": "Box",
-    "color": "#F03765",
     "extensions": [
       ".jar"
     ]
   },
   {
+    "id": "class",
     "icon": "DocumentCube",
-    "color": "#D32F2F",
     "extensions": [
       ".class"
     ]
   },
   {
+    "id": "shell",
     "icon": "WindowConsole",
-    "color": "#4AB9ED",
     "extensions": [
       ".bat",
       ".cmd",
@@ -187,8 +197,8 @@
     ]
   },
   {
+    "id": "archive",
     "icon": "FolderZip",
-    "color": "#FF87B7",
     "extensions": [
       ".zip",
       ".rar",
@@ -200,8 +210,8 @@
     ]
   },
   {
+    "id": "key",
     "icon": "Key",
-    "color": "#E38B2D",
     "extensions": [
       ".env",
       ".pem",
@@ -212,23 +222,23 @@
     ]
   },
   {
+    "id": "git",
     "icon": "BranchFork",
-    "color": "#F26A3D",
     "extensions": [
       ".gitignore",
       ".gitattributes"
     ]
   },
   {
+    "id": "pdf",
     "icon": "DocumentPdf",
-    "color": "#FF595C",
     "extensions": [
       ".pdf"
     ]
   },
   {
+    "id": "code",
     "icon": "Code",
-    "color": "#7ED4E6",
     "extensions": [
       ".mcfunction",
       ".cs",
