@@ -25,7 +25,8 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
             BufferSize = 1000,
             Background = Brushes.Transparent,
             Foreground = Brush.Parse("#cccccc"),
-            CloseProcessOnDetach = false
+            CloseProcessOnDetach = false,
+            StartingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
         };
 
         if (OperatingSystem.IsWindows())
