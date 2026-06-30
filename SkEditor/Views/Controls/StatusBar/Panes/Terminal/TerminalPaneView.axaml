@@ -2,15 +2,35 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:terminal="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal"
+             xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.Panes.TerminalPaneView"
-             x:DataType="terminal:TerminalPaneViewModel"
+             x:DataType="vm:TerminalPaneViewModel"
              Name="Root">
-    <Border Background="#05FFFFFF" BorderBrush="#10FFFFFF" BorderThickness="1" CornerRadius="7" Padding="12">
+    <Border>
         <ContentControl Content="{Binding TerminalControl}"
                         FontFamily="{DynamicResource JetBrainsFont}"
                         FontSize="12"
                         FontFeatures="-liga,-calt,-clig" />
+
+        <Border.Styles>
+            <Style Selector="Border">
+                <Setter Property="Background" Value="#05FFFFFF" />
+                <Setter Property="BorderBrush" Value="#10FFFFFF" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="7" />
+                <Setter Property="Padding" Value="12" />
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <BrushTransition Property="Background" Duration="0:0:0.1" />
+                        <BrushTransition Property="BorderBrush" Duration="0:0:0.1" />
+                    </Transitions>
+                </Setter>
+                <Style Selector="^:not(:focus-within)">
+                    <Setter Property="Background" Value="#03FFFFFF" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                </Style>
+            </Style>
+        </Border.Styles>
     </Border>
 </UserControl>
