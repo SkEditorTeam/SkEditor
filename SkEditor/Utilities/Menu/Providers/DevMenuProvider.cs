@@ -12,8 +12,8 @@ public class DevMenuProvider(AppSettings appSettings, IThemeService themes) : IM
     {
         MainMenuItem devMenu = MainMenuItem.HeaderOnly(TranslatableString.FromRawString("Dev"));
 
-        MainMenuItem.HeaderWithIcon(TranslatableString.FromRawString("Reload Theme"), Symbol.Color)
-            .WithCommand(themes.ReloadCurrentThemeAsync)
+        MainMenuItem.HeaderWithIcon(TranslatableString.FromRawString("Reload Themes"), Symbol.Color)
+            .WithCommand(themes.ReloadThemesAsync)
             .AddTo(devMenu);
 
         devMenu.IsVisible = appSettings.IsDevModeEnabled;

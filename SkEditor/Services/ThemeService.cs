@@ -277,6 +277,12 @@ public class ThemeService(
         styles.CustomAccentColor = accent;
     }
 
+    public async Task ReloadThemesAsync()
+    {
+        LoadThemes();
+        await ReloadCurrentThemeAsync();
+    }
+
     public async Task ReloadCurrentThemeAsync()
     {
         string themePath = CurrentTheme.IsBuiltIn

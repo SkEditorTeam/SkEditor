@@ -14,6 +14,7 @@ public interface IThemeService
     Theme? LoadTheme(string path, bool isBuiltIn = false);
     void SaveAllThemes();
     Task ReloadCurrentThemeAsync();
+    Task ReloadThemesAsync();
     Task SetThemeAsync(Theme theme);
     Task ApplyThemeAsync();
 
