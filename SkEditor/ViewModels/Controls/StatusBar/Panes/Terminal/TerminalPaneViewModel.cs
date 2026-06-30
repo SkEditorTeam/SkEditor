@@ -30,10 +30,15 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
 
         if (OperatingSystem.IsWindows())
         {
-            control.Process = IsCommandAvailable("pwsh.exe") ? "pwsh.exe" : "powershell.exe";
-            const string ps1Init =
-                "function Clear-Host { [Console]::Out.Write(\"$([char]27)]2;__CLEAR_SCROLLBACK__$([DateTime]::Now.Ticks)$([char]7)\"); [Console]::Out.Write(\"$([char]27)[2J$([char]27)[H\"); };";
-            control.Args = ["-NoLogo", "-NoExit", "-Command", ps1Init];
+            bool isNewPowershellAvailable = IsCommandAvailable("pwsh.exe");
+            control.Process = isNewPowershellAvailable ? "pwsh.exe" : "powershell.exe";
+
+            if (isNewPowershellAvailable)
+            {
+                const string ps1Init =
+                    "function Clear-Host { [Console]::Out.Write(\"$([char]27)]2;__CLEAR_SCROLLBACK__$([DateTime]::Now.Ticks)$([char]7)\"); [Console]::Out.Write(\"$([char]27)[2J$([char]27)[H\"); };";
+                control.Args = ["-NoLogo", "-NoExit", "-Command", ps1Init];
+            }
         }
         else
         {
@@ -53,15 +58,25 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
     {
         try
         {
-            Process.Start(new ProcessStartInfo
+            var startInfo = new ProcessStartInfo
             {
                 FileName = OperatingSystem.IsWindows() ? "where" : "which",
                 Arguments = command,
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
-            })?.WaitForExit();
-            return true;
+            };
+
+            using Process? process = Process.Start(startInfo);
+            if (process == null)
+            {
+                return false;
+            }
+
+            process.WaitForExit();
+
+            return process.ExitCode == 0;
         }
         catch
         {
