@@ -28,22 +28,31 @@ public class NodeToColorConverter : IMultiValueConverter, IValueConverter
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        switch (value)
+        Color color = value switch
         {
-            case SftpFolderNode { IsRoot: true }:
-                return new ImmutableSolidColorBrush(Color.Parse(_iconProvider.GetColorForId("sftp-root")));
-            case BaseFolderNode:
-                return new ImmutableSolidColorBrush(Color.Parse(_iconProvider.GetColorForId("folder")));
-            case BaseFileNode file:
-            {
-                string ext = Path.GetExtension(file.Name);
-                IconProvider.FileIconEntry iconData = _iconProvider.GetIconForExtension(ext);
+            SftpFolderNode { IsRoot: true } => GetColorForId("sftp-root"),
+            BaseFolderNode => GetColorForId("folder"),
+            BaseFileNode file => GetColorForExtension(Path.GetExtension(file.Name)),
+            _ => Colors.White
+        };
 
-                return new ImmutableSolidColorBrush(Color.Parse(iconData.Color));
-            }
-            default:
-                return Brushes.White;
-        }
+        return new ImmutableSolidColorBrush(color);
+    }
+
+    private Color GetColorForId(string id)
+    {
+        string colorString = _iconProvider.GetColorForId(id);
+        return Color.TryParse(colorString, out Color parsedColor)
+            ? parsedColor
+            : Colors.White;
+    }
+
+    private Color GetColorForExtension(string extension)
+    {
+        IconProvider.FileIconEntry iconData = _iconProvider.GetIconForExtension(extension);
+        return Color.TryParse(iconData.Color, out Color parsedColor)
+            ? parsedColor
+            : Colors.White;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
