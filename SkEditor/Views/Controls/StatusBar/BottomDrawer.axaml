@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:controls="clr-namespace:SkEditor.Views.Controls"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:BottomDrawerViewModel"
              x:Class="SkEditor.Views.Controls.StatusBar.BottomDrawer">
@@ -13,7 +14,7 @@
 
         <Grid RowDefinitions="Auto,*" RowSpacing="8">
             <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Height="36">
-                <Grid ColumnDefinitions="*, Auto">
+                <Grid ColumnDefinitions="*, Auto,Auto">
                     <controls:SkEditorTabStrip Grid.Column="0" Padding="16,8,8,0"
                                                ItemsSource="{Binding Items}"
                                                SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
@@ -26,6 +27,13 @@
                     <ContentControl Grid.Column="1"
                                     Content="{Binding SelectedItem?.Toolbar}"
                                     VerticalAlignment="Center" />
+
+                    <Button Grid.Column="2" Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
+                            Command="{Binding CloseDrawerCommand}" Margin="0,0,8,0">
+                        <Viewbox Height="14">
+                            <fluent:SymbolIcon Symbol="Subtract" />
+                        </Viewbox>
+                    </Button>
                 </Grid>
             </Border>
 
