@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using AvaloniaEdit.Document;
 using SkEditor.Contracts.Services.Files;
@@ -11,25 +12,26 @@ using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Utilities.StatusBar;
 
-public class EditorInfoStatusBarProvider : IStatusBarProvider
+public class EditorInfoStatusBarProvider(ITabService tabs, IWindowDialogService windowDialogs)
+    : IStatusBarProvider
 {
-    private readonly StatusBarItem _cursorItem;
-    private readonly ITabService _tabService;
+    private readonly StatusBarItem _cursorItem = new StatusBarItem()
+        .WithAlignment(StatusBarItem.ItemAlignment.Right)
+        .WithCommand(windowDialogs.ShowGoToLineDialogAsync);
 
     private TabViewModelBase? _currentTab;
 
-    public EditorInfoStatusBarProvider(ITabService tabService, IWindowDialogService windowDialogs)
+    public bool CanAttach => true;
+
+    public void Initialize()
     {
-        _tabService = tabService;
+        tabs.SelectedTabChanged += OnTabChanged;
+        OnTabChanged(tabs.SelectedTab);
 
-        _cursorItem = new StatusBarItem()
-            .WithAlignment(StatusBarItem.ItemAlignment.Right)
-            .WithCommand(windowDialogs.ShowGoToLineDialogAsync);
-
-        _tabService.SelectedTabChanged += OnTabChanged;
-
-        UpdateState();
+        AttachStatusChanged?.Invoke(this, EventArgs.Empty);
     }
+
+    public event EventHandler? AttachStatusChanged;
 
     public IEnumerable<StatusBarItem> GetItems()
     {
@@ -38,17 +40,24 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider
 
     private void OnTabChanged(TabViewModelBase? tab)
     {
-        _currentTab?.PropertyChanged -= OnTabPropertyChanged;
+        if (_currentTab != null)
+        {
+            _currentTab.PropertyChanged -= OnTabPropertyChanged;
+        }
+
         _currentTab = tab;
 
-        tab?.PropertyChanged += OnTabPropertyChanged;
+        if (tab != null)
+        {
+            tab.PropertyChanged += OnTabPropertyChanged;
+        }
 
         UpdateState();
     }
 
     private void UpdateState()
     {
-        if (_tabService.SelectedTab is ITextEditorTab editorTab)
+        if (tabs.SelectedTab is ITextEditorTab editorTab)
         {
             _cursorItem.IsVisible = true;
 

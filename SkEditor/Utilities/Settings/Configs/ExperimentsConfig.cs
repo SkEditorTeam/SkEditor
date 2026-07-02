@@ -27,6 +27,12 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     [ObservableProperty]
     public partial bool SplitViewEnabled { get; set; } = false;
 
+    /// <summary>
+    ///     Enables the Bottom Drawer feature.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool BottomDrawerEnabled { get; set; } = false;
+
     protected override string GetFileName()
     {
         return "experiments.json";

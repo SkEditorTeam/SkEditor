@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,15 +25,46 @@ public partial class StatusBarViewModel : ObservableObject
         _windowDialogs = windowDialogs;
         _notifs = notifs;
 
-        foreach (StatusBarItem item in providers.SelectMany(p => p.GetItems()))
+        foreach (IStatusBarProvider provider in providers)
         {
-            if (item.Alignment == StatusBarItem.ItemAlignment.Left)
+            provider.AttachStatusChanged += OnAttachStatusChanged;
+            provider.Initialize();
+        }
+    }
+
+    private void OnAttachStatusChanged(object? sender, EventArgs e)
+    {
+        if (sender is not IStatusBarProvider provider)
+        {
+            return;
+        }
+
+        if (provider.CanAttach)
+        {
+            foreach (StatusBarItem item in provider.GetItems())
             {
-                LeftItems.Add(item);
+                if (item.Alignment == StatusBarItem.ItemAlignment.Left)
+                {
+                    LeftItems.Add(item);
+                }
+                else
+                {
+                    RightItems.Add(item);
+                }
             }
-            else
+        }
+        else
+        {
+            foreach (StatusBarItem item in provider.GetItems())
             {
-                RightItems.Add(item);
+                if (item.Alignment == StatusBarItem.ItemAlignment.Left)
+                {
+                    LeftItems.Remove(item);
+                }
+                else
+                {
+                    RightItems.Remove(item);
+                }
             }
         }
     }

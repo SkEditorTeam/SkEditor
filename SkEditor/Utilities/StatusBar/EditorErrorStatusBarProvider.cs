@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
 
 namespace SkEditor.Utilities.StatusBar;
@@ -10,18 +12,12 @@ namespace SkEditor.Utilities.StatusBar;
 public class EditorErrorStatusBarProvider : IStatusBarProvider
 {
     private readonly StatusBarItem _item;
+    private readonly ExperimentsConfig _experiments;
 
-    public enum EditorErrorStatus
+    public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments)
     {
-        AllGood,
-        Error,
-        Warning
-    }
+        _experiments = experiments;
 
-    private EditorErrorStatus _status = EditorErrorStatus.AllGood;
-
-    public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer)
-    {
         _item = new StatusBarItem()
             .WithIcon(Symbol.ErrorCircle)
             .WithText(TranslatableString.FromRawString("2"))
@@ -32,6 +28,23 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
 
         _item.WithCommand(command);
     }
+
+    public bool CanAttach => _experiments.BottomDrawerEnabled;
+
+    public void Initialize()
+    {
+        AttachStatusChanged?.Invoke(this, EventArgs.Empty);
+
+        _experiments.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(ExperimentsConfig.BottomDrawerEnabled))
+            {
+                AttachStatusChanged?.Invoke(this, EventArgs.Empty);
+            }
+        };
+    }
+
+    public event EventHandler? AttachStatusChanged;
 
     public IEnumerable<StatusBarItem> GetItems()
     {

@@ -41,7 +41,14 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                     .WithDescription(TranslatableString.FromRawString(
                         "Enables the Split View feature. THIS FEATURE IS VERY EARLY IN DEVELOPMENT!"))
                     .WithIcon(Symbol.DocumentLandscapeSplitHint)
-                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled))
+                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled)),
+
+                ToggleSetting
+                    .Create(TranslatableString.FromRawString("Bottom Drawer"))
+                    .WithDescription(TranslatableString.FromRawString(
+                        "Enables the Bottom Drawer feature. THIS FEATURE IS VERY EARLY IN DEVELOPMENT!"))
+                    .WithIcon(Symbol.PanelBottom)
+                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.BottomDrawerEnabled))
             ]);
     }
 }
