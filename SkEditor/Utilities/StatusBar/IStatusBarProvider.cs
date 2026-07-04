@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using R3;
 using SkEditor.ViewModels.Controls;
 
 namespace SkEditor.Utilities.StatusBar;
 
 public interface IStatusBarProvider
 {
-    bool CanAttach { get; }
-
-    void Initialize();
-
-    event EventHandler? AttachStatusChanged;
+    ReadOnlyReactiveProperty<bool> CanAttach { get; }
     
     IEnumerable<StatusBarItem> GetItems();
 }

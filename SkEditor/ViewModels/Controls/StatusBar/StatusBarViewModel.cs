@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Notifications;
@@ -12,10 +13,11 @@ using SkEditor.Utilities.StatusBar;
 
 namespace SkEditor.ViewModels.Controls;
 
-public partial class StatusBarViewModel : ObservableObject
+public partial class StatusBarViewModel : ObservableObject, IDisposable
 {
     private readonly INotificationService _notifs;
     private readonly IWindowDialogService _windowDialogs;
+    private DisposableBag _disposables;
 
     public StatusBarViewModel(
         IWindowDialogService windowDialogs,
@@ -27,44 +29,30 @@ public partial class StatusBarViewModel : ObservableObject
 
         foreach (IStatusBarProvider provider in providers)
         {
-            provider.AttachStatusChanged += OnAttachStatusChanged;
-            provider.Initialize();
+            provider.CanAttach
+                .Subscribe(canAttach => OnAttachStatusChanged(provider, canAttach))
+                .AddTo(ref _disposables);
         }
     }
 
-    private void OnAttachStatusChanged(object? sender, EventArgs e)
+    private void OnAttachStatusChanged(IStatusBarProvider provider, bool canAttach)
     {
-        if (sender is not IStatusBarProvider provider)
+        foreach (StatusBarItem item in provider.GetItems())
         {
-            return;
-        }
+            ObservableCollection<StatusBarItem> targetCollection = item.Alignment == StatusBarItem.ItemAlignment.Left
+                ? LeftItems
+                : RightItems;
 
-        if (provider.CanAttach)
-        {
-            foreach (StatusBarItem item in provider.GetItems())
+            if (canAttach)
             {
-                if (item.Alignment == StatusBarItem.ItemAlignment.Left)
+                if (!targetCollection.Contains(item))
                 {
-                    LeftItems.Add(item);
-                }
-                else
-                {
-                    RightItems.Add(item);
+                    targetCollection.Add(item);
                 }
             }
-        }
-        else
-        {
-            foreach (StatusBarItem item in provider.GetItems())
+            else
             {
-                if (item.Alignment == StatusBarItem.ItemAlignment.Left)
-                {
-                    LeftItems.Remove(item);
-                }
-                else
-                {
-                    RightItems.Remove(item);
-                }
+                targetCollection.Remove(item);
             }
         }
     }
@@ -93,5 +81,11 @@ public partial class StatusBarViewModel : ObservableObject
     {
         _notifs.RemoveFromHistory(notification);
         OnPropertyChanged(nameof(Notifications));
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _disposables.Dispose();
     }
 }
