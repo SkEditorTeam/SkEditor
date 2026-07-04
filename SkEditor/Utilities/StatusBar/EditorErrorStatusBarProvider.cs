@@ -17,8 +17,8 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
     public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments)
     {
         _item = new StatusBarItem()
-            .WithIcon(Symbol.ErrorCircle)
             .WithIcon(Symbol.SpinnerIos)
+            .WithIconClass("spin")
             .WithText(TranslatableString.FromRawString("2"))
             .WithColor(Color.Parse("#A0A5AF"))
             .WithAlignment(StatusBarItem.ItemAlignment.Left);

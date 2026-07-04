@@ -23,6 +23,9 @@ public partial class StatusBarItem : ObservableObject
     public partial Symbol? IconSymbol { get; set; }
 
     [ObservableProperty]
+    public partial string? IconClass { get; set; }
+
+    [ObservableProperty]
     public partial IRelayCommand? Command { get; set; }
 
     [ObservableProperty]
@@ -52,6 +55,12 @@ public partial class StatusBarItem : ObservableObject
     public StatusBarItem WithIcon(Symbol icon)
     {
         IconSymbol = icon;
+        return this;
+    }
+
+    public StatusBarItem WithIconClass(string iconClass)
+    {
+        IconClass = iconClass;
         return this;
     }
 

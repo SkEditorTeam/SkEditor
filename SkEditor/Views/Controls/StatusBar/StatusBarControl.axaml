@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
@@ -23,9 +23,28 @@
                 <Setter Property="BorderBrush" Value="Transparent" />
             </Style>
 
-            <Style Selector="^ fluent|SymbolIcon">
+            <Style Selector="^ icons|SymbolIcon">
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
             </Style>
+        </Style>
+
+        <Style Selector="icons|SymbolIcon.spin">
+            <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+            <Setter Property="RenderTransform">
+                <RotateTransform Angle="0" />
+            </Setter>
+            <Style.Animations>
+                <Animation Duration="0:0:1"
+                           IterationCount="Infinite"
+                           PlaybackDirection="Normal">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
         </Style>
     </UserControl.Styles>
 
@@ -41,10 +60,11 @@
                     IsVisible="{Binding IsVisible}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <Viewbox Width="18" Height="18" VerticalAlignment="Center" Margin="0,1,0,0">
-                        <fluent:SymbolIcon Width="20" Height="20" FontSize="18"
-                                           Symbol="{Binding IconSymbol}"
-                                           IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           Foreground="{Binding ForegroundColor, Converter={StaticResource ColorToBrushConverter}}" />
+                        <icons:SymbolIcon Width="20" Height="20" FontSize="18"
+                                          Symbol="{Binding IconSymbol}"
+                                          IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                          Foreground="{Binding ForegroundColor, Converter={StaticResource ColorToBrushConverter}}"
+                                          behaviors:BindableStyleClasses.Classes="{Binding IconClass}" />
                     </Viewbox>
                     <TextBlock Text="{Binding Text}"
                                IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -81,7 +101,7 @@
 
                 <Button BorderThickness="0" Background="Transparent" Height="28" Width="28" Padding="0"
                         CornerRadius="7">
-                    <fluent:SymbolIcon Symbol="Alert" FontSize="16" />
+                    <icons:SymbolIcon Symbol="Alert" FontSize="16" />
                     <Button.Flyout>
                         <Flyout Placement="TopEdgeAlignedRight" VerticalOffset="-16">
                             <Border Width="400" Height="500" Padding="0">
@@ -105,8 +125,8 @@
                                     <StackPanel IsVisible="{Binding !Notifications.Count}" Grid.Row="1" Spacing="16"
                                                 HorizontalAlignment="Center" VerticalAlignment="Center">
                                         <Viewbox Height="96">
-                                            <fluent:SymbolIcon Symbol="LeafTwo"
-                                                               Foreground="{DynamicResource ForegroundSecondaryColor}" />
+                                            <icons:SymbolIcon Symbol="LeafTwo"
+                                                              Foreground="{DynamicResource ForegroundSecondaryColor}" />
                                         </Viewbox>
                                         <TextBlock FontSize="16"
                                                    Text="{localization:Translate NotificationCenterEmpty}"
@@ -146,8 +166,8 @@
                                                                 CornerRadius="6"
                                                                 Command="{Binding $parent[UserControl].((vms:StatusBarViewModel)DataContext)?.ClearNotificationCommand}"
                                                                 CommandParameter="{Binding .}">
-                                                            <fluent:SymbolIcon Symbol="Dismiss" FontSize="12"
-                                                                               Foreground="{StaticResource ForegroundSecondaryColor}" />
+                                                            <icons:SymbolIcon Symbol="Dismiss" FontSize="12"
+                                                                              Foreground="{StaticResource ForegroundSecondaryColor}" />
                                                         </Button>
                                                     </Panel>
                                                 </DataTemplate>
