@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Analyzer;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Files;
@@ -24,6 +25,7 @@ public class StartupService(
     IConfigService config,
     AppSettings appSettings,
     LegacyConfigMigrator configMigrator,
+    IAnalyzer analyzer,
     IFileService files,
     string[] args) : IStartupService
 {
@@ -81,6 +83,8 @@ public class StartupService(
         MainWindow mainWindow = await Dispatcher.UIThread.InvokeAsync(() => mainWindowFactory.Create(splashScreen));
 
         namedPipeServer.Start();
+
+        _ = analyzer.Initialize();
 
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {

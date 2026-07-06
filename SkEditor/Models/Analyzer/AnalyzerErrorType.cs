@@ -3,5 +3,6 @@
 public enum AnalyzerErrorType
 {
     Error,
-    Warning
+    Warning,
+    Info
 }

@@ -35,7 +35,8 @@
 
     <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Theme="{DynamicResource ButtonTheme}">
         <Interaction.Behaviors>
-            <input:InputElementDoubleTappedEventCommandTrigger Command="{Binding #Root.ErrorClickCommand}" />
+            <input:InputElementDoubleTappedEventCommandTrigger Command="{Binding #Root.ErrorClickCommand}"
+                                                               Parameter="{Binding #Root.ErrorClickCommandParameter}" />
         </Interaction.Behaviors>
         
         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">

@@ -46,7 +46,7 @@ public partial class StatusBarItem : ObservableObject
         return new StatusBarItem { IconSymbol = icon };
     }
 
-    public StatusBarItem WithText(TranslatableString text)
+    public StatusBarItem WithText(TranslatableString? text)
     {
         Text = text;
         return this;
@@ -58,7 +58,7 @@ public partial class StatusBarItem : ObservableObject
         return this;
     }
 
-    public StatusBarItem WithIconClass(string iconClass)
+    public StatusBarItem WithIconClass(string? iconClass)
     {
         IconClass = iconClass;
         return this;

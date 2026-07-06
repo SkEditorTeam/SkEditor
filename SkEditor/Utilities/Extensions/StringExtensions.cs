@@ -1,9 +1,19 @@
-﻿namespace SkEditor.Utilities.Extensions;
+﻿using SkEditor.Utilities.Localization;
+
+namespace SkEditor.Utilities.Extensions;
 
 public static class StringExtensions
 {
-    public static string NormalizePathSeparators(this string path)
+    extension(string path)
     {
-        return path.Replace("\\", "/");
+        public string NormalizePathSeparators()
+        {
+            return path.Replace("\\", "/");
+        }
+
+        public TranslatableString ToTranslatable()
+        {
+            return TranslatableString.FromRawString(path);
+        }
     }
 }

@@ -8,6 +8,7 @@
              xmlns:analyzer="clr-namespace:SkEditor.Models.Analyzer"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.Panes.ErrorListPaneView"
+             Name="Root"
              x:DataType="vm:ErrorListPaneViewModel">
     <Grid RowDefinitions="Auto,*" Margin="8,4,0,8">
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
@@ -29,7 +30,9 @@
                         <statusBar:DrawerErrorEntry x:DataType="analyzer:AnalyzerError"
                                                     ErrorMessage="{Binding Message}"
                                                     ErrorType="{Binding Type}" ErrorLine="{Binding Line}"
-                                                    ErrorSource="{Binding File}" />
+                                                    ErrorSource="script"
+                                                    ErrorClickCommand="{Binding #Root.((vm:ErrorListPaneViewModel)DataContext)?.ErrorClickCommand}"
+                                                    ErrorClickCommandParameter="{Binding .}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

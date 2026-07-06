@@ -77,6 +77,15 @@ public partial class DrawerErrorEntry : UserControl
         set => SetValue(ErrorClickCommandProperty, value);
     }
 
+    public static readonly StyledProperty<object> ErrorClickCommandParameterProperty =
+        AvaloniaProperty.Register<DrawerErrorEntry, object>(nameof(ErrorClickCommandParameter));
+
+    public object ErrorClickCommandParameter
+    {
+        get => GetValue(ErrorClickCommandParameterProperty);
+        set => SetValue(ErrorClickCommandParameterProperty, value);
+    }
+
     public DrawerErrorEntry()
     {
         InitializeComponent();

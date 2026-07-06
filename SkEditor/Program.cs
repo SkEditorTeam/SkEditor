@@ -26,6 +26,7 @@ internal class Program
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace()
-            .WithInterFont();
+            .WithInterFont()
+            .UseR3();
     }
 }

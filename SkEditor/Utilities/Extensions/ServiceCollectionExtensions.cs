@@ -2,7 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using SkEditor.Analyzing;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Analyzer;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Contracts.Services.Localization;
@@ -252,7 +254,9 @@ public static class ServiceCollectionExtensions
             services.AddDrawer();
 
             services.AddSingleton<IStatusBarProvider, EditorInfoStatusBarProvider>();
-            services.AddSingleton<IStatusBarProvider, EditorErrorStatusBarProvider>();
+
+            services.AddSingleton<EditorErrorStatusBarProvider>();
+            services.AddSingleton<IStatusBarProvider>(sp => sp.GetRequiredService<EditorErrorStatusBarProvider>());
         }
 
         private void AddDrawer()
@@ -268,6 +272,12 @@ public static class ServiceCollectionExtensions
             viewLocator.Register<TerminalToolbarViewModel, TerminalToolbarView>();
 
             services.AddSingleton(viewLocator);
+        }
+
+        public void AddAnalyzer()
+        {
+            services.AddSingleton<IAnalyzer, Analyzer>();
+            services.AddTransient<IEditorFeature, AnalyzerFeature>();
         }
     }
 }
