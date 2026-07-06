@@ -54,8 +54,8 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid Name="MainGrid" ColumnDefinitions="450, *" Margin="24">
-        <Grid Grid.Column="0" Margin="16" RowSpacing="48" RowDefinitions="Auto,*" VerticalAlignment="Top">
+    <Grid Name="MainGrid" ColumnDefinitions="450, *" Margin="24,24,24,0">
+        <Grid Grid.Column="0" Margin="16,16,16,0" RowSpacing="48" RowDefinitions="Auto,*" VerticalAlignment="Top">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="24">
                 <Image Source="{StaticResource SkEditorLogo}" Height="100" Width="100">
                     <Image.Effect>
@@ -128,7 +128,7 @@
 
         <Border Grid.Column="1"
                 Name="RecentItemsPanel"
-                Margin="24,16,16,16"
+                Margin="24,16,16,0"
                 Background="#01FFFFFF"
                 BorderBrush="#0CFFFFFF"
                 BorderThickness="2"
