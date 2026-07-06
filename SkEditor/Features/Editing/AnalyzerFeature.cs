@@ -20,6 +20,7 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
 {
     private TextMarkerService? _textMarkers;
     private IDisposable? _textEnteredSubscription;
+    private CancellationTokenSource? _featureCts;
 
     public bool CanAttach(IFeatureTab tab)
     {
@@ -29,11 +30,13 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
         }
 
         string extension = Path.GetExtension(fileTab.Path ?? string.Empty).ToLowerInvariant();
-        return extension == ".sk";
+        return string.IsNullOrEmpty(extension) || extension == ".sk";
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
+        _featureCts = new CancellationTokenSource();
+        
         _textEnteredSubscription = editor.TextChangedAsObservable()
             .Debounce(TimeSpan.FromSeconds(0.5))
             .SubscribeAwait(async (_, ct) => { await AnalyzeText(editor, ct); }, AwaitOperation.Switch);
@@ -44,10 +47,16 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
             editor.TextArea.TextView.BackgroundRenderers.Add(_textMarkers);
             editor.TextArea.TextView.LineTransformers.Add(_textMarkers);
         }
+
+        _ = AnalyzeText(editor, _featureCts.Token);
     }
 
     public void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
+        _featureCts?.Cancel();
+        _featureCts?.Dispose();
+        _featureCts = null;
+
         _textEnteredSubscription?.Dispose();
         _textEnteredSubscription = null;
     }
@@ -55,6 +64,11 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
     private async Task AnalyzeText(TextEditor editor, CancellationToken ct)
     {
         AnalyzerResult? result = await analyzer.Analyze(editor.Text, ct);
+
+        if (ct.IsCancellationRequested)
+        {
+            return;
+        }
 
         _textMarkers?.RemoveAll();
 
@@ -66,7 +80,7 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
         foreach (AnalyzerError analyzerError in result.Errors)
         {
             DocumentLine? line = editor.Document.GetLineByNumber(analyzerError.Line);
-            (int length, int notEmptyColumn) = GetLineLengthAndNotEmptyColumn(editor, line);
+            (int length, int notEmptyColumn) = editor.GetLineLengthAndNotEmptyColumn(line);
 
             int offset = editor.Document.GetOffset(analyzerError.Line, notEmptyColumn);
 
@@ -80,35 +94,5 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
-    }
-
-    private static (int, int) GetLineLengthAndNotEmptyColumn(TextEditor textEditor, DocumentLine line)
-    {
-        int notEmptyColumn = 0;
-        int length = line.Length;
-        for (int i = 0; i < line.Length; i++)
-        {
-            if (char.IsWhiteSpace(textEditor.Document.GetCharAt(line.Offset + i)))
-            {
-                continue;
-            }
-
-            notEmptyColumn = i + 1;
-            length -= i;
-            break;
-        }
-
-        for (int i = line.Length - 1; i >= 0; i--)
-        {
-            if (char.IsWhiteSpace(textEditor.Document.GetCharAt(line.Offset + i)))
-            {
-                continue;
-            }
-
-            length -= line.Length - i - 1;
-            break;
-        }
-
-        return (length, notEmptyColumn);
     }
 }

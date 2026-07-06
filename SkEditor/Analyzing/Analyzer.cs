@@ -7,16 +7,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Analyzer;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.StatusBar;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Analyzing;
 
 public class Analyzer(
     IConfigService configs,
+    ITabService tabs,
     INotificationService notifs,
     EditorErrorStatusBarProvider statusBarErrors,
     ILogService logs) : IAnalyzer
@@ -51,7 +54,7 @@ public class Analyzer(
             StartInfo = startInfo
         };
 
-        _process.ErrorDataReceived += (sender, args) =>
+        _process.ErrorDataReceived += (_, args) =>
         {
             Notification notification = Notification
                 .Create(TranslatableString.FromRawString("Analyzer Error"))
@@ -61,7 +64,7 @@ public class Analyzer(
             notifs.Show(notification);
         };
 
-        _process.OutputDataReceived += (sender, args) =>
+        _process.OutputDataReceived += (_, args) =>
         {
             if (string.IsNullOrEmpty(args.Data))
             {
@@ -132,10 +135,10 @@ public class Analyzer(
 
             AnalyzeResultsDto? resultsDto = await _analysisTcs.Task;
 
-            if (resultsDto is not null)
+            if (resultsDto is not null && tabs.SelectedTab is IFileTab fileTab)
             {
                 AnalyzerResult result = AnalyzerResult.FromDto(resultsDto.Results.First().Value);
-                statusBarErrors.UpdateResult(result);
+                statusBarErrors.UpdateResult(fileTab, result);
                 return result;
             }
         }

@@ -5,10 +5,13 @@ using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using R3;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
 using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.StatusBar.Panes;
+using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 #pragma warning disable CS8846 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
@@ -17,16 +20,17 @@ namespace SkEditor.Utilities.StatusBar;
 public class EditorErrorStatusBarProvider : IStatusBarProvider
 {
     private readonly StatusBarItem _item;
-    private readonly BottomDrawerViewModel _drawer;
     private readonly ErrorListPaneViewModel _pane;
+    private readonly ITabService _tabs;
     private DisposableBag _disposables;
+
+    private readonly Dictionary<IFileTab, AnalyzerResult> _results = new();
 
     public ReactiveProperty<bool> IsAnalyzerLoaded { get; } = new(false);
     public ReactiveProperty<bool> IsAnalyzing { get; } = new(false);
 
-    public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments)
+    public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments, ITabService tabs)
     {
-        _drawer = drawer;
         _pane = drawer.GetPane<ErrorListPaneViewModel>() ??
                 throw new InvalidOperationException("ErrorListPaneViewModel not found");
 
@@ -45,20 +49,34 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
             .ToReadOnlyReactiveProperty(experiments.BottomDrawerEnabled)
             .AddTo(ref _disposables);
 
-        IsAnalyzerLoaded.AddTo(ref _disposables);
         IsAnalyzerLoaded
-            .Subscribe(_ => UpdateState());
+            .Subscribe(_ => UpdateState())
+            .AddTo(ref _disposables);
 
-        IsAnalyzing.AddTo(ref _disposables);
         IsAnalyzing
-            .Subscribe(_ => UpdateState());
+            .Subscribe(_ => UpdateState())
+            .AddTo(ref _disposables);
+
+        _tabs = tabs;
+
+        Observable.FromEvent<TabViewModelBase?>(
+                h => tabs.SelectedTabChanged += h,
+                h => tabs.SelectedTabChanged -= h)
+            .Subscribe(_ => UpdateState())
+            .AddTo(ref _disposables);
     }
 
     private void UpdateState()
     {
+        _pane.Errors.Clear();
+        if (_tabs.SelectedTab is IFileTab fileTab && _results.TryGetValue(fileTab, out AnalyzerResult? result))
+        {
+            result.Errors.ForEach(_pane.Errors.Add);
+        }
+        
         bool anyErrors = _pane.Errors.Any(e => e.Type == AnalyzerErrorType.Error);
         bool anyWarnings = _pane.Errors.Any(e => e.Type == AnalyzerErrorType.Warning);
-        
+
         Symbol icon = IsAnalyzerLoaded.Value switch
         {
             false or true when IsAnalyzing.Value => Symbol.SpinnerIos,
@@ -86,10 +104,9 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
         _item.WithColor(color);
     }
 
-    public void UpdateResult(AnalyzerResult result)
+    public void UpdateResult(IFileTab tab, AnalyzerResult result)
     {
-        _pane.Errors.Clear();
-        result.Errors.ForEach(_pane.Errors.Add);
+        _results[tab] = result;
         UpdateState();
     }
 
