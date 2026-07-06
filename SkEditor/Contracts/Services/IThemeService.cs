@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Theme = SkEditor.Models.UI.Theme;
+using Avalonia.Media;
+using SkEditor.Models.UI;
 
 namespace SkEditor.Contracts.Services;
 
@@ -17,6 +18,7 @@ public interface IThemeService
     Task ReloadThemesAsync();
     Task SetThemeAsync(Theme theme);
     Task ApplyThemeAsync();
+    Color GetAccentColor();
 
     event Action ThemeChanged;
 }

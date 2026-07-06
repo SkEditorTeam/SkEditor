@@ -6,7 +6,7 @@ using SkEditor.Contracts.Services;
 
 namespace SkEditor.Tranformers;
 
-public class OccurenceBackgroundTransformer(IThemeService themeService) : DocumentColorizingTransformer
+public class OccurenceBackgroundTransformer(IThemeService themes) : DocumentColorizingTransformer
 {
     public int LineNumber { get; set; }
 
@@ -32,8 +32,8 @@ public class OccurenceBackgroundTransformer(IThemeService themeService) : Docume
 
     private void ApplyChanges(VisualLineElement element)
     {
-        Color selectionColor = themeService.CurrentTheme.SelectionColor.Color;
-        Color accentColor = themeService.CurrentTheme.AccentColor.Color;
+        Color selectionColor = themes.CurrentTheme.SelectionColor.Color;
+        Color accentColor = themes.GetAccentColor();
 
         Color occurrenceColor = BlendColors(selectionColor, accentColor, 0.3);
 

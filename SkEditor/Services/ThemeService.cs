@@ -253,28 +253,29 @@ public class ThemeService(
     {
         FluentAvaloniaTheme styles = app.Styles.OfType<FluentAvaloniaTheme>().First();
 
-        Color accent;
-
-        if (CurrentTheme.AccentColor is null)
-        {
-            Color rawSystemColor = app.PlatformSettings?.GetColorValues().AccentColor1 ?? Colors.White;
-
-            HsvColor hsv = rawSystemColor.ToHsv();
-
-            double targetS = Math.Clamp(hsv.S * 0.65, 0.40, 0.55);
-            double targetV = Math.Clamp(hsv.V, 0.80, 0.90);
-
-            HsvColor newHsv = new(rawSystemColor.A, hsv.H, targetS, targetV);
-
-            accent = newHsv.ToRgb();
-        }
-        else
-        {
-            accent = CurrentTheme.AccentColor.Color;
-        }
+        Color accent = GetAccentColor();
 
         styles.PreferUserAccentColor = false;
         styles.CustomAccentColor = accent;
+    }
+
+    public Color GetAccentColor()
+    {
+        if (CurrentTheme.AccentColor is not null)
+        {
+            return CurrentTheme.AccentColor.Color;
+        }
+
+        Color rawSystemColor = Application.Current?.PlatformSettings?.GetColorValues().AccentColor1 ?? Colors.White;
+
+        HsvColor hsv = rawSystemColor.ToHsv();
+
+        double targetS = Math.Clamp(hsv.S * 0.65, 0.40, 0.55);
+        double targetV = Math.Clamp(hsv.V, 0.80, 0.90);
+
+        HsvColor newHsv = new(rawSystemColor.A, hsv.H, targetS, targetV);
+
+        return newHsv.ToRgb();
     }
 
     public async Task ReloadThemesAsync()
