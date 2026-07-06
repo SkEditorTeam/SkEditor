@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
@@ -180,32 +179,5 @@ public sealed class TextMarkerService(FileTabViewModel fileTab) : DocumentColori
 
             yield return new Point(start.X + (i * offset * multiplier), start.Y + (yOffset * multiplier));
         }
-    }
-}
-
-public sealed class TextMarker : TextSegment, ITextMarker
-{
-    private readonly TextMarkerService _service;
-
-    public TextMarker(TextMarkerService service, int startOffset, int length)
-    {
-        _service = service ?? throw new ArgumentNullException(nameof(service));
-        StartOffset = startOffset;
-        Length = length;
-        MarkerTypes = TextMarkerTypes.None;
-    }
-
-    public bool IsDeleted => !IsConnectedToCollection;
-
-    public Color? BackgroundColor { get; set; }
-    public Color? ForegroundColor { get; set; }
-    public TextMarkerTypes MarkerTypes { get; set; }
-    public Color MarkerColor { get; set; }
-
-    public Func<UserControl>? Tooltip { get; set; }
-
-    public void Delete()
-    {
-        _service.Remove(this);
     }
 }

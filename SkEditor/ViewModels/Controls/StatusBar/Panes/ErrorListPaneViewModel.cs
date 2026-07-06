@@ -7,7 +7,6 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs;
-using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Controls.StatusBar.Panes;
 
@@ -21,10 +20,9 @@ public partial class ErrorListPaneViewModel(INotificationService notifs, ITabSer
     [RelayCommand]
     public void ErrorClick(AnalyzerError error)
     {
-        if (tabs.SelectedTab is ITextEditorTab and FileTabViewModel fileTab)
+        if (tabs.SelectedTab is FileTabViewModel fileTab)
         {
             DocumentLine line = fileTab.Document.GetLineByNumber(error.Line);
-
             fileTab.RequestGoToLocation(new TextLocation(error.Line, line.EndOffset));
         }
     }
