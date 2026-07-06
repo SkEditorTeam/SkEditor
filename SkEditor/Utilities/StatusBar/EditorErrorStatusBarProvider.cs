@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
@@ -8,12 +10,15 @@ using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.StatusBar.Panes;
 
+#pragma warning disable CS8846 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+
 namespace SkEditor.Utilities.StatusBar;
 
 public class EditorErrorStatusBarProvider : IStatusBarProvider
 {
     private readonly StatusBarItem _item;
     private readonly BottomDrawerViewModel _drawer;
+    private readonly ErrorListPaneViewModel _pane;
     private DisposableBag _disposables;
 
     public ReactiveProperty<bool> IsAnalyzerLoaded { get; } = new(false);
@@ -22,7 +27,9 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
     public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments)
     {
         _drawer = drawer;
-        
+        _pane = drawer.GetPane<ErrorListPaneViewModel>() ??
+                throw new InvalidOperationException("ErrorListPaneViewModel not found");
+
         _item = new StatusBarItem()
             .WithIcon(Symbol.SpinnerIos)
             .WithIconClass("spin")
@@ -49,23 +56,29 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
 
     private void UpdateState()
     {
+        bool anyErrors = _pane.Errors.Any(e => e.Type == AnalyzerErrorType.Error);
+        bool anyWarnings = _pane.Errors.Any(e => e.Type == AnalyzerErrorType.Warning);
+        
         Symbol icon = IsAnalyzerLoaded.Value switch
         {
             false or true when IsAnalyzing.Value => Symbol.SpinnerIos,
+            true when anyErrors => Symbol.ErrorCircle,
+            true when anyWarnings => Symbol.Warning,
             true => Symbol.CheckmarkCircle
+        };
+
+        Color color = IsAnalyzerLoaded.Value switch
+        {
+            false => Color.Parse("#A0A5AF"),
+            true when anyErrors => Color.Parse("#FF2D52"),
+            true when anyWarnings => Color.Parse("#FFAE45"),
+            true => Color.Parse("#8BF07B"),
         };
 
         string? iconClass = IsAnalyzerLoaded.Value switch
         {
             false or true when IsAnalyzing.Value => "spin",
             true => null
-        };
-
-        Color color = IsAnalyzerLoaded.Value switch
-        {
-            true when IsAnalyzing.Value => Color.Parse("#8BF07B"),
-            true => Color.Parse("#8BF07B"),
-            false => Color.Parse("#A0A5AF")
         };
 
         _item.WithIcon(icon);
@@ -75,14 +88,9 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
 
     public void UpdateResult(AnalyzerResult result)
     {
-        ErrorListPaneViewModel? pane = _drawer.GetPane<ErrorListPaneViewModel>();
-        if (pane is null)
-        {
-            return;
-        }
-
-        pane.Errors.Clear();
-        result.Errors.ForEach(pane.Errors.Add);
+        _pane.Errors.Clear();
+        result.Errors.ForEach(_pane.Errors.Add);
+        UpdateState();
     }
 
     public ReadOnlyReactiveProperty<bool> CanAttach { get; }
