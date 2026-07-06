@@ -6,6 +6,7 @@
              xmlns:statusBar="clr-namespace:SkEditor.Views.Controls.StatusBar"
              xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes"
              xmlns:analyzer="clr-namespace:SkEditor.Models.Analyzer"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.Panes.ErrorListPaneView"
              Name="Root"
@@ -18,24 +19,41 @@
                     <behaviors:SmoothScrollBehavior />
                 </BehaviorCollection>
             </Interaction.Behaviors>
-            <ItemsControl ItemsSource="{Binding Errors}" Margin="0,0,14,0">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Spacing="6" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+            <Panel>
+                <ItemsControl ItemsSource="{Binding Errors}" Margin="0,0,14,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Spacing="6" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <statusBar:DrawerErrorEntry x:DataType="analyzer:AnalyzerError"
-                                                    ErrorMessage="{Binding Message}"
-                                                    ErrorType="{Binding Type}" ErrorLine="{Binding Line}"
-                                                    ErrorSource="script"
-                                                    ErrorClickCommand="{Binding #Root.((vm:ErrorListPaneViewModel)DataContext)?.ErrorClickCommand}"
-                                                    ErrorClickCommandParameter="{Binding .}" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <statusBar:DrawerErrorEntry x:DataType="analyzer:AnalyzerError"
+                                                        ErrorMessage="{Binding Message}"
+                                                        ErrorType="{Binding Type}" ErrorLine="{Binding Line}"
+                                                        ErrorSource="script"
+                                                        ErrorClickCommand="{Binding #Root.((vm:ErrorListPaneViewModel)DataContext)?.ErrorClickCommand}"
+                                                        ErrorClickCommandParameter="{Binding .}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel VerticalAlignment="Center" Spacing="12"
+                            IsVisible="{Binding !Errors.Count}">
+                    <Viewbox Height="48" Opacity="0.5">
+                        <icons:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
+                    </Viewbox>
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="No issues!"
+                                   HorizontalAlignment="Center" FontSize="16" Opacity="0.75" />
+                        <TextBlock Text="Your code is clean and free of errors, good job!"
+                                   HorizontalAlignment="Center" TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   FontSize="12" MaxWidth="300" Opacity="0.6" />
+                    </StackPanel>
+                </StackPanel>
+            </Panel>
         </ScrollViewer>
     </Grid>
 </UserControl>
