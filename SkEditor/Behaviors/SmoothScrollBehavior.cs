@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
+using AvaloniaEdit;
 using SkEditor.Utilities.Extensions;
 
 namespace SkEditor.Behaviors;
@@ -60,16 +61,20 @@ public class SmoothScrollBehavior : StyledElementBehavior<ScrollViewer>
             RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
         AssociatedObject!.SetValue(ScrollChangeSizeProperty, ChangeSize.Line);
 
-        AssociatedObject.Loaded += AssociatedObject_Loaded;
+        AssociatedObject!.SetValue(TextEditor.SmoothScrollActionProperty, AnimateTo);
+
+        AssociatedObject.Loaded += OnScrollViewerLoaded;
     }
 
     protected override void OnDetaching()
     {
         base.OnDetaching();
         AssociatedObject!.RemoveHandler(InputElement.PointerWheelChangedEvent, OnPointerWheelChanged);
+
+        AssociatedObject!.SetValue(TextEditor.SmoothScrollActionProperty, null);
     }
 
-    private void AssociatedObject_Loaded(object? sender, RoutedEventArgs e)
+    private void OnScrollViewerLoaded(object? sender, RoutedEventArgs e)
     {
         if (AssociatedObject == null)
         {
@@ -78,7 +83,7 @@ public class SmoothScrollBehavior : StyledElementBehavior<ScrollViewer>
 
         _scp = AssociatedObject?.Presenter as ScrollContentPresenter;
 
-        AssociatedObject!.Loaded -= AssociatedObject_Loaded;
+        AssociatedObject!.Loaded -= OnScrollViewerLoaded;
     }
 
     private void OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
@@ -246,6 +251,42 @@ public class SmoothScrollBehavior : StyledElementBehavior<ScrollViewer>
         };
 
         topLevel.RequestAnimationFrame(frameCallback);
+    }
+
+    public void AnimateTo(double targetY)
+    {
+        if (AssociatedObject == null)
+        {
+            return;
+        }
+
+        DateTime currentTime = DateTime.Now;
+        double maxOffset = AssociatedObject.Extent.Height - AssociatedObject.Bounds.Height;
+        if (maxOffset < 0)
+        {
+            maxOffset = 0;
+        }
+
+        targetY = Math.Clamp(targetY, 0, maxOffset);
+
+        if (_isAnimating)
+        {
+            double elapsedTime = (currentTime - _animationStartTime).TotalMilliseconds;
+            double progress = Math.Min(elapsedTime / AnimationDuration, 1.0);
+            double easedProgress = ScrollEasing.Ease(progress);
+
+            _startOffset += easedProgress * (_targetOffset - _startOffset);
+            _targetOffset = targetY;
+            _animationStartTime = currentTime;
+        }
+        else
+        {
+            _isAnimating = true;
+            _startOffset = AssociatedObject.Offset.Y;
+            _targetOffset = targetY;
+            _animationStartTime = currentTime;
+            Animate();
+        }
     }
 
     #region ScrollContentPresenter
