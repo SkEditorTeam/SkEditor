@@ -24,7 +24,7 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
 
     public bool CanAttach(IFeatureTab tab)
     {
-        if (!experiments.BottomDrawerEnabled || tab is not IFileTab fileTab)
+        if (!experiments.AnalyzerEnabled || tab is not IFileTab fileTab)
         {
             return false;
         }

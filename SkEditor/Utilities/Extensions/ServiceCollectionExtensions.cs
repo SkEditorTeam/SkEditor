@@ -195,6 +195,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<ISettingsSectionProvider, IntegrationsSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, ExperimentsSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, AdvancedSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, AnalyzerSectionProvider>();
         }
 
         private void AddMainMenuProviders()

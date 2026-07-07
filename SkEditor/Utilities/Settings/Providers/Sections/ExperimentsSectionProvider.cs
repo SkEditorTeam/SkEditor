@@ -1,12 +1,16 @@
-﻿using FluentIcons.Common;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using FluentIcons.Common;
+using R3;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.ExperimentsConfigProperty;
 
 namespace SkEditor.Utilities.Settings.Providers.Sections;
 
-public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettingsSectionProvider
+public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenger messenger) : ISettingsSectionProvider
 {
     public SettingSection GetSection()
     {
@@ -36,19 +40,46 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.GlobalColorPreviewEnabled))
                     ),
 
-                ToggleSetting
-                    .Create(TranslatableString.FromRawString("Split View"))
-                    .WithDescription(TranslatableString.FromRawString(
-                        "Enables the Split View feature. THIS FEATURE IS VERY EARLY IN DEVELOPMENT!"))
+                // ToggleSetting
+                //     .Create("Split View".ToTranslatable())
+                //     .WithDescription("Allows you to split the editor into two views for better multitasking and comparison of code files. This is a very early prototype!".ToTranslatable())
+                //     .WithIcon(Symbol.DocumentLandscapeSplitHint)
+                //     .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled)),
+                ExpandableSetting
+                    .Create("Split View".ToTranslatable())
+                    .WithDescription(
+                        "Allows you to split the editor into two views for better multitasking and comparison of code files."
+                            .ToTranslatable())
                     .WithIcon(Symbol.DocumentLandscapeSplitHint)
-                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled)),
+                    .WithChildren(
+                        InfoSetting
+                            .Create("Highly experimental!".ToTranslatable())
+                            .WithDescription(
+                                "This is more of a prototype than a fully functional feature. It *will* probably not work as expected and may cause issues."
+                                    .ToTranslatable())
+                            .WithIcon(Symbol.Warning)
+                            .WithType(InfoSetting.InfoType.Warning),
+                        ToggleSetting
+                            .Create("Enable Split View".ToTranslatable())
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled))
+                    ),
 
-                ToggleSetting
-                    .Create(TranslatableString.FromRawString("Bottom Drawer"))
-                    .WithDescription(TranslatableString.FromRawString(
-                        "Enables the Bottom Drawer feature. THIS FEATURE IS VERY EARLY IN DEVELOPMENT!"))
-                    .WithIcon(Symbol.PanelBottom)
-                    .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.BottomDrawerEnabled))
+                ExpandableSetting
+                    .Create("Analyzer".ToTranslatable())
+                    .WithDescription(
+                        "Enables the Analyzer feature, which provides real-time code analysis and suggestions."
+                            .ToTranslatable())
+                    .WithIcon(Symbol.Search)
+                    .WithChildren(
+                        ToggleSetting
+                            .Create("Enable Analyzer".ToTranslatable())
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerEnabled)),
+                        ClickableActionSetting
+                            .Create("Go to Analyzer settings".ToTranslatable())
+                            .WithAction(() => messenger.Send(new NavigateToSettingsSectionMessage("Analyzer")))
+                            .WithEnabled(experiments.ObservePropertyChanged(x => x.AnalyzerEnabled)
+                                .ToBindableReactiveProperty())
+                    )
             ]);
     }
 }

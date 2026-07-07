@@ -30,18 +30,18 @@ public partial class BottomDrawerViewModel : ObservableObject
 
         _experiments.PropertyChanged += (_, args) =>
         {
-            if (args.PropertyName != nameof(ExperimentsConfig.BottomDrawerEnabled))
+            if (args.PropertyName != nameof(ExperimentsConfig.AnalyzerEnabled))
             {
                 return;
             }
 
-            if (!_experiments.BottomDrawerEnabled)
+            if (!_experiments.AnalyzerEnabled)
             {
                 CloseDrawer();
             }
         };
 
-        if (!_experiments.BottomDrawerEnabled)
+        if (!_experiments.AnalyzerEnabled)
         {
             CloseDrawer();
         }
@@ -57,7 +57,7 @@ public partial class BottomDrawerViewModel : ObservableObject
 
     public void OpenDrawer()
     {
-        if (!_experiments.BottomDrawerEnabled)
+        if (!_experiments.AnalyzerEnabled)
         {
             return;
         }

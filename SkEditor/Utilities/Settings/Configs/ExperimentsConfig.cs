@@ -28,10 +28,10 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     public partial bool SplitViewEnabled { get; set; } = false;
 
     /// <summary>
-    ///     Enables the Bottom Drawer feature.
+    ///     Enables the Analyzer.
     /// </summary>
     [ObservableProperty]
-    public partial bool BottomDrawerEnabled { get; set; } = false;
+    public partial bool AnalyzerEnabled { get; set; } = false;
 
     protected override string GetFileName()
     {
