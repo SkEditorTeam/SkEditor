@@ -4,6 +4,7 @@
              xmlns:assets="clr-namespace:SkEditor.Assets"
              xmlns:dialogs="clr-namespace:SkEditor.Models.Dialogs.Elements"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              x:Class="SkEditor.App"
              x:CompileBindings="True"
              RequestedThemeVariant="Dark">
@@ -11,7 +12,7 @@
     <Application.Styles>
         <sty:FluentAvaloniaTheme />
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
-        <StyleInclude Source="avares://Iciclecreek.Avalonia.Terminal/Themes/Generic.axaml" />
+        <StyleInclude Source="avares://SkTerminal/Themes/Generic.axaml" />
         <StyleInclude Source="avares://SkEditor/Styles/MainWindowStyles.axaml" />
     </Application.Styles>
 
