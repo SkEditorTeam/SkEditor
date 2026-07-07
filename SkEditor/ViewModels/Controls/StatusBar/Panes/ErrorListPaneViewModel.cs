@@ -2,18 +2,17 @@
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.ViewModels.Controls.StatusBar.Panes;
 
-public partial class ErrorListPaneViewModel(INotificationService notifs, ITabService tabs)
-    : ObservableObject, IDrawerPaneViewModel
+public partial class ErrorListPaneViewModel(ITabService tabs) : ObservableObject, IDrawerPaneViewModel
 {
-    public TranslatableString Name => TranslatableString.FromRawString("Errors");
+    public TranslatableString Name => "Problems".ToTranslatable();
 
     public ObservableCollection<AnalyzerError> Errors { get; set; } = [];
 

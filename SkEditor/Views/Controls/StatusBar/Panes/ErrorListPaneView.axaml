@@ -45,7 +45,7 @@
                         <icons:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
                     </Viewbox>
                     <StackPanel Spacing="4">
-                        <TextBlock Text="No issues!"
+                        <TextBlock Text="No problems found"
                                    HorizontalAlignment="Center" FontSize="16" Opacity="0.75" />
                         <TextBlock Text="Your code is clean and free of errors, good job!"
                                    HorizontalAlignment="Center" TextAlignment="Center"
