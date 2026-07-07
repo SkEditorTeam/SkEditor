@@ -81,8 +81,9 @@
 
         <Thickness x:Key="FlyoutContentPadding">10</Thickness>
 
-        <FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/JetBrainsMono#JetBrains Mono</FontFamily>
-        <FontFamily x:Key="MinecraftFont">avares://SkEditor/Assets/MinecraftFont#Minecraft</FontFamily>
+        <FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/Fonts/JetBrainsMono#JetBrains Mono</FontFamily>
+        <FontFamily x:Key="MinecraftFont">avares://SkEditor/Assets/Fonts/MinecraftFont#Minecraft</FontFamily>
+        <FontFamily x:Key="OpenSansFont">avares://SkEditor/Assets/Fonts/OpenSans#Open Sans</FontFamily>
     </Application.Resources>
 
     <Application.DataTemplates>

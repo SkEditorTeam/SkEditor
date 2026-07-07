@@ -103,6 +103,10 @@
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Folder Include="Assets\Fonts\Geist\" />
+    </ItemGroup>
+
     <Target Name="RemoveNativePdbFiles" AfterTargets="ComputeFilesToPublish">
         <ItemGroup>
             <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb' And '%(Filename)' != '$(TargetName)'" />

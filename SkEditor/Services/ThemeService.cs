@@ -462,11 +462,24 @@ public class ThemeService(
 
     private void UpdateFont()
     {
-        string fontName = CurrentTheme.CustomFont ?? FontFamily.Default.Name;
-
-        if (Application.Current != null)
+        if (Application.Current is null)
         {
-            Application.Current.Resources["ContentControlThemeFontFamily"] = new FontFamily(fontName);
+            return;
         }
+
+        string? customFont = CurrentTheme.CustomFont;
+
+        object? font = null;
+        if (customFont is not null)
+        {
+            font = new FontFamily(customFont);
+        }
+        else if (!OperatingSystem.IsWindows())
+        {
+            font = Application.Current.Resources["OpenSansFont"];
+        }
+
+        font ??= new FontFamily(FontFamily.Default.Name);
+        Application.Current.Resources["ContentControlThemeFontFamily"] = font;
     }
 }
