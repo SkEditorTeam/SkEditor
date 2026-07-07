@@ -10,7 +10,7 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
 {
     public SettingSection GetSection()
     {
-        return SettingSection.Create(TranslationKey.SettingsSectionExperiments)
+        return SettingSection.Create("Experiments", TranslationKey.SettingsSectionExperiments)
             .WithIcon(Symbol.Beaker)
             .WithSettings(
             [

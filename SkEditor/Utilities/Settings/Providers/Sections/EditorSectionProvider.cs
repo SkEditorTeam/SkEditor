@@ -15,7 +15,7 @@ public class EditorSectionProvider(
 {
     public SettingSection GetSection()
     {
-        SettingSection editor = SettingSection.Create(TranslationKey.SettingsSectionEditor)
+        SettingSection editor = SettingSection.Create("Editor", TranslationKey.SettingsSectionEditor)
             .WithIcon(Symbol.Code);
         SettingSection editorBehavior = CreateBehaviorSection();
         SettingSection editorIndentation = CreateIndentationSection();
@@ -27,7 +27,7 @@ public class EditorSectionProvider(
 
     private SettingSection CreateBehaviorSection()
     {
-        return SettingSection.Create(TranslationKey.SettingsEditorSubsectionBehavior)
+        return SettingSection.Create("Editor Behavior", TranslationKey.SettingsEditorSubsectionBehavior)
             .WithIcon(Symbol.EditSettings)
             .WithSettings(
             [
@@ -60,7 +60,7 @@ public class EditorSectionProvider(
     private SettingSection CreateIndentationSection()
     {
         return SettingSection
-            .Create(TranslationKey.SettingsEditorSubsectionIndentationTyping)
+            .Create("Indentation and Typing", TranslationKey.SettingsEditorSubsectionIndentationTyping)
             .WithIcon(Symbol.TextIndentIncrease)
             .WithSettings(
             [

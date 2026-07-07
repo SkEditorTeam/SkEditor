@@ -17,7 +17,7 @@ public class IntegrationsSectionProvider(
 {
     public SettingSection GetSection()
     {
-        SettingSection integrations = SettingSection.Create(TranslationKey.SettingsSectionIntegrations)
+        SettingSection integrations = SettingSection.Create("Integrations", TranslationKey.SettingsSectionIntegrations)
             .WithIcon(Symbol.PlugConnected);
 
         SettingSection integrationsDiscord = CreateDiscordSection();
@@ -30,7 +30,7 @@ public class IntegrationsSectionProvider(
 
     private SettingSection CreateDiscordSection()
     {
-        return SettingSection.Create(TranslationKey.SettingsIntegrationsSubsectionDiscord)
+        return SettingSection.Create("Discord", TranslationKey.SettingsIntegrationsSubsectionDiscord)
             .WithIcon("DiscordIconOutline")
             .WithSettings(
             [
@@ -51,7 +51,7 @@ public class IntegrationsSectionProvider(
 
     private SettingSection CreateApiKeysSection()
     {
-        return SettingSection.Create(TranslationKey.SettingsIntegrationsSubsectionApiKeys)
+        return SettingSection.Create("API Keys", TranslationKey.SettingsIntegrationsSubsectionApiKeys)
             .WithIcon(Symbol.Key)
             .WithSettings(
             [

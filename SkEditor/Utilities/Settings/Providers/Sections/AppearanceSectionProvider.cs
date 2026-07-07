@@ -23,7 +23,7 @@ public class AppearanceSectionProvider(
 {
     public SettingSection GetSection()
     {
-        SettingSection appearance = SettingSection.Create(TranslationKey.SettingsSectionAppearance)
+        SettingSection appearance = SettingSection.Create("Appearance", TranslationKey.SettingsSectionAppearance)
             .WithIcon(Symbol.PaintBrush);
 
         SettingSection appearanceTheme = CreateThemeSection();
@@ -37,7 +37,7 @@ public class AppearanceSectionProvider(
 
     private SettingSection CreateThemeSection()
     {
-        return SettingSection.Create(TranslationKey.SettingsAppearanceSubsectionTheme)
+        return SettingSection.Create("Theme", TranslationKey.SettingsAppearanceSubsectionTheme)
             .WithIcon(Symbol.Color)
             .WithSettings(
             [
@@ -60,7 +60,7 @@ public class AppearanceSectionProvider(
     private SettingSection CreateFontDisplaySection()
     {
         return SettingSection
-            .Create(TranslationKey.SettingsAppearanceSubsectionFontDisplay)
+            .Create("Font Display", TranslationKey.SettingsAppearanceSubsectionFontDisplay)
             .WithIcon(Symbol.TextFont)
             .WithSettings(
             [
@@ -106,7 +106,7 @@ public class AppearanceSectionProvider(
     private SettingSection CreateSidebarLayoutSection()
     {
         return SettingSection
-            .Create(TranslationKey.SettingsAppearanceSubsectionSidebarLayout)
+            .Create("Sidebar and Layout", TranslationKey.SettingsAppearanceSubsectionSidebarLayout)
             .WithIcon(Symbol.PanelLeft)
             .WithSettings(
             [

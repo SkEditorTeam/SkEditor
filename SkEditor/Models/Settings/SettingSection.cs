@@ -6,8 +6,9 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings;
 
-public class SettingSection(TranslatableString name) : ObservableObject
+public class SettingSection(string id, TranslatableString name) : ObservableObject
 {
+    public string Id { get; init; } = id;
     public TranslatableString Name { get; init; } = name;
     public StandardIcon Icon { get; private set; }
     public List<SettingElement> Settings { get; private set; } = [];
@@ -17,9 +18,9 @@ public class SettingSection(TranslatableString name) : ObservableObject
 
     public bool Selectable => !(Subsections.Count > 0 || Settings.Count == 0);
 
-    public static SettingSection Create(TranslatableString name)
+    public static SettingSection Create(string id, TranslatableString name)
     {
-        return new SettingSection(name);
+        return new SettingSection(id, name);
     }
 
     public SettingSection WithIcon(StandardIcon icon)

@@ -14,7 +14,7 @@ public class GeneralSectionProvider(
 {
     public SettingSection GetSection()
     {
-        return SettingSection.Create(TranslationKey.SettingsSectionGeneral)
+        return SettingSection.Create("General", TranslationKey.SettingsSectionGeneral)
             .WithIcon(Symbol.Home)
             .WithSettings(
             [

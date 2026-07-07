@@ -20,7 +20,7 @@ public class AdvancedSectionProvider(
 {
     public SettingSection GetSection()
     {
-        return SettingSection.Create(TranslationKey.SettingsSectionAdvanced)
+        return SettingSection.Create("Advanced", TranslationKey.SettingsSectionAdvanced)
             .WithIcon(Symbol.Wrench)
             .WithSettings(
             [
