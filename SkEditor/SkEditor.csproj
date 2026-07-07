@@ -86,6 +86,7 @@
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
         <PackageReference Include="SSH.NET" Version="2025.1.0" />
+        <PackageReference Include="SkTerminal" Version="1.0.0" />
 
         <PackageReference Include="HotAvalonia" Version="3.1.3" PrivateAssets="All" Publish="True" />
         <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="12.0.5" PrivateAssets="All" Publish="True" />
@@ -104,7 +105,6 @@
         <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj" />
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit.TextMate\AvaloniaEdit.TextMate.csproj" />
-        <ProjectReference Include="..\External\SkTerminal\src\Iciclecreek.Avalonia.TerminalWindow\Iciclecreek.Avalonia.Terminal.csproj" />
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false" />
     </ItemGroup>
 

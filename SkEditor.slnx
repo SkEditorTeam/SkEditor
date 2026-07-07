@@ -14,8 +14,6 @@
         <Project Path="External/SkAvaloniaEdit/src/AvaloniaEdit.TextMate/AvaloniaEdit.TextMate.csproj" />
         <Project Path="External/SkAvaloniaEdit/src/AvaloniaEdit/AvaloniaEdit.csproj" />
         <Project Path="External/SkFluentAvalonia/src/FluentAvalonia/FluentAvalonia.csproj" />
-        <Project
-                Path="External/SkTerminal/src/Iciclecreek.Avalonia.TerminalWindow/Iciclecreek.Avalonia.Terminal.csproj" />
     </Folder>
     <Project Path="Installer/SkEditorInstaller.wixproj" Type="b7dd6f7e-def8-4e67-b5b7-07ef123db6f0">
         <BuildType Solution="Debug|Any CPU" Project="Release" />

@@ -6,6 +6,3 @@
 	path = External/SkAvaloniaEdit
 	url = https://github.com/SkEditorTeam/SkAvaloniaEdit
 	branch = master
-[submodule "External/SkTerminal"]
-	path = External/SkTerminal
-	url = https://github.com/NotroDev/SkTerminal
