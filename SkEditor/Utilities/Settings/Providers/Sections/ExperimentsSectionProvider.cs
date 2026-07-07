@@ -40,11 +40,6 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.GlobalColorPreviewEnabled))
                     ),
 
-                // ToggleSetting
-                //     .Create("Split View".ToTranslatable())
-                //     .WithDescription("Allows you to split the editor into two views for better multitasking and comparison of code files. This is a very early prototype!".ToTranslatable())
-                //     .WithIcon(Symbol.DocumentLandscapeSplitHint)
-                //     .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled)),
                 ExpandableSetting
                     .Create("Split View".ToTranslatable())
                     .WithDescription(
