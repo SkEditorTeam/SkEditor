@@ -48,6 +48,11 @@
         <AdditionalFiles Include="Assets\SkEditor.svg" NamespaceName="SkEditor.Assets" ClassName="SkEditor" />
     </ItemGroup>
 
+    <!-- Open Sans is not included in Windows builds -->
+    <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win')) Or $(TargetFramework.Contains('windows'))">
+        <AvaloniaResource Remove="Assets/Fonts/OpenSans/**" />
+    </ItemGroup>
+
     <ItemGroup>
         <Content Include="Languages\**" Exclude="Languages\English.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -101,10 +106,6 @@
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit.TextMate\AvaloniaEdit.TextMate.csproj" />
         <ProjectReference Include="..\External\SkTerminal\src\Iciclecreek.Avalonia.TerminalWindow\Iciclecreek.Avalonia.Terminal.csproj" />
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Assets\Fonts\Geist\" />
     </ItemGroup>
 
     <Target Name="RemoveNativePdbFiles" AfterTargets="ComputeFilesToPublish">

@@ -1,7 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sty="using:FluentAvalonia.Styling"
-             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              xmlns:assets="clr-namespace:SkEditor.Assets"
              xmlns:dialogs="clr-namespace:SkEditor.Models.Dialogs.Elements"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
@@ -83,7 +82,6 @@
 
         <FontFamily x:Key="JetBrainsFont">avares://SkEditor/Assets/Fonts/JetBrainsMono#JetBrains Mono</FontFamily>
         <FontFamily x:Key="MinecraftFont">avares://SkEditor/Assets/Fonts/MinecraftFont#Minecraft</FontFamily>
-        <FontFamily x:Key="OpenSansFont">avares://SkEditor/Assets/Fonts/OpenSans#Open Sans</FontFamily>
     </Application.Resources>
 
     <Application.DataTemplates>

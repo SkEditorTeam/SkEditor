@@ -4,12 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Media;
-using Avalonia.Media.Immutable;
-using Avalonia.Platform;
-using Avalonia.Styling;
 using FluentAvalonia.Styling;
 using Iciclecreek.Avalonia.Terminal;
 using SkEditor.Contracts.Services;
@@ -476,7 +470,7 @@ public class ThemeService(
         }
         else if (!OperatingSystem.IsWindows())
         {
-            font = Application.Current.Resources["OpenSansFont"];
+            font = new FontFamily("avares://SkEditor/Assets/Fonts/OpenSans#Open Sans");
         }
 
         font ??= new FontFamily(FontFamily.Default.Name);
