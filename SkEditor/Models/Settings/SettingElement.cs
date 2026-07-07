@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using R3;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings;
 
-public abstract class SettingElement(TranslatableString name)
-    : ObservableObject
+public abstract class SettingElement(TranslatableString name) : ObservableObject
 {
     public TranslatableString Name { get; set; } = name;
     public StandardIcon? Icon { get; protected set; }
@@ -14,6 +14,9 @@ public abstract class SettingElement(TranslatableString name)
     public SettingElement? Parent { get; set; }
 
     public virtual double Width { get; set; } = double.NaN;
+
+    public BindableReactiveProperty<bool> IsEnabled { get; protected set; } = new(true);
+    public BindableReactiveProperty<bool> IsVisible { get; protected set; } = new(true);
 }
 
 public abstract class SettingElement<T>(TranslatableString name) : SettingElement(name)
@@ -28,6 +31,18 @@ public abstract class SettingElement<T>(TranslatableString name) : SettingElemen
     public T WithDescription(TranslatableString description)
     {
         Description = description;
+        return (T)this;
+    }
+
+    public T WithVisible(BindableReactiveProperty<bool> visible)
+    {
+        IsVisible = visible;
+        return (T)this;
+    }
+
+    public T WithEnabled(BindableReactiveProperty<bool> enabled)
+    {
+        IsEnabled = enabled;
         return (T)this;
     }
 }

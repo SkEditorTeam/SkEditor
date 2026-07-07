@@ -143,6 +143,7 @@
                                 <DataTemplate x:Key="StandardTemplate" x:DataType="models:SettingElement">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
+                                        IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
                                         IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         Footer="{Binding}" />
@@ -151,6 +152,7 @@
                                 <DataTemplate x:Key="ClickableTemplate" x:DataType="types:ClickableActionSetting">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
+                                        IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
                                         IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         IsClickEnabled="True"
@@ -160,6 +162,7 @@
                                 <DataTemplate x:Key="InfoTemplate" x:DataType="types:InfoSetting">
                                     <controls:FAInfoBar
                                         Title="{Binding Name.Value}"
+                                        IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
                                         IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Message="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         IsOpen="True" IsClosable="False"
@@ -169,6 +172,7 @@
                                 <DataTemplate x:Key="ExpandableTemplate" x:DataType="types:ExpandableSetting">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
+                                        IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
                                         IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         ItemsSource="{Binding Children}">
@@ -179,6 +183,8 @@
                                                                   DataType="models:SettingElement">
                                                         <controls:FASettingsExpanderItem
                                                             Content="{Binding Name.Value}"
+                                                            IsVisible="{Binding IsVisible.Value}"
+                                                            IsEnabled="{Binding IsEnabled.Value}"
                                                             Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                                             IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                                             Footer="{Binding}" />
@@ -188,6 +194,8 @@
                                                                   DataType="types:ClickableActionSetting">
                                                         <controls:FASettingsExpanderItem
                                                             Content="{Binding Name.Value}"
+                                                            IsVisible="{Binding IsVisible.Value}"
+                                                            IsEnabled="{Binding IsEnabled.Value}"
                                                             Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                                             IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                                             IsClickEnabled="True"
@@ -197,6 +205,8 @@
                                                     <DataTemplate x:Key="InfoExpanderItemTemplate"
                                                                   DataType="types:InfoSetting">
                                                         <controls:FASettingsExpanderItem Content="{Binding Name.Value}"
+                                                                IsVisible="{Binding IsVisible.Value}"
+                                                                IsEnabled="{Binding IsEnabled.Value}"
                                                                 Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                                                 IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}">
                                                             <controls:FASettingsExpanderItem.Resources>
