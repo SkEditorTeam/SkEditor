@@ -32,8 +32,8 @@
     <Menu Name="MainMenu" ItemsSource="{Binding Items}">
         <Menu.Styles>
             <Style Selector="Menu MenuItem" x:DataType="menu:MainMenuItem">
-                <Setter Property="IsVisible" Value="{Binding IsVisible}" />
-                <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                <Setter Property="IsVisible" Value="{Binding IsVisible.Value}" />
+                <Setter Property="IsEnabled" Value="{Binding IsEnabled.Value}" />
                 <Setter Property="Command" Value="{Binding Command}" />
                 <Setter Property="ItemsSource" Value="{Binding SubItems}" />
                 <Setter Property="InputGesture"

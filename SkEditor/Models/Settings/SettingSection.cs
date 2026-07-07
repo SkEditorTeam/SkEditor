@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using R3;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 
@@ -11,6 +12,8 @@ public class SettingSection(TranslatableString name) : ObservableObject
     public StandardIcon Icon { get; private set; }
     public List<SettingElement> Settings { get; private set; } = [];
     public List<SettingSection> Subsections { get; private set; } = [];
+
+    public BindableReactiveProperty<bool> IsVisible { get; set; } = new(true);
 
     public bool Selectable => !(Subsections.Count > 0 || Settings.Count == 0);
 

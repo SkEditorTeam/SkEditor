@@ -1,7 +1,9 @@
 ﻿using FluentIcons.Common;
+using R3;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Utilities.Editor;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Tabs.Capabilities;
@@ -74,23 +76,16 @@ public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService ta
             .WithInputGesture("Ctrl+H", false)
             .AddTo(edit);
 
-        UpdateVisibility(edit);
-        tabs.SelectedTabChanged += _ => { UpdateVisibility(edit); };
+        BindableReactiveProperty<bool> isTextEditorActive = tabs.ObserveSelectedTab()
+            .Select(tab => tab is ITextEditorTab)
+            .ToBindableReactiveProperty();
+
+        foreach (MainMenuItem item in edit.SubItems ?? [])
+        {
+            item.IsEnabled = isTextEditorActive;
+        }
 
         return edit;
-    }
-
-    private void UpdateVisibility(MainMenuItem edit)
-    {
-        if (edit.SubItems is null)
-        {
-            return;
-        }
-
-        foreach (MainMenuItem mainMenuItem in edit.SubItems)
-        {
-            mainMenuItem.IsEnabled = tabs.SelectedTab is ITextEditorTab;
-        }
     }
 
     private void RequestAction(EditorCommandType commandType)

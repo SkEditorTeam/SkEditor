@@ -1,4 +1,5 @@
 ﻿using FluentIcons.Common;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
@@ -10,20 +11,12 @@ public class DevMenuProvider(AppSettings appSettings, IThemeService themes) : IM
 {
     public MainMenuItem GetMainMenuItem()
     {
-        MainMenuItem devMenu = MainMenuItem.HeaderOnly(TranslatableString.FromRawString("Dev"));
+        MainMenuItem devMenu = MainMenuItem.HeaderOnly(TranslatableString.FromRawString("Dev"))
+            .WithVisibility(appSettings.ObservePropertyChanged(x => x.IsDevModeEnabled).ToBindableReactiveProperty());
 
         MainMenuItem.HeaderWithIcon(TranslatableString.FromRawString("Reload Themes"), Symbol.Color)
             .WithCommand(themes.ReloadThemesAsync)
             .AddTo(devMenu);
-
-        devMenu.IsVisible = appSettings.IsDevModeEnabled;
-        appSettings.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(AppSettings.IsDevModeEnabled))
-            {
-                devMenu.IsVisible = appSettings.IsDevModeEnabled;
-            }
-        };
 
         return devMenu;
     }

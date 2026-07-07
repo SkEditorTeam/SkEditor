@@ -4,17 +4,16 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using R3;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Menu;
 
-public partial class MainMenuItem : ObservableObject
+public class MainMenuItem : ObservableObject
 {
-    [ObservableProperty]
-    public partial bool IsVisible { get; set; } = true;
+    public BindableReactiveProperty<bool> IsVisible { get; set; } = new(true);
 
-    [ObservableProperty]
-    public partial bool IsEnabled { get; set; } = true;
+    public BindableReactiveProperty<bool> IsEnabled { get; set; } = new(true);
 
     public TranslatableString? Header { get; private set; }
     public Symbol? IconSymbol { get; private set; }
@@ -88,7 +87,13 @@ public partial class MainMenuItem : ObservableObject
         return this;
     }
 
-    public MainMenuItem WithVisibility(bool isVisible)
+    public MainMenuItem WithEnabled(BindableReactiveProperty<bool> isEnabled)
+    {
+        IsEnabled = isEnabled;
+        return this;
+    }
+
+    public MainMenuItem WithVisibility(BindableReactiveProperty<bool> isVisible)
     {
         IsVisible = isVisible;
         return this;
