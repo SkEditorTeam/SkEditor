@@ -193,6 +193,19 @@
                                                             IsClickEnabled="True"
                                                             Command="{Binding Command}" />
                                                     </DataTemplate>
+
+                                                    <DataTemplate x:Key="InfoExpanderItemTemplate"
+                                                                  DataType="types:InfoSetting">
+                                                        <controls:FASettingsExpanderItem Content="{Binding Name.Value}"
+                                                                Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                                IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}">
+                                                            <controls:FASettingsExpanderItem.Resources>
+                                                                <x:Double x:Key="SettingsExpanderItemIconSize">20</x:Double>
+                                                                <Thickness x:Key="SettingsExpanderItemPadding">22,10,16,10</Thickness>
+                                                                <Thickness x:Key="SettingsExpanderItemContentMargin">37,0,0,0</Thickness>
+                                                            </controls:FASettingsExpanderItem.Resources>
+                                                        </controls:FASettingsExpanderItem>
+                                                    </DataTemplate>
                                                 </dataTemplates:ExpanderItemTemplateFactory.Templates>
                                             </dataTemplates:ExpanderItemTemplateFactory>
                                         </controls:FASettingsExpander.ItemTemplate>

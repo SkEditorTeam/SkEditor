@@ -24,6 +24,7 @@ public class ExpanderItemTemplateFactory : RecyclingElementFactory
         return dataContext switch
         {
             ClickableActionSetting => "ClickableExpanderItemTemplate",
+            InfoSetting => "InfoExpanderItemTemplate",
             _ => "StandardExpanderItemTemplate"
         };
     }
