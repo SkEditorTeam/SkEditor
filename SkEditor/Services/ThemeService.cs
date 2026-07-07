@@ -4,6 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Media.Immutable;
+using Avalonia.Platform;
+using Avalonia.Styling;
 using FluentAvalonia.Styling;
 using Iciclecreek.Avalonia.Terminal;
 using SkEditor.Contracts.Services;
@@ -221,7 +227,7 @@ public class ThemeService(
 
     private void ApplyTerminalTheme()
     {
-        ConsolePalette? palette = ConsolePalette.CreateDefault();
+        var palette = ConsolePalette.CreateDefault();
 
         foreach ((string key, string hex) in CurrentTheme.TerminalColors)
         {
