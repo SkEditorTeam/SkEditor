@@ -5,7 +5,9 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Iciclecreek.Terminal;
+using R3;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 
 namespace SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
 
@@ -13,10 +15,18 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
 {
     public TranslatableString Name => TranslatableString.FromRawString("Terminal");
     public IDrawerToolbarViewModel? Toolbar { get; }
+    public BindableReactiveProperty<bool> IsVisible { get; }
 
     public TerminalControl TerminalControl => field ??= CreateTerminal();
 
-    public TerminalPaneViewModel() => Toolbar = new TerminalToolbarViewModel(this);
+    public TerminalPaneViewModel(ExperimentsConfig experiments)
+    {
+        Toolbar = new TerminalToolbarViewModel(this);
+
+        IsVisible = experiments
+            .ObservePropertyChanged(x => x.TerminalEnabled)
+            .ToBindableReactiveProperty();
+    }
 
     private TerminalControl CreateTerminal()
     {

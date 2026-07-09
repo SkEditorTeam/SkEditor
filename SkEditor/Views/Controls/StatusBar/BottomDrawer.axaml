@@ -16,7 +16,7 @@
             <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Height="36">
                 <Grid ColumnDefinitions="*, Auto,Auto">
                     <controls:SkEditorTabStrip Grid.Column="0" Padding="16,8,8,0"
-                                               ItemsSource="{Binding Items}"
+                                               ItemsSource="{Binding VisibleItems}"
                                                SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                         <controls:SkEditorTabStrip.ItemTemplate>
                             <DataTemplate x:DataType="vm:IDrawerPaneViewModel">
