@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Views.Windows;
 using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
@@ -42,7 +43,23 @@ public partial class MainMenuViewModel : ObservableObject
                     Command = item.Command,
                     Gesture = KeyGesture.Parse(gestureText)
                 };
-                mainWindow.KeyBindings.Add(keyBinding);
+
+                item.IsVisible
+                    .CombineLatest(item.IsEnabled, (visible, enabled) => visible && enabled)
+                    .Subscribe(active =>
+                    {
+                        if (active)
+                        {
+                            if (!mainWindow.KeyBindings.Contains(keyBinding))
+                            {
+                                mainWindow.KeyBindings.Add(keyBinding);
+                            }
+                        }
+                        else
+                        {
+                            mainWindow.KeyBindings.Remove(keyBinding);
+                        }
+                    });
             }
 
             if (item.SubItems is not null)
