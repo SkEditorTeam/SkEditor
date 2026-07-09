@@ -39,12 +39,12 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <StackPanel VerticalAlignment="Center" Spacing="12"
+                <StackPanel VerticalAlignment="Center" Spacing="6"
                             IsVisible="{Binding !Errors.Count}">
-                    <Viewbox Height="48" Opacity="0.5">
+                    <Viewbox Height="32" Opacity="0.5">
                         <icons:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
                     </Viewbox>
-                    <StackPanel Spacing="4">
+                    <StackPanel Spacing="2">
                         <TextBlock Text="No problems found"
                                    HorizontalAlignment="Center" FontSize="16" Opacity="0.75" />
                         <TextBlock Text="Your code is clean and free of errors, good job!"
