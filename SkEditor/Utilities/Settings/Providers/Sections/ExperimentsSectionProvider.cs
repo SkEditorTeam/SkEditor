@@ -74,6 +74,25 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                             .WithAction(() => messenger.Send(new NavigateToSettingsSectionMessage("Analyzer")))
                             .WithEnabled(experiments.ObservePropertyChanged(x => x.AnalyzerEnabled)
                                 .ToBindableReactiveProperty())
+                    ),
+
+                ExpandableSetting
+                    .Create("Terminal".ToTranslatable())
+                    .WithDescription(
+                        "Gives you access to an integrated terminal within the editor for running commands and scripts."
+                            .ToTranslatable())
+                    .WithIcon(Symbol.WindowConsole)
+                    .WithChildren(
+                        InfoSetting
+                            .Create("Highly experimental!".ToTranslatable())
+                            .WithDescription(
+                                "The terminal view is still in development and has some serious bugs, i.e. scrolling issues."
+                                    .ToTranslatable())
+                            .WithIcon(Symbol.Warning)
+                            .WithType(InfoSetting.InfoType.Warning),
+                        ToggleSetting
+                            .Create("Enable Terminal".ToTranslatable())
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.TerminalEnabled))
                     )
             ]);
     }

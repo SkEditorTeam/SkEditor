@@ -7,6 +7,7 @@ using FluentIcons.Common;
 using R3;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.StatusBar.Panes;
@@ -44,9 +45,8 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
 
         _item.WithCommand(command);
 
-        CanAttach = experiments
-            .ObservePropertyChanged(x => x.AnalyzerEnabled)
-            .ToReadOnlyReactiveProperty(experiments.AnalyzerEnabled)
+        CanAttach = experiments.IsBottomDrawerEnabled()
+            .ToReadOnlyReactiveProperty()
             .AddTo(ref _disposables);
 
         IsAnalyzerLoaded

@@ -33,6 +33,12 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     [ObservableProperty]
     public partial bool AnalyzerEnabled { get; set; } = false;
 
+    /// <summary>
+    ///     Enables the Terminal.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool TerminalEnabled { get; set; } = false;
+
     protected override string GetFileName()
     {
         return "experiments.json";
