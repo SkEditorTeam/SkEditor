@@ -12,12 +12,12 @@ public partial class ToggleSetting(TranslatableString name) : SettingElement<Tog
         set
         {
             field = value;
-            IsEnabled = value.Get();
+            IsToggled = value.Get();
         }
     }
 
     [ObservableProperty]
-    public partial bool IsEnabled { get; set; }
+    public partial bool IsToggled { get; set; }
 
     public static ToggleSetting Create(TranslatableString name)
     {
@@ -30,7 +30,7 @@ public partial class ToggleSetting(TranslatableString name) : SettingElement<Tog
         return this;
     }
 
-    partial void OnIsEnabledChanged(bool oldValue, bool newValue)
+    partial void OnIsToggledChanged(bool oldValue, bool newValue)
     {
         if (oldValue != newValue)
         {
