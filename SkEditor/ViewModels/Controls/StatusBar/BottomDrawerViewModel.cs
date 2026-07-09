@@ -5,7 +5,6 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
-using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
@@ -34,7 +33,7 @@ public partial class BottomDrawerViewModel : ObservableObject
     private readonly BindableReactiveProperty<bool> _isBottomDrawerEnabled;
 
     public BottomDrawerViewModel(IEnumerable<IDrawerPaneViewModel> panes, ExperimentsConfig experiments,
-        StateConfig state, ILogService logs)
+        StateConfig state)
     {
         Items = new ObservableCollection<IDrawerPaneViewModel>(panes);
 

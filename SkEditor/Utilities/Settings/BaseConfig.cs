@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
-using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Utilities.Settings;
 
@@ -51,20 +50,7 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
 
             if (loadedData != null)
             {
-                if (loadedData is StateConfig state && this is StateConfig thisState)
-                {
-                    App.Services.GetService<ILogService>()
-                        ?.Info(
-                            $"loaded.BottomDrawerSize={state.BottomDrawerHeight}, this.BottomDrawerSize before copy={thisState.BottomDrawerHeight}");
-                }
-
                 CopyFrom(loadedData);
-                if (loadedData is StateConfig state2 && this is StateConfig thisState2)
-                {
-                    App.Services.GetService<ILogService>()
-                        ?.Info(
-                            $"loaded.BottomDrawerSize={state2.BottomDrawerHeight}, this.BottomDrawerSize after copy={thisState2.BottomDrawerHeight}");
-                }
             }
         }
         catch (Exception ex)
