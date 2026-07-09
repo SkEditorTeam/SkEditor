@@ -1,23 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
+using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings;
+using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Controls;
 
 public partial class BottomDrawerViewModel : ObservableObject
 {
+    public const double MinDrawerHeight = 120;
+    
     [ObservableProperty]
-    public partial double? DrawerHeight { get; set; } = 0;
+    public partial double? DrawerHeight { get; set; } = null;
 
     [ObservableProperty]
     public partial bool IsDrawerOpen { get; private set; } = false;
 
-    private double _lastHeight = 200;
+    private double _lastHeight;
 
     public ObservableCollection<IDrawerPaneViewModel> Items { get; }
 
@@ -28,7 +33,8 @@ public partial class BottomDrawerViewModel : ObservableObject
 
     private readonly BindableReactiveProperty<bool> _isBottomDrawerEnabled;
 
-    public BottomDrawerViewModel(IEnumerable<IDrawerPaneViewModel> panes, ExperimentsConfig experiments)
+    public BottomDrawerViewModel(IEnumerable<IDrawerPaneViewModel> panes, ExperimentsConfig experiments,
+        StateConfig state, ILogService logs)
     {
         Items = new ObservableCollection<IDrawerPaneViewModel>(panes);
 
@@ -36,6 +42,11 @@ public partial class BottomDrawerViewModel : ObservableObject
         {
             TrackVisibility(pane);
         }
+
+        _lastHeight = state.BottomDrawerHeight;
+
+        this.ObservePropertyChanged(x => x.DrawerHeight)
+            .Subscribe(_ => state.BottomDrawerHeight = Math.Max(DrawerHeight ?? _lastHeight, MinDrawerHeight));
 
         _isBottomDrawerEnabled = experiments.IsBottomDrawerEnabled();
 
@@ -91,7 +102,7 @@ public partial class BottomDrawerViewModel : ObservableObject
     {
         IsDrawerOpen = false;
         _lastHeight = DrawerHeight ?? _lastHeight;
-        DrawerHeight = 0;
+        DrawerHeight = null;
     }
 
     public void OpenDrawer()

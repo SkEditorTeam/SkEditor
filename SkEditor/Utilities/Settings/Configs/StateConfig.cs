@@ -22,6 +22,12 @@ public partial class StateConfig : BaseConfig<StateConfig>
     public partial double SidebarPaneSize { get; set; } = 320;
 
     /// <summary>
+    ///     The height of the bottom drawer pane.
+    /// </summary>
+    [ObservableProperty]
+    public partial double BottomDrawerHeight { get; set; } = 170;
+
+    /// <summary>
     ///     Whether to use the skript-gui addon syntax in the GUI Generator instead of the default Skript syntax.
     /// </summary>
     [ObservableProperty]

@@ -8,6 +8,7 @@ using Theme = SkEditor.Models.UI.Theme;
 
 namespace SkEditor.Services.Settings;
 
+// remove this and use R3 in Theme-related class
 public class SettingsObserverService(AppSettings appSettings, IThemeService themeService, ILogService logs)
 {
     public void Initialize()

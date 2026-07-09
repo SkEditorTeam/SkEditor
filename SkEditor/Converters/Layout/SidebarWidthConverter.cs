@@ -2,6 +2,7 @@
 using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
+using SkEditor.ViewModels.Controls;
 
 namespace SkEditor.Converters.Layout;
 
@@ -24,7 +25,7 @@ public class BottomDrawerMinWidthConverter : IValueConverter
     {
         if (value is true)
         {
-            return 150.0;
+            return BottomDrawerViewModel.MinDrawerHeight;
         }
 
         return 0;
