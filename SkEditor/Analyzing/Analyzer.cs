@@ -71,8 +71,6 @@ public class Analyzer(
                 return;
             }
 
-            logs.Info(args.Data);
-
             if (args.Data.Contains("Successfully enabled"))
             {
                 stopwatch.Stop();

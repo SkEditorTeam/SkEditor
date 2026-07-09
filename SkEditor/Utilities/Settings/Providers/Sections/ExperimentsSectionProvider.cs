@@ -66,6 +66,12 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                             .ToTranslatable())
                     .WithIcon(Symbol.Search)
                     .WithChildren(
+                        InfoSetting
+                            .Create("Important!".ToTranslatable())
+                            .WithDescription("Restart the app after toggling this setting to take effect."
+                                .ToTranslatable())
+                            .WithIcon(Symbol.Warning)
+                            .WithType(InfoSetting.InfoType.Warning),
                         ToggleSetting
                             .Create("Enable Analyzer".ToTranslatable())
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerEnabled)),
