@@ -32,9 +32,7 @@ public class Analyzer(
     public async Task Initialize()
     {
         const string analyzerPath = @"C:\Users\Notro\Desktop\Analyzer\SkAnalyzer3.jar";
-
-        Stopwatch stopwatch = Stopwatch.StartNew();
-
+        
         Directory.CreateDirectory(WorkingDir);
 
         ProcessStartInfo startInfo = new()
@@ -73,15 +71,6 @@ public class Analyzer(
 
             if (args.Data.Contains("Successfully enabled"))
             {
-                stopwatch.Stop();
-                Notification notification = Notification
-                    .Create(TranslatableString.FromRawString("Analyzer Started"))
-                    .WithMessage(
-                        TranslatableString.FromRawString($"Analyzer started in {stopwatch.ElapsedMilliseconds} ms."))
-                    .WithType(NotificationType.Success);
-
-                notifs.Show(notification);
-
                 messenger.Send(new AnalyzerLoadedMessage());
             }
 
