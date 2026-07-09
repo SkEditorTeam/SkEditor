@@ -44,7 +44,8 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
 
         _item.WithCommand(command);
 
-        CanAttach = experiments.IsBottomDrawerEnabled()
+        CanAttach = experiments
+            .ObservePropertyChanged(x => x.AnalyzerEnabled)
             .ToReadOnlyReactiveProperty()
             .AddTo(ref _disposables);
 
