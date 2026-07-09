@@ -12,7 +12,7 @@ namespace SkEditor.ViewModels.Controls.StatusBar.Panes;
 
 public partial class ErrorListPaneViewModel(ITabService tabs) : ObservableObject, IDrawerPaneViewModel
 {
-    public TranslatableString Name => "Problems".ToTranslatable();
+    public TranslatableString Name => "Errors".ToTranslatable();
 
     public ObservableCollection<AnalyzerError> Errors { get; set; } = [];
 
