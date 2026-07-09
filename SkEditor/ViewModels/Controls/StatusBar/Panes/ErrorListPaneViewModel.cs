@@ -25,6 +25,7 @@ public partial class ErrorListPaneViewModel : ObservableObject, IDrawerPaneViewM
             .ToBindableReactiveProperty();
     }
 
+    public string Id => "ErrorList";
     public TranslatableString Name => "Errors".ToTranslatable();
     public BindableReactiveProperty<bool> IsVisible { get; }
 

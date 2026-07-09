@@ -117,6 +117,21 @@ public partial class BottomDrawerViewModel : ObservableObject
         }
     }
 
+    public void TogglePane(string paneId)
+    {
+        string? oldSelectedId = SelectedItem?.Id;
+
+        if (oldSelectedId == paneId)
+        {
+            ToggleDrawer();
+        }
+        else
+        {
+            SelectedItem = VisibleItems.FirstOrDefault(x => x.Id == paneId) ?? VisibleItems.FirstOrDefault();
+            OpenDrawer();
+        }
+    }
+
     public T? GetPane<T>() where T : class, IDrawerPaneViewModel
     {
         foreach (IDrawerPaneViewModel item in Items)

@@ -7,7 +7,6 @@ using FluentIcons.Common;
 using R3;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.StatusBar.Panes;
@@ -41,7 +40,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
             .WithColor(Color.Parse("#A0A5AF"))
             .WithAlignment(StatusBarItem.ItemAlignment.Left);
 
-        RelayCommand command = new(drawer.ToggleDrawer);
+        RelayCommand command = new(() => drawer.TogglePane("ErrorList"));
 
         _item.WithCommand(command);
 

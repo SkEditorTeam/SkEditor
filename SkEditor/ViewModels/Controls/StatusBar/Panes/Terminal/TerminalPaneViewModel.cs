@@ -13,6 +13,7 @@ namespace SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
 
 public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDisposable
 {
+    public string Id => "Terminal";
     public TranslatableString Name => TranslatableString.FromRawString("Terminal");
     public IDrawerToolbarViewModel? Toolbar { get; }
     public BindableReactiveProperty<bool> IsVisible { get; }
