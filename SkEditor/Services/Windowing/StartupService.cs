@@ -84,7 +84,7 @@ public class StartupService(
 
         namedPipeServer.Start();
 
-        _ = analyzer.Initialize();
+        //_ = analyzer.Initialize();
 
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {

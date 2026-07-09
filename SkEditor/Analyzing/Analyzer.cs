@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Analyzer;
 using SkEditor.Contracts.Services.Files;
@@ -12,7 +13,6 @@ using SkEditor.Models.Analyzer;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.StatusBar;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Analyzing;
@@ -21,7 +21,7 @@ public class Analyzer(
     IConfigService configs,
     ITabService tabs,
     INotificationService notifs,
-    EditorErrorStatusBarProvider statusBarErrors,
+    IMessenger messenger,
     ILogService logs) : IAnalyzer
 {
     public readonly string WorkingDir = Path.Combine(configs.GetAppDataPath(), "Analyzer");
@@ -84,7 +84,7 @@ public class Analyzer(
 
                 notifs.Show(notification);
 
-                statusBarErrors.IsAnalyzerLoaded.Value = true;
+                messenger.Send(new AnalyzerLoadedMessage());
             }
 
             if (args.Data.Contains("{\"results\":"))
@@ -120,7 +120,7 @@ public class Analyzer(
             return null;
         }
 
-        statusBarErrors.IsAnalyzing.Value = true;
+        messenger.Send(new AnalyzerStatusChangedMessage(true));
 
         string tempFilePath = Path.Combine(WorkingDir, "temp_script.sk");
         await File.WriteAllTextAsync(tempFilePath, text, ct);
@@ -138,7 +138,7 @@ public class Analyzer(
             if (resultsDto is not null && tabs.SelectedTab is IFileTab fileTab)
             {
                 AnalyzerResult result = AnalyzerResult.FromDto(resultsDto.Results.First().Value);
-                statusBarErrors.UpdateResult(fileTab, result);
+                messenger.Send(new AnalyzerResultUpdatedMessage(fileTab, result));
                 return result;
             }
         }
@@ -153,7 +153,7 @@ public class Analyzer(
         }
         finally
         {
-            statusBarErrors.IsAnalyzing.Value = false;
+            messenger.Send(new AnalyzerStatusChangedMessage(false));
         }
 
         return null;

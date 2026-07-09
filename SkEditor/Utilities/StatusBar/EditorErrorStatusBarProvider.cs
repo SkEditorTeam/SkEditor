@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
 using SkEditor.Contracts.Services.Files;
@@ -17,7 +18,9 @@ using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Utilities.StatusBar;
 
-public class EditorErrorStatusBarProvider : IStatusBarProvider
+public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<AnalyzerLoadedMessage>,
+    IRecipient<AnalyzerStatusChangedMessage>,
+    IRecipient<AnalyzerResultUpdatedMessage>
 {
     private readonly StatusBarItem _item;
     private readonly ErrorListPaneViewModel _pane;
@@ -29,7 +32,8 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
     public ReactiveProperty<bool> IsAnalyzerLoaded { get; } = new(false);
     public ReactiveProperty<bool> IsAnalyzing { get; } = new(false);
 
-    public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments, ITabService tabs)
+    public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments, ITabService tabs,
+        IMessenger messenger)
     {
         _pane = drawer.GetPane<ErrorListPaneViewModel>() ??
                 throw new InvalidOperationException("ErrorListPaneViewModel not found");
@@ -64,6 +68,10 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
                 h => tabs.SelectedTabChanged -= h)
             .Subscribe(_ => UpdateState())
             .AddTo(ref _disposables);
+
+        messenger.Register<AnalyzerLoadedMessage>(this);
+        messenger.Register<AnalyzerStatusChangedMessage>(this);
+        messenger.Register<AnalyzerResultUpdatedMessage>(this);
     }
 
     private void UpdateState()
@@ -73,7 +81,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
         {
             result.Errors.ForEach(_pane.Errors.Add);
         }
-        
+
         bool anyErrors = _pane.Errors.Any(e => e.Type == AnalyzerErrorType.Error);
         bool anyWarnings = _pane.Errors.Any(e => e.Type == AnalyzerErrorType.Warning);
 
@@ -120,5 +128,21 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider
     public void Dispose()
     {
         _disposables.Dispose();
+    }
+
+    public void Receive(AnalyzerLoadedMessage message)
+    {
+        IsAnalyzerLoaded.Value = true;
+    }
+
+    public void Receive(AnalyzerStatusChangedMessage message)
+    {
+        IsAnalyzing.Value = message.IsAnalyzing;
+    }
+
+    public void Receive(AnalyzerResultUpdatedMessage message)
+    {
+        _results[message.Tab] = message.Result;
+        UpdateState();
     }
 }
