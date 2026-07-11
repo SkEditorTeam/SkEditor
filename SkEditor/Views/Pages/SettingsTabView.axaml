@@ -120,6 +120,7 @@
         <controls:FANavigationView.MenuItemTemplate>
             <DataTemplate DataType="models:SettingSection">
                 <controls:FANavigationViewItem Content="{Binding Name.Value}"
+                                               IsExpanded="{Binding IsExpanded.Value, Mode=TwoWay}"
                                                IsVisible="{Binding IsVisible.Value}"
                                                SelectsOnInvoked="{Binding Selectable}"
                                                IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"

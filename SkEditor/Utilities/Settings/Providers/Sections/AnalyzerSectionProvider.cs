@@ -11,6 +11,8 @@ public class AnalyzerSectionProvider(
     ExperimentsConfig experiments,
     AppSettings appSettings) : ISettingsSectionProvider
 {
+    public string ParentId => "Editor";
+
     public SettingSection GetSection()
     {
         SettingSection section = SettingSection.Create("Analyzer", "Analyzer".ToTranslatable())

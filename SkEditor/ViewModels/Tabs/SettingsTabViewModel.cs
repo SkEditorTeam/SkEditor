@@ -16,6 +16,9 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
 {
     private readonly IConfigService _configs;
     private readonly IMessenger _messenger;
+    private readonly Dictionary<string, SettingSection> _parentMap = [];
+
+    private readonly Dictionary<string, SettingSection> _sectionsById;
 
     public SettingsTabViewModel(IConfigService configs, IEnumerable<ISettingsSectionProvider> sectionProviders,
         IMessenger messenger) : base(
@@ -25,12 +28,35 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
         _messenger = messenger;
         SettingsCategories = [];
 
-        foreach (ISettingsSectionProvider settingsSectionProvider in sectionProviders)
+        var providerData = sectionProviders
+            .Select(p => new { Provider = p, Section = p.GetSection() })
+            .ToList();
+
+        _sectionsById = providerData.ToDictionary(x => x.Section.Id, x => x.Section);
+
+        foreach (var item in providerData)
         {
-            SettingsCategories.Add(settingsSectionProvider.GetSection());
+            string? parentId = item.Provider.ParentId;
+
+            if (string.IsNullOrEmpty(parentId))
+            {
+                SettingsCategories.Add(item.Section);
+            }
+            else if (_sectionsById.TryGetValue(parentId, out SettingSection? parentSection))
+            {
+                parentSection.Subsections.Add(item.Section);
+                _parentMap[item.Section.Id] = parentSection;
+            }
+            else
+            {
+                SettingsCategories.Add(item.Section);
+            }
         }
 
-        CurrentSection = SettingsCategories[0];
+        if (SettingsCategories.Count > 0)
+        {
+            CurrentSection = SettingsCategories[0];
+        }
 
         _messenger.Register(this);
     }
@@ -44,16 +70,28 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
 
     public List<SettingSection> SettingsCategories { get; }
 
+    public void Receive(NavigateToSettingsSectionMessage message)
+    {
+        if (!_sectionsById.TryGetValue(message.SectionId, out SettingSection? section))
+        {
+            return;
+        }
+
+        CurrentSection = section;
+
+        SettingSection current = section;
+        while (_parentMap.TryGetValue(current.Id, out SettingSection? parent))
+        {
+            parent.IsExpanded.Value = true;
+            current = parent;
+        }
+    }
+
     [RelayCommand]
     private void CloseTab()
     {
         _ = _configs.SaveAllConfigsAsync();
         _messenger.UnregisterAll(this);
         RequestClose();
-    }
-
-    public void Receive(NavigateToSettingsSectionMessage message)
-    {
-        CurrentSection = SettingsCategories.FirstOrDefault(s => s.Id == message.SectionId) ?? CurrentSection;
     }
 }
