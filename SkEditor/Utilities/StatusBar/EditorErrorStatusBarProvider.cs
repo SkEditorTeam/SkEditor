@@ -24,19 +24,18 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
 {
     private readonly StatusBarItem _item;
     private readonly ErrorListPaneViewModel _pane;
-    private readonly ITabService _tabs;
-    private DisposableBag _disposables;
 
     private readonly Dictionary<IFileTab, AnalyzerResult> _results = new();
-
-    public ReactiveProperty<bool> IsAnalyzerLoaded { get; } = new(false);
-    public ReactiveProperty<bool> IsAnalyzing { get; } = new(false);
+    private readonly ITabService _tabs;
+    private DisposableBag _disposables;
 
     public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments, ITabService tabs,
         IMessenger messenger)
     {
         _pane = drawer.GetPane<ErrorListPaneViewModel>() ??
                 throw new InvalidOperationException("ErrorListPaneViewModel not found");
+
+        _pane.IsAnalyzerLoaded = IsAnalyzerLoaded.ToBindableReactiveProperty();
 
         _item = new StatusBarItem()
             .WithIcon(Symbol.SpinnerIos)
@@ -72,6 +71,32 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         messenger.Register<AnalyzerLoadedMessage>(this);
         messenger.Register<AnalyzerStatusChangedMessage>(this);
         messenger.Register<AnalyzerResultUpdatedMessage>(this);
+    }
+
+    public ReactiveProperty<bool> IsAnalyzerLoaded { get; } = new(false);
+    public ReactiveProperty<bool> IsAnalyzing { get; } = new(false);
+
+    public void Receive(AnalyzerLoadedMessage message)
+    {
+        IsAnalyzerLoaded.Value = true;
+    }
+
+    public void Receive(AnalyzerResultUpdatedMessage message)
+    {
+        _results[message.Tab] = message.Result;
+        UpdateState();
+    }
+
+    public void Receive(AnalyzerStatusChangedMessage message)
+    {
+        IsAnalyzing.Value = message.IsAnalyzing;
+    }
+
+    public ReadOnlyReactiveProperty<bool> CanAttach { get; }
+
+    public IEnumerable<StatusBarItem> GetItems()
+    {
+        yield return _item;
     }
 
     private void UpdateState()
@@ -118,31 +143,8 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         UpdateState();
     }
 
-    public ReadOnlyReactiveProperty<bool> CanAttach { get; }
-
-    public IEnumerable<StatusBarItem> GetItems()
-    {
-        yield return _item;
-    }
-
     public void Dispose()
     {
         _disposables.Dispose();
-    }
-
-    public void Receive(AnalyzerLoadedMessage message)
-    {
-        IsAnalyzerLoaded.Value = true;
-    }
-
-    public void Receive(AnalyzerStatusChangedMessage message)
-    {
-        IsAnalyzing.Value = message.IsAnalyzing;
-    }
-
-    public void Receive(AnalyzerResultUpdatedMessage message)
-    {
-        _results[message.Tab] = message.Result;
-        UpdateState();
     }
 }

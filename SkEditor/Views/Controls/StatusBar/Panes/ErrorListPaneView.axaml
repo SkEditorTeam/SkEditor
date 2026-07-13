@@ -7,6 +7,7 @@
              xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes"
              xmlns:analyzer="clr-namespace:SkEditor.Models.Analyzer"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.Panes.ErrorListPaneView"
              Name="Root"
@@ -39,8 +40,13 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <StackPanel VerticalAlignment="Center" Spacing="6"
-                            IsVisible="{Binding !Errors.Count}">
+                <StackPanel VerticalAlignment="Center" Spacing="6">
+                    <StackPanel.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="IsAnalyzerLoaded.Value" />
+                            <Binding Path="!Errors.Count" />
+                        </MultiBinding>
+                    </StackPanel.IsVisible>
                     <Viewbox Height="32" Opacity="0.5">
                         <icons:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
                     </Viewbox>
@@ -52,6 +58,16 @@
                                    TextWrapping="Wrap"
                                    FontSize="12" MaxWidth="300" Opacity="0.6" />
                     </StackPanel>
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Center" Spacing="6"
+                            IsVisible="{Binding !IsAnalyzerLoaded.Value}">
+                    <ui:FAProgressRing IsIndeterminate="True"
+                                       BorderThickness="1.5"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                    <TextBlock Text="Loading Analyzer..."
+                               HorizontalAlignment="Center" FontSize="16" Opacity="0.75" />
                 </StackPanel>
             </Panel>
         </ScrollViewer>

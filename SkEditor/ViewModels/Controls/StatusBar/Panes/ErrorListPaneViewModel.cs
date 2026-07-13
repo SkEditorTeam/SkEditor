@@ -25,11 +25,13 @@ public partial class ErrorListPaneViewModel : ObservableObject, IDrawerPaneViewM
             .ToBindableReactiveProperty();
     }
 
+    public BindableReactiveProperty<bool> IsAnalyzerLoaded { get; set; } = new(false);
+
+    public ObservableCollection<AnalyzerError> Errors { get; set; } = [];
+
     public string Id => "ErrorList";
     public TranslatableString Name => "Errors".ToTranslatable();
     public BindableReactiveProperty<bool> IsVisible { get; }
-
-    public ObservableCollection<AnalyzerError> Errors { get; set; } = [];
 
     [RelayCommand]
     public void ErrorClick(AnalyzerError error)
