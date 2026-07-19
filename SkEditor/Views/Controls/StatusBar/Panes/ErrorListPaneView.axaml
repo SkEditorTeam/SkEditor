@@ -44,6 +44,7 @@
                     <StackPanel.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="IsAnalyzerLoaded.Value" />
+                            <Binding Path="IsFileAnalyzable.Value" />
                             <Binding Path="!Errors.Count" />
                         </MultiBinding>
                     </StackPanel.IsVisible>
@@ -58,6 +59,22 @@
                                    TextWrapping="Wrap"
                                    FontSize="12" MaxWidth="300" Opacity="0.6" />
                     </StackPanel>
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Center" Spacing="6">
+                    <StackPanel.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="IsAnalyzerLoaded.Value" />
+                            <Binding Path="!IsFileAnalyzable.Value" />
+                        </MultiBinding>
+                    </StackPanel.IsVisible>
+                    <Viewbox Height="32" Opacity="0.5">
+                        <icons:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
+                    </Viewbox>
+                    <TextBlock Text="Open a Skript file to see errors and warnings."
+                               HorizontalAlignment="Center" TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               FontSize="12" MaxWidth="300" Opacity="0.6" />
                 </StackPanel>
 
                 <StackPanel VerticalAlignment="Center" Spacing="6"

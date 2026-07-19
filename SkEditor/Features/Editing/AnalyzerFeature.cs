@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media;
@@ -29,8 +28,7 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
             return false;
         }
 
-        string extension = Path.GetExtension(fileTab.Path ?? string.Empty).ToLowerInvariant();
-        return string.IsNullOrEmpty(extension) || extension == ".sk";
+        return fileTab.IsAnalyzable;
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)

@@ -23,9 +23,13 @@ public partial class ErrorListPaneViewModel : ObservableObject, IDrawerPaneViewM
         IsVisible = experiments
             .ObservePropertyChanged(x => x.AnalyzerEnabled)
             .ToBindableReactiveProperty();
+
+        _tabs.ObserveSelectedTab()
+            .Subscribe(tab => { IsFileAnalyzable.Value = tab is FileTabViewModel { IsAnalyzable: true }; });
     }
 
     public BindableReactiveProperty<bool> IsAnalyzerLoaded { get; set; } = new(false);
+    public BindableReactiveProperty<bool> IsFileAnalyzable { get; set; } = new(false);
 
     public ObservableCollection<AnalyzerError> Errors { get; set; } = [];
 

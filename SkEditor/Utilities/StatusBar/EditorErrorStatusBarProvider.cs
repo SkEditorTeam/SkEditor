@@ -120,6 +120,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         Symbol icon = IsAnalyzerLoaded.Value switch
         {
             false or true when IsAnalyzing.Value => Symbol.SpinnerIos,
+            false or true when !_pane.IsFileAnalyzable.Value => Symbol.CircleHint,
             true when anyErrors => Symbol.ErrorCircle,
             true when anyWarnings => Symbol.Warning,
             true => Symbol.CheckmarkCircle
@@ -127,6 +128,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
 
         Color color = IsAnalyzerLoaded.Value switch
         {
+            false or true when !_pane.IsFileAnalyzable.Value => Color.Parse("#A0A5AF"),
             false => Color.Parse("#A0A5AF"),
             true when anyErrors => Color.Parse("#FF2D52"),
             true when anyWarnings => Color.Parse("#FFAE45"),
