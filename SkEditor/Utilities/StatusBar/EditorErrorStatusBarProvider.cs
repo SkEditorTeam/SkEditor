@@ -20,7 +20,8 @@ namespace SkEditor.Utilities.StatusBar;
 
 public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<AnalyzerLoadedMessage>,
     IRecipient<AnalyzerStatusChangedMessage>,
-    IRecipient<AnalyzerResultUpdatedMessage>
+    IRecipient<AnalyzerResultUpdatedMessage>,
+    IRecipient<AnalyzerFailedToLoadMessage>
 {
     private readonly StatusBarItem _item;
     private readonly ErrorListPaneViewModel _pane;
@@ -71,6 +72,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         messenger.Register<AnalyzerLoadedMessage>(this);
         messenger.Register<AnalyzerStatusChangedMessage>(this);
         messenger.Register<AnalyzerResultUpdatedMessage>(this);
+        messenger.Register<AnalyzerFailedToLoadMessage>(this);
     }
 
     public ReactiveProperty<bool> IsAnalyzerLoaded { get; } = new(false);
@@ -92,6 +94,11 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         IsAnalyzing.Value = message.IsAnalyzing;
     }
 
+    public void Receive(AnalyzerFailedToLoadMessage message)
+    {
+        _item.IsVisible = false;
+    }
+    
     public ReadOnlyReactiveProperty<bool> CanAttach { get; }
 
     public IEnumerable<StatusBarItem> GetItems()

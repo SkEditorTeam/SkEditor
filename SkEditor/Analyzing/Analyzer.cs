@@ -24,16 +24,37 @@ public class Analyzer(
     IMessenger messenger,
     ILogService logs) : IAnalyzer
 {
-    public readonly string WorkingDir = Path.Combine(configs.GetAppDataPath(), "Analyzer");
+    public readonly string AnalyzerRoot = Path.Combine(configs.GetAppDataPath(), "Analyzer");
+
+    public string BinDir => Path.Combine(AnalyzerRoot, "Binaries");
+    public string WorkingDir => Path.Combine(AnalyzerRoot, "Server");
 
     private Process? _process;
     private TaskCompletionSource<AnalyzeResultsDto?>? _analysisTcs;
 
     public async Task Initialize()
     {
-        const string analyzerPath = @"C:\Users\Notro\Desktop\Analyzer\SkAnalyzer3.jar";
-        
+        string analyzerPath = Path.Combine(BinDir, "SkAnalyzer.jar");
+
         Directory.CreateDirectory(WorkingDir);
+        Directory.CreateDirectory(BinDir);
+
+        if (!File.Exists(analyzerPath))
+        {
+            messenger.Send(new AnalyzerFailedToLoadMessage());
+            await Task.Delay(2500);
+
+            Notification notification = Notification
+                .Create("Missing SkAnalyzer.jar".ToTranslatable())
+                .WithMessage(
+                    "The SkAnalyzer.jar file is missing. Please refer to the installation instructions on the SkEditor Discord server."
+                        .ToTranslatable())
+                .WithDuration(TimeSpan.MaxValue)
+                .WithType(NotificationType.Error);
+
+            notifs.Show(notification);
+            return;
+        }
 
         ProcessStartInfo startInfo = new()
         {
