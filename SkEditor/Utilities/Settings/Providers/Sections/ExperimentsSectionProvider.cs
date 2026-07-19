@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
-using FluentIcons.Common;
-using R3;
-using SkEditor.Models.Messages;
+﻿using FluentIcons.Common;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
 using SkEditor.Utilities.Extensions;
@@ -10,7 +7,7 @@ using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.Experi
 
 namespace SkEditor.Utilities.Settings.Providers.Sections;
 
-public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenger messenger) : ISettingsSectionProvider
+public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettingsSectionProvider
 {
     public SettingSection GetSection()
     {
@@ -74,12 +71,12 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                             .WithType(InfoSetting.InfoType.Warning),
                         ToggleSetting
                             .Create("Enable Analyzer".ToTranslatable())
-                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerEnabled)),
-                        ClickableActionSetting
-                            .Create("Go to Analyzer settings".ToTranslatable())
-                            .WithAction(() => messenger.Send(new NavigateToSettingsSectionMessage("Analyzer")))
-                            .WithEnabled(experiments.ObservePropertyChanged(x => x.AnalyzerEnabled)
-                                .ToBindableReactiveProperty())
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerEnabled))
+                        // ClickableActionSetting
+                        //     .Create("Go to Analyzer settings".ToTranslatable())
+                        //     .WithAction(() => messenger.Send(new NavigateToSettingsSectionMessage("Analyzer")))
+                        //     .WithEnabled(experiments.ObservePropertyChanged(x => x.AnalyzerEnabled)
+                        //         .ToBindableReactiveProperty())
                     ),
 
                 ExpandableSetting
