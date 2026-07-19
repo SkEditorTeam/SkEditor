@@ -1,23 +1,35 @@
 ﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+using R3;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings.Types;
 
-public partial class ToggleSetting(TranslatableString name) : SettingElement<ToggleSetting>(name)
+public class ToggleSetting : SettingElement<ToggleSetting>
 {
+    public ToggleSetting(TranslatableString name) : base(name)
+    {
+        IsToggled = new BindableReactiveProperty<bool>(false);
+
+        IsToggled.Subscribe(newValue =>
+        {
+            if (Property.Get() != newValue)
+            {
+                Property.Set(newValue);
+            }
+        });
+    }
+
     public (Func<bool> Get, Action<bool> Set) Property
     {
         get => (field.Get, field.Set);
         set
         {
             field = value;
-            IsToggled = value.Get();
+            IsToggled.Value = value.Get();
         }
     }
 
-    [ObservableProperty]
-    public partial bool IsToggled { get; set; }
+    public BindableReactiveProperty<bool> IsToggled { get; set; }
 
     public static ToggleSetting Create(TranslatableString name)
     {
@@ -28,13 +40,5 @@ public partial class ToggleSetting(TranslatableString name) : SettingElement<Tog
     {
         Property = property;
         return this;
-    }
-
-    partial void OnIsToggledChanged(bool oldValue, bool newValue)
-    {
-        if (oldValue != newValue)
-        {
-            Property.Set(newValue);
-        }
     }
 }

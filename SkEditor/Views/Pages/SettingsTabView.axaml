@@ -62,7 +62,7 @@
 
     <UserControl.DataTemplates>
         <DataTemplate DataType="{x:Type types:ToggleSetting}">
-            <ToggleSwitch IsChecked="{Binding IsToggled}" />
+            <ToggleSwitch IsChecked="{Binding IsToggled.Value}" />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type types:IChoiceSetting}">
