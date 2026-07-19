@@ -20,6 +20,13 @@ public static class TabServiceExtensions
 
     extension(IFileTab tab)
     {
-        public bool IsAnalyzable => Path.GetExtension(tab.Path ?? string.Empty).ToLowerInvariant() is null or ".sk";
+        public bool IsAnalyzable
+        {
+            get
+            {
+                string extension = Path.GetExtension(tab.Path ?? string.Empty).ToLowerInvariant();
+                return string.IsNullOrWhiteSpace(extension) || extension is ".sk";
+            }
+        }
     }
 }
