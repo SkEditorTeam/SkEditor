@@ -2,9 +2,9 @@
 
 namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class IndentAmountChoiceProvider : ISettingsChoiceProvider
+public class IndentAmountChoiceProvider : ISettingsChoiceProvider<int>
 {
-    public IEnumerable<object> GetValues()
+    public IEnumerable<int> GetValues()
     {
         return
         [

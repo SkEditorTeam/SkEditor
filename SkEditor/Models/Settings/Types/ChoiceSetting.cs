@@ -27,7 +27,7 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement<
         }
     }
 
-    public ISettingsChoiceProvider? Provider { get; protected set; }
+    public ISettingsChoiceProvider<T>? Provider { get; protected set; }
 
     [ObservableProperty]
     public partial T? SelectedOption { get; set; }
@@ -56,7 +56,7 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement<
         return this;
     }
 
-    public ChoiceSetting<T> WithProvider(ISettingsChoiceProvider provider)
+    public ChoiceSetting<T> WithProvider(ISettingsChoiceProvider<T> provider)
     {
         if (Property.Get == null || Property.Set == null)
         {
@@ -64,7 +64,7 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement<
         }
 
         Provider = provider;
-        Options = provider.GetValues().Cast<T>().ToList();
+        Options = provider.GetValues().ToList();
 
         WrappedOptions = Options
             .Where(o => o != null)

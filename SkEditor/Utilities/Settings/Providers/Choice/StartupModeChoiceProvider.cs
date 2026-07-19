@@ -5,14 +5,14 @@ using SkEditor.Utilities.Startup;
 
 namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class StartupModeChoiceProvider : ISettingsChoiceProvider
+public class StartupModeChoiceProvider : ISettingsChoiceProvider<StartupMode>
 {
-    public IEnumerable<object> GetValues()
+    public IEnumerable<StartupMode> GetValues()
     {
         return [StartupMode.Auto, StartupMode.DisableSplashScreen, StartupMode.EnableSplashScreen];
     }
 
-    public TranslatableString GetDisplayValue(object value)
+    public TranslatableString GetDisplayValue(StartupMode value)
     {
         return value switch
         {

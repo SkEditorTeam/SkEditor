@@ -4,9 +4,9 @@ using SkEditor.Contracts.Services;
 
 namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class ThemeChoiceProvider(IThemeService themeService) : ISettingsChoiceProvider
+public class ThemeChoiceProvider(IThemeService themeService) : ISettingsChoiceProvider<string>
 {
-    public IEnumerable<object> GetValues()
+    public IEnumerable<string> GetValues()
     {
         List<string> themes = themeService.Themes.Select(x => x.Name).ToList();
         return themes.Distinct();

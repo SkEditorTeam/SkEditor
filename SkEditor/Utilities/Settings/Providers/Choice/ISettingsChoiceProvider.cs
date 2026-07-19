@@ -3,12 +3,12 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public interface ISettingsChoiceProvider
+public interface ISettingsChoiceProvider<T>
 {
-    IEnumerable<object> GetValues();
+    IEnumerable<T> GetValues();
 
-    TranslatableString GetDisplayValue(object value)
+    TranslatableString GetDisplayValue(T value)
     {
-        return TranslatableString.FromRawString(value.ToString() ?? string.Empty);
+        return TranslatableString.FromRawString(value?.ToString() ?? string.Empty);
     }
 }

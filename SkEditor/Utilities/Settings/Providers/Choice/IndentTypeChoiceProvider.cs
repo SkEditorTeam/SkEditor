@@ -4,9 +4,9 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class IndentTypeChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider
+public class IndentTypeChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider<bool>
 {
-    public IEnumerable<object> GetValues()
+    public IEnumerable<bool> GetValues()
     {
         return
         [
@@ -15,13 +15,12 @@ public class IndentTypeChoiceProvider(ITranslationService translationService) : 
         ];
     }
 
-    public TranslatableString GetDisplayValue(object value)
+    public TranslatableString GetDisplayValue(bool value)
     {
         return value switch
         {
             false => translationService.GetObservable(TranslationKey.SettingsGeneralTabTypeSpaces),
-            true => translationService.GetObservable(TranslationKey.SettingsGeneralTabTypeTabs),
-            _ => TranslatableString.FromRawString(value.ToString() ?? string.Empty)
+            true => translationService.GetObservable(TranslationKey.SettingsGeneralTabTypeTabs)
         };
     }
 }

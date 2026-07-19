@@ -5,7 +5,7 @@ using SkEditor.Contracts.Services.Localization;
 
 namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class LanguageChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider
+public class LanguageChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider<string>
 {
     private static readonly Comparer<string> Comparer = Comparer<string>.Create((x, y) =>
     {
@@ -17,7 +17,7 @@ public class LanguageChoiceProvider(ITranslationService translationService) : IS
         return y == "English" ? 1 : string.CompareOrdinal(x, y);
     });
 
-    public IEnumerable<object> GetValues()
+    public IEnumerable<string> GetValues()
     {
         List<string> availableLanguages = [];
 
