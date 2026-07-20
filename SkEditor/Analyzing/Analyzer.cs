@@ -115,7 +115,29 @@ public class Analyzer(
             }
         };
 
-        _process.Start();
+        try
+        {
+            _process.Start();
+        }
+        catch (Exception ex)
+        {
+            logs.Error($"Failed to start process: {ex.Message}");
+            _process = null;
+
+            await Task.Delay(2500);
+
+            messenger.Send(new AnalyzerFailedToLoadMessage());
+
+            Notification notification = Notification
+                .Create("Analyzer failed to start".ToTranslatable())
+                .WithMessage("Failed to start the Analyzer process. Look into the logs for more information."
+                    .ToTranslatable())
+                .WithDuration(TimeSpan.MaxValue)
+                .WithType(NotificationType.Error);
+
+            notifs.Show(notification);
+            return;
+        }
         _process.BeginOutputReadLine();
         _process.BeginErrorReadLine();
         await _process.WaitForExitAsync();
