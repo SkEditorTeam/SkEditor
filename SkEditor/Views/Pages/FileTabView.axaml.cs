@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using AvaloniaEdit.Editing;
 using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Views.Pages;
@@ -12,7 +13,13 @@ public partial class FileTabView : UserControl
 
         Editor.AddHandler(
             GotFocusEvent,
-            (_, _) => (DataContext as FileTabViewModel)?.FocusCommand.Execute(null),
+            (_, e) =>
+            {
+                if (e.Source is TextArea)
+                {
+                    (DataContext as FileTabViewModel)?.FocusCommand.Execute(null);
+                }
+            },
             RoutingStrategies.Bubble,
             true);
     }
