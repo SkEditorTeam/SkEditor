@@ -111,6 +111,19 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         _pane.Errors.Clear();
         if (_tabs.SelectedTab is IFileTab fileTab && _results.TryGetValue(fileTab, out AnalyzerResult? result))
         {
+            result.Errors.Sort((a, b) =>
+            {
+                int lineComparison = a.Line.CompareTo(b.Line);
+                if (lineComparison != 0)
+                {
+                    return lineComparison;
+                }
+
+                int typeComparison = a.Type.CompareTo(b.Type);
+                return typeComparison != 0
+                    ? typeComparison
+                    : string.Compare(a.Message, b.Message, StringComparison.Ordinal);
+            });
             result.Errors.ForEach(_pane.Errors.Add);
         }
 
