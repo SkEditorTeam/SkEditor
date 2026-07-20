@@ -33,7 +33,7 @@
                             <statusBar:DrawerErrorEntry x:DataType="analyzer:AnalyzerError"
                                                         ErrorMessage="{Binding Message}"
                                                         ErrorType="{Binding Type}" ErrorLine="{Binding Line}"
-                                                        ErrorSource="script"
+                                                        ErrorSource=""
                                                         ErrorClickCommand="{Binding #Root.((vm:ErrorListPaneViewModel)DataContext)?.ErrorClickCommand}"
                                                         ErrorClickCommandParameter="{Binding .}" />
                         </DataTemplate>
