@@ -71,15 +71,7 @@ public class TextEditorLoadBehavior : Behavior<TextEditor>
 
         if (newTab != null && AssociatedObject != null)
         {
-            Dispatcher.UIThread.Post(
-                () =>
-                {
-                    if (AssociatedObject?.IsLoaded == true)
-                    {
-                        AssociatedObject.TextArea.Focus();
-                    }
-                },
-                DispatcherPriority.Loaded);
+            Dispatcher.UIThread.Post(() => AssociatedObject?.TextArea?.Focus(), DispatcherPriority.Loaded);
         }
     }
 }
