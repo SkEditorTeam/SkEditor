@@ -176,9 +176,27 @@ public class Analyzer(
         {
             return null;
         }
+        catch (IOException ex)
+        {
+            if (_process.HasExited)
+            {
+                logs.Error(ex, "Analyzer process has exited unexpectedly");
+                _process = null;
+                messenger.Send(new AnalyzerFailedToLoadMessage());
+
+                notifs.Show(Notification
+                    .Create("Analyzer process has exited".ToTranslatable())
+                    .WithMessage("The Analyzer process has exited unexpectedly. Please restart SkEditor."
+                        .ToTranslatable())
+                    .MakePersistent()
+                    .WithType(NotificationType.Error));
+
+                return null;
+            }
+        }
         catch (Exception ex)
         {
-            logs.Error($"Failed to send command to analyzer process: {ex.Message}");
+            logs.Error(ex, "Failed to send command to analyzer process");
             return null;
         }
         finally
