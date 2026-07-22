@@ -146,21 +146,21 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         targetList.Remove(tab);
         tabViewLocator.RemoveFromCache(tab);
 
+        if (MainTabs.Count == 0 && SplitTabs.Count > 0)
+        {
+            List<TabViewModelBase> itemsToMove = SplitTabs.ToList();
+            SplitTabs.Clear();
+
+            foreach (TabViewModelBase item in itemsToMove)
+            {
+                MainTabs.Add(item);
+            }
+        }
+
         if (SelectedTab == tab)
         {
-            TabViewModelBase? nextTab = targetList.LastOrDefault() ??
-                                        (isMain ? SplitTabs.LastOrDefault() : MainTabs.LastOrDefault());
-
+            TabViewModelBase? nextTab = MainTabs.LastOrDefault() ?? SplitTabs.LastOrDefault();
             SelectedTab = nextTab;
-
-            if (isMain)
-            {
-                SelectedMainTab = nextTab;
-            }
-            else
-            {
-                SelectedSplitTab = nextTab;
-            }
         }
 
         if (tab is IFeatureTab featureTab)
