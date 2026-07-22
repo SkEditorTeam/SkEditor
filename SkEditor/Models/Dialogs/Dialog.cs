@@ -6,51 +6,35 @@ using SkEditor.Utilities.Localization;
 namespace SkEditor.Models.Dialogs;
 
 /// <summary>
-///     Represents a dialog that can be displayed to the user.
+///     Represents a customizable dialog window to be displayed in the SkEditor UI.
 /// </summary>
 public class Dialog
 {
-    /// <summary>
-    ///     The title of the dialog. This is a required property and must be set when creating a dialog.
-    /// </summary>
+    /// <summary> The localized title displayed in the header of the dialog. </summary>
     public required TranslatableString Title { get; init; }
 
-    /// <summary>
-    ///     The message of the dialog. This is an optional property and can be set using the <see cref="WithMessage" /> method.
-    /// </summary>
+    /// <summary> The optional localized description body of the dialog. </summary>
     public TranslatableString? Message { get; set; }
 
-    /// <summary>
-    ///     The Symbol that will be used as the icon for the dialog. This is an optional property and can be set using the
-    ///     <see cref="WithIcon" /> method.
-    /// </summary>
+    /// <summary> The optional icon displayed alongside the dialog content. </summary>
     public Symbol? Icon { get; set; }
 
-    /// <summary>
-    ///     The buttons that will be displayed in the dialog. This is an optional property and can be set using the
-    ///     <see cref="WithButtons" /> method.
-    /// </summary>
+    /// <summary> The interactive buttons displayed at the bottom of the dialog. </summary>
     public List<DialogButton> Buttons { get; init; } = [];
 
-    /// <summary>
-    ///     The elements that will be displayed in the dialog. This is an optional property and can be set using the
-    ///     <see cref="WithElements" /> method. Elements can be used to display additional content in the dialog.
-    /// </summary>
+    /// <summary> Additional UI elements or custom controls embedded inside the dialog body. </summary>
     public List<DialogElement> Elements { get; init; } = [];
 
-    /// <summary>
-    ///     Whether user should be able to use Esc key to close the dialog with a <see cref="DialogResult" /> of
-    ///     <see cref="StandardDialogResult.Cancel" /> (even if there is no Cancel button)
-    /// </summary>
+    /// <summary> Gets or sets whether the user can close the dialog by pressing the Esc key. </summary>
     public bool AllowIgnore { get; set; } = true;
 
     /// <summary>
-    ///     Creates a new dialog with the specified title, message, and buttons.
+    ///     Creates a new dialog with a title, message, and predefined buttons.
     /// </summary>
-    /// <param name="title">The title of the dialog.</param>
-    /// <param name="message">The message of the dialog.</param>
-    /// <param name="buttons">The buttons that will be displayed in the dialog.</param>
-    /// <returns>>A new instance of the <see cref="Dialog" /> class with the specified title, message, and buttons.</returns>
+    /// <param name="title">The localized title of the dialog.</param>
+    /// <param name="message">The localized content of the dialog body.</param>
+    /// <param name="buttons">The interactive buttons to be appended to the dialog bottom.</param>
+    /// <returns>A configured <see cref="Dialog" /> instance ready to be shown.</returns>
     public static Dialog Create(TranslatableString title, TranslatableString message, params DialogButton[] buttons)
     {
         return new Dialog
@@ -62,11 +46,10 @@ public class Dialog
     }
 
     /// <summary>
-    ///     Creates a new dialog with the specified title. The message and buttons can be set later using the
-    ///     <see cref="WithMessage" /> and <see cref="WithButtons" /> methods.
+    ///     Creates a basic dialog with only a title. Other properties can be configured via fluent methods.
     /// </summary>
-    /// <param name="title">The title of the dialog.</param>
-    /// <returns>A new instance of the <see cref="Dialog" /> class with the specified title.</returns>
+    /// <param name="title">The localized title of the dialog.</param>
+    /// <returns>A minimal <see cref="Dialog" /> instance.</returns>
     public static Dialog Create(TranslatableString title)
     {
         return new Dialog
@@ -75,61 +58,35 @@ public class Dialog
         };
     }
 
-    /// <summary>
-    ///     Sets the message of the dialog and returns the dialog instance for chaining. This method can be used to set the
-    ///     message of the dialog after it has been created using the <see cref="Create(TranslatableString)" /> method.
-    /// </summary>
-    /// <param name="message">The message that will be displayed in the dialog.</param>
-    /// <returns>>The dialog instance with the updated message.</returns>
+    /// <summary> Sets the message body of the dialog and returns this instance for chaining. </summary>
     public Dialog WithMessage(TranslatableString message)
     {
         Message = message;
         return this;
     }
 
-    /// <summary>
-    ///     Sets the icon of the dialog and returns the dialog instance for chaining. This method can be used to set the icon
-    ///     of the dialog after it has been created using the <see cref="Create(TranslatableString)" /> method.
-    /// </summary>
-    /// <param name="icon">The Symbol that will be used as the icon for the dialog.</param>
-    /// <returns>The dialog instance with the updated icon.</returns>
+    /// <summary> Sets the icon of the dialog and returns this instance for chaining. </summary>
     public Dialog WithIcon(Symbol icon)
     {
         Icon = icon;
         return this;
     }
 
-    /// <summary>
-    ///     Adds the specified buttons to the dialog and returns the dialog instance for chaining. This method can be used to
-    ///     add buttons to the dialog after it has been created using the <see cref="Create(TranslatableString)" /> method.
-    /// </summary>
-    /// <param name="buttons">The buttons to add to the dialog.</param>
-    /// <returns>The dialog instance with the updated buttons.</returns>
+    /// <summary> Appends buttons to the dialog and returns this instance for chaining. </summary>
     public Dialog WithButtons(params DialogButton[] buttons)
     {
         Buttons.AddRange(buttons);
         return this;
     }
 
-
-    /// <summary>
-    ///     Adds the specified elements to the dialog and returns the dialog instance for chaining. This method can be used to
-    ///     add elements to the dialog after it has been created using the <see cref="Create(TranslatableString)" /> method.
-    /// </summary>
-    /// <param name="elements">The elements to add to the dialog.</param>
-    /// <returns>The dialog instance with the updated elements.</returns>
+    /// <summary> Appends custom UI elements to the dialog body and returns this instance for chaining. </summary>
     public Dialog WithElements(params DialogElement[] elements)
     {
         Elements.AddRange(elements);
         return this;
     }
 
-    /// <summary>
-    ///     Disallows the user from ignoring the dialog by pressing the Esc key. When this method is called, pressing the Esc
-    ///     key
-    ///     will not close the dialog.
-    /// </summary>
-    /// <returns>The dialog instance with the updated AllowIgnore property.</returns>
+    /// <summary> Prevents the dialog from being closed by pressing the Esc key and returns this instance for chaining. </summary>
     public Dialog DisallowIgnore()
     {
         AllowIgnore = false;
@@ -138,51 +95,28 @@ public class Dialog
 }
 
 /// <summary>
-///     Represents a button that can be displayed in a dialog.
+///     Represents an interactive button within a dialog.
 /// </summary>
-/// <param name="text">The text that will be displayed on the button.</param>
-/// <param name="result">The result that will be returned when the button is clicked.</param>
-/// <param name="isDefault">Whether the button is the default button.</param>
 public class DialogButton(TranslatableString text, DialogResult result, bool isDefault = false)
 {
-    /// <summary>
-    ///     The text that will be displayed on the button.
-    /// </summary>
+    /// <summary> The localized label displayed on the button. </summary>
     public TranslatableString Text { get; init; } = text;
 
-    /// <summary>
-    ///     Whether the button is the default button. If the user presses the Enter key while the dialog is open, the default
-    ///     button will be clicked. Only one button can be the default button.
-    /// </summary>
+    /// <summary> Gets whether pressing Enter triggers this button. Only one button in a dialog should be default. </summary>
     public bool IsDefault { get; init; } = isDefault;
 
-    /// <summary>
-    ///     The result that will be returned when the button is clicked. This will be used to determine which button was
-    ///     clicked when the dialog is closed.
-    /// </summary>
+    /// <summary> The result value returned to the caller when this button is clicked. </summary>
     public DialogResult Result { get; init; } = result;
 
-    /// <summary>
-    ///     Predefined button for "OK". This button will return a <see cref="DialogResult" /> with a result of
-    ///     <see cref="StandardDialogResult.Ok" /> when clicked.
-    /// </summary>
+    /// <summary> Predefined button for 'OK'. </summary>
     public static DialogButton Ok => new(TranslationKey.ButtonOkay, DialogResult.Ok);
 
-    /// <summary>
-    ///     Predefined button for "Cancel". This button will return a <see cref="DialogResult" /> with a result of
-    ///     <see cref="StandardDialogResult.Cancel" /> when clicked.
-    /// </summary>
+    /// <summary> Predefined button for 'Cancel'. </summary>
     public static DialogButton Cancel => new(TranslationKey.ButtonCancel, DialogResult.Cancel);
 
-    /// <summary>
-    ///     Predefined button for "Yes". This button will return a <see cref="DialogResult" /> with a result of
-    ///     <see cref="StandardDialogResult.Yes" /> when clicked.
-    /// </summary>
+    /// <summary> Predefined button for 'Yes'. </summary>
     public static DialogButton Yes => new(TranslationKey.ButtonYes, DialogResult.Yes);
 
-    /// <summary>
-    ///     Predefined button for "No". This button will return a <see cref="DialogResult" /> with a result of
-    ///     <see cref="StandardDialogResult.No" /> when clicked.
-    /// </summary>
+    /// <summary> Predefined button for 'No'. </summary>
     public static DialogButton No => new(TranslationKey.ButtonNo, DialogResult.No);
 }
