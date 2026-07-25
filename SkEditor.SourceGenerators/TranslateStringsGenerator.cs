@@ -12,6 +12,14 @@ namespace SkEditor.SourceGenerators;
 public class TranslateStringsGenerator : IIncrementalGenerator
 {
     private const string EnglishJsonFileName = "English.json";
+    
+    private static readonly DiagnosticDescriptor MissingJsonRule = new(
+        id: "SKED001",
+        title: "Missing translation file",
+        messageFormat: "Resource '{0}' was not found in AdditionalFiles",
+        category: "SourceGenerator",
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true);
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -25,8 +33,7 @@ public class TranslateStringsGenerator : IIncrementalGenerator
         {
             if (additionalText is null)
             {
-                ctx.AddSource("TranslationKey.g.cs",
-                    $"#error Resource '{EnglishJsonFileName}' not found in AdditionalFiles.");
+                ctx.ReportDiagnostic(Diagnostic.Create(MissingJsonRule, Location.None, EnglishJsonFileName));
                 return;
             }
 
