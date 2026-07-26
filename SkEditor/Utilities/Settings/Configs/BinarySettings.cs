@@ -18,7 +18,11 @@ public partial class BinarySettings : ObservableObject, IConfig
 {
     private const string ConfigFileName = "settings.bin";
 
-    private readonly string _binaryFilePath = Path.Combine(AppContext.BaseDirectory, ConfigFileName);
+    private readonly string _binaryFilePath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "SkEditor", "v3.0",
+        ConfigFileName
+    );
 
     private List<IBinarySettingHandler> Registry => field ??=
     [
@@ -77,7 +81,13 @@ public partial class BinarySettings : ObservableObject, IConfig
     {
         try
         {
-            using BinaryWriter writer = new(File.OpenWrite(_binaryFilePath));
+            string? directory = Path.GetDirectoryName(_binaryFilePath);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            
+            using BinaryWriter writer = new(File.Create(_binaryFilePath));
             foreach (IBinarySettingHandler handler in Registry)
             {
                 handler.Save(writer);
