@@ -76,11 +76,12 @@ public class Analyzer(
         _process.ErrorDataReceived += (_, args) =>
         {
             Notification notification = Notification
-                .Create(TranslatableString.FromRawString("Analyzer Error"))
-                .WithMessage(TranslatableString.FromRawString(args.Data ?? string.Empty))
+                .Create("Analyzer Error".ToTranslatable())
+                .WithMessage((args.Data ?? string.Empty).ToTranslatable())
                 .WithType(NotificationType.Error);
 
             notifs.Show(notification);
+            logs.Error($"Analyzer Error: {args.Data}");
         };
 
         _process.OutputDataReceived += (_, args) =>
