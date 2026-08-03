@@ -84,9 +84,9 @@ public class Analyzer(
         await _analyzeLock.WaitAsync(ct);
         messenger.Send(new AnalyzerStatusChangedMessage(true));
 
+        string tempFilePath = Path.Combine(WorkingDir, $"temp_{Guid.NewGuid():N}.sk");
         try
         {
-            string tempFilePath = Path.Combine(WorkingDir, "temp_script.sk");
             await File.WriteAllTextAsync(tempFilePath, text, ct);
 
             AnalyzeResultsDto? resultsDto = await protocolHandler.SendParseCommandAsync(tempFilePath, ct);
@@ -100,6 +100,7 @@ public class Analyzer(
         }
         finally
         {
+            File.Delete(tempFilePath);
             _analyzeLock.Release();
             messenger.Send(new AnalyzerStatusChangedMessage(false));
         }
