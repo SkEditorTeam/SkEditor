@@ -43,8 +43,13 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
                 string relPath = parts[2];
                 string destinationPath = Path.Combine(librariesFolder, relPath);
 
-                if (!Path.GetFullPath(destinationPath)
-                        .StartsWith(Path.GetFullPath(librariesFolder), StringComparison.OrdinalIgnoreCase))
+                string fullLibsFolder = Path.GetFullPath(librariesFolder);
+                if (!fullLibsFolder.EndsWith(Path.DirectorySeparatorChar))
+                {
+                    fullLibsFolder += Path.DirectorySeparatorChar;
+                }
+
+                if (!Path.GetFullPath(destinationPath).StartsWith(fullLibsFolder, StringComparison.OrdinalIgnoreCase))
                 {
                     logs.Warning("Skipping extraction of library with invalid path: " + relPath);
                     continue;
