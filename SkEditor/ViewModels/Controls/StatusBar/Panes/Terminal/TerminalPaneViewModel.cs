@@ -18,7 +18,8 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
     public IDrawerToolbarViewModel? Toolbar { get; }
     public BindableReactiveProperty<bool> IsVisible { get; }
 
-    public TerminalControl TerminalControl => field ??= CreateTerminal();
+    private TerminalControl? _terminalControl;
+    public TerminalControl TerminalControl => _terminalControl ??= CreateTerminal();
 
     public TerminalPaneViewModel(ExperimentsConfig experiments)
     {
@@ -99,7 +100,7 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        TerminalControl?.Kill();
+        _terminalControl?.Kill();
     }
 
     public async Task RestartTerminal()
