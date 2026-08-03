@@ -22,7 +22,7 @@ public class AnalyzerAotGenerator(
             .Create("Analyzer AOT Cache".ToTranslatable())
             .WithMessage("Generating AOT cache for the Analyzer. This is a one-time operation and may take a bit longer."
                 .ToTranslatable())
-            .WithDuration(TimeSpan.MaxValue)
+            .WithDuration(TimeSpan.FromSeconds(10))
             .WithType(NotificationType.Information);
 
         notifs.Show(notification);
