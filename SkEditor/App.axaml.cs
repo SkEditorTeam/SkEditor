@@ -85,6 +85,11 @@ public class App : Application
             desktop.MainWindow = _splashScreen;
             _splashScreen.Show();
         }
+        
+        desktop.Exit += (_, _) =>
+        {
+            (Services as IDisposable)?.Dispose();
+        };
 
         Dispatcher.UIThread.Post(() =>
         {

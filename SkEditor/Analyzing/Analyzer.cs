@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,6 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Analyzing;
@@ -22,7 +22,7 @@ public class Analyzer(
     ITabService tabs,
     INotificationService notifs,
     IMessenger messenger,
-    ILogService logs) : IAnalyzer
+    ILogService logs) : IAnalyzer, IDisposable
 {
     public readonly string AnalyzerRoot = Path.Combine(configs.GetAppDataPath(), "Analyzer");
 
@@ -69,9 +69,9 @@ public class Analyzer(
             notifs.Show(notification);
             return;
         }
+
         _process.BeginOutputReadLine();
         _process.BeginErrorReadLine();
-        await _process.WaitForExitAsync();
     }
 
     /// <summary>
@@ -108,21 +108,28 @@ public class Analyzer(
         ProcessStartInfo startInfo = new()
         {
             FileName = "java",
-            Arguments = $"-Dskanalyzer.parentProcess={Environment.ProcessId} -jar \"{analyzerPath}\"",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             RedirectStandardInput = true,
             UseShellExecute = false,
             CreateNoWindow = true,
-            WorkingDirectory = WorkingDir
+            WorkingDirectory = WorkingDir,
+            StandardOutputEncoding = Encoding.UTF8,
+            StandardErrorEncoding = Encoding.UTF8,
         };
+
+        startInfo.ArgumentList.Add("-Dskanalyzer.parentProcess=" + Environment.ProcessId);
+        startInfo.ArgumentList.Add("--enable-native-access=ALL-UNNAMED");
+
+        startInfo.ArgumentList.Add("-jar");
+        startInfo.ArgumentList.Add(analyzerPath);
 
         return new Process
         {
             StartInfo = startInfo
         };
     }
-    
+
     private void OnErrorReceived(object _, DataReceivedEventArgs args)
     {
         if (string.IsNullOrWhiteSpace(args.Data))
@@ -143,7 +150,7 @@ public class Analyzer(
         notifs.Show(notification);
         logs.Error($"Analyzer Error: {args.Data}");
     }
-    
+
     private void OnOutputReceived(object _, DataReceivedEventArgs args)
     {
         if (string.IsNullOrEmpty(args.Data))
@@ -166,7 +173,8 @@ public class Analyzer(
             int jsonStartIndex = args.Data.IndexOf("{\"results\":", StringComparison.Ordinal);
             string json = args.Data[jsonStartIndex..];
 
-            AnalyzeResultsDto? result = JsonSerializer.Deserialize<AnalyzeResultsDto>(json, AnalyzeResultContext.Default.AnalyzeResultsDto);
+            AnalyzeResultsDto? result =
+                JsonSerializer.Deserialize<AnalyzeResultsDto>(json, AnalyzeResultContext.Default.AnalyzeResultsDto);
 
             _analysisTcs?.TrySetResult(result);
         }
@@ -238,5 +246,25 @@ public class Analyzer(
         }
 
         return null;
+    }
+    
+    public void Dispose()
+    {
+        if (_process is null || _process.HasExited)
+        {
+            return;
+        }
+
+        GC.SuppressFinalize(this);
+        
+        try
+        {
+            _process.Kill(entireProcessTree: true);
+            _process.Dispose();
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Failed to kill Analyzer process on exit");
+        }
     }
 }
