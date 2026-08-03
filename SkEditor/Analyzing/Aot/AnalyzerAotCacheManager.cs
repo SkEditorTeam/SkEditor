@@ -3,19 +3,24 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using SkEditor.Analyzing.Processes;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
 
-namespace SkEditor.Analyzing;
+namespace SkEditor.Analyzing.Aot;
 
-internal static class AnalyzerAotGenerator
+public class AnalyzerAotCacheManager(
+    ILogService logs,
+    INotificationService notifs,
+    IAnalyzerProcessBuilder processBuilder) : IAnalyzerAotCacheManager
 {
-    internal static async Task GenerateAotCacheAsync(string workingDir, string analyzerPath, string aotPath, ILogService logs, INotificationService notifs)
+    public async Task GenerateAotCacheAsync(string workingDir, string analyzerPath, string aotPath,
+        CancellationToken ct = default)
     {
         Notification notification = Notification
-            .Create("Generating AOT Cache".ToTranslatable())
-            .WithMessage("Generating AOT cache for the Analyzer. This is a one-time operation and may take some time."
+            .Create("Analyzer AOT Cache".ToTranslatable())
+            .WithMessage("Generating AOT cache for the Analyzer. This is a one-time operation and may take a bit longer."
                 .ToTranslatable())
             .WithDuration(TimeSpan.MaxValue)
             .WithType(NotificationType.Information);
@@ -23,12 +28,14 @@ internal static class AnalyzerAotGenerator
         notifs.Show(notification);
 
         TaskCompletionSource<bool> enabledTcs = new();
-        ProcessStartInfo startInfo = AnalyzerProcessBuilder.BuildProcessStartInfo(workingDir, analyzerPath, aotPath, true);
+        ProcessStartInfo startInfo =
+            processBuilder.BuildProcessStartInfo(workingDir, analyzerPath, aotPath, isGeneratingAot: true);
 
-        Process p = new() { StartInfo = startInfo };
+        Process process = new() { StartInfo = startInfo };
+
         try
         {
-            p.OutputDataReceived += (_, args) =>
+            process.OutputDataReceived += (_, args) =>
             {
                 if (string.IsNullOrEmpty(args.Data)) return;
 
@@ -38,7 +45,7 @@ internal static class AnalyzerAotGenerator
                 }
             };
 
-            p.ErrorDataReceived += (_, args) =>
+            process.ErrorDataReceived += (_, args) =>
             {
                 if (!string.IsNullOrWhiteSpace(args.Data))
                 {
@@ -46,11 +53,13 @@ internal static class AnalyzerAotGenerator
                 }
             };
 
-            p.Start();
-            p.BeginOutputReadLine();
-            p.BeginErrorReadLine();
+            process.Start();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
 
-            using CancellationTokenSource timeoutCts = new(TimeSpan.FromSeconds(60));
+            using CancellationTokenSource timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            timeoutCts.CancelAfter(TimeSpan.FromSeconds(60));
+
             await using CancellationTokenRegistration
                 reg = timeoutCts.Token.Register(() => enabledTcs.TrySetCanceled());
 
@@ -58,8 +67,8 @@ internal static class AnalyzerAotGenerator
             {
                 await enabledTcs.Task;
 
-                await p.StandardInput.WriteLineAsync("exit");
-                await p.WaitForExitAsync(timeoutCts.Token);
+                await process.StandardInput.WriteLineAsync("exit");
+                await process.WaitForExitAsync(timeoutCts.Token);
 
                 if (File.Exists(aotPath) && new FileInfo(aotPath).Length > 1000)
                 {
@@ -71,37 +80,36 @@ internal static class AnalyzerAotGenerator
                 logs.Error(ex, "Failed to generate AOT cache.");
             }
 
-            CleanupCorruptAot(aotPath, logs);
+            CleanupCorruptAot(aotPath);
         }
         catch (Exception ex)
         {
             logs.Error(ex, "An error occurred during AOT generation.");
-            CleanupCorruptAot(aotPath, logs);
+            CleanupCorruptAot(aotPath);
         }
         finally
         {
             try
             {
-                if (!p.HasExited)
+                if (!process.HasExited)
                 {
-                    p.Kill(true);
+                    process.Kill(true);
                 }
             }
             catch
             {
                 // ignored
             }
-
-            p.Dispose();
+            finally
+            {
+                process.Dispose();
+            }
         }
     }
 
-    private static void CleanupCorruptAot(string aotPath, ILogService logs)
+    public void CleanupCorruptAot(string aotPath)
     {
-        if (!File.Exists(aotPath))
-        {
-            return;
-        }
+        if (!File.Exists(aotPath)) return;
 
         try
         {

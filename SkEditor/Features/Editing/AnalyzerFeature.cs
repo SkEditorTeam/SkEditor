@@ -5,7 +5,7 @@ using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using R3;
-using SkEditor.Contracts.Services.Analyzer;
+using SkEditor.Analyzing;
 using SkEditor.Models.Analyzer;
 using SkEditor.Utilities.Editor.TextMarkers;
 using SkEditor.Utilities.Extensions;

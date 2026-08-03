@@ -5,11 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SkEditor.Analyzing;
+namespace SkEditor.Analyzing.Processes;
 
-public static class AnalyzerProcessBuilder
+public class AnalyzerProcessBuilder : IAnalyzerProcessBuilder
 {
-    internal static ProcessStartInfo BuildProcessStartInfo(string workingDir, string analyzerPath, string? aotPath, bool isGeneratingAot = false)
+    public ProcessStartInfo BuildProcessStartInfo(string workingDir, string analyzerPath, string? aotPath, bool isGeneratingAot = false)
     {
         ProcessStartInfo startInfo = new()
         {
@@ -43,7 +43,6 @@ public static class AnalyzerProcessBuilder
         if (Directory.Exists(libsDir))
         {
             string[] jarFiles = Directory.GetFiles(libsDir, "*.jar", SearchOption.AllDirectories);
-
             Array.Sort(jarFiles);
 
             IEnumerable<string> relativeJars = jarFiles.Select(p => Path.GetRelativePath(workingDir, p));
@@ -58,7 +57,6 @@ public static class AnalyzerProcessBuilder
 
         startInfo.ArgumentList.Add("-cp");
         startInfo.ArgumentList.Add(classpath);
-
         startInfo.ArgumentList.Add("me.glicz.skanalyzer.shell.SkAnalyzerShell");
 
         return startInfo;

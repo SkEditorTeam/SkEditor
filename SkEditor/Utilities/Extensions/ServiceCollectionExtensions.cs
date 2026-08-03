@@ -3,8 +3,11 @@ using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Analyzing;
+using SkEditor.Analyzing.Aot;
+using SkEditor.Analyzing.Bootstrapping;
+using SkEditor.Analyzing.Processes;
+using SkEditor.Analyzing.Protocol;
 using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Analyzer;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Contracts.Services.Localization;
@@ -32,6 +35,7 @@ using SkEditor.Utilities.StatusBar;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.FileTree;
 using SkEditor.ViewModels.Controls.Sidebar.Panes;
+using SkEditor.ViewModels.Controls.StatusBar.Panes;
 using SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
 using SkEditor.ViewModels.Pages;
 using SkEditor.ViewModels.Tabs;
@@ -40,7 +44,6 @@ using SkEditor.Views.Controls.Sidebar;
 using SkEditor.Views.Controls.StatusBar.Panes;
 using SkEditor.Views.Pages;
 using SkEditor.Views.Windows;
-using ErrorListPaneViewModel = SkEditor.ViewModels.Controls.StatusBar.Panes.ErrorListPaneViewModel;
 
 namespace SkEditor.Utilities.Extensions;
 
@@ -277,6 +280,12 @@ public static class ServiceCollectionExtensions
 
         public void AddAnalyzer()
         {
+            services.AddSingleton<IAnalyzerBootstrapper, AnalyzerBootstrapper>();
+            services.AddSingleton<IAnalyzerAotCacheManager, AnalyzerAotCacheManager>();
+            services.AddSingleton<IAnalyzerProcessBuilder, AnalyzerProcessBuilder>();
+            services.AddSingleton<IAnalyzerProcessRunner, AnalyzerProcessRunner>();
+            services.AddSingleton<IAnalyzerProtocolHandler, AnalyzerProtocolHandler>();
+
             services.AddSingleton<IAnalyzer, Analyzer>();
             services.AddTransient<IEditorFeature, AnalyzerFeature>();
         }
