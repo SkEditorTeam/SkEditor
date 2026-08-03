@@ -40,7 +40,7 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
                 string relPath = parts[2];
                 string destinationPath = Path.Combine(workingDir, "libraries", relPath);
 
-                bool isValid = await IsFileValid(destinationPath, expectedHashHex);
+                bool isValid = await IsFileValid(destinationPath, expectedHashHex, ct);
                 if (isValid)
                 {
                     continue;
@@ -63,7 +63,7 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
         }
     }
 
-    private static async Task<bool> IsFileValid(string filePath, string expectedHashHex)
+    private static async Task<bool> IsFileValid(string filePath, string expectedHashHex, CancellationToken ct = default)
     {
         if (!File.Exists(filePath)) return false;
 
@@ -71,7 +71,7 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
         {
             using SHA256 sha256 = SHA256.Create();
             await using FileStream stream = File.OpenRead(filePath);
-            byte[] hash = await sha256.ComputeHashAsync(stream);
+            byte[] hash = await sha256.ComputeHashAsync(stream, ct);
             string actualHashHex = Convert.ToHexString(hash);
 
             return string.Equals(actualHashHex, expectedHashHex, StringComparison.OrdinalIgnoreCase);
