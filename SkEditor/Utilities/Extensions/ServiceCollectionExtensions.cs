@@ -281,7 +281,7 @@ public static class ServiceCollectionExtensions
         public void AddAnalyzer()
         {
             services.AddSingleton<IAnalyzerBootstrapper, AnalyzerBootstrapper>();
-            services.AddSingleton<IAnalyzerAotCacheManager, AnalyzerAotCacheManager>();
+            services.AddSingleton<IAnalyzerAotGenerator, AnalyzerAotGenerator>();
             services.AddSingleton<IAnalyzerProcessBuilder, AnalyzerProcessBuilder>();
             services.AddSingleton<IAnalyzerProcessRunner, AnalyzerProcessRunner>();
             services.AddSingleton<IAnalyzerProtocolHandler, AnalyzerProtocolHandler>();

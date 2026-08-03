@@ -10,10 +10,10 @@ using SkEditor.Utilities.Extensions;
 
 namespace SkEditor.Analyzing.Aot;
 
-public class AnalyzerAotCacheManager(
+public class AnalyzerAotGenerator(
     ILogService logs,
     INotificationService notifs,
-    IAnalyzerProcessBuilder processBuilder) : IAnalyzerAotCacheManager
+    IAnalyzerProcessBuilder processBuilder) : IAnalyzerAotGenerator
 {
     public async Task GenerateAotCacheAsync(string workingDir, string analyzerPath, string aotPath,
         CancellationToken ct = default)

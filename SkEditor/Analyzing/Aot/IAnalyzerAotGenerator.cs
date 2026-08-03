@@ -6,7 +6,7 @@ namespace SkEditor.Analyzing.Aot;
 /// <summary>
 /// Manages the AOT cache for the Analyzer, including generating it if necessary and removing it if it is corrupt.
 /// </summary>
-public interface IAnalyzerAotCacheManager
+public interface IAnalyzerAotGenerator
 {
     /// <summary>
     /// Generates the AOT cache for the Analyzer.

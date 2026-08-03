@@ -22,7 +22,7 @@ public class Analyzer(
     ILogService logs,
     IMessenger messenger,
     IAnalyzerBootstrapper bootstrapper,
-    IAnalyzerAotCacheManager aotManager,
+    IAnalyzerAotGenerator aotManager,
     IAnalyzerProcessBuilder processBuilder,
     IAnalyzerProcessRunner processRunner,
     IAnalyzerProtocolHandler protocolHandler) : IAnalyzer, IDisposable
