@@ -31,6 +31,8 @@ public class Analyzer(
     public string BinDir => Path.Combine(AnalyzerRoot, "Binaries");
     public string WorkingDir => Path.Combine(AnalyzerRoot, "Server");
 
+    private readonly SemaphoreSlim _analyzeLock = new(1, 1);
+
     public async Task Initialize()
     {
         string analyzerPath = Path.Combine(BinDir, "SkAnalyzer.jar");
@@ -55,11 +57,8 @@ public class Analyzer(
         processRunner.OutputDataReceived += (_, data) => protocolHandler.HandleOutputData(data);
         processRunner.ErrorDataReceived += (_, data) => protocolHandler.HandleErrorData(data);
         processRunner.ProcessExited += OnProcessExited;
-        
-        protocolHandler.CorruptedAotDetected += (_, _) =>
-        {
-            aotManager.CleanupCorruptAot(aotPath);
-        };
+
+        protocolHandler.CorruptedAotDetected += (_, _) => { aotManager.CleanupCorruptAot(aotPath); };
 
         protocolHandler.ResetState();
 
@@ -82,6 +81,7 @@ public class Analyzer(
             return null;
         }
 
+        await _analyzeLock.WaitAsync(ct);
         messenger.Send(new AnalyzerStatusChangedMessage(true));
 
         try
@@ -100,6 +100,7 @@ public class Analyzer(
         }
         finally
         {
+            _analyzeLock.Release();
             messenger.Send(new AnalyzerStatusChangedMessage(false));
         }
 
