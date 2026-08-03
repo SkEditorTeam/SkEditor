@@ -14,6 +14,6 @@ public interface IAnalyzerBootstrapper
     /// <param name="analyzerJarPath">The path to the Analyzer JAR file.</param>
     /// <param name="workingDir">The working "server" directory for the Analyzer.</param>
     /// <param name="ct">A cancellation token to cancel the operation.</param>
-    /// <returns>True if everything went fine, false if there was an error or the libraries were already extracted.</returns>
+    /// <returns>True if everything went fine.</returns>
     Task<bool> EnsureLibrariesExtractedAsync(string analyzerJarPath, string workingDir, CancellationToken ct = default);
 }
