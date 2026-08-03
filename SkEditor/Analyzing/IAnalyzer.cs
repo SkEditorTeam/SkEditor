@@ -17,5 +17,6 @@ public interface IAnalyzer
     /// <summary>
     /// Analyzes the given text and returns the result.
     /// </summary>
+    /// <remarks>A cancellation token is required for making sure only one analysis is running at a time.</remarks>
     Task<AnalyzerResult?> Analyze(string text, CancellationToken ct);
 }
