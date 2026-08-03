@@ -48,7 +48,8 @@ public class AnalyzerProcessBuilder : IAnalyzerProcessBuilder
             IEnumerable<string> relativeJars = jarFiles.Select(p => Path.GetRelativePath(workingDir, p));
             string relativeAnalyzerPath = Path.GetRelativePath(workingDir, analyzerPath);
 
-            classpath = string.Join(';', relativeJars) + ";" + relativeAnalyzerPath;
+            string separator = Path.PathSeparator.ToString();
+            classpath = string.Join(separator, relativeJars) + separator + relativeAnalyzerPath;
         }
         else
         {
