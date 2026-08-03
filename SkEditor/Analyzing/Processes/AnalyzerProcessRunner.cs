@@ -28,7 +28,6 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
 
             _process.OutputDataReceived += (_, args) =>
             {
-                logs.Info(args.Data ?? "nothing");
                 if (args.Data != null) OutputDataReceived?.Invoke(this, args.Data);
             };
 
@@ -48,13 +47,14 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
             logs.Error(ex, "Failed to start Analyzer process.");
             throw;
         }
-}
+    }
 
     public async Task WriteInputLineAsync(string input)
     {
         if (_process is null || _process.HasExited)
         {
-            throw new InvalidOperationException($"Process is not running. is null: {_process is null}, has exited: {_process?.HasExited}");
+            throw new InvalidOperationException(
+                $"Process is not running. is null: {_process is null}, has exited: {_process?.HasExited}");
         }
 
         await _process.StandardInput.WriteLineAsync(input);
