@@ -69,9 +69,8 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
 
         try
         {
-            using SHA256 sha256 = SHA256.Create();
             await using FileStream stream = File.OpenRead(filePath);
-            byte[] hash = await sha256.ComputeHashAsync(stream, ct);
+            byte[] hash = await SHA256.HashDataAsync(stream, ct);
             string actualHashHex = Convert.ToHexString(hash);
 
             return string.Equals(actualHashHex, expectedHashHex, StringComparison.OrdinalIgnoreCase);
