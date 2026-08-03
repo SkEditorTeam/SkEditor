@@ -11,7 +11,8 @@ namespace SkEditor.Analyzing.Bootstrapping;
 
 public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
 {
-    public async Task<bool> EnsureLibrariesExtractedAsync(string analyzerJarPath, string workingDir, CancellationToken ct = default)
+    public async Task<bool> EnsureLibrariesExtractedAsync(string analyzerJarPath, string workingDir,
+        CancellationToken ct = default)
     {
         if (!File.Exists(analyzerJarPath)) return false;
 
@@ -29,6 +30,8 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
             await using Stream listStream = await listEntry.OpenAsync(ct);
             using StreamReader reader = new(listStream, Encoding.UTF8);
 
+            string librariesFolder = Path.Combine(workingDir, "libraries");
+
             while (await reader.ReadLineAsync(ct) is { } line)
             {
                 if (string.IsNullOrWhiteSpace(line)) continue;
@@ -38,7 +41,14 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
 
                 string expectedHashHex = parts[0];
                 string relPath = parts[2];
-                string destinationPath = Path.Combine(workingDir, "libraries", relPath);
+                string destinationPath = Path.Combine(librariesFolder, relPath);
+
+                if (!Path.GetFullPath(destinationPath)
+                        .StartsWith(Path.GetFullPath(librariesFolder), StringComparison.OrdinalIgnoreCase))
+                {
+                    logs.Warning("Skipping extraction of library with invalid path: " + relPath);
+                    continue;
+                }
 
                 bool isValid = await IsFileValid(destinationPath, expectedHashHex, ct);
                 if (isValid)
