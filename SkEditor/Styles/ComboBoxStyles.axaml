@@ -370,6 +370,7 @@
         <Setter Property="Height" Value="26" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FontSize" Value="12" />
+        <Setter Property="ItemContainerTheme" Value="{StaticResource ToolbarComboBoxItem}" />
 
         <Style Selector="^ /template/ Border#Background">
             <Setter Property="Transitions">
@@ -394,5 +395,58 @@
             <Setter Property="FontSize" Value="10" />
             <Setter Property="Margin" Value="0,0,8,0" />
         </Style>
+    </ControlTheme>
+
+    <ControlTheme x:Key="ToolbarComboBoxItem" TargetType="ComboBoxItem"
+                  BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+        <Setter Property="Padding" Value="11,3,11,4" />
+
+        <Style Selector="^ /template/ Border#LayoutRoot">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Duration="0:0:0.075" Property="Background" />
+                    <BrushTransition Duration="0:0:0.075" Property="BorderBrush" />
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Margin="5,2,5,2"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        TemplatedControl.IsTemplateFocusTarget="True">
+                    <Panel>
+                        <Rectangle Name="Pill"
+                                   Theme="{StaticResource ToolbarComboBoxItemPill}"
+                                   Opacity="0" />
+
+                        <ContentPresenter Name="ContentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          Background="{x:Null}"
+                                          BorderBrush="{x:Null}"
+                                          CornerRadius="{TemplateBinding CornerRadius}"
+                                          BorderThickness="0" />
+                    </Panel>
+
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+    <ControlTheme x:Key="ToolbarComboBoxItemPill" TargetType="Rectangle" BasedOn="{StaticResource ComboBoxItemPill}">
+        <Setter Property="Height" Value="11" />
+        <Setter Property="Width" Value="{StaticResource ComboBoxItemPillWidth}" />
+        <Setter Property="Fill" Value="{DynamicResource ComboBoxItemPillFillBrush}" />
+        <Setter Property="RadiusX" Value="{DynamicResource ComboBoxItemPillCornerRadius}" />
+        <Setter Property="RadiusY" Value="{DynamicResource ComboBoxItemPillCornerRadius}" />
     </ControlTheme>
 </ResourceDictionary>
