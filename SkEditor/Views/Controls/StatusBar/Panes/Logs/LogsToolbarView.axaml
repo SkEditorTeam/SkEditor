@@ -9,6 +9,9 @@
              x:DataType="terminal:LogsToolbarViewModel"
              Name="Root">
     <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,8,0">
+        <ComboBox Theme="{DynamicResource ToolbarComboBox}" VerticalAlignment="Center"
+                  ItemsSource="{Binding AvailableSources}" SelectedItem="{Binding SelectedSource.Value, Mode=TwoWay}" />
+        
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center" Command="{Binding CopyLogsCommand}">
             <Viewbox Height="14">
                 <fluent:SymbolIcon Symbol="Copy" />

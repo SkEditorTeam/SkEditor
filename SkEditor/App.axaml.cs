@@ -10,6 +10,7 @@ using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Windowing;
@@ -50,11 +51,28 @@ public class App : Application
     {
         base.OnFrameworkInitializationCompleted();
 
+        string logsFolder = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "SkEditor", "v3.0", "Logs");
+
         Logger serilogLogger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-            .WriteTo.Async(a => a.File(Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SkEditor/v3.0/Logs/log-.txt"), rollingInterval: RollingInterval.Minute))
+            .WriteTo.Logger(lc => lc
+                .Filter.ByExcluding(e =>
+                    e.Properties.TryGetValue("Source", out LogEventPropertyValue? val) &&
+                    val.ToString().Contains("Analyzer"))
+                .WriteTo.Async(a => a.File(
+                    Path.Combine(logsFolder, "log-.txt"),
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 7)))
+            .WriteTo.Logger(lc => lc
+                .Filter.ByIncludingOnly(e =>
+                    e.Properties.TryGetValue("Source", out LogEventPropertyValue? val) &&
+                    val.ToString().Contains("Analyzer"))
+                .WriteTo.Async(a => a.File(
+                    Path.Combine(logsFolder, "Analyzer", "analyzer-.txt"),
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 3)))
             .WriteTo.Console(theme: AnsiConsoleTheme.Code)
             .CreateLogger();
 
@@ -86,11 +104,8 @@ public class App : Application
             desktop.MainWindow = _splashScreen;
             _splashScreen.Show();
         }
-        
-        desktop.Exit += (_, _) =>
-        {
-            (Services as IDisposable)?.Dispose();
-        };
+
+        desktop.Exit += (_, _) => { (Services as IDisposable)?.Dispose(); };
 
         Dispatcher.UIThread.Post(() =>
         {

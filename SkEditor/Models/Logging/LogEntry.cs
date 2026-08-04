@@ -3,12 +3,17 @@ using System.Text;
 
 namespace SkEditor.Models.Logging;
 
-public record LogEntry(LogLevel Level, string Message, DateTime Timestamp, Exception? Exception = null)
+public record LogEntry(
+    LogLevel Level,
+    LogSource Source,
+    string Message,
+    DateTime Timestamp,
+    Exception? Exception = null)
 {
     public override string ToString()
     {
         StringBuilder sb = new();
-        sb.Append($"[{Timestamp:yyyy-MM-dd HH:mm:ss}] [{Level}] {Message}");
+        sb.Append($"[{Timestamp:yyyy-MM-dd HH:mm:ss}] [{Level}] [{Source}] {Message}");
         if (Exception == null)
         {
             return sb.ToString();

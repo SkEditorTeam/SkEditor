@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Logging;
 
 namespace SkEditor.Analyzing.Processes;
 
@@ -44,7 +45,7 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
         }
         catch (Exception ex)
         {
-            logs.Error(ex, "Failed to start Analyzer process.");
+            logs.Error(ex, "Failed to start Analyzer process.", LogSource.Analyzer);
             throw;
         }
     }
@@ -75,7 +76,7 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
         }
         catch (Exception ex)
         {
-            logs.Error(ex, "Error while stopping Analyzer process.");
+            logs.Error(ex, "Error while stopping Analyzer process.", LogSource.Analyzer);
         }
         finally
         {

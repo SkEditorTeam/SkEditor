@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Logging;
 
 namespace SkEditor.Analyzing.Bootstrapping;
 
@@ -23,7 +24,7 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
             ZipArchiveEntry? listEntry = archive.GetEntry("META-INF/libraries.list");
             if (listEntry == null)
             {
-                logs.Warning("META-INF/libraries.list missing in SkAnalyzer.jar!");
+                logs.Warning("META-INF/libraries.list missing in SkAnalyzer.jar!", LogSource.Analyzer);
                 return false;
             }
 
@@ -51,7 +52,7 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
 
                 if (!Path.GetFullPath(destinationPath).StartsWith(fullLibsFolder, StringComparison.OrdinalIgnoreCase))
                 {
-                    logs.Warning("Skipping extraction of library with invalid path: " + relPath);
+                    logs.Warning("Skipping extraction of library with invalid path: " + relPath, LogSource.Analyzer);
                     continue;
                 }
 
@@ -73,7 +74,7 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
         }
         catch (Exception ex)
         {
-            logs.Error(ex, "Failed to extract libraries from SkAnalyzer.jar");
+            logs.Error(ex, "Failed to extract libraries from SkAnalyzer.jar", LogSource.Analyzer);
             return false;
         }
     }

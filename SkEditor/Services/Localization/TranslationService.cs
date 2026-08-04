@@ -11,6 +11,7 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Models.Logging;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
@@ -151,6 +152,7 @@ public class TranslationService : ITranslationService
         catch (JsonException ex)
         {
             _logs.Error($"Failed to load language file '{Path.GetFileName(languageFile)}': {ex.Message}",
+                LogSource.SkEditor,
                 true);
         }
     }

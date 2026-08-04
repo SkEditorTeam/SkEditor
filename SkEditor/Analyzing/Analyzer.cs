@@ -12,6 +12,7 @@ using SkEditor.Analyzing.Protocol;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
+using SkEditor.Models.Logging;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Analyzing;
@@ -69,7 +70,7 @@ public class Analyzer(
         }
         catch (Exception ex)
         {
-            logs.Error($"Failed to start process: {ex.Message}");
+            logs.Error($"Failed to start process: {ex.Message}", LogSource.Analyzer);
             messenger.Send(new AnalyzerFailedToLoadMessage());
         }
     }
@@ -117,7 +118,7 @@ public class Analyzer(
     private void OnProcessExited(object? sender, EventArgs e)
     {
         protocolHandler.ResetState();
-        logs.Error("Analyzer process has exited unexpectedly.");
+        logs.Error("Analyzer process has exited unexpectedly.", LogSource.Analyzer);
         messenger.Send(new AnalyzerFailedToLoadMessage());
     }
 }

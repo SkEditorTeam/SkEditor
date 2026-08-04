@@ -14,6 +14,7 @@
 
     <UserControl.Resources>
         <converters:LogLevelColorConverter x:Key="LogLevelColorConverter" />
+        <converters:LogLevelMessageColorConverter x:Key="LogLevelMessageColorConverter" />
         <converters:LogLevelSymbolConverter x:Key="LogLevelSymbolConverter" />
     </UserControl.Resources>
 
@@ -25,7 +26,7 @@
                         <behaviors:SmoothScrollBehavior />
                     </BehaviorCollection>
                 </Interaction.Behaviors>
-                <ItemsControl ItemsSource="{Binding Logs}">
+                <ItemsControl ItemsSource="{Binding FilteredLogs}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="logging:LogEntry">
                             <SelectableTextBlock FontFeatures="-liga,-calt,-clig"
@@ -39,14 +40,15 @@
                                      Foreground="{Binding Level, Converter={StaticResource LogLevelColorConverter}}" />
                                 <Run Text="]" />
 
-                                <Run Text="{Binding Message}" Foreground="{DynamicResource ForegroundColor}" />
+                                <Run Text="{Binding Message}"
+                                     Foreground="{Binding Level,Converter={StaticResource LogLevelMessageColorConverter}}" />
                             </SelectableTextBlock>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
 
-            <StackPanel VerticalAlignment="Center" Spacing="6" IsVisible="{Binding !Logs.Count}">
+            <StackPanel VerticalAlignment="Center" Spacing="6" IsVisible="{Binding !FilteredLogs.Count}">
                 <Viewbox Height="32" Opacity="0.5">
                     <icons:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
                 </Viewbox>

@@ -1,7 +1,7 @@
-using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ObservableCollections;
 using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Logging;
@@ -21,7 +21,9 @@ public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
 
     private DisposableBag _disposables;
 
-    public ObservableCollection<LogEntry> Logs { get; } = [];
+    private readonly ObservableList<LogEntry> _allLogs = [];
+    private readonly ISynchronizedView<LogEntry, LogEntry> _logsView;
+    public NotifyCollectionChangedSynchronizedViewList<LogEntry> FilteredLogs { get; }
 
     private readonly IClipboardService _clipboard;
     private readonly ILinkService _links;
@@ -37,17 +39,40 @@ public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
             .ObservePropertyChanged(x => x.IsDevModeEnabled)
             .ToBindableReactiveProperty();
 
-        Toolbar = new LogsToolbarViewModel(this);
+        LogsToolbarViewModel toolbar = new(this);
+        Toolbar = toolbar;
+
+        _logsView = _allLogs
+            .CreateView(x => x)
+            .AddTo(ref _disposables);
+
+        FilteredLogs = _logsView
+            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
+            .AddTo(ref _disposables);
 
         logs.OnLogReceived
             .ObserveOnCurrentSynchronizationContext()
             .Subscribe(entry =>
             {
-                Logs.Add(entry);
+                _allLogs.Add(entry);
 
-                if (Logs.Count > 500)
+                if (_allLogs.Count > 500)
                 {
-                    Logs.RemoveAt(0);
+                    _allLogs.RemoveAt(0);
+                }
+            })
+            .AddTo(ref _disposables);
+
+        toolbar.SelectedSource
+            .Subscribe(source =>
+            {
+                if (source is null)
+                {
+                    _logsView.ResetFilter();
+                }
+                else
+                {
+                    _logsView.AttachFilter(entry => entry.Source == source.Value);
                 }
             })
             .AddTo(ref _disposables);
@@ -55,7 +80,7 @@ public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
 
     public void ClearLogs()
     {
-        Logs.Clear();
+        _allLogs.Clear();
     }
 
     public void OpenLogsFolder()
@@ -66,7 +91,7 @@ public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
     public async Task CopyLogs()
     {
         StringBuilder sb = new();
-        foreach (LogEntry log in Logs)
+        foreach (LogEntry log in FilteredLogs)
         {
             sb.AppendLine(log.ToString());
         }

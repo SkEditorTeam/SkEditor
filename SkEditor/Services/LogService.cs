@@ -28,66 +28,69 @@ public class LogService(ILogger logger) : ILogService, IDisposable
     public Observable<LogEntry> OnLogReceived => _logSubject;
 
     [MessageTemplateFormatMethod("messageTemplate")]
-    public void Debug(string messageTemplate, params object[] propertyValues)
+    public void Debug(string messageTemplate, LogSource source = LogSource.SkEditor, params object[] propertyValues)
     {
-        logger.Debug(messageTemplate, propertyValues);
-        Publish(LogLevel.Debug, messageTemplate, propertyValues);
+        logger.ForContext("Source", source).Debug(messageTemplate, propertyValues);
+        Publish(LogLevel.Debug, source, messageTemplate, propertyValues);
     }
 
     [MessageTemplateFormatMethod("messageTemplate")]
-    public void Info(string messageTemplate, params object[] propertyValues)
+    public void Info(string messageTemplate, LogSource source = LogSource.SkEditor, params object[] propertyValues)
     {
-        logger.Information(messageTemplate, propertyValues);
-        Publish(LogLevel.Info, messageTemplate, propertyValues);
+        logger.ForContext("Source", source).Information(messageTemplate, propertyValues);
+        Publish(LogLevel.Info, source, messageTemplate, propertyValues);
     }
 
     [MessageTemplateFormatMethod("messageTemplate")]
-    public void Warning(string messageTemplate, params object[] propertyValues)
+    public void Warning(string messageTemplate, LogSource source = LogSource.SkEditor, params object[] propertyValues)
     {
-        logger.Warning(messageTemplate, propertyValues);
-        Publish(LogLevel.Warning, messageTemplate, propertyValues);
+        logger.ForContext("Source", source).Warning(messageTemplate, propertyValues);
+        Publish(LogLevel.Warning, source, messageTemplate, propertyValues);
     }
 
     [MessageTemplateFormatMethod("messageTemplate")]
-    public void Error(string messageTemplate, params object[] propertyValues)
+    public void Error(string messageTemplate, LogSource source = LogSource.SkEditor, params object[] propertyValues)
     {
-        logger.Error(messageTemplate, propertyValues);
-        Publish(LogLevel.Error, messageTemplate, propertyValues);
+        logger.ForContext("Source", source).Error(messageTemplate, propertyValues);
+        Publish(LogLevel.Error, source, messageTemplate, propertyValues);
     }
 
     [MessageTemplateFormatMethod("messageTemplate")]
     public void Error(
         Exception ex,
-        string? messageTemplate,
+        string? messageTemplate = null,
+        LogSource source = LogSource.SkEditor,
         params object[] propertyValues)
     {
         messageTemplate ??= "An exception occurred: {ExceptionMessage}";
 
-        logger.Error(ex, messageTemplate, propertyValues);
-        Publish(LogLevel.Error, messageTemplate, propertyValues, ex);
+        logger.ForContext("Source", source).Error(ex, messageTemplate, propertyValues);
+        Publish(LogLevel.Error, source, messageTemplate, propertyValues, ex);
     }
 
     [MessageTemplateFormatMethod("messageTemplate")]
-    public void Fatal(string messageTemplate, params object[] propertyValues)
+    public void Fatal(string messageTemplate, LogSource source = LogSource.SkEditor, params object[] propertyValues)
     {
-        logger.Fatal(messageTemplate, propertyValues);
-        Publish(LogLevel.Fatal, messageTemplate, propertyValues);
+        logger.ForContext("Source", source).Fatal(messageTemplate, propertyValues);
+        Publish(LogLevel.Fatal, source, messageTemplate, propertyValues);
     }
 
     [MessageTemplateFormatMethod("messageTemplate")]
     public void Fatal(
         Exception exception,
         string? messageTemplate = null,
+        LogSource source = LogSource.SkEditor,
         params object[] propertyValues)
     {
         messageTemplate ??= "An exception occurred: {ExceptionMessage}";
 
-        logger.Fatal(exception, messageTemplate, propertyValues);
-        Publish(LogLevel.Fatal, messageTemplate, propertyValues, exception);
+        logger.ForContext("Source", source).Fatal(exception, messageTemplate, propertyValues);
+        Publish(LogLevel.Fatal, source, messageTemplate, propertyValues, exception);
     }
 
     private void Publish(
         LogLevel level,
+        LogSource source,
         string template,
         object[] values,
         Exception? ex = null)
@@ -99,6 +102,7 @@ public class LogService(ILogger logger) : ILogService, IDisposable
         _logSubject.OnNext(
             new LogEntry(
                 level,
+                source,
                 formattedMessage,
                 DateTime.Now,
                 ex));

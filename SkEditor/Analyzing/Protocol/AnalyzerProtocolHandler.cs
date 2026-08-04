@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Analyzing.Processes;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Analyzer;
+using SkEditor.Models.Logging;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
 
@@ -42,7 +43,7 @@ public class AnalyzerProtocolHandler(
         }
         catch (Exception ex)
         {
-            logs.Error(ex, "Failed to send command to analyzer process.");
+            logs.Error(ex, "Failed to send command to analyzer process.", LogSource.Analyzer);
             return null;
         }
     }
@@ -53,7 +54,8 @@ public class AnalyzerProtocolHandler(
 
         if (!_isInitialized && !_didRemoveCorruptedAot && data.Contains("[aot]") && (data.Contains("error") || data.Contains("bad magic number")))
         {
-            logs.Warning("Detected corrupted AOT cache during JVM startup. Deleting bad .aot file...");
+            logs.Warning("Detected corrupted AOT cache during JVM startup. Deleting bad .aot file...",
+                LogSource.Analyzer);
             CorruptedAotDetected?.Invoke(this, EventArgs.Empty);
             _didRemoveCorruptedAot = true;
         }
@@ -64,7 +66,11 @@ public class AnalyzerProtocolHandler(
             messenger.Send(new AnalyzerLoadedMessage());
         }
 
-        if (!data.Contains("{\"results\":")) return;
+        if (!data.Contains("{\"results\":"))
+        {
+            logs.LogAnalyzerLine(data);
+            return;
+        }
 
         try
         {
@@ -93,7 +99,7 @@ public class AnalyzerProtocolHandler(
 
         if (data.StartsWith("WARNING", StringComparison.OrdinalIgnoreCase))
         {
-            logs.Warning($"Analyzer Warning: {data}");
+            logs.Warning(data, LogSource.Analyzer);
             return;
         }
 
@@ -102,6 +108,6 @@ public class AnalyzerProtocolHandler(
             .WithType(NotificationType.Error);
 
         notifs.Show(notification);
-        logs.Error($"Analyzer Error: {data}");
+        logs.Error(data, LogSource.Analyzer);
     }
 }

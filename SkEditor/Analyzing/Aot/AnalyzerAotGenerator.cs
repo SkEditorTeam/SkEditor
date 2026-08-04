@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Analyzing.Processes;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Logging;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
 
@@ -44,13 +45,22 @@ public class AnalyzerAotGenerator(
                     enabledTcs.TrySetResult(true);
                 }
             };
-
+            
             process.ErrorDataReceived += (_, args) =>
             {
-                if (!string.IsNullOrWhiteSpace(args.Data))
+                if (string.IsNullOrWhiteSpace(args.Data))
                 {
-                    logs.Warning($"An error occurred during AOT generation: {args.Data}");
+                    return;
                 }
+
+                if (args.Data.StartsWith("Picked up JAVA_TOOL_OPTIONS", StringComparison.OrdinalIgnoreCase) ||
+                    args.Data.StartsWith("Picked up _JAVA_OPTIONS", StringComparison.OrdinalIgnoreCase))
+                {
+                    logs.Debug(args.Data, LogSource.Analyzer);
+                    return;
+                }
+
+                logs.Warning($"An error occurred during AOT generation: {args.Data}", LogSource.Analyzer);
             };
 
             process.Start();
@@ -77,14 +87,14 @@ public class AnalyzerAotGenerator(
             }
             catch (Exception ex)
             {
-                logs.Error(ex, "Failed to generate AOT cache.");
+                logs.Error(ex, "Failed to generate AOT cache.", LogSource.Analyzer);
             }
 
             CleanupCorruptAot(aotPath);
         }
         catch (Exception ex)
         {
-            logs.Error(ex, "An error occurred during AOT generation.");
+            logs.Error(ex, "An error occurred during AOT generation.", LogSource.Analyzer);
             CleanupCorruptAot(aotPath);
         }
         finally
@@ -117,7 +127,7 @@ public class AnalyzerAotGenerator(
         }
         catch (Exception ex)
         {
-            logs.Error(ex, "Failed to delete corrupt AOT file.");
+            logs.Error(ex, "Failed to delete corrupt AOT file.", LogSource.Analyzer);
         }
     }
 }

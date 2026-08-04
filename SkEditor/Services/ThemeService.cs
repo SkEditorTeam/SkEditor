@@ -13,6 +13,7 @@ using Avalonia.Styling;
 using FluentAvalonia.Styling;
 using Iciclecreek.Avalonia.Terminal;
 using SkEditor.Contracts.Services;
+using SkEditor.Models.Logging;
 using SkEditor.Models.UI;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Settings.Configs;
@@ -185,7 +186,7 @@ public class ThemeService(
         Application? currentApp = Application.Current;
         if (currentApp == null)
         {
-            log.Error("Application.Current is null. Cannot apply theme.", true);
+            log.Error("Application.Current is null. Cannot apply theme.", LogSource.SkEditor, true);
             return;
         }
 
