@@ -13,7 +13,7 @@ public record LogEntry(
     public override string ToString()
     {
         StringBuilder sb = new();
-        sb.Append($"[{Timestamp:yyyy-MM-dd HH:mm:ss}] [{Level}] [{Source}] {Message}");
+        sb.Append($"[{Timestamp:yyyy-MM-dd HH:mm:ss}] [{Level}] {Message}");
         if (Exception == null)
         {
             return sb.ToString();
