@@ -24,28 +24,19 @@
                 <Interaction.Behaviors>
                     <BehaviorCollection>
                         <behaviors:SmoothScrollBehavior />
+                        <AutoScrollToBottomBehavior />
                     </BehaviorCollection>
                 </Interaction.Behaviors>
-                <ItemsControl ItemsSource="{Binding FilteredLogs}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="logging:LogEntry">
-                            <SelectableTextBlock FontFeatures="-liga,-calt,-clig"
-                                                 FontSize="12"
-                                                 Foreground="{DynamicResource ForegroundSecondaryColor}"
-                                                 FontWeight="Normal"
-                                                 TextWrapping="Wrap"
-                                                 FontFamily="{DynamicResource JetBrainsFont}">
-                                <Run Text="[" /><Run Text="{Binding Timestamp, StringFormat='{}{0:HH:mm:ss}'}" />
-                                <Run Text="{Binding Level, Converter={StaticResource LogLevelSymbolConverter}}"
-                                     Foreground="{Binding Level, Converter={StaticResource LogLevelColorConverter}}" />
-                                <Run Text="]" />
-
-                                <Run Text="{Binding Message}"
-                                     Foreground="{Binding Level,Converter={StaticResource LogLevelMessageColorConverter}}" />
-                            </SelectableTextBlock>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <SelectableTextBlock behaviors:LogInlinesBehavior.Logs="{Binding FilteredLogs}"
+                                     FontFeatures="-liga,-calt,-clig"
+                                     FontSize="12"
+                                     Foreground="{DynamicResource ForegroundSecondaryColor}"
+                                     SelectionBrush="{DynamicResource SelectionColor}"
+                                     FontWeight="Normal"
+                                     TextWrapping="Wrap"
+                                     ContextFlyout="{x:Null}"
+                                     ContextMenu="{x:Null}"
+                                     FontFamily="{DynamicResource JetBrainsFont}" />
             </ScrollViewer>
 
             <StackPanel VerticalAlignment="Center" Spacing="6" IsVisible="{Binding !FilteredLogs.Count}">
