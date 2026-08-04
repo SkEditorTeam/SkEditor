@@ -181,7 +181,7 @@ public class SmoothScrollBehavior : StyledElementBehavior<ScrollViewer>
     private void AnimateScroll(double delta)
     {
         DateTime currentTime = DateTime.Now;
-        double maxOffset = AssociatedObject!.Extent.Height - AssociatedObject!.Bounds.Height;
+        double maxOffset = AssociatedObject!.Extent.Height - AssociatedObject!.Viewport.Height;
         if (maxOffset < 0)
         {
             maxOffset = 0;
