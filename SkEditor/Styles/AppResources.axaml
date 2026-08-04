@@ -1,0 +1,45 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Brush x:Key="BackgroundColor">#1f1f1f</Brush>
+    <Brush x:Key="ForegroundColor">#e8e8e8</Brush>
+    <Brush x:Key="ForegroundSecondaryColor">#BFBFBF</Brush>
+    <Brush x:Key="TitleBarBackground">#00000000</Brush>
+    <Brush x:Key="MainWindowGridBackground">#00000000</Brush>
+    <Brush x:Key="SmallWindowBackgroundColor">#1f1f1f</Brush>
+    <Brush x:Key="DialogTopBackgroundColor">#121212</Brush>
+    <Brush x:Key="DialogTopBorderColor">#75161616</Brush>
+    <Brush x:Key="DialogBackgroundColor">#0d0d0d</Brush>
+    <Brush x:Key="EditorBackgroundColor">#1b1b1b</Brush>
+    <Brush x:Key="EditorTextColor">#cdcaca</Brush>
+    <Brush x:Key="LineNumbersColor">#8a8a8a</Brush>
+    <Brush x:Key="SelectionColor">#641a6096</Brush>
+    <Brush x:Key="TabViewItemHeaderBackgroundSelected">#282828</Brush>
+    <Brush x:Key="TabViewSelectedItemBorderBrush">#751c1c1c</Brush>
+
+    <Brush x:Key="LogLevelDebugColor">#d8f2f2</Brush>
+    <Brush x:Key="LogLevelInfoColor">#81D8FF</Brush>
+    <Brush x:Key="LogLevelWarningColor">#FFFE74</Brush>
+    <Brush x:Key="LogLevelErrorColor">#FF666E</Brush>
+    <Brush x:Key="LogLevelFatalColor">#FF2B3F</Brush>
+
+    <Brush x:Key="MenuFlyoutPresenterBackground">#2c2c2c</Brush>
+    <Brush x:Key="MenuFlyoutPresenterBorderBrush">#75161616</Brush>
+    <Brush x:Key="TextControlBackgroundFocused">#B31E1E1E</Brush>
+    <Brush x:Key="TextControlPlaceholderForeground">#33FFFFFF</Brush>
+    <Brush x:Key="TextControlPlaceholderForegroundPointerOver">#4DFFFFFF</Brush>
+
+    <Brush x:Key="NotificationBackground">#2c2c2c</Brush>
+    <Brush x:Key="NotificationBorderBrush">#75161616</Brush>
+
+    <Brush x:Key="SkEditorBorderBackground">#0affffff</Brush>
+    <Brush x:Key="MessageBoxBackground">#0d0d0d</Brush>
+
+    <Brush x:Key="TextControlPlaceholderForegroundFocused">#26FFFFFF</Brush>
+    <Brush x:Key="SearchPanelBackgroundBrush">#161616</Brush>
+
+    <Brush x:Key="CurrentLineBackground">#05FFFFFF</Brush>
+    <Brush x:Key="CurrentLineBorder">#0DFFFFFF</Brush>
+
+    <Thickness x:Key="FlyoutContentPadding">10</Thickness>
+</ResourceDictionary>

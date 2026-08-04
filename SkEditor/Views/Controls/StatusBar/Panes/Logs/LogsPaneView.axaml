@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes"
+             xmlns:logging="clr-namespace:SkEditor.Models.Logging"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
+             xmlns:converters="clr-namespace:SkEditor.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkEditor.Views.Controls.StatusBar.Panes.LogsPaneView"
+             x:DataType="vm:LogsPaneViewModel"
+             Name="Root">
+
+    <UserControl.Resources>
+        <converters:LogLevelColorConverter x:Key="LogLevelColorConverter" />
+        <converters:LogLevelSymbolConverter x:Key="LogLevelSymbolConverter" />
+    </UserControl.Resources>
+
+    <Border>
+        <Panel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0" Padding="12,12,20,12">
+                <Interaction.Behaviors>
+                    <BehaviorCollection>
+                        <behaviors:SmoothScrollBehavior />
+                    </BehaviorCollection>
+                </Interaction.Behaviors>
+                <ItemsControl ItemsSource="{Binding Logs}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="logging:LogEntry">
+                            <SelectableTextBlock FontFeatures="-liga,-calt,-clig"
+                                                 FontSize="12"
+                                                 Foreground="{DynamicResource ForegroundSecondaryColor}"
+                                                 FontWeight="Normal"
+                                                 TextWrapping="Wrap"
+                                                 FontFamily="{DynamicResource JetBrainsFont}">
+                                <Run Text="[" /><Run Text="{Binding Timestamp, StringFormat='{}{0:HH:mm:ss}'}" />
+                                <Run Text="{Binding Level, Converter={StaticResource LogLevelSymbolConverter}}"
+                                     Foreground="{Binding Level, Converter={StaticResource LogLevelColorConverter}}" />
+                                <Run Text="]" />
+
+                                <Run Text="{Binding Message}" Foreground="{DynamicResource ForegroundColor}" />
+                            </SelectableTextBlock>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <StackPanel VerticalAlignment="Center" Spacing="6" IsVisible="{Binding !Logs.Count}">
+                <Viewbox Height="32" Opacity="0.5">
+                    <icons:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
+                </Viewbox>
+                <TextBlock Text="No logs found"
+                           HorizontalAlignment="Center" TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           FontSize="12" MaxWidth="300" Opacity="0.6" />
+            </StackPanel>
+        </Panel>
+
+        <Border.Styles>
+            <Style Selector="Border">
+                <Setter Property="Background" Value="#05FFFFFF" />
+                <Setter Property="BorderBrush" Value="#10FFFFFF" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="7" />
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <BrushTransition Property="Background" Duration="0:0:0.1" />
+                        <BrushTransition Property="BorderBrush" Duration="0:0:0.1" />
+                    </Transitions>
+                </Setter>
+                <!--<Style Selector="^:not(:focus-within)">
+                    <Setter Property="Background" Value="#03FFFFFF" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                </Style>-->
+            </Style>
+        </Border.Styles>
+    </Border>
+</UserControl>

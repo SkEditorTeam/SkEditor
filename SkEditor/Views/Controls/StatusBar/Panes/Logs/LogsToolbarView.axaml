@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:terminal="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkEditor.Views.Controls.StatusBar.Panes.LogsToolbarView"
+             x:DataType="terminal:LogsToolbarViewModel"
+             Name="Root">
+    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,8,0">
+        <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center" Command="{Binding CopyLogsCommand}">
+            <Viewbox Height="14">
+                <fluent:SymbolIcon Symbol="Copy" />
+            </Viewbox>
+        </Button>
+        <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
+                Command="{Binding OpenLogsFolderCommand}">
+            <Viewbox Height="14">
+                <fluent:SymbolIcon Symbol="Folder" />
+            </Viewbox>
+        </Button>
+        <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center" Command="{Binding ClearLogsCommand}">
+            <Viewbox Height="14">
+                <fluent:SymbolIcon Symbol="Delete" />
+            </Viewbox>
+        </Button>
+    </StackPanel>
+</UserControl>

@@ -1,4 +1,6 @@
 ﻿using System;
+using R3;
+using SkEditor.Models.Logging;
 
 namespace SkEditor.Contracts.Services;
 
@@ -7,6 +9,9 @@ namespace SkEditor.Contracts.Services;
 /// </summary>
 public interface ILogService
 {
+    string LogsFolderPath { get; }
+    Observable<LogEntry> OnLogReceived { get; }
+    
     /// <summary>
     ///     Logs a debug message using a message template.
     ///     Should be used for development and debugging purposes.
@@ -54,14 +59,6 @@ public interface ILogService
     /// <param name="messageTemplate">Optional message template with placeholders like {Property}</param>
     /// <param name="propertyValues">Values to fill the placeholders</param>
     void Fatal(Exception exception, string? messageTemplate = null, params object[] propertyValues);
-
-    /// <summary>
-    ///     Logs an error message using a message template and optionally informs the user via UI.
-    /// </summary>
-    /// <param name="informUser">Whether to show a user-friendly error dialog/notification</param>
-    /// <param name="messageTemplate">The message template with placeholders like {Property}</param>
-    /// <param name="propertyValues">Values to fill the placeholders</param>
-    void Error(bool informUser, string messageTemplate, params object[] propertyValues);
 
     /// <summary>
     ///     Logs an error from an exception with an optional custom message template.

@@ -10,12 +10,12 @@ using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
+using Serilog.Sinks.SystemConsole.Themes;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
@@ -52,9 +52,10 @@ public class App : Application
 
         Logger serilogLogger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-            .WriteTo.File(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SkEditor/v3.0/Logs/log-.txt"), rollingInterval: RollingInterval.Minute)
-            .WriteTo.Sink(new LogsHandler())
+            .WriteTo.Async(a => a.File(Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "SkEditor/v3.0/Logs/log-.txt"), rollingInterval: RollingInterval.Minute))
+            .WriteTo.Console(theme: AnsiConsoleTheme.Code)
             .CreateLogger();
 
         Log.Logger = serilogLogger;

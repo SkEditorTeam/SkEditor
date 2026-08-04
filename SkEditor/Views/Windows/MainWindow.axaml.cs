@@ -2,6 +2,7 @@
 using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
 using HotAvalonia;
+using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Windowing;
@@ -115,6 +116,21 @@ public partial class MainWindow : FAAppWindow
             IsVisible = true;
             Activate();
             Focus();
+
+            App.Services.GetRequiredService<ILogService>().Debug(
+                "This is a debug message, which is only visible in debug builds. If you see this in release, something is wrong.");
+            App.Services.GetRequiredService<ILogService>()
+                .Info($"Main window loaded in {App.Stopwatch.ElapsedMilliseconds}ms");
+            App.Services.GetRequiredService<ILogService>().Info($"Current theme: {_themes.CurrentTheme}");
+            App.Services.GetRequiredService<ILogService>()
+                .Info("Having any issues? Join our Discord: https://discord.gg/SkEditor");
+            App.Services.GetRequiredService<ILogService>().Info("Have a great day! :)");
+            App.Services.GetRequiredService<ILogService>()
+                .Warning("Ooohh, that's a warning, so we're completely ignoring it");
+            App.Services.GetRequiredService<ILogService>()
+                .Error("This is an error message, but it's not a real error, so don't worry about it.");
+            App.Services.GetRequiredService<ILogService>().Fatal(
+                "Scary, right? This is a fatal error message, but it's not a real fatal error, so don't worry about it.");
 
             SplashScreen?.Close();
         });
