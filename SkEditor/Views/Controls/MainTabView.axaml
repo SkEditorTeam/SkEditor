@@ -84,7 +84,7 @@
                           IsVisible="{Binding IsSplitActive}" />
 
             <Border IsHitTestVisible="False" Grid.Column="1" Width="1" Margin="0,8" VerticalAlignment="Stretch"
-                    Background="{DynamicResource SkEditorBorderBackground}" />
+                    Background="{DynamicResource SkEditorBorderBackground}" IsVisible="{Binding IsSplitActive}" />
 
             <ui:FATabView Grid.Column="2"
                           Name="SplitTabView"
