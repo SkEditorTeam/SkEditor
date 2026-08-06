@@ -371,6 +371,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="ItemContainerTheme" Value="{StaticResource ToolbarComboBoxItem}" />
+        <Setter Property="ToolTip.ShowDelay" Value="1000" />
 
         <Style Selector="^ /template/ Border#Background">
             <Setter Property="Transitions">

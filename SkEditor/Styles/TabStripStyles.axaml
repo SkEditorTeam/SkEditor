@@ -109,6 +109,7 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="Padding" Value="8,5" />
+        <Setter Property="ToolTip.ShowDelay" Value="1000" />
 
         <Setter Property="Transitions">
             <Transitions>

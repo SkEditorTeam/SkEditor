@@ -29,7 +29,7 @@
                                     VerticalAlignment="Center" />
 
                     <Button Grid.Column="2" Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
-                            Command="{Binding CloseDrawerCommand}" Margin="0,0,8,0">
+                            Command="{Binding CloseDrawerCommand}" Margin="0,0,8,0" ToolTip.Tip="Close">
                         <Viewbox Height="14">
                             <fluent:SymbolIcon Symbol="Subtract" />
                         </Viewbox>
