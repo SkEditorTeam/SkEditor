@@ -124,7 +124,7 @@ public partial class FileTabViewModel(
     {
         string? oldPath = File.Path;
 
-        string? path = await filePicker.SaveFileAsync(Header.Value);
+        string? path = await filePicker.SaveFileAsync(Header.Value, oldPath);
         if (path == null)
         {
             return false;

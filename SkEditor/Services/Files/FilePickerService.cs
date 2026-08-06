@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -57,7 +58,7 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
             }).ToArray();
     }
 
-    public async Task<string?> SaveFileAsync(string fileName)
+    public async Task<string?> SaveFileAsync(string fileName, string? currentPath = null)
     {
         IStorageProvider? storageProvider = GetStorageProvider();
         if (storageProvider == null)
@@ -65,9 +66,20 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
             return null;
         }
 
+        string? folder = null;
+        if (currentPath is not null)
+        {
+            folder = Path.GetDirectoryName(currentPath);
+        }
+
+        IStorageFolder? storageFolder = folder is null
+            ? null
+            : await storageProvider.TryGetFolderFromPathAsync(folder);
+
         FilePickerSaveOptions dialogOptions = new()
         {
-            Title = translations.Get(TranslationKey.WindowTitleSaveFilePicker, fileName)
+            Title = translations.Get(TranslationKey.WindowTitleSaveFilePicker, fileName),
+            SuggestedStartLocation = storageFolder
         };
         IStorageFile? result = await storageProvider.SaveFilePickerAsync(dialogOptions);
         return result?.Path.LocalPath;

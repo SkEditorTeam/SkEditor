@@ -22,6 +22,7 @@ public interface IFilePickerService
     ///     Opens a save file dialog and allows the user to select a location and name for saving a file.
     /// </summary>
     /// <param name="fileName">The file name to display in the dialog title.</param>
+    /// <param name="currentPath">The current file path.</param>
     /// <returns>The file path of the selected location, or null if the operation was cancelled.</returns>
-    Task<string?> SaveFileAsync(string fileName);
+    Task<string?> SaveFileAsync(string fileName, string? currentPath = null);
 }
