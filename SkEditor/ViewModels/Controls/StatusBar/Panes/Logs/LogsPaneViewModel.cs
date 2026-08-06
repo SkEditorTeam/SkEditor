@@ -96,7 +96,12 @@ public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
             sb.AppendLine(log.ToString());
         }
 
-        await _clipboard.CopyTextAsync(sb.ToString());
+        string logs = sb.ToString();
+
+        if (!string.IsNullOrWhiteSpace(logs))
+        {
+            await _clipboard.CopyTextAsync(logs);
+        }
     }
 
     public void Dispose()
