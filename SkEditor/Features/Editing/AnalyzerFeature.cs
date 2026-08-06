@@ -64,6 +64,8 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
         if (tab is IDiagnosticsTab diagnosticsTab)
         {
             diagnosticsTab.Diagnostics.Clear();
+            editor.TextArea.TextView.BackgroundRenderers.Remove(_textMarkers);
+            editor.TextArea.TextView.LineTransformers.Remove(_textMarkers);
         }
 
         _textEnteredSubscription?.Dispose();
