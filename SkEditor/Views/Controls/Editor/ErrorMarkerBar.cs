@@ -2,13 +2,12 @@ using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Rendering;
-using Microsoft.Extensions.DependencyInjection;
 using ObservableCollections;
 using R3;
-using SkEditor.Contracts.Services;
 using SkEditor.Models.Analyzer;
 
 namespace SkEditor.Views.Controls.Editor;
@@ -24,10 +23,13 @@ public class ErrorMarkerBar : Control
     public static readonly StyledProperty<Thickness> TrackPaddingProperty =
         AvaloniaProperty.Register<ErrorMarkerBar, Thickness>(
             nameof(TrackPadding),
-            new Thickness(0, 12, 0, 12)
+            new Thickness(0, 10, 0, 12)
         );
 
+    private IDisposable? _editorSubscription;
     private IDisposable? _diagnosticsSubscription;
+
+    private const double MarkerHeight = 3.0;
 
     static ErrorMarkerBar() => AffectsRender<ErrorMarkerBar>(EditorProperty, DiagnosticsProperty);
 
@@ -53,7 +55,24 @@ public class ErrorMarkerBar : Control
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == DiagnosticsProperty)
+        if (change.Property == EditorProperty)
+        {
+            _editorSubscription?.Dispose();
+
+            if (change.GetNewValue<TextEditor?>() is { } editor)
+            {
+                editor.TextArea.TextView.VisualLinesChanged += OnVisualLinesChanged;
+
+                _editorSubscription = Disposable.Create(() =>
+                {
+                    editor.TextArea.TextView.VisualLinesChanged -= OnVisualLinesChanged;
+                });
+            }
+
+            InvalidateVisual();
+        }
+
+        else if (change.Property == DiagnosticsProperty)
         {
             _diagnosticsSubscription?.Dispose();
 
@@ -68,6 +87,11 @@ public class ErrorMarkerBar : Control
         }
     }
 
+    private void OnVisualLinesChanged(object? sender, EventArgs e)
+    {
+        InvalidateVisual();
+    }
+
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromVisualTree(e);
@@ -79,32 +103,24 @@ public class ErrorMarkerBar : Control
         base.Render(context);
 
         if (Editor?.Document == null || Diagnostics == null || Diagnostics.Count == 0)
+            return;
+
+        TextView? textView = Editor.TextArea.TextView;
+        if (textView == null)
         {
             return;
         }
 
-        double totalHeight = Bounds.Height;
-        int totalLines = Editor.Document.LineCount;
-
-        if (totalLines == 0 || totalHeight <= 0)
-        {
+        if (textView.DocumentHeight <= textView.Bounds.Height)
             return;
-        }
-
-        App.Services.GetRequiredService<ILogService>().Debug(
-            $"document height: {Editor.TextArea.TextView.DocumentHeight}, bounds: {Editor.TextArea.TextView.Bounds.Height}, height: {Editor.TextArea.TextView.Height}");
-        if (Editor.TextArea.TextView.DocumentHeight <= Editor.TextArea.TextView.Bounds.Height)
-        {
-            return;
-        }
 
         var groupedMarkers = Diagnostics
-            .Select(err => new
+            .Select(error => new
             {
-                Y = Math.Round(CalculateYPosition(err.Line) / 2.0) * 2.0,
-                Error = err
+                Y = Math.Round(CalculateYPosition(error.Line)),
+                Error = error
             })
-            .GroupBy(x => x.Y)
+            .GroupBy(m => m.Y)
             .Select(g => new
             {
                 Y = g.Key,
@@ -122,44 +138,51 @@ public class ErrorMarkerBar : Control
             };
 
             SolidColorBrush brush = new(color);
-            context.DrawRectangle(brush, null, new Rect(0, marker.Y, Bounds.Width, 3), 1.5, 1.5);
+            context.DrawRectangle(brush, null, new Rect(0, marker.Y, Bounds.Width, MarkerHeight), 1.5, 1.5);
         }
     }
 
     private double CalculateYPosition(int lineNumber)
     {
-        if (Editor?.Document == null || Editor.TextArea.TextView.DocumentHeight <= 0)
+        if (Editor?.Document == null)
         {
-            return 0;
+            return TrackPadding.Top;
         }
 
-        TextView? textView = Editor.TextArea.TextView;
-        double visualTop = textView.GetVisualTopByDocumentLine(lineNumber);
-        double documentHeight = textView.DocumentHeight;
-
-        double totalExtent = documentHeight;
-
-        if (Editor.Options.AllowScrollBelowDocument)
+        int totalLines = Editor.Document.LineCount;
+        if (totalLines <= 0)
         {
-            double viewportHeight = textView.Bounds.Height;
-            double defaultLineHeight = textView.DefaultLineHeight;
+            return TrackPadding.Top;
+        }
 
-            double desiredHeight = Math.Min(viewportHeight, documentHeight);
-            double extraHeightToAllowScrollBelowDocument = Math.Max(0, desiredHeight - defaultLineHeight);
+        int clampedLine = Math.Clamp(lineNumber, 1, totalLines);
 
-            totalExtent = documentHeight + extraHeightToAllowScrollBelowDocument;
+        TextView? textView = Editor.TextArea.TextView;
+        if (textView == null)
+        {
+            return TrackPadding.Top;
+        }
+
+        double totalExtent = ((IScrollable)textView).Extent.Height;
+        if (totalExtent <= 0)
+        {
+            totalExtent = textView.DocumentHeight;
+        }
+
+        if (totalExtent <= 0)
+        {
+            return TrackPadding.Top;
         }
 
         double topPadding = TrackPadding.Top;
         double bottomPadding = TrackPadding.Bottom;
-        double usableHeight = Bounds.Height - topPadding - bottomPadding;
 
-        if (usableHeight <= 0 || totalExtent <= 0)
-        {
-            return topPadding;
-        }
+        double usableHeight = Math.Max(0, Bounds.Height - topPadding - bottomPadding - MarkerHeight);
 
-        double y = topPadding + (visualTop / totalExtent * usableHeight);
+        double visualTop = textView.GetVisualTopByDocumentLine(clampedLine);
+        double ratio = Math.Clamp(visualTop / totalExtent, 0.0, 1.0);
+
+        double y = topPadding + (ratio * usableHeight);
         return y;
     }
 }

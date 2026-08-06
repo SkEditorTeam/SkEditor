@@ -68,6 +68,7 @@
                                Margin="0,0,1,0"
                                HorizontalAlignment="Right"
                                Editor="{Binding #Editor}"
+                               IsHitTestVisible="False"
                                Diagnostics="{Binding Diagnostics}" />
 
         <StackPanel Opacity="{Binding IsLoading}"
