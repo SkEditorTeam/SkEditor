@@ -3,7 +3,9 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using AvaloniaEdit;
 using AvaloniaEdit.Rendering;
 using ObservableCollections;
@@ -23,15 +25,19 @@ public class ErrorMarkerBar : Control
     public static readonly StyledProperty<Thickness> TrackPaddingProperty =
         AvaloniaProperty.Register<ErrorMarkerBar, Thickness>(
             nameof(TrackPadding),
-            new Thickness(0, 10, 0, 12)
+            new Thickness(0, 2, 0, 2)
         );
 
     private IDisposable? _editorSubscription;
     private IDisposable? _diagnosticsSubscription;
-
+    private ScrollBar? _verticalScrollBar;
+    
     private const double MarkerHeight = 3.0;
+    private const double MarkerWidth = 12.0;
 
     static ErrorMarkerBar() => AffectsRender<ErrorMarkerBar>(EditorProperty, DiagnosticsProperty);
+
+    public ErrorMarkerBar() => Width = MarkerWidth;
 
     public TextEditor? Editor
     {
@@ -132,6 +138,8 @@ public class ErrorMarkerBar : Control
                 HighestSeverity = g.Min(x => x.Error.Type)
             });
 
+        CacheScrollBar();
+
         foreach (var marker in groupedMarkers)
         {
             Color color = marker.HighestSeverity switch
@@ -143,7 +151,18 @@ public class ErrorMarkerBar : Control
             };
 
             SolidColorBrush brush = new(color);
-            context.DrawRectangle(brush, null, new Rect(0, marker.Y, Bounds.Width, MarkerHeight), 1.5, 1.5);
+            context.DrawRectangle(brush, null, new Rect(0, marker.Y, MarkerWidth, MarkerHeight), 1.5, 1.5);
+        }
+    }
+
+    private void CacheScrollBar()
+    {
+        if (Editor?.ScrollViewer != null && _verticalScrollBar == null)
+        {
+            _verticalScrollBar = Editor.ScrollViewer
+                .GetVisualDescendants()
+                .OfType<ScrollBar>()
+                .FirstOrDefault(s => s.Orientation == Orientation.Vertical);
         }
     }
 

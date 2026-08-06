@@ -39,6 +39,7 @@
                 <ResourceInclude Source="avares://SkEditor/Styles/SettingsExpanderItemStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/TextEditorStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/AppWindowStyles.axaml" />
+                <ResourceInclude Source="avares://SkEditor/Styles/ScrollBarStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Assets/Icons.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
