@@ -7,10 +7,11 @@
              xmlns:converters="clr-namespace:SkEditor.Converters"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
-             xmlns:tabs1="clr-namespace:SkEditor.ViewModels.Tabs"
+             xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
+             xmlns:editor="clr-namespace:SkEditor.Views.Controls.Editor"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
-             x:DataType="{x:Type tabs1:FileTabViewModel}"
+             x:DataType="tabs:FileTabViewModel"
              x:Class="SkEditor.Views.Pages.FileTabView">
 
     <UserControl.Resources>
@@ -62,6 +63,12 @@
                 </Style>
             </avaloniaEdit:TextEditor.Styles>
         </avaloniaEdit:TextEditor>
+
+        <editor:ErrorMarkerBar Width="11"
+                               Margin="0,0,1,0"
+                               HorizontalAlignment="Right"
+                               Editor="{Binding #Editor}"
+                               Diagnostics="{Binding Diagnostics}" />
 
         <StackPanel Opacity="{Binding IsLoading}"
                     IsHitTestVisible="{Binding IsLoading}"

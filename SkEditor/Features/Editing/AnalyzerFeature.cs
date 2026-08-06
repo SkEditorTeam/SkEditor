@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using R3;
@@ -23,7 +24,7 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
 
     public bool CanAttach(IFeatureTab tab)
     {
-        if (!experiments.AnalyzerEnabled || tab is not IFileTab fileTab)
+        if (!experiments.AnalyzerEnabled || tab is not IFileTab fileTab || tab is not IDiagnosticsTab)
         {
             return false;
         }
@@ -33,11 +34,16 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
     {
+        if (tab is not IDiagnosticsTab diagnosticsTab)
+        {
+            return;
+        }
+        
         _featureCts = new CancellationTokenSource();
         
         _textEnteredSubscription = editor.TextChangedAsObservable()
             .Debounce(TimeSpan.FromSeconds(0.5))
-            .SubscribeAwait(async (_, ct) => { await AnalyzeText(editor, ct); }, AwaitOperation.Switch);
+            .SubscribeAwait(async (_, ct) => { await AnalyzeText(diagnosticsTab, editor, ct); }, AwaitOperation.Switch);
 
         if (tab is FileTabViewModel fileTab)
         {
@@ -46,7 +52,7 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
             editor.TextArea.TextView.LineTransformers.Add(_textMarkers);
         }
 
-        _ = AnalyzeText(editor, _featureCts.Token);
+        _ = AnalyzeText(diagnosticsTab, editor, _featureCts.Token);
     }
 
     public void OnViewDetached(IFeatureTab tab, TextEditor editor)
@@ -55,11 +61,16 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
         _featureCts?.Dispose();
         _featureCts = null;
 
+        if (tab is IDiagnosticsTab diagnosticsTab)
+        {
+            diagnosticsTab.Diagnostics.Clear();
+        }
+
         _textEnteredSubscription?.Dispose();
         _textEnteredSubscription = null;
     }
 
-    private async Task AnalyzeText(TextEditor editor, CancellationToken ct)
+    private async Task AnalyzeText(IDiagnosticsTab tab, TextEditor editor, CancellationToken ct)
     {
         AnalyzerResult? result = await analyzer.Analyze(editor.Text, ct);
 
@@ -69,6 +80,18 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
         }
 
         _textMarkers?.RemoveAll();
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            tab.Diagnostics.Clear();
+
+            if (result is null)
+            {
+                return;
+            }
+
+            tab.Diagnostics.AddRange(result.Errors);
+        });
 
         if (result is null || _textMarkers is null)
         {

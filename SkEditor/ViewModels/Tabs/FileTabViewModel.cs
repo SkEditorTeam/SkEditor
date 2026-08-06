@@ -10,9 +10,11 @@ using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using ObservableCollections;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
+using SkEditor.Models.Analyzer;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Files;
 using SkEditor.Models.Notifications;
@@ -33,7 +35,7 @@ public partial class FileTabViewModel(
     IRecentFileService recentFiles,
     ILogService logs)
     : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab, ISaveableTab,
-        IFileTab, IClosableTab, ISaveStateTab
+        IFileTab, IClosableTab, ISaveStateTab, IDiagnosticsTab
 {
     private static readonly Encoding Utf8NoBom = new UTF8Encoding(false);
 
@@ -255,4 +257,6 @@ public partial class FileTabViewModel(
     {
         RequestFocus();
     }
+
+    public ObservableList<AnalyzerError> Diagnostics { get; } = [];
 }
