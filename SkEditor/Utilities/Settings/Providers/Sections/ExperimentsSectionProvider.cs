@@ -71,7 +71,14 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                             .WithType(InfoSetting.InfoType.Warning),
                         ToggleSetting
                             .Create("Enable Analyzer".ToTranslatable())
-                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerEnabled))
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerEnabled)),
+                        ToggleSetting
+                            .Create("Show Scrollbar Markers".ToTranslatable())
+                            .WithDescription(
+                                "Displays colored error and warning indicators directly on the editor scrollbar."
+                                    .ToTranslatable())
+                            .WithProperty(
+                                experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerErrorScrollMarkersEnabled))
                         // ClickableActionSetting
                         //     .Create("Go to Analyzer settings".ToTranslatable())
                         //     .WithAction(() => messenger.Send(new NavigateToSettingsSectionMessage("Analyzer")))

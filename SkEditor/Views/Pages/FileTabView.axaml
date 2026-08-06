@@ -68,6 +68,7 @@
                                Margin="0,0,1,0"
                                HorizontalAlignment="Right"
                                Editor="{Binding #Editor}"
+                               IsVisible="{Binding Experiments.AnalyzerErrorScrollMarkersEnabled}"
                                IsHitTestVisible="False"
                                Diagnostics="{Binding Diagnostics}" />
 

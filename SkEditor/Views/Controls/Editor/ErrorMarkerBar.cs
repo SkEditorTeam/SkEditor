@@ -89,6 +89,11 @@ public class ErrorMarkerBar : Control
 
     private void OnVisualLinesChanged(object? sender, EventArgs e)
     {
+        if (!IsVisible)
+        {
+            return;
+        }
+
         InvalidateVisual();
     }
 

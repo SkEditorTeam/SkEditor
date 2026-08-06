@@ -20,6 +20,7 @@ using SkEditor.Models.Files;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
@@ -28,6 +29,7 @@ namespace SkEditor.ViewModels.Tabs;
 public partial class FileTabViewModel(
     TranslatableString header,
     AppSettings appSettings,
+    ExperimentsConfig experiments,
     IDialogService dialogs,
     INotificationService notifications,
     IFilePickerService filePicker,
@@ -47,6 +49,7 @@ public partial class FileTabViewModel(
     public TextDocument Document { get; } = new();
 
     public AppSettings AppSettings { get; } = appSettings;
+    public ExperimentsConfig Experiments { get; } = experiments;
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
 

@@ -34,6 +34,12 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     public partial bool AnalyzerEnabled { get; set; } = false;
 
     /// <summary>
+    ///     Enables the Analyzer error markers visible on the scrollbar.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool AnalyzerErrorScrollMarkersEnabled { get; set; } = true;
+
+    /// <summary>
     ///     Enables the Terminal.
     /// </summary>
     [ObservableProperty]

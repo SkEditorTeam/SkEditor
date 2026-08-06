@@ -4,6 +4,7 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Models.Files;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs;
 
@@ -11,6 +12,7 @@ namespace SkEditor.Services.Files;
 
 public class FileTabFactory(
     AppSettings appSettings,
+    ExperimentsConfig experiments,
     IDialogService dialogService,
     IFilePickerService filePicker,
     IFileFeatureService features,
@@ -27,7 +29,8 @@ public class FileTabFactory(
 
         TranslatableString header = TranslatableString.FromRawString(file.Name);
 
-        return new FileTabViewModel(header, appSettings, dialogService, notifications, filePicker, features, recentFiles, logs)
+        return new FileTabViewModel(header, appSettings, experiments, dialogService, notifications, filePicker,
+            features, recentFiles, logs)
         {
             File = file
         };
@@ -37,7 +40,8 @@ public class FileTabFactory(
     {
         TranslatableString header = TranslatableString.FromRawString(name);
 
-        return new FileTabViewModel(header, appSettings, dialogService, notifications, filePicker, features, recentFiles, logs)
+        return new FileTabViewModel(header, appSettings, experiments, dialogService, notifications, filePicker,
+            features, recentFiles, logs)
         {
             File = new LocalFile(name: name),
             IsSaved = true
