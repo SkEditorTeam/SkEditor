@@ -135,6 +135,8 @@
   "SettingsAppearanceFontSize": "Font size",
   "SettingsAppearanceMouseWheelZoom": "Mouse wheel zoom",
   "SettingsAppearanceMouseWheelZoomDescription": "Zoom the editor font size by holding Ctrl and scrolling the mouse wheel.",
+  "SettingsAppearanceFontLigatures": "Font ligatures",
+  "SettingsAppearanceFontLigaturesDescription": "Whether font ligatures (e.g. '=>', '!=') should be enabled, if supported by the font.",
   "SettingsAppearanceHighlightCurrentLine": "Highlight current line",
   "SettingsAppearanceSubsectionSidebarLayout": "Sidebar & layout",
   "SettingsAppearanceSidebarAnimations": "Sidebar animations",

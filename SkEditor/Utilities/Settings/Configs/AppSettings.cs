@@ -161,6 +161,12 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial string? EditorFontFamily { get; set; } = null;
 
     /// <summary>
+    ///     Whether to enable font ligatures in the editor (if supported by the active font).
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsFontLigaturesEnabled { get; set; } = true;
+
+    /// <summary>
     ///     The number of spaces per tab in the code editor.
     /// </summary>
     [ObservableProperty]

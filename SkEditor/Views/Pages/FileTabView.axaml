@@ -16,6 +16,7 @@
 
     <UserControl.Resources>
         <converters:EditorFontFamilyConverter x:Key="EditorFontFamilyConverter" />
+        <converters:EditorFontFeaturesConverter x:Key="EditorFontFeaturesConverter" />
     </UserControl.Resources>
 
     <Panel>
@@ -32,7 +33,8 @@
                                  WordWrap="{Binding WordWrap}"
                                  ScrollOffset="{Binding ScrollOffset, Mode=TwoWay}"
                                  CaretOffset="{Binding CaretOffset, Mode=TwoWay}"
-                                 FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}">
+                                 FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}"
+                                 FontFeatures="{Binding AppSettings.IsFontLigaturesEnabled, Converter={StaticResource EditorFontFeaturesConverter}}">
             <Interaction.Behaviors>
                 <behaviors:TextEditorLoadBehavior />
             </Interaction.Behaviors>

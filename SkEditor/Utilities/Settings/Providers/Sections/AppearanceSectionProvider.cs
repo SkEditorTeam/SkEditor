@@ -78,12 +78,17 @@ public class AppearanceSectionProvider(
                             {
                                 await SelectFont();
                                 s.Description?.UpdateParameters(GetFontName());
-                            }), NumberSetting<int>
+                            }),
+                        NumberSetting<int>
                             .Create(TranslationKey.SettingsAppearanceFontSize)
                             .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorFontSize))
                             .WithMinValue(8)
                             .WithMaxValue(48)
                             .WithFormatString(),
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsAppearanceFontLigatures)
+                            .WithDescription(TranslationKey.SettingsAppearanceFontLigaturesDescription)
+                            .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsFontLigaturesEnabled)),
                         
                         ToggleSetting
                             .Create(TranslationKey.SettingsAppearanceMouseWheelZoom)
