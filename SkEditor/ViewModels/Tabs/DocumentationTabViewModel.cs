@@ -1,27 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using SkEditor.Contracts.Services;
 using SkEditor.Models.Documentation;
+using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Providers;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Tabs;
 
 public partial class DocumentationTabViewModel : TabViewModelBase
 {
-    public DocumentationTabViewModel() : base(TranslationKey.DocumentationTabTitle, Symbol.Book) =>
-        _ = Task.Run(async () =>
-        {
-            await LoadDocs();
+    private readonly ILogService _logs;
+    private readonly INotificationService _notifs;
 
-            SelectedSyntaxType = DocumentationSyntaxType.All;
-        });
+    private CancellationTokenSource? _cts;
+
+    public DocumentationTabViewModel(INotificationService notifs, ILogService logs) : base(
+        TranslationKey.DocumentationTabTitle, Symbol.Book)
+    {
+        _notifs = notifs;
+        _logs = logs;
+
+        SelectedProvider ??= Providers.FirstOrDefault();
+    }
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
 
@@ -70,18 +80,38 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         RequestClose();
     }
 
-    public async Task LoadDocs()
+    public async Task LoadDocs(CancellationToken cancellationToken = default)
     {
-        SelectedProvider ??= Providers.FirstOrDefault();
-
         IDocumentationProvider? provider = SelectedProvider;
         if (provider is null)
         {
             return;
         }
 
-        DocumentationEntries = await provider.GetDocumentationEntriesAsync();
-        Filter();
+        try
+        {
+            IReadOnlyList<DocumentationEntry> entries = await provider.GetDocumentationEntriesAsync();
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            DocumentationEntries = entries;
+            SelectedSyntaxType ??= DocumentationSyntaxType.All;
+            Filter();
+        }
+        catch (Exception ex)
+        {
+            Notification notification = Notification
+                .Create("Error loading documentation".ToTranslatable())
+                .WithMessage("Something went wrong when loading documentation. Try again or look into the logs."
+                    .ToTranslatable())
+                .WithType(NotificationType.Error);
+
+            _notifs.Show(notification);
+            _logs.Error(ex, "Error loading documentation");
+        }
     }
 
     partial void OnSelectedEntryChanged(DocumentationEntry? value)
@@ -108,7 +138,11 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     {
         OnPropertyChanged(nameof(AvailableAddons));
 
-        _ = Task.Run(async () => { await LoadDocs(); });
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        CancellationToken token = _cts.Token;
+
+        _ = LoadDocs(token);
     }
 
     private void Filter()
