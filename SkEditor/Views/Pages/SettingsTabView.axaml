@@ -112,7 +112,8 @@
 
     <controls:FANavigationView Name="NavigationView" VerticalAlignment="Stretch" Margin="16,24,0,16"
                                PaneDisplayMode="Auto" OpenPaneLength="250"
-                               CompactModeThresholdWidth="180"
+                               ExpandedModeThresholdWidth="800"
+                               CompactModeThresholdWidth="250"
                                MaxWidth="1080"
                                MenuItemsSource="{Binding SettingsCategories}"
                                SelectedItem="{Binding CurrentSection, Mode=TwoWay}"
