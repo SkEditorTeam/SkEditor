@@ -146,6 +146,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<IEditorFeature, AutoIndentFeature>();
             services.AddTransient<IEditorFeature, SmartAutoPairingFeature>();
             services.AddTransient<IEditorFeature, SelectionOccurencesFeature>();
+            services.AddTransient<IEditorFeature, AltKeyHandlingFeature>();
         }
 
         public void AddEditorCommands()
