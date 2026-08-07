@@ -80,7 +80,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     ///     Whether to show the current file name in Discord Rich Presence details.
     /// </summary>
     [ObservableProperty]
-    public partial bool IsDiscordRichPresenceDetailsEnabled { get; set; } = true;
+    public partial bool IsDiscordRichPresenceDetailsEnabled { get; set; } = false;
 
     /// <summary>
     ///     Whether to open files and expand folders in the explorer with a single click instead of a double click
