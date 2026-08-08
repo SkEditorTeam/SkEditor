@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -30,7 +30,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
     private bool _tooltipShown;
     private Popup? _popup;
     private bool _pointerOverPopup;
-    private static readonly TimeSpan HideGracePeriod = TimeSpan.FromMilliseconds(150);
+    private static readonly TimeSpan HideGracePeriod = TimeSpan.FromMilliseconds(100);
     private Point _lastPointerPosition;
 
     public bool CanAttach(IFeatureTab tab)
@@ -50,6 +50,8 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
             return;
         }
 
+        _disposableBag = new DisposableBag();
+
         _popup = new Popup
         {
             Topmost = false,
@@ -64,6 +66,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
         ((ISetLogicalParent)_popup).SetParent(editor.TextArea.TextView);
 
         editor.PointerMovedAsObservable()
+            .ThrottleLast(TimeSpan.FromMilliseconds(50))
             .Subscribe(e => _lastPointerPosition = e.GetPosition(editor.TextArea.TextView))
             .AddTo(ref _disposableBag);
 
@@ -76,67 +79,73 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
             .DistinctUntilChanged(Comparer)
             .SubscribeAwait(async (result, ct) =>
             {
-                (AnalyzerError? error, _) = result;
-
-                if (error is null)
-                {
-                    if (!_tooltipShown)
-                    {
-                        return;
-                    }
-
-                    await Task.Delay(HideGracePeriod, ct);
-
-                    if (_pointerOverPopup)
-                    {
-                        return;
-                    }
-
-                    _popup!.IsOpen = false;
-                    _tooltipShown = false;
-                    return;
-                }
-
-                await Task.Delay(_tooltipDelay, ct);
-
-                (AnalyzerError? currentError, Rect currentTargetRect) =
-                    GetErrorAndTargetRect(_lastPointerPosition, editor, diagnosticsTab);
-
-                if (currentError is null || !Equals(currentError, error))
-                {
-                    return;
-                }
-
-                Border border = new()
-                {
-                    IsHitTestVisible = true,
-                    Cursor = new Cursor(StandardCursorType.Arrow),
-                    Background = new SolidColorBrush(Color.Parse("#1c1c1c")),
-                    BorderBrush = new SolidColorBrush(Color.Parse("#3c3c3c")),
-                    BorderThickness = new Thickness(1),
-                    Padding = new Thickness(8),
-                    CornerRadius = new CornerRadius(4),
-                    Child = new TextBlock
-                    {
-                        Text = error.Message,
-                        Foreground = Brushes.White
-                    }
-                };
-                border.PointerEntered += (_, _) => _pointerOverPopup = true;
-                border.PointerExited += (_, _) =>
-                {
-                    _pointerOverPopup = false;
-                    _popup!.IsOpen = false;
-                    _tooltipShown = false;
-                };
-
-                _popup!.Child = border;
-                _popup.PlacementRect = currentTargetRect;
-                _popup.IsOpen = true;
-
-                _tooltipShown = true;
+                await HandlePointerMoved(editor, result, diagnosticsTab, ct);
             }, AwaitOperation.Switch)
             .AddTo(ref _disposableBag);
+    }
+
+    private async Task HandlePointerMoved(TextEditor editor, (AnalyzerError? Error, Rect TargetRect) result,
+        IDiagnosticsTab diagnosticsTab, CancellationToken ct)
+    {
+        (AnalyzerError? error, _) = result;
+
+        if (error is null)
+        {
+            if (!_tooltipShown)
+            {
+                return;
+            }
+
+            await Task.Delay(HideGracePeriod, ct);
+
+            if (_pointerOverPopup)
+            {
+                return;
+            }
+
+            _popup!.IsOpen = false;
+            _tooltipShown = false;
+            return;
+        }
+
+        await Task.Delay(_tooltipDelay, ct);
+
+        (AnalyzerError? currentError, Rect currentTargetRect) =
+            GetErrorAndTargetRect(_lastPointerPosition, editor, diagnosticsTab);
+
+        if (currentError is null || !Equals(currentError, error))
+        {
+            return;
+        }
+
+        Border border = new()
+        {
+            IsHitTestVisible = true,
+            Cursor = new Cursor(StandardCursorType.Arrow),
+            Background = new SolidColorBrush(Color.Parse("#1c1c1c")),
+            BorderBrush = new SolidColorBrush(Color.Parse("#3c3c3c")),
+            BorderThickness = new Thickness(1),
+            Padding = new Thickness(8),
+            CornerRadius = new CornerRadius(7),
+            Child = new TextBlock
+            {
+                Text = error.Message,
+                Foreground = Brushes.White
+            }
+        };
+        border.PointerEntered += (_, _) => _pointerOverPopup = true;
+        border.PointerExited += (_, _) =>
+        {
+            _pointerOverPopup = false;
+            _popup!.IsOpen = false;
+            _tooltipShown = false;
+        };
+
+        _popup!.Child = border;
+        _popup.PlacementRect = currentTargetRect;
+        _popup.IsOpen = true;
+
+        _tooltipShown = true;
     }
 
     private static (AnalyzerError? Error, Rect TargetRect) GetErrorAndTargetRect(Point point, TextEditor editor,
@@ -171,7 +180,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
             return (null, default);
         }
 
-        AnalyzerError? errorAtPos = diagnosticsTab.Diagnostics.FirstOrDefault(d => d.Line == lineNumber);
+        diagnosticsTab.DiagnosticDictionary.TryGetValue(lineNumber, out AnalyzerError? errorAtPos);
 
         double lineBottomY = visualLine.VisualTop + visualLine.Height - textView.ScrollOffset.Y;
         Rect targetRect = new(point.X, lineBottomY, 1, 1);
@@ -182,8 +191,17 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
     public void OnViewDetached(IFeatureTab tab, TextEditor editor)
     {
         _disposableBag.Dispose();
-        _popup?.IsOpen = false;
+
+        if (_popup is not null)
+        {
+            _popup.IsOpen = false;
+            _popup.Child = null;
+        }
+
         _tooltipShown = false;
+        _pointerOverPopup = false;
+        _lastPointerPosition = default;
+
         _popup = null;
     }
 

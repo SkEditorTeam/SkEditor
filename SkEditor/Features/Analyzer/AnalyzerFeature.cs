@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media;
@@ -83,17 +85,7 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
 
         _textMarkers?.RemoveAll();
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            tab.Diagnostics.Clear();
-
-            if (result is null)
-            {
-                return;
-            }
-
-            tab.Diagnostics.AddRange(result.Errors);
-        });
+        await UpdateTabDiagnostics(tab, result);
 
         if (result is null || _textMarkers is null)
         {
@@ -116,6 +108,35 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
                 AnalyzerErrorType.Info => new Color(255, 26, 144, 237),
                 _ => throw new ArgumentOutOfRangeException()
             };
+        }
+    }
+
+    private static async Task UpdateTabDiagnostics(IDiagnosticsTab tab, AnalyzerResult? result)
+    {
+        tab.DiagnosticDictionary.Clear();
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            tab.Diagnostics.Clear();
+
+            if (result is null)
+            {
+                return;
+            }
+
+            tab.Diagnostics.AddRange(result.Errors);
+        });
+
+        if (result is not null)
+        {
+            Dictionary<int, AnalyzerError> newErrorsDict = result.Errors
+                .GroupBy(e => e.Line)
+                .ToDictionary(g => g.Key, g => g.First());
+
+            foreach ((int line, AnalyzerError error) in newErrorsDict)
+            {
+                tab.DiagnosticDictionary[line] = error;
+            }
         }
     }
 }

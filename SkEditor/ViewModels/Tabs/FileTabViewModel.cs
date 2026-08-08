@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -262,4 +263,5 @@ public partial class FileTabViewModel(
     }
 
     public ObservableList<AnalyzerError> Diagnostics { get; } = [];
+    public Dictionary<int, AnalyzerError> DiagnosticDictionary { get; } = [];
 }
