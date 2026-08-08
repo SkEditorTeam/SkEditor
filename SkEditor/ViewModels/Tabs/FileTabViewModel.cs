@@ -183,6 +183,10 @@ public partial class FileTabViewModel(
             notifications.Show(notification);
             return false;
         }
+        catch (OperationCanceledException)
+        {
+            return false;
+        }
         finally
         {
             _saveSemaphore.Release();
