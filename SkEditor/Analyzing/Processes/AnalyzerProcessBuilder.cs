@@ -37,6 +37,10 @@ public class AnalyzerProcessBuilder : IAnalyzerProcessBuilder
 
         startInfo.ArgumentList.Add("--enable-native-access=ALL-UNNAMED");
 
+        startInfo.ArgumentList.Add("-XX:+UseStringDeduplication");
+        startInfo.ArgumentList.Add("-XX:+DisableExplicitGC");
+        startInfo.ArgumentList.Add("-XX:+UseCompactObjectHeaders");
+
         string libsDir = Path.Combine(workingDir, "libraries");
         string classpath;
 
