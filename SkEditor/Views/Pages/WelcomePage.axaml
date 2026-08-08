@@ -151,18 +151,20 @@
                     <icons:SymbolIcon Symbol="History" FontSize="48" />
                     <TextBlock Text="{localization:Translate WelcomePageRecentEmpty}" />
                 </StackPanel>
-                <ScrollViewer Grid.Row="1" Padding="0,0,18,0" VerticalAlignment="Stretch" HorizontalAlignment="Center"
+                <ScrollViewer Grid.Row="1" Padding="0,0,18,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               VerticalScrollBarVisibility="Auto" IsVisible="{Binding !!RecentItems.Count}">
                     <Interaction.Behaviors>
                         <BehaviorCollection>
                             <behaviors:SmoothScrollBehavior />
                         </BehaviorCollection>
                     </Interaction.Behaviors>
-                    <ItemsRepeater ItemsSource="{Binding RecentItems}">
-                        <ItemsRepeater.Layout>
-                            <StackLayout Spacing="8" />
-                        </ItemsRepeater.Layout>
-                        <ItemsRepeater.ItemTemplate>
+                    <ItemsControl ItemsSource="{Binding RecentItems}" HorizontalAlignment="Stretch">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="8" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="welcome:WelcomeScreenRecentItem">
                                 <Button HorizontalContentAlignment="Stretch"
                                         VerticalContentAlignment="Center"
@@ -225,8 +227,8 @@
                                     </DockPanel>
                                 </Button>
                             </DataTemplate>
-                        </ItemsRepeater.ItemTemplate>
-                    </ItemsRepeater>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </ScrollViewer>
             </Grid>
         </Border>
