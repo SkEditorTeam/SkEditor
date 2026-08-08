@@ -74,7 +74,7 @@ public partial class TranslatableString : ObservableObject, IDisposable
             // if field is not null, then that's a raw value
             if (field != null)
             {
-                return _parameters == null
+                return _parameters == null || _parameters.Length == 0
                     ? field
                     : string.Format(field, _parameters.Select(p => p?.ToString() ?? string.Empty).ToArray());
             }
