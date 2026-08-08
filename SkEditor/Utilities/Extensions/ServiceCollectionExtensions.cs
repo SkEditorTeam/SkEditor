@@ -15,6 +15,7 @@ using SkEditor.Contracts.Services.Security;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.DataTemplates;
 using SkEditor.Features;
+using SkEditor.Features.Analyzer;
 using SkEditor.Features.Editing;
 using SkEditor.Services;
 using SkEditor.Services.Files;
@@ -292,6 +293,7 @@ public static class ServiceCollectionExtensions
 
             services.AddSingleton<IAnalyzer, Analyzer>();
             services.AddTransient<IEditorFeature, AnalyzerFeature>();
+            services.AddTransient<IEditorFeature, AnalyzerTooltipFeature>();
         }
     }
 }

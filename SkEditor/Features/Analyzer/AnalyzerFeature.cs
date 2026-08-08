@@ -14,7 +14,7 @@ using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
-namespace SkEditor.Features.Editing;
+namespace SkEditor.Features.Analyzer;
 
 public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) : IEditorFeature
 {

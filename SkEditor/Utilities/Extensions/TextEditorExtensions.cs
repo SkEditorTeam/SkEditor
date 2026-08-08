@@ -1,4 +1,5 @@
 ﻿using System;
+using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using R3;
@@ -18,7 +19,20 @@ public static class TextEditorExtensions
                 .Select(x => x.e);
         }
 
-        public (int, int) GetLineLengthAndNotEmptyColumn(DocumentLine line)
+        public Observable<PointerEventArgs> PointerMovedAsObservable()
+        {
+            return Observable.FromEventHandler<PointerEventArgs>(
+                    h => editor.TextArea.TextView.PointerMoved += h,
+                    h => editor.TextArea.TextView.PointerMoved -= h
+                )
+                .Select(x => x.e);
+        }
+
+        /// <summary>
+        ///     Gets the length of the non-whitespace content of the specified line
+        ///     and the column with its first non-whitespace character.
+        /// </summary>
+        public (int length, int notEmptyColumn) GetLineLengthAndNotEmptyColumn(DocumentLine line)
         {
             int notEmptyColumn = 0;
             int length = line.Length;
