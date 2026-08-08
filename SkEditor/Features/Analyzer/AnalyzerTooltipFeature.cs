@@ -11,7 +11,6 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using R3;
-using SkEditor.Contracts.Services;
 using SkEditor.Models.Analyzer;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings;
@@ -20,14 +19,14 @@ using SkEditor.Views.Controls.Editor;
 
 namespace SkEditor.Features.Analyzer;
 
-public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotificationService notifs, ILogService logs)
+public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
     : IEditorFeature
 {
     private static readonly ErrorResultComparer Comparer = new();
 
     private Popup? _popup;
     private AnalyzerTooltipView? _tooltipView;
-    
+
     private DisposableBag _disposableBag;
     private readonly TimeSpan _tooltipDelay = TimeSpan.FromMilliseconds(500);
     private bool _tooltipShown;
@@ -37,7 +36,8 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
 
     public bool CanAttach(IFeatureTab tab)
     {
-        if (!experiments.AnalyzerEnabled || tab is not IFileTab fileTab || tab is not IDiagnosticsTab)
+        if (!experiments.AnalyzerEnabled || !experiments.AnalyzerErrorTooltipsEnabled || tab is not IFileTab fileTab ||
+            tab is not IDiagnosticsTab)
         {
             return false;
         }
@@ -108,10 +108,8 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
                 return GetErrorAndTargetRect(point, editor, diagnosticsTab);
             })
             .DistinctUntilChanged(Comparer)
-            .SubscribeAwait(async (result, ct) =>
-            {
-                await HandlePointerMoved(editor, result, diagnosticsTab, ct);
-            }, AwaitOperation.Switch)
+            .SubscribeAwait(async (result, ct) => { await HandlePointerMoved(editor, result, diagnosticsTab, ct); },
+                AwaitOperation.Switch)
             .AddTo(ref _disposableBag);
 
         Observable.FromEventHandler(

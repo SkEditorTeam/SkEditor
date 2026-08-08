@@ -40,6 +40,12 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     public partial bool AnalyzerErrorScrollMarkersEnabled { get; set; } = true;
 
     /// <summary>
+    ///     Enables the Analyzer tooltips shown when hovering on an error.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool AnalyzerErrorTooltipsEnabled { get; set; } = true;
+
+    /// <summary>
     ///     Enables the Terminal.
     /// </summary>
     [ObservableProperty]
