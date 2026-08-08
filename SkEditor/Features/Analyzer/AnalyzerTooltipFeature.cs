@@ -7,7 +7,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
-using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
@@ -17,6 +16,7 @@ using SkEditor.Models.Analyzer;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Views.Controls.Editor;
 
 namespace SkEditor.Features.Analyzer;
 
@@ -25,10 +25,12 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
 {
     private static readonly ErrorResultComparer Comparer = new();
 
+    private Popup? _popup;
+    private AnalyzerTooltipView? _tooltipView;
+    
     private DisposableBag _disposableBag;
     private readonly TimeSpan _tooltipDelay = TimeSpan.FromMilliseconds(500);
     private bool _tooltipShown;
-    private Popup? _popup;
     private bool _pointerOverPopup;
     private static readonly TimeSpan HideGracePeriod = TimeSpan.FromMilliseconds(100);
     private Point _lastPointerPosition;
@@ -52,6 +54,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
 
         _disposableBag = new DisposableBag();
 
+        _tooltipView = new AnalyzerTooltipView();
         _popup = new Popup
         {
             Topmost = false,
@@ -60,8 +63,36 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
             PlacementAnchor = PopupAnchor.BottomLeft,
             PlacementGravity = PopupGravity.BottomRight,
             PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.SlideX,
-            HorizontalOffset = -2
+            HorizontalOffset = -2,
+            Child = _tooltipView
         };
+
+        _tooltipView.PointerEntered += (_, _) => _pointerOverPopup = true;
+        _tooltipView.PointerExited += (_, _) =>
+        {
+            _pointerOverPopup = false;
+            _popup!.IsOpen = false;
+            _tooltipShown = false;
+        };
+
+        Observable.FromEventHandler<PointerEventArgs>(
+                h => _tooltipView.PointerEntered += h,
+                h => _tooltipView.PointerEntered -= h
+            )
+            .Subscribe(_ => _pointerOverPopup = true)
+            .AddTo(ref _disposableBag);
+
+        Observable.FromEventHandler<PointerEventArgs>(
+                h => _tooltipView.PointerExited += h,
+                h => _tooltipView.PointerExited -= h
+            )
+            .Subscribe(_ =>
+            {
+                _pointerOverPopup = false;
+                _popup?.IsOpen = false;
+                _tooltipShown = false;
+            })
+            .AddTo(ref _disposableBag);
 
         ((ISetLogicalParent)_popup).SetParent(editor.TextArea.TextView);
 
@@ -81,6 +112,18 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
             {
                 await HandlePointerMoved(editor, result, diagnosticsTab, ct);
             }, AwaitOperation.Switch)
+            .AddTo(ref _disposableBag);
+
+        Observable.FromEventHandler(
+                h => editor.TextArea.TextView.ScrollOffsetChanged += h,
+                h => editor.TextArea.TextView.ScrollOffsetChanged -= h
+            )
+            .Subscribe(_ =>
+            {
+                _pointerOverPopup = false;
+                _popup?.IsOpen = false;
+                _tooltipShown = false;
+            })
             .AddTo(ref _disposableBag);
     }
 
@@ -103,7 +146,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
                 return;
             }
 
-            _popup!.IsOpen = false;
+            _popup?.IsOpen = false;
             _tooltipShown = false;
             return;
         }
@@ -118,32 +161,9 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
             return;
         }
 
-        Border border = new()
-        {
-            IsHitTestVisible = true,
-            Cursor = new Cursor(StandardCursorType.Arrow),
-            Background = new SolidColorBrush(Color.Parse("#1c1c1c")),
-            BorderBrush = new SolidColorBrush(Color.Parse("#3c3c3c")),
-            BorderThickness = new Thickness(1),
-            Padding = new Thickness(8),
-            CornerRadius = new CornerRadius(7),
-            Child = new TextBlock
-            {
-                Text = error.Message,
-                Foreground = Brushes.White
-            }
-        };
-        border.PointerEntered += (_, _) => _pointerOverPopup = true;
-        border.PointerExited += (_, _) =>
-        {
-            _pointerOverPopup = false;
-            _popup!.IsOpen = false;
-            _tooltipShown = false;
-        };
-
-        _popup!.Child = border;
-        _popup.PlacementRect = currentTargetRect;
-        _popup.IsOpen = true;
+        _tooltipView?.Diagnostic = error;
+        _popup?.PlacementRect = currentTargetRect;
+        _popup?.IsOpen = true;
 
         _tooltipShown = true;
     }
@@ -203,6 +223,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments, INotification
         _lastPointerPosition = default;
 
         _popup = null;
+        _tooltipView = null;
     }
 
     private class ErrorResultComparer : IEqualityComparer<(AnalyzerError? Error, Rect TargetRect)>
