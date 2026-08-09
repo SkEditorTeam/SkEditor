@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -77,14 +78,14 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
             return;
         }
 
-        CurrentSection = section;
-
         SettingSection current = section;
         while (_parentMap.TryGetValue(current.Id, out SettingSection? parent))
         {
             parent.IsExpanded.Value = true;
             current = parent;
         }
+
+        Dispatcher.UIThread.InvokeAsync(() => { CurrentSection = section; }, DispatcherPriority.Background);
     }
 
     [RelayCommand]
