@@ -37,12 +37,24 @@
                             <Border Name="SelectionIndicator"
                                     Background="{DynamicResource NavigationViewSelectionIndicatorForeground}"
                                     Opacity="0"
+                                    RenderTransform="scaleY(0)"
                                     RenderOptions.BitmapInterpolationMode="HighQuality"
                                     RenderOptions.EdgeMode="Aliased"
                                     ClipToBounds="True"
                                     Width="{DynamicResource NavigationViewSelectionIndicatorWidth}"
                                     Height="{DynamicResource NavigationViewSelectionIndicatorHeight}"
-                                    CornerRadius="{DynamicResource NavigationViewSelectionIndicatorRadius}" />
+                                    CornerRadius="{DynamicResource NavigationViewSelectionIndicatorRadius}">
+                                <Border.Transitions>
+                                    <Transitions>
+                                        <TransformOperationsTransition Duration="00:00:00.200"
+                                                                       Property="RenderTransform"
+                                                                       Easing="0,0 0,1" />
+                                        <DoubleTransition Duration="00:00:00.200"
+                                                          Property="Opacity"
+                                                          Easing="0,0 0,1" />
+                                    </Transitions>
+                                </Border.Transitions>
+                            </Border>
                         </Panel>
 
                         <Grid Name="ContentGrid"
@@ -138,6 +150,10 @@
         </Style>
 
         <Style Selector="^:selected">
+            <Style Selector="^ /template/ Border#SelectionIndicator">
+                <Setter Property="Opacity" Value="1" />
+                <Setter Property="RenderTransform" Value="scaleY(1)" />
+            </Style>
             <Style Selector="^ /template/ Border#LayoutRoot">
                 <Setter Property="Background" Value="{DynamicResource NavigationViewItemBackgroundSelected}" />
             </Style>
