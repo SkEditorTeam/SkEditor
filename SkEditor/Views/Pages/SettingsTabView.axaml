@@ -156,6 +156,7 @@
                                         Header="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
                                         IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
+                                        ActionIconSource="{Binding ActionIcon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         IsClickEnabled="True"
                                         Command="{Binding Command}" />
@@ -200,6 +201,7 @@
                                                             IsEnabled="{Binding IsEnabled.Value}"
                                                             Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                                             IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
+                                                            ActionIconSource="{Binding ActionIcon, Converter={StaticResource StandardIconSourceConverter}}"
                                                             IsClickEnabled="True"
                                                             Command="{Binding Command}" />
                                                     </DataTemplate>
