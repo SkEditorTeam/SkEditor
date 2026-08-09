@@ -1,26 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ui="using:FluentAvalonia.UI.Controls">
-    <Design.PreviewWith>
-        <Border Padding="20" Width="700" Height="250">
-            <ui:FASettingsExpander IconSource="Globe" Header="Test Header" IsExpanded="True"
-                                   Description="This is a description for the SettingsExpander"
-                                   ActionIconSource="Save" IsClickEnabled="False">
-                <ui:FASettingsExpander.Footer>
-                    <Button Content="FooterButton" />
-                </ui:FASettingsExpander.Footer>
-
-                <ui:FASettingsExpanderItem Content="Content Here" ActionIconSource="Pin" IsClickEnabled="True" />
-                <ui:FASettingsExpanderItem Content="Content Here">
-                    <ui:FASettingsExpanderItem.Footer>
-                        <Button Content="FooterButton" />
-                    </ui:FASettingsExpanderItem.Footer>
-                </ui:FASettingsExpanderItem>
-                <ui:FASettingsExpanderItem Content="Right Content Here"
-                                           HorizontalContentAlignment="Right" />
-            </ui:FASettingsExpander>
-        </Border>
-    </Design.PreviewWith>
 
     <Thickness x:Key="SettingsExpanderItemPadding">16 10</Thickness>
     <x:Double x:Key="SettingsExpanderItemMinHeight">48</x:Double>
@@ -61,6 +41,7 @@
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
                                  IsVisible="False"
+                                 ClipToBounds="False"
                                  Name="IconHost">
                             <ContentPresenter Name="IconPresenter"
                                               Content="{Binding TemplateSettings.Icon, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -96,6 +77,7 @@
                                  Height="{DynamicResource SettingsExpanderItemActionIconSize}"
                                  Name="ActionIconHost"
                                  IsVisible="False"
+                                 ClipToBounds="False"
                                  Grid.Column="2">
                             <ContentPresenter Name="ExpandChevronActionIconContainer"
                                               Content="{Binding TemplateSettings.ActionIcon, RelativeSource={RelativeSource TemplatedParent}}" />
