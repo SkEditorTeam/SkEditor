@@ -10,10 +10,25 @@ namespace SkEditor.Analyzing;
 public interface IAnalyzer
 {
     /// <summary>
+    ///     Gets the root directory of the Analyzer.
+    /// </summary>
+    string AnalyzerRoot { get; }
+
+    /// <summary>
+    ///     Gets the directory where the Analyzer binaries are located.
+    /// </summary>
+    string BinDir { get; }
+
+    /// <summary>
+    ///     Gets the working directory where the Analyzer server runs.
+    /// </summary>
+    string WorkingDir { get; }
+
+    /// <summary>
     /// Initializes the Analyzer.
     /// </summary>
     Task Initialize();
-    
+
     /// <summary>
     /// Analyzes the given text and returns the result.
     /// </summary>

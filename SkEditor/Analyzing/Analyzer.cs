@@ -38,9 +38,11 @@ public class Analyzer(
     {
         string analyzerPath = Path.Combine(BinDir, "SkAnalyzer.jar");
         string aotPath = Path.Combine(BinDir, "skanalyzer.aot");
+        string pluginsPath = Path.Combine(WorkingDir, "plugins");
 
         Directory.CreateDirectory(WorkingDir);
         Directory.CreateDirectory(BinDir);
+        Directory.CreateDirectory(pluginsPath);
 
         if (!File.Exists(analyzerPath))
         {
