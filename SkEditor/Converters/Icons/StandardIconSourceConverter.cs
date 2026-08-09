@@ -11,22 +11,21 @@ public class StandardIconSourceConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not StandardIcon settingIcon)
+        return value is StandardIcon settingIcon
+            ? ConvertIcon(settingIcon)
+            : null;
+    }
+
+    public static object? ConvertIcon(StandardIcon icon)
+    {
+        if (icon.IsSymbol)
         {
-            return null;
+            return new SymbolIconSource { Symbol = (Symbol)icon.Value };
         }
 
-        if (settingIcon.IsSymbol)
-        {
-            return new SymbolIconSource { Symbol = (Symbol)settingIcon.Value };
-        }
-
-        if (settingIcon.IsPath)
-        {
-            return Utilities.Icons.Icons.GetPathIconSource((string)settingIcon.Value);
-        }
-
-        return null;
+        return icon.IsPath
+            ? Utilities.Icons.Icons.GetPathIconSource((string)icon.Value)
+            : null;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

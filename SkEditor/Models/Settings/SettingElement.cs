@@ -17,6 +17,7 @@ public abstract class SettingElement(TranslatableString name) : ObservableObject
 
     public BindableReactiveProperty<bool> IsEnabled { get; protected set; } = new(true);
     public BindableReactiveProperty<bool> IsVisible { get; protected set; } = new(true);
+    public BindableReactiveProperty<bool?> Status { get; protected set; } = new(null);
 }
 
 public abstract class SettingElement<T>(TranslatableString name) : SettingElement(name)
@@ -28,7 +29,7 @@ public abstract class SettingElement<T>(TranslatableString name) : SettingElemen
         return (T)this;
     }
 
-    public T WithDescription(TranslatableString description)
+    public T WithDescription(TranslatableString? description)
     {
         Description = description;
         return (T)this;
@@ -43,6 +44,18 @@ public abstract class SettingElement<T>(TranslatableString name) : SettingElemen
     public T WithEnabled(BindableReactiveProperty<bool> enabled)
     {
         IsEnabled = enabled;
+        return (T)this;
+    }
+
+    public T WithStatus(bool? status)
+    {
+        Status.Value = status;
+        return (T)this;
+    }
+
+    public T WithStatus(BindableReactiveProperty<bool?> status)
+    {
+        Status = status;
         return (T)this;
     }
 }

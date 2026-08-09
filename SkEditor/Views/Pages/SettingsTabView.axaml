@@ -11,6 +11,7 @@
              xmlns:lconverters="clr-namespace:SkEditor.Converters.Layout"
              xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
+             xmlns:sConverters="clr-namespace:SkEditor.Converters.Settings"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:SettingsTabViewModel"
@@ -30,6 +31,8 @@
         <converters:InfoBarSeverityConverter x:Key="InfoBarSeverityConverter" />
         <lconverters:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
         <lconverters:OrientationConverter x:Key="OrientationConverter" />
+
+        <sConverters:SettingIconConverter x:Key="SettingIconConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -146,39 +149,63 @@
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
-                                        IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                        Footer="{Binding}" />
+                                        Footer="{Binding}">
+                                        <controls:FASettingsExpander.IconSource>
+                                            <MultiBinding Converter="{StaticResource SettingIconConverter}">
+                                                <Binding Path="Status.Value" />
+                                                <Binding Path="Icon" />
+                                            </MultiBinding>
+                                        </controls:FASettingsExpander.IconSource>
+                                    </controls:FASettingsExpander>
                                 </DataTemplate>
 
                                 <DataTemplate x:Key="ClickableTemplate" x:DataType="types:ClickableActionSetting">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
-                                        IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         ActionIconSource="{Binding ActionIcon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         IsClickEnabled="True"
-                                        Command="{Binding Command}" />
+                                        Command="{Binding Command}">
+                                        <controls:FASettingsExpander.IconSource>
+                                            <MultiBinding Converter="{StaticResource SettingIconConverter}">
+                                                <Binding Path="Status.Value" />
+                                                <Binding Path="Icon" />
+                                            </MultiBinding>
+                                        </controls:FASettingsExpander.IconSource>
+                                    </controls:FASettingsExpander>
                                 </DataTemplate>
 
                                 <DataTemplate x:Key="InfoTemplate" x:DataType="types:InfoSetting">
                                     <controls:FAInfoBar
                                         Title="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
-                                        IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Message="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         IsOpen="True" IsClosable="False"
-                                        Severity="{Binding Type, Converter={StaticResource InfoBarSeverityConverter}}" />
+                                        Severity="{Binding Type, Converter={StaticResource InfoBarSeverityConverter}}">
+                                        <controls:FASettingsExpander.IconSource>
+                                            <MultiBinding Converter="{StaticResource SettingIconConverter}">
+                                                <Binding Path="Status.Value" />
+                                                <Binding Path="Icon" />
+                                            </MultiBinding>
+                                        </controls:FASettingsExpander.IconSource>
+                                    </controls:FAInfoBar>
                                 </DataTemplate>
 
                                 <DataTemplate x:Key="ExpandableTemplate" x:DataType="types:ExpandableSetting">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
-                                        IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                         Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
                                         ItemsSource="{Binding Children}">
+                                        <controls:FASettingsExpander.IconSource>
+                                            <MultiBinding Converter="{StaticResource SettingIconConverter}">
+                                                <Binding Path="Status.Value" />
+                                                <Binding Path="Icon" />
+                                            </MultiBinding>
+                                        </controls:FASettingsExpander.IconSource>
+                                        
                                         <controls:FASettingsExpander.ItemTemplate>
                                             <dataTemplates:ExpanderItemTemplateFactory>
                                                 <dataTemplates:ExpanderItemTemplateFactory.Templates>
@@ -189,8 +216,20 @@
                                                             IsVisible="{Binding IsVisible.Value}"
                                                             IsEnabled="{Binding IsEnabled.Value}"
                                                             Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                            IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
-                                                            Footer="{Binding}" />
+                                                            Footer="{Binding}">
+                                                            <controls:FASettingsExpanderItem.IconSource>
+                                                                <MultiBinding
+                                                                    Converter="{StaticResource SettingIconConverter}">
+                                                                    <Binding Path="Status.Value" />
+                                                                    <Binding Path="Icon" />
+                                                                </MultiBinding>
+                                                            </controls:FASettingsExpanderItem.IconSource>
+                                                            <controls:FASettingsExpanderItem.Resources>
+                                                                <x:Double x:Key="SettingsExpanderItemIconSize">20</x:Double>
+                                                                <Thickness x:Key="SettingsExpanderItemPadding">22,10,16,10</Thickness>
+                                                                <Thickness x:Key="SettingsExpanderItemContentMargin">37,0,0,0</Thickness>
+                                                            </controls:FASettingsExpanderItem.Resources>
+                                                        </controls:FASettingsExpanderItem>
                                                     </DataTemplate>
 
                                                     <DataTemplate x:Key="ClickableExpanderItemTemplate"
@@ -200,10 +239,22 @@
                                                             IsVisible="{Binding IsVisible.Value}"
                                                             IsEnabled="{Binding IsEnabled.Value}"
                                                             Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                            IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}"
                                                             ActionIconSource="{Binding ActionIcon, Converter={StaticResource StandardIconSourceConverter}}"
                                                             IsClickEnabled="True"
-                                                            Command="{Binding Command}" />
+                                                            Command="{Binding Command}">
+                                                            <controls:FASettingsExpanderItem.IconSource>
+                                                                <MultiBinding
+                                                                    Converter="{StaticResource SettingIconConverter}">
+                                                                    <Binding Path="Status.Value" />
+                                                                    <Binding Path="Icon" />
+                                                                </MultiBinding>
+                                                            </controls:FASettingsExpanderItem.IconSource>
+                                                            <controls:FASettingsExpanderItem.Resources>
+                                                                <x:Double x:Key="SettingsExpanderItemIconSize">20</x:Double>
+                                                                <Thickness x:Key="SettingsExpanderItemPadding">22,10,16,10</Thickness>
+                                                                <Thickness x:Key="SettingsExpanderItemContentMargin">37,0,0,0</Thickness>
+                                                            </controls:FASettingsExpanderItem.Resources>
+                                                        </controls:FASettingsExpanderItem>
                                                     </DataTemplate>
 
                                                     <DataTemplate x:Key="InfoExpanderItemTemplate"
@@ -211,8 +262,14 @@
                                                         <controls:FASettingsExpanderItem Content="{Binding Name.Value}"
                                                                 IsVisible="{Binding IsVisible.Value}"
                                                                 IsEnabled="{Binding IsEnabled.Value}"
-                                                                Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
-                                                                IconSource="{Binding Icon, Converter={StaticResource StandardIconSourceConverter}}">
+                                                                Description="{Binding Description.Value, FallbackValue='{x:Null}'}">
+                                                            <controls:FASettingsExpanderItem.IconSource>
+                                                                <MultiBinding
+                                                                    Converter="{StaticResource SettingIconConverter}">
+                                                                    <Binding Path="Status.Value" />
+                                                                    <Binding Path="Icon" />
+                                                                </MultiBinding>
+                                                            </controls:FASettingsExpanderItem.IconSource>
                                                             <controls:FASettingsExpanderItem.Resources>
                                                                 <x:Double x:Key="SettingsExpanderItemIconSize">20</x:Double>
                                                                 <Thickness x:Key="SettingsExpanderItemPadding">22,10,16,10</Thickness>
