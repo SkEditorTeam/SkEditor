@@ -1,4 +1,7 @@
-﻿using FluentIcons.Common;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using FluentIcons.Common;
+using R3;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
 using SkEditor.Utilities.Extensions;
@@ -7,7 +10,7 @@ using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.Experi
 
 namespace SkEditor.Utilities.Settings.Providers.Sections;
 
-public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettingsSectionProvider
+public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenger messenger) : ISettingsSectionProvider
 {
     public SettingSection GetSection()
     {
@@ -61,7 +64,7 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                     .WithDescription(
                         "Enables the Analyzer feature, which provides real-time code analysis and suggestions."
                             .ToTranslatable())
-                    .WithIcon(Symbol.Search)
+                    .WithIcon(Symbol.DocumentSearch)
                     .WithChildren(
                         InfoSetting
                             .Create("Important!".ToTranslatable())
@@ -72,24 +75,12 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments) : ISettin
                         ToggleSetting
                             .Create("Enable Analyzer".ToTranslatable())
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerEnabled)),
-                        ToggleSetting
-                            .Create("Show scrollbar markers".ToTranslatable())
-                            .WithDescription(
-                                "Displays colored error and warning indicators directly on the editor scrollbar."
-                                    .ToTranslatable())
-                            .WithProperty(
-                                experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerErrorScrollMarkersEnabled)),
-                        ToggleSetting
-                            .Create("Diagnostic tooltips".ToTranslatable())
-                            .WithDescription("Shows a tooltip with issue details when you hover over code errors."
-                                .ToTranslatable())
-                            .WithProperty(
-                                experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerErrorTooltipsEnabled))
-                        // ClickableActionSetting
-                        //     .Create("Go to Analyzer settings".ToTranslatable())
-                        //     .WithAction(() => messenger.Send(new NavigateToSettingsSectionMessage("Analyzer")))
-                        //     .WithEnabled(experiments.ObservePropertyChanged(x => x.AnalyzerEnabled)
-                        //         .ToBindableReactiveProperty())
+                        ClickableActionSetting
+                            .Create("Go to Analyzer settings".ToTranslatable())
+                            .WithAction(() => messenger.Send(new NavigateToSettingsSectionMessage("Analyzer")))
+                            .WithActionIcon(Symbol.ChevronRight)
+                            .WithEnabled(experiments.ObservePropertyChanged(x => x.AnalyzerEnabled)
+                                .ToBindableReactiveProperty())
                     ),
 
                 ExpandableSetting
