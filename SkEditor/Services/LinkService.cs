@@ -5,7 +5,7 @@ using SkEditor.Contracts.Services;
 
 namespace SkEditor.Services;
 
-public class LinkService : ILinkService
+public class LinkService(ILogService logs) : ILinkService
 {
     public void OpenLink(string url)
     {
@@ -14,6 +14,12 @@ public class LinkService : ILinkService
 
     public void OpenFolder(string path)
     {
+        if (!Directory.Exists(path))
+        {
+            logs.Warning($"Attempted to open folder '{path}', but it doesn't exist.");
+            return;
+        }
+        
         if (OperatingSystem.IsWindows())
         {
             Process.Start(new ProcessStartInfo
