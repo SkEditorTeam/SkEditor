@@ -12,6 +12,7 @@
              xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
              xmlns:sConverters="clr-namespace:SkEditor.Converters.Settings"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:SettingsTabViewModel"
@@ -87,7 +88,13 @@
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type types:ActionSetting}">
-            <Button Content="{Binding Text}" Command="{Binding Command}" />
+            <Button Command="{Binding Command}"
+                    IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                <StackPanel Spacing="6" Orientation="Horizontal">
+                    <TextBlock Text="{Binding Text}" FontSize="14" />
+                    <icons:SymbolIcon Symbol="Open" FontSize="14" IsVisible="{Binding IsExternal}" />
+                </StackPanel>
+            </Button>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type types:CompoundSetting}">

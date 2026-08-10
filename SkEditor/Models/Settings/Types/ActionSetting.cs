@@ -9,37 +9,44 @@ public class ActionSetting(TranslatableString name) : SettingElement<ActionSetti
 {
     public IRelayCommand? Command { get; private set; }
     public TranslatableString? Text { get; private set; }
+    public bool? IsExternal { get; private set; } = false;
 
     public static ActionSetting Create(TranslatableString name)
     {
         return new ActionSetting(name);
     }
 
-    public ActionSetting WithAction(TranslatableString text, Action action)
+    public ActionSetting WithAction(TranslatableString? text, Action action)
     {
         Text = text;
         Command = new RelayCommand(action);
         return this;
     }
 
-    public ActionSetting WithAction(TranslatableString text, Func<Task> action)
+    public ActionSetting WithAction(TranslatableString? text, Func<Task> action)
     {
         Text = text;
         Command = new AsyncRelayCommand(action);
         return this;
     }
 
-    public ActionSetting WithAction(TranslatableString text, Action<ActionSetting> action)
+    public ActionSetting WithAction(TranslatableString? text, Action<ActionSetting> action)
     {
         Text = text;
         Command = new RelayCommand(() => action(this));
         return this;
     }
 
-    public ActionSetting WithAction(TranslatableString text, Func<ActionSetting, Task> action)
+    public ActionSetting WithAction(TranslatableString? text, Func<ActionSetting, Task> action)
     {
         Text = text;
         Command = new AsyncRelayCommand(() => action(this));
+        return this;
+    }
+
+    public ActionSetting AsExternal()
+    {
+        IsExternal = true;
         return this;
     }
 }
