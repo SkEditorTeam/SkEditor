@@ -64,6 +64,16 @@ public class AnalyzerProcessBuilder : IAnalyzerProcessBuilder
         startInfo.ArgumentList.Add(classpath);
         startInfo.ArgumentList.Add("me.glicz.skanalyzer.shell.SkAnalyzerShell");
 
+        string? binDir = Directory.GetParent(analyzerPath)?.FullName;
+        string? skriptJar = binDir != null
+            ? Path.Combine(binDir, "Skript.jar")
+            : null;
+
+        if (File.Exists(skriptJar))
+        {
+            startInfo.ArgumentList.Add($"--add-plugin={skriptJar}");
+        }
+
         return startInfo;
     }
 }
