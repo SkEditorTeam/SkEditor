@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
+using R3;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings.Types;
 
-public class ExpandableSetting(TranslatableString name) : SettingElement<ExpandableSetting>(name)
+public class ExpandableSetting(BindableReactiveProperty<TranslatableString> name)
+    : SettingElement<ExpandableSetting>(name)
 {
     public List<SettingElement> Children { get; } = [];
 
     public static ExpandableSetting Create(TranslatableString name)
+    {
+        return new ExpandableSetting(new BindableReactiveProperty<TranslatableString>(name));
+    }
+
+    public static ExpandableSetting Create(BindableReactiveProperty<TranslatableString> name)
     {
         return new ExpandableSetting(name);
     }

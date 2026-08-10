@@ -1,10 +1,11 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using R3;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings.Types;
 
-public partial class TextSetting(TranslatableString name) : SettingElement<TextSetting>(name)
+public partial class TextSetting(BindableReactiveProperty<TranslatableString> name) : SettingElement<TextSetting>(name)
 {
     public (Func<string> Get, Action<string> Set) Property
     {
@@ -33,6 +34,11 @@ public partial class TextSetting(TranslatableString name) : SettingElement<TextS
     }
 
     public static TextSetting Create(TranslatableString name)
+    {
+        return new TextSetting(new BindableReactiveProperty<TranslatableString>(name));
+    }
+
+    public static TextSetting Create(BindableReactiveProperty<TranslatableString> name)
     {
         return new TextSetting(name);
     }

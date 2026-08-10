@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using R3;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings.Types;
@@ -14,7 +15,7 @@ public interface INumberSetting
     object? Value { get; set; }
 }
 
-public partial class NumberSetting<T>(TranslatableString name)
+public partial class NumberSetting<T>(BindableReactiveProperty<TranslatableString> name)
     : SettingElement<NumberSetting<T>>(name), INumberSetting where T : struct, INumber<T>
 {
     public (Func<T> Get, Action<T> Set) Property
@@ -55,6 +56,11 @@ public partial class NumberSetting<T>(TranslatableString name)
     }
 
     public static NumberSetting<T> Create(TranslatableString name)
+    {
+        return new NumberSetting<T>(new BindableReactiveProperty<TranslatableString>(name));
+    }
+
+    public static NumberSetting<T> Create(BindableReactiveProperty<TranslatableString> name)
     {
         return new NumberSetting<T>(name);
     }

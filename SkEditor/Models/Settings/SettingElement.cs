@@ -5,9 +5,9 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings;
 
-public abstract class SettingElement(TranslatableString name) : ObservableObject
+public abstract class SettingElement(BindableReactiveProperty<TranslatableString> name) : ObservableObject
 {
-    public TranslatableString Name { get; set; } = name;
+    public BindableReactiveProperty<TranslatableString> Name { get; set; } = name;
     public StandardIcon? Icon { get; protected set; }
     public BindableReactiveProperty<TranslatableString?> Description { get; protected set; } = new(null);
 
@@ -20,7 +20,7 @@ public abstract class SettingElement(TranslatableString name) : ObservableObject
     public BindableReactiveProperty<bool?> Status { get; protected set; } = new(null);
 }
 
-public abstract class SettingElement<T>(TranslatableString name) : SettingElement(name)
+public abstract class SettingElement<T>(BindableReactiveProperty<TranslatableString> name) : SettingElement(name)
     where T : SettingElement<T>
 {
     public T WithIcon(StandardIcon icon)

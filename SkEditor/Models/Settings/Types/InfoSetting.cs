@@ -1,8 +1,9 @@
-﻿using SkEditor.Utilities.Localization;
+using R3;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings.Types;
 
-public class InfoSetting(TranslatableString name) : SettingElement<InfoSetting>(name)
+public class InfoSetting(BindableReactiveProperty<TranslatableString> name) : SettingElement<InfoSetting>(name)
 {
     public enum InfoType
     {
@@ -14,6 +15,11 @@ public class InfoSetting(TranslatableString name) : SettingElement<InfoSetting>(
     public InfoType Type { get; set; } = InfoType.Info;
 
     public static InfoSetting Create(TranslatableString name)
+    {
+        return new InfoSetting(new BindableReactiveProperty<TranslatableString>(name));
+    }
+
+    public static InfoSetting Create(BindableReactiveProperty<TranslatableString> name)
     {
         return new InfoSetting(name);
     }

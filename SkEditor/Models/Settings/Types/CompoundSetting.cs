@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using R3;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings.Types;
 
-public class CompoundSetting(TranslatableString name) : SettingElement<CompoundSetting>(name)
+public class CompoundSetting(BindableReactiveProperty<TranslatableString> name) : SettingElement<CompoundSetting>(name)
 {
     public List<SettingElement> Children { get; } = [];
 
@@ -13,6 +14,11 @@ public class CompoundSetting(TranslatableString name) : SettingElement<CompoundS
     public override double Width => Children.Count == 0 ? base.Width : Children.Max(c => c.Width);
 
     public static CompoundSetting Create(TranslatableString name)
+    {
+        return new CompoundSetting(new BindableReactiveProperty<TranslatableString>(name));
+    }
+
+    public static CompoundSetting Create(BindableReactiveProperty<TranslatableString> name)
     {
         return new CompoundSetting(name);
     }

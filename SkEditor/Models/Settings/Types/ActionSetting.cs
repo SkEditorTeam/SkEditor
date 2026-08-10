@@ -6,7 +6,7 @@ using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Models.Settings.Types;
 
-public class ActionSetting(TranslatableString name) : SettingElement<ActionSetting>(name)
+public class ActionSetting(BindableReactiveProperty<TranslatableString> name) : SettingElement<ActionSetting>(name)
 {
     public IRelayCommand? Command { get; private set; }
     public BindableReactiveProperty<TranslatableString?> Text { get; private set; } = new(null);
@@ -14,6 +14,11 @@ public class ActionSetting(TranslatableString name) : SettingElement<ActionSetti
     public bool? IsExternal { get; private set; } = false;
 
     public static ActionSetting Create(TranslatableString name)
+    {
+        return new ActionSetting(new BindableReactiveProperty<TranslatableString>(name));
+    }
+
+    public static ActionSetting Create(BindableReactiveProperty<TranslatableString> name)
     {
         return new ActionSetting(name);
     }

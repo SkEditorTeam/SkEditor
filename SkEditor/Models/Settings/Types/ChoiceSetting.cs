@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using R3;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Providers.Choice;
 
@@ -15,7 +16,8 @@ public interface IChoiceSetting
     object? SelectedItem { get; set; }
 }
 
-public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement<ChoiceSetting<T>>(name), IChoiceSetting
+public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableString> name)
+    : SettingElement<ChoiceSetting<T>>(name), IChoiceSetting
 {
     public (Func<T> Get, Action<T> Set) Property
     {
@@ -46,6 +48,11 @@ public partial class ChoiceSetting<T>(TranslatableString name) : SettingElement<
     }
 
     public static ChoiceSetting<T> Create(TranslatableString name)
+    {
+        return new ChoiceSetting<T>(new BindableReactiveProperty<TranslatableString>(name));
+    }
+
+    public static ChoiceSetting<T> Create(BindableReactiveProperty<TranslatableString> name)
     {
         return new ChoiceSetting<T>(name);
     }
