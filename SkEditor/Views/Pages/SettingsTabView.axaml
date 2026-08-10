@@ -89,10 +89,11 @@
 
         <DataTemplate DataType="{x:Type types:ActionSetting}">
             <Button Command="{Binding Command}"
-                    IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                    IsVisible="{Binding IsButtonVisible.Value}">
                 <StackPanel Spacing="6" Orientation="Horizontal">
                     <TextBlock Text="{Binding Text}" FontSize="14" />
-                    <icons:SymbolIcon Symbol="Open" FontSize="14" IsVisible="{Binding IsExternal}" />
+                    <icons:SymbolIcon Symbol="Open" FontSize="13" IsVisible="{Binding IsExternal}"
+                                      VerticalAlignment="Center" Margin="0,1,0,0" />
                 </StackPanel>
             </Button>
         </DataTemplate>
@@ -156,7 +157,7 @@
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
-                                        Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                        Description="{Binding Description.Value.Value, FallbackValue='{x:Null}'}"
                                         Footer="{Binding}">
                                         <controls:FASettingsExpander.IconSource>
                                             <MultiBinding Converter="{StaticResource SettingIconConverter}">
@@ -172,7 +173,7 @@
                                         Header="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
                                         ActionIconSource="{Binding ActionIcon, Converter={StaticResource StandardIconSourceConverter}}"
-                                        Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                        Description="{Binding Description.Value.Value, FallbackValue='{x:Null}'}"
                                         IsClickEnabled="True"
                                         Command="{Binding Command}">
                                         <controls:FASettingsExpander.IconSource>
@@ -188,7 +189,7 @@
                                     <controls:FAInfoBar
                                         Title="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
-                                        Message="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                        Message="{Binding Description.Value.Value, FallbackValue='{x:Null}'}"
                                         IsOpen="True" IsClosable="False"
                                         Severity="{Binding Type, Converter={StaticResource InfoBarSeverityConverter}}">
                                         <controls:FASettingsExpander.IconSource>
@@ -204,7 +205,7 @@
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
-                                        Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                        Description="{Binding Description.Value.Value, FallbackValue='{x:Null}'}"
                                         ItemsSource="{Binding Children}">
                                         <controls:FASettingsExpander.IconSource>
                                             <MultiBinding Converter="{StaticResource SettingIconConverter}">
@@ -222,7 +223,7 @@
                                                             Content="{Binding Name.Value}"
                                                             IsVisible="{Binding IsVisible.Value}"
                                                             IsEnabled="{Binding IsEnabled.Value}"
-                                                            Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                            Description="{Binding Description.Value.Value, FallbackValue='{x:Null}'}"
                                                             Footer="{Binding}">
                                                             <controls:FASettingsExpanderItem.IconSource>
                                                                 <MultiBinding
@@ -245,7 +246,7 @@
                                                             Content="{Binding Name.Value}"
                                                             IsVisible="{Binding IsVisible.Value}"
                                                             IsEnabled="{Binding IsEnabled.Value}"
-                                                            Description="{Binding Description.Value, FallbackValue='{x:Null}'}"
+                                                            Description="{Binding Description.Value.Value, FallbackValue='{x:Null}'}"
                                                             ActionIconSource="{Binding ActionIcon, Converter={StaticResource StandardIconSourceConverter}}"
                                                             IsClickEnabled="True"
                                                             Command="{Binding Command}">
@@ -269,7 +270,7 @@
                                                         <controls:FASettingsExpanderItem Content="{Binding Name.Value}"
                                                                 IsVisible="{Binding IsVisible.Value}"
                                                                 IsEnabled="{Binding IsEnabled.Value}"
-                                                                Description="{Binding Description.Value, FallbackValue='{x:Null}'}">
+                                                                Description="{Binding Description.Value.Value, FallbackValue='{x:Null}'}">
                                                             <controls:FASettingsExpanderItem.IconSource>
                                                                 <MultiBinding
                                                                     Converter="{StaticResource SettingIconConverter}">

@@ -77,7 +77,7 @@ public class AppearanceSectionProvider(
                             .WithAction(TranslationKey.ButtonChange, async s =>
                             {
                                 await SelectFont();
-                                s.Description?.UpdateParameters(GetFontName());
+                                s.Description.Value?.UpdateParameters(GetFontName());
                             }),
                         NumberSetting<int>
                             .Create(TranslationKey.SettingsAppearanceFontSize)

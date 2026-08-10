@@ -9,7 +9,7 @@ public abstract class SettingElement(TranslatableString name) : ObservableObject
 {
     public TranslatableString Name { get; set; } = name;
     public StandardIcon? Icon { get; protected set; }
-    public TranslatableString? Description { get; protected set; }
+    public BindableReactiveProperty<TranslatableString?> Description { get; protected set; } = new(null);
 
     public SettingElement? Parent { get; set; }
 
@@ -31,7 +31,19 @@ public abstract class SettingElement<T>(TranslatableString name) : SettingElemen
 
     public T WithDescription(TranslatableString? description)
     {
+        Description.Value = description;
+        return (T)this;
+    }
+
+    public T WithDescription(BindableReactiveProperty<TranslatableString?> description)
+    {
         Description = description;
+        return (T)this;
+    }
+
+    public T WithDescription(Observable<TranslatableString?> description)
+    {
+        Description = description.ToBindableReactiveProperty();
         return (T)this;
     }
 
@@ -56,6 +68,12 @@ public abstract class SettingElement<T>(TranslatableString name) : SettingElemen
     public T WithStatus(BindableReactiveProperty<bool?> status)
     {
         Status = status;
+        return (T)this;
+    }
+
+    public T WithStatus(BindableReactiveProperty<bool> status)
+    {
+        Status = status.Select(b => (bool?)b).ToBindableReactiveProperty();
         return (T)this;
     }
 }
