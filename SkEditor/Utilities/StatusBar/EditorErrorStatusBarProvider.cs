@@ -6,8 +6,11 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
+using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
+using SkEditor.Models.Notifications;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.StatusBar.Panes;
@@ -28,10 +31,11 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
 
     private readonly Dictionary<IFileTab, AnalyzerResult> _results = new();
     private readonly ITabService _tabs;
+    private readonly INotificationService _notifs;
     private DisposableBag _disposables;
 
     public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments, ITabService tabs,
-        IMessenger messenger)
+        IMessenger messenger, INotificationService notifs)
     {
         _pane = drawer.GetPane<ErrorListPaneViewModel>() ??
                 throw new InvalidOperationException("ErrorListPaneViewModel not found");
@@ -62,6 +66,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
             .AddTo(ref _disposables);
 
         _tabs = tabs;
+        _notifs = notifs;
 
         Observable.FromEvent<TabViewModelBase?>(
                 h => tabs.SelectedTabChanged += h,
@@ -97,6 +102,16 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
     public void Receive(AnalyzerFailedToLoadMessage message)
     {
         _item.IsVisible = false;
+
+        Notification notification = Notification
+            .Create("Analyzer failed to load".ToTranslatable())
+            .WithMessage(
+                "The required components may be missing or incompatible. Check the settings for more information."
+                    .ToTranslatable())
+            .WithDuration(TimeSpan.FromSeconds(10))
+            .WithType(NotificationType.Error);
+
+        _notifs.Show(notification);
     }
     
     public ReadOnlyReactiveProperty<bool> CanAttach { get; }
