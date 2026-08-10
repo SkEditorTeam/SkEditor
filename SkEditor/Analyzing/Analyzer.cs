@@ -28,16 +28,18 @@ public class Analyzer(
     IAnalyzerProcessRunner processRunner,
     IAnalyzerProtocolHandler protocolHandler) : IAnalyzer, IDisposable
 {
+    private readonly SemaphoreSlim _analyzeLock = new(1, 1);
+    private string? _aotPath;
     public string AnalyzerRoot => Path.Combine(configs.GetAppDataPath(), "Analyzer");
     public string BinDir => Path.Combine(AnalyzerRoot, "Binaries");
     public string WorkingDir => Path.Combine(AnalyzerRoot, "Server");
 
-    private readonly SemaphoreSlim _analyzeLock = new(1, 1);
+    public bool IsRunning => processRunner.IsRunning;
 
     public async Task Initialize()
     {
         string analyzerPath = Path.Combine(BinDir, "SkAnalyzer.jar");
-        string aotPath = Path.Combine(BinDir, "skanalyzer.aot");
+        _aotPath = Path.Combine(BinDir, "skanalyzer.aot");
         string pluginsPath = Path.Combine(WorkingDir, "plugins");
 
         Directory.CreateDirectory(WorkingDir);
@@ -50,24 +52,23 @@ public class Analyzer(
             return;
         }
 
+        messenger.Send(new AnalyzerUnloadedMessage());
+
         await bootstrapper.EnsureLibrariesExtractedAsync(analyzerPath, WorkingDir);
 
-        if (!File.Exists(aotPath))
+        if (!File.Exists(_aotPath))
         {
-            await aotManager.GenerateAotCacheAsync(WorkingDir, analyzerPath, aotPath);
+            await aotManager.GenerateAotCacheAsync(WorkingDir, analyzerPath, _aotPath);
         }
 
-        processRunner.OutputDataReceived += (_, data) => protocolHandler.HandleOutputData(data);
-        processRunner.ErrorDataReceived += (_, data) => protocolHandler.HandleErrorData(data);
-        processRunner.ProcessExited += OnProcessExited;
-
-        protocolHandler.CorruptedAotDetected += (_, _) => { aotManager.CleanupCorruptAot(aotPath); };
+        UnsubscribeEvents();
+        SubscribeEvents();
 
         protocolHandler.ResetState();
 
         try
         {
-            ProcessStartInfo startInfo = processBuilder.BuildProcessStartInfo(WorkingDir, analyzerPath, aotPath);
+            ProcessStartInfo startInfo = processBuilder.BuildProcessStartInfo(WorkingDir, analyzerPath, _aotPath);
             processRunner.Start(startInfo);
         }
         catch (Exception ex)
@@ -113,8 +114,43 @@ public class Analyzer(
 
     public void Dispose()
     {
+        UnsubscribeEvents();
         processRunner.Dispose();
         GC.SuppressFinalize(this);
+    }
+
+    private void SubscribeEvents()
+    {
+        processRunner.OutputDataReceived += OnOutputDataReceived;
+        processRunner.ErrorDataReceived += OnErrorDataReceived;
+        processRunner.ProcessExited += OnProcessExited;
+        protocolHandler.CorruptedAotDetected += OnCorruptedAotDetected;
+    }
+
+    private void UnsubscribeEvents()
+    {
+        processRunner.OutputDataReceived -= OnOutputDataReceived;
+        processRunner.ErrorDataReceived -= OnErrorDataReceived;
+        processRunner.ProcessExited -= OnProcessExited;
+        protocolHandler.CorruptedAotDetected -= OnCorruptedAotDetected;
+    }
+
+    private void OnOutputDataReceived(object? sender, string data)
+    {
+        protocolHandler.HandleOutputData(data);
+    }
+
+    private void OnErrorDataReceived(object? sender, string data)
+    {
+        protocolHandler.HandleErrorData(data);
+    }
+
+    private void OnCorruptedAotDetected(object? sender, EventArgs e)
+    {
+        if (_aotPath != null)
+        {
+            aotManager.CleanupCorruptAot(_aotPath);
+        }
     }
 
     private void OnProcessExited(object? sender, EventArgs e)

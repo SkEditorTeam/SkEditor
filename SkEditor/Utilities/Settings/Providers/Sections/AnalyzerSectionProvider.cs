@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using FluentIcons.Common;
@@ -20,7 +21,8 @@ public class AnalyzerSectionProvider(
     ILinkService links,
     IAnalyzer analyzer,
     IFilePickerService filePicker,
-    INotificationService notifs) : ISettingsSectionProvider
+    INotificationService notifs,
+    ILogService logs) : ISettingsSectionProvider
 {
     public string ParentId => "Editor";
 
@@ -28,7 +30,8 @@ public class AnalyzerSectionProvider(
     {
         string pluginsDir = Path.Combine(analyzer.WorkingDir, "plugins");
 
-        BindableReactiveProperty<bool> isJavaValid = new(CheckJava25());
+        BindableReactiveProperty<bool> isJavaValid = new(false);
+        _ = Task.Run(async () => { isJavaValid.Value = await CheckJava25(); });
 
         BindableReactiveProperty<bool> isAnalyzerPresent =
             new(File.Exists(Path.Combine(analyzer.BinDir, "SkAnalyzer.jar")));
@@ -39,6 +42,31 @@ public class AnalyzerSectionProvider(
                 isSkriptPresent,
                 (j, a, s) => j && a && s)
             .ToBindableReactiveProperty();
+
+        isEverythingReady.SubscribeAwait(async (v, _) =>
+        {
+            if (!v || analyzer.IsRunning)
+            {
+                return;
+            }
+
+            try
+            {
+                await analyzer.Initialize();
+            }
+            catch (Exception ex)
+            {
+                Notification notification = Notification
+                    .Create("Analyzer failed to load".ToTranslatable())
+                    .WithMessage(
+                        "Something went wrong while starting the Analyzer. Take a look at the logs for more information."
+                            .ToTranslatable())
+                    .WithType(NotificationType.Error);
+                notifs.Show(notification);
+
+                logs.Error(ex, "Failed to initialize Analyzer process.");
+            }
+        }, AwaitOperation.Drop);
 
         BindableReactiveProperty<TranslatableString> everythingTitle = isEverythingReady
             .Select(v => v
@@ -73,7 +101,7 @@ public class AnalyzerSectionProvider(
 
                 ExpandableSetting
                     .Create("Tools".ToTranslatable())
-                    .WithDescription("Manage Skript addons and other server plugins.".ToTranslatable())
+                    .WithDescription("Manage Skript addons and analyzer process state.".ToTranslatable())
                     .WithIcon(Symbol.Wrench)
                     .WithChildren(
                         ActionSetting
@@ -82,6 +110,64 @@ public class AnalyzerSectionProvider(
                             {
                                 Directory.CreateDirectory(pluginsDir);
                                 links.OpenFolder(pluginsDir);
+                            }),
+                        ActionSetting
+                            .Create("Restart".ToTranslatable())
+                            .WithDescription(
+                                "Restarts the Analyzer process if it hanged, crashed, or you're just feeling like it."
+                                    .ToTranslatable())
+                            .WithAction("Restart".ToTranslatable(), async () =>
+                            {
+                                try
+                                {
+                                    await analyzer.Initialize();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Notification notification = Notification
+                                        .Create("Restart failed".ToTranslatable())
+                                        .WithMessage(
+                                            "Something went wrong while restarting the Analyzer. Take a look at the logs for more information."
+                                                .ToTranslatable())
+                                        .WithType(NotificationType.Error);
+                                    notifs.Show(notification);
+
+                                    logs.Error(ex, "Failed to restart the Analyzer process.");
+                                }
+                            }),
+                        ActionSetting
+                            .Create("Clear AOT cache".ToTranslatable())
+                            .WithDescription(
+                                "Deletes the generated .aot cache file. It will be recreated on the next startup."
+                                    .ToTranslatable())
+                            .WithAction("Clear".ToTranslatable(), () =>
+                            {
+                                string aotPath = Path.Combine(analyzer.BinDir, "skanalyzer.aot");
+                                if (!File.Exists(aotPath))
+                                {
+                                    return;
+                                }
+
+                                try
+                                {
+                                    File.Delete(aotPath);
+
+                                    Notification notification = Notification
+                                        .Create("AOT cache cleared".ToTranslatable())
+                                        .WithMessage(
+                                            "AOT cache file deleted. Restart the Analyzer to regenerate it."
+                                                .ToTranslatable())
+                                        .WithType(NotificationType.Success);
+                                    notifs.Show(notification);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Notification notification = Notification
+                                        .Create("Error".ToTranslatable())
+                                        .WithMessage($"Failed to delete AOT cache: {ex.Message}".ToTranslatable())
+                                        .WithType(NotificationType.Error);
+                                    notifs.Show(notification);
+                                }
                             })
                     ),
 
@@ -106,7 +192,7 @@ public class AnalyzerSectionProvider(
         return section;
     }
 
-    private ActionSetting GetJavaSetting(BindableReactiveProperty<bool> isJavaValid)
+    private CompoundSetting GetJavaSetting(BindableReactiveProperty<bool> isJavaValid)
     {
         BindableReactiveProperty<TranslatableString?> description = isJavaValid
             .Select(v => v
@@ -114,13 +200,19 @@ public class AnalyzerSectionProvider(
                 : "Java 25 was not found in PATH. SkAnalyzer requires JRE 25 to run.".ToTranslatable())
             .ToBindableReactiveProperty();
 
-        return ActionSetting
+        return CompoundSetting
             .Create("Java 25 runtime".ToTranslatable())
             .WithDescription(description)
-            .AsExternal()
-            .WithAction("Download".ToTranslatable(),
-                () => { links.OpenLink("https://adoptium.net/"); })
-            .WithButtonVisible(isJavaValid.Select(v => !v).ToBindableReactiveProperty())
+            .WithChildren(
+                ActionSetting.Create("Download".ToTranslatable())
+                    .AsExternal()
+                    .WithButtonVisible(isJavaValid.Select(v => !v).ToBindableReactiveProperty())
+                    .WithAction("Download".ToTranslatable(),
+                        () => { links.OpenLink("https://adoptium.net/"); }),
+                ActionSetting.Create("Check".ToTranslatable())
+                    .WithButtonVisible(isJavaValid.Select(v => !v).ToBindableReactiveProperty())
+                    .WithAction("Check".ToTranslatable(), async () => { isJavaValid.Value = await CheckJava25(); })
+            )
             .WithStatus(isJavaValid);
     }
 
@@ -219,7 +311,7 @@ public class AnalyzerSectionProvider(
         return null;
     }
 
-    private static bool CheckJava25()
+    private static async Task<bool> CheckJava25()
     {
         Process? process = null;
         try
@@ -237,8 +329,8 @@ public class AnalyzerSectionProvider(
                 }
             };
             process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
+            string output = await process.StandardOutput.ReadToEndAsync();
+            await process.WaitForExitAsync();
             return output.Contains(" 25") || output.Contains("25.");
         }
         catch

@@ -22,6 +22,7 @@ using SkEditor.ViewModels.Tabs.Capabilities;
 namespace SkEditor.Utilities.StatusBar;
 
 public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<AnalyzerLoadedMessage>,
+    IRecipient<AnalyzerUnloadedMessage>,
     IRecipient<AnalyzerStatusChangedMessage>,
     IRecipient<AnalyzerResultUpdatedMessage>,
     IRecipient<AnalyzerFailedToLoadMessage>
@@ -75,6 +76,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
             .AddTo(ref _disposables);
 
         messenger.Register<AnalyzerLoadedMessage>(this);
+        messenger.Register<AnalyzerUnloadedMessage>(this);
         messenger.Register<AnalyzerStatusChangedMessage>(this);
         messenger.Register<AnalyzerResultUpdatedMessage>(this);
         messenger.Register<AnalyzerFailedToLoadMessage>(this);
@@ -85,7 +87,16 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
 
     public void Receive(AnalyzerLoadedMessage message)
     {
+        _item.IsVisible = true;
         IsAnalyzerLoaded.Value = true;
+    }
+
+    public void Receive(AnalyzerUnloadedMessage message)
+    {
+        _item.IsVisible = true;
+        IsAnalyzerLoaded.Value = false;
+        _results.Clear();
+        UpdateState();
     }
 
     public void Receive(AnalyzerResultUpdatedMessage message)
@@ -147,8 +158,9 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
 
         Symbol icon = IsAnalyzerLoaded.Value switch
         {
-            false or true when IsAnalyzing.Value => Symbol.SpinnerIos,
-            false or true when !_pane.IsFileAnalyzable.Value => Symbol.CircleHint,
+            false => Symbol.SpinnerIos,
+            true when IsAnalyzing.Value => Symbol.SpinnerIos,
+            true when !_pane.IsFileAnalyzable.Value => Symbol.CircleHint,
             true when anyErrors => Symbol.ErrorCircle,
             true when anyWarnings => Symbol.Warning,
             true => Symbol.CheckmarkCircle
@@ -165,8 +177,9 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
 
         string? iconClass = IsAnalyzerLoaded.Value switch
         {
-            false or true when IsAnalyzing.Value => "spin",
-            true => null
+            false => "spin",
+            true when IsAnalyzing.Value => "spin",
+            _ => null
         };
 
         _item.WithIcon(icon);

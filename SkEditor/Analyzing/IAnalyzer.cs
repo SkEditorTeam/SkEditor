@@ -25,6 +25,11 @@ public interface IAnalyzer
     string WorkingDir { get; }
 
     /// <summary>
+    ///     Gets a value indicating whether the Analyzer is currently running.
+    /// </summary>
+    bool IsRunning { get; }
+
+    /// <summary>
     /// Initializes the Analyzer.
     /// </summary>
     Task Initialize();

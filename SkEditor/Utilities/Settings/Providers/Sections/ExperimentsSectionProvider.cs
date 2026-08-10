@@ -68,7 +68,7 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                     .WithChildren(
                         InfoSetting
                             .Create("Important!".ToTranslatable())
-                            .WithDescription("Restart the app after toggling this setting to take effect."
+                            .WithDescription("Check out the Analyzer settings to set it up properly."
                                 .ToTranslatable())
                             .WithIcon(Symbol.Warning)
                             .WithType(InfoSetting.InfoType.Warning),
