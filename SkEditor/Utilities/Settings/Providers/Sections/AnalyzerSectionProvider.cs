@@ -40,6 +40,16 @@ public class AnalyzerSectionProvider(
                 (j, a, s) => j && a && s)
             .ToBindableReactiveProperty();
 
+        BindableReactiveProperty<TranslatableString> everythingTitle = isEverythingReady
+            .Select(v => v
+                ? "All required components are installed.".ToTranslatable()
+                : "Some required components are missing.".ToTranslatable())
+            .ToBindableReactiveProperty(
+                isEverythingReady.Value
+                    ? "All required components are installed.".ToTranslatable()
+                    : "Some required components are missing.".ToTranslatable()
+            );
+
         SettingSection section = SettingSection.Create("Analyzer", "Analyzer".ToTranslatable())
             .WithIcon(Symbol.DocumentSearch)
             .WithSettings(
@@ -53,9 +63,7 @@ public class AnalyzerSectionProvider(
                     .WithType(InfoSetting.InfoType.Warning),
 
                 ExpandableSetting
-                    .Create(isEverythingReady.Value
-                        ? "All required components are installed.".ToTranslatable()
-                        : "Some required components are missing.".ToTranslatable())
+                    .Create(everythingTitle)
                     .WithStatus(isEverythingReady)
                     .WithChildren(
                         GetJavaSetting(isJavaValid),
