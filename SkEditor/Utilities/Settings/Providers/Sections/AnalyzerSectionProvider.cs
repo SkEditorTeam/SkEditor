@@ -70,7 +70,11 @@ public class AnalyzerSectionProvider(
                     .WithChildren(
                         ActionSetting
                             .Create("Server plugins folder".ToTranslatable())
-                            .WithAction(TranslationKey.ButtonOpenFolder, () => links.OpenFolder(pluginsDir))
+                            .WithAction(TranslationKey.ButtonOpenFolder, () =>
+                            {
+                                Directory.CreateDirectory(pluginsDir);
+                                links.OpenFolder(pluginsDir);
+                            })
                     ),
 
                 ToggleSetting
@@ -128,7 +132,10 @@ public class AnalyzerSectionProvider(
                     .AsExternal()
                     .WithButtonVisible(isAnalyzerPresent.Select(v => !v).ToBindableReactiveProperty())
                     .WithAction("Download".ToTranslatable(),
-                        () => { links.OpenLink("https://github.com/SkEditorTeam/SkAnalyzer"); }),
+                        () =>
+                        {
+                            links.OpenLink("https://github.com/SkEditorTeam/SkAnalyzer/releases/tag/v2.0.0-beta.7");
+                        }),
                 ActionSetting.Create("Select file".ToTranslatable())
                     .WithButtonVisible(isAnalyzerPresent.Select(v => !v).ToBindableReactiveProperty())
                     .WithAction(TranslationKey.ButtonSelect, async () =>
@@ -139,6 +146,7 @@ public class AnalyzerSectionProvider(
                             return;
                         }
 
+                        Directory.CreateDirectory(analyzer.BinDir);
                         File.Move(jarFile, Path.Combine(analyzer.BinDir, "SkAnalyzer.jar"));
                         isAnalyzerPresent.Value = true;
                     })
@@ -173,6 +181,7 @@ public class AnalyzerSectionProvider(
                             return;
                         }
 
+                        Directory.CreateDirectory(analyzer.BinDir);
                         File.Move(jarFile, Path.Combine(analyzer.BinDir, "Skript.jar"));
                         isSkriptPresent.Value = true;
                     })
