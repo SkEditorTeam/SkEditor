@@ -15,8 +15,8 @@
         <PublishAot>true</PublishAot>
 
         <VersionPrefix>3.0.0</VersionPrefix>
-        <VersionSuffix>alpha.15</VersionSuffix>
-        <AssemblyVersion>2.99.15</AssemblyVersion>
+        <VersionSuffix>alpha.16</VersionSuffix>
+        <AssemblyVersion>2.99.16</AssemblyVersion>
         <FileVersion>$(AssemblyVersion)</FileVersion>
 
         <InformationalVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</InformationalVersion>
