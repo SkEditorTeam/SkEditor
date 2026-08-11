@@ -73,7 +73,14 @@ public interface ITabService
     /// <remarks>This force-closes the tab and normally should only be used after the closing is handled by the tab itself.</remarks>
     void CloseTab(TabViewModelBase tab);
 
-    // todo: docs
+    /// <summary>
+    ///     Splits the given tab into the split view. Nothing happens if the tab is already in the split view or is the only
+    ///     tab.
+    /// </summary>
     void SplitTab(TabViewModelBase tab);
+
+    /// <summary>
+    ///     Merges the given tab back into the main view.
+    /// </summary>
     void MergeTab(TabViewModelBase tab);
 }
