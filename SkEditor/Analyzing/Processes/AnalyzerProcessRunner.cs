@@ -10,7 +10,25 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
 {
     private Process? _process;
 
-    public bool IsRunning => _process is { HasExited: false };
+    public bool IsRunning
+    {
+        get
+        {
+            if (_process is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                return !_process.HasExited;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }
+    }
 
     public event EventHandler<string>? OutputDataReceived;
     public event EventHandler<string>? ErrorDataReceived;
