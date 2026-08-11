@@ -313,6 +313,8 @@ public class AnalyzerSectionProvider(
 
     private static async Task<bool> CheckJava25()
     {
+        RefreshPath();
+        
         Process? process = null;
         try
         {
@@ -340,6 +342,22 @@ public class AnalyzerSectionProvider(
         finally
         {
             process?.Dispose();
+        }
+    }
+
+    private static void RefreshPath()
+    {
+        try
+        {
+            string? machinePath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
+            string? userPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
+            string combinedPath = $"{machinePath};{userPath}";
+
+            Environment.SetEnvironmentVariable("PATH", combinedPath);
+        }
+        catch
+        {
+            // ignored
         }
     }
 }
