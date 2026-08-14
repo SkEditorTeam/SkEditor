@@ -45,7 +45,7 @@ public class AnalyzerSectionProvider(
 
         isEverythingReady.SubscribeAwait(async (v, _) =>
         {
-            if (!v || analyzer.IsRunning)
+            if (!v || analyzer.IsRunning || !experiments.AnalyzerEnabled)
             {
                 return;
             }
