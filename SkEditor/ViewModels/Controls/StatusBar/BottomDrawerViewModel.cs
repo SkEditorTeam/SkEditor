@@ -5,7 +5,6 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 
@@ -47,7 +46,10 @@ public partial class BottomDrawerViewModel : ObservableObject
         this.ObservePropertyChanged(x => x.DrawerHeight)
             .Subscribe(_ => state.BottomDrawerHeight = Math.Max(DrawerHeight ?? _lastHeight, MinDrawerHeight));
 
-        _isBottomDrawerEnabled = experiments.IsBottomDrawerEnabled();
+        _isBottomDrawerEnabled = VisibleItems
+            .ObservePropertyChanged(x => x.Count)
+            .Select(x => x > 0)
+            .ToBindableReactiveProperty();
 
         _isBottomDrawerEnabled
             .Where(enabled => !enabled)
