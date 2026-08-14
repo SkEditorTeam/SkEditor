@@ -11,7 +11,6 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Files;
-using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 
@@ -85,10 +84,7 @@ public class StartupService(
 
         namedPipeServer.Start();
 
-        if (config.GetConfig<ExperimentsConfig>()?.AnalyzerEnabled == true)
-        {
-            _ = analyzer.Initialize();
-        }
+        analyzer.ObserveOptionChange();
 
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {

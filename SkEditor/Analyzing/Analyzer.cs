@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
+using R3;
 using SkEditor.Analyzing.Aot;
 using SkEditor.Analyzing.Bootstrapping;
 using SkEditor.Analyzing.Processes;
@@ -13,6 +14,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
 using SkEditor.Models.Logging;
+using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Analyzing;
@@ -110,6 +112,28 @@ public class Analyzer(
         }
 
         return null;
+    }
+
+    public void ObserveOptionChange()
+    {
+        ExperimentsConfig experiments = configs.GetConfig<ExperimentsConfig>()
+                                        ?? throw new InvalidOperationException("ExperimentsConfig is not available.");
+
+        experiments
+            .ObservePropertyChanged(x => x.AnalyzerEnabled)
+            .SubscribeAwait(async (v, _) =>
+            {
+                if (v)
+                {
+                    await Initialize();
+                }
+                else
+                {
+                    processRunner.Stop();
+                    protocolHandler.ResetState();
+                    messenger.Send(new AnalyzerUnloadedMessage());
+                }
+            });
     }
 
     public void Dispose()

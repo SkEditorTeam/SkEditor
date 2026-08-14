@@ -5,7 +5,7 @@ using SkEditor.Models.Analyzer;
 namespace SkEditor.Analyzing;
 
 /// <summary>
-/// Manages everything related to the Analyzer functionality.
+///     Manages everything related to the Analyzer functionality.
 /// </summary>
 public interface IAnalyzer
 {
@@ -30,12 +30,17 @@ public interface IAnalyzer
     bool IsRunning { get; }
 
     /// <summary>
-    /// Initializes the Analyzer.
+    ///     Initializes the Analyzer.
     /// </summary>
     Task Initialize();
 
     /// <summary>
-    /// Analyzes the given text and returns the result.
+    ///     Observes whether the Analyzer is enabled and starts or stops the Analyzer accordingly.
+    /// </summary>
+    void ObserveOptionChange();
+
+    /// <summary>
+    ///     Analyzes the given text and returns the result.
     /// </summary>
     /// <remarks>A cancellation token is required for making sure only one analysis is running at a time.</remarks>
     Task<AnalyzerResult?> Analyze(string text, CancellationToken ct);
