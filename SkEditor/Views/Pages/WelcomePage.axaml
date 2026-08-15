@@ -20,7 +20,6 @@
         <system:TimeSpan x:Key="ButtonTransitionDuration">0:0:0.1</system:TimeSpan>
 
         <lconverters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
-        <lconverters:ScrollVisibleToPaddingConverter x:Key="ScrollVisibleToPaddingConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -55,7 +54,7 @@
     </UserControl.Styles>
 
     <Grid Name="MainGrid" ColumnDefinitions="450, *" Margin="24,24,24,0">
-        <Grid Grid.Column="0" Margin="16,16,16,0" RowSpacing="48" RowDefinitions="Auto,*" VerticalAlignment="Top">
+        <Grid Grid.Column="0" Margin="6,16,16,0" RowSpacing="48" RowDefinitions="Auto,*" VerticalAlignment="Top">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="24">
                 <Image Source="{StaticResource SkEditorLogo}" Height="100" Width="100">
                     <Image.Effect>
@@ -72,17 +71,12 @@
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled"
-                          MaxHeight="600">
+                          MaxHeight="600" Margin="0,0,-16,0" Padding="0,0,16,0">
                 <Interaction.Behaviors>
                     <BehaviorCollection>
                         <behaviors:SmoothScrollBehavior />
                     </BehaviorCollection>
                 </Interaction.Behaviors>
-                <ScrollViewer.Padding>
-                    <Binding Path="ScrollBarMaximum"
-                             RelativeSource="{RelativeSource Self}"
-                             Converter="{StaticResource ScrollVisibleToPaddingConverter}" />
-                </ScrollViewer.Padding>
                 <ItemsRepeater ItemsSource="{Binding WelcomeSections}">
                     <ItemsRepeater.Layout>
                         <StackLayout Spacing="32" />
