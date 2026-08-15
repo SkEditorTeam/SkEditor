@@ -79,6 +79,8 @@
         <Setter Property="Foreground" Value="{DynamicResource ScrollBarForeground}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="CornerRadius" Value="{DynamicResource ScrollBarCornerRadius}" />
+        <Setter Property="HideDelay" Value="0:0:0.5" />
+        <Setter Property="ShowDelay" Value="0:0:0.1" />
 
         <Style Selector="^:vertical">
             <Setter Property="Template">
