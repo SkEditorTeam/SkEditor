@@ -100,7 +100,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
                 return GetErrorAndTargetRect(point, editor, diagnosticsTab);
             });
 
-        Observable<(AnalyzerError, Rect)> exitedStream = editor.PointerExitedAsObservable()
+        Observable<(AnalyzerError?, Rect)> exitedStream = editor.PointerExitedAsObservable()
             .Select(_ => ((AnalyzerError?)null, default(Rect)));
 
         Observable.Merge(movedStream, exitedStream)
