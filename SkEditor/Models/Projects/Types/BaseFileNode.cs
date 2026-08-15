@@ -82,6 +82,15 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
         }
     }
 
+    public override void UpdateName(string newName)
+    {
+        Name = newName;
+
+        string directory = GetDirectoryName(Path);
+        string newPath = CombinePath(directory, newName);
+        UpdatePath(newPath);
+    }
+    
     public override void UpdatePath(string newPath)
     {
         Path = newPath;

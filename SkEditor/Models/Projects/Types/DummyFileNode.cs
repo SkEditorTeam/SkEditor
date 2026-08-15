@@ -31,6 +31,11 @@ public sealed class DummyFileNode() : FileSystemNode("Loading...", "...", false)
         return Task.FromResult(true);
     }
 
+    public override void UpdateName(string newName)
+    {
+        Name = newName;
+    }
+    
     public override void UpdatePath(string newPath)
     {
         Path = newPath;

@@ -7,7 +7,7 @@ using SkEditor.Models.Projects.Types;
 
 namespace SkEditor.Models.Projects.Local;
 
-public class LocalFileSystem : IFileSystem
+public partial class LocalFileSystem : IFileSystem
 {
     public static readonly char[] InvalidChars =
         Path.GetInvalidFileNameChars();
@@ -29,6 +29,8 @@ public class LocalFileSystem : IFileSystem
         }
 
         Root = new LocalFolderNode(rootName, rootDirectory, true) { IsRoot = true };
+
+        _watcher = CreateWatcher(rootDirectory);
     }
 
     public FileSystemNode? Root { get; }

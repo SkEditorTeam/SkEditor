@@ -13,8 +13,8 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Remote;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Projects;
 using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Windows;

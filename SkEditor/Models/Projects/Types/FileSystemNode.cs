@@ -36,7 +36,7 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
 
     public abstract char[] InvalidChars { get; }
 
-    protected bool HasLoadedChildren { get; set; }
+    public bool HasLoadedChildren { get; set; }
 
     public abstract Task LoadChildrenAsync(bool force = false);
 
@@ -58,6 +58,7 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     public abstract Task RenameAsync(string newName);
     public abstract Task<bool> DeleteAsync();
 
+    public abstract void UpdateName(string newName);
     public abstract void UpdatePath(string newPath);
 
     protected virtual string CombinePath(string directory, string name)
