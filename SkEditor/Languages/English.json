@@ -107,6 +107,7 @@
   "ProjectRenameErrorNameEmpty": "Name cannot be empty.",
   "ProjectRenameErrorNameInvalid": "Name is invalid.",
   "ProjectErrorNameExists": "A file or folder with this name already exists.",
+  "ProjectGeneralErrorDescription": "Something went wrong. Look into the logs for more details.",
   "SettingsEnabled": "Enabled",
   "SettingsDisabled": "Disabled",
   "SettingsHomeTitle": "Settings",

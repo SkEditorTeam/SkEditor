@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
@@ -24,6 +25,7 @@ public class FileTreeCommandHandler(
     IDialogService dialogs,
     IClipboardService clipboard,
     INotificationService notifs,
+    ILogService logs,
     ITabService tabs,
     ILinkService links)
 {
@@ -200,7 +202,7 @@ public class FileTreeCommandHandler(
         return true;
     }
 
-    public async Task CloseLocal()
+    public void CloseLocal()
     {
         if (fileTree.SelectedNodes.Count != 1)
         {
@@ -211,7 +213,17 @@ public class FileTreeCommandHandler(
 
         if (fileTree.FileSystem is LocalFileSystem && node.IsRoot)
         {
-            await fileTree.CloseFileSystemAsync();
+            _ = Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                try
+                {
+                    await fileTree.CloseFileSystemAsync();
+                }
+                catch (Exception ex)
+                {
+                    logs.Error(ex, "Failed to close local file system");
+                }
+            }, DispatcherPriority.Background);
         }
     }
 
@@ -244,36 +256,50 @@ public class FileTreeCommandHandler(
 
         void OnNodeOnRenamed(object? __, NodeRenamedEventArgs args)
         {
-            _ = Task.Run(async () =>
+            _ = Dispatcher.UIThread.InvokeAsync(async () =>
             {
-                node.IsRenaming = false;
-
-                if (args.OldName == args.NewName)
-                {
-                    return;
-                }
-
                 try
                 {
-                    if (string.IsNullOrWhiteSpace(args.NewName))
+                    node.IsRenaming = false;
+
+                    if (args.OldName == args.NewName)
                     {
-                        Notification notification = Notification
-                            .Create(TranslationKey.ProjectRenameFailedTitle)
-                            .WithMessage(TranslationKey.ProjectRenameErrorNameEmpty)
-                            .WithType(NotificationType.Error);
-
-                        notifs.Show(notification);
-
                         return;
                     }
 
-                    await node.RenameAsync(args.NewName);
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(args.NewName))
+                        {
+                            Notification notification = Notification
+                                .Create(TranslationKey.ProjectRenameFailedTitle)
+                                .WithMessage(TranslationKey.ProjectRenameErrorNameEmpty)
+                                .WithType(NotificationType.Error);
+
+                            notifs.Show(notification);
+
+                            return;
+                        }
+
+                        await node.RenameAsync(args.NewName);
+                    }
+                    finally
+                    {
+                        node.Renamed -= OnNodeOnRenamed;
+                    }
                 }
-                finally
+                catch (Exception ex)
                 {
-                    node.Renamed -= OnNodeOnRenamed;
+                    logs.Error(ex, "Failed to rename node");
+
+                    Notification notification = Notification
+                        .Create(TranslationKey.ProjectRenameFailedTitle)
+                        .WithMessage(TranslationKey.ProjectGeneralErrorDescription)
+                        .WithType(NotificationType.Error);
+
+                    notifs.Show(notification);
                 }
-            });
+            }, DispatcherPriority.Background);
         }
     }
 
