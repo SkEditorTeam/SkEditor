@@ -123,6 +123,21 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
                 _tooltipShown = false;
             })
             .AddTo(ref _disposableBag);
+
+        editor.PointerExitedAsObservable()
+            .Subscribe(e =>
+            {
+                Point point = e.GetCurrentPoint(editor.TextArea.TextView).Position;
+                if (!(point.X < 0) && !(point.Y < 0))
+                {
+                    return;
+                }
+
+                _pointerOverPopup = false;
+                _popup!.IsOpen = false;
+                _tooltipShown = false;
+            })
+            .AddTo(ref _disposableBag);
     }
 
     private async Task HandlePointerMoved(TextEditor editor, (AnalyzerError? Error, Rect TargetRect) result,

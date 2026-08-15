@@ -28,6 +28,15 @@ public static class TextEditorExtensions
                 .Select(x => x.e);
         }
 
+        public Observable<PointerEventArgs> PointerExitedAsObservable()
+        {
+            return Observable.FromEventHandler<PointerEventArgs>(
+                    h => editor.TextArea.TextView.PointerExited += h,
+                    h => editor.TextArea.TextView.PointerExited -= h
+                )
+                .Select(x => x.e);
+        }
+
         /// <summary>
         ///     Gets the length of the non-whitespace content of the specified line
         ///     and the column with its first non-whitespace character.
