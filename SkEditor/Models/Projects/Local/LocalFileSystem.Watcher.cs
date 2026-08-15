@@ -68,9 +68,11 @@ public partial class LocalFileSystem : IDisposable
                 if (node is null)
                 {
                     Notifs.Debug($"Renamed node not found for path: {oldPath}");
+                    return;
                 }
 
-                node?.UpdateName(e.Name);
+                string fileName = Path.GetFileName(e.FullPath);
+                node.UpdateName(fileName);
             })
             .AddTo(ref _disposables);
 
@@ -91,10 +93,11 @@ public partial class LocalFileSystem : IDisposable
 
     private static FileSystemNode? FindNode(string path, IEnumerable<FileSystemNode> children)
     {
+        ReadOnlySpan<char> normalizedPath = GetNormalizedPath(path);
+        
         foreach (FileSystemNode child in children)
         {
-            bool same = GetNormalizedPath(path)
-                .Equals(GetNormalizedPath(child.Path), StringComparison.OrdinalIgnoreCase);
+            bool same = normalizedPath.Equals(child.Path.AsSpan(), StringComparison.OrdinalIgnoreCase);
 
             if (same)
             {
