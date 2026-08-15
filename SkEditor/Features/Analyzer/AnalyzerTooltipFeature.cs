@@ -67,14 +67,6 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
             Child = _tooltipView
         };
 
-        _tooltipView.PointerEntered += (_, _) => _pointerOverPopup = true;
-        _tooltipView.PointerExited += (_, _) =>
-        {
-            _pointerOverPopup = false;
-            _popup!.IsOpen = false;
-            _tooltipShown = false;
-        };
-
         Observable.FromEventHandler<PointerEventArgs>(
                 h => _tooltipView.PointerEntered += h,
                 h => _tooltipView.PointerEntered -= h
@@ -101,12 +93,17 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
             .Subscribe(e => _lastPointerPosition = e.GetPosition(editor.TextArea.TextView))
             .AddTo(ref _disposableBag);
 
-        editor.PointerMovedAsObservable()
+        var movedStream = editor.PointerMovedAsObservable()
             .Select(e =>
             {
                 Point point = e.GetPosition(editor.TextArea.TextView);
                 return GetErrorAndTargetRect(point, editor, diagnosticsTab);
-            })
+            });
+
+        Observable<(AnalyzerError, Rect)> exitedStream = editor.PointerExitedAsObservable()
+            .Select(_ => ((AnalyzerError?)null, default(Rect)));
+
+        Observable.Merge(movedStream, exitedStream)
             .DistinctUntilChanged(Comparer)
             .SubscribeAwait(async (result, ct) => { await HandlePointerMoved(editor, result, diagnosticsTab, ct); },
                 AwaitOperation.Switch)
@@ -120,21 +117,6 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
             {
                 _pointerOverPopup = false;
                 _popup?.IsOpen = false;
-                _tooltipShown = false;
-            })
-            .AddTo(ref _disposableBag);
-
-        editor.PointerExitedAsObservable()
-            .Subscribe(e =>
-            {
-                Point point = e.GetCurrentPoint(editor.TextArea.TextView).Position;
-                if (!(point.X < 0) && !(point.Y < 0))
-                {
-                    return;
-                }
-
-                _pointerOverPopup = false;
-                _popup!.IsOpen = false;
                 _tooltipShown = false;
             })
             .AddTo(ref _disposableBag);
