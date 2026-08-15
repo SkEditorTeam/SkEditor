@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentIcons.Common;
 using R3;
@@ -347,11 +348,18 @@ public class AnalyzerSectionProvider(
 
     private static void RefreshPath()
     {
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
+
         try
         {
             string? machinePath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
             string? userPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
-            string combinedPath = $"{machinePath};{userPath}";
+
+            string combinedPath = string.Join(Path.PathSeparator,
+                new[] { machinePath, userPath }.Where(p => !string.IsNullOrWhiteSpace(p)));
 
             Environment.SetEnvironmentVariable("PATH", combinedPath);
         }
