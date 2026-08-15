@@ -17,8 +17,8 @@ public class SftpFileSystem(
     INotificationService notifications) : IFileSystem
 {
     public static readonly char[] InvalidChars = ['/', '\\', '\0'];
-    public FileSystemNode? Root { get; private set; }
     public RemoteConnection Connection => connection;
+    public FileSystemNode? Root { get; private set; }
 
     public async Task<bool> LoadAsync(CancellationToken cancellationToken)
     {

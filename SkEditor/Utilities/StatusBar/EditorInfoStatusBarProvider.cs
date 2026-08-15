@@ -14,9 +14,11 @@ namespace SkEditor.Utilities.StatusBar;
 
 public class EditorInfoStatusBarProvider : IStatusBarProvider, IDisposable
 {
-    private readonly ITabService _tabs;
     private readonly StatusBarItem _cursorItem;
+    private readonly ITabService _tabs;
     private DisposableBag _disposables;
+
+    public ReadOnlyReactiveProperty<bool> CanAttach { get; }
 
     public EditorInfoStatusBarProvider(ITabService tabs, IWindowDialogService windowDialogs)
     {
@@ -59,8 +61,6 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider, IDisposable
             .Subscribe(UpdateState)
             .AddTo(ref _disposables);
     }
-
-    public ReadOnlyReactiveProperty<bool> CanAttach { get; }
 
     public IEnumerable<StatusBarItem> GetItems()
     {

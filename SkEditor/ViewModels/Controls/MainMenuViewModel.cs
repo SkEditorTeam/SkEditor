@@ -10,10 +10,10 @@ namespace SkEditor.ViewModels.Controls;
 
 public partial class MainMenuViewModel : ObservableObject
 {
-    public MainMenuViewModel(IMenuService menuService) => Items = menuService.GetMainMenuItems();
-
     [ObservableProperty]
     public partial IEnumerable<MainMenuItem> Items { get; set; }
+
+    public MainMenuViewModel(IMenuService menuService) => Items = menuService.GetMainMenuItems();
 
     public void RegisterHotKeys(MainWindow mainWindow)
     {

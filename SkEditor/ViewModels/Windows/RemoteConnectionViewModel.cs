@@ -26,8 +26,13 @@ public partial class RemoteConnectionViewModel(
     IDialogService dialogs,
     ITranslationService translation) : ObservableObject
 {
+    public IReadOnlyList<RemoteAuthMethod> AuthMethods { get; } =
+        Enum.GetValues<RemoteAuthMethod>().ToList();
+
     [ObservableProperty]
     public partial RemoteConnectionInfo ConnectionInfo { get; set; } = new();
+
+    public ObservableCollection<RemoteConnection> Connections { get; } = new(connectionsConfig.Connections);
 
     [ObservableProperty]
     public partial string? InfoBarMessage { get; set; }
@@ -38,15 +43,10 @@ public partial class RemoteConnectionViewModel(
     [ObservableProperty]
     public partial bool IsTesting { get; set; }
 
-    public ObservableCollection<RemoteConnection> Connections { get; } = new(connectionsConfig.Connections);
+    public Func<Task<string?>>? RequestKeyFilePicker { get; set; }
 
     [ObservableProperty]
     public partial RemoteConnection? SelectedConnection { get; set; }
-
-    public IReadOnlyList<RemoteAuthMethod> AuthMethods { get; } =
-        Enum.GetValues<RemoteAuthMethod>().ToList();
-
-    public Func<Task<string?>>? RequestKeyFilePicker { get; set; }
 
     [RelayCommand]
     private void SaveConnection()
@@ -94,7 +94,7 @@ public partial class RemoteConnectionViewModel(
     private async Task<bool> TestConnection()
     {
         IsTesting = true;
-        
+
         RemoteConnectionTestResult result = await connections.TestConnectionAsync(ConnectionInfo);
 
         InfoBarMessage = result.Message;
@@ -174,8 +174,6 @@ public partial class RemoteConnectionViewModel(
         }
     }
 
-    public event Action? PasteCompleted;
-
     [RelayCommand]
     private async Task HandlePaste(RoutedEventArgs e)
     {
@@ -241,4 +239,6 @@ public partial class RemoteConnectionViewModel(
         InfoBarMessage = null;
         InfoBarSeverity = FAInfoBarSeverity.Informational;
     }
+
+    public event Action? PasteCompleted;
 }

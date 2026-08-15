@@ -9,6 +9,7 @@ namespace SkEditor.Models.Projects.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
 {
+    public override char[] InvalidChars => LocalFileSystem.InvalidChars;
     protected override Func<string, Task<bool>> AlreadyExistsPredicate => LocalFileSystem.AlreadyExistsPredicate;
 
     protected override Func<string, Task> CreateFileAction =>
@@ -23,7 +24,40 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
     protected override Func<string, string, Task> RenameFileAction =>
         async (oldPath, newPath) => await Task.Run(() => Directory.Move(oldPath, newPath));
 
-    public override char[] InvalidChars => LocalFileSystem.InvalidChars;
+    public override IEnumerable<ProjectAction> GetSupportedActions()
+    {
+        if (IsRoot)
+        {
+            return
+            [
+                ProjectAction.NewFile,
+                ProjectAction.NewFolder,
+                ProjectAction.Separator,
+                ProjectAction.CopyPath,
+                ProjectAction.ShowInExplorer,
+                ProjectAction.Separator,
+                ProjectAction.Refresh,
+                ProjectAction.Close
+            ];
+        }
+
+        return
+        [
+            ProjectAction.NewFile,
+            ProjectAction.NewFolder,
+            ProjectAction.Separator,
+            ProjectAction.Duplicate,
+            ProjectAction.Rename,
+            ProjectAction.Delete,
+            ProjectAction.Separator,
+            ProjectAction.CopyPath,
+            ProjectAction.CopyRelativePath,
+            ProjectAction.Separator,
+            ProjectAction.ShowInExplorer,
+            ProjectAction.Separator,
+            ProjectAction.Refresh
+        ];
+    }
 
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
@@ -67,6 +101,16 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
     }
 
+    protected override FileSystemNode CreateFileNode(string name, string path)
+    {
+        return new LocalFileNode(name, path);
+    }
+
+    protected override FileSystemNode CreateFolderNode(string name, string path)
+    {
+        return new LocalFolderNode(name, path, false);
+    }
+
     private static bool HasVisibleContents(string path)
     {
         try
@@ -86,50 +130,5 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         return entry.Attributes.HasFlag(FileAttributes.ReparsePoint) ||
                (entry.Attributes.HasFlag(FileAttributes.Hidden) &&
                 entry.Attributes.HasFlag(FileAttributes.System));
-    }
-
-    public override IEnumerable<ProjectAction> GetSupportedActions()
-    {
-        if (IsRoot)
-        {
-            return
-            [
-                ProjectAction.NewFile,
-                ProjectAction.NewFolder,
-                ProjectAction.Separator,
-                ProjectAction.CopyPath,
-                ProjectAction.ShowInExplorer,
-                ProjectAction.Separator,
-                ProjectAction.Refresh,
-                ProjectAction.Close
-            ];
-        }
-
-        return
-        [
-            ProjectAction.NewFile,
-            ProjectAction.NewFolder,
-            ProjectAction.Separator,
-            ProjectAction.Duplicate,
-            ProjectAction.Rename,
-            ProjectAction.Delete,
-            ProjectAction.Separator,
-            ProjectAction.CopyPath,
-            ProjectAction.CopyRelativePath,
-            ProjectAction.Separator,
-            ProjectAction.ShowInExplorer,
-            ProjectAction.Separator,
-            ProjectAction.Refresh
-        ];
-    }
-
-    protected override FileSystemNode CreateFileNode(string name, string path)
-    {
-        return new LocalFileNode(name, path);
-    }
-
-    protected override FileSystemNode CreateFolderNode(string name, string path)
-    {
-        return new LocalFolderNode(name, path, false);
     }
 }

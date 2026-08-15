@@ -10,8 +10,6 @@ namespace SkEditor.ViewModels.Pages;
 
 public partial class ThemePageViewModel(IThemeService themeService) : ObservableObject
 {
-    public List<Theme> Themes { get; } = themeService.Themes;
-
     public Theme SelectedTheme
     {
         get;
@@ -28,6 +26,8 @@ public partial class ThemePageViewModel(IThemeService themeService) : Observable
             _ = Dispatcher.UIThread.InvokeAsync(() => themeService.SetThemeAsync(value));
         }
     } = themeService.CurrentTheme;
+
+    public List<Theme> Themes { get; } = themeService.Themes;
 
     [RelayCommand]
     public void OpenThemesFolder()

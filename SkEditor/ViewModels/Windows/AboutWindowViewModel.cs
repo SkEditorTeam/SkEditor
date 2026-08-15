@@ -20,18 +20,18 @@ public partial class AboutWindowViewModel(
     ILinkService links)
     : ObservableObject
 {
-    public string OperatingSystem => RuntimeInformation.OSDescription;
-    public string FrameworkDescription => RuntimeInformation.FrameworkDescription;
-    public string InformationalVersion => App.GetInformationalVersion();
     public string AssemblyVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown";
-
-    public string VersionString => translations.Get(TranslationKey.AboutVersion, InformationalVersion, AssemblyVersion);
-
-    public DateTime ReleaseDate => BuildInfo.ReleaseDate;
-    public string DateString => translations.Get(TranslationKey.AboutReleaseDate, FormatDateNoDayOfWeek(ReleaseDate));
 
     public string Author => "Notro";
     public string AuthorString => translations.Get(TranslationKey.AboutAuthor, Author);
+    public string DateString => translations.Get(TranslationKey.AboutReleaseDate, FormatDateNoDayOfWeek(ReleaseDate));
+    public string FrameworkDescription => RuntimeInformation.FrameworkDescription;
+    public string InformationalVersion => App.GetInformationalVersion();
+    public string OperatingSystem => RuntimeInformation.OSDescription;
+
+    public DateTime ReleaseDate => BuildInfo.ReleaseDate;
+
+    public string VersionString => translations.Get(TranslationKey.AboutVersion, InformationalVersion, AssemblyVersion);
 
     [RelayCommand]
     public async Task CopySystemInfo()

@@ -8,19 +8,19 @@ namespace SkEditor.Models.Notifications;
 /// </summary>
 public class Notification
 {
-    private Notification(TranslatableString title) => Title = title;
-
-    /// <summary> The localized title displayed in the header of the notification. </summary>
-    public TranslatableString Title { get; }
+    /// <summary> How long the notification remains visible. If null, the default timeout is applied. </summary>
+    public TimeSpan? Duration { get; private set; }
 
     /// <summary> The optional localized description body of the notification. </summary>
     public TranslatableString? Message { get; private set; }
 
+    /// <summary> The localized title displayed in the header of the notification. </summary>
+    public TranslatableString Title { get; }
+
     /// <summary> The severity level which determines the visual style and icon of the notification. </summary>
     public NotificationType Type { get; private set; } = NotificationType.Information;
 
-    /// <summary> How long the notification remains visible. If null, the default timeout is applied. </summary>
-    public TimeSpan? Duration { get; private set; }
+    private Notification(TranslatableString title) => Title = title;
 
     /// <summary>
     ///     Creates a new notification with a required title and optional styling parameters.

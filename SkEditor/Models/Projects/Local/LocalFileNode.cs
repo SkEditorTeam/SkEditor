@@ -12,9 +12,6 @@ namespace SkEditor.Models.Projects.Local;
 
 public partial class LocalFileNode(string name, string path) : BaseFileNode(name, path)
 {
-    protected override Func<string, string, Task> RenameFileAction =>
-        async (oldPath, newPath) => await Task.Run(() => File.Move(oldPath, newPath));
-
     public override char[] InvalidChars => LocalFileSystem.InvalidChars;
 
     public override IRelayCommand OpenCommand => OpenFileCommand;
@@ -22,6 +19,9 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
     protected override Func<string, Task<bool>> AlreadyExistsPredicate => LocalFileSystem.AlreadyExistsPredicate;
 
     protected override Func<string, Task> DeleteAction => async path => await Task.Run(() => File.Delete(path));
+
+    protected override Func<string, string, Task> RenameFileAction =>
+        async (oldPath, newPath) => await Task.Run(() => File.Move(oldPath, newPath));
 
     [RelayCommand]
     public void OpenFile()

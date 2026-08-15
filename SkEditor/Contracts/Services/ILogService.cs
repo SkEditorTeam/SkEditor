@@ -11,7 +11,7 @@ public interface ILogService
 {
     string LogsFolderPath { get; }
     Observable<LogEntry> OnLogReceived { get; }
-    
+
     /// <summary>
     ///     Logs a debug message using a message template.
     ///     Should be used for development and debugging purposes.

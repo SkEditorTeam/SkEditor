@@ -15,7 +15,10 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
     public async Task<bool> EnsureLibrariesExtractedAsync(string analyzerJarPath, string workingDir,
         CancellationToken ct = default)
     {
-        if (!File.Exists(analyzerJarPath)) return false;
+        if (!File.Exists(analyzerJarPath))
+        {
+            return false;
+        }
 
         try
         {
@@ -35,10 +38,16 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
 
             while (await reader.ReadLineAsync(ct) is { } line)
             {
-                if (string.IsNullOrWhiteSpace(line)) continue;
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
 
                 string[] parts = line.Split('\t');
-                if (parts.Length < 3) continue;
+                if (parts.Length < 3)
+                {
+                    continue;
+                }
 
                 string expectedHashHex = parts[0];
                 string relPath = parts[2];
@@ -64,10 +73,13 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
 
                 string zipResourcePath = "META-INF/libraries/" + relPath.Replace('\\', '/');
                 ZipArchiveEntry? resourceEntry = archive.GetEntry(zipResourcePath);
-                if (resourceEntry == null) continue;
+                if (resourceEntry == null)
+                {
+                    continue;
+                }
 
                 Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
-                await resourceEntry.ExtractToFileAsync(destinationPath, overwrite: true, ct);
+                await resourceEntry.ExtractToFileAsync(destinationPath, true, ct);
             }
 
             return true;
@@ -81,7 +93,10 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
 
     private static async Task<bool> IsFileValid(string filePath, string expectedHashHex, CancellationToken ct = default)
     {
-        if (!File.Exists(filePath)) return false;
+        if (!File.Exists(filePath))
+        {
+            return false;
+        }
 
         try
         {

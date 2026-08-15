@@ -28,22 +28,12 @@ public class ErrorMarkerBar : Control
             new Thickness(0, 2, 0, 2)
         );
 
-    private IDisposable? _editorSubscription;
-    private IDisposable? _diagnosticsSubscription;
-    private ScrollBar? _verticalScrollBar;
-    
     private const double MarkerHeight = 3.0;
     private const double MarkerWidth = 12.0;
+    private IDisposable? _diagnosticsSubscription;
 
-    static ErrorMarkerBar() => AffectsRender<ErrorMarkerBar>(EditorProperty, DiagnosticsProperty);
-
-    public ErrorMarkerBar() => Width = MarkerWidth;
-
-    public TextEditor? Editor
-    {
-        get => GetValue(EditorProperty);
-        set => SetValue(EditorProperty, value);
-    }
+    private IDisposable? _editorSubscription;
+    private ScrollBar? _verticalScrollBar;
 
     public ObservableList<AnalyzerError>? Diagnostics
     {
@@ -51,10 +41,70 @@ public class ErrorMarkerBar : Control
         set => SetValue(DiagnosticsProperty, value);
     }
 
+    public TextEditor? Editor
+    {
+        get => GetValue(EditorProperty);
+        set => SetValue(EditorProperty, value);
+    }
+
     public Thickness TrackPadding
     {
         get => GetValue(TrackPaddingProperty);
         set => SetValue(TrackPaddingProperty, value);
+    }
+
+    static ErrorMarkerBar() => AffectsRender<ErrorMarkerBar>(EditorProperty, DiagnosticsProperty);
+
+    public ErrorMarkerBar() => Width = MarkerWidth;
+
+    public override void Render(DrawingContext context)
+    {
+        base.Render(context);
+
+        if (Editor?.Document == null || Diagnostics == null || Diagnostics.Count == 0)
+        {
+            return;
+        }
+
+        TextView? textView = Editor.TextArea.TextView;
+        if (textView == null)
+        {
+            return;
+        }
+
+        if (textView.DocumentHeight <= textView.Bounds.Height)
+        {
+            return;
+        }
+
+        var groupedMarkers = Diagnostics
+            .Select(error => new
+            {
+                Y = Math.Round(CalculateYPosition(error.Line)),
+                Error = error
+            })
+            .GroupBy(m => m.Y)
+            .Select(g => new
+            {
+                Y = g.Key,
+                HighestSeverity = g.Min(x => x.Error.Type)
+            });
+
+        CacheScrollBar();
+
+        foreach (var marker in groupedMarkers)
+        {
+            Color color = marker.HighestSeverity switch
+            {
+                AnalyzerErrorType.Error => Color.FromArgb(255, 237, 27, 60),
+                AnalyzerErrorType.Warning => Color.FromArgb(255, 252, 172, 0),
+                AnalyzerErrorType.Info => Color.FromArgb(255, 26, 144, 237),
+                _ => Colors.Transparent
+            };
+
+            SolidColorBrush brush = new(color);
+            context.DrawRectangle(brush, null, new Rect(0, marker.Y, MarkerWidth, MarkerHeight), 1.5, 1.5);
+        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -93,6 +143,12 @@ public class ErrorMarkerBar : Control
         }
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _diagnosticsSubscription?.Dispose();
+    }
+
     private void OnVisualLinesChanged(object? sender, EventArgs e)
     {
         if (!IsVisible)
@@ -101,58 +157,6 @@ public class ErrorMarkerBar : Control
         }
 
         InvalidateVisual();
-    }
-
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnDetachedFromVisualTree(e);
-        _diagnosticsSubscription?.Dispose();
-    }
-
-    public override void Render(DrawingContext context)
-    {
-        base.Render(context);
-
-        if (Editor?.Document == null || Diagnostics == null || Diagnostics.Count == 0)
-            return;
-
-        TextView? textView = Editor.TextArea.TextView;
-        if (textView == null)
-        {
-            return;
-        }
-
-        if (textView.DocumentHeight <= textView.Bounds.Height)
-            return;
-
-        var groupedMarkers = Diagnostics
-            .Select(error => new
-            {
-                Y = Math.Round(CalculateYPosition(error.Line)),
-                Error = error
-            })
-            .GroupBy(m => m.Y)
-            .Select(g => new
-            {
-                Y = g.Key,
-                HighestSeverity = g.Min(x => x.Error.Type)
-            });
-
-        CacheScrollBar();
-
-        foreach (var marker in groupedMarkers)
-        {
-            Color color = marker.HighestSeverity switch
-            {
-                AnalyzerErrorType.Error => Color.FromArgb(255, 237, 27, 60),
-                AnalyzerErrorType.Warning => Color.FromArgb(255, 252, 172, 0),
-                AnalyzerErrorType.Info => Color.FromArgb(255, 26, 144, 237),
-                _ => Colors.Transparent
-            };
-
-            SolidColorBrush brush = new(color);
-            context.DrawRectangle(brush, null, new Rect(0, marker.Y, MarkerWidth, MarkerHeight), 1.5, 1.5);
-        }
     }
 
     private void CacheScrollBar()

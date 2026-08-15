@@ -24,7 +24,7 @@ public class DevMenuProvider(AppSettings appSettings, IThemeService themes, Bott
         MainMenuItem.HeaderWithIcon("Logs".ToTranslatable(), Symbol.List)
             .WithCommand(() => bottomDrawer.TogglePane("Logs"))
             .AddTo(devMenu);
-        
+
         return devMenu;
     }
 }

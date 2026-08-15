@@ -9,6 +9,13 @@ namespace SkEditor.Models.Projects.Types;
 
 public abstract partial class FileSystemNode(string name, string path, bool isDirectory) : ObservableObject
 {
+    public ObservableCollection<FileSystemNode> Children { get; } = [];
+
+    public bool HasLoadedChildren { get; set; }
+
+    public abstract char[] InvalidChars { get; }
+    public bool IsDirectory { get; set; } = isDirectory;
+
     [ObservableProperty]
     public partial bool IsExpanded { get; set; }
 
@@ -18,32 +25,23 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     [ObservableProperty]
     public partial bool IsRenaming { get; set; }
 
+    public bool IsRoot { get; init; }
+
     [ObservableProperty]
     public partial string Name { get; protected set; } = name;
 
-    public string Path { get; protected set; } = path;
-    public bool IsDirectory { get; set; } = isDirectory;
-    public bool IsRoot { get; init; }
-
-    public ObservableCollection<FileSystemNode> Children { get; } = [];
-
     public virtual IRelayCommand? OpenCommand => null;
+
+    public string Path { get; protected set; } = path;
 
     protected abstract Func<string, Task<bool>> AlreadyExistsPredicate { get; }
 
     protected abstract Func<string, Task> DeleteAction { get; }
     protected abstract Func<string, string, Task> RenameFileAction { get; }
 
-    public abstract char[] InvalidChars { get; }
-
-    public bool HasLoadedChildren { get; set; }
-
     public abstract Task LoadChildrenAsync(bool force = false);
 
     public abstract IEnumerable<ProjectAction> GetSupportedActions();
-
-    public event EventHandler<NodeRenamedEventArgs>? Renamed;
-    public event EventHandler? Deleted;
 
     public void OnRenamed(string oldName, string newName)
     {
@@ -70,10 +68,13 @@ public abstract partial class FileSystemNode(string name, string path, bool isDi
     {
         return System.IO.Path.GetDirectoryName(path) ?? string.Empty;
     }
+
+    public event EventHandler<NodeRenamedEventArgs>? Renamed;
+    public event EventHandler? Deleted;
 }
 
 public class NodeRenamedEventArgs(string oldName, string newName) : EventArgs
 {
-    public string OldName { get; } = oldName;
     public string NewName { get; } = newName;
+    public string OldName { get; } = oldName;
 }

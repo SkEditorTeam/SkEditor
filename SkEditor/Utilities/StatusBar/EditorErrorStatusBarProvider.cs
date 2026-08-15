@@ -28,12 +28,17 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
     IRecipient<AnalyzerFailedToLoadMessage>
 {
     private readonly StatusBarItem _item;
+    private readonly INotificationService _notifs;
     private readonly ErrorListPaneViewModel _pane;
 
     private readonly Dictionary<IFileTab, AnalyzerResult> _results = new();
     private readonly ITabService _tabs;
-    private readonly INotificationService _notifs;
     private DisposableBag _disposables;
+
+    public ReadOnlyReactiveProperty<bool> CanAttach { get; }
+
+    public ReactiveProperty<bool> IsAnalyzerLoaded { get; } = new(false);
+    public ReactiveProperty<bool> IsAnalyzing { get; } = new(false);
 
     public EditorErrorStatusBarProvider(BottomDrawerViewModel drawer, ExperimentsConfig experiments, ITabService tabs,
         IMessenger messenger, INotificationService notifs)
@@ -82,9 +87,6 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         messenger.Register<AnalyzerFailedToLoadMessage>(this);
     }
 
-    public ReactiveProperty<bool> IsAnalyzerLoaded { get; } = new(false);
-    public ReactiveProperty<bool> IsAnalyzing { get; } = new(false);
-
     public void Receive(AnalyzerLoadedMessage message)
     {
         _item.IsVisible = true;
@@ -124,12 +126,21 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
 
         _notifs.Show(notification);
     }
-    
-    public ReadOnlyReactiveProperty<bool> CanAttach { get; }
 
     public IEnumerable<StatusBarItem> GetItems()
     {
         yield return _item;
+    }
+
+    public void UpdateResult(IFileTab tab, AnalyzerResult result)
+    {
+        _results[tab] = result;
+        UpdateState();
+    }
+
+    public void Dispose()
+    {
+        _disposables.Dispose();
     }
 
     private void UpdateState()
@@ -172,7 +183,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
             false => Color.Parse("#A0A5AF"),
             true when anyErrors => Color.Parse("#FF2D52"),
             true when anyWarnings => Color.Parse("#FFAE45"),
-            true => Color.Parse("#8BF07B"),
+            true => Color.Parse("#8BF07B")
         };
 
         string? iconClass = IsAnalyzerLoaded.Value switch
@@ -185,16 +196,5 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         _item.WithIcon(icon);
         _item.WithIconClass(iconClass);
         _item.WithColor(color);
-    }
-
-    public void UpdateResult(IFileTab tab, AnalyzerResult result)
-    {
-        _results[tab] = result;
-        UpdateState();
-    }
-
-    public void Dispose()
-    {
-        _disposables.Dispose();
     }
 }

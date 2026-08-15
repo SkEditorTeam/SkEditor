@@ -38,29 +38,6 @@ public class RemoteConnectionService(
     private readonly ConcurrentDictionary<RemoteConnection, SemaphoreSlim> _connectionLocks = new();
     private readonly ICredentialStore _store = credentialStoreFactory.Create();
 
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-
-        foreach (SftpClient client in _activeConnections.Values)
-        {
-            if (client.IsConnected)
-            {
-                client.Disconnect();
-            }
-
-            client.Dispose();
-        }
-
-        _activeConnections.Clear();
-        foreach (SemaphoreSlim semaphore in _connectionLocks.Values)
-        {
-            semaphore.Dispose();
-        }
-
-        _connectionLocks.Clear();
-    }
-
     public async Task<RemoteConnectionTestResult> TestConnectionAsync(RemoteConnectionInfo connectionInfo)
     {
         string keyFilePath = connectionInfo.KeyFilePath;
@@ -376,5 +353,28 @@ public class RemoteConnectionService(
         {
             client.Dispose();
         }
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+
+        foreach (SftpClient client in _activeConnections.Values)
+        {
+            if (client.IsConnected)
+            {
+                client.Disconnect();
+            }
+
+            client.Dispose();
+        }
+
+        _activeConnections.Clear();
+        foreach (SemaphoreSlim semaphore in _connectionLocks.Values)
+        {
+            semaphore.Dispose();
+        }
+
+        _connectionLocks.Clear();
     }
 }

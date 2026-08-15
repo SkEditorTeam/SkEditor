@@ -9,10 +9,10 @@ namespace SkEditor.Utilities.Settings.Configs;
 [SettingsConfig]
 public partial class ConnectionsConfig : BaseConfig<ConnectionsConfig>
 {
-    protected override JsonTypeInfo<ConnectionsConfig> TypeInfo => AppJsonContext.Default.ConnectionsConfig;
-
     [ObservableProperty]
     public partial ObservableCollection<RemoteConnection> Connections { get; set; } = [];
+
+    protected override JsonTypeInfo<ConnectionsConfig> TypeInfo => AppJsonContext.Default.ConnectionsConfig;
 
     protected override string GetFileName()
     {

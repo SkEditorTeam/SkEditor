@@ -15,8 +15,6 @@ public partial class SettingsCategorySeparator : UserControl
     public static readonly StyledProperty<TranslationKey?> TitleKeyProperty =
         AvaloniaProperty.Register<SettingsCategorySeparator, TranslationKey?>(nameof(TitleKey));
 
-    public SettingsCategorySeparator() => InitializeComponent();
-
     public string? Title
     {
         get => GetValue(TitleProperty);
@@ -28,6 +26,8 @@ public partial class SettingsCategorySeparator : UserControl
         get => GetValue(TitleKeyProperty);
         set => SetValue(TitleKeyProperty, value);
     }
+
+    public SettingsCategorySeparator() => InitializeComponent();
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {

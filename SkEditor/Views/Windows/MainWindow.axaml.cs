@@ -2,7 +2,6 @@
 using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
 using HotAvalonia;
-using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Windowing;
@@ -21,6 +20,8 @@ public partial class MainWindow : FAAppWindow
     private readonly IThemeService _themes;
     private readonly ITranslationService _translation;
     private readonly IWindowCloseService _windowClose;
+
+    public new SplashScreen? SplashScreen { get; set; }
 
     public MainWindow()
     {
@@ -64,7 +65,36 @@ public partial class MainWindow : FAAppWindow
         AttachEvents(dragDropService, shortcutsService);
     }
 
-    public new SplashScreen? SplashScreen { get; set; }
+    public async Task OnLoaded()
+    {
+        await _translation.ChangeLanguageAsync(_appSettings.Language, true);
+        await SplashScreen.TryUpdateStatusAsync("Loading themes and addons...");
+
+        await _themes.SetThemeAsync(_themes.CurrentTheme);
+
+        App.Stopwatch.Stop();
+        _splashScreen.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
+
+        await SplashScreen.TryUpdateStatusAsync("Initializing main window...");
+
+        _discordIntegration.SetUp();
+
+        Dispatcher.Post(() =>
+        {
+            IsVisible = true;
+            Activate();
+            Focus();
+
+            SplashScreen?.Close();
+        });
+    }
+
+    [AvaloniaHotReload]
+    public void Reload()
+    {
+        _ = _translation.ChangeLanguageAsync(_appSettings.Language);
+        _ = _themes.SetThemeAsync(_themes.CurrentTheme);
+    }
 
     private void AttachEvents(DragDropService dragDropService, ShortcutsService shortcutsService)
     {
@@ -95,36 +125,5 @@ public partial class MainWindow : FAAppWindow
 
         TitleBar.Height = titleBarHeight;
         ExtendClientAreaTitleBarHeightHint = titleBarHeight;
-    }
-
-    public async Task OnLoaded()
-    {
-        await _translation.ChangeLanguageAsync(_appSettings.Language, true);
-        await SplashScreen.TryUpdateStatusAsync("Loading themes and addons...");
-
-        await _themes.SetThemeAsync(_themes.CurrentTheme);
-
-        App.Stopwatch.Stop();
-        _splashScreen.UpdateStartupTime((int)App.Stopwatch.ElapsedMilliseconds);
-
-        await SplashScreen.TryUpdateStatusAsync("Initializing main window...");
-
-        _discordIntegration.SetUp();
-
-        Dispatcher.Post(() =>
-        {
-            IsVisible = true;
-            Activate();
-            Focus();
-
-            SplashScreen?.Close();
-        });
-    }
-
-    [AvaloniaHotReload]
-    public void Reload()
-    {
-        _ = _translation.ChangeLanguageAsync(_appSettings.Language);
-        _ = _themes.SetThemeAsync(_themes.CurrentTheme);
     }
 }

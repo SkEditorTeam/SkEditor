@@ -8,9 +8,9 @@ namespace SkEditor.Contracts.Services;
 
 public interface IThemeService
 {
-    List<Theme> Themes { get; set; }
     Theme CurrentTheme { get; set; }
     string ThemeFolderPath { get; set; }
+    List<Theme> Themes { get; set; }
     void LoadThemes();
     Theme? LoadTheme(string path, bool isBuiltIn = false);
     void SaveAllThemes();

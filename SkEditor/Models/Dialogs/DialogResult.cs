@@ -7,6 +7,38 @@
 public class DialogResult
 {
     /// <summary>
+    ///     Gets a <see cref="DialogResult" /> representing the "Cancel" standard dialog result.
+    /// </summary>
+    public static DialogResult Cancel => new(StandardDialogResult.Cancel);
+
+    /// <summary>
+    ///     Gets the custom data associated with the dialog result. This will be non-null only if the result is a custom
+    ///     result.
+    /// </summary>
+    public string? Data { get; }
+
+    /// <summary>
+    ///     Gets a <see cref="DialogResult" /> representing the "No" standard dialog result.
+    /// </summary>
+    public static DialogResult No => new(StandardDialogResult.No);
+
+    /// <summary>
+    ///     Gets a <see cref="DialogResult" /> representing the "Ok" standard dialog result.
+    /// </summary>
+    public static DialogResult Ok => new(StandardDialogResult.Ok);
+
+    /// <summary>
+    ///     Gets the standard dialog result. If the result is a custom result, this will be
+    ///     <see cref="StandardDialogResult.Custom" />.
+    /// </summary>
+    public StandardDialogResult Result { get; }
+
+    /// <summary>
+    ///     Gets a <see cref="DialogResult" /> representing the "Yes" standard dialog result.
+    /// </summary>
+    public static DialogResult Yes => new(StandardDialogResult.Yes);
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="DialogResult" /> class with a standard dialog result.
     /// </summary>
     /// <param name="result">The standard dialog result.</param>
@@ -22,38 +54,6 @@ public class DialogResult
         Result = StandardDialogResult.Custom;
         Data = customData;
     }
-
-    /// <summary>
-    ///     Gets the standard dialog result. If the result is a custom result, this will be
-    ///     <see cref="StandardDialogResult.Custom" />.
-    /// </summary>
-    public StandardDialogResult Result { get; }
-
-    /// <summary>
-    ///     Gets the custom data associated with the dialog result. This will be non-null only if the result is a custom
-    ///     result.
-    /// </summary>
-    public string? Data { get; }
-
-    /// <summary>
-    ///     Gets a <see cref="DialogResult" /> representing the "Ok" standard dialog result.
-    /// </summary>
-    public static DialogResult Ok => new(StandardDialogResult.Ok);
-
-    /// <summary>
-    ///     Gets a <see cref="DialogResult" /> representing the "Cancel" standard dialog result.
-    /// </summary>
-    public static DialogResult Cancel => new(StandardDialogResult.Cancel);
-
-    /// <summary>
-    ///     Gets a <see cref="DialogResult" /> representing the "Yes" standard dialog result.
-    /// </summary>
-    public static DialogResult Yes => new(StandardDialogResult.Yes);
-
-    /// <summary>
-    ///     Gets a <see cref="DialogResult" /> representing the "No" standard dialog result.
-    /// </summary>
-    public static DialogResult No => new(StandardDialogResult.No);
 
     public override string ToString()
     {

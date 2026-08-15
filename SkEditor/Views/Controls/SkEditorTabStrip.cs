@@ -8,6 +8,8 @@ namespace SkEditor.Views.Controls;
 
 public class SkEditorTabStrip : TabStrip
 {
+    protected override Type StyleKeyOverride => typeof(SkEditorTabStrip);
+
     protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
     {
         return new SkEditorTabStripItem();
@@ -17,8 +19,6 @@ public class SkEditorTabStrip : TabStrip
     {
         return NeedsContainer<SkEditorTabStripItem>(item, out recycleKey);
     }
-
-    protected override Type StyleKeyOverride => typeof(SkEditorTabStrip);
 }
 
 public class SkEditorTabStripItem : TabStripItem

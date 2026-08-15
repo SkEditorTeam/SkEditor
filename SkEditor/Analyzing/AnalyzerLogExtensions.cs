@@ -6,9 +6,6 @@ namespace SkEditor.Analyzing;
 
 public static partial class AnalyzerLogExtensions
 {
-    [GeneratedRegex(@"^\[\d{2}:\d{2}:\d{2}\]\s+(?<level>[A-Z]+)\s+(?<message>.*)$")]
-    private static partial Regex AnalyzerLogHeaderRegex();
-
     public static void LogAnalyzerLine(this ILogService logs, string? rawLine)
     {
         if (string.IsNullOrWhiteSpace(rawLine))
@@ -54,4 +51,7 @@ public static partial class AnalyzerLogExtensions
                 break;
         }
     }
+
+    [GeneratedRegex(@"^\[\d{2}:\d{2}:\d{2}\]\s+(?<level>[A-Z]+)\s+(?<message>.*)$")]
+    private static partial Regex AnalyzerLogHeaderRegex();
 }

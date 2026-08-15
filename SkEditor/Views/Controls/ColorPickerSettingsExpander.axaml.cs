@@ -8,8 +8,6 @@ public partial class ColorPickerSettingsExpander : UserControl
     public static readonly StyledProperty<string> ExpanderHeaderProperty =
         AvaloniaProperty.Register<ColorPickerSettingsExpander, string>(nameof(ExpanderHeader));
 
-    public ColorPickerSettingsExpander() => InitializeComponent();
-
     public string ExpanderHeader
     {
         get => GetValue(ExpanderHeaderProperty);
@@ -17,4 +15,6 @@ public partial class ColorPickerSettingsExpander : UserControl
     }
 
     public bool IsAlphaEnabled { get; set; } = true;
+
+    public ColorPickerSettingsExpander() => InitializeComponent();
 }

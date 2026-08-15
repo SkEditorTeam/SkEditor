@@ -11,7 +11,7 @@ public partial class LogsToolbarViewModel(LogsPaneViewModel logsPane) : Observab
 {
     public IReadOnlyList<LogSource?> AvailableSources { get; } = [LogSource.SkEditor, LogSource.Analyzer];
     public BindableReactiveProperty<LogSource?> SelectedSource { get; } = new(LogSource.SkEditor);
-    
+
     [RelayCommand]
     public void ClearLogs()
     {

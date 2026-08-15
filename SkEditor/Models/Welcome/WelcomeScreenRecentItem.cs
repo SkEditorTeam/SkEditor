@@ -11,21 +11,19 @@ namespace SkEditor.Models.Welcome;
 public sealed class WelcomeScreenRecentItem(string name, string path, bool isFolder, DateTime lastOpened)
     : INotifyPropertyChanged
 {
-    public string Name { get; } = name;
-    public string Path { get; } = path;
-    public bool IsFolder { get; } = isFolder;
-    public DateTime LastOpened { get; } = lastOpened;
-
-    [JsonIgnore]
-    public Symbol IconSymbol => IsFolder ? Symbol.Folder : Symbol.Document;
-
     [JsonIgnore]
     public string DisplayPath => IsFolder ? Path : System.IO.Path.GetDirectoryName(Path) ?? string.Empty;
 
     [JsonIgnore]
-    public TranslatableString PrettyLastOpened => ToPrettyDate(LastOpened);
+    public Symbol IconSymbol => IsFolder ? Symbol.Folder : Symbol.Document;
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public bool IsFolder { get; } = isFolder;
+    public DateTime LastOpened { get; } = lastOpened;
+    public string Name { get; } = name;
+    public string Path { get; } = path;
+
+    [JsonIgnore]
+    public TranslatableString PrettyLastOpened => ToPrettyDate(LastOpened);
 
     public static TranslatableString ToPrettyDate(DateTime date)
     {
@@ -92,4 +90,6 @@ public sealed class WelcomeScreenRecentItem(string name, string path, bool isFol
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrettyLastOpened)));
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }

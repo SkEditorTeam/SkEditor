@@ -28,15 +28,15 @@ public class App : Application
     private readonly BinarySettings _binarySettings;
     private SplashScreen? _splashScreen;
 
+    public static IServiceProvider Services { get; private set; } = null!;
+
+    public static Stopwatch Stopwatch { get; } = new();
+
     public App()
     {
         _binarySettings = new BinarySettings();
         _binarySettings.Load();
     }
-
-    public static IServiceProvider Services { get; private set; } = null!;
-
-    public static Stopwatch Stopwatch { get; } = new();
 
     public override void Initialize()
     {
@@ -114,6 +114,15 @@ public class App : Application
         }, DispatcherPriority.Background);
     }
 
+    public static string GetInformationalVersion()
+    {
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string? informationVersion =
+            assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+
+        return informationVersion ?? throw new InvalidOperationException("Informational version is null");
+    }
+
     private static void ConfigureServices(IServiceCollection services, BinarySettings binarySettings, string[] args)
     {
         services.AddSingleton(args);
@@ -135,14 +144,5 @@ public class App : Application
         services.AddStatusBar();
 
         services.AddAnalyzer();
-    }
-
-    public static string GetInformationalVersion()
-    {
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        string? informationVersion =
-            assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-
-        return informationVersion ?? throw new InvalidOperationException("Informational version is null");
     }
 }

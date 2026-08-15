@@ -24,6 +24,20 @@ public class SkEditorNotificationManager : TemplatedControl
     private readonly List<SkEditorNotificationCard> _items = [];
     private Panel? _itemsControl;
 
+    public int MaxItems
+    {
+        get => GetValue(MaxItemsProperty);
+        set => SetValue(MaxItemsProperty, value);
+    }
+
+    public NotificationPosition Position
+    {
+        get => GetValue(PositionProperty);
+        set => SetValue(PositionProperty, value);
+    }
+
+    protected override Type StyleKeyOverride => typeof(WindowNotificationManager);
+
     static SkEditorNotificationManager()
     {
         HorizontalAlignmentProperty.OverrideDefaultValue<SkEditorNotificationManager>(HorizontalAlignment.Stretch);
@@ -33,26 +47,6 @@ public class SkEditorNotificationManager : TemplatedControl
     public SkEditorNotificationManager() => UpdatePseudoClasses(Position);
 
     public SkEditorNotificationManager(TopLevel host) : this() => InstallFromTopLevel(host);
-
-    protected override Type StyleKeyOverride => typeof(WindowNotificationManager);
-
-    public NotificationPosition Position
-    {
-        get => GetValue(PositionProperty);
-        set => SetValue(PositionProperty, value);
-    }
-
-    public int MaxItems
-    {
-        get => GetValue(MaxItemsProperty);
-        set => SetValue(MaxItemsProperty, value);
-    }
-
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-        _itemsControl = e.NameScope.Find<Panel>("PART_Items");
-    }
 
     public void Show(string title, string message, NotificationType type, TimeSpan? expiration = null,
         Action? onClick = null)
@@ -86,6 +80,12 @@ public class SkEditorNotificationManager : TemplatedControl
         }
 
         card.StartTimer(expiration ?? TimeSpan.FromSeconds(5));
+    }
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _itemsControl = e.NameScope.Find<Panel>("PART_Items");
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

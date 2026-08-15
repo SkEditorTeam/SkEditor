@@ -12,7 +12,7 @@ public class SftpFile(string path, string name, RemoteConnection connection, IRe
     : BaseFile(path, name)
 {
     public RemoteConnection Connection => connection;
-    
+
     public override async ValueTask<Stream> LoadAsync()
     {
         if (Path is null)

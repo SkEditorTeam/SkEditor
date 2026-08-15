@@ -9,7 +9,8 @@ namespace SkEditor.Analyzing.Processes;
 
 public class AnalyzerProcessBuilder : IAnalyzerProcessBuilder
 {
-    public ProcessStartInfo BuildProcessStartInfo(string workingDir, string analyzerPath, string? aotPath, bool isGeneratingAot = false)
+    public ProcessStartInfo BuildProcessStartInfo(string workingDir, string analyzerPath, string? aotPath,
+        bool isGeneratingAot = false)
     {
         ProcessStartInfo startInfo = new()
         {

@@ -20,6 +20,8 @@ public class SftpFolderNode(
     bool addDummy = true)
     : BaseFolderNode(name, path, isRoot, addDummy)
 {
+    public override char[] InvalidChars => SftpFileSystem.InvalidChars;
+
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
         SftpFileSystem.GetAlreadyExistsPredicate(service, connection);
 
@@ -38,7 +40,43 @@ public class SftpFolderNode(
         async (oldPath, newPath) => await service.ExecuteSafeAsync(connection,
             async c => await c.RenameFileAsync(oldPath, newPath, CancellationToken.None));
 
-    public override char[] InvalidChars => SftpFileSystem.InvalidChars;
+    public override IEnumerable<ProjectAction> GetSupportedActions()
+    {
+        if (IsRoot)
+        {
+            return
+            [
+                ProjectAction.NewFile,
+                ProjectAction.NewFolder,
+                ProjectAction.Separator,
+                ProjectAction.Upload,
+                ProjectAction.Download,
+                ProjectAction.Separator,
+                ProjectAction.CopyPath,
+                ProjectAction.Separator,
+                ProjectAction.Refresh,
+                ProjectAction.Disconnect
+            ];
+        }
+
+        return
+        [
+            ProjectAction.NewFile,
+            ProjectAction.NewFolder,
+            ProjectAction.Separator,
+            ProjectAction.Upload,
+            ProjectAction.Download,
+            ProjectAction.Separator,
+            ProjectAction.Duplicate,
+            ProjectAction.Rename,
+            ProjectAction.Delete,
+            ProjectAction.Separator,
+            ProjectAction.CopyPath,
+            ProjectAction.CopyRelativePath,
+            ProjectAction.Separator,
+            ProjectAction.Refresh
+        ];
+    }
 
     protected override async Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders()
     {
@@ -82,44 +120,6 @@ public class SftpFolderNode(
 
         return folders.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
             .Concat<FileSystemNode>(files.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase));
-    }
-
-    public override IEnumerable<ProjectAction> GetSupportedActions()
-    {
-        if (IsRoot)
-        {
-            return
-            [
-                ProjectAction.NewFile,
-                ProjectAction.NewFolder,
-                ProjectAction.Separator,
-                ProjectAction.Upload,
-                ProjectAction.Download,
-                ProjectAction.Separator,
-                ProjectAction.CopyPath,
-                ProjectAction.Separator,
-                ProjectAction.Refresh,
-                ProjectAction.Disconnect
-            ];
-        }
-
-        return
-        [
-            ProjectAction.NewFile,
-            ProjectAction.NewFolder,
-            ProjectAction.Separator,
-            ProjectAction.Upload,
-            ProjectAction.Download,
-            ProjectAction.Separator,
-            ProjectAction.Duplicate,
-            ProjectAction.Rename,
-            ProjectAction.Delete,
-            ProjectAction.Separator,
-            ProjectAction.CopyPath,
-            ProjectAction.CopyRelativePath,
-            ProjectAction.Separator,
-            ProjectAction.Refresh
-        ];
     }
 
     protected override string CombinePath(string folderPath, string itemName)

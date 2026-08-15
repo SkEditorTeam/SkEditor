@@ -99,17 +99,17 @@ public partial class PublishingJsonContext : JsonSerializerContext;
 
 public class CodeSkriptPlCreateRequest
 {
+    [JsonPropertyName("anonymous")]
+    public required bool Anonymous { get; set; }
+
+    [JsonPropertyName("content")]
+    public required string Content { get; set; }
+
     [JsonPropertyName("key")]
     public required string Key { get; set; }
 
     [JsonPropertyName("language")]
     public string? Language { get; set; }
-
-    [JsonPropertyName("content")]
-    public required string Content { get; set; }
-
-    [JsonPropertyName("anonymous")]
-    public required bool Anonymous { get; set; }
 }
 
 public class CodeSkriptPlCreateResponse

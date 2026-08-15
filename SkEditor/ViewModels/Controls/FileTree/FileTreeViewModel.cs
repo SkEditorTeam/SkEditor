@@ -19,14 +19,29 @@ namespace SkEditor.ViewModels.Controls.FileTree;
 
 public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConnectionStateChangedMessage>
 {
+    private readonly AppSettings _appSettings;
     private readonly IClipboardService _clipboard;
     private readonly IDialogService _dialogs;
+    private readonly ILinkService _links;
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
     private readonly ITabService _tabs;
-    private readonly ILinkService _links;
-    private readonly AppSettings _appSettings;
     private CancellationTokenSource? _cts;
+
+    public ObservableCollection<ContextMenuItem> ContextMenuItems { get; } = [];
+
+    [ObservableProperty]
+    public partial IFileSystem? FileSystem { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsLoading { get; set; }
+
+    public ObservableCollection<FileSystemNode> RootItems { get; } = [];
+
+    public ObservableCollection<FileSystemNode> SelectedNodes { get; } = [];
+
+    [ObservableProperty]
+    public partial int ThemeVersion { get; set; }
 
     public FileTreeViewModel(ILogService logs, INotificationService notifs, IClipboardService clipboard,
         IDialogService dialogs, ILinkService links, ITabService tabs, AppSettings appSettings, IThemeService themes,
@@ -37,7 +52,7 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
         _dialogs = dialogs;
         _tabs = tabs;
         _links = links;
-        
+
         _clipboard = clipboard;
         _appSettings = appSettings;
 
@@ -49,21 +64,6 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
 
         themes.ThemeChanged += () => Dispatcher.UIThread.Post(() => ThemeVersion++);
     }
-
-    [ObservableProperty]
-    public partial IFileSystem? FileSystem { get; set; }
-
-    [ObservableProperty]
-    public partial bool IsLoading { get; set; }
-
-    [ObservableProperty]
-    public partial int ThemeVersion { get; set; }
-    
-    public ObservableCollection<FileSystemNode> RootItems { get; } = [];
-
-    public ObservableCollection<FileSystemNode> SelectedNodes { get; } = [];
-
-    public ObservableCollection<ContextMenuItem> ContextMenuItems { get; } = [];
 
     /// <summary>
     ///     Loads the file system and populates the root items.
@@ -137,11 +137,6 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
         UpdateContextMenuItems();
     }
 
-    partial void OnFileSystemChanged(IFileSystem? value)
-    {
-        WeakReferenceMessenger.Default.Send(new FileSystemChangedMessage(this, value));
-    }
-
     public void HandleNodeClick(FileSystemNode node, bool isDoubleClick)
     {
         bool singleClickEnabled = _appSettings.IsExplorerSingleClickOpenEnabled;
@@ -163,7 +158,7 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
             {
                 return;
             }
-            
+
             switch (message.State)
             {
                 case RemoteConnectionState.Reconnecting:
@@ -182,5 +177,10 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
                     break;
             }
         });
+    }
+
+    partial void OnFileSystemChanged(IFileSystem? value)
+    {
+        WeakReferenceMessenger.Default.Send(new FileSystemChangedMessage(this, value));
     }
 }

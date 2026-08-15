@@ -24,6 +24,11 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
     private readonly INotificationService _notifications;
     private readonly IRecentFileService _recents;
 
+    public required FileTreeViewModel FileTree { get; init; }
+    public StandardIcon Icon => Symbol.Folder;
+
+    public TranslatableString Name => TranslationKey.LocalExplorerTitle;
+
     public ExplorerViewModel(FileTreeViewModel fileTree,
         IFilePickerService filePicker,
         IRecentFileService recents,
@@ -39,15 +44,10 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
         _messenger.Register(this);
     }
 
-    public required FileTreeViewModel FileTree { get; init; }
-
     public void Receive(OpenExplorerFolderMessage message)
     {
         _ = HandleOpenExplorerFolderMessageAsync(message);
     }
-
-    public TranslatableString Name => TranslationKey.LocalExplorerTitle;
-    public StandardIcon Icon => Symbol.Folder;
 
     [RelayCommand]
     public async Task<bool> OpenFolder()

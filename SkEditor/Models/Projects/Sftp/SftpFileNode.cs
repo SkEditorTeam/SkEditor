@@ -19,12 +19,6 @@ public partial class SftpFileNode(
     IRemoteConnectionService service)
     : BaseFileNode(name, path)
 {
-    protected override Func<string, string, Task> RenameFileAction => async (oldPath, newPath) =>
-    {
-        await service.ExecuteSafeAsync(connection,
-            async c => await c.RenameFileAsync(oldPath, newPath, CancellationToken.None));
-    };
-
     public override char[] InvalidChars => SftpFileSystem.InvalidChars;
 
     public override IRelayCommand OpenCommand => OpenFileCommand;
@@ -36,6 +30,12 @@ public partial class SftpFileNode(
         async path =>
             await service.ExecuteSafeAsync(connection,
                 async c => await c.DeleteFileAsync(path, CancellationToken.None));
+
+    protected override Func<string, string, Task> RenameFileAction => async (oldPath, newPath) =>
+    {
+        await service.ExecuteSafeAsync(connection,
+            async c => await c.RenameFileAsync(oldPath, newPath, CancellationToken.None));
+    };
 
     [RelayCommand]
     public void OpenFile()

@@ -34,9 +34,9 @@ public class Analyzer(
     private string? _aotPath;
     public string AnalyzerRoot => Path.Combine(configs.GetAppDataPath(), "Analyzer");
     public string BinDir => Path.Combine(AnalyzerRoot, "Binaries");
-    public string WorkingDir => Path.Combine(AnalyzerRoot, "Server");
 
     public bool IsRunning => processRunner.IsRunning;
+    public string WorkingDir => Path.Combine(AnalyzerRoot, "Server");
 
     public async Task Initialize()
     {
@@ -136,13 +136,6 @@ public class Analyzer(
             });
     }
 
-    public void Dispose()
-    {
-        UnsubscribeEvents();
-        processRunner.Dispose();
-        GC.SuppressFinalize(this);
-    }
-
     private void SubscribeEvents()
     {
         processRunner.OutputDataReceived += OnOutputDataReceived;
@@ -182,5 +175,12 @@ public class Analyzer(
         protocolHandler.ResetState();
         logs.Error("Analyzer process has exited unexpectedly.", LogSource.Analyzer);
         messenger.Send(new AnalyzerFailedToLoadMessage());
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeEvents();
+        processRunner.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

@@ -7,7 +7,13 @@ namespace SkEditor.ViewModels.Pages;
 
 public class WhatsNewPageViewModel : ObservableObject
 {
-    public string Version { get; } = $"v{App.GetInformationalVersion()}";
+    public List<string> Changes { get; } =
+    [
+        "Added a new 'What's New' page to highlight the latest features and improvements in SkEditor.",
+        "Implemented a modern toast notification system to provide users with timely updates and feedback.",
+        "Redesigned the settings view for improved usability and a more cohesive user experience.",
+        "Enhanced the overall user interface with various visual improvements and optimizations."
+    ];
 
     public List<WhatsNewFeaturedItem> FeaturedItems { get; } =
     [
@@ -21,11 +27,5 @@ public class WhatsNewPageViewModel : ObservableObject
             "At long last, SkEditor features built-in SFTP integration! You can now connect directly to remote servers and edit files without ever leaving the editor.")
     ];
 
-    public List<string> Changes { get; } =
-    [
-        "Added a new 'What's New' page to highlight the latest features and improvements in SkEditor.",
-        "Implemented a modern toast notification system to provide users with timely updates and feedback.",
-        "Redesigned the settings view for improved usability and a more cohesive user experience.",
-        "Enhanced the overall user interface with various visual improvements and optimizations."
-    ];
+    public string Version { get; } = $"v{App.GetInformationalVersion()}";
 }

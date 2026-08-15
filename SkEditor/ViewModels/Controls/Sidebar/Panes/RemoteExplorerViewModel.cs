@@ -24,14 +24,28 @@ namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelViewModel,
     IRecipient<FileSystemChangedMessage>
 {
+    private readonly IDialogService _dialogs;
     private readonly INotificationService _notifications;
     private readonly IRemoteConnectionService _remoteConnections;
-    private readonly IWindowDialogService _windowDialogs;
     private readonly ITabService _tabs;
-    private readonly IDialogService _dialogs;
+    private readonly IWindowDialogService _windowDialogs;
 
     private int _connectionChangeId;
+
+    private bool _ignoreNextConnectionChange;
     private bool _isChangingConnection;
+
+    public RemoteConnection? CurrentConnection { get; set; }
+
+    public required FileTreeViewModel FileTree { get; init; }
+    public StandardIcon Icon => "RemoteDesktopIcon";
+
+    public TranslatableString Name => TranslationKey.RemoteExplorerTitle;
+
+    public ObservableCollection<RemoteConnection> RemoteConnections { get; }
+
+    [ObservableProperty]
+    public partial RemoteConnection? SelectedConnection { get; set; }
 
     public RemoteExplorerViewModel(FileTreeViewModel fileTree,
         INotificationService notifications,
@@ -54,15 +68,6 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         messenger.Register(this);
     }
 
-    [ObservableProperty]
-    public partial RemoteConnection? SelectedConnection { get; set; }
-
-    public RemoteConnection? CurrentConnection { get; set; }
-
-    public required FileTreeViewModel FileTree { get; init; }
-
-    public ObservableCollection<RemoteConnection> RemoteConnections { get; }
-
     public void Receive(FileSystemChangedMessage message)
     {
         if (message.Sender != FileTree || _isChangingConnection)
@@ -78,11 +83,6 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         CurrentConnection = null;
         SelectedConnection = null;
     }
-
-    public TranslatableString Name => TranslationKey.RemoteExplorerTitle;
-    public StandardIcon Icon => "RemoteDesktopIcon";
-
-    private bool _ignoreNextConnectionChange;
 
     [RelayCommand(AllowConcurrentExecutions = true)]
     private async Task Connect()

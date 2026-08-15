@@ -16,6 +16,15 @@ public partial class ErrorListPaneViewModel : ObservableObject, IDrawerPaneViewM
 {
     private readonly ITabService _tabs;
 
+    public ObservableCollection<AnalyzerError> Errors { get; set; } = [];
+
+    public string Id => "ErrorList";
+
+    public BindableReactiveProperty<bool> IsAnalyzerLoaded { get; set; } = new(false);
+    public BindableReactiveProperty<bool> IsFileAnalyzable { get; set; } = new(false);
+    public BindableReactiveProperty<bool> IsVisible { get; }
+    public TranslatableString Name => "Errors".ToTranslatable();
+
     public ErrorListPaneViewModel(ITabService tabs, ExperimentsConfig experiments)
     {
         _tabs = tabs;
@@ -27,15 +36,6 @@ public partial class ErrorListPaneViewModel : ObservableObject, IDrawerPaneViewM
         _tabs.ObserveSelectedTab()
             .Subscribe(tab => { IsFileAnalyzable.Value = tab is FileTabViewModel { IsAnalyzable: true }; });
     }
-
-    public BindableReactiveProperty<bool> IsAnalyzerLoaded { get; set; } = new(false);
-    public BindableReactiveProperty<bool> IsFileAnalyzable { get; set; } = new(false);
-
-    public ObservableCollection<AnalyzerError> Errors { get; set; } = [];
-
-    public string Id => "ErrorList";
-    public TranslatableString Name => "Errors".ToTranslatable();
-    public BindableReactiveProperty<bool> IsVisible { get; }
 
     [RelayCommand]
     public void ErrorClick(AnalyzerError error)

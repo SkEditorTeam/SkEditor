@@ -8,12 +8,12 @@ namespace SkEditor.Models.Dialogs.Elements;
 public partial class TextDialogElement : DialogElement
 {
     [ObservableProperty]
-    public partial string Text { get; set; } = string.Empty;
-
-    [ObservableProperty]
     public partial TranslatableString? ErrorMessage { get; set; }
 
     public TranslatableString? PlaceholderText { get; init; }
+
+    [ObservableProperty]
+    public partial string Text { get; set; } = string.Empty;
 
     public Func<string, TranslatableString?>? ValidationFunc { get; init; }
 

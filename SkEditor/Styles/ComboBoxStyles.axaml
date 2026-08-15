@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                     xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
                     x:CompileBindings="True">
 
@@ -162,7 +161,7 @@
             <Setter Property="Margin" Value="{DynamicResource ComboBoxDropdownIconMargin}" />
             <Setter Property="FontSize" Value="{DynamicResource ComboBoxDropdownIconSize}" />
         </Style>
-        
+
         <Style Selector="^:pointerover">
             <Style Selector="^ /template/ ContentPresenter#ContentPresenter">
                 <Setter Property="Foreground" Value="{DynamicResource ComboBoxForegroundPointerOver}" />

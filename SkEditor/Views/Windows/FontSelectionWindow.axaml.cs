@@ -61,6 +61,6 @@ public partial class FontSelectionWindow : SkEditorWindow
 
 public class FontInfo
 {
-    public string? Name { get; set; }
     public FontFamily? Font { get; set; }
+    public string? Name { get; set; }
 }

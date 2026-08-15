@@ -8,10 +8,10 @@ namespace SkEditor.Tranformers;
 
 public class OccurenceBackgroundTransformer(IThemeService themes) : DocumentColorizingTransformer
 {
+    public int EndOffset { get; set; }
     public int LineNumber { get; set; }
 
     public int StartOffset { get; set; }
-    public int EndOffset { get; set; }
 
     protected override void ColorizeLine(DocumentLine line)
     {

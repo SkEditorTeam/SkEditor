@@ -25,6 +25,10 @@ public class WelcomeService : IWelcomeService
 
     private DispatcherTimer _timeUpdater;
 
+    public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
+
+    public ObservableCollection<WelcomeScreenSection> WelcomeSections { get; } = [];
+
     public WelcomeService(IFileService fileService, ITabService tabService, IRecentFileService recents,
         ILinkService links,
         Func<SettingsTabViewModel> settingsTabFactory)
@@ -41,10 +45,6 @@ public class WelcomeService : IWelcomeService
 
         StartDateTimer();
     }
-
-    public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
-
-    public ObservableCollection<WelcomeScreenSection> WelcomeSections { get; } = [];
 
     private void BuildSections()
     {

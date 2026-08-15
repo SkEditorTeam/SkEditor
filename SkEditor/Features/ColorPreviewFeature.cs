@@ -42,6 +42,9 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
         editor.TextArea.TextView.ElementGenerators.Remove(_colorGenerator);
     }
 
+    [GeneratedRegex(@"<#[#]?(?<hex>(?:[0-9a-fA-F]{3}){1,2})>")]
+    public static partial Regex HexRegexGen();
+
     private static void ShowColorFlyout(ColorBoxControl control)
     {
         TopLevel topLevel = TopLevel.GetTopLevel(control)!;
@@ -107,7 +110,4 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
 
         flyout.Closed += (_, _) => document.UndoStack.EndUndoGroup();
     }
-
-    [GeneratedRegex(@"<#[#]?(?<hex>(?:[0-9a-fA-F]{3}){1,2})>")]
-    public static partial Regex HexRegexGen();
 }

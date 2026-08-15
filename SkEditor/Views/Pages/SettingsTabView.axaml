@@ -213,7 +213,7 @@
                                                 <Binding Path="Icon" />
                                             </MultiBinding>
                                         </controls:FASettingsExpander.IconSource>
-                                        
+
                                         <controls:FASettingsExpander.ItemTemplate>
                                             <dataTemplates:ExpanderItemTemplateFactory>
                                                 <dataTemplates:ExpanderItemTemplateFactory.Templates>

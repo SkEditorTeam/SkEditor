@@ -16,13 +16,6 @@ public partial class LocalFileSystem : IDisposable
 
     private static INotificationService Notifs => App.Services.GetRequiredService<INotificationService>();
 
-    public void Dispose()
-    {
-        _watcher.Dispose();
-        _disposables.Dispose();
-        GC.SuppressFinalize(this);
-    }
-
     private FileSystemWatcher CreateWatcher(string directory)
     {
         FileSystemWatcher watcher = new(directory)
@@ -129,5 +122,12 @@ public partial class LocalFileSystem : IDisposable
             .AsSpan()
             .TrimEnd(Path.DirectorySeparatorChar)
             .TrimEnd(Path.AltDirectorySeparatorChar);
+    }
+
+    public void Dispose()
+    {
+        _watcher.Dispose();
+        _disposables.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

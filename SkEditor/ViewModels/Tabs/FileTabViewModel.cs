@@ -45,29 +45,32 @@ public partial class FileTabViewModel(
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
 
     private CancellationTokenSource? _saveCts;
-    public required BaseFile File { get; init; }
-    public string? Path => File.Path;
-    public TextDocument Document { get; } = new();
 
     public AppSettings AppSettings { get; } = appSettings;
-    public ExperimentsConfig Experiments { get; } = experiments;
+
+    [ObservableProperty]
+    public partial int CaretOffset { get; set; } = 0;
 
     public override IRelayCommand CloseCommand => CloseTabCommand;
+    public Dictionary<int, AnalyzerError> DiagnosticDictionary { get; } = [];
+
+    public ObservableList<AnalyzerError> Diagnostics { get; } = [];
+    public TextDocument Document { get; } = new();
+    public ExperimentsConfig Experiments { get; } = experiments;
+    public required BaseFile File { get; init; }
 
     [ObservableProperty]
     public partial double FontSize { get; set; } = appSettings.EditorFontSize;
 
-    [ObservableProperty]
-    public partial bool WordWrap { get; set; } = appSettings.IsWordWrapEnabled;
+    public override bool IsCacheable => true;
+    public string? Path => File.Path;
 
     [ObservableProperty]
     public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
     [ObservableProperty]
-    public partial int CaretOffset { get; set; } = 0;
+    public partial bool WordWrap { get; set; } = appSettings.IsWordWrapEnabled;
 
-    public override bool IsCacheable => true;
-    
     public async Task<bool> LoadContentAsync()
     {
         if (string.IsNullOrEmpty(File.Path))
@@ -144,6 +147,28 @@ public partial class FileTabViewModel(
         return await PerformSaveAsync();
     }
 
+    public void UpdateHeader()
+    {
+        if (File.Path is null)
+        {
+            return;
+        }
+
+        string fileName = System.IO.Path.GetFileName(File.Path);
+        Header = TranslatableString.FromRawString(fileName);
+    }
+
+    public string? GetExtension()
+    {
+        return System.IO.Path.GetExtension(File.Path ?? null)?.ToLowerInvariant();
+    }
+
+    [RelayCommand]
+    public void OnFocus()
+    {
+        RequestFocus();
+    }
+
     /// <summary>
     ///     Performs the actual save operation
     /// </summary>
@@ -196,27 +221,6 @@ public partial class FileTabViewModel(
         return true;
     }
 
-    public void UpdateHeader()
-    {
-        if (File.Path is null)
-        {
-            return;
-        }
-
-        string fileName = System.IO.Path.GetFileName(File.Path);
-        Header = TranslatableString.FromRawString(fileName);
-    }
-
-    public string? GetExtension()
-    {
-        return System.IO.Path.GetExtension(File.Path ?? null)?.ToLowerInvariant();
-    }
-
-    /// <summary>
-    ///     Fired before the close logic begins. Allows async features (like AutoSave) to flush data.
-    /// </summary>
-    public event Func<Task>? ClosingAsync;
-
     [RelayCommand]
     private async Task CloseTab()
     {
@@ -260,12 +264,8 @@ public partial class FileTabViewModel(
         RequestClose();
     }
 
-    [RelayCommand]
-    public void OnFocus()
-    {
-        RequestFocus();
-    }
-
-    public ObservableList<AnalyzerError> Diagnostics { get; } = [];
-    public Dictionary<int, AnalyzerError> DiagnosticDictionary { get; } = [];
+    /// <summary>
+    ///     Fired before the close logic begins. Allows async features (like AutoSave) to flush data.
+    /// </summary>
+    public event Func<Task>? ClosingAsync;
 }

@@ -11,11 +11,8 @@ public record SkDocsResponseDto
 
 public record SkDocsDataDto
 {
-    [JsonPropertyName("id")]
-    public required string Id { get; init; }
-
-    [JsonPropertyName("title")]
-    public required string Title { get; init; }
+    [JsonPropertyName("addon")]
+    public required string Addon { get; init; }
 
     [JsonPropertyName("category")]
     public required string Category { get; init; }
@@ -23,8 +20,11 @@ public record SkDocsDataDto
     [JsonPropertyName("description")]
     public string? Description { get; init; }
 
-    [JsonPropertyName("addon")]
-    public required string Addon { get; init; }
+    [JsonPropertyName("examples")]
+    public string[]? Examples { get; init; }
+
+    [JsonPropertyName("id")]
+    public required string Id { get; init; }
 
     [JsonPropertyName("since")]
     public string? Since { get; init; }
@@ -32,8 +32,8 @@ public record SkDocsDataDto
     [JsonPropertyName("syntax")]
     public required string Syntax { get; init; }
 
-    [JsonPropertyName("examples")]
-    public string[]? Examples { get; init; }
+    [JsonPropertyName("title")]
+    public required string Title { get; init; }
 }
 
 [JsonSerializable(typeof(SkDocsResponseDto))]

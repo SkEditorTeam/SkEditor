@@ -183,36 +183,6 @@ public static class ServiceCollectionExtensions
             }
         }
 
-        private void AddChoiceProviders()
-        {
-            services.AddSingleton<LanguageChoiceProvider>();
-            services.AddSingleton<ThemeChoiceProvider>();
-            services.AddSingleton<StartupModeChoiceProvider>();
-            services.AddSingleton<IndentAmountChoiceProvider>();
-            services.AddSingleton<IndentTypeChoiceProvider>();
-        }
-
-        private void AddSectionProviders()
-        {
-            services.AddSingleton<ISettingsSectionProvider, GeneralSectionProvider>();
-            services.AddSingleton<ISettingsSectionProvider, EditorSectionProvider>();
-            services.AddSingleton<ISettingsSectionProvider, AppearanceSectionProvider>();
-            services.AddSingleton<ISettingsSectionProvider, IntegrationsSectionProvider>();
-            services.AddSingleton<ISettingsSectionProvider, ExperimentsSectionProvider>();
-            services.AddSingleton<ISettingsSectionProvider, AdvancedSectionProvider>();
-            services.AddSingleton<ISettingsSectionProvider, AnalyzerSectionProvider>();
-        }
-
-        private void AddMainMenuProviders()
-        {
-            services.AddSingleton<IMenuProvider, FileMenuProvider>();
-            services.AddSingleton<IMenuProvider, EditMenuProvider>();
-            services.AddSingleton<IMenuProvider, ToolsMenuProvider>();
-            services.AddSingleton<IMenuProvider, HelpMenuProvider>();
-            services.AddSingleton<IMenuProvider, DevMenuProvider>();
-            services.AddSingleton<IMenuProvider, SettingsMenuProvider>();
-        }
-
         public void AddTabs()
         {
             services.AddTransientWithFactory<SettingsTabViewModel>();
@@ -220,7 +190,7 @@ public static class ServiceCollectionExtensions
 
             services.AddSingleton<TabViewLocator>(_ =>
             {
-                var locator = new TabViewLocator();
+                TabViewLocator locator = new();
 
                 locator.Register<SettingsTabViewModel, SettingsTabView>();
                 locator.Register<DocumentationTabViewModel, DocumentationTabView>();
@@ -265,6 +235,49 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IStatusBarProvider>(sp => sp.GetRequiredService<EditorErrorStatusBarProvider>());
         }
 
+        public void AddAnalyzer()
+        {
+            services.AddSingleton<IAnalyzerBootstrapper, AnalyzerBootstrapper>();
+            services.AddSingleton<IAnalyzerAotGenerator, AnalyzerAotGenerator>();
+            services.AddSingleton<IAnalyzerProcessBuilder, AnalyzerProcessBuilder>();
+            services.AddSingleton<IAnalyzerProcessRunner, AnalyzerProcessRunner>();
+            services.AddSingleton<IAnalyzerProtocolHandler, AnalyzerProtocolHandler>();
+
+            services.AddSingleton<IAnalyzer, Analyzer>();
+            services.AddTransient<IEditorFeature, AnalyzerFeature>();
+            services.AddTransient<IEditorFeature, AnalyzerTooltipFeature>();
+        }
+
+        private void AddChoiceProviders()
+        {
+            services.AddSingleton<LanguageChoiceProvider>();
+            services.AddSingleton<ThemeChoiceProvider>();
+            services.AddSingleton<StartupModeChoiceProvider>();
+            services.AddSingleton<IndentAmountChoiceProvider>();
+            services.AddSingleton<IndentTypeChoiceProvider>();
+        }
+
+        private void AddSectionProviders()
+        {
+            services.AddSingleton<ISettingsSectionProvider, GeneralSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, EditorSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, AppearanceSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, IntegrationsSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, ExperimentsSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, AdvancedSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, AnalyzerSectionProvider>();
+        }
+
+        private void AddMainMenuProviders()
+        {
+            services.AddSingleton<IMenuProvider, FileMenuProvider>();
+            services.AddSingleton<IMenuProvider, EditMenuProvider>();
+            services.AddSingleton<IMenuProvider, ToolsMenuProvider>();
+            services.AddSingleton<IMenuProvider, HelpMenuProvider>();
+            services.AddSingleton<IMenuProvider, DevMenuProvider>();
+            services.AddSingleton<IMenuProvider, SettingsMenuProvider>();
+        }
+
         private void AddDrawer()
         {
             services.AddSingleton<BottomDrawerViewModel>();
@@ -281,19 +294,6 @@ public static class ServiceCollectionExtensions
             viewLocator.Register<LogsToolbarViewModel, LogsToolbarView>();
 
             services.AddSingleton(viewLocator);
-        }
-
-        public void AddAnalyzer()
-        {
-            services.AddSingleton<IAnalyzerBootstrapper, AnalyzerBootstrapper>();
-            services.AddSingleton<IAnalyzerAotGenerator, AnalyzerAotGenerator>();
-            services.AddSingleton<IAnalyzerProcessBuilder, AnalyzerProcessBuilder>();
-            services.AddSingleton<IAnalyzerProcessRunner, AnalyzerProcessRunner>();
-            services.AddSingleton<IAnalyzerProtocolHandler, AnalyzerProtocolHandler>();
-
-            services.AddSingleton<IAnalyzer, Analyzer>();
-            services.AddTransient<IEditorFeature, AnalyzerFeature>();
-            services.AddTransient<IEditorFeature, AnalyzerTooltipFeature>();
         }
     }
 }

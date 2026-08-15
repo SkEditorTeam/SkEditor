@@ -24,32 +24,6 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     private CancellationTokenSource? _cts;
 
-    public DocumentationTabViewModel(INotificationService notifs, ILogService logs) : base(
-        TranslationKey.DocumentationTabTitle, Symbol.Book)
-    {
-        _notifs = notifs;
-        _logs = logs;
-
-        SelectedProvider ??= Providers.FirstOrDefault();
-    }
-
-    public override IRelayCommand CloseCommand => CloseTabCommand;
-
-    public override bool IsCacheable => true;
-
-    public IReadOnlyList<DocumentationEntry>? DocumentationEntries { get; private set; }
-
-    [ObservableProperty]
-    public partial List<DocumentationEntry>? FilteredEntries { get; set; }
-
-    [ObservableProperty]
-    public partial DocumentationEntry? SelectedEntry { get; set; }
-
-    public List<DocumentationSyntaxType> SyntaxTypes { get; } = Enum.GetValues<DocumentationSyntaxType>().ToList();
-
-    [ObservableProperty]
-    public partial DocumentationSyntaxType? SelectedSyntaxType { get; set; }
-
     public List<string?> AvailableAddons => DocumentationEntries?
         .Select(entry => entry.Addon)
         .Where(addon => !string.IsNullOrEmpty(addon))
@@ -57,11 +31,14 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         .Distinct()
         .ToList() ?? [];
 
-    [ObservableProperty]
-    public partial string? SelectedAddon { get; set; } = null;
+    public override IRelayCommand CloseCommand => CloseTabCommand;
+
+    public IReadOnlyList<DocumentationEntry>? DocumentationEntries { get; private set; }
 
     [ObservableProperty]
-    public partial string SearchText { get; set; } = string.Empty;
+    public partial List<DocumentationEntry>? FilteredEntries { get; set; }
+
+    public override bool IsCacheable => true;
 
     public TextDocument PatternDocument { get; set; } = new();
 
@@ -72,12 +49,29 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     ];
 
     [ObservableProperty]
+    public partial string SearchText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string? SelectedAddon { get; set; } = null;
+
+    [ObservableProperty]
+    public partial DocumentationEntry? SelectedEntry { get; set; }
+
+    [ObservableProperty]
     public partial IDocumentationProvider? SelectedProvider { get; set; }
 
-    [RelayCommand]
-    private void CloseTab()
+    [ObservableProperty]
+    public partial DocumentationSyntaxType? SelectedSyntaxType { get; set; }
+
+    public List<DocumentationSyntaxType> SyntaxTypes { get; } = Enum.GetValues<DocumentationSyntaxType>().ToList();
+
+    public DocumentationTabViewModel(INotificationService notifs, ILogService logs) : base(
+        TranslationKey.DocumentationTabTitle, Symbol.Book)
     {
-        RequestClose();
+        _notifs = notifs;
+        _logs = logs;
+
+        SelectedProvider ??= Providers.FirstOrDefault();
     }
 
     public async Task LoadDocs(CancellationToken cancellationToken = default)
@@ -112,6 +106,12 @@ public partial class DocumentationTabViewModel : TabViewModelBase
             _notifs.Show(notification);
             _logs.Error(ex, "Error loading documentation");
         }
+    }
+
+    [RelayCommand]
+    private void CloseTab()
+    {
+        RequestClose();
     }
 
     partial void OnSelectedEntryChanged(DocumentationEntry? value)

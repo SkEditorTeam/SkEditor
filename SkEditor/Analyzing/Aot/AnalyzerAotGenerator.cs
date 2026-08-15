@@ -21,8 +21,9 @@ public class AnalyzerAotGenerator(
     {
         Notification notification = Notification
             .Create("Analyzer AOT Cache".ToTranslatable())
-            .WithMessage("Generating AOT cache for the Analyzer. This is a one-time operation and may take a bit longer."
-                .ToTranslatable())
+            .WithMessage(
+                "Generating AOT cache for the Analyzer. This is a one-time operation and may take a bit longer."
+                    .ToTranslatable())
             .WithDuration(TimeSpan.FromSeconds(10))
             .WithType(NotificationType.Information);
 
@@ -30,7 +31,7 @@ public class AnalyzerAotGenerator(
 
         TaskCompletionSource<bool> enabledTcs = new();
         ProcessStartInfo startInfo =
-            processBuilder.BuildProcessStartInfo(workingDir, analyzerPath, aotPath, isGeneratingAot: true);
+            processBuilder.BuildProcessStartInfo(workingDir, analyzerPath, aotPath, true);
 
         Process process = new() { StartInfo = startInfo };
 
@@ -38,14 +39,17 @@ public class AnalyzerAotGenerator(
         {
             process.OutputDataReceived += (_, args) =>
             {
-                if (string.IsNullOrEmpty(args.Data)) return;
+                if (string.IsNullOrEmpty(args.Data))
+                {
+                    return;
+                }
 
                 if (args.Data.Contains("Successfully enabled") || args.Data.Contains("Successfully started"))
                 {
                     enabledTcs.TrySetResult(true);
                 }
             };
-            
+
             process.ErrorDataReceived += (_, args) =>
             {
                 if (string.IsNullOrWhiteSpace(args.Data))
@@ -119,7 +123,10 @@ public class AnalyzerAotGenerator(
 
     public void CleanupCorruptAot(string aotPath)
     {
-        if (!File.Exists(aotPath)) return;
+        if (!File.Exists(aotPath))
+        {
+            return;
+        }
 
         try
         {

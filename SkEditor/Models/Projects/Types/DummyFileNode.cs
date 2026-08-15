@@ -6,10 +6,10 @@ namespace SkEditor.Models.Projects.Types;
 
 public sealed class DummyFileNode() : FileSystemNode("Loading...", "...", false)
 {
+    public override char[] InvalidChars => [];
     protected override Func<string, Task<bool>> AlreadyExistsPredicate => _ => Task.FromResult(false);
     protected override Func<string, Task> DeleteAction => _ => Task.CompletedTask;
     protected override Func<string, string, Task> RenameFileAction => (_, _) => Task.CompletedTask;
-    public override char[] InvalidChars => [];
 
     public override Task LoadChildrenAsync(bool force = false)
     {
@@ -35,7 +35,7 @@ public sealed class DummyFileNode() : FileSystemNode("Loading...", "...", false)
     {
         Name = newName;
     }
-    
+
     public override void UpdatePath(string newPath)
     {
         Path = newPath;

@@ -16,25 +16,25 @@ public partial class StatusBarItem : ObservableObject
         Right
     }
 
-    [ObservableProperty]
-    public partial TranslatableString? Text { get; set; }
-
-    [ObservableProperty]
-    public partial Symbol? IconSymbol { get; set; }
-
-    [ObservableProperty]
-    public partial string? IconClass { get; set; }
+    public ItemAlignment Alignment { get; private set; } = ItemAlignment.Right;
 
     [ObservableProperty]
     public partial IRelayCommand? Command { get; set; }
 
     [ObservableProperty]
+    public partial Color? ForegroundColor { get; set; }
+
+    [ObservableProperty]
+    public partial string? IconClass { get; set; }
+
+    [ObservableProperty]
+    public partial Symbol? IconSymbol { get; set; }
+
+    [ObservableProperty]
     public partial bool IsVisible { get; set; } = true;
 
     [ObservableProperty]
-    public partial Color? ForegroundColor { get; set; }
-
-    public ItemAlignment Alignment { get; private set; } = ItemAlignment.Right;
+    public partial TranslatableString? Text { get; set; }
 
     public static StatusBarItem TextOnly(TranslatableString text)
     {

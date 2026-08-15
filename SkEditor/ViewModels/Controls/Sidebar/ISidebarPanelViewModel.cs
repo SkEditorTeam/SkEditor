@@ -6,7 +6,7 @@ namespace SkEditor.ViewModels.Controls;
 
 public interface ISidebarPanelViewModel
 {
-    TranslatableString Name { get; }
     StandardIcon Icon { get; }
     Thickness IconOffset => new(0, 0, 0, 0);
+    TranslatableString Name { get; }
 }

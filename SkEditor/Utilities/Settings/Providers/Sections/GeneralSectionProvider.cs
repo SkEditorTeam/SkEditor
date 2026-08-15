@@ -22,7 +22,7 @@ public class GeneralSectionProvider(
                     .Create(TranslationKey.SettingsGeneralLanguage)
                     .WithIcon(Symbol.Earth)
                     .WithProperty(appSettings.GetProperty<string>(AppSettingsProperty.Language))
-                    .WithProvider(languageProvider),
+                    .WithProvider(languageProvider)
 
                 // ToggleSetting
                 //     .Create(TranslationKey.SettingsGeneralCheckForUpdates)

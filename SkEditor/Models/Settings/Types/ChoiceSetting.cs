@@ -19,6 +19,8 @@ public interface IChoiceSetting
 public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableString> name)
     : SettingElement<ChoiceSetting<T>>(name), IChoiceSetting
 {
+    public List<T> Options { get; protected set; } = [];
+
     public (Func<T> Get, Action<T> Set) Property
     {
         get => (field.Get, field.Set);
@@ -33,8 +35,6 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
 
     [ObservableProperty]
     public partial T? SelectedOption { get; set; }
-
-    public List<T> Options { get; protected set; } = [];
 
     public List<OptionItem> WrappedOptions { get; private set; } = [];
 

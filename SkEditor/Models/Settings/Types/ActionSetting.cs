@@ -9,9 +9,9 @@ namespace SkEditor.Models.Settings.Types;
 public class ActionSetting(BindableReactiveProperty<TranslatableString> name) : SettingElement<ActionSetting>(name)
 {
     public IRelayCommand? Command { get; private set; }
-    public BindableReactiveProperty<TranslatableString?> Text { get; private set; } = new(null);
     public BindableReactiveProperty<bool> IsButtonVisible { get; private set; } = new(true);
     public bool? IsExternal { get; private set; } = false;
+    public BindableReactiveProperty<TranslatableString?> Text { get; private set; } = new(null);
 
     public static ActionSetting Create(TranslatableString name)
     {

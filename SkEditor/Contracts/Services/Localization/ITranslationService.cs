@@ -12,12 +12,6 @@ public interface ITranslationService
     string LanguagesFolder { get; }
 
     /// <summary>
-    ///     Event triggered when the application's language is changed. The event handler receives the new language as a
-    ///     parameter.
-    /// </summary>
-    event EventHandler<string>? LanguageChanged;
-
-    /// <summary>
     ///     Retrieves the translated string for the given key, formatting it with the provided parameters if any.
     /// </summary>
     /// <param name="key">The translation key.</param>
@@ -34,4 +28,10 @@ public interface ITranslationService
     /// <param name="language">The language to change to.</param>
     /// <param name="startup">Whether this change is occurring during application startup.</param>
     Task ChangeLanguageAsync(string language, bool startup = false);
+
+    /// <summary>
+    ///     Event triggered when the application's language is changed. The event handler receives the new language as a
+    ///     parameter.
+    /// </summary>
+    event EventHandler<string>? LanguageChanged;
 }

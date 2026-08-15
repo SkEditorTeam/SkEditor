@@ -20,26 +20,26 @@ public record SkUnityResultDto
 
 public record SkUnityDataDto
 {
+    [JsonPropertyName("addon")]
+    public required string Addon { get; init; }
+
+    [JsonPropertyName("desc")]
+    public required string Description { get; init; }
+
     [JsonPropertyName("id")]
     public required string Id { get; init; }
 
     [JsonPropertyName("name")]
     public required string Name { get; init; }
 
+    [JsonPropertyName("pattern")]
+    public required string Pattern { get; init; }
+
     [JsonPropertyName("doc")]
     public required string Type { get; init; }
 
-    [JsonPropertyName("desc")]
-    public required string Description { get; init; }
-
-    [JsonPropertyName("addon")]
-    public required string Addon { get; init; }
-
     [JsonPropertyName("version")]
     public required string Version { get; init; }
-
-    [JsonPropertyName("pattern")]
-    public required string Pattern { get; init; }
 }
 
 [JsonSerializable(typeof(SkUnityResponseDto))]

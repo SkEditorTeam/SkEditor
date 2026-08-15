@@ -7,10 +7,6 @@ namespace SkEditor.Services.Files.Features;
 
 public class ZoomService : IZoomService
 {
-    public ZoomService(AppSettings appSettings) => appSettings.PropertyChanged += OnPropertyChanged;
-
-    public event Action<double>? ZoomChanged;
-
     public double GlobalFontSize
     {
         get;
@@ -27,6 +23,8 @@ public class ZoomService : IZoomService
         }
     } = 14;
 
+    public ZoomService(AppSettings appSettings) => appSettings.PropertyChanged += OnPropertyChanged;
+
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (sender is not AppSettings settings)
@@ -41,4 +39,6 @@ public class ZoomService : IZoomService
 
         GlobalFontSize = settings.EditorFontSize;
     }
+
+    public event Action<double>? ZoomChanged;
 }

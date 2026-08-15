@@ -6,13 +6,13 @@ namespace SkEditor.Utilities.Editor.TextMarkers;
 
 public interface ITextMarker
 {
-    int StartOffset { get; }
-    int EndOffset { get; }
-    int Length { get; }
     Color? BackgroundColor { get; set; }
+    int EndOffset { get; }
     Color? ForegroundColor { get; set; }
-    TextMarkerTypes MarkerTypes { get; set; }
+    int Length { get; }
     Color MarkerColor { get; set; }
+    TextMarkerTypes MarkerTypes { get; set; }
+    int StartOffset { get; }
     Func<UserControl>? Tooltip { get; set; }
     void Delete();
 }

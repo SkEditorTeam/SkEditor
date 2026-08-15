@@ -21,6 +21,8 @@ public class RecentFileService : IRecentFileService
     private readonly string _savePath;
     private CancellationTokenSource? _cts;
 
+    public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
+
     public RecentFileService(IConfigService configs, ILogService logs)
     {
         _savePath = Path.Combine(configs.GetAppDataPath(), "recent.json");
@@ -28,8 +30,6 @@ public class RecentFileService : IRecentFileService
 
         RecentItems = new ReadOnlyObservableCollection<WelcomeScreenRecentItem>(_recentItems);
     }
-
-    public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems { get; }
 
     public void AddRecentItem(string name, string path, bool isFolder, DateTime lastAccessed)
     {

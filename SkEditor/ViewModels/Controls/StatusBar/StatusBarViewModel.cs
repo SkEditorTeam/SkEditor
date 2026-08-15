@@ -19,6 +19,11 @@ public partial class StatusBarViewModel : ObservableObject, IDisposable
     private readonly IWindowDialogService _windowDialogs;
     private DisposableBag _disposables;
 
+    public ObservableCollection<StatusBarItem> LeftItems { get; } = [];
+
+    public List<Notification> Notifications => _notifs.GetHistory().Reverse().ToList();
+    public ObservableCollection<StatusBarItem> RightItems { get; } = [];
+
     public StatusBarViewModel(
         IWindowDialogService windowDialogs,
         INotificationService notifs,
@@ -33,6 +38,27 @@ public partial class StatusBarViewModel : ObservableObject, IDisposable
                 .Subscribe(canAttach => OnAttachStatusChanged(provider, canAttach))
                 .AddTo(ref _disposables);
         }
+    }
+
+
+    [RelayCommand]
+    public async Task OpenGoToLineDialog()
+    {
+        await _windowDialogs.ShowGoToLineDialogAsync();
+    }
+
+    [RelayCommand]
+    public void ClearAllNotifications()
+    {
+        _notifs.ClearHistory();
+        OnPropertyChanged(nameof(Notifications));
+    }
+
+    [RelayCommand]
+    public void ClearNotification(Notification notification)
+    {
+        _notifs.RemoveFromHistory(notification);
+        OnPropertyChanged(nameof(Notifications));
     }
 
     private void OnAttachStatusChanged(IStatusBarProvider provider, bool canAttach)
@@ -55,32 +81,6 @@ public partial class StatusBarViewModel : ObservableObject, IDisposable
                 targetCollection.Remove(item);
             }
         }
-    }
-
-    public ObservableCollection<StatusBarItem> LeftItems { get; } = [];
-    public ObservableCollection<StatusBarItem> RightItems { get; } = [];
-
-    public List<Notification> Notifications => _notifs.GetHistory().Reverse().ToList();
-
-
-    [RelayCommand]
-    public async Task OpenGoToLineDialog()
-    {
-        await _windowDialogs.ShowGoToLineDialogAsync();
-    }
-
-    [RelayCommand]
-    public void ClearAllNotifications()
-    {
-        _notifs.ClearHistory();
-        OnPropertyChanged(nameof(Notifications));
-    }
-
-    [RelayCommand]
-    public void ClearNotification(Notification notification)
-    {
-        _notifs.RemoveFromHistory(notification);
-        OnPropertyChanged(nameof(Notifications));
     }
 
     public void Dispose()

@@ -10,71 +10,17 @@ namespace SkEditor.Models.UI;
 [Theme]
 public partial class Theme
 {
-    [JsonIgnore]
-    public string FileName { get; set; } = string.Empty;
-
-    [JsonIgnore]
-    public bool IsBuiltIn { get; set; }
-
-    public string Name { get; set; } = string.Empty;
+    [ThemeResource]
+    public Brush? AccentColor { get; set; } = C("#FFFFFF");
 
     [ThemeResource]
     public Brush BackgroundColor { get; set; } = C("#ff0d0d0d");
-
-    [ThemeResource("TaskDialogButtonAreaBackground")]
-    public Brush SmallWindowBackgroundColor { get; set; } = C("#ff0f0f0f");
-
-    [ThemeResource]
-    public Brush DialogBackgroundColor { get; set; } = C("#ff0d0d0d");
-
-    [ThemeResource]
-    public Brush EditorBackgroundColor { get; set; } = C("#ff0d0d0d");
-
-    [ThemeResource]
-    public Brush EditorTextColor { get; set; } = C("#ffcdcaca");
-
-    [ThemeResource]
-    public Brush LineNumbersColor { get; set; } = C("#ff8a8a8a");
-
-    [ThemeResource]
-    public Brush SelectionColor { get; set; } = C("#641a6096");
-
-    [ThemeResource("TabViewItemHeaderBackgroundSelected", MapPropertyName = false)]
-    public Brush SelectedTabItemBackground { get; set; } = C("#ff161616");
-
-    [ThemeResource("TabViewSelectedItemBorderBrush", MapPropertyName = false)]
-    public Brush SelectedTabItemBorder { get; set; } = C("#00181818");
-
-    [ThemeResource("MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground",
-        "SearchPanelBackgroundBrush",
-        MapPropertyName = false)]
-    public Brush MenuBackground { get; set; } = C("#ff151515");
-
-    [ThemeResource("MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush",
-        "SearchPanelBorderBrush",
-        MapPropertyName = false)]
-    public Brush MenuBorder { get; set; } = C("#ff262626");
-
-    [ThemeResource]
-    public Brush NotificationBackground { get; set; } = C("#ff151515");
-
-    [ThemeResource]
-    public Brush NotificationBorderBrush { get; set; } = C("#ff262626");
-
-    [ThemeResource("TextControlBackgroundFocused", MapPropertyName = false)]
-    public Brush TextBoxFocusedBackground { get; set; } = C("#ff191919");
 
     [ThemeResource]
     public Brush CurrentLineBackground { get; set; } = C("#05FFFFFF");
 
     [ThemeResource]
     public Brush CurrentLineBorder { get; set; } = C("#0DFFFFFF");
-
-    [ThemeResource]
-    public Brush? AccentColor { get; set; } = C("#FFFFFF");
-
-    public string? CustomFont { get; set; }
-    public bool UseMicaEffect { get; set; }
 
     public Dictionary<string, Brush> CustomColorChanges { get; set; } = new()
     {
@@ -84,7 +30,16 @@ public partial class Theme
         { "ToggleButtonBackgroundCheckedPointerOver", C("#40ffffff") }
     };
 
-    public Dictionary<string, string> TerminalColors { get; set; } = new();
+    public string? CustomFont { get; set; }
+
+    [ThemeResource]
+    public Brush DialogBackgroundColor { get; set; } = C("#ff0d0d0d");
+
+    [ThemeResource]
+    public Brush EditorBackgroundColor { get; set; } = C("#ff0d0d0d");
+
+    [ThemeResource]
+    public Brush EditorTextColor { get; set; } = C("#ffcdcaca");
 
     public Dictionary<string, string> ExplorerIconColors { get; set; } = new()
     {
@@ -116,6 +71,52 @@ public partial class Theme
         { "pdf", "#FF595C" },
         { "code", "#7ED4E6" }
     };
+
+    [JsonIgnore]
+    public string FileName { get; set; } = string.Empty;
+
+    [JsonIgnore]
+    public bool IsBuiltIn { get; set; }
+
+    [ThemeResource]
+    public Brush LineNumbersColor { get; set; } = C("#ff8a8a8a");
+
+    [ThemeResource("MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "FlyoutPresenterBackground",
+        "SearchPanelBackgroundBrush",
+        MapPropertyName = false)]
+    public Brush MenuBackground { get; set; } = C("#ff151515");
+
+    [ThemeResource("MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "FlyoutBorderThemeBrush",
+        "SearchPanelBorderBrush",
+        MapPropertyName = false)]
+    public Brush MenuBorder { get; set; } = C("#ff262626");
+
+    public string Name { get; set; } = string.Empty;
+
+    [ThemeResource]
+    public Brush NotificationBackground { get; set; } = C("#ff151515");
+
+    [ThemeResource]
+    public Brush NotificationBorderBrush { get; set; } = C("#ff262626");
+
+    [ThemeResource("TabViewItemHeaderBackgroundSelected", MapPropertyName = false)]
+    public Brush SelectedTabItemBackground { get; set; } = C("#ff161616");
+
+    [ThemeResource("TabViewSelectedItemBorderBrush", MapPropertyName = false)]
+    public Brush SelectedTabItemBorder { get; set; } = C("#00181818");
+
+    [ThemeResource]
+    public Brush SelectionColor { get; set; } = C("#641a6096");
+
+    [ThemeResource("TaskDialogButtonAreaBackground")]
+    public Brush SmallWindowBackgroundColor { get; set; } = C("#ff0f0f0f");
+
+    public Dictionary<string, string> TerminalColors { get; set; } = new();
+
+    [ThemeResource("TextControlBackgroundFocused", MapPropertyName = false)]
+    public Brush TextBoxFocusedBackground { get; set; } = C("#ff191919");
+
+    public bool UseMicaEffect { get; set; }
 
     private static Brush C(string hex)
     {

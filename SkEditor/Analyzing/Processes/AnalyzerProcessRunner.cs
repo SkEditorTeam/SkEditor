@@ -30,10 +30,6 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
         }
     }
 
-    public event EventHandler<string>? OutputDataReceived;
-    public event EventHandler<string>? ErrorDataReceived;
-    public event EventHandler? ProcessExited;
-
     public void Start(ProcessStartInfo startInfo)
     {
         try
@@ -47,12 +43,18 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
 
             _process.OutputDataReceived += (_, args) =>
             {
-                if (args.Data != null) OutputDataReceived?.Invoke(this, args.Data);
+                if (args.Data != null)
+                {
+                    OutputDataReceived?.Invoke(this, args.Data);
+                }
             };
 
             _process.ErrorDataReceived += (_, args) =>
             {
-                if (args.Data != null) ErrorDataReceived?.Invoke(this, args.Data);
+                if (args.Data != null)
+                {
+                    ErrorDataReceived?.Invoke(this, args.Data);
+                }
             };
 
             _process.Exited += (_, _) => ProcessExited?.Invoke(this, EventArgs.Empty);
@@ -81,7 +83,10 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
 
     public void Stop()
     {
-        if (_process is null) return;
+        if (_process is null)
+        {
+            return;
+        }
 
         try
         {
@@ -107,4 +112,8 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
         Stop();
         GC.SuppressFinalize(this);
     }
+
+    public event EventHandler<string>? OutputDataReceived;
+    public event EventHandler<string>? ErrorDataReceived;
+    public event EventHandler? ProcessExited;
 }

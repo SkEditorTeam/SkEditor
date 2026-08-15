@@ -21,6 +21,19 @@ public partial class MainTabView : UserControl
         InitializeComponentState();
     }
 
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+
+        if (DataContext is not MainWindowViewModel vm)
+        {
+            return;
+        }
+
+        vm.PropertyChanged += OnViewModelPropertyChanged;
+        UpdateSplitState(vm.IsSplitActive);
+    }
+
     [AvaloniaHotReload]
     private void InitializeComponentState()
     {
@@ -55,7 +68,7 @@ public partial class MainTabView : UserControl
         e.DragEffects = DragDropEffects.Move;
         e.Handled = true;
     }
-    
+
     private void OnTabDragDrop(FATabView source, FATabViewTabDragCompletedEventArgs e)
     {
         if (e.Tab.DataContext is not TabViewModelBase tabVm)
@@ -89,19 +102,6 @@ public partial class MainTabView : UserControl
                 mainVm.MergeTab(tabVm);
             }
         });
-    }
-
-    protected override void OnDataContextChanged(EventArgs e)
-    {
-        base.OnDataContextChanged(e);
-
-        if (DataContext is not MainWindowViewModel vm)
-        {
-            return;
-        }
-
-        vm.PropertyChanged += OnViewModelPropertyChanged;
-        UpdateSplitState(vm.IsSplitActive);
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)

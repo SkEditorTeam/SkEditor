@@ -7,14 +7,14 @@ namespace SkEditor.Models.Projects;
 
 public class ContextMenuItem
 {
-    public static ContextMenuItem Separator => new() { IsSeparator = true };
+    public bool AllowForOneItemOnly { get; private set; }
+    public IRelayCommand? Command { get; private set; }
 
     public TranslatableString? Header { get; private set; }
     public StandardIcon? Icon { get; private set; }
-    public IRelayCommand? Command { get; private set; }
     public string? InputGestureText { get; private set; }
     public bool IsSeparator { get; private init; }
-    public bool AllowForOneItemOnly { get; private set; }
+    public static ContextMenuItem Separator => new() { IsSeparator = true };
 
     public static ContextMenuItem Item(TranslatableString header)
     {
@@ -77,4 +77,3 @@ public class ContextMenuItem
         return cleaned;
     }
 }
-

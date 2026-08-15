@@ -10,14 +10,8 @@ namespace SkEditor.Models.Dialogs;
 /// </summary>
 public class Dialog
 {
-    /// <summary> The localized title displayed in the header of the dialog. </summary>
-    public required TranslatableString Title { get; init; }
-
-    /// <summary> The optional localized description body of the dialog. </summary>
-    public TranslatableString? Message { get; set; }
-
-    /// <summary> The optional icon displayed alongside the dialog content. </summary>
-    public Symbol? Icon { get; set; }
+    /// <summary> Gets or sets whether the user can close the dialog by pressing the Esc key. </summary>
+    public bool AllowIgnore { get; set; } = true;
 
     /// <summary> The interactive buttons displayed at the bottom of the dialog. </summary>
     public List<DialogButton> Buttons { get; init; } = [];
@@ -25,8 +19,14 @@ public class Dialog
     /// <summary> Additional UI elements or custom controls embedded inside the dialog body. </summary>
     public List<DialogElement> Elements { get; init; } = [];
 
-    /// <summary> Gets or sets whether the user can close the dialog by pressing the Esc key. </summary>
-    public bool AllowIgnore { get; set; } = true;
+    /// <summary> The optional icon displayed alongside the dialog content. </summary>
+    public Symbol? Icon { get; set; }
+
+    /// <summary> The optional localized description body of the dialog. </summary>
+    public TranslatableString? Message { get; set; }
+
+    /// <summary> The localized title displayed in the header of the dialog. </summary>
+    public required TranslatableString Title { get; init; }
 
     /// <summary>
     ///     Creates a new dialog with a title, message, and predefined buttons.
@@ -99,24 +99,24 @@ public class Dialog
 /// </summary>
 public class DialogButton(TranslatableString text, DialogResult result, bool isDefault = false)
 {
-    /// <summary> The localized label displayed on the button. </summary>
-    public TranslatableString Text { get; init; } = text;
+    /// <summary> Predefined button for 'Cancel'. </summary>
+    public static DialogButton Cancel => new(TranslationKey.ButtonCancel, DialogResult.Cancel);
 
     /// <summary> Gets whether pressing Enter triggers this button. Only one button in a dialog should be default. </summary>
     public bool IsDefault { get; init; } = isDefault;
 
-    /// <summary> The result value returned to the caller when this button is clicked. </summary>
-    public DialogResult Result { get; init; } = result;
+    /// <summary> Predefined button for 'No'. </summary>
+    public static DialogButton No => new(TranslationKey.ButtonNo, DialogResult.No);
 
     /// <summary> Predefined button for 'OK'. </summary>
     public static DialogButton Ok => new(TranslationKey.ButtonOkay, DialogResult.Ok);
 
-    /// <summary> Predefined button for 'Cancel'. </summary>
-    public static DialogButton Cancel => new(TranslationKey.ButtonCancel, DialogResult.Cancel);
+    /// <summary> The result value returned to the caller when this button is clicked. </summary>
+    public DialogResult Result { get; init; } = result;
+
+    /// <summary> The localized label displayed on the button. </summary>
+    public TranslatableString Text { get; init; } = text;
 
     /// <summary> Predefined button for 'Yes'. </summary>
     public static DialogButton Yes => new(TranslationKey.ButtonYes, DialogResult.Yes);
-
-    /// <summary> Predefined button for 'No'. </summary>
-    public static DialogButton No => new(TranslationKey.ButtonNo, DialogResult.No);
 }

@@ -20,14 +20,14 @@ public interface IAnalyzer
     string BinDir { get; }
 
     /// <summary>
-    ///     Gets the working directory where the Analyzer server runs.
-    /// </summary>
-    string WorkingDir { get; }
-
-    /// <summary>
     ///     Gets a value indicating whether the Analyzer is currently running.
     /// </summary>
     bool IsRunning { get; }
+
+    /// <summary>
+    ///     Gets the working directory where the Analyzer server runs.
+    /// </summary>
+    string WorkingDir { get; }
 
     /// <summary>
     ///     Initializes the Analyzer.

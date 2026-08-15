@@ -7,11 +7,11 @@ namespace SkEditor.Models.UI;
 /// </summary>
 public readonly record struct StandardIcon
 {
-    private StandardIcon(object value) => Value = value;
-    public object Value { get; init; }
+    public bool IsPath => Value is string;
 
     public bool IsSymbol => Value is Symbol;
-    public bool IsPath => Value is string;
+    public object Value { get; init; }
+    private StandardIcon(object value) => Value = value;
 
     public static implicit operator StandardIcon(Symbol symbol)
     {

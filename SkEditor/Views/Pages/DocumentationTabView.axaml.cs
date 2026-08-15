@@ -16,6 +16,11 @@ public partial class DocumentationTabView : UserControl
         Loaded += OnLoaded;
     }
 
+    public void InitializeComponentState()
+    {
+        OnLoaded(null, new RoutedEventArgs());
+    }
+
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         PatternEditor.TextArea.TextView.LineTransformers.Add(new DocumentationPatternColorizer());
@@ -23,10 +28,5 @@ public partial class DocumentationTabView : UserControl
             (ImmutableSolidColorBrush?)Application.Current?.FindResource("SelectionColor");
         PatternEditor.TextArea.CaretBrush = Brushes.Transparent;
         PatternEditor.Options.LineHeightFactor = 1.3;
-    }
-
-    public void InitializeComponentState()
-    {
-        OnLoaded(null, new RoutedEventArgs());
     }
 }

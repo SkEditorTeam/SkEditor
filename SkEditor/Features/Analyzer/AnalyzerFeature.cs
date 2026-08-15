@@ -20,9 +20,9 @@ namespace SkEditor.Features.Analyzer;
 
 public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) : IEditorFeature
 {
-    private TextMarkerService? _textMarkers;
-    private IDisposable? _textEnteredSubscription;
     private CancellationTokenSource? _featureCts;
+    private IDisposable? _textEnteredSubscription;
+    private TextMarkerService? _textMarkers;
 
     public bool CanAttach(IFeatureTab tab)
     {
@@ -40,9 +40,9 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
         {
             return;
         }
-        
+
         _featureCts = new CancellationTokenSource();
-        
+
         _textEnteredSubscription = editor.TextChangedAsObservable()
             .Debounce(TimeSpan.FromSeconds(0.5))
             .SubscribeAwait(async (_, ct) => { await AnalyzeText(diagnosticsTab, editor, ct); }, AwaitOperation.Switch);

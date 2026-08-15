@@ -17,6 +17,31 @@ public partial class FileTreeViewModel
     private FileTreeCommandHandler _commandHandler;
     private Dictionary<ProjectAction, IRelayCommand> _commandMap;
 
+    public async Task CloseFileSystemAsync()
+    {
+        if (_cts != null)
+        {
+            await _cts.CancelAsync();
+            _cts.Dispose();
+            _cts = null;
+        }
+
+        if (FileSystem is SftpFileSystem sftp)
+        {
+            sftp.Disconnect();
+        }
+
+        RootItems.Clear();
+        SelectedNodes.Clear();
+        FileSystem = null;
+        IsLoading = false;
+    }
+
+    public async Task<bool> Disconnect()
+    {
+        return await _commandHandler.Disconnect();
+    }
+
     [MemberNotNull(nameof(_commandMap), nameof(_commandHandler))]
     private void InitializeCommandMap()
     {
@@ -46,26 +71,6 @@ public partial class FileTreeViewModel
     private static AsyncRelayCommand FromAction(Func<Task> action)
     {
         return new AsyncRelayCommand(action);
-    }
-
-    public async Task CloseFileSystemAsync()
-    {
-        if (_cts != null)
-        {
-            await _cts.CancelAsync();
-            _cts.Dispose();
-            _cts = null;
-        }
-
-        if (FileSystem is SftpFileSystem sftp)
-        {
-            sftp.Disconnect();
-        }
-
-        RootItems.Clear();
-        SelectedNodes.Clear();
-        FileSystem = null;
-        IsLoading = false;
     }
 
     private void UpdateContextMenuItems()
@@ -179,10 +184,5 @@ public partial class FileTreeViewModel
         }
 
         Dispatcher.UIThread.Post(() => { _ = Disconnect(); });
-    }
-
-    public async Task<bool> Disconnect()
-    {
-        return await _commandHandler.Disconnect();
     }
 }

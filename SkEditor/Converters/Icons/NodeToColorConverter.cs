@@ -39,6 +39,11 @@ public class NodeToColorConverter : IMultiValueConverter, IValueConverter
         return new ImmutableSolidColorBrush(color);
     }
 
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+
     private Color GetColorForId(string id)
     {
         string colorString = _iconProvider.GetColorForId(id);
@@ -53,10 +58,5 @@ public class NodeToColorConverter : IMultiValueConverter, IValueConverter
         return Color.TryParse(iconData.Color, out Color parsedColor)
             ? parsedColor
             : Colors.White;
-    }
-
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
     }
 }

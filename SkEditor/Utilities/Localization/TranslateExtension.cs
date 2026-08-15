@@ -6,13 +6,13 @@ namespace SkEditor.Utilities.Localization;
 
 public class TranslateExtension : MarkupExtension
 {
+    public TranslationKey? Key { get; set; }
+
     public TranslateExtension()
     {
     }
 
     public TranslateExtension(TranslationKey key) => Key = key;
-
-    public TranslationKey? Key { get; set; }
 
     public override object ProvideValue(IServiceProvider serviceProvider)
     {

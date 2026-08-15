@@ -7,17 +7,17 @@ namespace SkEditor.Models.Settings;
 
 public abstract class SettingElement(BindableReactiveProperty<TranslatableString> name) : ObservableObject
 {
-    public BindableReactiveProperty<TranslatableString> Name { get; set; } = name;
-    public StandardIcon? Icon { get; protected set; }
     public BindableReactiveProperty<TranslatableString?> Description { get; protected set; } = new(null);
-
-    public SettingElement? Parent { get; set; }
-
-    public virtual double Width { get; set; } = double.NaN;
+    public StandardIcon? Icon { get; protected set; }
 
     public BindableReactiveProperty<bool> IsEnabled { get; protected set; } = new(true);
     public BindableReactiveProperty<bool> IsVisible { get; protected set; } = new(true);
+    public BindableReactiveProperty<TranslatableString> Name { get; set; } = name;
+
+    public SettingElement? Parent { get; set; }
     public BindableReactiveProperty<bool?> Status { get; protected set; } = new(null);
+
+    public virtual double Width { get; set; } = double.NaN;
 }
 
 public abstract class SettingElement<T>(BindableReactiveProperty<TranslatableString> name) : SettingElement(name)

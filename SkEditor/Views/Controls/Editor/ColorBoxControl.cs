@@ -14,6 +14,13 @@ public class ColorBoxControl : Control
 
     private readonly TextRunProperties _properties;
 
+    public Color Color { get; }
+    public int DocumentLength { get; }
+
+    public int DocumentOffset { get; }
+    public bool IsPrefixed { get; }
+    public TextView TextView { get; }
+
     public ColorBoxControl(Color color, bool isPrefixed, TextView textView, TextRunProperties properties,
         Action<ColorBoxControl> clickAction,
         int documentOffset,
@@ -31,21 +38,6 @@ public class ColorBoxControl : Control
         Margin = new Thickness(2, 0, 2, 0);
     }
 
-    public Color Color { get; }
-    public bool IsPrefixed { get; }
-
-    public int DocumentOffset { get; }
-    public int DocumentLength { get; }
-    public TextView TextView { get; }
-
-    protected override Size MeasureOverride(Size availableSize)
-    {
-        double height = TextView.DefaultLineHeight;
-        double boxSize = height * 0.7;
-
-        return new Size(boxSize, _properties.FontRenderingEmSize);
-    }
-
     public override void Render(DrawingContext context)
     {
         double height = Bounds.Height;
@@ -60,6 +52,14 @@ public class ColorBoxControl : Control
 
         context.DrawRectangle(new SolidColorBrush(Color), new Pen(Brushes.Gray, 0.5), rect, borderRadius,
             borderRadius);
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        double height = TextView.DefaultLineHeight;
+        double boxSize = height * 0.7;
+
+        return new Size(boxSize, _properties.FontRenderingEmSize);
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)

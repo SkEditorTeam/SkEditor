@@ -11,37 +11,27 @@ namespace SkEditor.Contracts.Services.Files;
 public interface ITabService
 {
     /// <summary>
+    ///     All the opened tabs, including both main and split tabs.
+    /// </summary>
+    IEnumerable<TabViewModelBase> AllTabs { get; }
+
+    /// <summary>
     ///     The collection of main tabs, which are opened in the main view.
     /// </summary>
     ObservableCollection<TabViewModelBase> MainTabs { get; }
 
-    /// <summary>
-    ///     The collection of split tabs, which are opened in the split view.
-    /// </summary>
-    ObservableCollection<TabViewModelBase> SplitTabs { get; }
-
-    /// <summary>
-    ///     All the opened tabs, including both main and split tabs.
-    /// </summary>
-    IEnumerable<TabViewModelBase> AllTabs { get; }
+    TabViewModelBase? SelectedMainTab { get; set; }
+    TabViewModelBase? SelectedSplitTab { get; set; }
 
     /// <summary>
     ///     The currently selected tab. Can be null if no tabs are opened.
     /// </summary>
     TabViewModelBase? SelectedTab { get; set; }
 
-    TabViewModelBase? SelectedMainTab { get; set; }
-    TabViewModelBase? SelectedSplitTab { get; set; }
-
     /// <summary>
-    ///     Raised when the selected tab changes.
+    ///     The collection of split tabs, which are opened in the split view.
     /// </summary>
-    event Action<TabViewModelBase?>? SelectedTabChanged;
-
-    /// <summary>
-    ///     Raised when a tab is closed.
-    /// </summary>
-    event Action<TabViewModelBase>? TabClosed;
+    ObservableCollection<TabViewModelBase> SplitTabs { get; }
 
     /// <summary>
     ///     Switches to the tab at the given index. Does nothing if the index is out of range.
@@ -83,4 +73,14 @@ public interface ITabService
     ///     Merges the given tab back into the main view.
     /// </summary>
     void MergeTab(TabViewModelBase tab);
+
+    /// <summary>
+    ///     Raised when the selected tab changes.
+    /// </summary>
+    event Action<TabViewModelBase?>? SelectedTabChanged;
+
+    /// <summary>
+    ///     Raised when a tab is closed.
+    /// </summary>
+    event Action<TabViewModelBase>? TabClosed;
 }

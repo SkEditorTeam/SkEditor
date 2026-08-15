@@ -10,8 +10,8 @@ namespace SkEditor.Models.Settings.Types;
 public class ClickableActionSetting(BindableReactiveProperty<TranslatableString> name)
     : SettingElement<ClickableActionSetting>(name)
 {
-    public IRelayCommand? Command { get; private set; }
     public StandardIcon? ActionIcon { get; protected set; }
+    public IRelayCommand? Command { get; private set; }
 
     public static ClickableActionSetting Create(TranslatableString name)
     {

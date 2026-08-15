@@ -15,6 +15,8 @@ public partial class LocalFileSystem : IFileSystem
     public static readonly Func<string, Task<bool>> AlreadyExistsPredicate =
         path => Task.FromResult(File.Exists(path) || Directory.Exists(path));
 
+    public FileSystemNode? Root { get; }
+
     public LocalFileSystem(string rootDirectory)
     {
         if (!Directory.Exists(rootDirectory))
@@ -32,8 +34,6 @@ public partial class LocalFileSystem : IFileSystem
 
         _watcher = CreateWatcher(rootDirectory);
     }
-
-    public FileSystemNode? Root { get; }
 
     public async Task<bool> LoadAsync(CancellationToken cancellationToken)
     {

@@ -6,6 +6,18 @@ namespace SkEditor.Models.Settings.Types;
 
 public class ToggleSetting : SettingElement<ToggleSetting>
 {
+    public BindableReactiveProperty<bool> IsToggled { get; set; }
+
+    public (Func<bool> Get, Action<bool> Set) Property
+    {
+        get => (field.Get, field.Set);
+        set
+        {
+            field = value;
+            IsToggled.Value = value.Get();
+        }
+    }
+
     public ToggleSetting(BindableReactiveProperty<TranslatableString> name) : base(name)
     {
         IsToggled = new BindableReactiveProperty<bool>(false);
@@ -18,18 +30,6 @@ public class ToggleSetting : SettingElement<ToggleSetting>
             }
         });
     }
-
-    public (Func<bool> Get, Action<bool> Set) Property
-    {
-        get => (field.Get, field.Set);
-        set
-        {
-            field = value;
-            IsToggled.Value = value.Get();
-        }
-    }
-
-    public BindableReactiveProperty<bool> IsToggled { get; set; }
 
     public static ToggleSetting Create(TranslatableString name)
     {

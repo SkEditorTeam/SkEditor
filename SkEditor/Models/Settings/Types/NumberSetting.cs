@@ -9,28 +9,29 @@ namespace SkEditor.Models.Settings.Types;
 
 public interface INumberSetting
 {
-    double? MinValue { get; set; }
-    double? MaxValue { get; set; }
     string FormatString { get; set; }
+    double? MaxValue { get; set; }
+    double? MinValue { get; set; }
     object? Value { get; set; }
 }
 
 public partial class NumberSetting<T>(BindableReactiveProperty<TranslatableString> name)
     : SettingElement<NumberSetting<T>>(name), INumberSetting where T : struct, INumber<T>
 {
+    public string FormatString { get; set; } = "{0}";
+
+    [ObservableProperty]
+    public partial T GenericValue { get; set; }
+
+    public double? MaxValue { get; set; }
+
+    public double? MinValue { get; set; }
+
     public (Func<T> Get, Action<T> Set) Property
     {
         get => (field.Get, field.Set);
         set;
     }
-
-    [ObservableProperty]
-    public partial T GenericValue { get; set; }
-
-    public double? MinValue { get; set; }
-    public double? MaxValue { get; set; }
-
-    public string FormatString { get; set; } = "{0}";
 
     public object? Value
     {

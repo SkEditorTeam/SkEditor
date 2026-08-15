@@ -38,7 +38,7 @@
             <input:InputElementDoubleTappedEventCommandTrigger Command="{Binding #Root.ErrorClickCommand}"
                                                                Parameter="{Binding #Root.ErrorClickCommandParameter}" />
         </Interaction.Behaviors>
-        
+
         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
             <Viewbox Grid.Column="0" Height="18" Width="18">
                 <icons:SymbolIcon Symbol="{Binding #Root.ErrorIcon}" Foreground="{Binding #Root.ErrorColor}"

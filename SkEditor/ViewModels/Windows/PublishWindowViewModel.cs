@@ -13,6 +13,22 @@ namespace SkEditor.ViewModels.Windows;
 
 public partial class PublishWindowViewModel : ObservableObject
 {
+    public IRelayCommand CopyCommand { get; }
+
+    public IRelayCommand PublishCommand { get; }
+
+    public List<PublishTypeEntry> PublishTypes { get; } =
+    [
+        new(PublishType.Pastebin, "Pastebin"),
+        new(PublishType.SkUnity, "skUnity Parser")
+    ];
+
+    [ObservableProperty]
+    public partial string Result { get; private set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial PublishTypeEntry SelectedType { get; set; }
+
     public PublishWindowViewModel(IPublishService publishService, INotificationService notifications,
         IClipboardService clipboard, SecretsConfig secretsConfig, ITabService tabs)
     {
@@ -76,21 +92,6 @@ public partial class PublishWindowViewModel : ObservableObject
             await clipboard.CopyTextAsync(Result);
         });
     }
-
-    [ObservableProperty]
-    public partial string Result { get; private set; } = string.Empty;
-
-    public List<PublishTypeEntry> PublishTypes { get; } =
-    [
-        new(PublishType.Pastebin, "Pastebin"),
-        new(PublishType.SkUnity, "skUnity Parser")
-    ];
-
-    [ObservableProperty]
-    public partial PublishTypeEntry SelectedType { get; set; }
-
-    public IRelayCommand PublishCommand { get; }
-    public IRelayCommand CopyCommand { get; }
 
     public record PublishTypeEntry(PublishType Type, string Name);
 }

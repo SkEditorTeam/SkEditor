@@ -19,7 +19,7 @@ public class LinkService(ILogService logs) : ILinkService
             logs.Warning($"Attempted to open folder '{path}', but it doesn't exist.");
             return;
         }
-        
+
         if (OperatingSystem.IsWindows())
         {
             Process.Start(new ProcessStartInfo

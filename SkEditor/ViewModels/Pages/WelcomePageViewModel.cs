@@ -23,9 +23,8 @@ public partial class WelcomePageViewModel(
     INotificationService notifications,
     ILinkService links) : ObservableObject
 {
-    public string Version { get; } = $"v{App.GetInformationalVersion()}";
-
     public ReadOnlyObservableCollection<WelcomeScreenRecentItem> RecentItems => welcome.RecentItems;
+    public string Version { get; } = $"v{App.GetInformationalVersion()}";
     public ObservableCollection<WelcomeScreenSection> WelcomeSections => welcome.WelcomeSections;
 
     [RelayCommand]

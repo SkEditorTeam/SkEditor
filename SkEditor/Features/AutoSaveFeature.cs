@@ -10,10 +10,10 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
 {
     private readonly TimeSpan _debounceDelay = TimeSpan.FromSeconds(1);
     private readonly TimeSpan _maxDelay = TimeSpan.FromSeconds(10);
-    private CancellationTokenSource? _cts;
-    private DateTime _lastChangeAt = DateTime.MinValue;
     private IClosableTab? _closableTab;
+    private CancellationTokenSource? _cts;
     private IFileTab? _fileTab;
+    private DateTime _lastChangeAt = DateTime.MinValue;
     private ISaveableTab? _saveableTab;
     private ITextEditorTab? _textEditorTab;
 

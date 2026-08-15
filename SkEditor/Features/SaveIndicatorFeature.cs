@@ -7,8 +7,8 @@ namespace SkEditor.Features;
 
 public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
 {
-    private PropertyChangedEventHandler? _handler;
     private IFileTab? _fileTab;
+    private PropertyChangedEventHandler? _handler;
     private ISaveStateTab? _saveStateTab;
     private ITextEditorTab? _textEditorTab;
 

@@ -19,10 +19,8 @@ public class AnalyzerProtocolHandler(
     IAnalyzerProcessRunner processRunner) : IAnalyzerProtocolHandler
 {
     private TaskCompletionSource<AnalyzeResultsDto?>? _analysisTcs;
-    private bool _isInitialized;
     private bool _didRemoveCorruptedAot;
-    
-    public event EventHandler? CorruptedAotDetected;
+    private bool _isInitialized;
 
     public async Task<AnalyzeResultsDto?> SendParseCommandAsync(string scriptFilePath, CancellationToken ct)
     {
@@ -50,16 +48,20 @@ public class AnalyzerProtocolHandler(
 
     public void HandleOutputData(string data)
     {
-        if (string.IsNullOrEmpty(data)) return;
+        if (string.IsNullOrEmpty(data))
+        {
+            return;
+        }
 
-        if (!_isInitialized && !_didRemoveCorruptedAot && data.Contains("[aot]") && (data.Contains("error") || data.Contains("bad magic number")))
+        if (!_isInitialized && !_didRemoveCorruptedAot && data.Contains("[aot]") &&
+            (data.Contains("error") || data.Contains("bad magic number")))
         {
             logs.Warning("Detected corrupted AOT cache during JVM startup. Deleting bad .aot file...",
                 LogSource.Analyzer);
             CorruptedAotDetected?.Invoke(this, EventArgs.Empty);
             _didRemoveCorruptedAot = true;
         }
-        
+
         if (data.Contains("Successfully enabled") || data.Contains("Successfully started"))
         {
             _isInitialized = true;
@@ -77,7 +79,8 @@ public class AnalyzerProtocolHandler(
             int jsonStartIndex = data.IndexOf("{\"results\":", StringComparison.Ordinal);
             string json = data[jsonStartIndex..];
 
-            AnalyzeResultsDto? result = JsonSerializer.Deserialize(json, AnalyzeResultContext.Default.AnalyzeResultsDto);
+            AnalyzeResultsDto? result =
+                JsonSerializer.Deserialize(json, AnalyzeResultContext.Default.AnalyzeResultsDto);
             _analysisTcs?.TrySetResult(result);
         }
         catch (Exception ex)
@@ -85,7 +88,7 @@ public class AnalyzerProtocolHandler(
             _analysisTcs?.TrySetException(ex);
         }
     }
-    
+
     public void ResetState()
     {
         _isInitialized = false;
@@ -95,7 +98,10 @@ public class AnalyzerProtocolHandler(
 
     public void HandleErrorData(string data)
     {
-        if (string.IsNullOrWhiteSpace(data)) return;
+        if (string.IsNullOrWhiteSpace(data))
+        {
+            return;
+        }
 
         if (data.StartsWith("WARNING", StringComparison.OrdinalIgnoreCase))
         {
@@ -110,4 +116,6 @@ public class AnalyzerProtocolHandler(
         notifs.Show(notification);
         logs.Error(data, LogSource.Analyzer);
     }
+
+    public event EventHandler? CorruptedAotDetected;
 }

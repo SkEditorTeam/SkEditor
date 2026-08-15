@@ -12,6 +12,9 @@ public partial class GoToLineWindowViewModel : ObservableObject
 {
     private readonly ITabService _tabs;
 
+    [ObservableProperty]
+    public partial string Input { get; set; } = string.Empty;
+
     public GoToLineWindowViewModel(ITabService tabs)
     {
         _tabs = tabs;
@@ -24,11 +27,6 @@ public partial class GoToLineWindowViewModel : ObservableObject
         TextLocation location = fileTab.Document.GetLocation(fileTab.CaretOffset);
         Input = $"{location.Line}:{location.Column}";
     }
-
-    [ObservableProperty]
-    public partial string Input { get; set; } = string.Empty;
-
-    public event Action? CloseRequested;
 
     [RelayCommand]
     public void Execute()
@@ -95,4 +93,6 @@ public partial class GoToLineWindowViewModel : ObservableObject
         location = new TextLocation(line, column);
         return true;
     }
+
+    public event Action? CloseRequested;
 }

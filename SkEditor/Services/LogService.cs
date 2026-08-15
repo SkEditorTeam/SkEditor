@@ -14,13 +14,6 @@ public class LogService(ILogger logger) : ILogService, IDisposable
 {
     private readonly Subject<LogEntry> _logSubject = new();
 
-    public void Dispose()
-    {
-        _logSubject.OnCompleted();
-        _logSubject.Dispose();
-        GC.SuppressFinalize(this);
-    }
-
     public string LogsFolderPath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "SkEditor", "v3.0", "Logs");
@@ -118,5 +111,12 @@ public class LogService(ILogger logger) : ILogService, IDisposable
         {
             return template;
         }
+    }
+
+    public void Dispose()
+    {
+        _logSubject.OnCompleted();
+        _logSubject.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

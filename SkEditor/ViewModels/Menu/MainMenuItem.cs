@@ -11,19 +11,19 @@ namespace SkEditor.ViewModels.Menu;
 
 public class MainMenuItem : ObservableObject
 {
-    public BindableReactiveProperty<bool> IsVisible { get; set; } = new(true);
-
-    public BindableReactiveProperty<bool> IsEnabled { get; set; } = new(true);
+    public IRelayCommand? Command { get; private set; }
 
     public TranslatableString? Header { get; private set; }
     public Symbol? IconSymbol { get; private set; }
-    public IRelayCommand? Command { get; private set; }
-    public IEnumerable<MainMenuItem>? SubItems { get; private set; }
     public string? InputGestureText { get; private set; }
-    public bool RegisterHotKey { get; private set; } = true;
+
+    public BindableReactiveProperty<bool> IsEnabled { get; set; } = new(true);
     public bool IsSeparator { get; private set; }
+    public BindableReactiveProperty<bool> IsVisible { get; set; } = new(true);
+    public bool RegisterHotKey { get; private set; } = true;
 
     public static MainMenuItem Separator => new() { IsSeparator = true };
+    public IEnumerable<MainMenuItem>? SubItems { get; private set; }
 
     public static MainMenuItem HeaderOnly(TranslatableString header)
     {

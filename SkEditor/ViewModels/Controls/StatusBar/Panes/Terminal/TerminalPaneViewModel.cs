@@ -13,13 +13,12 @@ namespace SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
 
 public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDisposable
 {
-    public string Id => "Terminal";
-    public TranslatableString Name => TranslatableString.FromRawString("Terminal");
-    public IDrawerToolbarViewModel? Toolbar { get; }
-    public BindableReactiveProperty<bool> IsVisible { get; }
-
     private TerminalControl? _terminalControl;
+    public string Id => "Terminal";
+    public BindableReactiveProperty<bool> IsVisible { get; }
+    public TranslatableString Name => TranslatableString.FromRawString("Terminal");
     public TerminalControl TerminalControl => _terminalControl ??= CreateTerminal();
+    public IDrawerToolbarViewModel? Toolbar { get; }
 
     public TerminalPaneViewModel(ExperimentsConfig experiments)
     {
@@ -28,6 +27,17 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
         IsVisible = experiments
             .ObservePropertyChanged(x => x.TerminalEnabled)
             .ToBindableReactiveProperty();
+    }
+
+    public async Task RestartTerminal()
+    {
+        await TerminalControl.ClearAsync();
+        await TerminalControl.LaunchProcess();
+    }
+
+    public async Task Clear()
+    {
+        await TerminalControl.ClearAsync();
     }
 
     private TerminalControl CreateTerminal()
@@ -71,7 +81,7 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
     {
         try
         {
-            var startInfo = new ProcessStartInfo
+            ProcessStartInfo startInfo = new()
             {
                 FileName = OperatingSystem.IsWindows() ? "where" : "which",
                 Arguments = command,
@@ -101,16 +111,5 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
     {
         GC.SuppressFinalize(this);
         _terminalControl?.Kill();
-    }
-
-    public async Task RestartTerminal()
-    {
-        await TerminalControl.ClearAsync();
-        await TerminalControl.LaunchProcess();
-    }
-
-    public async Task Clear()
-    {
-        await TerminalControl.ClearAsync();
     }
 }

@@ -9,9 +9,9 @@ namespace SkEditor.Services.Windowing;
 public class WindowRegistry(IClassicDesktopStyleApplicationLifetime desktop)
 {
     private readonly List<MainWindow> _windows = [];
+    public MainWindow? Active => _windows.LastOrDefault(w => w.IsActive) ?? _windows.LastOrDefault();
 
     public IReadOnlyList<MainWindow> Windows => _windows.AsReadOnly();
-    public MainWindow? Active => _windows.LastOrDefault(w => w.IsActive) ?? _windows.LastOrDefault();
 
     public void Register(MainWindow window)
     {

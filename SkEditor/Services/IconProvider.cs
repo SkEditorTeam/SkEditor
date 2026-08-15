@@ -10,10 +10,9 @@ namespace SkEditor.Services;
 
 public class IconProvider
 {
+    public readonly FileIconEntry DefaultIcon = new("Document", "#CFD8DC", []);
     private readonly Dictionary<string, FileIconEntry> _iconMap = new();
     private readonly Dictionary<string, string> _idColorMap = new();
-    
-    public readonly FileIconEntry DefaultIcon = new("Document", "#CFD8DC", []);
 
     public async Task LoadIcons(Dictionary<string, string> themeColors)
     {
@@ -35,7 +34,7 @@ public class IconProvider
             foreach (string ext in entry.Extensions)
             {
                 string lowerExt = ext.ToLower();
-                
+
                 FileIconEntry iconEntry = new(entry.Icon, color, entry.Extensions);
                 _iconMap.Add(lowerExt, iconEntry);
             }
@@ -49,7 +48,7 @@ public class IconProvider
         string lowerExt = extension.ToLower();
         return _iconMap.GetValueOrDefault(lowerExt, DefaultIcon);
     }
-    
+
     public string GetColorForId(string id)
     {
         return _idColorMap.GetValueOrDefault(id, "#CFD8DC");
@@ -57,21 +56,21 @@ public class IconProvider
 
     public class FileIconEntryDto
     {
-        [JsonPropertyName("id")]
-        public required string Id { get; set; }
+        [JsonPropertyName("extensions")]
+        public required string[] Extensions { get; init; }
 
         [JsonPropertyName("icon")]
         public required string Icon { get; init; }
 
-        [JsonPropertyName("extensions")]
-        public required string[] Extensions { get; init; }
+        [JsonPropertyName("id")]
+        public required string Id { get; set; }
     }
 
     public class FileIconEntry(string icon, string color, string[] extensions)
     {
-        public string Icon { get; } = icon;
         public string Color { get; } = color;
         public string[] Extensions { get; } = extensions;
+        public string Icon { get; } = icon;
     }
 }
 

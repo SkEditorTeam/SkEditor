@@ -9,6 +9,15 @@ public sealed class TextMarker : TextSegment, ITextMarker
 {
     private readonly TextMarkerService _service;
 
+    public Color? BackgroundColor { get; set; }
+    public Color? ForegroundColor { get; set; }
+
+    public bool IsDeleted => !IsConnectedToCollection;
+    public Color MarkerColor { get; set; }
+    public TextMarkerTypes MarkerTypes { get; set; }
+
+    public Func<UserControl>? Tooltip { get; set; }
+
     public TextMarker(TextMarkerService service, int startOffset, int length)
     {
         _service = service ?? throw new ArgumentNullException(nameof(service));
@@ -16,15 +25,6 @@ public sealed class TextMarker : TextSegment, ITextMarker
         Length = length;
         MarkerTypes = TextMarkerTypes.None;
     }
-
-    public bool IsDeleted => !IsConnectedToCollection;
-
-    public Color? BackgroundColor { get; set; }
-    public Color? ForegroundColor { get; set; }
-    public TextMarkerTypes MarkerTypes { get; set; }
-    public Color MarkerColor { get; set; }
-
-    public Func<UserControl>? Tooltip { get; set; }
 
     public void Delete()
     {

@@ -29,15 +29,13 @@ public class ThemeService(
     WindowRegistry windowRegistry) : IThemeService
 {
     private bool _defaultColorsCollected;
+    public Theme CurrentTheme { get; set; } = new();
 
     public Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 
-    public List<Theme> Themes { get; set; } = [];
-    public Theme CurrentTheme { get; set; } = new();
-
     public string ThemeFolderPath { get; set; } = Path.Combine(config.GetAppDataPath(), "Themes");
 
-    public event Action? ThemeChanged;
+    public List<Theme> Themes { get; set; } = [];
 
     public void LoadThemes()
     {
@@ -70,24 +68,6 @@ public class ThemeService(
         LoadBuiltInThemes();
 
         CurrentTheme = GetUsedTheme();
-    }
-
-    private void LoadBuiltInThemes()
-    {
-        Uri themesUri = new("avares://SkEditor/Assets/Themes/");
-        IEnumerable<Uri> themes = AssetLoader.GetAssets(themesUri, themesUri);
-
-        foreach (Uri theme in themes)
-        {
-            Theme? deserializedTheme = LoadTheme(theme.ToString(), true);
-
-            if (deserializedTheme == null)
-            {
-                continue;
-            }
-
-            Themes.Add(deserializedTheme);
-        }
     }
 
     public Theme? LoadTheme(string path, bool isBuiltIn = false)
@@ -221,45 +201,6 @@ public class ThemeService(
         await Task.WhenAll(tasks);
     }
 
-    private async Task UpdateExplorerIcons()
-    {
-        await iconProvider.LoadIcons(CurrentTheme.ExplorerIconColors);
-    }
-
-    private void ApplyTerminalTheme()
-    {
-        var palette = ConsolePalette.CreateDefault();
-
-        foreach ((string key, string hex) in CurrentTheme.TerminalColors)
-        {
-            if (key.Length < 3)
-            {
-                continue;
-            }
-
-            bool isBg = key.StartsWith("Bg", StringComparison.OrdinalIgnoreCase);
-            string colorName = key[2..];
-
-            if (Enum.TryParse(colorName, true, out AnsiColor ansiColor) &&
-                Color.TryParse(hex, out Color color))
-            {
-                palette[ansiColor, isBg] = color;
-            }
-        }
-
-        BufferCellExtensions.ActivePalette = palette;
-    }
-
-    private void UpdateAccentColor(Application app)
-    {
-        FluentAvaloniaTheme styles = app.Styles.OfType<FluentAvaloniaTheme>().First();
-
-        Color accent = GetAccentColor();
-
-        styles.PreferUserAccentColor = false;
-        styles.CustomAccentColor = accent;
-    }
-
     public Color GetAccentColor()
     {
         if (CurrentTheme.AccentColor is not null)
@@ -314,6 +255,80 @@ public class ThemeService(
         await ApplyThemeAsync();
     }
 
+    public static Theme GetDefaultTheme()
+    {
+        return new Theme
+        {
+            Name = "Default",
+            FileName = "Default.json"
+        };
+    }
+
+    public void SaveTheme(Theme theme)
+    {
+        string path = Path.Combine(ThemeFolderPath, theme.FileName);
+
+        string serializedTheme = JsonSerializer.Serialize(theme, ThemeJsonContext.Default.Theme);
+        File.WriteAllText(path, serializedTheme);
+    }
+
+    private void LoadBuiltInThemes()
+    {
+        Uri themesUri = new("avares://SkEditor/Assets/Themes/");
+        IEnumerable<Uri> themes = AssetLoader.GetAssets(themesUri, themesUri);
+
+        foreach (Uri theme in themes)
+        {
+            Theme? deserializedTheme = LoadTheme(theme.ToString(), true);
+
+            if (deserializedTheme == null)
+            {
+                continue;
+            }
+
+            Themes.Add(deserializedTheme);
+        }
+    }
+
+    private async Task UpdateExplorerIcons()
+    {
+        await iconProvider.LoadIcons(CurrentTheme.ExplorerIconColors);
+    }
+
+    private void ApplyTerminalTheme()
+    {
+        ConsolePalette palette = ConsolePalette.CreateDefault();
+
+        foreach ((string key, string hex) in CurrentTheme.TerminalColors)
+        {
+            if (key.Length < 3)
+            {
+                continue;
+            }
+
+            bool isBg = key.StartsWith("Bg", StringComparison.OrdinalIgnoreCase);
+            string colorName = key[2..];
+
+            if (Enum.TryParse(colorName, true, out AnsiColor ansiColor) &&
+                Color.TryParse(hex, out Color color))
+            {
+                palette[ansiColor, isBg] = color;
+            }
+        }
+
+        BufferCellExtensions.ActivePalette = palette;
+    }
+
+    private void UpdateAccentColor(Application app)
+    {
+        FluentAvaloniaTheme styles = app.Styles.OfType<FluentAvaloniaTheme>().First();
+
+        Color accent = GetAccentColor();
+
+        styles.PreferUserAccentColor = false;
+        styles.CustomAccentColor = accent;
+    }
+
     private Theme GetUsedTheme()
     {
         string currentTheme = appSettings.CurrentTheme;
@@ -342,23 +357,6 @@ public class ThemeService(
         }
 
         return GetDefaultTheme();
-    }
-
-    public static Theme GetDefaultTheme()
-    {
-        return new Theme
-        {
-            Name = "Default",
-            FileName = "Default.json"
-        };
-    }
-
-    public void SaveTheme(Theme theme)
-    {
-        string path = Path.Combine(ThemeFolderPath, theme.FileName);
-
-        string serializedTheme = JsonSerializer.Serialize(theme, ThemeJsonContext.Default.Theme);
-        File.WriteAllText(path, serializedTheme);
     }
 
     private void CaptureNewDefaultColors(Theme themeToApply)
@@ -483,4 +481,6 @@ public class ThemeService(
         font ??= new FontFamily(FontFamily.Default.Name);
         Application.Current.Resources["ContentControlThemeFontFamily"] = font;
     }
+
+    public event Action? ThemeChanged;
 }

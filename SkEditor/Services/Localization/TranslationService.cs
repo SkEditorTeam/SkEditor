@@ -25,6 +25,10 @@ public class TranslationService : ITranslationService
     private readonly AppSettings _appSettings;
     private readonly ILogService _logs;
 
+    public static ITranslationService Current { get; set; } = null!;
+
+    public string LanguagesFolder => Path.Combine(AppContext.BaseDirectory, "Languages");
+
     public TranslationService(ILogService logs, AppSettings appSettings)
     {
         _logs = logs;
@@ -32,12 +36,6 @@ public class TranslationService : ITranslationService
 
         appSettings.PropertyChanged += OnSettingsChanged;
     }
-
-    public static ITranslationService Current { get; set; } = null!;
-
-    public string LanguagesFolder => Path.Combine(AppContext.BaseDirectory, "Languages");
-
-    public event EventHandler<string>? LanguageChanged;
 
     public string Get(TranslationKey key, params string?[] parameters)
     {
@@ -196,4 +194,6 @@ public class TranslationService : ITranslationService
             _ = ChangeLanguageAsync(_appSettings.Language);
         }
     }
+
+    public event EventHandler<string>? LanguageChanged;
 }

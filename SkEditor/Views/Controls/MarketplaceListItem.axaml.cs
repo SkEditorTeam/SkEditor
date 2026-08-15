@@ -16,11 +16,10 @@ public partial class MarketplaceListItem : UserControl
     public static readonly AvaloniaProperty<string> ItemShortDescriptionProperty =
         AvaloniaProperty.Register<MarketplaceListItem, string>(nameof(ItemShortDescription));
 
-    public MarketplaceListItem()
+    public string? ItemImageUrl
     {
-        InitializeComponent();
-
-        RenderOptions.SetBitmapInterpolationMode(IconImage, BitmapInterpolationMode.HighQuality);
+        get => GetValue(ItemImageUrlProperty)?.ToString();
+        set => SetValue(ItemImageUrlProperty, value);
     }
 
     public string? ItemName
@@ -29,15 +28,16 @@ public partial class MarketplaceListItem : UserControl
         set => SetValue(ItemNameProperty, value);
     }
 
-    public string? ItemImageUrl
-    {
-        get => GetValue(ItemImageUrlProperty)?.ToString();
-        set => SetValue(ItemImageUrlProperty, value);
-    }
-
     public string? ItemShortDescription
     {
         get => GetValue(ItemShortDescriptionProperty)?.ToString();
         set => SetValue(ItemShortDescriptionProperty, value);
+    }
+
+    public MarketplaceListItem()
+    {
+        InitializeComponent();
+
+        RenderOptions.SetBitmapInterpolationMode(IconImage, BitmapInterpolationMode.HighQuality);
     }
 }

@@ -20,6 +20,8 @@ public sealed class TextMarkerService(FileTabViewModel fileTab) : DocumentColori
 
     public KnownLayer Layer => KnownLayer.Selection;
 
+    public IEnumerable<ITextMarker> TextMarkers => _markers;
+
     public void Draw(TextView textView, DrawingContext drawingContext)
     {
         ArgumentNullException.ThrowIfNull(textView);
@@ -133,8 +135,6 @@ public sealed class TextMarkerService(FileTabViewModel fileTab) : DocumentColori
         return _markers?.FindSegmentsContaining(offset) ?? Enumerable.Empty<ITextMarker>();
     }
 
-    public IEnumerable<ITextMarker> TextMarkers => _markers;
-
     public void RemoveAll()
     {
         _markers.ToList().ForEach(Remove);
@@ -157,8 +157,6 @@ public sealed class TextMarkerService(FileTabViewModel fileTab) : DocumentColori
         fileTab.RequestRedraw(segment);
     }
 
-    public event EventHandler? RedrawRequested;
-
     protected override void ColorizeLine(DocumentLine line)
     {
     }
@@ -180,4 +178,6 @@ public sealed class TextMarkerService(FileTabViewModel fileTab) : DocumentColori
             yield return new Point(start.X + (i * offset * multiplier), start.Y + (yOffset * multiplier));
         }
     }
+
+    public event EventHandler? RedrawRequested;
 }

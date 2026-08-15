@@ -23,16 +23,16 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
     : IEditorFeature
 {
     private static readonly ErrorResultComparer Comparer = new();
-
-    private Popup? _popup;
-    private AnalyzerTooltipView? _tooltipView;
+    private static readonly TimeSpan HideGracePeriod = TimeSpan.FromMilliseconds(100);
+    private readonly TimeSpan _tooltipDelay = TimeSpan.FromMilliseconds(500);
 
     private DisposableBag _disposableBag;
-    private readonly TimeSpan _tooltipDelay = TimeSpan.FromMilliseconds(500);
-    private bool _tooltipShown;
-    private bool _pointerOverPopup;
-    private static readonly TimeSpan HideGracePeriod = TimeSpan.FromMilliseconds(100);
     private Point _lastPointerPosition;
+    private bool _pointerOverPopup;
+
+    private Popup? _popup;
+    private bool _tooltipShown;
+    private AnalyzerTooltipView? _tooltipView;
 
     public bool CanAttach(IFeatureTab tab)
     {
@@ -93,7 +93,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
             .Subscribe(e => _lastPointerPosition = e.GetPosition(editor.TextArea.TextView))
             .AddTo(ref _disposableBag);
 
-        var movedStream = editor.PointerMovedAsObservable()
+        Observable<(AnalyzerError? Error, Rect TargetRect)> movedStream = editor.PointerMovedAsObservable()
             .Select(e =>
             {
                 Point point = e.GetPosition(editor.TextArea.TextView);
@@ -120,6 +120,24 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
                 _tooltipShown = false;
             })
             .AddTo(ref _disposableBag);
+    }
+
+    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
+    {
+        _disposableBag.Dispose();
+
+        if (_popup is not null)
+        {
+            _popup.IsOpen = false;
+            _popup.Child = null;
+        }
+
+        _tooltipShown = false;
+        _pointerOverPopup = false;
+        _lastPointerPosition = default;
+
+        _popup = null;
+        _tooltipView = null;
     }
 
     private async Task HandlePointerMoved(TextEditor editor, (AnalyzerError? Error, Rect TargetRect) result,
@@ -201,24 +219,6 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
         Rect targetRect = new(point.X, lineBottomY, 1, 1);
 
         return (errorAtPos, targetRect);
-    }
-
-    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
-    {
-        _disposableBag.Dispose();
-
-        if (_popup is not null)
-        {
-            _popup.IsOpen = false;
-            _popup.Child = null;
-        }
-
-        _tooltipShown = false;
-        _pointerOverPopup = false;
-        _lastPointerPosition = default;
-
-        _popup = null;
-        _tooltipView = null;
     }
 
     private class ErrorResultComparer : IEqualityComparer<(AnalyzerError? Error, Rect TargetRect)>

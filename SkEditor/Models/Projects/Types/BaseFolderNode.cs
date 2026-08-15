@@ -16,6 +16,15 @@ public abstract partial class BaseFolderNode : FileSystemNode
 {
     private static readonly FileSystemNode DummyNode = new DummyFileNode();
 
+    private bool _ignoreNextExpandedChange;
+
+    public bool HasChildren => Children.Any() && Children.First() != DummyNode;
+
+    public override IRelayCommand OpenCommand => OpenFolderCommand;
+
+    protected abstract Func<string, Task> CreateFileAction { get; }
+    protected abstract Func<string, Task> CreateFolderAction { get; }
+
     protected BaseFolderNode(string name, string path, bool isRoot, bool addDummy = true) : base(name, path, true)
     {
         if (!isRoot && addDummy)
@@ -24,154 +33,10 @@ public abstract partial class BaseFolderNode : FileSystemNode
         }
     }
 
-    public override IRelayCommand OpenCommand => OpenFolderCommand;
-
-    public bool HasChildren => Children.Any() && Children.First() != DummyNode;
-
-    protected abstract Func<string, Task> CreateFileAction { get; }
-    protected abstract Func<string, Task> CreateFolderAction { get; }
-
     [RelayCommand]
     public void OpenFolder()
     {
         IsExpanded = !IsExpanded;
-    }
-
-    private bool _ignoreNextExpandedChange;
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-
-        if (e.PropertyName != nameof(IsExpanded))
-        {
-            return;
-        }
-
-        if (_ignoreNextExpandedChange)
-        {
-            _ignoreNextExpandedChange = false;
-            return;
-        }
-
-        if (IsExpanded && !HasLoadedChildren)
-        {
-            _ = LoadChildrenAsync();
-        }
-    }
-
-    protected int FindInsertionIndex(FileSystemNode newNode)
-    {
-        bool newIsFolder = newNode is BaseFolderNode;
-
-        int lo = 0;
-        int hi = Children.Count;
-
-        if (newIsFolder)
-        {
-            hi = Children.TakeWhile(c => c is BaseFolderNode).Count();
-        }
-        else
-        {
-            lo = Children.TakeWhile(c => c is BaseFolderNode).Count();
-        }
-
-        while (lo < hi)
-        {
-            int mid = (lo + hi) / 2;
-            int cmp = StringComparer.OrdinalIgnoreCase.Compare(
-                Children[mid].Name, newNode.Name);
-
-            if (cmp < 0)
-            {
-                lo = mid + 1;
-            }
-            else
-            {
-                hi = mid;
-            }
-        }
-
-        return lo;
-    }
-
-    protected void AddChild(FileSystemNode node, bool add = true)
-    {
-        node.PropertyChanged += OnChildPropertyChanged;
-        node.Deleted += OnChildDeleted;
-
-        if (add)
-        {
-            Children.Insert(FindInsertionIndex(node), node);
-        }
-    }
-
-    protected void RemoveChild(FileSystemNode node)
-    {
-        node.PropertyChanged -= OnChildPropertyChanged;
-        node.Deleted -= OnChildDeleted;
-        Children.Remove(node);
-    }
-
-    private void OnChildDeleted(object? sender, EventArgs e)
-    {
-        if (sender is not FileSystemNode node)
-        {
-            return;
-        }
-
-        RemoveChild(node);
-    }
-
-    private void OnChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(Name))
-        {
-            return;
-        }
-
-        if (sender is not FileSystemNode node)
-        {
-            return;
-        }
-
-        int oldIndex = Children.IndexOf(node);
-        if (oldIndex < 0)
-        {
-            return;
-        }
-
-        int newIndex = CalculateRenameIndex(node, oldIndex);
-
-        if (oldIndex != newIndex)
-        {
-            Children.Move(oldIndex, newIndex);
-        }
-    }
-
-    private int CalculateRenameIndex(FileSystemNode node, int oldIndex)
-    {
-        int startIndex = node is BaseFolderNode ? 0 : Children.TakeWhile(c => c is BaseFolderNode).Count();
-        int endIndex = node is BaseFolderNode ? Children.TakeWhile(c => c is BaseFolderNode).Count() : Children.Count;
-
-        int targetIndex = startIndex;
-
-        for (int i = startIndex; i < endIndex; i++)
-        {
-            if (i == oldIndex)
-            {
-                continue;
-            }
-
-            if (StringComparer.OrdinalIgnoreCase.Compare(Children[i].Name, node.Name) > 0)
-            {
-                break;
-            }
-
-            targetIndex++;
-        }
-
-        return targetIndex;
     }
 
     public override async Task LoadChildrenAsync(bool force = false)
@@ -244,8 +109,6 @@ public abstract partial class BaseFolderNode : FileSystemNode
         _ignoreNextExpandedChange = true;
         OnPropertyChanged(nameof(IsExpanded));
     }
-
-    protected abstract Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders();
 
     public async Task NewFile(string name)
     {
@@ -399,6 +262,143 @@ public abstract partial class BaseFolderNode : FileSystemNode
         }
     }
 
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (e.PropertyName != nameof(IsExpanded))
+        {
+            return;
+        }
+
+        if (_ignoreNextExpandedChange)
+        {
+            _ignoreNextExpandedChange = false;
+            return;
+        }
+
+        if (IsExpanded && !HasLoadedChildren)
+        {
+            _ = LoadChildrenAsync();
+        }
+    }
+
+    protected int FindInsertionIndex(FileSystemNode newNode)
+    {
+        bool newIsFolder = newNode is BaseFolderNode;
+
+        int lo = 0;
+        int hi = Children.Count;
+
+        if (newIsFolder)
+        {
+            hi = Children.TakeWhile(c => c is BaseFolderNode).Count();
+        }
+        else
+        {
+            lo = Children.TakeWhile(c => c is BaseFolderNode).Count();
+        }
+
+        while (lo < hi)
+        {
+            int mid = (lo + hi) / 2;
+            int cmp = StringComparer.OrdinalIgnoreCase.Compare(
+                Children[mid].Name, newNode.Name);
+
+            if (cmp < 0)
+            {
+                lo = mid + 1;
+            }
+            else
+            {
+                hi = mid;
+            }
+        }
+
+        return lo;
+    }
+
+    protected void AddChild(FileSystemNode node, bool add = true)
+    {
+        node.PropertyChanged += OnChildPropertyChanged;
+        node.Deleted += OnChildDeleted;
+
+        if (add)
+        {
+            Children.Insert(FindInsertionIndex(node), node);
+        }
+    }
+
+    protected void RemoveChild(FileSystemNode node)
+    {
+        node.PropertyChanged -= OnChildPropertyChanged;
+        node.Deleted -= OnChildDeleted;
+        Children.Remove(node);
+    }
+
+    protected abstract Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders();
+
     protected abstract FileSystemNode CreateFileNode(string name, string path);
     protected abstract FileSystemNode CreateFolderNode(string name, string path);
+
+    private void OnChildDeleted(object? sender, EventArgs e)
+    {
+        if (sender is not FileSystemNode node)
+        {
+            return;
+        }
+
+        RemoveChild(node);
+    }
+
+    private void OnChildPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(Name))
+        {
+            return;
+        }
+
+        if (sender is not FileSystemNode node)
+        {
+            return;
+        }
+
+        int oldIndex = Children.IndexOf(node);
+        if (oldIndex < 0)
+        {
+            return;
+        }
+
+        int newIndex = CalculateRenameIndex(node, oldIndex);
+
+        if (oldIndex != newIndex)
+        {
+            Children.Move(oldIndex, newIndex);
+        }
+    }
+
+    private int CalculateRenameIndex(FileSystemNode node, int oldIndex)
+    {
+        int startIndex = node is BaseFolderNode ? 0 : Children.TakeWhile(c => c is BaseFolderNode).Count();
+        int endIndex = node is BaseFolderNode ? Children.TakeWhile(c => c is BaseFolderNode).Count() : Children.Count;
+
+        int targetIndex = startIndex;
+
+        for (int i = startIndex; i < endIndex; i++)
+        {
+            if (i == oldIndex)
+            {
+                continue;
+            }
+
+            if (StringComparer.OrdinalIgnoreCase.Compare(Children[i].Name, node.Name) > 0)
+            {
+                break;
+            }
+
+            targetIndex++;
+        }
+
+        return targetIndex;
+    }
 }

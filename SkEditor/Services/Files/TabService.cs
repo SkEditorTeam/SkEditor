@@ -16,38 +16,8 @@ namespace SkEditor.Services.Files;
 public class TabService(IFileFeatureService features, TabViewLocator tabViewLocator, INotificationService notifs)
     : ITabService
 {
-    public ObservableCollection<TabViewModelBase> MainTabs { get; } = [];
-    public ObservableCollection<TabViewModelBase> SplitTabs { get; } = [];
-
     public IEnumerable<TabViewModelBase> AllTabs => MainTabs.Concat(SplitTabs);
-
-    public TabViewModelBase? SelectedTab
-    {
-        get;
-        set
-        {
-            if (Equals(field, value))
-            {
-                return;
-            }
-
-            field = value;
-
-            if (value != null)
-            {
-                if (MainTabs.Contains(value))
-                {
-                    SelectedMainTab = value;
-                }
-                else if (SplitTabs.Contains(value))
-                {
-                    SelectedSplitTab = value;
-                }
-            }
-
-            SelectedTabChanged?.Invoke(value);
-        }
-    }
+    public ObservableCollection<TabViewModelBase> MainTabs { get; } = [];
 
     public TabViewModelBase? SelectedMainTab
     {
@@ -85,8 +55,35 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         }
     }
 
-    public event Action<TabViewModelBase?>? SelectedTabChanged;
-    public event Action<TabViewModelBase>? TabClosed;
+    public TabViewModelBase? SelectedTab
+    {
+        get;
+        set
+        {
+            if (Equals(field, value))
+            {
+                return;
+            }
+
+            field = value;
+
+            if (value != null)
+            {
+                if (MainTabs.Contains(value))
+                {
+                    SelectedMainTab = value;
+                }
+                else if (SplitTabs.Contains(value))
+                {
+                    SelectedSplitTab = value;
+                }
+            }
+
+            SelectedTabChanged?.Invoke(value);
+        }
+    }
+
+    public ObservableCollection<TabViewModelBase> SplitTabs { get; } = [];
 
     public void SwitchTab(int index)
     {
@@ -231,4 +228,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
             SelectedTab = tab;
         }
     }
+
+    public event Action<TabViewModelBase?>? SelectedTabChanged;
+    public event Action<TabViewModelBase>? TabClosed;
 }

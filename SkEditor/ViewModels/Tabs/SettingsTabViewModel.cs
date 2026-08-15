@@ -21,6 +21,15 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
 
     private readonly Dictionary<string, SettingSection> _sectionsById;
 
+    public override IRelayCommand CloseCommand => CloseTabCommand;
+
+    [ObservableProperty]
+    public partial SettingSection? CurrentSection { get; set; }
+
+    public override bool IsCacheable => true;
+
+    public List<SettingSection> SettingsCategories { get; }
+
     public SettingsTabViewModel(IConfigService configs, IEnumerable<ISettingsSectionProvider> sectionProviders,
         IMessenger messenger) : base(
         TranslationKey.SettingsHomeTitle, Symbol.Settings)
@@ -61,15 +70,6 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
 
         _messenger.Register(this);
     }
-
-    public override IRelayCommand CloseCommand => CloseTabCommand;
-
-    public override bool IsCacheable => true;
-
-    [ObservableProperty]
-    public partial SettingSection? CurrentSection { get; set; }
-
-    public List<SettingSection> SettingsCategories { get; }
 
     public void Receive(NavigateToSettingsSectionMessage message)
     {

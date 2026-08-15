@@ -89,7 +89,6 @@ public class AppearanceSectionProvider(
                             .Create(TranslationKey.SettingsAppearanceFontLigatures)
                             .WithDescription(TranslationKey.SettingsAppearanceFontLigaturesDescription)
                             .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsFontLigaturesEnabled)),
-                        
                         ToggleSetting
                             .Create(TranslationKey.SettingsAppearanceMouseWheelZoom)
                             .WithDescription(TranslationKey.SettingsAppearanceMouseWheelZoomDescription)

@@ -14,20 +14,19 @@ namespace SkEditor.ViewModels.Controls.StatusBar.Panes;
 
 public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
 {
-    public string Id => "Logs";
-    public TranslatableString Name => "Logs".ToTranslatable();
-    public BindableReactiveProperty<bool> IsVisible { get; }
-    public IDrawerToolbarViewModel? Toolbar { get; }
-
-    private DisposableBag _disposables;
-
     private readonly ObservableList<LogEntry> _allLogs = [];
-    private readonly ISynchronizedView<LogEntry, LogEntry> _logsView;
-    public NotifyCollectionChangedSynchronizedViewList<LogEntry> FilteredLogs { get; }
 
     private readonly IClipboardService _clipboard;
     private readonly ILinkService _links;
     private readonly ILogService _logs;
+    private readonly ISynchronizedView<LogEntry, LogEntry> _logsView;
+
+    private DisposableBag _disposables;
+    public NotifyCollectionChangedSynchronizedViewList<LogEntry> FilteredLogs { get; }
+    public string Id => "Logs";
+    public BindableReactiveProperty<bool> IsVisible { get; }
+    public TranslatableString Name => "Logs".ToTranslatable();
+    public IDrawerToolbarViewModel? Toolbar { get; }
 
     public LogsPaneViewModel(AppSettings appSettings, ILogService logs, IClipboardService clipboard, ILinkService links)
     {

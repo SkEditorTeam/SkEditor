@@ -7,18 +7,16 @@ namespace SkEditor.Models.Settings.Types;
 
 public partial class TextSetting(BindableReactiveProperty<TranslatableString> name) : SettingElement<TextSetting>(name)
 {
+    public bool IsPassword { get; set; }
+    public char PasswordChar => IsPassword ? '●' : '\0';
+
+    public TranslatableString? Placeholder { get; set; }
+
     public (Func<string> Get, Action<string> Set) Property
     {
         get => (field.Get, field.Set);
         set;
     }
-
-    public TranslatableString? Placeholder { get; set; }
-
-    public bool IsPassword { get; set; }
-    public char PasswordChar => IsPassword ? '●' : '\0';
-
-    public override double Width { get; set; }
 
     [ObservableProperty]
     public partial string Text { get; set; } = string.Empty;
@@ -32,6 +30,8 @@ public partial class TextSetting(BindableReactiveProperty<TranslatableString> na
             Text = value;
         }
     }
+
+    public override double Width { get; set; }
 
     public static TextSetting Create(TranslatableString name)
     {

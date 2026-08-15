@@ -15,6 +15,10 @@ namespace SkEditor.Behaviors;
 
 public static class LogInlinesBehavior
 {
+    public static readonly AttachedProperty<IEnumerable<LogEntry>?> LogsProperty =
+        AvaloniaProperty.RegisterAttached<SelectableTextBlock, IEnumerable<LogEntry>?>(
+            "Logs", typeof(LogInlinesBehavior));
+
     private static readonly LogLevelColorConverter LevelColorConverter = new();
     private static readonly LogLevelMessageColorConverter MessageColorConverter = new();
     private static readonly LogLevelSymbolConverter SymbolConverter = new();
@@ -23,9 +27,7 @@ public static class LogInlinesBehavior
         AvaloniaProperty.RegisterAttached<SelectableTextBlock, IDisposable?>(
             "Subscription", typeof(LogInlinesBehavior));
 
-    public static readonly AttachedProperty<IEnumerable<LogEntry>?> LogsProperty =
-        AvaloniaProperty.RegisterAttached<SelectableTextBlock, IEnumerable<LogEntry>?>(
-            "Logs", typeof(LogInlinesBehavior));
+    static LogInlinesBehavior() => LogsProperty.Changed.Subscribe(OnLogsChanged);
 
     public static void SetLogs(SelectableTextBlock element, IEnumerable<LogEntry>? value)
     {
@@ -36,8 +38,6 @@ public static class LogInlinesBehavior
     {
         return element.GetValue(LogsProperty);
     }
-
-    static LogInlinesBehavior() => LogsProperty.Changed.Subscribe(OnLogsChanged);
 
     private static void OnLogsChanged(AvaloniaPropertyChangedEventArgs<IEnumerable<LogEntry>?> e)
     {

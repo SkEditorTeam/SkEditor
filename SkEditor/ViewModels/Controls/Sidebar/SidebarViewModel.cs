@@ -14,19 +14,14 @@ public partial class SidebarViewModel : ObservableObject, IRecipient<RequestPane
     private readonly StateConfig _stateConfig;
     private double _savedColumnWidth;
 
-    public SidebarViewModel(IEnumerable<ISidebarPanelViewModel> panels, StateConfig stateConfig, IMessenger messenger)
-    {
-        Items = new ObservableCollection<ISidebarPanelViewModel>(panels);
-        _stateConfig = stateConfig;
+    [ObservableProperty]
+    public partial double? ColumnWidth { get; set; } = null;
 
-        _savedColumnWidth = _stateConfig.SidebarPaneSize;
-
-        PropertyChanged += OnPropertyChanged;
-
-        messenger.Register(this);
-    }
+    public bool IsPanelVisible => SelectedItem is not null;
 
     public ObservableCollection<ISidebarPanelViewModel> Items { get; }
+
+    public ISidebarPanelViewModel? LastSelectedItem { get; private set; }
 
     public ISidebarPanelViewModel? SelectedItem
     {
@@ -45,11 +40,17 @@ public partial class SidebarViewModel : ObservableObject, IRecipient<RequestPane
         }
     }
 
-    public ISidebarPanelViewModel? LastSelectedItem { get; private set; }
-    public bool IsPanelVisible => SelectedItem is not null;
+    public SidebarViewModel(IEnumerable<ISidebarPanelViewModel> panels, StateConfig stateConfig, IMessenger messenger)
+    {
+        Items = new ObservableCollection<ISidebarPanelViewModel>(panels);
+        _stateConfig = stateConfig;
 
-    [ObservableProperty]
-    public partial double? ColumnWidth { get; set; } = null;
+        _savedColumnWidth = _stateConfig.SidebarPaneSize;
+
+        PropertyChanged += OnPropertyChanged;
+
+        messenger.Register(this);
+    }
 
     public void Receive(RequestPaneOpenMessage message)
     {

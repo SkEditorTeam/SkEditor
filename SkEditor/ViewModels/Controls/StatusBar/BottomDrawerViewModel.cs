@@ -13,23 +13,23 @@ namespace SkEditor.ViewModels.Controls;
 public partial class BottomDrawerViewModel : ObservableObject
 {
     public const double MinDrawerHeight = 120;
-    
+
+    private readonly BindableReactiveProperty<bool> _isBottomDrawerEnabled;
+
+    private double _lastHeight;
+
     [ObservableProperty]
     public partial double? DrawerHeight { get; set; } = null;
 
     [ObservableProperty]
     public partial bool IsDrawerOpen { get; private set; } = false;
 
-    private double _lastHeight;
-
     public ObservableCollection<IDrawerPaneViewModel> Items { get; }
-
-    public ObservableCollection<IDrawerPaneViewModel> VisibleItems { get; } = [];
 
     [ObservableProperty]
     public partial IDrawerPaneViewModel? SelectedItem { get; set; }
 
-    private readonly BindableReactiveProperty<bool> _isBottomDrawerEnabled;
+    public ObservableCollection<IDrawerPaneViewModel> VisibleItems { get; } = [];
 
     public BottomDrawerViewModel(IEnumerable<IDrawerPaneViewModel> panes, ExperimentsConfig experiments,
         StateConfig state)
@@ -54,48 +54,6 @@ public partial class BottomDrawerViewModel : ObservableObject
         _isBottomDrawerEnabled
             .Where(enabled => !enabled)
             .Subscribe(_ => CloseDrawer());
-    }
-
-    private void TrackVisibility(IDrawerPaneViewModel pane)
-    {
-        pane.IsVisible
-            .Subscribe(isVisible => UpdateVisibility(pane, isVisible));
-    }
-
-    private void UpdateVisibility(IDrawerPaneViewModel pane, bool isVisible)
-    {
-        if (isVisible)
-        {
-            if (VisibleItems.Contains(pane))
-            {
-                return;
-            }
-
-            int sourceIndex = Items.IndexOf(pane);
-            int insertAt = VisibleItems.Count;
-
-            for (int i = 0; i < VisibleItems.Count; i++)
-            {
-                if (Items.IndexOf(VisibleItems[i]) <= sourceIndex)
-                {
-                    continue;
-                }
-
-                insertAt = i;
-                break;
-            }
-
-            VisibleItems.Insert(insertAt, pane);
-        }
-        else
-        {
-            VisibleItems.Remove(pane);
-
-            if (ReferenceEquals(SelectedItem, pane))
-            {
-                SelectedItem = VisibleItems.FirstOrDefault();
-            }
-        }
     }
 
     [RelayCommand]
@@ -155,5 +113,47 @@ public partial class BottomDrawerViewModel : ObservableObject
         }
 
         return null;
+    }
+
+    private void TrackVisibility(IDrawerPaneViewModel pane)
+    {
+        pane.IsVisible
+            .Subscribe(isVisible => UpdateVisibility(pane, isVisible));
+    }
+
+    private void UpdateVisibility(IDrawerPaneViewModel pane, bool isVisible)
+    {
+        if (isVisible)
+        {
+            if (VisibleItems.Contains(pane))
+            {
+                return;
+            }
+
+            int sourceIndex = Items.IndexOf(pane);
+            int insertAt = VisibleItems.Count;
+
+            for (int i = 0; i < VisibleItems.Count; i++)
+            {
+                if (Items.IndexOf(VisibleItems[i]) <= sourceIndex)
+                {
+                    continue;
+                }
+
+                insertAt = i;
+                break;
+            }
+
+            VisibleItems.Insert(insertAt, pane);
+        }
+        else
+        {
+            VisibleItems.Remove(pane);
+
+            if (ReferenceEquals(SelectedItem, pane))
+            {
+                SelectedItem = VisibleItems.FirstOrDefault();
+            }
+        }
     }
 }

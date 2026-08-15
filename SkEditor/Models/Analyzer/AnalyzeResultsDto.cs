@@ -26,15 +26,6 @@ public class AnalyzeResultDto
 
 public class ScriptErrorDto
 {
-    [JsonPropertyName("line")]
-    public required int Line { get; set; }
-
-    [JsonPropertyName("message")]
-    public required string Message { get; set; }
-
-    [JsonPropertyName("level")]
-    public required AnalyzerErrorLevel Level { get; set; }
-
     [JsonConverter(typeof(JsonStringEnumConverter<AnalyzerErrorLevel>))]
     public enum AnalyzerErrorLevel
     {
@@ -42,6 +33,15 @@ public class ScriptErrorDto
         Warning,
         Info
     }
+
+    [JsonPropertyName("level")]
+    public required AnalyzerErrorLevel Level { get; set; }
+
+    [JsonPropertyName("line")]
+    public required int Line { get; set; }
+
+    [JsonPropertyName("message")]
+    public required string Message { get; set; }
 }
 
 public class ScriptStructureDto

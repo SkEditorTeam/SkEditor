@@ -18,50 +18,8 @@ public partial class TranslatableString : ObservableObject, IDisposable
 
     private object[] _parameters = [];
 
-    /// <summary>
-    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key.
-    /// </summary>
-    /// <param name="key">The translation key to use for retrieving the translated string.</param>
-    public TranslatableString(TranslationKey key)
-    {
-        Key = key.ToString();
-
-        lock (Instances)
-        {
-            Instances.Add(new WeakReference<TranslatableString>(this));
-
-            if (_eventSubscribed)
-            {
-                return;
-            }
-
-            TranslationService.Current.LanguageChanged += OnGlobalLanguageChanged;
-            _eventSubscribed = true;
-        }
-    }
-
-    private TranslatableString(string rawValue, params object[]? parameters)
-    {
-        Key = string.Empty;
-        Value = rawValue;
-        _parameters = parameters ?? [];
-    }
-
-    /// <summary>
-    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key and parameters.
-    /// </summary>
-    /// <param name="key">The translation key to use for retrieving the translated string.</param>
-    /// <param name="parameters">
-    ///     The parameters to use for formatting the translated string. These parameters will be passed to
-    ///     the translation system and can be used in the translation templates.
-    /// </param>
-    public TranslatableString(TranslationKey key, params object[]? parameters) : this(key) =>
-        _parameters = parameters ?? [];
-
     [ObservableProperty]
     public partial string Key { get; set; }
-
-    private TranslationKey EnumKey => Enum.Parse<TranslationKey>(Key);
 
     /// <summary>
     ///     Gets the translated value of this instance based on the current language and the translation key. If the instance
@@ -96,11 +54,46 @@ public partial class TranslatableString : ObservableObject, IDisposable
         }
     }
 
+    private TranslationKey EnumKey => Enum.Parse<TranslationKey>(Key);
 
-    public void Dispose()
+    /// <summary>
+    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key.
+    /// </summary>
+    /// <param name="key">The translation key to use for retrieving the translated string.</param>
+    public TranslatableString(TranslationKey key)
     {
-        GC.SuppressFinalize(this);
-        TranslationService.Current.LanguageChanged -= OnGlobalLanguageChanged;
+        Key = key.ToString();
+
+        lock (Instances)
+        {
+            Instances.Add(new WeakReference<TranslatableString>(this));
+
+            if (_eventSubscribed)
+            {
+                return;
+            }
+
+            TranslationService.Current.LanguageChanged += OnGlobalLanguageChanged;
+            _eventSubscribed = true;
+        }
+    }
+
+    /// <summary>
+    ///     Creates a new instance of <see cref="TranslatableString" /> with the specified translation key and parameters.
+    /// </summary>
+    /// <param name="key">The translation key to use for retrieving the translated string.</param>
+    /// <param name="parameters">
+    ///     The parameters to use for formatting the translated string. These parameters will be passed to
+    ///     the translation system and can be used in the translation templates.
+    /// </param>
+    public TranslatableString(TranslationKey key, params object[]? parameters) : this(key) =>
+        _parameters = parameters ?? [];
+
+    private TranslatableString(string rawValue, params object[]? parameters)
+    {
+        Key = string.Empty;
+        Value = rawValue;
+        _parameters = parameters ?? [];
     }
 
     /// <summary>
@@ -158,5 +151,12 @@ public partial class TranslatableString : ObservableObject, IDisposable
                 }
             }
         }
+    }
+
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        TranslationService.Current.LanguageChanged -= OnGlobalLanguageChanged;
     }
 }

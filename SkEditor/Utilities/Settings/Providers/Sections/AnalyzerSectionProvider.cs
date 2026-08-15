@@ -314,7 +314,7 @@ public class AnalyzerSectionProvider(
     private static async Task<bool> CheckJava25()
     {
         RefreshPath();
-        
+
         Process? process = null;
         try
         {

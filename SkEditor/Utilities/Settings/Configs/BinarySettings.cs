@@ -24,17 +24,10 @@ public partial class BinarySettings : ObservableObject, IConfig
         ConfigFileName
     );
 
-    private List<IBinarySettingHandler> Registry => field ??=
-    [
-        new BinarySettingHandler<byte>(() => (byte)SplashScreenMode, v => SplashScreenMode = (StartupMode)v,
-            r => r.ReadByte(), (w, v) => w.Write(v)),
-
-        new BinarySettingHandler<int>(() => AverageStartupTime, v => AverageStartupTime = v, r => r.ReadInt32(),
-            (w, v) => w.Write(v))
-    ];
-
     [ObservableProperty]
     public partial int AverageStartupTime { get; set; }
+
+    public string FileName => ConfigFileName;
 
     [ObservableProperty]
     public partial StartupMode SplashScreenMode { get; set; } = StartupMode.Auto;
@@ -45,7 +38,14 @@ public partial class BinarySettings : ObservableObject, IConfig
         set => SplashScreenMode = (StartupMode)value;
     }
 
-    public string FileName => ConfigFileName;
+    private List<IBinarySettingHandler> Registry => field ??=
+    [
+        new BinarySettingHandler<byte>(() => (byte)SplashScreenMode, v => SplashScreenMode = (StartupMode)v,
+            r => r.ReadByte(), (w, v) => w.Write(v)),
+
+        new BinarySettingHandler<int>(() => AverageStartupTime, v => AverageStartupTime = v, r => r.ReadInt32(),
+            (w, v) => w.Write(v))
+    ];
 
     /// <summary>
     ///     Loads the settings if the file exists.
@@ -86,7 +86,7 @@ public partial class BinarySettings : ObservableObject, IConfig
             {
                 Directory.CreateDirectory(directory);
             }
-            
+
             using BinaryWriter writer = new(File.Create(_binaryFilePath));
             foreach (IBinarySettingHandler handler in Registry)
             {

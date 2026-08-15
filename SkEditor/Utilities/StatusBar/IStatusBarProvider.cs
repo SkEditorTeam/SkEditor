@@ -7,6 +7,6 @@ namespace SkEditor.Utilities.StatusBar;
 public interface IStatusBarProvider
 {
     ReadOnlyReactiveProperty<bool> CanAttach { get; }
-    
+
     IEnumerable<StatusBarItem> GetItems();
 }

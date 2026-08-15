@@ -189,7 +189,7 @@ public class FileTreeCommandHandler(
             if (result != DialogResult.Ok)
             {
                 return false;
-            }   
+            }
         }
 
         if (fileTree.FileSystem is SftpFileSystem)
