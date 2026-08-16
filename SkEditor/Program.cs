@@ -25,6 +25,7 @@ internal class Program
     {
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            .UseWaylandWithFallback()
             .LogToTrace()
             .UseR3();
     }

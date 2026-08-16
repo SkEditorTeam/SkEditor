@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -51,6 +53,13 @@ public class App : Application
     {
         base.OnFrameworkInitializationCompleted();
 
+        if (OperatingSystem.IsLinux())
+        {
+            var expanderStyle = new Style(x => x.OfType<Expander>());
+            expanderStyle.Setters.Add(new Setter(FluentAvalonia.UI.Controls.FAExpanderExt.ExpanderAnimationTypeProperty, null));
+            Styles.Add(expanderStyle);
+        }
+        
         string logsFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "SkEditor", "v3.0", "Logs");
