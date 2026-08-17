@@ -9,6 +9,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
@@ -53,12 +54,7 @@ public class App : Application
     {
         base.OnFrameworkInitializationCompleted();
 
-        if (OperatingSystem.IsLinux())
-        {
-            var expanderStyle = new Style(x => x.OfType<Expander>());
-            expanderStyle.Setters.Add(new Setter(FluentAvalonia.UI.Controls.FAExpanderExt.ExpanderAnimationTypeProperty, null));
-            Styles.Add(expanderStyle);
-        }
+        SetUpLinux();
         
         string logsFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -130,6 +126,18 @@ public class App : Application
             assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
         return informationVersion ?? throw new InvalidOperationException("Informational version is null");
+    }
+
+    private void SetUpLinux()
+    {
+        if (!OperatingSystem.IsLinux())
+        {
+            return;
+        }
+
+        Style expanderStyle = new(x => x.OfType<Expander>());
+        expanderStyle.Setters.Add(new Setter(FAExpanderExt.ExpanderAnimationTypeProperty, null));
+        Styles.Add(expanderStyle);
     }
 
     private static void ConfigureServices(IServiceCollection services, BinarySettings binarySettings, string[] args)
