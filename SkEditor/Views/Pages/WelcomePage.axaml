@@ -177,7 +177,7 @@
                                                       CommandParameter="{Binding}" />
 
                                             <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FolderOpen}"
-                                                      Header="{localization:Translate WelcomePageRecentCopyPath}"
+                                                      Header="{localization:Translate MenuHeaderOpenInExplorer}"
                                                       Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.ShowInExplorerCommand}"
                                                       CommandParameter="{Binding}" />
 
