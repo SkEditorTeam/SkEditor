@@ -96,6 +96,22 @@ public class FileService(
         }
     }
 
+    public void UpdateFileDetails(string oldPath, string newName, string newPath)
+    {
+        FileTabViewModel? fileTab = tabs.AllTabs
+            .OfType<FileTabViewModel>()
+            .FirstOrDefault(tab => tab.File.Path == oldPath);
+
+        if (fileTab is null)
+        {
+            return;
+        }
+
+        fileTab.File.Name = newName;
+        fileTab.File.Path = newPath;
+        fileTab.UpdateHeader();
+    }
+
     public async Task SaveFileAsync()
     {
         if (tabs.SelectedTab is ISaveableTab saveableTab)

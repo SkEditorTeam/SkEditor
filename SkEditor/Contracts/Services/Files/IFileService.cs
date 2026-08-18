@@ -18,8 +18,12 @@ public interface IFileService
     /// <summary>
     ///     Opens the specified file in a new tab.
     /// </summary>
-    /// <param name="file">The file to open.</param>
     Task OpenFileAsync(BaseFile file);
+
+    /// <summary>
+    ///     Updates the details of a file after it has been renamed or moved.
+    /// </summary>
+    void UpdateFileDetails(string oldPath, string newName, string newPath);
 
     /// <summary>
     ///     Saves the currently active file. If the file has not been saved before, it prompts the user to select a location to
@@ -37,6 +41,5 @@ public interface IFileService
     ///     Saves all open files. If any file has not been saved before, it prompts the user to select a location to save the
     ///     file.
     /// </summary>
-    /// <returns></returns>
     Task SaveAllAsync();
 }

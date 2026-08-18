@@ -14,7 +14,8 @@ using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.ViewModels.Windows;
 
-public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenFileMessage>
+public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenFileMessage>,
+    IRecipient<UpdateFileDetailsMessage>
 {
     private readonly IFileService _files;
     private readonly ITabService _tabs;
@@ -103,12 +104,18 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         StatusBar = statusBar;
         BottomDrawer = bottomDrawer;
 
-        messenger.Register(this);
+        messenger.Register<OpenFileMessage>(this);
+        messenger.Register<UpdateFileDetailsMessage>(this);
     }
 
     public void Receive(OpenFileMessage message)
     {
         _ = _files.OpenFileAsync(message.File);
+    }
+
+    public void Receive(UpdateFileDetailsMessage message)
+    {
+        _files.UpdateFileDetails(message.OldPath, message.NewName, message.NewPath);
     }
 
     public void SplitTab(TabViewModelBase tab)
