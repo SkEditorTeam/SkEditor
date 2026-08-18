@@ -248,4 +248,5 @@
         &lt;/Entry&gt;
     &lt;/TypePattern&gt;
 &lt;/Patterns&gt;</s:String>
-	<s:String x:Key="/Default/CustomTools/CustomToolsData/@EntryValue"></s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/CustomTools/CustomToolsData/@EntryValue"></s:String>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002EMemberReordering_002EMigrations_002ECSharpFileLayoutPatternRemoveIsAttributeUpgrade/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
