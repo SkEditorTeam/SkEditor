@@ -30,13 +30,18 @@ public partial class WelcomePageViewModel(
     [RelayCommand]
     public async Task OpenRecent(WelcomeScreenRecentItem item)
     {
+        if (!CheckItemExists(item))
+        {
+            return;
+        }
+        
         if (item.IsFolder)
         {
-            OpenFolder(item);
+            WeakReferenceMessenger.Default.Send(new OpenExplorerFolderMessage(item.Path));
         }
         else
         {
-            await OpenFile(item);
+            await files.OpenFileAsync(new LocalFile(item.Path, item.Name));
         }
     }
 
@@ -49,6 +54,11 @@ public partial class WelcomePageViewModel(
     [RelayCommand]
     public void ShowInExplorer(WelcomeScreenRecentItem item)
     {
+        if (!CheckItemExists(item))
+        {
+            return;
+        }
+        
         if (item.IsFolder)
         {
             links.OpenFolder(item.Path);
@@ -65,29 +75,15 @@ public partial class WelcomePageViewModel(
         recents.RemoveRecentItem(item.Path);
     }
 
-    private async Task OpenFile(WelcomeScreenRecentItem item)
+    private bool CheckItemExists(WelcomeScreenRecentItem item)
     {
-        if (!File.Exists(item.Path))
+        if (item.IsFolder)
         {
-            Notification notif = Notification
-                .Create(TranslationKey.FileExplorerFileNotFoundTitle)
-                .WithMessage(new TranslatableString(TranslationKey.FileExplorerFileNotFoundMessage, item.Name))
-                .WithDuration(TimeSpan.FromSeconds(10))
-                .WithType(NotificationType.Error);
+            if (Directory.Exists(item.Path))
+            {
+                return true;
+            }
 
-            notifications.Show(notif);
-
-            recents.RemoveRecentItem(item.Path);
-            return;
-        }
-
-        await files.OpenFileAsync(new LocalFile(item.Path, item.Name));
-    }
-
-    private void OpenFolder(WelcomeScreenRecentItem item)
-    {
-        if (!Directory.Exists(item.Path))
-        {
             Notification notif = Notification
                 .Create(TranslationKey.FileExplorerFolderNotFoundTitle)
                 .WithMessage(new TranslatableString(TranslationKey.FileExplorerFolderNotFoundMessage, item.Name))
@@ -95,11 +91,24 @@ public partial class WelcomePageViewModel(
                 .WithType(NotificationType.Error);
 
             notifications.Show(notif);
+        }
+        else
+        {
+            if (File.Exists(item.Path))
+            {
+                return true;
+            }
 
-            recents.RemoveRecentItem(item.Path);
-            return;
+            Notification notif = Notification
+                .Create(TranslationKey.FileExplorerFileNotFoundTitle)
+                .WithMessage(new TranslatableString(TranslationKey.FileExplorerFileNotFoundMessage, item.Name))
+                .WithDuration(TimeSpan.FromSeconds(10))
+                .WithType(NotificationType.Error);
+
+            notifications.Show(notif);
         }
 
-        WeakReferenceMessenger.Default.Send(new OpenExplorerFolderMessage(item.Path));
+        recents.RemoveRecentItem(item.Path);
+        return false;
     }
 }
