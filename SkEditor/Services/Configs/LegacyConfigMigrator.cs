@@ -47,11 +47,8 @@ public class LegacyConfigMigrator(IConfigService config)
 
         if (oldAppConfig != null)
         {
-            appSettings.CheckForAppUpdates = oldAppConfig.CheckForUpdates;
-            appSettings.CheckForExternalFileChanges = oldAppConfig.CheckForChanges;
             appSettings.CurrentTheme = oldAppConfig.CurrentTheme;
             appSettings.CustomUiScale = oldAppConfig.CustomUiScale;
-            appSettings.FileSyntaxes = oldAppConfig.FileSyntaxes;
             appSettings.EditorFontFamily = oldAppConfig.Font == "Default"
                 ? null
                 : oldAppConfig.Font;
@@ -62,9 +59,7 @@ public class LegacyConfigMigrator(IConfigService config)
             appSettings.IsAutoSaveEnabled = oldAppConfig.IsAutoSaveEnabled;
             appSettings.IsDevModeEnabled = oldAppConfig.IsDevModeEnabled;
             appSettings.IsDiscordRichPresenceEnabled = oldAppConfig.IsDiscordRpcEnabled;
-            appSettings.IsPasteIndentationEnabled = oldAppConfig.IsPasteIndentationEnabled;
             appSettings.IsExplorerSingleClickOpenEnabled = oldAppConfig.IsProjectSingleClickEnabled;
-            appSettings.IsSidebarAnimationEnabled = oldAppConfig.IsSidebarAnimationEnabled;
             appSettings.IsWordWrapEnabled = oldAppConfig.IsWrappingEnabled;
             appSettings.IsEditorZoomLevelSyncEnabled = oldAppConfig.IsZoomSyncEnabled;
             appSettings.Language = oldAppConfig.Language;

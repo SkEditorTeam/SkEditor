@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization.Metadata;
+﻿using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Settings.Attributes;
 
@@ -8,18 +7,6 @@ namespace SkEditor.Utilities.Settings.Configs;
 [SettingsConfig]
 public partial class AppSettings : BaseConfig<AppSettings>
 {
-    /// <summary>
-    ///     Whether to check for application updates on startup.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool CheckForAppUpdates { get; set; } = true;
-
-    /// <summary>
-    ///     Whether to enable automatic checks if the file was modified by an external program.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool CheckForExternalFileChanges { get; set; } = true;
-
     /// <summary>
     ///     The current application theme file name.
     /// </summary>
@@ -49,12 +36,6 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// </summary>
     [ObservableProperty]
     public partial int EditorTabSize { get; set; } = 4;
-
-    /// <summary>
-    ///     A dictionary mapping file extensions to their associated syntax highlighting themes.
-    /// </summary>
-    [ObservableProperty]
-    public partial Dictionary<string, string> FileSyntaxes { get; set; } = new();
 
     /// <summary>
     ///     Whether to force the native window title bar on Windows.
@@ -139,18 +120,6 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// </summary>
     [ObservableProperty]
     public partial bool IsMouseWheelZoomEnabled { get; set; } = true;
-
-    /// <summary>
-    ///     Whether to make editor try to adapt pasted code indentation to the current line indentation.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool IsPasteIndentationEnabled { get; set; }
-
-    /// <summary>
-    ///     Whether to enable sidebar animations.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool IsSidebarAnimationEnabled { get; set; }
 
     /// <summary>
     ///     Whether to enable word wrap in the editor.

@@ -21,8 +21,6 @@ public class OldAppConfig
     public required bool EnableProjectsExperiment { get; set; }
     public required bool EnableRealtimeCodeParser { get; set; }
     public required bool EnableSessionRestoring { get; set; }
-    public required Dictionary<string, string> FileSyntaxes { get; set; }
-    public required Dictionary<string, string?> FileTypeChoices { get; set; }
     public required string Font { get; set; }
     public required bool ForceNativeTitleBar { get; set; }
     public required bool HighlightCurrentLine { get; set; }
