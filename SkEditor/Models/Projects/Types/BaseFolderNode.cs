@@ -318,7 +318,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         return lo;
     }
 
-    protected void AddChild(FileSystemNode node, bool add = true)
+    public void AddChild(FileSystemNode node, bool add = true)
     {
         node.PropertyChanged += OnChildPropertyChanged;
         node.Deleted += OnChildDeleted;
@@ -329,7 +329,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         }
     }
 
-    protected void RemoveChild(FileSystemNode node)
+    public void RemoveChild(FileSystemNode node)
     {
         node.PropertyChanged -= OnChildPropertyChanged;
         node.Deleted -= OnChildDeleted;

@@ -29,6 +29,17 @@ public partial class LocalFileSystem : IDisposable
                            NotifyFilters.Size
         };
 
+        SubscribeError(directory, watcher);
+        SubscribeRenamed(watcher);
+        SubscribeCreated(watcher);
+        SubscribeDeleted(watcher);
+
+        watcher.EnableRaisingEvents = true;
+        return watcher;
+    }
+
+    private void SubscribeError(string directory, FileSystemWatcher watcher)
+    {
         watcher.ErrorAsObservable()
             .SubscribeAwait(async (_, _) =>
             {
@@ -53,11 +64,24 @@ public partial class LocalFileSystem : IDisposable
                 }
             }, AwaitOperation.Drop)
             .AddTo(ref _disposables);
+    }
 
+    private void SubscribeRenamed(FileSystemWatcher watcher)
+    {
         watcher.RenamedAsObservable()
+            .Delay(TimeSpan.FromMilliseconds(50))
+            .ObserveOnCurrentSynchronizationContext()
             .Subscribe(e =>
             {
                 if (e.Name is null)
+                {
+                    return;
+                }
+
+                bool newExists = File.Exists(e.FullPath) || Directory.Exists(e.FullPath);
+                bool oldExists = File.Exists(e.OldFullPath) || Directory.Exists(e.OldFullPath);
+
+                if (!newExists || oldExists)
                 {
                     return;
                 }
@@ -67,7 +91,6 @@ public partial class LocalFileSystem : IDisposable
                 FileSystemNode? node = FindNode(oldPath);
                 if (node is null)
                 {
-                    Notifs.Debug($"Renamed node not found for path: {oldPath}");
                     return;
                 }
 
@@ -75,11 +98,96 @@ public partial class LocalFileSystem : IDisposable
                 node.UpdateName(fileName);
             })
             .AddTo(ref _disposables);
-
-        watcher.EnableRaisingEvents = true;
-        return watcher;
     }
 
+    private void SubscribeCreated(FileSystemWatcher watcher)
+    {
+        watcher.CreatedAsObservable()
+            .Delay(TimeSpan.FromMilliseconds(50))
+            .ObserveOnCurrentSynchronizationContext()
+            .Subscribe(e =>
+            {
+                if (e.Name is null)
+                {
+                    return;
+                }
+
+                string path = e.FullPath;
+                bool exists = File.Exists(path) || Directory.Exists(path);
+
+                if (!exists)
+                {
+                    return;
+                }
+
+                string parentPath = Path.GetDirectoryName(e.FullPath) ?? string.Empty;
+                FileSystemNode? parentNode = FindNode(parentPath);
+                if (parentNode is not LocalFolderNode folderNode)
+                {
+                    return;
+                }
+
+                if (!folderNode.HasLoadedChildren)
+                {
+                    return;
+                }
+
+                FileAttributes attributes = File.GetAttributes(path);
+                bool isDir = attributes.HasFlag(FileAttributes.Directory);
+
+                string name = Path.GetFileName(e.FullPath);
+                FileSystemNode newNode = isDir
+                    ? new LocalFolderNode(name, path, false)
+                    : new LocalFileNode(name, path);
+
+                folderNode.AddChild(newNode, true);
+            })
+            .AddTo(ref _disposables);
+    }
+
+    private void SubscribeDeleted(FileSystemWatcher watcher)
+    {
+        watcher.DeletedAsObservable()
+            .Delay(TimeSpan.FromMilliseconds(50))
+            .ObserveOnCurrentSynchronizationContext()
+            .Subscribe(e =>
+            {
+                if (e.Name is null)
+                {
+                    return;
+                }
+
+                string path = e.FullPath;
+                bool exists = File.Exists(path) || Directory.Exists(path);
+
+                if (exists)
+                {
+                    return;
+                }
+
+                string parentPath = Path.GetDirectoryName(e.FullPath) ?? string.Empty;
+                FileSystemNode? parentNode = FindNode(parentPath);
+                if (parentNode is not LocalFolderNode folderNode)
+                {
+                    return;
+                }
+
+                if (!folderNode.HasLoadedChildren)
+                {
+                    return;
+                }
+
+                FileSystemNode? nodeToRemove = FindNode(path);
+                if (nodeToRemove is null)
+                {
+                    return;
+                }
+
+                folderNode.RemoveChild(nodeToRemove);
+            })
+            .AddTo(ref _disposables);
+    }
+    
     private FileSystemNode? FindNode(string path)
     {
         if (Root is null)
@@ -87,17 +195,24 @@ public partial class LocalFileSystem : IDisposable
             return null;
         }
 
-        FileSystemNode? node = FindNode(path, Root.Children);
+        ReadOnlySpan<char> normalizedRootPath = GetNormalizedPath(Root.Path);
+        ReadOnlySpan<char> normalizedPath = GetNormalizedPath(path);
+
+        bool isRoot = normalizedPath.Equals(normalizedRootPath, StringComparison.OrdinalIgnoreCase);
+        if (isRoot)
+        {
+            return Root;
+        }
+
+        FileSystemNode? node = FindNode(normalizedPath, Root.Children);
         return node;
     }
 
-    private static FileSystemNode? FindNode(string path, IEnumerable<FileSystemNode> children)
+    private static FileSystemNode? FindNode(ReadOnlySpan<char> path, IEnumerable<FileSystemNode> children)
     {
-        ReadOnlySpan<char> normalizedPath = GetNormalizedPath(path);
-        
         foreach (FileSystemNode child in children)
         {
-            bool same = normalizedPath.Equals(child.Path.AsSpan(), StringComparison.OrdinalIgnoreCase);
+            bool same = path.Equals(child.Path.AsSpan(), StringComparison.OrdinalIgnoreCase);
 
             if (same)
             {
