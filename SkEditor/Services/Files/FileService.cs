@@ -102,14 +102,19 @@ public class FileService(
             .OfType<FileTabViewModel>()
             .FirstOrDefault(tab => tab.File.Path == oldPath);
 
-        if (fileTab is null)
-        {
-            return;
-        }
+        fileTab?.File.Name = newName;
+        fileTab?.File.Path = newPath;
+        fileTab?.UpdateHeader();
+    }
 
-        fileTab.File.Name = newName;
-        fileTab.File.Path = newPath;
-        fileTab.UpdateHeader();
+    public void NotifyFileDelete(string filePath)
+    {
+        FileTabViewModel? fileTab = tabs.AllTabs
+            .OfType<FileTabViewModel>()
+            .FirstOrDefault(tab => tab.File.Path == filePath);
+
+        fileTab?.IsSaved = false;
+        fileTab?.Document.UndoStack.DiscardOriginalFileMarker();
     }
 
     public async Task SaveFileAsync()

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Projects.Types;
 
 namespace SkEditor.Models.Projects.Local;
@@ -107,6 +109,12 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
     protected override FileSystemNode CreateFolderNode(string name, string path)
     {
         return new LocalFolderNode(name, path, false);
+    }
+
+    public override void RemoveChild(FileSystemNode node)
+    {
+        base.RemoveChild(node);
+        WeakReferenceMessenger.Default.Send(new NotifyFileDeleteMessage(node.Path));
     }
 
     private static bool HasVisibleContents(string path)

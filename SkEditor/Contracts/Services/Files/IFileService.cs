@@ -26,6 +26,11 @@ public interface IFileService
     void UpdateFileDetails(string oldPath, string newName, string newPath);
 
     /// <summary>
+    ///     Notifies the service that the file was deleted, and needs to be updated, e.g. its saved status.
+    /// </summary>
+    void NotifyFileDelete(string filePath);
+
+    /// <summary>
     ///     Saves the currently active file. If the file has not been saved before, it prompts the user to select a location to
     ///     save the file.
     /// </summary>

@@ -329,7 +329,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         }
     }
 
-    public void RemoveChild(FileSystemNode node)
+    public virtual void RemoveChild(FileSystemNode node)
     {
         node.PropertyChanged -= OnChildPropertyChanged;
         node.Deleted -= OnChildDeleted;
