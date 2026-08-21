@@ -102,7 +102,7 @@
           "name": "keyword.operator.relational.sk"
         },
         {
-          "match": "(options|variables|import):",
+          "match": "(options|variables):",
           "name": "entity.name.section.sk"
         },
         {
@@ -156,43 +156,87 @@
     "structs": {
       "patterns": [
         {
-          "match": "^struct\\s+.*?:",
-          "name": "entity.name.section.sk"
-        },
-        {
-          "match": "^\\s*(?:(const)\\s+)?(\\w+)\\s*:\\s*([^=\n\r#]+?)(?=\\s*(=|$|#))",
-          "captures": {
-            "1": {
+          "begin": "^struct\\s+.*?:",
+          "beginCaptures": {
+            "0": {
+              "name": "entity.name.section.sk"
+            }
+          },
+          "end": "^(?=\\S)",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#strings"
+            },
+            {
+              "match": "converts to:",
+              "name": "entity.other.attribute-name.sk"
+            },
+            {
+              "match": "(?<!\\w)via(?!\\w)",
               "name": "keyword.control.sk"
             },
-            "2": {
-              "name": "variable.parameter.function.sk"
+            {
+              "match": "^\\s*(?:(const)\\s+)?(\\w+)\\s*:\\s*([^=\n\r#]+?)(?=\\s*(=|$|#))",
+              "captures": {
+                "1": {
+                  "name": "keyword.control.sk"
+                },
+                "2": {
+                  "name": "variable.parameter.function.sk"
+                },
+                "3": {
+                  "name": "storage.type.function.sk"
+                }
+              }
             },
-            "3": {
-              "name": "storage.type.function.sk"
+            {
+              "include": "#keywords"
+            },
+            {
+              "include": "#variables"
+            },
+            {
+              "include": "#numbers"
             }
-          }
+          ]
         }
       ]
     },
     "imports": {
       "patterns": [
         {
-          "match": "^\\s*((?:[a-zA-Z_$][\\w$]*\\.)+)([a-zA-Z_$][\\w$]*)(?:\\s+(as)\\s+([a-zA-Z_$][\\w$]*))?",
-          "captures": {
-            "1": {
-              "name": "variable.parameter.argument.sk"
-            },
-            "2": {
-              "name": "storage.type.function.sk"
-            },
-            "3": {
-              "name": "keyword.control.sk"
-            },
-            "4": {
-              "name": "storage.type.function.sk"
+          "begin": "^import:",
+          "beginCaptures": {
+            "0": {
+              "name": "entity.name.section.sk"
             }
-          }
+          },
+          "end": "^(?=\\S)",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "match": "^\\s*((?:[a-zA-Z_$][\\w$]*\\.)+)([a-zA-Z_$][\\w$]*)(?:\\s+(as)\\s+([a-zA-Z_$][\\w$]*))?",
+              "captures": {
+                "1": {
+                  "name": "variable.parameter.argument.sk"
+                },
+                "2": {
+                  "name": "storage.type.function.sk"
+                },
+                "3": {
+                  "name": "keyword.control.sk"
+                },
+                "4": {
+                  "name": "storage.type.function.sk"
+                }
+              }
+            }
+          ]
         }
       ]
     },
