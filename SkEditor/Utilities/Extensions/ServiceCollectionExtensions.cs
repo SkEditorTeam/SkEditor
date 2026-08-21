@@ -255,6 +255,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<StartupModeChoiceProvider>();
             services.AddSingleton<IndentAmountChoiceProvider>();
             services.AddSingleton<IndentTypeChoiceProvider>();
+            services.AddSingleton<SyntaxThemeChoiceProvider>();
         }
 
         private void AddSectionProviders()

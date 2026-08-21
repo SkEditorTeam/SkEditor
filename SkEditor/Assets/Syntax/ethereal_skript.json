@@ -1,0 +1,130 @@
+{
+  "$schema": "vscode://schemas/color-theme",
+  "name": "Ethereal Skript",
+  "colors": {},
+  "tokenColors": [
+    {
+      "scope": "comment.line.sk, comment.block.sk",
+      "settings": {
+        "foreground": "#6e7699",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": "keyword.other.todo.sk",
+      "settings": {
+        "foreground": "#fa5a74",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "scope": "keyword.other.documentation.tag.sk",
+      "settings": {
+        "foreground": "#c699fd"
+      }
+    },
+    {
+      "scope": "variable.parameter.documentation.sk",
+      "settings": {
+        "foreground": "#abc4f7",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": "string.quoted.double.sk",
+      "settings": {
+        "foreground": "#b0e49f"
+      }
+    },
+    {
+      "scope": "meta.interpolation.in-string.sk, meta.interpolation.sk",
+      "settings": {
+        "foreground": "#e0aa8b"
+      }
+    },
+    {
+      "scope": "variable.other.readwrite.option.in-string.sk, variable.other.readwrite.sk",
+      "settings": {
+        "foreground": "#87e4d8"
+      }
+    },
+    {
+      "scope": "variable.other.readwrite.variable.in-string.sk",
+      "settings": {
+        "foreground": "#74c7f7"
+      }
+    },
+    {
+      "scope": "variable.parameter.argument.sk, variable.language.sk",
+      "settings": {
+        "foreground": "#b4a1db"
+      }
+    },
+    {
+      "scope": "keyword.operator.logical.sk, keyword.operator.relational.sk",
+      "settings": {
+        "foreground": "#dcf093"
+      }
+    },
+    {
+      "scope": "keyword.control.sk",
+      "settings": {
+        "foreground": "#c096f8"
+      }
+    },
+    {
+      "scope": "meta.function.sk",
+      "settings": {
+        "foreground": "#b8b9fc"
+      }
+    },
+    {
+      "scope": "constant.language.boolean.sk, constant.numeric.sk",
+      "settings": {
+        "foreground": "#f59595"
+      }
+    },
+    {
+      "scope": "punctuation.section.sk, punctuation.definition.function.sk",
+      "settings": {
+        "foreground": "#9ca6c7"
+      }
+    },
+    {
+      "scope": "storage.type.sk, storage.type.function.sk",
+      "settings": {
+        "foreground": "#fff1a3"
+      }
+    },
+    {
+      "scope": "entity.name.section.sk",
+      "settings": {
+        "foreground": "#b8b9fc"
+      }
+    },
+    {
+      "scope": "entity.other.attribute-name.sk",
+      "settings": {
+        "foreground": "#b8b9fc"
+      }
+    },
+    {
+      "scope": "entity.name.function.sk, function.call.sk",
+      "settings": {
+        "foreground": "#80eba0"
+      }
+    },
+    {
+      "scope": "variable.parameter.function.sk",
+      "settings": {
+        "foreground": "#f59c99"
+      }
+    },
+    {
+      "scope": "entity.name.tag.minimessage.sk, constant.character.format.legacy.sk",
+      "settings": {
+        "foreground": "#deb3fc"
+      }
+    }
+  ]
+}

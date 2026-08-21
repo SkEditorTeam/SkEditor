@@ -14,6 +14,12 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial string CurrentTheme { get; set; } = "Default.json";
 
     /// <summary>
+    ///     The current syntax highlighting theme id.
+    /// </summary>
+    [ObservableProperty]
+    public partial string SyntaxTheme { get; set; } = "dark_skript";
+
+    /// <summary>
     ///     The UI scale factor.
     /// </summary>
     [ObservableProperty]
