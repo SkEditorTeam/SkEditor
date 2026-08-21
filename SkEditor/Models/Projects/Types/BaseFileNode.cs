@@ -31,7 +31,9 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
         string directory = GetDirectoryName(Path);
         string newPath = CombinePath(directory, newName);
 
-        if (AlreadyExistsPredicate(newPath).Result)
+        bool alreadyExists = await AlreadyExistsPredicate(newPath);
+
+        if (alreadyExists)
         {
             WeakReferenceMessenger.Default.Send(new ShowNotificationMessage(
                 Notification
