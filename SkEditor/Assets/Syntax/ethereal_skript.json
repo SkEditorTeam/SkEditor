@@ -45,7 +45,7 @@
     {
       "scope": "variable.other.readwrite.option.in-string.sk, variable.other.readwrite.sk",
       "settings": {
-        "foreground": "#87e4d8"
+        "foreground": "#abe4dc"
       }
     },
     {
