@@ -42,7 +42,7 @@ public partial class LocalFileNode(string name, string path) : BaseFileNode(name
         string oldPath = Path;
         base.UpdatePath(newPath);
 
-        WeakReferenceMessenger.Default.Send(new UpdateFileDetailsMessage(oldPath, Path, Name));
+        WeakReferenceMessenger.Default.Send(new UpdateFileDetailsMessage(oldPath, Name, Path));
     }
 
     public override IEnumerable<ProjectAction> GetSupportedActions()
