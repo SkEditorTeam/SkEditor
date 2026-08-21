@@ -103,7 +103,7 @@
     {
       "scope": "storage.type.sk",
       "settings": {
-        "foreground": "#f5c842"
+        "foreground": "#ebb153"
       }
     },
     {
@@ -162,7 +162,7 @@
     {
       "scope": "storage.type.function.sk",
       "settings": {
-        "foreground": "#f5c842",
+        "foreground": "#ebb153",
         "fontStyle": "bold"
       }
     },
