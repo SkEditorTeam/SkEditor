@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using FluentIcons.Common;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Dialogs;
@@ -15,6 +16,7 @@ using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Local;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
@@ -251,12 +253,10 @@ public class FileTreeCommandHandler(
 
         node.IsRenaming = true;
 
-        node.Renamed += OnNodeOnRenamed;
-        return;
-
-        void OnNodeOnRenamed(object? __, NodeRenamedEventArgs args)
-        {
-            _ = Dispatcher.UIThread.InvokeAsync(async () =>
+        node.RenamedAsObservable()
+            .Take(1)
+            .ObserveOnUIThreadDispatcher()
+            .SubscribeAwait(async (args, _) =>
             {
                 try
                 {
@@ -267,26 +267,19 @@ public class FileTreeCommandHandler(
                         return;
                     }
 
-                    try
+                    if (string.IsNullOrWhiteSpace(args.NewName))
                     {
-                        if (string.IsNullOrWhiteSpace(args.NewName))
-                        {
-                            Notification notification = Notification
-                                .Create(TranslationKey.ProjectRenameFailedTitle)
-                                .WithMessage(TranslationKey.ProjectRenameErrorNameEmpty)
-                                .WithType(NotificationType.Error);
+                        Notification notification = Notification
+                            .Create(TranslationKey.ProjectRenameFailedTitle)
+                            .WithMessage(TranslationKey.ProjectRenameErrorNameEmpty)
+                            .WithType(NotificationType.Error);
 
-                            notifs.Show(notification);
+                        notifs.Show(notification);
 
-                            return;
-                        }
-
-                        await node.RenameAsync(args.NewName);
+                        return;
                     }
-                    finally
-                    {
-                        node.Renamed -= OnNodeOnRenamed;
-                    }
+
+                    await node.RenameAsync(args.NewName);
                 }
                 catch (Exception ex)
                 {
@@ -299,8 +292,7 @@ public class FileTreeCommandHandler(
 
                     notifs.Show(notification);
                 }
-            }, DispatcherPriority.Background);
-        }
+            });
     }
 
     public async Task Delete()
