@@ -59,13 +59,12 @@
                     Command="{Binding Command}"
                     IsVisible="{Binding IsVisible}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Viewbox Width="18" Height="18" VerticalAlignment="Center" Margin="0,1,0,0">
-                        <icons:SymbolIcon Width="20" Height="20" FontSize="18"
-                                          Symbol="{Binding IconSymbol}"
-                                          IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                          Foreground="{Binding ForegroundColor, Converter={StaticResource ColorToBrushConverter}}"
-                                          behaviors:BindableStyleClasses.Classes="{Binding IconClass}" />
-                    </Viewbox>
+                    <icons:SymbolIcon FontSize="18"
+                                      VerticalAlignment="Center" Margin="0,1,0,0"
+                                      Symbol="{Binding IconSymbol}"
+                                      IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                      Foreground="{Binding ForegroundColor, Converter={StaticResource ColorToBrushConverter}}"
+                                      behaviors:BindableStyleClasses.Classes="{Binding IconClass}" />
                     <TextBlock Text="{Binding Text}"
                                IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                VerticalAlignment="Center" />
@@ -124,10 +123,8 @@
 
                                     <StackPanel IsVisible="{Binding !Notifications.Count}" Grid.Row="1" Spacing="16"
                                                 HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Viewbox Height="96">
-                                            <icons:SymbolIcon Symbol="LeafTwo"
-                                                              Foreground="{DynamicResource ForegroundSecondaryColor}" />
-                                        </Viewbox>
+                                        <icons:SymbolIcon Symbol="LeafTwo" FontSize="96"
+                                                          Foreground="{DynamicResource ForegroundSecondaryColor}" />
                                         <TextBlock FontSize="16"
                                                    Text="{localization:Translate NotificationCenterEmpty}"
                                                    TextWrapping="Wrap" TextAlignment="Center" />
