@@ -15,21 +15,15 @@
 
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
                 Command="{Binding CopyLogsCommand}" ToolTip.Tip="Copy">
-            <Viewbox Height="14">
-                <fluent:SymbolIcon Symbol="Copy" />
-            </Viewbox>
+            <fluent:SymbolIcon Symbol="Copy" FontSize="14" />
         </Button>
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
                 Command="{Binding OpenLogsFolderCommand}" ToolTip.Tip="Open logs folder">
-            <Viewbox Height="14">
-                <fluent:SymbolIcon Symbol="Folder" />
-            </Viewbox>
+            <fluent:SymbolIcon Symbol="Folder" FontSize="14" />
         </Button>
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
                 Command="{Binding ClearLogsCommand}" ToolTip.Tip="Clear logs">
-            <Viewbox Height="14">
-                <fluent:SymbolIcon Symbol="Delete" />
-            </Viewbox>
+            <fluent:SymbolIcon Symbol="Delete" FontSize="14" />
         </Button>
     </StackPanel>
 </UserControl>

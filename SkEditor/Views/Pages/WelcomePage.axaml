@@ -188,11 +188,8 @@
                                         </MenuFlyout>
                                     </Button.ContextFlyout>
                                     <DockPanel LastChildFill="True">
-                                        <Viewbox Width="20" Height="20"
-                                                 DockPanel.Dock="Left"
-                                                 Margin="0,0,16,0">
-                                            <icons:SymbolIcon Symbol="{Binding IconSymbol}" />
-                                        </Viewbox>
+                                        <icons:SymbolIcon Symbol="{Binding IconSymbol}" FontSize="20"
+                                                          DockPanel.Dock="Left" Margin="0,0,16,0" />
 
                                         <TextBlock Text="{Binding PrettyLastOpened.Value}"
                                                    DockPanel.Dock="Right"

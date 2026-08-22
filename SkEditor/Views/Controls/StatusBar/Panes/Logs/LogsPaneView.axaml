@@ -39,9 +39,7 @@
             </ScrollViewer>
 
             <StackPanel VerticalAlignment="Center" Spacing="6" IsVisible="{Binding !FilteredLogs.Count}">
-                <Viewbox Height="32" Opacity="0.5">
-                    <icons:SymbolIcon Symbol="WeatherSqualls" HorizontalAlignment="Center" />
-                </Viewbox>
+                <icons:SymbolIcon Symbol="WeatherSqualls" FontSize="32" Opacity="0.5" HorizontalAlignment="Center" />
                 <TextBlock Text="No logs found"
                            HorizontalAlignment="Center" TextAlignment="Center"
                            TextWrapping="Wrap"

@@ -86,24 +86,22 @@
                 <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center" ColumnSpacing="8"
                       ToolTip.Tip="{Binding Name}" ToolTip.ShowDelay="750">
                     <Panel>
-                        <Viewbox Width="18" Height="18">
-                            <icons:SymbolIcon Width="21" Height="21">
-                                <icons:SymbolIcon.Foreground>
-                                    <MultiBinding Converter="{StaticResource NodeToColorConverter}">
-                                        <Binding Path="." />
-                                        <Binding Path="Name" />
-                                        <Binding Path="#Root.((fileTree:FileTreeViewModel)DataContext)?.ThemeVersion" />
-                                    </MultiBinding>
-                                </icons:SymbolIcon.Foreground>
-                                <icons:SymbolIcon.Symbol>
-                                    <MultiBinding Converter="{StaticResource NodeToIconConverter}">
-                                        <Binding Path="." />
-                                        <Binding Path="IsExpanded" />
-                                        <Binding Path="Name" />
-                                    </MultiBinding>
-                                </icons:SymbolIcon.Symbol>
-                            </icons:SymbolIcon>
-                        </Viewbox>
+                        <icons:SymbolIcon FontSize="16">
+                            <icons:SymbolIcon.Foreground>
+                                <MultiBinding Converter="{StaticResource NodeToColorConverter}">
+                                    <Binding Path="." />
+                                    <Binding Path="Name" />
+                                    <Binding Path="#Root.((fileTree:FileTreeViewModel)DataContext)?.ThemeVersion" />
+                                </MultiBinding>
+                            </icons:SymbolIcon.Foreground>
+                            <icons:SymbolIcon.Symbol>
+                                <MultiBinding Converter="{StaticResource NodeToIconConverter}">
+                                    <Binding Path="." />
+                                    <Binding Path="IsExpanded" />
+                                    <Binding Path="Name" />
+                                </MultiBinding>
+                            </icons:SymbolIcon.Symbol>
+                        </icons:SymbolIcon>
                     </Panel>
                     <Panel Grid.Column="1">
                         <TextBlock IsVisible="{Binding !IsRenaming}" Text="{Binding Name}" VerticalAlignment="Center"
