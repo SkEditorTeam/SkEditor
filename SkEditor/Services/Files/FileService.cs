@@ -114,6 +114,7 @@ public class FileService(
             .FirstOrDefault(tab => tab.File.Path == filePath);
 
         fileTab?.IsSaved = false;
+        fileTab?.File.Path = null;
         fileTab?.Document.UndoStack.DiscardOriginalFileMarker();
     }
 
