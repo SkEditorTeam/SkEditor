@@ -320,6 +320,11 @@ public abstract partial class BaseFolderNode : FileSystemNode
 
     public void AddChild(FileSystemNode node, bool add = true)
     {
+        if (Children.Any(c => c.Path.Equals(node.Path, StringComparison.OrdinalIgnoreCase)))
+        {
+            return;
+        }
+        
         node.PropertyChanged += OnChildPropertyChanged;
         node.Deleted += OnChildDeleted;
 

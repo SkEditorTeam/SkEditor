@@ -140,7 +140,7 @@ public partial class LocalFileSystem : IDisposable
                     ? new LocalFolderNode(name, path, false)
                     : new LocalFileNode(name, path);
 
-                folderNode.AddChild(newNode, true);
+                folderNode.AddChild(newNode);
             })
             .AddTo(ref _disposables);
     }
