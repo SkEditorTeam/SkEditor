@@ -15,6 +15,14 @@ namespace SkEditor.Services.Files;
 
 public class FilePickerService(ITranslationService translations) : IFilePickerService
 {
+    private readonly FilePickerFileType _skriptFileType = new("Skript")
+    {
+        Patterns =
+        [
+            "*.sk"
+        ]
+    };
+    
     public async Task<string[]?> PickFilesAsync(bool allowMultiple = true)
     {
         IStorageProvider? storageProvider = GetStorageProvider();
@@ -66,6 +74,17 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
             return null;
         }
 
+        FilePickerSaveOptions dialogOptions = await BuildSaveFilePickerOptions(storageProvider, fileName, currentPath);
+        IStorageFile? result = await storageProvider.SaveFilePickerAsync(dialogOptions);
+        return result?.Path.LocalPath;
+    }
+
+    private async Task<FilePickerSaveOptions> BuildSaveFilePickerOptions(IStorageProvider storageProvider,
+        string fileName, string? currentPath)
+    {
+        string? extension = Path.GetExtension(currentPath)?.ToLowerInvariant();
+        bool isSkript = string.IsNullOrEmpty(extension) || extension == ".sk";
+
         string? folder = null;
         if (currentPath is not null)
         {
@@ -79,10 +98,22 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
         FilePickerSaveOptions dialogOptions = new()
         {
             Title = translations.Get(TranslationKey.WindowTitleSaveFilePicker, fileName),
-            SuggestedStartLocation = storageFolder
+            SuggestedStartLocation = storageFolder,
+            SuggestedFileName = fileName,
+            SuggestedFileType = isSkript ? _skriptFileType : null,
+            FileTypeChoices =
+            [
+                new FilePickerFileType(translations.Get(TranslationKey.FilePickerAllFiles))
+                {
+                    Patterns =
+                    [
+                        "*.*"
+                    ]
+                },
+                _skriptFileType
+            ]
         };
-        IStorageFile? result = await storageProvider.SaveFilePickerAsync(dialogOptions);
-        return result?.Path.LocalPath;
+        return dialogOptions;
     }
 
     private static IStorageProvider? GetStorageProvider()

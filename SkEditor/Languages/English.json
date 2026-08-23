@@ -324,5 +324,6 @@
   "AboutCopySystemInfo": "Copy system info",
   "AboutSupportUs": "Support SkEditor",
   "DocumentationTabTitle": "Documentation",
-  "DocumentationAllAddons": "All addons"
+  "DocumentationAllAddons": "All addons",
+  "FilePickerAllFiles": "All files"
 }
