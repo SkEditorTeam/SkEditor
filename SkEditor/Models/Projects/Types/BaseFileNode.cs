@@ -60,8 +60,7 @@ public abstract class BaseFileNode(string name, string path) : FileSystemNode(na
             return;
         }
 
-        UpdatePath(newPath);
-        Name = newName;
+        UpdateName(newName);
     }
 
     public override async Task<bool> DeleteAsync()

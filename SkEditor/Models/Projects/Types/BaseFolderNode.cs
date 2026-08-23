@@ -239,8 +239,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
             return;
         }
 
-        Name = newName;
-        UpdatePath(newPath);
+        UpdateName(newName);
     }
 
     public override void UpdateName(string newName)
