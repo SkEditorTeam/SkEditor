@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
 using SkEditor.Contracts.Services;
@@ -128,6 +129,11 @@ public partial class LocalFileSystem : IDisposable
                 }
 
                 if (!folderNode.HasLoadedChildren)
+                {
+                    return;
+                }
+
+                if (folderNode.Children.Any(c => c.Path.Equals(path, StringComparison.OrdinalIgnoreCase)))
                 {
                     return;
                 }

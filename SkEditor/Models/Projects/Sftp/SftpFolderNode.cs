@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Renci.SshNet;
 using Renci.SshNet.Common;
 using Renci.SshNet.Sftp;
 using SkEditor.Contracts.Services;
@@ -34,7 +35,8 @@ public class SftpFolderNode(
             async c => await c.CreateDirectoryAsync(path));
 
     protected override Func<string, Task> DeleteAction =>
-        async path => await service.ExecuteSafeAsync(connection, async c => await c.DeleteDirectoryAsync(path));
+        async path => await service.ExecuteSafeAsync(connection,
+            async c => { await DeleteDirectoryRecursiveAsync(c, path, CancellationToken.None); });
 
     protected override Func<string, string, Task> RenameFileAction =>
         async (oldPath, newPath) => await service.ExecuteSafeAsync(connection,
@@ -141,5 +143,29 @@ public class SftpFolderNode(
     protected override FileSystemNode CreateFolderNode(string name, string path, bool addDummy = true)
     {
         return new SftpFolderNode(name, path, false, connection, service, addDummy);
+    }
+
+    public async Task DeleteDirectoryRecursiveAsync(SftpClient client, string path, CancellationToken ct = default)
+    {
+        IAsyncEnumerable<ISftpFile> files = client.ListDirectoryAsync(path, ct);
+
+        await foreach (ISftpFile file in files)
+        {
+            if (file.Name is "." or "..")
+            {
+                continue;
+            }
+
+            if (file.IsDirectory)
+            {
+                await DeleteDirectoryRecursiveAsync(client, file.FullName, ct);
+            }
+            else
+            {
+                await client.DeleteFileAsync(file.FullName, ct);
+            }
+        }
+
+        await client.DeleteDirectoryAsync(path, ct);
     }
 }

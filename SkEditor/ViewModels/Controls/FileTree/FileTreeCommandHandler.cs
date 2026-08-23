@@ -323,12 +323,16 @@ public class FileTreeCommandHandler(
         List<FileSystemNode> nodesToDelete = fileTree.SelectedNodes.ToList();
         foreach (FileSystemNode node in nodesToDelete)
         {
+            node.IsLoadingChildren = true;
+            node.IsExpanded = false;
             bool isSuccess = await node.DeleteAsync();
 
             if (isSuccess)
             {
                 node.OnDeleted();
             }
+
+            node.IsLoadingChildren = false;
         }
     }
 
