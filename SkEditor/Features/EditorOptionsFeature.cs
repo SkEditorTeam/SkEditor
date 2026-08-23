@@ -38,5 +38,7 @@ public class EditorOptionsFeature(AppSettings appSettings, IThemeService themes)
         editor.TextArea.TextView.CurrentLineBackground = themes.CurrentTheme.CurrentLineBackground;
         editor.TextArea.TextView.CurrentLineBorder = new ImmutablePen(themes.CurrentTheme.CurrentLineBorder, 2);
         editor.Options.HighlightCurrentLine = appSettings.HighlightCurrentLine;
+
+        editor.Options.FixedLineHeight = true;
     }
 }
