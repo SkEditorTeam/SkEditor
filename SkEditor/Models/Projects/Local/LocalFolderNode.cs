@@ -9,7 +9,8 @@ using SkEditor.Models.Projects.Types;
 
 namespace SkEditor.Models.Projects.Local;
 
-public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolderNode(name, path, isRoot)
+public class LocalFolderNode(string name, string path, bool isRoot, bool addDummy = true)
+    : BaseFolderNode(name, path, isRoot, addDummy)
 {
     public override char[] InvalidChars => LocalFileSystem.InvalidChars;
     protected override Func<string, Task<bool>> AlreadyExistsPredicate => LocalFileSystem.AlreadyExistsPredicate;
@@ -106,9 +107,9 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
         return new LocalFileNode(name, path);
     }
 
-    protected override FileSystemNode CreateFolderNode(string name, string path)
+    protected override FileSystemNode CreateFolderNode(string name, string path, bool addDummy = true)
     {
-        return new LocalFolderNode(name, path, false);
+        return new LocalFolderNode(name, path, false, addDummy);
     }
 
     public override void RemoveChild(FileSystemNode node)

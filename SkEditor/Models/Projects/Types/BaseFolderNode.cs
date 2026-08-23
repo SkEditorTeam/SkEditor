@@ -163,7 +163,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
         {
             await CreateFolderAction(newFolderPath);
 
-            FileSystemNode newNode = CreateFolderNode(name, newFolderPath);
+            FileSystemNode newNode = CreateFolderNode(name, newFolderPath, false);
             AddChild(newNode);
         }
         catch (Exception ex)
@@ -344,7 +344,7 @@ public abstract partial class BaseFolderNode : FileSystemNode
     protected abstract Task<IEnumerable<FileSystemNode>> LoadFilesAndFolders();
 
     protected abstract FileSystemNode CreateFileNode(string name, string path);
-    protected abstract FileSystemNode CreateFolderNode(string name, string path);
+    protected abstract FileSystemNode CreateFolderNode(string name, string path, bool addDummy = true);
 
     private void OnChildDeleted(object? sender, EventArgs e)
     {

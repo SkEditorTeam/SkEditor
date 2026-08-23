@@ -138,8 +138,8 @@ public class SftpFolderNode(
         return new SftpFileNode(name, path, connection, service);
     }
 
-    protected override FileSystemNode CreateFolderNode(string name, string path)
+    protected override FileSystemNode CreateFolderNode(string name, string path, bool addDummy = true)
     {
-        return new SftpFolderNode(name, path, false, connection, service, false);
+        return new SftpFolderNode(name, path, false, connection, service, addDummy);
     }
 }
