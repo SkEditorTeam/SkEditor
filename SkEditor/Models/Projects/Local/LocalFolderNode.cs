@@ -115,6 +115,33 @@ public class LocalFolderNode(string name, string path, bool isRoot) : BaseFolder
     {
         base.RemoveChild(node);
         WeakReferenceMessenger.Default.Send(new NotifyFileDeleteMessage(node.Path));
+
+        if (node is LocalFolderNode folderNode)
+        {
+            NotifyDeleted(folderNode);
+        }
+    }
+
+    private static void NotifyDeleted(LocalFolderNode folderNode)
+    {
+        if (!folderNode.HasLoadedChildren)
+        {
+            return;
+        }
+
+        FileSystemNode[] children = folderNode.Children.ToArray();
+        foreach (FileSystemNode node in children)
+        {
+            switch (node)
+            {
+                case LocalFileNode localFileNode:
+                    folderNode.RemoveChild(localFileNode);
+                    break;
+                case LocalFolderNode subFolderNode:
+                    NotifyDeleted(subFolderNode);
+                    break;
+            }
+        }
     }
 
     private static bool HasVisibleContents(string path)
