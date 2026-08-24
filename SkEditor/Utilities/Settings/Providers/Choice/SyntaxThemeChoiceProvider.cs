@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.UI;
@@ -12,10 +14,29 @@ public class SyntaxThemeChoiceProvider(ISyntaxService syntax) : ISettingsChoiceP
     public Observable<Unit> ValuesChanged => Observable.FromEvent(
         h => syntax.SyntaxesReloaded += h,
         h => syntax.SyntaxesReloaded -= h);
-    
+
     public IEnumerable<SyntaxTheme?> GetValues()
     {
         return syntax.AvailableThemes;
+    }
+
+    public TranslatableString GetDisplayValue(SyntaxTheme? value)
+    {
+        return value?.Name?.ToTranslatable() ?? string.Empty.ToTranslatable();
+    }
+}
+
+public class SyntaxThemeSkriptChoiceProvider(ISyntaxService syntax) : ISettingsChoiceProvider<SyntaxTheme?>
+{
+    public Observable<Unit> ValuesChanged => Observable.FromEvent(
+        h => syntax.SyntaxesReloaded += h,
+        h => syntax.SyntaxesReloaded -= h);
+
+    public IEnumerable<SyntaxTheme?> GetValues()
+    {
+        return syntax.AvailableThemes.Where(t =>
+            t.TargetLanguage?.Equals("skript", StringComparison.OrdinalIgnoreCase) == true &&
+            !t.IsBuiltInTextMateTheme);
     }
 
     public TranslatableString GetDisplayValue(SyntaxTheme? value)

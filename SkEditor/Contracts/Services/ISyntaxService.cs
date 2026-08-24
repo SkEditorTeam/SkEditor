@@ -11,6 +11,7 @@ public interface ISyntaxService
     string GrammarFolder { get; }
     string ThemeFolder { get; }
     void LoadSyntaxes();
+    void RefreshPairs();
 
     string? GetGrammarFileByScope(string scopeName);
     SyntaxPair? GetPairByExtension(string? extension);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
@@ -52,7 +53,7 @@ public class TextMateFeature(ISyntaxService syntax) : IEditorFeature
 
         if (pair != null && !string.IsNullOrEmpty(pair.Theme.FileName))
         {
-            theme = registryOptions.LoadCustomTheme(pair.Theme.FileName);
+            theme = registryOptions.LoadThemeById(pair.Theme.FileName);
         }
 
         _installation.SetTheme(theme ?? registryOptions.GetDefaultTheme());
@@ -112,6 +113,13 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme, ISyntaxService synt
 
         using StreamReader reader = new(stream);
         return ThemeReader.ReadThemeSync(reader);
+    }
+
+    public IRawTheme? LoadThemeById(string themeIdentifier)
+    {
+        return Enum.TryParse(themeIdentifier, true, out ThemeName builtIn)
+            ? LoadTheme(builtIn)
+            : LoadCustomTheme(themeIdentifier);
     }
 
     public IRawTheme GetTheme(string scopeName)

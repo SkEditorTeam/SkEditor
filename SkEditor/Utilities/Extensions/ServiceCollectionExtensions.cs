@@ -257,6 +257,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IndentAmountChoiceProvider>();
             services.AddSingleton<IndentTypeChoiceProvider>();
             services.AddSingleton<SyntaxThemeChoiceProvider>();
+            services.AddSingleton<SyntaxThemeSkriptChoiceProvider>();
             services.AddSingleton<SyntaxGrammarChoiceProvider>();
         }
 

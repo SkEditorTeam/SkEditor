@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Avalonia.Platform;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Settings.Configs;
+using TextMateSharp.Grammars;
 
 namespace SkEditor.Services;
 
-public class SyntaxService(IConfigService config, AppSettings settings, ILogService logs) : ISyntaxService
+public partial class SyntaxService(IConfigService config, AppSettings settings, ILogService logs) : ISyntaxService
 {
     private const string SyntaxAssetsDirectory = "avares://SkEditor/Assets/Syntax";
     private static readonly string[] DefaultGrammars = ["skript.tmLanguage.json"];
@@ -40,17 +42,16 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
             settings.SyntaxPairs.Add(new SyntaxPairDto([".sk", ""], "skript.tmLanguage.json", "dark_skript.json"));
         }
 
-        _syntaxPairs.Clear();
-        _scopeToGrammarFile.Clear();
-
         AvailableThemes = Directory.EnumerateFiles(ThemeFolder, "*.json")
             .Select(file =>
             {
                 string fileName = Path.GetFileName(file);
                 (string? name, string? language) = ReadPropertiesFromTheme(file);
-
                 return new SyntaxTheme(fileName, name, language);
             })
+            .Concat(Enum.GetValues<ThemeName>().Select(tn =>
+                new SyntaxTheme(tn.ToString(), ToSentenceCase(tn.ToString()))
+            ))
             .ToList();
 
         AvailableGrammars = Directory.EnumerateFiles(GrammarFolder, "*.json")
@@ -61,12 +62,23 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
                 return new SyntaxGrammar(fileName, scope);
             })
             .ToList();
+
+        SyntaxesReloaded?.Invoke();
+
+        RefreshPairs();
+    }
+
+    public void RefreshPairs()
+    {
+        _syntaxPairs.Clear();
+        _scopeToGrammarFile.Clear();
         
         foreach (SyntaxPairDto dto in settings.SyntaxPairs)
         {
             string scope = ResolveScopeName(dto.Grammar);
             SyntaxGrammar? grammar = AvailableGrammars.FirstOrDefault(g => g.ScopeName == scope);
-            SyntaxTheme? theme = AvailableThemes.FirstOrDefault(t => t.FileName == dto.Theme);
+            SyntaxTheme? theme =
+                AvailableThemes.FirstOrDefault(t => t.FileName.Equals(dto.Theme, StringComparison.OrdinalIgnoreCase));
 
             if (grammar is null)
             {
@@ -91,7 +103,6 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
                 }
             }
 
-
             if (grammar is null || theme is null)
             {
                 continue;
@@ -100,10 +111,8 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
             _syntaxPairs.Add(new SyntaxPair(dto.Extensions, grammar, theme));
             _scopeToGrammarFile[scope] = dto.Grammar;
         }
-
-        SyntaxesReloaded?.Invoke();
     }
-
+    
     public SyntaxPair? GetPairByExtension(string? extension)
     {
         string normalizedExt = extension?.ToLowerInvariant() ?? "";
@@ -207,4 +216,19 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
 
         return default;
     }
+
+    private static string ToSentenceCase(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return value;
+        }
+
+        string result = PascalCaseBoundaryRegex().Replace(value, " $1").ToLowerInvariant();
+
+        return char.ToUpperInvariant(result[0]) + result[1..];
+    }
+
+    [GeneratedRegex("(?<!^)([A-Z])")]
+    private static partial Regex PascalCaseBoundaryRegex();
 }

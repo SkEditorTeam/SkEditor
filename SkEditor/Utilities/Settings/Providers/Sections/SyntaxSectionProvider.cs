@@ -19,6 +19,7 @@ public class SyntaxSectionProvider(
     AppSettings appSettings,
     ISyntaxService syntax,
     SyntaxThemeChoiceProvider themeChoiceProvider,
+    SyntaxThemeSkriptChoiceProvider themeSkriptChoiceProvider,
     SyntaxGrammarChoiceProvider grammarChoiceProvider,
     ILinkService links) : ISettingsSectionProvider
 {
@@ -59,7 +60,7 @@ public class SyntaxSectionProvider(
 
                     SyntaxPairDto newPair = new([".custom"], defaultGrammar, defaultTheme);
                     appSettings.SyntaxPairs.Add(newPair);
-                    syntax.LoadSyntaxes();
+                    syntax.RefreshPairs();
 
                     SettingElement newElement = CreateRuleElement(newPair, customRules.Children);
                     customRules.Children.Insert(customRules.Children.Count - 1, newElement);
@@ -91,7 +92,7 @@ public class SyntaxSectionProvider(
                                 .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                                 .Select(e => e.StartsWith('.') ? e : $".{e}")
                                 .ToArray();
-                            syntax.LoadSyntaxes();
+                            syntax.RefreshPairs();
                         }
                     )),
                 ChoiceSetting<SyntaxGrammar?>
@@ -101,7 +102,7 @@ public class SyntaxSectionProvider(
                         val =>
                         {
                             pair.Grammar = val?.FileName ?? pair.Grammar;
-                            syntax.LoadSyntaxes();
+                            syntax.RefreshPairs();
                         }
                     ))
                     .WithProvider(grammarChoiceProvider),
@@ -112,7 +113,7 @@ public class SyntaxSectionProvider(
                         val =>
                         {
                             pair.Theme = val?.FileName ?? pair.Theme;
-                            syntax.LoadSyntaxes();
+                            syntax.RefreshPairs();
                         }
                     ))
                     .WithProvider(themeChoiceProvider),
@@ -124,7 +125,7 @@ public class SyntaxSectionProvider(
             appSettings.SyntaxPairs.Remove(pair);
             parentCollection.Remove(ruleItem);
             (ruleItem as IDisposable)?.Dispose();
-            syntax.LoadSyntaxes();
+            syntax.RefreshPairs();
         });
 
         return ruleItem;
@@ -150,10 +151,10 @@ public class SyntaxSectionProvider(
                     newTheme =>
                     {
                         skriptPair.Theme = newTheme?.FileName ?? skriptPair.Theme;
-                        syntax.LoadSyntaxes();
+                        syntax.RefreshPairs();
                     }
                 ))
-                .WithProvider(themeChoiceProvider)
+                .WithProvider(themeSkriptChoiceProvider)
         ];
     }
 
