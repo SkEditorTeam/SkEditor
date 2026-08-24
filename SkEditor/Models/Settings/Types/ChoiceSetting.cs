@@ -21,6 +21,7 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
     : SettingElement<ChoiceSetting<T>>(name), IChoiceSetting, IDisposable
 {
     private IDisposable? _providerSubscription;
+    private bool _isRefreshing;
     
     public List<T> Options { get; protected set; } = [];
 
@@ -95,27 +96,40 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
             return;
         }
 
-        Options = Provider.GetValues().ToList();
-
-        WrappedOptions.Clear();
-        foreach (T o in Options.Where(o => o != null))
+        _isRefreshing = true;
+        try
         {
-            WrappedOptions.Add(new OptionItem(o!, Provider.GetDisplayValue(o!)));
+            Options = Provider.GetValues().ToList();
+
+            WrappedOptions.Clear();
+            foreach (T o in Options.Where(o => o != null))
+            {
+                WrappedOptions.Add(new OptionItem(o!, Provider.GetDisplayValue(o!)));
+            }
+
+            T? currentVal = Property.Get != null ? Property.Get() : SelectedOption;
+
+            if (currentVal is not null && !Options.Contains(currentVal) && Options.Count > 0)
+            {
+                currentVal = Options.FirstOrDefault();
+            }
+
+            SelectedOption = currentVal;
+            OnPropertyChanged(nameof(IChoiceSetting.SelectedItem));
         }
-
-        T? currentVal = Property.Get != null ? Property.Get() : SelectedOption;
-
-        if (currentVal is not null && !Options.Contains(currentVal) && Options.Count > 0)
+        finally
         {
-            currentVal = Options.FirstOrDefault();
+            _isRefreshing = false;
         }
-
-        SelectedOption = currentVal;
-        OnPropertyChanged(nameof(IChoiceSetting.SelectedItem));
     }
 
     partial void OnSelectedOptionChanged(T? oldValue, T? newValue)
     {
+        if (_isRefreshing)
+        {
+            return;
+        }
+
         if (!EqualityComparer<T>.Default.Equals(oldValue, newValue) && newValue is not null)
         {
             Property.Set(newValue);

@@ -122,8 +122,9 @@ public class SyntaxSectionProvider(
         deleteAction.WithAction("Remove".ToTranslatable(), () =>
         {
             appSettings.SyntaxPairs.Remove(pair);
-            syntax.LoadSyntaxes();
             parentCollection.Remove(ruleItem);
+            (ruleItem as IDisposable)?.Dispose();
+            syntax.LoadSyntaxes();
         });
 
         return ruleItem;
