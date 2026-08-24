@@ -121,7 +121,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="models:SettingElement">
-                        <ContentControl Content="{Binding}" />
+                        <ContentControl Content="{Binding}" IsVisible="{Binding IsVisible.Value}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
