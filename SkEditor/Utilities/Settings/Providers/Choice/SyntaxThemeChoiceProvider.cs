@@ -17,7 +17,8 @@ public class SyntaxThemeChoiceProvider(ISyntaxService syntax) : ISettingsChoiceP
 
     public IEnumerable<SyntaxTheme?> GetValues()
     {
-        return syntax.AvailableThemes;
+        return syntax.AvailableThemes.Where(t =>
+            t.TargetLanguage?.Equals("skript", StringComparison.OrdinalIgnoreCase) != true);
     }
 
     public TranslatableString GetDisplayValue(SyntaxTheme? value)

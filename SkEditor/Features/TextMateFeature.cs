@@ -75,7 +75,7 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme, ISyntaxService synt
         string normalizedExt = extension?.ToLowerInvariant() ?? "";
 
         SyntaxPair? customPair = syntax.GetPairByExtension(normalizedExt);
-        if (customPair is not null)
+        if (customPair is not null && !string.IsNullOrEmpty(customPair.Grammar?.ScopeName))
         {
             return customPair.Grammar.ScopeName;
         }

@@ -20,7 +20,7 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
 
     private static readonly ThemeName[] BuiltInTextmateThemes =
         [ThemeName.DarkPlus, ThemeName.OneDark, ThemeName.Monokai, ThemeName.Dracula, ThemeName.OneDark];
-    
+
     private readonly Dictionary<string, string> _scopeToGrammarFile = [];
 
     private readonly List<SyntaxPair> _syntaxPairs = [];
@@ -44,6 +44,7 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
         if (settings.SyntaxPairs.Count == 0)
         {
             settings.SyntaxPairs.Add(new SyntaxPairDto([".sk", ""], "skript.tmLanguage.json", "dark_skript.json"));
+            settings.SyntaxPairs.Add(new SyntaxPairDto(["*"], null, "DarkPlus"));
         }
 
         AvailableThemes = Directory.EnumerateFiles(ThemeFolder, "*.json")
@@ -71,30 +72,18 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
 
         RefreshPairs();
     }
-    
+
     public void RefreshPairs()
     {
         _syntaxPairs.Clear();
         _scopeToGrammarFile.Clear();
-        
+
         foreach (SyntaxPairDto dto in settings.SyntaxPairs)
         {
-            string scope = ResolveScopeName(dto.Grammar);
+            string? scope = dto.Grammar is null ? null : ResolveScopeName(dto.Grammar);
             SyntaxGrammar? grammar = AvailableGrammars.FirstOrDefault(g => g.ScopeName == scope);
             SyntaxTheme? theme =
                 AvailableThemes.FirstOrDefault(t => t.FileName.Equals(dto.Theme, StringComparison.OrdinalIgnoreCase));
-
-            if (grammar is null)
-            {
-                grammar = AvailableGrammars.FirstOrDefault(g => g.FileName == DefaultGrammars[0])
-                          ?? AvailableGrammars.FirstOrDefault();
-
-                if (grammar is not null)
-                {
-                    dto.Grammar = grammar.FileName;
-                    scope = grammar.ScopeName;
-                }
-            }
 
             if (theme is null)
             {
@@ -107,20 +96,26 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
                 }
             }
 
-            if (grammar is null || theme is null)
+            if (theme is null)
             {
                 continue;
             }
 
             _syntaxPairs.Add(new SyntaxPair(dto.Extensions, grammar, theme));
-            _scopeToGrammarFile[scope] = dto.Grammar;
+            if (scope is not null && dto.Grammar is not null)
+            {
+                _scopeToGrammarFile[scope] = dto.Grammar;
+            }
         }
     }
-    
+
     public SyntaxPair? GetPairByExtension(string? extension)
     {
         string normalizedExt = extension?.ToLowerInvariant() ?? "";
-        return _syntaxPairs.FirstOrDefault(p => p.Extensions.Contains(normalizedExt));
+
+        SyntaxPair? exactMatch = _syntaxPairs.FirstOrDefault(p => p.Extensions.Contains(normalizedExt));
+        return exactMatch ??
+               _syntaxPairs.FirstOrDefault(p => p.Extensions.Contains("*") || p.Extensions.Contains(".*"));
     }
 
     public string? GetGrammarFileByScope(string scopeName)

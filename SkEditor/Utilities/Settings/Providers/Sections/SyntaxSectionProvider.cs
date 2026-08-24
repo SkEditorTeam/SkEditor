@@ -12,6 +12,7 @@ using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
+using TextMateSharp.Grammars;
 
 namespace SkEditor.Utilities.Settings.Providers.Sections;
 
@@ -54,11 +55,7 @@ public class SyntaxSectionProvider(
                 .Create("Add new rule".ToTranslatable())
                 .WithAction(TranslationKey.ButtonAdd, () =>
                 {
-                    string defaultGrammar =
-                        syntax.AvailableGrammars.FirstOrDefault()?.FileName ?? "skript.tmLanguage.json";
-                    string defaultTheme = syntax.AvailableThemes.FirstOrDefault()?.FileName ?? "dark_skript.json";
-
-                    SyntaxPairDto newPair = new([".custom"], defaultGrammar, defaultTheme);
+                    SyntaxPairDto newPair = new([""], null, nameof(ThemeName.DarkPlus));
                     appSettings.SyntaxPairs.Add(newPair);
                     syntax.RefreshPairs();
 
@@ -90,7 +87,7 @@ public class SyntaxSectionProvider(
                         {
                             pair.Extensions = val
                                 .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                                .Select(e => e.StartsWith('.') ? e : $".{e}")
+                                .Select(e => e == "*" || e.StartsWith('.') ? e : $".{e}")
                                 .ToArray();
                             syntax.RefreshPairs();
                         }
@@ -101,7 +98,7 @@ public class SyntaxSectionProvider(
                         () => syntax.AvailableGrammars.FirstOrDefault(g => g.FileName == pair.Grammar),
                         val =>
                         {
-                            pair.Grammar = val?.FileName ?? pair.Grammar;
+                            pair.Grammar = val?.FileName;
                             syntax.RefreshPairs();
                         }
                     ))

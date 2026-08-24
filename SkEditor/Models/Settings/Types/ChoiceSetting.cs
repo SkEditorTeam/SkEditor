@@ -9,7 +9,7 @@ using SkEditor.Utilities.Settings.Providers.Choice;
 
 namespace SkEditor.Models.Settings.Types;
 
-public record OptionItem(object Value, TranslatableString Display);
+public record OptionItem(object? Value, TranslatableString Display);
 
 public interface IChoiceSetting
 {
@@ -38,7 +38,7 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
     public ISettingsChoiceProvider<T>? Provider { get; protected set; }
 
     [ObservableProperty]
-    public partial T? SelectedOption { get; set; }
+    public partial T SelectedOption { get; set; }
 
     public ObservableCollection<OptionItem> WrappedOptions { get; } = [];
 
@@ -47,8 +47,8 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
     object? IChoiceSetting.SelectedItem
     {
         get => WrappedOptions.FirstOrDefault(o =>
-            EqualityComparer<T>.Default.Equals((T)o.Value, SelectedOption));
-        set => SelectedOption = value is OptionItem item ? (T)item.Value : default!;
+            EqualityComparer<T>.Default.Equals((T?)o.Value, SelectedOption));
+        set => SelectedOption = value is OptionItem { Value: T val } ? val : default!;
     }
 
     public static ChoiceSetting<T> Create(TranslatableString name)
@@ -102,16 +102,16 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
             Options = Provider.GetValues().ToList();
 
             WrappedOptions.Clear();
-            foreach (T o in Options.Where(o => o != null))
+            foreach (T o in Options)
             {
-                WrappedOptions.Add(new OptionItem(o!, Provider.GetDisplayValue(o!)));
+                WrappedOptions.Add(new OptionItem(o, Provider.GetDisplayValue(o!)));
             }
 
-            T? currentVal = Property.Get != null ? Property.Get() : SelectedOption;
+            T currentVal = Property.Get != null ? Property.Get() : SelectedOption;
 
-            if (currentVal is not null && !Options.Contains(currentVal) && Options.Count > 0)
+            if (!Options.Contains(currentVal) && Options.Count > 0)
             {
-                currentVal = Options.FirstOrDefault();
+                currentVal = Options[0];
             }
 
             SelectedOption = currentVal;
@@ -123,14 +123,14 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
         }
     }
 
-    partial void OnSelectedOptionChanged(T? oldValue, T? newValue)
+    partial void OnSelectedOptionChanged(T oldValue, T newValue)
     {
         if (_isRefreshing)
         {
             return;
         }
 
-        if (!EqualityComparer<T>.Default.Equals(oldValue, newValue) && newValue is not null)
+        if (!EqualityComparer<T>.Default.Equals(oldValue, newValue))
         {
             Property.Set(newValue);
         }

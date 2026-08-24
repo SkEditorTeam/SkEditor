@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.UI;
@@ -16,12 +17,19 @@ public class SyntaxGrammarChoiceProvider(ISyntaxService syntax) : ISettingsChoic
     
     public IEnumerable<SyntaxGrammar?> GetValues()
     {
-        return syntax.AvailableGrammars;
+        List<SyntaxGrammar?> grammars = [null, ..syntax.AvailableGrammars.Where(g => g.ScopeName != "source.sk")];
+
+        return grammars;
     }
 
     public TranslatableString GetDisplayValue(SyntaxGrammar? value)
     {
-        string? displayName = Path.GetFileNameWithoutExtension(value?.FileName)?.Replace(".tmLanguage", "");
+        if (value is null)
+        {
+            return "Auto".ToTranslatable();
+        }
+
+        string? displayName = Path.GetFileNameWithoutExtension(value.FileName)?.Replace(".tmLanguage", "");
         return displayName?.ToTranslatable() ?? string.Empty.ToTranslatable();
     }
 }
