@@ -259,6 +259,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<SyntaxThemeChoiceProvider>();
             services.AddSingleton<SyntaxThemeSkriptChoiceProvider>();
             services.AddSingleton<SyntaxGrammarChoiceProvider>();
+            services.AddSingleton<SyntaxGrammarSkriptChoiceProvider>();
         }
 
         private void AddSectionProviders()

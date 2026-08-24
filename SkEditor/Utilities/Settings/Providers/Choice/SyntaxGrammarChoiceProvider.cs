@@ -33,3 +33,21 @@ public class SyntaxGrammarChoiceProvider(ISyntaxService syntax) : ISettingsChoic
         return displayName?.ToTranslatable() ?? string.Empty.ToTranslatable();
     }
 }
+
+public class SyntaxGrammarSkriptChoiceProvider(ISyntaxService syntax) : ISettingsChoiceProvider<SyntaxGrammar?>
+{
+    public Observable<Unit> ValuesChanged => Observable.FromEvent(
+        h => syntax.SyntaxesReloaded += h,
+        h => syntax.SyntaxesReloaded -= h);
+
+    public IEnumerable<SyntaxGrammar?> GetValues()
+    {
+        return syntax.AvailableGrammars.Where(g => g.ScopeName == "source.sk");
+    }
+
+    public TranslatableString GetDisplayValue(SyntaxGrammar? value)
+    {
+        string? displayName = Path.GetFileNameWithoutExtension(value?.FileName)?.Replace(".tmLanguage", "");
+        return displayName?.ToTranslatable() ?? string.Empty.ToTranslatable();
+    }
+}

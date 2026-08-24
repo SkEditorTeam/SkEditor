@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using AvaloniaEdit.Utils;
 using FluentIcons.Common;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
@@ -22,6 +23,7 @@ public class SyntaxSectionProvider(
     SyntaxThemeChoiceProvider themeChoiceProvider,
     SyntaxThemeSkriptChoiceProvider themeSkriptChoiceProvider,
     SyntaxGrammarChoiceProvider grammarChoiceProvider,
+    SyntaxGrammarSkriptChoiceProvider grammarSkriptChoiceProvider,
     ILinkService links) : ISettingsSectionProvider
 {
     public string ParentId => "Appearance";
@@ -137,22 +139,52 @@ public class SyntaxSectionProvider(
             appSettings.SyntaxPairs.Insert(0, skriptPair);
         }
 
+        ChoiceSetting<SyntaxGrammar?> skriptGrammarItem = ChoiceSetting<SyntaxGrammar?>
+            .Create("Skript grammar".ToTranslatable())
+            .WithProperty((
+                () => syntax.AvailableGrammars.FirstOrDefault(g => g.FileName == skriptPair.Grammar),
+                newGrammar =>
+                {
+                    skriptPair.Grammar = newGrammar?.FileName;
+                    syntax.RefreshPairs();
+                }
+            ))
+            .WithProvider(grammarSkriptChoiceProvider);
+
+        BindableReactiveProperty<bool> isGrammarVisible = Observable.FromEvent(
+                h => syntax.SyntaxesReloaded += h,
+                h => syntax.SyntaxesReloaded -= h)
+            .Select(_ => HasMultipleSkriptGrammars())
+            .ToBindableReactiveProperty(HasMultipleSkriptGrammars());
+
+        skriptGrammarItem.WithVisible(isGrammarVisible);
+
         return
         [
-            ChoiceSetting<SyntaxTheme?>
-                .Create("Skript syntax theme".ToTranslatable())
-                .WithDescription("Choose the color scheme used for Skript code.".ToTranslatable())
+            CompoundSetting
+                .Create("Skript syntax".ToTranslatable())
+                .WithDescription("Choose the grammar and color scheme used for Skript code.".ToTranslatable())
                 .WithIcon(Symbol.Color)
-                .WithProperty((
-                    () => syntax.AvailableThemes.FirstOrDefault(t => t.FileName == skriptPair.Theme),
-                    newTheme =>
-                    {
-                        skriptPair.Theme = newTheme?.FileName ?? skriptPair.Theme;
-                        syntax.RefreshPairs();
-                    }
-                ))
-                .WithProvider(themeSkriptChoiceProvider)
+                .WithChildren(
+                    skriptGrammarItem,
+                    ChoiceSetting<SyntaxTheme?>
+                        .Create("Skript theme".ToTranslatable())
+                        .WithProperty((
+                            () => syntax.AvailableThemes.FirstOrDefault(t => t.FileName == skriptPair.Theme),
+                            newTheme =>
+                            {
+                                skriptPair.Theme = newTheme?.FileName ?? skriptPair.Theme;
+                                syntax.RefreshPairs();
+                            }
+                        ))
+                        .WithProvider(themeSkriptChoiceProvider)
+                )
         ];
+    }
+
+    private bool HasMultipleSkriptGrammars()
+    {
+        return syntax.AvailableGrammars.Count(g => g.ScopeName == "source.sk") > 1;
     }
 
     private List<SettingElement> CreateManagementSection()
