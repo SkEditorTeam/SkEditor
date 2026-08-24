@@ -19,7 +19,7 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
     private static readonly string[] DefaultThemes = ["dark_skript.json", "ethereal_skript.json"];
 
     private static readonly ThemeName[] BuiltInTextmateThemes =
-        [ThemeName.DarkPlus, ThemeName.OneDark, ThemeName.Monokai, ThemeName.Dracula, ThemeName.OneDark];
+        [ThemeName.DarkPlus, ThemeName.OneDark, ThemeName.Monokai, ThemeName.Dracula];
 
     private readonly Dictionary<string, string> _scopeToGrammarFile = [];
 
