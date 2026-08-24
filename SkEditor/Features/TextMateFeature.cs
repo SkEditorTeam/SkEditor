@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using Avalonia.Platform;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
 using R3;
@@ -36,14 +34,13 @@ public class TextMateFeature(ISyntaxService syntax) : IEditorFeature
             return;
         }
 
-        string? extension = Path.GetExtension(fileTab.Path)?.ToLowerInvariant();
+        string extension = Path.GetExtension(fileTab.Path)?.ToLowerInvariant() ?? "";
 
         SkEditorRegistryOptions registryOptions = new(ThemeName.DarkPlus, syntax);
         _installation = editor.InstallTextMate(registryOptions);
 
         string? scope = registryOptions.GetScopeByExtension(extension);
-
-        if (scope is null)
+        if (string.IsNullOrEmpty(scope))
         {
             return;
         }
@@ -51,11 +48,14 @@ public class TextMateFeature(ISyntaxService syntax) : IEditorFeature
         _installation.SetGrammar(scope);
 
         SyntaxPair? pair = syntax.GetPairByExtension(extension);
-        string? themeName = pair?.Theme.FileName;
+        IRawTheme? theme = null;
 
-        _installation.SetTheme(!string.IsNullOrEmpty(themeName)
-            ? registryOptions.GetTheme(themeName)
-            : registryOptions.GetDefaultTheme());
+        if (pair != null && !string.IsNullOrEmpty(pair.Theme.FileName))
+        {
+            theme = registryOptions.LoadCustomTheme(pair.Theme.FileName);
+        }
+
+        _installation.SetTheme(theme ?? registryOptions.GetDefaultTheme());
     }
 
     public void OnViewDetached(IFeatureTab tab, TextEditor editor)
@@ -71,41 +71,52 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme, ISyntaxService synt
 
     public string? GetScopeByExtension(string? extension)
     {
-        SyntaxPair? customPair = syntax.GetPairByExtension(extension);
+        string normalizedExt = extension?.ToLowerInvariant() ?? "";
+
+        SyntaxPair? customPair = syntax.GetPairByExtension(normalizedExt);
         if (customPair is not null)
         {
-            return customPair.Grammar.FileName;
+            return customPair.Grammar.ScopeName;
         }
 
-        return string.IsNullOrEmpty(extension)
+        return string.IsNullOrEmpty(normalizedExt)
             ? null
-            : _defaultRegistry.GetScopeByExtension(extension);
+            : _defaultRegistry.GetScopeByExtension(normalizedExt);
     }
 
-    public IRawGrammar GetGrammar(string scopeName)
+    public IRawGrammar? GetGrammar(string scopeName)
     {
-        if (scopeName != "source.sk")
+        string? grammarFile = syntax.GetGrammarFileByScope(scopeName);
+        if (string.IsNullOrEmpty(grammarFile))
         {
             return _defaultRegistry.GetGrammar(scopeName);
         }
 
-        using Stream stream = AssetLoader.Open(new Uri("avares://SkEditor/Assets/Syntax/skript.tmLanguage.json"));
+        using Stream? stream = syntax.GetGrammarStream(grammarFile);
+        if (stream == null)
+        {
+            return _defaultRegistry.GetGrammar(scopeName);
+        }
+
         using StreamReader reader = new(stream);
         return GrammarReader.ReadGrammarSync(reader);
     }
 
-    public IRawTheme GetTheme(string scopeName)
+    public IRawTheme? LoadCustomTheme(string themeFileName)
     {
-        Uri uri = new($"avares://SkEditor/Assets/Syntax/{scopeName}.json");
-
-        if (!AssetLoader.Exists(uri))
+        using Stream? stream = syntax.GetThemeStream(themeFileName);
+        if (stream == null)
         {
-            return _defaultRegistry.GetTheme(scopeName) ?? _defaultRegistry.GetDefaultTheme();
+            return null;
         }
 
-        using Stream stream = AssetLoader.Open(uri);
         using StreamReader reader = new(stream);
         return ThemeReader.ReadThemeSync(reader);
+    }
+
+    public IRawTheme GetTheme(string scopeName)
+    {
+        return _defaultRegistry.GetTheme(scopeName) ?? _defaultRegistry.GetDefaultTheme();
     }
 
     public IRawTheme GetDefaultTheme()
