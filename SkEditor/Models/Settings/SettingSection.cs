@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using R3;
 using SkEditor.Models.UI;
@@ -16,8 +16,8 @@ public class SettingSection(string id, TranslatableString name) : ObservableObje
     public TranslatableString Name { get; init; } = name;
 
     public bool Selectable => !(Subsections.Count > 0 || Settings.Count == 0);
-    public List<SettingElement> Settings { get; private set; } = [];
-    public List<SettingSection> Subsections { get; private set; } = [];
+    public ObservableCollection<SettingElement> Settings { get; private set; } = [];
+    public ObservableCollection<SettingSection> Subsections { get; private set; } = [];
 
     public static SettingSection Create(string id, TranslatableString name)
     {
@@ -30,13 +30,13 @@ public class SettingSection(string id, TranslatableString name) : ObservableObje
         return this;
     }
 
-    public SettingSection WithSettings(List<SettingElement> settings)
+    public SettingSection WithSettings(ObservableCollection<SettingElement> settings)
     {
         Settings = settings;
         return this;
     }
 
-    public SettingSection WithSubsections(List<SettingSection> subsections)
+    public SettingSection WithSubsections(ObservableCollection<SettingSection> subsections)
     {
         Subsections = subsections;
         return this;

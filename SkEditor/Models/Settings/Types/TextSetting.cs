@@ -31,7 +31,7 @@ public partial class TextSetting(BindableReactiveProperty<TranslatableString> na
         }
     }
 
-    public override double Width { get; set; }
+    public override double? Width { get; set; }
 
     public static TextSetting Create(TranslatableString name)
     {

@@ -43,6 +43,10 @@
             <Setter Property="Width" Value="{Binding Width, FallbackValue=Auto}" />
         </Style>
 
+        <Style Selector="controls|FASettingsExpander /template/ ContentPresenter#FooterPresenter">
+            <Setter Property="MaxWidth" Value="500" />
+        </Style>
+
         <Style Selector="controls|FANavigationView /template/ ScrollViewer#MenuItemsScrollViewer">
             <Setter Property="Interaction.Behaviors">
                 <BehaviorCollectionTemplate>
@@ -84,7 +88,10 @@
 
         <DataTemplate DataType="{x:Type types:TextSetting}">
             <TextBox Text="{Binding Text, Mode=TwoWay}" PasswordChar="{Binding PasswordChar}"
-                     PlaceholderText="{Binding Placeholder.Value, FallbackValue={x:Null}}" />
+                     PlaceholderText="{Binding Placeholder.Value, FallbackValue={x:Null}}"
+                     Width="{Binding Width, FallbackValue=96}"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Center" />
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type types:ActionSetting}">

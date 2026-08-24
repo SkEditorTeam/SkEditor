@@ -22,13 +22,16 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
     public string SyntaxFolderPath { get; set; } = Path.Combine(config.GetAppDataPath(), "Syntax");
     public string ThemeFolder => Path.Combine(SyntaxFolderPath, "Themes");
 
+    public List<SyntaxTheme> AvailableThemes { get; private set; } = [];
+    public List<SyntaxGrammar> AvailableGrammars { get; private set; } = [];
+
     public void LoadSyntaxes()
     {
         Directory.CreateDirectory(GrammarFolder);
         Directory.CreateDirectory(ThemeFolder);
 
-        EnsureDefaultFiles(DefaultGrammars, GrammarFolder);
-        EnsureDefaultFiles(DefaultThemes, ThemeFolder);
+        CopyDefaultFiles(DefaultGrammars, GrammarFolder);
+        CopyDefaultFiles(DefaultThemes, ThemeFolder);
 
         if (settings.SyntaxPairs.Count == 0)
         {
@@ -38,11 +41,35 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
         _syntaxPairs.Clear();
         _scopeToGrammarFile.Clear();
 
+        AvailableThemes = Directory.EnumerateFiles(ThemeFolder, "*.json")
+            .Select(file =>
+            {
+                string fileName = Path.GetFileName(file);
+                (string? name, string? language) = ReadPropertiesFromTheme(file);
+
+                return new SyntaxTheme(fileName, name, language);
+            })
+            .ToList();
+
+        AvailableGrammars = Directory.EnumerateFiles(GrammarFolder, "*.json")
+            .Select(file =>
+            {
+                string fileName = Path.GetFileName(file);
+                string scope = ResolveScopeName(fileName);
+                return new SyntaxGrammar(fileName, scope);
+            })
+            .ToList();
+        
         foreach (SyntaxPairDto dto in settings.SyntaxPairs)
         {
             string scope = ResolveScopeName(dto.Grammar);
-            SyntaxGrammar grammar = new(dto.Grammar, scope);
-            SyntaxTheme theme = new(dto.Theme);
+            SyntaxGrammar? grammar = AvailableGrammars.FirstOrDefault(g => g.ScopeName == scope);
+            SyntaxTheme? theme = AvailableThemes.FirstOrDefault(t => t.FileName == dto.Theme);
+
+            if (grammar is null || theme is null)
+            {
+                continue;
+            }
 
             _syntaxPairs.Add(new SyntaxPair(dto.Extensions, grammar, theme));
             _scopeToGrammarFile[scope] = dto.Grammar;
@@ -88,16 +115,6 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
         return AssetLoader.Exists(assetUri) ? AssetLoader.Open(assetUri) : null;
     }
 
-    public List<string> GetAvailableGrammarFiles()
-    {
-        return Directory.EnumerateFiles(GrammarFolder, "*.json").Select(Path.GetFileName).ToList()!;
-    }
-
-    public List<string> GetAvailableThemeFiles()
-    {
-        return Directory.EnumerateFiles(ThemeFolder, "*.json").Select(Path.GetFileName).ToList()!;
-    }
-
     private string ResolveScopeName(string grammarFileName)
     {
         try
@@ -122,7 +139,7 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
         return "source.unknown";
     }
 
-    private static void EnsureDefaultFiles(string[] files, string destinationFolder)
+    private static void CopyDefaultFiles(string[] files, string destinationFolder)
     {
         foreach (string file in files)
         {
@@ -142,5 +159,24 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
             using FileStream fileStream = File.Create(targetPath);
             assetStream.CopyTo(fileStream);
         }
+    }
+
+    private static (string? name, string? language) ReadPropertiesFromTheme(string filePath)
+    {
+        try
+        {
+            using Stream stream = File.OpenRead(filePath);
+            using JsonDocument doc = JsonDocument.Parse(stream);
+
+            string? name = doc.RootElement.GetProperty("name").GetString();
+            string? language = doc.RootElement.GetProperty("language").GetString();
+            return (name, language);
+        }
+        catch
+        {
+            // ignored
+        }
+
+        return default;
     }
 }

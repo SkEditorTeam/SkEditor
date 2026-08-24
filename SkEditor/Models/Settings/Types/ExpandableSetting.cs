@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
+using AvaloniaEdit.Utils;
 using R3;
 using SkEditor.Utilities.Localization;
 
@@ -7,7 +8,7 @@ namespace SkEditor.Models.Settings.Types;
 public class ExpandableSetting(BindableReactiveProperty<TranslatableString> name)
     : SettingElement<ExpandableSetting>(name)
 {
-    public List<SettingElement> Children { get; } = [];
+    public ObservableCollection<SettingElement> Children { get; } = [];
 
     public static ExpandableSetting Create(TranslatableString name)
     {

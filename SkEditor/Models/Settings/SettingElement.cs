@@ -17,7 +17,7 @@ public abstract class SettingElement(BindableReactiveProperty<TranslatableString
     public SettingElement? Parent { get; set; }
     public BindableReactiveProperty<bool?> Status { get; protected set; } = new(null);
 
-    public virtual double Width { get; set; } = double.NaN;
+    public virtual double? Width { get; set; }
 }
 
 public abstract class SettingElement<T>(BindableReactiveProperty<TranslatableString> name) : SettingElement(name)

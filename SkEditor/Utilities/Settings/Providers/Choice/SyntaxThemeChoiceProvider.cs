@@ -1,24 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using SkEditor.Contracts.Services;
+using SkEditor.Models.UI;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Settings.Providers.Choice;
 
-public class SyntaxThemeChoiceProvider : ISettingsChoiceProvider<string>
+public class SyntaxThemeChoiceProvider(ISyntaxService syntax) : ISettingsChoiceProvider<SyntaxTheme?>
 {
-    public IEnumerable<string> GetValues()
+    public IEnumerable<SyntaxTheme?> GetValues()
     {
-        return ["dark_skript", "ethereal_skript"];
+        return syntax.AvailableThemes;
     }
 
-    public TranslatableString GetDisplayValue(string value)
+    public TranslatableString GetDisplayValue(SyntaxTheme? value)
     {
-        return value switch
-        {
-            "dark_skript" => "Default dark".ToTranslatable(),
-            "ethereal_skript" => "Ethereal".ToTranslatable(),
-            _ => throw new InvalidDataException($"Invalid syntax theme value: {value}")
-        };
+        return value?.Name?.ToTranslatable() ?? string.Empty.ToTranslatable();
     }
 }

@@ -11,7 +11,7 @@ public class CompoundSetting(BindableReactiveProperty<TranslatableString> name) 
 
     public bool IsVertical { get; set; }
 
-    public override double Width => Children.Count == 0 ? base.Width : Children.Max(c => c.Width);
+    public override double? Width => Children.Count == 0 ? base.Width : Children.Max(c => c.Width);
 
     public static CompoundSetting Create(TranslatableString name)
     {

@@ -257,6 +257,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IndentAmountChoiceProvider>();
             services.AddSingleton<IndentTypeChoiceProvider>();
             services.AddSingleton<SyntaxThemeChoiceProvider>();
+            services.AddSingleton<SyntaxGrammarChoiceProvider>();
         }
 
         private void AddSectionProviders()
@@ -264,6 +265,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<ISettingsSectionProvider, GeneralSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, EditorSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, AppearanceSectionProvider>();
+            services.AddSingleton<ISettingsSectionProvider, SyntaxSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, IntegrationsSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, ExperimentsSectionProvider>();
             services.AddSingleton<ISettingsSectionProvider, AdvancedSectionProvider>();
