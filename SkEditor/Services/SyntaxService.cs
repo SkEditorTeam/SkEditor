@@ -85,6 +85,18 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
             SyntaxTheme? theme =
                 AvailableThemes.FirstOrDefault(t => t.FileName.Equals(dto.Theme, StringComparison.OrdinalIgnoreCase));
 
+            if (dto.Grammar is not null && grammar is null)
+            {
+                grammar = AvailableGrammars.FirstOrDefault(g => g.FileName == DefaultGrammars[0])
+                          ?? AvailableGrammars.FirstOrDefault();
+
+                if (grammar is not null)
+                {
+                    dto.Grammar = grammar.FileName;
+                    scope = grammar.ScopeName;
+                }
+            }
+            
             if (theme is null)
             {
                 theme = AvailableThemes.FirstOrDefault(t => t.FileName == DefaultThemes[0])
