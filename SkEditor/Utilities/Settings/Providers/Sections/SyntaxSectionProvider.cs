@@ -87,10 +87,17 @@ public class SyntaxSectionProvider(
                         () => string.Join(", ", pair.Extensions),
                         val =>
                         {
-                            pair.Extensions = val
-                                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                                .Select(e => e == "*" || e.StartsWith('.') ? e : $".{e}")
-                                .ToArray();
+                            if (string.IsNullOrWhiteSpace(val))
+                            {
+                                pair.Extensions = [];
+                            }
+                            else
+                            {
+                                pair.Extensions = val
+                                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                    .Select(e => e == "*" || e.StartsWith('.') ? e : $".{e}")
+                                    .ToArray();
+                            }
                             syntax.RefreshPairs();
                         }
                     )),
