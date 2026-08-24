@@ -5,7 +5,6 @@ using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
 using SkEditor.Services.Windowing;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
@@ -55,14 +54,7 @@ public class AppearanceSectionProvider(
                     .WithDescription(TranslationKey.SettingsAppearanceThemeThemesFolderDescription)
                     .WithIcon(Symbol.FolderOpen)
                     .WithAction(TranslationKey.ButtonOpenFolder,
-                        () => links.OpenFolder(themes.ThemeFolderPath)),
-
-                ChoiceSetting<string>
-                    .Create("Skript syntax theme".ToTranslatable())
-                    .WithDescription("Select the syntax theme for Skript files.".ToTranslatable())
-                    .WithIcon(Symbol.Code)
-                    .WithProperty(appSettings.GetProperty<string>(AppSettingsProperty.SyntaxTheme))
-                    .WithProvider(syntaxThemeProvider)
+                        () => links.OpenFolder(themes.ThemeFolderPath))
             ]);
     }
 

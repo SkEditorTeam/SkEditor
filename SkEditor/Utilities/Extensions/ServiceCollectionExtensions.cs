@@ -60,6 +60,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<ILogService, LogService>();
             services.AddSingleton<IThemeService, ThemeService>();
+            services.AddSingleton<ISyntaxService, SyntaxService>();
             services.AddSingleton<IWelcomeService, WelcomeService>();
             services.AddSingleton<ITranslationService, TranslationService>();
             services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();

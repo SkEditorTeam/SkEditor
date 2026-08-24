@@ -39,10 +39,7 @@ public class ThemeService(
 
     public void LoadThemes()
     {
-        if (!Directory.Exists(ThemeFolderPath))
-        {
-            Directory.CreateDirectory(ThemeFolderPath);
-        }
+        Directory.CreateDirectory(ThemeFolderPath);
 
         if (!File.Exists(Path.Combine(ThemeFolderPath, "Default.json")))
         {

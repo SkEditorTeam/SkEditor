@@ -39,6 +39,7 @@ public partial class MainWindow : FAAppWindow
         MainMenuViewModel menuViewModel,
         AppSettings appSettings,
         IThemeService themes,
+        ISyntaxService syntaxes,
         ITranslationService translation,
         DragDropService dragDropService,
         ShortcutsService shortcutsService,
@@ -58,6 +59,8 @@ public partial class MainWindow : FAAppWindow
         menuViewModel.RegisterHotKeys(this);
 
         _themes.LoadThemes();
+        syntaxes.LoadSyntaxes();
+        
         Style();
 
         LayoutTransform.LayoutTransform = new ScaleTransform(appSettings.CustomUiScale, appSettings.CustomUiScale);

@@ -1,5 +1,7 @@
-﻿using System.Text.Json.Serialization.Metadata;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.Models.UI;
 using SkEditor.Utilities.Settings.Attributes;
 
 namespace SkEditor.Utilities.Settings.Configs;
@@ -12,12 +14,9 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// </summary>
     [ObservableProperty]
     public partial string CurrentTheme { get; set; } = "Default.json";
-
-    /// <summary>
-    ///     The current syntax highlighting theme id.
-    /// </summary>
+    
     [ObservableProperty]
-    public partial string SyntaxTheme { get; set; } = "dark_skript";
+    public partial List<SyntaxPairDto> SyntaxPairs { get; set; } = [];
 
     /// <summary>
     ///     The UI scale factor.
