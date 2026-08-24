@@ -21,4 +21,5 @@ public interface IThemeService
     Color GetAccentColor();
 
     event Action ThemeChanged;
+    event Action ThemesReloaded;
 }

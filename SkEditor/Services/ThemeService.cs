@@ -220,7 +220,8 @@ public class ThemeService(
     public async Task ReloadThemesAsync()
     {
         LoadThemes();
-        await ReloadCurrentThemeAsync();
+        await ApplyThemeAsync();
+        ThemesReloaded?.Invoke();
     }
 
     public async Task ReloadCurrentThemeAsync()
@@ -242,7 +243,11 @@ public class ThemeService(
 
         if (reloadedTheme == null)
         {
-            log.Error($"Failed to reload theme from {themePath}. Keeping the current theme.");
+            log.Warning($"Theme at {themePath} not found or failed to load. Falling back to default theme.");
+            Theme defaultTheme =
+                Themes.FirstOrDefault(t => t.FileName.Equals("Default.json", StringComparison.OrdinalIgnoreCase)) ??
+                GetDefaultTheme();
+            await SetThemeAsync(defaultTheme);
             return;
         }
 
@@ -337,7 +342,11 @@ public class ThemeService(
 
             if (selectedTheme == null)
             {
-                return GetDefaultTheme();
+                Theme defaultTheme =
+                    Themes.FirstOrDefault(x => x.FileName.Equals("Default.json", StringComparison.OrdinalIgnoreCase)) ??
+                    GetDefaultTheme();
+                appSettings.CurrentTheme = defaultTheme.Name;
+                return defaultTheme;
             }
 
             if (!selectedTheme.Name.Equals(currentTheme))
@@ -480,4 +489,5 @@ public class ThemeService(
     }
 
     public event Action? ThemeChanged;
+    public event Action? ThemesReloaded;
 }

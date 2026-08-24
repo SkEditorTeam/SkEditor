@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using R3;
@@ -12,13 +13,15 @@ public record OptionItem(object Value, TranslatableString Display);
 
 public interface IChoiceSetting
 {
-    IEnumerable<OptionItem> Options { get; }
+    ObservableCollection<OptionItem> Options { get; }
     object? SelectedItem { get; set; }
 }
 
 public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableString> name)
-    : SettingElement<ChoiceSetting<T>>(name), IChoiceSetting
+    : SettingElement<ChoiceSetting<T>>(name), IChoiceSetting, IDisposable
 {
+    private IDisposable? _providerSubscription;
+    
     public List<T> Options { get; protected set; } = [];
 
     public (Func<T> Get, Action<T> Set) Property
@@ -36,9 +39,9 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
     [ObservableProperty]
     public partial T? SelectedOption { get; set; }
 
-    public List<OptionItem> WrappedOptions { get; private set; } = [];
+    public ObservableCollection<OptionItem> WrappedOptions { get; } = [];
 
-    IEnumerable<OptionItem> IChoiceSetting.Options => WrappedOptions;
+    ObservableCollection<OptionItem> IChoiceSetting.Options => WrappedOptions;
 
     object? IChoiceSetting.SelectedItem
     {
@@ -71,15 +74,44 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
         }
 
         Provider = provider;
-        Options = provider.GetValues().ToList();
+        _providerSubscription?.Dispose();
 
-        WrappedOptions = Options
-            .Where(o => o != null)
-            .Select(o => new OptionItem(o!, provider.GetDisplayValue(o!)))
-            .ToList();
+        RefreshOptions();
+
+        if (provider.ValuesChanged is not null)
+        {
+            _providerSubscription = provider.ValuesChanged
+                .Subscribe(_ => RefreshOptions());
+        }
 
         SelectedOption = Property.Get();
         return this;
+    }
+
+    public void RefreshOptions()
+    {
+        if (Provider is null)
+        {
+            return;
+        }
+
+        Options = Provider.GetValues().ToList();
+
+        WrappedOptions.Clear();
+        foreach (T o in Options.Where(o => o != null))
+        {
+            WrappedOptions.Add(new OptionItem(o!, Provider.GetDisplayValue(o!)));
+        }
+
+        T? currentVal = Property.Get != null ? Property.Get() : SelectedOption;
+
+        if (currentVal is not null && !Options.Contains(currentVal) && Options.Count > 0)
+        {
+            currentVal = Options.FirstOrDefault();
+        }
+
+        SelectedOption = currentVal;
+        OnPropertyChanged(nameof(IChoiceSetting.SelectedItem));
     }
 
     partial void OnSelectedOptionChanged(T? oldValue, T? newValue)
@@ -88,5 +120,13 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
         {
             Property.Set(newValue);
         }
+
+        OnPropertyChanged(nameof(IChoiceSetting.SelectedItem));
+    }
+
+    public void Dispose()
+    {
+        _providerSubscription?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

@@ -25,6 +25,8 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
     public List<SyntaxTheme> AvailableThemes { get; private set; } = [];
     public List<SyntaxGrammar> AvailableGrammars { get; private set; } = [];
 
+    public event Action? SyntaxesReloaded;
+
     public void LoadSyntaxes()
     {
         Directory.CreateDirectory(GrammarFolder);
@@ -66,6 +68,30 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
             SyntaxGrammar? grammar = AvailableGrammars.FirstOrDefault(g => g.ScopeName == scope);
             SyntaxTheme? theme = AvailableThemes.FirstOrDefault(t => t.FileName == dto.Theme);
 
+            if (grammar is null)
+            {
+                grammar = AvailableGrammars.FirstOrDefault(g => g.FileName == DefaultGrammars[0])
+                          ?? AvailableGrammars.FirstOrDefault();
+
+                if (grammar is not null)
+                {
+                    dto.Grammar = grammar.FileName;
+                    scope = grammar.ScopeName;
+                }
+            }
+
+            if (theme is null)
+            {
+                theme = AvailableThemes.FirstOrDefault(t => t.FileName == DefaultThemes[0])
+                        ?? AvailableThemes.FirstOrDefault();
+
+                if (theme is not null)
+                {
+                    dto.Theme = theme.FileName;
+                }
+            }
+
+
             if (grammar is null || theme is null)
             {
                 continue;
@@ -74,6 +100,8 @@ public class SyntaxService(IConfigService config, AppSettings settings, ILogServ
             _syntaxPairs.Add(new SyntaxPair(dto.Extensions, grammar, theme));
             _scopeToGrammarFile[scope] = dto.Grammar;
         }
+
+        SyntaxesReloaded?.Invoke();
     }
 
     public SyntaxPair? GetPairByExtension(string? extension)

@@ -5,6 +5,7 @@ using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
 using SkEditor.Services.Windowing;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
@@ -16,7 +17,6 @@ namespace SkEditor.Utilities.Settings.Providers.Sections;
 public class AppearanceSectionProvider(
     AppSettings appSettings,
     ThemeChoiceProvider themeProvider,
-    SyntaxThemeChoiceProvider syntaxThemeProvider,
     IThemeService themes,
     ITranslationService translations,
     WindowRegistry windowRegistry,
@@ -54,7 +54,13 @@ public class AppearanceSectionProvider(
                     .WithDescription(TranslationKey.SettingsAppearanceThemeThemesFolderDescription)
                     .WithIcon(Symbol.FolderOpen)
                     .WithAction(TranslationKey.ButtonOpenFolder,
-                        () => links.OpenFolder(themes.ThemeFolderPath))
+                        () => links.OpenFolder(themes.ThemeFolderPath)),
+
+                ActionSetting
+                    .Create("Reload themes".ToTranslatable())
+                    .WithDescription("Reload files for newly added themes.".ToTranslatable())
+                    .WithIcon(Symbol.ArrowClockwise)
+                    .WithAction("Reload".ToTranslatable(), themes.ReloadThemesAsync)
             ]);
     }
 

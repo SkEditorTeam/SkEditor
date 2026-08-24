@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using SkEditor.Models.UI;
 
@@ -19,4 +20,6 @@ public interface ISyntaxService
 
     List<SyntaxTheme> AvailableThemes { get; }
     List<SyntaxGrammar> AvailableGrammars { get; }
+
+    event Action SyntaxesReloaded;
 }
