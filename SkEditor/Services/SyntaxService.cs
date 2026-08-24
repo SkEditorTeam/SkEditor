@@ -64,7 +64,8 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
             {
                 string fileName = Path.GetFileName(file);
                 string scope = ResolveScopeName(fileName);
-                return new SyntaxGrammar(fileName, scope);
+                string? name = ReadGrammarName(file);
+                return new SyntaxGrammar(fileName, name, scope);
             })
             .ToList();
 
@@ -226,6 +227,24 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
         }
 
         return default;
+    }
+
+    private static string? ReadGrammarName(string filePath)
+    {
+        try
+        {
+            using Stream stream = File.OpenRead(filePath);
+            using JsonDocument doc = JsonDocument.Parse(stream);
+
+            string? name = doc.RootElement.GetProperty("name").GetString();
+            return name;
+        }
+        catch
+        {
+            // ignored
+        }
+
+        return null;
     }
 
     private static string ToSentenceCase(string value)

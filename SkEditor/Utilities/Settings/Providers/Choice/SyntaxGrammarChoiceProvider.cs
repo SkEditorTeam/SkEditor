@@ -29,7 +29,7 @@ public class SyntaxGrammarChoiceProvider(ISyntaxService syntax) : ISettingsChoic
             return "Auto".ToTranslatable();
         }
 
-        string? displayName = Path.GetFileNameWithoutExtension(value.FileName)?.Replace(".tmLanguage", "");
+        string? displayName = Path.GetFileNameWithoutExtension(value.Name)?.Replace(".tmLanguage", "");
         return displayName?.ToTranslatable() ?? string.Empty.ToTranslatable();
     }
 }
@@ -47,7 +47,7 @@ public class SyntaxGrammarSkriptChoiceProvider(ISyntaxService syntax) : ISetting
 
     public TranslatableString GetDisplayValue(SyntaxGrammar? value)
     {
-        string? displayName = Path.GetFileNameWithoutExtension(value?.FileName)?.Replace(".tmLanguage", "");
+        string? displayName = Path.GetFileNameWithoutExtension(value?.Name)?.Replace(".tmLanguage", "");
         return displayName?.ToTranslatable() ?? string.Empty.ToTranslatable();
     }
 }
