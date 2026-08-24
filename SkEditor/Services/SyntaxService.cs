@@ -17,6 +17,10 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
     private const string SyntaxAssetsDirectory = "avares://SkEditor/Assets/Syntax";
     private static readonly string[] DefaultGrammars = ["skript.tmLanguage.json"];
     private static readonly string[] DefaultThemes = ["dark_skript.json", "ethereal_skript.json"];
+
+    private static readonly ThemeName[] BuiltInTextmateThemes =
+        [ThemeName.DarkPlus, ThemeName.OneDark, ThemeName.Monokai, ThemeName.Dracula, ThemeName.OneDark];
+    
     private readonly Dictionary<string, string> _scopeToGrammarFile = [];
 
     private readonly List<SyntaxPair> _syntaxPairs = [];
@@ -49,7 +53,7 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
                 (string? name, string? language) = ReadPropertiesFromTheme(file);
                 return new SyntaxTheme(fileName, name, language);
             })
-            .Concat(Enum.GetValues<ThemeName>().Select(tn =>
+            .Concat(BuiltInTextmateThemes.Select(tn =>
                 new SyntaxTheme(tn.ToString(), ToSentenceCase(tn.ToString()))
             ))
             .ToList();
@@ -67,7 +71,7 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
 
         RefreshPairs();
     }
-
+    
     public void RefreshPairs()
     {
         _syntaxPairs.Clear();
