@@ -92,6 +92,8 @@ public partial class DocumentationTabViewModel : TabViewModelBase
             }
 
             DocumentationEntries = entries;
+            SelectedAddon = null;
+            OnPropertyChanged(nameof(AvailableAddons));
             SelectedSyntaxType ??= DocumentationSyntaxType.All;
             Filter();
         }
@@ -136,8 +138,6 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     partial void OnSelectedProviderChanged(IDocumentationProvider? value)
     {
-        OnPropertyChanged(nameof(AvailableAddons));
-
         _cts?.Cancel();
         _cts = new CancellationTokenSource();
         CancellationToken token = _cts.Token;
