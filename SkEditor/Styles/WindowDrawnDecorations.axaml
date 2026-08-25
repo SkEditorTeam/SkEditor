@@ -67,7 +67,6 @@
                 <Setter Property="Foreground" Value="White" />
             </Style>
         </Style>
-
     </ControlTheme>
 
     <ControlTheme x:Key="{x:Type WindowDrawnDecorations}" TargetType="WindowDrawnDecorations">
@@ -84,17 +83,13 @@
                                     BorderThickness="{TemplateBinding FrameThickness}"
                                     BorderBrush="{DynamicResource AccentFillColorDefaultBrush}"
                                     IsHitTestVisible="False" />
-                            <!-- Titlebar: background, title text, and drag area live in underlay -->
                             <Panel Name="PART_TitleBar" VerticalAlignment="Top"
                                    Height="{TemplateBinding TitleBarHeight}"
-                                   Background="Transparent"
-                                   WindowDecorationProperties.ElementRole="TitleBar" />
-
+                                   Background="Transparent" />
                         </Panel>
                     </WindowDrawnDecorationsContent.Underlay>
 
                     <WindowDrawnDecorationsContent.Overlay>
-                        <!-- Overlay: only interactive caption buttons -->
                         <Panel Name="PART_OverlayWrapper">
                             <StackPanel Name="PART_OverlayPanel"
                                         VerticalAlignment="Top"
@@ -129,17 +124,13 @@
                     </WindowDrawnDecorationsContent.Overlay>
 
                     <WindowDrawnDecorationsContent.FullscreenPopover>
-                        <Panel Height="{TemplateBinding DefaultTitleBarHeight}"
+                        <Panel Height="{TemplateBinding TitleBarHeight}"
                                VerticalAlignment="Top"
-                               Background="Transparent"
+                               Background="{DynamicResource TitleBarBackground}"
                                WindowDecorationProperties.ElementRole="TitleBar">
-                            <TextBlock Text="{TemplateBinding Title}"
-                                       VerticalAlignment="Center"
-                                       Margin="12,0,0,0"
-                                       FontSize="12" />
                             <StackPanel HorizontalAlignment="Right"
                                         Orientation="Horizontal"
-                                        Spacing="2"
+                                        Height="{TemplateBinding TitleBarHeight}"
                                         TextElement.FontSize="10">
                                 <Button Name="PART_PopoverFullScreenButton"
                                         Theme="{StaticResource FluentDrawnCaptionButton}"
@@ -162,7 +153,7 @@
             </WindowDrawnDecorationsTemplate>
         </Setter>
 
-        <!-- Shadow: inset border and add drop shadow -->
+        <!-- Shadow -->
         <Style Selector="^:has-shadow /template/ Panel#PART_UnderlayWrapper">
             <Setter Property="Margin" Value="{TemplateBinding ShadowThickness}" />
         </Style>
@@ -173,10 +164,7 @@
             <Setter Property="Margin" Value="{TemplateBinding ShadowThickness}" />
         </Style>
 
-        <!-- Border: inset titlebar and buttons inside frame -->
-        <Style Selector="^:has-border /template/ Panel#PART_TitleTextPanel">
-            <Setter Property="Margin" Value="1,1,1,0" />
-        </Style>
+        <!-- Border -->
         <Style Selector="^:has-border /template/ Panel#PART_TitleBar">
             <Setter Property="Margin" Value="1,1,1,0" />
         </Style>
@@ -184,7 +172,7 @@
             <Setter Property="Margin" Value="0,1,1,0" />
         </Style>
 
-        <!-- Maximized: restore button path changes -->
+        <!-- Maximized -->
         <Style Selector="^:maximized /template/ Button#PART_MaximizeButton">
             <Setter Property="Content" Value="&#xE923;" />
             <Setter Property="FontSize" Value="16" />
@@ -195,24 +183,14 @@
             <Setter Property="Opacity" Value="0.2" />
         </Style>
 
-        <!-- Hide caption buttons when the platform does not support the action -->
+        <!-- Hide caption buttons -->
         <Style Selector="^:not(:has-minimize) /template/ Button#PART_MinimizeButton">
             <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:not(:has-maximize) /template/ Button#PART_MaximizeButton">
             <Setter Property="IsVisible" Value="False" />
         </Style>
-        <Style Selector="^:not(:has-fullscreen) /template/ Button#PART_FullScreenButton">
-            <Setter Property="IsVisible" Value="False" />
-        </Style>
-        <Style Selector="^:not(:has-fullscreen) /template/ Button#PART_PopoverFullScreenButton">
-            <Setter Property="IsVisible" Value="False" />
-        </Style>
 
-        <!-- Fullscreen: hide overlay and titlebar (popover takes over) -->
-        <Style Selector="^:fullscreen /template/ Panel#PART_TitleTextPanel">
-            <Setter Property="IsVisible" Value="False" />
-        </Style>
         <Style Selector="^:fullscreen /template/ StackPanel#PART_OverlayPanel">
             <Setter Property="IsVisible" Value="False" />
         </Style>
@@ -220,5 +198,4 @@
             <Setter Property="IsVisible" Value="False" />
         </Style>
     </ControlTheme>
-
 </ResourceDictionary>

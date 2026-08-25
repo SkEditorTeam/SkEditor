@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using SkEditor.Utilities.Settings.Configs;
@@ -47,7 +46,7 @@ public class WindowStateService(StateConfig stateConfig, WindowRegistry windowRe
         }
     }
 
-    public async Task ToggleFullScreen()
+    public void ToggleFullScreen()
     {
         if (windowRegistry.Active is not { } window)
         {
@@ -56,19 +55,11 @@ public class WindowStateService(StateConfig stateConfig, WindowRegistry windowRe
 
         if (window.WindowState == WindowState.FullScreen)
         {
-            window.WindowState = WindowState.Normal;
-            await Task.Delay(10);
             window.WindowState = _preFullScreenState;
         }
         else
         {
             _preFullScreenState = window.WindowState;
-            if (_preFullScreenState == WindowState.Maximized)
-            {
-                window.WindowState = WindowState.Normal;
-                await Task.Delay(10);
-            }
-
             window.WindowState = WindowState.FullScreen;
         }
     }

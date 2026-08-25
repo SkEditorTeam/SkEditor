@@ -1,6 +1,5 @@
 ﻿using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Views.Windows;
 
@@ -25,7 +24,7 @@ public class ShortcutsService(ITabService tabs, WindowStateService windowState)
 
             case { Key: Key.F11 }:
             {
-                Dispatcher.UIThread.InvokeAsync(async () => { await windowState.ToggleFullScreen(); });
+                windowState.ToggleFullScreen();
                 break;
             }
         }

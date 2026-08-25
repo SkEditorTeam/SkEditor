@@ -20,4 +20,12 @@
         <Setter Property="Width" Value="14" />
         <Setter Property="Height" Value="14" />
     </Style>
+
+    <Style Selector="Window Border#TitleBarBorder">
+        <Setter Property="(WindowDecorationProperties.ElementRole)" Value="TitleBar" />
+    </Style>
+
+    <Style Selector="Window[WindowState=FullScreen] Border#TitleBarBorder">
+        <Setter Property="(WindowDecorationProperties.ElementRole)" Value="None" />
+    </Style>
 </Styles>
