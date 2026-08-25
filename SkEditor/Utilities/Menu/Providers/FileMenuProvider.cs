@@ -93,6 +93,7 @@ public class FileMenuProvider(
             .WithEnabled(hasTabs)
             .WithItems([
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseCurrentFile, Symbol.Document)
+                    .WithInputGesture("Ctrl+W")
                     .WithCommand(() => tabs.SelectedTab?.CloseCommand.Execute(null)),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAll, Symbol.DocumentMultiple)
