@@ -88,13 +88,20 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
 
             if (dto.Grammar is not null && grammar is null)
             {
-                grammar = AvailableGrammars.FirstOrDefault(g => g.FileName == DefaultGrammars[0])
-                          ?? AvailableGrammars.FirstOrDefault();
+                bool isSkriptRule = dto.Extensions.Contains(".sk", StringComparer.OrdinalIgnoreCase);
 
-                if (grammar is not null)
+                if (isSkriptRule)
                 {
-                    dto.Grammar = grammar.FileName;
-                    scope = grammar.ScopeName;
+                    grammar = AvailableGrammars.FirstOrDefault(g => g.FileName == DefaultGrammars[0])
+                              ?? AvailableGrammars.FirstOrDefault();
+
+                    dto.Grammar = grammar?.FileName;
+                    scope = grammar?.ScopeName;
+                }
+                else
+                {
+                    dto.Grammar = null;
+                    scope = null;
                 }
             }
             
