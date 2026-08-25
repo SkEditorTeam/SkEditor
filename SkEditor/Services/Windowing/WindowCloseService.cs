@@ -80,11 +80,17 @@ public class WindowCloseService(ITabService tabs, IDialogService dialogs, IConfi
     {
         StateConfig? stateConfig = configs.GetConfig<StateConfig>();
 
-        stateConfig?.MainWindowHeight = height;
-        stateConfig?.MainWindowWidth = width;
-        stateConfig?.MainWindowX = x;
-        stateConfig?.MainWindowY = y;
-        stateConfig?.MainWindowMaximized = windowState == WindowState.Maximized;
+        bool isMaximized = windowState == WindowState.Maximized;
+        stateConfig?.MainWindowMaximized = isMaximized;
+
+        // TODO: think about saving the last known bounds if the window was unmaximized in this session
+        if (!isMaximized)
+        {
+            stateConfig?.MainWindowHeight = height;
+            stateConfig?.MainWindowWidth = width;
+            stateConfig?.MainWindowX = x;
+            stateConfig?.MainWindowY = y;
+        }
 
         await configs.SaveAllConfigsImmediateAsync();
     }
