@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using SkEditor.Models.UI;
+using TextMateSharp.Internal.Types;
+using TextMateSharp.Themes;
 
 namespace SkEditor.Contracts.Services;
 
@@ -16,6 +18,10 @@ public interface ISyntaxService
     string? GetGrammarFileByScope(string scopeName);
     SyntaxPair? GetPairByExtension(string? extension);
 
+    IRawGrammar? GetRawGrammar(string scopeName);
+    IRawTheme? GetRawTheme(string themeId);
+    IRawTheme GetDefaultTheme();
+    
     Stream? GetGrammarStream(string fileName);
     Stream? GetThemeStream(string fileName);
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
@@ -8,8 +7,6 @@ using SkEditor.Contracts.Services;
 using SkEditor.Models.UI;
 using SkEditor.ViewModels.Tabs.Capabilities;
 using TextMateSharp.Grammars;
-using TextMateSharp.Internal.Grammars.Reader;
-using TextMateSharp.Internal.Themes.Reader;
 using TextMateSharp.Internal.Types;
 using TextMateSharp.Registry;
 using TextMateSharp.Themes;
@@ -87,49 +84,22 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme, ISyntaxService synt
 
     public IRawGrammar? GetGrammar(string scopeName)
     {
-        string? grammarFile = syntax.GetGrammarFileByScope(scopeName);
-        if (string.IsNullOrEmpty(grammarFile))
-        {
-            return _defaultRegistry.GetGrammar(scopeName);
-        }
-
-        using Stream? stream = syntax.GetGrammarStream(grammarFile);
-        if (stream == null)
-        {
-            return _defaultRegistry.GetGrammar(scopeName);
-        }
-
-        using StreamReader reader = new(stream);
-        return GrammarReader.ReadGrammarSync(reader);
-    }
-
-    public IRawTheme? LoadCustomTheme(string themeFileName)
-    {
-        using Stream? stream = syntax.GetThemeStream(themeFileName);
-        if (stream == null)
-        {
-            return null;
-        }
-
-        using StreamReader reader = new(stream);
-        return ThemeReader.ReadThemeSync(reader);
+        return syntax.GetRawGrammar(scopeName);
     }
 
     public IRawTheme? LoadThemeById(string themeIdentifier)
     {
-        return Enum.TryParse(themeIdentifier, true, out ThemeName builtIn)
-            ? LoadTheme(builtIn)
-            : LoadCustomTheme(themeIdentifier);
+        return syntax.GetRawTheme(themeIdentifier);
     }
 
     public IRawTheme GetTheme(string scopeName)
     {
-        return _defaultRegistry.GetTheme(scopeName) ?? _defaultRegistry.GetDefaultTheme();
+        return _defaultRegistry.GetTheme(scopeName) ?? syntax.GetDefaultTheme();
     }
 
     public IRawTheme GetDefaultTheme()
     {
-        return _defaultRegistry.GetDefaultTheme();
+        return syntax.GetDefaultTheme();
     }
 
     public ICollection<string> GetInjections(string scopeName)
@@ -139,6 +109,6 @@ public class SkEditorRegistryOptions(ThemeName defaultTheme, ISyntaxService synt
 
     public IRawTheme LoadTheme(ThemeName name)
     {
-        return _defaultRegistry.LoadTheme(name);
+        return syntax.GetRawTheme(name.ToString()) ?? _defaultRegistry.LoadTheme(name);
     }
 }

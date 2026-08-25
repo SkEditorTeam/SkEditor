@@ -9,6 +9,10 @@ using SkEditor.Contracts.Services;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Settings.Configs;
 using TextMateSharp.Grammars;
+using TextMateSharp.Internal.Grammars.Reader;
+using TextMateSharp.Internal.Themes.Reader;
+using TextMateSharp.Internal.Types;
+using TextMateSharp.Themes;
 
 namespace SkEditor.Services;
 
@@ -21,20 +25,25 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
     private static readonly ThemeName[] BuiltInTextmateThemes =
         [ThemeName.DarkPlus, ThemeName.OneDark, ThemeName.Monokai, ThemeName.Dracula];
 
+    private readonly RegistryOptions _defaultRegistry = new(ThemeName.DarkPlus);
+    private readonly Dictionary<string, IRawGrammar> _rawGrammarCache = new();
+    private readonly Dictionary<string, IRawTheme> _rawThemeCache = new();
+
     private readonly Dictionary<string, string> _scopeToGrammarFile = [];
 
     private readonly List<SyntaxPair> _syntaxPairs = [];
+    public List<SyntaxGrammar> AvailableGrammars { get; private set; } = [];
+
+    public List<SyntaxTheme> AvailableThemes { get; private set; } = [];
     public string GrammarFolder => Path.Combine(SyntaxFolderPath, "Grammars");
     public string SyntaxFolderPath { get; set; } = Path.Combine(config.GetAppDataPath(), "Syntax");
     public string ThemeFolder => Path.Combine(SyntaxFolderPath, "Themes");
 
-    public List<SyntaxTheme> AvailableThemes { get; private set; } = [];
-    public List<SyntaxGrammar> AvailableGrammars { get; private set; } = [];
-
-    public event Action? SyntaxesReloaded;
-
     public void LoadSyntaxes()
     {
+        _rawGrammarCache.Clear();
+        _rawThemeCache.Clear();
+
         Directory.CreateDirectory(GrammarFolder);
         Directory.CreateDirectory(ThemeFolder);
 
@@ -141,6 +150,79 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
     public string? GetGrammarFileByScope(string scopeName)
     {
         return _scopeToGrammarFile.GetValueOrDefault(scopeName);
+    }
+
+    public IRawGrammar? GetRawGrammar(string scopeName)
+    {
+        if (_rawGrammarCache.TryGetValue(scopeName, out IRawGrammar? cachedGrammar))
+        {
+            return cachedGrammar;
+        }
+
+        string? grammarFile = GetGrammarFileByScope(scopeName);
+        if (string.IsNullOrEmpty(grammarFile))
+        {
+            IRawGrammar? defaultGrammar = _defaultRegistry.GetGrammar(scopeName);
+            if (defaultGrammar != null)
+            {
+                _rawGrammarCache[scopeName] = defaultGrammar;
+            }
+
+            return defaultGrammar;
+        }
+
+        using Stream? stream = GetGrammarStream(grammarFile);
+        if (stream == null)
+        {
+            return _defaultRegistry.GetGrammar(scopeName);
+        }
+
+        using StreamReader reader = new(stream);
+        IRawGrammar? grammar = GrammarReader.ReadGrammarSync(reader);
+        if (grammar != null)
+        {
+            _rawGrammarCache[scopeName] = grammar;
+        }
+
+        return grammar;
+    }
+
+    public IRawTheme? GetRawTheme(string themeId)
+    {
+        if (_rawThemeCache.TryGetValue(themeId, out IRawTheme? cachedTheme))
+        {
+            return cachedTheme;
+        }
+
+        IRawTheme? theme;
+
+        if (Enum.TryParse(themeId, true, out ThemeName builtIn))
+        {
+            theme = _defaultRegistry.LoadTheme(builtIn);
+        }
+        else
+        {
+            using Stream? stream = GetThemeStream(themeId);
+            if (stream == null)
+            {
+                return null;
+            }
+
+            using StreamReader reader = new(stream);
+            theme = ThemeReader.ReadThemeSync(reader);
+        }
+
+        if (theme != null)
+        {
+            _rawThemeCache[themeId] = theme;
+        }
+
+        return theme;
+    }
+
+    public IRawTheme GetDefaultTheme()
+    {
+        return _defaultRegistry.GetDefaultTheme();
     }
 
     public Stream? GetGrammarStream(string fileName)
@@ -268,4 +350,6 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
 
     [GeneratedRegex("(?<!^)([A-Z])")]
     private static partial Regex PascalCaseBoundaryRegex();
+
+    public event Action? SyntaxesReloaded;
 }
