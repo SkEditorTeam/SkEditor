@@ -192,7 +192,7 @@ public class SyntaxSectionProvider(
 
     private bool HasMultipleSkriptGrammars()
     {
-        return syntax.AvailableGrammars.Count(g => g.ScopeName == "source.sk") > 1;
+        return syntax.AvailableGrammars.Count(g => g.ScopeName == "source.skript") > 1;
     }
 
     private List<SettingElement> CreateManagementSection()

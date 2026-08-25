@@ -17,7 +17,7 @@ public class SyntaxGrammarChoiceProvider(ISyntaxService syntax) : ISettingsChoic
     
     public IEnumerable<SyntaxGrammar?> GetValues()
     {
-        List<SyntaxGrammar?> grammars = [null, ..syntax.AvailableGrammars.Where(g => g.ScopeName != "source.sk")];
+        List<SyntaxGrammar?> grammars = [null, ..syntax.AvailableGrammars.Where(g => g.ScopeName != "source.skript")];
 
         return grammars;
     }
@@ -42,7 +42,7 @@ public class SyntaxGrammarSkriptChoiceProvider(ISyntaxService syntax) : ISetting
 
     public IEnumerable<SyntaxGrammar?> GetValues()
     {
-        return syntax.AvailableGrammars.Where(g => g.ScopeName == "source.sk");
+        return syntax.AvailableGrammars.Where(g => g.ScopeName == "source.skript");
     }
 
     public TranslatableString GetDisplayValue(SyntaxGrammar? value)

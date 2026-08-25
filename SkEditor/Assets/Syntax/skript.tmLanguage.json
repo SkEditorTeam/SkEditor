@@ -1,5 +1,5 @@
 {
-  "scopeName": "source.sk",
+  "scopeName": "source.skript",
   "name": "Skript",
   "repository": {
     "main": {
@@ -44,26 +44,26 @@
         {
           "begin": "^###",
           "end": "^###",
-          "name": "comment.block.sk",
+          "name": "comment.block.skript",
           "patterns": [
             {
               "match": "(@param|@returns)",
-              "name": "keyword.other.documentation.tag.sk"
+              "name": "keyword.other.documentation.tag.skript"
             },
             {
               "match": "(?<=@param\\s)\\w+",
-              "name": "variable.parameter.documentation.sk"
+              "name": "variable.parameter.documentation.skript"
             }
           ]
         },
         {
           "begin": "(?<!<)#",
           "end": "$",
-          "name": "comment.line.sk",
+          "name": "comment.line.skript",
           "patterns": [
             {
               "match": "(?i)todo(:)?",
-              "name": "keyword.other.todo.sk"
+              "name": "keyword.other.todo.skript"
             }
           ]
         }
@@ -74,22 +74,22 @@
         {
           "begin": "\"",
           "end": "\"",
-          "name": "string.quoted.double.sk",
+          "name": "string.quoted.double.skript",
           "patterns": [
             {
               "include": "#textFormatting"
             },
             {
               "match": "{@\\w+}",
-              "name": "variable.other.readwrite.option.in-string.sk"
+              "name": "variable.other.readwrite.option.in-string.skript"
             },
             {
               "match": "%.+?%",
-              "name": "meta.interpolation.in-string.sk"
+              "name": "meta.interpolation.in-string.skript"
             },
             {
               "match": "\\{(?:[^{}]|\\{[^{}]*\\})*\\}",
-              "name": "variable.other.readwrite.variable.in-string.sk"
+              "name": "variable.other.readwrite.variable.in-string.skript"
             }
           ]
         }
@@ -99,57 +99,57 @@
       "patterns": [
         {
           "match": "->",
-          "name": "keyword.operator.relational.sk"
+          "name": "keyword.operator.relational.skript"
         },
         {
           "match": "(options|variables):",
-          "name": "entity.name.section.sk"
+          "name": "entity.name.section.skript"
         },
         {
           "begin": "^(on|every) ",
           "end": "$",
-          "name": "entity.name.section.sk"
+          "name": "entity.name.section.skript"
         },
         {
           "begin": "^command /",
           "end": "$",
-          "name": "entity.name.section.sk"
+          "name": "entity.name.section.skript"
         },
         {
           "match": "aliases:|description:|usage:|trigger:|cooldown:|cooldown message:|cooldown storage:|cooldown bypass:|executable by:|permission:|permission message:|converts to:",
-          "name": "entity.other.attribute-name.sk"
+          "name": "entity.other.attribute-name.skript"
         },
         {
           "match": "arg[ -]\\d+",
-          "name": "variable.parameter.argument.sk"
+          "name": "variable.parameter.argument.skript"
         },
         {
           "match": "(?<!\\w)(is(n't)?( not)?|are(n't)?( not)?|do(es)?(n't)?( not)?|don't|have(n't)?|has(n't)?( not)?|did not|didn't)(?!\\w)",
-          "name": "keyword.operator.logical.sk"
+          "name": "keyword.operator.logical.skript"
         },
         {
           "match": "(?<!\\w)(<|>|=|-|\\+)(?!\\w)",
-          "name": "keyword.operator.relational.sk"
+          "name": "keyword.operator.relational.skript"
         },
         {
           "match": "(?<!\\w)(if|else|then|loop|while|cancel event|from|stop|of|via|const)(?!\\w)",
-          "name": "keyword.control.sk"
+          "name": "keyword.control.skript"
         },
         {
           "match": "(true|false)",
-          "name": "constant.language.boolean.sk"
+          "name": "constant.language.boolean.skript"
         },
         {
           "match": "(\\(|\\)|\\[|\\])",
-          "name": "punctuation.section.sk"
+          "name": "punctuation.section.skript"
         },
         {
           "match": "(player|all players|console|loop-player|input player|victim|attacker|executor|this)",
-          "name": "variable.language.sk"
+          "name": "variable.language.skript"
         },
         {
           "match": "\\b(integer|boolean|number|string|text|struct)\\b",
-          "name": "storage.type.sk"
+          "name": "storage.type.skript"
         }
       ]
     },
@@ -159,7 +159,7 @@
           "begin": "^struct\\s+.*?:",
           "beginCaptures": {
             "0": {
-              "name": "entity.name.section.sk"
+              "name": "entity.name.section.skript"
             }
           },
           "end": "^(?=\\S)",
@@ -172,23 +172,23 @@
             },
             {
               "match": "converts to:",
-              "name": "entity.other.attribute-name.sk"
+              "name": "entity.other.attribute-name.skript"
             },
             {
               "match": "(?<!\\w)via(?!\\w)",
-              "name": "keyword.control.sk"
+              "name": "keyword.control.skript"
             },
             {
               "match": "^\\s*(?:(const)\\s+)?(\\w+)\\s*:\\s*([^=\n\r#]+?)(?=\\s*(=|$|#))",
               "captures": {
                 "1": {
-                  "name": "keyword.control.sk"
+                  "name": "keyword.control.skript"
                 },
                 "2": {
-                  "name": "variable.parameter.function.sk"
+                  "name": "variable.parameter.function.skript"
                 },
                 "3": {
-                  "name": "storage.type.function.sk"
+                  "name": "storage.type.function.skript"
                 }
               }
             },
@@ -211,7 +211,7 @@
           "begin": "^import:",
           "beginCaptures": {
             "0": {
-              "name": "entity.name.section.sk"
+              "name": "entity.name.section.skript"
             }
           },
           "end": "^(?=\\S)",
@@ -223,16 +223,16 @@
               "match": "^\\s*((?:[a-zA-Z_$][\\w$]*\\.)+)([a-zA-Z_$][\\w$]*)(?:\\s+(as)\\s+([a-zA-Z_$][\\w$]*))?",
               "captures": {
                 "1": {
-                  "name": "variable.parameter.argument.sk"
+                  "name": "variable.parameter.argument.skript"
                 },
                 "2": {
-                  "name": "storage.type.function.sk"
+                  "name": "storage.type.function.skript"
                 },
                 "3": {
-                  "name": "keyword.control.sk"
+                  "name": "keyword.control.skript"
                 },
                 "4": {
-                  "name": "storage.type.function.sk"
+                  "name": "storage.type.function.skript"
                 }
               }
             }
@@ -244,7 +244,7 @@
       "patterns": [
         {
           "match": "{@\\w+}",
-          "name": "variable.other.readwrite.sk"
+          "name": "variable.other.readwrite.skript"
         }
       ]
     },
@@ -252,7 +252,7 @@
       "patterns": [
         {
           "match": "%.+?%",
-          "name": "meta.interpolation.sk"
+          "name": "meta.interpolation.skript"
         }
       ]
     },
@@ -260,7 +260,7 @@
       "patterns": [
         {
           "match": "\\{(?:[^{}]|\\{[^{}]*\\})*\\}",
-          "name": "variable.other.readwrite.sk"
+          "name": "variable.other.readwrite.skript"
         }
       ]
     },
@@ -269,21 +269,21 @@
         {
           "begin": "\\{@",
           "end": "\\}",
-          "name": "meta.interpolation.sk",
+          "name": "meta.interpolation.skript",
           "patterns": [
             {
               "match": "\\{(\\w)+(::(\\w)+)\\.",
-              "name": "meta.interpolation.sk"
+              "name": "meta.interpolation.skript"
             },
             {
               "match": "\\{(\\w)+(\\.\\w)+\\.",
-              "name": "meta.interpolation.sk"
+              "name": "meta.interpolation.skript"
             }
           ]
         },
         {
           "match": "%.*?%",
-          "name": "meta.interpolation.sk"
+          "name": "meta.interpolation.skript"
         }
       ]
     },
@@ -291,7 +291,7 @@
       "patterns": [
         {
           "match": "(-)?\\d+",
-          "name": "constant.numeric.sk"
+          "name": "constant.numeric.skript"
         }
       ]
     },
@@ -300,44 +300,44 @@
         {
           "begin": "^(function|local function) ",
           "end": "$",
-          "name": "meta.function.sk",
+          "name": "meta.function.skript",
           "patterns": [
             {
               "match": "(\\w)+(::(\\w)+)?(?=\\()",
-              "name": "entity.name.function.sk"
+              "name": "entity.name.function.skript"
             },
             {
               "begin": "\\(",
               "end": "\\)",
-              "name": "punctuation.definition.function.sk",
+              "name": "punctuation.definition.function.skript",
               "patterns": [
                 {
                   "match": "\\w+:",
-                  "name": "variable.parameter.function.sk"
+                  "name": "variable.parameter.function.skript"
                 },
                 {
                   "match": "\\w+",
-                  "name": "storage.type.function.sk"
+                  "name": "storage.type.function.skript"
                 }
               ]
             },
             {
               "match": "::",
-              "name": "punctuation.definition.function.sk"
+              "name": "punctuation.definition.function.skript"
             },
             {
               "match": "(?<=:: )[^:]+",
-              "name": "storage.type.function.sk"
+              "name": "storage.type.function.skript"
             },
             {
               "match": ":$",
-              "name": "punctuation.definition.function.sk"
+              "name": "punctuation.definition.function.skript"
             }
           ]
         },
         {
           "match": "(\\w)+(::(\\w)+)?(?=\\()",
-          "name": "entity.name.function.sk"
+          "name": "entity.name.function.skript"
         }
       ]
     },
@@ -345,11 +345,11 @@
       "patterns": [
         {
           "match": "&[0-9a-fA-Fk-orlmnK-ORLMN]",
-          "name": "constant.character.format.legacy.sk"
+          "name": "constant.character.format.legacy.skript"
         },
         {
           "match": "</?!?(?:#[0-9a-fA-F]{3,6}|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|grey|dark_gray|dark_grey|blue|green|aqua|red|light_purple|yellow|white|color|colour|c|shadow|bold|b|italic|em|i|underlined|u|strikethrough|st|obfuscated|obf|reset|click|hover|insert|key|lang|tr|translate|lang_or|tr_or|translate_or|rainbow|gradient|transition|font|newline|br|selector|sel|score|nbt|data|pride|sprite|head)(?::(?:[^>'\"]|'[^']*'|\"[^\"]*\")*)?/?>",
-          "name": "entity.name.tag.minimessage.sk"
+          "name": "entity.name.tag.minimessage.skript"
         }
       ]
     }
