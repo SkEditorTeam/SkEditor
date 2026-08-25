@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Media;
-using FluentAvalonia.UI.Windowing;
 using HotAvalonia;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Localization;
@@ -12,7 +12,7 @@ using SkEditor.ViewModels.Windows;
 
 namespace SkEditor.Views.Windows;
 
-public partial class MainWindow : FAAppWindow
+public partial class MainWindow : Window
 {
     private readonly AppSettings _appSettings;
     private readonly IDiscordIntegrationService _discordIntegration;
@@ -21,7 +21,7 @@ public partial class MainWindow : FAAppWindow
     private readonly ITranslationService _translation;
     private readonly IWindowCloseService _windowClose;
 
-    public new SplashScreen? SplashScreen { get; set; }
+    public SplashScreen? SplashScreen { get; set; }
 
     public MainWindow()
     {
@@ -60,7 +60,7 @@ public partial class MainWindow : FAAppWindow
 
         _themes.LoadThemes();
         syntaxes.LoadSyntaxes();
-        
+
         Style();
 
         LayoutTransform.LayoutTransform = new ScaleTransform(appSettings.CustomUiScale, appSettings.CustomUiScale);
@@ -124,9 +124,7 @@ public partial class MainWindow : FAAppWindow
     {
         const double titleBarHeight = 50;
 
-        TitleBar.ExtendsContentIntoTitleBar = true;
-
-        TitleBar.Height = titleBarHeight;
+        ExtendClientAreaToDecorationsHint = true;
         ExtendClientAreaTitleBarHeightHint = titleBarHeight;
     }
 }
