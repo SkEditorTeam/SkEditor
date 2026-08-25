@@ -96,6 +96,7 @@ public class SyntaxSectionProvider(
                                 pair.Extensions = val
                                     .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                                     .Select(e => e == "*" || e.StartsWith('.') ? e : $".{e}")
+                                    .Where(e => !e.Equals(".sk", StringComparison.OrdinalIgnoreCase))
                                     .ToArray();
                             }
                             syntax.RefreshPairs();
