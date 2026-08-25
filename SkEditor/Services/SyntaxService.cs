@@ -64,7 +64,7 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
                 return new SyntaxTheme(fileName, name, language);
             })
             .Concat(BuiltInTextmateThemes.Select(tn =>
-                new SyntaxTheme(tn.ToString(), ToSentenceCase(tn.ToString()))
+                new SyntaxTheme(tn.ToString(), ToTitleCase(tn.ToString()))
             ))
             .ToList();
 
@@ -336,15 +336,14 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
         return null;
     }
 
-    private static string ToSentenceCase(string value)
+    private static string ToTitleCase(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
             return value;
         }
 
-        string result = PascalCaseBoundaryRegex().Replace(value, " $1").ToLowerInvariant();
-
+        string result = PascalCaseBoundaryRegex().Replace(value, " $1");
         return char.ToUpperInvariant(result[0]) + result[1..];
     }
 
