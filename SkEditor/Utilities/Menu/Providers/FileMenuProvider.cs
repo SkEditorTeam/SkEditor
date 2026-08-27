@@ -76,7 +76,7 @@ public class FileMenuProvider(
             .WithEnabled(selectedTab.Select(tab => tab is ITextEditorTab).ToBindableReactiveProperty())
             .AddTo(fileMenu);
 
-        MainMenuItem.HeaderWithIcon(TranslatableString.FromRawString("Split tabs"), Symbol.DocumentLandscapeSplitHint)
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSplitTabs, Symbol.DocumentLandscapeSplitHint)
             .WithCommand(() =>
             {
                 if (tabs.SelectedTab is not null)

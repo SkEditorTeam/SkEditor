@@ -1,4 +1,5 @@
-﻿using SkEditor.Utilities.Localization;
+﻿using System;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Utilities.Extensions;
 
@@ -12,6 +13,12 @@ public static class StringExtensions
         }
 
         public TranslatableString ToTranslatable()
+        {
+            return TranslatableString.FromRawString(path);
+        }
+
+        [Obsolete("Replace with proper translations keys later")]
+        public TranslatableString ToTranslatableWip()
         {
             return TranslatableString.FromRawString(path);
         }

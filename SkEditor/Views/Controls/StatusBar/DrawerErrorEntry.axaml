@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:input="clr-namespace:Avalonia.Input"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.DrawerErrorEntry"
              x:Name="Root">
@@ -56,7 +57,7 @@
                            VerticalAlignment="Center" FontWeight="Medium" Text="{Binding #Root.ErrorSource}" />
                 <TextBlock FontSize="11" Foreground="{DynamicResource ForegroundSecondaryColor}"
                            VerticalAlignment="Center" TextAlignment="Right">
-                    <Run Text="Line " />
+                    <Run Text="{localization:Translate BottomDrawerErrorListLine}" />
                     <Run Text="{Binding #Root.ErrorLine}" />
                 </TextBlock>
             </StackPanel>

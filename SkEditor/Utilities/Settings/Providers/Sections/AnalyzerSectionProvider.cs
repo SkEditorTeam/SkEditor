@@ -11,7 +11,6 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Notifications;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.ExperimentsConfigProperty;
 
@@ -58,10 +57,8 @@ public class AnalyzerSectionProvider(
             catch (Exception ex)
             {
                 Notification notification = Notification
-                    .Create("Analyzer failed to load".ToTranslatable())
-                    .WithMessage(
-                        "Something went wrong while starting the Analyzer. Take a look at the logs for more information."
-                            .ToTranslatable())
+                    .Create(TranslationKey.AnalyzerFailedToLoad)
+                    .WithMessage(TranslationKey.AnalyzerGeneralFailureMessage)
                     .WithType(NotificationType.Error);
                 notifs.Show(notification);
 
@@ -70,24 +67,16 @@ public class AnalyzerSectionProvider(
         }, AwaitOperation.Drop);
 
         BindableReactiveProperty<TranslatableString> everythingTitle = isEverythingReady
-            .Select(v => v
-                ? "All required components are installed.".ToTranslatable()
-                : "Some required components are missing.".ToTranslatable())
-            .ToBindableReactiveProperty(
-                isEverythingReady.Value
-                    ? "All required components are installed.".ToTranslatable()
-                    : "Some required components are missing.".ToTranslatable()
-            );
+            .Select(GetComponentStatusTitle)
+            .ToBindableReactiveProperty(GetComponentStatusTitle(isEverythingReady.Value));
 
-        SettingSection section = SettingSection.Create("Analyzer", "Analyzer".ToTranslatable())
+        SettingSection section = SettingSection.Create("Analyzer", TranslationKey.SettingsSectionAnalyzer)
             .WithIcon(Symbol.DocumentSearch)
             .WithSettings(
             [
                 InfoSetting
                     .Create(TranslationKey.Attention)
-                    .WithDescription(
-                        "The Analyzer is an experimental feature and can be toggled in the Experiments section."
-                            .ToTranslatable())
+                    .WithDescription(TranslationKey.SettingsAnalyzerWarning)
                     .WithIcon(Symbol.Warning)
                     .WithType(InfoSetting.InfoType.Warning),
 
@@ -101,23 +90,21 @@ public class AnalyzerSectionProvider(
                     ),
 
                 ExpandableSetting
-                    .Create("Tools".ToTranslatable())
-                    .WithDescription("Manage Skript addons and analyzer process state.".ToTranslatable())
+                    .Create(TranslationKey.SettingsAnalyzerToolsTitle)
+                    .WithDescription(TranslationKey.SettingsAnalyzerToolsDescription)
                     .WithIcon(Symbol.Wrench)
                     .WithChildren(
                         ActionSetting
-                            .Create("Server plugins folder".ToTranslatable())
+                            .Create(TranslationKey.SettingsAnalyzerPluginsFolder)
                             .WithAction(TranslationKey.ButtonOpenFolder, () =>
                             {
                                 Directory.CreateDirectory(pluginsDir);
                                 links.OpenFolder(pluginsDir);
                             }),
                         ActionSetting
-                            .Create("Restart".ToTranslatable())
-                            .WithDescription(
-                                "Restarts the Analyzer process if it hanged, crashed, or you're just feeling like it."
-                                    .ToTranslatable())
-                            .WithAction("Restart".ToTranslatable(), async () =>
+                            .Create(TranslationKey.SettingsAnalyzerRestartTitle)
+                            .WithDescription(TranslationKey.SettingsAnalyzerRestartDescription)
+                            .WithAction(TranslationKey.ButtonRestart, async () =>
                             {
                                 try
                                 {
@@ -126,10 +113,8 @@ public class AnalyzerSectionProvider(
                                 catch (Exception ex)
                                 {
                                     Notification notification = Notification
-                                        .Create("Restart failed".ToTranslatable())
-                                        .WithMessage(
-                                            "Something went wrong while restarting the Analyzer. Take a look at the logs for more information."
-                                                .ToTranslatable())
+                                        .Create(TranslationKey.SettingsAnalyzerRestartFailedTitle)
+                                        .WithMessage(TranslationKey.SettingsAnalyzerRestartFailedMessage)
                                         .WithType(NotificationType.Error);
                                     notifs.Show(notification);
 
@@ -137,11 +122,9 @@ public class AnalyzerSectionProvider(
                                 }
                             }),
                         ActionSetting
-                            .Create("Clear AOT cache".ToTranslatable())
-                            .WithDescription(
-                                "Deletes the generated .aot cache file. It will be recreated on the next startup."
-                                    .ToTranslatable())
-                            .WithAction("Clear".ToTranslatable(), () =>
+                            .Create(TranslationKey.SettingsAnalyzerClearAotCacheTitle)
+                            .WithDescription(TranslationKey.SettingsAnalyzerClearAotCacheDescription)
+                            .WithAction(TranslationKey.ButtonClear, () =>
                             {
                                 string aotPath = Path.Combine(analyzer.BinDir, "skanalyzer.aot");
                                 if (!File.Exists(aotPath))
@@ -154,34 +137,33 @@ public class AnalyzerSectionProvider(
                                     File.Delete(aotPath);
 
                                     Notification notification = Notification
-                                        .Create("AOT cache cleared".ToTranslatable())
-                                        .WithMessage(
-                                            "AOT cache file deleted. Restart the Analyzer to regenerate it."
-                                                .ToTranslatable())
+                                        .Create(TranslationKey.SettingsAnalyzerClearAotCacheSuccessTitle)
+                                        .WithMessage(TranslationKey.SettingsAnalyzerClearAotCacheSuccessMessage)
                                         .WithType(NotificationType.Success);
                                     notifs.Show(notification);
                                 }
                                 catch (Exception ex)
                                 {
                                     Notification notification = Notification
-                                        .Create("Error".ToTranslatable())
-                                        .WithMessage($"Failed to delete AOT cache: {ex.Message}".ToTranslatable())
+                                        .Create(TranslationKey.SettingsAnalyzerClearAotCacheFailedTitle)
+                                        .WithMessage(TranslationKey.SettingsAnalyzerClearAotCacheFailedMessage)
                                         .WithType(NotificationType.Error);
                                     notifs.Show(notification);
+
+                                    logs.Error(ex, "Failed to delete AOT cache.");
                                 }
                             })
                     ),
 
                 ToggleSetting
-                    .Create("Scrollbar error markers".ToTranslatable())
-                    .WithDescription("Displays colored error and warning indicators directly on the editor scrollbar."
-                        .ToTranslatable())
+                    .Create(TranslationKey.SettingsAnalyzerScrollbarErrorMarkers)
+                    .WithDescription(TranslationKey.SettingsAnalyzerScrollbarErrorMarkersDescription)
                     .WithIcon(Symbol.SidebarSearch)
                     .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerErrorScrollMarkersEnabled)),
 
                 ToggleSetting
-                    .Create("Diagnostic tooltips".ToTranslatable())
-                    .WithDescription("Shows detailed error tooltips when hovering over code issues.".ToTranslatable())
+                    .Create(TranslationKey.SettingsAnalyzerDiagnosticTooltips)
+                    .WithDescription(TranslationKey.SettingsAnalyzerDiagnosticTooltipsDescription)
                     .WithIcon(Symbol.CommentNote)
                     .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerErrorTooltipsEnabled))
             ]);
@@ -193,26 +175,33 @@ public class AnalyzerSectionProvider(
         return section;
     }
 
+    private static TranslatableString GetComponentStatusTitle(bool ready)
+    {
+        return ready
+            ? TranslationKey.SettingsAnalyzerComponentsInstalled
+            : TranslationKey.SettingsAnalyzerComponentsMissing;
+    }
+
     private CompoundSetting GetJavaSetting(BindableReactiveProperty<bool> isJavaValid)
     {
         BindableReactiveProperty<TranslatableString?> description = isJavaValid
             .Select(v => v
                 ? null
-                : "Java 25 was not found in PATH. SkAnalyzer requires JRE 25 to run.".ToTranslatable())
+                : new TranslatableString(TranslationKey.SettingsAnalyzerJavaNotFound))
             .ToBindableReactiveProperty();
 
         return CompoundSetting
-            .Create("Java 25 runtime".ToTranslatable())
+            .Create(TranslationKey.SettingsAnalyzerJavaTitle)
             .WithDescription(description)
             .WithChildren(
-                ActionSetting.Create("Download".ToTranslatable())
+                ActionSetting.Create(TranslationKey.ButtonDownload)
                     .AsExternal()
                     .WithButtonVisible(isJavaValid.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction("Download".ToTranslatable(),
+                    .WithAction(TranslationKey.ButtonDownload,
                         () => { links.OpenLink("https://adoptium.net/"); }),
-                ActionSetting.Create("Check".ToTranslatable())
+                ActionSetting.Create(TranslationKey.ButtonCheck)
                     .WithButtonVisible(isJavaValid.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction("Check".ToTranslatable(), async () => { isJavaValid.Value = await CheckJava25(); })
+                    .WithAction(TranslationKey.ButtonCheck, async () => { isJavaValid.Value = await CheckJava25(); })
             )
             .WithStatus(isJavaValid);
     }
@@ -222,22 +211,22 @@ public class AnalyzerSectionProvider(
         BindableReactiveProperty<TranslatableString?> description = isAnalyzerPresent
             .Select(v => v
                 ? null
-                : "SkAnalyzer.jar is missing.".ToTranslatable())
+                : new TranslatableString(TranslationKey.SettingsAnalyzerSkAnalyzerMissing))
             .ToBindableReactiveProperty();
 
         return CompoundSetting
-            .Create("SkAnalyzer".ToTranslatable())
+            .Create(TranslationKey.SettingsAnalyzerSkAnalyzerTitle)
             .WithDescription(description)
             .WithChildren(
-                ActionSetting.Create("Download".ToTranslatable())
+                ActionSetting.Create(TranslationKey.ButtonDownload)
                     .AsExternal()
                     .WithButtonVisible(isAnalyzerPresent.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction("Download".ToTranslatable(),
+                    .WithAction(TranslationKey.ButtonDownload,
                         () =>
                         {
                             links.OpenLink("https://github.com/SkEditorTeam/SkAnalyzer/releases/tag/v2.0.0-beta.7");
                         }),
-                ActionSetting.Create("Select file".ToTranslatable())
+                ActionSetting.Create(TranslationKey.ButtonSelectFile)
                     .WithButtonVisible(isAnalyzerPresent.Select(v => !v).ToBindableReactiveProperty())
                     .WithAction(TranslationKey.ButtonSelect, async () =>
                     {
@@ -260,19 +249,19 @@ public class AnalyzerSectionProvider(
         BindableReactiveProperty<TranslatableString?> description = isSkriptPresent
             .Select(v => v
                 ? null
-                : "Skript patched JAR is missing.".ToTranslatable())
+                : new TranslatableString(TranslationKey.SettingsAnalyzerSkriptMissing))
             .ToBindableReactiveProperty();
 
         return CompoundSetting
-            .Create("Skript".ToTranslatable())
+            .Create(TranslationKey.SettingsAnalyzerSkriptTitle)
             .WithDescription(description)
             .WithChildren(
-                ActionSetting.Create("Download".ToTranslatable())
+                ActionSetting.Create(TranslationKey.ButtonDownload)
                     .AsExternal()
                     .WithButtonVisible(isSkriptPresent.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction("Download".ToTranslatable(),
+                    .WithAction(TranslationKey.ButtonDownload,
                         () => { links.OpenLink("https://github.com/SkEditorTeam/Skratches/releases/latest"); }),
-                ActionSetting.Create("Select file".ToTranslatable())
+                ActionSetting.Create(TranslationKey.ButtonSelectFile)
                     .WithButtonVisible(isSkriptPresent.Select(v => !v).ToBindableReactiveProperty())
                     .WithAction(TranslationKey.ButtonSelect, async () =>
                     {
@@ -304,8 +293,8 @@ public class AnalyzerSectionProvider(
         }
 
         Notification notification = Notification
-            .Create("Invalid file selected".ToTranslatable())
-            .WithMessage("You need to select a single .jar file.".ToTranslatable())
+            .Create(TranslationKey.SettingsAnalyzerInvalidFileSelectedTitle)
+            .WithMessage(TranslationKey.SettingsAnalyzerInvalidFileSelectedMessage)
             .WithType(NotificationType.Error);
 
         notifs.Show(notification);

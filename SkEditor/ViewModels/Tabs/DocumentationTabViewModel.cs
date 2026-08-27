@@ -12,7 +12,6 @@ using SkEditor.Models.Documentation;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Providers;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.ViewModels.Tabs;
@@ -100,9 +99,8 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         catch (Exception ex)
         {
             Notification notification = Notification
-                .Create("Error loading documentation".ToTranslatable())
-                .WithMessage("Something went wrong when loading documentation. Try again or look into the logs."
-                    .ToTranslatable())
+                .Create(TranslationKey.DocumentationLoadErrorTitle)
+                .WithMessage(TranslationKey.DocumentationLoadErrorMessage)
                 .WithType(NotificationType.Error);
 
             _notifs.Show(notification);

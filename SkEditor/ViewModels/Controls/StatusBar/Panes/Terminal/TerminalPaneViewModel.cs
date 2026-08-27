@@ -16,7 +16,7 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
     private TerminalControl? _terminalControl;
     public string Id => "Terminal";
     public BindableReactiveProperty<bool> IsVisible { get; }
-    public TranslatableString Name => TranslatableString.FromRawString("Terminal");
+    public TranslatableString Name => TranslationKey.BottomDrawerTerminalTitle;
     public TerminalControl TerminalControl => _terminalControl ??= CreateTerminal();
     public IDrawerToolbarViewModel? Toolbar { get; }
 

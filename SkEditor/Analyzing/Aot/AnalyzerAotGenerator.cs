@@ -7,7 +7,7 @@ using SkEditor.Analyzing.Processes;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Logging;
 using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Analyzing.Aot;
 
@@ -20,10 +20,8 @@ public class AnalyzerAotGenerator(
         CancellationToken ct = default)
     {
         Notification notification = Notification
-            .Create("Analyzer AOT Cache".ToTranslatable())
-            .WithMessage(
-                "Generating AOT cache for the Analyzer. This is a one-time operation and may take a bit longer."
-                    .ToTranslatable())
+            .Create(TranslationKey.AnalyzerAotCacheGeneratingTitle)
+            .WithMessage(TranslationKey.AnalyzerAotCacheGeneratingMessage)
             .WithDuration(TimeSpan.FromSeconds(10))
             .WithType(NotificationType.Information);
 

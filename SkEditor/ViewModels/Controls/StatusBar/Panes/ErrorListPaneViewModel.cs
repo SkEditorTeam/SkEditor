@@ -23,7 +23,7 @@ public partial class ErrorListPaneViewModel : ObservableObject, IDrawerPaneViewM
     public BindableReactiveProperty<bool> IsAnalyzerLoaded { get; set; } = new(false);
     public BindableReactiveProperty<bool> IsFileAnalyzable { get; set; } = new(false);
     public BindableReactiveProperty<bool> IsVisible { get; }
-    public TranslatableString Name => "Errors".ToTranslatable();
+    public TranslatableString Name => TranslationKey.BottomDrawerErrorListTitle;
 
     public ErrorListPaneViewModel(ITabService tabs, ExperimentsConfig experiments)
     {

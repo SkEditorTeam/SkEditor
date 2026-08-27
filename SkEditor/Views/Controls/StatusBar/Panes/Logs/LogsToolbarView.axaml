@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:terminal="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.Panes.LogsToolbarView"
              x:DataType="terminal:LogsToolbarViewModel"
@@ -11,18 +12,20 @@
     <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,8,0">
         <ComboBox Theme="{DynamicResource ToolbarComboBox}" VerticalAlignment="Center"
                   ItemsSource="{Binding AvailableSources}" SelectedItem="{Binding SelectedSource.Value, Mode=TwoWay}"
-                  ToolTip.Tip="Log source" />
+                  ToolTip.Tip="{localization:Translate BottomDrawerLogsToolbarLogSource}" />
 
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
-                Command="{Binding CopyLogsCommand}" ToolTip.Tip="Copy">
+                Command="{Binding CopyLogsCommand}" ToolTip.Tip="{localization:Translate BottomDrawerLogsToolbarCopy}">
             <fluent:SymbolIcon Symbol="Copy" FontSize="14" />
         </Button>
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
-                Command="{Binding OpenLogsFolderCommand}" ToolTip.Tip="Open logs folder">
+                Command="{Binding OpenLogsFolderCommand}"
+                ToolTip.Tip="{localization:Translate BottomDrawerLogsToolbarOpenFolder}">
             <fluent:SymbolIcon Symbol="Folder" FontSize="14" />
         </Button>
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
-                Command="{Binding ClearLogsCommand}" ToolTip.Tip="Clear logs">
+                Command="{Binding ClearLogsCommand}"
+                ToolTip.Tip="{localization:Translate BottomDrawerLogsToolbarClear}">
             <fluent:SymbolIcon Symbol="Delete" FontSize="14" />
         </Button>
     </StackPanel>

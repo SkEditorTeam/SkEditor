@@ -2,7 +2,6 @@
 using FluentIcons.Common;
 using R3;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
@@ -25,7 +24,7 @@ public class ToolsMenuProvider(
             .WithCommand(() => tabs.OpenUniqueTab(docsTabFactory))
             .AddTo(tools);
 
-        MainMenuItem.HeaderWithIcon("Terminal".ToTranslatable(), Symbol.WindowConsole)
+        MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderTerminal, Symbol.WindowConsole)
             .WithCommand(() => bottomDrawer.TogglePane("Terminal"))
             .WithVisibility(experiments.ObservePropertyChanged(x => x.TerminalEnabled).ToBindableReactiveProperty())
             .AddTo(tools);

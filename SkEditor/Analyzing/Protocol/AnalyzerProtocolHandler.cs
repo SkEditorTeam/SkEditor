@@ -9,6 +9,7 @@ using SkEditor.Models.Analyzer;
 using SkEditor.Models.Logging;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Analyzing.Protocol;
 
@@ -109,7 +110,7 @@ public class AnalyzerProtocolHandler(
             return;
         }
 
-        Notification notification = Notification.Create("Analyzer Error".ToTranslatable())
+        Notification notification = Notification.Create(TranslationKey.AnalyzerErrorTitle)
             .WithMessage(data.ToTranslatable())
             .WithType(NotificationType.Error);
 

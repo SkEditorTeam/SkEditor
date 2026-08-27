@@ -10,7 +10,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Analyzer;
 using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.StatusBar.Panes;
@@ -117,10 +117,8 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         _item.IsVisible = false;
 
         Notification notification = Notification
-            .Create("Analyzer failed to load".ToTranslatable())
-            .WithMessage(
-                "The required components may be missing or incompatible. Check the settings for more information."
-                    .ToTranslatable())
+            .Create(TranslationKey.AnalyzerFailedToLoad)
+            .WithMessage(TranslationKey.AnalyzerComponentsMissingMessage)
             .WithDuration(TimeSpan.FromSeconds(10))
             .WithType(NotificationType.Error);
 

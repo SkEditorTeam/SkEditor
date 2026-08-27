@@ -10,6 +10,7 @@
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:layout="clr-namespace:SkEditor.Converters.Layout"
              xmlns:documentationUtils="clr-namespace:SkEditor.Models.Documentation"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:DocumentationTabViewModel"
@@ -81,7 +82,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBox Grid.Column="2" PlaceholderText="Type your query..."
+            <TextBox Grid.Column="2" PlaceholderText="{localization:Translate DocumentationSearchPlaceholder}"
                      VerticalContentAlignment="Center"
                      Theme="{StaticResource SearchBoxTheme}"
                      Text="{Binding SearchText, Mode=TwoWay}" HorizontalAlignment="Stretch" />
@@ -258,7 +259,7 @@
         <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5"
                     Spacing="16" IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNull}}">
             <fluent:SymbolIcon Symbol="WeatherSqualls" FontSize="64" />
-            <TextBlock Text="No results found" FontSize="24" />
+            <TextBlock Text="{localization:Translate DocumentationNoResultsFound}" FontSize="24" />
         </StackPanel>
     </Grid>
 </UserControl>

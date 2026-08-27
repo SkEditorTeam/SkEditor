@@ -178,8 +178,8 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         if (MainTabs.Count == 1)
         {
             notifs.Show(Notification
-                .Create(TranslatableString.FromRawString("Oops!"))
-                .WithMessage(TranslatableString.FromRawString("You can't split the only tab open in the main view."))
+                .Create(TranslationKey.SplitViewOnlyTabErrorTitle)
+                .WithMessage(TranslationKey.SplitViewOnlyTabErrorMessage)
                 .WithType(NotificationType.Warning));
 
             return;

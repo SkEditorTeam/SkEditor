@@ -5,7 +5,6 @@ using ObservableCollections;
 using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Logging;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
@@ -19,13 +18,12 @@ public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
     private readonly IClipboardService _clipboard;
     private readonly ILinkService _links;
     private readonly ILogService _logs;
-    private readonly ISynchronizedView<LogEntry, LogEntry> _logsView;
 
     private DisposableBag _disposables;
     public NotifyCollectionChangedSynchronizedViewList<LogEntry> FilteredLogs { get; }
     public string Id => "Logs";
     public BindableReactiveProperty<bool> IsVisible { get; }
-    public TranslatableString Name => "Logs".ToTranslatable();
+    public TranslatableString Name => TranslationKey.BottomDrawerLogsTitle;
     public IDrawerToolbarViewModel? Toolbar { get; }
 
     public LogsPaneViewModel(AppSettings appSettings, ILogService logs, IClipboardService clipboard, ILinkService links)
@@ -41,11 +39,11 @@ public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
         LogsToolbarViewModel toolbar = new(this);
         Toolbar = toolbar;
 
-        _logsView = _allLogs
+        ISynchronizedView<LogEntry, LogEntry> logsView = _allLogs
             .CreateView(x => x)
             .AddTo(ref _disposables);
 
-        FilteredLogs = _logsView
+        FilteredLogs = logsView
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .AddTo(ref _disposables);
 
@@ -67,11 +65,11 @@ public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
             {
                 if (source is null)
                 {
-                    _logsView.ResetFilter();
+                    logsView.ResetFilter();
                 }
                 else
                 {
-                    _logsView.AttachFilter(entry => entry.Source == source.Value);
+                    logsView.AttachFilter(entry => entry.Source == source.Value);
                 }
             })
             .AddTo(ref _disposables);

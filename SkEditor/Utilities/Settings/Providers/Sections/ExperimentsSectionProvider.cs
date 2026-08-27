@@ -4,7 +4,6 @@ using R3;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.ExperimentsConfigProperty;
 
@@ -41,42 +40,35 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                     ),
 
                 ExpandableSetting
-                    .Create("Split View".ToTranslatable())
-                    .WithDescription(
-                        "Allows you to split the editor into two views for better multitasking and comparison of code files."
-                            .ToTranslatable())
+                    .Create(TranslationKey.SettingsExperimentsSplitView)
+                    .WithDescription(TranslationKey.SettingsExperimentsSplitViewDescription)
                     .WithIcon(Symbol.DocumentLandscapeSplitHint)
                     .WithChildren(
                         InfoSetting
-                            .Create("Highly experimental!".ToTranslatable())
-                            .WithDescription(
-                                "This is more of a prototype than a fully functional feature. It *will* probably not work as expected and may cause issues."
-                                    .ToTranslatable())
+                            .Create(TranslationKey.SettingsExperimentsSplitViewWarningTitle)
+                            .WithDescription(TranslationKey.SettingsExperimentsSplitViewWarningDescription)
                             .WithIcon(Symbol.Warning)
                             .WithType(InfoSetting.InfoType.Warning),
                         ToggleSetting
-                            .Create("Enable Split View".ToTranslatable())
+                            .Create(TranslationKey.SettingsExperimentsSplitViewOption)
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled))
                     ),
 
                 ExpandableSetting
-                    .Create("Analyzer".ToTranslatable())
-                    .WithDescription(
-                        "Enables the Analyzer feature, which provides real-time code analysis and suggestions."
-                            .ToTranslatable())
+                    .Create(TranslationKey.SettingsExperimentsAnalyzer)
+                    .WithDescription(TranslationKey.SettingsExperimentsAnalyzerDescription)
                     .WithIcon(Symbol.DocumentSearch)
                     .WithChildren(
                         InfoSetting
-                            .Create("Important!".ToTranslatable())
-                            .WithDescription("Check out the Analyzer settings to set it up properly."
-                                .ToTranslatable())
+                            .Create(TranslationKey.SettingsExperimentsAnalyzerWarningTitle)
+                            .WithDescription(TranslationKey.SettingsExperimentsAnalyzerWarningDescription)
                             .WithIcon(Symbol.Warning)
                             .WithType(InfoSetting.InfoType.Warning),
                         ToggleSetting
-                            .Create("Enable Analyzer".ToTranslatable())
+                            .Create(TranslationKey.SettingsExperimentsAnalyzerOption)
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.AnalyzerEnabled)),
                         ClickableActionSetting
-                            .Create("Go to Analyzer settings".ToTranslatable())
+                            .Create(TranslationKey.SettingsExperimentsAnalyzerOpenSettings)
                             .WithAction(() => messenger.Send(new NavigateToSettingsSectionMessage("Analyzer")))
                             .WithActionIcon(Symbol.ChevronRight)
                             .WithEnabled(experiments.ObservePropertyChanged(x => x.AnalyzerEnabled)
@@ -84,21 +76,17 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                     ),
 
                 ExpandableSetting
-                    .Create("Terminal".ToTranslatable())
-                    .WithDescription(
-                        "Gives you access to an integrated terminal within the editor for running commands and scripts."
-                            .ToTranslatable())
+                    .Create(TranslationKey.SettingsExperimentsTerminal)
+                    .WithDescription(TranslationKey.SettingsExperimentsTerminalDescription)
                     .WithIcon(Symbol.WindowConsole)
                     .WithChildren(
                         InfoSetting
-                            .Create("Highly experimental!".ToTranslatable())
-                            .WithDescription(
-                                "The terminal view is still in development and has some serious bugs, i.e. scrolling issues."
-                                    .ToTranslatable())
+                            .Create(TranslationKey.SettingsExperimentsTerminalWarningTitle)
+                            .WithDescription(TranslationKey.SettingsExperimentsTerminalWarningDescription)
                             .WithIcon(Symbol.Warning)
                             .WithType(InfoSetting.InfoType.Warning),
                         ToggleSetting
-                            .Create("Enable Terminal".ToTranslatable())
+                            .Create(TranslationKey.SettingsExperimentsTerminalOption)
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.TerminalEnabled))
                     )
             ]);

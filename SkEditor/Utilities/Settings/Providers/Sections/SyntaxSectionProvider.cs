@@ -9,7 +9,6 @@ using SkEditor.Contracts.Services;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
 using SkEditor.Models.UI;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
@@ -31,7 +30,7 @@ public class SyntaxSectionProvider(
     public SettingSection GetSection()
     {
         SettingSection syntaxSection = SettingSection
-            .Create("Syntax", "Syntax highlighting".ToTranslatable())
+            .Create("Syntax", TranslationKey.SettingsSectionSyntaxHighlighting)
             .WithIcon(Symbol.CodeTextEdit);
 
         ObservableCollection<SettingElement> settings = syntaxSection.Settings;
@@ -39,8 +38,8 @@ public class SyntaxSectionProvider(
         settings.AddRange(CreateManagementSection());
 
         ExpandableSetting customRules = ExpandableSetting
-            .Create("Custom rules".ToTranslatable())
-            .WithDescription("Bind a custom grammar and theme to specific file extensions.".ToTranslatable())
+            .Create(TranslationKey.SettingsSyntaxCustomRules)
+            .WithDescription(TranslationKey.SettingsSyntaxCustomRulesDescription)
             .WithIcon(Symbol.PuzzlePiece);
 
         List<SyntaxPairDto> customPairs = appSettings.SyntaxPairs
@@ -54,7 +53,7 @@ public class SyntaxSectionProvider(
 
         customRules.Children.Add(
             ActionSetting
-                .Create("Add new rule".ToTranslatable())
+                .Create(TranslationKey.SettingsSyntaxCustomRulesAdd)
                 .WithAction(TranslationKey.ButtonAdd, () =>
                 {
                     SyntaxPairDto newPair = new([""], null, nameof(ThemeName.DarkPlus));
@@ -74,15 +73,15 @@ public class SyntaxSectionProvider(
     private SettingElement CreateRuleElement(SyntaxPairDto pair, ObservableCollection<SettingElement> parentCollection)
     {
         ActionSetting deleteAction = ActionSetting
-            .Create("Delete".ToTranslatable())
+            .Create(TranslationKey.SettingsSyntaxCustomRulesDelete)
             .WithIcon(Symbol.Delete);
 
         SettingElement ruleItem = CompoundSetting
-            .Create("Rule".ToTranslatable())
+            .Create(TranslationKey.SettingsSyntaxCustomRulesRule)
             .WithIcon(Symbol.Link)
             .WithChildren(
                 TextSetting
-                    .Create("Extensions".ToTranslatable())
+                    .Create(TranslationKey.SettingsSyntaxCustomRulesRuleExtensions)
                     .WithProperty((
                         () => string.Join(", ", pair.Extensions),
                         val =>
@@ -103,7 +102,7 @@ public class SyntaxSectionProvider(
                         }
                     )),
                 ChoiceSetting<SyntaxGrammar?>
-                    .Create("Grammar file".ToTranslatable())
+                    .Create(TranslationKey.SettingsSyntaxCustomRulesRuleGrammarFile)
                     .WithProperty((
                         () => syntax.AvailableGrammars.FirstOrDefault(g => g.FileName == pair.Grammar),
                         val =>
@@ -114,7 +113,7 @@ public class SyntaxSectionProvider(
                     ))
                     .WithProvider(grammarChoiceProvider),
                 ChoiceSetting<SyntaxTheme?>
-                    .Create("Theme file".ToTranslatable())
+                    .Create(TranslationKey.SettingsSyntaxCustomRulesRuleThemeFile)
                     .WithProperty((
                         () => syntax.AvailableThemes.FirstOrDefault(t => t.FileName == pair.Theme),
                         val =>
@@ -127,7 +126,7 @@ public class SyntaxSectionProvider(
                 deleteAction
             );
 
-        deleteAction.WithAction("Remove".ToTranslatable(), () =>
+        deleteAction.WithAction(TranslationKey.SettingsSyntaxCustomRulesDelete, () =>
         {
             appSettings.SyntaxPairs.Remove(pair);
             parentCollection.Remove(ruleItem);
@@ -148,7 +147,7 @@ public class SyntaxSectionProvider(
         }
 
         ChoiceSetting<SyntaxGrammar?> skriptGrammarItem = ChoiceSetting<SyntaxGrammar?>
-            .Create("Skript grammar".ToTranslatable())
+            .Create(TranslationKey.SettingsSyntaxSkriptGrammar)
             .WithProperty((
                 () => syntax.AvailableGrammars.FirstOrDefault(g => g.FileName == skriptPair.Grammar),
                 newGrammar =>
@@ -170,13 +169,13 @@ public class SyntaxSectionProvider(
         return
         [
             CompoundSetting
-                .Create("Skript syntax".ToTranslatable())
-                .WithDescription("Choose the grammar and color scheme used for Skript code.".ToTranslatable())
+                .Create(TranslationKey.SettingsSyntaxSkriptSyntax)
+                .WithDescription(TranslationKey.SettingsSyntaxSkriptSyntaxDescription)
                 .WithIcon(Symbol.Color)
                 .WithChildren(
                     skriptGrammarItem,
                     ChoiceSetting<SyntaxTheme?>
-                        .Create("Skript theme".ToTranslatable())
+                        .Create(TranslationKey.SettingsSyntaxSkriptTheme)
                         .WithProperty((
                             () => syntax.AvailableThemes.FirstOrDefault(t => t.FileName == skriptPair.Theme),
                             newTheme =>
@@ -200,16 +199,16 @@ public class SyntaxSectionProvider(
         return
         [
             ActionSetting
-                .Create("Syntax folder".ToTranslatable())
-                .WithDescription("Open the folder containing syntax grammars and themes.".ToTranslatable())
+                .Create(TranslationKey.SettingsSyntaxFolder)
+                .WithDescription(TranslationKey.SettingsSyntaxFolderDescription)
                 .WithIcon(Symbol.FolderOpen)
                 .WithAction(TranslationKey.ButtonOpenFolder, () => links.OpenFolder(syntax.SyntaxFolderPath)),
 
             ActionSetting
-                .Create("Reload syntaxes".ToTranslatable())
-                .WithDescription("Reload files for newly added grammars and themes.".ToTranslatable())
+                .Create(TranslationKey.SettingsSyntaxReload)
+                .WithDescription(TranslationKey.SettingsSyntaxReloadDescription)
                 .WithIcon(Symbol.ArrowClockwise)
-                .WithAction("Reload".ToTranslatable(), syntax.LoadSyntaxes)
+                .WithAction(TranslationKey.ButtonReload, syntax.LoadSyntaxes)
         ];
     }
 }

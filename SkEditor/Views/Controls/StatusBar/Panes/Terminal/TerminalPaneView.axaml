@@ -26,10 +26,6 @@
                         <BrushTransition Property="BorderBrush" Duration="0:0:0.1" />
                     </Transitions>
                 </Setter>
-                <!--<Style Selector="^:not(:focus-within)">
-                    <Setter Property="Background" Value="#03FFFFFF" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                </Style>-->
             </Style>
         </Border.Styles>
     </Border>

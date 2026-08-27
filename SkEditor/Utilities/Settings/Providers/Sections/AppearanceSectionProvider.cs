@@ -5,7 +5,6 @@ using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
 using SkEditor.Services.Windowing;
-using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
@@ -57,10 +56,10 @@ public class AppearanceSectionProvider(
                         () => links.OpenFolder(themes.ThemeFolderPath)),
 
                 ActionSetting
-                    .Create("Reload themes".ToTranslatable())
-                    .WithDescription("Reload files for newly added themes.".ToTranslatable())
+                    .Create(TranslationKey.SettingsAppearanceThemeReloadThemes)
+                    .WithDescription(TranslationKey.SettingsAppearanceThemeReloadThemesDescription)
                     .WithIcon(Symbol.ArrowClockwise)
-                    .WithAction("Reload".ToTranslatable(), themes.ReloadThemesAsync)
+                    .WithAction(TranslationKey.ButtonReload, themes.ReloadThemesAsync)
             ]);
     }
 

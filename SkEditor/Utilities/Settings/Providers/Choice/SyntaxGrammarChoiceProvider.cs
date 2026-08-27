@@ -26,7 +26,7 @@ public class SyntaxGrammarChoiceProvider(ISyntaxService syntax) : ISettingsChoic
     {
         if (value is null)
         {
-            return "Auto".ToTranslatable();
+            return TranslationKey.SettingsSyntaxGrammarAuto;
         }
 
         string? displayName = Path.GetFileNameWithoutExtension(value.Name)?.Replace(".tmLanguage", "");

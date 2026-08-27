@@ -6,6 +6,7 @@
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:converters="clr-namespace:SkEditor.Converters"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.Panes.LogsPaneView"
              x:DataType="vm:LogsPaneViewModel"
@@ -40,7 +41,7 @@
 
             <StackPanel VerticalAlignment="Center" Spacing="6" IsVisible="{Binding !FilteredLogs.Count}">
                 <icons:SymbolIcon Symbol="WeatherSqualls" FontSize="32" Opacity="0.5" HorizontalAlignment="Center" />
-                <TextBlock Text="No logs found"
+                <TextBlock Text="{localization:Translate BottomDrawerLogsNoLogs}"
                            HorizontalAlignment="Center" TextAlignment="Center"
                            TextWrapping="Wrap"
                            FontSize="12" MaxWidth="300" Opacity="0.6" />
@@ -59,10 +60,6 @@
                         <BrushTransition Property="BorderBrush" Duration="0:0:0.1" />
                     </Transitions>
                 </Setter>
-                <!--<Style Selector="^:not(:focus-within)">
-                    <Setter Property="Background" Value="#03FFFFFF" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                </Style>-->
             </Style>
         </Border.Styles>
     </Border>

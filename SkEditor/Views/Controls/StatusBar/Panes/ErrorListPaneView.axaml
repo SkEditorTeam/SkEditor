@@ -8,6 +8,7 @@
              xmlns:analyzer="clr-namespace:SkEditor.Models.Analyzer"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Views.Controls.StatusBar.Panes.ErrorListPaneView"
              Name="Root"
@@ -50,9 +51,9 @@
                     </StackPanel.IsVisible>
                     <icons:SymbolIcon Symbol="WeatherSqualls" FontSize="32" Opacity="0.5" HorizontalAlignment="Center" />
                     <StackPanel Spacing="2">
-                        <TextBlock Text="No problems found"
+                        <TextBlock Text="{localization:Translate BottomDrawerErrorListNoProblems}"
                                    HorizontalAlignment="Center" FontSize="16" Opacity="0.75" />
-                        <TextBlock Text="Your code is clean and free of errors, good job!"
+                        <TextBlock Text="{localization:Translate BottomDrawerErrorListNoProblemsDescription}"
                                    HorizontalAlignment="Center" TextAlignment="Center"
                                    TextWrapping="Wrap"
                                    FontSize="12" MaxWidth="300" Opacity="0.6" />
@@ -67,7 +68,7 @@
                         </MultiBinding>
                     </StackPanel.IsVisible>
                     <icons:SymbolIcon Symbol="WeatherSqualls" FontSize="32" Opacity="0.5" HorizontalAlignment="Center" />
-                    <TextBlock Text="Open a Skript file to see errors and warnings."
+                    <TextBlock Text="{localization:Translate BottomDrawerErrorListNoSkriptFileOpened}"
                                HorizontalAlignment="Center" TextAlignment="Center"
                                TextWrapping="Wrap"
                                FontSize="12" MaxWidth="300" Opacity="0.6" />
@@ -79,7 +80,7 @@
                                        BorderThickness="1.5"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center" />
-                    <TextBlock Text="Loading Analyzer..."
+                    <TextBlock Text="{localization:Translate BottomDrawerErrorListLoading}"
                                HorizontalAlignment="Center" FontSize="16" Opacity="0.75" />
                 </StackPanel>
             </Panel>
