@@ -126,7 +126,6 @@
                 <Setter Property="IconSource">
                     <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled" />
                 </Setter>
-                <Setter Property="Foreground" Value="{DynamicResource InfoBarInformationalSeverityIconForeground}" />
             </Style>
         </Style>
 
@@ -140,7 +139,6 @@
 
             <Style Selector="^ /template/ ui|FAIconSourceElement#PART_Icon">
                 <Setter Property="IconSource" Value="{StaticResource ExclamationMarkIcon}" />
-                <Setter Property="Foreground" Value="{DynamicResource InfoBarInformationalSeverityIconForeground}" />
             </Style>
         </Style>
 
@@ -156,7 +154,6 @@
                 <Setter Property="IconSource">
                     <icons:SymbolIconSource Symbol="Checkmark" IconVariant="Filled" />
                 </Setter>
-                <Setter Property="Foreground" Value="{DynamicResource InfoBarInformationalSeverityIconForeground}" />
                 <Setter Property="RenderTransform">
                     <TranslateTransform X="0.5" />
                 </Setter>

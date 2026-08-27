@@ -219,7 +219,7 @@
         </Style>
         <Style Selector="^:success /template/ controls|FAIconSourceElement#PART_Icon">
             <Setter Property="IconSource">
-                <icons:SymbolIconSource Symbol="Checkmark" IconVariant="Filled" />
+                <icons:SymbolIconSource Symbol="Checkmark" IconVariant="Filled" Foreground="#56FF20" />
             </Setter>
             <Setter Property="Foreground" Value="#56FF20" />
         </Style>
@@ -237,7 +237,7 @@
         </Style>
         <Style Selector="^:error /template/ controls|FAIconSourceElement#PART_Icon">
             <Setter Property="IconSource">
-                <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled" />
+                <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled" Foreground="#FF4E37" />
             </Setter>
             <Setter Property="Foreground" Value="#FF4E37" />
             <Setter Property="RenderTransform">
@@ -327,7 +327,7 @@
         </Style>
         <Style Selector="^:success /template/ controls|FAIconSourceElement#PART_Icon">
             <Setter Property="IconSource">
-                <icons:SymbolIconSource Symbol="Checkmark" IconVariant="Filled" />
+                <icons:SymbolIconSource Symbol="Checkmark" IconVariant="Filled" Foreground="#56FF20" />
             </Setter>
             <Setter Property="Foreground" Value="#56FF20" />
         </Style>
@@ -345,7 +345,7 @@
         </Style>
         <Style Selector="^:error /template/ controls|FAIconSourceElement#PART_Icon">
             <Setter Property="IconSource">
-                <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled" />
+                <icons:SymbolIconSource Symbol="Dismiss" IconVariant="Filled" Foreground="#FF4E37" />
             </Setter>
             <Setter Property="Foreground" Value="#FF4E37" />
             <Setter Property="RenderTransform">
