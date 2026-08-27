@@ -8,6 +8,7 @@
              xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              xmlns:aConverters="clr-namespace:Avalonia.Markup.Xaml.Converters;assembly=Avalonia.Markup.Xaml"
+             xmlns:attachedProperties="clr-namespace:SkEditor.AttachedProperties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vms:StatusBarViewModel"
              x:Class="SkEditor.Views.Controls.Sidebar.StatusBarControl">
@@ -64,7 +65,7 @@
                                       Symbol="{Binding IconSymbol}"
                                       IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
                                       Foreground="{Binding ForegroundColor, Converter={StaticResource ColorToBrushConverter}}"
-                                      behaviors:BindableStyleClasses.Classes="{Binding IconClass}" />
+                                      attachedProperties:BindableStyleClasses.Classes="{Binding IconClass}" />
                     <TextBlock Text="{Binding Text}"
                                IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                VerticalAlignment="Center" />

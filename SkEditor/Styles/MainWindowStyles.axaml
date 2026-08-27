@@ -27,5 +27,6 @@
 
     <Style Selector="Window[WindowState=FullScreen] Border#TitleBarBorder">
         <Setter Property="(WindowDecorationProperties.ElementRole)" Value="None" />
+        <Setter Property="IsVisible" Value="{OnPlatform macOS={x:False}, Default={x:True}}" />
     </Style>
 </Styles>

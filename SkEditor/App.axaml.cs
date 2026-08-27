@@ -21,6 +21,7 @@ using SkEditor.Services.Localization;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Extensions;
+using SkEditor.ViewModels;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
 using SplashScreen = SkEditor.Views.Windows.SplashScreen;
 
@@ -91,6 +92,7 @@ public class App : Application
         ConfigureServices(collection, _binarySettings, appArgs);
         Services = collection.BuildServiceProvider();
         TranslationService.Current = Services.GetRequiredService<ITranslationService>();
+        DataContext = Services.GetRequiredService<AppViewModel>();
 
         SettingsObserverService observer = Services.GetRequiredService<SettingsObserverService>();
         observer.Initialize();
@@ -142,6 +144,7 @@ public class App : Application
 
     private static void ConfigureServices(IServiceCollection services, BinarySettings binarySettings, string[] args)
     {
+        services.AddSingleton<AppViewModel>();
         services.AddSingleton(args);
         services.AddSingleton<IClassicDesktopStyleApplicationLifetime>(_ =>
             (IClassicDesktopStyleApplicationLifetime)Current!.ApplicationLifetime!);

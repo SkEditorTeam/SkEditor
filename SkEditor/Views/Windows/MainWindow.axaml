@@ -8,12 +8,14 @@
         xmlns:sidebar="clr-namespace:SkEditor.Views.Controls.Sidebar"
         xmlns:layout="clr-namespace:SkEditor.Converters.Layout"
         xmlns:statusBar="clr-namespace:SkEditor.Views.Controls.StatusBar"
+        xmlns:attached="clr-namespace:SkEditor.AttachedProperties"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Views.Windows.MainWindow"
         x:DataType="windows:MainWindowViewModel"
         x:Name="Root"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
+        attached:NativeMenuBridge.ItemsSource="{Binding MainMenu.Items}"
         Focusable="True"
         Title="SkEditor" WindowStartupLocation="Manual" DragDrop.AllowDrop="True">
 
@@ -26,15 +28,17 @@
     <LayoutTransformControl Name="LayoutTransform">
         <Grid RowDefinitions="Auto,*">
             <Border Name="TitleBarBorder" Grid.Row="0" Padding="5" VerticalAlignment="Top"
-                    HorizontalAlignment="Stretch"
+                    HorizontalAlignment="Stretch" Height="{Binding #Root.ExtendClientAreaTitleBarHeightHint}"
                     Background="{DynamicResource TitleBarBackground}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                            IsVisible="{OnPlatform macOS=False, Default=True}">
                     <Image Source="{StaticResource SkEditorLogo}" Margin="12,0,0,0" Height="20" Width="20" />
                     <controls:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0"
                                               WindowDecorationProperties.ElementRole="User" />
                 </StackPanel>
             </Border>
             <Separator Grid.Row="0" Height="1" Margin="0,1,0,0" VerticalAlignment="Bottom"
+                       IsVisible="{OnPlatform macOS=False, Default=True}"
                        Background="{DynamicResource WindowBorderBrush}" />
 
             <Border Grid.Row="1" Padding="10,12,10,10" Background="{DynamicResource MainWindowGridBackground}">

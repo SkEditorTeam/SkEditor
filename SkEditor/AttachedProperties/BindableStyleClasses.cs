@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 
-namespace SkEditor.Behaviors;
+namespace SkEditor.AttachedProperties;
 
 public class BindableStyleClasses
 {

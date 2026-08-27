@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using HotAvalonia;
@@ -56,7 +57,10 @@ public partial class MainWindow : Window
         _splashScreen = splashScreen;
         _windowClose = windowClose;
 
-        menuViewModel.RegisterHotKeys(this);
+        if (!OperatingSystem.IsMacOS())
+        {
+            menuViewModel.RegisterHotKeys(this);
+        }
 
         _themes.LoadThemes();
         syntaxes.LoadSyntaxes();
@@ -123,8 +127,11 @@ public partial class MainWindow : Window
     private void Style()
     {
         const double titleBarHeight = 50;
+        const double macOsTitleBarHeight = 28;
 
         ExtendClientAreaToDecorationsHint = true;
-        ExtendClientAreaTitleBarHeightHint = titleBarHeight;
+        ExtendClientAreaTitleBarHeightHint = OperatingSystem.IsMacOS()
+            ? macOsTitleBarHeight
+            : titleBarHeight;
     }
 }
