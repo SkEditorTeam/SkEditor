@@ -74,7 +74,7 @@ public class TranslationService : ITranslationService
         return new TranslatableString(key, parameters);
     }
 
-    public async Task ChangeLanguageAsync(string language, bool startup = false)
+    public async Task ChangeLanguageAsync(string language)
     {
         ClearOldLanguages();
 
@@ -82,10 +82,7 @@ public class TranslationService : ITranslationService
 
         AddDictionary(language, newLanguageDict);
 
-        if (!startup)
-        {
-            PropagateLanguageChange(language);
-        }
+        PropagateLanguageChange(language);
     }
 
     private static void ClearOldLanguages()

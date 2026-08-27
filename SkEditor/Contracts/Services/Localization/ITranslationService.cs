@@ -26,8 +26,7 @@ public interface ITranslationService
     ///     Changes the application's language to the specified language.
     /// </summary>
     /// <param name="language">The language to change to.</param>
-    /// <param name="startup">Whether this change is occurring during application startup.</param>
-    Task ChangeLanguageAsync(string language, bool startup = false);
+    Task ChangeLanguageAsync(string language);
 
     /// <summary>
     ///     Event triggered when the application's language is changed. The event handler receives the new language as a

@@ -70,7 +70,7 @@ public partial class MainWindow : Window
 
     public async Task OnLoaded()
     {
-        await _translation.ChangeLanguageAsync(_appSettings.Language, true);
+        await _translation.ChangeLanguageAsync(_appSettings.Language);
         await SplashScreen.TryUpdateStatusAsync("Loading themes and addons...");
 
         await _themes.SetThemeAsync(_themes.CurrentTheme);
