@@ -15,7 +15,10 @@
         x:Name="Root"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
-        attached:NativeMenuBridge.ItemsSource="{Binding MainMenu.Items}"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="{Binding TitleBarHeight}"
+        attached:MacOsTitleBar.IsThick="{Binding UseThickTitleBar}"
+        attached:NativeMenuBridge.ItemsSource="{Binding NativeMenuItems}"
         Focusable="True"
         Title="SkEditor" WindowStartupLocation="Manual" DragDrop.AllowDrop="True">
 
@@ -28,17 +31,19 @@
     <LayoutTransformControl Name="LayoutTransform">
         <Grid RowDefinitions="Auto,*">
             <Border Name="TitleBarBorder" Grid.Row="0" Padding="5" VerticalAlignment="Top"
-                    HorizontalAlignment="Stretch" Height="{Binding #Root.ExtendClientAreaTitleBarHeightHint}"
+                    HorizontalAlignment="Stretch" Height="{Binding TitleBarHeight}"
+                    Margin="{Binding TitleBarMargin}"
                     Background="{DynamicResource TitleBarBackground}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
-                            IsVisible="{OnPlatform macOS=False, Default=True}">
-                    <Image Source="{StaticResource SkEditorLogo}" Margin="12,0,0,0" Height="20" Width="20" />
+                            IsVisible="{Binding ShowInAppMenu}">
+                    <Image Source="{StaticResource SkEditorLogo}" IsVisible="{OnPlatform macOS=False, Default=True}"
+                           Margin="12,0,0,0" Height="20" Width="20" />
                     <controls:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0"
                                               WindowDecorationProperties.ElementRole="User" />
                 </StackPanel>
             </Border>
             <Separator Grid.Row="0" Height="1" Margin="0,1,0,0" VerticalAlignment="Bottom"
-                       IsVisible="{OnPlatform macOS=False, Default=True}"
+                       IsVisible="{Binding ShowInAppMenu}"
                        Background="{DynamicResource WindowBorderBrush}" />
 
             <Border Grid.Row="1" Padding="10,12,10,10" Background="{DynamicResource MainWindowGridBackground}">

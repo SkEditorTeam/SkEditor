@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -9,6 +11,7 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls;
+using SkEditor.ViewModels.Menu;
 using SkEditor.ViewModels.Pages;
 using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
@@ -31,6 +34,32 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public MainMenuViewModel MainMenu { get; }
 
     public ObservableCollection<TabViewModelBase> MainTabs => _tabs.MainTabs;
+
+    public bool ShowInAppMenu =>
+        !OperatingSystem.IsMacOS() || AppSettings.UseIntegratedMenuOnMacOs;
+
+    public bool UseThickTitleBar =>
+        OperatingSystem.IsMacOS() && AppSettings.UseIntegratedMenuOnMacOs;
+
+    public IEnumerable<MainMenuItem>? NativeMenuItems =>
+        OperatingSystem.IsMacOS() && !AppSettings.UseIntegratedMenuOnMacOs ? MainMenu.Items : null;
+
+    public Thickness TitleBarMargin => OperatingSystem.IsMacOS() && AppSettings.UseIntegratedMenuOnMacOs
+        ? new Thickness(57, 0, 0, 0)
+        : new Thickness(0);
+
+    public double TitleBarHeight
+    {
+        get
+        {
+            if (OperatingSystem.IsMacOS())
+            {
+                return AppSettings.UseIntegratedMenuOnMacOs ? 52 : 24;
+            }
+
+            return 50;
+        }
+    }
 
     public TabViewModelBase? SelectedMainTab
     {
@@ -100,7 +129,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         {
             allTabs.CollectionChanged += (_, _) => OnPropertyChanged(nameof(AllTabs));
         }
-
+        
         Sidebar = sidebar;
         StatusBar = statusBar;
         BottomDrawer = bottomDrawer;

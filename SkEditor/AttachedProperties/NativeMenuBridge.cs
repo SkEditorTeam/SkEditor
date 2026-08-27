@@ -6,8 +6,10 @@ using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Microsoft.Extensions.DependencyInjection;
 using R3;
 using SkEditor.Services.Localization;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Menu;
 
 namespace SkEditor.AttachedProperties;
@@ -19,6 +21,8 @@ public static class NativeMenuBridge
             "ItemsSource", typeof(NativeMenuBridge));
 
     private static readonly ConditionalWeakTable<Window, WindowMenuState> States = new();
+
+    private static bool IsEnabled => !App.Services.GetRequiredService<AppSettings>().UseIntegratedMenuOnMacOs;
 
     static NativeMenuBridge() => ItemsSourceProperty.Changed.AddClassHandler<Window>(OnItemsSourceChanged);
 
@@ -34,7 +38,7 @@ public static class NativeMenuBridge
 
     private static void OnItemsSourceChanged(Window window, AvaloniaPropertyChangedEventArgs args)
     {
-        if (!OperatingSystem.IsMacOS())
+        if (!OperatingSystem.IsMacOS() || !IsEnabled)
         {
             return;
         }
@@ -72,8 +76,6 @@ public static class NativeMenuBridge
                     States.Remove(window);
                 })
                 .AddTo(state.RootDisposables);
-
-            RebuildMenu(window);
         }
         else
         {
@@ -82,9 +84,9 @@ public static class NativeMenuBridge
                 state.Dispose();
                 States.Remove(window);
             }
-
-            NativeMenu.SetMenu(window, null);
         }
+
+        RebuildMenu(window);
     }
 
     private static void RebuildMenu(Window window)

@@ -43,10 +43,11 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial int EditorTabSize { get; set; } = 4;
 
     /// <summary>
-    ///     Whether to force the native window title bar on Windows.
+    ///     If true, SkEditor will use the integrated in-app menu on macOS instead of the native menu bar.
     /// </summary>
+    /// <remarks>Does not affect other platforms and shouldn't be visible to users in UI.</remarks>
     [ObservableProperty]
-    public partial bool ForceNativeTitleBar { get; set; }
+    public partial bool UseIntegratedMenuOnMacOs { get; set; } = false;
 
     /// <summary>
     ///     Whether to highlight the current line in the editor.

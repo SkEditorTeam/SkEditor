@@ -22,7 +22,6 @@ public class OldAppConfig
     public required bool EnableRealtimeCodeParser { get; set; }
     public required bool EnableSessionRestoring { get; set; }
     public required string Font { get; set; }
-    public required bool ForceNativeTitleBar { get; set; }
     public required bool HighlightCurrentLine { get; set; }
     public required bool IsAutoIndentEnabled { get; set; }
     public required bool IsAutoPairingEnabled { get; set; }

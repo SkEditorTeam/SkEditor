@@ -188,6 +188,8 @@
   "SettingsGeneralUseSplashScreenAuto": "Auto (recommended)",
   "SettingsGeneralUseSplashScreenEnabled": "Always on",
   "SettingsGeneralUseSplashScreenDisabled": "Instant start (off)",
+  "SettingsAdvancedUseMacOsIntegratedMenu": "Use the integrated menu bar",
+  "SettingsAdvancedUseMacOsIntegratedMenuDescription": "Displays the menu bar inside the SkEditor window instead of the native macOS system menu bar. A restart is required for this change to take effect.",
   "SettingsAdvancedOpenAppDataFolder": "Configuration folder",
   "SettingsAdvancedOpenAppDataFolderDescription": "Open the folder where SkEditor stores its configuration files, themes, and other data.",
   "SettingsExperimentsWarningDescription": "These features are experimental and may cause issues. Use with caution!",

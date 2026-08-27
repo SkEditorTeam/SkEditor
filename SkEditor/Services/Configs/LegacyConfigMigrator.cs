@@ -52,7 +52,6 @@ public class LegacyConfigMigrator(IConfigService config)
             appSettings.EditorFontFamily = oldAppConfig.Font == "Default"
                 ? null
                 : oldAppConfig.Font;
-            appSettings.ForceNativeTitleBar = oldAppConfig.ForceNativeTitleBar;
             appSettings.HighlightCurrentLine = oldAppConfig.HighlightCurrentLine;
             appSettings.IsAutoIndentEnabled = oldAppConfig.IsAutoIndentEnabled;
             appSettings.IsAutoPairingEnabled = oldAppConfig.IsAutoPairingEnabled;

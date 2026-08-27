@@ -57,15 +57,10 @@ public partial class MainWindow : Window
         _splashScreen = splashScreen;
         _windowClose = windowClose;
 
-        if (!OperatingSystem.IsMacOS())
-        {
-            menuViewModel.RegisterHotKeys(this);
-        }
+        RegisterHotKeys(menuViewModel, appSettings);
 
         _themes.LoadThemes();
         syntaxes.LoadSyntaxes();
-
-        Style();
 
         LayoutTransform.LayoutTransform = new ScaleTransform(appSettings.CustomUiScale, appSettings.CustomUiScale);
 
@@ -103,6 +98,14 @@ public partial class MainWindow : Window
         _ = _themes.SetThemeAsync(_themes.CurrentTheme);
     }
 
+    private void RegisterHotKeys(MainMenuViewModel menuViewModel, AppSettings appSettings)
+    {
+        if (!OperatingSystem.IsMacOS() || appSettings.UseIntegratedMenuOnMacOs)
+        {
+            menuViewModel.RegisterHotKeys(this);
+        }
+    }
+
     private void AttachEvents(DragDropService dragDropService, ShortcutsService shortcutsService)
     {
         Loaded += async (_, _) => await OnLoaded();
@@ -122,16 +125,5 @@ public partial class MainWindow : Window
         };
         dragDropService.AttachDragDropEvents(this);
         shortcutsService.AttachKeyEvents(this);
-    }
-
-    private void Style()
-    {
-        const double titleBarHeight = 50;
-        const double macOsTitleBarHeight = 28;
-
-        ExtendClientAreaToDecorationsHint = true;
-        ExtendClientAreaTitleBarHeightHint = OperatingSystem.IsMacOS()
-            ? macOsTitleBarHeight
-            : titleBarHeight;
     }
 }
