@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -17,9 +18,7 @@ public static class NativeMenuBridge
         AvaloniaProperty.RegisterAttached<Window, IEnumerable<MainMenuItem>?>(
             "ItemsSource", typeof(NativeMenuBridge));
 
-    private static readonly AttachedProperty<CompositeDisposable?> MenuDisposablesProperty =
-        AvaloniaProperty.RegisterAttached<Window, CompositeDisposable?>(
-            "MenuDisposables", typeof(NativeMenuBridge));
+    private static readonly ConditionalWeakTable<Window, WindowMenuState> States = new();
 
     static NativeMenuBridge() => ItemsSourceProperty.Changed.AddClassHandler<Window>(OnItemsSourceChanged);
 
@@ -40,20 +39,19 @@ public static class NativeMenuBridge
             return;
         }
 
-        window.GetValue(MenuDisposablesProperty)?.Dispose();
-        CompositeDisposable disposables = new();
-        window.SetValue(MenuDisposablesProperty, disposables);
-
-        Observable.FromEvent<EventHandler<string>, string>(
-                h => (_, e) => h(e),
-                h => TranslationService.Current.LanguageChanged += h,
-                h => TranslationService.Current.LanguageChanged -= h)
-            .ObserveOnUIThreadDispatcher()
-            .Subscribe(_ => RebuildMenu(window))
-            .AddTo(disposables);
-
         if (args.NewValue is IEnumerable<MainMenuItem> newItems)
         {
+            WindowMenuState state = States.GetOrCreateValue(window);
+            state.RootDisposables.Clear();
+
+            Observable.FromEvent<EventHandler<string>, string>(
+                    h => (_, e) => h(e),
+                    h => TranslationService.Current.LanguageChanged += h,
+                    h => TranslationService.Current.LanguageChanged -= h)
+                .ObserveOnUIThreadDispatcher()
+                .Subscribe(_ => RebuildMenu(window))
+                .AddTo(state.RootDisposables);
+
             if (newItems is INotifyCollectionChanged notifyCollection)
             {
                 Observable.FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
@@ -61,13 +59,30 @@ public static class NativeMenuBridge
                         h => notifyCollection.CollectionChanged += h,
                         h => notifyCollection.CollectionChanged -= h)
                     .Subscribe(_ => RebuildMenu(window))
-                    .AddTo(disposables);
+                    .AddTo(state.RootDisposables);
             }
+
+            Observable.FromEventHandler(
+                    h => window.Closed += h,
+                    h => window.Closed -= h)
+                .Take(1)
+                .Subscribe(_ =>
+                {
+                    state.Dispose();
+                    States.Remove(window);
+                })
+                .AddTo(state.RootDisposables);
 
             RebuildMenu(window);
         }
         else
         {
+            if (States.TryGetValue(window, out WindowMenuState? state))
+            {
+                state.Dispose();
+                States.Remove(window);
+            }
+
             NativeMenu.SetMenu(window, null);
         }
     }
@@ -75,24 +90,27 @@ public static class NativeMenuBridge
     private static void RebuildMenu(Window window)
     {
         IEnumerable<MainMenuItem>? items = GetItemsSource(window);
-        if (items is null)
+        if (items is null || !States.TryGetValue(window, out WindowMenuState? state))
         {
             NativeMenu.SetMenu(window, null);
             return;
         }
 
+        state.ItemDisposables.Clear();
+
         NativeMenu? existingMenu = NativeMenu.GetMenu(window);
         if (existingMenu is null)
         {
-            existingMenu = new NativeMenu();
+            existingMenu = [];
             NativeMenu.SetMenu(window, existingMenu);
         }
 
         existingMenu.Items.Clear();
-        PopulateNativeMenu(existingMenu, items);
+        PopulateNativeMenu(existingMenu, items, state.ItemDisposables);
     }
 
-    private static void PopulateNativeMenu(NativeMenu targetMenu, IEnumerable<MainMenuItem> items)
+    private static void PopulateNativeMenu(NativeMenu targetMenu, IEnumerable<MainMenuItem> items,
+        CompositeDisposable itemDisposables)
     {
         foreach (MainMenuItem item in items)
         {
@@ -102,11 +120,19 @@ public static class NativeMenuBridge
                 continue;
             }
 
+            if (item.Header is null)
+            {
+                continue;
+            }
+
             NativeMenuItem nativeItem = new()
             {
-                Header = item.Header?.Value,
+                Header = item.Header.Value,
                 Command = item.Command
             };
+
+            item.IsEnabled.Subscribe(val => nativeItem.IsEnabled = val).AddTo(itemDisposables);
+            item.IsVisible.Subscribe(val => nativeItem.IsVisible = val).AddTo(itemDisposables);
 
             if (!string.IsNullOrEmpty(item.InputGestureText))
             {
@@ -117,11 +143,23 @@ public static class NativeMenuBridge
             if (item.SubItems is not null && item.SubItems.Any())
             {
                 NativeMenu subMenu = [];
-                PopulateNativeMenu(subMenu, item.SubItems);
+                PopulateNativeMenu(subMenu, item.SubItems, itemDisposables);
                 nativeItem.Menu = subMenu;
             }
 
             targetMenu.Items.Add(nativeItem);
+        }
+    }
+
+    private sealed class WindowMenuState : IDisposable
+    {
+        public readonly CompositeDisposable RootDisposables = new();
+        public readonly CompositeDisposable ItemDisposables = new();
+
+        public void Dispose()
+        {
+            ItemDisposables.Dispose();
+            RootDisposables.Dispose();
         }
     }
 }
