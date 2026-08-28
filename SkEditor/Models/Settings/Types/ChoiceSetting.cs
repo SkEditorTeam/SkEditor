@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
 using R3;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Providers.Choice;
@@ -17,12 +16,17 @@ public interface IChoiceSetting
     object? SelectedItem { get; set; }
 }
 
-public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableString> name)
-    : SettingElement<ChoiceSetting<T>>(name), IChoiceSetting, IDisposable
+public class ChoiceSetting<T> : SettingElement<ChoiceSetting<T>>, IChoiceSetting, IDisposable
 {
+    private DisposableBag _disposables;
     private IDisposable? _providerSubscription;
     private bool _isRefreshing;
-    
+
+    public ChoiceSetting(BindableReactiveProperty<TranslatableString> name) : base(name) =>
+        SelectedOption
+            .Subscribe(OnSelectedOptionChanged)
+            .AddTo(ref _disposables);
+
     public List<T> Options { get; protected set; } = [];
 
     public (Func<T> Get, Action<T> Set) Property
@@ -31,14 +35,13 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
         set
         {
             field = value;
-            SelectedOption = value.Get();
+            SelectedOption.Value = value.Get();
         }
     }
 
     public ISettingsChoiceProvider<T>? Provider { get; protected set; }
 
-    [ObservableProperty]
-    public partial T SelectedOption { get; set; }
+    public BindableReactiveProperty<T> SelectedOption { get; } = new(default!);
 
     public ObservableCollection<OptionItem> WrappedOptions { get; } = [];
 
@@ -47,8 +50,8 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
     object? IChoiceSetting.SelectedItem
     {
         get => WrappedOptions.FirstOrDefault(o =>
-            EqualityComparer<T>.Default.Equals((T?)o.Value, SelectedOption));
-        set => SelectedOption = value is OptionItem { Value: T val } ? val : default!;
+            EqualityComparer<T>.Default.Equals((T?)o.Value, SelectedOption.Value));
+        set => SelectedOption.Value = value is OptionItem { Value: T val } ? val : default!;
     }
 
     public static ChoiceSetting<T> Create(TranslatableString name)
@@ -85,7 +88,7 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
                 .Subscribe(_ => RefreshOptions());
         }
 
-        SelectedOption = Property.Get();
+        SelectedOption.Value = Property.Get();
         return this;
     }
 
@@ -107,14 +110,14 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
                 WrappedOptions.Add(new OptionItem(o, Provider.GetDisplayValue(o!)));
             }
 
-            T currentVal = Property.Get != null ? Property.Get() : SelectedOption;
+            T currentVal = Property.Get != null ? Property.Get() : SelectedOption.Value;
 
             if (!Options.Contains(currentVal) && Options.Count > 0)
             {
                 currentVal = Options[0];
             }
 
-            SelectedOption = currentVal;
+            SelectedOption.Value = currentVal;
             OnPropertyChanged(nameof(IChoiceSetting.SelectedItem));
         }
         finally
@@ -123,14 +126,14 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
         }
     }
 
-    partial void OnSelectedOptionChanged(T oldValue, T newValue)
+    private void OnSelectedOptionChanged(T newValue)
     {
-        if (_isRefreshing)
+        if (_isRefreshing || Property.Set == null || Property.Get == null)
         {
             return;
         }
 
-        if (!EqualityComparer<T>.Default.Equals(oldValue, newValue))
+        if (!EqualityComparer<T>.Default.Equals(Property.Get(), newValue))
         {
             Property.Set(newValue);
         }
@@ -141,6 +144,7 @@ public partial class ChoiceSetting<T>(BindableReactiveProperty<TranslatableStrin
     public void Dispose()
     {
         _providerSubscription?.Dispose();
+        _disposables.Dispose();
         GC.SuppressFinalize(this);
     }
 }
