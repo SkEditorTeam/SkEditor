@@ -19,6 +19,7 @@
         ExtendClientAreaTitleBarHeightHint="{Binding TitleBarHeight}"
         attached:MacOsTitleBar.IsThick="{Binding UseThickTitleBar}"
         attached:NativeMenuBridge.ItemsSource="{Binding NativeMenuItems}"
+        attached:DwmMaximizeFix.EnableFix="True"
         Focusable="True"
         Title="SkEditor" WindowStartupLocation="Manual" DragDrop.AllowDrop="True">
 
