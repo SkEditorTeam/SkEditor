@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using ObservableCollections;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
@@ -68,8 +69,9 @@ public partial class FileTabViewModel(
     [ObservableProperty]
     public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
-    [ObservableProperty]
-    public partial bool WordWrap { get; set; } = appSettings.IsWordWrapEnabled;
+    public BindableReactiveProperty<bool> WordWrap { get; } = appSettings
+        .ObservePropertyChanged(x => x.IsWordWrapEnabled)
+        .ToBindableReactiveProperty(appSettings.IsWordWrapEnabled);
 
     public async Task<bool> LoadContentAsync()
     {

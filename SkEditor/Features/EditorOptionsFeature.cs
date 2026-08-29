@@ -5,20 +5,41 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
+using R3;
 using SkEditor.Contracts.Services;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
 
-public class EditorOptionsFeature(AppSettings appSettings, IThemeService themes) : IEditorFeature
+public class EditorOptionsFeature(AppSettings appSettings, IThemeService themes, INotificationService notifs)
+    : IEditorFeature
 {
+    private DisposableBag _disposables;
+    
     public bool CanAttach(IFeatureTab tab)
     {
         return tab is ITextEditorTab;
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
+    {
+        _disposables = new DisposableBag();
+
+        appSettings.ObserveAnyPropertyChanged()
+            .AsUnitObservable()
+            .Prepend(Unit.Default)
+            .Subscribe(_ => UpdateOptions(editor))
+            .AddTo(ref _disposables);
+    }
+
+    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
+    {
+        _disposables.Dispose();
+    }
+
+    private void UpdateOptions(TextEditor editor)
     {
         editor.TextArea.TextView.LinkTextForegroundBrush = new ImmutableSolidColorBrush(Color.Parse("#1a94c4"));
         editor.TextArea.TextView.LinkTextUnderline = true;

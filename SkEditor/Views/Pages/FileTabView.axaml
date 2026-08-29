@@ -30,7 +30,7 @@
                                  Background="{DynamicResource EditorBackgroundColor}"
                                  LineNumbersForeground="{DynamicResource LineNumbersColor}"
                                  FontSize="{Binding FontSize}"
-                                 WordWrap="{Binding WordWrap}"
+                                 WordWrap="{Binding WordWrap.Value}"
                                  ScrollOffset="{Binding ScrollOffset, Mode=TwoWay}"
                                  CaretOffset="{Binding CaretOffset, Mode=TwoWay}"
                                  FontFamily="{Binding AppSettings.EditorFontFamily, Converter={StaticResource EditorFontFamilyConverter}}"
