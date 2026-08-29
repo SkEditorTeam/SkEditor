@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using Avalonia.Input;
+using SkEditor.Utilities.Menu;
 
 namespace SkEditor.Converters;
 
@@ -9,17 +9,9 @@ public class KeyGestureConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not string inputGesture)
-        {
-            return null;
-        }
-
-        if (OperatingSystem.IsMacOS())
-        {
-            inputGesture = inputGesture.Replace("Ctrl", "Cmd");
-        }
-
-        return KeyGesture.Parse(inputGesture);
+        return value is not string inputGesture
+            ? null
+            : KeyGestureUtilities.ParsePlatform(inputGesture);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

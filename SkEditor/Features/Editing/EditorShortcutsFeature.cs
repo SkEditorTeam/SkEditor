@@ -7,12 +7,15 @@ using Avalonia.Interactivity;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Utilities.Menu;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features.Editing;
 
 public class EditorShortcutsFeature : IEditorFeature
 {
+    private readonly KeyModifiers _ctrlMod = KeyGestureUtilities.PlatformControlModifier;
+    
     private Dictionary<(KeyGesture, KeyGesture), Action> _chordShortcuts = [];
 
     private List<KeyBinding> _currentKeyBindings = [];
@@ -41,22 +44,22 @@ public class EditorShortcutsFeature : IEditorFeature
 
         _shortcuts = new Dictionary<KeyGesture, Action>
         {
-            { new KeyGesture(Key.C, KeyModifiers.Control), FromCommand(ApplicationCommands.Copy) },
-            { new KeyGesture(Key.V, KeyModifiers.Control), FromCommand(ApplicationCommands.Paste) },
-            { new KeyGesture(Key.X, KeyModifiers.Control), FromCommand(ApplicationCommands.Cut) },
-            { new KeyGesture(Key.Z, KeyModifiers.Control), FromCommand(ApplicationCommands.Undo) },
-            { new KeyGesture(Key.R, KeyModifiers.Control), FromCommand(ApplicationCommands.Redo) },
-            { new KeyGesture(Key.A, KeyModifiers.Control), FromCommand(ApplicationCommands.SelectAll) },
-            { new KeyGesture(Key.F, KeyModifiers.Control), FromCommand(ApplicationCommands.Find) },
-            { new KeyGesture(Key.H, KeyModifiers.Control), FromCommand(ApplicationCommands.Replace) },
-            { new KeyGesture(Key.Back, KeyModifiers.Control), DeletePreviousWord }
+            { new KeyGesture(Key.C, _ctrlMod), FromCommand(ApplicationCommands.Copy) },
+            { new KeyGesture(Key.V, _ctrlMod), FromCommand(ApplicationCommands.Paste) },
+            { new KeyGesture(Key.X, _ctrlMod), FromCommand(ApplicationCommands.Cut) },
+            { new KeyGesture(Key.Z, _ctrlMod), FromCommand(ApplicationCommands.Undo) },
+            { new KeyGesture(Key.R, _ctrlMod), FromCommand(ApplicationCommands.Redo) },
+            { new KeyGesture(Key.A, _ctrlMod), FromCommand(ApplicationCommands.SelectAll) },
+            { new KeyGesture(Key.F, _ctrlMod), FromCommand(ApplicationCommands.Find) },
+            { new KeyGesture(Key.H, _ctrlMod), FromCommand(ApplicationCommands.Replace) },
+            { new KeyGesture(Key.Back, _ctrlMod), DeletePreviousWord }
         };
 
         _chordShortcuts = new Dictionary<(KeyGesture, KeyGesture), Action>
         {
             {
-                (new KeyGesture(Key.E, KeyModifiers.Control), new KeyGesture(Key.W)),
-                () => { _tab!.WordWrap = !_tab.WordWrap; }
+                (new KeyGesture(Key.E, _ctrlMod), new KeyGesture(Key.W)),
+                () => { _tab.WordWrap.Value = !_tab.WordWrap.Value; }
             }
         };
 
@@ -146,25 +149,31 @@ public class EditorShortcutsFeature : IEditorFeature
         if (_pendingChordPrefix != null)
         {
             (KeyGesture _pendingChordPrefix, KeyGesture exactGesture) exactChord = (_pendingChordPrefix, exactGesture);
+            bool matched = false;
 
             if (_chordShortcuts.TryGetValue(exactChord, out Action? action))
             {
                 action();
+                matched = true;
             }
-            else if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
+            else if (e.KeyModifiers.HasFlag(_ctrlMod))
             {
-                KeyGesture strippedGesture = new(e.Key, e.KeyModifiers & ~KeyModifiers.Control);
+                KeyGesture strippedGesture = new(e.Key, e.KeyModifiers & ~_ctrlMod);
                 (KeyGesture _pendingChordPrefix, KeyGesture strippedGesture) strippedChord =
                     (_pendingChordPrefix, strippedGesture);
 
                 if (_chordShortcuts.TryGetValue(strippedChord, out action))
                 {
                     action();
+                    matched = true;
                 }
             }
 
             _pendingChordPrefix = null;
-            e.Handled = true;
+            if (matched || e.Key == Key.Escape)
+            {
+                e.Handled = true;
+            }
             return;
         }
 
