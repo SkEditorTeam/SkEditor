@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.ComponentModel;
-using R3;
 using SkEditor.Contracts.Services;
+using SkEditor.Utilities.Menu;
 using SkEditor.Views.Windows;
 using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
@@ -17,54 +18,56 @@ public partial class MainMenuViewModel : ObservableObject
 
     public void RegisterHotKeys(MainWindow mainWindow)
     {
-        RegisterHotKeysRecursive(Items, mainWindow);
+        mainWindow.AddHandler(InputElement.KeyDownEvent, (_, e) =>
+        {
+            if (e.Handled)
+            {
+                return;
+            }
+
+            foreach (MainMenuItem item in GetActiveMenuItemsWithHotkeys(Items))
+            {
+                if (string.IsNullOrEmpty(item.InputGestureText) || item.Command is null)
+                {
+                    continue;
+                }
+
+                KeyGesture gesture = KeyGestureUtilities.ParsePlatform(item.InputGestureText);
+                if (!gesture.Matches(e))
+                {
+                    continue;
+                }
+
+                if (!item.Command.CanExecute(null))
+                {
+                    continue;
+                }
+
+                item.Command.Execute(null);
+                e.Handled = true;
+                return;
+            }
+        }, RoutingStrategies.Bubble);
     }
 
-    private static void RegisterHotKeysRecursive(IEnumerable<MainMenuItem> items, MainWindow mainWindow)
+    private static IEnumerable<MainMenuItem> GetActiveMenuItemsWithHotkeys(IEnumerable<MainMenuItem> items)
     {
         foreach (MainMenuItem item in items)
         {
-            if (!item.RegisterHotKey)
+            if (item is { RegisterHotKey: true, IsVisible.Value: true, IsEnabled.Value: true } &&
+                !string.IsNullOrEmpty(item.InputGestureText))
             {
-                if (item.SubItems is not null)
-                {
-                    RegisterHotKeysRecursive(item.SubItems, mainWindow);
-                }
+                yield return item;
+            }
 
+            if (item.SubItems is null)
+            {
                 continue;
             }
 
-            if (!string.IsNullOrEmpty(item.InputGestureText) && item.Command is not null)
+            foreach (MainMenuItem subItem in GetActiveMenuItemsWithHotkeys(item.SubItems))
             {
-                string gestureText = item.InputGestureText;
-
-                KeyBinding keyBinding = new()
-                {
-                    Command = item.Command,
-                    Gesture = KeyGesture.Parse(gestureText)
-                };
-
-                item.IsVisible
-                    .CombineLatest(item.IsEnabled, (visible, enabled) => visible && enabled)
-                    .Subscribe(active =>
-                    {
-                        if (active)
-                        {
-                            if (!mainWindow.KeyBindings.Contains(keyBinding))
-                            {
-                                mainWindow.KeyBindings.Add(keyBinding);
-                            }
-                        }
-                        else
-                        {
-                            mainWindow.KeyBindings.Remove(keyBinding);
-                        }
-                    });
-            }
-
-            if (item.SubItems is not null)
-            {
-                RegisterHotKeysRecursive(item.SubItems, mainWindow);
+                yield return subItem;
             }
         }
     }
