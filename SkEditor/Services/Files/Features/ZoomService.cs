@@ -1,12 +1,14 @@
 ﻿using System;
-using System.ComponentModel;
+using R3;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Services.Files.Features;
 
-public class ZoomService : IZoomService
+public class ZoomService : IZoomService, IDisposable
 {
+    private DisposableBag _disposableBag;
+    
     public double GlobalFontSize
     {
         get;
@@ -23,22 +25,17 @@ public class ZoomService : IZoomService
         }
     } = 14;
 
-    public ZoomService(AppSettings appSettings) => appSettings.PropertyChanged += OnPropertyChanged;
-
-    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (sender is not AppSettings settings)
-        {
-            return;
-        }
-
-        if (e.PropertyName != nameof(AppSettings.EditorFontSize))
-        {
-            return;
-        }
-
-        GlobalFontSize = settings.EditorFontSize;
-    }
+    public ZoomService(AppSettings appSettings) =>
+        appSettings
+            .ObservePropertyChanged(x => x.EditorFontSize)
+            .Subscribe(newValue => GlobalFontSize = newValue)
+            .AddTo(ref _disposableBag);
 
     public event Action<double>? ZoomChanged;
+
+    public void Dispose()
+    {
+        _disposableBag.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }
