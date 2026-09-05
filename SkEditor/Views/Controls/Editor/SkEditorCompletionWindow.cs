@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.VisualTree;
 using AvaloniaEdit.CodeCompletion;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
@@ -45,6 +48,17 @@ public class SkEditorCompletionWindow : CompletionWindowBase
         Child = myView;
 
         TextArea.Caret.PositionChanged += OnCaretPositionChanged;
+
+        myView.DoubleTapped += (_, e) =>
+        {
+            if (e.Source is not Visual visual || visual.FindAncestorOfType<ListBoxItem>() is null)
+            {
+                return;
+            }
+
+            AcceptComplete();
+            e.Handled = true;
+        };
     }
 
     public new void Show()
