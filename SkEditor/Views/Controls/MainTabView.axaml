@@ -45,10 +45,31 @@
                                    Margin="0,0,8,0" />
 
                         <Ellipse Grid.Column="2"
-                                 IsVisible="{Binding !IsSaved}"
+                                 Classes.unsaved="{Binding !IsSaved}"
                                  Width="4" Height="4"
                                  Fill="{Binding $parent[ContentPresenter].Foreground}"
-                                 VerticalAlignment="Center" />
+                                 VerticalAlignment="Center"
+                                 RenderTransformOrigin="50%,50%">
+                            <Ellipse.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="CubicEaseOut" />
+                                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.18"
+                                                                   Easing="BackEaseOut" />
+                                </Transitions>
+                            </Ellipse.Transitions>
+
+                            <Ellipse.Styles>
+                                <Style Selector="Ellipse">
+                                    <Setter Property="Opacity" Value="0" />
+                                    <Setter Property="RenderTransform" Value="scale(0)" />
+                                </Style>
+
+                                <Style Selector="Ellipse.unsaved">
+                                    <Setter Property="Opacity" Value="1" />
+                                    <Setter Property="RenderTransform" Value="scale(1)" />
+                                </Style>
+                            </Ellipse.Styles>
+                        </Ellipse>
                     </Grid>
                 </ui:FATabViewItem.Header>
                 <Interaction.Behaviors>
