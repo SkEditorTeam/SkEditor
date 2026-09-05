@@ -10,6 +10,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Platform;
 using Avalonia.Styling;
+using AvaloniaEdit.Snippets;
 using FluentAvalonia.Styling;
 using Iciclecreek.Avalonia.Terminal;
 using SkEditor.Contracts.Services;
@@ -179,6 +180,7 @@ public class ThemeService(
         }
 
         ApplyTerminalTheme();
+        UpdateSnippetColors();
         await UpdateExplorerIcons();
 
         tasks.AddRange(CurrentTheme.CustomColorChanges.Select(colorChange =>
@@ -289,6 +291,12 @@ public class ThemeService(
 
             Themes.Add(deserializedTheme);
         }
+    }
+
+    private void UpdateSnippetColors()
+    {
+        SnippetReplaceableTextElement.ActiveBackgroundBrush = CurrentTheme.SnippetActiveBackground;
+        SnippetReplaceableTextElement.ActiveBorderPen = new Pen(CurrentTheme.SnippetActiveBorder, 1.5);
     }
 
     private async Task UpdateExplorerIcons()

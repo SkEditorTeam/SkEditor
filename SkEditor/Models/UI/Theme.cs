@@ -111,6 +111,12 @@ public partial class Theme
     [ThemeResource("TaskDialogButtonAreaBackground")]
     public Brush SmallWindowBackgroundColor { get; set; } = C("#ff0f0f0f");
 
+    [ThemeResource]
+    public Brush SnippetActiveBackground { get; set; } = C("#336587FF");
+
+    [ThemeResource]
+    public Brush SnippetActiveBorder { get; set; } = C("#FF6587FF");
+
     public Dictionary<string, string> TerminalColors { get; set; } = new();
 
     [ThemeResource("TextControlBackgroundFocused", MapPropertyName = false)]

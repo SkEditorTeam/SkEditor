@@ -8,7 +8,7 @@
         <Setter Property="Background" Value="{DynamicResource ListViewItemBackground}" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSecondaryColor}" />
-        <Setter Property="Padding" Value="8,3,8,1" />
+        <Setter Property="Padding" Value="8,2" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="MinWidth" Value="240" />

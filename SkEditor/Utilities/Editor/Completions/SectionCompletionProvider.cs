@@ -1,20 +1,32 @@
 using System;
 using System.Collections.Generic;
 using AvaloniaEdit.Document;
+using AvaloniaEdit.Snippets;
 using SkEditor.Models.Completions;
+using SkEditor.Utilities.Extensions;
 
 namespace SkEditor.Utilities.Editor.Completions;
 
 public class SectionCompletionProvider : ICompletionProvider
 {
-    private record CompletionItem(string Title, string Text);
+    private readonly List<CompletionDataInfo> _completions = [];
 
-    private readonly CompletionItem[] _sectionKeywords =
-    [
-        new("command", "command /"),
-        new("function", "function "),
-        new("options", "options:")
-    ];
+    public SectionCompletionProvider()
+    {
+        _completions.Add(new CompletionDataInfo("options", "options", CompletionType.Section));
+
+        CompletionDataInfo functionCompletion = new("function", null, CompletionType.Function)
+        {
+            Snippet = new Snippet()
+                .Text("function ")
+                .Placeholder("myFunction")
+                .Text("(")
+                .Placeholder("p: player")
+                .Text("):\n\t")
+                .Caret()
+        };
+        _completions.Add(functionCompletion);
+    }
 
     public bool CheckCompletionsAvailable(TextDocument document, CompletionContext context)
     {
@@ -23,12 +35,27 @@ public class SectionCompletionProvider : ICompletionProvider
 
     public void PopulateCompletions(TextDocument document, CompletionContext context, List<CompletionData> completions)
     {
-        foreach (CompletionItem data in _sectionKeywords)
+        foreach (CompletionDataInfo info in _completions)
         {
-            if (data.Title.StartsWith(context.Word, StringComparison.InvariantCultureIgnoreCase))
+            if (!info.Title.StartsWith(context.Word, StringComparison.InvariantCultureIgnoreCase))
             {
-                completions.Add(new CompletionData(data.Title, data.Text, CompletionType.Section, null, context.Word));
+                continue;
             }
+
+            CompletionData completionData = new(info.Title, info.Text, CompletionType.Section, null, context.Word);
+
+            if (info.Snippet is not null)
+            {
+                completionData.CustomComplete = (textArea, startOffset, lengthToReplace) =>
+                {
+                    textArea.Document.Remove(startOffset, lengthToReplace);
+                    info.Snippet?.Insert(textArea);
+                };
+
+                completionData.Description = "snippet";
+            }
+
+            completions.Add(completionData);
         }
     }
 }

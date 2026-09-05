@@ -192,11 +192,18 @@ public class SkEditorCompletionWindow : CompletionWindowBase
         {
             return;
         }
-        
+
         int offset = _textArea.Caret.Offset;
         int lengthToReplace = offset - StartOffset;
 
-        _textArea.Document.Replace(StartOffset, lengthToReplace, SelectedCompletion.Value.Text);
+        if (SelectedCompletion.Value.CustomComplete is not null)
+        {
+            SelectedCompletion.Value.CustomComplete(_textArea, StartOffset, lengthToReplace);
+        }
+        else
+        {
+            _textArea.Document.Replace(StartOffset, lengthToReplace, SelectedCompletion.Value.Text);
+        }
 
         Hide();
     }

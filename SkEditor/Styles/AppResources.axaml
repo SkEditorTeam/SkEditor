@@ -4,6 +4,7 @@
     <Brush x:Key="BackgroundColor">#1f1f1f</Brush>
     <Brush x:Key="ForegroundColor">#e8e8e8</Brush>
     <Brush x:Key="ForegroundSecondaryColor">#BFBFBF</Brush>
+    <Brush x:Key="ForegroundTertiaryColor">#8a8a8a</Brush>
     <Brush x:Key="TitleBarBackground">#00000000</Brush>
     <Brush x:Key="MainWindowGridBackground">#00000000</Brush>
     <Brush x:Key="SmallWindowBackgroundColor">#1f1f1f</Brush>
