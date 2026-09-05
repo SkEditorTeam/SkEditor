@@ -2,6 +2,10 @@ namespace SkEditor.Models.Completions;
 
 public enum CompletionType
 {
-    Text,
+    Effect,
+    Section,
+    Keyword,
+    Function,
+    Variable,
     Snippet
 }

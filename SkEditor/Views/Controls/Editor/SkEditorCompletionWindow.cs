@@ -136,6 +136,7 @@ public class SkEditorCompletionWindow : CompletionWindowBase
         DocumentLine? line = document.GetLineByOffset(globalOffset);
         int lineStartOffset = StartOffset - line.Offset;
         int length = Math.Max(0, globalOffset - StartOffset);
+
         ReadOnlySpan<char> word = document.GetTextAsMemory(StartOffset, length).Span;
 
         if (word.IsWhiteSpace() || word.IndexOfAny(' ', '\t') >= 0)
@@ -157,7 +158,6 @@ public class SkEditorCompletionWindow : CompletionWindowBase
         }
 
         Completions.AddRange(completions);
-
         SelectedCompletion.Value = Completions.FirstOrDefault();
     }
 
@@ -192,7 +192,7 @@ public class SkEditorCompletionWindow : CompletionWindowBase
         {
             return;
         }
-
+        
         int offset = _textArea.Caret.Offset;
         int lengthToReplace = offset - StartOffset;
 

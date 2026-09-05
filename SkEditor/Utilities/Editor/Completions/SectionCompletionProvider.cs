@@ -7,10 +7,13 @@ namespace SkEditor.Utilities.Editor.Completions;
 
 public class SectionCompletionProvider : ICompletionProvider
 {
-    private readonly CompletionData[] _sectionKeywords =
+    private record CompletionItem(string Title, string Text);
+
+    private readonly CompletionItem[] _sectionKeywords =
     [
         new("command", "command /"),
-        new("function", "function ")
+        new("function", "function "),
+        new("options", "options:")
     ];
 
     public bool CheckCompletionsAvailable(TextDocument document, CompletionContext context)
@@ -20,11 +23,11 @@ public class SectionCompletionProvider : ICompletionProvider
 
     public void PopulateCompletions(TextDocument document, CompletionContext context, List<CompletionData> completions)
     {
-        foreach (CompletionData data in _sectionKeywords)
+        foreach (CompletionItem data in _sectionKeywords)
         {
-            if (data.Title.StartsWith(context.Word))
+            if (data.Title.StartsWith(context.Word, StringComparison.InvariantCultureIgnoreCase))
             {
-                completions.Add(data);
+                completions.Add(new CompletionData(data.Title, data.Text, CompletionType.Section, null, context.Word));
             }
         }
     }

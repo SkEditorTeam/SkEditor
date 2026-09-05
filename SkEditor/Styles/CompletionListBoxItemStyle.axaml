@@ -11,7 +11,7 @@
         <Setter Property="Padding" Value="8,3,8,1" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="MinWidth" Value="160" />
+        <Setter Property="MinWidth" Value="240" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
