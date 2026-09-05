@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:editor="clr-namespace:SkEditor.ViewModels.Controls.Editor"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="editor:CompletionViewModel"
+             x:Class="SkEditor.Views.Controls.Editor.CompletionView">
+
+    <Border Background="{DynamicResource MenuFlyoutPresenterBackground}" BorderThickness="1"
+            BorderBrush="{DynamicResource MenuFlyoutPresenterBorderBrush}"
+            Padding="2" Margin="0,4,0,0" CornerRadius="7">
+
+        <ListBox Foreground="{DynamicResource ForegroundColor}" SelectionMode="AlwaysSelected"
+                 ItemsSource="{Binding CompletionList}" SelectedItem="{Binding SelectedCompletion.Value, Mode=TwoWay}"
+                 DisplayMemberBinding="{Binding Title}"
+                 ItemContainerTheme="{DynamicResource CompletionListBoxItemTheme}" />
+    </Border>
+</UserControl>

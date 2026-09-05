@@ -2,17 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     x:CompileBindings="True">
 
-    <ControlTheme TargetType="ListBoxItem" x:Key="{x:Type ListBoxItem}">
-        <Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
-        <Setter Property="FontSize" Value="14" />
+    <ControlTheme TargetType="ListBoxItem" x:Key="CompletionListBoxItemTheme">
+        <Setter Property="FontFamily" Value="{DynamicResource JetBrainsFont}" />
+        <Setter Property="FontSize" Value="13" />
         <Setter Property="Background" Value="{DynamicResource ListViewItemBackground}" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
-        <Setter Property="Foreground" Value="{DynamicResource ListViewItemForeground}" />
-        <Setter Property="Padding" Value="16,0,12,0" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundSecondaryColor}" />
+        <Setter Property="Padding" Value="8,3,8,1" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="MinWidth" Value="{DynamicResource ListViewItemMinWidth}" />
-        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="MinWidth" Value="160" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
@@ -60,13 +59,13 @@
                 <Setter Property="Background" Value="{DynamicResource ListViewItemBackgroundSelected}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter">
-                <Setter Property="Foreground" Value="{DynamicResource ListViewItemForegroundSelected}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
             </Style>
             <Style Selector="^:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
                 <Setter Property="Background" Value="{DynamicResource ListViewItemBackgroundSelected}" />
             </Style>
             <Style Selector="^:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Foreground" Value="{DynamicResource ListViewItemForegroundSelected}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
             </Style>
 
 

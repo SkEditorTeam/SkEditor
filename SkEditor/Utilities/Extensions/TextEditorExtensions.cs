@@ -19,6 +19,33 @@ public static class TextEditorExtensions
                 .Select(x => x.e);
         }
 
+        public Observable<TextInputEventArgs> TextEnteredAsObservable()
+        {
+            return Observable.FromEventHandler<TextInputEventArgs>(
+                    h => editor.TextArea.TextEntered += h,
+                    h => editor.TextArea.TextEntered -= h
+                )
+                .Select(x => x.e);
+        }
+
+        public Observable<TextInputEventArgs> TextEnteringAsObservable()
+        {
+            return Observable.FromEventHandler<TextInputEventArgs>(
+                    h => editor.TextArea.TextEntering += h,
+                    h => editor.TextArea.TextEntering -= h
+                )
+                .Select(x => x.e);
+        }
+
+        public Observable<KeyEventArgs> KeyDownAsObservable()
+        {
+            return Observable.FromEventHandler<KeyEventArgs>(
+                    h => editor.TextArea.KeyDown += h,
+                    h => editor.TextArea.KeyDown -= h
+                )
+                .Select(x => x.e);
+        }
+
         public Observable<PointerEventArgs> PointerMovedAsObservable()
         {
             return Observable.FromEventHandler<PointerEventArgs>(

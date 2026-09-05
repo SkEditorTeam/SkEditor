@@ -25,6 +25,7 @@ using SkEditor.Services.Security;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Editor.Commands;
+using SkEditor.Utilities.Editor.Completions;
 using SkEditor.Utilities.Menu;
 using SkEditor.Utilities.Menu.Providers;
 using SkEditor.Utilities.Publishing;
@@ -149,6 +150,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<IEditorFeature, SmartAutoPairingFeature>();
             services.AddTransient<IEditorFeature, SelectionOccurencesFeature>();
             services.AddTransient<IEditorFeature, AltKeyHandlingFeature>();
+            services.AddTransient<IEditorFeature, CompletionFeature>();
         }
 
         public void AddEditorCommands()
@@ -156,6 +158,11 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IEditorCommand, CommentCommand>();
             services.AddSingleton<IEditorCommand, DuplicateCommand>();
             services.AddSingleton<IEditorCommand, TrimWhitespaceCommand>();
+        }
+
+        public void AddEditorCompletions()
+        {
+            services.AddSingleton<ICompletionProvider, SectionCompletionProvider>();
         }
 
         public void AddConfigs(BinarySettings binarySettings)
