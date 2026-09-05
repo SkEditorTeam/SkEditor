@@ -16,8 +16,26 @@ public partial class MainMenuViewModel : ObservableObject
 
     public MainMenuViewModel(IMenuService menuService) => Items = menuService.GetMainMenuItems();
 
+    private bool _isAltGrPressed;
+
     public void RegisterHotKeys(MainWindow mainWindow)
     {
+        mainWindow.AddHandler(InputElement.KeyDownEvent, (_, e) =>
+        {
+            if (e.PhysicalKey == PhysicalKey.AltRight)
+            {
+                _isAltGrPressed = true;
+            }
+        }, RoutingStrategies.Tunnel);
+
+        mainWindow.AddHandler(InputElement.KeyUpEvent, (_, e) =>
+        {
+            if (e.PhysicalKey == PhysicalKey.AltRight)
+            {
+                _isAltGrPressed = false;
+            }
+        }, RoutingStrategies.Tunnel);
+        
         mainWindow.AddHandler(InputElement.KeyDownEvent, (_, e) =>
         {
             if (e.Handled)
@@ -33,6 +51,13 @@ public partial class MainMenuViewModel : ObservableObject
                 }
 
                 KeyGesture gesture = KeyGestureUtilities.ParsePlatform(item.InputGestureText);
+
+                if (_isAltGrPressed && gesture.KeyModifiers.HasFlag(KeyModifiers.Control) &&
+                    gesture.KeyModifiers.HasFlag(KeyModifiers.Alt))
+                {
+                    continue;
+                }
+
                 if (!gesture.Matches(e))
                 {
                     continue;
