@@ -1,5 +1,6 @@
 using System;
 using AvaloniaEdit.Editing;
+using AvaloniaEdit.Snippets;
 
 namespace SkEditor.Models.Completions;
 
@@ -11,7 +12,8 @@ public class CompletionData
     public string MatchedPrefix { get; }
     public string Remainder { get; }
     public CompletionType Type { get; }
-    public Action<TextArea, int, int>? CustomComplete { get; set; }
+    public Snippet? Snippet { get; init; }
+    public Action<TextArea, int, int>? CustomComplete { get; init; }
 
     public CompletionData(string title, string? text, CompletionType type, string? description = null,
         ReadOnlySpan<char> prefix = default)
@@ -30,6 +32,36 @@ public class CompletionData
         {
             MatchedPrefix = string.Empty;
             Remainder = title;
+        }
+    }
+
+    public void Complete(TextArea textArea, int startOffset, int lengthToReplace)
+    {
+        if (CustomComplete is not null)
+        {
+            CustomComplete(textArea, startOffset, lengthToReplace);
+            return;
+        }
+
+        if (Snippet is not null)
+        {
+            textArea.Document.UndoStack.StartUndoGroup();
+            try
+            {
+                textArea.Document.Remove(startOffset, lengthToReplace);
+                Snippet.Insert(textArea);
+            }
+            finally
+            {
+                textArea.Document.UndoStack.EndUndoGroup();
+            }
+
+            return;
+        }
+
+        if (Text is not null)
+        {
+            textArea.Document.Replace(startOffset, lengthToReplace, Text);
         }
     }
 }
