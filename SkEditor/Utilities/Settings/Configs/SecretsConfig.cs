@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization.Metadata;
+﻿using System;
+using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Settings.Attributes;
 
@@ -19,6 +20,7 @@ public partial class SecretsConfig : BaseConfig<SecretsConfig>
     [ObservableProperty]
     public partial string SkUnityApiKey { get; set; } = string.Empty;
 
+    protected override Environment.SpecialFolder TargetFolder => Environment.SpecialFolder.LocalApplicationData;
     protected override JsonTypeInfo<SecretsConfig> TypeInfo => AppJsonContext.Default.SecretsConfig;
 
     protected override string GetFileName()

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Settings;
 
 namespace SkEditor.Services;
@@ -15,7 +15,12 @@ public class ConfigService(IEnumerable<IConfig> configs)
 
     public string GetAppDataPath()
     {
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SkEditor", "v3.0");
+        return AppPaths.RoamingData;
+    }
+
+    public string GetLocalAppDataPath()
+    {
+        return AppPaths.LocalData;
     }
 
     public async Task LoadAllConfigsAsync()

@@ -20,6 +20,7 @@ using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
+using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
 using SkEditor.ViewModels;
 using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
@@ -56,10 +57,8 @@ public class App : Application
         base.OnFrameworkInitializationCompleted();
 
         SetUpLinux();
-        
-        string logsFolder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "SkEditor", "v3.0", "Logs");
+
+        MigrateLogDirectory();
 
         Logger serilogLogger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -68,7 +67,7 @@ public class App : Application
                     e.Properties.TryGetValue("Source", out LogEventPropertyValue? val) &&
                     val.ToString().Contains("Analyzer"))
                 .WriteTo.Async(a => a.File(
-                    Path.Combine(logsFolder, "log-.txt"),
+                    Path.Combine(AppPaths.Logs, "log-.txt"),
                     rollingInterval: RollingInterval.Day,
                     retainedFileCountLimit: 7)))
             .WriteTo.Logger(lc => lc
@@ -76,7 +75,7 @@ public class App : Application
                     e.Properties.TryGetValue("Source", out LogEventPropertyValue? val) &&
                     val.ToString().Contains("Analyzer"))
                 .WriteTo.Async(a => a.File(
-                    Path.Combine(logsFolder, "Analyzer", "analyzer-.txt"),
+                    Path.Combine(AppPaths.Logs, "Analyzer", "analyzer-.txt"),
                     rollingInterval: RollingInterval.Day,
                     retainedFileCountLimit: 3)))
             .WriteTo.Console(theme: AnsiConsoleTheme.Code)
@@ -128,6 +127,26 @@ public class App : Application
             assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
         return informationVersion ?? throw new InvalidOperationException("Informational version is null");
+    }
+
+    // TEMP: Remove migration from Roaming when leaving Alpha
+    private static void MigrateLogDirectory()
+    {
+        try
+        {
+            string legacyRoot = Path.Combine(AppPaths.RoamingData, "Logs");
+
+            if (Directory.Exists(AppPaths.Logs) || !Directory.Exists(legacyRoot))
+            {
+                return;
+            }
+
+            Directory.Move(legacyRoot, AppPaths.Logs);
+        }
+        catch
+        {
+            // ignored
+        }
     }
 
     private void SetUpLinux()

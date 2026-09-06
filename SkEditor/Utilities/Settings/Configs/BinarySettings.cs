@@ -18,11 +18,7 @@ public partial class BinarySettings : ObservableObject, IConfig
 {
     private const string ConfigFileName = "settings.bin";
 
-    private readonly string _binaryFilePath = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "SkEditor", "v3.0",
-        ConfigFileName
-    );
+    private readonly string _binaryFilePath = Path.Combine(AppPaths.LocalData, ConfigFileName);
 
     [ObservableProperty]
     public partial int AverageStartupTime { get; set; }
@@ -52,6 +48,26 @@ public partial class BinarySettings : ObservableObject, IConfig
     /// </summary>
     public Task Load()
     {
+        string legacyPath = Path.Combine(AppPaths.RoamingData, ConfigFileName);
+
+        if (!File.Exists(_binaryFilePath) && File.Exists(legacyPath))
+        {
+            try
+            {
+                string? dir = Path.GetDirectoryName(_binaryFilePath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                File.Move(legacyPath, _binaryFilePath, true);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Warning(ex, "Failed to migrate settings.bin from Roaming");
+            }
+        }
+
         if (!File.Exists(_binaryFilePath))
         {
             return Task.CompletedTask;

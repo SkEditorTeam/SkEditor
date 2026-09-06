@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization.Metadata;
+﻿using System;
+using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SkEditor.Utilities.Settings.Attributes;
 
@@ -46,6 +47,8 @@ public partial class StateConfig : BaseConfig<StateConfig>
     [ObservableProperty]
     public partial double SidebarPaneSize { get; set; } = 320;
 
+
+    protected override Environment.SpecialFolder TargetFolder => Environment.SpecialFolder.LocalApplicationData;
     protected override JsonTypeInfo<StateConfig> TypeInfo => AppJsonContext.Default.StateConfig;
 
     protected override string GetFileName()

@@ -1,10 +1,10 @@
 ﻿using System;
-using System.IO;
 using R3;
 using Serilog;
 using Serilog.Core;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Logging;
+using SkEditor.Utilities;
 
 #pragma warning disable CA2254
 
@@ -14,9 +14,7 @@ public class LogService(ILogger logger) : ILogService, IDisposable
 {
     private readonly Subject<LogEntry> _logSubject = new();
 
-    public string LogsFolderPath => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "SkEditor", "v3.0", "Logs");
+    public string LogsFolderPath => AppPaths.Logs;
 
     public Observable<LogEntry> OnLogReceived => _logSubject;
 

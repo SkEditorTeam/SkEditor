@@ -8,25 +8,26 @@ public interface IConfigService
     /// <summary>
     ///     Get the application data path.
     /// </summary>
-    /// <returns>The application data path.</returns>
     string GetAppDataPath();
+
+    /// <summary>
+    ///     Get the local application data path.
+    /// </summary>
+    string GetLocalAppDataPath();
 
     /// <summary>
     ///     Load all configuration files asynchronously.
     /// </summary>
-    /// <returns>A task representing the asynchronous operation.</returns>
     Task LoadAllConfigsAsync();
 
     /// <summary>
     ///     Save all configuration files asynchronously.
     /// </summary>
-    /// <returns>A task representing the asynchronous operation.</returns>
     Task SaveAllConfigsAsync();
 
     /// <summary>
     ///     Save all configuration files immediately asynchronously.
     /// </summary>
-    /// <returns>A task representing the asynchronous operation.</returns>
     Task SaveAllConfigsImmediateAsync();
 
     /// <summary>

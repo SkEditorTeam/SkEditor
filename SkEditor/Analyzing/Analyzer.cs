@@ -32,7 +32,7 @@ public class Analyzer(
 {
     private readonly SemaphoreSlim _analyzeLock = new(1, 1);
     private string? _aotPath;
-    public string AnalyzerRoot => Path.Combine(configs.GetAppDataPath(), "Analyzer");
+    public string AnalyzerRoot => Path.Combine(configs.GetLocalAppDataPath(), "Analyzer");
     public string BinDir => Path.Combine(AnalyzerRoot, "Binaries");
 
     public bool IsRunning => processRunner.IsRunning;
@@ -40,6 +40,8 @@ public class Analyzer(
 
     public async Task Initialize()
     {
+        MigrateDirectory();
+        
         string analyzerPath = Path.Combine(BinDir, "SkAnalyzer.jar");
         _aotPath = Path.Combine(BinDir, "skanalyzer.aot");
         string pluginsPath = Path.Combine(WorkingDir, "plugins");
@@ -77,6 +79,27 @@ public class Analyzer(
         {
             logs.Error($"Failed to start process: {ex.Message}", LogSource.Analyzer);
             messenger.Send(new AnalyzerFailedToLoadMessage());
+        }
+    }
+
+    // TEMP: Remove migration from Roaming when leaving Alpha
+    private void MigrateDirectory()
+    {
+        try
+        {
+            string legacyRoot = Path.Combine(configs.GetAppDataPath(), "Analyzer");
+
+            if (Directory.Exists(AnalyzerRoot) || !Directory.Exists(legacyRoot))
+            {
+                return;
+            }
+
+            Directory.Move(legacyRoot, AnalyzerRoot);
+            logs.Info("Migrated Analyzer directory from Roaming to LocalApplicationData.", LogSource.Analyzer);
+        }
+        catch
+        {
+            // ignored
         }
     }
 
