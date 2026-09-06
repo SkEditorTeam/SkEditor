@@ -13,9 +13,9 @@ public class SectionCompletionProvider : ICompletionProvider
 
     public SectionCompletionProvider()
     {
-        _completions.Add(new CompletionDataInfo("options", "options", CompletionType.Section));
+        _completions.Add(new CompletionDataInfo("options", "options", CompletionType.Keyword));
 
-        _completions.Add(new CompletionDataInfo("function", "function", CompletionType.Section));
+        _completions.Add(new CompletionDataInfo("function", "function", CompletionType.Keyword));
         _completions.Add(new CompletionDataInfo("function", null, CompletionType.Section)
         {
             Snippet = new Snippet()
@@ -27,7 +27,7 @@ public class SectionCompletionProvider : ICompletionProvider
                 .Caret()
         });
 
-        _completions.Add(new CompletionDataInfo("command", "command", CompletionType.Section));
+        _completions.Add(new CompletionDataInfo("command", "command", CompletionType.Keyword));
         _completions.Add(new CompletionDataInfo("command", null, CompletionType.Section)
         {
             Snippet = new Snippet()
