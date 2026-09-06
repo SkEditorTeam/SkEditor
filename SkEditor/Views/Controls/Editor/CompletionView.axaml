@@ -45,17 +45,17 @@
                                            VerticalAlignment="Center"
                                            FontSize="14" />
 
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding MatchedPrefix}" Foreground="#6587FF" />
-                            <TextBlock Text="{Binding Remainder}" />
-                        </StackPanel>
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+                            <Run Text="{Binding MatchedPrefix}" Foreground="#6587FF" />
+                            <Run Text="{Binding Remainder}" />
+                        </TextBlock>
 
                         <TextBlock Grid.Column="2"
                                    Text="{Binding Description}"
                                    Foreground="{DynamicResource ForegroundTertiaryColor}"
                                    FontSize="12"
                                    Margin="16,0,0,0"
-                                   VerticalAlignment="Center" />
+                                   VerticalAlignment="Center" HorizontalAlignment="Right" />
 
                     </Grid>
                 </DataTemplate>

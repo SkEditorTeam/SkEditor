@@ -18,7 +18,7 @@ public class CompletionIconConverter : IValueConverter
         Symbol symbol = type switch
         {
             CompletionType.Effect => Symbol.Wand,
-            CompletionType.Keyword => Symbol.Organization,
+            CompletionType.Keyword => Symbol.Tag,
             CompletionType.Section => Symbol.AlignLeft,
             CompletionType.Function => Symbol.MathFormula,
             CompletionType.Variable => Symbol.BracesVariable,
