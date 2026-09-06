@@ -59,6 +59,15 @@ public class AdvancedSectionProvider(
                     () => links.OpenFolder(configs.GetAppDataPath()))
         );
 
+        settings.Add(
+            ActionSetting
+                .Create(TranslationKey.SettingsAdvancedOpenLocalAppDataFolder)
+                .WithDescription(TranslationKey.SettingsAdvancedOpenLocalAppDataFolderDescription)
+                .WithIcon(Symbol.FolderOpen)
+                .WithAction(TranslationKey.ButtonOpenFolder,
+                    () => links.OpenFolder(configs.GetLocalAppDataPath()))
+        );
+
         return SettingSection.Create("Advanced", TranslationKey.SettingsSectionAdvanced)
             .WithIcon(Symbol.Wrench)
             .WithSettings(settings);
