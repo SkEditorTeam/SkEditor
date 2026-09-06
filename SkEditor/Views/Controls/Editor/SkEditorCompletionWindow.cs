@@ -119,7 +119,17 @@ public class SkEditorCompletionWindow : CompletionWindowBase
             LogicalDirection.Backward,
             CaretPositioningMode.WordStart);
 
-        return wordStart < 0 ? offset : wordStart;
+        if (wordStart < 0)
+        {
+            wordStart = offset;
+        }
+
+        while (wordStart > 0 && document.GetCharAt(wordStart - 1) is '{' or '@')
+        {
+            wordStart--;
+        }
+
+        return wordStart;
     }
 
     private void UpdateCompletionsList()
@@ -204,8 +214,17 @@ public class SkEditorCompletionWindow : CompletionWindowBase
         int offset = _textArea.Caret.Offset;
         int lengthToReplace = offset - StartOffset;
 
+        if (SelectedCompletion.Value.Text is { Length: > 0 } insertText && offset < _textArea.Document.TextLength)
+        {
+            char nextChar = _textArea.Document.GetCharAt(offset);
+
+            if (nextChar is '}' or ')' or '"' && insertText.EndsWith(nextChar))
+            {
+                lengthToReplace++;
+            }
+        }
+
         SelectedCompletion.Value.Complete(_textArea, StartOffset, lengthToReplace);
-        
         Hide();
     }
 

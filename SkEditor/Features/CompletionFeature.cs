@@ -108,6 +108,12 @@ public class CompletionFeature(IEnumerable<ICompletionProvider> completionProvid
 
     private static bool ShouldTriggerCompletion(char c)
     {
-        return char.IsLetterOrDigit(c) || c == ':' || c == '%';
+        return char.IsLetterOrDigit(c)
+               || c == '_'
+               || c == '{'
+               || c == '@'
+               || c == ':'
+               || c == '%'
+               || c == '/';
     }
 }
