@@ -4,14 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
-using FluentAvalonia.UI.Windowing;
 using Serilog;
 using SkEditor.Analyzing;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
+using SkEditor.Matcher;
 using SkEditor.Models.Files;
-using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Views.Windows;
 
 namespace SkEditor.Services.Windowing;
@@ -23,9 +22,9 @@ public class StartupService(
     WindowErrorService windowErrorService,
     NamedPipeServer namedPipeServer,
     IConfigService config,
-    AppSettings appSettings,
     LegacyConfigMigrator configMigrator,
     IAnalyzer analyzer,
+    ISkriptSyntaxService syntaxService,
     IFileService files,
     string[] args) : IStartupService
 {
@@ -83,6 +82,7 @@ public class StartupService(
         namedPipeServer.Start();
 
         analyzer.ObserveOptionChange();
+        _ = syntaxService.LoadAsync();
 
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {

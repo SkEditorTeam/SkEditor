@@ -114,6 +114,7 @@
         <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj" />
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit.TextMate\AvaloniaEdit.TextMate.csproj" />
+        <ProjectReference Include="..\SkEditor.Matcher\SkEditor.Matcher.csproj" />
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false" />
     </ItemGroup>
 

@@ -377,3 +377,4 @@ Dockerfile
 
 # temporary Skript documentation API dumps
 SkEditor/Assets/*docs.json
+SkEditor.Matcher/Assets/skript-data.json

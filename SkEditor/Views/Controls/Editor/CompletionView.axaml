@@ -15,7 +15,7 @@
         <completions:CompletionIconConverter x:Key="CompletionIconConverter" />
         <completions:CompletionIconColorConverter x:Key="CompletionIconColorConverter" />
     </UserControl.Resources>
-    
+
     <Border Background="{DynamicResource MenuFlyoutPresenterBackground}" BorderThickness="1"
             BorderBrush="{DynamicResource MenuFlyoutPresenterBorderBrush}"
             MaxHeight="180"
@@ -46,8 +46,9 @@
                                            FontSize="14" />
 
                         <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
-                            <Run Text="{Binding MatchedPrefix}" Foreground="#6587FF" />
-                            <Run Text="{Binding Remainder}" />
+                            <!-- @formatter:off -->
+<Run Text="{Binding MatchedPrefix}" Foreground="#6587FF" /><Run Text="{Binding Remainder}" />
+                            <!-- @formatter:on -->
                         </TextBlock>
 
                         <TextBlock Grid.Column="2"

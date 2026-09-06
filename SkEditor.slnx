@@ -20,5 +20,6 @@
         <Platform Solution="*|Any CPU" Project="x64" />
     </Project>
     <Project Path="SkEditor/SkEditor.csproj" />
+    <Project Path="SkEditor.Matcher/SkEditor.Matcher.csproj" />
     <Project Path="SkEditor.SourceGenerators/SkEditor.SourceGenerators.csproj" />
 </Solution>

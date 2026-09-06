@@ -17,6 +17,7 @@ using SkEditor.DataTemplates;
 using SkEditor.Features;
 using SkEditor.Features.Analyzer;
 using SkEditor.Features.Editing;
+using SkEditor.Matcher;
 using SkEditor.Services;
 using SkEditor.Services.Files;
 using SkEditor.Services.Files.Features;
@@ -162,7 +163,10 @@ public static class ServiceCollectionExtensions
 
         public void AddEditorCompletions()
         {
+            services.AddSingleton<ISkriptSyntaxService, SkriptSyntaxService>();
+            
             services.AddSingleton<ICompletionProvider, SectionCompletionProvider>();
+            services.AddSingleton<ICompletionProvider, EventCompletionProvider>();
         }
 
         public void AddConfigs(BinarySettings binarySettings)
