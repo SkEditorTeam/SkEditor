@@ -157,6 +157,14 @@ public class SkEditorCompletionWindow : CompletionWindowBase
             completionProvider.PopulateCompletions(document, context, completions);
         }
 
+        completions.Sort((a, b) =>
+        {
+            int nameComparison = string.Compare(a.Title, b.Title, StringComparison.OrdinalIgnoreCase);
+            return nameComparison != 0
+                ? nameComparison
+                : (b.Snippet is not null).CompareTo(a.Snippet is not null);
+        });
+
         Completions.AddRange(completions);
         SelectedCompletion.Value = Completions.FirstOrDefault();
     }
@@ -196,15 +204,8 @@ public class SkEditorCompletionWindow : CompletionWindowBase
         int offset = _textArea.Caret.Offset;
         int lengthToReplace = offset - StartOffset;
 
-        if (SelectedCompletion.Value.CustomComplete is not null)
-        {
-            SelectedCompletion.Value.CustomComplete(_textArea, StartOffset, lengthToReplace);
-        }
-        else
-        {
-            _textArea.Document.Replace(StartOffset, lengthToReplace, SelectedCompletion.Value.Text);
-        }
-
+        SelectedCompletion.Value.Complete(_textArea, StartOffset, lengthToReplace);
+        
         Hide();
     }
 
