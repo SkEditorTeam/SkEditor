@@ -39,7 +39,7 @@ public class AdvancedSectionProvider(
                 .WithProvider(startupModeProvider)
         ];
 
-        if (OperatingSystem.IsMacOS() || true)
+        if (OperatingSystem.IsMacOS())
         {
             settings.Add(
                 ToggleSetting
