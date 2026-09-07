@@ -168,6 +168,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<ICompletionProvider, SectionCompletionProvider>();
             services.AddSingleton<ICompletionProvider, EventCompletionProvider>();
             services.AddSingleton<ICompletionProvider, VariableCompletionProvider>();
+            services.AddSingleton<ICompletionProvider, EffectCompletionProvider>();
         }
 
         public void AddConfigs(BinarySettings binarySettings)
