@@ -113,20 +113,23 @@ public class SkEditorCompletionWindow : CompletionWindowBase
             return offset;
         }
 
-        int wordStart = TextUtilities.GetNextCaretPosition(
-            document,
-            offset,
-            LogicalDirection.Backward,
-            CaretPositioningMode.WordStart);
-
-        if (wordStart < 0)
+        int wordStart = offset;
+        while (wordStart > 0)
         {
-            wordStart = offset;
-        }
+            char c = document.GetCharAt(wordStart - 1);
 
-        while (wordStart > 0 && document.GetCharAt(wordStart - 1) is '{' or '@')
-        {
-            wordStart--;
+            if (char.IsLetterOrDigit(c) || c is '_' or ':' or '.')
+            {
+                wordStart--;
+                continue;
+            }
+
+            if (c is '{' or '@')
+            {
+                wordStart--;
+            }
+
+            break;
         }
 
         return wordStart;

@@ -44,6 +44,7 @@ public partial class VariableCompletionProvider : ICompletionProvider
         }
 
         string fullText = document.Text;
+        ReadOnlySpan<char> currentWord = context.Word;
 
         foreach (ValueMatch match in VariableRegex().EnumerateMatches(fullText.AsSpan()))
         {
@@ -57,7 +58,7 @@ public partial class VariableCompletionProvider : ICompletionProvider
 
             ReadOnlySpan<char> matchSpan = fullText.AsSpan(matchStart, match.Length);
 
-            if (!matchSpan.StartsWith(context.Word, StringComparison.OrdinalIgnoreCase))
+            if (!matchSpan.StartsWith(currentWord, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
@@ -76,7 +77,7 @@ public partial class VariableCompletionProvider : ICompletionProvider
                     fullVariable,
                     CompletionType.Variable,
                     null,
-                    context.Word));
+                    currentWord));
             }
         }
     }
