@@ -80,7 +80,7 @@ public sealed class TextMarkerService(FileTabViewModel fileTab) : DocumentColori
                     StreamGeometry geometry = new();
 
                     using StreamGeometryContext ctx = geometry.Open();
-                    Point[] points = CreatePoints(startPoint, endPoint, offset, count).ToArray();
+                    Point[] points = [.. CreatePoints(startPoint, endPoint, offset, count)];
 
                     ctx.BeginFigure(points[0], false);
 

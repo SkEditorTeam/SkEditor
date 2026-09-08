@@ -23,6 +23,8 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
     private CancellationTokenSource? _featureCts;
     private IDisposable? _textEnteredSubscription;
     private TextMarkerService? _textMarkers;
+    
+    private readonly Dictionary<DocumentLine, ITextMarker> _textMarkersDict = new();
 
     public bool CanAttach(IFeatureTab tab)
     {
@@ -83,21 +85,31 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
             return;
         }
 
-        _textMarkers?.RemoveAll();
-
         await UpdateTabDiagnostics(tab, result);
 
         if (result is null || _textMarkers is null)
         {
+            _textMarkersDict.Clear();
+            _textMarkers?.RemoveAll();
             return;
         }
-
+        
+        foreach ((_, ITextMarker textMarker) in _textMarkersDict)
+        {
+            _textMarkers.Remove(textMarker);
+        }
+        
         foreach (AnalyzerError analyzerError in result.Errors)
         {
             DocumentLine? line = editor.Document.GetLineByNumber(analyzerError.Line);
             (int length, int notEmptyColumn) = editor.GetLineLengthAndNotEmptyColumn(line);
 
             int offset = editor.Document.GetOffset(analyzerError.Line, notEmptyColumn);
+
+            if (_textMarkersDict.TryGetValue(line, out ITextMarker? existingMarker))
+            {
+                _textMarkers.Remove(existingMarker);
+            }
 
             ITextMarker? marker = _textMarkers.Create(offset, length);
             marker?.MarkerTypes = TextMarkerTypes.SquigglyUnderline;
@@ -108,6 +120,11 @@ public class AnalyzerFeature(IAnalyzer analyzer, ExperimentsConfig experiments) 
                 AnalyzerErrorType.Info => new Color(255, 26, 144, 237),
                 _ => throw new ArgumentOutOfRangeException()
             };
+
+            if (marker is not null)
+            {
+                _textMarkersDict[line] = marker;
+            }
         }
     }
 
