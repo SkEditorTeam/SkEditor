@@ -4,6 +4,7 @@ using R3;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.ExperimentsConfigProperty;
 
@@ -88,6 +89,22 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                         ToggleSetting
                             .Create(TranslationKey.SettingsExperimentsTerminalOption)
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.TerminalEnabled))
+                    ),
+
+                ExpandableSetting
+                    .Create("Code completion".ToTranslatableWip())
+                    .WithDescription("Displays suggestions while writing code.".ToTranslatableWip())
+                    .WithIcon(Symbol.TextBulletListSquareSparkle)
+                    .WithChildren(
+                        InfoSetting
+                            .Create("Just a prototype".ToTranslatableWip())
+                            .WithDescription("This feature is an early WIP and you shouldn't expect much from it."
+                                .ToTranslatableWip())
+                            .WithIcon(Symbol.Warning)
+                            .WithType(InfoSetting.InfoType.Warning),
+                        ToggleSetting
+                            .Create("Enable code completion".ToTranslatableWip())
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.CodeCompletionEnabled))
                     )
             ]);
     }

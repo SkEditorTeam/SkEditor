@@ -12,13 +12,14 @@ public class EffectCompletionProvider : ICompletionProvider
     public EffectCompletionProvider()
     {
         _completions.Add(new CompletionDataInfo("set", "set", CompletionType.Keyword));
-        ;
         _completions.Add(new CompletionDataInfo("clear", "clear", CompletionType.Keyword));
-        ;
     }
 
     public bool CheckCompletionsAvailable(TextDocument document, CompletionContext context)
     {
+        // TEMP: disable provider prototype before build
+        return false;
+        
         int offset = context.StartOffset;
         DocumentLine line = document.GetLineByOffset(offset);
 

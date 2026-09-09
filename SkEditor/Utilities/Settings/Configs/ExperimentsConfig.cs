@@ -49,6 +49,12 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     [ObservableProperty]
     public partial bool TerminalEnabled { get; set; } = false;
 
+    /// <summary>
+    ///     Enables the Code Completion.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool CodeCompletionEnabled { get; set; } = false;
+
     protected override JsonTypeInfo<ExperimentsConfig> TypeInfo => AppJsonContext.Default.ExperimentsConfig;
 
     protected override string GetFileName()

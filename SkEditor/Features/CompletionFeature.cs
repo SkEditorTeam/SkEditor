@@ -6,12 +6,14 @@ using AvaloniaEdit;
 using R3;
 using SkEditor.Utilities.Editor.Completions;
 using SkEditor.Utilities.Extensions;
+using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Tabs.Capabilities;
 using SkEditor.Views.Controls.Editor;
 
 namespace SkEditor.Features;
 
-public class CompletionFeature(IEnumerable<ICompletionProvider> completionProviders) : IEditorFeature
+public class CompletionFeature(ExperimentsConfig experiments, IEnumerable<ICompletionProvider> completionProviders)
+    : IEditorFeature
 {
     private SkEditorCompletionWindow? _completionWindow;
     private TextEditor? _editor;
@@ -20,6 +22,11 @@ public class CompletionFeature(IEnumerable<ICompletionProvider> completionProvid
 
     public bool CanAttach(IFeatureTab tab)
     {
+        if (!experiments.CodeCompletionEnabled)
+        {
+            return false;
+        }
+        
         if (tab is not IFileTab fileTab)
         {
             return false;
@@ -45,7 +52,6 @@ public class CompletionFeature(IEnumerable<ICompletionProvider> completionProvid
             .AddTo(ref _disposables);
 
         editor.AddHandler(InputElement.KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
-
         _disposables.Add(Disposable.Create(() => { editor.RemoveHandler(InputElement.KeyDownEvent, OnKeyDown); }));
     }
 
