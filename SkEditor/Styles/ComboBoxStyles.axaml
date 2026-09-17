@@ -100,7 +100,7 @@
 
                         <ContentPresenter x:Name="ContentPresenter"
                                           Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding ItemTemplate}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                           Grid.Row="1"
                                           Grid.Column="0"
                                           Margin="{TemplateBinding Padding}"
