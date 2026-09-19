@@ -48,6 +48,9 @@
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Icon" Value="{Binding IconSymbol, Converter={StaticResource SymbolIconConverter}}" />
+                <Setter Property="ToolTip.Tip" Value="{Binding Tooltip}" />
+                <Setter Property="ToolTip.ShowDelay" Value="1000" />
+                <Setter Property="ToolTip.Placement" Value="Right" />
             </Style>
             <Style Selector="Menu MenuItem:disabled icons|SymbolIcon">
                 <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabled}" />

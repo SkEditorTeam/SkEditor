@@ -14,6 +14,8 @@ public class MainMenuItem : ObservableObject
     public IRelayCommand? Command { get; private set; }
 
     public TranslatableString? Header { get; private set; }
+    public TranslatableString? Tooltip { get; private set; }
+    
     public Symbol? IconSymbol { get; private set; }
     public string? InputGestureText { get; private set; }
 
@@ -59,6 +61,12 @@ public class MainMenuItem : ObservableObject
     public MainMenuItem WithIcon(Symbol iconSymbol)
     {
         IconSymbol = iconSymbol;
+        return this;
+    }
+
+    public MainMenuItem WithTooltip(TranslatableString tooltip)
+    {
+        Tooltip = tooltip;
         return this;
     }
 
