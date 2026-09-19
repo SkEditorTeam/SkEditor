@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -25,7 +25,7 @@ public class MainMenuItem : ObservableObject
     public bool RegisterHotKey { get; private set; } = true;
 
     public static MainMenuItem Separator => new() { IsSeparator = true };
-    public IEnumerable<MainMenuItem>? SubItems { get; private set; }
+    public ObservableCollection<MainMenuItem>? SubItems { get; private set; }
 
     public static MainMenuItem HeaderOnly(TranslatableString header)
     {
@@ -52,7 +52,7 @@ public class MainMenuItem : ObservableObject
         return this;
     }
 
-    public MainMenuItem WithItems(IEnumerable<MainMenuItem> subItems)
+    public MainMenuItem WithItems(ObservableCollection<MainMenuItem> subItems)
     {
         SubItems = SubItems is not null ? [..SubItems, ..subItems] : subItems;
         return this;

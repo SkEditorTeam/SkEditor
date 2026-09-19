@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
+using SkEditor.Models.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Extensions;
@@ -19,6 +22,7 @@ public class FileMenuProvider(
     IFileService files,
     ITabService tabs,
     ITabCloseService tabClose,
+    IRecentFileService recentFiles,
     ExperimentsConfig experiments,
     IWindowDialogService windowDialogs) : IMenuProvider
 {
@@ -46,6 +50,9 @@ public class FileMenuProvider(
             .WithCommand(() => WeakReferenceMessenger.Default.Send(new OpenExplorerFolderMessage()))
             .WithInputGesture("Ctrl+Shift+O")
             .AddTo(fileMenu);
+
+        MainMenuItem historyItem = BuildHistoryItem();
+        fileMenu.WithItem(historyItem);
 
         MainMenuItem.Separator.AddTo(fileMenu);
 
@@ -114,5 +121,28 @@ public class FileMenuProvider(
             .AddTo(fileMenu);
 
         return fileMenu;
+    }
+
+    private MainMenuItem BuildHistoryItem()
+    {
+        MainMenuItem historyItem = MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderRecentFiles, Symbol.History);
+        ObservableCollection<MainMenuItem> recentItems = [];
+        historyItem.WithItems(recentItems);
+
+        recentFiles.RecentItems.BindTo(recentItems, item =>
+        {
+            return MainMenuItem
+                .HeaderWithIcon(item.Name.ToTranslatable(), Symbol.Document)
+                .WithTooltip(item.Path.ToTranslatable())
+                .WithCommand(() =>
+                {
+                    Dispatcher.UIThread.InvokeAsync(async () =>
+                    {
+                        await files.OpenFileAsync(new LocalFile(item.Path));
+                    });
+                });
+        }, i => !i.IsFolder, 5);
+
+        return historyItem;
     }
 }
