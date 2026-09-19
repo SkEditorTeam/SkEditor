@@ -16,6 +16,7 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
     {
         return SettingSection.Create("Experiments", TranslationKey.SettingsSectionExperiments)
             .WithIcon(Symbol.Beaker)
+            .WithOrder(40)
             .WithSettings(
             [
                 InfoSetting

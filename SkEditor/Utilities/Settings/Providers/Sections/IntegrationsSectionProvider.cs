@@ -18,6 +18,7 @@ public class IntegrationsSectionProvider(
     public SettingSection GetSection()
     {
         SettingSection integrations = SettingSection.Create("Integrations", TranslationKey.SettingsSectionIntegrations)
+            .WithOrder(30)
             .WithIcon(Symbol.PlugConnected);
 
         SettingSection integrationsDiscord = CreateDiscordSection();

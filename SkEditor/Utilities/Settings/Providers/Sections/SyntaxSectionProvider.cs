@@ -31,7 +31,8 @@ public class SyntaxSectionProvider(
     {
         SettingSection syntaxSection = SettingSection
             .Create("Syntax", TranslationKey.SettingsSectionSyntaxHighlighting)
-            .WithIcon(Symbol.CodeTextEdit);
+            .WithIcon(Symbol.CodeTextEdit)
+            .WithOrder(20);
 
         ObservableCollection<SettingElement> settings = syntaxSection.Settings;
         settings.AddRange(CreateSkriptSection());

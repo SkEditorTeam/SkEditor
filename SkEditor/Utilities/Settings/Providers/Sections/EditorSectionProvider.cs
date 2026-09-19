@@ -16,6 +16,7 @@ public class EditorSectionProvider(
     public SettingSection GetSection()
     {
         SettingSection editor = SettingSection.Create("Editor", TranslationKey.SettingsSectionEditor)
+            .WithOrder(10)
             .WithIcon(Symbol.Code);
         SettingSection editorBehavior = CreateBehaviorSection();
         SettingSection editorIndentation = CreateIndentationSection();

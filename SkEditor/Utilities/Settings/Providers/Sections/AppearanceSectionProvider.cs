@@ -24,11 +24,12 @@ public class AppearanceSectionProvider(
     public SettingSection GetSection()
     {
         SettingSection appearance = SettingSection.Create("Appearance", TranslationKey.SettingsSectionAppearance)
+            .WithOrder(20)
             .WithIcon(Symbol.PaintBrush);
 
-        SettingSection appearanceTheme = CreateThemeSection();
-        SettingSection appearanceFontDisplay = CreateFontDisplaySection();
-        SettingSection appearanceSidebarLayout = CreateSidebarLayoutSection();
+        SettingSection appearanceTheme = CreateThemeSection().WithOrder(10);
+        SettingSection appearanceFontDisplay = CreateFontDisplaySection().WithOrder(30);
+        SettingSection appearanceSidebarLayout = CreateSidebarLayoutSection().WithOrder(40);
 
         appearance.WithSubsections([appearanceTheme, appearanceFontDisplay, appearanceSidebarLayout]);
 

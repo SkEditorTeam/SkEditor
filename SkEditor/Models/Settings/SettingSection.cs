@@ -10,6 +10,7 @@ public class SettingSection(string id, TranslatableString name) : ObservableObje
 {
     public StandardIcon Icon { get; private set; }
     public string Id { get; init; } = id;
+    public int Order { get; set; } = 100;
 
     public BindableReactiveProperty<bool> IsExpanded { get; set; } = new(false);
     public BindableReactiveProperty<bool> IsVisible { get; set; } = new(true);
@@ -39,6 +40,12 @@ public class SettingSection(string id, TranslatableString name) : ObservableObje
     public SettingSection WithSubsections(ObservableCollection<SettingSection> subsections)
     {
         Subsections = subsections;
+        return this;
+    }
+
+    public SettingSection WithOrder(int order)
+    {
+        Order = order;
         return this;
     }
 }

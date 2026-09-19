@@ -16,6 +16,7 @@ public class GeneralSectionProvider(
     {
         return SettingSection.Create("General", TranslationKey.SettingsSectionGeneral)
             .WithIcon(Symbol.Home)
+            .WithOrder(0)
             .WithSettings(
             [
                 ChoiceSetting<string>

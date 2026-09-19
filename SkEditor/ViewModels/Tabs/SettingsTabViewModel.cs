@@ -63,6 +63,23 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
             }
         }
 
+        SettingsCategories.Sort((a, b) => a.Order.CompareTo(b.Order));
+
+        foreach (SettingSection section in _sectionsById.Values)
+        {
+            if (section.Subsections.Count <= 1)
+            {
+                continue;
+            }
+
+            List<SettingSection> sorted = section.Subsections.OrderBy(s => s.Order).ToList();
+            section.Subsections.Clear();
+            foreach (SettingSection s in sorted)
+            {
+                section.Subsections.Add(s);
+            }
+        }
+
         if (SettingsCategories.Count > 0)
         {
             CurrentSection = SettingsCategories[0];

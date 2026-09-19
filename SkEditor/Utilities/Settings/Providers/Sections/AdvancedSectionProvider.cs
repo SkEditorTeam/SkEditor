@@ -70,6 +70,7 @@ public class AdvancedSectionProvider(
 
         return SettingSection.Create("Advanced", TranslationKey.SettingsSectionAdvanced)
             .WithIcon(Symbol.Wrench)
+            .WithOrder(int.MaxValue)
             .WithSettings(settings);
     }
 }
