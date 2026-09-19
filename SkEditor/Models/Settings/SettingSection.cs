@@ -37,6 +37,12 @@ public class SettingSection(string id, TranslatableString name) : ObservableObje
         return this;
     }
 
+    public SettingSection AddSetting(SettingElement setting)
+    {
+        Settings.Add(setting);
+        return this;
+    }
+
     public SettingSection WithSubsections(ObservableCollection<SettingSection> subsections)
     {
         Subsections = subsections;

@@ -29,9 +29,8 @@ public class AppearanceSectionProvider(
 
         SettingSection appearanceTheme = CreateThemeSection().WithOrder(10);
         SettingSection appearanceFontDisplay = CreateFontDisplaySection().WithOrder(30);
-        SettingSection appearanceSidebarLayout = CreateSidebarLayoutSection().WithOrder(40);
 
-        appearance.WithSubsections([appearanceTheme, appearanceFontDisplay, appearanceSidebarLayout]);
+        appearance.WithSubsections([appearanceTheme, appearanceFontDisplay]);
 
         return appearance;
     }
@@ -111,21 +110,6 @@ public class AppearanceSectionProvider(
                     .Create(TranslationKey.SettingsAppearanceHighlightCurrentLine)
                     .WithIcon(Symbol.Highlight)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.HighlightCurrentLine))
-            ]);
-    }
-
-    private SettingSection CreateSidebarLayoutSection()
-    {
-        return SettingSection
-            .Create("Sidebar and Layout", TranslationKey.SettingsAppearanceSubsectionSidebarLayout)
-            .WithIcon(Symbol.PanelLeft)
-            .WithSettings(
-            [
-                ToggleSetting
-                    .Create(TranslationKey.SettingsExplorerSingleClickOpen)
-                    .WithDescription(TranslationKey.SettingsExplorerSingleClickOpenDescription)
-                    .WithIcon(Symbol.CursorClick)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsExplorerSingleClickOpenEnabled))
             ]);
     }
 

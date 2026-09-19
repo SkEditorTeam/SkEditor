@@ -18,12 +18,14 @@ using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Controls.FileTree;
 
 public class FileTreeCommandHandler(
     FileTreeViewModel fileTree,
+    AppSettings appSettings,
     IDialogService dialogs,
     IClipboardService clipboard,
     INotificationService notifs,
@@ -140,7 +142,7 @@ public class FileTreeCommandHandler(
             return;
         }
 
-        string paths = string.Join("\n", fileTree.SelectedNodes.Select(n => n.Path));
+        string paths = string.Join("\n", fileTree.SelectedNodes.Select(n => FormatPath(n.Path)));
         clipboard.CopyTextAsync(paths);
     }
 
@@ -157,10 +159,21 @@ public class FileTreeCommandHandler(
         }
 
         string basePath = fileTree.FileSystem.Root.Path;
-        string paths = string.Join("\n",
-            fileTree.SelectedNodes.Select(n =>
-                n.Path.StartsWith(basePath) ? n.Path[basePath.Length..].TrimStart('/', '\\') : n.Path));
-        clipboard.CopyTextAsync(paths);
+
+        IEnumerable<string> paths = fileTree.SelectedNodes
+            .Select(n => n.Path.StartsWith(basePath) ? n.Path[basePath.Length..].TrimStart('/', '\\') : n.Path)
+            .Select(FormatPath);
+
+        string pathString = string.Join("\n", paths);
+
+        clipboard.CopyTextAsync(pathString);
+    }
+
+    private string FormatPath(string path)
+    {
+        return OperatingSystem.IsWindows() && appSettings.IsExplorerForwardSlashesCopyEnabled
+            ? path.Replace('\\', '/')
+            : path;
     }
 
     public async Task Refresh()

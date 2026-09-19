@@ -110,6 +110,13 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial bool IsExplorerSingleClickOpenEnabled { get; set; }
 
     /// <summary>
+    ///     Whether to copy file paths with forward slashes instead of backslashes in the explorer.
+    /// </summary>
+    /// <remarks>Shouldn't be visible to non-Windows users in UI.</remarks>
+    [ObservableProperty]
+    public partial bool IsExplorerForwardSlashesCopyEnabled { get; set; } = true;
+
+    /// <summary>
     ///     Whether this is (likely) the first time the user runs the application. Used to show the tutorial.
     /// </summary>
     [ObservableProperty]

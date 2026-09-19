@@ -1,4 +1,5 @@
-﻿using FluentIcons.Common;
+﻿using System;
+using FluentIcons.Common;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
 using SkEditor.Utilities.Localization;
@@ -14,7 +15,7 @@ public class GeneralSectionProvider(
 {
     public SettingSection GetSection()
     {
-        return SettingSection.Create("General", TranslationKey.SettingsSectionGeneral)
+        SettingSection section = SettingSection.Create("General", TranslationKey.SettingsSectionGeneral)
             .WithIcon(Symbol.Home)
             .WithOrder(0)
             .WithSettings(
@@ -23,13 +24,26 @@ public class GeneralSectionProvider(
                     .Create(TranslationKey.SettingsGeneralLanguage)
                     .WithIcon(Symbol.Earth)
                     .WithProperty(appSettings.GetProperty<string>(AppSettingsProperty.Language))
-                    .WithProvider(languageProvider)
+                    .WithProvider(languageProvider),
 
-                // ToggleSetting
-                //     .Create(TranslationKey.SettingsGeneralCheckForUpdates)
-                //     .WithDescription(TranslationKey.SettingsGeneralCheckForUpdatesDescription)
-                //     .WithIcon(Symbol.CloudSync)
-                //     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForAppUpdates))
+                ToggleSetting
+                    .Create(TranslationKey.SettingsExplorerSingleClickOpen)
+                    .WithDescription(TranslationKey.SettingsExplorerSingleClickOpenDescription)
+                    .WithIcon(Symbol.CursorClick)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsExplorerSingleClickOpenEnabled))
             ]);
+
+        if (OperatingSystem.IsWindows())
+        {
+            ToggleSetting forwardSlashesCopy = ToggleSetting
+                .Create(TranslationKey.SettingsExplorerForwardSlashesCopy)
+                .WithDescription(TranslationKey.SettingsExplorerForwardSlashesCopyDescription)
+                .WithIcon(Symbol.ClipboardLink)
+                .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsExplorerForwardSlashesCopyEnabled));
+
+            section.AddSetting(forwardSlashesCopy);
+        }
+
+        return section;
     }
 }
