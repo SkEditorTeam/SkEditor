@@ -28,15 +28,15 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto"
                                                   SharedSizeGroup="MenuItemIGT" />
-                                <ColumnDefinition Width="Auto"
-                                                  SharedSizeGroup="MenuItemChevron" />
                             </Grid.ColumnDefinitions>
 
                             <Viewbox Name="PART_IconPresenter"
                                      Margin="{DynamicResource MenuIconPresenterMargin}"
-                                     StretchDirection="DownOnly"
+                                     Width="18"
+                                     Height="18"
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
+                                     ClipToBounds="False"
                                      IsVisible="False">
                                 <ContentPresenter Content="{TemplateBinding Icon}" />
                             </Viewbox>
@@ -59,7 +59,8 @@
                                        Text="{TemplateBinding InputGesture, Converter={StaticResource KeyGestureConverter}}"
                                        HorizontalAlignment="Right"
                                        VerticalAlignment="Center" />
-                            <Viewbox Grid.Column="2" Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
+                            <Viewbox Name="PART_ChevronPresenter" Grid.Column="2"
+                                     Margin="{DynamicResource MenuFlyoutItemChevronMargin}"
                                      VerticalAlignment="Center"
                                      HorizontalAlignment="Right"
                                      Height="12">
@@ -159,7 +160,7 @@
             <Setter Property="Foreground" Value="{DynamicResource MenuFlyoutSubItemChevronSubMenuOpened}" />
         </Style>
 
-        <Style Selector="^:empty /template/ icons|SymbolIcon#PART_ChevronPath">
+        <Style Selector="^:empty /template/ Viewbox#PART_ChevronPresenter">
             <Setter Property="IsVisible" Value="False" />
         </Style>
 
