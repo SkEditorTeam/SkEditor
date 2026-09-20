@@ -48,6 +48,8 @@
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Icon" Value="{Binding IconSymbol, Converter={StaticResource SymbolIconConverter}}" />
+                <Setter Property="ToolTip.ServiceEnabled"
+                        Value="{Binding Tooltip, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 <Setter Property="ToolTip.Tip">
                     <Template>
                         <ToolTip MaxWidth="1000">
