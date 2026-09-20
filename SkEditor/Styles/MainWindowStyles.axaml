@@ -29,4 +29,12 @@
         <Setter Property="(WindowDecorationProperties.ElementRole)" Value="None" />
         <Setter Property="IsVisible" Value="{OnPlatform macOS={x:False}, Default={x:True}}" />
     </Style>
+
+    <Style Selector="MenuFlyoutPresenter">
+        <Setter Property="Focusable" Value="True" />
+    </Style>
+
+    <Style Selector="Separator">
+        <Setter Property="Margin" Value="8,4" />
+    </Style>
 </Styles>

@@ -13,10 +13,6 @@
             <Setter Property="FontSize" Value="18.5" />
         </Style>
 
-        <Style Selector="Separator">
-            <Setter Property="Margin" Value="8,4" />
-        </Style>
-
         <Style Selector="Menu">
             <Setter Property="Height" Value="40" />
         </Style>

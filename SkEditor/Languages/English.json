@@ -63,6 +63,7 @@
   "MenuHeaderOpenInExplorer": "Open in Explorer",
   "MenuHeaderCopyPath": "Copy relative path",
   "MenuHeaderCopyAbsolutePath": "Copy absolute path",
+  "MenuHeaderCopyFileName": "Copy file name",
   "MenuHeaderRename": "Rename",
   "MenuHeaderNewFile": "New file",
   "MenuHeaderNewFolder": "New folder",

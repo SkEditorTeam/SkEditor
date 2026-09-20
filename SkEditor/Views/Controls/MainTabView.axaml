@@ -7,6 +7,8 @@
              xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
              xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
              xmlns:windows="clr-namespace:SkEditor.Views.Windows"
+             xmlns:iconsMarkup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              x:Class="SkEditor.Views.Controls.MainTabView"
              x:DataType="vms:MainWindowViewModel">
 
@@ -23,6 +25,32 @@
                         <Binding Path="IsLoading" />
                     </MultiBinding>
                 </ui:FATabViewItem.IconSource>
+                <ui:FATabViewItem.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Dismiss}"
+                                  Header="{localization:Translate MenuHeaderClose}"
+                                  Command="{Binding CloseCommand}" />
+
+                        <Separator />
+
+                        <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FolderOpen}"
+                                  Header="{localization:Translate MenuHeaderOpenInExplorer}"
+                                  Command="{Binding $parent[UserControl].((vms:MainWindowViewModel)DataContext)?.ShowInExplorerCommand}"
+                                  CommandParameter="{Binding}" />
+
+                        <Separator />
+
+                        <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Clipboard}"
+                                  Header="{localization:Translate MenuHeaderCopyFileName}"
+                                  Command="{Binding $parent[UserControl].((vms:MainWindowViewModel)DataContext)?.ShowInExplorerCommand}"
+                                  CommandParameter="{Binding}" />
+
+                        <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardLink}"
+                                  Header="{localization:Translate MenuHeaderCopyAbsolutePath}"
+                                  Command="{Binding $parent[UserControl].((vms:MainWindowViewModel)DataContext)?.CopyPathCommand}"
+                                  CommandParameter="{Binding}" />
+                    </MenuFlyout>
+                </ui:FATabViewItem.ContextFlyout>
                 <ui:FATabViewItem.Header>
                     <Grid ColumnDefinitions="Auto,*,Auto">
                         <Panel Grid.Column="0"

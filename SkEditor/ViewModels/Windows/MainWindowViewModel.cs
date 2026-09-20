@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Menu;
 using SkEditor.ViewModels.Pages;
+using SkEditor.ViewModels.Tabs;
 using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.ViewModels.Windows;
@@ -23,6 +26,8 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 {
     private readonly IFileService _files;
     private readonly ITabService _tabs;
+    private readonly IClipboardService _clipboard;
+    private readonly ILinkService _links;
 
     public IEnumerable<TabViewModelBase> AllTabs => _tabs.AllTabs;
 
@@ -99,7 +104,11 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public StatusBarViewModel StatusBar { get; }
     public WelcomePageViewModel WelcomePage { get; }
 
-    public MainWindowViewModel(ITabService tabs, IFileService files, AppSettings appSettings,
+    public MainWindowViewModel(ITabService tabs,
+        IFileService files,
+        IClipboardService clipboard,
+        ILinkService links,
+        AppSettings appSettings,
         MainMenuViewModel mainMenu,
         SidebarViewModel sidebar,
         StatusBarViewModel statusBar,
@@ -109,6 +118,8 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     {
         _tabs = tabs;
         _files = files;
+        _clipboard = clipboard;
+        _links = links;
 
         AppSettings = appSettings;
 
@@ -168,6 +179,25 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public void NewTab()
     {
         _files.NewFile();
+    }
+
+
+    [RelayCommand]
+    public async Task CopyPath(TabViewModelBase item)
+    {
+        if (item is FileTabViewModel { Path: not null } fileTab)
+        {
+            await _clipboard.CopyTextAsync(fileTab.Path);
+        }
+    }
+
+    [RelayCommand]
+    public void ShowInExplorer(TabViewModelBase item)
+    {
+        if (item is FileTabViewModel { Path: not null } fileTab)
+        {
+            _links.OpenFolderWithFileSelection(fileTab.Path);
+        }
     }
 
     partial void OnSelectedTabChanged(TabViewModelBase? value)
