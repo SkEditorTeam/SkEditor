@@ -10,11 +10,13 @@
         <Setter Property="BorderThickness" Value="{DynamicResource MenuBarItemBorderThickness}" />
         <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
-        <Setter Property="Padding" Value="{DynamicResource MenuFlyoutItemThemePaddingNarrow}" />
+        <Setter Property="Padding" Value="11,4" />
+        <Setter Property="MinHeight" Value="10" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
                     <Border Name="PART_LayoutRoot"
+                            Height="28"
                             Padding="{TemplateBinding Padding}"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
