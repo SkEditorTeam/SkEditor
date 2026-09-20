@@ -39,10 +39,17 @@
 
                         <TextBlock Grid.Column="1"
                                    Text="{Binding Header.Value}"
-                                   ToolTip.Tip="{Binding Header.Value}"
+                                   ToolTip.ServiceEnabled="{Binding ToolTip, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                    TextTrimming="CharacterEllipsis"
                                    VerticalAlignment="Center"
-                                   Margin="0,0,8,0" />
+                                   Margin="0,0,8,0">
+                            <ToolTip.Tip>
+                                <ToolTip MaxWidth="1000">
+                                    <TextBlock Text="{Binding ToolTip}" TextWrapping="NoWrap" TextTrimming="None"
+                                               ClipToBounds="False" />
+                                </ToolTip>
+                            </ToolTip.Tip>
+                        </TextBlock>
 
                         <Ellipse Grid.Column="2"
                                  Classes.unsaved="{Binding !IsSaved}"

@@ -24,6 +24,9 @@ public abstract partial class TabViewModelBase(TranslatableString header, Symbol
     [ObservableProperty]
     public partial TranslatableString Header { get; protected set; } = header;
 
+    [ObservableProperty]
+    public virtual partial string? ToolTip { get; set; }
+
     /// <summary>
     ///     The Symbol icon that is displayed on the tab.
     /// </summary>

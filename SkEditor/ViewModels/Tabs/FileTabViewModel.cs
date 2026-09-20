@@ -60,6 +60,8 @@ public partial class FileTabViewModel(
     public ExperimentsConfig Experiments { get; } = experiments;
     public required BaseFile File { get; init; }
 
+    public override string? ToolTip => Path;
+
     [ObservableProperty]
     public partial double FontSize { get; set; } = appSettings.EditorFontSize;
 
