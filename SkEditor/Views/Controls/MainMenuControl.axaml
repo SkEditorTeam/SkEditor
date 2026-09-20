@@ -48,7 +48,16 @@
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Icon" Value="{Binding IconSymbol, Converter={StaticResource SymbolIconConverter}}" />
-                <Setter Property="ToolTip.Tip" Value="{Binding Tooltip}" />
+                <Setter Property="ToolTip.Tip">
+                    <Template>
+                        <ToolTip MaxWidth="1000">
+                            <TextBlock Text="{Binding Tooltip}" FontWeight="Normal" TextWrapping="NoWrap"
+                                       TextTrimming="None"
+                                       ClipToBounds="False" />
+                        </ToolTip>
+                    </Template>
+                </Setter>
+
                 <Setter Property="ToolTip.ShowDelay" Value="1000" />
                 <Setter Property="ToolTip.Placement" Value="Right" />
             </Style>
