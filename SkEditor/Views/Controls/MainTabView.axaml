@@ -45,7 +45,8 @@
                                    Margin="0,0,8,0">
                             <ToolTip.Tip>
                                 <ToolTip MaxWidth="1000">
-                                    <TextBlock Text="{Binding ToolTip}" TextWrapping="NoWrap" TextTrimming="None"
+                                    <TextBlock Text="{Binding ToolTip}" FontWeight="Normal" TextWrapping="NoWrap"
+                                               TextTrimming="None"
                                                ClipToBounds="False" />
                                 </ToolTip>
                             </ToolTip.Tip>
