@@ -65,12 +65,18 @@ public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEdit
             case EditorCommandType.Redo:
                 _editor.Redo();
                 break;
+            case EditorCommandType.SelectAll:
+                _editor.SelectAll();
+                break;
             case EditorCommandType.Find:
+                _editor.SearchPanel.IsReplaceMode = false;
                 _editor.SearchPanel.Open();
+                _editor.SearchPanel.Reactivate();
                 break;
             case EditorCommandType.Replace:
                 _editor.SearchPanel.IsReplaceMode = true;
                 _editor.SearchPanel.Open();
+                _editor.SearchPanel.Reactivate();
                 break;
 
             default:

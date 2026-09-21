@@ -44,6 +44,7 @@
   "MenuHeaderFind": "Find",
   "MenuHeaderReplace": "Replace",
   "MenuHeaderTrimWhitespaces": "Trim whitespaces",
+  "MenuHeaderSelectAll": "Select all",
   "MenuHeaderDocumentation": "Documentation",
   "MenuHeaderTerminal": "Terminal",
   "MenuHeaderGenerate": "Generate",

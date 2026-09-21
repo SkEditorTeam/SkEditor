@@ -11,5 +11,6 @@ public enum EditorCommandType
     Comment,
     TrimWhitespace,
     Find,
-    Replace
+    Replace,
+    SelectAll
 }

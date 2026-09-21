@@ -9,6 +9,7 @@
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
              xmlns:editor="clr-namespace:SkEditor.Views.Controls.Editor"
+             xmlns:iconsMarkup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:FileTabViewModel"
@@ -38,6 +39,50 @@
             <Interaction.Behaviors>
                 <behaviors:TextEditorLoadBehavior />
             </Interaction.Behaviors>
+            <avaloniaEdit:TextEditor.ContextFlyout>
+                <MenuFlyout>
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Cut}"
+                              Header="{localization:Translate MenuHeaderCut}"
+                              Command="{Binding CutCommand}"
+                              InputGesture="Ctrl+X" />
+
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Copy}"
+                              Header="{localization:Translate MenuHeaderCopy}"
+                              Command="{Binding CopyCommand}"
+                              InputGesture="Ctrl+C" />
+
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardPaste}"
+                              Header="{localization:Translate MenuHeaderPaste}"
+                              Command="{Binding PasteCommand}"
+                              InputGesture="Ctrl+V" />
+
+                    <Separator />
+
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=SelectAllOn}"
+                              Header="{localization:Translate MenuHeaderSelectAll}"
+                              Command="{Binding SelectAllCommand}"
+                              InputGesture="Ctrl+A" />
+
+                    <Separator />
+
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Search}"
+                              Header="{localization:Translate MenuHeaderFind}"
+                              Command="{Binding FindCommand}"
+                              InputGesture="Ctrl+F" />
+
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ArrowSwap}"
+                              Header="{localization:Translate MenuHeaderReplace}"
+                              Command="{Binding ReplaceCommand}"
+                              InputGesture="Ctrl+H" />
+
+
+                    <Separator />
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Comment}"
+                              Header="{localization:Translate MenuHeaderComment}"
+                              Command="{Binding CommentCommand}"
+                              InputGesture="Ctrl+OemQuestion" />
+                </MenuFlyout>
+            </avaloniaEdit:TextEditor.ContextFlyout>
             <avaloniaEdit:TextEditor.Transitions>
                 <Transitions>
                     <DoubleTransition Property="Opacity"
