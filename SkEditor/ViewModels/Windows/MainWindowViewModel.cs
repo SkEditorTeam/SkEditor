@@ -181,25 +181,6 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         _files.NewFile();
     }
 
-
-    [RelayCommand]
-    public async Task CopyPath(TabViewModelBase item)
-    {
-        if (item is FileTabViewModel { Path: not null } fileTab)
-        {
-            await _clipboard.CopyTextAsync(fileTab.Path);
-        }
-    }
-
-    [RelayCommand]
-    public void ShowInExplorer(TabViewModelBase item)
-    {
-        if (item is FileTabViewModel { Path: not null } fileTab)
-        {
-            _links.OpenFolderWithFileSelection(fileTab.Path);
-        }
-    }
-
     partial void OnSelectedTabChanged(TabViewModelBase? value)
     {
         if (_tabs.SelectedTab != value)

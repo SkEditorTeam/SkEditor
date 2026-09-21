@@ -9,6 +9,7 @@
              xmlns:windows="clr-namespace:SkEditor.Views.Windows"
              xmlns:iconsMarkup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+             xmlns:capabilities="clr-namespace:SkEditor.ViewModels.Tabs.Capabilities"
              x:Class="SkEditor.Views.Controls.MainTabView"
              x:DataType="vms:MainWindowViewModel">
 
@@ -31,24 +32,28 @@
                                   Header="{localization:Translate MenuHeaderClose}"
                                   Command="{Binding CloseCommand}" />
 
-                        <Separator />
+                        <Separator IsVisible="{Binding HasPath, FallbackValue=False}"
+                                   x:DataType="capabilities:IFileTab" />
 
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FolderOpen}"
+                                  IsVisible="{Binding HasPath, FallbackValue=False}"
                                   Header="{localization:Translate MenuHeaderOpenInExplorer}"
-                                  Command="{Binding $parent[UserControl].((vms:MainWindowViewModel)DataContext)?.ShowInExplorerCommand}"
-                                  CommandParameter="{Binding}" />
+                                  x:DataType="capabilities:IFileTab"
+                                  Command="{Binding OpenInExplorerRelayCommand}" />
 
-                        <Separator />
+                        <Separator IsVisible="{Binding ., Converter={converters:IsType capabilities:IFileTab}}" />
 
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Clipboard}"
+                                  IsVisible="{Binding ., Converter={converters:IsType capabilities:IFileTab}}"
                                   Header="{localization:Translate MenuHeaderCopyFileName}"
-                                  Command="{Binding $parent[UserControl].((vms:MainWindowViewModel)DataContext)?.ShowInExplorerCommand}"
-                                  CommandParameter="{Binding}" />
+                                  x:DataType="capabilities:IFileTab"
+                                  Command="{Binding CopyNameRelayCommand}" />
 
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardLink}"
+                                  IsVisible="{Binding HasPath, FallbackValue=False}"
                                   Header="{localization:Translate MenuHeaderCopyAbsolutePath}"
-                                  Command="{Binding $parent[UserControl].((vms:MainWindowViewModel)DataContext)?.CopyPathCommand}"
-                                  CommandParameter="{Binding}" />
+                                  x:DataType="capabilities:IFileTab"
+                                  Command="{Binding CopyPathRelayCommand}" />
                     </MenuFlyout>
                 </ui:FATabViewItem.ContextFlyout>
                 <ui:FATabViewItem.Header>

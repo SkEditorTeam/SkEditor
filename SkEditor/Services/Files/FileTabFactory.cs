@@ -18,6 +18,8 @@ public class FileTabFactory(
     IFileFeatureService features,
     IRecentFileService recentFiles,
     INotificationService notifications,
+    ILinkService links,
+    IClipboardService clipboard,
     ILogService logs) : IFileTabFactory
 {
     public FileTabViewModel CreateFromFile(BaseFile file)
@@ -30,7 +32,7 @@ public class FileTabFactory(
         TranslatableString header = TranslatableString.FromRawString(file.Name);
 
         return new FileTabViewModel(header, appSettings, experiments, dialogService, notifications, filePicker,
-            features, recentFiles, logs)
+            features, recentFiles, links, clipboard, logs)
         {
             File = file
         };
@@ -41,7 +43,7 @@ public class FileTabFactory(
         TranslatableString header = TranslatableString.FromRawString(name);
 
         return new FileTabViewModel(header, appSettings, experiments, dialogService, notifications, filePicker,
-            features, recentFiles, logs)
+            features, recentFiles, links, clipboard, logs)
         {
             File = new LocalFile(name: name),
             IsSaved = true

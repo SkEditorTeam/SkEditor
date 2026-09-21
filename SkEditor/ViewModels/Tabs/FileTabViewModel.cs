@@ -37,6 +37,8 @@ public partial class FileTabViewModel(
     IFilePickerService filePicker,
     IFileFeatureService features,
     IRecentFileService recentFiles,
+    ILinkService links,
+    IClipboardService clipboard,
     ILogService logs)
     : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab, ISaveableTab,
         IFileTab, IClosableTab, ISaveStateTab, IDiagnosticsTab
@@ -67,6 +69,9 @@ public partial class FileTabViewModel(
 
     public override bool IsCacheable => true;
     public string? Path => File.Path;
+    public IRelayCommand OpenInExplorerRelayCommand => OpenInExplorerCommand;
+    public IRelayCommand CopyNameRelayCommand => CopyNameCommand;
+    public IRelayCommand CopyPathRelayCommand => CopyPathCommand;
 
     [ObservableProperty]
     public partial Vector ScrollOffset { get; set; } = Vector.Zero;
@@ -268,6 +273,34 @@ public partial class FileTabViewModel(
         RequestClose();
     }
 
+    [RelayCommand]
+    private void OpenInExplorer()
+    {
+        if (Path is not null)
+        {
+            links.OpenFolderWithFileSelection(Path);
+        }
+    }
+
+    [RelayCommand]
+    private async Task CopyName()
+    {
+        await clipboard.CopyTextAsync(Header.Value);
+    }
+
+    [RelayCommand]
+    private async Task CopyPath()
+    {
+        if (Path is not null)
+        {
+            string pathToCopy = OperatingSystem.IsWindows() && AppSettings.IsExplorerForwardSlashesCopyEnabled
+                ? Path.Replace('\\', '/')
+                : Path;
+
+            await clipboard.CopyTextAsync(pathToCopy);
+        }
+    }
+    
     /// <summary>
     ///     Fired before the close logic begins. Allows async features (like AutoSave) to flush data.
     /// </summary>
