@@ -123,7 +123,7 @@
   "ProjectRenameErrorNameInvalid": "Name is invalid.",
   "ProjectErrorNameExists": "A file or folder with this name already exists.",
   "ProjectGeneralErrorDescription": "Something went wrong. Look into the logs for more details.",
-  "SearchPanelToggleReplace": "Toggle between modes",
+  "SearchPanelToggleReplace": "Toggle replace",
   "SearchPanelFindLabel": "Find...",
   "SearchPanelReplaceLabel": "Replace...",
   "SearchPanelMatchCase": "Match case",
