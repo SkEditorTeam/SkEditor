@@ -219,6 +219,8 @@
   "SettingsIntegrationsApiKeysApiKeyPlaceholder": "귀하의 {0} API 키",
   "SettingsAdvancedDeveloperMode": "개발자 모드",
   "SettingsAdvancedDeveloperModeDescription": "개발자 전용 기능에 접근하려면 개발자 모드를 활성화하세요.",
+  "SettingsAdvancedHardwareAcceleration": "하드웨어 가속",
+  "SettingsAdvancedHardwareAccelerationDescription": "렌더링에 GPU를 사용합니다. 성능 또는 디스플레이 문제가 발생하는 경우 비활성화하세요(재시작 필요).",
   "SettingsAdvancedStartupSplashScreen": "시작 스플래시 화면",
   "SettingsAdvancedStartupSplashScreenDescription": "초기화 중 시각적 피드백을 제공합니다.\\n'자동'으로 설정하면 하드웨어 성능에 따라 빠르게 시작될 때 화면을 숨깁니다.",
   "SettingsGeneralUseSplashScreenAuto": "자동 (권장)",

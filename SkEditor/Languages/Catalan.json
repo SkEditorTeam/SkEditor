@@ -219,6 +219,8 @@
   "SettingsIntegrationsApiKeysApiKeyPlaceholder": "La teva clau API de {0}",
   "SettingsAdvancedDeveloperMode": "Mode desenvolupador",
   "SettingsAdvancedDeveloperModeDescription": "Activa el mode desenvolupador per accedir a les funcions de desenvolupament.",
+  "SettingsAdvancedHardwareAcceleration": "Acceleració per maquinari",
+  "SettingsAdvancedHardwareAccelerationDescription": "Utilitza la GPU per a la renderització. Desactiva-ho si experimentes problemes de rendiment o de visualització (requereix reiniciar).",
   "SettingsAdvancedStartupSplashScreen": "Pantalla de presentació inicial",
   "SettingsAdvancedStartupSplashScreenDescription": "Indicacions visuals durant la inicialització.\n'Auto' l'ocultarà de manera intel·ligent si SkEditor s'inicia a l'instant al teu maquinari.",
   "SettingsGeneralUseSplashScreenAuto": "Auto (Recomanat)",

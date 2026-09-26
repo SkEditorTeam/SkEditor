@@ -30,6 +30,12 @@ public class AdvancedSectionProvider(
                 .WithIcon(Symbol.Flash)
                 .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsDevModeEnabled)),
 
+            ToggleSetting
+                .Create(TranslationKey.SettingsAdvancedHardwareAcceleration)
+                .WithDescription(TranslationKey.SettingsAdvancedHardwareAccelerationDescription)
+                .WithIcon(Symbol.DeveloperBoardLightning)
+                .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.UseHardwareAcceleration)),
+
             ChoiceSetting<StartupMode>
                 .Create(TranslationKey.SettingsAdvancedStartupSplashScreen)
                 .WithDescription(TranslationKey.SettingsAdvancedStartupSplashScreenDescription)

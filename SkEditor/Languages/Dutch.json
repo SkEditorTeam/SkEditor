@@ -219,6 +219,8 @@
   "SettingsIntegrationsApiKeysApiKeyPlaceholder": "Uw {0} API-sleutel",
   "SettingsAdvancedDeveloperMode": "Ontwikkelaarsmodus",
   "SettingsAdvancedDeveloperModeDescription": "Schakel de ontwikkelaarsmodus in om toegang te krijgen tot ontwikkelaarsfuncties.",
+  "SettingsAdvancedHardwareAcceleration": "Hardwareversnelling",
+  "SettingsAdvancedHardwareAccelerationDescription": "Gebruikt de GPU voor rendering. Schakel dit uit als u prestatie- of weergaveproblemen ervaart (opnieuw opstarten vereist).",
   "SettingsAdvancedStartupSplashScreen": "Opstartscherm",
   "SettingsAdvancedStartupSplashScreenDescription": "Visuele feedback tijdens initialisatie.\\n'Auto' zal dit op intelligente wijze verbergen als SkEditor direct opstart op uw hardware.",
   "SettingsGeneralUseSplashScreenAuto": "Automatisch (Aanbevolen)",

@@ -1,32 +1,100 @@
 using System;
+using System.IO;
 using System.Text;
+using System.Text.Json;
 using Avalonia;
 using Avalonia.Data;
+using SkEditor.Utilities;
 
 namespace SkEditor;
 
-internal class Program
+internal static class Program
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
     [STAThread]
     public static void Main(string[] args)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         GC.KeepAlive(typeof(RelativeSource));
 
-        BuildAvaloniaApp()
+        bool hardwareAcceleration = CheckHardwareAcceleration();
+
+        BuildAvaloniaApp(hardwareAcceleration)
             .StartWithClassicDesktopLifetime(args);
     }
 
-    // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
+    {
+        // ReSharper disable once IntroduceOptionalParameters.Global
+        return BuildAvaloniaApp(true);
+    }
+
+    public static AppBuilder BuildAvaloniaApp(bool hardwareAcceleration)
     {
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            .With(new Win32PlatformOptions
+            {
+                RenderingMode = hardwareAcceleration
+                    ? [Win32RenderingMode.AngleEgl, Win32RenderingMode.Software]
+                    : [Win32RenderingMode.Software]
+            })
+            .With(new X11PlatformOptions
+            {
+                RenderingMode = hardwareAcceleration
+                    ? [X11RenderingMode.Egl, X11RenderingMode.Glx, X11RenderingMode.Software]
+                    : [X11RenderingMode.Software]
+            })
+            .With(new AvaloniaNativePlatformOptions
+            {
+                RenderingMode = hardwareAcceleration
+                    ?
+                    [
+                        AvaloniaNativeRenderingMode.Metal, AvaloniaNativeRenderingMode.OpenGl,
+                        AvaloniaNativeRenderingMode.Software
+                    ]
+                    : [AvaloniaNativeRenderingMode.Software]
+            })
             .UseWaylandWithFallback()
             .LogToTrace()
             .UseR3();
+    }
+
+    private static bool CheckHardwareAcceleration()
+    {
+        try
+        {
+            string filePath = Path.Combine(AppPaths.RoamingData, "options.json");
+
+            if (!File.Exists(filePath))
+            {
+                return true;
+            }
+
+            byte[] bytes = File.ReadAllBytes(filePath);
+            Utf8JsonReader reader = new(bytes);
+
+            while (reader.Read())
+            {
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    continue;
+                }
+
+                if (reader.ValueTextEquals("useHardwareAcceleration"u8))
+                {
+                    reader.Read();
+                    return reader.GetBoolean();
+                }
+
+                reader.Read();
+                reader.Skip();
+            }
+        }
+        catch
+        {
+            return true;
+        }
+
+        return true;
     }
 }

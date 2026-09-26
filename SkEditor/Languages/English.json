@@ -219,6 +219,8 @@
   "SettingsIntegrationsApiKeysApiKeyPlaceholder": "Your {0} API key",
   "SettingsAdvancedDeveloperMode": "Developer mode",
   "SettingsAdvancedDeveloperModeDescription": "Enable developer mode to access developer features.",
+  "SettingsAdvancedHardwareAcceleration": "Hardware acceleration",
+  "SettingsAdvancedHardwareAccelerationDescription": "Uses the GPU for rendering. Disable if you experience performance or display issues (requires restart).",
   "SettingsAdvancedStartupSplashScreen": "Startup splash screen",
   "SettingsAdvancedStartupSplashScreenDescription": "Visual feedback during initialization.\n'Auto' will intelligently hide it if SkEditor starts instantly on your hardware.",
   "SettingsGeneralUseSplashScreenAuto": "Auto (recommended)",

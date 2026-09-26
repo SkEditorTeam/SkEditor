@@ -219,6 +219,8 @@
   "SettingsIntegrationsApiKeysApiKeyPlaceholder": "Twój klucz API dla {0}",
   "SettingsAdvancedDeveloperMode": "Tryb deweloperski",
   "SettingsAdvancedDeveloperModeDescription": "Włącza tryb deweloperski, dając dostęp do funkcji dla twórców.",
+  "SettingsAdvancedHardwareAcceleration": "Akceleracja sprzętowa",
+  "SettingsAdvancedHardwareAccelerationDescription": "Wykorzystuje GPU do renderowania. Wyłącz w przypadku problemów z wydajnością lub wyświetlaniem (wymaga restartu).",
   "SettingsAdvancedStartupSplashScreen": "Ekran powitalny",
   "SettingsAdvancedStartupSplashScreenDescription": "Wizualny wskaźnik ładowania podczas uruchamiania.\n'Auto' inteligentnie ukryje ekran powitalny, jeśli program uruchamia się błyskawicznie na Twoim sprzęcie.",
   "SettingsGeneralUseSplashScreenAuto": "Auto (zalecane)",

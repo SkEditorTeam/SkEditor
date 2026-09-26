@@ -219,6 +219,8 @@
   "SettingsIntegrationsApiKeysApiKeyPlaceholder": "Ваш ключ API для {0}",
   "SettingsAdvancedDeveloperMode": "Режим разработчика",
   "SettingsAdvancedDeveloperModeDescription": "Включить режим разработчика для доступа к функциям разработки.",
+  "SettingsAdvancedHardwareAcceleration": "Аппаратное ускорение",
+  "SettingsAdvancedHardwareAccelerationDescription": "Использует GPU для рендеринга. Отключите, если возникают проблемы с производительностью или отображением (требуется перезапуск).",
   "SettingsAdvancedStartupSplashScreen": "Заставка при запуске",
   "SettingsAdvancedStartupSplashScreenDescription": "Визуальный отклик во время инициализации.\n'Авто' автоматически скроет его, если SkEditor запускается мгновенно на вашем оборудовании.",
   "SettingsGeneralUseSplashScreenAuto": "Авто (рекомендуется)",

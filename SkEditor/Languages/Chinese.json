@@ -219,6 +219,8 @@
   "SettingsIntegrationsApiKeysApiKeyPlaceholder": "您的 {0} API 密钥",
   "SettingsAdvancedDeveloperMode": "开发者模式",
   "SettingsAdvancedDeveloperModeDescription": "启用开发者模式以访问各种开发与调试功能。",
+  "SettingsAdvancedHardwareAcceleration": "硬件加速",
+  "SettingsAdvancedHardwareAccelerationDescription": "使用 GPU 进行渲染。如果遇到性能或显示问题，请禁用此项（需要重启）。",
   "SettingsAdvancedStartupSplashScreen": "启动画面",
   "SettingsAdvancedStartupSplashScreenDescription": "软件初始化期间的视觉反馈。\\n选择“自动”将在硬件性能足够快、SkEditor 能瞬间启动时智能隐藏该画面。",
   "SettingsGeneralUseSplashScreenAuto": "自动（推荐）",

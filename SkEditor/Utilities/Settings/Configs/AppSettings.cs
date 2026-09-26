@@ -19,6 +19,12 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial List<SyntaxPairDto> SyntaxPairs { get; set; } = [];
 
     /// <summary>
+    ///     Whether to use hardware acceleration, if available.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool UseHardwareAcceleration { get; set; } = true;
+
+    /// <summary>
     ///     The UI scale factor.
     /// </summary>
     [ObservableProperty]

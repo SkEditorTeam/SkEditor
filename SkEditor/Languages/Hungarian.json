@@ -219,6 +219,8 @@
   "SettingsIntegrationsApiKeysApiKeyPlaceholder": "Az Ön {0} API-kulcsa",
   "SettingsAdvancedDeveloperMode": "Fejlesztői mód",
   "SettingsAdvancedDeveloperModeDescription": "Fejlesztői mód engedélyezése a fejlesztői funkciók eléréséhez.",
+  "SettingsAdvancedHardwareAcceleration": "Hardveres gyorsítás",
+  "SettingsAdvancedHardwareAccelerationDescription": "A GPU-t használja a rendereléshez. Tiltsa le, ha teljesítménybeli vagy megjelenítési problémákat tapasztal (újraindítást igényel).",
   "SettingsAdvancedStartupSplashScreen": "Indítóképernyő",
   "SettingsAdvancedStartupSplashScreenDescription": "Vizuális visszajelzés az indítás során.\\nAz 'Auto' intelligensen elrejti azt, ha a SkEditor azonnal betölt a hardverén.",
   "SettingsGeneralUseSplashScreenAuto": "Automatikus (Ajánlott)",
