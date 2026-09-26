@@ -8,7 +8,7 @@ using SkEditor.Utilities.Settings.Providers.Choice;
 
 namespace SkEditor.Models.Settings.Types;
 
-public record OptionItem(object? Value, TranslatableString Display, string? FontFamily = null)
+public record OptionItem(object? Value, TranslatableString Display)
 {
     public override string ToString()
     {
@@ -139,8 +139,7 @@ public class ChoiceSetting<T> : SettingElement<ChoiceSetting<T>>, IChoiceSetting
             {
                 WrappedOptions.Add(new OptionItem(
                     o,
-                    Provider.GetDisplayValue(o!),
-                    Provider.GetFontFamily(o!)));
+                    Provider.GetDisplayValue(o!)));
             }
 
             T currentVal = Property.Get != null ? Property.Get() : SelectedOption.Value;

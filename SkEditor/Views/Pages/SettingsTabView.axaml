@@ -74,10 +74,10 @@
             <ToggleSwitch IsChecked="{Binding IsToggled.Value}" />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type types:IChoiceSetting}">
+        <DataTemplate DataType="{x:Type types:IFontChoiceSetting}">
             <ComboBox ItemsSource="{Binding Options}"
-                      Width="{Binding Width}"
-                      MaxWidth="{Binding MaxWidth}"
+                      Width="{Binding Width, FallbackValue=NaN}"
+                      MaxWidth="{Binding MaxWidth, FallbackValue=NaN}"
                       SelectedItem="{Binding SelectedItem}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type types:OptionItem}">
@@ -94,8 +94,34 @@
 
                     <Style Selector="ComboBox ComboBoxItem" x:DataType="types:OptionItem">
                         <Setter Property="FontFamily"
-                                Value="{Binding FontFamily, Converter={StaticResource SettingsFontFamilyConverter}}" />
+                                Value="{Binding Value, Converter={StaticResource SettingsFontFamilyConverter}}" />
+                        <Setter Property="Height" Value="32" />
+                        <Setter Property="Padding" Value="12,0" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                    </Style>
+                </ComboBox.Styles>
+            </ComboBox>
+        </DataTemplate>
 
+        <DataTemplate DataType="{x:Type types:IChoiceSetting}">
+            <ComboBox ItemsSource="{Binding Options}"
+                      Width="{Binding Width, FallbackValue=NaN}"
+                      MaxWidth="{Binding MaxWidth, FallbackValue=NaN}"
+                      SelectedItem="{Binding SelectedItem}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type types:OptionItem}">
+                        <TextBlock Text="{Binding Display.Value}"
+                                   VerticalAlignment="Center"
+                                   TextTrimming="CharacterEllipsis" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+
+                <ComboBox.Styles>
+                    <Style Selector="ComboBox /template/ Popup#PART_Popup">
+                        <Setter Property="Width" Value="{Binding $parent[ComboBox].MaxWidth}" />
+                    </Style>
+
+                    <Style Selector="ComboBox ComboBoxItem" x:DataType="types:OptionItem">
                         <Setter Property="Height" Value="32" />
                         <Setter Property="Padding" Value="12,0" />
                         <Setter Property="VerticalContentAlignment" Value="Center" />

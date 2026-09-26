@@ -70,7 +70,7 @@ public class AppearanceSectionProvider(
                     .WithDescription(TranslationKey.SettingsAppearanceEditorFontDescription)
                     .WithIcon(Symbol.TextFont)
                     .WithChildren(
-                        ChoiceSetting<string?>
+                        FontChoiceSetting
                             .Create(TranslationKey.SettingsAppearanceFontFamily)
                             .WithMinWidth(196)
                             .WithMaxWidth(196)

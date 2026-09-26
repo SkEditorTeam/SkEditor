@@ -22,11 +22,6 @@ public class FontFamilyChoiceProvider : ISettingsChoiceProvider<string?>
         return fonts;
     }
 
-    public string? GetFontFamily(string? value)
-    {
-        return value;
-    }
-
     public TranslatableString GetDisplayValue(string? value)
     {
         if (value is null)
