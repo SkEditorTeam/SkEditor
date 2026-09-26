@@ -1,14 +1,10 @@
-﻿using System.Threading.Tasks;
-using FluentIcons.Common;
+﻿using FluentIcons.Common;
 using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
-using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.Utilities.Settings.Providers.Choice;
-using SkEditor.Views.Windows;
 using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
 
 namespace SkEditor.Utilities.Settings.Providers.Sections;
@@ -16,9 +12,8 @@ namespace SkEditor.Utilities.Settings.Providers.Sections;
 public class AppearanceSectionProvider(
     AppSettings appSettings,
     ThemeChoiceProvider themeProvider,
+    FontFamilyChoiceProvider fontFamilyProvider,
     IThemeService themes,
-    ITranslationService translations,
-    WindowRegistry windowRegistry,
     ILinkService links) : ISettingsSectionProvider
 {
     public SettingSection GetSection()
@@ -75,16 +70,12 @@ public class AppearanceSectionProvider(
                     .WithDescription(TranslationKey.SettingsAppearanceEditorFontDescription)
                     .WithIcon(Symbol.TextFont)
                     .WithChildren(
-                        ActionSetting
+                        ChoiceSetting<string?>
                             .Create(TranslationKey.SettingsAppearanceFontFamily)
-                            .WithDescription(translations.GetObservable(
-                                TranslationKey.SettingsAppearanceCurrentFontDescription,
-                                GetFontName()))
-                            .WithAction(TranslationKey.ButtonChange, async s =>
-                            {
-                                await SelectFont();
-                                s.Description.Value?.UpdateParameters(GetFontName());
-                            }),
+                            .WithMinWidth(196)
+                            .WithMaxWidth(196)
+                            .WithProperty(appSettings.GetProperty<string?>(AppSettingsProperty.EditorFontFamily))
+                            .WithProvider(fontFamilyProvider),
                         NumberSetting<int>
                             .Create(TranslationKey.SettingsAppearanceFontSize)
                             .WithProperty(appSettings.GetProperty<int>(AppSettingsProperty.EditorFontSize))
@@ -111,34 +102,5 @@ public class AppearanceSectionProvider(
                     .WithIcon(Symbol.Highlight)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.HighlightCurrentLine))
             ]);
-    }
-
-    private async Task SelectFont()
-    {
-        if (windowRegistry.Active is not { } mainWindow)
-        {
-            return;
-        }
-
-        FontSelectionWindow window = new();
-        string result = await window.ShowDialog<string>(mainWindow);
-        if (result is null)
-        {
-            return;
-        }
-
-        appSettings.EditorFontFamily = result == "Default"
-            ? null
-            : result;
-    }
-
-    private object GetFontName()
-    {
-        if (appSettings.EditorFontFamily is not null)
-        {
-            return appSettings.EditorFontFamily;
-        }
-
-        return (TranslatableString)TranslationKey.SettingsAppearanceCurrentFontDescriptionDefault;
     }
 }

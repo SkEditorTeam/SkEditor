@@ -273,6 +273,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<SyntaxThemeSkriptChoiceProvider>();
             services.AddSingleton<SyntaxGrammarChoiceProvider>();
             services.AddSingleton<SyntaxGrammarSkriptChoiceProvider>();
+            services.AddSingleton<FontFamilyChoiceProvider>();
         }
 
         private void AddSectionProviders()
