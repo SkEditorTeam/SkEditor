@@ -8,12 +8,20 @@ using SkEditor.Utilities.Settings.Providers.Choice;
 
 namespace SkEditor.Models.Settings.Types;
 
-public record OptionItem(object? Value, TranslatableString Display);
+public record OptionItem(object? Value, TranslatableString Display, string? FontFamily = null)
+{
+    public override string ToString()
+    {
+        return Display?.Value ?? string.Empty;
+    }
+}
 
 public interface IChoiceSetting
 {
     ObservableCollection<OptionItem> Options { get; }
     object? SelectedItem { get; set; }
+    double? Width { get; set; }
+    double? MaxWidth { get; set; }
 }
 
 public class ChoiceSetting<T> : SettingElement<ChoiceSetting<T>>, IChoiceSetting, IDisposable
@@ -54,6 +62,10 @@ public class ChoiceSetting<T> : SettingElement<ChoiceSetting<T>>, IChoiceSetting
         set => SelectedOption.Value = value is OptionItem { Value: T val } ? val : default!;
     }
 
+    public override double? Width { get; set; }
+    public double? MinWidth { get; set; }
+    public double? MaxWidth { get; set; }
+
     public static ChoiceSetting<T> Create(TranslatableString name)
     {
         return new ChoiceSetting<T>(new BindableReactiveProperty<TranslatableString>(name));
@@ -67,6 +79,24 @@ public class ChoiceSetting<T> : SettingElement<ChoiceSetting<T>>, IChoiceSetting
     public ChoiceSetting<T> WithProperty((Func<T> Get, Action<T> Set) property)
     {
         Property = property;
+        return this;
+    }
+
+    public ChoiceSetting<T> WithWidth(double width)
+    {
+        Width = width;
+        return this;
+    }
+
+    public ChoiceSetting<T> WithMinWidth(double minWidth)
+    {
+        MinWidth = minWidth;
+        return this;
+    }
+
+    public ChoiceSetting<T> WithMaxWidth(double maxWidth)
+    {
+        MaxWidth = maxWidth;
         return this;
     }
 
@@ -107,7 +137,10 @@ public class ChoiceSetting<T> : SettingElement<ChoiceSetting<T>>, IChoiceSetting
             WrappedOptions.Clear();
             foreach (T o in Options)
             {
-                WrappedOptions.Add(new OptionItem(o, Provider.GetDisplayValue(o!)));
+                WrappedOptions.Add(new OptionItem(
+                    o,
+                    Provider.GetDisplayValue(o!),
+                    Provider.GetFontFamily(o!)));
             }
 
             T currentVal = Property.Get != null ? Property.Get() : SelectedOption.Value;

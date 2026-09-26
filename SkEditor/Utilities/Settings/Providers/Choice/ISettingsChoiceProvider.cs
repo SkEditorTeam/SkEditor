@@ -14,4 +14,9 @@ public interface ISettingsChoiceProvider<T>
     {
         return TranslatableString.FromRawString(value?.ToString() ?? string.Empty);
     }
+
+    string? GetFontFamily(T value)
+    {
+        return null;
+    }
 }
