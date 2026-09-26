@@ -9,6 +9,7 @@ public class ExpandableSetting(BindableReactiveProperty<TranslatableString> name
     : SettingElement<ExpandableSetting>(name)
 {
     public ObservableCollection<SettingElement> Children { get; } = [];
+    public BindableReactiveProperty<bool> IsExpanded { get; } = new(false);
 
     public static ExpandableSetting Create(TranslatableString name)
     {

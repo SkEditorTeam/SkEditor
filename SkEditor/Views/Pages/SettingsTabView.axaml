@@ -263,6 +263,7 @@
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
+                                        IsExpanded="{Binding IsExpanded.Value, Mode=TwoWay}"
                                         Description="{Binding Description.Value.Value, FallbackValue='{x:Null}'}"
                                         ItemsSource="{Binding Children}">
                                         <controls:FASettingsExpander.IconSource>
