@@ -11,7 +11,7 @@ namespace SkEditor.Utilities.Localization;
 ///     Represents a string that can be translated based on a translation key.
 ///     It listens for global language changes and updates its value accordingly.
 /// </summary>
-public partial class TranslatableString : ObservableObject, IDisposable
+public partial class TranslatableString : ObservableObject
 {
     private static readonly HashSet<WeakReference<TranslatableString>> Instances = [];
     private static bool _eventSubscribed;
@@ -151,12 +151,5 @@ public partial class TranslatableString : ObservableObject, IDisposable
                 }
             }
         }
-    }
-
-
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-        TranslationService.Current.LanguageChanged -= OnGlobalLanguageChanged;
     }
 }
