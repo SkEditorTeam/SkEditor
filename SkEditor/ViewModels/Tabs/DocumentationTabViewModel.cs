@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -119,15 +118,11 @@ public partial class DocumentationTabViewModel : TabViewModelBase
             CanChangeFilters = false;
             CurrentError = null;
             
-            Stopwatch stopwatch = Stopwatch.StartNew();
             string downloadUrl = provider.GetDownloadUrl();
 
             await using Stream docStream =
                 await _documentation.GetDocumentationStream(provider.FileName, downloadUrl, ct);
             IReadOnlyList<DocumentationEntry> entries = await provider.GetDocumentationEntriesAsync(docStream, ct);
-
-            stopwatch.Stop();
-            _notifs.Debug($"Loading documentation took {stopwatch.ElapsedMilliseconds} ms");
 
             if (ct.IsCancellationRequested)
             {
@@ -148,12 +143,18 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         {
             // ignored
         }
-        catch (DocumentationException ex) when (ex.ApiKeyMissing)
+        catch (DocumentationException ex) when (ex.ApiKeyMissing || ex.ApiKeyInvalid)
         {
+            _documentation.DeleteCache(provider.FileName);
+            
             CurrentState = DocumentationState.Error;
             CurrentError = new DocumentationErrorInfo(
-                TranslationKey.DocumentationApiKeyMissingTitle,
-                TranslationKey.DocumentationApiKeyMissingMessage,
+                ex.ApiKeyInvalid
+                    ? TranslationKey.DocumentationApiKeyInvalidTitle
+                    : TranslationKey.DocumentationApiKeyMissingTitle,
+                ex.ApiKeyInvalid
+                    ? TranslationKey.DocumentationApiKeyInvalidMessage
+                    : TranslationKey.DocumentationApiKeyMissingMessage,
                 Symbol.Key,
                 true,
                 true

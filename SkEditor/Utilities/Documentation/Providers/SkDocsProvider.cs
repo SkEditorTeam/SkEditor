@@ -20,9 +20,16 @@ public class SkDocsProvider : IDocumentationProvider
         return "https://api.skdocs.org/api/search?q=ALL_ADDON_SYNTAXES";
     }
 
+    private IReadOnlyList<DocumentationEntry>? _cachedEntries;
+
     public async Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync(Stream jsonStream,
         CancellationToken ct)
     {
+        if (_cachedEntries is not null)
+        {
+            return _cachedEntries;
+        }
+        
         SkDocsResponseDto? serializedResponse =
             await JsonSerializer.DeserializeAsync<SkDocsResponseDto>(jsonStream,
                 SkDocsResponseContext.Default.SkDocsResponseDto, ct);
@@ -32,7 +39,7 @@ public class SkDocsProvider : IDocumentationProvider
             return [];
         }
 
-        return serializedResponse.Results.Select(doc => new DocumentationEntry
+        List<DocumentationEntry> entries = serializedResponse.Results.Select(doc => new DocumentationEntry
         {
             Name = WebUtility.HtmlDecode(doc.Title),
             Type = StringToCategory(doc.Category),
@@ -41,6 +48,9 @@ public class SkDocsProvider : IDocumentationProvider
             Version = WebUtility.HtmlDecode(doc.Since),
             Patterns = WebUtility.HtmlDecode(doc.Syntax)
         }).ToList();
+
+        _cachedEntries = entries;
+        return _cachedEntries;
     }
 
     private static DocumentationSyntaxType StringToCategory(string type)

@@ -52,4 +52,13 @@ public class DocumentationService(HttpClient httpClient) : IDocumentationService
 
         return new FileStream(filePath, options);
     }
+
+    public void DeleteCache(string fileName)
+    {
+        string filePath = Path.Combine(_docsPath, fileName);
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
+    }
 }

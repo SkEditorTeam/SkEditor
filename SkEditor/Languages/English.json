@@ -432,6 +432,8 @@
   "DocumentationAllAddons": "All addons",
   "DocumentationApiKeyMissingTitle": "API key required",
   "DocumentationApiKeyMissingMessage": "You don't have an API key set to use this provider. Set it up in the settings.",
+  "DocumentationApiKeyInvalidTitle": "Invalid API key",
+  "DocumentationApiKeyInvalidMessage": "The API key you provided is invalid. Please check your settings and try again.",
   "DocumentationConnectionErrorTitle": "Connection error",
   "DocumentationConnectionErrorMessage": "Something went wrong trying to connect to the provider. Check your internet connection and try again.",
   "DocumentationConnectionErrorGenericTitle": "Error loading documentation",

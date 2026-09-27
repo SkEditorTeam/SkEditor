@@ -6,7 +6,6 @@ using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Platform;
 using SkEditor.Models.Documentation;
 using SkEditor.Utilities.Settings.Configs;
 
@@ -32,14 +31,32 @@ public class SkUnityProvider(SecretsConfig secrets) : IDocumentationProvider
         return $"https://api.skunity.com/v1/{apiKey}/docs/getAllSyntax";
     }
 
+    private IReadOnlyList<DocumentationEntry>? _cachedEntries;
+
     public async Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync(Stream jsonStream,
         CancellationToken ct)
     {
-        Uri jsonFile = new("avares://SkEditor/Assets/skunity-docs.json");
-        await using Stream stream = AssetLoader.Open(jsonFile);
+        if (_cachedEntries is not null)
+        {
+            return _cachedEntries;
+        }
 
+        using (JsonDocument doc = await JsonDocument.ParseAsync(jsonStream, cancellationToken: ct))
+        {
+            JsonElement root = doc.RootElement;
+            if (root.TryGetProperty("response", out JsonElement resp) && resp.ValueEquals("failed"))
+            {
+                throw new DocumentationException
+                {
+                    ApiKeyInvalid = true
+                };
+            }
+        }
+
+        jsonStream.Position = 0;
+        
         SkUnityResponseDto? response =
-            await JsonSerializer.DeserializeAsync<SkUnityResponseDto>(stream,
+            await JsonSerializer.DeserializeAsync<SkUnityResponseDto>(jsonStream,
                 SkUnityResponseContext.Default.SkUnityResponseDto, ct);
 
         if (response is null)
@@ -47,7 +64,7 @@ public class SkUnityProvider(SecretsConfig secrets) : IDocumentationProvider
             return [];
         }
 
-        return response.ResultDto.Docs.Values.Select(doc => new DocumentationEntry
+        var entries = response.ResultDto.Docs.Values.Select(doc => new DocumentationEntry
         {
             Name = WebUtility.HtmlDecode(doc.Name),
             Type = StringToCategory(doc.Type),
@@ -56,6 +73,9 @@ public class SkUnityProvider(SecretsConfig secrets) : IDocumentationProvider
             Version = WebUtility.HtmlDecode(doc.Version),
             Patterns = WebUtility.HtmlDecode(doc.Pattern)
         }).ToList();
+
+        _cachedEntries = entries;
+        return _cachedEntries;
     }
 
     private static DocumentationSyntaxType StringToCategory(string type)

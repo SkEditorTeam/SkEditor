@@ -7,4 +7,5 @@ namespace SkEditor.Contracts.Services;
 public interface IDocumentationService
 {
     Task<Stream> GetDocumentationStream(string fileName, string url, CancellationToken ct = default);
+    void DeleteCache(string fileName);
 }
