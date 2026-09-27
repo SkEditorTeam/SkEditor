@@ -37,12 +37,16 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
         _configs = configs;
         _messenger = messenger;
         SettingsCategories = [];
+        _sectionsById = [];
 
         var providerData = sectionProviders
             .Select(p => new { Provider = p, Section = p.GetSection() })
             .ToList();
 
-        _sectionsById = providerData.ToDictionary(x => x.Section.Id, x => x.Section);
+        foreach (var item in providerData)
+        {
+            RegisterSection(item.Section, null);
+        }
 
         foreach (var item in providerData)
         {
@@ -72,7 +76,7 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
                 continue;
             }
 
-            List<SettingSection> sorted = section.Subsections.OrderBy(s => s.Order).ToList();
+            List<SettingSection> sorted = [.. section.Subsections.OrderBy(s => s.Order)];
             section.Subsections.Clear();
             foreach (SettingSection s in sorted)
             {
@@ -86,6 +90,21 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
         }
 
         _messenger.Register(this);
+        return;
+
+        void RegisterSection(SettingSection section, SettingSection? parent)
+        {
+            _sectionsById[section.Id] = section;
+            if (parent is not null)
+            {
+                _parentMap[section.Id] = parent;
+            }
+
+            foreach (SettingSection sub in section.Subsections)
+            {
+                RegisterSection(sub, section);
+            }
+        }
     }
 
     public void Receive(NavigateToSettingsSectionMessage message)
