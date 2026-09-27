@@ -25,6 +25,7 @@ using SkEditor.Services.Localization;
 using SkEditor.Services.Security;
 using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
+using SkEditor.Utilities.Docs.Providers;
 using SkEditor.Utilities.Editor.Commands;
 using SkEditor.Utilities.Editor.Completions;
 using SkEditor.Utilities.Menu;
@@ -72,11 +73,14 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
             services.AddSingleton<ICredentialStoreFactory, CredentialStoreFactory>();
             services.AddHttpClient<IPublishService, PublishService>();
+            services.AddHttpClient<IDocumentationService, DocumentationService>();
 
             services.AddSingleton<IMenuService, MenuService>();
             services.AddMainMenuProviders();
 
             services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+
+            services.AddDocumentationProviders();
         }
 
         public void AddWindowing()
@@ -314,6 +318,12 @@ public static class ServiceCollectionExtensions
             viewLocator.Register<LogsToolbarViewModel, LogsToolbarView>();
 
             services.AddSingleton(viewLocator);
+        }
+
+        private void AddDocumentationProviders()
+        {
+            services.AddSingleton<IDocumentationProvider, SkDocsProvider>();
+            services.AddSingleton<IDocumentationProvider, SkUnityProvider>();
         }
     }
 }

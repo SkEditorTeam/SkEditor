@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Platform;
 using SkEditor.Models.Documentation;
 
 namespace SkEditor.Utilities.Docs.Providers;
@@ -13,22 +13,26 @@ namespace SkEditor.Utilities.Docs.Providers;
 public class SkDocsProvider : IDocumentationProvider
 {
     public string Name => "SkDocs";
+    public string FileName => "skdocs.json";
 
-    public async Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync()
+    public string GetDownloadUrl()
     {
-        Uri jsonFile = new("avares://SkEditor/Assets/skdocs.json");
-        await using Stream stream = AssetLoader.Open(jsonFile);
+        return "https://api.skdocs.org/api/search?q=ALL_ADDON_SYNTAXES";
+    }
 
-        SkDocsResponseDto? response =
-            await JsonSerializer.DeserializeAsync<SkDocsResponseDto>(stream,
-                SkDocsResponseContext.Default.SkDocsResponseDto);
+    public async Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync(Stream jsonStream,
+        CancellationToken ct)
+    {
+        SkDocsResponseDto? serializedResponse =
+            await JsonSerializer.DeserializeAsync<SkDocsResponseDto>(jsonStream,
+                SkDocsResponseContext.Default.SkDocsResponseDto, ct);
 
-        if (response is null)
+        if (serializedResponse is null)
         {
             return [];
         }
 
-        return response.Results.Select(doc => new DocumentationEntry
+        return serializedResponse.Results.Select(doc => new DocumentationEntry
         {
             Name = WebUtility.HtmlDecode(doc.Title),
             Type = StringToCategory(doc.Category),

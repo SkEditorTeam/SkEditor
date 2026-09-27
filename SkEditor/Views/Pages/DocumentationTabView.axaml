@@ -37,229 +37,250 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto,*" Margin="16" RowSpacing="32" ColumnSpacing="32">
-
-        <!-- Filters, provider and search -->
-        <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12" MaxWidth="1100" HorizontalAlignment="Stretch">
-            <ComboBox Grid.Column="0"
-                      ItemsSource="{Binding Providers}"
-                      SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
-                      Padding="16,8"
-                      IsVisible="{Binding Bounds.Width, 
+    <Panel>
+        <Grid RowDefinitions="Auto,*" Margin="16" RowSpacing="32" ColumnSpacing="32"
+              Opacity="{Binding !IsLoadingDocs.Value}"
+              IsHitTestVisible="{Binding !IsLoadingDocs.Value}">
+            <!-- Filters, provider and search -->
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12" MaxWidth="1100" HorizontalAlignment="Stretch">
+                <ComboBox Grid.Column="0"
+                          ItemsSource="{Binding Providers}"
+                          SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
+                          Padding="16,8"
+                          IsVisible="{Binding Bounds.Width, 
                                    RelativeSource={RelativeSource AncestorType=Grid}, 
                                    Converter={StaticResource WidthToVisibilityConverter}, 
                                    ConverterParameter=700}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                            <Viewbox Height="18">
-                                <fluent:SymbolIcon Symbol="Library" />
-                            </Viewbox>
-                            <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0,-1,0,0" MaxWidth="100"
-                                       VerticalAlignment="Center"
-                                       TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Name}" />
-                        </Grid>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                <Viewbox Height="18">
+                                    <fluent:SymbolIcon Symbol="Library" />
+                                </Viewbox>
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0,-1,0,0" MaxWidth="100"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Name}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
-            <ComboBox Grid.Column="1" ItemsSource="{Binding SyntaxTypes}"
-                      SelectedItem="{Binding SelectedSyntaxType, Mode=TwoWay}"
-                      Padding="16,8">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Viewbox Height="18">
-                                <controls:FAIconSourceElement
-                                    IconSource="{Binding ., Converter={StaticResource SyntaxIconConverter}}"
-                                    Foreground="{Binding ., Converter={StaticResource SyntaxTypeColorConverter}}" />
-                            </Viewbox>
-                            <TextBlock Text="{Binding ., Converter={StaticResource SyntaxTypeNameConverter}}"
-                                       VerticalAlignment="Center"
-                                       Margin="0,-1,0,0" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding SyntaxTypes}"
+                          SelectedItem="{Binding SelectedSyntaxType, Mode=TwoWay}"
+                          Padding="16,8">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Viewbox Height="18">
+                                    <controls:FAIconSourceElement
+                                        IconSource="{Binding ., Converter={StaticResource SyntaxIconConverter}}"
+                                        Foreground="{Binding ., Converter={StaticResource SyntaxTypeColorConverter}}" />
+                                </Viewbox>
+                                <TextBlock Text="{Binding ., Converter={StaticResource SyntaxTypeNameConverter}}"
+                                           VerticalAlignment="Center"
+                                           Margin="0,-1,0,0" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
-            <TextBox Grid.Column="2" PlaceholderText="{localization:Translate DocumentationSearchPlaceholder}"
-                     VerticalContentAlignment="Center"
-                     Theme="{StaticResource SearchBoxTheme}"
-                     Text="{Binding SearchText, Mode=TwoWay}" HorizontalAlignment="Stretch" />
+                <TextBox Grid.Column="2" PlaceholderText="{localization:Translate DocumentationSearchPlaceholder}"
+                         VerticalContentAlignment="Center"
+                         Theme="{StaticResource SearchBoxTheme}"
+                         Text="{Binding SearchText, Mode=TwoWay}" HorizontalAlignment="Stretch" />
 
-            <ComboBox Grid.Column="3" ItemsSource="{Binding AvailableAddons}"
-                      SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
-                      Padding="16,8"
-                      IsVisible="{Binding Bounds.Width, 
+                <ComboBox Grid.Column="3" ItemsSource="{Binding AvailableAddons}"
+                          SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
+                          Padding="16,8"
+                          IsVisible="{Binding Bounds.Width, 
                                    RelativeSource={RelativeSource AncestorType=Grid}, 
                                    Converter={StaticResource WidthToVisibilityConverter}, 
                                    ConverterParameter=550}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                            <Viewbox Height="18">
-                                <fluent:SymbolIcon Symbol="PuzzlePiece" />
-                            </Viewbox>
-                            <TextBlock Grid.Column="1"
-                                       Text="{Binding ., Converter={StaticResource AddonNameConverter}}"
-                                       Margin="0,-1,0,0" MaxWidth="100"
-                                       VerticalAlignment="Center"
-                                       TextTrimming="CharacterEllipsis"
-                                       ToolTip.Tip="{Binding ., Converter={StaticResource AddonNameConverter}}" />
-                        </Grid>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Grid>
-
-        <Grid Grid.Row="1" ColumnSpacing="32"
-              IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MaxWidth="300" MinWidth="100" />
-                <ColumnDefinition Width="3*" />
-            </Grid.ColumnDefinitions>
-
-            <!-- List of all elements -->
-            <ListBox Grid.Column="0" ItemsSource="{Binding FilteredEntries}" MaxWidth="300"
-                     HorizontalAlignment="Stretch" SelectionMode="AlwaysSelected" ClipToBounds="False"
-                     SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
-                <ListBox.Styles>
-                    <Style Selector="ListBox /template/ ScrollViewer">
-                        <Setter Property="Margin" Value="0,0,-8,0" />
-                        <Setter Property="Interaction.Behaviors">
-                            <BehaviorCollection>
-                                <behaviors:SmoothScrollBehavior />
-                            </BehaviorCollection>
-                        </Setter>
-
-                        <Setter Property="Padding">
-                            <Binding Path="ScrollBarMaximum"
-                                     RelativeSource="{RelativeSource Self}"
-                                     Converter="{StaticResource ScrollVisibleToPaddingConverter}" />
-                        </Setter>
-                    </Style>
-
-                    <Style Selector="ListBoxItem" x:DataType="documentationUtils:DocumentationEntry">
-                        <Setter Property="ToolTip.Tip" Value="{Binding Name}" />
-                        <Setter Property="ToolTip.BetweenShowDelay" Value="100" />
-                        <Setter Property="ToolTip.ShowDelay" Value="1000" />
-                    </Style>
-                </ListBox.Styles>
-
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                            <controls:FAIconSourceElement
-                                IconSource="{Binding Type, Converter={StaticResource SyntaxIconConverter}}"
-                                Foreground="{Binding Type, Converter={StaticResource SyntaxTypeColorConverter}}"
-                                Width="24" Height="24" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="16" TextWrapping="NoWrap"
-                                       TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="240" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-            <!-- Selected item view -->
-            <Border Grid.Column="1"
-                    Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
-                    Padding="24,24,0,24">
-                <ScrollViewer Padding="0,0,24,0">
-                    <Interaction.Behaviors>
-                        <behaviors:SmoothScrollBehavior />
-                    </Interaction.Behaviors>
-                    <DockPanel VerticalSpacing="24" LastChildFill="False">
-                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16" DockPanel.Dock="Top" Height="40">
-                            <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
-                                <Viewbox Height="28" VerticalAlignment="Center">
-                                    <controls:FAIconSourceElement
-                                        Foreground="{Binding SelectedEntry?.Type, Converter={StaticResource SyntaxTypeColorConverter}}"
-                                        IconSource="{Binding SelectedEntry?.Type, Converter={StaticResource SyntaxIconConverter}}" />
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                <Viewbox Height="18">
+                                    <fluent:SymbolIcon Symbol="PuzzlePiece" />
                                 </Viewbox>
-                                <TextBlock x:Name="TitleTextBlock" Text="{Binding SelectedEntry?.Name}"
-                                           FontSize="24" TextTrimming="CharacterEllipsis"
-                                           FontWeight="DemiBold"
-                                           VerticalAlignment="Center" Margin="0,-1,0,0" />
-                            </StackPanel>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding ., Converter={StaticResource AddonNameConverter}}"
+                                           Margin="0,-1,0,0" MaxWidth="100"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis"
+                                           ToolTip.Tip="{Binding ., Converter={StaticResource AddonNameConverter}}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
 
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal"
-                                        Spacing="8">
+            <Grid Grid.Row="1" ColumnSpacing="32"
+                  IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}">
 
-                                <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
-                                        Padding="20,8">
-                                    <Border.IsVisible>
-                                        <MultiBinding Converter="{StaticResource BadgeVisibilityConverter}"
-                                                      ConverterParameter="Addon">
-                                            <Binding Path="Bounds.Width"
-                                                     RelativeSource="{RelativeSource AncestorType=Grid}" />
-                                            <Binding Path="SelectedEntry.Name" FallbackValue="" />
-                                            <Binding Path="SelectedEntry.Addon" FallbackValue="" />
-                                            <Binding Path="SelectedEntry.Version" FallbackValue="" />
-                                        </MultiBinding>
-                                    </Border.IsVisible>
-                                    <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-                                        <Viewbox Height="18" VerticalAlignment="Center">
-                                            <fluent:SymbolIcon Symbol="PuzzlePiece" />
-                                        </Viewbox>
-                                        <TextBlock Text="{Binding SelectedEntry?.Addon}" FontSize="16"
-                                                   VerticalAlignment="Center" Padding="0,0,0,1" />
-                                    </StackPanel>
-                                </Border>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MaxWidth="300" MinWidth="100" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
 
-                                <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
-                                        Padding="20,8">
-                                    <Border.IsVisible>
-                                        <MultiBinding Converter="{StaticResource BadgeVisibilityConverter}"
-                                                      ConverterParameter="Version">
-                                            <Binding Path="Bounds.Width"
-                                                     RelativeSource="{RelativeSource AncestorType=Grid}" />
-                                            <Binding Path="SelectedEntry.Name" FallbackValue="" />
-                                            <Binding Path="SelectedEntry.Addon" FallbackValue="" />
-                                            <Binding Path="SelectedEntry.Version" FallbackValue="" />
-                                        </MultiBinding>
-                                    </Border.IsVisible>
-                                    <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-                                        <Viewbox Height="18" VerticalAlignment="Center">
-                                            <fluent:SymbolIcon Symbol="History" />
-                                        </Viewbox>
-                                        <TextBlock Text="{Binding SelectedEntry?.Version}" FontSize="16"
-                                                   VerticalAlignment="Center" Padding="0,0,0,1" />
-                                    </StackPanel>
-                                </Border>
+                <!-- List of all elements -->
+                <ListBox Grid.Column="0" ItemsSource="{Binding FilteredEntries}" MaxWidth="300"
+                         HorizontalAlignment="Stretch" SelectionMode="AlwaysSelected" ClipToBounds="False"
+                         SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
+                    <ListBox.Styles>
+                        <Style Selector="ListBox /template/ ScrollViewer">
+                            <Setter Property="Margin" Value="0,0,-8,0" />
+                            <Setter Property="Interaction.Behaviors">
+                                <BehaviorCollection>
+                                    <behaviors:SmoothScrollBehavior />
+                                </BehaviorCollection>
+                            </Setter>
 
-                            </StackPanel>
-                        </Grid>
+                            <Setter Property="Padding">
+                                <Binding Path="ScrollBarMaximum"
+                                         RelativeSource="{RelativeSource Self}"
+                                         Converter="{StaticResource ScrollVisibleToPaddingConverter}" />
+                            </Setter>
+                        </Style>
 
-                        <TextBlock Text="{Binding SelectedEntry?.Description}" FontSize="16" TextWrapping="Wrap"
-                                   DockPanel.Dock="Top"
-                                   IsVisible="{Binding SelectedEntry?.Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        <Style Selector="ListBoxItem" x:DataType="documentationUtils:DocumentationEntry">
+                            <Setter Property="ToolTip.Tip" Value="{Binding Name}" />
+                            <Setter Property="ToolTip.BetweenShowDelay" Value="100" />
+                            <Setter Property="ToolTip.ShowDelay" Value="1000" />
+                        </Style>
+                    </ListBox.Styles>
 
-                        <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
-                                Padding="20,12"
-                                DockPanel.Dock="Top">
-                            <avaloniaEdit:TextEditor Name="PatternEditor" ShowLineNumbers="False"
-                                                     IsReadOnly="True"
-                                                     WordWrap="True"
-                                                     Document="{Binding PatternDocument}"
-                                                     Foreground="{DynamicResource EditorTextColor}"
-                                                     Background="Transparent"
-                                                     LineNumbersForeground="{DynamicResource LineNumbersColor}"
-                                                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                                     FontFeatures="-liga,-calt,-clig"
-                                                     FontSize="16"
-                                                     FontFamily="{DynamicResource JetBrainsFont}" />
-                        </Border>
-                    </DockPanel>
-                </ScrollViewer>
-            </Border>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                <controls:FAIconSourceElement
+                                    IconSource="{Binding Type, Converter={StaticResource SyntaxIconConverter}}"
+                                    Foreground="{Binding Type, Converter={StaticResource SyntaxTypeColorConverter}}"
+                                    Width="24" Height="24" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="16" TextWrapping="NoWrap"
+                                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" MaxWidth="240" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- Selected item view -->
+                <Border Grid.Column="1"
+                        Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
+                        Padding="24,24,0,24">
+                    <ScrollViewer Padding="0,0,24,0">
+                        <Interaction.Behaviors>
+                            <behaviors:SmoothScrollBehavior />
+                        </Interaction.Behaviors>
+                        <DockPanel VerticalSpacing="24" LastChildFill="False">
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16" DockPanel.Dock="Top" Height="40">
+                                <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                                    <Viewbox Height="28" VerticalAlignment="Center">
+                                        <controls:FAIconSourceElement
+                                            Foreground="{Binding SelectedEntry?.Type, Converter={StaticResource SyntaxTypeColorConverter}}"
+                                            IconSource="{Binding SelectedEntry?.Type, Converter={StaticResource SyntaxIconConverter}}" />
+                                    </Viewbox>
+                                    <TextBlock x:Name="TitleTextBlock" Text="{Binding SelectedEntry?.Name}"
+                                               FontSize="24" TextTrimming="CharacterEllipsis"
+                                               FontWeight="DemiBold"
+                                               VerticalAlignment="Center" Margin="0,-1,0,0" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal"
+                                            Spacing="8">
+
+                                    <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
+                                            Padding="20,8">
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource BadgeVisibilityConverter}"
+                                                          ConverterParameter="Addon">
+                                                <Binding Path="Bounds.Width"
+                                                         RelativeSource="{RelativeSource AncestorType=Grid}" />
+                                                <Binding Path="SelectedEntry.Name" FallbackValue="" />
+                                                <Binding Path="SelectedEntry.Addon" FallbackValue="" />
+                                                <Binding Path="SelectedEntry.Version" FallbackValue="" />
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                            <Viewbox Height="18" VerticalAlignment="Center">
+                                                <fluent:SymbolIcon Symbol="PuzzlePiece" />
+                                            </Viewbox>
+                                            <TextBlock Text="{Binding SelectedEntry?.Addon}" FontSize="16"
+                                                       VerticalAlignment="Center" Padding="0,0,0,1" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
+                                            Padding="20,8">
+                                        <Border.IsVisible>
+                                            <MultiBinding Converter="{StaticResource BadgeVisibilityConverter}"
+                                                          ConverterParameter="Version">
+                                                <Binding Path="Bounds.Width"
+                                                         RelativeSource="{RelativeSource AncestorType=Grid}" />
+                                                <Binding Path="SelectedEntry.Name" FallbackValue="" />
+                                                <Binding Path="SelectedEntry.Addon" FallbackValue="" />
+                                                <Binding Path="SelectedEntry.Version" FallbackValue="" />
+                                            </MultiBinding>
+                                        </Border.IsVisible>
+                                        <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                            <Viewbox Height="18" VerticalAlignment="Center">
+                                                <fluent:SymbolIcon Symbol="History" />
+                                            </Viewbox>
+                                            <TextBlock Text="{Binding SelectedEntry?.Version}" FontSize="16"
+                                                       VerticalAlignment="Center" Padding="0,0,0,1" />
+                                        </StackPanel>
+                                    </Border>
+
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Text="{Binding SelectedEntry?.Description}" FontSize="16" TextWrapping="Wrap"
+                                       DockPanel.Dock="Top"
+                                       IsVisible="{Binding SelectedEntry?.Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+                            <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
+                                    Padding="20,12"
+                                    DockPanel.Dock="Top">
+                                <avaloniaEdit:TextEditor Name="PatternEditor" ShowLineNumbers="False"
+                                                         IsReadOnly="True"
+                                                         WordWrap="True"
+                                                         Document="{Binding PatternDocument}"
+                                                         Foreground="{DynamicResource EditorTextColor}"
+                                                         Background="Transparent"
+                                                         LineNumbersForeground="{DynamicResource LineNumbersColor}"
+                                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                         FontFeatures="-liga,-calt,-clig"
+                                                         FontSize="16"
+                                                         FontFamily="{DynamicResource JetBrainsFont}" />
+                            </Border>
+                        </DockPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+
+            <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5"
+                        Spacing="16" IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNull}}">
+                <fluent:SymbolIcon Symbol="WeatherSqualls" FontSize="64" />
+                <TextBlock Text="{localization:Translate DocumentationNoResultsFound}" FontSize="24" />
+            </StackPanel>
         </Grid>
 
-        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5"
-                    Spacing="16" IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNull}}">
-            <fluent:SymbolIcon Symbol="WeatherSqualls" FontSize="64" />
-            <TextBlock Text="{localization:Translate DocumentationNoResultsFound}" FontSize="24" />
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
+                    Opacity="{Binding IsLoadingDocs.Value}"
+                    IsHitTestVisible="{Binding IsLoadingDocs.Value}">
+            <StackPanel.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.15" />
+                </Transitions>
+            </StackPanel.Transitions>
+
+            <controls:FAProgressRing IsIndeterminate="True"
+                                     Width="64" Height="64"
+                                     Opacity="0.75" />
+
+            <TextBlock Text="Loading documentation..."
+                       FontSize="20" Opacity="0.9" />
         </StackPanel>
-    </Grid>
+    </Panel>
 </UserControl>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +9,7 @@ using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Documentation;
 using SkEditor.Models.Notifications;
@@ -18,6 +21,7 @@ namespace SkEditor.ViewModels.Tabs;
 
 public partial class DocumentationTabViewModel : TabViewModelBase
 {
+    private readonly IDocumentationService _documentation;
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
 
@@ -41,11 +45,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     public TextDocument PatternDocument { get; set; } = new();
 
-    public List<IDocumentationProvider> Providers { get; } =
-    [
-        new SkDocsProvider(),
-        new SkUnityProvider()
-    ];
+    public List<IDocumentationProvider> Providers { get; }
 
     [ObservableProperty]
     public partial string SearchText { get; set; } = string.Empty;
@@ -62,18 +62,23 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     [ObservableProperty]
     public partial DocumentationSyntaxType? SelectedSyntaxType { get; set; }
 
-    public List<DocumentationSyntaxType> SyntaxTypes { get; } = Enum.GetValues<DocumentationSyntaxType>().ToList();
+    public BindableReactiveProperty<bool> IsLoadingDocs { get; } = new(false);
 
-    public DocumentationTabViewModel(INotificationService notifs, ILogService logs) : base(
-        TranslationKey.DocumentationTabTitle, Symbol.Book)
+    public List<DocumentationSyntaxType> SyntaxTypes { get; } = [.. Enum.GetValues<DocumentationSyntaxType>()];
+
+    public DocumentationTabViewModel(IDocumentationService documentation, INotificationService notifs, ILogService logs,
+        IEnumerable<IDocumentationProvider> providers) : base(TranslationKey.DocumentationTabTitle, Symbol.Book)
     {
+        _documentation = documentation;
         _notifs = notifs;
         _logs = logs;
+
+        Providers = [.. providers];
 
         SelectedProvider ??= Providers.FirstOrDefault();
     }
 
-    public async Task LoadDocs(CancellationToken cancellationToken = default)
+    public async Task LoadDocs(CancellationToken ct = default)
     {
         IDocumentationProvider? provider = SelectedProvider;
         if (provider is null)
@@ -83,9 +88,21 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
         try
         {
-            IReadOnlyList<DocumentationEntry> entries = await provider.GetDocumentationEntriesAsync();
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
-            if (cancellationToken.IsCancellationRequested)
+            IsLoadingDocs.Value = true;
+
+            string downloadUrl = provider.GetDownloadUrl();
+
+            await using Stream docStream =
+                await _documentation.GetDocumentationStream(provider.FileName, downloadUrl, ct);
+            IReadOnlyList<DocumentationEntry> entries = await provider.GetDocumentationEntriesAsync(docStream, ct);
+            IsLoadingDocs.Value = false;
+
+            stopwatch.Stop();
+            _notifs.Debug($"Loading documentation took {stopwatch.ElapsedMilliseconds} ms");
+
+            if (ct.IsCancellationRequested)
             {
                 return;
             }
@@ -96,6 +113,15 @@ public partial class DocumentationTabViewModel : TabViewModelBase
             SelectedSyntaxType ??= DocumentationSyntaxType.All;
             Filter();
         }
+        catch (DocumentationException ex) when (ex.ApiKeyMissing)
+        {
+            Notification notification = Notification
+                .Create(TranslationKey.DocumentationLoadErrorTitle)
+                .WithMessage(TranslationKey.DocumentationApiKeyMissing)
+                .WithType(NotificationType.Error);
+
+            _notifs.Show(notification);
+        }
         catch (Exception ex)
         {
             Notification notification = Notification
@@ -105,6 +131,10 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
             _notifs.Show(notification);
             _logs.Error(ex, "Error loading documentation");
+        }
+        finally
+        {
+            IsLoadingDocs.Value = false;
         }
     }
 

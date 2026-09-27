@@ -431,6 +431,7 @@
   "DocumentationAllAddons": "All addons",
   "DocumentationLoadErrorTitle": "Error loading documentation",
   "DocumentationLoadErrorMessage": "Something went wrong when loading documentation. Try again or look into the logs.",
+  "DocumentationApiKeyMissing": "You don't have an API key set to use this provider. Set it up in the Integrations settings.",
   "DocumentationSearchPlaceholder": "Type your query...",
   "DocumentationNoResultsFound": "No results found",
   "FilePickerAllFiles": "All files",

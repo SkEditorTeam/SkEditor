@@ -4,24 +4,43 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform;
 using SkEditor.Models.Documentation;
+using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.Utilities.Docs.Providers;
 
-public class SkUnityProvider : IDocumentationProvider
+public class SkUnityProvider(SecretsConfig secrets) : IDocumentationProvider
 {
     public string Name => "skUnity";
+    public string FileName => "skunity.json";
 
-    public async Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync()
+    public string GetDownloadUrl()
+    {
+        string apiKey = secrets.SkUnityApiKey;
+
+        if (string.IsNullOrWhiteSpace(apiKey))
+        {
+            throw new DocumentationException
+            {
+                ApiKeyMissing = true
+            };
+        }
+
+        return $"https://api.skunity.com/v1/{apiKey}/docs/getAllSyntax";
+    }
+
+    public async Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync(Stream jsonStream,
+        CancellationToken ct)
     {
         Uri jsonFile = new("avares://SkEditor/Assets/skunity-docs.json");
         await using Stream stream = AssetLoader.Open(jsonFile);
 
         SkUnityResponseDto? response =
             await JsonSerializer.DeserializeAsync<SkUnityResponseDto>(stream,
-                SkUnityResponseContext.Default.SkUnityResponseDto);
+                SkUnityResponseContext.Default.SkUnityResponseDto, ct);
 
         if (response is null)
         {
