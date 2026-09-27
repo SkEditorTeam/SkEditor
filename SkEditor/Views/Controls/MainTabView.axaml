@@ -161,6 +161,6 @@
         </Grid>
 
         <pages:WelcomePage VerticalAlignment="Stretch" DataContext="{Binding WelcomePage}"
-                           IsVisible="{Binding !$parent[windows:MainWindow].((vms:MainWindowViewModel)DataContext).AnyTabsOpen}" />
+                           IsVisible="{Binding !$parent[windows:MainWindow].((vms:MainWindowViewModel)DataContext)?.AnyTabsOpen, TargetNullValue=True}" />
     </Panel>
 </UserControl>

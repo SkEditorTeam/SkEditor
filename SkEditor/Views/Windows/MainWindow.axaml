@@ -51,7 +51,7 @@
                 <Grid Name="CoreGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition
-                            Width="{Binding Sidebar.ColumnWidth, Mode=TwoWay, Converter={StaticResource DoubleToGridLengthConverter}}"
+                            Width="{Binding Sidebar.ColumnWidth, TargetNullValue=NaN, Mode=TwoWay, Converter={StaticResource DoubleToGridLengthConverter}}"
                             MinWidth="{Binding Sidebar.ColumnWidth, Converter={StaticResource SidebarColumnMinWidthConverter}}"
                             MaxWidth="800" />
                         <ColumnDefinition Width="Auto" />

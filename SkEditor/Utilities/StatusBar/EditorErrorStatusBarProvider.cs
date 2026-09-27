@@ -17,8 +17,6 @@ using SkEditor.ViewModels.Controls.StatusBar.Panes;
 using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
-#pragma warning disable CS8846 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-
 namespace SkEditor.Utilities.StatusBar;
 
 public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<AnalyzerLoadedMessage>,
@@ -144,6 +142,12 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
     private void UpdateState()
     {
         _pane.Errors.Clear();
+
+        if (_tabs is null || _results is null)
+        {
+            return;
+        }
+        
         if (_tabs.SelectedTab is IFileTab fileTab && _results.TryGetValue(fileTab, out AnalyzerResult? result))
         {
             result.Errors.Sort((a, b) =>

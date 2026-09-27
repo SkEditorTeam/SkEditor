@@ -60,6 +60,11 @@ public class EditorSmoothScrollFeature(AppSettings appSettings) : IEditorFeature
 
     private static void AddBehavior(TextEditor editor)
     {
+        if (editor.ScrollViewer is null)
+        {
+            return;
+        }
+        
         SmoothScrollBehavior behavior = new()
         {
             AnimationDuration = 250,

@@ -31,7 +31,7 @@
     <Grid Name="GridPanels">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="{Binding ColumnWidth}" />
+            <ColumnDefinition Width="{Binding ColumnWidth, TargetNullValue={x:Static GridLength.Auto}}" />
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" Width="50" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
@@ -71,7 +71,7 @@
         <Border Grid.Column="1" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
                 Margin="10,0,0,0" IsVisible="{Binding IsPanelVisible}">
             <Grid RowDefinitions="Auto,Auto,*">
-                <TextBlock Grid.Row="0" Text="{Binding SelectedItem.Name.Value, FallbackValue={x:Null}}"
+                <TextBlock Grid.Row="0" Text="{Binding SelectedItem?.Name.Value, TargetNullValue=''}"
                            FontWeight="DemiBold"
                            TextWrapping="NoWrap"
                            Margin="20,10,20,10" />
