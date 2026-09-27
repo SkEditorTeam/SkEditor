@@ -9,7 +9,7 @@
              xmlns:documentation="clr-namespace:SkEditor.Converters.Documentation"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:layout="clr-namespace:SkEditor.Converters.Layout"
-             xmlns:documentationUtils="clr-namespace:SkEditor.Models.Documentation"
+             xmlns:docsUtils="clr-namespace:SkEditor.Models.Documentation"
              xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
@@ -38,11 +38,10 @@
     </UserControl.Styles>
 
     <Panel>
-        <Grid RowDefinitions="Auto,*" Margin="16" RowSpacing="32" ColumnSpacing="32"
-              Opacity="{Binding !IsLoadingDocs.Value}"
-              IsHitTestVisible="{Binding !IsLoadingDocs.Value}">
+        <Grid RowDefinitions="Auto,*" Margin="16" RowSpacing="32" ColumnSpacing="32">
             <!-- Filters, provider and search -->
-            <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12" MaxWidth="1100" HorizontalAlignment="Stretch">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12" MaxWidth="1100" HorizontalAlignment="Stretch"
+                  IsHitTestVisible="{Binding CanChangeFilters}">
                 <ComboBox Grid.Column="0"
                           ItemsSource="{Binding Providers}"
                           SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
@@ -115,7 +114,7 @@
             </Grid>
 
             <Grid Grid.Row="1" ColumnSpacing="32"
-                  IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}">
+                  IsVisible="{Binding CurrentState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static docsUtils:DocumentationState.Normal}}">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" MaxWidth="300" MinWidth="100" />
@@ -142,7 +141,7 @@
                             </Setter>
                         </Style>
 
-                        <Style Selector="ListBoxItem" x:DataType="documentationUtils:DocumentationEntry">
+                        <Style Selector="ListBoxItem" x:DataType="docsUtils:DocumentationEntry">
                             <Setter Property="ToolTip.Tip" Value="{Binding Name}" />
                             <Setter Property="ToolTip.BetweenShowDelay" Value="100" />
                             <Setter Property="ToolTip.ShowDelay" Value="1000" />
@@ -258,23 +257,32 @@
                 </Border>
             </Grid>
 
-            <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5"
-                        Spacing="16" IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNull}}">
+            <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5">
+                <StackPanel.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="CurrentState"
+                                 Converter="{x:Static ObjectConverters.Equal}"
+                                 ConverterParameter="{x:Static docsUtils:DocumentationState.Normal}" />
+                        <Binding Path="SelectedEntry"
+                                 Converter="{x:Static ObjectConverters.IsNull}" />
+                    </MultiBinding>
+                </StackPanel.IsVisible>
+                
                 <fluent:SymbolIcon Symbol="WeatherSqualls" FontSize="64" />
                 <TextBlock Text="{localization:Translate DocumentationNoResultsFound}" FontSize="24" />
             </StackPanel>
         </Grid>
 
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
-                    Opacity="{Binding IsLoadingDocs.Value}"
-                    IsHitTestVisible="{Binding IsLoadingDocs.Value}">
+                    IsHitTestVisible="False"
+                    Opacity="{Binding CurrentState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static docsUtils:DocumentationState.Loading}}">
             <StackPanel.Transitions>
                 <Transitions>
                     <DoubleTransition Property="Opacity"
-                                      Duration="0:0:0.15" />
+                                      Duration="0:0:0.25" />
                 </Transitions>
             </StackPanel.Transitions>
-
+            
             <controls:FAProgressRing IsIndeterminate="True"
                                      Width="64" Height="64"
                                      Opacity="0.75" />
@@ -282,5 +290,28 @@
             <TextBlock Text="Loading documentation..."
                        FontSize="20" Opacity="0.9" />
         </StackPanel>
+
+        <Border VerticalAlignment="Center" HorizontalAlignment="Center"
+                IsVisible="{Binding CurrentState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static docsUtils:DocumentationState.Error}}">
+            <StackPanel Spacing="16" HorizontalAlignment="Center" MaxWidth="360">
+                <fluent:SymbolIcon FontSize="40" Symbol="{Binding CurrentError.Icon, FallbackValue=ErrorCircle}"
+                                   Opacity="0.9" />
+
+                <StackPanel HorizontalAlignment="Center" Spacing="4">
+                    <TextBlock Text="{Binding CurrentError?.Title}" FontSize="18" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundColor}" />
+                    <TextBlock Text="{Binding CurrentError?.Message}" FontSize="14" Opacity="0.8" TextWrapping="Wrap"
+                               TextAlignment="Center" Foreground="{DynamicResource ForegroundSecondaryColor}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+                    <Button Content="{localization:Translate ButtonRetry}" Command="{Binding RetryLoadCommand}"
+                            IsVisible="{Binding CurrentError?.CanRetry}" MinWidth="80" />
+                    <Button Content="{localization:Translate DocumentationButtonSettings}"
+                            Command="{Binding OpenSettingsCommand}"
+                            IsVisible="{Binding CurrentError?.IsApiKeyMissing}" MinWidth="80" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
     </Panel>
 </UserControl>

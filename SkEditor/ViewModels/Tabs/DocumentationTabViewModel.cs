@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
-using R3;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Documentation;
-using SkEditor.Models.Notifications;
+using SkEditor.Models.Messages;
 using SkEditor.Utilities.Docs;
 using SkEditor.Utilities.Docs.Providers;
 using SkEditor.Utilities.Localization;
@@ -24,6 +26,9 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     private readonly IDocumentationService _documentation;
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
+    private readonly ITabService _tabs;
+    private readonly Func<SettingsTabViewModel> _settingsTabFactory;
+    private readonly IMessenger _messenger;
 
     private CancellationTokenSource? _cts;
 
@@ -62,16 +67,28 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     [ObservableProperty]
     public partial DocumentationSyntaxType? SelectedSyntaxType { get; set; }
 
-    public BindableReactiveProperty<bool> IsLoadingDocs { get; } = new(false);
+    [ObservableProperty]
+    public partial DocumentationState CurrentState { get; set; } = DocumentationState.Normal;
+
+    [ObservableProperty]
+    public partial DocumentationErrorInfo? CurrentError { get; set; }
+
+    [ObservableProperty]
+    public partial bool CanChangeFilters { get; set; } = true;
 
     public List<DocumentationSyntaxType> SyntaxTypes { get; } = [.. Enum.GetValues<DocumentationSyntaxType>()];
 
     public DocumentationTabViewModel(IDocumentationService documentation, INotificationService notifs, ILogService logs,
-        IEnumerable<IDocumentationProvider> providers) : base(TranslationKey.DocumentationTabTitle, Symbol.Book)
+        IEnumerable<IDocumentationProvider> providers, ITabService tabs,
+        Func<SettingsTabViewModel> settingsTabFactory, IMessenger messenger) : base(
+        TranslationKey.DocumentationTabTitle, Symbol.Book)
     {
         _documentation = documentation;
         _notifs = notifs;
         _logs = logs;
+        _tabs = tabs;
+        _settingsTabFactory = settingsTabFactory;
+        _messenger = messenger;
 
         Providers = [.. providers];
 
@@ -83,21 +100,31 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         IDocumentationProvider? provider = SelectedProvider;
         if (provider is null)
         {
+            CurrentState = DocumentationState.Error;
+            CurrentError = new DocumentationErrorInfo(
+                TranslationKey.DocumentationConnectionErrorGenericTitle,
+                TranslationKey.DocumentationConnectionErrorGenericMessage,
+                Symbol.Warning,
+                false
+            );
+            
             return;
         }
 
+        using CancellationTokenSource delayCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        _ = ShowLoadingWithDelayAsync(delayCts.Token);
+
         try
         {
+            CanChangeFilters = false;
+            CurrentError = null;
+            
             Stopwatch stopwatch = Stopwatch.StartNew();
-
-            IsLoadingDocs.Value = true;
-
             string downloadUrl = provider.GetDownloadUrl();
 
             await using Stream docStream =
                 await _documentation.GetDocumentationStream(provider.FileName, downloadUrl, ct);
             IReadOnlyList<DocumentationEntry> entries = await provider.GetDocumentationEntriesAsync(docStream, ct);
-            IsLoadingDocs.Value = false;
 
             stopwatch.Stop();
             _notifs.Debug($"Loading documentation took {stopwatch.ElapsedMilliseconds} ms");
@@ -112,29 +139,65 @@ public partial class DocumentationTabViewModel : TabViewModelBase
             OnPropertyChanged(nameof(AvailableAddons));
             SelectedSyntaxType ??= DocumentationSyntaxType.All;
             Filter();
+
+            CurrentState = DocumentationEntries.Count == 0
+                ? DocumentationState.Empty
+                : DocumentationState.Normal;
+        }
+        catch (OperationCanceledException)
+        {
+            // ignored
         }
         catch (DocumentationException ex) when (ex.ApiKeyMissing)
         {
-            Notification notification = Notification
-                .Create(TranslationKey.DocumentationLoadErrorTitle)
-                .WithMessage(TranslationKey.DocumentationApiKeyMissing)
-                .WithType(NotificationType.Error);
-
-            _notifs.Show(notification);
+            CurrentState = DocumentationState.Error;
+            CurrentError = new DocumentationErrorInfo(
+                TranslationKey.DocumentationApiKeyMissingTitle,
+                TranslationKey.DocumentationApiKeyMissingMessage,
+                Symbol.Key,
+                true,
+                true
+            );
+        }
+        catch (HttpRequestException ex)
+        {
+            CurrentState = DocumentationState.Error;
+            CurrentError = new DocumentationErrorInfo(
+                TranslationKey.DocumentationConnectionErrorTitle,
+                TranslationKey.DocumentationConnectionErrorMessage,
+                Symbol.CloudOff,
+                true
+            );
+            _logs.Error(ex, "Error loading documentation");
         }
         catch (Exception ex)
         {
-            Notification notification = Notification
-                .Create(TranslationKey.DocumentationLoadErrorTitle)
-                .WithMessage(TranslationKey.DocumentationLoadErrorMessage)
-                .WithType(NotificationType.Error);
-
-            _notifs.Show(notification);
+            CurrentState = DocumentationState.Error;
+            CurrentError = new DocumentationErrorInfo(
+                TranslationKey.DocumentationConnectionErrorGenericTitle,
+                TranslationKey.DocumentationConnectionErrorGenericMessage,
+                Symbol.Warning,
+                true
+            );
             _logs.Error(ex, "Error loading documentation");
         }
         finally
         {
-            IsLoadingDocs.Value = false;
+            await delayCts.CancelAsync();
+            CanChangeFilters = true;
+        }
+    }
+
+    private async Task ShowLoadingWithDelayAsync(CancellationToken token)
+    {
+        try
+        {
+            await Task.Delay(150, token);
+            CurrentState = DocumentationState.Loading;
+        }
+        catch (OperationCanceledException)
+        {
+            // ignored
         }
     }
 
@@ -144,6 +207,21 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         RequestClose();
     }
 
+    [RelayCommand]
+    public void RetryLoad()
+    {
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        _ = LoadDocs(_cts.Token);
+    }
+
+    [RelayCommand]
+    public void OpenSettings()
+    {
+        _tabs.OpenUniqueTab(_settingsTabFactory);
+        _messenger.Send(new NavigateToSettingsSectionMessage("API Keys"));
+    }
+    
     partial void OnSelectedEntryChanged(DocumentationEntry? value)
     {
         PatternDocument.Text = value?.Patterns ?? string.Empty;
@@ -175,6 +253,11 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     private void Filter()
     {
+        if (DocumentationEntries is null)
+        {
+            return;
+        }
+
         FilteredEntries = DocumentationSearchEngine.Filter(SearchText, DocumentationEntries,
             SelectedSyntaxType ?? DocumentationSyntaxType.All, SelectedAddon);
     }
