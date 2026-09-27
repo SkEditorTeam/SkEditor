@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "Par défaut",
   "SettingsAppearanceFontSize": "Taille de la police",
   "SettingsAppearanceMouseWheelZoom": "Zoom avec la molette de la souris",
-  "SettingsAppearanceMouseWheelZoomDescription": "Ajuster la taille de la police de l'éditeur en maintenant la touche Ctrl enfoncée et en faisant défiler la molette de la souris.",
+  "SettingsAppearanceMouseWheelZoomDescription": "Ajuster la taille de la police de l'éditeur en maintenant la touche {0} enfoncée et en faisant défiler la molette de la souris.",
   "SettingsAppearanceFontLigatures": "Ligatures de police",
   "SettingsAppearanceFontLigaturesDescription": "Indique si les ligatures de police (par ex. '=>', '!=') doivent être activées, si la police les prend en charge.",
   "SettingsAppearanceHighlightCurrentLine": "Surligner la ligne actuelle",

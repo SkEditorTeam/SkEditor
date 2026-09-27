@@ -1,4 +1,5 @@
-﻿using FluentIcons.Common;
+﻿using System;
+using FluentIcons.Common;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Settings;
 using SkEditor.Models.Settings.Types;
@@ -88,7 +89,9 @@ public class AppearanceSectionProvider(
                             .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsFontLigaturesEnabled)),
                         ToggleSetting
                             .Create(TranslationKey.SettingsAppearanceMouseWheelZoom)
-                            .WithDescription(TranslationKey.SettingsAppearanceMouseWheelZoomDescription)
+                            .WithDescription(new TranslatableString(
+                                TranslationKey.SettingsAppearanceMouseWheelZoomDescription,
+                                OperatingSystem.IsMacOS() ? "⌘" : TranslationKey.KeyModifierControl))
                             .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsMouseWheelZoomEnabled)),
                         ToggleSetting
                             .Create(TranslationKey.SettingsEditorZoomSync)

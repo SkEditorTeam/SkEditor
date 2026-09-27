@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "Predefinito",
   "SettingsAppearanceFontSize": "Dimensione carattere",
   "SettingsAppearanceMouseWheelZoom": "Zoom con rotellina del mouse",
-  "SettingsAppearanceMouseWheelZoomDescription": "Ingrandisci la dimensione del carattere dell'editor tenendo premuto Ctrl e scorrendo la rotellina del mouse.",
+  "SettingsAppearanceMouseWheelZoomDescription": "Ingrandisci la dimensione del carattere dell'editor tenendo premuto {0} e scorrendo la rotellina del mouse.",
   "SettingsAppearanceFontLigatures": "Legature dei caratteri",
   "SettingsAppearanceFontLigaturesDescription": "Indica se abilitare le legature dei caratteri (es. '=>', '!='), se supportate dal font.",
   "SettingsAppearanceHighlightCurrentLine": "Evidenzia riga corrente",

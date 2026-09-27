@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "Alapértelmezett",
   "SettingsAppearanceFontSize": "Betűméret",
   "SettingsAppearanceMouseWheelZoom": "Nagyítás egérgörgővel",
-  "SettingsAppearanceMouseWheelZoomDescription": "A szerkesztő betűméretének nagyítása a Ctrl billentyű lenyomva tartásával és az egérgörgő görgetésével.",
+  "SettingsAppearanceMouseWheelZoomDescription": "A szerkesztő betűméretének nagyítása a {0} billentyű lenyomva tartásával és az egérgörgő görgetésével.",
   "SettingsAppearanceFontLigatures": "Betűkészlet-ligatúrák",
   "SettingsAppearanceFontLigaturesDescription": "Meghatározza, hogy engedélyezve legyenek-e a betűkészlet-ligatúrák (pl. '=>', '!='), amennyiben a betűtípus támogatja azokat.",
   "SettingsAppearanceHighlightCurrentLine": "Aktuális sor kiemelése",

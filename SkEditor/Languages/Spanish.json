@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "Predeterminada",
   "SettingsAppearanceFontSize": "Tamaño de fuente",
   "SettingsAppearanceMouseWheelZoom": "Zoom con la rueda del ratón",
-  "SettingsAppearanceMouseWheelZoomDescription": "Haz zoom en el tamaño de fuente del editor manteniendo presionado Ctrl y usando la rueda del ratón.",
+  "SettingsAppearanceMouseWheelZoomDescription": "Haz zoom en el tamaño de fuente del editor manteniendo presionado {0} y usando la rueda del ratón.",
   "SettingsAppearanceFontLigatures": "Ligaduras de fuente",
   "SettingsAppearanceFontLigaturesDescription": "Determina si se deben habilitar las ligaduras de fuente (p. ej., '=>', '!='), si la fuente las admite.",
   "SettingsAppearanceHighlightCurrentLine": "Resaltar línea actual",

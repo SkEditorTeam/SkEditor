@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "Standaard",
   "SettingsAppearanceFontSize": "Lettergrootte",
   "SettingsAppearanceMouseWheelZoom": "Zoomen met muiswiel",
-  "SettingsAppearanceMouseWheelZoomDescription": "Zoom de lettergrootte van de editor in of uit door Ctrl ingedrukt te houden en het muiswiel te draaien.",
+  "SettingsAppearanceMouseWheelZoomDescription": "Zoom de lettergrootte van de editor in of uit door {0} ingedrukt te houden en het muiswiel te draaien.",
   "SettingsAppearanceFontLigatures": "Fontligaturen",
   "SettingsAppearanceFontLigaturesDescription": "Bepaalt of fontligaturen (bijv. '=>', '!=') moeten worden ingeschakeld, mits ondersteund door het lettertype.",
   "SettingsAppearanceHighlightCurrentLine": "Huidige regel markeren",

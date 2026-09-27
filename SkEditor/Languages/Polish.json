@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "Domyślna",
   "SettingsAppearanceFontSize": "Rozmiar czcionki",
   "SettingsAppearanceMouseWheelZoom": "Przybliżanie kółkiem myszy",
-  "SettingsAppearanceMouseWheelZoomDescription": "Zmieniaj rozmiar czcionki w edytorze, przytrzymując klawisz Ctrl i przewijając kółko myszy.",
+  "SettingsAppearanceMouseWheelZoomDescription": "Zmieniaj rozmiar czcionki w edytorze, przytrzymując klawisz {0} i przewijając kółko myszy.",
   "SettingsAppearanceFontLigatures": "Ligatury czcionek",
   "SettingsAppearanceFontLigaturesDescription": "Określa, czy ligatury czcionek (np. '=>', '!=') powinny być włączone, jeśli są obsługiwane przez czcionkę.",
   "SettingsAppearanceHighlightCurrentLine": "Podświetl bieżący wiersz",

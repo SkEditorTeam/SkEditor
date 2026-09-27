@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "Per defecte",
   "SettingsAppearanceFontSize": "Mida de la font",
   "SettingsAppearanceMouseWheelZoom": "Zoom amb la roda del ratolí",
-  "SettingsAppearanceMouseWheelZoomDescription": "Amplia la mida de la font de l'editor mantenint premut Ctrl i desplaçant la roda del ratolí.",
+  "SettingsAppearanceMouseWheelZoomDescription": "Amplia la mida de la font de l'editor mantenint premut {0} i desplaçant la roda del ratolí.",
   "SettingsAppearanceFontLigatures": "Lligadures de font",
   "SettingsAppearanceFontLigaturesDescription": "Indica si s'han d'activar les lligadures de font (p. ex. '=>', '!='), si la font les admet.",
   "SettingsAppearanceHighlightCurrentLine": "Ressalta la línia actual",

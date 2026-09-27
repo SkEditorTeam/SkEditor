@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "기본값",
   "SettingsAppearanceFontSize": "글꼴 크기",
   "SettingsAppearanceMouseWheelZoom": "마우스 휠 확대/축소",
-  "SettingsAppearanceMouseWheelZoomDescription": "Ctrl 키를 누른 상태에서 마우스 휠을 스크롤하여 편집기 글꼴 크기를 조절합니다.",
+  "SettingsAppearanceMouseWheelZoomDescription": "{0} 키를 누른 상태에서 마우스 휠을 스크롤하여 편집기 글꼴 크기를 조절합니다.",
   "SettingsAppearanceFontLigatures": "글꼴 합자",
   "SettingsAppearanceFontLigaturesDescription": "글꼴에서 지원하는 경우 글꼴 합자(예: '=>', '!=')를 활성화할지 여부입니다.",
   "SettingsAppearanceHighlightCurrentLine": "현재 줄 강조 표시",

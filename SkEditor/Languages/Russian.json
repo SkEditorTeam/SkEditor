@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "По умолчанию",
   "SettingsAppearanceFontSize": "Размер шрифта",
   "SettingsAppearanceMouseWheelZoom": "Масштабирование колесом мыши",
-  "SettingsAppearanceMouseWheelZoomDescription": "Масштабировать размер шрифта в редакторе при зажатом Ctrl и прокрутке колеса мыши.",
+  "SettingsAppearanceMouseWheelZoomDescription": "Масштабировать размер шрифта в редакторе при зажатом {0} и прокрутке колеса мыши.",
   "SettingsAppearanceFontLigatures": "Лигатуры шрифта",
   "SettingsAppearanceFontLigaturesDescription": "Включает лигатуры шрифта (например, '=>', '!='), если они поддерживаются выбранным шрифтом.",
   "SettingsAppearanceHighlightCurrentLine": "Выделять текущую строку",

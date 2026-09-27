@@ -169,7 +169,7 @@
   "SettingsAppearanceCurrentFontDescriptionDefault": "默认",
   "SettingsAppearanceFontSize": "字体大小",
   "SettingsAppearanceMouseWheelZoom": "鼠标滚轮缩放",
-  "SettingsAppearanceMouseWheelZoomDescription": "按住 Ctrl 键并滚动鼠标滚轮来缩放编辑器字号。",
+  "SettingsAppearanceMouseWheelZoomDescription": "按住 {0} 键并滚动鼠标滚轮来缩放编辑器字号。",
   "SettingsAppearanceFontLigatures": "字体连字",
   "SettingsAppearanceFontLigaturesDescription": "若字体支持，是否启用字体连字（例如 '=>'、'!='）。",
   "SettingsAppearanceHighlightCurrentLine": "高亮当前行",
