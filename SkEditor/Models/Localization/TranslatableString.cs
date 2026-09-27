@@ -34,7 +34,7 @@ public partial class TranslatableString : ObservableObject
             {
                 return _parameters == null || _parameters.Length == 0
                     ? field
-                    : string.Format(field, _parameters.Select(p => p?.ToString() ?? string.Empty).ToArray());
+                    : string.Format(field, TransformParameters(_parameters));
             }
 
             ITranslationService translationService = TranslationService.Current;
@@ -44,14 +44,20 @@ public partial class TranslatableString : ObservableObject
                 return translationService.Get(EnumKey);
             }
 
-            string[] resolvedParameters = _parameters.Select(p => p switch
-            {
-                TranslatableString ts => ts.Value,
-                _ => p?.ToString() ?? string.Empty
-            }).ToArray();
+            string[] resolvedParameters = TransformParameters(_parameters);
 
             return translationService.Get(EnumKey, resolvedParameters);
         }
+    }
+
+    private static string[] TransformParameters(object[] objects)
+    {
+        return objects.Select(p => p switch
+        {
+            TranslatableString ts => ts.Value,
+            TranslationKey tk => TranslationService.Current.Get(tk),
+            _ => p?.ToString() ?? string.Empty
+        }).ToArray();
     }
 
     private TranslationKey EnumKey => Enum.Parse<TranslationKey>(Key);
