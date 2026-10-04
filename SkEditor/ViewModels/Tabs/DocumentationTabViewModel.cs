@@ -223,7 +223,6 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     [RelayCommand]
     public async Task UpdateProvider(IDocumentationProvider provider)
     {
-        _documentation.DeleteCache(provider.FileName);
         bool success = await _documentation.DownloadDocumentation(provider.FileName, provider.GetDownloadUrl());
 
         if (!success)

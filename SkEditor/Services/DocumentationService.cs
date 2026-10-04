@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Contracts.Services;
@@ -35,11 +37,30 @@ public class DocumentationService(HttpClient httpClient) : IDocumentationService
 
     public async Task<bool> DownloadDocumentation(string fileName, string url, CancellationToken ct = default)
     {
+        string? tempFilePath = null;
         try
         {
+            string filePath = Path.Combine(_docsPath, fileName);
+            string eTagFilePath = Path.ChangeExtension(filePath, ".etag");
+
             using HttpRequestMessage request = new(HttpMethod.Get, url);
+
+            if (File.Exists(filePath) && File.Exists(eTagFilePath))
+            {
+                string savedEtag = await File.ReadAllTextAsync(eTagFilePath, ct);
+                if (EntityTagHeaderValue.TryParse(savedEtag, out EntityTagHeaderValue? parsedEtag))
+                {
+                    request.Headers.IfNoneMatch.Add(parsedEtag);
+                }
+            }
+
             using HttpResponseMessage response =
                 await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
+
+            if (response.StatusCode == HttpStatusCode.NotModified)
+            {
+                return true;
+            }
 
             if (!response.IsSuccessStatusCode)
             {
@@ -55,18 +76,39 @@ public class DocumentationService(HttpClient httpClient) : IDocumentationService
                 Options = FileOptions.Asynchronous | FileOptions.SequentialScan
             };
 
-            string tempFilePath = Path.Combine(_docsPath, $"temp_{Guid.NewGuid():N}.sk");
+            tempFilePath = Path.Combine(_docsPath, $"temp_{Guid.NewGuid():N}.sk");
             await using (FileStream fileStream = new(tempFilePath, fileOptions))
             {
                 await networkStream.CopyToAsync(fileStream, ct);
             }
 
-            string filePath = Path.Combine(_docsPath, fileName);
             File.Move(tempFilePath, filePath, true);
+            if (response.Headers.ETag is { } eTag)
+            {
+                await File.WriteAllTextAsync(eTagFilePath, eTag.ToString(), ct);
+            }
+            else if (File.Exists(eTagFilePath))
+            {
+                File.Delete(eTagFilePath);
+            }
         }
         catch
         {
             return false;
+        }
+        finally
+        {
+            if (tempFilePath != null && File.Exists(tempFilePath))
+            {
+                try
+                {
+                    File.Delete(tempFilePath);
+                }
+                catch
+                {
+                    // ignore
+                }
+            }
         }
 
         return true;
