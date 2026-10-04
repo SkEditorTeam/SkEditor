@@ -160,7 +160,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
                 true
             );
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             CurrentState = DocumentationState.Error;
             CurrentError = new DocumentationErrorInfo(
@@ -168,7 +168,6 @@ public partial class DocumentationTabViewModel : TabViewModelBase
                 TranslationKey.DocumentationConnectionErrorMessage,
                 Symbol.CloudOff
             );
-            _logs.Error(ex, "Error loading documentation");
         }
         catch (Exception ex)
         {
@@ -225,9 +224,18 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     public async Task UpdateProvider(IDocumentationProvider provider)
     {
         _documentation.DeleteCache(provider.FileName);
-        await _documentation.DownloadDocumentation(provider.FileName, provider.GetDownloadUrl());
+        bool success = await _documentation.DownloadDocumentation(provider.FileName, provider.GetDownloadUrl());
 
-        if (SelectedProvider == provider)
+        if (!success)
+        {
+            CurrentState = DocumentationState.Error;
+            CurrentError = new DocumentationErrorInfo(
+                TranslationKey.DocumentationConnectionErrorTitle,
+                TranslationKey.DocumentationConnectionErrorMessage,
+                Symbol.CloudOff
+            );
+        }
+        else if (SelectedProvider == provider)
         {
             await LoadDocs();
         }
