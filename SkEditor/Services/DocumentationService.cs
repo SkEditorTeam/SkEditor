@@ -19,27 +19,7 @@ public class DocumentationService(HttpClient httpClient) : IDocumentationService
 
         if (!File.Exists(filePath))
         {
-            using HttpRequestMessage request = new(HttpMethod.Get, url);
-            using HttpResponseMessage response =
-                await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
-            response.EnsureSuccessStatusCode();
-
-            await using Stream networkStream = await response.Content.ReadAsStreamAsync(ct);
-            FileStreamOptions fileOptions = new()
-            {
-                Mode = FileMode.Create,
-                Access = FileAccess.Write,
-                Share = FileShare.None,
-                Options = FileOptions.Asynchronous | FileOptions.SequentialScan
-            };
-
-            string tempFilePath = Path.Combine(_docsPath, $"temp_{Guid.NewGuid():N}.sk");
-            await using (FileStream fileStream = new(tempFilePath, fileOptions))
-            {
-                await networkStream.CopyToAsync(fileStream, ct);
-            }
-
-            File.Move(tempFilePath, filePath, true);
+            await DownloadDocumentation(fileName, url, ct);
         }
 
         FileStreamOptions options = new()
@@ -51,6 +31,32 @@ public class DocumentationService(HttpClient httpClient) : IDocumentationService
         };
 
         return new FileStream(filePath, options);
+    }
+
+    public async Task DownloadDocumentation(string fileName, string url, CancellationToken ct = default)
+    {
+        using HttpRequestMessage request = new(HttpMethod.Get, url);
+        using HttpResponseMessage response =
+            await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
+        response.EnsureSuccessStatusCode();
+
+        await using Stream networkStream = await response.Content.ReadAsStreamAsync(ct);
+        FileStreamOptions fileOptions = new()
+        {
+            Mode = FileMode.Create,
+            Access = FileAccess.Write,
+            Share = FileShare.None,
+            Options = FileOptions.Asynchronous | FileOptions.SequentialScan
+        };
+
+        string tempFilePath = Path.Combine(_docsPath, $"temp_{Guid.NewGuid():N}.sk");
+        await using (FileStream fileStream = new(tempFilePath, fileOptions))
+        {
+            await networkStream.CopyToAsync(fileStream, ct);
+        }
+
+        string filePath = Path.Combine(_docsPath, fileName);
+        File.Move(tempFilePath, filePath, true);
     }
 
     public void DeleteCache(string fileName)
