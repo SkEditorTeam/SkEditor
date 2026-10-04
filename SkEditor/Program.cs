@@ -8,7 +8,7 @@ using SkEditor.Utilities;
 
 namespace SkEditor;
 
-internal static class Program
+internal class Program
 {
     [STAThread]
     public static void Main(string[] args)
@@ -16,20 +16,14 @@ internal static class Program
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         GC.KeepAlive(typeof(RelativeSource));
 
-        bool hardwareAcceleration = CheckHardwareAcceleration();
-
-        BuildAvaloniaApp(hardwareAcceleration)
+        BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }
 
     public static AppBuilder BuildAvaloniaApp()
     {
-        // ReSharper disable once IntroduceOptionalParameters.Global
-        return BuildAvaloniaApp(true);
-    }
-
-    public static AppBuilder BuildAvaloniaApp(bool hardwareAcceleration)
-    {
+        bool hardwareAcceleration = CheckHardwareAcceleration();
+        
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .With(new Win32PlatformOptions
