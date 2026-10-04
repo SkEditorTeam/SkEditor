@@ -31,16 +31,9 @@ public class SkUnityProvider(SecretsConfig secrets) : IDocumentationProvider
         return $"https://api.skunity.com/v1/{apiKey}/docs/getAllSyntax";
     }
 
-    private IReadOnlyList<DocumentationEntry>? _cachedEntries;
-
     public async Task<IReadOnlyList<DocumentationEntry>> GetDocumentationEntriesAsync(Stream jsonStream,
         CancellationToken ct)
     {
-        if (_cachedEntries is not null)
-        {
-            return _cachedEntries;
-        }
-
         using (JsonDocument doc = await JsonDocument.ParseAsync(jsonStream, cancellationToken: ct))
         {
             JsonElement root = doc.RootElement;
@@ -74,8 +67,7 @@ public class SkUnityProvider(SecretsConfig secrets) : IDocumentationProvider
             Patterns = WebUtility.HtmlDecode(doc.Pattern)
         }).ToList();
 
-        _cachedEntries = entries;
-        return _cachedEntries;
+        return entries;
     }
 
     private static DocumentationSyntaxType StringToCategory(string type)

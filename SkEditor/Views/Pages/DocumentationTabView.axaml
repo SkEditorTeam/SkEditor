@@ -14,6 +14,7 @@
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:DocumentationTabViewModel"
+             Name="Root"
              Focusable="True"
              x:Class="SkEditor.Views.Pages.DocumentationTabView">
 
@@ -35,30 +36,46 @@
             <Setter Property="MaxWidth" Value="170" />
             <Setter Property="MinWidth" Value="60" />
         </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="MaxWidth" Value="170" />
+        </Style>
+
+        <Style Selector="Button.refreshButton">
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Width" Value="20" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        </Style>
     </UserControl.Styles>
 
     <Panel>
         <Grid RowDefinitions="Auto,*" Margin="16" RowSpacing="32" ColumnSpacing="32">
             <!-- Filters, provider and search -->
-            <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12" MaxWidth="1100" HorizontalAlignment="Stretch"
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="12" MaxWidth="1100"
+                  HorizontalAlignment="Stretch"
                   IsHitTestVisible="{Binding CanChangeFilters}">
-                <ComboBox Grid.Column="0"
-                          ItemsSource="{Binding Providers}"
-                          SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
+
+                <ComboBox Grid.Column="0" ItemsSource="{Binding AvailableAddons}"
+                          SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
                           Padding="16,8"
                           IsVisible="{Binding Bounds.Width, 
                                    RelativeSource={RelativeSource AncestorType=Grid}, 
                                    Converter={StaticResource WidthToVisibilityConverter}, 
-                                   ConverterParameter=700}">
+                                   ConverterParameter=550}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                                <Viewbox Height="18">
-                                    <fluent:SymbolIcon Symbol="Library" />
-                                </Viewbox>
-                                <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0,-1,0,0" MaxWidth="100"
+                                <fluent:SymbolIcon FontSize="18" Symbol="PuzzlePiece" />
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding ., Converter={StaticResource AddonNameConverter}}"
+                                           Margin="0,-1,0,0" MaxWidth="100"
                                            VerticalAlignment="Center"
-                                           TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Name}" />
+                                           TextTrimming="CharacterEllipsis"
+                                           ToolTip.Tip="{Binding ., Converter={StaticResource AddonNameConverter}}" />
                             </Grid>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
@@ -88,25 +105,37 @@
                          Theme="{StaticResource SearchBoxTheme}"
                          Text="{Binding SearchText, Mode=TwoWay}" HorizontalAlignment="Stretch" />
 
-                <ComboBox Grid.Column="3" ItemsSource="{Binding AvailableAddons}"
-                          SelectedItem="{Binding SelectedAddon, Mode=TwoWay}"
+                <ComboBox Grid.Column="3"
+                          ItemsSource="{Binding Providers}"
+                          SelectedItem="{Binding SelectedProvider, Mode=TwoWay}"
                           Padding="16,8"
                           IsVisible="{Binding Bounds.Width, 
                                    RelativeSource={RelativeSource AncestorType=Grid}, 
                                    Converter={StaticResource WidthToVisibilityConverter}, 
-                                   ConverterParameter=550}">
-                    <ComboBox.ItemTemplate>
+                                   ConverterParameter=700}">
+                    <ComboBox.SelectionBoxItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                                <Viewbox Height="18">
-                                    <fluent:SymbolIcon Symbol="PuzzlePiece" />
-                                </Viewbox>
-                                <TextBlock Grid.Column="1"
-                                           Text="{Binding ., Converter={StaticResource AddonNameConverter}}"
-                                           Margin="0,-1,0,0" MaxWidth="100"
+                                <fluent:SymbolIcon FontSize="18" Symbol="Library" />
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0,-1,0,0" MaxWidth="100"
                                            VerticalAlignment="Center"
-                                           TextTrimming="CharacterEllipsis"
-                                           ToolTip.Tip="{Binding ., Converter={StaticResource AddonNameConverter}}" />
+                                           TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Name}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.SelectionBoxItemTemplate>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <fluent:SymbolIcon FontSize="16" Symbol="Library" />
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0,-1,0,0" MaxWidth="100"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Name}" />
+
+                                <Button Grid.Column="2" Classes="refreshButton"
+                                        Command="{Binding #Root.((tabs:DocumentationTabViewModel)DataContext)?.UpdateProviderCommand}"
+                                        CommandParameter="{Binding .}">
+                                    <fluent:SymbolIcon FontSize="16" Symbol="ArrowSync" />
+                                </Button>
                             </Grid>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
@@ -267,7 +296,7 @@
                                  Converter="{x:Static ObjectConverters.IsNull}" />
                     </MultiBinding>
                 </StackPanel.IsVisible>
-                
+
                 <fluent:SymbolIcon Symbol="WeatherSqualls" FontSize="64" />
                 <TextBlock Text="{localization:Translate DocumentationNoResultsFound}" FontSize="24" />
             </StackPanel>
@@ -282,7 +311,7 @@
                                       Duration="0:0:0.25" />
                 </Transitions>
             </StackPanel.Transitions>
-            
+
             <controls:FAProgressRing IsIndeterminate="True"
                                      Width="64" Height="64"
                                      Opacity="0.75" />
@@ -308,7 +337,7 @@
                     <Button Content="{localization:Translate ButtonRetry}" Command="{Binding RetryLoadCommand}"
                             IsVisible="{Binding CurrentError?.CanRetry}" MinWidth="80" />
                     <Button Content="{localization:Translate DocumentationButtonSettings}"
-                            Command="{Binding OpenSettingsCommand}"
+                            Command="{Binding OpenApiKeysSettingsCommand}"
                             IsVisible="{Binding CurrentError?.IsApiKeyMissing}" MinWidth="80" />
                 </StackPanel>
             </StackPanel>

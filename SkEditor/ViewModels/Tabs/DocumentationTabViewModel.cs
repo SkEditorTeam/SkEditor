@@ -166,8 +166,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
             CurrentError = new DocumentationErrorInfo(
                 TranslationKey.DocumentationConnectionErrorTitle,
                 TranslationKey.DocumentationConnectionErrorMessage,
-                Symbol.CloudOff,
-                true
+                Symbol.CloudOff
             );
             _logs.Error(ex, "Error loading documentation");
         }
@@ -177,8 +176,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
             CurrentError = new DocumentationErrorInfo(
                 TranslationKey.DocumentationConnectionErrorGenericTitle,
                 TranslationKey.DocumentationConnectionErrorGenericMessage,
-                Symbol.Warning,
-                true
+                Symbol.Warning
             );
             _logs.Error(ex, "Error loading documentation");
         }
@@ -217,10 +215,22 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     }
 
     [RelayCommand]
-    public void OpenSettings()
+    public void OpenApiKeysSettings()
     {
         _tabs.OpenUniqueTab(_settingsTabFactory);
         _messenger.Send(new NavigateToSettingsSectionMessage("API Keys"));
+    }
+
+    [RelayCommand]
+    public async Task UpdateProvider(IDocumentationProvider provider)
+    {
+        _documentation.DeleteCache(provider.FileName);
+        await _documentation.DownloadDocumentation(provider.FileName, provider.GetDownloadUrl());
+
+        if (SelectedProvider == provider)
+        {
+            await LoadDocs();
+        }
     }
     
     partial void OnSelectedEntryChanged(DocumentationEntry? value)
