@@ -47,7 +47,6 @@ public class LegacyConfigMigrator(IConfigService config)
 
         if (oldAppConfig != null)
         {
-            appSettings.CurrentTheme = oldAppConfig.CurrentTheme;
             appSettings.CustomUiScale = oldAppConfig.CustomUiScale;
             appSettings.EditorFontFamily = oldAppConfig.Font == "Default"
                 ? null
