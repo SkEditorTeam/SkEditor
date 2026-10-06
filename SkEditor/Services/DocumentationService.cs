@@ -23,6 +23,15 @@ public class DocumentationService(HttpClient httpClient) : IDocumentationService
         {
             await DownloadDocumentation(fileName, url, ct);
         }
+        else
+        {
+            DateTime lastWriteTime = File.GetLastWriteTimeUtc(filePath);
+            bool isOlderThanWeek = DateTime.UtcNow - lastWriteTime > TimeSpan.FromDays(7);
+            if (isOlderThanWeek)
+            {
+                await DownloadDocumentation(fileName, url, ct);
+            }
+        }
 
         FileStreamOptions options = new()
         {
