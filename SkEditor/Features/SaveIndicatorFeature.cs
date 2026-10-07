@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using AvaloniaEdit.Document;
+﻿using R3;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
@@ -8,9 +7,9 @@ namespace SkEditor.Features;
 public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
 {
     private IFileTab? _fileTab;
-    private PropertyChangedEventHandler? _handler;
     private ISaveStateTab? _saveStateTab;
     private ITextEditorTab? _textEditorTab;
+    private DisposableBag _disposables;
 
     public bool CanAttach(IFeatureTab tab)
     {
@@ -27,33 +26,25 @@ public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
         _textEditorTab = textEditorTab;
         _saveStateTab = saveStateTab;
         _fileTab = fileTab;
+        _disposables = default;
 
-        _handler = (_, e) =>
-        {
-            if (e.PropertyName != nameof(UndoStack.IsOriginalFile))
+        _textEditorTab.Document.UndoStack
+            .ObservePropertyChanged(x => x.IsOriginalFile)
+            .Subscribe(_ =>
             {
-                return;
-            }
+                if (appSettings.IsAutoSaveEnabled && _fileTab.Path is not null)
+                {
+                    return;
+                }
 
-            if (appSettings.IsAutoSaveEnabled && _fileTab.Path is not null)
-            {
-                return;
-            }
-
-            _saveStateTab.IsSaved = _textEditorTab.Document.UndoStack.IsOriginalFile;
-        };
-
-        _textEditorTab.Document.UndoStack.PropertyChanged += _handler;
+                _saveStateTab.IsSaved = _textEditorTab.Document.UndoStack.IsOriginalFile;
+            })
+            .AddTo(ref _disposables);
     }
 
     public void Detach(IFeatureTab tab)
     {
-        if (_textEditorTab != null)
-        {
-            _textEditorTab.Document.UndoStack.PropertyChanged -= _handler;
-        }
-
-        _handler = null;
+        _disposables.Dispose();
         _textEditorTab = null;
         _saveStateTab = null;
         _fileTab = null;
