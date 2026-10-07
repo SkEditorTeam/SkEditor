@@ -6,4 +6,5 @@ public interface ISaveableTab
 {
     Task<bool> SaveAsync();
     Task<bool> SaveAsAsync();
+    bool IsSaved { get; set; }
 }

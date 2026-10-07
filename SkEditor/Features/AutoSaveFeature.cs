@@ -29,10 +29,8 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
 
     public void Attach(IFeatureTab tab)
     {
-        if (tab is not ITextEditorTab textEditorTab ||
-            tab is not ISaveableTab saveableTab ||
-            tab is not IClosableTab closableTab ||
-            tab is not IFileTab fileTab)
+        if (tab is not (ITextEditorTab textEditorTab and ISaveableTab saveableTab and IClosableTab closableTab
+            and IFileTab fileTab))
         {
             return;
         }

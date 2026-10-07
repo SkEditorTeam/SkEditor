@@ -8,12 +8,13 @@ using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Dialogs;
 using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Utilities.Settings.Configs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Services.Files;
 
-public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabCloseService
+public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogService dialogs) : ITabCloseService
 {
     public async Task CloseMultipleAsync(CloseType closeType)
     {
@@ -23,7 +24,17 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
             return;
         }
 
-        List<FileTabViewModel> unsavedTabs = tabsToClose.OfType<FileTabViewModel>().Where(t => !t.IsSaved).ToList();
+        List<ISaveableTab> saveableTabs = tabsToClose.OfType<ISaveableTab>().ToList();
+
+        if (appSettings.IsAutoSaveEnabled)
+        {
+            foreach (ISaveableTab saveableTab in saveableTabs)
+            {
+                await saveableTab.SaveAsync();
+            }
+        }
+
+        List<ISaveableTab> unsavedTabs = saveableTabs.Where(t => !t.IsSaved).ToList();
 
         switch (unsavedTabs.Count)
         {
@@ -58,7 +69,7 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
         }
     }
 
-    private async Task<bool> AskForConfirmation(List<FileTabViewModel> unsavedTabs)
+    private async Task<bool> AskForConfirmation(List<ISaveableTab> unsavedTabs)
     {
         Dialog dialog = Dialog
             .Create(TranslationKey.UnsavedFilesCloseAllTitle)
@@ -83,7 +94,7 @@ public class TabCloseService(ITabService tabs, IDialogService dialogs) : ITabClo
         }
 
         bool savedAll = true;
-        foreach (FileTabViewModel unsavedTab in unsavedTabs)
+        foreach (ISaveableTab unsavedTab in unsavedTabs)
         {
             bool saved = await unsavedTab.SaveAsync();
             if (saved)
