@@ -45,7 +45,7 @@ public class LocalFile(string? path = null, string? name = null)
             await File.Create(Path).DisposeAsync();
         }
 
-        string tempFilePath = Path + ".tmp";
+        string tempFilePath = $"{Path}-{Guid.NewGuid()}.tmp";
 
         try
         {
