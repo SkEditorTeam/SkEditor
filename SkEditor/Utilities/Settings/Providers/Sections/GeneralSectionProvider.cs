@@ -27,6 +27,12 @@ public class GeneralSectionProvider(
                     .WithProvider(languageProvider),
 
                 ToggleSetting
+                    .Create(TranslationKey.SettingsEditorAutosave)
+                    .WithDescription(TranslationKey.SettingsEditorAutosaveDescription)
+                    .WithIcon(Symbol.SaveSync)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoSaveEnabled)),
+
+                ToggleSetting
                     .Create(TranslationKey.SettingsExplorerSingleClickOpen)
                     .WithDescription(TranslationKey.SettingsExplorerSingleClickOpenDescription)
                     .WithIcon(Symbol.CursorClick)

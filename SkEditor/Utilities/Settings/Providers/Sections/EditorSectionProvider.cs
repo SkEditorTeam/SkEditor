@@ -38,12 +38,6 @@ public class EditorSectionProvider(
                     .WithIcon(Symbol.TextWrap)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsWordWrapEnabled)),
 
-                ToggleSetting
-                    .Create(TranslationKey.SettingsEditorAutosave)
-                    .WithDescription(TranslationKey.SettingsEditorAutosaveDescription)
-                    .WithIcon(Symbol.SaveSync)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoSaveEnabled)),
-
                 // ToggleSetting
                 //     .Create(TranslationKey.SettingsEditorExternalChangeChecker)
                 //     .WithDescription(TranslationKey.SettingsEditorExternalChangeCheckerDescription)
