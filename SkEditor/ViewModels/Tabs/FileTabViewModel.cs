@@ -196,6 +196,7 @@ public partial class FileTabViewModel(
         await using StreamWriter writer = new(memoryStream, Utf8NoBom, leaveOpen: true);
 
         ITextSource? snapshot = Document.CreateSnapshot();
+        Document.UndoStack.MarkAsOriginalFile();
         snapshot.WriteTextTo(writer);
 
         await writer.FlushAsync(token);
@@ -226,7 +227,6 @@ public partial class FileTabViewModel(
             _saveSemaphore.Release();
         }
 
-        Document.UndoStack.MarkAsOriginalFile();
         return true;
     }
 
