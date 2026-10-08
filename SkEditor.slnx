@@ -22,4 +22,5 @@
     <Project Path="SkEditor/SkEditor.csproj" />
     <Project Path="SkEditor.Matcher/SkEditor.Matcher.csproj" />
     <Project Path="SkEditor.SourceGenerators/SkEditor.SourceGenerators.csproj" />
+    <Project Path="SkEditor.Tests/SkEditor.Tests.csproj" />
 </Solution>
