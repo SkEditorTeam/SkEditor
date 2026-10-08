@@ -225,6 +225,7 @@ public class RemoteConnectionService(
                     .WithType(NotificationType.Error));
 
                 Disconnect(connection);
+                throw;
             }
         }
     }
