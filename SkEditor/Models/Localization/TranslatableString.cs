@@ -79,7 +79,7 @@ public partial class TranslatableString : ObservableObject
                 return;
             }
 
-            TranslationService.Current.LanguageChanged += OnGlobalLanguageChanged;
+            TranslationService.Current?.LanguageChanged += OnGlobalLanguageChanged;
             _eventSubscribed = true;
         }
     }
