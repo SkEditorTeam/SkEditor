@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using SkEditor.Utilities.Localization;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Tabs;
 
@@ -11,7 +12,7 @@ namespace SkEditor.ViewModels.Tabs;
 ///     tabs, settings tabs, etc.).
 /// </summary>
 /// <param name="header">The header text of the tab, which is displayed on the tab itself.</param>
-public abstract partial class TabViewModelBase(TranslatableString header, Symbol? icon = null) : ObservableObject
+public abstract partial class TabViewModelBase(TranslatableString header, Symbol? icon = null) : ObservableObject, ITab
 {
     /// <summary>
     ///     Command that is executed when the user attempts to close the tab.

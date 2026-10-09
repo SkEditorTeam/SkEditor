@@ -2,16 +2,15 @@
 using System.IO;
 using R3;
 using SkEditor.Contracts.Services.Files;
-using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Utilities.Extensions;
 
 public static class TabServiceExtensions
 {
-    public static Observable<TabViewModelBase?> ObserveSelectedTab(this ITabService tabService)
+    public static Observable<ITab?> ObserveSelectedTab(this ITabService tabService)
     {
-        return Observable.FromEvent<Action<TabViewModelBase?>, TabViewModelBase?>(
+        return Observable.FromEvent<Action<ITab?>, ITab?>(
                 h => h,
                 h => tabService.SelectedTabChanged += h,
                 h => tabService.SelectedTabChanged -= h)

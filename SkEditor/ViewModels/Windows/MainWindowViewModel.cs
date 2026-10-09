@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Menu;
 using SkEditor.ViewModels.Pages;
-using SkEditor.ViewModels.Tabs;
-using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.ViewModels.Windows;
 
@@ -26,10 +23,8 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 {
     private readonly IFileService _files;
     private readonly ITabService _tabs;
-    private readonly IClipboardService _clipboard;
-    private readonly ILinkService _links;
 
-    public IEnumerable<TabViewModelBase> AllTabs => _tabs.AllTabs;
+    public IEnumerable<ITab> AllTabs => _tabs.AllTabs;
 
     public bool AnyTabsOpen => _tabs.AllTabs.Any();
 
@@ -38,7 +33,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public bool IsSplitActive => SplitTabs.Count > 0;
     public MainMenuViewModel MainMenu { get; }
 
-    public ObservableCollection<TabViewModelBase> MainTabs => _tabs.MainTabs;
+    public ObservableCollection<ITab> MainTabs => _tabs.MainTabs;
 
     public bool ShowInAppMenu =>
         !OperatingSystem.IsMacOS() || AppSettings.UseIntegratedMenuOnMacOs;
@@ -66,7 +61,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         }
     }
 
-    public TabViewModelBase? SelectedMainTab
+    public ITab? SelectedMainTab
     {
         get => _tabs.SelectedMainTab;
         set
@@ -81,7 +76,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         }
     }
 
-    public TabViewModelBase? SelectedSplitTab
+    public ITab? SelectedSplitTab
     {
         get => _tabs.SelectedSplitTab;
         set
@@ -97,17 +92,15 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     }
 
     [ObservableProperty]
-    public partial TabViewModelBase? SelectedTab { get; set; }
+    public partial ITab? SelectedTab { get; set; }
 
     public SidebarViewModel Sidebar { get; }
-    public ObservableCollection<TabViewModelBase> SplitTabs => _tabs.SplitTabs;
+    public ObservableCollection<ITab> SplitTabs => _tabs.SplitTabs;
     public StatusBarViewModel StatusBar { get; }
     public WelcomePageViewModel WelcomePage { get; }
 
     public MainWindowViewModel(ITabService tabs,
         IFileService files,
-        IClipboardService clipboard,
-        ILinkService links,
         AppSettings appSettings,
         MainMenuViewModel mainMenu,
         SidebarViewModel sidebar,
@@ -118,8 +111,6 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     {
         _tabs = tabs;
         _files = files;
-        _clipboard = clipboard;
-        _links = links;
 
         AppSettings = appSettings;
 
@@ -164,13 +155,13 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     {
         _files.NotifyFileDelete(message.Path);
     }
-    
-    public void SplitTab(TabViewModelBase tab)
+
+    public void SplitTab(ITab tab)
     {
         _tabs.SplitTab(tab);
     }
 
-    public void MergeTab(TabViewModelBase tab)
+    public void MergeTab(ITab tab)
     {
         _tabs.MergeTab(tab);
     }
@@ -181,7 +172,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         _files.NewFile();
     }
 
-    partial void OnSelectedTabChanged(TabViewModelBase? value)
+    partial void OnSelectedTabChanged(ITab? value)
     {
         if (_tabs.SelectedTab != value)
         {

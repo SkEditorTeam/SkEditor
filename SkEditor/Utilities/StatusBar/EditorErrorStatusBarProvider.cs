@@ -14,7 +14,6 @@ using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings;
 using SkEditor.ViewModels.Controls;
 using SkEditor.ViewModels.Controls.StatusBar.Panes;
-using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Utilities.StatusBar;
@@ -72,7 +71,7 @@ public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<Analy
         _tabs = tabs;
         _notifs = notifs;
 
-        Observable.FromEvent<TabViewModelBase?>(
+        Observable.FromEvent<ITab?>(
                 h => tabs.SelectedTabChanged += h,
                 h => tabs.SelectedTabChanged -= h)
             .Subscribe(_ => UpdateState())

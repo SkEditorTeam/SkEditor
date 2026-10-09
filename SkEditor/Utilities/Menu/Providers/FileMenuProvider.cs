@@ -12,7 +12,6 @@ using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
 
@@ -28,7 +27,7 @@ public class FileMenuProvider(
 {
     public MainMenuItem GetMainMenuItem()
     {
-        Observable<TabViewModelBase?> selectedTab = tabs.ObserveSelectedTab();
+        Observable<ITab?> selectedTab = tabs.ObserveSelectedTab();
         BindableReactiveProperty<bool> isSaveable =
             selectedTab.Select(tab => tab is ISaveableTab).ToBindableReactiveProperty();
         BindableReactiveProperty<bool> hasTabs =

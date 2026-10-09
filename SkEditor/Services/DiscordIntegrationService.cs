@@ -4,7 +4,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs;
-using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Services;
 
@@ -86,7 +86,7 @@ public partial class DiscordIntegrationService(
         _client.Dispose();
     }
 
-    private void UpdateDetails(TabViewModelBase? tab)
+    private void UpdateDetails(ITab? tab)
     {
         if (_client?.IsInitialized != true)
         {

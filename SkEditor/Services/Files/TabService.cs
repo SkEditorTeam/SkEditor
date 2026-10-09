@@ -9,17 +9,16 @@ using SkEditor.DataTemplates;
 using SkEditor.Models.Notifications;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Tabs.Capabilities;
-using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Services.Files;
 
 public class TabService(IFileFeatureService features, TabViewLocator tabViewLocator, INotificationService notifs)
     : ITabService
 {
-    public IEnumerable<TabViewModelBase> AllTabs => MainTabs.Concat(SplitTabs);
-    public ObservableCollection<TabViewModelBase> MainTabs { get; } = [];
+    public IEnumerable<ITab> AllTabs => MainTabs.Concat(SplitTabs);
+    public ObservableCollection<ITab> MainTabs { get; } = [];
 
-    public TabViewModelBase? SelectedMainTab
+    public ITab? SelectedMainTab
     {
         get;
         set
@@ -37,7 +36,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         }
     }
 
-    public TabViewModelBase? SelectedSplitTab
+    public ITab? SelectedSplitTab
     {
         get;
         set
@@ -55,7 +54,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         }
     }
 
-    public TabViewModelBase? SelectedTab
+    public ITab? SelectedTab
     {
         get;
         set
@@ -83,7 +82,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         }
     }
 
-    public ObservableCollection<TabViewModelBase> SplitTabs { get; } = [];
+    public ObservableCollection<ITab> SplitTabs { get; } = [];
 
     public void SwitchTab(int index)
     {
@@ -92,7 +91,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
             return;
         }
 
-        ObservableCollection<TabViewModelBase> activeList = SplitTabs.Contains(SelectedTab) ? SplitTabs : MainTabs;
+        ObservableCollection<ITab> activeList = SplitTabs.Contains(SelectedTab) ? SplitTabs : MainTabs;
 
         if (index < 0 || index >= activeList.Count)
         {
@@ -102,7 +101,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         SelectedTab = activeList[index];
     }
 
-    public void OpenTab(TabViewModelBase tab)
+    public void OpenTab(ITab tab)
     {
         tab.CloseRequested += OnTabCloseRequested;
 
@@ -128,7 +127,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         }
     }
 
-    public void CloseTab(TabViewModelBase tab)
+    public void CloseTab(ITab tab)
     {
         tab.CloseRequested -= OnTabCloseRequested;
 
@@ -138,17 +137,17 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         }
 
         bool isMain = MainTabs.Contains(tab);
-        ObservableCollection<TabViewModelBase> targetList = isMain ? MainTabs : SplitTabs;
+        ObservableCollection<ITab> targetList = isMain ? MainTabs : SplitTabs;
 
         targetList.Remove(tab);
         tabViewLocator.RemoveFromCache(tab);
 
         if (MainTabs.Count == 0 && SplitTabs.Count > 0)
         {
-            List<TabViewModelBase> itemsToMove = SplitTabs.ToList();
+            List<ITab> itemsToMove = SplitTabs.ToList();
             SplitTabs.Clear();
 
-            foreach (TabViewModelBase item in itemsToMove)
+            foreach (ITab item in itemsToMove)
             {
                 MainTabs.Add(item);
             }
@@ -156,7 +155,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
 
         if (SelectedTab == tab)
         {
-            TabViewModelBase? nextTab = MainTabs.LastOrDefault() ?? SplitTabs.LastOrDefault();
+            ITab? nextTab = MainTabs.LastOrDefault() ?? SplitTabs.LastOrDefault();
             SelectedTab = nextTab;
         }
 
@@ -168,7 +167,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         TabClosed?.Invoke(tab);
     }
 
-    public void SplitTab(TabViewModelBase tab)
+    public void SplitTab(ITab tab)
     {
         if (!MainTabs.Contains(tab))
         {
@@ -190,7 +189,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         SelectedSplitTab = tab;
     }
 
-    public void MergeTab(TabViewModelBase tab)
+    public void MergeTab(ITab tab)
     {
         if (!SplitTabs.Contains(tab))
         {
@@ -202,7 +201,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         SelectedMainTab = tab;
     }
 
-    public void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple) where T : TabViewModelBase
+    public void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple) where T : ITab
     {
         if (!allowMultiple && AllTabs.OfType<T>().FirstOrDefault() is { } existing)
         {
@@ -215,7 +214,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
 
     private void OnTabCloseRequested(object? sender, EventArgs e)
     {
-        if (sender is TabViewModelBase tab)
+        if (sender is ITab tab)
         {
             CloseTab(tab);
         }
@@ -223,12 +222,12 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
 
     private void OnFocusRequested(object? sender, EventArgs e)
     {
-        if (sender is TabViewModelBase tab)
+        if (sender is ITab tab)
         {
             SelectedTab = tab;
         }
     }
 
-    public event Action<TabViewModelBase?>? SelectedTabChanged;
-    public event Action<TabViewModelBase>? TabClosed;
+    public event Action<ITab?>? SelectedTabChanged;
+    public event Action<ITab>? TabClosed;
 }

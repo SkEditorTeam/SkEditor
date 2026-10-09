@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Contracts.Services.Files;
 
@@ -13,25 +13,25 @@ public interface ITabService
     /// <summary>
     ///     All the opened tabs, including both main and split tabs.
     /// </summary>
-    IEnumerable<TabViewModelBase> AllTabs { get; }
+    IEnumerable<ITab> AllTabs { get; }
 
     /// <summary>
     ///     The collection of main tabs, which are opened in the main view.
     /// </summary>
-    ObservableCollection<TabViewModelBase> MainTabs { get; }
+    ObservableCollection<ITab> MainTabs { get; }
 
-    TabViewModelBase? SelectedMainTab { get; set; }
-    TabViewModelBase? SelectedSplitTab { get; set; }
+    ITab? SelectedMainTab { get; set; }
+    ITab? SelectedSplitTab { get; set; }
 
     /// <summary>
     ///     The currently selected tab. Can be null if no tabs are opened.
     /// </summary>
-    TabViewModelBase? SelectedTab { get; set; }
+    ITab? SelectedTab { get; set; }
 
     /// <summary>
     ///     The collection of split tabs, which are opened in the split view.
     /// </summary>
-    ObservableCollection<TabViewModelBase> SplitTabs { get; }
+    ObservableCollection<ITab> SplitTabs { get; }
 
     /// <summary>
     ///     Switches to the tab at the given index. Does nothing if the index is out of range.
@@ -43,7 +43,7 @@ public interface ITabService
     ///     Opens the given tab.
     /// </summary>
     /// <param name="tab">The tab to open.</param>
-    void OpenTab(TabViewModelBase tab);
+    void OpenTab(ITab tab);
 
     /// <summary>
     ///     Opens a new tab created by the given factory.
@@ -54,33 +54,33 @@ public interface ITabService
     ///     tab of the same type and select it instead of opening a new one.
     /// </param>
     /// <typeparam name="T">The type of the tab to open.</typeparam>
-    void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple = false) where T : TabViewModelBase;
+    void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple = false) where T : ITab;
 
     /// <summary>
     ///     Closes the given tab.
     /// </summary>
     /// <param name="tab">The tab to close.</param>
     /// <remarks>This force-closes the tab and normally should only be used after the closing is handled by the tab itself.</remarks>
-    void CloseTab(TabViewModelBase tab);
+    void CloseTab(ITab tab);
 
     /// <summary>
     ///     Splits the given tab into the split view. Nothing happens if the tab is already in the split view or is the only
     ///     tab.
     /// </summary>
-    void SplitTab(TabViewModelBase tab);
+    void SplitTab(ITab tab);
 
     /// <summary>
     ///     Merges the given tab back into the main view.
     /// </summary>
-    void MergeTab(TabViewModelBase tab);
+    void MergeTab(ITab tab);
 
     /// <summary>
     ///     Raised when the selected tab changes.
     /// </summary>
-    event Action<TabViewModelBase?>? SelectedTabChanged;
+    event Action<ITab?>? SelectedTabChanged;
 
     /// <summary>
     ///     Raised when a tab is closed.
     /// </summary>
-    event Action<TabViewModelBase>? TabClosed;
+    event Action<ITab>? TabClosed;
 }

@@ -14,6 +14,10 @@ public interface ITextEditorTab
     Vector ScrollOffset { get; set; }
     BindableReactiveProperty<bool> WordWrap { get; }
 
+    void RequestEditorCommand(EditorCommandType commandType);
+    void RequestRedraw(ISegment? segment = null);
+    void RequestGoToLocation(TextLocation location);
+    
     event Action<EditorCommandType>? EditorCommandRequested;
     event Action<ISegment?>? RedrawRequested;
     event Action<TextLocation>? GoToLocationRequested;

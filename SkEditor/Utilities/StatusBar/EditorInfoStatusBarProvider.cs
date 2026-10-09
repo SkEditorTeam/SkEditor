@@ -28,7 +28,7 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider, IDisposable
             .WithAlignment(StatusBarItem.ItemAlignment.Right)
             .WithCommand(windowDialogs.ShowGoToLineDialogAsync);
 
-        CanAttach = Observable.FromEvent<TabViewModelBase?>(
+        CanAttach = Observable.FromEvent<ITab?>(
                 h => _tabs.SelectedTabChanged += h,
                 h => _tabs.SelectedTabChanged -= h
             )
@@ -36,7 +36,7 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider, IDisposable
             .Prepend(_tabs.SelectedTab is ITextEditorTab)
             .ToReadOnlyReactiveProperty();
 
-        Observable.FromEvent<TabViewModelBase?>(
+        Observable.FromEvent<ITab?>(
                 h => _tabs.SelectedTabChanged += h,
                 h => _tabs.SelectedTabChanged -= h
             )

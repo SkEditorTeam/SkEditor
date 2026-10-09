@@ -10,7 +10,6 @@ using SkEditor.Models.Tabs;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs.Capabilities;
-using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
 
 namespace SkEditor.Services.Files;
 
@@ -18,7 +17,7 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogS
 {
     public async Task CloseMultipleAsync(CloseType closeType)
     {
-        List<TabViewModelBase> tabsToClose = GetTabsToClose(closeType);
+        List<ITab> tabsToClose = GetTabsToClose(closeType);
         if (tabsToClose.Count == 0)
         {
             return;
@@ -40,7 +39,7 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogS
         {
             case 1:
             {
-                TabViewModelBase tab = tabsToClose.First(t => !t.IsSaved);
+                ITab tab = tabsToClose.First(t => t is ISaveableTab { IsSaved: false });
                 tab.CloseCommand?.Execute(null);
 
                 if (tabs.AllTabs.Contains(tab))
@@ -63,7 +62,7 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogS
             }
         }
 
-        foreach (TabViewModelBase tab in tabsToClose)
+        foreach (ITab tab in tabsToClose)
         {
             tabs.CloseTab(tab);
         }
@@ -109,13 +108,13 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogS
         return savedAll;
     }
 
-    private List<TabViewModelBase> GetTabsToClose(CloseType closeType)
+    private List<ITab> GetTabsToClose(CloseType closeType)
     {
         return closeType switch
         {
             CloseType.All => tabs.AllTabs.ToList(),
             CloseType.AllButCurrent => tabs.AllTabs.Where(t => t != tabs.SelectedTab).ToList(),
-            CloseType.Unsaved => tabs.AllTabs.Where(t => !t.IsSaved).ToList(),
+            CloseType.Unsaved => tabs.AllTabs.Where(t => t is ISaveableTab { IsSaved: false }).ToList(),
             CloseType.Left => tabs.AllTabs.TakeWhile(t => t != tabs.SelectedTab).ToList(),
             CloseType.Right => tabs.AllTabs.SkipWhile(t => t != tabs.SelectedTab).Skip(1).ToList(),
             _ => throw new ArgumentOutOfRangeException(nameof(closeType), closeType, null)

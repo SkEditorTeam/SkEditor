@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using TabViewModelBase = SkEditor.ViewModels.Tabs.TabViewModelBase;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.DataTemplates;
 
 public class TabViewLocator : IDataTemplate
 {
     private readonly Dictionary<Type, Func<Control>> _registry = new();
-    private readonly Dictionary<TabViewModelBase, Control> _viewCache = new();
+    private readonly Dictionary<ITab, Control> _viewCache = new();
 
     public Control Build(object? data)
     {
-        if (data is not TabViewModelBase tabVm)
+        if (data is not ITab tabVm)
         {
             return new TextBlock { Text = "Invalid data type" };
         }
@@ -41,17 +41,17 @@ public class TabViewLocator : IDataTemplate
 
     public bool Match(object? data)
     {
-        return data is TabViewModelBase;
+        return data is ITab;
     }
 
     public void Register<TViewModel, TView>()
-        where TViewModel : TabViewModelBase
+        where TViewModel : ITab
         where TView : Control, new()
     {
         _registry[typeof(TViewModel)] = () => new TView();
     }
 
-    public void RemoveFromCache(TabViewModelBase tabVm)
+    public void RemoveFromCache(ITab tabVm)
     {
         _viewCache.Remove(tabVm);
     }
