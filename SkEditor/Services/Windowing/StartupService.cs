@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
-using Serilog;
 using SkEditor.Analyzing;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
@@ -26,6 +25,7 @@ public class StartupService(
     IAnalyzer analyzer,
     ISkriptSyntaxService syntaxService,
     IFileService files,
+    ILogService logs,
     string[] args) : IStartupService
 {
     public string[]? StartupArguments { get; set; }
@@ -43,7 +43,7 @@ public class StartupService(
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Error creating SkEditor");
+            logs.Error(ex, "Error creating SkEditor");
 
             if (splashScreen is not null)
             {
