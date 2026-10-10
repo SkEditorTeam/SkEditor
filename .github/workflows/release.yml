@@ -1,0 +1,158 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish Windows x64 (AOT)
+        run: |
+          dotnet publish SkEditor -c Release -r win-x64 -p:PublishAot=true --nologo -v q /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false -o ./dist-win
+
+      - name: Create Zip
+        shell: pwsh
+        run: |
+          Compress-Archive -Path ./dist-win/* -DestinationPath Windows-x64.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifacts
+          path: Windows-x64.zip
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish Linux x64 (AOT)
+        run: |
+          dotnet publish SkEditor -c Release -r linux-x64 -p:PublishAot=true --nologo -v q /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false -o ./dist-linux
+          chmod +x ./dist-linux/SkEditor
+          cd dist-linux && zip -r ../Linux-x64.zip .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-artifacts
+          path: Linux-x64.zip
+
+  build-macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        arch: [ osx-x64, osx-arm64 ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Generate .icns
+        run: |
+          SOURCE="SkEditor/Assets/SkEditor.png"
+          ICONSET="SkEditor.iconset"
+          mkdir -p $ICONSET
+          for size in 16 32 64 128 256 512; do
+            sips -z $size $size "$SOURCE" --out "$ICONSET/icon_${size}x${size}.png"
+            double=$((size * 2))
+            sips -z $double $double "$SOURCE" --out "$ICONSET/icon_${size}x${size}@2x.png"
+          done
+          iconutil -c icns $ICONSET -o SkEditor/Assets/SkEditor.icns
+          rm -rf $ICONSET
+
+      - name: Publish macOS ${{ matrix.arch }} (AOT)
+        run: |
+          dotnet publish SkEditor -c Release -r ${{ matrix.arch }} -p:PublishAot=true --nologo -v q /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false -o ./publish
+
+      - name: Package .app
+        run: |
+          mkdir -p "SkEditor.app/Contents/MacOS"
+          mkdir -p "SkEditor.app/Contents/Resources"
+          cp -r ./publish/* "SkEditor.app/Contents/MacOS/"
+          cp SkEditor/Properties/Info.plist "SkEditor.app/Contents/"
+          cp SkEditor/Assets/SkEditor.icns "SkEditor.app/Contents/Resources/"
+          chmod +x SkEditor.app/Contents/MacOS/*
+          
+          ZIP_NAME="macOS-${{ matrix.arch == 'osx-arm64' && 'arm64' || 'x64' }}.zip"
+          zip -r "$ZIP_NAME" SkEditor.app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.arch }}-artifacts
+          path: "*.zip"
+
+  create-release:
+    needs: [ build-windows, build-linux, build-macos ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-files
+          merge-multiple: true
+
+      - name: Determine Version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Draft Pre-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ steps.get_version.outputs.VERSION }}"
+
+          cat << 'EOF' > release_notes.md
+          ## 👋 Hello!
+          
+          <!-- Description -->
+          
+          ---
+          
+          ### 📄 File Descriptions
+          
+          | File | Description |
+          |------|-------------|
+          | 💻 SkEditorInstaller.msi | Quick, easy installation for Windows x64 (most common) |
+          | 📦 Windows-x64.zip | Portable Windows version for x64 chips (likely your version) |
+          | 📦 Windows-arm64.zip | Portable Windows for ARM64 (only for ARM devices) |
+          | 🐧 Linux-x64.zip | Portable Linux x64 version |
+          | 🍎 macOS-x64.zip | For macOS on x64 (Intel chips) |
+          | 🍏 macOS-arm64.zip | For macOS on ARM64 |
+          EOF
+
+          gh release create "$TAG" release-files/*.zip \
+            --title "$TAG - Alpha Update" \
+            --notes-file release_notes.md \
+            --draft \
+            --prerelease
