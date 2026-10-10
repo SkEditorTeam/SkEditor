@@ -1,12 +1,10 @@
 using System.Text.Json.Serialization;
+using MemoryPack;
 
 namespace SkEditor.Matcher.Models;
 
-[JsonSerializable(typeof(SkriptDataDto))]
-[JsonSourceGenerationOptions(WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
-public partial class SkriptDataJsonContext : JsonSerializerContext;
-
-public class SkriptDataDto
+[MemoryPackable]
+public partial class SkriptDataDto
 {
     [JsonPropertyName("classInfos")]
     public required List<ClassInfoDto> ClassInfos { get; set; }
@@ -18,7 +16,8 @@ public class SkriptDataDto
     public required List<SyntaxElementDto> SyntaxElements { get; set; }
 }
 
-public class ClassInfoDto
+[MemoryPackable]
+public partial class ClassInfoDto
 {
     [JsonPropertyName("codeName")]
     public required string CodeName { get; set; }
@@ -33,7 +32,8 @@ public class ClassInfoDto
     public string[]? RegexPatterns { get; set; }
 }
 
-public class FunctionDto
+[MemoryPackable]
+public partial class FunctionDto
 {
     [JsonPropertyName("name")]
     public required string Name { get; set; }
@@ -45,7 +45,8 @@ public class FunctionDto
     public required string ReturnType { get; set; }
 }
 
-public class ClassTypeDto
+[MemoryPackable]
+public partial class ClassTypeDto
 {
     [JsonPropertyName("type")]
     public required string Type { get; set; }
@@ -54,7 +55,8 @@ public class ClassTypeDto
     public bool IsList { get; set; }
 }
 
-public class SyntaxElementDto
+[MemoryPackable]
+public partial class SyntaxElementDto
 {
     [JsonConverter(typeof(JsonStringEnumConverter<SyntaxType>))]
     public enum SyntaxType

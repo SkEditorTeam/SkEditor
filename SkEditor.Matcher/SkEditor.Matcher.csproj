@@ -7,10 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MemoryPack" Version="1.21.4" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\skript-data.json" />
+        <AvaloniaResource Include="Assets\skript-data.bin" />
     </ItemGroup>
 </Project>

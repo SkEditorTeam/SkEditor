@@ -1,5 +1,6 @@
-using System.Text.Json;
+using System.Buffers;
 using Avalonia.Platform;
+using MemoryPack;
 using SkEditor.Matcher.Models;
 using SkEditor.Matcher.Registries;
 
@@ -11,7 +12,7 @@ public class SkriptSyntaxService : ISkriptSyntaxService
     public TypeRegistry TypeRegistry { get; private set; } = null!;
     public Dictionary<SyntaxElement, List<SyntaxPattern>> PatternMap { get; } = [];
 
-    private static readonly Uri DefaultDataUri = new("avares://SkEditor.Matcher/Assets/skript-data.json");
+    private static readonly Uri DefaultDataUri = new("avares://SkEditor.Matcher/Assets/skript-data.bin");
 
     public async Task LoadAsync()
     {
@@ -22,10 +23,14 @@ public class SkriptSyntaxService : ISkriptSyntaxService
         });
     }
 
-    public void LoadFromStream(Stream jsonStream)
+    public void LoadFromStream(Stream stream)
     {
-        SkriptDataDto? dto =
-            JsonSerializer.Deserialize<SkriptDataDto>(jsonStream, SkriptDataJsonContext.Default.SkriptDataDto);
+        int length = (int)stream.Length;
+        Span<byte> span = ArrayPool<byte>.Shared.Rent(length).AsSpan(0, length);
+        stream.ReadExactly(span);
+
+        SkriptDataDto? dto = MemoryPackSerializer.Deserialize<SkriptDataDto>(span);
+        
         if (dto == null)
         {
             throw new InvalidOperationException("Failed to deserialize Skript data.");
