@@ -7,7 +7,9 @@ public interface ISkriptSyntaxService
 {
     TypeRegistry TypeRegistry { get; }
 
-    Task LoadAsync();
+    void Load();
     void LoadFromStream(Stream jsonStream);
     IEnumerable<(SyntaxElement Element, SyntaxPattern Pattern)> GetSyntaxByType(SyntaxElementDto.SyntaxType type);
+
+    Task InitializationTask { get; }
 }

@@ -82,7 +82,7 @@ public class StartupService(
         namedPipeServer.Start();
 
         analyzer.ObserveOptionChange();
-        _ = syntaxService.LoadAsync();
+        _ = Task.Run(syntaxService.Load);
 
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {

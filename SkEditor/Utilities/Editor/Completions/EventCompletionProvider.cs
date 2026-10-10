@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AvaloniaEdit.Document;
+using SkEditor.Contracts.Services;
 using SkEditor.Matcher;
 using SkEditor.Matcher.Models;
 using SkEditor.Models.Completions;
@@ -9,12 +11,29 @@ namespace SkEditor.Utilities.Editor.Completions;
 
 public class EventCompletionProvider : ICompletionProvider
 {
-    private readonly List<CompletionDataInfo> _cachedEvents = [];
+    private volatile List<CompletionDataInfo> _cachedEvents = [];
 
-    public EventCompletionProvider(ISkriptSyntaxService syntaxService) => PrecomputeEvents(syntaxService);
+    public EventCompletionProvider(ISkriptSyntaxService syntaxService, ILogService logs) =>
+        _ = InitializeAsync(syntaxService, logs);
 
-    private void PrecomputeEvents(ISkriptSyntaxService syntaxService)
+    private async Task InitializeAsync(ISkriptSyntaxService syntaxService, ILogService logs)
     {
+        try
+        {
+            await syntaxService.InitializationTask.ConfigureAwait(false);
+
+            List<CompletionDataInfo> events = PrecomputeEvents(syntaxService);
+            _cachedEvents = events;
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Error initializing event completion provider");
+        }
+    }
+
+    private static List<CompletionDataInfo> PrecomputeEvents(ISkriptSyntaxService syntaxService)
+    {
+        List<CompletionDataInfo> infos = [];
         HashSet<string> seenCanonicals = new(StringComparer.OrdinalIgnoreCase);
 
         foreach ((_, SyntaxPattern pattern) in syntaxService.GetSyntaxByType(SyntaxElementDto.SyntaxType.Event))
@@ -37,18 +56,19 @@ public class EventCompletionProvider : ICompletionProvider
 
             if (pattern.HasExpressions)
             {
-                _cachedEvents.Add(new CompletionDataInfo(canonical, canonical, CompletionType.Keyword, "snippet")
+                infos.Add(new CompletionDataInfo(canonical, canonical, CompletionType.Keyword, "snippet")
                 {
                     Snippet = pattern.ToSnippet(syntaxService.TypeRegistry)
                 });
             }
             else
             {
-                _cachedEvents.Add(new CompletionDataInfo(canonical, canonical, CompletionType.Keyword));
+                infos.Add(new CompletionDataInfo(canonical, canonical, CompletionType.Keyword));
             }
         }
 
-        _cachedEvents.Sort((a, b) => string.Compare(a.Title, b.Title, StringComparison.OrdinalIgnoreCase));
+        infos.Sort((a, b) => string.Compare(a.Title, b.Title, StringComparison.OrdinalIgnoreCase));
+        return infos;
     }
 
     public bool CheckCompletionsAvailable(TextDocument document, CompletionContext context)
