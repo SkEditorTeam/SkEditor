@@ -5,7 +5,6 @@ using SkEditor.Models.Dialogs;
 using SkEditor.Models.Tabs;
 using SkEditor.Services.Files;
 using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Tests;
@@ -25,7 +24,7 @@ public class TabCloseServiceTests
         ITab tab2 = Substitute.For<ITab, ISaveableTab>();
         ((ISaveableTab)tab2).IsSaved.Returns(false);
 
-        List<ITab> tabList = new() { tab1, tab2 };
+        List<ITab> tabList = [tab1, tab2];
         tabs.AllTabs.Returns(tabList);
 
         dialogs.ShowDialogAsync(Arg.Any<Dialog>()).Returns(DialogResult.Cancel);
@@ -36,6 +35,6 @@ public class TabCloseServiceTests
 
         await dialogs.Received(1).ShowDialogAsync(Arg.Any<Dialog>());
 
-        tabs.DidNotReceive().CloseTab(Arg.Any<TabViewModelBase>());
+        tabs.DidNotReceive().CloseTab(Arg.Any<ITab>());
     }
 }
