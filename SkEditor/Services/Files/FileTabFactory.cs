@@ -1,8 +1,11 @@
 ﻿using System;
+using System.IO;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Files.Features;
 using SkEditor.Models.Files;
+using SkEditor.Models.Session;
+using SkEditor.Utilities.Extensions;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
@@ -35,6 +38,31 @@ public class FileTabFactory(
             features, recentFiles, links, clipboard, logs)
         {
             File = file
+        };
+    }
+
+    public FileTabViewModel CreateFromSession(SessionStateFile file)
+    {
+        TranslatableString? header;
+        if (file.Header is { } fileHeader)
+        {
+            header = fileHeader.ToTranslatable();
+        }
+        else if (file.Path is not null)
+        {
+            string fileName = Path.GetFileName(file.Path);
+            header = fileName.ToTranslatable();
+        }
+        else
+        {
+            throw new InvalidOperationException("The session state file is missing both header and path!");
+        }
+
+        return new FileTabViewModel(header, appSettings, experiments, dialogService, notifications, filePicker,
+            features, recentFiles, links, clipboard, logs)
+        {
+            File = new LocalFile(file.Path, file.Header),
+            IsSaved = file.IsSaved
         };
     }
 

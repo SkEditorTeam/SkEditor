@@ -64,7 +64,11 @@ public class FileService(
         }
 
         FileTabViewModel fileTab = fileTabFactory.CreateFromFile(file);
+        await OpenFileTabAsync(fileTab);
+    }
 
+    private async Task OpenFileTabAsync(FileTabViewModel fileTab)
+    {
         Task<bool> fullLoadTask = LoadAndReadFileAsync(fileTab);
 
         Task timeoutTask = Task.Delay(100);
