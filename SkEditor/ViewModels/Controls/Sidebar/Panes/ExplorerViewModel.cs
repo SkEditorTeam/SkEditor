@@ -1,28 +1,21 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Models.Messages;
-using SkEditor.Models.Notifications;
-using SkEditor.Models.Projects.Local;
 using SkEditor.Models.UI;
 using SkEditor.Utilities.Localization;
 using SkEditor.ViewModels.Controls.FileTree;
 
 namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
 
-public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewModel, IRecipient<OpenExplorerFolderMessage>
+public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewModel,
+    IRecipient<OpenExplorerFolderMessage>, IRecipient<ProjectChangedMessage>
 {
-    private readonly IFilePickerService _filePicker;
     private readonly IMessenger _messenger;
-    private readonly INotificationService _notifications;
-    private readonly IRecentFileService _recents;
+    private readonly IProjectService _projects;
 
     public required FileTreeViewModel FileTree { get; init; }
     public StandardIcon Icon => Symbol.Folder;
@@ -30,18 +23,15 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
     public TranslatableString Name => TranslationKey.LocalExplorerTitle;
 
     public ExplorerViewModel(FileTreeViewModel fileTree,
-        IFilePickerService filePicker,
-        IRecentFileService recents,
-        INotificationService notifications,
+        IProjectService projects,
         IMessenger messenger)
     {
-        _filePicker = filePicker;
-        _recents = recents;
-        _notifications = notifications;
+        _projects = projects;
         FileTree = fileTree;
 
         _messenger = messenger;
-        _messenger.Register(this);
+        _messenger.Register<OpenExplorerFolderMessage>(this);
+        _messenger.Register<ProjectChangedMessage>(this);
     }
 
     public void Receive(OpenExplorerFolderMessage message)
@@ -49,42 +39,16 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
         _ = HandleOpenExplorerFolderMessageAsync(message);
     }
 
+    public void Receive(ProjectChangedMessage message)
+    {
+        FileTree.FileSystem = message.NewFileSystem;
+        _ = FileTree.LoadFileSystemAsync();
+    }
+
     [RelayCommand]
     public async Task<bool> OpenFolder()
     {
-        string? path = (await _filePicker.PickFoldersAsync(false))?.FirstOrDefault();
-        if (path is null)
-        {
-            return false;
-        }
-
-        if (!Directory.Exists(path))
-        {
-            Notification notification = Notification
-                .Create(TranslationKey.FileExplorerFolderDoesntExistTitle)
-                .WithMessage(TranslationKey.FileExplorerFolderDoesntExistMessage)
-                .WithType(NotificationType.Error);
-
-            _notifications.Show(notification);
-            return false;
-        }
-
-        await OpenFolder(path);
-        return true;
-    }
-
-    public async Task OpenFolder(string path)
-    {
-        LocalFileSystem localFileSystem = new(path);
-        FileTree.FileSystem = localFileSystem;
-
-        string? name = Path.GetFileName(Path.GetDirectoryName(path));
-        if (name is not null)
-        {
-            _recents.AddRecentItem(name, path, true, DateTime.Now);
-        }
-
-        await FileTree.LoadFileSystemAsync();
+        return await _projects.OpenProjectAsync();
     }
 
     private async Task HandleOpenExplorerFolderMessageAsync(
@@ -92,7 +56,7 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
     {
         if (m.FolderPath is not null)
         {
-            await OpenFolder(m.FolderPath);
+            _projects.OpenProject(m.FolderPath);
         }
         else
         {

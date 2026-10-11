@@ -69,6 +69,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
             services.AddSingleton<IClipboardService, ClipboardService>();
             services.AddSingleton<ILinkService, LinkService>();
+            services.AddSingleton<IProjectService, ProjectService>();
 
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
             services.AddSingleton<ICredentialStoreFactory, CredentialStoreFactory>();
