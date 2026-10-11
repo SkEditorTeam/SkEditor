@@ -104,16 +104,12 @@ public class SessionRestoreService(
                 tab = fileTabFactory.CreateFromFile(new LocalFile(file.Path));
                 await files.LoadAndOpenFileTabAsync(tab);
             }
-            else if (file.Content is not null)
-            {
-                tab = fileTabFactory.CreateFromSession(file);
-                tab.Document.Text = file.Content;
-                tab.Document.UndoStack.ClearAll();
-                tabs.OpenTab(tab);
-            }
             else
             {
-                throw new InvalidOperationException("The session state file is malformed!");
+                tab = fileTabFactory.CreateFromSession(file);
+                tab.Document.Text = file.Content ?? string.Empty;
+                tab.Document.UndoStack.ClearAll();
+                tabs.OpenTab(tab);
             }
 
             tab.CaretOffset = file.CaretOffset;
