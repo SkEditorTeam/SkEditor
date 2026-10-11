@@ -29,6 +29,12 @@ public interface IFileService
     Task LoadAndOpenFileTabAsync(FileTabViewModel fileTab, bool select = true);
 
     /// <summary>
+    ///     Tries to load the file content.
+    /// </summary>
+    /// <returns>True if success</returns>
+    Task<bool> LoadAndReadFileAsync(FileTabViewModel fileTab);
+
+    /// <summary>
     ///     Updates the details of a file after it has been renamed or moved.
     /// </summary>
     void UpdateFileDetails(string oldPath, string newName, string newPath);

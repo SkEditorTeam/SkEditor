@@ -148,7 +148,7 @@ public class FileService(
         }
     }
 
-    private async Task<bool> LoadAndReadFileAsync(FileTabViewModel fileTab)
+    public async Task<bool> LoadAndReadFileAsync(FileTabViewModel fileTab)
     {
         try
         {
