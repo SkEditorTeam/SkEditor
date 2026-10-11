@@ -117,28 +117,26 @@ public class SessionRestoreService(
 
         foreach (SessionStateFile file in state.Files)
         {
+            bool isTarget = (file.Header ?? Path.GetFileName(file.Path)) == state.SelectedTabHeader;
+            
             FileTabViewModel? tab;
             if (file.Content is null && file.Path is not null && file.IsSaved)
             {
                 tab = fileTabFactory.CreateFromFile(new LocalFile(file.Path));
-                await files.LoadAndOpenFileTabAsync(tab, false);
+                await files.LoadAndOpenFileTabAsync(tab, isTarget);
             }
             else
             {
                 tab = fileTabFactory.CreateFromSession(file);
                 tab.Document.Text = file.Content ?? string.Empty;
                 tab.Document.UndoStack.ClearAll();
-                tabs.OpenTab(tab, false);
+                tabs.OpenTab(tab, isTarget);
             }
 
             tab.CaretOffset = file.CaretOffset;
             tab.ScrollOffset = file.ScrollOffset;
         }
 
-        ITab? matchedHeaderTab = tabs.AllTabs.FirstOrDefault(t => t.Header.Value == state.SelectedTabHeader);
-        if (matchedHeaderTab is not null)
-        {
-            tabs.SelectedTab = matchedHeaderTab;
-        }
+        tabs.SelectedTab ??= tabs.AllTabs.LastOrDefault();
     }
 }
