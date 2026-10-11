@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SkEditor.Models.Files;
+using SkEditor.ViewModels.Tabs;
 
 namespace SkEditor.Contracts.Services.Files;
 
@@ -19,6 +20,11 @@ public interface IFileService
     ///     Opens the specified file in a new tab.
     /// </summary>
     Task OpenFileAsync(BaseFile file);
+
+    /// <summary>
+    ///     Loads and opens the specified pre-constructed file tab.
+    /// </summary>
+    Task LoadAndOpenFileTabAsync(FileTabViewModel fileTab);
 
     /// <summary>
     ///     Updates the details of a file after it has been renamed or moved.

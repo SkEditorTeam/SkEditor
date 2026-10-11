@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using FluentIcons.Common;
-using MemoryPack;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Dialogs;
-using SkEditor.Models.Session;
-using SkEditor.Utilities;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs.Capabilities;
@@ -21,7 +17,8 @@ public class WindowCloseService(
     AppSettings appSettings,
     ITabService tabs,
     IDialogService dialogs,
-    IConfigService configs) : IWindowCloseService
+    IConfigService configs,
+    ISessionRestoreService sessionRestore) : IWindowCloseService
 {
     public bool IsClosing { get; private set; }
 
@@ -36,7 +33,6 @@ public class WindowCloseService(
         List<ISaveableTab> saveableTabs = tabs.AllTabs.OfType<ISaveableTab>().ToList();
 
         bool isAutoSaveEnabled = appSettings.IsAutoSaveEnabled;
-        bool isSessionRestoreEnabled = appSettings.IsSessionRestoreEnabled;
 
         if (isAutoSaveEnabled)
         {
@@ -46,16 +42,11 @@ public class WindowCloseService(
             }
         }
 
-        if (isSessionRestoreEnabled)
-        {
-            await SaveState(saveableTabs);
-        }
-
         List<ISaveableTab> unsavedTabs = saveableTabs
             .Where(t => !t.IsSaved)
             .ToList();
 
-        if (unsavedTabs.Count > 0)
+        if (unsavedTabs.Count > 0 && !appSettings.IsAutoSaveEnabled)
         {
             bool success = await HandleUnsaved(unsavedTabs);
             if (!success)
@@ -66,6 +57,7 @@ public class WindowCloseService(
 
         IsClosing = true;
         await SaveWindowStateAsync(stateConfig, height, width, (int)x, (int)y, windowState);
+        await sessionRestore.SaveSessionState();
         return true;
     }
 
@@ -113,46 +105,6 @@ public class WindowCloseService(
 
         IsClosing = false;
         return false;
-    }
-
-    private static async Task SaveState(List<ISaveableTab> saveableTabs)
-    {
-        SessionStateFile[] files = saveableTabs
-            .OfType<IFileTab>()
-            .Select(tab =>
-            {
-                bool isSaved = tab is ISaveableTab { IsSaved: true };
-                string? content = null;
-                int caretOffset = 0;
-                if (tab is ITextEditorTab editorTab)
-                {
-                    caretOffset = editorTab.CaretOffset;
-                    if (!isSaved)
-                    {
-                        content = editorTab.Document.Text;
-                    }
-                }
-
-                string? header = tab switch
-                {
-                    ITab headerTab => headerTab.Header.Value,
-                    _ => null
-                };
-
-                return new SessionStateFile
-                {
-                    IsSaved = isSaved,
-                    CaretOffset = caretOffset,
-                    Path = tab.Path,
-                    Header = header,
-                    Content = content
-                };
-            })
-            .ToArray();
-
-        FileStream fileStream = File.Create(Path.Combine(AppPaths.LocalData, "session.bin"));
-        SessionState state = new(files);
-        await MemoryPackSerializer.SerializeAsync(fileStream, state);
     }
 
     private async Task SaveWindowStateAsync(StateConfig stateConfig, double height, double width, int x, int y,

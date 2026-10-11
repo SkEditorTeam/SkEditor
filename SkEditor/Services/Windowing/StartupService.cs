@@ -19,6 +19,7 @@ public class StartupService(
     WindowInstanceService windowInstanceService,
     WindowStateService windowStateService,
     WindowErrorService windowErrorService,
+    ISessionRestoreService sessionRestore,
     NamedPipeServer namedPipeServer,
     IConfigService config,
     LegacyConfigMigrator configMigrator,
@@ -87,9 +88,10 @@ public class StartupService(
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             windowStateService.RecoverMainWindowState(mainWindow);
+            await sessionRestore.RecoverSessionState();
+            
             desktop.MainWindow = mainWindow;
             mainWindow.ApplyTemplate();
-
             await CheckArgs();
         });
     }

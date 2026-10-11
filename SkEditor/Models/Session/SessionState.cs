@@ -1,4 +1,5 @@
 using System.Text;
+using Avalonia;
 using MemoryPack;
 
 namespace SkEditor.Models.Session;
@@ -30,4 +31,5 @@ public partial class SessionStateFile
     public string? Header { get; set; }
     public string? Content { get; set; }
     public required int CaretOffset { get; set; }
+    public required Vector ScrollOffset { get; set; }
 }

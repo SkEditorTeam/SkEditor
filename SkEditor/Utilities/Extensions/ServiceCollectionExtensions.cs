@@ -93,6 +93,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IWindowDialogService, WindowDialogService>();
             services.AddSingleton<IWindowCloseService, WindowCloseService>();
+            services.AddSingleton<ISessionRestoreService, SessionRestoreService>();
             services.AddSingleton<ShortcutsService>();
             services.AddSingleton<SplashScreenService>();
         }

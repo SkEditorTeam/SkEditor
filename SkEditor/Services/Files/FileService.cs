@@ -64,10 +64,10 @@ public class FileService(
         }
 
         FileTabViewModel fileTab = fileTabFactory.CreateFromFile(file);
-        await OpenFileTabAsync(fileTab);
+        await LoadAndOpenFileTabAsync(fileTab);
     }
 
-    private async Task OpenFileTabAsync(FileTabViewModel fileTab)
+    public async Task LoadAndOpenFileTabAsync(FileTabViewModel fileTab)
     {
         Task<bool> fullLoadTask = LoadAndReadFileAsync(fileTab);
 
