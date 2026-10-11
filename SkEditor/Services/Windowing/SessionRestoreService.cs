@@ -23,7 +23,7 @@ public class SessionRestoreService(
     IFileSystem fileSystem)
     : ISessionRestoreService
 {
-    private static readonly string SessionFilePath = Path.Combine(AppPaths.LocalData, "session.bin");
+    public static readonly string SessionFilePath = Path.Combine(AppPaths.LocalData, "session.bin");
 
     public async Task SaveSessionState()
     {
