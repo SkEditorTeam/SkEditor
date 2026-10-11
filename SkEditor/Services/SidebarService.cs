@@ -22,6 +22,8 @@ public partial class SidebarService : ObservableObject, ISidebarService, IRecipi
     [ObservableProperty]
     public partial ISidebarPanelViewModel? SelectedPanel { get; set; }
 
+    public string? SelectedPanelName => SelectedPanel?.Name?.Value;
+
     public void OpenPanel(string name)
     {
         SelectedPanel = Panels.FirstOrDefault(p => p.Name.Value == name);

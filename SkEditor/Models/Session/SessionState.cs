@@ -8,6 +8,8 @@ public partial class SessionState(SessionStateFile[] files)
 {
     public SessionStateFile[] Files { get; set; } = files;
     public string? SelectedTabHeader { get; set; }
+    public string? OpenFolderPath { get; set; }
+    public string? OpenedSidebarPanel { get; set; }
 }
 
 [MemoryPackable]

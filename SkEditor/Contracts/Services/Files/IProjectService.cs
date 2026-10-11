@@ -6,6 +6,8 @@ namespace SkEditor.Contracts.Services.Files;
 public interface IProjectService
 {
     LocalFileSystem? CurrentProject { get; }
+    string? CurrentProjectPath { get; }
+    
     Task<bool> OpenProjectAsync();
     void OpenProject(string path);
 }

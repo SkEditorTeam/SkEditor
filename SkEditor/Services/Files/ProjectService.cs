@@ -19,6 +19,7 @@ public class ProjectService(
     IMessenger messenger) : IProjectService
 {
     public LocalFileSystem? CurrentProject { get; private set; }
+    public string? CurrentProjectPath => CurrentProject?.Root?.Path;
 
     public void OpenProject(string path)
     {

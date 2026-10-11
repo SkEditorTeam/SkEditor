@@ -23,7 +23,9 @@ public class SessionRestoreService(
     IFileService files,
     ITabService tabs,
     IFileSystem fileSystem,
-    ILogService logs)
+    ILogService logs,
+    IProjectService projects,
+    ISidebarService sidebar)
     : ISessionRestoreService
 {
     public static readonly string SessionFilePath = Path.Combine(AppPaths.LocalData, "session.bin");
@@ -81,7 +83,9 @@ public class SessionRestoreService(
 
         SessionState state = new(stateFiles)
         {
-            SelectedTabHeader = tabs.SelectedTab?.Header?.Value
+            SelectedTabHeader = tabs.SelectedTab?.Header?.Value,
+            OpenFolderPath = projects.CurrentProjectPath,
+            OpenedSidebarPanel = sidebar.SelectedPanelName
         };
         
         await MemoryPackSerializer.SerializeAsync(fileStream, state);
@@ -138,5 +142,15 @@ public class SessionRestoreService(
         }
 
         tabs.SelectedTab ??= tabs.AllTabs.LastOrDefault();
+
+        if (state.OpenFolderPath is not null)
+        {
+            projects.OpenProject(state.OpenFolderPath);
+        }
+
+        if (state.OpenedSidebarPanel is not null)
+        {
+            sidebar.OpenPanel(state.OpenedSidebarPanel);
+        }
     }
 }

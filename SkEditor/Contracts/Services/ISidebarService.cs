@@ -8,6 +8,7 @@ public interface ISidebarService
 {
     ObservableCollection<ISidebarPanelViewModel> Panels { get; }
     ISidebarPanelViewModel? SelectedPanel { get; set; }
+    string? SelectedPanelName { get; }
 
     void OpenPanel(string name);
 
