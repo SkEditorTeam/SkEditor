@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
 using Avalonia;
@@ -167,6 +168,8 @@ public class App : Application
         services.AddSingleton(args);
         services.AddSingleton<IClassicDesktopStyleApplicationLifetime>(_ =>
             (IClassicDesktopStyleApplicationLifetime)Current!.ApplicationLifetime!);
+
+        services.AddSingleton<IFileSystem, FileSystem>();
 
         services.AddCoreServices();
         services.AddWindowing();

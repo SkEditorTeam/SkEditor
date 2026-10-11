@@ -1,9 +1,9 @@
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using MemoryPack;
-using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Files;
@@ -20,7 +20,7 @@ public class SessionRestoreService(
     IFileTabFactory fileTabFactory,
     IFileService files,
     ITabService tabs,
-    ILogService logs)
+    IFileSystem fileSystem)
     : ISessionRestoreService
 {
     private static readonly string SessionFilePath = Path.Combine(AppPaths.LocalData, "session.bin");
@@ -29,9 +29,9 @@ public class SessionRestoreService(
     {
         if (!appSettings.IsSessionRestoreEnabled)
         {
-            if (File.Exists(SessionFilePath))
+            if (fileSystem.File.Exists(SessionFilePath))
             {
-                File.Delete(SessionFilePath);
+                fileSystem.File.Delete(SessionFilePath);
             }
 
             return;
@@ -74,14 +74,14 @@ public class SessionRestoreService(
             })
             .ToArray();
 
-        FileStream fileStream = File.Create(Path.Combine(AppPaths.LocalData, "session.bin"));
+        await using FileSystemStream fileStream = fileSystem.File.Create(SessionFilePath);
         SessionState state = new(stateFiles);
         await MemoryPackSerializer.SerializeAsync(fileStream, state);
     }
 
     public async Task RecoverSessionState()
     {
-        bool fileExists = File.Exists(SessionFilePath);
+        bool fileExists = fileSystem.File.Exists(SessionFilePath);
 
         if (!fileExists || !appSettings.IsSessionRestoreEnabled)
         { 
@@ -89,7 +89,7 @@ public class SessionRestoreService(
         }
 
         // ReSharper disable once MethodHasAsyncOverload
-        byte[] bytes = File.ReadAllBytes(SessionFilePath);
+        byte[] bytes = fileSystem.File.ReadAllBytes(SessionFilePath);
         SessionState? state = MemoryPackSerializer.Deserialize<SessionState>(bytes);
         if (state is null)
         {
