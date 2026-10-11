@@ -17,6 +17,10 @@ public static class StringExtensions
             return TranslatableString.FromRawString(path);
         }
 
+        /// <summary>
+        ///     Only use this for quickly creating hard-coded translatable strings in development.
+        ///     The obsolete attribute will help you to find usages quickly.
+        /// </summary>
         [Obsolete("Replace with proper translations keys later")]
         public TranslatableString ToTranslatableWip()
         {
