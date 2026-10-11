@@ -10,4 +10,5 @@ public interface IProjectService
     
     Task<bool> OpenProjectAsync();
     void OpenProject(string path);
+    void CloseProject();
 }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using SkEditor.Models.Messages;
 using SkEditor.Models.Projects;
 using SkEditor.Models.Projects.Sftp;
 using SkEditor.Models.Projects.Types;
@@ -35,6 +37,7 @@ public partial class FileTreeViewModel
         SelectedNodes.Clear();
         FileSystem = null;
         IsLoading = false;
+        WeakReferenceMessenger.Default.Send(new ProjectChangedMessage(null));
     }
 
     public async Task<bool> Disconnect()

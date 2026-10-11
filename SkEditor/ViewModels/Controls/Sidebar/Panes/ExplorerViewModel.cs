@@ -42,6 +42,13 @@ public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewMode
     public void Receive(ProjectChangedMessage message)
     {
         FileTree.FileSystem = message.NewFileSystem;
+
+        if (message.NewFileSystem is null)
+        {
+            _projects.CloseProject();
+            return;
+        }
+
         _ = FileTree.LoadFileSystemAsync();
     }
 

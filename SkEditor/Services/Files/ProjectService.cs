@@ -35,6 +35,11 @@ public class ProjectService(
         messenger.Send(new ProjectChangedMessage(localFileSystem));
     }
 
+    public void CloseProject()
+    {
+        CurrentProject = null;
+    }
+
     public async Task<bool> OpenProjectAsync()
     {
         string? path = (await filePicker.PickFoldersAsync(false))?.FirstOrDefault();
