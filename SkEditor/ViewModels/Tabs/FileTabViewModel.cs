@@ -89,7 +89,7 @@ public partial class FileTabViewModel(
 
         await using Stream stream = await File.LoadAsync();
 
-        if (await stream.IsLikelyBinaryAsync())
+        if (stream.IsLikelyBinary())
         {
             Dialog dialog = Dialog
                 .Create(TranslationKey.BinaryFileTitle)

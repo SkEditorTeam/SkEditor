@@ -1,35 +1,28 @@
 ﻿using System;
-using System.Buffers;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace SkEditor.Utilities.Extensions;
 
 public static class StreamExtensions
 {
-    public static async ValueTask<bool> IsLikelyBinaryAsync(this Stream stream)
+    public static bool IsLikelyBinary(this Stream stream)
     {
         if (!stream.CanSeek)
         {
             throw new InvalidOperationException("Stream must support seeking to check if it's binary.");
         }
 
-        const int bufferSize = 8192;
-        byte[] buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+        Span<byte> buffer = stackalloc byte[1024];
 
+        long originalPosition = stream.Position;
         try
         {
-            int bytesRead = await stream.ReadAsync(buffer.AsMemory(0, bufferSize));
-
-            bool isBinary = buffer.AsSpan(0, bytesRead).Contains((byte)0);
-
-            stream.Position = 0;
-
-            return isBinary;
+            int bytesRead = stream.Read(buffer);
+            return buffer[..bytesRead].Contains((byte)0);
         }
         finally
         {
-            ArrayPool<byte>.Shared.Return(buffer);
+            stream.Position = originalPosition;
         }
     }
 }
