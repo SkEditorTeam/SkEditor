@@ -152,6 +152,8 @@ public class SessionRestoreTests
         FileTabViewModel dummyTab = CreateDummyTab("saved.sk");
         fileTabFactory.CreateFromFile(Arg.Any<BaseFile>()).Returns(dummyTab);
 
+        files.LoadAndReadFileAsync(dummyTab).Returns(true);
+
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
 
