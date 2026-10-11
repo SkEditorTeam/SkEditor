@@ -164,6 +164,7 @@ public class App : Application
 
     private static void ConfigureServices(IServiceCollection services, BinarySettings binarySettings, string[] args)
     {
+        services.AddTransient(typeof(Lazy<>), typeof(Lazier<>));
         services.AddSingleton<AppViewModel>();
         services.AddSingleton(args);
         services.AddSingleton<IClassicDesktopStyleApplicationLifetime>(_ =>
