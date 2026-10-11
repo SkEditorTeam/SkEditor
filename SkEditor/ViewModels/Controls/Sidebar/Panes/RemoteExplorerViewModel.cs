@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
@@ -29,6 +30,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
     private readonly IRemoteConnectionService _remoteConnections;
     private readonly ITabService _tabs;
     private readonly IWindowDialogService _windowDialogs;
+    private readonly ConnectionsConfig _connectionsConfig;
 
     private int _connectionChangeId;
 
@@ -42,7 +44,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
 
     public TranslatableString Name => TranslationKey.RemoteExplorerTitle;
 
-    public ObservableCollection<RemoteConnection> RemoteConnections { get; }
+    public ObservableCollection<RemoteConnection> RemoteConnections => _connectionsConfig.Connections;
 
     [ObservableProperty]
     public partial RemoteConnection? SelectedConnection { get; set; }
@@ -61,9 +63,12 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
         _windowDialogs = windowDialogs;
         _tabs = tabs;
         _dialogs = dialogs;
+        _connectionsConfig = connectionsConfig;
 
         FileTree = fileTree;
-        RemoteConnections = connectionsConfig.Connections;
+        connectionsConfig
+            .ObservePropertyChanged(x => x.Connections)
+            .Subscribe(_ => OnPropertyChanged(nameof(RemoteConnections)));
 
         messenger.Register(this);
     }
