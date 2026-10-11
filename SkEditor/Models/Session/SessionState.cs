@@ -1,4 +1,3 @@
-using System.Text;
 using Avalonia;
 using MemoryPack;
 
@@ -8,19 +7,7 @@ namespace SkEditor.Models.Session;
 public partial class SessionState(SessionStateFile[] files)
 {
     public SessionStateFile[] Files { get; set; } = files;
-
-    public override string ToString()
-    {
-        StringBuilder sb = new();
-        sb.AppendLine("SessionState:");
-        foreach (SessionStateFile file in Files)
-        {
-            sb.AppendLine(
-                $"  - IsSaved: {file.IsSaved}, Path: {file.Path}, Header: {file.Header}, Content length: {file.Content?.Length ?? -1} characters");
-        }
-
-        return sb.ToString();
-    }
+    public string? SelectedTabHeader { get; set; }
 }
 
 [MemoryPackable]

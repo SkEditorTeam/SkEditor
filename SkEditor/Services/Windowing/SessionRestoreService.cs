@@ -78,7 +78,12 @@ public class SessionRestoreService(
             .ToArray();
 
         await using FileSystemStream fileStream = fileSystem.File.Create(SessionFilePath);
-        SessionState state = new(stateFiles);
+
+        SessionState state = new(stateFiles)
+        {
+            SelectedTabHeader = tabs.SelectedTab?.Header.Value
+        };
+        
         await MemoryPackSerializer.SerializeAsync(fileStream, state);
     }
 
@@ -116,18 +121,24 @@ public class SessionRestoreService(
             if (file.Content is null && file.Path is not null && file.IsSaved)
             {
                 tab = fileTabFactory.CreateFromFile(new LocalFile(file.Path));
-                await files.LoadAndOpenFileTabAsync(tab);
+                await files.LoadAndOpenFileTabAsync(tab, false);
             }
             else
             {
                 tab = fileTabFactory.CreateFromSession(file);
                 tab.Document.Text = file.Content ?? string.Empty;
                 tab.Document.UndoStack.ClearAll();
-                tabs.OpenTab(tab);
+                tabs.OpenTab(tab, false);
             }
 
             tab.CaretOffset = file.CaretOffset;
             tab.ScrollOffset = file.ScrollOffset;
+        }
+
+        ITab? matchedHeaderTab = tabs.AllTabs.FirstOrDefault(t => t.Header.Value == state.SelectedTabHeader);
+        if (matchedHeaderTab is not null)
+        {
+            tabs.SelectedTab = matchedHeaderTab;
         }
     }
 }

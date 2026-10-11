@@ -101,7 +101,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         SelectedTab = activeList[index];
     }
 
-    public void OpenTab(ITab tab)
+    public void OpenTab(ITab tab, bool select = true)
     {
         tab.CloseRequested += OnTabCloseRequested;
 
@@ -118,12 +118,18 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         if (SelectedTab is not null && SplitTabs.Contains(SelectedTab))
         {
             SplitTabs.Add(tab);
-            SelectedSplitTab = tab;
+            if (select)
+            {
+                SelectedSplitTab = tab;
+            }
         }
         else
         {
             MainTabs.Add(tab);
-            SelectedMainTab = tab;
+            if (select)
+            {
+                SelectedMainTab = tab;
+            }
         }
     }
 

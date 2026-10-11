@@ -24,7 +24,9 @@ public interface IFileService
     /// <summary>
     ///     Loads and opens the specified pre-constructed file tab.
     /// </summary>
-    Task LoadAndOpenFileTabAsync(FileTabViewModel fileTab);
+    /// <param name="fileTab">The tab to open.</param>
+    /// <param name="select">Whether to select the tab after opening.</param>
+    Task LoadAndOpenFileTabAsync(FileTabViewModel fileTab, bool select = true);
 
     /// <summary>
     ///     Updates the details of a file after it has been renamed or moved.

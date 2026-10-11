@@ -43,7 +43,8 @@ public interface ITabService
     ///     Opens the given tab.
     /// </summary>
     /// <param name="tab">The tab to open.</param>
-    void OpenTab(ITab tab);
+    /// <param name="select">Whether to select the tab after opening.</param>
+    void OpenTab(ITab tab, bool select = true);
 
     /// <summary>
     ///     Opens a new tab created by the given factory.

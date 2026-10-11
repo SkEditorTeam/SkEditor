@@ -67,7 +67,7 @@ public class FileService(
         await LoadAndOpenFileTabAsync(fileTab);
     }
 
-    public async Task LoadAndOpenFileTabAsync(FileTabViewModel fileTab)
+    public async Task LoadAndOpenFileTabAsync(FileTabViewModel fileTab, bool select = true)
     {
         Task<bool> fullLoadTask = LoadAndReadFileAsync(fileTab);
 
@@ -81,13 +81,13 @@ public class FileService(
             if (isSuccess)
             {
                 fileTab.IsLoading = false;
-                tabs.OpenTab(fileTab);
+                tabs.OpenTab(fileTab, select);
             }
         }
         else
         {
             fileTab.IsLoading = true;
-            tabs.OpenTab(fileTab);
+            tabs.OpenTab(fileTab, select);
 
             bool isSuccess = await fullLoadTask;
 
