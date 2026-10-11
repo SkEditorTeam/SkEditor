@@ -269,6 +269,8 @@ public class SessionRestoreTests
         IProjectService? projects = null,
         ISidebarService? sidebar = null)
     {
+        ISidebarService sidebarMock = sidebar ?? Substitute.For<ISidebarService>();
+        
         return new SessionRestoreService(
             appSettings ?? new AppSettings { IsSessionRestoreEnabled = true },
             fileTabFactory ?? Substitute.For<IFileTabFactory>(),
@@ -277,7 +279,7 @@ public class SessionRestoreTests
             fileSystem ?? new MockFileSystem(),
             logs ?? Substitute.For<ILogService>(),
             projects ?? Substitute.For<IProjectService>(),
-            sidebar ?? Substitute.For<ISidebarService>()
+            new Lazy<ISidebarService>(() => sidebarMock)
         );
     }
 }
