@@ -15,5 +15,5 @@ public interface ISessionRestoreService
     /// <summary>
     ///     Restores the session state from a file if it exists and session restore is enabled.
     /// </summary>
-    Task RecoverSessionState();
+    void RecoverSessionState();
 }

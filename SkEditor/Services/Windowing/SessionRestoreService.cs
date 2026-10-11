@@ -87,16 +87,16 @@ public class SessionRestoreService(
             OpenFolderPath = projects.CurrentProjectPath,
             OpenedSidebarPanel = sidebar.SelectedPanelName
         };
-        
+
         await MemoryPackSerializer.SerializeAsync(fileStream, state);
     }
 
-    public async Task RecoverSessionState()
+    public void RecoverSessionState()
     {
         bool fileExists = fileSystem.File.Exists(SessionFilePath);
 
         if (!fileExists || !appSettings.IsSessionRestoreEnabled)
-        { 
+        {
             return;
         }
 
@@ -113,7 +113,7 @@ public class SessionRestoreService(
             logs.Error(e, "Restoring session failed");
             return;
         }
-        
+
         if (state is null)
         {
             return;
@@ -122,12 +122,13 @@ public class SessionRestoreService(
         foreach (SessionStateFile file in state.Files)
         {
             bool isTarget = (file.Header ?? Path.GetFileName(file.Path)) == state.SelectedTabHeader;
-            
+
             FileTabViewModel? tab;
             if (file.Content is null && file.Path is not null && file.IsSaved)
             {
                 tab = fileTabFactory.CreateFromFile(new LocalFile(file.Path));
-                await files.LoadAndOpenFileTabAsync(tab, isTarget);
+                tabs.OpenTab(tab, isTarget);
+                _ = RestoreFileTabAsync(tab, file);
             }
             else
             {
@@ -135,10 +136,9 @@ public class SessionRestoreService(
                 tab.Document.Text = file.Content ?? string.Empty;
                 tab.Document.UndoStack.ClearAll();
                 tabs.OpenTab(tab, isTarget);
-            }
 
-            tab.CaretOffset = file.CaretOffset;
-            tab.ScrollOffset = file.ScrollOffset;
+                RestoreTabState(tab, file);
+            }
         }
 
         tabs.SelectedTab ??= tabs.AllTabs.LastOrDefault();
@@ -152,5 +152,20 @@ public class SessionRestoreService(
         {
             sidebar.OpenPanel(state.OpenedSidebarPanel);
         }
+    }
+
+    private async Task RestoreFileTabAsync(FileTabViewModel tab, SessionStateFile sessionFile)
+    {
+        bool success = await files.LoadAndReadFileAsync(tab);
+        if (success)
+        {
+            RestoreTabState(tab, sessionFile);
+        }
+    }
+
+    private static void RestoreTabState(FileTabViewModel tab, SessionStateFile sessionFile)
+    {
+        tab.CaretOffset = sessionFile.CaretOffset;
+        tab.ScrollOffset = sessionFile.ScrollOffset;
     }
 }

@@ -57,7 +57,7 @@ public class SessionRestoreTests
     }
 
     [Fact]
-    public async Task RecoverSessionState_WhenDisabled_DoNothing()
+    public void RecoverSessionState_WhenDisabled_DoNothing()
     {
         AppSettings appSettings = new() { IsSessionRestoreEnabled = false };
 
@@ -82,13 +82,13 @@ public class SessionRestoreTests
         SessionRestoreService sessionRestore =
             CreateSut(appSettings, tabs: tabs, fileSystem: fileSystem);
 
-        await sessionRestore.RecoverSessionState();
+        sessionRestore.RecoverSessionState();
 
         tabs.ReceivedCalls().Should().BeEmpty();
     }
 
     [Fact]
-    public async Task RecoverSessionState_SessionExists_Restore()
+    public void RecoverSessionState_SessionExists_Restore()
     {
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         ITabService tabs = Substitute.For<ITabService>();
@@ -115,7 +115,7 @@ public class SessionRestoreTests
         SessionRestoreService sessionRestore =
             CreateSut(fileTabFactory: fileTabFactory, tabs: tabs, fileSystem: fileSystem);
 
-        await sessionRestore.RecoverSessionState();
+        sessionRestore.RecoverSessionState();
 
         tabs.Received(1).OpenTab(dummyTab, Arg.Any<bool>());
         dummyTab.Document.Text.Should().Be("Test");
@@ -123,7 +123,7 @@ public class SessionRestoreTests
     }
 
     [Fact]
-    public async Task RecoverSessionState_WhenFileDoesNotExist_DoNothing()
+    public void RecoverSessionState_WhenFileDoesNotExist_DoNothing()
     {
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         IFileService files = Substitute.For<IFileService>();
@@ -135,7 +135,7 @@ public class SessionRestoreTests
         SessionRestoreService sessionRestore =
             CreateSut(fileTabFactory: fileTabFactory, files: files, tabs: tabs, fileSystem: fileSystem);
 
-        await sessionRestore.RecoverSessionState();
+        sessionRestore.RecoverSessionState();
 
         fileTabFactory.ReceivedCalls().Should().BeEmpty();
         tabs.ReceivedCalls().Should().BeEmpty();
@@ -172,11 +172,11 @@ public class SessionRestoreTests
         SessionRestoreService sessionRestore =
             CreateSut(fileTabFactory: fileTabFactory, files: files, tabs: tabs, fileSystem: fileSystem);
 
-        await sessionRestore.RecoverSessionState();
+        sessionRestore.RecoverSessionState();
 
         fileTabFactory.Received(1).CreateFromFile(Arg.Is<BaseFile>(f => f.Path == @"C:\projects\saved.sk"));
-        await files.Received(1).LoadAndOpenFileTabAsync(dummyTab, Arg.Any<bool>());
-        tabs.DidNotReceiveWithAnyArgs().OpenTab(null!);
+        tabs.Received().OpenTab(dummyTab, Arg.Any<bool>());
+        await files.Received(1).LoadAndReadFileAsync(dummyTab);
 
         dummyTab.CaretOffset.Should().Be(42);
         dummyTab.ScrollOffset.Should().Be(new Vector(10, 20));
