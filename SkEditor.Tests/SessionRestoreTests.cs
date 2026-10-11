@@ -14,6 +14,7 @@ using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs;
+using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Tests;
 
@@ -50,6 +51,8 @@ public class SessionRestoreTests
         ITabService tabs = Substitute.For<ITabService>();
         ILogService logs = Substitute.For<ILogService>();
 
+        tabs.SelectedTab.Returns((ITab?)null);
+        
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
 
@@ -127,7 +130,7 @@ public class SessionRestoreTests
 
         await sessionRestore.RecoverSessionState();
 
-        tabs.Received(1).OpenTab(dummyTab);
+        tabs.Received(1).OpenTab(dummyTab, Arg.Any<bool>());
         dummyTab.Document.Text.Should().Be("Test");
         dummyTab.CaretOffset.Should().Be(1);
     }
@@ -189,7 +192,7 @@ public class SessionRestoreTests
         await sessionRestore.RecoverSessionState();
 
         fileTabFactory.Received(1).CreateFromFile(Arg.Is<BaseFile>(f => f.Path == @"C:\projects\saved.sk"));
-        await files.Received(1).LoadAndOpenFileTabAsync(dummyTab);
+        await files.Received(1).LoadAndOpenFileTabAsync(dummyTab, Arg.Any<bool>());
         tabs.DidNotReceiveWithAnyArgs().OpenTab(null!);
 
         dummyTab.CaretOffset.Should().Be(42);
@@ -218,6 +221,7 @@ public class SessionRestoreTests
         unsavedTab.CaretOffset = 5;
 
         tabs.AllTabs.Returns([savedTab, unsavedTab]);
+        tabs.SelectedTab.Returns(savedTab);
 
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
@@ -232,6 +236,7 @@ public class SessionRestoreTests
 
         savedState.Should().NotBeNull();
         savedState.Files.Should().HaveCount(2);
+        savedState.SelectedTabHeader.Should().Be("saved.sk");
 
         SessionStateFile savedFile = savedState.Files[0];
         savedFile.IsSaved.Should().BeTrue();

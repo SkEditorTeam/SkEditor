@@ -81,7 +81,7 @@ public class SessionRestoreService(
 
         SessionState state = new(stateFiles)
         {
-            SelectedTabHeader = tabs.SelectedTab?.Header.Value
+            SelectedTabHeader = tabs.SelectedTab?.Header?.Value
         };
         
         await MemoryPackSerializer.SerializeAsync(fileStream, state);
