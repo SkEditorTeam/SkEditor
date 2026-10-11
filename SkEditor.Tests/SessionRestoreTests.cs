@@ -27,12 +27,13 @@ public class SessionRestoreTests
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         IFileService files = Substitute.For<IFileService>();
         ITabService tabs = Substitute.For<ITabService>();
+        ILogService logs = Substitute.For<ILogService>();
 
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
         fileSystem.AddFile(SessionRestoreService.SessionFilePath, new MockFileData(Guid.NewGuid().ToString()));
 
-        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem);
+        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem, logs);
 
         await sessionRestore.SaveSessionState();
 
@@ -47,11 +48,12 @@ public class SessionRestoreTests
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         IFileService files = Substitute.For<IFileService>();
         ITabService tabs = Substitute.For<ITabService>();
+        ILogService logs = Substitute.For<ILogService>();
 
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
 
-        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem);
+        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem, logs);
 
         await sessionRestore.SaveSessionState();
 
@@ -67,6 +69,7 @@ public class SessionRestoreTests
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         IFileService files = Substitute.For<IFileService>();
         ITabService tabs = Substitute.For<ITabService>();
+        ILogService logs = Substitute.For<ILogService>();
 
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
@@ -84,7 +87,7 @@ public class SessionRestoreTests
 
         fileSystem.AddFile(SessionRestoreService.SessionFilePath, new MockFileData(bytes));
 
-        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem);
+        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem, logs);
 
         await sessionRestore.RecoverSessionState();
 
@@ -99,6 +102,7 @@ public class SessionRestoreTests
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         IFileService files = Substitute.For<IFileService>();
         ITabService tabs = Substitute.For<ITabService>();
+        ILogService logs = Substitute.For<ILogService>();
 
         FileTabViewModel dummyTab = CreateDummyTab();
         fileTabFactory.CreateFromSession(Arg.Any<SessionStateFile>()).Returns(dummyTab);
@@ -119,7 +123,7 @@ public class SessionRestoreTests
 
         fileSystem.AddFile(SessionRestoreService.SessionFilePath, new MockFileData(bytes));
 
-        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem);
+        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem, logs);
 
         await sessionRestore.RecoverSessionState();
 
@@ -136,11 +140,12 @@ public class SessionRestoreTests
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         IFileService files = Substitute.For<IFileService>();
         ITabService tabs = Substitute.For<ITabService>();
+        ILogService logs = Substitute.For<ILogService>();
 
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
 
-        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem);
+        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem, logs);
 
         await sessionRestore.RecoverSessionState();
 
@@ -157,6 +162,7 @@ public class SessionRestoreTests
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         IFileService files = Substitute.For<IFileService>();
         ITabService tabs = Substitute.For<ITabService>();
+        ILogService logs = Substitute.For<ILogService>();
 
         FileTabViewModel dummyTab = CreateDummyTab("saved.sk");
         fileTabFactory.CreateFromFile(Arg.Any<BaseFile>()).Returns(dummyTab);
@@ -178,7 +184,7 @@ public class SessionRestoreTests
 
         fileSystem.AddFile(SessionRestoreService.SessionFilePath, new MockFileData(bytes));
 
-        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem);
+        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem, logs);
 
         await sessionRestore.RecoverSessionState();
 
@@ -198,6 +204,7 @@ public class SessionRestoreTests
         IFileTabFactory fileTabFactory = Substitute.For<IFileTabFactory>();
         IFileService files = Substitute.For<IFileService>();
         ITabService tabs = Substitute.For<ITabService>();
+        ILogService logs = Substitute.For<ILogService>();
 
         FileTabViewModel savedTab = CreateDummyTab("saved.sk", new LocalFile(@"C:\projects\saved.sk", "saved.sk"));
         savedTab.IsSaved = true;
@@ -215,7 +222,7 @@ public class SessionRestoreTests
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
 
-        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem);
+        SessionRestoreService sessionRestore = new(appSettings, fileTabFactory, files, tabs, fileSystem, logs);
 
         await sessionRestore.SaveSessionState();
 
