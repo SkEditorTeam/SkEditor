@@ -1,9 +1,11 @@
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using MemoryPack;
+using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Files;
@@ -20,7 +22,8 @@ public class SessionRestoreService(
     IFileTabFactory fileTabFactory,
     IFileService files,
     ITabService tabs,
-    IFileSystem fileSystem)
+    IFileSystem fileSystem,
+    ILogService logs)
     : ISessionRestoreService
 {
     public static readonly string SessionFilePath = Path.Combine(AppPaths.LocalData, "session.bin");
@@ -90,7 +93,18 @@ public class SessionRestoreService(
 
         // ReSharper disable once MethodHasAsyncOverload
         byte[] bytes = fileSystem.File.ReadAllBytes(SessionFilePath);
-        SessionState? state = MemoryPackSerializer.Deserialize<SessionState>(bytes);
+        SessionState? state;
+        try
+        {
+            state = MemoryPackSerializer.Deserialize<SessionState>(bytes);
+        }
+        catch (Exception e)
+        {
+            fileSystem.File.Delete(SessionFilePath);
+            logs.Error(e, "Restoring session failed");
+            return;
+        }
+        
         if (state is null)
         {
             return;
