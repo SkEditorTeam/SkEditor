@@ -33,6 +33,7 @@ public class WindowCloseService(
         List<ISaveableTab> saveableTabs = tabs.AllTabs.OfType<ISaveableTab>().ToList();
 
         bool isAutoSaveEnabled = appSettings.IsAutoSaveEnabled;
+        bool isSessionRestoreEnabled = appSettings.IsSessionRestoreEnabled;
 
         if (isAutoSaveEnabled)
         {
@@ -46,7 +47,7 @@ public class WindowCloseService(
             .Where(t => !t.IsSaved)
             .ToList();
 
-        if (unsavedTabs.Count > 0 && !appSettings.IsAutoSaveEnabled)
+        if (unsavedTabs.Count > 0 && !isSessionRestoreEnabled)
         {
             bool success = await HandleUnsaved(unsavedTabs);
             if (!success)
