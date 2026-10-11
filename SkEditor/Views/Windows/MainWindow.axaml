@@ -75,7 +75,7 @@
                                   Background="Transparent"
                                   ResizeDirection="Columns"
                                   Width="10"
-                                  IsHitTestVisible="{Binding Sidebar.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                  IsHitTestVisible="{Binding Sidebar.Sidebar.SelectedPanel, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
                     <statusBar:BottomDrawer Name="Drawer" DataContext="{Binding BottomDrawer}"
                                             Grid.Column="2" Grid.Row="2"

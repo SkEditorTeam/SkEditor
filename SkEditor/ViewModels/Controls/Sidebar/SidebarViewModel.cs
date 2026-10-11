@@ -1,91 +1,67 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Models.Messages;
+using SkEditor.Contracts.Services;
 using SkEditor.Utilities.Settings.Configs;
 
 namespace SkEditor.ViewModels.Controls;
 
-public partial class SidebarViewModel : ObservableObject, IRecipient<RequestPaneOpenMessage>
+public partial class SidebarViewModel : ObservableObject
 {
+    public ISidebarService Sidebar { get; }
+    
     private readonly StateConfig _stateConfig;
     private double _savedColumnWidth;
 
     [ObservableProperty]
     public partial double? ColumnWidth { get; set; } = null;
 
-    public bool IsPanelVisible => SelectedItem is not null;
-
-    public ObservableCollection<ISidebarPanelViewModel> Items { get; }
-
+    public bool IsPanelVisible => Sidebar.SelectedPanel is not null;
     public ISidebarPanelViewModel? LastSelectedItem { get; private set; }
 
-    public ISidebarPanelViewModel? SelectedItem
+    public SidebarViewModel(ISidebarService sidebar, StateConfig stateConfig)
     {
-        get;
-        set
+        Sidebar = sidebar;
+        _stateConfig = stateConfig;
+        _savedColumnWidth = _stateConfig.SidebarPaneSize;
+
+        Sidebar.PropertyChanged += OnSidebarPropertyChanged;
+    }
+
+    private void OnSidebarPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(ISidebarService.SelectedPanel))
         {
-            field = value;
-            if (value is not null)
+            return;
+        }
+
+        if (Sidebar.SelectedPanel is not null)
+        {
+            LastSelectedItem = Sidebar.SelectedPanel;
+            OnPropertyChanged(nameof(LastSelectedItem));
+        }
+
+        OnPropertyChanged(nameof(IsPanelVisible));
+
+        if (Sidebar.SelectedPanel == null)
+        {
+            if (ColumnWidth.HasValue)
             {
-                LastSelectedItem = value;
+                _savedColumnWidth = ColumnWidth.Value;
             }
 
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(LastSelectedItem));
-            OnPropertyChanged(nameof(IsPanelVisible));
+            ColumnWidth = null;
+        }
+        else
+        {
+            ColumnWidth ??= _savedColumnWidth;
         }
     }
 
-    public SidebarViewModel(IEnumerable<ISidebarPanelViewModel> panels, StateConfig stateConfig, IMessenger messenger)
+    partial void OnColumnWidthChanged(double? value)
     {
-        Items = new ObservableCollection<ISidebarPanelViewModel>(panels);
-        _stateConfig = stateConfig;
-
-        _savedColumnWidth = _stateConfig.SidebarPaneSize;
-
-        PropertyChanged += OnPropertyChanged;
-
-        messenger.Register(this);
-    }
-
-    public void Receive(RequestPaneOpenMessage message)
-    {
-        SelectedItem = Items.FirstOrDefault(p => p.Name.Value == message.PaneName);
-    }
-
-    private void OnPropertyChanged(object? _, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
+        if (value.HasValue)
         {
-            case nameof(SelectedItem) when SelectedItem == null:
-            {
-                if (ColumnWidth.HasValue)
-                {
-                    _savedColumnWidth = ColumnWidth.Value;
-                }
-
-                ColumnWidth = null;
-                break;
-            }
-            case nameof(SelectedItem):
-            {
-                ColumnWidth ??= _savedColumnWidth;
-
-                break;
-            }
-            case nameof(ColumnWidth):
-            {
-                if (ColumnWidth.HasValue)
-                {
-                    _stateConfig.SidebarPaneSize = ColumnWidth.Value;
-                }
-
-                break;
-            }
+            _stateConfig.SidebarPaneSize = value.Value;
         }
     }
 }

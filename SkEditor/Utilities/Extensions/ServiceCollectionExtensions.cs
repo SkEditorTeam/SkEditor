@@ -70,6 +70,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IClipboardService, ClipboardService>();
             services.AddSingleton<ILinkService, LinkService>();
             services.AddSingleton<IProjectService, ProjectService>();
+            services.AddSingleton<ISidebarService, SidebarService>();
 
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
             services.AddSingleton<ICredentialStoreFactory, CredentialStoreFactory>();

@@ -36,8 +36,8 @@
 
         <Border Grid.Column="0" Width="50" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
                 Padding="6">
-            <ListBox ItemsSource="{Binding Items}"
-                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+            <ListBox ItemsSource="{Binding Sidebar.Panels}"
+                     SelectedItem="{Binding Sidebar.SelectedPanel, Mode=TwoWay}"
                      SelectionMode="Single,Toggle"
                      Background="Transparent"
                      BorderThickness="0"
@@ -71,7 +71,7 @@
         <Border Grid.Column="1" Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7"
                 Margin="10,0,0,0" IsVisible="{Binding IsPanelVisible}">
             <Grid RowDefinitions="Auto,Auto,*">
-                <TextBlock Grid.Row="0" Text="{Binding SelectedItem?.Name.Value, TargetNullValue=''}"
+                <TextBlock Grid.Row="0" Text="{Binding Sidebar.SelectedPanel?.Name.Value, TargetNullValue=''}"
                            FontWeight="DemiBold"
                            TextWrapping="NoWrap"
                            Margin="20,10,20,10" />
