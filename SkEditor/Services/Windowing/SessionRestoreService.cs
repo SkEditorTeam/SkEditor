@@ -124,14 +124,14 @@ public class SessionRestoreService(
         {
             bool isTarget = (file.Header ?? Path.GetFileName(file.Path)) == state.SelectedTabHeader;
 
-            if (file.Path is not null && !fileSystem.File.Exists(file.Path))
-            {
-                continue;
-            }
-
             FileTabViewModel? tab;
             if (file.Content is null && file.Path is not null && file.IsSaved)
             {
+                if (fileSystem.File.Exists(file.Path))
+                {
+                    continue;
+                }
+                
                 tab = fileTabFactory.CreateFromFile(new LocalFile(file.Path));
                 tabs.OpenTab(tab, isTarget);
                 _ = RestoreFileTabAsync(tab, file);
