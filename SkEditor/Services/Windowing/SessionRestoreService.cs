@@ -123,6 +123,11 @@ public class SessionRestoreService(
         {
             bool isTarget = (file.Header ?? Path.GetFileName(file.Path)) == state.SelectedTabHeader;
 
+            if (file.Path is not null && !fileSystem.File.Exists(file.Path))
+            {
+                continue;
+            }
+
             FileTabViewModel? tab;
             if (file.Content is null && file.Path is not null && file.IsSaved)
             {
@@ -143,7 +148,7 @@ public class SessionRestoreService(
 
         tabs.SelectedTab ??= tabs.AllTabs.LastOrDefault();
 
-        if (state.OpenFolderPath is not null)
+        if (state.OpenFolderPath is not null && fileSystem.Directory.Exists(state.OpenFolderPath))
         {
             projects.OpenProject(state.OpenFolderPath);
         }

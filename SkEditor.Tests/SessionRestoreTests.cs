@@ -170,6 +170,7 @@ public class SessionRestoreTests
         byte[] bytes = MemoryPackSerializer.Serialize(mockState);
 
         fileSystem.AddFile(SessionRestoreService.SessionFilePath, new MockFileData(bytes));
+        fileSystem.AddFile(@"C:\projects\saved.sk", new MockFileData("dummy content"));
 
         SessionRestoreService sessionRestore =
             CreateSut(fileTabFactory: fileTabFactory, files: files, tabs: tabs, fileSystem: fileSystem);
