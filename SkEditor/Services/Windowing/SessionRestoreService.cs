@@ -44,6 +44,7 @@ public class SessionRestoreService(
 
         SessionStateFile[] stateFiles = tabs.AllTabs
             .OfType<ISaveableTab>()
+            .Where(t => t is IFileTab { File: LocalFile })
             .Select(tab =>
             {
                 bool isSaved = tab is { IsSaved: true };

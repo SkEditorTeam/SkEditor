@@ -7,6 +7,7 @@ using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Models.Dialogs;
+using SkEditor.Models.Files;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs.Capabilities;
@@ -47,9 +48,23 @@ public class WindowCloseService(
             .Where(t => !t.IsSaved)
             .ToList();
 
-        if (unsavedTabs.Count > 0 && !isSessionRestoreEnabled)
+        List<ISaveableTab> remoteTabs = unsavedTabs
+            .Where(t => t is IFileTab { File: not LocalFile })
+            .ToList();
+
+        bool hasRemoteTabs = remoteTabs.Count > 0;
+        if (unsavedTabs.Count > 0 && (!isSessionRestoreEnabled || hasRemoteTabs))
         {
-            bool success = await HandleUnsaved(unsavedTabs);
+            bool success;
+            if (isSessionRestoreEnabled && hasRemoteTabs)
+            {
+                success = await HandleUnsaved(remoteTabs);
+            }
+            else
+            {
+                success = await HandleUnsaved(unsavedTabs);
+            }
+            
             if (!success)
             {
                 return false;
