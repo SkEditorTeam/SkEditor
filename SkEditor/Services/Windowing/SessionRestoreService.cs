@@ -127,7 +127,7 @@ public class SessionRestoreService(
             FileTabViewModel? tab;
             if (file.Content is null && file.Path is not null && file.IsSaved)
             {
-                if (fileSystem.File.Exists(file.Path))
+                if (!fileSystem.File.Exists(file.Path))
                 {
                     continue;
                 }
