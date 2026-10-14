@@ -83,7 +83,7 @@ public partial class AppSettings : BaseConfig<AppSettings>
     ///     Automatically saves and restores the user files, folders, etc. without any prompts.
     /// </summary>
     [ObservableProperty]
-    public partial bool IsSessionRestoreEnabled { get; set; } = true;
+    public partial bool IsSessionRestoreEnabled { get; set; } = false;
 
     /// <summary>
     ///     Whether to enable the developer mode.

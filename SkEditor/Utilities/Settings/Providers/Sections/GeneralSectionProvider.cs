@@ -27,6 +27,12 @@ public class GeneralSectionProvider(
                     .WithProvider(languageProvider),
 
                 ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralSessionRestore)
+                    .WithDescription(TranslationKey.SettingsGeneralSessionRestoreDescription)
+                    .WithIcon(Symbol.History)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsSessionRestoreEnabled)),
+
+                ToggleSetting
                     .Create(TranslationKey.SettingsEditorAutosave)
                     .WithDescription(TranslationKey.SettingsEditorAutosaveDescription)
                     .WithIcon(Symbol.SaveSync)

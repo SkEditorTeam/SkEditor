@@ -156,6 +156,8 @@
   "SettingsGeneralTabTypeSpaces": "Spaces",
   "SettingsGeneralCheckForUpdates": "Check for updates",
   "SettingsGeneralCheckForUpdatesDescription": "Automatically checks for SkEditor updates on startup.",
+  "SettingsGeneralSessionRestore": "Session restore",
+  "SettingsGeneralSessionRestoreDescription": "Restores the last opened files and folders on startup.",
   "SettingsAppearanceSubsectionTheme": "Theme",
   "SettingsAppearanceThemeSelectedTheme": "Theme",
   "SettingsAppearanceThemeSelectedThemeDescription": "Customize colors of the app.",
