@@ -1,7 +1,0 @@
-﻿<Project>
-    <PropertyGroup>
-        <GenerateDocumentationFile>false</GenerateDocumentationFile>
-        <DebugType>none</DebugType>
-        <DebugSymbols>false</DebugSymbols>
-    </PropertyGroup>
-</Project>

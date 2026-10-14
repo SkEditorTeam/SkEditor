@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
+        <PackageReference Include="SkAvaloniaEdit" Version="12.0.0-rc5" />
     </ItemGroup>
 
     <ItemGroup>

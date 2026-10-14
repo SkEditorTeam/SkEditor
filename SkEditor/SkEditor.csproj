@@ -72,8 +72,6 @@
 
         <PackageReference Include="AsyncImageLoader.Avalonia" Version="4.0.0" />
         <PackageReference Include="Skia.Controls.Avalonia" Version="12.0.0.17" />
-        <!--        <PackageReference Include="SkAvaloniaEdit" Version="12.0.0-rc4" />-->
-        <!--        <PackageReference Include="SkFluentAvalonia" Version="3.0.0-preview1"/>-->
 
         <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
@@ -83,6 +81,7 @@
         <PackageReference Include="Octokit" Version="14.0.0" />
         <PackageReference Include="SSH.NET" Version="2026.0.0" />
         <PackageReference Include="SkTerminal" Version="1.0.1" />
+        <PackageReference Include="SkDiscordRPC" Version="1.0.0" />
 
         <PackageReference Include="Serilog" Version="4.4.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
@@ -106,15 +105,15 @@
 
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.4" Condition="'$(RuntimeIdentifier)' == 'linux-x64'" />
 
+        <PackageReference Include="SkFluentAvalonia" Version="3.1.0" />
         <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.1.341" />
         <PackageReference Include="FluentAvaloniaUI" Version="3.0.0" ExcludeAssets="compile;runtime" />
+
+        <PackageReference Include="SkAvaloniaEdit" Version="12.0.0-rc5" />
+        <PackageReference Include="SkAvaloniaEdit.TextMate" Version="12.0.0-rc5" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\External\DiscordRPC\DiscordRPC.csproj" />
-        <ProjectReference Include="..\External\SkFluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj" />
-        <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
-        <ProjectReference Include="..\External\SkAvaloniaEdit\src\AvaloniaEdit.TextMate\AvaloniaEdit.TextMate.csproj" />
         <ProjectReference Include="..\SkEditor.Matcher\SkEditor.Matcher.csproj" />
         <ProjectReference Include="..\SkEditor.SourceGenerators\SkEditor.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" Properties="PublishAot=false" />
     </ItemGroup>

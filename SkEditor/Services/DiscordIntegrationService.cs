@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using DiscordRPC;
+using DiscordRPC.Entities;
 using SkEditor.Contracts.Services;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Utilities.Settings.Configs;
@@ -57,7 +58,7 @@ public partial class DiscordIntegrationService(
         _client.SetPresence(new RichPresence
         {
             Timestamps = Timestamps.Now,
-            Assets = new DiscordRPC.Assets
+            Assets = new DiscordRPC.Entities.Assets
             {
                 LargeImageKey = "image_large",
                 LargeImageText = "SkEditor"
