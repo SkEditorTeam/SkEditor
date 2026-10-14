@@ -10,10 +10,10 @@ public interface ISessionRestoreService
     /// <summary>
     ///     Saves the session state if session restore is enabled. Otherwise, deletes the existing session state file.
     /// </summary>
-    Task SaveSessionState();
+    Task SaveSessionStateAsync();
 
     /// <summary>
     ///     Restores the session state from a file if it exists and session restore is enabled.
     /// </summary>
-    void RecoverSessionState();
+    Task RecoverSessionStateAsync();
 }

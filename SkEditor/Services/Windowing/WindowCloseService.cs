@@ -73,7 +73,7 @@ public class WindowCloseService(
 
         IsClosing = true;
         await SaveWindowStateAsync(stateConfig, height, width, (int)x, (int)y, windowState);
-        await sessionRestore.SaveSessionState();
+        await sessionRestore.SaveSessionStateAsync();
         return true;
     }
 

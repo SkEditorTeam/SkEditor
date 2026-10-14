@@ -88,7 +88,7 @@ public class StartupService(
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             windowStateService.RecoverMainWindowState(mainWindow);
-            sessionRestore.RecoverSessionState();
+            await sessionRestore.RecoverSessionStateAsync();
             
             desktop.MainWindow = mainWindow;
             mainWindow.ApplyTemplate();

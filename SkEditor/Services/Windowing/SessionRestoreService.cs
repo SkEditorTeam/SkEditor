@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
@@ -30,7 +31,7 @@ public class SessionRestoreService(
 {
     public static readonly string SessionFilePath = Path.Combine(AppPaths.LocalData, "session.bin");
 
-    public async Task SaveSessionState()
+    public async Task SaveSessionStateAsync()
     {
         if (!appSettings.IsSessionRestoreEnabled)
         {
@@ -92,7 +93,7 @@ public class SessionRestoreService(
         await MemoryPackSerializer.SerializeAsync(fileStream, state);
     }
 
-    public void RecoverSessionState()
+    public async Task RecoverSessionStateAsync()
     {
         bool fileExists = fileSystem.File.Exists(SessionFilePath);
 
@@ -120,6 +121,7 @@ public class SessionRestoreService(
             return;
         }
 
+        List<Task> restoreTasks = [];
         foreach (SessionStateFile file in state.Files)
         {
             bool isTarget = (file.Header ?? Path.GetFileName(file.Path)) == state.SelectedTabHeader;
@@ -134,7 +136,7 @@ public class SessionRestoreService(
                 
                 tab = fileTabFactory.CreateFromFile(new LocalFile(file.Path));
                 tabs.OpenTab(tab, isTarget);
-                _ = RestoreFileTabAsync(tab, file);
+                restoreTasks.Add(RestoreFileTabAsync(tab, file));
             }
             else
             {
@@ -146,6 +148,8 @@ public class SessionRestoreService(
                 RestoreTabState(tab, file);
             }
         }
+
+        await Task.WhenAll(restoreTasks);
 
         tabs.SelectedTab ??= tabs.AllTabs.LastOrDefault();
 
