@@ -9,6 +9,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
+using SkEditor.Models.Files;
 using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Services.Files;
@@ -22,8 +23,9 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
             "*.sk"
         ]
     };
-    
-    public async Task<string[]?> PickFilesAsync(bool allowMultiple = true)
+
+    public async Task<string[]?> PickFilesAsync(TranslatableString? title = null, bool allowMultiple = true,
+        params FilePickerType[] fileTypes)
     {
         IStorageProvider? storageProvider = GetStorageProvider();
         if (storageProvider == null)
@@ -31,11 +33,17 @@ public class FilePickerService(ITranslationService translations) : IFilePickerSe
             return null;
         }
 
+        TranslatableString translatableTitle = title ?? TranslationKey.WindowTitleOpenFilePicker;
         FilePickerOpenOptions dialogOptions = new()
         {
-            Title = translations.Get(TranslationKey.WindowTitleOpenFilePicker),
-            AllowMultiple = allowMultiple
+            Title = translatableTitle?.Value,
+            AllowMultiple = allowMultiple,
+            FileTypeFilter = fileTypes.Select(ft => new FilePickerFileType(ft.Name.Value)
+            {
+                Patterns = ft.Patterns
+            }).ToList()
         };
+        
         IReadOnlyList<IStorageFile> result = await storageProvider.OpenFilePickerAsync(dialogOptions);
         return result.Count == 0 ? null : result.Select(x => x.Path.LocalPath).ToArray();
     }

@@ -10,8 +10,10 @@ using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
 using SkEditor.Contracts.Services;
+using SkEditor.Contracts.Services.Files;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Models.Dialogs;
+using SkEditor.Models.Files;
 using SkEditor.Models.Remote;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
@@ -22,6 +24,7 @@ namespace SkEditor.ViewModels.Windows;
 public partial class RemoteConnectionViewModel(
     IRemoteConnectionService connections,
     IClipboardService clipboard,
+    IFilePickerService filePicker,
     ConnectionsConfig connectionsConfig,
     IDialogService dialogs,
     ITranslationService translation) : ObservableObject
@@ -42,8 +45,6 @@ public partial class RemoteConnectionViewModel(
 
     [ObservableProperty]
     public partial bool IsTesting { get; set; }
-
-    public Func<Task<string?>>? RequestKeyFilePicker { get; set; }
 
     [ObservableProperty]
     public partial RemoteConnection? SelectedConnection { get; set; }
@@ -161,16 +162,15 @@ public partial class RemoteConnectionViewModel(
     [RelayCommand]
     private async Task BrowseKey()
     {
-        if (RequestKeyFilePicker == null)
-        {
-            return;
-        }
+        string[]? path = await filePicker.PickFilesAsync(
+            TranslationKey.RemoteConnectionSelectKeyFile,
+            false,
+            new FilePickerType(TranslationKey.RemoteConnectionSelectKeyKeyFiles, "*.pem", "*.key", "*.ppk"),
+            new FilePickerType(TranslationKey.RemoteConnectionSelectKeyAllFiles, "*.*"));
 
-        string? path = await RequestKeyFilePicker.Invoke();
-
-        if (!string.IsNullOrEmpty(path))
+        if (path is not null && path.Length > 0)
         {
-            ConnectionInfo.KeyFilePath = path;
+            ConnectionInfo.KeyFilePath = path[0];
         }
     }
 

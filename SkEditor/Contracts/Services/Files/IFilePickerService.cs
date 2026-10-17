@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using SkEditor.Models.Files;
+using SkEditor.Utilities.Localization;
 
 namespace SkEditor.Contracts.Services.Files;
 
@@ -7,9 +9,12 @@ public interface IFilePickerService
     /// <summary>
     ///     Opens a file picker dialog and allows the user to select one or more files.
     /// </summary>
+    /// <param name="title">The title of the file picker dialog.</param>
     /// <param name="allowMultiple">Whether to allow selecting multiple files.</param>
+    /// <param name="fileTypes">Filter for the types of files to display in the dialog.</param>
     /// <returns>The file paths of the selected files, or null if the operation was cancelled.</returns>
-    Task<string[]?> PickFilesAsync(bool allowMultiple = true);
+    Task<string[]?> PickFilesAsync(TranslatableString? title = null, bool allowMultiple = true,
+        params FilePickerType[] fileTypes);
 
     /// <summary>
     ///     Opens a folder picker dialog and allows the user to select one or more folders.
