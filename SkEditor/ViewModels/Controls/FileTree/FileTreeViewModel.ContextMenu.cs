@@ -152,14 +152,7 @@ public partial class FileTreeViewModel
 
     private bool IsNotRenaming()
     {
-        if (SelectedNodes.Count != 1)
-        {
-            return false;
-        }
-
-        FileSystemNode node = SelectedNodes[0];
-
-        return !node.IsRenaming;
+        return !SelectedNodes.Any(n => n.IsRenaming);
     }
 
     [RelayCommand]
