@@ -13,6 +13,7 @@ using Avalonia.Styling;
 using AvaloniaEdit.Snippets;
 using FluentAvalonia.Styling;
 using Iciclecreek.Avalonia.Terminal;
+using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Logging;
 using SkEditor.Models.UI;
@@ -22,19 +23,45 @@ using MainWindow = SkEditor.Views.Windows.MainWindow;
 
 namespace SkEditor.Services;
 
-public class ThemeService(
-    ILogService log,
-    IConfigService config,
-    AppSettings appSettings,
-    IconProvider iconProvider,
-    WindowRegistry windowRegistry) : IThemeService
+public class ThemeService : IThemeService
 {
     private bool _defaultColorsCollected;
+    private readonly ILogService _log;
+    private readonly AppSettings _appSettings;
+    private readonly IconProvider _iconProvider;
+    private readonly WindowRegistry _windowRegistry;
+
+    public ThemeService(ILogService log,
+        IConfigService config,
+        AppSettings appSettings,
+        IconProvider iconProvider,
+        WindowRegistry windowRegistry)
+    {
+        _log = log;
+        _appSettings = appSettings;
+        _iconProvider = iconProvider;
+        _windowRegistry = windowRegistry;
+        ThemeFolderPath = Path.Combine(config.GetAppDataPath(), "Themes");
+
+        appSettings
+            .ObservePropertyChanged(x => x.CurrentTheme)
+            .ObserveOnUIThreadDispatcher()
+            .SubscribeAwait(async (_, _) =>
+            {
+                string themeName = appSettings.CurrentTheme;
+                Theme? theme = Themes.FirstOrDefault(x => x.Name.Equals(themeName));
+                if (theme is not null)
+                {
+                    await SetThemeAsync(theme);
+                }
+            }, AwaitOperation.Switch);
+    }
+
     public Theme CurrentTheme { get; set; } = new();
 
     public Dictionary<string, ImmutableSolidColorBrush> DefaultColors { get; set; } = [];
 
-    public string ThemeFolderPath { get; set; } = Path.Combine(config.GetAppDataPath(), "Themes");
+    public string ThemeFolderPath { get; set; }
 
     public List<Theme> Themes { get; set; } = [];
 
@@ -110,7 +137,7 @@ public class ThemeService(
         }
         catch (Exception ex)
         {
-            log.Error($"Failed to load theme from {path}: {ex.Message}");
+            _log.Error($"Failed to load theme from {path}: {ex.Message}");
             return null;
         }
 
@@ -129,18 +156,18 @@ public class ThemeService(
 
         if (oldMica && !newMica)
         {
-            MainWindow? mainWindow = windowRegistry.Active;
+            MainWindow? mainWindow = _windowRegistry.Active;
             mainWindow?.TransparencyLevelHint = [WindowTransparencyLevel.None];
         }
 
         if (newMica)
         {
-            MainWindow? mainWindow = windowRegistry.Active;
+            MainWindow? mainWindow = _windowRegistry.Active;
             mainWindow?.TransparencyLevelHint = [WindowTransparencyLevel.Mica];
         }
 
         CurrentTheme = theme;
-        appSettings.CurrentTheme = theme.Name;
+        _appSettings.CurrentTheme = theme.Name;
 
         await ApplyThemeAsync();
     }
@@ -164,7 +191,7 @@ public class ThemeService(
         Application? currentApp = Application.Current;
         if (currentApp == null)
         {
-            log.Error("Application.Current is null. Cannot apply theme.", LogSource.SkEditor, true);
+            _log.Error("Application.Current is null. Cannot apply theme.", LogSource.SkEditor, true);
             return;
         }
 
@@ -244,7 +271,7 @@ public class ThemeService(
 
         if (reloadedTheme == null)
         {
-            log.Warning($"Theme at {themePath} not found or failed to load. Falling back to default theme.");
+            _log.Warning($"Theme at {themePath} not found or failed to load. Falling back to default theme.");
             Theme defaultTheme =
                 Themes.FirstOrDefault(t => t.FileName.Equals("Default.json", StringComparison.OrdinalIgnoreCase)) ??
                 GetDefaultTheme();
@@ -301,7 +328,7 @@ public class ThemeService(
 
     private async Task UpdateExplorerIcons()
     {
-        await iconProvider.LoadIcons(CurrentTheme.ExplorerIconColors);
+        await _iconProvider.LoadIcons(CurrentTheme.ExplorerIconColors);
     }
 
     private void ApplyTerminalTheme()
@@ -340,7 +367,7 @@ public class ThemeService(
 
     private Theme GetUsedTheme()
     {
-        string currentTheme = appSettings.CurrentTheme;
+        string currentTheme = _appSettings.CurrentTheme;
 
         if (currentTheme != null)
         {
@@ -352,13 +379,13 @@ public class ThemeService(
                 Theme defaultTheme =
                     Themes.FirstOrDefault(x => x.FileName.Equals("Default.json", StringComparison.OrdinalIgnoreCase)) ??
                     GetDefaultTheme();
-                appSettings.CurrentTheme = defaultTheme.Name;
+                _appSettings.CurrentTheme = defaultTheme.Name;
                 return defaultTheme;
             }
 
             if (!selectedTheme.Name.Equals(currentTheme))
             {
-                appSettings.CurrentTheme = selectedTheme.Name;
+                _appSettings.CurrentTheme = selectedTheme.Name;
             }
 
             return selectedTheme;
@@ -393,7 +420,7 @@ public class ThemeService(
                 }
                 else
                 {
-                    log.Warning(
+                    _log.Warning(
                         $"Could not find default resource for key '{kvp.Key}' introduced by theme '{themeToApply.Name}'. It might not reset correctly.");
                 }
             });

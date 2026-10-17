@@ -23,7 +23,6 @@ using SkEditor.Services.Files;
 using SkEditor.Services.Files.Features;
 using SkEditor.Services.Localization;
 using SkEditor.Services.Security;
-using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities.Docs.Providers;
 using SkEditor.Utilities.Editor.Commands;
@@ -189,8 +188,6 @@ public static class ServiceCollectionExtensions
             AddConfig(new SecretsConfig());
             AddConfig(new StateConfig());
             AddConfig(binarySettings);
-
-            services.AddSingleton<SettingsObserverService>();
 
             services.AddChoiceProviders();
             services.AddSectionProviders();

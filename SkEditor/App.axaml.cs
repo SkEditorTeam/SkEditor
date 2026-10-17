@@ -19,7 +19,6 @@ using Serilog.Sinks.SystemConsole.Themes;
 using SkEditor.Contracts.Services.Localization;
 using SkEditor.Contracts.Services.Windowing;
 using SkEditor.Services.Localization;
-using SkEditor.Services.Settings;
 using SkEditor.Services.Windowing;
 using SkEditor.Utilities;
 using SkEditor.Utilities.Extensions;
@@ -93,9 +92,6 @@ public class App : Application
         Services = collection.BuildServiceProvider();
         TranslationService.Current = Services.GetRequiredService<ITranslationService>();
         DataContext = Services.GetRequiredService<AppViewModel>();
-
-        SettingsObserverService observer = Services.GetRequiredService<SettingsObserverService>();
-        observer.Initialize();
 
         Stopwatch.Start();
 
