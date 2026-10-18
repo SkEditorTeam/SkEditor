@@ -2,17 +2,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="clr-namespace:SkEditor.Core.Notifications.UI"
+        xmlns:notifs="clr-namespace:SkEditor.Core.Notifications.UI"
         xmlns:converters="clr-namespace:SkEditor.Layout.Sidebar.UI.Converters"
-        xmlns:ui1="clr-namespace:SkEditor.Layout.Menu.UI"
-        xmlns:ui2="clr-namespace:SkEditor.Layout.Sidebar.UI"
-        xmlns:ui3="clr-namespace:SkEditor.Layout.StatusBar.UI"
-        xmlns:windows1="clr-namespace:SkEditor.Windowing.UI"
+        xmlns:menu="clr-namespace:SkEditor.Layout.Menu.UI"
+        xmlns:sidebar="clr-namespace:SkEditor.Layout.Sidebar.UI"
+        xmlns:statusbar="clr-namespace:SkEditor.Layout.StatusBar.UI"
+        xmlns:windows="clr-namespace:SkEditor.Windowing.UI"
         xmlns:platform="clr-namespace:SkEditor.Windowing.UI.Platform"
-        xmlns:ui4="clr-namespace:SkEditor.Workspace.Tabs.UI"
+        xmlns:tabs="clr-namespace:SkEditor.Workspace.Tabs.UI"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SkEditor.Windowing.UI.MainWindow"
-        x:DataType="windows1:MainWindowViewModel"
+        x:DataType="windows:MainWindowViewModel"
         x:Name="Root"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
@@ -40,7 +40,7 @@
                             IsVisible="{Binding ShowInAppMenu}">
                     <Image Source="{StaticResource SkEditorLogo}" IsVisible="{OnPlatform macOS=False, Default=True}"
                            Margin="12,0,0,0" Height="20" Width="20" />
-                    <ui1:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0"
+                    <menu:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0"
                                               WindowDecorationProperties.ElementRole="User" />
                 </StackPanel>
             </Border>
@@ -69,7 +69,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <ui2:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0"
+                    <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0"
                                             Grid.RowSpan="3" />
 
                     <GridSplitter Name="Splitter" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
@@ -78,11 +78,11 @@
                                   Width="10"
                                   IsHitTestVisible="{Binding Sidebar.Sidebar.SelectedPanel, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
-                    <ui3:BottomDrawer Name="Drawer" DataContext="{Binding BottomDrawer}"
+                    <statusbar:BottomDrawer Name="Drawer" DataContext="{Binding BottomDrawer}"
                                             Grid.Column="2" Grid.Row="2"
                                             IsVisible="{Binding IsDrawerOpen}" />
 
-                    <ui3:StatusBarControl DataContext="{Binding StatusBar}" Grid.Column="0" Grid.Row="3"
+                    <statusbar:StatusBarControl DataContext="{Binding StatusBar}" Grid.Column="0" Grid.Row="3"
                                               Margin="0,10,0,0"
                                               Grid.ColumnSpan="3" />
 
@@ -91,11 +91,11 @@
                                   IsVisible="{Binding BottomDrawer.IsDrawerOpen}"
                                   Height="10" />
 
-                    <ui4:MainTabView Grid.Column="2" Grid.Row="0" VerticalAlignment="Stretch" />
+                    <tabs:MainTabView Grid.Column="2" Grid.Row="0" VerticalAlignment="Stretch" />
                 </Grid>
             </Border>
 
-            <ui:SkEditorNotificationManager
+            <notifs:SkEditorNotificationManager
                 x:Name="NotificationManager"
                 Grid.Row="1"
                 Position="BottomRight"

@@ -3,12 +3,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-        xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+        xmlns:localization="clr-namespace:SkEditor.Core.Localization"
         xmlns:about="clr-namespace:SkEditor.Windowing.UI.About"
         mc:Ignorable="d" d:DesignWidth="180" d:DesignHeight="100"
         x:Class="SkEditor.Windowing.UI.About.AboutWindow" Icon="/Assets/SkEditor.ico"
         x:DataType="about:AboutWindowViewModel"
-        Title="{localization1:Translate AboutTitle}" Height="336" Width="580" CanResize="False"
+        Title="{localization:Translate AboutTitle}" Height="336" Width="580" CanResize="False"
         WindowStartupLocation="CenterOwner">
 
     <Grid Name="AboutGrid" Margin="24,8,24,24" RowDefinitions="*,Auto">
@@ -26,7 +26,7 @@
             <StackPanel Grid.Column="1" VerticalAlignment="Top" Spacing="4" Margin="0,2,0,0">
                 <TextBlock Text="SkEditor" FontSize="26" FontWeight="DemiBold"
                            Foreground="{DynamicResource ForegroundColor}" />
-                <TextBlock Text="{localization1:Translate AboutDescription}" TextWrapping="Wrap" Margin="0,0,0,12" />
+                <TextBlock Text="{localization:Translate AboutDescription}" TextWrapping="Wrap" Margin="0,0,0,12" />
 
                 <StackPanel Spacing="2">
                     <TextBlock Text="{Binding VersionString}" />
@@ -34,7 +34,7 @@
                 </StackPanel>
 
                 <StackPanel Spacing="2" Margin="0,12,0,0">
-                    <TextBlock Text="{localization1:Translate AboutRunningOn}" />
+                    <TextBlock Text="{localization:Translate AboutRunningOn}" />
                     <TextBlock>
                         <Run>•</Run>
                         <Run Text="{Binding FrameworkDescription}" />
@@ -57,7 +57,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <icons:SymbolIcon Symbol="DocumentCopy" FontSize="16"
                                       Foreground="{DynamicResource ForegroundColor}" />
-                    <TextBlock Text="{localization1:Translate AboutCopySystemInfo}"
+                    <TextBlock Text="{localization:Translate AboutCopySystemInfo}"
                                Foreground="{DynamicResource ForegroundColor}" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
@@ -65,7 +65,7 @@
             <Button Command="{Binding OpenSupportCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <icons:SymbolIcon Symbol="Heart" FontSize="16" IconVariant="Color" />
-                    <TextBlock Text="{localization1:Translate AboutSupportUs}" VerticalAlignment="Center"
+                    <TextBlock Text="{localization:Translate AboutSupportUs}" VerticalAlignment="Center"
                                Foreground="{DynamicResource ForegroundColor}" />
                 </StackPanel>
             </Button>

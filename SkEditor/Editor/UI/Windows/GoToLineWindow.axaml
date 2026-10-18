@@ -2,12 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
-        xmlns:windows1="clr-namespace:SkEditor.Editor.UI.Windows"
+        xmlns:localization="clr-namespace:SkEditor.Core.Localization"
+        xmlns:windows="clr-namespace:SkEditor.Editor.UI.Windows"
         mc:Ignorable="d" d:DesignWidth="180" d:DesignHeight="100"
         x:Class="SkEditor.Editor.UI.Windows.GoToLineWindow" Icon="/Assets/SkEditor.ico"
-        Title="{localization1:Translate GoToLine}" Height="100" Width="180" CanResize="False"
-        x:DataType="windows1:GoToLineWindowViewModel"
+        Title="{localization:Translate GoToLine}" Height="100" Width="180" CanResize="False"
+        x:DataType="windows:GoToLineWindowViewModel"
         WindowStartupLocation="CenterOwner">
 
     <Window.KeyBindings>
@@ -21,6 +21,6 @@
                 <SelectAllOnFocusBehavior />
             </Interaction.Behaviors>
         </TextBox>
-        <Button Grid.Column="1" Content="{localization1:Translate GoToLineButton}" Command="{Binding ExecuteCommand}" />
+        <Button Grid.Column="1" Content="{localization:Translate GoToLineButton}" Command="{Binding ExecuteCommand}" />
     </Grid>
 </Window>

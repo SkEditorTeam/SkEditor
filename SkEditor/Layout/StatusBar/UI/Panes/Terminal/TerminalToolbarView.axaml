@@ -3,21 +3,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
-             xmlns:terminal1="clr-namespace:SkEditor.Layout.StatusBar.UI.Panes.Terminal"
+             xmlns:localization="clr-namespace:SkEditor.Core.Localization"
+             xmlns:terminal="clr-namespace:SkEditor.Layout.StatusBar.UI.Panes.Terminal"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Layout.StatusBar.UI.Panes.Terminal.TerminalToolbarView"
-             x:DataType="terminal1:TerminalToolbarViewModel"
+             x:DataType="terminal:TerminalToolbarViewModel"
              Name="Root">
     <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,8,0">
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
                 Command="{Binding ClearCommand}"
-                ToolTip.Tip="{localization1:Translate BottomDrawerTerminalToolbarClear}">
+                ToolTip.Tip="{localization:Translate BottomDrawerTerminalToolbarClear}">
             <fluent:SymbolIcon Symbol="Delete" FontSize="14" />
         </Button>
         <Button Theme="{DynamicResource ToolbarButton}" VerticalAlignment="Center"
                 Command="{Binding ResetCommand}"
-                ToolTip.Tip="{localization1:Translate BottomDrawerTerminalToolbarRestart}">
+                ToolTip.Tip="{localization:Translate BottomDrawerTerminalToolbarRestart}">
             <fluent:SymbolIcon Symbol="ArrowClockwise" FontSize="14" />
         </Button>
     </StackPanel>

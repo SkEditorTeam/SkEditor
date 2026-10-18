@@ -2,8 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sty="using:FluentAvalonia.Styling"
              xmlns:assets="clr-namespace:SkEditor.Assets"
-             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
-             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:behaviors="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:localization="clr-namespace:SkEditor.Core.Localization"
              xmlns:elements="clr-namespace:SkEditor.Core.Dialogs.Models.Elements"
              xmlns:ui="clr-namespace:SkEditor.Windowing.UI"
              x:Class="SkEditor.App"
@@ -56,7 +56,7 @@
     </Application.Resources>
 
     <Application.DataTemplates>
-        <DataTemplate DataType="localization1:TranslatableString">
+        <DataTemplate DataType="localization:TranslatableString">
             <TextBlock Text="{Binding Value}" />
         </DataTemplate>
 
@@ -66,7 +66,7 @@
                          PlaceholderText="{Binding PlaceholderText}"
                          Classes.error="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                     <Interaction.Behaviors>
-                        <behaviors1:FocusOnLoadedBehavior ShouldFocus="{Binding AutoFocus}" />
+                        <behaviors:FocusOnLoadedBehavior ShouldFocus="{Binding AutoFocus}" />
                     </Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Text="{Binding ErrorMessage}"
@@ -80,7 +80,7 @@
 
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="{localization1:Translate MenuHeaderSettingsMac}"
+            <NativeMenuItem Header="{localization:Translate MenuHeaderSettingsMac}"
                             Command="{Binding OpenSettingsCommand}"
                             Gesture="Cmd+," />
         </NativeMenu>

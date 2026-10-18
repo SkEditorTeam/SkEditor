@@ -5,8 +5,8 @@
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="300"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:panes1="clr-namespace:SkEditor.Layout.Sidebar.UI.Panes"
-             x:DataType="panes1:SearchPaneViewModel"
+             xmlns:panes="clr-namespace:SkEditor.Layout.Sidebar.UI.Panes"
+             x:DataType="panes:SearchPaneViewModel"
              x:Class="SkEditor.Layout.Sidebar.UI.Panes.SearchPaneView">
 
     <UserControl.Styles>

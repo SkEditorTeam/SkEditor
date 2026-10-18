@@ -6,10 +6,10 @@
              xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:converters="clr-namespace:SkEditor.Appearance.Converters"
-             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
-             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:behaviors="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:localization="clr-namespace:SkEditor.Core.Localization"
              xmlns:ui="clr-namespace:SkEditor.Documentation.UI"
-             xmlns:converters1="clr-namespace:SkEditor.Documentation.UI.Converters"
+             xmlns:converters2="clr-namespace:SkEditor.Documentation.UI.Converters"
              xmlns:models="clr-namespace:SkEditor.Documentation.Models"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
@@ -19,14 +19,14 @@
              x:Class="SkEditor.Documentation.UI.DocumentationTabView">
 
     <UserControl.Resources>
-        <converters1:DocumentationSyntaxIconConverter x:Key="SyntaxIconConverter" />
-        <converters1:DocumentationSyntaxTypeNameConverter x:Key="SyntaxTypeNameConverter" />
-        <converters1:DocumentationSyntaxTypeBrushConverter x:Key="SyntaxTypeColorConverter" />
-        <converters1:DocumentationNullableAddonNameConverter x:Key="AddonNameConverter" />
-        <converters1:DocumentationBadgeVisibilityConverter x:Key="BadgeVisibilityConverter" />
+        <converters2:DocumentationSyntaxIconConverter x:Key="SyntaxIconConverter" />
+        <converters2:DocumentationSyntaxTypeNameConverter x:Key="SyntaxTypeNameConverter" />
+        <converters2:DocumentationSyntaxTypeBrushConverter x:Key="SyntaxTypeColorConverter" />
+        <converters2:DocumentationNullableAddonNameConverter x:Key="AddonNameConverter" />
+        <converters2:DocumentationBadgeVisibilityConverter x:Key="BadgeVisibilityConverter" />
 
         <converters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
-        <converters1:ScrollVisibleToPaddingConverter x:Key="ScrollVisibleToPaddingConverter" />
+        <converters2:ScrollVisibleToPaddingConverter x:Key="ScrollVisibleToPaddingConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -100,7 +100,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <TextBox Grid.Column="2" PlaceholderText="{localization1:Translate DocumentationSearchPlaceholder}"
+                <TextBox Grid.Column="2" PlaceholderText="{localization:Translate DocumentationSearchPlaceholder}"
                          VerticalContentAlignment="Center"
                          Theme="{StaticResource SearchBoxTheme}"
                          Text="{Binding SearchText, Mode=TwoWay}" HorizontalAlignment="Stretch" />
@@ -159,7 +159,7 @@
                             <Setter Property="Margin" Value="0,0,-8,0" />
                             <Setter Property="Interaction.Behaviors">
                                 <BehaviorCollection>
-                                    <behaviors1:SmoothScrollBehavior />
+                                    <behaviors:SmoothScrollBehavior />
                                 </BehaviorCollection>
                             </Setter>
 
@@ -197,7 +197,7 @@
                         Padding="24,24,0,24">
                     <ScrollViewer Padding="0,0,24,0">
                         <Interaction.Behaviors>
-                            <behaviors1:SmoothScrollBehavior />
+                            <behaviors:SmoothScrollBehavior />
                         </Interaction.Behaviors>
                         <DockPanel VerticalSpacing="24" LastChildFill="False">
                             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16" DockPanel.Dock="Top" Height="40">
@@ -298,7 +298,7 @@
                 </StackPanel.IsVisible>
 
                 <fluent:SymbolIcon Symbol="WeatherSqualls" FontSize="64" />
-                <TextBlock Text="{localization1:Translate DocumentationNoResultsFound}" FontSize="24" />
+                <TextBlock Text="{localization:Translate DocumentationNoResultsFound}" FontSize="24" />
             </StackPanel>
         </Grid>
 
@@ -334,9 +334,9 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
-                    <Button Content="{localization1:Translate ButtonRetry}" Command="{Binding RetryLoadCommand}"
+                    <Button Content="{localization:Translate ButtonRetry}" Command="{Binding RetryLoadCommand}"
                             IsVisible="{Binding CurrentError?.CanRetry}" MinWidth="80" />
-                    <Button Content="{localization1:Translate DocumentationButtonSettings}"
+                    <Button Content="{localization:Translate DocumentationButtonSettings}"
                             Command="{Binding OpenApiKeysSettingsCommand}"
                             IsVisible="{Binding CurrentError?.IsApiKeyMissing}" MinWidth="80" />
                 </StackPanel>

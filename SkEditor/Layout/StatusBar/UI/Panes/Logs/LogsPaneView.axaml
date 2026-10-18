@@ -3,19 +3,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
-             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:behaviors="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:localization="clr-namespace:SkEditor.Core.Localization"
              xmlns:logs="clr-namespace:SkEditor.Layout.StatusBar.UI.Panes.Logs"
-             xmlns:converters1="clr-namespace:SkEditor.Layout.StatusBar.UI.Panes.Logs.Converters"
+             xmlns:converters="clr-namespace:SkEditor.Layout.StatusBar.UI.Panes.Logs.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Layout.StatusBar.UI.Panes.Logs.LogsPaneView"
              x:DataType="logs:LogsPaneViewModel"
              Name="Root">
 
     <UserControl.Resources>
-        <converters1:LogLevelColorConverter x:Key="LogLevelColorConverter" />
-        <converters1:LogLevelMessageColorConverter x:Key="LogLevelMessageColorConverter" />
-        <converters1:LogLevelSymbolConverter x:Key="LogLevelSymbolConverter" />
+        <converters:LogLevelColorConverter x:Key="LogLevelColorConverter" />
+        <converters:LogLevelMessageColorConverter x:Key="LogLevelMessageColorConverter" />
+        <converters:LogLevelSymbolConverter x:Key="LogLevelSymbolConverter" />
     </UserControl.Resources>
 
     <Border>
@@ -23,7 +23,7 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0" Padding="12,12,20,12">
                 <Interaction.Behaviors>
                     <BehaviorCollection>
-                        <behaviors1:SmoothScrollBehavior />
+                        <behaviors:SmoothScrollBehavior />
                         <AutoScrollToBottomBehavior />
                     </BehaviorCollection>
                 </Interaction.Behaviors>
@@ -41,7 +41,7 @@
 
             <StackPanel VerticalAlignment="Center" Spacing="6" IsVisible="{Binding !FilteredLogs.Count}">
                 <icons:SymbolIcon Symbol="WeatherSqualls" FontSize="32" Opacity="0.5" HorizontalAlignment="Center" />
-                <TextBlock Text="{localization1:Translate BottomDrawerLogsNoLogs}"
+                <TextBlock Text="{localization:Translate BottomDrawerLogsNoLogs}"
                            HorizontalAlignment="Center" TextAlignment="Center"
                            TextWrapping="Wrap"
                            FontSize="12" MaxWidth="300" Opacity="0.6" />

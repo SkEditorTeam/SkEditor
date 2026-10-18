@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:aConverters="clr-namespace:Avalonia.Markup.Xaml.Converters;assembly=Avalonia.Markup.Xaml"
-             xmlns:attachedProperties1="clr-namespace:SkEditor.Appearance.AttachedProperties"
-             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
-             xmlns:converters1="clr-namespace:SkEditor.Core.Notifications.Converters"
-             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:attachedProperties="clr-namespace:SkEditor.Appearance.AttachedProperties"
+             xmlns:behaviors="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:converters="clr-namespace:SkEditor.Core.Notifications.Converters"
+             xmlns:localization="clr-namespace:SkEditor.Core.Localization"
              xmlns:ui="clr-namespace:SkEditor.Layout.StatusBar.UI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="ui:StatusBarViewModel"
@@ -50,7 +50,7 @@
     </UserControl.Styles>
 
     <UserControl.Resources>
-        <converters1:NotificationTypeConverter x:Key="NotificationTypeConverter" />
+        <converters:NotificationTypeConverter x:Key="NotificationTypeConverter" />
 
         <aConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
 
@@ -65,7 +65,7 @@
                                       Symbol="{Binding IconSymbol}"
                                       IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
                                       Foreground="{Binding ForegroundColor, Converter={StaticResource ColorToBrushConverter}}"
-                                      attachedProperties1:BindableStyleClasses.Classes="{Binding IconClass}" />
+                                      attachedProperties:BindableStyleClasses.Classes="{Binding IconClass}" />
                     <TextBlock Text="{Binding Text}"
                                IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                VerticalAlignment="Center" />
@@ -111,7 +111,7 @@
                                         <TextBlock VerticalAlignment="Center" Margin="4,0,0,0"
                                                    Foreground="{StaticResource ForegroundColor}"
                                                    FontSize="16" FontWeight="DemiBold"
-                                                   Text="{localization1:Translate NotificationCenterTitle}" />
+                                                   Text="{localization:Translate NotificationCenterTitle}" />
 
                                         <Button IsVisible="{Binding Notifications.Count}"
                                                 VerticalAlignment="Center" HorizontalAlignment="Right" Padding="8,4"
@@ -119,7 +119,7 @@
                                                 Foreground="{StaticResource ForegroundSecondaryColor}"
                                                 BorderThickness="0" CornerRadius="6"
                                                 Command="{Binding ClearAllNotificationsCommand}"
-                                                Content="{localization1:Translate NotificationCenterClearAll}" />
+                                                Content="{localization:Translate NotificationCenterClearAll}" />
                                     </Panel>
 
                                     <StackPanel IsVisible="{Binding !Notifications.Count}" Grid.Row="1" Spacing="16"
@@ -127,7 +127,7 @@
                                         <icons:SymbolIcon Symbol="LeafTwo" FontSize="96"
                                                           Foreground="{DynamicResource ForegroundSecondaryColor}" />
                                         <TextBlock FontSize="16"
-                                                   Text="{localization1:Translate NotificationCenterEmpty}"
+                                                   Text="{localization:Translate NotificationCenterEmpty}"
                                                    TextWrapping="Wrap" TextAlignment="Center" />
                                     </StackPanel>
 
@@ -135,7 +135,7 @@
                                                   Margin="0,8,-8,0">
                                         <Interaction.Behaviors>
                                             <BehaviorCollection>
-                                                <behaviors1:SmoothScrollBehavior />
+                                                <behaviors:SmoothScrollBehavior />
                                             </BehaviorCollection>
                                         </Interaction.Behaviors>
                                         <ItemsControl ItemsSource="{Binding Notifications}" Padding="0,0,14,0">

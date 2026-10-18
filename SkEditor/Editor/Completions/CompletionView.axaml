@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:behaviors="clr-namespace:SkEditor.Appearance.Behaviors"
              xmlns:editor="clr-namespace:SkEditor.Editor.Completions"
              xmlns:converters="clr-namespace:SkEditor.Editor.Completions.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -29,7 +29,7 @@
                 <Style Selector="ListBox /template/ ScrollViewer">
                     <Setter Property="Interaction.Behaviors">
                         <BehaviorCollection>
-                            <behaviors1:SmoothScrollBehavior />
+                            <behaviors:SmoothScrollBehavior />
                         </BehaviorCollection>
                     </Setter>
                 </Style>

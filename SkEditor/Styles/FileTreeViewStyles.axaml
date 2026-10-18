@@ -2,13 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
                     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-                    xmlns:converters1="clr-namespace:SkEditor.Appearance.Icons.Converters"
-                    xmlns:converters3="clr-namespace:SkEditor.Layout.Menu.Converters"
+                    xmlns:icons="clr-namespace:SkEditor.Appearance.Icons.Converters"
+                    xmlns:menu="clr-namespace:SkEditor.Layout.Menu.Converters"
                     xmlns:abstractions="clr-namespace:SkEditor.Workspace.Filesystem.Abstractions"
                     x:CompileBindings="True">
 
-    <converters1:StandardIconConverter x:Key="StandardIconConverter" />
-    <converters3:ContextMenuHeaderConverter x:Key="ContextMenuHeaderConverter" />
+    <icons:StandardIconConverter x:Key="StandardIconConverter" />
+    <menu:ContextMenuHeaderConverter x:Key="ContextMenuHeaderConverter" />
 
     <x:Double x:Key="TreeViewItemIndent">16</x:Double>
     <x:Double x:Key="TreeViewItemExpandCollapseChevronSize">18</x:Double>

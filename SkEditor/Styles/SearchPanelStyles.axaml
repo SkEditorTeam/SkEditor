@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:search="https://github.com/avaloniaui/avaloniaedit"
                     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-                    xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+                    xmlns:localization="clr-namespace:SkEditor.Core.Localization"
                     x:CompileBindings="True">
     <Design.PreviewWith>
         <Border Padding="20">
@@ -104,10 +104,10 @@
         <Setter Property="Margin" Value="0 8 16 0" />
         <Setter Property="FontSize" Value="{DynamicResource SearchPanelFontSize}" />
         <Setter Property="FontFamily" Value="{DynamicResource SearchPanelFontFamily}" />
-        <Setter Property="NoMatchesFoundText" Value="{localization1:Translate SearchPanelNoMatchesFound}" />
-        <Setter Property="MatchesFoundFormat" Value="{localization1:Translate SearchPanelMatchesFound}" />
-        <Setter Property="SingleMatchText" Value="{localization1:Translate SearchPanelSingleMatch}" />
-        <Setter Property="MatchOfFormat" Value="{localization1:Translate SearchPanelMatchOf}" />
+        <Setter Property="NoMatchesFoundText" Value="{localization:Translate SearchPanelNoMatchesFound}" />
+        <Setter Property="MatchesFoundFormat" Value="{localization:Translate SearchPanelMatchesFound}" />
+        <Setter Property="SingleMatchText" Value="{localization:Translate SearchPanelSingleMatch}" />
+        <Setter Property="MatchOfFormat" Value="{localization:Translate SearchPanelMatchOf}" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border Name="PART_Border"
@@ -130,13 +130,13 @@
                                       Width="16"
                                       Margin="0,0,8,0">
                             <ToolTip.Tip>
-                                <TextBlock Text="{localization1:Translate SearchPanelToggleReplace}" />
+                                <TextBlock Text="{localization:Translate SearchPanelToggleReplace}" />
                             </ToolTip.Tip>
                         </ToggleButton>
                         <StackPanel Orientation="Horizontal"
                                     Grid.Column="2"
                                     Grid.Row="0">
-                            <TextBox PlaceholderText="{localization1:Translate SearchPanelFindLabel}"
+                            <TextBox PlaceholderText="{localization:Translate SearchPanelFindLabel}"
                                      Theme="{StaticResource SearchBoxTheme}"
                                      Name="PART_searchTextBox"
                                      Width="265"
@@ -146,7 +146,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <ToggleButton Theme="{StaticResource SearchPanelTextBoxButton}"
                                                       IsChecked="{Binding $parent[search:SearchPanel].MatchCase, Mode=TwoWay}"
-                                                      ToolTip.Tip="{localization1:Translate SearchPanelMatchCase}"
+                                                      ToolTip.Tip="{localization:Translate SearchPanelMatchCase}"
                                                       VerticalAlignment="Center">
                                             <Viewbox Height="12" Width="12">
                                                 <fluent:SymbolIcon Symbol="TextCaseTitle"
@@ -155,7 +155,7 @@
                                         </ToggleButton>
                                         <ToggleButton Theme="{StaticResource SearchPanelTextBoxButton}"
                                                       IsChecked="{Binding $parent[search:SearchPanel].WholeWords, Mode=TwoWay}"
-                                                      ToolTip.Tip="{localization1:Translate SearchPanelMatchWholeWords}"
+                                                      ToolTip.Tip="{localization:Translate SearchPanelMatchWholeWords}"
                                                       Margin="3,0,0,0"
                                                       VerticalAlignment="Center">
                                             <Viewbox Height="12" Width="12">
@@ -165,7 +165,7 @@
                                         </ToggleButton>
                                         <ToggleButton Theme="{StaticResource SearchPanelTextBoxButton}"
                                                       IsChecked="{Binding $parent[search:SearchPanel].UseRegex, Mode=TwoWay}"
-                                                      ToolTip.Tip="{localization1:Translate SearchPanelUseRegex}"
+                                                      ToolTip.Tip="{localization:Translate SearchPanelUseRegex}"
                                                       Margin="3,0,5,0"
                                                       VerticalAlignment="Center">
                                             <Viewbox Height="12" Width="12">
@@ -181,7 +181,7 @@
                                     VerticalAlignment="Stretch"
                                     Command="{x:Static search:SearchCommands.FindPrevious}">
                                 <ToolTip.Tip>
-                                    <TextBlock Text="{localization1:Translate SearchPanelFindPrevious}" />
+                                    <TextBlock Text="{localization:Translate SearchPanelFindPrevious}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
                                     <fluent:SymbolIcon Symbol="ChevronUp"
@@ -193,7 +193,7 @@
                                     Width="34" Height="34"
                                     Command="{x:Static search:SearchCommands.FindNext}">
                                 <ToolTip.Tip>
-                                    <TextBlock Text="{localization1:Translate SearchPanelFindNext}" />
+                                    <TextBlock Text="{localization:Translate SearchPanelFindNext}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
                                     <fluent:SymbolIcon Symbol="ChevronDown"
@@ -217,7 +217,7 @@
                                     Margin="0 5 0 0 "
                                     Grid.Column="2"
                                     Grid.Row="1">
-                            <TextBox PlaceholderText="{localization1:Translate SearchPanelReplaceLabel}"
+                            <TextBox PlaceholderText="{localization:Translate SearchPanelReplaceLabel}"
                                      Theme="{StaticResource SearchBoxTheme}"
                                      Name="PART_replaceTextBox"
                                      IsVisible="{Binding IsReplaceMode, RelativeSource={RelativeSource TemplatedParent}}"
@@ -236,7 +236,7 @@
                                     Width="34" Height="34"
                                     Command="{x:Static search:SearchCommands.ReplaceNext}">
                                 <ToolTip.Tip>
-                                    <TextBlock Text="{localization1:Translate SearchPanelReplaceNext}" />
+                                    <TextBlock Text="{localization:Translate SearchPanelReplaceNext}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
                                     <fluent:SymbolIcon Symbol="ArrowForward"
@@ -248,7 +248,7 @@
                                     Width="34" Height="34"
                                     Command="{x:Static search:SearchCommands.ReplaceAll}">
                                 <ToolTip.Tip>
-                                    <TextBlock Text="{localization1:Translate SearchPanelReplaceAll}" />
+                                    <TextBlock Text="{localization:Translate SearchPanelReplaceAll}" />
                                 </ToolTip.Tip>
                                 <Viewbox Height="16" Width="16">
                                     <fluent:SymbolIcon Symbol="ArrowRepeatAll"

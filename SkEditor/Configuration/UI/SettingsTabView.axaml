@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:converters1="clr-namespace:SkEditor.Appearance.Icons.Converters"
-             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:converters="clr-namespace:SkEditor.Appearance.Icons.Converters"
+             xmlns:behaviors="clr-namespace:SkEditor.Appearance.Behaviors"
              xmlns:ui="clr-namespace:SkEditor.Configuration.UI"
              xmlns:converters2="clr-namespace:SkEditor.Configuration.Converters"
-             xmlns:models1="clr-namespace:SkEditor.Configuration.Models"
-             xmlns:types1="clr-namespace:SkEditor.Configuration.Models.Types"
+             xmlns:models="clr-namespace:SkEditor.Configuration.Models"
+             xmlns:types="clr-namespace:SkEditor.Configuration.Models.Types"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="ui:SettingsTabViewModel"
@@ -25,7 +25,7 @@
         <GridLength x:Key="ToggleSwitchPreContentMargin">2</GridLength>
         <GridLength x:Key="ToggleSwitchPostContentMargin">2</GridLength>
         <!-- ReSharper restore Xaml.RedundantResource -->
-        <converters1:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
+        <converters:StandardIconSourceConverter x:Key="StandardIconSourceConverter" />
         <converters2:InfoBarSeverityConverter x:Key="InfoBarSeverityConverter" />
         <converters2:HorizontalAlignmentConverter x:Key="HorizontalAlignmentConverter" />
         <converters2:OrientationConverter x:Key="OrientationConverter" />
@@ -36,7 +36,7 @@
 
     <UserControl.Styles>
         <Style Selector="controls|FASettingsExpanderItem /template/ ContentPresenter#FooterPresenter"
-               x:DataType="models1:SettingElement">
+               x:DataType="models:SettingElement">
             <Setter Property="MaxWidth" Value="500" />
             <Setter Property="Width" Value="{Binding Width, FallbackValue=Auto}" />
         </Style>
@@ -49,7 +49,7 @@
             <Setter Property="Interaction.Behaviors">
                 <BehaviorCollectionTemplate>
                     <BehaviorCollection>
-                        <behaviors1:SmoothScrollBehavior />
+                        <behaviors:SmoothScrollBehavior />
                     </BehaviorCollection>
                 </BehaviorCollectionTemplate>
             </Setter>
@@ -59,7 +59,7 @@
             <Setter Property="Interaction.Behaviors">
                 <BehaviorCollectionTemplate>
                     <BehaviorCollection>
-                        <behaviors1:SmoothScrollBehavior />
+                        <behaviors:SmoothScrollBehavior />
                     </BehaviorCollection>
                 </BehaviorCollectionTemplate>
             </Setter>
@@ -67,17 +67,17 @@
     </UserControl.Styles>
 
     <UserControl.DataTemplates>
-        <DataTemplate DataType="{x:Type types1:ToggleSetting}">
+        <DataTemplate DataType="{x:Type types:ToggleSetting}">
             <ToggleSwitch IsChecked="{Binding IsToggled.Value}" />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type types1:IFontChoiceSetting}">
+        <DataTemplate DataType="{x:Type types:IFontChoiceSetting}">
             <ComboBox ItemsSource="{Binding Options}"
                       Width="{Binding Width, FallbackValue=NaN}"
                       MaxWidth="{Binding MaxWidth, FallbackValue=NaN}"
                       SelectedItem="{Binding SelectedItem}">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type types1:OptionItem}">
+                    <DataTemplate DataType="{x:Type types:OptionItem}">
                         <TextBlock Text="{Binding Display.Value}"
                                    VerticalAlignment="Center"
                                    TextTrimming="CharacterEllipsis" />
@@ -89,7 +89,7 @@
                         <Setter Property="Width" Value="{Binding $parent[ComboBox].MaxWidth}" />
                     </Style>
 
-                    <Style Selector="ComboBox ComboBoxItem" x:DataType="types1:OptionItem">
+                    <Style Selector="ComboBox ComboBoxItem" x:DataType="types:OptionItem">
                         <Setter Property="FontFamily"
                                 Value="{Binding Value, Converter={StaticResource SettingsFontFamilyConverter}}" />
                         <Setter Property="Height" Value="32" />
@@ -100,13 +100,13 @@
             </ComboBox>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type types1:IChoiceSetting}">
+        <DataTemplate DataType="{x:Type types:IChoiceSetting}">
             <ComboBox ItemsSource="{Binding Options}"
                       Width="{Binding Width, FallbackValue=NaN}"
                       MaxWidth="{Binding MaxWidth, FallbackValue=NaN}"
                       SelectedItem="{Binding SelectedItem}">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type types1:OptionItem}">
+                    <DataTemplate DataType="{x:Type types:OptionItem}">
                         <TextBlock Text="{Binding Display.Value}"
                                    VerticalAlignment="Center"
                                    TextTrimming="CharacterEllipsis" />
@@ -118,7 +118,7 @@
                         <Setter Property="Width" Value="{Binding $parent[ComboBox].MaxWidth}" />
                     </Style>
 
-                    <Style Selector="ComboBox ComboBoxItem" x:DataType="types1:OptionItem">
+                    <Style Selector="ComboBox ComboBoxItem" x:DataType="types:OptionItem">
                         <Setter Property="Height" Value="32" />
                         <Setter Property="Padding" Value="12,0" />
                         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -127,14 +127,14 @@
             </ComboBox>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type types1:INumberSetting}">
+        <DataTemplate DataType="{x:Type types:INumberSetting}">
             <NumericUpDown Minimum="{Binding MinValue}"
                            Maximum="{Binding MaxValue}"
                            FormatString="{Binding FormatString}"
                            Value="{Binding Value, Mode=TwoWay}" />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type types1:TextSetting}">
+        <DataTemplate DataType="{x:Type types:TextSetting}">
             <TextBox Text="{Binding Text, Mode=TwoWay}" PasswordChar="{Binding PasswordChar}"
                      PlaceholderText="{Binding Placeholder.Value, FallbackValue={x:Null}}"
                      Width="{Binding Width, FallbackValue=96}"
@@ -142,7 +142,7 @@
                      VerticalAlignment="Center" />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type types1:ActionSetting}">
+        <DataTemplate DataType="{x:Type types:ActionSetting}">
             <Button Command="{Binding Command}"
                     IsVisible="{Binding IsButtonVisible.Value}">
                 <StackPanel Spacing="6" Orientation="Horizontal">
@@ -153,12 +153,12 @@
             </Button>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type types1:CompoundSetting}">
+        <DataTemplate DataType="{x:Type types:CompoundSetting}">
             <ItemsControl ItemsSource="{Binding Children}">
                 <ItemsControl.Styles>
                     <Style Selector="ContentControl > :is(Control)">
                         <Setter Property="HorizontalAlignment"
-                                Value="{Binding $parent[ItemsControl].((types1:CompoundSetting)DataContext).IsVertical, Converter={StaticResource HorizontalAlignmentConverter}, FallbackValue=Right}" />
+                                Value="{Binding $parent[ItemsControl].((types:CompoundSetting)DataContext).IsVertical, Converter={StaticResource HorizontalAlignmentConverter}, FallbackValue=Right}" />
                     </Style>
                 </ItemsControl.Styles>
                 <ItemsControl.ItemsPanel>
@@ -168,7 +168,7 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="models1:SettingElement">
+                    <DataTemplate DataType="models:SettingElement">
                         <ContentControl Content="{Binding}" IsVisible="{Binding IsVisible.Value}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -185,7 +185,7 @@
                                SelectedItem="{Binding CurrentSection, Mode=TwoWay}"
                                IsSettingsVisible="False" IsPaneToggleButtonVisible="False">
         <controls:FANavigationView.MenuItemTemplate>
-            <DataTemplate DataType="models1:SettingSection">
+            <DataTemplate DataType="models:SettingSection">
                 <controls:FANavigationViewItem Content="{Binding Name.Value}"
                                                IsExpanded="{Binding IsExpanded.Value, Mode=TwoWay}"
                                                IsVisible="{Binding IsVisible.Value}"
@@ -199,7 +199,7 @@
             <ScrollViewer Name="ScrollViewer" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                           Padding="24,4,24,24" VerticalScrollBarVisibility="Auto">
                 <Interaction.Behaviors>
-                    <behaviors1:SmoothScrollBehavior />
+                    <behaviors:SmoothScrollBehavior />
                 </Interaction.Behaviors>
                 <ItemsRepeater ItemsSource="{Binding CurrentSection.Settings, FallbackValue={x:Null}}">
                     <ItemsRepeater.Layout>
@@ -208,7 +208,7 @@
                     <ItemsRepeater.ItemTemplate>
                         <ui:SettingElementTemplateFactory>
                             <ui:SettingElementTemplateFactory.Templates>
-                                <DataTemplate x:Key="StandardTemplate" x:DataType="models1:SettingElement">
+                                <DataTemplate x:Key="StandardTemplate" x:DataType="models:SettingElement">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
@@ -223,7 +223,7 @@
                                     </controls:FASettingsExpander>
                                 </DataTemplate>
 
-                                <DataTemplate x:Key="ClickableTemplate" x:DataType="types1:ClickableActionSetting">
+                                <DataTemplate x:Key="ClickableTemplate" x:DataType="types:ClickableActionSetting">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
@@ -240,7 +240,7 @@
                                     </controls:FASettingsExpander>
                                 </DataTemplate>
 
-                                <DataTemplate x:Key="InfoTemplate" x:DataType="types1:InfoSetting">
+                                <DataTemplate x:Key="InfoTemplate" x:DataType="types:InfoSetting">
                                     <controls:FAInfoBar
                                         Title="{Binding Name.Value.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
@@ -256,7 +256,7 @@
                                     </controls:FAInfoBar>
                                 </DataTemplate>
 
-                                <DataTemplate x:Key="ExpandableTemplate" x:DataType="types1:ExpandableSetting">
+                                <DataTemplate x:Key="ExpandableTemplate" x:DataType="types:ExpandableSetting">
                                     <controls:FASettingsExpander
                                         Header="{Binding Name.Value.Value}"
                                         IsVisible="{Binding IsVisible.Value}" IsEnabled="{Binding IsEnabled.Value}"
@@ -274,7 +274,7 @@
                                             <ui:ExpanderItemTemplateFactory>
                                                 <ui:ExpanderItemTemplateFactory.Templates>
                                                     <DataTemplate x:Key="StandardExpanderItemTemplate"
-                                                                  DataType="models1:SettingElement">
+                                                                  DataType="models:SettingElement">
                                                         <controls:FASettingsExpanderItem
                                                             Content="{Binding Name.Value.Value}"
                                                             IsVisible="{Binding IsVisible.Value}"
@@ -297,7 +297,7 @@
                                                     </DataTemplate>
 
                                                     <DataTemplate x:Key="ClickableExpanderItemTemplate"
-                                                                  DataType="types1:ClickableActionSetting">
+                                                                  DataType="types:ClickableActionSetting">
                                                         <controls:FASettingsExpanderItem
                                                             Content="{Binding Name.Value.Value}"
                                                             IsVisible="{Binding IsVisible.Value}"
@@ -322,7 +322,7 @@
                                                     </DataTemplate>
 
                                                     <DataTemplate x:Key="InfoExpanderItemTemplate"
-                                                                  DataType="types1:InfoSetting">
+                                                                  DataType="types:InfoSetting">
                                                         <controls:FASettingsExpanderItem
                                                             Content="{Binding Name.Value.Value}"
                                                             IsVisible="{Binding IsVisible.Value}"
