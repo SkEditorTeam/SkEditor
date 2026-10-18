@@ -8,6 +8,7 @@ using FluentIcons.Common;
 using R3;
 using SkEditor.Contracts.Services;
 using SkEditor.Models.Dialogs;
+using SkEditor.Models.Files;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
 using SkEditor.ViewModels.Tabs.Capabilities;
@@ -30,7 +31,7 @@ public class ChangeDetectFeature(IDialogService dialogs) : IEditorFeature
 
     public bool CanAttach(IFeatureTab tab)
     {
-        return tab is ITextEditorTab;
+        return tab is ITextEditorTab and IFileTab { File: LocalFile };
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
