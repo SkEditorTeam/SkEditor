@@ -16,6 +16,15 @@ namespace SkEditor.Features;
 
 public class ChangeDetectFeature(IDialogService dialogs) : IEditorFeature
 {
+    private static readonly Dialog ChangesDialog = Dialog
+        .Create(TranslationKey.FileChangedExternallyTitle)
+        .WithMessage(TranslationKey.FileChangedExternallyMessage)
+        .WithIcon(Symbol.DocumentMultipleSync)
+        .WithButtons(
+            new DialogButton(TranslationKey.FileChangedExternallyKeepChanges, DialogResult.Cancel, true),
+            new DialogButton(TranslationKey.FileChangedExternallyDiscardAndReload, DialogResult.Ok)
+        );
+
     private DisposableBag _disposables;
     private FileSystemWatcher? _watcher;
 
@@ -39,6 +48,17 @@ public class ChangeDetectFeature(IDialogService dialogs) : IEditorFeature
         }
 
         _disposables = default;
+        SetupFileWatcher(fileTab, editor, path, directory);
+    }
+
+    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
+    {
+        _disposables.Dispose();
+        _watcher?.EnableRaisingEvents = false;
+    }
+
+    private void SetupFileWatcher(IFileTab fileTab, TextEditor editor, string path, string directory)
+    {
         _watcher ??= new FileSystemWatcher();
         _watcher.Path = directory;
         _watcher.Filter = Path.GetFileName(path);
@@ -57,26 +77,28 @@ public class ChangeDetectFeature(IDialogService dialogs) : IEditorFeature
 
                 DateTime lastWriteTimeUtc = File.GetLastWriteTimeUtc(path);
 
-                if (lastWriteTimeUtc != fileTab.File.LastSaveUtc)
+                if (lastWriteTimeUtc == fileTab.File.LastSaveUtc)
                 {
-                    long fileLength = new FileInfo(path).Length;
+                    return;
+                }
 
-                    if (fileLength != fileTab.File.Length)
+                long fileLength = new FileInfo(path).Length;
+
+                if (fileLength != fileTab.File.Length)
+                {
+                    await HandleChanged(fileTab, editor);
+                }
+                else
+                {
+                    ulong? originalHash = fileTab.File.DiskHash;
+                    XxHash3 hasher = new();
+                    await using Stream stream = await fileTab.File.LoadAsync();
+                    await hasher.AppendAsync(stream, ct);
+                    ulong? diskHash = hasher.GetCurrentHashAsUInt64();
+
+                    if (originalHash != diskHash)
                     {
                         await HandleChanged(fileTab, editor);
-                    }
-                    else
-                    {
-                        ulong? originalHash = fileTab.File.DiskHash;
-                        XxHash3 hasher = new();
-                        await using Stream stream = await fileTab.File.LoadAsync();
-                        await hasher.AppendAsync(stream, ct);
-                        ulong? diskHash = hasher.GetCurrentHashAsUInt64();
-
-                        if (originalHash != diskHash)
-                        {
-                            await HandleChanged(fileTab, editor);
-                        }
                     }
                 }
             })
@@ -92,59 +114,38 @@ public class ChangeDetectFeature(IDialogService dialogs) : IEditorFeature
 
         if (saveable.IsSaved)
         {
-            await using Stream stream = await fileTab.File.LoadAsync();
-            using StreamReader reader = new(stream);
-
-            string text = await reader.ReadToEndAsync();
-            await fileTab.File.UpdateSnapshotAsync(stream);
-
-            await Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                editor.Document.Text = text;
-                editor.Document.UndoStack.ClearAll();
-                editor.Document.UndoStack.MarkAsOriginalFile();
-            });
+            await ReloadEditorContent(fileTab, editor);
         }
         else
         {
-            Dialog dialog = Dialog
-                .Create(TranslationKey.FileChangedExternallyTitle)
-                .WithMessage(TranslationKey.FileChangedExternallyMessage)
-                .WithIcon(Symbol.DocumentMultipleSync)
-                .WithButtons(
-                    new DialogButton(TranslationKey.FileChangedExternallyKeepChanges, DialogResult.Cancel, true),
-                    new DialogButton(TranslationKey.FileChangedExternallyDiscardAndReload, DialogResult.Ok)
-                );
-
-            DialogResult result = await dialogs.ShowDialogAsync(dialog);
+            DialogResult result = await dialogs.ShowDialogAsync(ChangesDialog);
 
             if (result == StandardDialogResult.Ok)
             {
-                await using Stream stream = await fileTab.File.LoadAsync();
-                using StreamReader reader = new(stream);
-
-                string text = await reader.ReadToEndAsync();
-                await fileTab.File.UpdateSnapshotAsync(stream);
-
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    editor.Document.Text = text;
-                    editor.Document.UndoStack.ClearAll();
-                    editor.Document.UndoStack.MarkAsOriginalFile();
-                });
+                await ReloadEditorContent(fileTab, editor);
             }
             else
             {
                 await using Stream stream = await fileTab.File.LoadAsync();
-                using StreamReader reader = new(stream);
                 await fileTab.File.UpdateSnapshotAsync(stream);
             }
         }
     }
 
-    public void OnViewDetached(IFeatureTab tab, TextEditor editor)
+    private static async Task ReloadEditorContent(IFileTab fileTab, TextEditor editor)
     {
-        _disposables.Dispose();
-        _watcher?.EnableRaisingEvents = false;
+        await using Stream stream = await fileTab.File.LoadAsync();
+        using StreamReader reader = new(stream);
+
+        await fileTab.File.UpdateSnapshotAsync(stream);
+
+        string text = await reader.ReadToEndAsync();
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            editor.Document.Text = text;
+            editor.Document.UndoStack.ClearAll();
+            editor.Document.UndoStack.MarkAsOriginalFile();
+        });
     }
 }
