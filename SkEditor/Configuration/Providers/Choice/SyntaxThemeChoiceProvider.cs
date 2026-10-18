@@ -6,7 +6,6 @@ using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Editor.Syntax;
 using SkEditor.Editor.Syntax.Models;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Providers.Choice;
 

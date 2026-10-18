@@ -2,8 +2,8 @@
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.ComponentModel;
-using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
-using MainWindow = SkEditor.Windowing.UI.MainWindow;
+using SkEditor.Layout.Menu.Models;
+using SkEditor.Windowing.UI;
 
 namespace SkEditor.Layout.Menu.UI;
 

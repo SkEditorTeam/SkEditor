@@ -1,18 +1,17 @@
 ﻿using System;
 using System.IO;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.System;
 using SkEditor.Editor.Features;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session.Models;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.Tabs;
 

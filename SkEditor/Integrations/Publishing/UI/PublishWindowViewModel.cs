@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.System;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Integrations.Publishing.Models;
 using SkEditor.Workspace.Tabs;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
-using SecretsConfig = SkEditor.Configuration.Configs.SecretsConfig;
 
 namespace SkEditor.Integrations.Publishing.UI;
 

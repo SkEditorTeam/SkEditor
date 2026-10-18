@@ -9,7 +9,7 @@ using SkEditor.Configuration.Messages;
 using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Providers.Sections;
 using SkEditor.Core.Localization;
-using TabViewModelBase = SkEditor.Workspace.Tabs.TabViewModelBase;
+using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Configuration.UI;
 

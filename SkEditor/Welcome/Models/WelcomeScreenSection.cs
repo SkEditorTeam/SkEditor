@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Core.Localization;
 
 namespace SkEditor.Welcome.Models;
 

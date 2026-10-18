@@ -6,10 +6,9 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Iciclecreek.Terminal;
 using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
 using SkEditor.Layout.StatusBar.UI.Abstractions;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Layout.StatusBar.UI.Panes.Terminal;
 

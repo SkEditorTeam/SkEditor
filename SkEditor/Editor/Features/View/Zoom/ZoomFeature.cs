@@ -1,11 +1,11 @@
 ﻿using System;
+using Avalonia;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
+using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Layout.Menu;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using Vector = Avalonia.Vector;
 
 namespace SkEditor.Editor.Features.View.Zoom;
 

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Serilog;
+using SkEditor.Windowing.UI;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
-using MainWindow = SkEditor.Windowing.UI.MainWindow;
 
 namespace SkEditor.Windowing;
 

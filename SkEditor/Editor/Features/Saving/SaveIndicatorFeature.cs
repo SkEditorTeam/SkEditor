@@ -1,7 +1,7 @@
 ﻿using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Editor.Features.Saving;
 

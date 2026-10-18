@@ -3,12 +3,11 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ObservableCollections;
 using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.System;
 using SkEditor.Layout.StatusBar.UI.Abstractions;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Layout.StatusBar.UI.Panes.Logs;
 

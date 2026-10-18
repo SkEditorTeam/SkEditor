@@ -1,8 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Styling;
 using FluentAvalonia.UI.Controls;
-using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
-using Symbol = FluentIcons.Common.Symbol;
+using FluentIcons.Avalonia.Fluent;
+using FluentIcons.Common;
 
 namespace SkEditor.Appearance.Icons;
 

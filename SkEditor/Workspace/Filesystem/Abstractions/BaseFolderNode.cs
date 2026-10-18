@@ -9,7 +9,6 @@ using Serilog;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.Notifications.Messages;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.Filesystem.Abstractions;
 

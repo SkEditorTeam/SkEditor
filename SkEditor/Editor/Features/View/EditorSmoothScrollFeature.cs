@@ -5,8 +5,8 @@ using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using R3;
 using SkEditor.Appearance.Behaviors;
+using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Editor.Features.View;
 

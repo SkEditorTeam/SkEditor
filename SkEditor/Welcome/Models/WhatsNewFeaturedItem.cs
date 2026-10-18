@@ -1,7 +1,7 @@
 ﻿using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
+using FluentIcons.Common;
 using SkEditor.Appearance.Icons;
-using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Welcome.Models;
 

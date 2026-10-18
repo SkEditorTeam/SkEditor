@@ -14,15 +14,12 @@ using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.Security;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Filesystem.Sftp;
 using SkEditor.Workspace.Remote.Messages;
 using SkEditor.Workspace.Remote.Models;
 using SkEditor.Workspace.Tabs;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
-using ICredentialStore = SkEditor.Core.Security.ICredentialStore;
-using Notification = SkEditor.Core.Notifications.Notification;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.Remote;
 

@@ -9,13 +9,12 @@ using SkEditor.Analyzing;
 using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Models.Types;
+using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.System;
-using SkEditor.Core.Localization;
 using SkEditor.Workspace.Files;
 using ExperimentsProperty = SkEditor.Configuration.Configs.ExperimentsConfig.ExperimentsConfigProperty;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Providers.Sections;
 

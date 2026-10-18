@@ -12,10 +12,10 @@ using SkEditor.Analyzing.Models;
 using SkEditor.Analyzing.Processes;
 using SkEditor.Analyzing.Protocol;
 using SkEditor.Configuration;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Logging;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
 namespace SkEditor.Analyzing;
 

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentIcons.Common;
 using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Extensions;
@@ -13,7 +14,6 @@ using SkEditor.Core.Localization;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Editor.Features.Saving;
 

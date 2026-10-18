@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.Files;
 

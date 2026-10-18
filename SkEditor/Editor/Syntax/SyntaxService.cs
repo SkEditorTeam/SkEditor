@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Avalonia.Platform;
 using SkEditor.Configuration;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Logging;
 using SkEditor.Editor.Syntax.Models;
 using TextMateSharp.Grammars;
@@ -13,7 +14,6 @@ using TextMateSharp.Internal.Grammars.Reader;
 using TextMateSharp.Internal.Themes.Reader;
 using TextMateSharp.Internal.Types;
 using TextMateSharp.Themes;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Editor.Syntax;
 

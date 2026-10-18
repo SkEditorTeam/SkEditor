@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FluentIcons.Common;
 using SkEditor.Welcome.Models;
-using Symbol = FluentIcons.Common.Symbol;
 
 namespace SkEditor.Welcome.UI;
 

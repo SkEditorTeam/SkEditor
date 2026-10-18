@@ -1,8 +1,8 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Configuration.UI;
 using SkEditor.Workspace.Tabs;
-using SettingsTabViewModel = SkEditor.Configuration.UI.SettingsTabViewModel;
 
 namespace SkEditor.Windowing.UI;
 

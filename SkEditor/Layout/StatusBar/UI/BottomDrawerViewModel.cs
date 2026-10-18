@@ -5,9 +5,8 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Layout.StatusBar.UI.Abstractions;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
-using StateConfig = SkEditor.Configuration.Configs.StateConfig;
 
 namespace SkEditor.Layout.StatusBar.UI;
 

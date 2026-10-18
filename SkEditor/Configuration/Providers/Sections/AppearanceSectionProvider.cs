@@ -5,10 +5,9 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Models.Types;
 using SkEditor.Configuration.Providers.Choice;
-using SkEditor.Core.System;
 using SkEditor.Core.Localization;
+using SkEditor.Core.System;
 using AppSettingsProperty = SkEditor.Configuration.Configs.AppSettings.AppSettingsProperty;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Providers.Sections;
 

@@ -6,9 +6,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using SkEditor.Core.Logging;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Integrations.Publishing.Models;
 using SkEditor.Workspace.Tabs;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
 namespace SkEditor.Integrations.Publishing;
 

@@ -2,7 +2,6 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using SkEditor.Configuration.Configs;
-using OldAppJsonContext = SkEditor.Configuration.Configs.OldAppJsonContext;
 
 namespace SkEditor.Configuration;
 

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using AvaloniaEdit.Document;
 using R3;
+using SkEditor.Core.Localization;
 using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Layout.StatusBar.UI;
 using SkEditor.Windowing;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Layout.StatusBar.Providers;
 

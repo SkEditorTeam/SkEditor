@@ -17,7 +17,6 @@ using SkEditor.Core.Notifications;
 using SkEditor.Documentation.Models;
 using SkEditor.Documentation.Providers;
 using SkEditor.Workspace.Tabs;
-using TabViewModelBase = SkEditor.Workspace.Tabs.TabViewModelBase;
 
 namespace SkEditor.Documentation.UI;
 

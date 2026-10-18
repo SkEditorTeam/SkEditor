@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using R3;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Core.Localization;
 
 namespace SkEditor.Layout.Menu.Models;
 

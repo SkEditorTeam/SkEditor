@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentIcons.Common;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
 using SkEditor.Workspace.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Models;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Workspace.Tabs;
 

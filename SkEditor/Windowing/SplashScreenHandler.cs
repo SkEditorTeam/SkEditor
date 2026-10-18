@@ -1,5 +1,5 @@
-﻿using SkEditor.Windowing.Models;
-using BinarySettings = SkEditor.Configuration.Configs.BinarySettings;
+﻿using SkEditor.Configuration.Configs;
+using SkEditor.Windowing.Models;
 
 namespace SkEditor.Windowing;
 

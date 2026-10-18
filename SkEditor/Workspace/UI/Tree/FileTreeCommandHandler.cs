@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using FluentIcons.Common;
 using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Dialogs.Models.Elements;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
@@ -20,9 +22,6 @@ using SkEditor.Workspace.Projects.Extensions;
 using SkEditor.Workspace.Projects.Models;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using TextDialogElement = SkEditor.Core.Dialogs.Models.Elements.TextDialogElement;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.UI.Tree;
 

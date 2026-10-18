@@ -4,11 +4,11 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using HotAvalonia;
 using SkEditor.Appearance.Themes;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
 using SkEditor.Editor.Syntax;
 using SkEditor.Integrations.Discord;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using MainMenuViewModel = SkEditor.Layout.Menu.UI.MainMenuViewModel;
+using SkEditor.Layout.Menu.UI;
 
 namespace SkEditor.Windowing.UI;
 

@@ -6,8 +6,8 @@ using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using SkEditor.Configuration.Configs;
 using SkEditor.Documentation.Models;
-using SecretsConfig = SkEditor.Configuration.Configs.SecretsConfig;
 
 namespace SkEditor.Documentation.Providers;
 

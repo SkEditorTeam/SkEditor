@@ -16,10 +16,10 @@ using Iciclecreek.Avalonia.Terminal;
 using R3;
 using SkEditor.Appearance.Icons;
 using SkEditor.Configuration;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Logging;
 using SkEditor.Windowing;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using MainWindow = SkEditor.Windowing.UI.MainWindow;
+using SkEditor.Windowing.UI;
 
 namespace SkEditor.Appearance.Themes;
 

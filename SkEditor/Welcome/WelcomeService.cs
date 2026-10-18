@@ -6,14 +6,13 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using SkEditor.Appearance.Icons;
+using SkEditor.Configuration.UI;
 using SkEditor.Core.Localization;
 using SkEditor.Core.System;
 using SkEditor.Welcome.Models;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Projects.Messages;
 using SkEditor.Workspace.Tabs;
-using SettingsTabViewModel = SkEditor.Configuration.UI.SettingsTabViewModel;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Welcome;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using R3;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using SkEditor.Configuration.Configs;
 
 namespace SkEditor.Editor.Features.View.Zoom;
 

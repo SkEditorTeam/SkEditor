@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using SkEditor.Core.Localization;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Welcome.Models;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Appearance.Icons;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Core.Localization;
 
 namespace SkEditor.Workspace.Projects.Models;
 

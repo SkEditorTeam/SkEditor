@@ -1,6 +1,6 @@
-﻿using SkEditor.Workspace.Files.Types;
+﻿using SkEditor.Editor.UI.Tabs;
+using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session.Models;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
 namespace SkEditor.Workspace.Tabs;
 

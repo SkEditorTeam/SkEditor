@@ -1,4 +1,4 @@
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Core.Localization;
 
 namespace SkEditor.Workspace.Files;
 

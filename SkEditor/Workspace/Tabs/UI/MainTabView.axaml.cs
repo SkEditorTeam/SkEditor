@@ -5,8 +5,8 @@ using Avalonia.Input;
 using FluentAvalonia.UI.Controls;
 using HotAvalonia;
 using Microsoft.Extensions.DependencyInjection;
+using SkEditor.Windowing.UI;
 using SkEditor.Workspace.Tabs.Templates;
-using MainWindowViewModel = SkEditor.Windowing.UI.MainWindowViewModel;
 
 namespace SkEditor.Workspace.Tabs.UI;
 

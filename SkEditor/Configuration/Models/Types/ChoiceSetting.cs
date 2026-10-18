@@ -5,7 +5,6 @@ using System.Linq;
 using R3;
 using SkEditor.Configuration.Providers.Choice;
 using SkEditor.Core.Localization;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Models.Types;
 

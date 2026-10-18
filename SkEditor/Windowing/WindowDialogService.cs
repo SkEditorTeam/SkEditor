@@ -4,12 +4,12 @@ using Avalonia.Controls;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Editor.UI.Windows;
+using SkEditor.Integrations.Publishing.UI;
+using SkEditor.Windowing.UI.About;
+using SkEditor.Workspace.Remote.UI;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using AboutWindow = SkEditor.Windowing.UI.About.AboutWindow;
-using GoToLineWindow = SkEditor.Editor.UI.Windows.GoToLineWindow;
-using ManageRemoteConnectionsWindow = SkEditor.Workspace.Remote.UI.ManageRemoteConnectionsWindow;
-using PublishWindow = SkEditor.Integrations.Publishing.UI.PublishWindow;
 
 namespace SkEditor.Windowing;
 

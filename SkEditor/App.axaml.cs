@@ -17,12 +17,11 @@ using Serilog.Core;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using SkEditor.Composition;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Common;
 using SkEditor.Core.Localization;
 using SkEditor.Windowing;
-using AppViewModel = SkEditor.Windowing.UI.AppViewModel;
-using BinarySettings = SkEditor.Configuration.Configs.BinarySettings;
-using SplashScreen = SkEditor.Windowing.UI.SplashScreen;
+using SkEditor.Windowing.UI;
 
 namespace SkEditor;
 

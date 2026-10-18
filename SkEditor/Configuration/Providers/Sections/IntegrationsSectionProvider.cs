@@ -3,11 +3,10 @@ using FluentIcons.Common;
 using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Models.Types;
-using SkEditor.Core.System;
 using SkEditor.Core.Localization;
+using SkEditor.Core.System;
 using AppSettingsProperty = SkEditor.Configuration.Configs.AppSettings.AppSettingsProperty;
 using SecretsConfigProperty = SkEditor.Configuration.Configs.SecretsConfig.SecretsConfigProperty;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Providers.Sections;
 

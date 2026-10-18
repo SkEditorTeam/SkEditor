@@ -1,5 +1,5 @@
 ﻿using R3;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Core.Localization;
 
 namespace SkEditor.Layout.StatusBar.UI.Abstractions;
 

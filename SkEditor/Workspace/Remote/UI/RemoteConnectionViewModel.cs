@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
@@ -16,8 +17,6 @@ using SkEditor.Core.System;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Projects;
 using SkEditor.Workspace.Remote.Models;
-using ConnectionsConfig = SkEditor.Configuration.Configs.ConnectionsConfig;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.Remote.UI;
 

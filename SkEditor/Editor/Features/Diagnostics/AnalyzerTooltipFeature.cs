@@ -12,12 +12,12 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using R3;
 using SkEditor.Analyzing.Models;
+using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Extensions;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Editor.UI.Controls;
 using SkEditor.Workspace.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Extensions;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
 namespace SkEditor.Editor.Features.Diagnostics;
 

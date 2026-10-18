@@ -7,11 +7,11 @@ using Avalonia.Input;
 using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
+using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Editor.UI;
 using SkEditor.Editor.UI.Controls;
 using SkEditor.Workspace.Tabs.Capabilities;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
 namespace SkEditor.Editor.Features.Decorations;
 

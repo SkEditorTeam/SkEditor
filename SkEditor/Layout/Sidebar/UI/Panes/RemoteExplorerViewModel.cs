@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
 using SkEditor.Appearance.Icons;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
@@ -16,12 +17,10 @@ using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Filesystem.Sftp;
 using SkEditor.Workspace.Projects.Messages;
 using SkEditor.Workspace.Remote;
+using SkEditor.Workspace.Remote.Models;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using ConnectionsConfig = SkEditor.Configuration.Configs.ConnectionsConfig;
-using FileTreeViewModel = SkEditor.Workspace.UI.Tree.FileTreeViewModel;
-using RemoteConnection = SkEditor.Workspace.Remote.Models.RemoteConnection;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Workspace.UI.Tree;
 
 namespace SkEditor.Layout.Sidebar.UI.Panes;
 

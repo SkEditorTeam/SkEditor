@@ -1,8 +1,8 @@
 ﻿using FluentIcons.Common;
 using SkEditor.Core.Localization;
 using SkEditor.Core.System;
+using SkEditor.Layout.Menu.Models;
 using SkEditor.Windowing;
-using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
 
 namespace SkEditor.Layout.Menu.Providers;
 

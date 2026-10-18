@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Localization;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Core.Localization;
 

@@ -3,11 +3,11 @@ using R3;
 using SkEditor.Core.Localization;
 using SkEditor.Editor.Commands;
 using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Editor.UI.Tabs;
+using SkEditor.Layout.Menu.Models;
 using SkEditor.Windowing;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Extensions;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
-using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
 
 namespace SkEditor.Layout.Menu.Providers;
 

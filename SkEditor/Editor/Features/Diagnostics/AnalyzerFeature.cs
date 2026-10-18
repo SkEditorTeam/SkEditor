@@ -10,13 +10,13 @@ using AvaloniaEdit.Document;
 using R3;
 using SkEditor.Analyzing;
 using SkEditor.Analyzing.Models;
+using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Extensions;
 using SkEditor.Editor.Markers;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Editor.UI.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Extensions;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
 namespace SkEditor.Editor.Features.Diagnostics;
 

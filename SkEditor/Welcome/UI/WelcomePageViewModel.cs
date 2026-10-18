@@ -12,7 +12,6 @@ using SkEditor.Welcome.Models;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Projects.Messages;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Welcome.UI;
 

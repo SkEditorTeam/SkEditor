@@ -7,9 +7,9 @@ using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using R3;
 using SkEditor.Appearance.Themes;
+using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Extensions;
 using SkEditor.Editor.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Editor.Features.View;
 

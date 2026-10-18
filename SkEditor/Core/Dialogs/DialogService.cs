@@ -9,7 +9,7 @@ using FluentIcons.Avalonia.Fluent;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Dialogs.Models.Elements;
 using SkEditor.Windowing;
-using MainWindow = SkEditor.Windowing.UI.MainWindow;
+using SkEditor.Windowing.UI;
 
 namespace SkEditor.Core.Dialogs;
 

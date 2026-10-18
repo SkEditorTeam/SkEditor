@@ -1,10 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using DiscordRPC;
 using DiscordRPC.Entities;
+using SkEditor.Configuration.Configs;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
 namespace SkEditor.Integrations.Discord;
 

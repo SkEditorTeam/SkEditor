@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using FluentIcons.Common;
 using SkEditor.Configuration;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
@@ -11,8 +12,6 @@ using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using StateConfig = SkEditor.Configuration.Configs.StateConfig;
 
 namespace SkEditor.Windowing;
 

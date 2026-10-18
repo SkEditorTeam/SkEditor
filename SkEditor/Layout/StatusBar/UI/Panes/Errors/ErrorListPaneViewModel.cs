@@ -4,13 +4,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
 using SkEditor.Analyzing.Models;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Layout.StatusBar.UI.Abstractions;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Extensions;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Layout.StatusBar.UI.Panes.Errors;
 

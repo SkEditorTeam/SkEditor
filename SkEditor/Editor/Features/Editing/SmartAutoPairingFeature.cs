@@ -3,8 +3,8 @@ using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
+using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Editor.Features.Editing;
 

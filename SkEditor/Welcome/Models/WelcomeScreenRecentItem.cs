@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Text.Json.Serialization;
 using FluentIcons.Common;
 using SkEditor.Core.Localization;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Welcome.Models;
 

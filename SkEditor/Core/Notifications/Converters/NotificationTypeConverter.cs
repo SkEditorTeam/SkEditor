@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using AvaloniaNotificationType = Avalonia.Controls.Notifications.NotificationType;
 
 namespace SkEditor.Core.Notifications.Converters;
 
@@ -14,7 +13,7 @@ public class NotificationTypeConverter : IValueConverter
             return ToAvaloniaType(type);
         }
 
-        return AvaloniaNotificationType.Information;
+        return Avalonia.Controls.Notifications.NotificationType.Information;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -22,14 +21,14 @@ public class NotificationTypeConverter : IValueConverter
         throw new NotImplementedException();
     }
 
-    public static AvaloniaNotificationType ToAvaloniaType(NotificationType type)
+    public static Avalonia.Controls.Notifications.NotificationType ToAvaloniaType(NotificationType type)
     {
         return type switch
         {
-            NotificationType.Information => AvaloniaNotificationType.Information,
-            NotificationType.Success => AvaloniaNotificationType.Success,
-            NotificationType.Warning => AvaloniaNotificationType.Warning,
-            NotificationType.Error => AvaloniaNotificationType.Error,
+            NotificationType.Information => Avalonia.Controls.Notifications.NotificationType.Information,
+            NotificationType.Success => Avalonia.Controls.Notifications.NotificationType.Success,
+            NotificationType.Warning => Avalonia.Controls.Notifications.NotificationType.Warning,
+            NotificationType.Error => Avalonia.Controls.Notifications.NotificationType.Error,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
     }

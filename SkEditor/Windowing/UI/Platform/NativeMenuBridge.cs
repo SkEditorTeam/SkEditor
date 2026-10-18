@@ -8,9 +8,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
 using SkEditor.Layout.Menu.Models;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Windowing.UI.Platform;
 

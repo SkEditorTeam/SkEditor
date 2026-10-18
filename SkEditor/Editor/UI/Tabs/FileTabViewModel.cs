@@ -14,6 +14,7 @@ using FluentIcons.Common;
 using ObservableCollections;
 using R3;
 using SkEditor.Analyzing.Models;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Extensions;
@@ -26,9 +27,6 @@ using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Editor.UI.Tabs;
 

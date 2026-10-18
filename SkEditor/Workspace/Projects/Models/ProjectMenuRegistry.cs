@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentIcons.Common;
 using SkEditor.Core.Localization;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.Projects.Models;
 

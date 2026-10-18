@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using R3;
 using SkEditor.Appearance.Icons;
 using SkEditor.Core.Localization;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Models.Types;
 

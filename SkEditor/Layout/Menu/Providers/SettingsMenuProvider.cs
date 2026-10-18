@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentIcons.Common;
+using SkEditor.Configuration.UI;
+using SkEditor.Layout.Menu.Models;
 using SkEditor.Workspace.Tabs;
-using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
-using SettingsTabViewModel = SkEditor.Configuration.UI.SettingsTabViewModel;
 
 namespace SkEditor.Layout.Menu.Providers;
 

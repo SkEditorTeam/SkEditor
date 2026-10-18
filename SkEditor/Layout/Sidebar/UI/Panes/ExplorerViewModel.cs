@@ -8,8 +8,7 @@ using SkEditor.Core.Localization;
 using SkEditor.Layout.Sidebar.Messages;
 using SkEditor.Workspace.Projects;
 using SkEditor.Workspace.Projects.Messages;
-using FileTreeViewModel = SkEditor.Workspace.UI.Tree.FileTreeViewModel;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Workspace.UI.Tree;
 
 namespace SkEditor.Layout.Sidebar.UI.Panes;
 

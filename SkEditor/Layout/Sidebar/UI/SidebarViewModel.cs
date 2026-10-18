@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using StateConfig = SkEditor.Configuration.Configs.StateConfig;
+using SkEditor.Configuration.Configs;
 
 namespace SkEditor.Layout.Sidebar.UI;
 

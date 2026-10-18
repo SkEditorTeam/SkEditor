@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Appearance.Themes;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
@@ -17,7 +18,6 @@ using SkEditor.Workspace.Projects.Messages;
 using SkEditor.Workspace.Projects.Models;
 using SkEditor.Workspace.Remote.Messages;
 using SkEditor.Workspace.Tabs;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Workspace.UI.Tree;
 

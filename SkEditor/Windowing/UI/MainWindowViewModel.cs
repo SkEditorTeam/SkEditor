@@ -7,18 +7,17 @@ using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using SkEditor.Configuration.Configs;
 using SkEditor.Layout.Menu.Models;
+using SkEditor.Layout.Menu.UI;
+using SkEditor.Layout.Sidebar.UI;
+using SkEditor.Layout.StatusBar.UI;
+using SkEditor.Welcome.UI;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Messages;
 using SkEditor.Workspace.Projects.Messages;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
-using AppSettings = SkEditor.Configuration.Configs.AppSettings;
-using BottomDrawerViewModel = SkEditor.Layout.StatusBar.UI.BottomDrawerViewModel;
-using MainMenuViewModel = SkEditor.Layout.Menu.UI.MainMenuViewModel;
-using SidebarViewModel = SkEditor.Layout.Sidebar.UI.SidebarViewModel;
-using StatusBarViewModel = SkEditor.Layout.StatusBar.UI.StatusBarViewModel;
-using WelcomePageViewModel = SkEditor.Welcome.UI.WelcomePageViewModel;
 
 namespace SkEditor.Windowing.UI;
 

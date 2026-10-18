@@ -7,7 +7,6 @@ using SkEditor.Core.Notifications;
 using SkEditor.Workspace.Filesystem.Abstractions;
 using SkEditor.Workspace.Remote;
 using SkEditor.Workspace.Remote.Models;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.Filesystem.Sftp;
 

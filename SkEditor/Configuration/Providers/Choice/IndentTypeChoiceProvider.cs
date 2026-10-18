@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using SkEditor.Core.Localization;
-using SkEditor.Core.Localization;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Providers.Choice;
 

@@ -9,7 +9,6 @@ using SkEditor.Core.Extensions;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.Localization;
-using AnalyzeResultContext = SkEditor.Analyzing.Models.AnalyzeResultContext;
 
 namespace SkEditor.Analyzing.Protocol;
 

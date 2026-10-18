@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentIcons.Common;
 using SkEditor.Appearance.Icons;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Core.Localization;
 
 namespace SkEditor.Layout.Sidebar.UI.Panes;
 

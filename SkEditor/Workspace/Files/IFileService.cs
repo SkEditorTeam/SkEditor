@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using SkEditor.Editor.UI.Tabs;
 using SkEditor.Workspace.Files.Types;
-using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
 namespace SkEditor.Workspace.Files;
 

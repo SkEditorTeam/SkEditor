@@ -1,8 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using SkEditor.Configuration.Configs;
 using SkEditor.Windowing.UI;
-using StateConfig = SkEditor.Configuration.Configs.StateConfig;
 
 namespace SkEditor.Windowing;
 

@@ -2,7 +2,6 @@
 using FluentIcons.Common;
 using SkEditor.Core.Dialogs.Models.Elements;
 using SkEditor.Core.Localization;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Core.Dialogs.Models;
 

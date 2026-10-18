@@ -1,12 +1,12 @@
 ﻿using System;
 using FluentIcons.Common;
 using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
+using SkEditor.Documentation.UI;
+using SkEditor.Layout.Menu.Models;
 using SkEditor.Layout.StatusBar.UI;
 using SkEditor.Workspace.Tabs;
-using DocumentationTabViewModel = SkEditor.Documentation.UI.DocumentationTabViewModel;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
-using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
 
 namespace SkEditor.Layout.Menu.Providers;
 

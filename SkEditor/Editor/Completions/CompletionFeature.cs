@@ -4,11 +4,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using R3;
+using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Extensions;
 using SkEditor.Editor.Features;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Capabilities;
-using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
 namespace SkEditor.Editor.Completions;
 

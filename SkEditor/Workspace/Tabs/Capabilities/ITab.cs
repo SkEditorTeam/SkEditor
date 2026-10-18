@@ -1,6 +1,6 @@
 using System;
 using CommunityToolkit.Mvvm.Input;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
+using SkEditor.Core.Localization;
 
 namespace SkEditor.Workspace.Tabs.Capabilities;
 

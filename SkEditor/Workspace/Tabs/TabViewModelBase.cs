@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using SkEditor.Core.Localization;
 using SkEditor.Workspace.Tabs.Capabilities;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Workspace.Tabs;
 

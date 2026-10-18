@@ -2,7 +2,6 @@
 using System.IO;
 using SkEditor.Core.Localization;
 using SkEditor.Windowing.Models;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Providers.Choice;
 

@@ -3,7 +3,6 @@ using System.Linq;
 using Avalonia.Media;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
-using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
 namespace SkEditor.Configuration.Providers.Choice;
 
