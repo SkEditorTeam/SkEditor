@@ -19,15 +19,17 @@ public abstract class BaseFile(string? path, string? name)
         stream.Position = 0;
         Length = stream.Length;
 
-        if (Path is not null && File.Exists(Path))
-        {
-            LastSaveUtc = File.GetLastWriteTimeUtc(Path);
-        }
+        LastSaveUtc = GetLastWriteTimeUtc();
 
         XxHash3 hasher = new();
         await hasher.AppendAsync(stream);
         DiskHash = hasher.GetCurrentHashAsUInt64();
         stream.Position = 0;
+    }
+
+    protected virtual DateTime? GetLastWriteTimeUtc()
+    {
+        return null;
     }
 
     public abstract ValueTask<Stream> LoadAsync();
