@@ -39,6 +39,12 @@ public class GeneralSectionProvider(
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsAutoSaveEnabled)),
 
                 ToggleSetting
+                    .Create(TranslationKey.SettingsGeneralExternalChangeDetect)
+                    .WithDescription(TranslationKey.SettingsGeneralExternalChangeDetectDescription)
+                    .WithIcon(Symbol.DocumentSync)
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsChangeDetectEnabled)),
+
+                ToggleSetting
                     .Create(TranslationKey.SettingsExplorerSingleClickOpen)
                     .WithDescription(TranslationKey.SettingsExplorerSingleClickOpenDescription)
                     .WithIcon(Symbol.CursorClick)

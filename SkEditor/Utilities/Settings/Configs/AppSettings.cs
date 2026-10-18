@@ -86,6 +86,12 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial bool IsSessionRestoreEnabled { get; set; } = false;
 
     /// <summary>
+    ///     Detects external changes to files and prompts the user to reload them if enabled.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IsChangeDetectEnabled { get; set; } = false;
+
+    /// <summary>
     ///     Whether to enable the developer mode.
     /// </summary>
     [ObservableProperty]

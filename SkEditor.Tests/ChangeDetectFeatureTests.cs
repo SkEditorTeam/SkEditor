@@ -27,7 +27,6 @@ public class ChangeDetectFeatureTests
         FileTabViewModel tab = CreateDummyTab(TestFilePath, "content");
 
         bool result = sut.CanAttach(tab);
-
         result.Should().BeTrue();
     }
 
@@ -239,6 +238,7 @@ public class ChangeDetectFeatureTests
         IFileSystem? fileSystem = null)
     {
         return new ChangeDetectFeature(
+            new AppSettings { IsChangeDetectEnabled = true },
             dialogs ?? Substitute.For<IDialogService>(),
             fileSystem ?? new MockFileSystem()
         );

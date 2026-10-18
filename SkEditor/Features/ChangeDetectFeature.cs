@@ -11,16 +11,18 @@ using SkEditor.Models.Dialogs;
 using SkEditor.Models.Files;
 using SkEditor.Utilities.Localization;
 using SkEditor.Utilities.Projects;
+using SkEditor.Utilities.Settings.Configs;
 using SkEditor.ViewModels.Tabs.Capabilities;
 
 namespace SkEditor.Features;
 
-public class ChangeDetectFeature(IDialogService dialogs, IFileSystem? fileSystem = null) : IEditorFeature
+public class ChangeDetectFeature(AppSettings appSettings, IDialogService dialogs, IFileSystem? fileSystem = null)
+    : IEditorFeature
 {
     private static readonly Dialog ChangesDialog = Dialog
         .Create(TranslationKey.FileChangedExternallyTitle)
         .WithMessage(TranslationKey.FileChangedExternallyMessage)
-        .WithIcon(Symbol.DocumentMultipleSync)
+        .WithIcon(Symbol.DocumentSync)
         .WithButtons(
             new DialogButton(TranslationKey.FileChangedExternallyKeepChanges, DialogResult.Cancel, true),
             new DialogButton(TranslationKey.FileChangedExternallyDiscardAndReload, DialogResult.Ok)
@@ -34,7 +36,7 @@ public class ChangeDetectFeature(IDialogService dialogs, IFileSystem? fileSystem
 
     public bool CanAttach(IFeatureTab tab)
     {
-        return tab is ITextEditorTab and IFileTab { File: LocalFile };
+        return appSettings.IsChangeDetectEnabled && tab is ITextEditorTab and IFileTab { File: LocalFile };
     }
 
     public void Attach(IFeatureTab tab)
