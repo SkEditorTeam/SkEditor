@@ -122,6 +122,9 @@ public static class DocumentationSearchEngine
                 {
                     continue;
                 }
+                
+                success = false;
+                break;
             }
 
             if (tag.Equals("name", StringComparison.OrdinalIgnoreCase))
