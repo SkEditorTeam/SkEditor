@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 using FluentIcons.Common;
 using R3;
 using SkEditor.Analyzing;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Notifications;
-using SkEditor.Models.Settings;
-using SkEditor.Models.Settings.Types;
-using SkEditor.Utilities.Localization;
-using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.ExperimentsConfigProperty;
+using SkEditor.Configuration.Configs;
+using SkEditor.Configuration.Models;
+using SkEditor.Configuration.Models.Types;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.System;
+using SkEditor.Core.Localization;
+using SkEditor.Workspace.Files;
+using ExperimentsProperty = SkEditor.Configuration.Configs.ExperimentsConfig.ExperimentsConfigProperty;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Utilities.Settings.Providers.Sections;
+namespace SkEditor.Configuration.Providers.Sections;
 
 public class AnalyzerSectionProvider(
     ExperimentsConfig experiments,

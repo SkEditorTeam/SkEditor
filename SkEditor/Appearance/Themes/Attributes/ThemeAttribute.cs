@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SkEditor.Utilities.Styling;
+namespace SkEditor.Appearance.Themes.Attributes;
 
 /// <summary>
 ///     Marks a class as a theme definition to generate all the boilerplate code for theme mapping.

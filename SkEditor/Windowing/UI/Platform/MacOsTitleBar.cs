@@ -6,7 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 
-namespace SkEditor.AttachedProperties;
+namespace SkEditor.Windowing.UI.Platform;
 
 public static partial class MacOsTitleBar
 {

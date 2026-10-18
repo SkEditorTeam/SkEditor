@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Core.Extensions;
 
 public static class StreamExtensions
 {

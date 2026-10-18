@@ -2,9 +2,9 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Models.Settings.Types;
+using SkEditor.Configuration.Models.Types;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Configuration.Converters;
 
 public class InfoBarSeverityConverter : IValueConverter
 {

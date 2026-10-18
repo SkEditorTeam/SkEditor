@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Welcome;
+namespace SkEditor.Welcome.Models;
 
 public record WelcomeScreenElement(
     TranslatableString Name,

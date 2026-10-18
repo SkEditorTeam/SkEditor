@@ -1,11 +1,11 @@
 ﻿using FluentIcons.Common;
 using R3;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Controls;
-using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
+using SkEditor.Core.Localization;
+using SkEditor.Layout.StatusBar.UI;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
 
-namespace SkEditor.Utilities.Menu.Providers;
+namespace SkEditor.Layout.Menu.Providers;
 
 public class DevMenuProvider(AppSettings appSettings, BottomDrawerViewModel bottomDrawer)
     : IMenuProvider

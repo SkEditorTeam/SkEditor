@@ -1,11 +1,10 @@
 using NSubstitute;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Dialogs;
-using SkEditor.Models.Tabs;
-using SkEditor.Services.Files;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Models;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
 namespace SkEditor.Tests;
 

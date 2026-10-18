@@ -7,9 +7,9 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using SkEditor.Views.Controls.Editor;
+using SkEditor.Editor.UI.Controls;
 
-namespace SkEditor.ElementGenerators;
+namespace SkEditor.Editor.UI;
 
 public partial class HexColorElementGenerator(Action<ColorBoxControl> clickAction) : VisualLineElementGenerator
 {

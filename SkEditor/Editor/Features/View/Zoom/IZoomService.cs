@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SkEditor.Contracts.Services.Files.Features;
+namespace SkEditor.Editor.Features.View.Zoom;
 
 public interface IZoomService
 {

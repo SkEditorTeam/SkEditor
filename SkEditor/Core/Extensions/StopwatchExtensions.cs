@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Core.Extensions;
 
 public static class StopwatchExtensions
 {

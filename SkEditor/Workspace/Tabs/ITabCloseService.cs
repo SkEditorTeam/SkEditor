@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SkEditor.Models.Tabs;
+using SkEditor.Workspace.Tabs.Models;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Workspace.Tabs;
 
 /// <summary>
 ///     Used to close multiple tabs at once, such as "Close All", "Close Others", etc.

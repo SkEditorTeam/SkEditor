@@ -1,8 +1,8 @@
 ﻿using System;
 using AvaloniaEdit.Document;
-using SkEditor.Utilities.Editor;
+using SkEditor.Editor.Commands;
 
-namespace SkEditor.ViewModels.Tabs;
+namespace SkEditor.Editor.UI.Tabs;
 
 public partial class FileTabViewModel
 {

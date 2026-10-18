@@ -1,11 +1,10 @@
 ﻿using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Services;
-using SkEditor.Utilities.Settings;
-using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Configuration.Configs;
+using OldAppJsonContext = SkEditor.Configuration.Configs.OldAppJsonContext;
 
-namespace SkEditor.Services;
+namespace SkEditor.Configuration;
 
 public class LegacyConfigMigrator(IConfigService config)
 {

@@ -4,11 +4,12 @@ using System.IO;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Models.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Projects.Types;
+using SkEditor.Workspace.Files.Messages;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Projects.Models;
 
-namespace SkEditor.Models.Projects.Local;
+namespace SkEditor.Workspace.Filesystem.Local;
 
 public partial class LocalFileNode(string name, string path) : BaseFileNode(name, path)
 {

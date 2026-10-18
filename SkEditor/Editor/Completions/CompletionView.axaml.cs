@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace SkEditor.Views.Controls.Editor;
+namespace SkEditor.Editor.Completions;
 
 public partial class CompletionView : UserControl
 {

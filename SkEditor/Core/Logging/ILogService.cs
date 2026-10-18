@@ -1,8 +1,7 @@
 ﻿using System;
 using R3;
-using SkEditor.Models.Logging;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Core.Logging;
 
 /// <summary>
 ///     A service used for all logging purposes.

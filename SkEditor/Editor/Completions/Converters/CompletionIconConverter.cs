@@ -2,9 +2,9 @@ using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using FluentIcons.Common;
-using SkEditor.Models.Completions;
+using SkEditor.Editor.Completions.Models;
 
-namespace SkEditor.Converters.Completions;
+namespace SkEditor.Editor.Completions.Converters;
 
 public class CompletionIconConverter : IValueConverter
 {

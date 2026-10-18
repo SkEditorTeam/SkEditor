@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Workspace.Tabs;
 
 /// <summary>
 ///     Used to manage all the opened tabs.

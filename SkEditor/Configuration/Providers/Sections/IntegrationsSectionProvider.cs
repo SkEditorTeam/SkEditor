@@ -1,14 +1,15 @@
 ﻿using System;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Settings;
-using SkEditor.Models.Settings.Types;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
-using SecretsConfigProperty = SkEditor.Utilities.Settings.Configs.SecretsConfig.SecretsConfigProperty;
+using SkEditor.Configuration.Configs;
+using SkEditor.Configuration.Models;
+using SkEditor.Configuration.Models.Types;
+using SkEditor.Core.System;
+using SkEditor.Core.Localization;
+using AppSettingsProperty = SkEditor.Configuration.Configs.AppSettings.AppSettingsProperty;
+using SecretsConfigProperty = SkEditor.Configuration.Configs.SecretsConfig.SecretsConfigProperty;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Utilities.Settings.Providers.Sections;
+namespace SkEditor.Configuration.Providers.Sections;
 
 public class IntegrationsSectionProvider(
     AppSettings appSettings,

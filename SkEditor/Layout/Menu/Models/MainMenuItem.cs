@@ -5,9 +5,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Utilities.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Menu;
+namespace SkEditor.Layout.Menu.Models;
 
 public class MainMenuItem : ObservableObject
 {

@@ -5,9 +5,9 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
-using SkEditor.Models.Projects.Types;
+using SkEditor.Workspace.Filesystem.Abstractions;
 
-namespace SkEditor.Behaviors;
+namespace SkEditor.Workspace.UI.Tree;
 
 public class FileTreeRenameBehavior : Behavior<TextBox>
 {

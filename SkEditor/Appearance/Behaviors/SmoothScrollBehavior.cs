@@ -11,9 +11,9 @@ using Avalonia.Layout;
 using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
-using SkEditor.Utilities.Extensions;
+using SkEditor.Core.Extensions;
 
-namespace SkEditor.Behaviors;
+namespace SkEditor.Appearance.Behaviors;
 
 public class SmoothScrollBehavior : StyledElementBehavior<ScrollViewer>
 {

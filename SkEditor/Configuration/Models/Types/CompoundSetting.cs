@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using R3;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Settings.Types;
+namespace SkEditor.Configuration.Models.Types;
 
 public class CompoundSetting(BindableReactiveProperty<TranslatableString> name) : SettingElement<CompoundSetting>(name)
 {

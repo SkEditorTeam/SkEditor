@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using SkEditor.Models.Files;
+using SkEditor.Workspace.Files.Types;
 
-namespace SkEditor.ViewModels.Tabs.Capabilities;
+namespace SkEditor.Workspace.Tabs.Capabilities;
 
 public interface IFileTab
 {

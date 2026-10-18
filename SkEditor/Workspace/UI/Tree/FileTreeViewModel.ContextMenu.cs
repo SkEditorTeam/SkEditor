@@ -7,12 +7,13 @@ using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Projects;
-using SkEditor.Models.Projects.Sftp;
-using SkEditor.Models.Projects.Types;
+using SkEditor.Workspace.Filesystem;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Filesystem.Sftp;
+using SkEditor.Workspace.Projects.Messages;
+using SkEditor.Workspace.Projects.Models;
 
-namespace SkEditor.ViewModels.Controls.FileTree;
+namespace SkEditor.Workspace.UI.Tree;
 
 public partial class FileTreeViewModel
 {

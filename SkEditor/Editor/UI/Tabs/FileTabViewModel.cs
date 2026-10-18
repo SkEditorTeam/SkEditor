@@ -13,20 +13,24 @@ using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using ObservableCollections;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.Models.Analyzer;
-using SkEditor.Models.Dialogs;
-using SkEditor.Models.Files;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Analyzing.Models;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.System;
+using SkEditor.Editor.Features;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Tabs;
+namespace SkEditor.Editor.UI.Tabs;
 
 public partial class FileTabViewModel(
     TranslatableString header,
@@ -40,7 +44,7 @@ public partial class FileTabViewModel(
     ILinkService links,
     IClipboardService clipboard,
     ILogService logs)
-    : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab, ISaveableTab,
+    : Workspace.Tabs.TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab, ISaveableTab,
         IFileTab, IClosableTab, ISaveStateTab, IDiagnosticsTab
 {
     private static readonly Encoding Utf8NoBom = new UTF8Encoding(false);

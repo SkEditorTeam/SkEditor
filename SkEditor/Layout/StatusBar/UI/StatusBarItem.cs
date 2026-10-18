@@ -4,9 +4,9 @@ using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
-using SkEditor.Utilities.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls;
+namespace SkEditor.Layout.StatusBar.UI;
 
 public partial class StatusBarItem : ObservableObject
 {

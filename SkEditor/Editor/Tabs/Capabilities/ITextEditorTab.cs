@@ -2,9 +2,9 @@
 using Avalonia;
 using AvaloniaEdit.Document;
 using R3;
-using SkEditor.Utilities.Editor;
+using SkEditor.Editor.Commands;
 
-namespace SkEditor.ViewModels.Tabs.Capabilities;
+namespace SkEditor.Editor.Tabs.Capabilities;
 
 public interface ITextEditorTab
 {

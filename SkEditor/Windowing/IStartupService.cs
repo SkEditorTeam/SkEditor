@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
-using SkEditor.Views.Windows;
+using SkEditor.Windowing.UI;
 
-namespace SkEditor.Contracts.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public interface IStartupService
 {

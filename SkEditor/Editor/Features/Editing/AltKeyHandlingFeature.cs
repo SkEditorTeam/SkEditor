@@ -7,9 +7,9 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using AvaloniaEdit;
 using R3;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.Editing;
 
 public class AltKeyHandlingFeature : IEditorFeature
 {

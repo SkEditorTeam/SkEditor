@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using R3;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Core.Extensions;
 
 public static class ObservableCollectionExtensions
 {

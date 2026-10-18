@@ -4,7 +4,7 @@ using Avalonia.Data.Converters;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
 
-namespace SkEditor.Converters.Icons;
+namespace SkEditor.Workspace.Tabs.Converters;
 
 public class SymbolIconSourceConverter : IValueConverter
 {

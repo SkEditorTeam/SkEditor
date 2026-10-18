@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SkEditor.Utilities.Projects;
+namespace SkEditor.Workspace.Projects;
 
 public record SftpConnectionInfo(
     string Host,

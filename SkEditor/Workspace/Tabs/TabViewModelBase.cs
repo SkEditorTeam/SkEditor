@@ -2,10 +2,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Tabs;
+namespace SkEditor.Workspace.Tabs;
 
 /// <summary>
 ///     Represents a tab in the app. This is an abstract class that should be inherited by specific types of tabs (file

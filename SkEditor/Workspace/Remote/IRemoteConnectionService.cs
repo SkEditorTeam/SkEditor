@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet;
-using SkEditor.Models.Remote;
+using SkEditor.Workspace.Remote.Models;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Workspace.Remote;
 
 public interface IRemoteConnectionService
 {

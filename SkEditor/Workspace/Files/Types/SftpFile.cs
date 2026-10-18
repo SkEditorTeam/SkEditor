@@ -3,10 +3,10 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Remote;
+using SkEditor.Workspace.Remote;
+using SkEditor.Workspace.Remote.Models;
 
-namespace SkEditor.Models.Files;
+namespace SkEditor.Workspace.Files.Types;
 
 public class SftpFile(string path, string name, RemoteConnection connection, IRemoteConnectionService service)
     : BaseFile(path, name)

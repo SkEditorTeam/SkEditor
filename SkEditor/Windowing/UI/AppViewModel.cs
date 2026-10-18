@@ -1,10 +1,10 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Workspace.Tabs;
+using SettingsTabViewModel = SkEditor.Configuration.UI.SettingsTabViewModel;
 
-namespace SkEditor.ViewModels;
+namespace SkEditor.Windowing.UI;
 
 public partial class AppViewModel(
     ITabService tabs,

@@ -3,15 +3,16 @@ using System.IO;
 using AvaloniaEdit;
 using AvaloniaEdit.TextMate;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.UI;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Features;
+using SkEditor.Editor.Syntax.Models;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Types;
 using TextMateSharp.Registry;
 using TextMateSharp.Themes;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Syntax;
 
 public class TextMateFeature(ISyntaxService syntax) : IEditorFeature
 {

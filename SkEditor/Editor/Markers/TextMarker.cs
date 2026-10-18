@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 
-namespace SkEditor.Utilities.Editor.TextMarkers;
+namespace SkEditor.Editor.Markers;
 
 public sealed class TextMarker : TextSegment, ITextMarker
 {

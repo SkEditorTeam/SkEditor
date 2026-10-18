@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Notifications;
+﻿namespace SkEditor.Core.Notifications;
 
 public enum NotificationType
 {

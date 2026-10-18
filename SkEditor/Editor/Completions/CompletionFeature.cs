@@ -4,13 +4,13 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using R3;
-using SkEditor.Utilities.Editor.Completions;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs.Capabilities;
-using SkEditor.Views.Controls.Editor;
+using SkEditor.Editor.Extensions;
+using SkEditor.Editor.Features;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Completions;
 
 public class CompletionFeature(ExperimentsConfig experiments, IEnumerable<ICompletionProvider> completionProviders)
     : IEditorFeature

@@ -2,10 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Models.Remote;
-using SkEditor.Utilities.Settings.Attributes;
+using SkEditor.Configuration.Abstractions;
+using SkEditor.Workspace.Remote.Models;
 
-namespace SkEditor.Utilities.Settings.Configs;
+namespace SkEditor.Configuration.Configs;
 
 [SettingsConfig]
 public partial class ConnectionsConfig : BaseConfig<ConnectionsConfig>

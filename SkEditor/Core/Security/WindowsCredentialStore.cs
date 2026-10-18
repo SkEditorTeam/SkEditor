@@ -3,7 +3,7 @@ using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SkEditor.Utilities.Security;
+namespace SkEditor.Core.Security;
 
 [SupportedOSPlatform("windows")]
 public class WindowsCredentialStore : ICredentialStore

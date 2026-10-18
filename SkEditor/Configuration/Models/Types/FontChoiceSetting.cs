@@ -1,7 +1,8 @@
 using R3;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Settings.Types;
+namespace SkEditor.Configuration.Models.Types;
 
 public interface IFontChoiceSetting : IChoiceSetting;
 

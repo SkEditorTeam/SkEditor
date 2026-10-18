@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SkEditor.Models.Dialogs;
+using SkEditor.Core.Dialogs.Models;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Core.Dialogs;
 
 /// <summary>
 ///     Service for displaying dialogs to the user.

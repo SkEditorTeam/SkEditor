@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
 
-namespace SkEditor.DataTemplates;
+namespace SkEditor.Workspace.Tabs.Templates;
 
 public class TabViewLocator : IDataTemplate
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace SkEditor.Utilities.Docs;
+namespace SkEditor.Documentation.Models;
 
 public class DocumentationException : Exception
 {

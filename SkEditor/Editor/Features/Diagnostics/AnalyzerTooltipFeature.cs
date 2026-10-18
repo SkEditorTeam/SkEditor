@@ -11,13 +11,15 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 using R3;
-using SkEditor.Models.Analyzer;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs.Capabilities;
-using SkEditor.Views.Controls.Editor;
+using SkEditor.Analyzing.Models;
+using SkEditor.Editor.Extensions;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Editor.UI.Controls;
+using SkEditor.Workspace.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Extensions;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
-namespace SkEditor.Features.Analyzer;
+namespace SkEditor.Editor.Features.Diagnostics;
 
 public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
     : IEditorFeature
@@ -94,7 +96,7 @@ public class AnalyzerTooltipFeature(ExperimentsConfig experiments)
             .AddTo(ref _disposableBag);
 
         Observable<(AnalyzerError? Error, Rect TargetRect)> movedStream = editor.PointerMovedAsObservable()
-            .Select(e =>
+            .Select<PointerEventArgs, (AnalyzerError? Error, Rect TargetRect)>(e =>
             {
                 Point point = e.GetPosition(editor.TextArea.TextView);
                 return GetErrorAndTargetRect(point, editor, diagnosticsTab);

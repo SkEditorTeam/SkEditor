@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Dialogs;
+﻿namespace SkEditor.Core.Dialogs.Models;
 
 /// <summary>
 ///     Represents the result of a dialog. This can be one of the standard dialog results (Yes, No, Ok, Cancel) or a custom

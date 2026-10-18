@@ -3,9 +3,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input.Platform;
-using SkEditor.Contracts.Services;
 
-namespace SkEditor.Services;
+namespace SkEditor.Core.System;
 
 public class ClipboardService : IClipboardService
 {

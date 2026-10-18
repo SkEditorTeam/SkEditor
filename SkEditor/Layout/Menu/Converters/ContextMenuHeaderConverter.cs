@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Layout.Menu.Converters;
 
 public class ContextMenuHeaderConverter : IMultiValueConverter
 {

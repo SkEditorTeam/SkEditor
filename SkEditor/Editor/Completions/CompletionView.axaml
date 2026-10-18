@@ -2,18 +2,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:editor="clr-namespace:SkEditor.ViewModels.Controls.Editor"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:completions="clr-namespace:SkEditor.Converters.Completions"
-             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
+             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:editor="clr-namespace:SkEditor.Editor.Completions"
+             xmlns:converters="clr-namespace:SkEditor.Editor.Completions.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="editor:CompletionViewModel"
              Name="Root"
-             x:Class="SkEditor.Views.Controls.Editor.CompletionView">
+             x:Class="SkEditor.Editor.Completions.CompletionView">
 
     <UserControl.Resources>
-        <completions:CompletionIconConverter x:Key="CompletionIconConverter" />
-        <completions:CompletionIconColorConverter x:Key="CompletionIconColorConverter" />
+        <converters:CompletionIconConverter x:Key="CompletionIconConverter" />
+        <converters:CompletionIconColorConverter x:Key="CompletionIconColorConverter" />
     </UserControl.Resources>
 
     <Border Background="{DynamicResource MenuFlyoutPresenterBackground}" BorderThickness="1"
@@ -29,7 +29,7 @@
                 <Style Selector="ListBox /template/ ScrollViewer">
                     <Setter Property="Interaction.Behaviors">
                         <BehaviorCollection>
-                            <behaviors:SmoothScrollBehavior />
+                            <behaviors1:SmoothScrollBehavior />
                         </BehaviorCollection>
                     </Setter>
                 </Style>

@@ -12,10 +12,10 @@ namespace SkEditor.SourceGenerators;
 public class ThemeGenerator : IIncrementalGenerator
 {
     private const string ThemeAttributeFullName =
-        "SkEditor.Utilities.Styling.ThemeAttribute";
+        "SkEditor.Appearance.Themes.Attributes.ThemeAttribute";
 
     private const string ThemeResourceAttributeFullName =
-        "SkEditor.Utilities.Styling.ThemeResourceAttribute";
+        "SkEditor.Appearance.Themes.Attributes.ThemeResourceAttribute";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Renci.SshNet;
 using Renci.SshNet.Common;
 using Renci.SshNet.Sftp;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Projects.Types;
-using SkEditor.Models.Remote;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Projects.Models;
+using SkEditor.Workspace.Remote;
+using SkEditor.Workspace.Remote.Models;
 
-namespace SkEditor.Models.Projects.Sftp;
+namespace SkEditor.Workspace.Filesystem.Sftp;
 
 public class SftpFolderNode(
     string name,

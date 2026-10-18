@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using FluentIcons.Common;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Workspace.Projects.Models;
 
 public record MenuTemplate(
     TranslatableString Header,

@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SkEditor.Models.Files;
+namespace SkEditor.Workspace.Files.Types;
 
 public class LocalFile(string? path = null, string? name = null, IFileSystem? fileSystem = null)
     : BaseFile(path, name ?? System.IO.Path.GetFileName(path))

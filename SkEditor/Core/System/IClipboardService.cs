@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Core.System;
 
 /// <summary>
 ///     Used for interacting with the system clipboard.

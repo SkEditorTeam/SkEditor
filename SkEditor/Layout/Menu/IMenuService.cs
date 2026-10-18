@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SkEditor.ViewModels.Menu;
+using SkEditor.Layout.Menu.Models;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Layout.Menu;
 
 public interface IMenuService
 {

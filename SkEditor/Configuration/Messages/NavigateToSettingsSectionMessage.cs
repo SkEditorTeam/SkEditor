@@ -1,3 +1,3 @@
-﻿namespace SkEditor.Models.Messages;
+﻿namespace SkEditor.Configuration.Messages;
 
 public record NavigateToSettingsSectionMessage(string SectionId);

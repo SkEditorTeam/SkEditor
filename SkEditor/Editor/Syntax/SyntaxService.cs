@@ -5,16 +5,17 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Avalonia.Platform;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Configuration;
+using SkEditor.Core.Logging;
+using SkEditor.Editor.Syntax.Models;
 using TextMateSharp.Grammars;
 using TextMateSharp.Internal.Grammars.Reader;
 using TextMateSharp.Internal.Themes.Reader;
 using TextMateSharp.Internal.Types;
 using TextMateSharp.Themes;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Services;
+namespace SkEditor.Editor.Syntax;
 
 public partial class SyntaxService(IConfigService config, AppSettings settings, ILogService logs) : ISyntaxService
 {

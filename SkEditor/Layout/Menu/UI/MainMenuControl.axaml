@@ -1,12 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:icons="using:FluentIcons.Avalonia.Fluent"
-             xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
-             xmlns:converters="clr-namespace:SkEditor.Converters"
-             xmlns:menu="clr-namespace:SkEditor.ViewModels.Menu"
-             xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
-             x:DataType="vms:MainMenuViewModel"
-             x:Class="SkEditor.Views.Controls.MainMenuControl">
+             xmlns:ui="clr-namespace:SkEditor.Layout.Menu.UI"
+             xmlns:converters1="clr-namespace:SkEditor.Layout.Menu.Converters"
+             xmlns:menu="clr-namespace:SkEditor.Layout.Menu.Models"
+             x:DataType="ui:MainMenuViewModel"
+             x:Class="SkEditor.Layout.Menu.UI.MainMenuControl">
 
     <UserControl.Styles>
         <Style Selector="icons|SymbolIcon">
@@ -19,9 +18,9 @@
     </UserControl.Styles>
 
     <UserControl.Resources>
-        <iconverters:SymbolIconConverter x:Key="SymbolIconConverter" />
-        <converters:MenuHeaderConverter x:Key="MenuHeaderConverter" />
-        <converters:KeyGestureConverter x:Key="KeyGestureConverter" />
+        <converters1:SymbolIconConverter x:Key="SymbolIconConverter" />
+        <converters1:MenuHeaderConverter x:Key="MenuHeaderConverter" />
+        <converters1:KeyGestureConverter x:Key="KeyGestureConverter" />
     </UserControl.Resources>
 
 

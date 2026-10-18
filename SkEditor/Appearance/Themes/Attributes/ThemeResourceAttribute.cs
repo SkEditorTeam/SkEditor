@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SkEditor.Utilities.Styling;
+namespace SkEditor.Appearance.Themes.Attributes;
 
 /// <summary>
 ///     Marks a property as a theme resource with optional keys.

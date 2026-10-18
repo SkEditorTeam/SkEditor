@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SkEditor.Utilities.Editor.TextMarkers;
+namespace SkEditor.Editor.Markers;
 
 public interface ITextMarkerService
 {

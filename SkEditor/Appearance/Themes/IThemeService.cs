@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Media;
-using SkEditor.Models.UI;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Appearance.Themes;
 
 /// <summary>
 ///     Manages the app themes, including loading, saving, and applying themes.

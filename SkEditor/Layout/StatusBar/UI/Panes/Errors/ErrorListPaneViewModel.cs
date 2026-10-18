@@ -3,14 +3,16 @@ using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Analyzer;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Analyzing.Models;
+using SkEditor.Core.Localization;
+using SkEditor.Layout.StatusBar.UI.Abstractions;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Extensions;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls.StatusBar.Panes;
+namespace SkEditor.Layout.StatusBar.UI.Panes.Errors;
 
 public partial class ErrorListPaneViewModel : ObservableObject, IDrawerPaneViewModel
 {

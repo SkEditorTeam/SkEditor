@@ -1,7 +1,7 @@
 ﻿using AvaloniaEdit;
 using AvaloniaEdit.Document;
 
-namespace SkEditor.Utilities.Editor.Commands;
+namespace SkEditor.Editor.Commands;
 
 public interface IEditorCommand
 {

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Contracts.Services;
-using SkEditor.Utilities.Settings.Configs;
+using StateConfig = SkEditor.Configuration.Configs.StateConfig;
 
-namespace SkEditor.ViewModels.Controls;
+namespace SkEditor.Layout.Sidebar.UI;
 
 public partial class SidebarViewModel : ObservableObject
 {

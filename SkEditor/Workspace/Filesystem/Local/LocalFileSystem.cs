@@ -2,10 +2,9 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Models;
-using SkEditor.Models.Projects.Types;
+using SkEditor.Workspace.Filesystem.Abstractions;
 
-namespace SkEditor.Models.Projects.Local;
+namespace SkEditor.Workspace.Filesystem.Local;
 
 public partial class LocalFileSystem : IFileSystem
 {

@@ -4,7 +4,7 @@ using FluentAvalonia.UI.Controls;
 using SymbolIconSource = FluentIcons.Avalonia.Fluent.SymbolIconSource;
 using Symbol = FluentIcons.Common.Symbol;
 
-namespace SkEditor.Utilities.Icons;
+namespace SkEditor.Appearance.Icons;
 
 public static class Icons
 {

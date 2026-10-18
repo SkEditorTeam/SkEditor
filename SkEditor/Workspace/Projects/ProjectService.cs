@@ -3,14 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Notifications;
-using SkEditor.Models.Projects.Local;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Filesystem.Local;
+using SkEditor.Workspace.Projects.Messages;
 
-namespace SkEditor.Services.Files;
+namespace SkEditor.Workspace.Projects;
 
 public class ProjectService(
     IFilePickerService filePicker,

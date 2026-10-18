@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Editor.UI.Converters;
 
 public class EditorFontFamilyConverter : IValueConverter
 {

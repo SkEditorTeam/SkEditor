@@ -9,17 +9,17 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Models.Dialogs;
-using SkEditor.Models.Files;
-using SkEditor.Models.Remote;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Projects;
-using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Localization;
+using SkEditor.Core.System;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Projects;
+using SkEditor.Workspace.Remote.Models;
+using ConnectionsConfig = SkEditor.Configuration.Configs.ConnectionsConfig;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Windows;
+namespace SkEditor.Workspace.Remote.UI;
 
 public partial class RemoteConnectionViewModel(
     IRemoteConnectionService connections,

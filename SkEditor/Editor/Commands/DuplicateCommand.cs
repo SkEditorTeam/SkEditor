@@ -3,7 +3,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 
-namespace SkEditor.Utilities.Editor.Commands;
+namespace SkEditor.Editor.Commands;
 
 public class DuplicateCommand : IEditorCommand
 {

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using AvaloniaEdit.Document;
 using R3;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Controls;
-using SkEditor.ViewModels.Tabs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Layout.StatusBar.UI;
+using SkEditor.Windowing;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Utilities.StatusBar;
+namespace SkEditor.Layout.StatusBar.Providers;
 
 public class EditorInfoStatusBarProvider : IStatusBarProvider, IDisposable
 {

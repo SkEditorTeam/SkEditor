@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Models.WhatsNew;
+using SkEditor.Welcome.Models;
 using Symbol = FluentIcons.Common.Symbol;
 
-namespace SkEditor.ViewModels.Pages;
+namespace SkEditor.Welcome.UI;
 
 public class WhatsNewPageViewModel : ObservableObject
 {

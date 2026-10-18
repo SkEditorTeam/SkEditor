@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Services.Localization;
+using SkEditor.Core.Localization;
 
-namespace SkEditor.Utilities.Localization;
+namespace SkEditor.Core.Localization;
 
 /// <summary>
 ///     Represents a string that can be translated based on a translation key.

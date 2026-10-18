@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Remote;
+﻿namespace SkEditor.Workspace.Remote.Models;
 
 public enum RemoteAuthMethod
 {

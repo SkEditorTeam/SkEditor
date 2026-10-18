@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
 using R3;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Workspace.Tabs.Extensions;
 
 public static class TabServiceExtensions
 {

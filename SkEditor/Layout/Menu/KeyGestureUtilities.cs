@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Input;
 
-namespace SkEditor.Utilities.Menu;
+namespace SkEditor.Layout.Menu;
 
 public static class KeyGestureUtilities
 {

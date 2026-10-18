@@ -1,7 +1,7 @@
 ﻿using R3;
-using SkEditor.Utilities.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls;
+namespace SkEditor.Layout.StatusBar.UI.Abstractions;
 
 public interface IDrawerPaneViewModel
 {

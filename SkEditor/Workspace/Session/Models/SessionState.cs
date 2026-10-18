@@ -1,7 +1,7 @@
 using Avalonia;
 using MemoryPack;
 
-namespace SkEditor.Models.Session;
+namespace SkEditor.Workspace.Session.Models;
 
 [MemoryPackable]
 public partial class SessionState(SessionStateFile[] files)

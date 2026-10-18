@@ -1,6 +1,6 @@
-﻿using SkEditor.Contracts.Models;
-using SkEditor.ViewModels.Controls.FileTree;
+﻿using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.UI.Tree;
 
-namespace SkEditor.Models.Messages;
+namespace SkEditor.Workspace.Projects.Messages;
 
 public record FileSystemChangedMessage(FileTreeViewModel Sender, IFileSystem? NewFileSystem);

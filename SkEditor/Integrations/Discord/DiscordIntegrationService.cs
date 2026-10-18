@@ -1,13 +1,12 @@
 ﻿using System.Text.RegularExpressions;
 using DiscordRPC;
 using DiscordRPC.Entities;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
-namespace SkEditor.Services;
+namespace SkEditor.Integrations.Discord;
 
 public partial class DiscordIntegrationService(
     AppSettings appSettings,

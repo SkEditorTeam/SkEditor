@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SkEditor.Models.Documentation;
+using SkEditor.Documentation.Models;
 
-namespace SkEditor.Utilities.Docs;
+namespace SkEditor.Documentation;
 
 public static class DocumentationSearchEngine
 {

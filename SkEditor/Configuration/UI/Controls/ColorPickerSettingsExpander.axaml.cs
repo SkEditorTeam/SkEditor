@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 
-namespace SkEditor.Views.Controls;
+namespace SkEditor.Configuration.UI.Controls;
 
 public partial class ColorPickerSettingsExpander : UserControl
 {

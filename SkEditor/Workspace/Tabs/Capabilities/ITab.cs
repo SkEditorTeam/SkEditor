@@ -1,8 +1,8 @@
 using System;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Utilities.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Tabs.Capabilities;
+namespace SkEditor.Workspace.Tabs.Capabilities;
 
 public interface ITab
 {

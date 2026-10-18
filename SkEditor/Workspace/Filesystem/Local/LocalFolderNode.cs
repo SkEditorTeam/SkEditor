@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Projects.Types;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Projects.Messages;
+using SkEditor.Workspace.Projects.Models;
 
-namespace SkEditor.Models.Projects.Local;
+namespace SkEditor.Workspace.Filesystem.Local;
 
 public class LocalFolderNode(string name, string path, bool isRoot, bool addDummy = true)
     : BaseFolderNode(name, path, isRoot, addDummy)

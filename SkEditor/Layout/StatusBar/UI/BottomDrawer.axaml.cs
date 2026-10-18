@@ -1,8 +1,7 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.DataTemplates;
 
-namespace SkEditor.Views.Controls.StatusBar;
+namespace SkEditor.Layout.StatusBar.UI;
 
 public partial class BottomDrawer : UserControl
 {

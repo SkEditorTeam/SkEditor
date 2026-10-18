@@ -1,8 +1,7 @@
 ﻿using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.DataTemplates;
 
-namespace SkEditor.Views.Controls.Sidebar;
+namespace SkEditor.Layout.Sidebar.UI;
 
 public partial class SidebarControl : UserControl
 {

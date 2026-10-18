@@ -3,9 +3,9 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using SkEditor.Models.Logging;
+using SkEditor.Core.Logging;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Layout.StatusBar.UI.Panes.Logs.Converters;
 
 public class LogLevelColorConverter : IValueConverter
 {

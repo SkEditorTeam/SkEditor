@@ -5,13 +5,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Settings;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Providers.Sections;
+using SkEditor.Configuration.Messages;
+using SkEditor.Configuration.Models;
+using SkEditor.Configuration.Providers.Sections;
+using SkEditor.Core.Localization;
+using TabViewModelBase = SkEditor.Workspace.Tabs.TabViewModelBase;
 
-namespace SkEditor.ViewModels.Tabs;
+namespace SkEditor.Configuration.UI;
 
 public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<NavigateToSettingsSectionMessage>
 {

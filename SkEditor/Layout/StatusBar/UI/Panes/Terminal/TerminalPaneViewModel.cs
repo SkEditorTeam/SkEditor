@@ -6,10 +6,12 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Iciclecreek.Terminal;
 using R3;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
+using SkEditor.Core.Localization;
+using SkEditor.Layout.StatusBar.UI.Abstractions;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
+namespace SkEditor.Layout.StatusBar.UI.Panes.Terminal;
 
 public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDisposable
 {

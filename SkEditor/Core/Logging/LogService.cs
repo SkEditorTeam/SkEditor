@@ -2,13 +2,11 @@
 using R3;
 using Serilog;
 using Serilog.Core;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Logging;
-using SkEditor.Utilities;
+using SkEditor.Core.Common;
 
 #pragma warning disable CA2254
 
-namespace SkEditor.Services;
+namespace SkEditor.Core.Logging;
 
 public class LogService(ILogger logger) : ILogService, IDisposable
 {

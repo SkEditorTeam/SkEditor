@@ -6,15 +6,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Dialogs;
-using SkEditor.Models.Files;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Projects;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.Saving;
 
 public class ChangeDetectFeature(AppSettings appSettings, IDialogService dialogs, IFileSystem? fileSystem = null)
     : IEditorFeature

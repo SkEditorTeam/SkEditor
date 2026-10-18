@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace SkEditor.Models.Analyzer;
+namespace SkEditor.Analyzing.Models;
 
 [JsonSerializable(typeof(AnalyzeResultsDto))]
 public partial class AnalyzeResultContext : JsonSerializerContext;

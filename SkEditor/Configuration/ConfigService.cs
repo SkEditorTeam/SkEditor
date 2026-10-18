@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Services;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Settings;
+using SkEditor.Configuration.Abstractions;
+using SkEditor.Core.Common;
 
-namespace SkEditor.Services;
+namespace SkEditor.Configuration;
 
 public class ConfigService(IEnumerable<IConfig> configs)
     : IConfigService

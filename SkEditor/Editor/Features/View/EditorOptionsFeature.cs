@@ -6,15 +6,14 @@ using Avalonia.Media.Immutable;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Appearance.Themes;
+using SkEditor.Configuration.Extensions;
+using SkEditor.Editor.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.View;
 
-public class EditorOptionsFeature(AppSettings appSettings, IThemeService themes, INotificationService notifs)
-    : IEditorFeature
+public class EditorOptionsFeature(AppSettings appSettings, IThemeService themes) : IEditorFeature
 {
     private DisposableBag _disposables;
     

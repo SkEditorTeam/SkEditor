@@ -5,12 +5,12 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Integrations;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Core.Logging;
+using SkEditor.Integrations.Publishing.Models;
+using SkEditor.Workspace.Tabs;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
-namespace SkEditor.Utilities.Publishing;
+namespace SkEditor.Integrations.Publishing;
 
 public class PublishService(HttpClient httpClient, ILogService logs, ITabService tabs) : IPublishService
 {

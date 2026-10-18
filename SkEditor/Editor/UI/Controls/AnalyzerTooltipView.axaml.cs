@@ -1,13 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
-using SkEditor.Models.Analyzer;
+using SkEditor.Analyzing.Models;
 
-namespace SkEditor.Views.Controls.Editor;
+namespace SkEditor.Editor.UI.Controls;
 
 public partial class AnalyzerTooltipView : UserControl
 {
     public static readonly StyledProperty<AnalyzerError?> DiagnosticProperty =
-        AvaloniaProperty.Register<ColorPickerSettingsExpander, AnalyzerError?>(nameof(Diagnostic));
+        AvaloniaProperty.Register<Configuration.UI.Controls.ColorPickerSettingsExpander, AnalyzerError?>(nameof(Diagnostic));
 
     public AnalyzerError? Diagnostic
     {

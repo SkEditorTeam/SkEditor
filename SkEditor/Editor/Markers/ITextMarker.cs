@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 
-namespace SkEditor.Utilities.Editor.TextMarkers;
+namespace SkEditor.Editor.Markers;
 
 public interface ITextMarker
 {

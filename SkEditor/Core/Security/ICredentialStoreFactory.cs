@@ -1,6 +1,4 @@
-﻿using SkEditor.Utilities.Security;
-
-namespace SkEditor.Contracts.Services.Security;
+﻿namespace SkEditor.Core.Security;
 
 public interface ICredentialStoreFactory
 {

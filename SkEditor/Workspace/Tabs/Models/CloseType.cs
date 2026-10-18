@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Tabs;
+﻿namespace SkEditor.Workspace.Tabs.Models;
 
 /// <summary>
 ///     The type of closing to perform when closing multiple tabs.

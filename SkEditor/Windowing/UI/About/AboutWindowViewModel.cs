@@ -7,12 +7,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Localization;
+using SkEditor.Core.Localization;
+using SkEditor.Core.System;
 using SkEditor.SourceGenerators;
-using SkEditor.Utilities.Localization;
 
-namespace SkEditor.ViewModels.Windows;
+namespace SkEditor.Windowing.UI.About;
 
 public partial class AboutWindowViewModel(
     IClipboardService clipboard,

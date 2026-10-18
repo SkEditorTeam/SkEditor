@@ -6,13 +6,12 @@ using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Dialogs;
-using SkEditor.Models.Dialogs.Elements;
-using SkEditor.Services.Windowing;
-using SkEditor.Views.Windows;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Dialogs.Models.Elements;
+using SkEditor.Windowing;
+using MainWindow = SkEditor.Windowing.UI.MainWindow;
 
-namespace SkEditor.Services;
+namespace SkEditor.Core.Dialogs;
 
 public class DialogService(WindowRegistry windowRegistry) : IDialogService
 {

@@ -2,7 +2,7 @@ using System;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Snippets;
 
-namespace SkEditor.Models.Completions;
+namespace SkEditor.Editor.Completions.Models;
 
 public class CompletionData
 {

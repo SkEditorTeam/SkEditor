@@ -7,10 +7,10 @@ using Avalonia.Interactivity;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Utilities.Menu;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Layout.Menu;
 
-namespace SkEditor.Features.Editing;
+namespace SkEditor.Editor.Features.Editing;
 
 public class EditorShortcutsFeature : IEditorFeature
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SkEditor.Utilities.Editor.TextMarkers;
+namespace SkEditor.Editor.Markers;
 
 [Flags]
 public enum TextMarkerTypes

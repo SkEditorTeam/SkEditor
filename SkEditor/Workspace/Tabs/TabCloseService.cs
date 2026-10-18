@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Dialogs;
-using SkEditor.Models.Tabs;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Localization;
+using SkEditor.Workspace.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Models;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Services.Files;
+namespace SkEditor.Workspace.Tabs;
 
 public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogService dialogs) : ITabCloseService
 {

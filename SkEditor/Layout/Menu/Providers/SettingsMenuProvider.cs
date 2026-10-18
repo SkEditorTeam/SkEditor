@@ -1,10 +1,10 @@
 ﻿using System;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services.Files;
-using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
-using SettingsTabViewModel = SkEditor.ViewModels.Tabs.SettingsTabViewModel;
+using SkEditor.Workspace.Tabs;
+using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
+using SettingsTabViewModel = SkEditor.Configuration.UI.SettingsTabViewModel;
 
-namespace SkEditor.Utilities.Menu.Providers;
+namespace SkEditor.Layout.Menu.Providers;
 
 public class SettingsMenuProvider(ITabService tabs, Func<SettingsTabViewModel> settingsTabFactory) : IMenuProvider
 {

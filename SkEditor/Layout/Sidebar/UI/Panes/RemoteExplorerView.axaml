@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="300"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:projects="clr-namespace:SkEditor.Views.Controls.Projects"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-             xmlns:panes="clr-namespace:SkEditor.ViewModels.Controls.Sidebar.Panes"
              xmlns:primitives="clr-namespace:Avalonia.Controls.Primitives"
-             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
-             xmlns:converters="clr-namespace:SkEditor.Converters"
-             x:DataType="panes:RemoteExplorerViewModel"
-             x:Class="SkEditor.Views.Controls.Sidebar.RemoteExplorerView">
+             xmlns:converters1="clr-namespace:SkEditor.Appearance.Converters"
+             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:panes1="clr-namespace:SkEditor.Layout.Sidebar.UI.Panes"
+             xmlns:tree="clr-namespace:SkEditor.Workspace.UI.Tree"
+             x:DataType="panes1:RemoteExplorerViewModel"
+             x:Class="SkEditor.Layout.Sidebar.UI.Panes.RemoteExplorerView">
 
     <UserControl.Styles>
         <Style Selector="Button.barButton">
@@ -22,19 +22,19 @@
             <Setter Property="Height" Value="30" />
         </Style>
 
-        <Style Selector="projects|FileTreeView TextBlock">
+        <Style Selector="tree|FileTreeView TextBlock">
             <Setter Property="TextWrapping" Value="NoWrap" />
         </Style>
     </UserControl.Styles>
 
     <UserControl.Resources>
-        <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+        <converters1:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
     </UserControl.Resources>
 
     <Grid RowDefinitions="Auto,*" Margin="0,12,0,8">
         <DockPanel Grid.Row="0" Margin="12,0,12,0" HorizontalSpacing="8">
             <Button Classes="barButton" Command="{Binding NewRemoteConnectionCommand}" DockPanel.Dock="Right"
-                    ToolTip.Tip="{localization:Translate RemoteConnectionManageWindowTitle}"
+                    ToolTip.Tip="{localization1:Translate RemoteConnectionManageWindowTitle}"
                     VerticalAlignment="Center">
                 <Viewbox Height="14">
                     <icons:SymbolIcon Symbol="Options" />
@@ -43,10 +43,10 @@
 
             <ComboBox Theme="{DynamicResource LiteComboBox}" HorizontalAlignment="Stretch"
                       VerticalContentAlignment="Center"
-                      PlaceholderText="{localization:Translate RemoteConnectionSelectConnection}"
+                      PlaceholderText="{localization1:Translate RemoteConnectionSelectConnection}"
                       SelectedItem="{Binding SelectedConnection, Mode=TwoWay}"
                       DisplayMemberBinding="{Binding Name}"
-                      ToolTip.Tip="{localization:Translate RemoteConnectionNoConnectionTooltip}"
+                      ToolTip.Tip="{localization1:Translate RemoteConnectionNoConnectionTooltip}"
                       ToolTip.ShowOnDisabled="True"
                       ToolTip.ServiceEnabled="{Binding !RemoteConnections.Count}"
                       IsEnabled="{Binding !!RemoteConnections.Count}"
@@ -69,9 +69,9 @@
                 <icons:SymbolIcon Symbol="CloudOff" HorizontalAlignment="Center" />
             </Viewbox>
             <StackPanel Spacing="4">
-                <TextBlock Text="{localization:Translate RemoteConnectionNoConnectionTitle}"
+                <TextBlock Text="{localization1:Translate RemoteConnectionNoConnectionTitle}"
                            HorizontalAlignment="Center" TextAlignment="Center" FontSize="18" Opacity="0.75" />
-                <TextBlock Text="{localization:Translate RemoteConnectionNoConnectionMessage}"
+                <TextBlock Text="{localization1:Translate RemoteConnectionNoConnectionMessage}"
                            HorizontalAlignment="Center" TextAlignment="Center"
                            FontSize="13" MaxWidth="250" Opacity="0.6" />
             </StackPanel>
@@ -82,12 +82,12 @@
             <Viewbox Height="64" Opacity="0.5" OpacityMask="White">
                 <controls:FAProgressRing HorizontalAlignment="Center" />
             </Viewbox>
-            <TextBlock Text="{localization:Translate RemoteConnectionConnecting}" HorizontalAlignment="Center"
+            <TextBlock Text="{localization1:Translate RemoteConnectionConnecting}" HorizontalAlignment="Center"
                        FontSize="18" Opacity="0.75" />
         </StackPanel>
 
-        <projects:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}" Margin="0,12,0,0"
-                               IsVisible="{Binding $parent.((panes:RemoteExplorerViewModel)DataContext)?.SelectedConnection, Converter={x:Static ObjectConverters.IsNotNull}}"
+        <tree:FileTreeView Grid.Row="1" DataContext="{Binding FileTree}" Margin="0,12,0,0"
+                               IsVisible="{Binding $parent.((panes1:RemoteExplorerViewModel)DataContext)?.SelectedConnection, Converter={x:Static ObjectConverters.IsNotNull}}"
                                Opacity="{Binding !IsLoading, Converter={StaticResource BoolToOpacityConverter}}" />
     </Grid>
 </UserControl>

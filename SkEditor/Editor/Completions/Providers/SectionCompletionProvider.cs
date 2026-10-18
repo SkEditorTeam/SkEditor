@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Snippets;
-using SkEditor.Models.Completions;
-using SkEditor.Utilities.Extensions;
+using SkEditor.Editor.Completions.Models;
+using SkEditor.Editor.Extensions;
 
-namespace SkEditor.Utilities.Editor.Completions;
+namespace SkEditor.Editor.Completions.Providers;
 
 public class SectionCompletionProvider : ICompletionProvider
 {

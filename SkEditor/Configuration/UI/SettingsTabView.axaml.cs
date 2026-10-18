@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace SkEditor.Views.Pages;
+namespace SkEditor.Configuration.UI;
 
 public partial class SettingsTabView : UserControl
 {

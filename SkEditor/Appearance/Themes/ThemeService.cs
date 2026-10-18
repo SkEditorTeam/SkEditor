@@ -14,14 +14,14 @@ using AvaloniaEdit.Snippets;
 using FluentAvalonia.Styling;
 using Iciclecreek.Avalonia.Terminal;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Logging;
-using SkEditor.Models.UI;
-using SkEditor.Services.Windowing;
-using SkEditor.Utilities.Settings.Configs;
-using MainWindow = SkEditor.Views.Windows.MainWindow;
+using SkEditor.Appearance.Icons;
+using SkEditor.Configuration;
+using SkEditor.Core.Logging;
+using SkEditor.Windowing;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using MainWindow = SkEditor.Windowing.UI.MainWindow;
 
-namespace SkEditor.Services;
+namespace SkEditor.Appearance.Themes;
 
 public class ThemeService : IThemeService
 {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Projects.Models;
 
-namespace SkEditor.Models.Projects.Types;
+namespace SkEditor.Workspace.Filesystem;
 
 public sealed class DummyFileNode() : FileSystemNode("Loading...", "...", false)
 {

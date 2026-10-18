@@ -3,7 +3,7 @@ using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 
-namespace SkEditor.Utilities.Docs;
+namespace SkEditor.Documentation;
 
 public partial class DocumentationPatternColorizer : DocumentColorizingTransformer
 {

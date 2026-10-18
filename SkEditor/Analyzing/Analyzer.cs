@@ -8,14 +8,14 @@ using CommunityToolkit.Mvvm.Messaging;
 using R3;
 using SkEditor.Analyzing.Aot;
 using SkEditor.Analyzing.Bootstrapping;
+using SkEditor.Analyzing.Models;
 using SkEditor.Analyzing.Processes;
 using SkEditor.Analyzing.Protocol;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Analyzer;
-using SkEditor.Models.Logging;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Configuration;
+using SkEditor.Core.Logging;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
 namespace SkEditor.Analyzing;
 

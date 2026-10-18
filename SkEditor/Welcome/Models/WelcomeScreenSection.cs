@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using SkEditor.Utilities.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Welcome;
+namespace SkEditor.Welcome.Models;
 
 public record WelcomeScreenSection(TranslatableString Title, List<WelcomeScreenElement> Entries);

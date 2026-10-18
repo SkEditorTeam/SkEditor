@@ -1,4 +1,4 @@
-namespace SkEditor.Models.UI;
+namespace SkEditor.Editor.Syntax.Models;
 
 public class SyntaxPairDto(string[] extensions, string? grammar, string theme)
 {

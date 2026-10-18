@@ -1,9 +1,9 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit.Editing;
-using SkEditor.ViewModels.Tabs;
 
-namespace SkEditor.Views.Pages;
+namespace SkEditor.Editor.UI.Tabs;
 
 public partial class FileTabView : UserControl
 {
@@ -11,7 +11,7 @@ public partial class FileTabView : UserControl
     {
         InitializeComponent();
 
-        Editor.AddHandler(
+        AddHandler<FocusChangedEventArgs>(
             GotFocusEvent,
             (_, e) =>
             {

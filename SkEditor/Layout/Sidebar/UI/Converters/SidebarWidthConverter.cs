@@ -2,9 +2,9 @@
 using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using SkEditor.ViewModels.Controls;
+using SkEditor.Layout.StatusBar.UI;
 
-namespace SkEditor.Converters.Layout;
+namespace SkEditor.Layout.Sidebar.UI.Converters;
 
 public class SidebarColumnMinWidthConverter : IValueConverter
 {

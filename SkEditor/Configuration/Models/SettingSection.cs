@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using R3;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Localization;
+using SkEditor.Appearance.Icons;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Settings;
+namespace SkEditor.Configuration.Models;
 
 public class SettingSection(string id, TranslatableString name) : ObservableObject
 {

@@ -6,20 +6,20 @@
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:iconsMarkup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
-             xmlns:vms="clr-namespace:SkEditor.ViewModels.Pages"
-             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
-             xmlns:welcome="clr-namespace:SkEditor.Models.Welcome"
-             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
-             xmlns:lconverters="clr-namespace:SkEditor.Converters.Layout"
+             xmlns:converters="clr-namespace:SkEditor.Appearance.Converters"
+             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:vms1="clr-namespace:SkEditor.Welcome.UI"
+             xmlns:models="clr-namespace:SkEditor.Welcome.Models"
              mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
-             x:DataType="vms:WelcomePageViewModel"
+             x:DataType="vms1:WelcomePageViewModel"
              x:CompileBindings="True"
-             x:Class="SkEditor.Views.Pages.WelcomePage">
+             x:Class="SkEditor.Welcome.UI.WelcomePage">
 
     <UserControl.Resources>
         <system:TimeSpan x:Key="ButtonTransitionDuration">0:0:0.1</system:TimeSpan>
 
-        <lconverters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
+        <converters:WidthToVisibilityConverter x:Key="WidthToVisibilityConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -74,7 +74,7 @@
                           MaxHeight="600" Margin="0,0,-16,0" Padding="0,0,16,0">
                 <Interaction.Behaviors>
                     <BehaviorCollection>
-                        <behaviors:SmoothScrollBehavior />
+                        <behaviors1:SmoothScrollBehavior />
                     </BehaviorCollection>
                 </Interaction.Behaviors>
                 <ItemsRepeater ItemsSource="{Binding WelcomeSections}">
@@ -82,7 +82,7 @@
                         <StackLayout Spacing="32" />
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
-                        <DataTemplate DataType="welcome:WelcomeScreenSection">
+                        <DataTemplate DataType="models:WelcomeScreenSection">
                             <StackPanel Spacing="12">
                                 <TextBlock Text="{Binding Title.Value}"
                                            TextAlignment="Center"
@@ -95,7 +95,7 @@
                                         <StackLayout Spacing="6" />
                                     </ItemsRepeater.Layout>
                                     <ItemsRepeater.ItemTemplate>
-                                        <DataTemplate DataType="welcome:WelcomeScreenElement">
+                                        <DataTemplate DataType="models:WelcomeScreenElement">
                                             <Button HorizontalContentAlignment="Stretch" Command="{Binding Command}"
                                                     IsEnabled="{Binding IsEnabled}">
                                                 <StackPanel Orientation="Horizontal" Spacing="16"
@@ -134,7 +134,7 @@
                                    Converter={StaticResource WidthToVisibilityConverter}, 
                                    ConverterParameter=650}">
             <Grid RowDefinitions="Auto,*" RowSpacing="24">
-                <TextBlock Text="{localization:Translate WelcomePageRecentTitle}"
+                <TextBlock Text="{localization1:Translate WelcomePageRecentTitle}"
                            FontSize="20"
                            FontWeight="SemiBold"
                            Grid.Row="0"
@@ -143,13 +143,13 @@
                 <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5"
                             Spacing="10" IsVisible="{Binding !RecentItems.Count}">
                     <icons:SymbolIcon Symbol="History" FontSize="48" />
-                    <TextBlock Text="{localization:Translate WelcomePageRecentEmpty}" />
+                    <TextBlock Text="{localization1:Translate WelcomePageRecentEmpty}" />
                 </StackPanel>
                 <ScrollViewer Grid.Row="1" Padding="0,0,18,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               VerticalScrollBarVisibility="Auto" IsVisible="{Binding !!RecentItems.Count}">
                     <Interaction.Behaviors>
                         <BehaviorCollection>
-                            <behaviors:SmoothScrollBehavior />
+                            <behaviors1:SmoothScrollBehavior />
                         </BehaviorCollection>
                     </Interaction.Behaviors>
                     <ItemsControl ItemsSource="{Binding RecentItems}" HorizontalAlignment="Stretch">
@@ -159,31 +159,31 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="welcome:WelcomeScreenRecentItem">
+                            <DataTemplate DataType="models:WelcomeScreenRecentItem">
                                 <Button HorizontalContentAlignment="Stretch"
                                         VerticalContentAlignment="Center"
-                                        Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.OpenRecentCommand}"
+                                        Command="{Binding $parent[UserControl].((vms1:WelcomePageViewModel)DataContext)?.OpenRecentCommand}"
                                         CommandParameter="{Binding}">
                                     <Button.ContextFlyout>
                                         <MenuFlyout>
                                             <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Open}"
-                                                      Header="{localization:Translate MenuHeaderOpen}"
-                                                      Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.OpenRecentCommand}"
+                                                      Header="{localization1:Translate MenuHeaderOpen}"
+                                                      Command="{Binding $parent[UserControl].((vms1:WelcomePageViewModel)DataContext)?.OpenRecentCommand}"
                                                       CommandParameter="{Binding}" />
 
                                             <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardLink}"
-                                                      Header="{localization:Translate MenuHeaderCopyAbsolutePath}"
-                                                      Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.CopyPathCommand}"
+                                                      Header="{localization1:Translate MenuHeaderCopyAbsolutePath}"
+                                                      Command="{Binding $parent[UserControl].((vms1:WelcomePageViewModel)DataContext)?.CopyPathCommand}"
                                                       CommandParameter="{Binding}" />
 
                                             <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FolderOpen}"
-                                                      Header="{localization:Translate MenuHeaderOpenInExplorer}"
-                                                      Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.ShowInExplorerCommand}"
+                                                      Header="{localization1:Translate MenuHeaderOpenInExplorer}"
+                                                      Command="{Binding $parent[UserControl].((vms1:WelcomePageViewModel)DataContext)?.ShowInExplorerCommand}"
                                                       CommandParameter="{Binding}" />
 
                                             <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Delete}"
-                                                      Header="{localization:Translate WelcomePageRecentRemove}"
-                                                      Command="{Binding $parent[UserControl].((vms:WelcomePageViewModel)DataContext)?.RemoveCommand}"
+                                                      Header="{localization1:Translate WelcomePageRecentRemove}"
+                                                      Command="{Binding $parent[UserControl].((vms1:WelcomePageViewModel)DataContext)?.RemoveCommand}"
                                                       CommandParameter="{Binding}" />
                                         </MenuFlyout>
                                     </Button.ContextFlyout>

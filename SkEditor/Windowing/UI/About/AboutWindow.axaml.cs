@@ -1,7 +1,4 @@
-using SkEditor.ViewModels.Windows;
-using SkEditor.Views.Controls;
-
-namespace SkEditor.Views.Windows;
+namespace SkEditor.Windowing.UI.About;
 
 public partial class AboutWindow : SkEditorWindow
 {

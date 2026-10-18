@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using FluentIcons.Common;
-using SkEditor.Models.Dialogs.Elements;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Dialogs.Models.Elements;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Dialogs;
+namespace SkEditor.Core.Dialogs.Models;
 
 /// <summary>
 ///     Represents a customizable dialog window to be displayed in the SkEditor UI.

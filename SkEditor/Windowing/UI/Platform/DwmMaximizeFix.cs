@@ -5,7 +5,7 @@ using Avalonia.Controls;
 
 // ReSharper disable InconsistentNaming
 
-namespace SkEditor.AttachedProperties;
+namespace SkEditor.Windowing.UI.Platform;
 
 public static partial class DwmMaximizeFix
 {

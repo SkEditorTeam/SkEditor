@@ -7,12 +7,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Models.Files;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Services.Files;
+namespace SkEditor.Workspace.Files;
 
 public class FilePickerService(ITranslationService translations) : IFilePickerService
 {

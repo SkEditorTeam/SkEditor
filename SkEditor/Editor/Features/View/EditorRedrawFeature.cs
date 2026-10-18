@@ -1,8 +1,8 @@
 ﻿using AvaloniaEdit;
 using AvaloniaEdit.Document;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.View;
 
 public class EditorRedrawFeature : IEditorFeature
 {

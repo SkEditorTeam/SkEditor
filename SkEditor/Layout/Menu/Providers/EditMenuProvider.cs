@@ -1,15 +1,15 @@
 ﻿using FluentIcons.Common;
 using R3;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Utilities.Editor;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs;
-using SkEditor.ViewModels.Tabs.Capabilities;
-using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
+using SkEditor.Core.Localization;
+using SkEditor.Editor.Commands;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Windowing;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Extensions;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
+using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
 
-namespace SkEditor.Utilities.Menu.Providers;
+namespace SkEditor.Layout.Menu.Providers;
 
 public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService tabs) : IMenuProvider
 {

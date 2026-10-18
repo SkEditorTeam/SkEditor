@@ -1,14 +1,16 @@
 ﻿using System;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Settings;
-using SkEditor.Models.Settings.Types;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Settings.Providers.Choice;
-using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
+using SkEditor.Appearance.Themes;
+using SkEditor.Configuration.Configs;
+using SkEditor.Configuration.Models;
+using SkEditor.Configuration.Models.Types;
+using SkEditor.Configuration.Providers.Choice;
+using SkEditor.Core.System;
+using SkEditor.Core.Localization;
+using AppSettingsProperty = SkEditor.Configuration.Configs.AppSettings.AppSettingsProperty;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Utilities.Settings.Providers.Sections;
+namespace SkEditor.Configuration.Providers.Sections;
 
 public class AppearanceSectionProvider(
     AppSettings appSettings,

@@ -3,9 +3,9 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using SkEditor.Models.Documentation;
+using SkEditor.Documentation.Models;
 
-namespace SkEditor.Converters.Documentation;
+namespace SkEditor.Documentation.UI.Converters;
 
 public class DocumentationSyntaxTypeBrushConverter : IValueConverter
 {

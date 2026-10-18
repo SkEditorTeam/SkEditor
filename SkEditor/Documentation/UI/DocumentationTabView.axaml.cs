@@ -3,9 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using SkEditor.Utilities.Docs;
 
-namespace SkEditor.Views.Pages;
+namespace SkEditor.Documentation.UI;
 
 public partial class DocumentationTabView : UserControl
 {

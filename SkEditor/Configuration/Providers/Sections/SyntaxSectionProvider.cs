@@ -5,16 +5,17 @@ using System.Linq;
 using AvaloniaEdit.Utils;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Settings;
-using SkEditor.Models.Settings.Types;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Settings.Providers.Choice;
+using SkEditor.Configuration.Configs;
+using SkEditor.Configuration.Models;
+using SkEditor.Configuration.Models.Types;
+using SkEditor.Configuration.Providers.Choice;
+using SkEditor.Core.System;
+using SkEditor.Core.Localization;
+using SkEditor.Editor.Syntax;
+using SkEditor.Editor.Syntax.Models;
 using TextMateSharp.Grammars;
 
-namespace SkEditor.Utilities.Settings.Providers.Sections;
+namespace SkEditor.Configuration.Providers.Sections;
 
 public class SyntaxSectionProvider(
     AppSettings appSettings,

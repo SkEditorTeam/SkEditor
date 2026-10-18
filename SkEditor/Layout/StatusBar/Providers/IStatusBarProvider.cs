@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using R3;
-using SkEditor.ViewModels.Controls;
+using SkEditor.Layout.StatusBar.UI;
 
-namespace SkEditor.Utilities.StatusBar;
+namespace SkEditor.Layout.StatusBar.Providers;
 
 public interface IStatusBarProvider
 {

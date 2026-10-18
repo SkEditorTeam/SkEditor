@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SkEditor.Utilities.Settings;
+namespace SkEditor.Configuration.Abstractions;
 
 internal interface IBinarySettingHandler
 {

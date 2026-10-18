@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Projects.Types;
-using SkEditor.Utilities.Projects;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Notifications;
+using SkEditor.Workspace.Filesystem.Abstractions;
 
-namespace SkEditor.Models.Projects.Local;
+namespace SkEditor.Workspace.Filesystem.Local;
 
 public partial class LocalFileSystem : IDisposable
 {

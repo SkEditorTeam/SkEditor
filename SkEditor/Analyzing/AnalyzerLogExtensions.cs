@@ -1,6 +1,5 @@
 using System.Text.RegularExpressions;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Logging;
+using SkEditor.Core.Logging;
 
 namespace SkEditor.Analyzing;
 

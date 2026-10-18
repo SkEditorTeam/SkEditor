@@ -3,9 +3,10 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Text.Json.Serialization;
 using FluentIcons.Common;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Welcome;
+namespace SkEditor.Welcome.Models;
 
 [method: JsonConstructor]
 public sealed class WelcomeScreenRecentItem(string name, string path, bool isFolder, DateTime lastOpened)

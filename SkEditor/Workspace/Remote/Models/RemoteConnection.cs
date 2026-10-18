@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SkEditor.Models.Remote;
+namespace SkEditor.Workspace.Remote.Models;
 
 public partial class RemoteConnection : ObservableObject
 {

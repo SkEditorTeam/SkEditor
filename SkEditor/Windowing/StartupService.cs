@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using SkEditor.Analyzing;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Windowing;
+using SkEditor.Configuration;
+using SkEditor.Core.Logging;
 using SkEditor.Matcher;
-using SkEditor.Models.Files;
-using SkEditor.Views.Windows;
+using SkEditor.Windowing.UI;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Session;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class StartupService(
     MainWindowFactory mainWindowFactory,

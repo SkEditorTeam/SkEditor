@@ -1,3 +1,3 @@
-﻿namespace SkEditor.ViewModels.Controls;
+﻿namespace SkEditor.Layout.StatusBar.UI.Abstractions;
 
 public interface IDrawerToolbarViewModel;

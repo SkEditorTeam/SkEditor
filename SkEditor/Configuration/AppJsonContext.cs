@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Configuration.Configs;
 
-namespace SkEditor.Utilities.Settings;
+namespace SkEditor.Configuration;
 
 [JsonSerializable(typeof(AppSettings))]
 [JsonSerializable(typeof(SecretsConfig))]

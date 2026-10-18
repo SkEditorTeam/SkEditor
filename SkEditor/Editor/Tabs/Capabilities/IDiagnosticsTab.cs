@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using ObservableCollections;
-using SkEditor.Models.Analyzer;
+using SkEditor.Analyzing.Models;
 
-namespace SkEditor.ViewModels.Tabs.Capabilities;
+namespace SkEditor.Editor.Tabs.Capabilities;
 
 public interface IDiagnosticsTab
 {

@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Utilities.Security;
+﻿namespace SkEditor.Core.Security;
 
 public interface ICredentialStore
 {

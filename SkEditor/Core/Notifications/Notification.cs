@@ -1,7 +1,7 @@
 ﻿using System;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
 
-namespace SkEditor.Models.Notifications;
+namespace SkEditor.Core.Notifications;
 
 /// <summary>
 ///     Represents an in-app toast notification displayed to the user within the SkEditor UI.

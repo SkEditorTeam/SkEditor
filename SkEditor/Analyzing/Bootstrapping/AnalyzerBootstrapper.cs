@@ -5,8 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Logging;
+using SkEditor.Core.Logging;
 
 namespace SkEditor.Analyzing.Bootstrapping;
 

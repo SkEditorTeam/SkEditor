@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Views.Windows;
+using SkEditor.Windowing.UI;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class MainWindowFactory(IServiceProvider sp, WindowRegistry registry)
 {

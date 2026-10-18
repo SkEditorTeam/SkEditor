@@ -3,15 +3,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:vms="clr-namespace:SkEditor.ViewModels.Controls"
-             xmlns:converters="clr-namespace:SkEditor.Converters"
-             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
-             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
              xmlns:aConverters="clr-namespace:Avalonia.Markup.Xaml.Converters;assembly=Avalonia.Markup.Xaml"
-             xmlns:attachedProperties="clr-namespace:SkEditor.AttachedProperties"
+             xmlns:attachedProperties1="clr-namespace:SkEditor.Appearance.AttachedProperties"
+             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:converters1="clr-namespace:SkEditor.Core.Notifications.Converters"
+             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:ui="clr-namespace:SkEditor.Layout.StatusBar.UI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="vms:StatusBarViewModel"
-             x:Class="SkEditor.Views.Controls.Sidebar.StatusBarControl">
+             x:DataType="ui:StatusBarViewModel"
+             x:Class="SkEditor.Layout.StatusBar.UI.StatusBarControl">
 
     <UserControl.Styles>
         <Style Selector="TextBlock">
@@ -50,11 +50,11 @@
     </UserControl.Styles>
 
     <UserControl.Resources>
-        <converters:NotificationTypeConverter x:Key="NotificationTypeConverter" />
+        <converters1:NotificationTypeConverter x:Key="NotificationTypeConverter" />
 
         <aConverters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
 
-        <DataTemplate x:Key="StatusBarItemTemplate" DataType="vms:StatusBarItem">
+        <DataTemplate x:Key="StatusBarItemTemplate" DataType="ui:StatusBarItem">
             <Button BorderThickness="0" Background="Transparent" Height="28" Padding="8,0"
                     CornerRadius="7"
                     Command="{Binding Command}"
@@ -65,7 +65,7 @@
                                       Symbol="{Binding IconSymbol}"
                                       IsVisible="{Binding IconSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
                                       Foreground="{Binding ForegroundColor, Converter={StaticResource ColorToBrushConverter}}"
-                                      attachedProperties:BindableStyleClasses.Classes="{Binding IconClass}" />
+                                      attachedProperties1:BindableStyleClasses.Classes="{Binding IconClass}" />
                     <TextBlock Text="{Binding Text}"
                                IsVisible="{Binding Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                VerticalAlignment="Center" />
@@ -111,7 +111,7 @@
                                         <TextBlock VerticalAlignment="Center" Margin="4,0,0,0"
                                                    Foreground="{StaticResource ForegroundColor}"
                                                    FontSize="16" FontWeight="DemiBold"
-                                                   Text="{localization:Translate NotificationCenterTitle}" />
+                                                   Text="{localization1:Translate NotificationCenterTitle}" />
 
                                         <Button IsVisible="{Binding Notifications.Count}"
                                                 VerticalAlignment="Center" HorizontalAlignment="Right" Padding="8,4"
@@ -119,7 +119,7 @@
                                                 Foreground="{StaticResource ForegroundSecondaryColor}"
                                                 BorderThickness="0" CornerRadius="6"
                                                 Command="{Binding ClearAllNotificationsCommand}"
-                                                Content="{localization:Translate NotificationCenterClearAll}" />
+                                                Content="{localization1:Translate NotificationCenterClearAll}" />
                                     </Panel>
 
                                     <StackPanel IsVisible="{Binding !Notifications.Count}" Grid.Row="1" Spacing="16"
@@ -127,7 +127,7 @@
                                         <icons:SymbolIcon Symbol="LeafTwo" FontSize="96"
                                                           Foreground="{DynamicResource ForegroundSecondaryColor}" />
                                         <TextBlock FontSize="16"
-                                                   Text="{localization:Translate NotificationCenterEmpty}"
+                                                   Text="{localization1:Translate NotificationCenterEmpty}"
                                                    TextWrapping="Wrap" TextAlignment="Center" />
                                     </StackPanel>
 
@@ -135,7 +135,7 @@
                                                   Margin="0,8,-8,0">
                                         <Interaction.Behaviors>
                                             <BehaviorCollection>
-                                                <behaviors:SmoothScrollBehavior />
+                                                <behaviors1:SmoothScrollBehavior />
                                             </BehaviorCollection>
                                         </Interaction.Behaviors>
                                         <ItemsControl ItemsSource="{Binding Notifications}" Padding="0,0,14,0">
@@ -162,7 +162,7 @@
                                                                 Padding="4"
                                                                 Background="Transparent" BorderThickness="0"
                                                                 CornerRadius="6"
-                                                                Command="{Binding $parent[UserControl].((vms:StatusBarViewModel)DataContext)?.ClearNotificationCommand}"
+                                                                Command="{Binding $parent[UserControl].((ui:StatusBarViewModel)DataContext)?.ClearNotificationCommand}"
                                                                 CommandParameter="{Binding .}">
                                                             <icons:SymbolIcon Symbol="Dismiss" FontSize="12"
                                                                               Foreground="{StaticResource ForegroundSecondaryColor}" />

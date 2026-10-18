@@ -1,6 +1,6 @@
 ﻿using FluentIcons.Common;
 
-namespace SkEditor.Models.UI;
+namespace SkEditor.Appearance.Icons;
 
 /// <summary>
 ///     Represents an icon that can be either a symbol or a path icon (represented by a string resource name)

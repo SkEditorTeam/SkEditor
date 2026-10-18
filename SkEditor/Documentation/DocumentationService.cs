@@ -5,10 +5,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Services;
-using SkEditor.Utilities;
+using SkEditor.Core.Common;
 
-namespace SkEditor.Services;
+namespace SkEditor.Documentation;
 
 public class DocumentationService(HttpClient httpClient) : IDocumentationService
 {

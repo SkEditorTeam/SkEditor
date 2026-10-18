@@ -1,6 +1,6 @@
-﻿using SkEditor.ViewModels.Menu;
+﻿using SkEditor.Layout.Menu.Models;
 
-namespace SkEditor.Utilities.Menu;
+namespace SkEditor.Layout.Menu.Providers;
 
 public interface IMenuProvider
 {

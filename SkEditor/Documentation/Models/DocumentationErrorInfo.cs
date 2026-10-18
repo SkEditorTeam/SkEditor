@@ -1,7 +1,7 @@
 using FluentIcons.Common;
-using SkEditor.Utilities.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Documentation;
+namespace SkEditor.Documentation.Models;
 
 public record DocumentationErrorInfo(
     TranslatableString Title,

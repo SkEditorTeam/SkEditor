@@ -2,7 +2,7 @@
 
 #pragma warning disable CS9113 // Parameter is unread.
 
-namespace SkEditor.Utilities.Settings.Attributes;
+namespace SkEditor.Configuration;
 
 /// <summary>
 ///     Marks a class as a settings config to generate all the boilerplate code.

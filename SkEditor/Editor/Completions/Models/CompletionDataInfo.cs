@@ -1,6 +1,6 @@
 using AvaloniaEdit.Snippets;
 
-namespace SkEditor.Models.Completions;
+namespace SkEditor.Editor.Completions.Models;
 
 public class CompletionDataInfo(string title, string? text, CompletionType type, string? description = null)
 {

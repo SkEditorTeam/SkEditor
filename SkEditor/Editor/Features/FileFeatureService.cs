@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using AvaloniaEdit;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.Features;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Configuration.Abstractions;
+using SkEditor.Editor.Tabs.Capabilities;
 
-namespace SkEditor.Services.Files.Features;
+namespace SkEditor.Editor.Features;
 
 public class FileFeatureService : IFileFeatureService
 {

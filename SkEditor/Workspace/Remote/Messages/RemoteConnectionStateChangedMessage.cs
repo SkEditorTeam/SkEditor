@@ -1,6 +1,6 @@
-﻿using SkEditor.Models.Projects.Sftp;
-using SkEditor.Models.Remote;
+﻿using SkEditor.Workspace.Filesystem.Sftp;
+using SkEditor.Workspace.Remote.Models;
 
-namespace SkEditor.Models.Messages;
+namespace SkEditor.Workspace.Remote.Messages;
 
 public record RemoteConnectionStateChangedMessage(RemoteConnection Connection, RemoteConnectionState State);

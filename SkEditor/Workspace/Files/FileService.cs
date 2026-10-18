@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Models.Files;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Services.Files;
+namespace SkEditor.Workspace.Files;
 
 public class FileService(
     ITabService tabs,

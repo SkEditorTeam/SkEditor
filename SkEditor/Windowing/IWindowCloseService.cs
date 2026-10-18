@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Avalonia.Controls;
 
-namespace SkEditor.Contracts.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public interface IWindowCloseService
 {

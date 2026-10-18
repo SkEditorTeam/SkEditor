@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace SkEditor.Converters.Documentation;
+namespace SkEditor.Documentation.UI.Converters;
 
 public class DocumentationBadgeVisibilityConverter : IMultiValueConverter
 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace SkEditor.Models.Completions;
+namespace SkEditor.Editor.Completions.Models;
 
 public readonly ref struct CompletionContext(
     int startOffset,

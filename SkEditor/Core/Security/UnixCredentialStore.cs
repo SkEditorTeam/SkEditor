@@ -4,7 +4,7 @@ using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SkEditor.Utilities.Security;
+namespace SkEditor.Core.Security;
 
 [UnsupportedOSPlatform("windows")]
 public class UnixCredentialStore : ICredentialStore

@@ -1,8 +1,8 @@
-﻿using SkEditor.Models.Files;
-using SkEditor.Models.Session;
-using SkEditor.ViewModels.Tabs;
+﻿using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Session.Models;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Workspace.Tabs;
 
 public interface IFileTabFactory
 {

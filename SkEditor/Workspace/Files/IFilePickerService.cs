@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SkEditor.Models.Files;
-using SkEditor.Utilities.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Workspace.Files;
 
 public interface IFilePickerService
 {

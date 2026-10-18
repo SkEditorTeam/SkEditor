@@ -1,6 +1,6 @@
 using AvaloniaEdit.Snippets;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Editor.Extensions;
 
 public static class SnippetBuilderExtensions
 {

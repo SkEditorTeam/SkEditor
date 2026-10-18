@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using SkEditor.Models.Remote;
-using SkEditor.Services.Localization;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using SkEditor.Workspace.Remote.Models;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Workspace.Remote.Converters;
 
 public class AuthMethodConverter : IValueConverter
 {

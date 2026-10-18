@@ -1,7 +1,7 @@
-﻿using SkEditor.Utilities.Startup;
-using BinarySettings = SkEditor.Utilities.Settings.Configs.BinarySettings;
+﻿using SkEditor.Windowing.Models;
+using BinarySettings = SkEditor.Configuration.Configs.BinarySettings;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class SplashScreenService(BinarySettings binarySettings)
 {

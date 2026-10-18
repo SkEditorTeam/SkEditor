@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Dialogs.Elements;
+﻿namespace SkEditor.Core.Dialogs.Models.Elements;
 
 public abstract class DialogElement
 {

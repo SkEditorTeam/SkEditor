@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace SkEditor.Views.Controls;
+namespace SkEditor.Layout.Menu.UI;
 
 public partial class MainMenuControl : UserControl
 {

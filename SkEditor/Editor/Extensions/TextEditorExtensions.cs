@@ -4,7 +4,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using R3;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Editor.Extensions;
 
 public static class TextEditorExtensions
 {

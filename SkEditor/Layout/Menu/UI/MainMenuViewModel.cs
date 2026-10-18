@@ -2,12 +2,10 @@
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Contracts.Services;
-using SkEditor.Utilities.Menu;
-using SkEditor.Views.Windows;
-using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
+using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
+using MainWindow = SkEditor.Windowing.UI.MainWindow;
 
-namespace SkEditor.ViewModels.Controls;
+namespace SkEditor.Layout.Menu.UI;
 
 public partial class MainMenuViewModel : ObservableObject
 {

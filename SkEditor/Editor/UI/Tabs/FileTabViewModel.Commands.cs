@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Utilities.Editor;
+using SkEditor.Editor.Commands;
 
-namespace SkEditor.ViewModels.Tabs;
+namespace SkEditor.Editor.UI.Tabs;
 
 public partial class FileTabViewModel
 {

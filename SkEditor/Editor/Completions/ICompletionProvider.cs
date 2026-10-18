@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using AvaloniaEdit.Document;
-using SkEditor.Models.Completions;
+using SkEditor.Editor.Completions.Models;
 
-namespace SkEditor.Utilities.Editor.Completions;
+namespace SkEditor.Editor.Completions;
 
 public interface ICompletionProvider
 {

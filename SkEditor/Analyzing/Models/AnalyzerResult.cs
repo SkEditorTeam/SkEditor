@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SkEditor.Models.Analyzer;
+namespace SkEditor.Analyzing.Models;
 
 public record AnalyzerResult(List<AnalyzerError> Errors)
 {

@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace SkEditor.Converters.Settings;
+namespace SkEditor.Configuration.Converters;
 
 public class SettingsFontFamilyConverter : IValueConverter
 {

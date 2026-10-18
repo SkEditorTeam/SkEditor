@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace SkEditor.Views.Controls.Sidebar;
+namespace SkEditor.Layout.Sidebar.UI.Panes;
 
 public partial class RemoteExplorerView : UserControl
 {

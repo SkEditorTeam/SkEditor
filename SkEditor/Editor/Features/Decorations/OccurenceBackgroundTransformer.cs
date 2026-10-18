@@ -2,9 +2,9 @@
 using Avalonia.Media.Immutable;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using SkEditor.Contracts.Services;
+using SkEditor.Appearance.Themes;
 
-namespace SkEditor.Tranformers;
+namespace SkEditor.Editor.Features.Decorations;
 
 public class OccurenceBackgroundTransformer(IThemeService themes) : DocumentColorizingTransformer
 {

@@ -1,4 +1,4 @@
-namespace SkEditor.Models.Completions;
+namespace SkEditor.Editor.Completions.Models;
 
 public enum CompletionType
 {

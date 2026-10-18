@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SkEditor.Contracts.Services.Localization;
+using SkEditor.Core.Localization;
 
-namespace SkEditor.Utilities.Settings.Providers.Choice;
+namespace SkEditor.Configuration.Providers.Choice;
 
 public class LanguageChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider<string>
 {

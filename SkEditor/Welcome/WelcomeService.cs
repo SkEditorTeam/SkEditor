@@ -5,15 +5,17 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Welcome;
-using SkEditor.Utilities.Icons;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Appearance.Icons;
+using SkEditor.Core.Localization;
+using SkEditor.Core.System;
+using SkEditor.Welcome.Models;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Projects.Messages;
+using SkEditor.Workspace.Tabs;
+using SettingsTabViewModel = SkEditor.Configuration.UI.SettingsTabViewModel;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Services;
+namespace SkEditor.Welcome;
 
 public class WelcomeService : IWelcomeService
 {

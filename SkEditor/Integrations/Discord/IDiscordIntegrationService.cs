@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Contracts.Services;
+﻿namespace SkEditor.Integrations.Discord;
 
 public interface IDiscordIntegrationService
 {

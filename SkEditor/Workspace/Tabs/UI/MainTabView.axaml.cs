@@ -5,11 +5,10 @@ using Avalonia.Input;
 using FluentAvalonia.UI.Controls;
 using HotAvalonia;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.DataTemplates;
-using SkEditor.ViewModels.Tabs;
-using SkEditor.ViewModels.Windows;
+using SkEditor.Workspace.Tabs.Templates;
+using MainWindowViewModel = SkEditor.Windowing.UI.MainWindowViewModel;
 
-namespace SkEditor.Views.Controls;
+namespace SkEditor.Workspace.Tabs.UI;
 
 public partial class MainTabView : UserControl
 {

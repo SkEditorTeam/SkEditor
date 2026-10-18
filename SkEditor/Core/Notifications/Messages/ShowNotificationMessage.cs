@@ -1,5 +1,3 @@
-﻿using SkEditor.Models.Notifications;
-
-namespace SkEditor.Models.Messages;
+﻿namespace SkEditor.Core.Notifications.Messages;
 
 public record ShowNotificationMessage(Notification Notification);

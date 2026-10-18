@@ -1,14 +1,14 @@
 ﻿using System;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Controls;
-using SkEditor.ViewModels.Tabs;
-using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
+using SkEditor.Core.Localization;
+using SkEditor.Layout.StatusBar.UI;
+using SkEditor.Workspace.Tabs;
+using DocumentationTabViewModel = SkEditor.Documentation.UI.DocumentationTabViewModel;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
+using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
 
-namespace SkEditor.Utilities.Menu.Providers;
+namespace SkEditor.Layout.Menu.Providers;
 
 public class ToolsMenuProvider(
     ITabService tabs,

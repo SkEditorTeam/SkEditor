@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ObservableCollections;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Logging;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
+using SkEditor.Core.System;
+using SkEditor.Layout.StatusBar.UI.Abstractions;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls.StatusBar.Panes;
+namespace SkEditor.Layout.StatusBar.UI.Panes.Logs;
 
 public class LogsPaneViewModel : ObservableObject, IDrawerPaneViewModel
 {

@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
-using SkEditor.ViewModels.Pages;
 
-namespace SkEditor.Views.Pages;
+namespace SkEditor.Welcome.UI;
 
 public partial class WhatsNewPage : UserControl
 {

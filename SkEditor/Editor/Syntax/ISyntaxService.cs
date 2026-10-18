@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using SkEditor.Models.UI;
+using SkEditor.Editor.Syntax.Models;
 using TextMateSharp.Internal.Types;
 using TextMateSharp.Themes;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Editor.Syntax;
 
 /// <summary>
 ///     Manages the syntax highlighting, including loading grammars, themes, and their associations.

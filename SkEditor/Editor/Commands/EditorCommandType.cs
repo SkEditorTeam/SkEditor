@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Utilities.Editor;
+﻿namespace SkEditor.Editor.Commands;
 
 public enum EditorCommandType
 {

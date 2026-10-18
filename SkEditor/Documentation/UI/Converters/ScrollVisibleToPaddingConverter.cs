@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
 
-namespace SkEditor.Converters.Layout;
+namespace SkEditor.Documentation.UI.Converters;
 
 public class ScrollVisibleToPaddingConverter : IValueConverter
 {

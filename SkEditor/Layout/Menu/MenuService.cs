@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using SkEditor.Contracts.Services;
-using SkEditor.Utilities.Menu;
-using SkEditor.ViewModels.Menu;
+using SkEditor.Layout.Menu.Models;
+using SkEditor.Layout.Menu.Providers;
 
-namespace SkEditor.Services;
+namespace SkEditor.Layout.Menu;
 
 public class MenuService(IEnumerable<IMenuProvider> menuProviders) : IMenuService
 {

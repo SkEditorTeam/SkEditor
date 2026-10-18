@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AvaloniaEdit.Document;
-using SkEditor.Contracts.Services;
+using SkEditor.Core.Logging;
+using SkEditor.Editor.Completions.Models;
 using SkEditor.Matcher;
 using SkEditor.Matcher.Models;
-using SkEditor.Models.Completions;
 
-namespace SkEditor.Utilities.Editor.Completions;
+namespace SkEditor.Editor.Completions.Providers;
 
 public class EventCompletionProvider : ICompletionProvider
 {

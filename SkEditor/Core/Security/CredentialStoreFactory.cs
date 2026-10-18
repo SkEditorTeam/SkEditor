@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Security;
-using SkEditor.Utilities.Security;
+using SkEditor.Configuration;
 
-namespace SkEditor.Services.Security;
+namespace SkEditor.Core.Security;
 
 public class CredentialStoreFactory(IConfigService configs) : ICredentialStoreFactory
 {

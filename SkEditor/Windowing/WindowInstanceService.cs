@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Serilog;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class WindowInstanceService
 {

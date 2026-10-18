@@ -3,15 +3,14 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using HotAvalonia;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Services.Windowing;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Controls;
-using SkEditor.ViewModels.Windows;
+using SkEditor.Appearance.Themes;
+using SkEditor.Core.Localization;
+using SkEditor.Editor.Syntax;
+using SkEditor.Integrations.Discord;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using MainMenuViewModel = SkEditor.Layout.Menu.UI.MainMenuViewModel;
 
-namespace SkEditor.Views.Windows;
+namespace SkEditor.Windowing.UI;
 
 public partial class MainWindow : Window
 {

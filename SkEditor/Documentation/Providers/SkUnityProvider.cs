@@ -6,10 +6,10 @@ using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using SkEditor.Models.Documentation;
-using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Documentation.Models;
+using SecretsConfig = SkEditor.Configuration.Configs.SecretsConfig;
 
-namespace SkEditor.Utilities.Docs.Providers;
+namespace SkEditor.Documentation.Providers;
 
 public class SkUnityProvider(SecretsConfig secrets) : IDocumentationProvider
 {

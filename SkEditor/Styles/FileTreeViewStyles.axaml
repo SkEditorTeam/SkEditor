@@ -2,13 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
                     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-                    xmlns:converters2="clr-namespace:SkEditor.Converters"
-                    xmlns:types="clr-namespace:SkEditor.Models.Projects.Types"
-                    xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
+                    xmlns:converters1="clr-namespace:SkEditor.Appearance.Icons.Converters"
+                    xmlns:converters3="clr-namespace:SkEditor.Layout.Menu.Converters"
+                    xmlns:abstractions="clr-namespace:SkEditor.Workspace.Filesystem.Abstractions"
                     x:CompileBindings="True">
 
-    <iconverters:StandardIconConverter x:Key="StandardIconConverter" />
-    <converters2:ContextMenuHeaderConverter x:Key="ContextMenuHeaderConverter" />
+    <converters1:StandardIconConverter x:Key="StandardIconConverter" />
+    <converters3:ContextMenuHeaderConverter x:Key="ContextMenuHeaderConverter" />
 
     <x:Double x:Key="TreeViewItemIndent">16</x:Double>
     <x:Double x:Key="TreeViewItemExpandCollapseChevronSize">18</x:Double>
@@ -83,7 +83,7 @@
                 Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=Bounds.Width}" />
         <Setter Property="FocusAdorner" Value="{x:Null}" />
         <Setter Property="Template">
-            <ControlTemplate x:DataType="types:FileSystemNode">
+            <ControlTemplate x:DataType="abstractions:FileSystemNode">
                 <StackPanel>
                     <Border Name="PART_LayoutRoot"
                             Classes="TreeViewItemLayoutRoot"

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using SkEditor.Models.Notifications;
 using AvaloniaNotificationType = Avalonia.Controls.Notifications.NotificationType;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Core.Notifications.Converters;
 
 public class NotificationTypeConverter : IValueConverter
 {

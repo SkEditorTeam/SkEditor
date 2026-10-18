@@ -2,11 +2,12 @@
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using Serilog;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.Notifications.Messages;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Projects.Types;
+namespace SkEditor.Workspace.Filesystem.Abstractions;
 
 public abstract class BaseFileNode(string name, string path) : FileSystemNode(name, path, false)
 {

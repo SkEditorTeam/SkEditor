@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AvaloniaEdit;
-using SkEditor.Utilities.Editor;
-using SkEditor.Utilities.Editor.Commands;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Commands;
+using SkEditor.Editor.Tabs.Capabilities;
 
-namespace SkEditor.Features.Editing;
+namespace SkEditor.Editor.Features.Editing;
 
 public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEditorFeature
 {

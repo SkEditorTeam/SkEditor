@@ -3,10 +3,10 @@ using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Editor.Features;
+using SkEditor.Editor.UI.Tabs;
 
-namespace SkEditor.Behaviors;
+namespace SkEditor.Editor.UI;
 
 public class TextEditorLoadBehavior : Behavior<TextEditor>
 {

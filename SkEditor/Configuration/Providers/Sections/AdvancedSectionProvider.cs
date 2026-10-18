@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Settings;
-using SkEditor.Models.Settings.Types;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Utilities.Settings.Providers.Choice;
-using SkEditor.Utilities.Startup;
-using AppSettingsProperty = SkEditor.Utilities.Settings.Configs.AppSettings.AppSettingsProperty;
-using BinarySettingsProperty = SkEditor.Utilities.Settings.Configs.BinarySettings.BinarySettingsProperty;
+using SkEditor.Configuration.Configs;
+using SkEditor.Configuration.Models;
+using SkEditor.Configuration.Models.Types;
+using SkEditor.Configuration.Providers.Choice;
+using SkEditor.Core.System;
+using SkEditor.Core.Localization;
+using SkEditor.Windowing.Models;
+using AppSettingsProperty = SkEditor.Configuration.Configs.AppSettings.AppSettingsProperty;
+using BinarySettingsProperty = SkEditor.Configuration.Configs.BinarySettings.BinarySettingsProperty;
 
-namespace SkEditor.Utilities.Settings.Providers.Sections;
+namespace SkEditor.Configuration.Providers.Sections;
 
 public class AdvancedSectionProvider(
     IConfigService configs,

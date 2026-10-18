@@ -4,8 +4,9 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Workspace.Projects.Models;
 
-namespace SkEditor.Models.Projects.Types;
+namespace SkEditor.Workspace.Filesystem.Abstractions;
 
 public abstract partial class FileSystemNode(string name, string path, bool isDirectory) : ObservableObject
 {

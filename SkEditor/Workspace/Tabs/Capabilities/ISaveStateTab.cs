@@ -1,4 +1,4 @@
-﻿namespace SkEditor.ViewModels.Tabs.Capabilities;
+﻿namespace SkEditor.Workspace.Tabs.Capabilities;
 
 public interface ISaveStateTab
 {

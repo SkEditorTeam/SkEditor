@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using AvaloniaEdit.Utils;
 
-namespace SkEditor.Views.Pages;
+namespace SkEditor.Welcome.UI;
 
 public partial class WelcomePage : UserControl
 {
@@ -10,7 +10,7 @@ public partial class WelcomePage : UserControl
     {
         InitializeComponent();
 
-        RecentItemsPanel.GetObservable(IsVisibleProperty)
+        AvaloniaObjectExtensions.GetObservable(RecentItemsPanel, IsVisibleProperty)
             .Subscribe(UpdateGridLayout);
     }
 

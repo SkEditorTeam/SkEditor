@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using R3;
-using SkEditor.Contracts.Services;
+using SkEditor.Appearance.Themes;
 
-namespace SkEditor.Utilities.Settings.Providers.Choice;
+namespace SkEditor.Configuration.Providers.Choice;
 
 public class ThemeChoiceProvider(IThemeService themeService) : ISettingsChoiceProvider<string>
 {

@@ -6,7 +6,7 @@ using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
 using AvaloniaEdit.Rendering;
 
-namespace SkEditor.Views.Controls.Editor;
+namespace SkEditor.Editor.UI.Controls;
 
 public class ColorBoxControl : Control
 {

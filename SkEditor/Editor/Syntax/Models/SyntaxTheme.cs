@@ -1,6 +1,6 @@
 using System;
 
-namespace SkEditor.Models.UI;
+namespace SkEditor.Editor.Syntax.Models;
 
 public record SyntaxTheme(string FileName, string? Name, string? TargetLanguage = null)
 {

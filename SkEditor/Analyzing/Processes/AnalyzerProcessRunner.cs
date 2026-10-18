@@ -1,8 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Logging;
+using SkEditor.Core.Logging;
 
 namespace SkEditor.Analyzing.Processes;
 

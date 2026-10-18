@@ -10,21 +10,21 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using Renci.SshNet;
 using Renci.SshNet.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Contracts.Services.Security;
-using SkEditor.Models.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Notifications;
-using SkEditor.Models.Projects.Sftp;
-using SkEditor.Models.Remote;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs;
-using ICredentialStore = SkEditor.Utilities.Security.ICredentialStore;
-using Notification = SkEditor.Models.Notifications.Notification;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.Security;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Filesystem.Sftp;
+using SkEditor.Workspace.Remote.Messages;
+using SkEditor.Workspace.Remote.Models;
+using SkEditor.Workspace.Tabs;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
+using ICredentialStore = SkEditor.Core.Security.ICredentialStore;
+using Notification = SkEditor.Core.Notifications.Notification;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Services;
+namespace SkEditor.Workspace.Remote;
 
 public class RemoteConnectionService(
     ITranslationService translation,

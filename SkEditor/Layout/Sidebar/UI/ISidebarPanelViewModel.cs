@@ -1,8 +1,8 @@
 ﻿using Avalonia;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Localization;
+using SkEditor.Appearance.Icons;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls;
+namespace SkEditor.Layout.Sidebar.UI;
 
 public interface ISidebarPanelViewModel
 {

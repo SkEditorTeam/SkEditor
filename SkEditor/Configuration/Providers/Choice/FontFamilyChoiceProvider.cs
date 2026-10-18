@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Media;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Utilities.Settings.Providers.Choice;
+namespace SkEditor.Configuration.Providers.Choice;
 
 public class FontFamilyChoiceProvider : ISettingsChoiceProvider<string?>
 {

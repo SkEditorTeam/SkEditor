@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SkEditor.Contracts.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public interface IWindowDialogService
 {

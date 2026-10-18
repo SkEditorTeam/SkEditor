@@ -2,23 +2,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
-             xmlns:statusBar="clr-namespace:SkEditor.Views.Controls.StatusBar"
-             xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls.StatusBar.Panes"
-             xmlns:analyzer="clr-namespace:SkEditor.Models.Analyzer"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
+             xmlns:models="clr-namespace:SkEditor.Analyzing.Models"
+             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:errors="clr-namespace:SkEditor.Layout.StatusBar.UI.Panes.Errors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SkEditor.Views.Controls.StatusBar.Panes.ErrorListPaneView"
+             x:Class="SkEditor.Layout.StatusBar.UI.Panes.Errors.ErrorListPaneView"
              Name="Root"
-             x:DataType="vm:ErrorListPaneViewModel">
+             x:DataType="errors:ErrorListPaneViewModel">
     <Grid RowDefinitions="Auto,*" Margin="8,2,0,0">
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                       Margin="0,0,-6,0">
             <Interaction.Behaviors>
                 <BehaviorCollection>
-                    <behaviors:SmoothScrollBehavior />
+                    <behaviors1:SmoothScrollBehavior />
                 </BehaviorCollection>
             </Interaction.Behaviors>
             <Panel>
@@ -31,11 +30,11 @@
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <statusBar:DrawerErrorEntry x:DataType="analyzer:AnalyzerError"
+                            <errors:DrawerErrorEntry x:DataType="models:AnalyzerError"
                                                         ErrorMessage="{Binding Message}"
                                                         ErrorType="{Binding Type}" ErrorLine="{Binding Line}"
                                                         ErrorSource=""
-                                                        ErrorClickCommand="{Binding #Root.((vm:ErrorListPaneViewModel)DataContext)?.ErrorClickCommand}"
+                                                        ErrorClickCommand="{Binding #Root.((errors:ErrorListPaneViewModel)DataContext)?.ErrorClickCommand}"
                                                         ErrorClickCommandParameter="{Binding .}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -51,9 +50,9 @@
                     </StackPanel.IsVisible>
                     <icons:SymbolIcon Symbol="WeatherSqualls" FontSize="32" Opacity="0.5" HorizontalAlignment="Center" />
                     <StackPanel Spacing="2">
-                        <TextBlock Text="{localization:Translate BottomDrawerErrorListNoProblems}"
+                        <TextBlock Text="{localization1:Translate BottomDrawerErrorListNoProblems}"
                                    HorizontalAlignment="Center" FontSize="16" Opacity="0.75" />
-                        <TextBlock Text="{localization:Translate BottomDrawerErrorListNoProblemsDescription}"
+                        <TextBlock Text="{localization1:Translate BottomDrawerErrorListNoProblemsDescription}"
                                    HorizontalAlignment="Center" TextAlignment="Center"
                                    TextWrapping="Wrap"
                                    FontSize="12" MaxWidth="300" Opacity="0.6" />
@@ -68,7 +67,7 @@
                         </MultiBinding>
                     </StackPanel.IsVisible>
                     <icons:SymbolIcon Symbol="WeatherSqualls" FontSize="32" Opacity="0.5" HorizontalAlignment="Center" />
-                    <TextBlock Text="{localization:Translate BottomDrawerErrorListNoSkriptFileOpened}"
+                    <TextBlock Text="{localization1:Translate BottomDrawerErrorListNoSkriptFileOpened}"
                                HorizontalAlignment="Center" TextAlignment="Center"
                                TextWrapping="Wrap"
                                FontSize="12" MaxWidth="300" Opacity="0.6" />
@@ -80,7 +79,7 @@
                                        BorderThickness="1.5"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center" />
-                    <TextBlock Text="{localization:Translate BottomDrawerErrorListLoading}"
+                    <TextBlock Text="{localization1:Translate BottomDrawerErrorListLoading}"
                                HorizontalAlignment="Center" FontSize="16" Opacity="0.75" />
                 </StackPanel>
             </Panel>

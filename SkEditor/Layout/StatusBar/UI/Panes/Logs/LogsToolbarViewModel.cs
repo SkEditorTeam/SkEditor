@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
-using SkEditor.Models.Logging;
+using SkEditor.Core.Logging;
+using SkEditor.Layout.StatusBar.UI.Abstractions;
 
-namespace SkEditor.ViewModels.Controls.StatusBar.Panes.Terminal;
+namespace SkEditor.Layout.StatusBar.UI.Panes.Logs;
 
 public partial class LogsToolbarViewModel(LogsPaneViewModel logsPane) : ObservableObject, IDrawerToolbarViewModel
 {

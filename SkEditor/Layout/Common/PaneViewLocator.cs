@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
-namespace SkEditor.DataTemplates;
+namespace SkEditor.Layout.Common;
 
 public abstract class PaneViewLocator : IRecyclingDataTemplate
 {

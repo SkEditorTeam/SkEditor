@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Utilities.Settings.Attributes;
+using SkEditor.Configuration.Abstractions;
 
-namespace SkEditor.Utilities.Settings.Configs;
+namespace SkEditor.Configuration.Configs;
 
 [SettingsConfig]
 public partial class SecretsConfig : BaseConfig<SecretsConfig>

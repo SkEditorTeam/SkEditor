@@ -8,11 +8,11 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
-using SkEditor.Services.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Menu;
+using SkEditor.Core.Localization;
+using SkEditor.Layout.Menu.Models;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.AttachedProperties;
+namespace SkEditor.Windowing.UI.Platform;
 
 public static class NativeMenuBridge
 {

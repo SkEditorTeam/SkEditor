@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Integrations;
+﻿namespace SkEditor.Integrations.Publishing.Models;
 
 public enum PublishType
 {

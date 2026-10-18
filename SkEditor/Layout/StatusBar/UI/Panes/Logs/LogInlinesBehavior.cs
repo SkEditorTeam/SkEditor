@@ -8,10 +8,10 @@ using Avalonia.Controls.Documents;
 using Avalonia.Media;
 using AvaloniaEdit.Utils;
 using R3;
-using SkEditor.Converters;
-using SkEditor.Models.Logging;
+using SkEditor.Core.Logging;
+using SkEditor.Layout.StatusBar.UI.Panes.Logs.Converters;
 
-namespace SkEditor.Behaviors;
+namespace SkEditor.Layout.StatusBar.UI.Panes.Logs;
 
 public static class LogInlinesBehavior
 {

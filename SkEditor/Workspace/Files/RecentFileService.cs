@@ -7,11 +7,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Welcome;
+using SkEditor.Configuration;
+using SkEditor.Core.Logging;
+using SkEditor.Welcome.Models;
 
-namespace SkEditor.Services.Files;
+namespace SkEditor.Workspace.Files;
 
 public class RecentFileService : IRecentFileService
 {

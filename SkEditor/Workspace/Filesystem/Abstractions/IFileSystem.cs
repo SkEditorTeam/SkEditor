@@ -1,8 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using SkEditor.Models.Projects.Types;
 
-namespace SkEditor.Contracts.Models;
+namespace SkEditor.Workspace.Filesystem.Abstractions;
 
 /// <summary>
 ///     Represents a file system in a node-based structure

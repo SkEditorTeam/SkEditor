@@ -10,15 +10,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Documentation;
-using SkEditor.Models.Messages;
-using SkEditor.Utilities.Docs;
-using SkEditor.Utilities.Docs.Providers;
-using SkEditor.Utilities.Localization;
+using SkEditor.Configuration.Messages;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Documentation.Models;
+using SkEditor.Documentation.Providers;
+using SkEditor.Workspace.Tabs;
+using TabViewModelBase = SkEditor.Workspace.Tabs.TabViewModelBase;
 
-namespace SkEditor.ViewModels.Tabs;
+namespace SkEditor.Documentation.UI;
 
 public partial class DocumentationTabViewModel : TabViewModelBase
 {
@@ -26,7 +27,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
     private readonly ITabService _tabs;
-    private readonly Func<SettingsTabViewModel> _settingsTabFactory;
+    private readonly Func<Configuration.UI.SettingsTabViewModel> _settingsTabFactory;
     private readonly IMessenger _messenger;
 
     private CancellationTokenSource? _cts;
@@ -79,7 +80,7 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     public DocumentationTabViewModel(IDocumentationService documentation, INotificationService notifs, ILogService logs,
         IEnumerable<IDocumentationProvider> providers, ITabService tabs,
-        Func<SettingsTabViewModel> settingsTabFactory, IMessenger messenger) : base(
+        Func<Configuration.UI.SettingsTabViewModel> settingsTabFactory, IMessenger messenger) : base(
         TranslationKey.DocumentationTabTitle, Symbol.Book)
     {
         _documentation = documentation;

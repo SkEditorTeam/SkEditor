@@ -1,8 +1,9 @@
 ﻿using System;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
+using SkEditor.Core.Localization;
 
-namespace SkEditor.Utilities.Localization;
+namespace SkEditor.Core.Localization;
 
 public class TranslateExtension : MarkupExtension
 {

@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Notifications;
-using SkEditor.Models.Welcome;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.System;
+using SkEditor.Welcome.Models;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Projects.Messages;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Pages;
+namespace SkEditor.Welcome.UI;
 
 public partial class WelcomePageViewModel(
     IWelcomeService welcome,

@@ -1,10 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.Views.Windows;
+using SkEditor.Windowing.UI;
+using StateConfig = SkEditor.Configuration.Configs.StateConfig;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class WindowStateService(StateConfig stateConfig, WindowRegistry windowRegistry)
 {

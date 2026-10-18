@@ -4,7 +4,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Threading;
 
-namespace SkEditor.Views.Controls.Notifications;
+namespace SkEditor.Core.Notifications.UI;
 
 public class SkEditorNotificationCard : NotificationCard
 {

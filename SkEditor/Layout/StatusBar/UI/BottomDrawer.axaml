@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:SkEditor.ViewModels.Controls"
-             xmlns:controls="clr-namespace:SkEditor.Views.Controls"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:ui="clr-namespace:SkEditor.Layout.StatusBar.UI"
+             xmlns:abstractions="clr-namespace:SkEditor.Layout.StatusBar.UI.Abstractions"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="vm:BottomDrawerViewModel"
-             x:Class="SkEditor.Views.Controls.StatusBar.BottomDrawer">
+             x:DataType="ui:BottomDrawerViewModel"
+             x:Class="SkEditor.Layout.StatusBar.UI.BottomDrawer">
     <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
             Background="{DynamicResource SkEditorBorderBackground}"
             CornerRadius="7" Padding="10">
@@ -15,15 +15,15 @@
         <Grid RowDefinitions="Auto,*" RowSpacing="8">
             <Border Background="{DynamicResource SkEditorBorderBackground}" CornerRadius="7" Height="36">
                 <Grid ColumnDefinitions="*, Auto,Auto">
-                    <controls:SkEditorTabStrip Grid.Column="0" Padding="16,8,8,0"
+                    <ui:SkEditorTabStrip Grid.Column="0" Padding="16,8,8,0"
                                                ItemsSource="{Binding VisibleItems}"
                                                SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                        <controls:SkEditorTabStrip.ItemTemplate>
-                            <DataTemplate x:DataType="vm:IDrawerPaneViewModel">
+                        <ui:SkEditorTabStrip.ItemTemplate>
+                            <DataTemplate x:DataType="abstractions:IDrawerPaneViewModel">
                                 <TextBlock Text="{Binding Name}" />
                             </DataTemplate>
-                        </controls:SkEditorTabStrip.ItemTemplate>
-                    </controls:SkEditorTabStrip>
+                        </ui:SkEditorTabStrip.ItemTemplate>
+                    </ui:SkEditorTabStrip>
                     <ContentControl Grid.Column="1"
                                     Content="{Binding SelectedItem?.Toolbar}"
                                     VerticalAlignment="Center" />

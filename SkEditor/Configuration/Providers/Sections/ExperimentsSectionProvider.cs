@@ -1,14 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Settings;
-using SkEditor.Models.Settings.Types;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
-using ExperimentsProperty = SkEditor.Utilities.Settings.ExperimentsConfig.ExperimentsConfigProperty;
+using SkEditor.Configuration.Configs;
+using SkEditor.Configuration.Messages;
+using SkEditor.Configuration.Models;
+using SkEditor.Configuration.Models.Types;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
+using ExperimentsProperty = SkEditor.Configuration.Configs.ExperimentsConfig.ExperimentsConfigProperty;
 
-namespace SkEditor.Utilities.Settings.Providers.Sections;
+namespace SkEditor.Configuration.Providers.Sections;
 
 public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenger messenger) : ISettingsSectionProvider
 {

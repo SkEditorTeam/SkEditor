@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.StatusBar;
+using SkEditor.Core.Notifications;
+using SkEditor.Layout.StatusBar.Providers;
+using SkEditor.Windowing;
 
-namespace SkEditor.ViewModels.Controls;
+namespace SkEditor.Layout.StatusBar.UI;
 
 public partial class StatusBarViewModel : ObservableObject, IDisposable
 {

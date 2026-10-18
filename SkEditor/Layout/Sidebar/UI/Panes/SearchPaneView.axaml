@@ -3,11 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="300"
-             xmlns:panes="clr-namespace:SkEditor.ViewModels.Controls.Sidebar.Panes"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
-             x:DataType="panes:SearchPaneViewModel"
-             x:Class="SkEditor.Views.Controls.Sidebar.SearchPaneView">
+             xmlns:panes1="clr-namespace:SkEditor.Layout.Sidebar.UI.Panes"
+             x:DataType="panes1:SearchPaneViewModel"
+             x:Class="SkEditor.Layout.Sidebar.UI.Panes.SearchPaneView">
 
     <UserControl.Styles>
         <Style Selector="TextBox.search">

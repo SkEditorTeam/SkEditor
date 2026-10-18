@@ -5,7 +5,7 @@ using Avalonia.Data.Converters;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Layout.Menu.Converters;
 
 public class MenuHeaderConverter : IMultiValueConverter
 {

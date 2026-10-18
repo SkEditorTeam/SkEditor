@@ -1,9 +1,8 @@
 ﻿using System;
 using R3;
-using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.Utilities.Settings.Configs;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Services.Files.Features;
+namespace SkEditor.Editor.Features.View.Zoom;
 
 public class ZoomService : IZoomService, IDisposable
 {

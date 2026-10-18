@@ -5,9 +5,9 @@ using Avalonia.Input;
 using Avalonia.Media;
 using FluentAvalonia.UI.Windowing;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Contracts.Services;
+using SkEditor.Appearance.Themes;
 
-namespace SkEditor.Views.Controls;
+namespace SkEditor.Windowing.UI;
 
 public class SkEditorWindow : FAAppWindow
 {

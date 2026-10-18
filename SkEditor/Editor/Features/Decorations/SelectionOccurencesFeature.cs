@@ -4,12 +4,10 @@ using System.Linq;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using SkEditor.Contracts.Services;
-using SkEditor.Tranformers;
-using SkEditor.Utilities.Editor;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Appearance.Themes;
+using SkEditor.Editor.Tabs.Capabilities;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.Decorations;
 
 public class SelectionOccurencesFeature(IThemeService themes) : IEditorFeature
 {

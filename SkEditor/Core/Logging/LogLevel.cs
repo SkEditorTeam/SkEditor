@@ -1,4 +1,4 @@
-namespace SkEditor.Models.Logging;
+namespace SkEditor.Core.Logging;
 
 public enum LogLevel
 {

@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Avalonia.Platform;
 
-namespace SkEditor.Services;
+namespace SkEditor.Appearance.Icons;
 
 public class IconProvider
 {

@@ -1,7 +1,6 @@
-using SkEditor.ViewModels.Windows;
-using SkEditor.Views.Controls;
+using SkEditor.Windowing.UI;
 
-namespace SkEditor.Views.Windows;
+namespace SkEditor.Integrations.Publishing.UI;
 
 public partial class PublishWindow : SkEditorWindow
 {

@@ -3,10 +3,10 @@ using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Features.Editing;
+namespace SkEditor.Editor.Features.Editing;
 
 public class AutoIndentFeature(AppSettings appSettings) : IEditorFeature
 {

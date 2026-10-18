@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Projects;
+﻿namespace SkEditor.Workspace.Projects.Models;
 
 public enum ProjectAction
 {

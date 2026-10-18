@@ -7,15 +7,20 @@ using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Controls;
-using SkEditor.ViewModels.Menu;
-using SkEditor.ViewModels.Pages;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Layout.Menu.Models;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Files.Messages;
+using SkEditor.Workspace.Projects.Messages;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using BottomDrawerViewModel = SkEditor.Layout.StatusBar.UI.BottomDrawerViewModel;
+using MainMenuViewModel = SkEditor.Layout.Menu.UI.MainMenuViewModel;
+using SidebarViewModel = SkEditor.Layout.Sidebar.UI.SidebarViewModel;
+using StatusBarViewModel = SkEditor.Layout.StatusBar.UI.StatusBarViewModel;
+using WelcomePageViewModel = SkEditor.Welcome.UI.WelcomePageViewModel;
 
-namespace SkEditor.ViewModels.Windows;
+namespace SkEditor.Windowing.UI;
 
 public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenFileMessage>,
     IRecipient<UpdateFileDetailsMessage>,

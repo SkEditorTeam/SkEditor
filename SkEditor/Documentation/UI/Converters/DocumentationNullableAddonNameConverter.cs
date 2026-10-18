@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using SkEditor.Services.Localization;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
 
-namespace SkEditor.Converters.Documentation;
+namespace SkEditor.Documentation.UI.Converters;
 
 public class DocumentationNullableAddonNameConverter : IValueConverter
 {

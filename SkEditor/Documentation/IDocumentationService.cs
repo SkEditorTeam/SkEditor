@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Documentation;
 
 /// <summary>
 ///     Handles documentation retrieval, download and caching

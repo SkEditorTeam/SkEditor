@@ -6,11 +6,10 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
-using SkEditor.Behaviors;
-using SkEditor.Models.Projects.Types;
-using SkEditor.ViewModels.Controls.FileTree;
+using SkEditor.Appearance.Behaviors;
+using SkEditor.Workspace.Filesystem.Abstractions;
 
-namespace SkEditor.Views.Controls.Projects;
+namespace SkEditor.Workspace.UI.Tree;
 
 public partial class FileTreeView : UserControl
 {
@@ -28,7 +27,7 @@ public partial class FileTreeView : UserControl
 
     private void OnFileTreeTemplateApplied(object? sender, TemplateAppliedEventArgs e)
     {
-        ScrollViewer? scrollViewer = FileTree.GetTemplateDescendants()
+        ScrollViewer? scrollViewer = TemplateExtensions.GetTemplateDescendants(FileTree)
             .OfType<ScrollViewer>()
             .FirstOrDefault();
         if (scrollViewer is null)

@@ -1,7 +1,7 @@
 using R3;
-using SkEditor.Models.Projects.Types;
+using SkEditor.Workspace.Filesystem.Abstractions;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Workspace.Projects.Extensions;
 
 public static class FileNodeExtensions
 {

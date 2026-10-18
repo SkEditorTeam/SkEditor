@@ -2,14 +2,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
-        xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
         xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+        xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+        xmlns:ui="clr-namespace:SkEditor.Integrations.Publishing.UI"
         mc:Ignorable="d"
-        x:Class="SkEditor.Views.Windows.PublishWindow" Icon="/Assets/SkEditor.ico"
-        Title="{localization:Translate WindowTitlePublish}" Height="230" Width="300"
+        x:Class="SkEditor.Integrations.Publishing.UI.PublishWindow" Icon="/Assets/SkEditor.ico"
+        Title="{localization1:Translate WindowTitlePublish}" Height="230" Width="300"
         CanResize="False" CanMinimize="False" CanMaximize="False"
-        x:DataType="windows:PublishWindowViewModel"
+        x:DataType="ui:PublishWindowViewModel"
         WindowStartupLocation="CenterOwner">
 
     <DockPanel Margin="20" VerticalSpacing="12">
@@ -25,7 +25,7 @@
         <StackPanel DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Spacing="12">
             <Grid ColumnDefinitions="*,auto" VerticalAlignment="Bottom" ColumnSpacing="6">
                 <TextBox IsReadOnly="True" Focusable="False"
-                         PlaceholderText="{localization:Translate PublishWindowResultLink}"
+                         PlaceholderText="{localization1:Translate PublishWindowResultLink}"
                          Text="{Binding Result}"
                          Grid.Column="0" />
                 <Button Width="35" Height="35" HorizontalAlignment="Right" Grid.Column="1"
@@ -38,7 +38,7 @@
                     </Button.Content>
                 </Button>
             </Grid>
-            <Button Content="{localization:Translate PublishWindowPublishButton}"
+            <Button Content="{localization1:Translate PublishWindowPublishButton}"
                     Command="{Binding PublishCommand}"
                     HorizontalAlignment="Stretch" />
         </StackPanel>

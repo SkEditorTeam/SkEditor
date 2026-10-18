@@ -1,7 +1,6 @@
-using SkEditor.ViewModels.Windows;
-using SkEditor.Views.Controls;
+using SkEditor.Windowing.UI;
 
-namespace SkEditor.Views.Windows;
+namespace SkEditor.Workspace.Remote.UI;
 
 public partial class ManageRemoteConnectionsWindow : SkEditorWindow
 {

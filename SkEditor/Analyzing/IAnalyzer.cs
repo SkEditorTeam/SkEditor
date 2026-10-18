@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using SkEditor.Models.Analyzer;
+using SkEditor.Analyzing.Models;
 
 namespace SkEditor.Analyzing;
 

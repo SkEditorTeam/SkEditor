@@ -1,9 +1,9 @@
 ﻿using Avalonia.Input;
 using Avalonia.Interactivity;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Views.Windows;
+using SkEditor.Windowing.UI;
+using SkEditor.Workspace.Tabs;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class ShortcutsService(ITabService tabs, WindowStateService windowState)
 {

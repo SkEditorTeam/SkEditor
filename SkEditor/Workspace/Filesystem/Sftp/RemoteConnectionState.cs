@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Projects.Sftp;
+﻿namespace SkEditor.Workspace.Filesystem.Sftp;
 
 public enum RemoteConnectionState
 {

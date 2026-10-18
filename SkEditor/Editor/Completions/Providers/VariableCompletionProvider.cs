@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using AvaloniaEdit.Document;
-using SkEditor.Models.Completions;
+using SkEditor.Editor.Completions.Models;
 
-namespace SkEditor.Utilities.Editor.Completions;
+namespace SkEditor.Editor.Completions.Providers;
 
 public partial class VariableCompletionProvider : ICompletionProvider
 {

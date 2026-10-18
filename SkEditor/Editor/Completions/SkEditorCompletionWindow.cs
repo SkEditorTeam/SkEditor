@@ -10,11 +10,9 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using ObservableCollections;
 using R3;
-using SkEditor.Models.Completions;
-using SkEditor.Utilities.Editor.Completions;
-using SkEditor.ViewModels.Controls.Editor;
+using SkEditor.Editor.Completions.Models;
 
-namespace SkEditor.Views.Controls.Editor;
+namespace SkEditor.Editor.Completions;
 
 public class SkEditorCompletionWindow : CompletionWindowBase
 {

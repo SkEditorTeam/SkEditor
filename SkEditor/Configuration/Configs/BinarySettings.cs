@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Serilog;
-using SkEditor.Utilities.Settings.Attributes;
-using SkEditor.Utilities.Startup;
+using SkEditor.Configuration.Abstractions;
+using SkEditor.Core.Common;
+using SkEditor.Windowing.Models;
 
-namespace SkEditor.Utilities.Settings.Configs;
+namespace SkEditor.Configuration.Configs;
 
 /// <summary>
 ///     Manages application settings stored in a binary file next to the executable.

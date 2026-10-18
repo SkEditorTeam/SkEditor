@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SkEditor.Utilities.Settings.Providers.Choice;
+namespace SkEditor.Configuration.Providers.Choice;
 
 public class IndentAmountChoiceProvider : ISettingsChoiceProvider<int>
 {

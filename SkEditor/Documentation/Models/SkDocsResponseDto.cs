@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace SkEditor.Models.Documentation;
+namespace SkEditor.Documentation.Models;
 
 public record SkDocsResponseDto
 {

@@ -1,6 +1,6 @@
-﻿using SkEditor.Models.Settings;
+﻿using SkEditor.Configuration.Models;
 
-namespace SkEditor.Utilities.Settings.Providers.Sections;
+namespace SkEditor.Configuration.Providers.Sections;
 
 public interface ISettingsSectionProvider
 {

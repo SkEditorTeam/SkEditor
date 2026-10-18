@@ -2,9 +2,9 @@
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using SkEditor.Views.Windows;
+using SkEditor.Windowing.UI;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class WindowRegistry(IClassicDesktopStyleApplicationLifetime desktop)
 {

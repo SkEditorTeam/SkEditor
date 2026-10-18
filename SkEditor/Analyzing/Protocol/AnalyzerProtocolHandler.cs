@@ -3,13 +3,13 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
+using SkEditor.Analyzing.Models;
 using SkEditor.Analyzing.Processes;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Analyzer;
-using SkEditor.Models.Logging;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.Localization;
+using AnalyzeResultContext = SkEditor.Analyzing.Models.AnalyzeResultContext;
 
 namespace SkEditor.Analyzing.Protocol;
 

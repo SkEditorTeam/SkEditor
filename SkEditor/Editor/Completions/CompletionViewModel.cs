@@ -1,8 +1,8 @@
 using ObservableCollections;
 using R3;
-using SkEditor.Models.Completions;
+using SkEditor.Editor.Completions.Models;
 
-namespace SkEditor.ViewModels.Controls.Editor;
+namespace SkEditor.Editor.Completions;
 
 public class CompletionViewModel(ObservableList<CompletionData> completions)
 {

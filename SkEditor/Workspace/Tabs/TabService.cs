@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.DataTemplates;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Editor.Features;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Templates;
 
-namespace SkEditor.Services.Files;
+namespace SkEditor.Workspace.Tabs;
 
 public class TabService(IFileFeatureService features, TabViewLocator tabViewLocator, INotificationService notifs)
     : ITabService

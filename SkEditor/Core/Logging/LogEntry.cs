@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace SkEditor.Models.Logging;
+namespace SkEditor.Core.Logging;
 
 public record LogEntry(
     LogLevel Level,

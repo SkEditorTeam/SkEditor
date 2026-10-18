@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
 
-namespace SkEditor.Contracts.Services.Localization;
+namespace SkEditor.Core.Localization;
 
 public interface ITranslationService
 {

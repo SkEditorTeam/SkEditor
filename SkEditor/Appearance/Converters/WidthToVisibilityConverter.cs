@@ -2,7 +2,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace SkEditor.Converters.Layout;
+namespace SkEditor.Appearance.Converters;
 
 public class WidthToVisibilityConverter : IValueConverter
 {

@@ -1,7 +1,7 @@
 ﻿using AvaloniaEdit;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features;
 
 public interface IEditorFeature
 {

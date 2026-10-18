@@ -6,17 +6,16 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Analyzer;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Controls;
-using SkEditor.ViewModels.Controls.StatusBar.Panes;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Analyzing.Models;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Layout.StatusBar.UI;
+using SkEditor.Layout.StatusBar.UI.Panes.Errors;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
-namespace SkEditor.Utilities.StatusBar;
+namespace SkEditor.Layout.StatusBar.Providers;
 
 public class EditorErrorStatusBarProvider : IStatusBarProvider, IRecipient<AnalyzerLoadedMessage>,
     IRecipient<AnalyzerUnloadedMessage>,

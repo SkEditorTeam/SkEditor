@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Appearance.Converters;
 
 public class ImmutableSolidColorBrushConverter : JsonConverter<ImmutableSolidColorBrush>
 {

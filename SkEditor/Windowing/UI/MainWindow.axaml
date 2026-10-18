@@ -2,31 +2,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="clr-namespace:SkEditor.Views.Controls"
-        xmlns:notifications="clr-namespace:SkEditor.Views.Controls.Notifications"
-        xmlns:windows="clr-namespace:SkEditor.ViewModels.Windows"
-        xmlns:sidebar="clr-namespace:SkEditor.Views.Controls.Sidebar"
-        xmlns:layout="clr-namespace:SkEditor.Converters.Layout"
-        xmlns:statusBar="clr-namespace:SkEditor.Views.Controls.StatusBar"
-        xmlns:attached="clr-namespace:SkEditor.AttachedProperties"
+        xmlns:ui="clr-namespace:SkEditor.Core.Notifications.UI"
+        xmlns:converters="clr-namespace:SkEditor.Layout.Sidebar.UI.Converters"
+        xmlns:ui1="clr-namespace:SkEditor.Layout.Menu.UI"
+        xmlns:ui2="clr-namespace:SkEditor.Layout.Sidebar.UI"
+        xmlns:ui3="clr-namespace:SkEditor.Layout.StatusBar.UI"
+        xmlns:windows1="clr-namespace:SkEditor.Windowing.UI"
+        xmlns:platform="clr-namespace:SkEditor.Windowing.UI.Platform"
+        xmlns:ui4="clr-namespace:SkEditor.Workspace.Tabs.UI"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="SkEditor.Views.Windows.MainWindow"
-        x:DataType="windows:MainWindowViewModel"
+        x:Class="SkEditor.Windowing.UI.MainWindow"
+        x:DataType="windows1:MainWindowViewModel"
         x:Name="Root"
         Background="{DynamicResource BackgroundColor}"
         Icon="/Assets/SkEditor.ico" MinWidth="450" MinHeight="250"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaTitleBarHeightHint="{Binding TitleBarHeight}"
-        attached:MacOsTitleBar.IsThick="{Binding UseThickTitleBar}"
-        attached:NativeMenuBridge.ItemsSource="{Binding NativeMenuItems}"
-        attached:DwmMaximizeFix.EnableFix="True"
+        platform:MacOsTitleBar.IsThick="{Binding UseThickTitleBar}"
+        platform:NativeMenuBridge.ItemsSource="{Binding NativeMenuItems}"
+        platform:DwmMaximizeFix.EnableFix="True"
         Focusable="True"
         Title="SkEditor" WindowStartupLocation="Manual" DragDrop.AllowDrop="True">
 
     <Window.Resources>
-        <layout:DoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
-        <layout:SidebarColumnMinWidthConverter x:Key="SidebarColumnMinWidthConverter" />
-        <layout:BottomDrawerMinWidthConverter x:Key="BottomDrawerMinWidthConverter" />
+        <converters:DoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
+        <converters:SidebarColumnMinWidthConverter x:Key="SidebarColumnMinWidthConverter" />
+        <converters:BottomDrawerMinWidthConverter x:Key="BottomDrawerMinWidthConverter" />
     </Window.Resources>
 
     <LayoutTransformControl Name="LayoutTransform">
@@ -39,7 +40,7 @@
                             IsVisible="{Binding ShowInAppMenu}">
                     <Image Source="{StaticResource SkEditorLogo}" IsVisible="{OnPlatform macOS=False, Default=True}"
                            Margin="12,0,0,0" Height="20" Width="20" />
-                    <controls:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0"
+                    <ui1:MainMenuControl DataContext="{Binding MainMenu}" Name="MainMenu" Margin="15,0,0,0"
                                               WindowDecorationProperties.ElementRole="User" />
                 </StackPanel>
             </Border>
@@ -68,7 +69,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <sidebar:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0"
+                    <ui2:SidebarControl Name="Sidebar" DataContext="{Binding Sidebar}" Grid.Column="0" Grid.Row="0"
                                             Grid.RowSpan="3" />
 
                     <GridSplitter Name="Splitter" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
@@ -77,11 +78,11 @@
                                   Width="10"
                                   IsHitTestVisible="{Binding Sidebar.Sidebar.SelectedPanel, Converter={x:Static ObjectConverters.IsNotNull}}" />
 
-                    <statusBar:BottomDrawer Name="Drawer" DataContext="{Binding BottomDrawer}"
+                    <ui3:BottomDrawer Name="Drawer" DataContext="{Binding BottomDrawer}"
                                             Grid.Column="2" Grid.Row="2"
                                             IsVisible="{Binding IsDrawerOpen}" />
 
-                    <sidebar:StatusBarControl DataContext="{Binding StatusBar}" Grid.Column="0" Grid.Row="3"
+                    <ui3:StatusBarControl DataContext="{Binding StatusBar}" Grid.Column="0" Grid.Row="3"
                                               Margin="0,10,0,0"
                                               Grid.ColumnSpan="3" />
 
@@ -90,11 +91,11 @@
                                   IsVisible="{Binding BottomDrawer.IsDrawerOpen}"
                                   Height="10" />
 
-                    <controls:MainTabView Grid.Column="2" Grid.Row="0" VerticalAlignment="Stretch" />
+                    <ui4:MainTabView Grid.Column="2" Grid.Row="0" VerticalAlignment="Stretch" />
                 </Grid>
             </Border>
 
-            <notifications:SkEditorNotificationManager
+            <ui:SkEditorNotificationManager
                 x:Name="NotificationManager"
                 Grid.Row="1"
                 Position="BottomRight"

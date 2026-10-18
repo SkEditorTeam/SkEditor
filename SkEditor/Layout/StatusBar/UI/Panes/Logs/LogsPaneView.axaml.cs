@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace SkEditor.Views.Controls.StatusBar.Panes;
+namespace SkEditor.Layout.StatusBar.UI.Panes.Logs;
 
 public partial class LogsPaneView : UserControl
 {

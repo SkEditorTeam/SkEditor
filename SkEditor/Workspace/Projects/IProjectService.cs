@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using SkEditor.Models.Projects.Local;
+using SkEditor.Workspace.Filesystem.Local;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Workspace.Projects;
 
 public interface IProjectService
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Core.Extensions;
 
 public static class ListExtensions
 {

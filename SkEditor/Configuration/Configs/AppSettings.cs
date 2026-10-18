@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Settings.Attributes;
+using SkEditor.Configuration.Abstractions;
+using SkEditor.Editor.Syntax.Models;
 
-namespace SkEditor.Utilities.Settings.Configs;
+namespace SkEditor.Configuration.Configs;
 
 [SettingsConfig]
 public partial class AppSettings : BaseConfig<AppSettings>

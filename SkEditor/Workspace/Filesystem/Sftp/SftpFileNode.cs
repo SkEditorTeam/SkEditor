@@ -4,13 +4,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Projects.Types;
-using SkEditor.Models.Remote;
+using SkEditor.Workspace.Files.Messages;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Projects.Models;
+using SkEditor.Workspace.Remote;
+using SkEditor.Workspace.Remote.Models;
 
-namespace SkEditor.Models.Projects.Sftp;
+namespace SkEditor.Workspace.Filesystem.Sftp;
 
 public partial class SftpFileNode(
     string name,

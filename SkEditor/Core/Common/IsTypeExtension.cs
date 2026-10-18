@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Core.Common;
 
 public class IsTypeExtension : MarkupExtension, IValueConverter
 {

@@ -5,10 +5,10 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
-using SkEditor.Converters.Icons;
-using SkEditor.Models.UI;
+using SkEditor.Appearance.Icons;
+using SkEditor.Appearance.Icons.Converters;
 
-namespace SkEditor.Converters.Settings;
+namespace SkEditor.Configuration.Converters;
 
 public class SettingIconConverter : IMultiValueConverter
 {

@@ -1,8 +1,9 @@
 ﻿using R3;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.Saving;
 
 public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
 {

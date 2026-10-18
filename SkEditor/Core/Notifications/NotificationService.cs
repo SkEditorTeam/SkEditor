@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Services;
-using SkEditor.Converters;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Notifications;
-using SkEditor.Services.Windowing;
-using SkEditor.Utilities.Localization;
-using SkEditor.Views.Controls.Notifications;
-using Notification = SkEditor.Models.Notifications.Notification;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications.Converters;
+using SkEditor.Core.Notifications.Messages;
+using SkEditor.Core.Notifications.UI;
+using SkEditor.Windowing;
 
-namespace SkEditor.Services;
+namespace SkEditor.Core.Notifications;
 
 public class NotificationService : INotificationService, IRecipient<ShowNotificationMessage>
 {

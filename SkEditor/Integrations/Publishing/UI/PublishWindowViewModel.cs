@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Integrations;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.System;
+using SkEditor.Integrations.Publishing.Models;
+using SkEditor.Workspace.Tabs;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
+using SecretsConfig = SkEditor.Configuration.Configs.SecretsConfig;
 
-namespace SkEditor.ViewModels.Windows;
+namespace SkEditor.Integrations.Publishing.UI;
 
 public partial class PublishWindowViewModel : ObservableObject
 {

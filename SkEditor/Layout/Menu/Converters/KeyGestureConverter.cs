@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using SkEditor.Utilities.Menu;
 
-namespace SkEditor.Converters;
+namespace SkEditor.Layout.Menu.Converters;
 
 public class KeyGestureConverter : IValueConverter
 {

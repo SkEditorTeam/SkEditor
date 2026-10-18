@@ -1,8 +1,8 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
 
-namespace SkEditor.Models.Dialogs.Elements;
+namespace SkEditor.Core.Dialogs.Models.Elements;
 
 [ObservableObject]
 public partial class TextDialogElement : DialogElement

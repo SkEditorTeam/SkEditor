@@ -6,21 +6,24 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Dialogs;
-using SkEditor.Models.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Projects.Sftp;
-using SkEditor.Models.Remote;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Controls.FileTree;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Appearance.Icons;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Windowing;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Filesystem.Sftp;
+using SkEditor.Workspace.Projects.Messages;
+using SkEditor.Workspace.Remote;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using ConnectionsConfig = SkEditor.Configuration.Configs.ConnectionsConfig;
+using FileTreeViewModel = SkEditor.Workspace.UI.Tree.FileTreeViewModel;
+using RemoteConnection = SkEditor.Workspace.Remote.Models.RemoteConnection;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
+namespace SkEditor.Layout.Sidebar.UI.Panes;
 
 public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelViewModel,
     IRecipient<FileSystemChangedMessage>

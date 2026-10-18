@@ -3,13 +3,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Controls.FileTree;
+using SkEditor.Appearance.Icons;
+using SkEditor.Core.Localization;
+using SkEditor.Layout.Sidebar.Messages;
+using SkEditor.Workspace.Projects;
+using SkEditor.Workspace.Projects.Messages;
+using FileTreeViewModel = SkEditor.Workspace.UI.Tree.FileTreeViewModel;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
+namespace SkEditor.Layout.Sidebar.UI.Panes;
 
 public partial class ExplorerViewModel : ObservableObject, ISidebarPanelViewModel,
     IRecipient<OpenExplorerFolderMessage>, IRecipient<ProjectChangedMessage>

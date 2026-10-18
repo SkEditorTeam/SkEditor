@@ -2,13 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sty="using:FluentAvalonia.Styling"
              xmlns:assets="clr-namespace:SkEditor.Assets"
-             xmlns:dialogs="clr-namespace:SkEditor.Models.Dialogs.Elements"
-             xmlns:behaviors="clr-namespace:SkEditor.Behaviors"
-             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
-             xmlns:vm="clr-namespace:SkEditor.ViewModels"
+             xmlns:behaviors1="clr-namespace:SkEditor.Appearance.Behaviors"
+             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:elements="clr-namespace:SkEditor.Core.Dialogs.Models.Elements"
+             xmlns:ui="clr-namespace:SkEditor.Windowing.UI"
              x:Class="SkEditor.App"
              x:CompileBindings="True"
-             x:DataType="vm:AppViewModel"
+             x:DataType="ui:AppViewModel"
              Name="SkEditor"
              RequestedThemeVariant="Dark">
 
@@ -56,17 +56,17 @@
     </Application.Resources>
 
     <Application.DataTemplates>
-        <DataTemplate DataType="localization:TranslatableString">
+        <DataTemplate DataType="localization1:TranslatableString">
             <TextBlock Text="{Binding Value}" />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type dialogs:TextDialogElement}">
+        <DataTemplate DataType="{x:Type elements:TextDialogElement}">
             <StackPanel Spacing="4">
                 <TextBox Text="{Binding Text, Mode=TwoWay}"
                          PlaceholderText="{Binding PlaceholderText}"
                          Classes.error="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                     <Interaction.Behaviors>
-                        <behaviors:FocusOnLoadedBehavior ShouldFocus="{Binding AutoFocus}" />
+                        <behaviors1:FocusOnLoadedBehavior ShouldFocus="{Binding AutoFocus}" />
                     </Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Text="{Binding ErrorMessage}"
@@ -80,7 +80,7 @@
 
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="{localization:Translate MenuHeaderSettingsMac}"
+            <NativeMenuItem Header="{localization1:Translate MenuHeaderSettingsMac}"
                             Command="{Binding OpenSettingsCommand}"
                             Gesture="Cmd+," />
         </NativeMenu>

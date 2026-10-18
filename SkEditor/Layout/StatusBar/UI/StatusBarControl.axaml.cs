@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace SkEditor.Views.Controls.Sidebar;
+namespace SkEditor.Layout.StatusBar.UI;
 
 public partial class StatusBarControl : UserControl
 {

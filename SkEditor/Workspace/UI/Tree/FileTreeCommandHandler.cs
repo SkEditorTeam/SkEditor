@@ -6,22 +6,25 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Dialogs;
-using SkEditor.Models.Dialogs.Elements;
-using SkEditor.Models.Files;
-using SkEditor.Models.Notifications;
-using SkEditor.Models.Projects;
-using SkEditor.Models.Projects.Local;
-using SkEditor.Models.Projects.Sftp;
-using SkEditor.Models.Projects.Types;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.System;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Filesystem.Local;
+using SkEditor.Workspace.Filesystem.Sftp;
+using SkEditor.Workspace.Projects.Extensions;
+using SkEditor.Workspace.Projects.Models;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using TextDialogElement = SkEditor.Core.Dialogs.Models.Elements.TextDialogElement;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls.FileTree;
+namespace SkEditor.Workspace.UI.Tree;
 
 public class FileTreeCommandHandler(
     FileTreeViewModel fileTree,

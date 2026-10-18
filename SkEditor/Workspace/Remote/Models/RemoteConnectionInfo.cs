@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Remote;
+namespace SkEditor.Workspace.Remote.Models;
 
 public partial class RemoteConnectionInfo : ObservableObject
 {

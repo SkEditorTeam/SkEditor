@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Core.Extensions;
 
 public static class HttpClientProgressExtensions
 {

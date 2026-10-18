@@ -5,11 +5,11 @@ using System.IO;
 using Avalonia.Data.Converters;
 using FluentIcons.Common;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Models.Projects.Sftp;
-using SkEditor.Models.Projects.Types;
-using SkEditor.Services;
+using SkEditor.Appearance.Icons;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Filesystem.Sftp;
 
-namespace SkEditor.Converters.Icons;
+namespace SkEditor.Workspace.UI.Tree.Converters;
 
 public class NodeToIconConverter : IMultiValueConverter, IValueConverter
 {

@@ -2,14 +2,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Renci.SshNet;
-using SkEditor.Contracts.Models;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Notifications;
-using SkEditor.Models.Projects.Types;
-using SkEditor.Models.Remote;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Remote;
+using SkEditor.Workspace.Remote.Models;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Projects.Sftp;
+namespace SkEditor.Workspace.Filesystem.Sftp;
 
 public class SftpFileSystem(
     RemoteConnection connection,

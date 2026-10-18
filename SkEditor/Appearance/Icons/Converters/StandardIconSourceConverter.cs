@@ -3,9 +3,8 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using FluentIcons.Avalonia.Fluent;
 using FluentIcons.Common;
-using SkEditor.Models.UI;
 
-namespace SkEditor.Converters.Icons;
+namespace SkEditor.Appearance.Icons.Converters;
 
 public class StandardIconSourceConverter : IValueConverter
 {
@@ -24,7 +23,7 @@ public class StandardIconSourceConverter : IValueConverter
         }
 
         return icon.IsPath
-            ? Utilities.Icons.Icons.GetPathIconSource((string)icon.Value)
+            ? Icons.GetPathIconSource((string)icon.Value)
             : null;
     }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace SkEditor.Utilities.Settings.Configs;
+namespace SkEditor.Configuration.Configs;
 
 /// <summary>
 ///     Represents the old application configuration structure for migration purposes.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace SkEditor.Converters.Icons;
+namespace SkEditor.Workspace.Tabs.Converters;
 
 public class TabIconConverter : IMultiValueConverter
 {

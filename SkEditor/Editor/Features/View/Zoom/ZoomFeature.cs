@@ -2,13 +2,12 @@
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
-using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.Utilities.Menu;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Layout.Menu;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 using Vector = Avalonia.Vector;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.View.Zoom;
 
 public class ZoomFeature(AppSettings appSettings, IZoomService zoomService) : IEditorFeature
 {

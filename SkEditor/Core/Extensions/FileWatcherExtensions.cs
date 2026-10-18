@@ -1,7 +1,7 @@
 using System.IO;
 using R3;
 
-namespace SkEditor.Utilities.Projects;
+namespace SkEditor.Core.Extensions;
 
 public static class FileWatcherExtensions
 {

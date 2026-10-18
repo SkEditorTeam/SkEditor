@@ -6,9 +6,9 @@ using System.Net;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using SkEditor.Models.Documentation;
+using SkEditor.Documentation.Models;
 
-namespace SkEditor.Utilities.Docs.Providers;
+namespace SkEditor.Documentation.Providers;
 
 public class SkDocsProvider : IDocumentationProvider
 {

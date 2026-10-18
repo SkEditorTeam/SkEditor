@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Avalonia.Media;
-using SkEditor.Converters;
-using SkEditor.Utilities.Styling;
+using SkEditor.Appearance.Converters;
+using SkEditor.Appearance.Themes.Attributes;
 using Brush = Avalonia.Media.Immutable.ImmutableSolidColorBrush;
 
-namespace SkEditor.Models.UI;
+namespace SkEditor.Appearance.Themes;
 
 [Theme]
 public partial class Theme

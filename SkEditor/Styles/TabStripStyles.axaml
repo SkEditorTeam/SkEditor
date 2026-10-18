@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:SkEditor.Views.Controls">
+                    xmlns:ui="clr-namespace:SkEditor.Layout.StatusBar.UI">
 
-    <ControlTheme x:Key="{x:Type controls:SkEditorTabStrip}" TargetType="controls:SkEditorTabStrip">
+    <ControlTheme x:Key="{x:Type ui:SkEditorTabStrip}" TargetType="ui:SkEditorTabStrip">
         <Setter Property="Template">
             <ControlTemplate>
                 <Border Background="{TemplateBinding Background}"
@@ -22,7 +22,7 @@
         </Setter>
     </ControlTheme>
 
-    <ControlTheme x:Key="{x:Type controls:SkEditorTabStripItem}" TargetType="controls:SkEditorTabStripItem">
+    <ControlTheme x:Key="{x:Type ui:SkEditorTabStripItem}" TargetType="ui:SkEditorTabStripItem">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="#78FFFFFF" />
@@ -40,7 +40,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         Padding="{TemplateBinding Padding}"
-                        Background="{Binding $parent[controls:SkEditorTabStripItem].Background}">
+                        Background="{Binding $parent[ui:SkEditorTabStripItem].Background}">
                     <Panel>
                         <ContentPresenter Name="PART_ContentPresenter"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"

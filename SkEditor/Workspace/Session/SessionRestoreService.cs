@@ -6,17 +6,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using MemoryPack;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Files;
-using SkEditor.Models.Session;
-using SkEditor.Utilities;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Core.Common;
+using SkEditor.Core.Logging;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Layout.Sidebar;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Projects;
+using SkEditor.Workspace.Session.Models;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Workspace.Session;
 
 public class SessionRestoreService(
     AppSettings appSettings,

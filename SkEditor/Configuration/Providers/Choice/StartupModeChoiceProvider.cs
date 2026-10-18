@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Startup;
+using SkEditor.Core.Localization;
+using SkEditor.Windowing.Models;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Utilities.Settings.Providers.Choice;
+namespace SkEditor.Configuration.Providers.Choice;
 
 public class StartupModeChoiceProvider : ISettingsChoiceProvider<StartupMode>
 {

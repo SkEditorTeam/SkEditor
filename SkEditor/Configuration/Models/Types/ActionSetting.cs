@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using R3;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Settings.Types;
+namespace SkEditor.Configuration.Models.Types;
 
 public class ActionSetting(BindableReactiveProperty<TranslatableString> name) : SettingElement<ActionSetting>(name)
 {

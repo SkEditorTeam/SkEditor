@@ -4,10 +4,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Analyzing.Processes;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Logging;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.Localization;
 
 namespace SkEditor.Analyzing.Aot;
 

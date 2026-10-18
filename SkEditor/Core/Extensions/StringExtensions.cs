@@ -1,7 +1,7 @@
 ﻿using System;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Core.Extensions;
 
 public static class StringExtensions
 {

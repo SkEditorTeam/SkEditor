@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace SkEditor.Utilities.Settings;
+namespace SkEditor.Configuration.Abstractions;
 
 public interface IConfig : INotifyPropertyChanged
 {

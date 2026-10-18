@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using R3;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
+using SkEditor.Editor.Syntax;
+using SkEditor.Editor.Syntax.Models;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Utilities.Settings.Providers.Choice;
+namespace SkEditor.Configuration.Providers.Choice;
 
 public class SyntaxGrammarChoiceProvider(ISyntaxService syntax) : ISettingsChoiceProvider<SyntaxGrammar?>
 {

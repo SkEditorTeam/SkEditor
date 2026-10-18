@@ -2,12 +2,12 @@
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Views.Windows;
+using SkEditor.Windowing.UI;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Projects.Messages;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class DragDropService(IFileService files)
 {

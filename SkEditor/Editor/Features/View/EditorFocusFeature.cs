@@ -1,8 +1,9 @@
 ﻿using System;
 using AvaloniaEdit;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.View;
 
 public class EditorFocusFeature : IEditorFeature
 {

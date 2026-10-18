@@ -10,7 +10,7 @@ namespace SkEditor.SourceGenerators;
 public class SettingsGenerator : IIncrementalGenerator
 {
     private const string SettingsConfigAttributeFullName =
-        "SkEditor.Utilities.Settings.Attributes.SettingsConfigAttribute";
+        "SkEditor.Configuration.SettingsConfigAttribute";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -61,10 +61,6 @@ public class SettingsGenerator : IIncrementalGenerator
                                    using System;
                                    using System.Collections;
                                    using System.Collections.Generic;
-                                   using SkEditor.ViewModels.Pages;
-                                   using SkEditor.Utilities.Localization;
-                                   using SkEditor.Models.Settings;
-                                   using SkEditor.Models.Settings.Types;
 
                                    namespace {{namespaceName}};
                                    public partial class {{className}}

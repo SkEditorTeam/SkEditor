@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
-using SkEditor.Models.Settings.Types;
+using SkEditor.Configuration.Models.Types;
 
-namespace SkEditor.DataTemplates;
+namespace SkEditor.Configuration.UI;
 
 public class SettingElementTemplateFactory : RecyclingElementFactory
 {

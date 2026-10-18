@@ -4,11 +4,11 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Xaml.Interactivity;
 using AvaloniaEdit;
 using R3;
-using SkEditor.Behaviors;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Appearance.Behaviors;
+using SkEditor.Editor.Tabs.Capabilities;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.View;
 
 public class EditorSmoothScrollFeature(AppSettings appSettings) : IEditorFeature
 {

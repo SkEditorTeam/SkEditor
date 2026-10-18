@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SkEditor.Models.Integrations;
+using SkEditor.Integrations.Publishing.Models;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Integrations.Publishing;
 
 public interface IPublishService
 {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Localization;
+using SkEditor.Appearance.Icons;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Models.Projects;
+namespace SkEditor.Workspace.Projects.Models;
 
 public class ContextMenuItem
 {

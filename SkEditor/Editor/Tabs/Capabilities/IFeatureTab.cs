@@ -1,3 +1,3 @@
-﻿namespace SkEditor.ViewModels.Tabs.Capabilities;
+﻿namespace SkEditor.Editor.Tabs.Capabilities;
 
 public interface IFeatureTab;

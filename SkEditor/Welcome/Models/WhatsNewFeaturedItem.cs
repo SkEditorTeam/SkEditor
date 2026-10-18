@@ -1,9 +1,9 @@
 ﻿using FluentAvalonia.UI.Controls;
 using FluentIcons.Avalonia.Fluent;
-using SkEditor.Utilities.Icons;
+using SkEditor.Appearance.Icons;
 using Symbol = FluentIcons.Common.Symbol;
 
-namespace SkEditor.Models.WhatsNew;
+namespace SkEditor.Welcome.Models;
 
 public record WhatsNewFeaturedItem(FAIconSource Icon, string Title, string Description)
 {

@@ -4,18 +4,21 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Tabs;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs.Capabilities;
-using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Windowing;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Projects.Messages;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Extensions;
+using SkEditor.Workspace.Tabs.Models;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
+using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
 
-namespace SkEditor.Utilities.Menu.Providers;
+namespace SkEditor.Layout.Menu.Providers;
 
 public class FileMenuProvider(
     IFileService files,

@@ -1,17 +1,20 @@
 ﻿using System;
 using System.IO;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Files.Features;
-using SkEditor.Models.Files;
-using SkEditor.Models.Session;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings;
-using SkEditor.Utilities.Settings.Configs;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.System;
+using SkEditor.Editor.Features;
+using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Session.Models;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Services.Files;
+namespace SkEditor.Workspace.Tabs;
 
 public class FileTabFactory(
     AppSettings appSettings,

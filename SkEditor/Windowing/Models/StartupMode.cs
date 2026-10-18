@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Utilities.Startup;
+﻿namespace SkEditor.Windowing.Models;
 
 public enum StartupMode : byte
 {

@@ -10,9 +10,9 @@ using AvaloniaEdit;
 using AvaloniaEdit.Rendering;
 using ObservableCollections;
 using R3;
-using SkEditor.Models.Analyzer;
+using SkEditor.Analyzing.Models;
 
-namespace SkEditor.Views.Controls.Editor;
+namespace SkEditor.Editor.Markers;
 
 public class ErrorMarkerBar : Control
 {

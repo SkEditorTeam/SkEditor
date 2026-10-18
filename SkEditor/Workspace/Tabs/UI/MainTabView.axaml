@@ -1,24 +1,24 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="using:FluentAvalonia.UI.Controls"
-             xmlns:pages="clr-namespace:SkEditor.Views.Pages"
-             xmlns:converters="clr-namespace:SkEditor.Converters"
-             xmlns:vms="clr-namespace:SkEditor.ViewModels.Windows"
-             xmlns:iconverters="clr-namespace:SkEditor.Converters.Icons"
-             xmlns:tabs="clr-namespace:SkEditor.ViewModels.Tabs"
-             xmlns:windows="clr-namespace:SkEditor.Views.Windows"
              xmlns:iconsMarkup="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
-             xmlns:localization="clr-namespace:SkEditor.Utilities.Localization"
-             xmlns:capabilities="clr-namespace:SkEditor.ViewModels.Tabs.Capabilities"
-             x:Class="SkEditor.Views.Controls.MainTabView"
-             x:DataType="vms:MainWindowViewModel">
+             xmlns:converters1="clr-namespace:SkEditor.Appearance.Converters"
+             xmlns:localization1="clr-namespace:SkEditor.Core.Localization"
+             xmlns:common="clr-namespace:SkEditor.Core.Common"
+             xmlns:ui1="clr-namespace:SkEditor.Welcome.UI"
+             xmlns:vms1="clr-namespace:SkEditor.Windowing.UI"
+             xmlns:converters2="clr-namespace:SkEditor.Workspace.Tabs.Converters"
+             xmlns:tabs1="clr-namespace:SkEditor.Workspace.Tabs"
+             xmlns:capabilities1="clr-namespace:SkEditor.Workspace.Tabs.Capabilities"
+             x:Class="SkEditor.Workspace.Tabs.UI.MainTabView"
+             x:DataType="vms1:MainWindowViewModel">
 
     <UserControl.Resources>
-        <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
-        <iconverters:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
-        <iconverters:TabIconConverter x:Key="TabIconConverter" />
+        <converters1:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
+        <converters2:SymbolIconSourceConverter x:Key="SymbolIconSourceConverter" />
+        <converters2:TabIconConverter x:Key="TabIconConverter" />
 
-        <DataTemplate x:Key="SharedTabItemTemplate" x:DataType="tabs:TabViewModelBase">
+        <DataTemplate x:Key="SharedTabItemTemplate" x:DataType="tabs1:TabViewModelBase">
             <ui:FATabViewItem Content="{Binding .}">
                 <ui:FATabViewItem.IconSource>
                     <MultiBinding Converter="{StaticResource TabIconConverter}">
@@ -29,30 +29,30 @@
                 <ui:FATabViewItem.ContextFlyout>
                     <MenuFlyout>
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Dismiss}"
-                                  Header="{localization:Translate MenuHeaderClose}"
+                                  Header="{localization1:Translate MenuHeaderClose}"
                                   Command="{Binding CloseCommand}" />
 
                         <Separator IsVisible="{Binding HasPath, FallbackValue=False}"
-                                   x:DataType="capabilities:IFileTab" />
+                                   x:DataType="capabilities1:IFileTab" />
 
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FolderOpen}"
                                   IsVisible="{Binding HasPath, FallbackValue=False}"
-                                  Header="{localization:Translate MenuHeaderOpenInExplorer}"
-                                  x:DataType="capabilities:IFileTab"
+                                  Header="{localization1:Translate MenuHeaderOpenInExplorer}"
+                                  x:DataType="capabilities1:IFileTab"
                                   Command="{Binding OpenInExplorerRelayCommand}" />
 
-                        <Separator IsVisible="{Binding ., Converter={converters:IsType capabilities:IFileTab}}" />
+                        <Separator IsVisible="{Binding ., Converter={common:IsType capabilities1:IFileTab}}" />
 
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Clipboard}"
-                                  IsVisible="{Binding ., Converter={converters:IsType capabilities:IFileTab}}"
-                                  Header="{localization:Translate MenuHeaderCopyFileName}"
-                                  x:DataType="capabilities:IFileTab"
+                                  IsVisible="{Binding ., Converter={common:IsType capabilities1:IFileTab}}"
+                                  Header="{localization1:Translate MenuHeaderCopyFileName}"
+                                  x:DataType="capabilities1:IFileTab"
                                   Command="{Binding CopyNameRelayCommand}" />
 
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardLink}"
                                   IsVisible="{Binding HasPath, FallbackValue=False}"
-                                  Header="{localization:Translate MenuHeaderCopyAbsolutePath}"
-                                  x:DataType="capabilities:IFileTab"
+                                  Header="{localization1:Translate MenuHeaderCopyAbsolutePath}"
+                                  x:DataType="capabilities1:IFileTab"
                                   Command="{Binding CopyPathRelayCommand}" />
                     </MenuFlyout>
                 </ui:FATabViewItem.ContextFlyout>
@@ -160,7 +160,7 @@
                           AddTabButtonCommand="{Binding NewTabCommand}" />
         </Grid>
 
-        <pages:WelcomePage VerticalAlignment="Stretch" DataContext="{Binding WelcomePage}"
-                           IsVisible="{Binding !$parent[windows:MainWindow].((vms:MainWindowViewModel)DataContext)?.AnyTabsOpen, TargetNullValue=True}" />
+        <ui1:WelcomePage VerticalAlignment="Stretch" DataContext="{Binding WelcomePage}"
+                           IsVisible="{Binding !$parent[vms1:MainWindow].((vms1:MainWindowViewModel)DataContext)?.AnyTabsOpen, TargetNullValue=True}" />
     </Panel>
 </UserControl>

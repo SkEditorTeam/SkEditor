@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SkEditor.Utilities.Settings;
+using SkEditor.Configuration.Abstractions;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Configuration;
 
 public interface IConfigService
 {

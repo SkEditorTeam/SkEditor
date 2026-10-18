@@ -7,12 +7,13 @@ using Avalonia.Input;
 using Avalonia.Media;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
-using SkEditor.ElementGenerators;
-using SkEditor.Utilities.Settings;
-using SkEditor.ViewModels.Tabs.Capabilities;
-using SkEditor.Views.Controls.Editor;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Editor.UI;
+using SkEditor.Editor.UI.Controls;
+using SkEditor.Workspace.Tabs.Capabilities;
+using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
 
-namespace SkEditor.Features;
+namespace SkEditor.Editor.Features.Decorations;
 
 public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEditorFeature
 {

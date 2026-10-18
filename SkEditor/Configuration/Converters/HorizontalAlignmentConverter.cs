@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Layout;
 
-namespace SkEditor.Converters.Layout;
+namespace SkEditor.Configuration.Converters;
 
 public class HorizontalAlignmentConverter : IValueConverter
 {

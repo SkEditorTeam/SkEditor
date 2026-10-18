@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using SkEditor.Models.Welcome;
+using SkEditor.Welcome.Models;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Welcome;
 
 /// <summary>
 ///     Provides data for the welcome screen.

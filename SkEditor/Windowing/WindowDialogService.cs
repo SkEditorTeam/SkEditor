@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Models.Notifications;
-using SkEditor.Utilities.Localization;
-using SkEditor.ViewModels.Tabs.Capabilities;
-using SkEditor.Views.Windows;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
+using AboutWindow = SkEditor.Windowing.UI.About.AboutWindow;
+using GoToLineWindow = SkEditor.Editor.UI.Windows.GoToLineWindow;
+using ManageRemoteConnectionsWindow = SkEditor.Workspace.Remote.UI.ManageRemoteConnectionsWindow;
+using PublishWindow = SkEditor.Integrations.Publishing.UI.PublishWindow;
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class WindowDialogService(
     WindowRegistry windowRegistry,

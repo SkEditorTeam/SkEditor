@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using SkEditor.ViewModels.Controls;
+using SkEditor.Layout.Sidebar.UI;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Layout.Sidebar;
 
 public interface ISidebarService
 {

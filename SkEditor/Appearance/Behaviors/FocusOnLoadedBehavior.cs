@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Xaml.Interactivity;
 
-namespace SkEditor.Behaviors;
+namespace SkEditor.Appearance.Behaviors;
 
 public class FocusOnLoadedBehavior : Behavior<Control>
 {

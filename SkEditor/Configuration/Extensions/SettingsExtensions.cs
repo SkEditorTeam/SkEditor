@@ -1,8 +1,8 @@
 using System.ComponentModel;
 using R3;
-using SkEditor.Utilities.Settings;
+using SkEditor.Configuration.Abstractions;
 
-namespace SkEditor.Utilities.Extensions;
+namespace SkEditor.Configuration.Extensions;
 
 public static class SettingsExtensions
 {

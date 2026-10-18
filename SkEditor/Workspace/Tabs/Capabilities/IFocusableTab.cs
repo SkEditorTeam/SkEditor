@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SkEditor.ViewModels.Tabs.Capabilities;
+namespace SkEditor.Workspace.Tabs.Capabilities;
 
 public interface IFocusableTab
 {

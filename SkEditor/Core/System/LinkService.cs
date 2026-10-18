@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using SkEditor.Contracts.Services;
+using SkEditor.Core.Logging;
 
-namespace SkEditor.Services;
+namespace SkEditor.Core.System;
 
 public class LinkService(ILogService logs) : ILinkService
 {

@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Analyzer;
+﻿namespace SkEditor.Analyzing.Models;
 
 public enum AnalyzerErrorType
 {

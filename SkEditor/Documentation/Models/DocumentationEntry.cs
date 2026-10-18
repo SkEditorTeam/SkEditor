@@ -1,4 +1,4 @@
-﻿namespace SkEditor.Models.Documentation;
+﻿namespace SkEditor.Documentation.Models;
 
 public record DocumentationEntry
 {

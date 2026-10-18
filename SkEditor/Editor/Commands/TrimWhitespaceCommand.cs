@@ -4,7 +4,7 @@ using System.Linq;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 
-namespace SkEditor.Utilities.Editor.Commands;
+namespace SkEditor.Editor.Commands;
 
 public class TrimWhitespaceCommand : IEditorCommand
 {

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using SkEditor.Models.Files;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Workspace.Files.Types;
+using FileTabViewModel = SkEditor.Editor.UI.Tabs.FileTabViewModel;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Workspace.Files;
 
 public interface IFileService
 {

@@ -6,9 +6,9 @@ using Avalonia;
 using Avalonia.Media;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
-using SkEditor.ViewModels.Tabs;
+using SkEditor.Editor.UI.Tabs;
 
-namespace SkEditor.Utilities.Editor.TextMarkers;
+namespace SkEditor.Editor.Markers;
 
 public sealed class TextMarkerService(FileTabViewModel fileTab) : DocumentColorizingTransformer, IBackgroundRenderer,
     ITextMarkerService

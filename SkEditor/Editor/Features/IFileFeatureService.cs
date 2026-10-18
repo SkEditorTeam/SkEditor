@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using AvaloniaEdit;
-using SkEditor.Features;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
 
-namespace SkEditor.Contracts.Services.Files.Features;
+namespace SkEditor.Editor.Features;
 
 public interface IFileFeatureService
 {

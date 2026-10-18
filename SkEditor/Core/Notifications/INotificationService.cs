@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Notification = SkEditor.Models.Notifications.Notification;
 
-namespace SkEditor.Contracts.Services;
+namespace SkEditor.Core.Notifications;
 
 public interface INotificationService
 {

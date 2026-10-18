@@ -4,9 +4,9 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
-using SkEditor.Models.Analyzer;
+using SkEditor.Analyzing.Models;
 
-namespace SkEditor.Views.Controls.StatusBar;
+namespace SkEditor.Layout.StatusBar.UI.Panes.Errors;
 
 public partial class DrawerErrorEntry : UserControl
 {

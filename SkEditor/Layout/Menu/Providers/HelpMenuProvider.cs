@@ -1,10 +1,10 @@
 ﻿using FluentIcons.Common;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Windowing;
-using SkEditor.Utilities.Localization;
-using MainMenuItem = SkEditor.ViewModels.Menu.MainMenuItem;
+using SkEditor.Core.Localization;
+using SkEditor.Core.System;
+using SkEditor.Windowing;
+using MainMenuItem = SkEditor.Layout.Menu.Models.MainMenuItem;
 
-namespace SkEditor.Utilities.Menu.Providers;
+namespace SkEditor.Layout.Menu.Providers;
 
 public class HelpMenuProvider(IWindowDialogService windowDialogs, ILinkService links) : IMenuProvider
 {

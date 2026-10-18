@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using Serilog;
 
-namespace SkEditor.Views.Windows;
+namespace SkEditor.Windowing.UI;
 
 public partial class SplashScreen : Window
 {

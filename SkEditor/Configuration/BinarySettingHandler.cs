@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using SkEditor.Configuration.Abstractions;
 
-namespace SkEditor.Utilities.Settings;
+namespace SkEditor.Configuration;
 
 internal class BinarySettingHandler<T>(
     Func<T> getter,

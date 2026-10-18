@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace SkEditor.Contracts.Services.Windowing;
+namespace SkEditor.Workspace.Session;
 
 /// <summary>
 ///     Handles saving and restoring session state.

@@ -3,10 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.ViewModels.Tabs.Capabilities;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs;
 
-namespace SkEditor.ViewModels.Windows;
+namespace SkEditor.Editor.UI.Windows;
 
 public partial class GoToLineWindowViewModel : ObservableObject
 {

@@ -1,6 +1,6 @@
-﻿using SkEditor.ViewModels.Tabs.Capabilities;
+﻿using SkEditor.Workspace.Tabs.Capabilities;
 
-namespace SkEditor.Models.Analyzer;
+namespace SkEditor.Analyzing.Models;
 
 public record AnalyzerLoadedMessage;
 

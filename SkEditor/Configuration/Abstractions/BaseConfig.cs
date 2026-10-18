@@ -7,9 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using SkEditor.Contracts.Services;
+using SkEditor.Core.Common;
+using SkEditor.Core.Logging;
 
-namespace SkEditor.Utilities.Settings;
+namespace SkEditor.Configuration.Abstractions;
 
 public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseConfig<T>, IConfig, new()
 {

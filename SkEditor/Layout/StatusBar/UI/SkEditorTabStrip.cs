@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 
-namespace SkEditor.Views.Controls;
+namespace SkEditor.Layout.StatusBar.UI;
 
 public class SkEditorTabStrip : TabStrip
 {

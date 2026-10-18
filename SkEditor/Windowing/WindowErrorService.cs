@@ -5,15 +5,13 @@ using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using Serilog;
-using SkEditor.Contracts.Services;
-using SkEditor.Views.Windows;
+using SkEditor.Configuration;
+using SkEditor.Windowing.UI;
 // ReSharper disable RedundantUsingDirective
-using System.Text;
-using System.Diagnostics;
 
 // ReSharper restore RedundantUsingDirective
 
-namespace SkEditor.Services.Windowing;
+namespace SkEditor.Windowing;
 
 public class WindowErrorService(IConfigService configs)
 {

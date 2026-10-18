@@ -1,10 +1,10 @@
 ﻿using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentIcons.Common;
-using SkEditor.Models.UI;
-using SkEditor.Utilities.Localization;
+using SkEditor.Appearance.Icons;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.ViewModels.Controls.Sidebar.Panes;
+namespace SkEditor.Layout.Sidebar.UI.Panes;
 
 public class SearchPaneViewModel : ObservableObject, ISidebarPanelViewModel
 {

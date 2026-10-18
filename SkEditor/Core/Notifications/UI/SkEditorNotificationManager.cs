@@ -9,7 +9,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Threading;
 
-namespace SkEditor.Views.Controls.Notifications;
+namespace SkEditor.Core.Notifications.UI;
 
 [TemplatePart("PART_Items", typeof(Panel))]
 [PseudoClasses(":topleft", ":topright", ":bottomleft", ":bottomright", ":topcenter", ":bottomcenter")]
@@ -48,14 +48,14 @@ public class SkEditorNotificationManager : TemplatedControl
 
     public SkEditorNotificationManager(TopLevel host) : this() => InstallFromTopLevel(host);
 
-    public void Show(string title, string message, NotificationType type, TimeSpan? expiration = null,
+    public void Show(string title, string message, Avalonia.Controls.Notifications.NotificationType type, TimeSpan? expiration = null,
         Action? onClick = null)
     {
         Dispatcher.UIThread.VerifyAccess();
 
         SkEditorNotificationCard card = new()
         {
-            Content = new Notification(title, message, type),
+            Content = new Avalonia.Controls.Notifications.Notification(title, message, type),
             NotificationType = type
         };
 

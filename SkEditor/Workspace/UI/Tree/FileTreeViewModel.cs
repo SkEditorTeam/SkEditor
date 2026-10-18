@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Models;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Files;
-using SkEditor.Models.Messages;
-using SkEditor.Models.Projects;
-using SkEditor.Models.Projects.Sftp;
-using SkEditor.Models.Projects.Types;
-using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Appearance.Themes;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.System;
+using SkEditor.Workspace.Filesystem.Abstractions;
+using SkEditor.Workspace.Filesystem.Sftp;
+using SkEditor.Workspace.Projects.Messages;
+using SkEditor.Workspace.Projects.Models;
+using SkEditor.Workspace.Remote.Messages;
+using SkEditor.Workspace.Tabs;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.ViewModels.Controls.FileTree;
+namespace SkEditor.Workspace.UI.Tree;
 
 public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConnectionStateChangedMessage>
 {

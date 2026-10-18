@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace SkEditor.Utilities;
+namespace SkEditor.Core.Common;
 
 public static class AppPaths
 {

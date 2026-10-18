@@ -3,11 +3,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using SkEditor.Contracts.Services;
-using SkEditor.Models.Messages;
-using SkEditor.ViewModels.Controls;
+using SkEditor.Layout.Sidebar.Messages;
+using SkEditor.Layout.Sidebar.UI;
 
-namespace SkEditor.Services;
+namespace SkEditor.Layout.Sidebar;
 
 public partial class SidebarService : ObservableObject, ISidebarService, IRecipient<RequestPaneOpenMessage>
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using SkEditor.Models.Welcome;
+using SkEditor.Welcome.Models;
 
-namespace SkEditor.Contracts.Services.Files;
+namespace SkEditor.Workspace.Files;
 
 public interface IRecentFileService
 {

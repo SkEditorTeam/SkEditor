@@ -4,7 +4,7 @@ using System.IO.Hashing;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SkEditor.Models.Files;
+namespace SkEditor.Workspace.Files.Types;
 
 /// <summary>
 ///     Represents a file in a file tab, having basic properties like name, path and disk snapshot properties.

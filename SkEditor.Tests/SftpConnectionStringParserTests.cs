@@ -1,5 +1,5 @@
 ﻿using AwesomeAssertions;
-using SkEditor.Utilities.Projects;
+using SkEditor.Workspace.Projects;
 
 namespace SkEditor.Tests;
 

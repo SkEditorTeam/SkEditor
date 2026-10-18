@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Utilities.Localization;
+using SkEditor.Core.Localization;
+using SkEditor.Core.Localization;
+using TranslatableString = SkEditor.Core.Localization.TranslatableString;
 
-namespace SkEditor.Utilities.Settings.Providers.Choice;
+namespace SkEditor.Configuration.Providers.Choice;
 
 public class IndentTypeChoiceProvider(ITranslationService translationService) : ISettingsChoiceProvider<bool>
 {

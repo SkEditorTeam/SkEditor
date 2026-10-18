@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
-using SkEditor.Contracts.Services;
-using SkEditor.Contracts.Services.Localization;
-using SkEditor.Models.Logging;
-using SkEditor.Utilities.Extensions;
-using SkEditor.Utilities.Localization;
-using SkEditor.Utilities.Settings.Configs;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Localization;
+using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 
-namespace SkEditor.Services.Localization;
+namespace SkEditor.Core.Localization;
 
 public class TranslationService : ITranslationService
 {

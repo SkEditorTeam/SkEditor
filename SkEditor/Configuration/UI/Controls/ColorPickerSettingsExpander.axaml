@@ -3,7 +3,7 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent.Markup;assembly=FluentIcons.Avalonia.Fluent"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
-             x:Class="SkEditor.Views.Controls.ColorPickerSettingsExpander">
+             x:Class="SkEditor.Configuration.UI.Controls.ColorPickerSettingsExpander">
 
     <ui:FASettingsExpander Header="{Binding ExpanderHeader}" Name="SettingsExpanderObject"
                            IconSource="{icons:SymbolIconSource Symbol=Color}">
