@@ -45,6 +45,7 @@ public abstract class BaseFile(string? path, string? name)
 
     /// <summary>
     ///     Updates the snapshot properties of the file (Length, LastSaveUtc, DiskHash) based on the provided stream.
+    ///     <remarks>The stream position is reset to 0 before and after the operation.</remarks>
     /// </summary>
     public async Task UpdateSnapshotAsync(Stream stream)
     {
