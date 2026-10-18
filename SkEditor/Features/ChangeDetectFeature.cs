@@ -161,8 +161,10 @@ public class ChangeDetectFeature(AppSettings appSettings, IDialogService dialogs
             return;
         }
 
+        int caretOffset = editorTab.CaretOffset;
         editorTab.Document.Text = text;
         editorTab.Document.UndoStack.ClearAll();
         editorTab.Document.UndoStack.MarkAsOriginalFile();
+        editorTab.CaretOffset = Math.Min(caretOffset, text.Length);
     }
 }
