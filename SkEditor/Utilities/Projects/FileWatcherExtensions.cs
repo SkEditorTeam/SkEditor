@@ -42,5 +42,14 @@ public static class FileWatcherExtensions
                 h => watcher.Renamed -= h
             );
         }
+
+        public Observable<FileSystemEventArgs> ChangedAsObservable()
+        {
+            return Observable.FromEvent<FileSystemEventHandler, FileSystemEventArgs>(
+                handler => (_, e) => handler(e),
+                h => watcher.Changed += h,
+                h => watcher.Changed -= h
+            );
+        }
     }
 }

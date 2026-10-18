@@ -111,6 +111,8 @@ public partial class FileTabViewModel(
         using StreamReader reader = new(stream);
 
         string text = await reader.ReadToEndAsync();
+        await File.UpdateSnapshotAsync(stream);
+        
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
             Document.Text = text;
@@ -205,6 +207,7 @@ public partial class FileTabViewModel(
         try
         {
             await File.SaveAsync(memoryStream, token);
+            await File.UpdateSnapshotAsync(memoryStream);
         }
         catch (UnauthorizedAccessException ex)
         {
