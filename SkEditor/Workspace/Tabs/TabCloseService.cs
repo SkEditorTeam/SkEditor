@@ -7,12 +7,13 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
+using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Models;
 
 namespace SkEditor.Workspace.Tabs;
 
-public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogService dialogs) : ITabCloseService
+public class TabCloseService(AppSettings appSettings, ITabService tabs, IFileService files, IDialogService dialogs) : ITabCloseService
 {
     public async Task CloseMultipleAsync(CloseType closeType)
     {
@@ -26,9 +27,9 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogS
 
         if (appSettings.IsAutoSaveEnabled)
         {
-            foreach (ISaveableTab saveableTab in saveableTabs)
+            foreach (IFileTab fileTab in saveableTabs.OfType<IFileTab>())
             {
-                await saveableTab.SaveAsync();
+                await files.SaveFileAsync(fileTab);
             }
         }
 
@@ -63,7 +64,7 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogS
 
         foreach (ITab tab in tabsToClose)
         {
-            tabs.CloseTab(tab);
+            tabs.ForceCloseTab(tab);
         }
     }
 
@@ -92,9 +93,9 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IDialogS
         }
 
         bool savedAll = true;
-        foreach (ISaveableTab unsavedTab in unsavedTabs)
+        foreach (IFileTab unsavedTab in unsavedTabs.OfType<IFileTab>())
         {
-            bool saved = await unsavedTab.SaveAsync();
+            bool saved = await files.SaveFileAsync(unsavedTab);
             if (saved)
             {
                 continue;

@@ -13,6 +13,7 @@ using SkEditor.Welcome.Models;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Projects.Messages;
 using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Welcome;
 
@@ -53,7 +54,11 @@ public class WelcomeService : IWelcomeService
             new TranslatableString(TranslationKey.WelcomePageGettingStarted),
             [
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
-                    new RelayCommand(() => _files.NewFile()), Icons.CreateSymbolIcon(Symbol.Document)),
+                    new RelayCommand(() =>
+                    {
+                        ITab tab = _files.NewFile();
+                        _tabs.OpenTab(tab);
+                    }), Icons.CreateSymbolIcon(Symbol.Document)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
                     new AsyncRelayCommand(async () => await _files.OpenFileAsync()),
                     Icons.CreateSymbolIcon(Symbol.DocumentSearch)),

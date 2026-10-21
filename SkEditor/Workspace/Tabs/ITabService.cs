@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Workspace.Tabs;
@@ -57,12 +58,14 @@ public interface ITabService
     /// <typeparam name="T">The type of the tab to open.</typeparam>
     void OpenUniqueTab<T>(Func<T> factory, bool allowMultiple = false) where T : ITab;
 
+    Task CloseTabAsync(ITab tab);
+
     /// <summary>
     ///     Closes the given tab.
     /// </summary>
     /// <param name="tab">The tab to close.</param>
     /// <remarks>This force-closes the tab and normally should only be used after the closing is handled by the tab itself.</remarks>
-    void CloseTab(ITab tab);
+    void ForceCloseTab(ITab tab);
 
     /// <summary>
     ///     Splits the given tab into the split view. Nothing happens if the tab is already in the split view or is the only

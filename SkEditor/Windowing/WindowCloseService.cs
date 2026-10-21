@@ -8,6 +8,7 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
+using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session;
 using SkEditor.Workspace.Tabs;
@@ -18,6 +19,7 @@ namespace SkEditor.Windowing;
 public class WindowCloseService(
     AppSettings appSettings,
     ITabService tabs,
+    IFileService files,
     IDialogService dialogs,
     IConfigService configs,
     ISessionRestoreService sessionRestore) : IWindowCloseService
@@ -39,9 +41,9 @@ public class WindowCloseService(
 
         if (isAutoSaveEnabled)
         {
-            foreach (ISaveableTab saveableTab in saveableTabs)
+            foreach (IFileTab fileTab in saveableTabs.OfType<IFileTab>())
             {
-                await saveableTab.SaveAsync();
+                await files.SaveFileAsync(fileTab);
             }
         }
 
@@ -103,9 +105,9 @@ public class WindowCloseService(
         }
 
         bool allSaved = true;
-        foreach (ISaveableTab tab in unsavedTabs)
+        foreach (IFileTab tab in unsavedTabs.OfType<IFileTab>())
         {
-            bool saved = await tab.SaveAsync();
+            bool saved = await files.SaveFileAsync(tab);
             if (saved)
             {
                 continue;

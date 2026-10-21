@@ -173,7 +173,8 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     [RelayCommand]
     public void NewTab()
     {
-        _files.NewFile();
+        ITab tab = _files.NewFile();
+        _tabs.OpenTab(tab);
     }
 
     partial void OnSelectedTabChanged(ITab? value)

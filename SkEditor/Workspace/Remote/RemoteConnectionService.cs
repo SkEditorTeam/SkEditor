@@ -276,7 +276,7 @@ public class RemoteConnectionService(
 
         foreach (FileTabViewModel tab in openTabs)
         {
-            tabs.CloseTab(tab);
+            tabs.ForceCloseTab(tab);
         }
     }
 

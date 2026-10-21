@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,18 +11,17 @@ using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Providers.Sections;
 using SkEditor.Core.Localization;
 using SkEditor.Workspace.Tabs;
+using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Configuration.UI;
 
-public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<NavigateToSettingsSectionMessage>
+public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<NavigateToSettingsSectionMessage>, IClosableTab
 {
     private readonly IConfigService _configs;
     private readonly IMessenger _messenger;
     private readonly Dictionary<string, SettingSection> _parentMap = [];
 
     private readonly Dictionary<string, SettingSection> _sectionsById;
-
-    public override IRelayCommand CloseCommand => CloseTabCommand;
 
     [ObservableProperty]
     public partial SettingSection? CurrentSection { get; set; }
@@ -124,11 +124,14 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
         Dispatcher.UIThread.InvokeAsync(() => { CurrentSection = section; }, DispatcherPriority.Background);
     }
 
-    [RelayCommand]
-    private void CloseTab()
+    public Task<bool> CanCloseAsync()
+    {
+        return Task.FromResult(true);
+    }
+
+    public void OnClosed()
     {
         _ = _configs.SaveAllConfigsAsync();
         _messenger.UnregisterAll(this);
-        RequestClose();
     }
 }

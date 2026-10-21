@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using SkEditor.Editor.UI.Tabs;
 using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Workspace.Files;
 
@@ -9,7 +9,7 @@ public interface IFileService
     /// <summary>
     ///     Creates a new tab with an empty file.
     /// </summary>
-    void NewFile();
+    ITab NewFile();
 
     /// <summary>
     ///     Opens a file dialog to select a file and opens it in a new tab.
@@ -26,13 +26,13 @@ public interface IFileService
     /// </summary>
     /// <param name="fileTab">The tab to open.</param>
     /// <param name="select">Whether to select the tab after opening.</param>
-    Task LoadAndOpenFileTabAsync(FileTabViewModel fileTab, bool select = true);
+    Task LoadAndOpenFileTabAsync(IFileTab fileTab, bool select = true);
 
     /// <summary>
     ///     Tries to load the file content.
     /// </summary>
     /// <returns>True if success</returns>
-    Task<bool> LoadAndReadFileAsync(FileTabViewModel fileTab);
+    Task<bool> LoadAndReadFileAsync(IFileTab fileTab);
 
     /// <summary>
     ///     Updates the details of a file after it has been renamed or moved.
@@ -45,20 +45,13 @@ public interface IFileService
     void NotifyFileDelete(string filePath);
 
     /// <summary>
-    ///     Saves the currently active file. If the file has not been saved before, it prompts the user to select a location to
-    ///     save the file.
+    ///     Saves the file. If the file has not been saved before, it prompts the user to select a location to save the file.
     /// </summary>
-    Task SaveFileAsync();
+    Task<bool> SaveFileAsync(IFileTab fileTab);
 
     /// <summary>
     ///     Prompts the user to select a location and saves the file at the specified location, regardless of whether it has
     ///     been saved before or not.
     /// </summary>
-    Task SaveAsFileAsync();
-
-    /// <summary>
-    ///     Saves all open files. If any file has not been saved before, it prompts the user to select a location to save the
-    ///     file.
-    /// </summary>
-    Task SaveAllAsync();
+    Task<bool> SaveFileAsAsync(IFileTab fileTab);
 }

@@ -2,16 +2,26 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using FluentIcons.Common;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Features;
 using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Templates;
 
 namespace SkEditor.Workspace.Tabs;
 
-public class TabService(IFileFeatureService features, TabViewLocator tabViewLocator, INotificationService notifs)
+public class TabService(
+    IFileFeatureService features,
+    TabViewLocator tabViewLocator,
+    IFileService files,
+    IDialogService dialogs,
+    INotificationService notifs)
     : ITabService
 {
     public IEnumerable<ITab> AllTabs => MainTabs.Concat(SplitTabs);
@@ -132,7 +142,70 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
         }
     }
 
-    public void CloseTab(ITab tab)
+    // public async Task CloseTabAsync(ITab tab)
+    // {
+    //     // if (tab is IClosableTab closableTab)
+    //     // {
+    //     //     if (closableTab.ClosingAsync is not null)
+    //     //     {
+    //     //         foreach (Func<Task> handler in ClosingAsync.GetInvocationList().Cast<Func<Task>>())
+    //     //         {
+    //     //             await handler();
+    //     //         }
+    //     //     }   
+    //     // }
+    //
+    //     if (tab is IFileTab { IsSaved: false } fileTab)
+    //     {
+    //         Dialog dialog = Dialog
+    //             .Create(TranslationKey.UnsavedFileTitle)
+    //             .WithMessage(new TranslatableString(TranslationKey.UnsavedFileMessage, tab.Header))
+    //             .WithIcon(Symbol.Save)
+    //             .WithButtons(
+    //                 new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
+    //                 new DialogButton(TranslationKey.ButtonDontSave, DialogResult.No),
+    //                 DialogButton.Cancel
+    //             );
+    //
+    //         DialogResult result = await dialogs.ShowDialogAsync(dialog);
+    //
+    //         if (result == StandardDialogResult.Cancel)
+    //         {
+    //             return;
+    //         }
+    //
+    //         if (result == StandardDialogResult.Yes)
+    //         {
+    //             bool saved = await files.SaveFileAsync(fileTab);
+    //             if (!saved)
+    //             {
+    //                 return;
+    //             }
+    //         }
+    //     }
+    //
+    //     tab.RequestClose();
+    // }
+    public async Task CloseTabAsync(ITab tab)
+    {
+        if (tab is IClosableTab closable)
+        {
+            bool canClose = await closable.CanCloseAsync();
+            if (!canClose)
+            {
+                return;
+            }
+        }
+
+        ForceCloseTab(tab);
+
+        if (tab is IClosableTab closableAfter)
+        {
+            closableAfter.OnClosed();
+        }
+    }
+
+    public void ForceCloseTab(ITab tab)
     {
         tab.CloseRequested -= OnTabCloseRequested;
 
@@ -221,7 +294,7 @@ public class TabService(IFileFeatureService features, TabViewLocator tabViewLoca
     {
         if (sender is ITab tab)
         {
-            CloseTab(tab);
+            ForceCloseTab(tab);
         }
     }
 

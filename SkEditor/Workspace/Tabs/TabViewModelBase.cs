@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
@@ -11,19 +12,36 @@ namespace SkEditor.Workspace.Tabs;
 ///     Represents a tab in the app. This is an abstract class that should be inherited by specific types of tabs (file
 ///     tabs, settings tabs, etc.).
 /// </summary>
-/// <param name="header">The header text of the tab, which is displayed on the tab itself.</param>
-public abstract partial class TabViewModelBase(TranslatableString header, Symbol? icon = null) : ObservableObject, ITab
+public abstract partial class TabViewModelBase : ObservableObject, ITab
 {
+    /// <summary>
+    ///     Represents a tab in the app. This is an abstract class that should be inherited by specific types of tabs (file
+    ///     tabs, settings tabs, etc.).
+    /// </summary>
+    /// <param name="header">The header text of the tab, which is displayed on the tab itself.</param>
+    /// <param name="icon">The Symbol icon that is displayed on the tab.</param>
+    /// <param name="closeFunc">Function that is executed when the user attempts to close the tab.</param>
+    protected TabViewModelBase(TranslatableString header, Symbol? icon = null, Func<ITab, Task>? closeFunc = null)
+    {
+        if (closeFunc is not null)
+        {
+            CloseCommand = new AsyncRelayCommand(() => closeFunc.Invoke(this));
+        }
+        
+        Header = header;
+        Icon = icon;
+    }
+
     /// <summary>
     ///     Command that is executed when the user attempts to close the tab.
     /// </summary>
-    public abstract IRelayCommand CloseCommand { get; }
+    public IRelayCommand? CloseCommand { get; }
 
     /// <summary>
     ///     The header text of the tab, which is displayed on the tab itself.
     /// </summary>
     [ObservableProperty]
-    public partial TranslatableString Header { get; protected set; } = header;
+    public partial TranslatableString Header { get; protected set; }
 
     [ObservableProperty]
     public virtual partial string? ToolTip { get; set; }
@@ -32,7 +50,7 @@ public abstract partial class TabViewModelBase(TranslatableString header, Symbol
     ///     The Symbol icon that is displayed on the tab.
     /// </summary>
     [ObservableProperty]
-    public partial Symbol? Icon { get; protected set; } = icon;
+    public partial Symbol? Icon { get; protected set; }
 
     /// <summary>
     ///     Indicates whether the tab's content should be cached when switching tabs.
@@ -52,7 +70,7 @@ public abstract partial class TabViewModelBase(TranslatableString header, Symbol
     /// <summary>
     ///     Raises the <see cref="CloseRequested" /> event to signal that the tab should be closed.
     /// </summary>
-    protected void RequestClose()
+    public void RequestClose()
     {
         CloseRequested?.Invoke(this, EventArgs.Empty);
     }

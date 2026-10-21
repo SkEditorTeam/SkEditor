@@ -3,19 +3,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Editor.Features.Saving;
 
-public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
+public class AutoSaveFeature(AppSettings appSettings, IFileService files) : IEditorFeature
 {
     private readonly TimeSpan _debounceDelay = TimeSpan.FromSeconds(1);
     private readonly TimeSpan _maxDelay = TimeSpan.FromSeconds(10);
-    private IClosableTab? _closableTab;
     private CancellationTokenSource? _cts;
     private IFileTab? _fileTab;
     private DateTime _lastChangeAt = DateTime.MinValue;
-    private ISaveableTab? _saveableTab;
     private ITextEditorTab? _textEditorTab;
 
     public bool CanAttach(IFeatureTab tab)
@@ -30,19 +29,16 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
 
     public void Attach(IFeatureTab tab)
     {
-        if (tab is not (ITextEditorTab textEditorTab and ISaveableTab saveableTab and IClosableTab closableTab
-            and IFileTab fileTab))
+        if (tab is not (ITextEditorTab textEditorTab and IFileTab fileTab))
         {
             return;
         }
 
         _textEditorTab = textEditorTab;
-        _saveableTab = saveableTab;
-        _closableTab = closableTab;
         _fileTab = fileTab;
 
         _textEditorTab.Document.TextChanged += OnTextChanged;
-        _closableTab.ClosingAsync += OnClosingAsync;
+        _fileTab.ClosingAsync += OnClosingAsync;
     }
 
     public void Detach(IFeatureTab tab)
@@ -52,14 +48,12 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
             _textEditorTab.Document.TextChanged -= OnTextChanged;
         }
 
-        if (_closableTab != null)
+        if (_fileTab != null)
         {
-            _closableTab.ClosingAsync -= OnClosingAsync;
+            _fileTab.ClosingAsync -= OnClosingAsync;
         }
 
         _textEditorTab = null;
-        _saveableTab = null;
-        _closableTab = null;
         _fileTab = null;
         _cts?.Cancel();
         _cts?.Dispose();
@@ -92,7 +86,7 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
 
     private async Task SaveAfterDelayAsync(TimeSpan delay, CancellationToken token)
     {
-        if (_saveableTab is null)
+        if (_fileTab is null)
         {
             return;
         }
@@ -101,7 +95,7 @@ public class AutoSaveFeature(AppSettings appSettings) : IEditorFeature
         {
             await Task.Delay(delay, token);
 
-            await _saveableTab.SaveAsync();
+            await files.SaveFileAsync(_fileTab);
 
             if (!token.IsCancellationRequested)
             {

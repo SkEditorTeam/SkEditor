@@ -13,7 +13,6 @@ using FluentIcons.Common;
 using SkEditor.Configuration.Messages;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
-using SkEditor.Core.Notifications;
 using SkEditor.Documentation.Models;
 using SkEditor.Documentation.Providers;
 using SkEditor.Workspace.Tabs;
@@ -24,7 +23,6 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 {
     private readonly IDocumentationService _documentation;
     private readonly ILogService _logs;
-    private readonly INotificationService _notifs;
     private readonly ITabService _tabs;
     private readonly Func<Configuration.UI.SettingsTabViewModel> _settingsTabFactory;
     private readonly IMessenger _messenger;
@@ -37,8 +35,6 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         .Prepend(null)
         .Distinct()
         .ToList() ?? [];
-
-    public override IRelayCommand CloseCommand => CloseTabCommand;
 
     public IReadOnlyList<DocumentationEntry>? DocumentationEntries { get; private set; }
 
@@ -77,13 +73,12 @@ public partial class DocumentationTabViewModel : TabViewModelBase
 
     public List<DocumentationSyntaxType> SyntaxTypes { get; } = [.. Enum.GetValues<DocumentationSyntaxType>()];
 
-    public DocumentationTabViewModel(IDocumentationService documentation, INotificationService notifs, ILogService logs,
+    public DocumentationTabViewModel(IDocumentationService documentation, ILogService logs,
         IEnumerable<IDocumentationProvider> providers, ITabService tabs,
         Func<Configuration.UI.SettingsTabViewModel> settingsTabFactory, IMessenger messenger) : base(
         TranslationKey.DocumentationTabTitle, Symbol.Book)
     {
         _documentation = documentation;
-        _notifs = notifs;
         _logs = logs;
         _tabs = tabs;
         _settingsTabFactory = settingsTabFactory;
@@ -197,12 +192,6 @@ public partial class DocumentationTabViewModel : TabViewModelBase
         {
             // ignored
         }
-    }
-
-    [RelayCommand]
-    private void CloseTab()
-    {
-        RequestClose();
     }
 
     [RelayCommand]

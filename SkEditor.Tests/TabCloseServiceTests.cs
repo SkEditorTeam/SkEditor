@@ -34,6 +34,6 @@ public class TabCloseServiceTests
 
         await dialogs.Received(1).ShowDialogAsync(Arg.Any<Dialog>());
 
-        tabs.DidNotReceive().CloseTab(Arg.Any<ITab>());
+        tabs.DidNotReceive().ForceCloseTab(Arg.Any<ITab>());
     }
 }

@@ -7,9 +7,11 @@ namespace SkEditor.Workspace.Tabs.Capabilities;
 public interface ITab
 {
     TranslatableString Header { get; }
-    IRelayCommand CloseCommand { get; }
+    IRelayCommand? CloseCommand { get; }
 
     bool IsCacheable { get; }
-    bool IsLoading { get; }
+    bool IsLoading { get; set; }
+
+    void RequestClose();
     event EventHandler? CloseRequested;
 }

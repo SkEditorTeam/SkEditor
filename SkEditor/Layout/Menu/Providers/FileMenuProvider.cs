@@ -39,7 +39,11 @@ public class FileMenuProvider(
         MainMenuItem fileMenu = MainMenuItem.HeaderOnly(TranslationKey.MenuHeaderFile);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderNew, Symbol.Document)
-            .WithCommand(files.NewFile)
+            .WithCommand(() =>
+            {
+                ITab tab = files.NewFile();
+                tabs.OpenTab(tab);
+            })
             .WithInputGesture("Ctrl+N")
             .AddTo(fileMenu);
 
@@ -59,19 +63,37 @@ public class FileMenuProvider(
         MainMenuItem.Separator.AddTo(fileMenu);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSave, Symbol.Save)
-            .WithCommand(files.SaveFileAsync)
+            .WithCommand(async () =>
+            {
+                if (tabs.SelectedTab is IFileTab fileTab)
+                {
+                    await files.SaveFileAsync(fileTab);
+                }
+            })
             .WithInputGesture("Ctrl+S")
             .WithEnabled(isSaveable)
             .AddTo(fileMenu);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAs, Symbol.SaveEdit)
-            .WithCommand(files.SaveAsFileAsync)
+            .WithCommand(async () =>
+            {
+                if (tabs.SelectedTab is IFileTab fileTab)
+                {
+                    await files.SaveFileAsAsync(fileTab);
+                }
+            })
             .WithInputGesture("Ctrl+Shift+S")
             .WithEnabled(isSaveable)
             .AddTo(fileMenu);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderSaveAll, Symbol.SaveMultiple)
-            .WithCommand(files.SaveAllAsync)
+            .WithCommand(async () =>
+            {
+                foreach (IFileTab fileTab in tabs.AllTabs.OfType<IFileTab>())
+                {
+                    await files.SaveFileAsync(fileTab);
+                }
+            })
             .WithInputGesture("Ctrl+Alt+S")
             .WithEnabled(selectedTab.Select(_ => tabs.AllTabs.Any() && tabs.AllTabs.Any(t => t is ISaveableTab))
                 .ToBindableReactiveProperty())
@@ -103,7 +125,13 @@ public class FileMenuProvider(
             .WithItems([
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseCurrentFile, Symbol.Document)
                     .WithInputGesture("Ctrl+W")
-                    .WithCommand(() => tabs.SelectedTab?.CloseCommand.Execute(null)),
+                    .WithCommand(async () =>
+                    {
+                        if (tabs.SelectedTab is not null)
+                        {
+                            await tabs.CloseTabAsync(tabs.SelectedTab);
+                        }
+                    }),
 
                 MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCloseAll, Symbol.DocumentMultiple)
                     .WithCommand(() => tabClose.CloseMultipleAsync(CloseType.All)),

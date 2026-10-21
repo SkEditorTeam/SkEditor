@@ -4,12 +4,8 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
-using SkEditor.Core.Logging;
-using SkEditor.Core.Notifications;
 using SkEditor.Core.System;
-using SkEditor.Editor.Features;
 using SkEditor.Editor.UI.Tabs;
-using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session.Models;
 
@@ -18,14 +14,9 @@ namespace SkEditor.Workspace.Tabs;
 public class FileTabFactory(
     AppSettings appSettings,
     ExperimentsConfig experiments,
-    IDialogService dialogService,
-    IFilePickerService filePicker,
-    IFileFeatureService features,
-    IRecentFileService recentFiles,
-    INotificationService notifications,
+    IDialogService dialogs,
     ILinkService links,
-    IClipboardService clipboard,
-    ILogService logs) : IFileTabFactory
+    IClipboardService clipboard) : IFileTabFactory
 {
     public FileTabViewModel CreateFromFile(BaseFile file)
     {
@@ -36,8 +27,7 @@ public class FileTabFactory(
 
         TranslatableString header = TranslatableString.FromRawString(file.Name);
 
-        return new FileTabViewModel(header, appSettings, experiments, dialogService, notifications, filePicker,
-            features, recentFiles, links, clipboard, logs)
+        return new FileTabViewModel(header, appSettings, experiments, links, clipboard)
         {
             File = file
         };
@@ -60,8 +50,7 @@ public class FileTabFactory(
             throw new InvalidOperationException("The session state file is missing both header and path!");
         }
 
-        return new FileTabViewModel(header, appSettings, experiments, dialogService, notifications, filePicker,
-            features, recentFiles, links, clipboard, logs)
+        return new FileTabViewModel(header, appSettings, experiments, links, clipboard)
         {
             File = new LocalFile(file.Path, file.Header),
             IsSaved = file.IsSaved
@@ -72,8 +61,7 @@ public class FileTabFactory(
     {
         TranslatableString header = TranslatableString.FromRawString(name);
 
-        return new FileTabViewModel(header, appSettings, experiments, dialogService, notifications, filePicker,
-            features, recentFiles, links, clipboard, logs)
+        return new FileTabViewModel(header, appSettings, experiments, links, clipboard)
         {
             File = new LocalFile(name: name),
             IsSaved = true

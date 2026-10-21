@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
@@ -15,17 +12,11 @@ using ObservableCollections;
 using R3;
 using SkEditor.Analyzing.Models;
 using SkEditor.Configuration.Configs;
-using SkEditor.Core.Dialogs;
-using SkEditor.Core.Dialogs.Models;
-using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
-using SkEditor.Core.Logging;
-using SkEditor.Core.Notifications;
 using SkEditor.Core.System;
-using SkEditor.Editor.Features;
 using SkEditor.Editor.Tabs.Capabilities;
-using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Editor.UI.Tabs;
@@ -34,29 +25,18 @@ public partial class FileTabViewModel(
     TranslatableString header,
     AppSettings appSettings,
     ExperimentsConfig experiments,
-    IDialogService dialogs,
-    INotificationService notifications,
-    IFilePickerService filePicker,
-    IFileFeatureService features,
-    IRecentFileService recentFiles,
     ILinkService links,
-    IClipboardService clipboard,
-    ILogService logs)
-    : Workspace.Tabs.TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab, ISaveableTab,
-        IFileTab, IClosableTab, ISaveStateTab, IDiagnosticsTab
+    IClipboardService clipboard)
+    : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab,
+        IFileTab, ISaveStateTab, IDiagnosticsTab
 {
-    private static readonly Encoding Utf8NoBom = new UTF8Encoding(false);
-
-    private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
-
-    private CancellationTokenSource? _saveCts;
-
     public AppSettings AppSettings { get; } = appSettings;
 
     [ObservableProperty]
     public partial int CaretOffset { get; set; } = 0;
 
-    public override IRelayCommand CloseCommand => CloseTabCommand;
+    public IRelayCommand CopyNameRelayCommand => CopyNameCommand;
+    public IRelayCommand CopyPathRelayCommand => CopyPathCommand;
     public Dictionary<int, AnalyzerError> DiagnosticDictionary { get; } = [];
 
     public ObservableList<AnalyzerError> Diagnostics { get; } = [];
@@ -64,100 +44,42 @@ public partial class FileTabViewModel(
     public ExperimentsConfig Experiments { get; } = experiments;
     public required BaseFile File { get; init; }
 
-    public override string? ToolTip => Path;
-
     [ObservableProperty]
     public partial double FontSize { get; set; } = appSettings.EditorFontSize;
 
     public override bool IsCacheable => true;
-    public string? Path => File.Path;
+
     public IRelayCommand OpenInExplorerRelayCommand => OpenInExplorerCommand;
-    public IRelayCommand CopyNameRelayCommand => CopyNameCommand;
-    public IRelayCommand CopyPathRelayCommand => CopyPathCommand;
+    public string? Path => File.Path;
 
     [ObservableProperty]
     public partial Vector ScrollOffset { get; set; } = Vector.Zero;
+
+    public override string? ToolTip => Path;
 
     public BindableReactiveProperty<bool> WordWrap { get; } = appSettings
         .ObservePropertyChanged(x => x.IsWordWrapEnabled)
         .ToBindableReactiveProperty(appSettings.IsWordWrapEnabled);
 
-    public async Task<bool> LoadContentAsync()
+    public async Task UpdateDocumentText(string text)
     {
-        if (string.IsNullOrEmpty(File.Path))
-        {
-            return false;
-        }
-
-        await using Stream stream = await File.LoadAsync();
-
-        if (stream.IsLikelyBinary())
-        {
-            Dialog dialog = Dialog
-                .Create(TranslationKey.BinaryFileTitle)
-                .WithMessage(TranslationKey.BinaryFileFound)
-                .WithIcon(Symbol.DocumentCube)
-                .WithButtons(
-                    new DialogButton(TranslationKey.ButtonOpen, DialogResult.Yes),
-                    new DialogButton(TranslationKey.ButtonCancel, DialogResult.Cancel)
-                );
-
-            DialogResult result = await dialogs.ShowDialogAsync(dialog);
-
-            if (result == StandardDialogResult.Cancel)
-            {
-                return false;
-            }
-        }
-
-        using StreamReader reader = new(stream);
-
-        string text = await reader.ReadToEndAsync();
-        await File.UpdateSnapshotAsync(stream);
-        
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
             Document.Text = text;
             Document.UndoStack.ClearAll();
-            Document.UndoStack.MarkAsOriginalFile();
+            MarkOriginal();
         });
-        return true;
     }
 
-    /// <summary>
-    ///     Saves the file. If the file lacks a path, it will do a "Save As" instead
-    /// </summary>
-    /// <returns>True if success, false otherwise (cancelled, failed)</returns>
-    public async Task<bool> SaveAsync()
+    public void MarkOriginal()
     {
-        if (File.Path == null)
-        {
-            return await SaveAsAsync();
-        }
-
-        return await PerformSaveAsync();
+        Document.UndoStack.MarkAsOriginalFile();
     }
 
-    /// <summary>
-    ///     Prompts the user to select a save location and saves the file there. Updates the tab's header and path accordingly
-    /// </summary>
-    /// <returns>True if success, false otherwise (cancelled, failed)</returns>
-    public async Task<bool> SaveAsAsync()
+    public void WriteContentStream(StreamWriter writer)
     {
-        string? oldPath = File.Path;
-
-        string? path = await filePicker.SaveFileAsync(Header.Value, oldPath);
-        if (path == null)
-        {
-            return false;
-        }
-
-        File.Path = path;
-        UpdateHeader();
-        features.UpdateFeatures(this);
-        recentFiles.UpdateRecentItem(oldPath, path);
-
-        return await PerformSaveAsync();
+        ITextSource? snapshot = Document.CreateSnapshot();
+        snapshot.WriteTextTo(writer);
     }
 
     public void UpdateHeader()
@@ -180,102 +102,6 @@ public partial class FileTabViewModel(
     public void OnFocus()
     {
         RequestFocus();
-    }
-
-    /// <summary>
-    ///     Performs the actual save operation
-    /// </summary>
-    /// <returns>True if success, false otherwise (failed)</returns>
-    private async Task<bool> PerformSaveAsync()
-    {
-        if (_saveCts is not null)
-        {
-            await _saveCts.CancelAsync();
-        }
-
-        _saveCts = new CancellationTokenSource();
-        CancellationToken token = _saveCts.Token;
-
-        using MemoryStream memoryStream = new();
-        await using StreamWriter writer = new(memoryStream, Utf8NoBom, leaveOpen: true);
-
-        ITextSource? snapshot = Document.CreateSnapshot();
-        snapshot.WriteTextTo(writer);
-
-        await writer.FlushAsync(token);
-        memoryStream.Position = 0;
-
-        await _saveSemaphore.WaitAsync(token);
-        try
-        {
-            await File.SaveAsync(memoryStream, token);
-            await File.UpdateSnapshotAsync(memoryStream);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            logs.Error(ex, "Failed to save file due to unauthorized access.");
-            Notification notification = Notification
-                .Create(TranslationKey.FileExplorerSaveFailedTitle)
-                .WithMessage(TranslationKey.FileExplorerSaveFailedPermission)
-                .WithType(NotificationType.Error);
-
-            notifications.Show(notification);
-            return false;
-        }
-        catch (OperationCanceledException)
-        {
-            return false;
-        }
-        finally
-        {
-            _saveSemaphore.Release();
-        }
-
-        Document.UndoStack.MarkAsOriginalFile();
-        return true;
-    }
-
-    [RelayCommand]
-    private async Task CloseTab()
-    {
-        if (ClosingAsync is not null)
-        {
-            foreach (Func<Task> handler in ClosingAsync.GetInvocationList().Cast<Func<Task>>())
-            {
-                await handler();
-            }
-        }
-
-        if (!IsSaved)
-        {
-            Dialog dialog = Dialog
-                .Create(TranslationKey.UnsavedFileTitle)
-                .WithMessage(new TranslatableString(TranslationKey.UnsavedFileMessage, Header))
-                .WithIcon(Symbol.Save)
-                .WithButtons(
-                    new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
-                    new DialogButton(TranslationKey.ButtonDontSave, DialogResult.No),
-                    DialogButton.Cancel
-                );
-
-            DialogResult result = await dialogs.ShowDialogAsync(dialog);
-
-            if (result == StandardDialogResult.Cancel)
-            {
-                return;
-            }
-
-            if (result == StandardDialogResult.Yes)
-            {
-                bool saved = await SaveAsync();
-                if (!saved)
-                {
-                    return;
-                }
-            }
-        }
-
-        RequestClose();
     }
 
     [RelayCommand]
@@ -305,9 +131,13 @@ public partial class FileTabViewModel(
             await clipboard.CopyTextAsync(pathToCopy);
         }
     }
-    
-    /// <summary>
-    ///     Fired before the close logic begins. Allows async features (like AutoSave) to flush data.
-    /// </summary>
-    public event Func<Task>? ClosingAsync;
+
+    public Task<bool> CanCloseAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnClosed()
+    {
+    }
 }
