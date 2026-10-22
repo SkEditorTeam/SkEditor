@@ -14,7 +14,6 @@ using R3;
 using SkEditor.Analyzing.Models;
 using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
-using SkEditor.Core.System;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Tabs;
@@ -25,9 +24,7 @@ namespace SkEditor.Editor.UI.Tabs;
 public partial class FileTabViewModel(
     TranslatableString header,
     AppSettings appSettings,
-    ExperimentsConfig experiments,
-    ILinkService links,
-    IClipboardService clipboard)
+    ExperimentsConfig experiments)
     : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab,
         IFileTab, ISaveStateTab, IDiagnosticsTab
 {
@@ -35,9 +32,7 @@ public partial class FileTabViewModel(
 
     [ObservableProperty]
     public partial int CaretOffset { get; set; } = 0;
-
-    public IRelayCommand CopyNameRelayCommand => CopyNameCommand;
-    public IRelayCommand CopyPathRelayCommand => CopyPathCommand;
+    
     public Dictionary<int, AnalyzerError> DiagnosticDictionary { get; } = [];
 
     public ObservableList<AnalyzerError> Diagnostics { get; } = [];
@@ -50,7 +45,6 @@ public partial class FileTabViewModel(
 
     public override bool IsCacheable => true;
 
-    public IRelayCommand OpenInExplorerRelayCommand => OpenInExplorerCommand;
     public string? Path => File.Path;
 
     [ObservableProperty]
@@ -104,34 +98,6 @@ public partial class FileTabViewModel(
     {
         RequestFocus();
     }
-
-    [RelayCommand]
-    private void OpenInExplorer()
-    {
-        if (Path is not null)
-        {
-            links.OpenFolderWithFileSelection(Path);
-        }
-    }
-
-    [RelayCommand]
-    private async Task CopyName()
-    {
-        await clipboard.CopyTextAsync(Header.Value);
-    }
-
-    [RelayCommand]
-    private async Task CopyPath()
-    {
-        if (Path is not null)
-        {
-            string pathToCopy = OperatingSystem.IsWindows() && AppSettings.IsExplorerForwardSlashesCopyEnabled
-                ? Path.Replace('\\', '/')
-                : Path;
-
-            await clipboard.CopyTextAsync(pathToCopy);
-        }
-    }
     
     public event Func<Task>? ClosingAsync;
 
@@ -148,9 +114,5 @@ public partial class FileTabViewModel(
         }
 
         return true;
-    }
-
-    public void OnClosed()
-    {
     }
 }

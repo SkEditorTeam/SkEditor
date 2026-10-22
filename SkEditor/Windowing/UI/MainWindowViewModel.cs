@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Configuration.Configs;
+using SkEditor.Core.System;
 using SkEditor.Layout.Menu.Models;
 using SkEditor.Layout.Menu.UI;
 using SkEditor.Layout.Sidebar.UI;
@@ -27,6 +28,8 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 {
     private readonly IFileTabService _fileTabs;
     private readonly ITabService _tabs;
+    private readonly ILinkService _links;
+    private readonly IClipboardService _clipboard;
 
     public IEnumerable<ITab> AllTabs => _tabs.AllTabs;
 
@@ -105,6 +108,8 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 
     public MainWindowViewModel(ITabService tabs,
         IFileTabService fileTabs,
+        ILinkService links,
+        IClipboardService clipboard,
         AppSettings appSettings,
         MainMenuViewModel mainMenu,
         SidebarViewModel sidebar,
@@ -113,8 +118,10 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         WelcomePageViewModel welcomePage,
         IMessenger messenger)
     {
-        this._tabs = tabs;
+        _tabs = tabs;
         _fileTabs = fileTabs;
+        _links = links;
+        _clipboard = clipboard;
 
         AppSettings = appSettings;
 
@@ -181,6 +188,34 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     {
         ITab tab = _fileTabs.NewFile();
         _tabs.OpenTab(tab);
+    }
+    
+    [RelayCommand]
+    private void OpenInExplorer(IFileTab fileTab)
+    {
+        if (fileTab.Path is not null)
+        {
+            _links.OpenFolderWithFileSelection(fileTab.Path);
+        }
+    }
+
+    [RelayCommand]
+    private async Task CopyName(IFileTab fileTab)
+    {
+        await _clipboard.CopyTextAsync(fileTab.Header.Value);
+    }
+
+    [RelayCommand]
+    private async Task CopyPath(IFileTab fileTab)
+    {
+        if (fileTab.Path is not null)
+        {
+            string pathToCopy = OperatingSystem.IsWindows() && AppSettings.IsExplorerForwardSlashesCopyEnabled
+                ? fileTab.Path.Replace('\\', '/')
+                : fileTab.Path;
+
+            await _clipboard.CopyTextAsync(pathToCopy);
+        }
     }
 
     partial void OnSelectedTabChanged(ITab? value)

@@ -1,6 +1,7 @@
 using NSubstitute;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
+using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Models;
@@ -15,6 +16,7 @@ public class TabCloseServiceTests
     {
         AppSettings appSettings = new() { IsAutoSaveEnabled = false };
         ITabService tabs = Substitute.For<ITabService>();
+        IFileService files = Substitute.For<IFileService>();
         IDialogService dialogs = Substitute.For<IDialogService>();
 
         ITab tab1 = Substitute.For<ITab, ISaveableTab>();
@@ -28,7 +30,7 @@ public class TabCloseServiceTests
 
         dialogs.ShowDialogAsync(Arg.Any<Dialog>()).Returns(DialogResult.Cancel);
 
-        TabCloseService service = new(appSettings, tabs, dialogs);
+        TabCloseService service = new(appSettings, tabs, files, dialogs);
 
         await service.CloseMultipleAsync(CloseType.All);
 

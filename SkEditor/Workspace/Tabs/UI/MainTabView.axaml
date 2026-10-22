@@ -41,7 +41,8 @@
                                   IsVisible="{Binding HasPath, FallbackValue=False}"
                                   Header="{localization:Translate MenuHeaderOpenInExplorer}"
                                   x:DataType="capabilities:IFileTab"
-                                  Command="{Binding OpenInExplorerRelayCommand}" />
+                                  Command="{Binding #Root.((vms:MainWindowViewModel)DataContext)?.OpenInExplorerCommand}"
+                                  CommandParameter="{Binding .}" />
 
                         <Separator IsVisible="{Binding ., Converter={common:IsType capabilities:IFileTab}}" />
 
@@ -49,13 +50,15 @@
                                   IsVisible="{Binding ., Converter={common:IsType capabilities:IFileTab}}"
                                   Header="{localization:Translate MenuHeaderCopyFileName}"
                                   x:DataType="capabilities:IFileTab"
-                                  Command="{Binding CopyNameRelayCommand}" />
+                                  Command="{Binding #Root.((vms:MainWindowViewModel)DataContext)?.CopyNameCommand}"
+                                  CommandParameter="{Binding .}"/>
 
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardLink}"
                                   IsVisible="{Binding HasPath, FallbackValue=False}"
                                   Header="{localization:Translate MenuHeaderCopyAbsolutePath}"
                                   x:DataType="capabilities:IFileTab"
-                                  Command="{Binding CopyPathRelayCommand}" />
+                                  Command="{Binding #Root.((vms:MainWindowViewModel)DataContext)?.CopyPathCommand}"
+                                  CommandParameter="{Binding .}" />
                     </MenuFlyout>
                 </ui:FATabViewItem.ContextFlyout>
                 <ui:FATabViewItem.Header>

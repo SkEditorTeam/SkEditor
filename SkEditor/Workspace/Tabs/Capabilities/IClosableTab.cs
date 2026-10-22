@@ -8,5 +8,5 @@ public interface IClosableTab
     event Func<Task>? ClosingAsync;
     
     Task<bool> CanCloseAsync() => Task.FromResult(true);
-    void OnClosed();
+    void OnClosed() { }
 }

@@ -5,12 +5,8 @@ using AwesomeAssertions;
 using MemoryPack;
 using NSubstitute;
 using SkEditor.Core.Common;
-using SkEditor.Core.Dialogs;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
-using SkEditor.Core.Notifications;
-using SkEditor.Core.System;
-using SkEditor.Editor.Features;
 using SkEditor.Editor.UI.Tabs;
 using SkEditor.Layout.Sidebar;
 using SkEditor.Workspace.Files;
@@ -252,15 +248,7 @@ public class SessionRestoreTests
         return new FileTabViewModel(
             TranslatableString.FromRawString(header),
             new AppSettings(),
-            new ExperimentsConfig(),
-            Substitute.For<IDialogService>(),
-            Substitute.For<INotificationService>(),
-            Substitute.For<IFilePickerService>(),
-            Substitute.For<IFileFeatureService>(),
-            Substitute.For<IRecentFileService>(),
-            Substitute.For<ILinkService>(),
-            Substitute.For<IClipboardService>(),
-            Substitute.For<ILogService>())
+            new ExperimentsConfig())
         {
             File = file ?? new LocalFile(name: header)
         };

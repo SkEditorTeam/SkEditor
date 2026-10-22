@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
 using SkEditor.Configuration.Configs;
-using SkEditor.Core.Dialogs;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
-using SkEditor.Core.System;
 using SkEditor.Editor.UI.Tabs;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session.Models;
@@ -13,10 +11,7 @@ namespace SkEditor.Workspace.Tabs;
 
 public class FileTabFactory(
     AppSettings appSettings,
-    ExperimentsConfig experiments,
-    IDialogService dialogs,
-    ILinkService links,
-    IClipboardService clipboard) : IFileTabFactory
+    ExperimentsConfig experiments) : IFileTabFactory
 {
     public FileTabViewModel CreateFromFile(BaseFile file)
     {
@@ -27,7 +22,7 @@ public class FileTabFactory(
 
         TranslatableString header = TranslatableString.FromRawString(file.Name);
 
-        return new FileTabViewModel(header, appSettings, experiments, links, clipboard)
+        return new FileTabViewModel(header, appSettings, experiments)
         {
             File = file
         };
@@ -50,7 +45,7 @@ public class FileTabFactory(
             throw new InvalidOperationException("The session state file is missing both header and path!");
         }
 
-        return new FileTabViewModel(header, appSettings, experiments, links, clipboard)
+        return new FileTabViewModel(header, appSettings, experiments)
         {
             File = new LocalFile(file.Path, file.Header),
             IsSaved = file.IsSaved
@@ -61,7 +56,7 @@ public class FileTabFactory(
     {
         TranslatableString header = TranslatableString.FromRawString(name);
 
-        return new FileTabViewModel(header, appSettings, experiments, links, clipboard)
+        return new FileTabViewModel(header, appSettings, experiments)
         {
             File = new LocalFile(name: name),
             IsSaved = true

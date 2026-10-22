@@ -214,15 +214,7 @@ public class ChangeDetectFeatureTests
         FileTabViewModel tab = new(
             TranslatableString.FromRawString(Path.GetFileName(path)),
             new AppSettings(),
-            new ExperimentsConfig(),
-            Substitute.For<IDialogService>(),
-            Substitute.For<INotificationService>(),
-            Substitute.For<IFilePickerService>(),
-            Substitute.For<IFileFeatureService>(),
-            Substitute.For<IRecentFileService>(),
-            Substitute.For<ILinkService>(),
-            Substitute.For<IClipboardService>(),
-            Substitute.For<ILogService>())
+            new ExperimentsConfig())
         {
             File = localFile,
             Document =
