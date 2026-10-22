@@ -121,6 +121,7 @@ public static class ServiceCollectionExtensions
         public void AddFileServices()
         {
             services.AddSingleton<ITabService, TabService>();
+            services.AddSingleton<IFileTabService, FileTabService>();
             services.AddSingleton<ITabCloseService, TabCloseService>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IFileTabFactory, FileTabFactory>();

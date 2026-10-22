@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
@@ -131,10 +132,22 @@ public partial class FileTabViewModel(
             await clipboard.CopyTextAsync(pathToCopy);
         }
     }
+    
+    public event Func<Task>? ClosingAsync;
 
-    public Task<bool> CanCloseAsync()
+    public async Task<bool> CanCloseAsync()
     {
-        throw new NotImplementedException();
+        if (ClosingAsync is null)
+        {
+            return true;
+        }
+
+        foreach (Func<Task> handler in ClosingAsync.GetInvocationList().Cast<Func<Task>>())
+        {
+            await handler();
+        }
+
+        return true;
     }
 
     public void OnClosed()

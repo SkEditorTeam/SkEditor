@@ -40,7 +40,7 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IFileSer
             case 1:
             {
                 ITab tab = tabsToClose.First(t => t is ISaveableTab { IsSaved: false });
-                tab.CloseCommand?.Execute(null);
+                await tabs.CloseTabAsync(tab);
 
                 if (tabs.AllTabs.Contains(tab))
                 {

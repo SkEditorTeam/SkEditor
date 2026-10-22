@@ -5,6 +5,8 @@ namespace SkEditor.Workspace.Tabs.Capabilities;
 
 public interface IClosableTab
 {
-    Task<bool> CanCloseAsync();
+    event Func<Task>? ClosingAsync;
+    
+    Task<bool> CanCloseAsync() => Task.FromResult(true);
     void OnClosed();
 }

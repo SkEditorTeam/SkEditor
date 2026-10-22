@@ -19,7 +19,7 @@ namespace SkEditor.Welcome;
 
 public class WelcomeService : IWelcomeService
 {
-    private readonly IFileService _files;
+    private readonly IFileTabService _fileTabs;
     private readonly ILinkService _links;
 
     private readonly Func<SettingsTabViewModel> _settingsTabFactory;
@@ -31,13 +31,13 @@ public class WelcomeService : IWelcomeService
 
     public ObservableCollection<WelcomeScreenSection> WelcomeSections { get; } = [];
 
-    public WelcomeService(IFileService fileService, ITabService tabService, IRecentFileService recents,
+    public WelcomeService(IFileTabService fileTabs, ITabService tabs, IRecentFileService recents,
         ILinkService links,
         Func<SettingsTabViewModel> settingsTabFactory)
     {
-        _files = fileService;
+        _fileTabs = fileTabs;
         _links = links;
-        _tabs = tabService;
+        _tabs = tabs;
         _settingsTabFactory = settingsTabFactory;
 
         RecentItems = recents.RecentItems;
@@ -56,11 +56,11 @@ public class WelcomeService : IWelcomeService
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedNewFile,
                     new RelayCommand(() =>
                     {
-                        ITab tab = _files.NewFile();
+                        ITab tab = _fileTabs.NewFile();
                         _tabs.OpenTab(tab);
                     }), Icons.CreateSymbolIcon(Symbol.Document)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFile,
-                    new AsyncRelayCommand(async () => await _files.OpenFileAsync()),
+                    new AsyncRelayCommand(async () => await _fileTabs.OpenFileAsync()),
                     Icons.CreateSymbolIcon(Symbol.DocumentSearch)),
                 WelcomeScreenElement.Create(TranslationKey.WelcomePageGettingStartedOpenFolder,
                     new RelayCommand(() => WeakReferenceMessenger.Default.Send(new OpenExplorerFolderMessage())),

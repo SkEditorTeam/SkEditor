@@ -22,6 +22,7 @@ namespace SkEditor.Layout.Menu.Providers;
 
 public class FileMenuProvider(
     IFileService files,
+    IFileTabService fileTabs,
     ITabService tabs,
     ITabCloseService tabClose,
     IRecentFileService recentFiles,
@@ -41,14 +42,14 @@ public class FileMenuProvider(
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderNew, Symbol.Document)
             .WithCommand(() =>
             {
-                ITab tab = files.NewFile();
+                ITab tab = fileTabs.NewFile();
                 tabs.OpenTab(tab);
             })
             .WithInputGesture("Ctrl+N")
             .AddTo(fileMenu);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderOpen, Symbol.DocumentSearch)
-            .WithCommand(files.OpenFileAsync)
+            .WithCommand(fileTabs.OpenFileAsync)
             .WithInputGesture("Ctrl+O")
             .AddTo(fileMenu);
 
@@ -168,7 +169,7 @@ public class FileMenuProvider(
                 {
                     Dispatcher.UIThread.InvokeAsync(async () =>
                     {
-                        await files.OpenFileAsync(new LocalFile(item.Path));
+                        await fileTabs.OpenFileAsync(new LocalFile(item.Path));
                     });
                 });
         }, i => !i.IsFolder, 5);

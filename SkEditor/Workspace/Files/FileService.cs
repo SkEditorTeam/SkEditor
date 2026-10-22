@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentIcons.Common;
@@ -15,16 +12,11 @@ using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Features;
 using SkEditor.Editor.Tabs.Capabilities;
-using SkEditor.Editor.UI.Tabs;
-using SkEditor.Workspace.Files.Types;
-using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Workspace.Files;
 
 public class FileService(
-    ITranslationService translation,
-    IFileTabFactory fileTabFactory,
     IFilePickerService filePicker,
     IRecentFileService recentFiles,
     INotificationService notifications,
@@ -38,120 +30,6 @@ public class FileService(
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
 
     private CancellationTokenSource? _saveCts;
-    
-    public ITab NewFile()
-    {
-        TranslatableString header =
-            translation.GetObservable(TranslationKey.NewFileNameFormat, GetNewFileNumber().ToString());
-
-        FileTabViewModel newFileTab = fileTabFactory.CreateNewFile(header.Value);
-        return newFileTab;
-    }
-
-    public async Task OpenFileAsync()
-    {
-        string[]? paths = await filePicker.PickFilesAsync();
-        if (paths is null)
-        {
-            return;
-        }
-
-        foreach (string path in paths)
-        {
-            await OpenFileAsync(new LocalFile(path));
-        }
-    }
-
-    public async Task OpenFileAsync(BaseFile file)
-    {
-        if (file is LocalFile && file.Name is not null && file.Path is not null)
-        {
-            recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
-        }
-
-        FileTabViewModel? existingTab =
-            tabs.AllTabs.OfType<FileTabViewModel>().FirstOrDefault(tab => tab.File.Path == file.Path);
-
-        if (existingTab is not null)
-        {
-            tabs.SelectedTab = existingTab;
-            return;
-        }
-
-        FileTabViewModel fileTab = fileTabFactory.CreateFromFile(file);
-        await LoadAndOpenFileTabAsync(fileTab);
-    }
-
-    public async Task LoadAndOpenFileTabAsync(IFileTab fileTab, bool select = true)
-    {
-        Task<bool> fullLoadTask = LoadAndReadFileAsync(fileTab);
-
-        Task timeoutTask = Task.Delay(100);
-
-        Task completedTask = await Task.WhenAny(fullLoadTask, timeoutTask);
-
-        if (completedTask == fullLoadTask)
-        {
-            bool isSuccess = await fullLoadTask;
-            if (isSuccess)
-            {
-                fileTab.IsLoading = false;
-                tabs.OpenTab(fileTab, select);
-            }
-        }
-        else
-        {
-            fileTab.IsLoading = true;
-            tabs.OpenTab(fileTab, select);
-
-            bool isSuccess = await fullLoadTask;
-
-            fileTab.IsLoading = false;
-
-            if (!isSuccess)
-            {
-                tabs.ForceCloseTab(fileTab);
-            }
-        }
-    }
-
-    public void UpdateFileDetails(string oldPath, string newName, string newPath)
-    {
-        FileTabViewModel? fileTab = tabs.AllTabs
-            .OfType<FileTabViewModel>()
-            .FirstOrDefault(tab => tab.File.Path == oldPath);
-
-        fileTab?.File.Name = newName;
-        fileTab?.File.Path = newPath;
-        fileTab?.UpdateHeader();
-    }
-
-    public void NotifyFileDelete(string filePath)
-    {
-        FileTabViewModel? fileTab = tabs.AllTabs
-            .OfType<FileTabViewModel>()
-            .FirstOrDefault(tab => tab.File.Path == filePath);
-
-        fileTab?.IsSaved = false;
-        fileTab?.File.Path = null;
-        fileTab?.Document.UndoStack.DiscardOriginalFileMarker();
-    }
-
-    public async Task SaveFileAsync()
-    {
-        if (tabs.SelectedTab is IFileTab fileTab)
-        {
-            await SaveFileAsync(fileTab);
-        }
-    }
-
-    public async Task SaveAsFileAsync()
-    {
-        if (tabs.SelectedTab is IFileTab fileTab)
-        {
-            await SaveFileAsAsync(fileTab);
-        }
-    }
 
     /// <summary>
     ///     Prompts the user to select a save location and saves the file there. Updates the tab's header and path accordingly
@@ -306,26 +184,5 @@ public class FileService(
         await fileTab.UpdateDocumentText(text);
         
         return true;
-    }
-
-    private int GetNewFileNumber()
-    {
-        string template = translation.Get(TranslationKey.NewFileNameFormat);
-        string pattern = Regex.Escape(template).Replace(@"\{0}", @"(\d+)");
-        Regex regex = new(pattern);
-
-        HashSet<int> existingNumbers = tabs.AllTabs
-            .Select(tab => regex.Match(tab.Header.Value))
-            .Where(m => m.Success)
-            .Select(m => int.Parse(m.Groups[1].Value))
-            .ToHashSet();
-
-        int number = 1;
-        while (existingNumbers.Contains(number))
-        {
-            number++;
-        }
-
-        return number;
     }
 }

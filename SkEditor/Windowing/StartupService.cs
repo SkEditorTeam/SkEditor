@@ -9,9 +9,9 @@ using SkEditor.Configuration;
 using SkEditor.Core.Logging;
 using SkEditor.Matcher;
 using SkEditor.Windowing.UI;
-using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session;
+using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Windowing;
 
@@ -26,7 +26,7 @@ public class StartupService(
     LegacyConfigMigrator configMigrator,
     IAnalyzer analyzer,
     ISkriptSyntaxService syntaxService,
-    IFileService files,
+    IFileTabService fileTabs,
     ILogService logs,
     string[] args) : IStartupService
 {
@@ -103,7 +103,7 @@ public class StartupService(
         {
             if (File.Exists(path))
             {
-                await files.OpenFileAsync(new LocalFile(path));
+                await fileTabs.OpenFileAsync(new LocalFile(path));
             }
         }
     }

@@ -112,8 +112,6 @@ public class TabService(
 
     public void OpenTab(ITab tab, bool select = true)
     {
-        tab.CloseRequested += OnTabCloseRequested;
-
         if (tab is IFocusableTab focusableTab)
         {
             focusableTab.FocusRequested += OnFocusRequested;
@@ -141,51 +139,7 @@ public class TabService(
             }
         }
     }
-
-    // public async Task CloseTabAsync(ITab tab)
-    // {
-    //     // if (tab is IClosableTab closableTab)
-    //     // {
-    //     //     if (closableTab.ClosingAsync is not null)
-    //     //     {
-    //     //         foreach (Func<Task> handler in ClosingAsync.GetInvocationList().Cast<Func<Task>>())
-    //     //         {
-    //     //             await handler();
-    //     //         }
-    //     //     }   
-    //     // }
-    //
-    //     if (tab is IFileTab { IsSaved: false } fileTab)
-    //     {
-    //         Dialog dialog = Dialog
-    //             .Create(TranslationKey.UnsavedFileTitle)
-    //             .WithMessage(new TranslatableString(TranslationKey.UnsavedFileMessage, tab.Header))
-    //             .WithIcon(Symbol.Save)
-    //             .WithButtons(
-    //                 new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
-    //                 new DialogButton(TranslationKey.ButtonDontSave, DialogResult.No),
-    //                 DialogButton.Cancel
-    //             );
-    //
-    //         DialogResult result = await dialogs.ShowDialogAsync(dialog);
-    //
-    //         if (result == StandardDialogResult.Cancel)
-    //         {
-    //             return;
-    //         }
-    //
-    //         if (result == StandardDialogResult.Yes)
-    //         {
-    //             bool saved = await files.SaveFileAsync(fileTab);
-    //             if (!saved)
-    //             {
-    //                 return;
-    //             }
-    //         }
-    //     }
-    //
-    //     tab.RequestClose();
-    // }
+    
     public async Task CloseTabAsync(ITab tab)
     {
         if (tab is IClosableTab closable)
@@ -197,6 +151,35 @@ public class TabService(
             }
         }
 
+        if (tab is IFileTab { IsSaved: false } fileTab)
+        {
+            Dialog dialog = Dialog
+                .Create(TranslationKey.UnsavedFileTitle)
+                .WithMessage(new TranslatableString(TranslationKey.UnsavedFileMessage, tab.Header))
+                .WithIcon(Symbol.Save)
+                .WithButtons(
+                    new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
+                    new DialogButton(TranslationKey.ButtonDontSave, DialogResult.No),
+                    DialogButton.Cancel
+                );
+    
+            DialogResult result = await dialogs.ShowDialogAsync(dialog);
+    
+            if (result == StandardDialogResult.Cancel)
+            {
+                return;
+            }
+    
+            if (result == StandardDialogResult.Yes)
+            {
+                bool saved = await files.SaveFileAsync(fileTab);
+                if (!saved)
+                {
+                    return;
+                }
+            }
+        }
+        
         ForceCloseTab(tab);
 
         if (tab is IClosableTab closableAfter)
@@ -207,8 +190,6 @@ public class TabService(
 
     public void ForceCloseTab(ITab tab)
     {
-        tab.CloseRequested -= OnTabCloseRequested;
-
         if (tab is IFocusableTab focusableTab)
         {
             focusableTab.FocusRequested -= OnFocusRequested;
@@ -288,14 +269,6 @@ public class TabService(
         }
 
         OpenTab(factory());
-    }
-
-    private void OnTabCloseRequested(object? sender, EventArgs e)
-    {
-        if (sender is ITab tab)
-        {
-            ForceCloseTab(tab);
-        }
     }
 
     private void OnFocusRequested(object? sender, EventArgs e)

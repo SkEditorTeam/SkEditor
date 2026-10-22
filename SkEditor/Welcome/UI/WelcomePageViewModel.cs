@@ -12,12 +12,13 @@ using SkEditor.Welcome.Models;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Projects.Messages;
+using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Welcome.UI;
 
 public partial class WelcomePageViewModel(
     IWelcomeService welcome,
-    IFileService files,
+    IFileTabService fileTabs,
     IRecentFileService recents,
     IClipboardService clipboard,
     INotificationService notifications,
@@ -41,7 +42,7 @@ public partial class WelcomePageViewModel(
         }
         else
         {
-            await files.OpenFileAsync(new LocalFile(item.Path, item.Name));
+            await fileTabs.OpenFileAsync(new LocalFile(item.Path, item.Name));
         }
     }
 

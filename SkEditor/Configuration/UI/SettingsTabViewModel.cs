@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using SkEditor.Configuration.Messages;
@@ -124,10 +124,7 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
         Dispatcher.UIThread.InvokeAsync(() => { CurrentSection = section; }, DispatcherPriority.Background);
     }
 
-    public Task<bool> CanCloseAsync()
-    {
-        return Task.FromResult(true);
-    }
+    public event Func<Task>? ClosingAsync;
 
     public void OnClosed()
     {

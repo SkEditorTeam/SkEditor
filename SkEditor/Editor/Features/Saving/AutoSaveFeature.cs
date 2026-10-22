@@ -97,11 +97,6 @@ public class AutoSaveFeature(AppSettings appSettings, IFileService files) : IEdi
 
             await files.SaveFileAsync(_fileTab);
 
-            if (!token.IsCancellationRequested)
-            {
-                _lastChangeAt = DateTime.MinValue;
-            }
-
             _lastChangeAt = DateTime.MinValue;
         }
         catch (OperationCanceledException)
@@ -112,11 +107,15 @@ public class AutoSaveFeature(AppSettings appSettings, IFileService files) : IEdi
 
     private async Task OnClosingAsync()
     {
-        if (_cts is not null && !_cts.IsCancellationRequested)
+        if (_fileTab is { IsSaved: false })
         {
-            await _cts.CancelAsync();
+            if (_cts is not null)
+            {
+                await _cts.CancelAsync();
+            }
 
-            await SaveAfterDelayAsync(TimeSpan.Zero, CancellationToken.None);
+            await files.SaveFileAsync(_fileTab);
+            _lastChangeAt = DateTime.MinValue;
         }
     }
 }

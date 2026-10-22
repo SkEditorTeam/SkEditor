@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FluentIcons.Common;
 using SkEditor.Core.Localization;
 using SkEditor.Workspace.Tabs.Capabilities;
@@ -20,22 +17,11 @@ public abstract partial class TabViewModelBase : ObservableObject, ITab
     /// </summary>
     /// <param name="header">The header text of the tab, which is displayed on the tab itself.</param>
     /// <param name="icon">The Symbol icon that is displayed on the tab.</param>
-    /// <param name="closeFunc">Function that is executed when the user attempts to close the tab.</param>
-    protected TabViewModelBase(TranslatableString header, Symbol? icon = null, Func<ITab, Task>? closeFunc = null)
+    protected TabViewModelBase(TranslatableString header, Symbol? icon = null)
     {
-        if (closeFunc is not null)
-        {
-            CloseCommand = new AsyncRelayCommand(() => closeFunc.Invoke(this));
-        }
-        
         Header = header;
         Icon = icon;
     }
-
-    /// <summary>
-    ///     Command that is executed when the user attempts to close the tab.
-    /// </summary>
-    public IRelayCommand? CloseCommand { get; }
 
     /// <summary>
     ///     The header text of the tab, which is displayed on the tab itself.
@@ -66,17 +52,4 @@ public abstract partial class TabViewModelBase : ObservableObject, ITab
     /// </summary>
     [ObservableProperty]
     public partial bool IsSaved { get; set; } = true;
-
-    /// <summary>
-    ///     Raises the <see cref="CloseRequested" /> event to signal that the tab should be closed.
-    /// </summary>
-    public void RequestClose()
-    {
-        CloseRequested?.Invoke(this, EventArgs.Empty);
-    }
-
-    /// <summary>
-    ///     Event that is raised when the tab requests to be closed.
-    /// </summary>
-    public event EventHandler? CloseRequested;
 }

@@ -11,6 +11,7 @@
              xmlns:tabs="clr-namespace:SkEditor.Workspace.Tabs"
              xmlns:capabilities="clr-namespace:SkEditor.Workspace.Tabs.Capabilities"
              x:Class="SkEditor.Workspace.Tabs.UI.MainTabView"
+             Name="Root"
              x:DataType="vms:MainWindowViewModel">
 
     <UserControl.Resources>
@@ -30,7 +31,8 @@
                     <MenuFlyout>
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Dismiss}"
                                   Header="{localization:Translate MenuHeaderClose}"
-                                  Command="{Binding CloseCommand}" />
+                                  Command="{Binding #Root.((vms:MainWindowViewModel)DataContext)?.CloseTabCommand}"
+                                  CommandParameter="{Binding .}" />
 
                         <Separator IsVisible="{Binding HasPath, FallbackValue=False}"
                                    x:DataType="capabilities:IFileTab" />
@@ -115,7 +117,8 @@
                 </ui:FATabViewItem.Header>
                 <Interaction.Behaviors>
                     <ui:FATabViewItemCloseRequestedEventCommandTrigger
-                        Command="{Binding CloseCommand}" />
+                        Command="{Binding #Root.((vms:MainWindowViewModel)DataContext)?.CloseTabCommand}"
+                        Parameter="{Binding .}" />
                 </Interaction.Behaviors>
             </ui:FATabViewItem>
         </DataTemplate>

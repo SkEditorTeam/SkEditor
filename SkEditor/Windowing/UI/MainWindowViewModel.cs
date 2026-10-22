@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -13,7 +14,6 @@ using SkEditor.Layout.Menu.UI;
 using SkEditor.Layout.Sidebar.UI;
 using SkEditor.Layout.StatusBar.UI;
 using SkEditor.Welcome.UI;
-using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Messages;
 using SkEditor.Workspace.Projects.Messages;
 using SkEditor.Workspace.Tabs;
@@ -25,7 +25,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     IRecipient<UpdateFileDetailsMessage>,
     IRecipient<NotifyFileDeleteMessage>
 {
-    private readonly IFileService _files;
+    private readonly IFileTabService _fileTabs;
     private readonly ITabService _tabs;
 
     public IEnumerable<ITab> AllTabs => _tabs.AllTabs;
@@ -104,7 +104,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     public WelcomePageViewModel WelcomePage { get; }
 
     public MainWindowViewModel(ITabService tabs,
-        IFileService files,
+        IFileTabService fileTabs,
         AppSettings appSettings,
         MainMenuViewModel mainMenu,
         SidebarViewModel sidebar,
@@ -113,15 +113,15 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
         WelcomePageViewModel welcomePage,
         IMessenger messenger)
     {
-        _tabs = tabs;
-        _files = files;
+        this._tabs = tabs;
+        _fileTabs = fileTabs;
 
         AppSettings = appSettings;
 
         MainMenu = mainMenu;
         WelcomePage = welcomePage;
 
-        _tabs.SelectedTabChanged += tab =>
+        this._tabs.SelectedTabChanged += tab =>
         {
             SelectedTab = tab;
             OnPropertyChanged(nameof(SelectedMainTab));
@@ -131,7 +131,7 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 
         SplitTabs.CollectionChanged += (_, _) => OnPropertyChanged(nameof(IsSplitActive));
 
-        if (_tabs.AllTabs is INotifyCollectionChanged allTabs)
+        if (this._tabs.AllTabs is INotifyCollectionChanged allTabs)
         {
             allTabs.CollectionChanged += (_, _) => OnPropertyChanged(nameof(AllTabs));
         }
@@ -147,17 +147,17 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
 
     public void Receive(OpenFileMessage message)
     {
-        _ = _files.OpenFileAsync(message.File);
+        _ = _fileTabs.OpenFileAsync(message.File);
     }
 
     public void Receive(UpdateFileDetailsMessage message)
     {
-        _files.UpdateFileDetails(message.OldPath, message.NewName, message.NewPath);
+        _fileTabs.UpdateFileDetails(message.OldPath, message.NewName, message.NewPath);
     }
 
     public void Receive(NotifyFileDeleteMessage message)
     {
-        _files.NotifyFileDelete(message.Path);
+        _fileTabs.NotifyFileDelete(message.Path);
     }
 
     public void SplitTab(ITab tab)
@@ -169,11 +169,17 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     {
         _tabs.MergeTab(tab);
     }
+    
+    [RelayCommand]
+    public async Task CloseTab(ITab tab)
+    {
+        await _tabs.CloseTabAsync(tab);
+    }
 
     [RelayCommand]
     public void NewTab()
     {
-        ITab tab = _files.NewFile();
+        ITab tab = _fileTabs.NewFile();
         _tabs.OpenTab(tab);
     }
 

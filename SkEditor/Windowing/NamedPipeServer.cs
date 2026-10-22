@@ -8,12 +8,12 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using Serilog;
 using SkEditor.Windowing.UI;
-using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Windowing;
 
-public class NamedPipeServer(WindowRegistry windowRegistry, IFileService fileService)
+public class NamedPipeServer(WindowRegistry windowRegistry, IFileTabService fileTabs)
 {
     public const string PipeName = "SkEditor3";
 
@@ -83,7 +83,7 @@ public class NamedPipeServer(WindowRegistry windowRegistry, IFileService fileSer
 
         foreach (string file in files)
         {
-            await fileService.OpenFileAsync(new LocalFile(file));
+            await fileTabs.OpenFileAsync(new LocalFile(file));
         }
     }
 
