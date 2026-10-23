@@ -46,16 +46,26 @@ public class FileService(
         }
 
         fileTab.File.Path = path;
-        fileTab.UpdateHeader();
+        
+        bool success = await PerformSaveAsync(fileTab);
 
-        if (fileTab is IFeatureTab featureTab)
+        if (success)
         {
-            features.UpdateFeatures(featureTab);
+            fileTab.UpdateHeader();
+
+            if (fileTab is IFeatureTab featureTab)
+            {
+                features.UpdateFeatures(featureTab);
+            }
+        
+            recentFiles.UpdateRecentItem(oldPath, path);
+        }
+        else
+        {
+            fileTab.File.Path = oldPath;
         }
         
-        recentFiles.UpdateRecentItem(oldPath, path);
-
-        return await PerformSaveAsync(fileTab);
+        return success;
     }
     
     public async Task<bool> SaveFileAsync(IFileTab fileTab)
