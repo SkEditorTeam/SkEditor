@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using R3;
 using SkEditor.Core.Extensions;
-using SkEditor.Core.Notifications;
 using SkEditor.Workspace.Filesystem.Abstractions;
 
 namespace SkEditor.Workspace.Filesystem.Local;
@@ -14,8 +12,6 @@ public partial class LocalFileSystem : IDisposable
 {
     private readonly FileSystemWatcher _watcher;
     private DisposableBag _disposables;
-
-    private static INotificationService Notifs => App.Services.GetRequiredService<INotificationService>();
 
     private FileSystemWatcher CreateWatcher(string directory)
     {
@@ -42,8 +38,10 @@ public partial class LocalFileSystem : IDisposable
     private void SubscribeError(string directory, FileSystemWatcher watcher)
     {
         watcher.ErrorAsObservable()
-            .SubscribeAwait(async (_, _) =>
+            .SubscribeAwait(async (e, _) =>
             {
+                _logs.Error(e.GetException(), "File system watcher error occurred");
+                
                 try
                 {
                     watcher.EnableRaisingEvents = false;
@@ -54,7 +52,7 @@ public partial class LocalFileSystem : IDisposable
                 }
                 catch (Exception ex)
                 {
-                    Notifs.Debug($"Error {ex.Message}");
+                    _logs.Error(ex, "Failed to reload file system after watcher error");
                 }
                 finally
                 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Filesystem.Local;
@@ -14,6 +15,7 @@ namespace SkEditor.Workspace.Projects;
 public class ProjectService(
     IFilePickerService filePicker,
     INotificationService notifs,
+    ILogService logs,
     IRecentFileService recents,
     IMessenger messenger) : IProjectService
 {
@@ -22,7 +24,7 @@ public class ProjectService(
 
     public void OpenProject(string path)
     {
-        LocalFileSystem localFileSystem = new(path);
+        LocalFileSystem localFileSystem = new(path, logs);
         CurrentProject = localFileSystem;
 
         string? name = Path.GetFileName(Path.GetDirectoryName(path));

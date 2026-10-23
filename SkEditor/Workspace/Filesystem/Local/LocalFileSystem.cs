@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using SkEditor.Core.Logging;
 using SkEditor.Workspace.Filesystem.Abstractions;
 
 namespace SkEditor.Workspace.Filesystem.Local;
@@ -16,8 +17,12 @@ public partial class LocalFileSystem : IFileSystem
 
     public FileSystemNode? Root { get; }
 
-    public LocalFileSystem(string rootDirectory)
+    private readonly ILogService _logs;
+
+    public LocalFileSystem(string rootDirectory, ILogService logs)
     {
+        _logs = logs;
+        
         if (!Directory.Exists(rootDirectory))
         {
             throw new DirectoryNotFoundException($"The directory '{rootDirectory}' does not exist.");
