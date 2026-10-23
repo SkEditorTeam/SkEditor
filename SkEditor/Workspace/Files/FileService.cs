@@ -89,10 +89,10 @@ public class FileService(
 
         await writer.FlushAsync(token);
         memoryStream.Position = 0;
-
-        await _saveSemaphore.WaitAsync(token);
+        
         try
         {
+            await _saveSemaphore.WaitAsync(token);
             await fileTab.File.SaveAsync(memoryStream, token);
             await fileTab.File.UpdateSnapshotAsync(memoryStream);
         }
