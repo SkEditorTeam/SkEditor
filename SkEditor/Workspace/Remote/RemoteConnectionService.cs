@@ -343,9 +343,9 @@ public class RemoteConnectionService(
                 client.Disconnect();
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // ignored
+            logs.Error(ex, $"Error disconnecting SFTP client for connection {connection.Name}");
         }
         finally
         {

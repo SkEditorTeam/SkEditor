@@ -5,6 +5,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Microsoft.Extensions.DependencyInjection;
+using SkEditor.Core.Logging;
 
 namespace SkEditor.Windowing.UI.Platform;
 
@@ -157,9 +159,9 @@ public static partial class MacOsTitleBar
                 window.PropertyChanged += OnWindowPropertyChanged;
                 _attached = true;
             }
-            catch
+            catch (Exception ex)
             {
-                // ignored
+                App.Services.GetRequiredService<ILogService>().Error(ex, "Failed to set up thick title bar on macOS.");
             }
         }
 
@@ -182,9 +184,9 @@ public static partial class MacOsTitleBar
                     objc_msgSend_bool(_nsWindow, _selSetTitlebarAppearsTransparent, true);
                     objc_msgSend_long(_nsWindow, _selSetTitleVisibility, 1);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignored
+                    App.Services.GetRequiredService<ILogService>().Error(ex, "Failed to update thick title bar on macOS.");
                 }
             }, DispatcherPriority.Background);
         }

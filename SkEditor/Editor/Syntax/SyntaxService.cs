@@ -300,7 +300,7 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
         }
     }
 
-    private static (string? name, string? language) ReadPropertiesFromTheme(string filePath)
+    private (string? name, string? language) ReadPropertiesFromTheme(string filePath)
     {
         try
         {
@@ -311,15 +311,15 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
             string? language = doc.RootElement.GetProperty("language").GetString();
             return (name, language);
         }
-        catch
+        catch (Exception ex)
         {
-            // ignored
+            logs.Error(ex, $"Failed to read properties from theme file: {filePath}");
         }
 
         return default;
     }
 
-    private static string? ReadGrammarName(string filePath)
+    private string? ReadGrammarName(string filePath)
     {
         try
         {
@@ -329,9 +329,9 @@ public partial class SyntaxService(IConfigService config, AppSettings settings, 
             string? name = doc.RootElement.GetProperty("name").GetString();
             return name;
         }
-        catch
+        catch (Exception ex)
         {
-            // ignored
+            logs.Error(ex, $"Failed to read name from grammar file: {filePath}");
         }
 
         return null;

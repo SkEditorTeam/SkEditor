@@ -99,7 +99,7 @@ public class Analyzer(
         }
         catch
         {
-            // ignored
+            logs.Error("Failed to migrate Analyzer directory from Roaming to LocalApplicationData.", LogSource.Analyzer);
         }
     }
 

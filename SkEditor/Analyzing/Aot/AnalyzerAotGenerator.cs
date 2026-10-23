@@ -107,9 +107,9 @@ public class AnalyzerAotGenerator(
                     process.Kill(true);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // ignored
+                logs.Error(ex, "Failed to kill the AOT generation process.", LogSource.Analyzer);
             }
             finally
             {

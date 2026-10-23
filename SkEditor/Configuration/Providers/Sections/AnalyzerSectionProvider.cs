@@ -303,7 +303,7 @@ public class AnalyzerSectionProvider(
         return null;
     }
 
-    private static async Task<bool> CheckJava25()
+    private async Task<bool> CheckJava25()
     {
         RefreshPath();
 
@@ -337,7 +337,7 @@ public class AnalyzerSectionProvider(
         }
     }
 
-    private static void RefreshPath()
+    private void RefreshPath()
     {
         if (!OperatingSystem.IsWindows())
         {
@@ -354,9 +354,9 @@ public class AnalyzerSectionProvider(
 
             Environment.SetEnvironmentVariable("PATH", combinedPath);
         }
-        catch
+        catch(Exception ex)
         {
-            // ignored
+            logs.Error(ex, "Failed to refresh PATH environment variable.");
         }
     }
 }
