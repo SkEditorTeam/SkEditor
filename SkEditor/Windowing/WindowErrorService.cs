@@ -25,7 +25,7 @@ public class WindowErrorService(IConfigService configs, ILogService logs)
 
 #if !DEBUG
             string fullException = e.Exception.ToString();
-            string encodedMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes(fullException));
+            string encodedMessage = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(fullException));
             await Task.Delay(500);
 
             string? processPath = Environment.ProcessPath;
@@ -34,7 +34,7 @@ public class WindowErrorService(IConfigService configs, ILogService logs)
                 processPath = AppDomain.CurrentDomain.BaseDirectory;
             }
 
-            Process.Start(processPath, "--crash " + encodedMessage);
+            System.Diagnostics.Process.Start(processPath, "--crash " + encodedMessage);
 #endif
             Environment.Exit(1);
         };
