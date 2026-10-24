@@ -32,13 +32,12 @@ public class OccurenceBackgroundTransformer(IThemeService themes) : DocumentColo
 
     private void ApplyChanges(VisualLineElement element)
     {
+        Color editorBg = themes.CurrentTheme.EditorBackgroundColor.Color;
         Color selectionColor = themes.CurrentTheme.SelectionColor.Color;
-        Color accentColor = themes.GetAccentColor();
+        
+        Color occurrenceColor = BlendColors(editorBg, selectionColor, 0.2);
 
-        Color occurrenceColor = BlendColors(selectionColor, accentColor, 0.3);
-
-        ImmutableSolidColorBrush brush = new(occurrenceColor);
-        element.TextRunProperties.SetBackgroundBrush(brush);
+        element.TextRunProperties.SetBackgroundBrush(new ImmutableSolidColorBrush(occurrenceColor));
     }
 
     private static Color BlendColors(Color baseColor, Color blend, double blendAmount)
