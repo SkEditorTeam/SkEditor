@@ -5,7 +5,6 @@ using System.Windows.Input;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
-using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Layout.Menu;
@@ -52,7 +51,7 @@ public class EditorShortcutsFeature : IEditorFeature
             { new KeyGesture(Key.A, _ctrlMod), FromCommand(ApplicationCommands.SelectAll) },
             { new KeyGesture(Key.F, _ctrlMod), FromCommand(ApplicationCommands.Find) },
             { new KeyGesture(Key.H, _ctrlMod), FromCommand(ApplicationCommands.Replace) },
-            { new KeyGesture(Key.Back, _ctrlMod), DeletePreviousWord }
+            { new KeyGesture(Key.Back, _ctrlMod), () => TextEditorUtilities.DeletePreviousWord(editor) }
         };
 
         _chordShortcuts = new Dictionary<(KeyGesture, KeyGesture), Action>
@@ -88,39 +87,6 @@ public class EditorShortcutsFeature : IEditorFeature
         _tab = null;
     }
 
-    private void DeletePreviousWord()
-    {
-        if (_tab?.Document is not { } doc || _editor is not { } editor)
-        {
-            return;
-        }
-
-        int caretOffset = editor.CaretOffset;
-        DocumentLine currentLine = doc.GetLineByOffset(caretOffset);
-        int lineStartOffset = currentLine.Offset;
-        int lengthToCaret = caretOffset - lineStartOffset;
-
-        if (lengthToCaret > 0)
-        {
-            ReadOnlySpan<char> textToCaret =
-                doc.GetTextAsMemory(lineStartOffset, lengthToCaret).Span;
-
-            if (textToCaret.TrimStart().IsEmpty)
-            {
-                doc.Remove(lineStartOffset, lengthToCaret);
-                return;
-            }
-        }
-
-        int wordStart = TextUtilities.GetNextCaretPosition(
-            doc, caretOffset, LogicalDirection.Backward, CaretPositioningMode.WordStartOrSymbol);
-
-        if (wordStart >= 0)
-        {
-            doc.Remove(wordStart, caretOffset - wordStart);
-        }
-    }
-
     private static Action FromCommand(ICommand command)
     {
         return () =>
@@ -134,17 +100,32 @@ public class EditorShortcutsFeature : IEditorFeature
 
     private void OnEditorPreviewKeyDown(object? sender, KeyEventArgs e)
     {
+        if (_editor == null || _tab == null)
+        {
+            return;
+        }
+        
+        if (e.KeyModifiers == KeyModifiers.Alt && !e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            switch (e.Key)
+            {
+                case Key.Up:
+                    TextEditorUtilities.MoveSelectionUp(_editor);
+                    e.Handled = true;
+                    return;
+                case Key.Down:
+                    TextEditorUtilities.MoveSelectionDown(_editor);
+                    e.Handled = true;
+                    return;
+            }
+        }
+        
         if (e.Key is Key.LeftCtrl or Key.RightCtrl or Key.LeftShift or Key.RightShift or Key.LeftAlt or Key.RightAlt)
         {
             return;
         }
 
         KeyGesture exactGesture = new(e.Key, e.KeyModifiers);
-
-        if (_editor == null || _tab == null)
-        {
-            return;
-        }
 
         if (_pendingChordPrefix != null)
         {

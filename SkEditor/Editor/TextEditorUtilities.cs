@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Avalonia;
+using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Rendering;
 
 namespace SkEditor.Editor;
 
-public class TextEditorUtilities
+public static class TextEditorUtilities
 {
     public static SimpleSegment GetWordAtMousePosition(Point pos, TextArea textArea)
     {
@@ -90,5 +91,124 @@ public class TextEditorUtilities
             yield return new SimpleSegment(wordStartPos, word.Length);
             offset = wordStartPos + 1;
         }
+    }
+
+    public static void DeletePreviousWord(TextEditor editor)
+    {
+        TextDocument document = editor.Document;
+
+        int caretOffset = editor.CaretOffset;
+        DocumentLine currentLine = document.GetLineByOffset(caretOffset);
+        int lineStartOffset = currentLine.Offset;
+        int lengthToCaret = caretOffset - lineStartOffset;
+
+        if (lengthToCaret > 0)
+        {
+            ReadOnlySpan<char> textToCaret =
+                document.GetTextAsMemory(lineStartOffset, lengthToCaret).Span;
+
+            if (textToCaret.TrimStart().IsEmpty)
+            {
+                document.Remove(lineStartOffset, lengthToCaret);
+                return;
+            }
+        }
+
+        int wordStart = TextUtilities.GetNextCaretPosition(
+            document, caretOffset, LogicalDirection.Backward, CaretPositioningMode.WordStartOrSymbol);
+
+        if (wordStart >= 0)
+        {
+            document.Remove(wordStart, caretOffset - wordStart);
+        }
+    }
+
+
+    public static void MoveSelectionUp(TextEditor editor)
+    {
+        TextDocument document = editor.Document;
+        (DocumentLine startLine, DocumentLine endLine) = GetSelectedLineRange(editor);
+
+        DocumentLine? previousLine = startLine.PreviousLine;
+        if (previousLine is null)
+        {
+            return;
+        }
+
+        int start = editor.SelectionStart;
+        int length = editor.SelectionLength;
+        int caretOffset = editor.CaretOffset;
+
+        string selectedLines = document.GetText(
+            startLine.Offset, endLine.EndOffset - startLine.Offset);
+        string delimiter = document.GetText(
+            previousLine.EndOffset, previousLine.DelimiterLength);
+        string previousText = document.GetText(
+            previousLine.Offset, previousLine.Length);
+
+        int offset = previousLine.Offset;
+        int shift = previousLine.TotalLength;
+
+        using (document.RunUpdate())
+        {
+            document.Replace(
+                offset,
+                endLine.EndOffset - offset,
+                selectedLines + delimiter + previousText);
+
+            editor.Select(start - shift, length);
+            editor.CaretOffset = caretOffset - shift;
+        }
+    }
+
+    public static void MoveSelectionDown(TextEditor editor)
+    {
+        TextDocument document = editor.Document;
+        (DocumentLine startLine, DocumentLine endLine) = GetSelectedLineRange(editor);
+
+        DocumentLine? nextLine = endLine.NextLine;
+        if (nextLine is null)
+        {
+            return;
+        }
+
+        int start = editor.SelectionStart;
+        int length = editor.SelectionLength;
+        int caretOffset = editor.CaretOffset;
+
+        string selectedLines = document.GetText(
+            startLine.Offset, endLine.EndOffset - startLine.Offset);
+        string delimiter = document.GetText(
+            endLine.EndOffset, endLine.DelimiterLength);
+        string nextText = document.GetText(
+            nextLine.Offset, nextLine.Length);
+
+        int shift = nextLine.Length + endLine.DelimiterLength;
+        int newStart = start + shift;
+
+        using (document.RunUpdate())
+        {
+            document.Replace(
+                startLine.Offset,
+                nextLine.EndOffset - startLine.Offset,
+                nextText + delimiter + selectedLines);
+
+            int newLength = Math.Min(length, document.TextLength - newStart);
+            editor.Select(newStart, newLength);
+            editor.CaretOffset = Math.Min(caretOffset + shift, document.TextLength);
+        }
+    }
+
+    private static (DocumentLine StartLine, DocumentLine EndLine) GetSelectedLineRange(TextEditor editor)
+    {
+        TextDocument document = editor.Document;
+        int start = editor.SelectionStart;
+        int length = editor.SelectionLength;
+        int end = start + length;
+
+        DocumentLine startLine = document.GetLineByOffset(start);
+        DocumentLine endLine = document.GetLineByOffset(length > 0 ? end - 1 : end);
+
+        return (startLine, endLine);
     }
 }
