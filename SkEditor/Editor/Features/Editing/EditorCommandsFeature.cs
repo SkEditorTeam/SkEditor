@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using SkEditor.Editor.Commands;
 using SkEditor.Editor.Tabs.Capabilities;
@@ -70,12 +71,12 @@ public class EditorCommandsFeature(IEnumerable<IEditorCommandHandler> commands) 
             case EditorCommandType.Find:
                 _editor.SearchPanel.IsReplaceMode = false;
                 _editor.SearchPanel.Open();
-                _editor.SearchPanel.Reactivate();
+                Dispatcher.UIThread.Post(_editor.SearchPanel.Reactivate, DispatcherPriority.Input);
                 break;
             case EditorCommandType.Replace:
                 _editor.SearchPanel.IsReplaceMode = true;
                 _editor.SearchPanel.Open();
-                _editor.SearchPanel.Reactivate();
+                Dispatcher.UIThread.Post(_editor.SearchPanel.Reactivate, DispatcherPriority.Input);
                 break;
 
             default:
