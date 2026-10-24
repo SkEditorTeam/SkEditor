@@ -105,21 +105,16 @@ public class EditorShortcutsFeature : IEditorFeature
             return;
         }
         
-        if (e.KeyModifiers == KeyModifiers.Alt && !e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        if (CheckLineMoveShortcuts(e))
         {
-            switch (e.Key)
-            {
-                case Key.Up:
-                    TextEditorUtilities.MoveSelectionUp(_editor);
-                    e.Handled = true;
-                    return;
-                case Key.Down:
-                    TextEditorUtilities.MoveSelectionDown(_editor);
-                    e.Handled = true;
-                    return;
-            }
+            return;
         }
-        
+
+        if (CheckSelectionCaretMovement(e))
+        {
+            return;
+        }
+
         if (e.Key is Key.LeftCtrl or Key.RightCtrl or Key.LeftShift or Key.RightShift or Key.LeftAlt or Key.RightAlt)
         {
             return;
@@ -165,5 +160,62 @@ public class EditorShortcutsFeature : IEditorFeature
 
         _pendingChordPrefix = exactGesture;
         e.Handled = true;
+    }
+
+    private bool CheckSelectionCaretMovement(KeyEventArgs e)
+    {
+        if (_editor is null)
+        {
+            return false;
+        }
+
+        if (e.KeyModifiers != KeyModifiers.None || _editor.SelectionLength <= 0)
+        {
+            return false;
+        }
+
+        switch (e.Key)
+        {
+            case Key.Left:
+                _editor.CaretOffset = _editor.SelectionStart;
+                _editor.TextArea.ClearSelection();
+                e.Handled = true;
+                return true;
+
+            case Key.Right:
+                _editor.CaretOffset = _editor.SelectionStart + _editor.SelectionLength;
+                _editor.TextArea.ClearSelection();
+                e.Handled = true;
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool CheckLineMoveShortcuts(KeyEventArgs e)
+    {
+        if (_editor is null)
+        {
+            return false;
+        }
+
+        if (e.KeyModifiers != KeyModifiers.Alt || e.KeyModifiers.HasFlag(KeyModifiers.Control))
+        {
+            return false;
+        }
+
+        switch (e.Key)
+        {
+            case Key.Up:
+                TextEditorUtilities.MoveSelectionUp(_editor);
+                e.Handled = true;
+                return true;
+            case Key.Down:
+                TextEditorUtilities.MoveSelectionDown(_editor);
+                e.Handled = true;
+                return true;
+        }
+
+        return false;
     }
 }
