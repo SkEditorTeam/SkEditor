@@ -105,10 +105,6 @@
                               Command="{Binding CommentCommand}"
                               InputGesture="Ctrl+OemQuestion" />
 
-                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Eraser}"
-                              Header="{localization:Translate MenuHeaderTrimWhitespaces}"
-                              Command="{Binding TrimWhitespaceCommand}" />
-
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseTitle}"
                               Header="{localization:Translate MenuHeaderTransform}">
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseUppercase}"
