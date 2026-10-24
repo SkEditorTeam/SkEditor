@@ -21,7 +21,7 @@
 
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="32">
             <Image Source="{StaticResource SkEditorLogo}" Height="96" Width="96"
-                   HorizontalAlignment="Left" VerticalAlignment="Top" />
+                   HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,4,0,0" />
 
             <StackPanel Grid.Column="1" VerticalAlignment="Top" Spacing="4" Margin="0,2,0,0">
                 <TextBlock Text="SkEditor" FontSize="26" FontWeight="DemiBold"
