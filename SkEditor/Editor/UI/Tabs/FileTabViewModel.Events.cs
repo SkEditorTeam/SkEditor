@@ -1,11 +1,13 @@
 ﻿using System;
 using AvaloniaEdit.Document;
+using CommunityToolkit.Mvvm.Input;
 using SkEditor.Editor.Commands;
 
 namespace SkEditor.Editor.UI.Tabs;
 
 public partial class FileTabViewModel
 {
+    [RelayCommand]
     public void RequestEditorCommand(EditorCommandType commandType)
     {
         EditorCommandRequested?.Invoke(commandType);

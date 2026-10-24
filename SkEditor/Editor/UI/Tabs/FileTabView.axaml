@@ -11,6 +11,7 @@
              xmlns:ui="clr-namespace:SkEditor.Editor.UI"
              xmlns:markers="clr-namespace:SkEditor.Editor.Markers"
              xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:commands="clr-namespace:SkEditor.Editor.Commands"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:FileTabViewModel"
@@ -66,43 +67,50 @@
                 <MenuFlyout>
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Cut}"
                               Header="{localization:Translate MenuHeaderCut}"
-                              Command="{Binding CutCommand}"
+                              Command="{Binding RequestEditorCommandCommand}"
+                              CommandParameter="{x:Static commands:EditorCommandType.Cut}"
                               InputGesture="Ctrl+X" />
 
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Copy}"
                               Header="{localization:Translate MenuHeaderCopy}"
-                              Command="{Binding CopyCommand}"
+                              Command="{Binding RequestEditorCommandCommand}"
+                              CommandParameter="{x:Static commands:EditorCommandType.Copy}"
                               InputGesture="Ctrl+C" />
 
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ClipboardPaste}"
                               Header="{localization:Translate MenuHeaderPaste}"
-                              Command="{Binding PasteCommand}"
+                              Command="{Binding RequestEditorCommandCommand}"
+                              CommandParameter="{x:Static commands:EditorCommandType.Paste}"
                               InputGesture="Ctrl+V" />
 
                     <Separator />
 
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=SelectAllOn}"
                               Header="{localization:Translate MenuHeaderSelectAll}"
-                              Command="{Binding SelectAllCommand}"
+                              Command="{Binding RequestEditorCommandCommand}"
+                              CommandParameter="{x:Static commands:EditorCommandType.SelectAll}"
                               InputGesture="Ctrl+A" />
 
                     <Separator />
 
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Search}"
                               Header="{localization:Translate MenuHeaderFind}"
-                              Command="{Binding FindCommand}"
+                              Command="{Binding RequestEditorCommandCommand}"
+                              CommandParameter="{x:Static commands:EditorCommandType.Find}"
                               InputGesture="Ctrl+F" />
 
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=ArrowSwap}"
                               Header="{localization:Translate MenuHeaderReplace}"
-                              Command="{Binding ReplaceCommand}"
+                              Command="{Binding RequestEditorCommandCommand}"
+                              CommandParameter="{x:Static commands:EditorCommandType.Replace}"
                               InputGesture="Ctrl+H" />
 
 
                     <Separator />
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Comment}"
                               Header="{localization:Translate MenuHeaderComment}"
-                              Command="{Binding CommentCommand}"
+                              Command="{Binding RequestEditorCommandCommand}"
+                              CommandParameter="{x:Static commands:EditorCommandType.Comment}"
                               InputGesture="Ctrl+OemQuestion" />
 
                     <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseTitle}"
@@ -110,19 +118,23 @@
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseUppercase}"
                                   Header="{localization:Translate MenuHeaderTransformUppercase}"
                                   ToolTip.Tip="{localization:Translate MenuTooltipTransformUppercase}"
-                                  Command="{Binding TransformToUppercaseCommand}" />
+                                  Command="{Binding RequestEditorCommandCommand}"
+                                  CommandParameter="{x:Static commands:EditorCommandType.TransformToUppercase}" />
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseLowercase}"
                                   Header="{localization:Translate MenuHeaderTransformLowercase}"
                                   ToolTip.Tip="{localization:Translate MenuTooltipTransformLowercase}"
-                                  Command="{Binding TransformToLowercaseCommand}" />
+                                  Command="{Binding RequestEditorCommandCommand}"
+                                  CommandParameter="{x:Static commands:EditorCommandType.TransformToLowercase}" />
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseTitle}"
                                   Header="{localization:Translate MenuHeaderTransformTitlecase}"
                                   ToolTip.Tip="{localization:Translate MenuTooltipTransformTitlecase}"
-                                  Command="{Binding TransformToTitlecaseCommand}" />
+                                  Command="{Binding RequestEditorCommandCommand}"
+                                  CommandParameter="{x:Static commands:EditorCommandType.TransformToTitlecase}" />
                         <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FontDecrease}"
                                   Header="{localization:Translate MenuHeaderTransformSmallCaps}"
                                   ToolTip.Tip="{localization:Translate MenuTooltipTransformSmallCaps}"
-                                  Command="{Binding TransformToSmallCapsCommand}" />
+                                  Command="{Binding RequestEditorCommandCommand}"
+                                  CommandParameter="{x:Static commands:EditorCommandType.TransformToSmallCaps}" />
                     </MenuItem>
 
                 </MenuFlyout>
