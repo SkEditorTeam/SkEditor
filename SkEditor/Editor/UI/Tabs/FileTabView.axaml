@@ -10,6 +10,7 @@
              xmlns:converters="clr-namespace:SkEditor.Editor.UI.Converters"
              xmlns:ui="clr-namespace:SkEditor.Editor.UI"
              xmlns:markers="clr-namespace:SkEditor.Editor.Markers"
+             xmlns:icons="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              mc:Ignorable="d" d:DesignWidth="800"
              x:CompileBindings="True"
              x:DataType="tabs:FileTabViewModel"
@@ -19,6 +20,28 @@
         <converters:EditorFontFamilyConverter x:Key="EditorFontFamilyConverter" />
         <converters:EditorFontFeaturesConverter x:Key="EditorFontFeaturesConverter" />
     </UserControl.Resources>
+    
+    <UserControl.Styles>
+        <Style Selector="MenuFlyoutPresenter icons|SymbolIcon">
+            <Setter Property="FontSize" Value="18.5" />
+        </Style>
+
+        <Style Selector="MenuFlyoutPresenter MenuItem">
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+            <Setter Property="ToolTip.Placement" Value="Right" />
+            <Setter Property="ToolTip.ShowDelay" Value="400" />
+        </Style>
+        <Style Selector="MenuFlyoutPresenter MenuItem:disabled icons|SymbolIcon">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabled}" />
+        </Style>
+
+        <Style Selector="ToolTip">
+            <Setter Property="MaxWidth" Value="1000" />
+        </Style>
+        <Style Selector="ToolTip TextBlock">
+            <Setter Property="TextWrapping" Value="NoWrap" />
+        </Style>
+    </UserControl.Styles>
 
     <Panel>
         <avaloniaEdit:TextEditor x:Name="Editor"
