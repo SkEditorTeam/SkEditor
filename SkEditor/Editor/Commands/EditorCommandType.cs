@@ -10,6 +10,10 @@ public enum EditorCommandType
     Duplicate,
     Comment,
     TrimWhitespace,
+    TransformToUppercase,
+    TransformToLowercase,
+    TransformToTitlecase,
+    TransformToSmallCaps,
     Find,
     Replace,
     SelectAll

@@ -104,6 +104,31 @@
                               Header="{localization:Translate MenuHeaderComment}"
                               Command="{Binding CommentCommand}"
                               InputGesture="Ctrl+OemQuestion" />
+
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=Eraser}"
+                              Header="{localization:Translate MenuHeaderTrimWhitespaces}"
+                              Command="{Binding TrimWhitespaceCommand}" />
+
+                    <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseTitle}"
+                              Header="{localization:Translate MenuHeaderTransform}">
+                        <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseUppercase}"
+                                  Header="{localization:Translate MenuHeaderTransformUppercase}"
+                                  ToolTip.Tip="{localization:Translate MenuTooltipTransformUppercase}"
+                                  Command="{Binding TransformToUppercaseCommand}" />
+                        <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseLowercase}"
+                                  Header="{localization:Translate MenuHeaderTransformLowercase}"
+                                  ToolTip.Tip="{localization:Translate MenuTooltipTransformLowercase}"
+                                  Command="{Binding TransformToLowercaseCommand}" />
+                        <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=TextCaseTitle}"
+                                  Header="{localization:Translate MenuHeaderTransformTitlecase}"
+                                  ToolTip.Tip="{localization:Translate MenuTooltipTransformTitlecase}"
+                                  Command="{Binding TransformToTitlecaseCommand}" />
+                        <MenuItem Icon="{iconsMarkup:SymbolIcon Symbol=FontDecrease}"
+                                  Header="{localization:Translate MenuHeaderTransformSmallCaps}"
+                                  ToolTip.Tip="{localization:Translate MenuTooltipTransformSmallCaps}"
+                                  Command="{Binding TransformToSmallCapsCommand}" />
+                    </MenuItem>
+
                 </MenuFlyout>
             </avaloniaEdit:TextEditor.ContextFlyout>
             <avaloniaEdit:TextEditor.Transitions>
@@ -135,9 +160,9 @@
         </avaloniaEdit:TextEditor>
 
         <markers:ErrorMarkerBar HorizontalAlignment="Right"
-                               Editor="{Binding #Editor}"
-                               IsHitTestVisible="False"
-                               Diagnostics="{Binding Diagnostics}">
+                                Editor="{Binding #Editor}"
+                                IsHitTestVisible="False"
+                                Diagnostics="{Binding Diagnostics}">
             <markers:ErrorMarkerBar.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="Experiments.AnalyzerEnabled" />

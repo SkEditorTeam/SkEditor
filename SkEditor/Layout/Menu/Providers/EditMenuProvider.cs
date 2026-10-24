@@ -59,6 +59,28 @@ public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService ta
             .WithCommand(() => RequestAction(EditorCommandType.TrimWhitespace))
             .AddTo(edit);
 
+        MainMenuItem
+            .HeaderWithIcon(TranslationKey.MenuHeaderTransform, Symbol.TextCaseTitle)
+            .WithItems(
+                MainMenuItem
+                    .HeaderWithIcon(TranslationKey.MenuHeaderTransformUppercase, Symbol.TextCaseUppercase)
+                    .WithTooltip(TranslationKey.MenuTooltipTransformUppercase)
+                    .WithCommand(() => RequestAction(EditorCommandType.TransformToUppercase)),
+                MainMenuItem
+                    .HeaderWithIcon(TranslationKey.MenuHeaderTransformLowercase, Symbol.TextCaseLowercase)
+                    .WithTooltip(TranslationKey.MenuTooltipTransformLowercase)
+                    .WithCommand(() => RequestAction(EditorCommandType.TransformToLowercase)),
+                MainMenuItem
+                    .HeaderWithIcon(TranslationKey.MenuHeaderTransformTitlecase, Symbol.TextCaseTitle)
+                    .WithTooltip(TranslationKey.MenuTooltipTransformTitlecase)
+                    .WithCommand(() => RequestAction(EditorCommandType.TransformToTitlecase)),
+                MainMenuItem
+                    .HeaderWithIcon(TranslationKey.MenuHeaderTransformSmallCaps, Symbol.FontDecrease)
+                    .WithTooltip(TranslationKey.MenuTooltipTransformSmallCaps)
+                    .WithCommand(() => RequestAction(EditorCommandType.TransformToSmallCaps))
+            )
+            .AddTo(edit);
+
         MainMenuItem.Separator.AddTo(edit);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderGoToLine, Symbol.NumberSymbol)

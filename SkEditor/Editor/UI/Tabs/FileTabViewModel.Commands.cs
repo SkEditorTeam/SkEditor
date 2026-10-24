@@ -58,4 +58,34 @@ public partial class FileTabViewModel
     {
         RequestEditorCommand(EditorCommandType.SelectAll);
     }
+    
+    [RelayCommand]
+    private void TrimWhitespace()
+    {
+        RequestEditorCommand(EditorCommandType.TrimWhitespace);
+    }
+
+    [RelayCommand]
+    private void TransformToUppercase()
+    {
+        RequestEditorCommand(EditorCommandType.TransformToUppercase);
+    }
+
+    [RelayCommand]
+    private void TransformToLowercase()
+    {
+        RequestEditorCommand(EditorCommandType.TransformToLowercase);
+    }
+
+    [RelayCommand]
+    private void TransformToTitlecase()
+    {
+        RequestEditorCommand(EditorCommandType.TransformToTitlecase);
+    }
+
+    [RelayCommand]
+    private void TransformToSmallCaps()
+    {
+        RequestEditorCommand(EditorCommandType.TransformToSmallCaps);
+    }
 }

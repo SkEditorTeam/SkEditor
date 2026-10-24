@@ -52,7 +52,7 @@ public class MainMenuItem : ObservableObject
         return this;
     }
 
-    public MainMenuItem WithItems(ObservableCollection<MainMenuItem> subItems)
+    public MainMenuItem WithItems(params ObservableCollection<MainMenuItem> subItems)
     {
         SubItems = SubItems is not null ? [..SubItems, ..subItems] : subItems;
         return this;
