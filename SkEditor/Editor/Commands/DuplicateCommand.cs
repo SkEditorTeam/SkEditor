@@ -5,11 +5,11 @@ using AvaloniaEdit.Editing;
 
 namespace SkEditor.Editor.Commands;
 
-public class DuplicateCommand : IEditorCommand
+public class DuplicateCommand : IEditorCommandHandler
 {
-    public EditorCommandType CommandType => EditorCommandType.Duplicate;
-
-    public void Execute(TextDocument document, TextEditor editor)
+    public EditorCommandType[] HandledCommandTypes => [EditorCommandType.Duplicate];
+    
+    public void Execute(TextDocument document, TextEditor editor, EditorCommandType _)
     {
         TextArea textArea = editor.TextArea;
 

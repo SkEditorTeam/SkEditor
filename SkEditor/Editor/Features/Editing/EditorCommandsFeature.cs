@@ -6,7 +6,7 @@ using SkEditor.Editor.Tabs.Capabilities;
 
 namespace SkEditor.Editor.Features.Editing;
 
-public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEditorFeature
+public class EditorCommandsFeature(IEnumerable<IEditorCommandHandler> commands) : IEditorFeature
 {
     private TextEditor? _editor;
     private ITextEditorTab? _tab;
@@ -79,7 +79,7 @@ public class EditorCommandsFeature(IEnumerable<IEditorCommand> commands) : IEdit
                 break;
 
             default:
-                commands.FirstOrDefault(c => c.CommandType == commandType)?.Execute(_editor.Document, _editor);
+                commands.FirstOrDefault(c => c.HandledCommandTypes.Contains(commandType))?.Execute(_editor.Document, _editor, commandType);
                 break;
         }
     }

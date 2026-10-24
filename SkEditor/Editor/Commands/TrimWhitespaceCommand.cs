@@ -6,11 +6,11 @@ using AvaloniaEdit.Document;
 
 namespace SkEditor.Editor.Commands;
 
-public class TrimWhitespaceCommand : IEditorCommand
+public class TrimWhitespaceCommand : IEditorCommandHandler
 {
-    public EditorCommandType CommandType => EditorCommandType.TrimWhitespace;
+    public EditorCommandType[] HandledCommandTypes => [EditorCommandType.TrimWhitespace];
 
-    public void Execute(TextDocument document, TextEditor editor)
+    public void Execute(TextDocument document, TextEditor editor, EditorCommandType _)
     {
         List<DocumentLine> selectedLines;
         int currentSelectionStart = editor.SelectionStart;

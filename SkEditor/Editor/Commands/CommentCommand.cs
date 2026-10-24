@@ -5,11 +5,11 @@ using AvaloniaEdit.Document;
 
 namespace SkEditor.Editor.Commands;
 
-public class CommentCommand : IEditorCommand
+public class CommentCommand : IEditorCommandHandler
 {
-    public EditorCommandType CommandType => EditorCommandType.Comment;
+    public EditorCommandType[] HandledCommandTypes => [EditorCommandType.Comment];
 
-    public void Execute(TextDocument document, TextEditor editor)
+    public void Execute(TextDocument document, TextEditor editor, EditorCommandType _)
     {
         int selectionStart = editor.SelectionStart;
         int selectionLength = editor.SelectionLength;

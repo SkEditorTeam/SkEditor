@@ -182,9 +182,9 @@ public static class ServiceCollectionExtensions
 
         public void AddEditorCommands()
         {
-            services.AddSingleton<IEditorCommand, CommentCommand>();
-            services.AddSingleton<IEditorCommand, DuplicateCommand>();
-            services.AddSingleton<IEditorCommand, TrimWhitespaceCommand>();
+            services.AddSingleton<IEditorCommandHandler, CommentCommand>();
+            services.AddSingleton<IEditorCommandHandler, DuplicateCommand>();
+            services.AddSingleton<IEditorCommandHandler, TrimWhitespaceCommand>();
         }
 
         public void AddEditorCompletions()
