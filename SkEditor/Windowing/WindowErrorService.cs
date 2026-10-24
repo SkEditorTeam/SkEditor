@@ -4,16 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
-using Serilog;
 using SkEditor.Configuration;
+using SkEditor.Core.Logging;
 using SkEditor.Windowing.UI;
-// ReSharper disable RedundantUsingDirective
-
-// ReSharper restore RedundantUsingDirective
 
 namespace SkEditor.Windowing;
 
-public class WindowErrorService(IConfigService configs)
+public class WindowErrorService(IConfigService configs, ILogService logs)
 {
     public void ConfigureErrorHandling()
     {
@@ -22,9 +19,7 @@ public class WindowErrorService(IConfigService configs)
             e.Handled = true;
 
             const string message = "Application crashed!";
-            Log.Fatal(e.Exception, message);
-            Console.Error.WriteLine(e);
-            await Console.Error.WriteLineAsync(message);
+            logs.Fatal(e.Exception, message);
 
             await configs.SaveAllConfigsImmediateAsync();
 
@@ -56,9 +51,7 @@ public class WindowErrorService(IConfigService configs)
         AggregateException flattenedException = t.Exception.Flatten();
         Exception innermost = flattenedException.InnerExceptions.FirstOrDefault() ?? flattenedException;
 
-        Log.Error(t.Exception, "Error creating SkEditor: {ExceptionMessage}\nStack Trace: {StackTrace}",
-            innermost.Message,
-            innermost.StackTrace);
+        logs.Error(t.Exception, $"Error creating SkEditor: {innermost.Message}\nStack Trace: {innermost.StackTrace}");
 
         await splashScreen.TryUpdateStatusAsync(
             $"Error: {t.Exception.InnerException?.Message ?? t.Exception.Message}");
