@@ -5,7 +5,7 @@ namespace SkEditor.Workspace.Projects;
 
 public interface IProjectService
 {
-    LocalFileSystem? CurrentProject { get; }
+    LocalNodeFileSystem? CurrentProject { get; }
     string? CurrentProjectPath { get; }
     
     Task<bool> OpenProjectAsync();

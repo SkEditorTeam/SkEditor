@@ -10,10 +10,10 @@ using SkEditor.Workspace.Remote.Models;
 
 namespace SkEditor.Workspace.Filesystem.Sftp;
 
-public class SftpFileSystem(
+public class SftpNodeFileSystem(
     RemoteConnection connection,
     IRemoteConnectionService connections,
-    INotificationService notifications) : IFileSystem
+    INotificationService notifications) : INodeFileSystem
 {
     public static readonly char[] InvalidChars = ['/', '\\', '\0'];
     public RemoteConnection Connection => connection;

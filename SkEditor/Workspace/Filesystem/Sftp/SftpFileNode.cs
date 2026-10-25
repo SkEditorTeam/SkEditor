@@ -20,12 +20,12 @@ public partial class SftpFileNode(
     IRemoteConnectionService service)
     : BaseFileNode(name, path)
 {
-    public override char[] InvalidChars => SftpFileSystem.InvalidChars;
+    public override char[] InvalidChars => SftpNodeFileSystem.InvalidChars;
 
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
-        SftpFileSystem.GetAlreadyExistsPredicate(service, connection);
+        SftpNodeFileSystem.GetAlreadyExistsPredicate(service, connection);
 
     protected override Func<string, Task> DeleteAction =>
         async path =>

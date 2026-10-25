@@ -211,7 +211,7 @@ public class FileTreeCommandHandler(
             }
         }
 
-        if (fileTree.FileSystem is SftpFileSystem)
+        if (fileTree.FileSystem is SftpNodeFileSystem)
         {
             await fileTree.CloseFileSystemAsync();
         }
@@ -228,7 +228,7 @@ public class FileTreeCommandHandler(
 
         FileSystemNode node = fileTree.SelectedNodes[0];
 
-        if (fileTree.FileSystem is LocalFileSystem && node.IsRoot)
+        if (fileTree.FileSystem is LocalNodeFileSystem && node.IsRoot)
         {
             _ = Dispatcher.UIThread.InvokeAsync(async () =>
             {

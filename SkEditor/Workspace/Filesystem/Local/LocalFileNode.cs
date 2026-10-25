@@ -13,11 +13,11 @@ namespace SkEditor.Workspace.Filesystem.Local;
 
 public partial class LocalFileNode(string name, string path) : BaseFileNode(name, path)
 {
-    public override char[] InvalidChars => LocalFileSystem.InvalidChars;
+    public override char[] InvalidChars => LocalNodeFileSystem.InvalidChars;
 
     public override IRelayCommand OpenCommand => OpenFileCommand;
 
-    protected override Func<string, Task<bool>> AlreadyExistsPredicate => LocalFileSystem.AlreadyExistsPredicate;
+    protected override Func<string, Task<bool>> AlreadyExistsPredicate => LocalNodeFileSystem.AlreadyExistsPredicate;
 
     protected override Func<string, Task> DeleteAction => async path => await Task.Run(() => File.Delete(path));
 

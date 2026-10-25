@@ -19,13 +19,13 @@ public class ProjectService(
     IRecentFileService recents,
     IMessenger messenger) : IProjectService
 {
-    public LocalFileSystem? CurrentProject { get; private set; }
+    public LocalNodeFileSystem? CurrentProject { get; private set; }
     public string? CurrentProjectPath => CurrentProject?.Root?.Path;
 
     public void OpenProject(string path)
     {
-        LocalFileSystem localFileSystem = new(path, logs);
-        CurrentProject = localFileSystem;
+        LocalNodeFileSystem localNodeFileSystem = new(path, logs);
+        CurrentProject = localNodeFileSystem;
 
         string? name = Path.GetFileName(Path.GetDirectoryName(path));
         if (name is not null)
@@ -33,7 +33,7 @@ public class ProjectService(
             recents.AddRecentItem(name, path, true, DateTime.Now);
         }
 
-        messenger.Send(new ProjectChangedMessage(localFileSystem));
+        messenger.Send(new ProjectChangedMessage(localNodeFileSystem));
     }
 
     public void CloseProject()

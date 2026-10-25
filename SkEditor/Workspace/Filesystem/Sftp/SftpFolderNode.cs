@@ -22,10 +22,10 @@ public class SftpFolderNode(
     bool addDummy = true)
     : BaseFolderNode(name, path, isRoot, addDummy)
 {
-    public override char[] InvalidChars => SftpFileSystem.InvalidChars;
+    public override char[] InvalidChars => SftpNodeFileSystem.InvalidChars;
 
     protected override Func<string, Task<bool>> AlreadyExistsPredicate =>
-        SftpFileSystem.GetAlreadyExistsPredicate(service, connection);
+        SftpNodeFileSystem.GetAlreadyExistsPredicate(service, connection);
 
     protected override Func<string, Task> CreateFileAction =>
         async path => await service.ExecuteSafeAsync(connection,

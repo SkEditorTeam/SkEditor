@@ -6,7 +6,7 @@ namespace SkEditor.Workspace.Filesystem.Abstractions;
 /// <summary>
 ///     Represents a file system in a node-based structure
 /// </summary>
-public interface IFileSystem
+public interface INodeFileSystem
 {
     /// <summary>
     ///     The root node of the file system.

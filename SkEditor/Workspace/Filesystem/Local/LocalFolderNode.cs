@@ -13,8 +13,8 @@ namespace SkEditor.Workspace.Filesystem.Local;
 public class LocalFolderNode(string name, string path, bool isRoot, bool addDummy = true)
     : BaseFolderNode(name, path, isRoot, addDummy)
 {
-    public override char[] InvalidChars => LocalFileSystem.InvalidChars;
-    protected override Func<string, Task<bool>> AlreadyExistsPredicate => LocalFileSystem.AlreadyExistsPredicate;
+    public override char[] InvalidChars => LocalNodeFileSystem.InvalidChars;
+    protected override Func<string, Task<bool>> AlreadyExistsPredicate => LocalNodeFileSystem.AlreadyExistsPredicate;
 
     protected override Func<string, Task> CreateFileAction =>
         async path => await File.Create(path).DisposeAsync();

@@ -160,7 +160,7 @@ public partial class RemoteExplorerViewModel : ObservableObject, ISidebarPanelVi
                 FileTree.FileSystem = null;
             }
 
-            FileTree.FileSystem = new SftpFileSystem(target, _remoteConnections, _notifications);
+            FileTree.FileSystem = new SftpNodeFileSystem(target, _remoteConnections, _notifications);
             bool success = await FileTree.LoadFileSystemAsync();
 
             return success;

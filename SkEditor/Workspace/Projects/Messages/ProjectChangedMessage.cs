@@ -2,4 +2,4 @@
 
 namespace SkEditor.Workspace.Projects.Messages;
 
-public record ProjectChangedMessage(IFileSystem? NewFileSystem);
+public record ProjectChangedMessage(INodeFileSystem? NewFileSystem);

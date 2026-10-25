@@ -29,7 +29,7 @@ public partial class FileTreeViewModel
             _cts = null;
         }
 
-        if (FileSystem is SftpFileSystem sftp)
+        if (FileSystem is SftpNodeFileSystem sftp)
         {
             sftp.Disconnect();
         }

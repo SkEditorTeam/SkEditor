@@ -35,7 +35,7 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
     public ObservableCollection<ContextMenuItem> ContextMenuItems { get; } = [];
 
     [ObservableProperty]
-    public partial IFileSystem? FileSystem { get; set; }
+    public partial INodeFileSystem? FileSystem { get; set; }
 
     [ObservableProperty]
     public partial bool IsLoading { get; set; }
@@ -158,7 +158,7 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
     {
         Dispatcher.UIThread.Post(() =>
         {
-            if (FileSystem is not SftpFileSystem sftpFileSystem || sftpFileSystem.Connection != message.Connection)
+            if (FileSystem is not SftpNodeFileSystem sftpFileSystem || sftpFileSystem.Connection != message.Connection)
             {
                 return;
             }
@@ -183,7 +183,7 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
         });
     }
 
-    partial void OnFileSystemChanged(IFileSystem? value)
+    partial void OnFileSystemChanged(INodeFileSystem? value)
     {
         WeakReferenceMessenger.Default.Send(new FileSystemChangedMessage(this, value));
     }
