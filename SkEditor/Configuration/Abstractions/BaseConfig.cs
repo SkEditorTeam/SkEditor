@@ -17,6 +17,13 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
     private const int SaveDebounceMs = 300;
 
     protected virtual Environment.SpecialFolder TargetFolder => Environment.SpecialFolder.ApplicationData;
+    
+    // ReSharper disable once ReplaceWithFieldKeyword
+    private string AppDataFolderPath => Path.Combine(
+        Environment.GetFolderPath(TargetFolder),
+        "SkEditor",
+        "v3.0"
+    );
 
     private readonly SemaphoreSlim _saveLock = new(1, 1);
     private CancellationTokenSource? _saveCts;
@@ -29,7 +36,7 @@ public abstract class BaseConfig<T> : ObservableObject, IConfig where T : BaseCo
     /// </summary>
     protected abstract JsonTypeInfo<T> TypeInfo { get; }
 
-    private string ConfigPath => Path.Combine(AppPaths.RoamingData, FileName);
+    private string ConfigPath => Path.Combine(AppDataFolderPath, FileName);
 
     public async Task Load()
     {
