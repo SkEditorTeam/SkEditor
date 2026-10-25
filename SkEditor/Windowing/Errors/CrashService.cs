@@ -31,6 +31,8 @@ public class CrashService(
 
     public void SaveCrashState(Exception ex)
     {
+        SaveCrashLog(ex);
+        
         CrashStateFile[] stateFiles = tabs.AllTabs
             .OfType<IFileTab>()
             .Select(tab =>
@@ -69,6 +71,36 @@ public class CrashService(
             FileShare.None);
 
         fileSystem.RandomAccess.Write(handle, writer.WrittenSpan, fileOffset: 0);
+    }
+    
+    private void SaveCrashLog(Exception ex)
+    {
+        try
+        {
+            string dir = Path.GetDirectoryName(CrashLogFilePath)!;
+            if (!fileSystem.Directory.Exists(dir))
+            {
+                fileSystem.Directory.CreateDirectory(dir);
+            }
+
+            string logContent = $"""
+                                 --------
+                                 SkEditor Crash Report - {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC
+                                 OS: {Environment.OSVersion} ({System.Runtime.InteropServices.RuntimeInformation.OSDescription})
+                                 Arch: {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture}
+                                 CommandLine: {Environment.CommandLine}
+                                 --------
+
+                                 Exception:
+                                 {ex}
+                                 """;
+
+            fileSystem.File.WriteAllText(CrashLogFilePath, logContent);
+        }
+        catch (Exception logEx)
+        {
+            logs.Error(logEx, "Failed to write crash.log");
+        }
     }
 
     public async Task CheckForCrashes()
