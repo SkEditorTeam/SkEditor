@@ -26,6 +26,16 @@ jobs:
       - name: Publish Windows x64 (AOT)
         run: |
           dotnet publish SkEditor -c Release -r win-x64 -p:PublishAot=true --nologo -v q /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false -o ./dist-win
+          
+      - name: Build MSI Installer
+        run: |
+          dotnet build Installer/SkEditorInstaller.wixproj -c Release -p:PublishDir="${{ github.workspace }}/dist-win" -p:IsAot=true
+
+      - name: Move MSI to artifacts
+        shell: pwsh
+        run: |
+          $msi = Get-ChildItem -Path "Installer/bin" -Filter "*.msi" -Recurse | Select-Object -First 1
+          Move-Item $msi.FullName -Destination "./SkEditorInstaller.msi"
 
       - name: Create Zip
         shell: pwsh
@@ -35,7 +45,9 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: windows-artifacts
-          path: Windows-x64.zip
+          path: |
+            Windows-x64.zip
+            SkEditorInstaller.msi
 
   build-linux:
     runs-on: ubuntu-latest
@@ -159,7 +171,7 @@ jobs:
           | 🍏 macOS-arm64.zip | For macOS on ARM64 |
           EOF
 
-          gh release create "$TAG" release-files/*.zip \
+          gh release create "$TAG" release-files/*.zip release-files/*.msi \
             --title "$TAG - Alpha Update" \
             --notes-file release_notes.md \
             --draft \
