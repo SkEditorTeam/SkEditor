@@ -5,9 +5,13 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentIcons.Common;
 using MemoryPack;
 using Microsoft.Win32.SafeHandles;
 using SkEditor.Core.Common;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Editor.UI.Tabs;
@@ -24,7 +28,8 @@ public class CrashService(
     ITabService tabs,
     ILogService logs,
     IFileTabFactory fileTabFactory,
-    IFileService files) : ICrashService
+    IFileService files,
+    IDialogService dialogs) : ICrashService
 {
     public static readonly string CrashLogFilePath = Path.Combine(AppPaths.LocalData, "crash.log");
     public static readonly string CrashRecoveryFilePath = Path.Combine(AppPaths.LocalData, "crash_recovery.bin");
@@ -32,7 +37,7 @@ public class CrashService(
     public void SaveCrashState(Exception ex)
     {
         SaveCrashLog(ex);
-        
+
         CrashStateFile[] stateFiles = tabs.AllTabs
             .OfType<IFileTab>()
             .Select(tab =>
@@ -61,7 +66,7 @@ public class CrashService(
         CrashState state = new(stateFiles);
 
         fileSystem.Directory.CreateDirectory(AppPaths.LocalData);
-        
+
         ArrayBufferWriter<byte> writer = new();
         MemoryPackSerializer.Serialize(writer, state);
         using SafeFileHandle handle = fileSystem.File.OpenHandle(
@@ -72,7 +77,7 @@ public class CrashService(
 
         fileSystem.RandomAccess.Write(handle, writer.WrittenSpan, fileOffset: 0);
     }
-    
+
     private void SaveCrashLog(Exception ex)
     {
         try
@@ -124,36 +129,69 @@ public class CrashService(
             return;
         }
 
-        if (state is null)
+        if (state is null || state.Files.Length == 0)
         {
+            fileSystem.File.Delete(CrashRecoveryFilePath);
+            return;
+        }
+        
+        int unsavedFiles = state.Files.Count(f => !f.IsSaved || f.IsRemote);
+
+        TranslationKey message = unsavedFiles > 0
+            ? TranslationKey.CrashRecoveryMessageUnsaved
+            : TranslationKey.CrashRecoveryMessageAllSaved;
+
+        Dialog dialog = Dialog
+            .Create(TranslationKey.CrashRecoveryTitle)
+            .WithMessage(message)
+            .WithIcon(Symbol.ShieldError)
+            .WithButtons(
+                new DialogButton(TranslationKey.CrashRecoveryRestore, DialogResult.Yes, isDefault: true),
+                new DialogButton(TranslationKey.CrashRecoveryDiscard, DialogResult.No)
+            );
+
+        DialogResult result = await dialogs.ShowDialogAsync(dialog);
+
+        if (result != DialogResult.Yes)
+        {
+            fileSystem.File.Delete(CrashRecoveryFilePath);
             return;
         }
 
-        List<Task> restoreTasks = [];
-        foreach (CrashStateFile file in state.Files)
+        try
         {
-            FileTabViewModel? tab;
-            if (file.Content is null && file.Path is not null && file.IsSaved)
+            List<Task> restoreTasks = [];
+            foreach (CrashStateFile file in state.Files)
             {
-                if (!fileSystem.File.Exists(file.Path))
+                FileTabViewModel? tab;
+                if (file.Content is null && file.Path is not null && file.IsSaved)
                 {
-                    continue;
-                }
+                    if (!fileSystem.File.Exists(file.Path))
+                    {
+                        continue;
+                    }
 
-                tab = fileTabFactory.CreateFromFile(new LocalFile(file.Path));
-                tabs.OpenTab(tab);
-                restoreTasks.Add(files.LoadAndReadFileAsync(tab));
+                    tab = fileTabFactory.CreateFromFile(new LocalFile(file.Path));
+                    tabs.OpenTab(tab);
+                    restoreTasks.Add(files.LoadAndReadFileAsync(tab));
+                }
+                else
+                {
+                    tab = fileTabFactory.CreateFromCrash(file);
+                    tab.Document.Text = file.Content ?? string.Empty;
+                    tab.Document.UndoStack.ClearAll();
+                    tabs.OpenTab(tab);
+                }
             }
-            else
+
+            await Task.WhenAll(restoreTasks);
+        }
+        finally
+        {
+            if (fileSystem.File.Exists(CrashRecoveryFilePath))
             {
-                tab = fileTabFactory.CreateFromCrash(file);
-                tab.Document.Text = file.Content ?? string.Empty;
-                tab.Document.UndoStack.ClearAll();
-                tabs.OpenTab(tab);
+                fileSystem.File.Delete(CrashRecoveryFilePath);
             }
         }
-
-        await Task.WhenAll(restoreTasks);
-        fileSystem.File.Delete(CrashRecoveryFilePath);
     }
 }

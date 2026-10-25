@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Threading;
 using HotAvalonia;
 using SkEditor.Appearance.Themes;
 using SkEditor.Configuration.Configs;
@@ -9,6 +10,7 @@ using SkEditor.Core.Localization;
 using SkEditor.Editor.Syntax;
 using SkEditor.Integrations.Discord;
 using SkEditor.Layout.Menu.UI;
+using SkEditor.Windowing.Errors;
 
 namespace SkEditor.Windowing.UI;
 
@@ -20,6 +22,7 @@ public partial class MainWindow : Window
     private readonly IThemeService _themes;
     private readonly ITranslationService _translation;
     private readonly IWindowCloseService _windowClose;
+    private readonly ICrashService _crashes;
 
     public SplashScreen? SplashScreen { get; set; }
 
@@ -32,6 +35,7 @@ public partial class MainWindow : Window
         _discordIntegration = null!;
         _splashScreen = null!;
         _windowClose = null!;
+        _crashes = null!;
     }
 
     public MainWindow(
@@ -45,7 +49,8 @@ public partial class MainWindow : Window
         ShortcutsService shortcutsService,
         IDiscordIntegrationService discordIntegration,
         IWindowCloseService windowClose,
-        SplashScreenService splashScreen)
+        SplashScreenService splashScreen,
+        ICrashService crashes)
         : this()
     {
         DataContext = viewModel;
@@ -55,6 +60,7 @@ public partial class MainWindow : Window
         _discordIntegration = discordIntegration;
         _splashScreen = splashScreen;
         _windowClose = windowClose;
+        _crashes = crashes;
 
         RegisterHotKeys(menuViewModel, appSettings);
 
@@ -80,7 +86,7 @@ public partial class MainWindow : Window
 
         _discordIntegration.SetUp();
 
-        Dispatcher.Post(() =>
+        await Dispatcher.UIThread.InvokeAsync(() =>
         {
             IsVisible = true;
             Activate();
@@ -88,6 +94,10 @@ public partial class MainWindow : Window
 
             SplashScreen?.Close();
         });
+        
+        await Task.Delay(100);
+
+        await _crashes.CheckForCrashes();
     }
 
     [AvaloniaHotReload]

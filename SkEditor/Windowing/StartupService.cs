@@ -21,7 +21,6 @@ public class StartupService(
     WindowInstanceService windowInstanceService,
     WindowStateService windowStateService,
     WindowErrorService windowErrorService,
-    ICrashService crashes,
     ISessionRestoreService sessionRestore,
     NamedPipeServer namedPipeServer,
     IConfigService config,
@@ -92,7 +91,6 @@ public class StartupService(
         {
             windowStateService.RecoverMainWindowState(mainWindow);
             await sessionRestore.RecoverSessionStateAsync();
-            await crashes.CheckForCrashes();
             
             desktop.MainWindow = mainWindow;
             mainWindow.ApplyTemplate();
