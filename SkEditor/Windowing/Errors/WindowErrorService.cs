@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,32 +13,85 @@ namespace SkEditor.Windowing.Errors;
 
 public class WindowErrorService(IConfigService configs, ICrashService crashes, ILogService logs)
 {
+    private int _crashHandlingStarted;
+
     public void ConfigureErrorHandling()
     {
-        Dispatcher.UIThread.UnhandledException += async (_, e) =>
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+        {
+            if (Interlocked.Exchange(ref _crashHandlingStarted, 1) != 0)
+                return;
+            
+            try
+            {
+                var exception = e.ExceptionObject as Exception
+                                ?? new Exception($"Non-Exception object: {e.ExceptionObject}");
+
+                logs.Fatal(exception, "Application crashed!");
+                crashes.SaveCrashState(exception);
+            }
+            catch
+            {
+                // ignored
+            }
+        };
+
+        Dispatcher.UIThread.UnhandledException += (__, e) =>
         {
             e.Handled = true;
 
-            const string message = "Application crashed!";
-            logs.Fatal(e.Exception, message);
+            if (Interlocked.Exchange(ref _crashHandlingStarted, 1) != 0)
+                return;
+
+            _ = HandleCrashAsync(e.Exception);
+        };
+    }
+
+    private async Task HandleCrashAsync(Exception ex)
+    {
+        try
+        {
+            logs.Fatal(ex, "Application crashed!");
 
             await configs.SaveAllConfigsImmediateAsync();
-            crashes.SaveCrashState(e.Exception);
-            
-            string fullException = e.Exception.ToString();
-            string encodedMessage = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(fullException));
+
+            crashes.SaveCrashState(ex);
+
             await Task.Delay(500);
 
-            string? processPath = Environment.ProcessPath;
-            if (string.IsNullOrEmpty(processPath))
+            if (ShouldAttemptRestart())
             {
-                processPath = AppDomain.CurrentDomain.BaseDirectory;
+                string? processPath = Environment.ProcessPath;
+
+                if (!string.IsNullOrEmpty(processPath))
+                {
+                    Process.Start(processPath, "--crash");
+                }
             }
-
-            System.Diagnostics.Process.Start(processPath, "--crash " + encodedMessage);
-
+        }
+        catch (Exception crashHandlingException)
+        {
+            try
+            {
+                logs.Error(crashHandlingException, "Crash handling failed!");
+            }
+            catch
+            {
+                // ignored
+            }
+        }
+        finally
+        {
             Environment.Exit(1);
-        };
+        }
+    }
+    
+    private static bool ShouldAttemptRestart()
+    {
+        bool alreadyCrashed = Environment.GetCommandLineArgs().Any(arg => arg.Equals("--crash", StringComparison.OrdinalIgnoreCase));
+        TimeSpan uptime = DateTime.Now - Process.GetCurrentProcess().StartTime;
+        
+        return !alreadyCrashed || uptime >= TimeSpan.FromSeconds(10);
     }
 
     public async Task CheckForErrors(IClassicDesktopStyleApplicationLifetime desktop, SplashScreen? splashScreen,
