@@ -66,13 +66,13 @@ public class CrashService(
 
         ArrayBufferWriter<byte> writer = new();
         MemoryPackSerializer.Serialize(writer, state);
-        using SafeFileHandle handle = fileSystem.File.OpenHandle(
-            CrashRecoveryFilePath,
-            FileMode.Create,
-            FileAccess.Write,
+        using Stream stream = fileSystem.File.Open(
+            CrashRecoveryFilePath, 
+            FileMode.Create, 
+            FileAccess.Write, 
             FileShare.None);
 
-        fileSystem.RandomAccess.Write(handle, writer.WrittenSpan, fileOffset: 0);
+        stream.Write(writer.WrittenSpan);
     }
 
     public async Task CheckForCrashes()
