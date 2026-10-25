@@ -3,29 +3,28 @@
     <Package Name="SkEditor"
              Manufacturer="Notro"
              Version="!(bind.FileVersion.SkEditorExe)"
-             UpgradeCode="14564974-da58-4917-8a0d-590043f589c2">
+             UpgradeCode="14564974-da58-4917-8a0d-590043f589c2"
+             Scope="perMachine">
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <MediaTemplate EmbedCab="yes"/>
 
-        <Feature Id="Main">
+        <Feature Id="Main" Title="SkEditor" Level="1">
             <ComponentGroupRef Id="SkEditorComponents"/>
         </Feature>
 
-        <ui:WixUI
-                Id="SkEditorInstaller_InstallDir"
-                InstallDirectory="INSTALLFOLDER"/>
+        <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER"/>
 
+        <UI>
+            <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg" Order="2" Condition="NOT Installed" />
+            <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2" />
+        </UI>
+        
         <UIRef Id="WixUI_ErrorProgressText"/>
 
-        <WixVariable Id="WixUIDialogBmp"
-                     Value="Assets/background.png"/>
-
-        <WixVariable Id="WixUIBannerBmp"
-                     Value="Assets/top.png"/>
-
-        <WixVariable Id="WixUIExclamationIco"
-                     Value="Assets/Warning.ico"/>
-
-        <WixVariable Id="WixUIInfoIco"
-                     Value="Assets/Info.ico"/>
+        <WixVariable Id="WixUIDialogBmp" Value="Assets/background.png"/>
+        <WixVariable Id="WixUIBannerBmp" Value="Assets/top.png"/>
+        <WixVariable Id="WixUIExclamationIco" Value="Assets/Warning.ico"/>
+        <WixVariable Id="WixUIInfoIco" Value="Assets/Info.ico"/>
     </Package>
 </Wix>

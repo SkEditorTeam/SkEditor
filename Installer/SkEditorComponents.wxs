@@ -1,12 +1,12 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Fragment>
         <ComponentGroup Id="SkEditorComponents" Directory="INSTALLFOLDER">
-            <Files Include="$(var.PublishDir)\**">
-                <Exclude Files="$(var.PublishDir)\SkEditor.exe"/>
+            <Files Include="!(bindpath.PublishDir)\**">
+                <Exclude Files="!(bindpath.PublishDir)\SkEditor.exe"/>
             </Files>
 
             <Component Id="MainExecutable">
-                <File Id="SkEditorExe" Source="$(var.PublishDir)\SkEditor.exe"/>
+                <File Id="SkEditorExe" Source="!(bindpath.PublishDir)\SkEditor.exe" KeyPath="yes"/>
 
                 <ProgId Id="SkEditor.sk" Description="Skript File" Icon="SkEditorExe">
                     <Extension Id="sk" ContentType="text/plain">
@@ -16,28 +16,29 @@
             </Component>
 
             <Component Id="ApplicationShortcuts" Guid="{bf08e1b2-e449-4bf6-9e61-e80cd00d68ac}">
-                <RegistryValue Root="HKCU" Key="Software\Notro\SkEditor" Name="Installed" Type="integer" Value="1"/>
+                <RegistryValue Root="HKCU" Key="Software\Notro\SkEditor" Name="Installed" Type="integer" Value="1" KeyPath="yes"/>
 
                 <Shortcut Id="DesktopShortcut"
                           Name="SkEditor"
                           Directory="DesktopFolder"
-                          Target="[#SkEditorExe]"
+                          Target="[!SkEditorExe]"
                           WorkingDirectory="INSTALLFOLDER"
                           Icon="SkEditorIcon.exe"/>
 
                 <Shortcut Id="StartMenuShortcut"
                           Name="SkEditor"
                           Directory="ProgramMenuFolder"
-                          Target="[#SkEditorExe]"
+                          Target="[!SkEditorExe]"
                           WorkingDirectory="INSTALLFOLDER"
                           Icon="SkEditorIcon.exe"/>
 
-                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor" Value="URL:SkEditor Protocol" Type="string"/>
-                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor" Name="URL Protocol" Value="" Type="string"/>
-                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor\DefaultIcon"
-                               Value="[INSTALLFOLDER]SkEditor.exe,0" Type="string"/>
-                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor\shell\open\command"
-                               Value="&quot;[INSTALLFOLDER]SkEditor.exe&quot; &quot;%1&quot;" Type="string"/>
+<!-- registering SkEditor URL protocol, disabled for now -->
+<!--                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor" Value="URL:SkEditor Protocol" Type="string"/>-->
+<!--                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor" Name="URL Protocol" Value="" Type="string"/>-->
+<!--                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor\DefaultIcon"-->
+<!--                               Value="[INSTALLFOLDER]SkEditor.exe,0" Type="string"/>-->
+<!--                <RegistryValue Root="HKCU" Key="Software\Classes\skeditor\shell\open\command"-->
+<!--                               Value="&quot;[INSTALLFOLDER]SkEditor.exe&quot; &quot;%1&quot;" Type="string"/>-->
             </Component>
         </ComponentGroup>
 
