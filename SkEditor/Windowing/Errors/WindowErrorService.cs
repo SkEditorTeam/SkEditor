@@ -8,9 +8,9 @@ using SkEditor.Configuration;
 using SkEditor.Core.Logging;
 using SkEditor.Windowing.UI;
 
-namespace SkEditor.Windowing;
+namespace SkEditor.Windowing.Errors;
 
-public class WindowErrorService(IConfigService configs, ILogService logs)
+public class WindowErrorService(IConfigService configs, ICrashService crashes, ILogService logs)
 {
     public void ConfigureErrorHandling()
     {
@@ -22,8 +22,8 @@ public class WindowErrorService(IConfigService configs, ILogService logs)
             logs.Fatal(e.Exception, message);
 
             await configs.SaveAllConfigsImmediateAsync();
-
-#if !DEBUG
+            crashes.SaveCrashState(e.Exception);
+            
             string fullException = e.Exception.ToString();
             string encodedMessage = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(fullException));
             await Task.Delay(500);
@@ -35,7 +35,7 @@ public class WindowErrorService(IConfigService configs, ILogService logs)
             }
 
             System.Diagnostics.Process.Start(processPath, "--crash " + encodedMessage);
-#endif
+
             Environment.Exit(1);
         };
     }

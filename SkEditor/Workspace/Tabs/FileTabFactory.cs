@@ -4,6 +4,7 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Editor.UI.Tabs;
+using SkEditor.Windowing.Errors.Models;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session.Models;
 
@@ -30,25 +31,37 @@ public class FileTabFactory(
 
     public FileTabViewModel CreateFromSession(SessionStateFile file)
     {
-        TranslatableString? header;
-        if (file.Header is { } fileHeader)
+        return CreateFromState(file.Path, file.Header, file.IsSaved);
+    }
+
+    public FileTabViewModel CreateFromCrash(CrashStateFile file)
+    {
+        string? path = file.IsRemote ? null : file.Path;
+        bool isSaved = file is { IsSaved: true, IsRemote: false };
+        return CreateFromState(path, file.Header, isSaved);
+    }
+    
+    private FileTabViewModel CreateFromState(string? path, string? header, bool isSaved)
+    {
+        TranslatableString? translatableHeader;
+        if (header != null)
         {
-            header = fileHeader.ToTranslatable();
+            translatableHeader = header.ToTranslatable();
         }
-        else if (file.Path is not null)
+        else if (path is not null)
         {
-            string fileName = Path.GetFileName(file.Path);
-            header = fileName.ToTranslatable();
+            string fileName = Path.GetFileName(path);
+            translatableHeader = fileName.ToTranslatable();
         }
         else
         {
-            throw new InvalidOperationException("The session state file is missing both header and path!");
+            throw new InvalidOperationException("The saved state file is missing both header and path!");
         }
 
-        return new FileTabViewModel(header, appSettings, experiments)
+        return new FileTabViewModel(translatableHeader, appSettings, experiments)
         {
-            File = new LocalFile(file.Path, file.Header),
-            IsSaved = file.IsSaved
+            File = new LocalFile(path, header),
+            IsSaved = isSaved
         };
     }
 

@@ -56,6 +56,7 @@ using SkEditor.Matcher;
 using SkEditor.Welcome;
 using SkEditor.Welcome.UI;
 using SkEditor.Windowing;
+using SkEditor.Windowing.Errors;
 using SkEditor.Windowing.UI;
 using SkEditor.Windowing.UI.About;
 using SkEditor.Workspace.Files;
@@ -110,6 +111,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<WindowInstanceService>();
             services.AddSingleton<WindowStateService>();
             services.AddSingleton<WindowErrorService>();
+            services.AddSingleton<ICrashService, CrashService>();
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IWindowDialogService, WindowDialogService>();
             services.AddSingleton<IWindowCloseService, WindowCloseService>();

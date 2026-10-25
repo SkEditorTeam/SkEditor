@@ -8,6 +8,7 @@ using SkEditor.Analyzing;
 using SkEditor.Configuration;
 using SkEditor.Core.Logging;
 using SkEditor.Matcher;
+using SkEditor.Windowing.Errors;
 using SkEditor.Windowing.UI;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Session;
@@ -20,6 +21,7 @@ public class StartupService(
     WindowInstanceService windowInstanceService,
     WindowStateService windowStateService,
     WindowErrorService windowErrorService,
+    ICrashService crashes,
     ISessionRestoreService sessionRestore,
     NamedPipeServer namedPipeServer,
     IConfigService config,
@@ -90,6 +92,7 @@ public class StartupService(
         {
             windowStateService.RecoverMainWindowState(mainWindow);
             await sessionRestore.RecoverSessionStateAsync();
+            await crashes.CheckForCrashes();
             
             desktop.MainWindow = mainWindow;
             mainWindow.ApplyTemplate();
