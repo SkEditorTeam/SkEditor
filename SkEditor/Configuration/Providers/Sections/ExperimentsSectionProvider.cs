@@ -5,7 +5,6 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Messages;
 using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Models.Types;
-using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using ExperimentsProperty = SkEditor.Configuration.Configs.ExperimentsConfig.ExperimentsConfigProperty;
 
@@ -94,18 +93,17 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                     ),
 
                 ExpandableSetting
-                    .Create("Code completion".ToTranslatableWip())
-                    .WithDescription("Displays suggestions while writing code.".ToTranslatableWip())
+                    .Create(TranslationKey.SettingsExperimentsCodeCompletion)
+                    .WithDescription(TranslationKey.SettingsExperimentsCodeCompletionDescription)
                     .WithIcon(Symbol.TextBulletListSquareSparkle)
                     .WithChildren(
                         InfoSetting
-                            .Create("Just a prototype".ToTranslatableWip())
-                            .WithDescription("This feature is an early WIP and you shouldn't expect much from it."
-                                .ToTranslatableWip())
+                            .Create(TranslationKey.SettingsExperimentsCodeCompletionWarningTitle)
+                            .WithDescription(TranslationKey.SettingsExperimentsCodeCompletionWarningDescription)
                             .WithIcon(Symbol.Warning)
                             .WithType(InfoSetting.InfoType.Warning),
                         ToggleSetting
-                            .Create("Enable code completion".ToTranslatableWip())
+                            .Create(TranslationKey.SettingsExperimentsCodeCompletionOption)
                             .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.CodeCompletionEnabled))
                     )
             ]);
