@@ -3,6 +3,6 @@
 
 ### New Rules
 
-| Rule ID | Category        | Severity | Notes                     |
-|---------|-----------------|----------|---------------------------|
-| SKED001 | SourceGenerator | Error    | TranslateStringsGenerator |
+Rule ID | Category | Severity | Notes
+--------|----------|----------|--------------------
+SKED001 | SourceGenerator | Error | TranslateStringsGenerator
