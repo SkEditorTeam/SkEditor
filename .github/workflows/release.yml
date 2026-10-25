@@ -40,7 +40,9 @@ jobs:
       - name: Create Zip
         shell: pwsh
         run: |
-          Compress-Archive -Path ./dist-win/* -DestinationPath Windows-x64.zip
+          New-Item -ItemType Directory -Path ./staging/SkEditor -Force | Out-Null
+          Copy-Item -Path ./dist-win/* -Destination ./staging/SkEditor -Recurse
+          Compress-Archive -Path ./staging/SkEditor -DestinationPath Windows-x64.zip
 
       - uses: actions/upload-artifact@v7
         with:
@@ -64,8 +66,13 @@ jobs:
       - name: Publish Linux x64 (AOT)
         run: |
           dotnet publish SkEditor -c Release -r linux-x64 -p:PublishAot=true --nologo -v q /clp:ErrorsOnly /p:DebugType=None /p:DebugSymbols=false -o ./dist-linux
-          chmod +x ./dist-linux/SkEditor
-          cd dist-linux && zip -r ../Linux-x64.zip .
+
+      - name: Create Zip with SkEditor folder
+        run: |
+          mkdir -p staging/SkEditor
+          cp -r dist-linux/* staging/SkEditor/
+          chmod +x staging/SkEditor/SkEditor
+          cd staging && zip -r ../Linux-x64.zip SkEditor
 
       - uses: actions/upload-artifact@v7
         with:
