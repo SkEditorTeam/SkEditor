@@ -15,6 +15,7 @@ public class SmartAutoPairingFeature(AppSettings appSettings) : IEditorFeature
         { '(', ')' },
         { '[', ']' },
         { '"', '"' },
+        { '\'', '\'' },
         { '<', '>' },
         { '{', '}' },
         { '%', '%' }
