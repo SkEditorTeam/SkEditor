@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Analyzing;
 using SkEditor.Analyzing.Aot;
 using SkEditor.Analyzing.Bootstrapping;
+using SkEditor.Analyzing.Downloading;
 using SkEditor.Analyzing.Processes;
 using SkEditor.Analyzing.Protocol;
 using SkEditor.Appearance.Icons;
@@ -283,6 +284,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IAnalyzerProcessBuilder, AnalyzerProcessBuilder>();
             services.AddSingleton<IAnalyzerProcessRunner, AnalyzerProcessRunner>();
             services.AddSingleton<IAnalyzerProtocolHandler, AnalyzerProtocolHandler>();
+            services.AddSingleton<IAnalyzerDownloadHelper, AnalyzerDownloadHelper>();
 
             services.AddSingleton<IAnalyzer, Analyzer>();
             services.AddTransient<IEditorFeature, AnalyzerFeature>();

@@ -76,6 +76,10 @@
                            FontSize="12" />
             </StackPanel>
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type elements:ProgressDialogElement}">
+            <ProgressBar Value="{Binding Value.Value}" IsIndeterminate="{Binding IsIndeterminate.Value}" />
+        </DataTemplate>
     </Application.DataTemplates>
 
     <NativeMenu.Menu>

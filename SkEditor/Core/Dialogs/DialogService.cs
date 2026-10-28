@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
@@ -32,6 +33,49 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
         object result = await taskDialog.ShowAsync(true);
 
         return result as DialogResult ?? DialogResult.Cancel;
+    }
+
+    public async Task<DialogResult> RunDialogAsync(Dialog dialog, Func<CancellationToken, Task> work)
+    {
+        MainWindow? mainWindow = windowRegistry.Active;
+
+        if (mainWindow is null)
+        {
+            throw new InvalidOperationException("No active window found.");
+        }
+
+        FATaskDialog taskDialog = BuildTaskDialog(dialog);
+        taskDialog.XamlRoot = windowRegistry.FindTopmostWindow(mainWindow);
+
+        using CancellationTokenSource cts = new();
+        
+        Task<object> dialogTask = taskDialog.ShowAsync(true);
+        Task workTask = work(cts.Token);
+
+        Task completedTask = await Task.WhenAny(dialogTask, workTask);
+        
+        if (completedTask == workTask)
+        {
+            await workTask;
+            taskDialog.Hide(DialogResult.Ok);
+        
+            await dialogTask;
+            return DialogResult.Ok;
+        }
+
+        await cts.CancelAsync();
+
+        try
+        {
+            await workTask;
+        }
+        catch (OperationCanceledException)
+        {
+            // ignored
+        }
+
+        object rawResult = await dialogTask;
+        return rawResult as DialogResult ?? DialogResult.Cancel;
     }
 
     private static FATaskDialog BuildTaskDialog(Dialog dialog)

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using FluentIcons.Common;
 using R3;
 using SkEditor.Analyzing;
+using SkEditor.Analyzing.Downloading;
 using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Models.Types;
+using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
@@ -22,6 +24,7 @@ public class AnalyzerSectionProvider(
     ExperimentsConfig experiments,
     ILinkService links,
     IAnalyzer analyzer,
+    IAnalyzerDownloadHelper downloader,
     IFilePickerService filePicker,
     INotificationService notifs,
     ILogService logs) : ISettingsSectionProvider
@@ -30,8 +33,6 @@ public class AnalyzerSectionProvider(
 
     public SettingSection GetSection()
     {
-        string pluginsDir = Path.Combine(analyzer.WorkingDir, "plugins");
-
         BindableReactiveProperty<bool> isJavaValid = new(false);
         _ = Task.Run(async () => { isJavaValid.Value = await CheckJava25(); });
 
@@ -82,80 +83,22 @@ public class AnalyzerSectionProvider(
                     .WithIcon(Symbol.Warning)
                     .WithType(InfoSetting.InfoType.Warning),
 
-                ExpandableSetting
+                ActionSetting
                     .Create(everythingTitle)
                     .WithStatus(isEverythingReady)
-                    .WithChildren(
-                        GetJavaSetting(isJavaValid),
-                        GetSkAnalyzerSetting(isAnalyzerPresent),
-                        GetSkriptSetting(isSkriptPresent)
-                    ),
+                    .WithAction("Setup".ToTranslatable(), async () =>
+                    {
+                        try
+                        {
+                            await downloader.Download();
+                        }
+                        catch (Exception ex)
+                        {
+                            logs.Error(ex, "Failed to download Analyzer components.");
+                        }
+                    }),
 
-                ExpandableSetting
-                    .Create(TranslationKey.SettingsAnalyzerToolsTitle)
-                    .WithDescription(TranslationKey.SettingsAnalyzerToolsDescription)
-                    .WithIcon(Symbol.Wrench)
-                    .WithChildren(
-                        ActionSetting
-                            .Create(TranslationKey.SettingsAnalyzerPluginsFolder)
-                            .WithAction(TranslationKey.ButtonOpenFolder, () =>
-                            {
-                                Directory.CreateDirectory(pluginsDir);
-                                links.OpenFolder(pluginsDir);
-                            }),
-                        ActionSetting
-                            .Create(TranslationKey.SettingsAnalyzerRestartTitle)
-                            .WithDescription(TranslationKey.SettingsAnalyzerRestartDescription)
-                            .WithAction(TranslationKey.ButtonRestart, async () =>
-                            {
-                                try
-                                {
-                                    await analyzer.Initialize();
-                                }
-                                catch (Exception ex)
-                                {
-                                    Notification notification = Notification
-                                        .Create(TranslationKey.SettingsAnalyzerRestartFailedTitle)
-                                        .WithMessage(TranslationKey.SettingsAnalyzerRestartFailedMessage)
-                                        .WithType(NotificationType.Error);
-                                    notifs.Show(notification);
-
-                                    logs.Error(ex, "Failed to restart the Analyzer process.");
-                                }
-                            }),
-                        ActionSetting
-                            .Create(TranslationKey.SettingsAnalyzerClearAotCacheTitle)
-                            .WithDescription(TranslationKey.SettingsAnalyzerClearAotCacheDescription)
-                            .WithAction(TranslationKey.ButtonClear, () =>
-                            {
-                                string aotPath = Path.Combine(analyzer.BinDir, "skanalyzer.aot");
-                                if (!File.Exists(aotPath))
-                                {
-                                    return;
-                                }
-
-                                try
-                                {
-                                    File.Delete(aotPath);
-
-                                    Notification notification = Notification
-                                        .Create(TranslationKey.SettingsAnalyzerClearAotCacheSuccessTitle)
-                                        .WithMessage(TranslationKey.SettingsAnalyzerClearAotCacheSuccessMessage)
-                                        .WithType(NotificationType.Success);
-                                    notifs.Show(notification);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Notification notification = Notification
-                                        .Create(TranslationKey.SettingsAnalyzerClearAotCacheFailedTitle)
-                                        .WithMessage(TranslationKey.SettingsAnalyzerClearAotCacheFailedMessage)
-                                        .WithType(NotificationType.Error);
-                                    notifs.Show(notification);
-
-                                    logs.Error(ex, "Failed to delete AOT cache.");
-                                }
-                            })
-                    ),
+                GetToolsSetting(),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsAnalyzerScrollbarErrorMarkers)
@@ -182,6 +125,77 @@ public class AnalyzerSectionProvider(
         return ready
             ? TranslationKey.SettingsAnalyzerComponentsInstalled
             : TranslationKey.SettingsAnalyzerComponentsMissing;
+    }
+
+    private ExpandableSetting GetToolsSetting()
+    {
+        string pluginsDir = Path.Combine(analyzer.WorkingDir, "plugins");
+        
+        return ExpandableSetting
+            .Create(TranslationKey.SettingsAnalyzerToolsTitle)
+            .WithDescription(TranslationKey.SettingsAnalyzerToolsDescription)
+            .WithIcon(Symbol.Wrench)
+            .WithChildren(
+                ActionSetting
+                    .Create(TranslationKey.SettingsAnalyzerPluginsFolder)
+                    .WithAction(TranslationKey.ButtonOpenFolder, () =>
+                    {
+                        Directory.CreateDirectory(pluginsDir);
+                        links.OpenFolder(pluginsDir);
+                    }),
+                ActionSetting
+                    .Create(TranslationKey.SettingsAnalyzerRestartTitle)
+                    .WithDescription(TranslationKey.SettingsAnalyzerRestartDescription)
+                    .WithAction(TranslationKey.ButtonRestart, async () =>
+                    {
+                        try
+                        {
+                            await analyzer.Initialize();
+                        }
+                        catch (Exception ex)
+                        {
+                            Notification notification = Notification
+                                .Create(TranslationKey.SettingsAnalyzerRestartFailedTitle)
+                                .WithMessage(TranslationKey.SettingsAnalyzerRestartFailedMessage)
+                                .WithType(NotificationType.Error);
+                            notifs.Show(notification);
+
+                            logs.Error(ex, "Failed to restart the Analyzer process.");
+                        }
+                    }),
+                ActionSetting
+                    .Create(TranslationKey.SettingsAnalyzerClearAotCacheTitle)
+                    .WithDescription(TranslationKey.SettingsAnalyzerClearAotCacheDescription)
+                    .WithAction(TranslationKey.ButtonClear, () =>
+                    {
+                        string aotPath = Path.Combine(analyzer.BinDir, "skanalyzer.aot");
+                        if (!File.Exists(aotPath))
+                        {
+                            return;
+                        }
+
+                        try
+                        {
+                            File.Delete(aotPath);
+
+                            Notification notification = Notification
+                                .Create(TranslationKey.SettingsAnalyzerClearAotCacheSuccessTitle)
+                                .WithMessage(TranslationKey.SettingsAnalyzerClearAotCacheSuccessMessage)
+                                .WithType(NotificationType.Success);
+                            notifs.Show(notification);
+                        }
+                        catch (Exception ex)
+                        {
+                            Notification notification = Notification
+                                .Create(TranslationKey.SettingsAnalyzerClearAotCacheFailedTitle)
+                                .WithMessage(TranslationKey.SettingsAnalyzerClearAotCacheFailedMessage)
+                                .WithType(NotificationType.Error);
+                            notifs.Show(notification);
+
+                            logs.Error(ex, "Failed to delete AOT cache.");
+                        }
+                    })
+            );
     }
 
     private CompoundSetting GetJavaSetting(BindableReactiveProperty<bool> isJavaValid)
@@ -354,7 +368,7 @@ public class AnalyzerSectionProvider(
 
             Environment.SetEnvironmentVariable("PATH", combinedPath);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             logs.Error(ex, "Failed to refresh PATH environment variable.");
         }

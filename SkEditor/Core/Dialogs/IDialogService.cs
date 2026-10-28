@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using SkEditor.Core.Dialogs.Models;
 
 namespace SkEditor.Core.Dialogs;
@@ -14,4 +16,6 @@ public interface IDialogService
     /// <param name="dialog">The dialog to display.</param>
     /// <returns>The dialog result.</returns>
     Task<DialogResult> ShowDialogAsync(Dialog dialog);
+    
+    Task<DialogResult> RunDialogAsync(Dialog dialog, Func<CancellationToken, Task> work);
 }
