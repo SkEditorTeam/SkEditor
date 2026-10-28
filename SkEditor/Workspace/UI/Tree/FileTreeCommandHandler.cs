@@ -50,7 +50,7 @@ public class FileTreeCommandHandler(
             return;
         }
 
-        TextDialogElement inputElement = new()
+        TextBoxDialogElement inputElement = new()
         {
             PlaceholderText = TranslationKey.FileExplorerCreateNewEnterName,
             ValidationFunc = name =>
@@ -101,7 +101,7 @@ public class FileTreeCommandHandler(
             return;
         }
 
-        TextDialogElement inputElement = new()
+        TextBoxDialogElement inputElement = new()
         {
             PlaceholderText = TranslationKey.FileExplorerCreateNewEnterName,
             ValidationFunc = name =>

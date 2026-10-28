@@ -109,7 +109,7 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
                 ItemsSource = dialog.Elements
             };
 
-            TextDialogElement? firstText = dialog.Elements.OfType<TextDialogElement>().FirstOrDefault();
+            TextBoxDialogElement? firstText = dialog.Elements.OfType<TextBoxDialogElement>().FirstOrDefault();
             firstText?.AutoFocus = true;
         }
 
@@ -140,9 +140,9 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
                 return;
             }
 
-            if (dialog.Elements.Any(e => e is TextDialogElement { ValidationFunc: not null }))
+            if (dialog.Elements.Any(e => e is TextBoxDialogElement { ValidationFunc: not null }))
             {
-                bool valid = dialog.Elements.OfType<TextDialogElement>()
+                bool valid = dialog.Elements.OfType<TextBoxDialogElement>()
                     .Select(e => e.Validate())
                     .Aggregate(true, (acc, v) => acc && v);
 

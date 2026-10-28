@@ -60,7 +60,7 @@
             <TextBlock Text="{Binding Value}" />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type elements:TextDialogElement}">
+        <DataTemplate DataType="{x:Type elements:TextBoxDialogElement}">
             <StackPanel Spacing="4">
                 <TextBox Text="{Binding Text, Mode=TwoWay}"
                          PlaceholderText="{Binding PlaceholderText}"
@@ -79,6 +79,10 @@
         
         <DataTemplate DataType="{x:Type elements:ProgressDialogElement}">
             <ProgressBar Value="{Binding Value.Value}" IsIndeterminate="{Binding IsIndeterminate.Value}" />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type elements:TextDialogElement}">
+            <TextBlock Text="{Binding Text.Value}" />
         </DataTemplate>
     </Application.DataTemplates>
 
