@@ -15,7 +15,7 @@ public class SkratchesComponent(HttpClient httpClient) : IAnalyzerComponent
 
     public TranslatableString Name => "Skratches".ToTranslatable();
     public string FileName => "Skript.jar";
-    public ComponentFolder Folder => ComponentFolder.Plugins;
+    public ComponentFolder Folder => ComponentFolder.Binaries;
 
     public async Task<DownloadInfo?> GetDownloadInfoAsync()
     {
