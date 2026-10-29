@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +33,19 @@ public class AnalyzerDownloadHelper(
 
     private readonly string _downloadPath = Path.Combine(analyzer.BinDir);
 
+    public bool CheckComponents()
+    {
+        return Components.All(CheckComponentExists);
+    }
+    
+    private bool CheckComponentExists(IAnalyzerComponent component)
+    {
+        string dest = GetDestinationFolder(component.Folder);
+        string file = Path.Combine(dest, component.FileName);
+
+        return fileSystem.File.Exists(file) || fileSystem.Directory.Exists(file);
+    }
+
     public async Task Download()
     {
         BindableReactiveProperty<float> progressProperty = new();
@@ -57,6 +71,8 @@ public class AnalyzerDownloadHelper(
         {
             foreach (IAnalyzerComponent component in Components)
             {
+                if (CheckComponentExists(component)) continue;
+                
                 descProperty.Value = $"Downloading {component.Name}...".ToTranslatable();
                 progressProperty.Value = 0;
                 DownloadInfo? info = await DownloadFileAsync(component, progressProperty, ct);

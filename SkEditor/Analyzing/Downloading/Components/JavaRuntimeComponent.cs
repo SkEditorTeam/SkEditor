@@ -14,6 +14,7 @@ namespace SkEditor.Analyzing.Downloading.Components;
 public class JavaRuntimeComponent(HttpClient httpClient) : IAnalyzerComponent
 {
     public TranslatableString Name => "JRE".ToTranslatable();
+    public string FileName => "JRE";
     public ComponentFolder Folder => ComponentFolder.Binaries;
 
     public async Task<DownloadInfo?> GetDownloadInfoAsync()

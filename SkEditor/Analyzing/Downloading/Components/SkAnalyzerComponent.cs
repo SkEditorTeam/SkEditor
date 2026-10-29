@@ -14,6 +14,7 @@ public class SkAnalyzerComponent(HttpClient httpClient) : IAnalyzerComponent
     private const string SkAnalyzerTag = "v2.0.0-beta.7";
     
     public TranslatableString Name => "SkAnalyzer".ToTranslatable();
+    public string FileName => "SkAnalyzer.jar";
     public ComponentFolder Folder => ComponentFolder.Binaries;
     
     public async Task<DownloadInfo?> GetDownloadInfoAsync()
@@ -51,11 +52,5 @@ public class SkAnalyzerComponent(HttpClient httpClient) : IAnalyzerComponent
         long size = targetAsset.Value.GetProperty("size").GetInt64();
         
         return new DownloadInfo(name, downloadUrl, checksum, size);
-    }
-
-    public Task PrepareAsync(string filePath, string destinationFolder)
-    {
-        File.Move(filePath, Path.Combine(destinationFolder, "SkAnalyzer.jar"));
-        return Task.CompletedTask;
     }
 }

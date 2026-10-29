@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentIcons.Common;
 using R3;
@@ -10,12 +8,12 @@ using SkEditor.Analyzing.Downloading;
 using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Models.Types;
+using SkEditor.Core.Common;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.System;
-using SkEditor.Workspace.Files;
 using ExperimentsProperty = SkEditor.Configuration.Configs.ExperimentsConfig.ExperimentsConfigProperty;
 
 namespace SkEditor.Configuration.Providers.Sections;
@@ -25,7 +23,6 @@ public class AnalyzerSectionProvider(
     ILinkService links,
     IAnalyzer analyzer,
     IAnalyzerDownloadHelper downloader,
-    IFilePickerService filePicker,
     INotificationService notifs,
     ILogService logs) : ISettingsSectionProvider
 {
@@ -33,20 +30,9 @@ public class AnalyzerSectionProvider(
 
     public SettingSection GetSection()
     {
-        BindableReactiveProperty<bool> isJavaValid = new(false);
-        _ = Task.Run(async () => { isJavaValid.Value = await CheckJava25(); });
+        BindableReactiveProperty<bool> isReady = new(downloader.CheckComponents());
 
-        BindableReactiveProperty<bool> isAnalyzerPresent =
-            new(File.Exists(Path.Combine(analyzer.BinDir, "SkAnalyzer.jar")));
-
-        BindableReactiveProperty<bool> isSkriptPresent = new(File.Exists(Path.Combine(analyzer.BinDir, "Skript.jar")));
-
-        BindableReactiveProperty<bool> isEverythingReady = isJavaValid.CombineLatest(isAnalyzerPresent,
-                isSkriptPresent,
-                (j, a, s) => j && a && s)
-            .ToBindableReactiveProperty();
-
-        isEverythingReady.SubscribeAwait(async (v, _) =>
+        isReady.SubscribeAwait(async (v, _) =>
         {
             if (!v || analyzer.IsRunning || !experiments.AnalyzerEnabled)
             {
@@ -69,9 +55,9 @@ public class AnalyzerSectionProvider(
             }
         }, AwaitOperation.Drop);
 
-        BindableReactiveProperty<TranslatableString> everythingTitle = isEverythingReady
+        BindableReactiveProperty<TranslatableString> everythingTitle = isReady
             .Select(GetComponentStatusTitle)
-            .ToBindableReactiveProperty(GetComponentStatusTitle(isEverythingReady.Value));
+            .ToBindableReactiveProperty(GetComponentStatusTitle(isReady.Value));
 
         SettingSection section = SettingSection.Create("Analyzer", TranslationKey.SettingsSectionAnalyzer)
             .WithIcon(Symbol.DocumentSearch)
@@ -85,20 +71,14 @@ public class AnalyzerSectionProvider(
 
                 ActionSetting
                     .Create(everythingTitle)
-                    .WithStatus(isEverythingReady)
+                    .WithStatus(isReady)
+                    .WithButtonVisible(isReady.Inverse())
                     .WithAction("Setup".ToTranslatable(), async () =>
                     {
-                        try
-                        {
-                            await downloader.Download();
-                        }
-                        catch (Exception ex)
-                        {
-                            logs.Error(ex, "Failed to download Analyzer components.");
-                        }
+                        await SetupComponents(isReady);
                     }),
 
-                GetToolsSetting(),
+                GetToolsSetting(isReady),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsAnalyzerScrollbarErrorMarkers)
@@ -120,6 +100,29 @@ public class AnalyzerSectionProvider(
         return section;
     }
 
+    private async Task<bool> SetupComponents(BindableReactiveProperty<bool> isReady)
+    {
+        try
+        {
+            bool preCheck = downloader.CheckComponents();
+            if (preCheck)
+            {
+                isReady.Value = preCheck;
+                return true;
+            }
+            
+            await downloader.Download();
+            bool check = downloader.CheckComponents();
+            isReady.Value = check;
+            return check;
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Failed to download Analyzer components.");
+            return false;
+        }
+    }
+
     private static TranslatableString GetComponentStatusTitle(bool ready)
     {
         return ready
@@ -127,7 +130,7 @@ public class AnalyzerSectionProvider(
             : TranslationKey.SettingsAnalyzerComponentsMissing;
     }
 
-    private ExpandableSetting GetToolsSetting()
+    private ExpandableSetting GetToolsSetting(BindableReactiveProperty<bool> isReady)
     {
         string pluginsDir = Path.Combine(analyzer.WorkingDir, "plugins");
         
@@ -150,7 +153,11 @@ public class AnalyzerSectionProvider(
                     {
                         try
                         {
-                            await analyzer.Initialize();
+                            bool success = await SetupComponents(isReady);
+                            if (success)
+                            {
+                                await analyzer.Initialize();
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -196,181 +203,5 @@ public class AnalyzerSectionProvider(
                         }
                     })
             );
-    }
-
-    private CompoundSetting GetJavaSetting(BindableReactiveProperty<bool> isJavaValid)
-    {
-        BindableReactiveProperty<TranslatableString?> description = isJavaValid
-            .Select(v => v
-                ? null
-                : new TranslatableString(TranslationKey.SettingsAnalyzerJavaNotFound))
-            .ToBindableReactiveProperty();
-
-        return CompoundSetting
-            .Create(TranslationKey.SettingsAnalyzerJavaTitle)
-            .WithDescription(description)
-            .WithChildren(
-                ActionSetting.Create(TranslationKey.ButtonDownload)
-                    .AsExternal()
-                    .WithButtonVisible(isJavaValid.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction(TranslationKey.ButtonDownload,
-                        () => { links.OpenLink("https://adoptium.net/"); }),
-                ActionSetting.Create(TranslationKey.ButtonCheck)
-                    .WithButtonVisible(isJavaValid.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction(TranslationKey.ButtonCheck, async () => { isJavaValid.Value = await CheckJava25(); })
-            )
-            .WithStatus(isJavaValid);
-    }
-
-    private CompoundSetting GetSkAnalyzerSetting(BindableReactiveProperty<bool> isAnalyzerPresent)
-    {
-        BindableReactiveProperty<TranslatableString?> description = isAnalyzerPresent
-            .Select(v => v
-                ? null
-                : new TranslatableString(TranslationKey.SettingsAnalyzerSkAnalyzerMissing))
-            .ToBindableReactiveProperty();
-
-        return CompoundSetting
-            .Create(TranslationKey.SettingsAnalyzerSkAnalyzerTitle)
-            .WithDescription(description)
-            .WithChildren(
-                ActionSetting.Create(TranslationKey.ButtonDownload)
-                    .AsExternal()
-                    .WithButtonVisible(isAnalyzerPresent.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction(TranslationKey.ButtonDownload,
-                        () =>
-                        {
-                            links.OpenLink("https://github.com/SkEditorTeam/SkAnalyzer/releases/tag/v2.0.0-beta.7");
-                        }),
-                ActionSetting.Create(TranslationKey.ButtonSelectFile)
-                    .WithButtonVisible(isAnalyzerPresent.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction(TranslationKey.ButtonSelect, async () =>
-                    {
-                        string? jarFile = await SelectJarFile();
-                        if (jarFile is null)
-                        {
-                            return;
-                        }
-
-                        Directory.CreateDirectory(analyzer.BinDir);
-                        File.Move(jarFile, Path.Combine(analyzer.BinDir, "SkAnalyzer.jar"));
-                        isAnalyzerPresent.Value = true;
-                    })
-            )
-            .WithStatus(isAnalyzerPresent);
-    }
-
-    private CompoundSetting GetSkriptSetting(BindableReactiveProperty<bool> isSkriptPresent)
-    {
-        BindableReactiveProperty<TranslatableString?> description = isSkriptPresent
-            .Select(v => v
-                ? null
-                : new TranslatableString(TranslationKey.SettingsAnalyzerSkriptMissing))
-            .ToBindableReactiveProperty();
-
-        return CompoundSetting
-            .Create(TranslationKey.SettingsAnalyzerSkriptTitle)
-            .WithDescription(description)
-            .WithChildren(
-                ActionSetting.Create(TranslationKey.ButtonDownload)
-                    .AsExternal()
-                    .WithButtonVisible(isSkriptPresent.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction(TranslationKey.ButtonDownload,
-                        () => { links.OpenLink("https://github.com/SkEditorTeam/Skratches/releases/latest"); }),
-                ActionSetting.Create(TranslationKey.ButtonSelectFile)
-                    .WithButtonVisible(isSkriptPresent.Select(v => !v).ToBindableReactiveProperty())
-                    .WithAction(TranslationKey.ButtonSelect, async () =>
-                    {
-                        string? jarFile = await SelectJarFile();
-                        if (jarFile is null)
-                        {
-                            return;
-                        }
-
-                        Directory.CreateDirectory(analyzer.BinDir);
-                        File.Move(jarFile, Path.Combine(analyzer.BinDir, "Skript.jar"));
-                        isSkriptPresent.Value = true;
-                    })
-            )
-            .WithStatus(isSkriptPresent);
-    }
-
-    private async Task<string?> SelectJarFile()
-    {
-        string[]? paths = await filePicker.PickFilesAsync();
-        if (paths is null)
-        {
-            return null;
-        }
-
-        if (paths.Length is not (0 or > 1) && paths[0].EndsWith(".jar"))
-        {
-            return paths[0];
-        }
-
-        Notification notification = Notification
-            .Create(TranslationKey.SettingsAnalyzerInvalidFileSelectedTitle)
-            .WithMessage(TranslationKey.SettingsAnalyzerInvalidFileSelectedMessage)
-            .WithType(NotificationType.Error);
-
-        notifs.Show(notification);
-        return null;
-    }
-
-    private async Task<bool> CheckJava25()
-    {
-        RefreshPath();
-
-        Process? process = null;
-        try
-        {
-            process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "java",
-                    Arguments = "--version",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                }
-            };
-            process.Start();
-            string output = await process.StandardOutput.ReadToEndAsync();
-            await process.WaitForExitAsync();
-            return output.Contains(" 25") || output.Contains("25.");
-        }
-        catch
-        {
-            return false;
-        }
-        finally
-        {
-            process?.Dispose();
-        }
-    }
-
-    private void RefreshPath()
-    {
-        if (!OperatingSystem.IsWindows())
-        {
-            return;
-        }
-
-        try
-        {
-            string? machinePath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
-            string? userPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
-
-            string combinedPath = string.Join(Path.PathSeparator,
-                new[] { machinePath, userPath }.Where(p => !string.IsNullOrWhiteSpace(p)));
-
-            Environment.SetEnvironmentVariable("PATH", combinedPath);
-        }
-        catch (Exception ex)
-        {
-            logs.Error(ex, "Failed to refresh PATH environment variable.");
-        }
     }
 }
