@@ -100,6 +100,7 @@ public class AnalyzerSectionProvider(
         return CompoundSetting
             .Create(everythingTitle)
             .WithStatus(isReady)
+            .WithSpacing(16)
             .WithChildren(
                 ProgressSetting
                     .Create("Progress".ToTranslatable())
@@ -109,9 +110,9 @@ public class AnalyzerSectionProvider(
                     .WithWidth(150),
 
                 ActionSetting
-                    .Create("Setup".ToTranslatable())
+                    .Create(TranslationKey.SettingsAnalyzerSetup)
                     .WithButtonVisible(isReady.Inverse())
-                    .WithAction("Setup".ToTranslatable(), async () =>
+                    .WithAction(TranslationKey.SettingsAnalyzerSetup, async () =>
                     {
                         await SetupComponents(isReady);
                     })
@@ -131,14 +132,22 @@ public class AnalyzerSectionProvider(
 
             _isDownloading.Value = true;
             await downloader.Download(_progress, _progressDescription);
-            _isDownloading.Value = false;
-            
-            bool check = downloader.CheckComponents();
-            isReady.Value = check;
         }
         catch (Exception ex)
         {
+            Notification notification = Notification
+                .Create(TranslationKey.SettingsAnalyzerDownloadFailed)
+                .WithMessage(TranslationKey.SettingsAnalyzerDownloadFailedMessage)
+                .WithType(NotificationType.Error);
+            notifs.Show(notification);
+
             logs.Error(ex, "Failed to download Analyzer components.");
+        }
+        finally
+        {
+            _isDownloading.Value = false;
+            bool check = downloader.CheckComponents();
+            isReady.Value = check;
         }
     }
 
