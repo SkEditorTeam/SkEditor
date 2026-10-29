@@ -9,6 +9,7 @@ public interface IAnalyzerDownloadHelper
     BindableReactiveProperty<bool> IsDownloading { get; }
     BindableReactiveProperty<float> Progress { get; }
     BindableReactiveProperty<TranslatableString> ProgressDescription { get; }
+    BindableReactiveProperty<bool> IsReady { get; }
     
     bool CheckComponents();
     Task Download();

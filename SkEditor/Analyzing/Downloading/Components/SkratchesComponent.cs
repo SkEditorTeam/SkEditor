@@ -9,7 +9,7 @@ using SkEditor.Core.Localization;
 
 namespace SkEditor.Analyzing.Downloading.Components;
 
-public class SkratchesComponent(HttpClient httpClient) : IAnalyzerComponent
+public class SkratchesComponent(IHttpClientFactory factory) : IAnalyzerComponent
 {
     private const string SkratchesTag = "build-16";
 
@@ -21,7 +21,8 @@ public class SkratchesComponent(HttpClient httpClient) : IAnalyzerComponent
     {
         const string apiUrl = $"https://api.github.com/repos/SkEditorTeam/Skratches/releases/tags/{SkratchesTag}";
 
-        await using Stream stream = await httpClient.GetStreamAsync(apiUrl);
+        using HttpClient client = factory.CreateClient("AnalyzerDownload");
+        await using Stream stream = await client.GetStreamAsync(apiUrl);
         using JsonDocument document = await JsonDocument.ParseAsync(stream);
 
         JsonElement root = document.RootElement;

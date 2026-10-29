@@ -285,10 +285,11 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IAnalyzerProcessRunner, AnalyzerProcessRunner>();
             services.AddSingleton<IAnalyzerProtocolHandler, AnalyzerProtocolHandler>();
             services.AddSingleton<IAnalyzerInitializer, AnalyzerInitializer>();
-            services.AddHttpClient<IAnalyzerDownloadHelper, AnalyzerDownloadHelper>(client =>
+            services.AddHttpClient("AnalyzerDownload", client =>
             {
                 client.DefaultRequestHeaders.Add("User-Agent", "SkEditor");
             });
+            services.AddSingleton<IAnalyzerDownloadHelper, AnalyzerDownloadHelper>();
 
             services.AddSingleton<IAnalyzer, Analyzer>();
             services.AddTransient<IEditorFeature, AnalyzerFeature>();

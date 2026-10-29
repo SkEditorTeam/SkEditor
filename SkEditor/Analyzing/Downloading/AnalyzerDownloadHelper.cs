@@ -12,20 +12,35 @@ using SkEditor.Core.Localization;
 
 namespace SkEditor.Analyzing.Downloading;
 
-public class AnalyzerDownloadHelper(
-    HttpClient httpClient,
-    IFileSystem fileSystem,
-    IAnalyzer analyzer)
-    : IAnalyzerDownloadHelper
+public class AnalyzerDownloadHelper : IAnalyzerDownloadHelper
 {
-    public readonly IAnalyzerComponent[] Components =
-    [
-        new JavaRuntimeComponent(httpClient),
-        new SkAnalyzerComponent(httpClient),
-        new SkratchesComponent(httpClient)
-    ];
+    public readonly IAnalyzerComponent[] Components;
 
-    private readonly string _downloadPath = Path.Combine(analyzer.BinDir);
+    private readonly string _downloadPath;
+    
+    private readonly IHttpClientFactory _factory;
+    private readonly IFileSystem _fileSystem;
+    private readonly IAnalyzer _analyzer;
+
+    public AnalyzerDownloadHelper(IHttpClientFactory factory,
+        IFileSystem fileSystem,
+        IAnalyzer analyzer)
+    {
+        _factory = factory;
+        _fileSystem = fileSystem;
+        _analyzer = analyzer;
+        _downloadPath = Path.Combine(analyzer.BinDir);
+        
+        Components = [
+            new JavaRuntimeComponent(factory),
+            new SkAnalyzerComponent(factory),
+            new SkratchesComponent(factory)
+        ];
+        
+        IsReady.Value = Components.All(CheckComponentExists);
+    }
+
+    public BindableReactiveProperty<bool> IsReady { get; } = new();
     
     public BindableReactiveProperty<bool> IsDownloading { get; } = new();
     public BindableReactiveProperty<float> Progress { get; } = new();
@@ -33,7 +48,9 @@ public class AnalyzerDownloadHelper(
 
     public bool CheckComponents()
     {
-        return Components.All(CheckComponentExists);
+        bool ready = Components.All(CheckComponentExists);
+        IsReady.Value = ready;
+        return ready;
     }
     
     private bool CheckComponentExists(IAnalyzerComponent component)
@@ -41,11 +58,13 @@ public class AnalyzerDownloadHelper(
         string dest = GetDestinationFolder(component.Folder);
         string file = Path.Combine(dest, component.FileName);
 
-        return fileSystem.File.Exists(file) || fileSystem.Directory.Exists(file);
+        return _fileSystem.File.Exists(file) || _fileSystem.Directory.Exists(file);
     }
 
     public async Task Download()
     {
+        if (IsDownloading.Value) return;
+        
         IsDownloading.Value = true;
         try
         {
@@ -69,6 +88,8 @@ public class AnalyzerDownloadHelper(
         {
             Progress.Value = 0;
             IsDownloading.Value = false;
+
+            CheckComponents();
         }
     }
 
@@ -76,8 +97,8 @@ public class AnalyzerDownloadHelper(
     {
         return folderType switch
         {
-            ComponentFolder.Binaries => analyzer.BinDir,
-            ComponentFolder.Plugins => Path.Combine(analyzer.WorkingDir, "plugins"),
+            ComponentFolder.Binaries => _analyzer.BinDir,
+            ComponentFolder.Plugins => Path.Combine(_analyzer.WorkingDir, "plugins"),
             _ => throw new ArgumentOutOfRangeException(nameof(folderType), folderType, null)
         };
     }
@@ -104,22 +125,23 @@ public class AnalyzerDownloadHelper(
 
         try
         {
-            await using (Stream downloadStream = await httpClient.GetStreamAsync(info.Url, ct))
+            using HttpClient client = _factory.CreateClient("AnalyzerDownload");
+            await using (Stream downloadStream = await client.GetStreamAsync(info.Url, ct))
             await using (ProgressStream progressStream = new(downloadStream, progress))
-            await using (FileSystemStream fileStream = fileSystem.File.Create(tempPath))
+            await using (FileSystemStream fileStream = _fileSystem.File.Create(tempPath))
             {
                 await progressStream.CopyToAsync(fileStream, ct);
             }
 
-            fileSystem.File.Move(tempPath, filePath, true);
+            _fileSystem.File.Move(tempPath, filePath, true);
         }
         catch
         {
-            if (fileSystem.File.Exists(tempPath))
+            if (_fileSystem.File.Exists(tempPath))
             {
                 try
                 {
-                    fileSystem.File.Delete(tempPath);
+                    _fileSystem.File.Delete(tempPath);
                 }
                 catch
                 {

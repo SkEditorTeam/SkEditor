@@ -11,7 +11,7 @@ using SkEditor.Core.Localization;
 
 namespace SkEditor.Analyzing.Downloading.Components;
 
-public class JavaRuntimeComponent(HttpClient httpClient) : IAnalyzerComponent
+public class JavaRuntimeComponent(IHttpClientFactory factory) : IAnalyzerComponent
 {
     public TranslatableString Name => "JRE".ToTranslatable();
     public string FileName => "JRE";
@@ -21,7 +21,8 @@ public class JavaRuntimeComponent(HttpClient httpClient) : IAnalyzerComponent
     {
         string mapUrl = GetLatestDownloadMapUrl();
 
-        await using var responseStream = await httpClient.GetStreamAsync(mapUrl);
+        using HttpClient client = factory.CreateClient("AnalyzerDownload");
+        await using var responseStream = await client.GetStreamAsync(mapUrl);
         using JsonDocument document = await JsonDocument.ParseAsync(responseStream);
 
         JsonElement root = document.RootElement;

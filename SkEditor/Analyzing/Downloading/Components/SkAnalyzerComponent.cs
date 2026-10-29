@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -9,7 +8,7 @@ using SkEditor.Core.Localization;
 
 namespace SkEditor.Analyzing.Downloading.Components;
 
-public class SkAnalyzerComponent(HttpClient httpClient) : IAnalyzerComponent
+public class SkAnalyzerComponent(IHttpClientFactory factory) : IAnalyzerComponent
 {
     private const string SkAnalyzerTag = "v2.0.0-beta.7";
     
@@ -21,7 +20,8 @@ public class SkAnalyzerComponent(HttpClient httpClient) : IAnalyzerComponent
     {
         const string apiUrl = $"https://api.github.com/repos/SkEditorTeam/SkAnalyzer/releases/tags/{SkAnalyzerTag}";
 
-        await using Stream stream = await httpClient.GetStreamAsync(apiUrl);
+        using HttpClient client = factory.CreateClient("AnalyzerDownload");
+        await using Stream stream = await client.GetStreamAsync(apiUrl);
         using JsonDocument document = await JsonDocument.ParseAsync(stream);
 
         JsonElement root = document.RootElement;

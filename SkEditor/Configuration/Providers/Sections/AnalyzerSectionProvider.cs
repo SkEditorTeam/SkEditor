@@ -30,31 +30,6 @@ public class AnalyzerSectionProvider(
 
     public SettingSection GetSection()
     {
-        BindableReactiveProperty<bool> isReady = new(downloader.CheckComponents());
-
-        isReady.SubscribeAwait(async (v, _) =>
-        {
-            if (!v || analyzer.IsRunning || !experiments.AnalyzerEnabled)
-            {
-                return;
-            }
-
-            try
-            {
-                await analyzer.Initialize();
-            }
-            catch (Exception ex)
-            {
-                Notification notification = Notification
-                    .Create(TranslationKey.AnalyzerFailedToLoad)
-                    .WithMessage(TranslationKey.AnalyzerGeneralFailureMessage)
-                    .WithType(NotificationType.Error);
-                notifs.Show(notification);
-
-                logs.Error(ex, "Failed to initialize Analyzer process.");
-            }
-        }, AwaitOperation.Drop);
-
         SettingSection section = SettingSection.Create("Analyzer", TranslationKey.SettingsSectionAnalyzer)
             .WithIcon(Symbol.DocumentSearch)
             .WithSettings(
@@ -65,8 +40,8 @@ public class AnalyzerSectionProvider(
                     .WithIcon(Symbol.Warning)
                     .WithType(InfoSetting.InfoType.Warning),
 
-                GetReadySetting(isReady),
-                GetToolsSetting(isReady),
+                GetReadySetting(),
+                GetToolsSetting(),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsAnalyzerScrollbarErrorMarkers)
@@ -88,15 +63,19 @@ public class AnalyzerSectionProvider(
         return section;
     }
 
-    private SettingElement GetReadySetting(BindableReactiveProperty<bool> isReady)
+    private SettingElement GetReadySetting()
     {
-        BindableReactiveProperty<TranslatableString> everythingTitle = isReady
+        BindableReactiveProperty<TranslatableString> everythingTitle = downloader.IsReady
             .Select(GetComponentStatusTitle)
-            .ToBindableReactiveProperty(GetComponentStatusTitle(isReady.Value));
+            .ToBindableReactiveProperty(GetComponentStatusTitle(downloader.IsReady.Value));
+        
+        BindableReactiveProperty<bool> canSetup = downloader.IsReady
+            .CombineLatest(downloader.IsDownloading, (ready, downloading) => !ready && !downloading)
+            .ToBindableReactiveProperty();
         
         return CompoundSetting
             .Create(everythingTitle)
-            .WithStatus(isReady)
+            .WithStatus(downloader.IsReady)
             .WithSpacing(16)
             .WithChildren(
                 ProgressSetting
@@ -108,20 +87,20 @@ public class AnalyzerSectionProvider(
 
                 ActionSetting
                     .Create(TranslationKey.SettingsAnalyzerSetup)
-                    .WithButtonVisible(isReady.Inverse())
+                    .WithButtonVisible(downloader.IsReady.Inverse())
+                    .WithEnabled(canSetup)
                     .WithAction(TranslationKey.SettingsAnalyzerSetup, async () =>
                     {
-                        await SetupComponents(isReady);
+                        await SetupComponents();
                     })
             );
     }
     
-    private async Task SetupComponents(BindableReactiveProperty<bool> isReady)
+    private async Task SetupComponents()
     {
         try
         {
             bool preCheck = downloader.CheckComponents();
-            isReady.Value = preCheck;
             if (preCheck)
             {
                 return;
@@ -139,11 +118,6 @@ public class AnalyzerSectionProvider(
 
             logs.Error(ex, "Failed to download Analyzer components.");
         }
-        finally
-        {
-            bool check = downloader.CheckComponents();
-            isReady.Value = check;
-        }
     }
 
     private static TranslatableString GetComponentStatusTitle(bool ready)
@@ -153,7 +127,7 @@ public class AnalyzerSectionProvider(
             : TranslationKey.SettingsAnalyzerComponentsMissing;
     }
 
-    private ExpandableSetting GetToolsSetting(BindableReactiveProperty<bool> isReady)
+    private ExpandableSetting GetToolsSetting()
     {
         string pluginsDir = Path.Combine(analyzer.WorkingDir, "plugins");
 
@@ -182,7 +156,7 @@ public class AnalyzerSectionProvider(
                             }
                             else
                             {
-                                await SetupComponents(isReady);
+                                await SetupComponents();
                             }
                         }
                         catch (Exception ex)
