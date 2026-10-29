@@ -10,6 +10,7 @@ public class CompoundSetting(BindableReactiveProperty<TranslatableString> name) 
     public List<SettingElement> Children { get; } = [];
 
     public bool IsVertical { get; set; }
+    public float Spacing { get; set; } = 8;
 
     public override double? Width => Children.Count == 0 ? base.Width : Children.Max(c => c.Width);
 
@@ -44,6 +45,12 @@ public class CompoundSetting(BindableReactiveProperty<TranslatableString> name) 
     public CompoundSetting WithVerticalLayout()
     {
         IsVertical = true;
+        return this;
+    }
+    
+    public CompoundSetting WithSpacing(float spacing)
+    {
+        Spacing = spacing;
         return this;
     }
 }

@@ -174,7 +174,7 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="{Binding IsVertical, Converter={StaticResource OrientationConverter}}"
-                                    Spacing="8" />
+                                    Spacing="{Binding Spacing}" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
