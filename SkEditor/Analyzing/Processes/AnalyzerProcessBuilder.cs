@@ -9,12 +9,13 @@ namespace SkEditor.Analyzing.Processes;
 
 public class AnalyzerProcessBuilder : IAnalyzerProcessBuilder
 {
-    public ProcessStartInfo BuildProcessStartInfo(string workingDir, string analyzerPath, string? aotPath,
+    public ProcessStartInfo BuildProcessStartInfo(string workingDir, string javaPath, string analyzerPath,
+        string? aotPath,
         bool isGeneratingAot = false)
     {
         ProcessStartInfo startInfo = new()
         {
-            FileName = "java",
+            FileName = javaPath,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             RedirectStandardInput = true,

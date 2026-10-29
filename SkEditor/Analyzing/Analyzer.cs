@@ -41,7 +41,8 @@ public class Analyzer(
     public async Task Initialize()
     {
         MigrateDirectory();
-        
+
+        string? javaPath = GetJavaPath();
         string analyzerPath = Path.Combine(BinDir, "SkAnalyzer.jar");
         _aotPath = Path.Combine(BinDir, "skanalyzer.aot");
         string pluginsPath = Path.Combine(WorkingDir, "plugins");
@@ -50,7 +51,7 @@ public class Analyzer(
         Directory.CreateDirectory(BinDir);
         Directory.CreateDirectory(pluginsPath);
 
-        if (!File.Exists(analyzerPath))
+        if (!File.Exists(javaPath) || !File.Exists(analyzerPath))
         {
             messenger.Send(new AnalyzerFailedToLoadMessage());
             return;
@@ -62,7 +63,7 @@ public class Analyzer(
 
         if (!File.Exists(_aotPath))
         {
-            await aotManager.GenerateAotCacheAsync(WorkingDir, analyzerPath, _aotPath);
+            await aotManager.GenerateAotCacheAsync(WorkingDir, javaPath, analyzerPath, _aotPath);
         }
 
         UnsubscribeEvents();
@@ -72,7 +73,7 @@ public class Analyzer(
 
         try
         {
-            ProcessStartInfo startInfo = processBuilder.BuildProcessStartInfo(WorkingDir, analyzerPath, _aotPath);
+            ProcessStartInfo startInfo = processBuilder.BuildProcessStartInfo(WorkingDir, javaPath, analyzerPath, _aotPath);
             processRunner.Start(startInfo);
         }
         catch (Exception ex)
@@ -80,6 +81,38 @@ public class Analyzer(
             logs.Error($"Failed to start process: {ex.Message}", LogSource.Analyzer);
             messenger.Send(new AnalyzerFailedToLoadMessage());
         }
+    }
+
+    private string? GetJavaPath()
+    {
+        string jreFolderPath = Path.Combine(BinDir, "JRE");
+
+        if (!Directory.Exists(jreFolderPath))
+        {
+            return null;
+        }
+
+        string? jdkFolder = Directory
+            .EnumerateDirectories(jreFolderPath)
+            .FirstOrDefault(d => Path.GetFileName(d).StartsWith("jdk"));
+
+        if (jdkFolder is null)
+        {
+            return null;
+        }
+        
+        string executablePath;
+        if (OperatingSystem.IsMacOS())
+        {
+            executablePath = Path.Combine(jdkFolder, "Contents", "Home", "bin", "java");
+        }
+        else
+        {
+            string executableName = OperatingSystem.IsWindows() ? "java.exe" : "java";
+            executablePath = Path.Combine(jdkFolder, "bin", executableName);
+        }
+
+        return !File.Exists(executablePath) ? null : executablePath;
     }
 
     // TEMP: Remove migration from Roaming when leaving Alpha

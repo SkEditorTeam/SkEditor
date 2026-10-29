@@ -15,7 +15,7 @@ public class AnalyzerAotGenerator(
     INotificationService notifs,
     IAnalyzerProcessBuilder processBuilder) : IAnalyzerAotGenerator
 {
-    public async Task GenerateAotCacheAsync(string workingDir, string analyzerPath, string aotPath,
+    public async Task GenerateAotCacheAsync(string workingDir, string javaPath, string analyzerPath, string aotPath,
         CancellationToken ct = default)
     {
         Notification notification = Notification
@@ -28,7 +28,7 @@ public class AnalyzerAotGenerator(
 
         TaskCompletionSource<bool> enabledTcs = new();
         ProcessStartInfo startInfo =
-            processBuilder.BuildProcessStartInfo(workingDir, analyzerPath, aotPath, true);
+            processBuilder.BuildProcessStartInfo(workingDir, javaPath, analyzerPath, aotPath, true);
 
         Process process = new() { StartInfo = startInfo };
 
