@@ -41,17 +41,30 @@ public class JavaRuntimeComponent(HttpClient httpClient) : IAnalyzerComponent
 
     public async Task PrepareAsync(string filePath, string destinationFolder)
     {
-        await using FileStream gzipStream = File.OpenRead(filePath);
-        await using GZipStream gzipDecompressor = new(gzipStream, CompressionMode.Decompress);
-        await using MemoryStream tarStream = new();
-        
-        await gzipDecompressor.CopyToAsync(tarStream);
-        tarStream.Position = 0;
-        
         string dest = Path.Combine(destinationFolder, "JRE");
-
         Directory.CreateDirectory(dest);
-        await TarFile.ExtractToDirectoryAsync(tarStream, dest, overwriteFiles: true);
+
+        await using (FileStream stream = File.OpenRead(filePath))
+        {
+            if (filePath.EndsWith(".tar.gz"))
+            {
+                await using GZipStream gzipDecompressor = new(stream, CompressionMode.Decompress);
+                await using MemoryStream tarStream = new();
+
+                await gzipDecompressor.CopyToAsync(tarStream);
+                tarStream.Position = 0;
+                await TarFile.ExtractToDirectoryAsync(tarStream, dest, overwriteFiles: true);
+            }
+            else if (filePath.EndsWith(".zip"))
+            {
+                await ZipFile.ExtractToDirectoryAsync(stream, dest, overwriteFiles: true);
+            }
+            else
+            {
+                throw new InvalidOperationException("The JRE archive needs to be tar.gz or zip!");
+            }
+        }
+        
         File.Delete(filePath);
     }
 
