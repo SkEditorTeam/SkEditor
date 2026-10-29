@@ -38,7 +38,7 @@
         <Style Selector="controls|FASettingsExpanderItem /template/ ContentPresenter#FooterPresenter"
                x:DataType="models:SettingElement">
             <Setter Property="MaxWidth" Value="500" />
-            <Setter Property="Width" Value="{Binding Width, FallbackValue=Auto}" />
+            <Setter Property="MinWidth" Value="{Binding Width, FallbackValue=Auto}" />
         </Style>
 
         <Style Selector="controls|FASettingsExpander /template/ ContentPresenter#FooterPresenter">
@@ -152,9 +152,19 @@
                 </StackPanel>
             </Button>
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type types:ProgressSetting}">
+            <StackPanel Orientation="Vertical" Spacing="4">
+                <TextBlock Text="{Binding Text.Value, FallbackValue={x:Null}}" FontSize="12" HorizontalAlignment="Center" />
+                <ProgressBar Value="{Binding Value.Value}" IsIndeterminate="{Binding IsIndeterminate.Value}"
+                             HorizontalAlignment="Center"
+                             Width="{Binding Width}" MinWidth="0" />
+            </StackPanel>
+        </DataTemplate>
 
         <DataTemplate DataType="{x:Type types:CompoundSetting}">
-            <ItemsControl ItemsSource="{Binding Children}">
+            <ItemsControl ItemsSource="{Binding Children}" HorizontalAlignment="{Binding IsVertical,
+                  Converter={StaticResource HorizontalAlignmentConverter}}">
                 <ItemsControl.Styles>
                     <Style Selector="ContentControl > :is(Control)">
                         <Setter Property="HorizontalAlignment"

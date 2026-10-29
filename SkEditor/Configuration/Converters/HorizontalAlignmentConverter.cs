@@ -16,7 +16,7 @@ public class HorizontalAlignmentConverter : IValueConverter
 
         return isVertical
             ? HorizontalAlignment.Stretch
-            : HorizontalAlignment.Left;
+            : HorizontalAlignment.Right;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

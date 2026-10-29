@@ -312,6 +312,7 @@
   "SettingsAnalyzerScrollbarErrorMarkersDescription": "Displays colored error and warning indicators directly on the editor scrollbar.",
   "SettingsAnalyzerDiagnosticTooltips": "Diagnostic tooltips",
   "SettingsAnalyzerDiagnosticTooltipsDescription": "Shows detailed error tooltips when hovering over code issues.",
+  "SettingsAnalyzerDownloading": "Downloading {0}...",
   "SettingsSyntaxSkriptSyntax": "Skript syntax",
   "SettingsSyntaxSkriptSyntaxDescription": "Choose the grammar and color scheme used for Skript code.",
   "SettingsSyntaxSkriptTheme": "Skript theme",

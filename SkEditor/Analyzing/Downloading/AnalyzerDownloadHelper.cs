@@ -5,14 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentIcons.Common;
 using R3;
 using SkEditor.Analyzing.Downloading.Components;
 using SkEditor.Core.Common;
-using SkEditor.Core.Dialogs;
-using SkEditor.Core.Dialogs.Models;
-using SkEditor.Core.Dialogs.Models.Elements;
-using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 
 namespace SkEditor.Analyzing.Downloading;
@@ -20,8 +15,7 @@ namespace SkEditor.Analyzing.Downloading;
 public class AnalyzerDownloadHelper(
     HttpClient httpClient,
     IFileSystem fileSystem,
-    IAnalyzer analyzer,
-    IDialogService dialogs)
+    IAnalyzer analyzer)
     : IAnalyzerDownloadHelper
 {
     public readonly IAnalyzerComponent[] Components =
@@ -46,44 +40,23 @@ public class AnalyzerDownloadHelper(
         return fileSystem.File.Exists(file) || fileSystem.Directory.Exists(file);
     }
 
-    public async Task Download()
+    public async Task Download(BindableReactiveProperty<float> progress, BindableReactiveProperty<TranslatableString> progressDescription)
     {
-        BindableReactiveProperty<float> progressProperty = new();
-        BindableReactiveProperty<TranslatableString> descProperty = new();
-
-        ProgressDialogElement progressElement = new()
+        foreach (IAnalyzerComponent component in Components)
         {
-            Value = progressProperty
-        };
-
-        TextDialogElement descriptionElement = new()
-        {
-            Text = descProperty
-        };
-
-        Dialog dialog = Dialog
-            .Create("Downloading...".ToTranslatable())
-            .WithIcon(Symbol.ArrowDownload)
-            .WithElements(progressElement, descriptionElement)
-            .WithButtons(DialogButton.Cancel);
-
-        await dialogs.RunDialogAsync(dialog, async ct =>
-        {
-            foreach (IAnalyzerComponent component in Components)
-            {
-                if (CheckComponentExists(component)) continue;
+            if (CheckComponentExists(component)) continue;
                 
-                descProperty.Value = $"Downloading {component.Name}...".ToTranslatable();
-                progressProperty.Value = 0;
-                DownloadInfo? info = await DownloadFileAsync(component, progressProperty, ct);
-                if (info is null) continue;
+            progress.Value = 0;
+            progressDescription.Value = new TranslatableString(TranslationKey.SettingsAnalyzerDownloading, component.Name);
+            
+            DownloadInfo? info = await DownloadFileAsync(component, progress, CancellationToken.None);
+            if (info is null) continue;
 
-                string filePath = Path.Combine(_downloadPath, info.Name);
-                string dest = GetDestinationFolder(component.Folder);
-                Directory.CreateDirectory(dest);
-                await component.PrepareAsync(filePath, dest);
-            }
-        });
+            string filePath = Path.Combine(_downloadPath, info.Name);
+            string dest = GetDestinationFolder(component.Folder);
+            Directory.CreateDirectory(dest);
+            await component.PrepareAsync(filePath, dest);
+        }
     }
 
     private string GetDestinationFolder(ComponentFolder folderType)
@@ -112,6 +85,7 @@ public class AnalyzerDownloadHelper(
             progressProperty.Value = percent;
         });
 
+        Directory.CreateDirectory(_downloadPath);
         string filePath = Path.Combine(_downloadPath, info.Name);
         string tempPath = filePath + ".tmp";
 
