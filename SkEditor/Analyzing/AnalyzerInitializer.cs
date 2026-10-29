@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using R3;
 using SkEditor.Analyzing.Downloading;
@@ -6,10 +7,7 @@ using SkEditor.Analyzing.Models;
 using SkEditor.Analyzing.Processes;
 using SkEditor.Analyzing.Protocol;
 using SkEditor.Configuration.Configs;
-using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
-using SkEditor.Core.Notifications;
-using SkEditor.Core.Notifications.Messages;
 
 namespace SkEditor.Analyzing;
 
@@ -30,27 +28,7 @@ public class AnalyzerInitializer(
             {
                 if (v)
                 {
-                    if (!downloader.CheckComponents())
-                    {
-                        try
-                        {
-                            await downloader.Download();
-                        }
-                        catch (Exception ex)
-                        {
-                            Notification notification = Notification
-                                .Create(TranslationKey.SettingsAnalyzerDownloadFailed)
-                                .WithMessage(TranslationKey.SettingsAnalyzerDownloadFailedMessage)
-                                .WithType(NotificationType.Error);
-
-                            messenger.Send(new ShowNotificationMessage(notification));
-
-                            logs.Error(ex, "Failed to download Analyzer components.");
-                            return;
-                        }
-                    }
-
-                    await analyzer.Initialize();
+                    await InitializeAnalyzer();
                 }
                 else
                 {
@@ -59,5 +37,34 @@ public class AnalyzerInitializer(
                     messenger.Send(new AnalyzerUnloadedMessage());
                 }
             });
+        
+        downloader.IsReady
+            .ObservePropertyChanged(x => x.Value, pushCurrentValueOnSubscribe: false)
+            .SubscribeAwait(async (v, _) =>
+            {
+                if (v && experiments.AnalyzerEnabled && !analyzer.IsRunning)
+                {
+                    await InitializeAnalyzer();
+                }
+            });
+    }
+
+    private async Task InitializeAnalyzer()
+    {
+        if (!downloader.CheckComponents())
+        {
+            try
+            {
+                await downloader.Download();
+            }
+            catch (Exception ex)
+            {
+                logs.Error(ex, "Failed to download Analyzer components.");
+                messenger.Send(new AnalyzerFailedToLoadMessage());
+                return;
+            }
+        }
+
+        await analyzer.Initialize();
     }
 }
