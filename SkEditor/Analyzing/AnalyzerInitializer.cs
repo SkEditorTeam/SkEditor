@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using R3;
@@ -20,6 +21,8 @@ public class AnalyzerInitializer(
     IAnalyzerProcessRunner processRunner,
     IAnalyzerProtocolHandler protocolHandler) : IAnalyzerInitializer
 {
+    private readonly SemaphoreSlim _initLock = new(1, 1);
+    
     public void ObserveOptionChange()
     {
         experiments
@@ -51,20 +54,35 @@ public class AnalyzerInitializer(
 
     private async Task InitializeAnalyzer()
     {
-        if (!downloader.CheckComponents())
+        if (!await _initLock.WaitAsync(0))
         {
-            try
-            {
-                await downloader.Download();
-            }
-            catch (Exception ex)
-            {
-                logs.Error(ex, "Failed to download Analyzer components.");
-                messenger.Send(new AnalyzerFailedToLoadMessage());
-                return;
-            }
+            return;
         }
 
-        await analyzer.Initialize();
+        try
+        {
+            if (!downloader.CheckComponents())
+            {
+                try
+                {
+                    await downloader.Download();
+                }
+                catch (Exception ex)
+                {
+                    logs.Error(ex, "Failed to download Analyzer components.");
+                    messenger.Send(new AnalyzerFailedToLoadMessage());
+                    return;
+                }
+            }
+
+            if (!analyzer.IsRunning)
+            {
+                await analyzer.Initialize();
+            }
+        }
+        finally
+        {
+            _initLock.Release();
+        }
     }
 }
