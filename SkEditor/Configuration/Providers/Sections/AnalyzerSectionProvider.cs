@@ -28,10 +28,6 @@ public class AnalyzerSectionProvider(
 {
     public string ParentId => "Editor";
 
-    private readonly BindableReactiveProperty<bool> _isDownloading = new();
-    private readonly BindableReactiveProperty<float> _progress = new();
-    private readonly BindableReactiveProperty<TranslatableString> _progressDescription = new();
-
     public SettingSection GetSection()
     {
         BindableReactiveProperty<bool> isReady = new(downloader.CheckComponents());
@@ -97,6 +93,7 @@ public class AnalyzerSectionProvider(
         BindableReactiveProperty<TranslatableString> everythingTitle = isReady
             .Select(GetComponentStatusTitle)
             .ToBindableReactiveProperty(GetComponentStatusTitle(isReady.Value));
+        
         return CompoundSetting
             .Create(everythingTitle)
             .WithStatus(isReady)
@@ -104,9 +101,9 @@ public class AnalyzerSectionProvider(
             .WithChildren(
                 ProgressSetting
                     .Create("Progress".ToTranslatable())
-                    .WithVisible(_isDownloading)
-                    .WithValue(_progress)
-                    .WithText(_progressDescription)
+                    .WithVisible(downloader.IsDownloading)
+                    .WithValue(downloader.Progress)
+                    .WithText(downloader.ProgressDescription)
                     .WithWidth(150),
 
                 ActionSetting
@@ -130,8 +127,7 @@ public class AnalyzerSectionProvider(
                 return;
             }
 
-            _isDownloading.Value = true;
-            await downloader.Download(_progress, _progressDescription);
+            await downloader.Download();
         }
         catch (Exception ex)
         {
@@ -145,7 +141,6 @@ public class AnalyzerSectionProvider(
         }
         finally
         {
-            _isDownloading.Value = false;
             bool check = downloader.CheckComponents();
             isReady.Value = check;
         }

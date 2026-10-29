@@ -284,6 +284,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IAnalyzerProcessBuilder, AnalyzerProcessBuilder>();
             services.AddSingleton<IAnalyzerProcessRunner, AnalyzerProcessRunner>();
             services.AddSingleton<IAnalyzerProtocolHandler, AnalyzerProtocolHandler>();
+            services.AddSingleton<IAnalyzerInitializer, AnalyzerInitializer>();
             services.AddHttpClient<IAnalyzerDownloadHelper, AnalyzerDownloadHelper>(client =>
             {
                 client.DefaultRequestHeaders.Add("User-Agent", "SkEditor");

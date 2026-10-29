@@ -25,7 +25,7 @@ public class StartupService(
     NamedPipeServer namedPipeServer,
     IConfigService config,
     LegacyConfigMigrator configMigrator,
-    IAnalyzer analyzer,
+    IAnalyzerInitializer analyzerInitializer,
     ISkriptSyntaxService syntaxService,
     IFileTabService fileTabs,
     ILogService logs,
@@ -83,8 +83,8 @@ public class StartupService(
         MainWindow mainWindow = await Dispatcher.UIThread.InvokeAsync(() => mainWindowFactory.Create(splashScreen));
 
         namedPipeServer.Start();
-
-        analyzer.ObserveOptionChange();
+        
+        analyzerInitializer.ObserveOptionChange();
         _ = Task.Run(syntaxService.Load);
 
         await Dispatcher.UIThread.InvokeAsync(async () =>

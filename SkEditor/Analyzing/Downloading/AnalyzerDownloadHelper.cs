@@ -26,6 +26,10 @@ public class AnalyzerDownloadHelper(
     ];
 
     private readonly string _downloadPath = Path.Combine(analyzer.BinDir);
+    
+    public BindableReactiveProperty<bool> IsDownloading { get; } = new();
+    public BindableReactiveProperty<float> Progress { get; } = new();
+    public BindableReactiveProperty<TranslatableString> ProgressDescription { get; } = new();
 
     public bool CheckComponents()
     {
@@ -40,22 +44,31 @@ public class AnalyzerDownloadHelper(
         return fileSystem.File.Exists(file) || fileSystem.Directory.Exists(file);
     }
 
-    public async Task Download(BindableReactiveProperty<float> progress, BindableReactiveProperty<TranslatableString> progressDescription)
+    public async Task Download()
     {
-        foreach (IAnalyzerComponent component in Components)
+        IsDownloading.Value = true;
+        try
         {
-            if (CheckComponentExists(component)) continue;
+            foreach (IAnalyzerComponent component in Components)
+            {
+                if (CheckComponentExists(component)) continue;
                 
-            progress.Value = 0;
-            progressDescription.Value = new TranslatableString(TranslationKey.SettingsAnalyzerDownloading, component.Name);
+                Progress.Value = 0;
+                ProgressDescription.Value = new TranslatableString(TranslationKey.SettingsAnalyzerDownloading, component.Name);
             
-            DownloadInfo? info = await DownloadFileAsync(component, progress, CancellationToken.None);
-            if (info is null) continue;
+                DownloadInfo? info = await DownloadFileAsync(component, Progress, CancellationToken.None);
+                if (info is null) continue;
 
-            string filePath = Path.Combine(_downloadPath, info.Name);
-            string dest = GetDestinationFolder(component.Folder);
-            Directory.CreateDirectory(dest);
-            await component.PrepareAsync(filePath, dest);
+                string filePath = Path.Combine(_downloadPath, info.Name);
+                string dest = GetDestinationFolder(component.Folder);
+                Directory.CreateDirectory(dest);
+                await component.PrepareAsync(filePath, dest);
+            }
+        }
+        finally
+        {
+            Progress.Value = 0;
+            IsDownloading.Value = false;
         }
     }
 

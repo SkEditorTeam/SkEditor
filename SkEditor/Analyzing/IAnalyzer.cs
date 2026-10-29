@@ -35,11 +35,6 @@ public interface IAnalyzer
     Task Initialize();
 
     /// <summary>
-    ///     Observes whether the Analyzer is enabled and starts or stops the Analyzer accordingly.
-    /// </summary>
-    void ObserveOptionChange();
-
-    /// <summary>
     ///     Analyzes the given text and returns the result.
     /// </summary>
     /// <remarks>A cancellation token is required for making sure only one analysis is running at a time.</remarks>
