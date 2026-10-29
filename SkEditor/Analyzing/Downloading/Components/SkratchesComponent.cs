@@ -14,6 +14,7 @@ public class SkratchesComponent(HttpClient httpClient) : IAnalyzerComponent
     private const string SkratchesTag = "build-16";
 
     public TranslatableString Name => "Skratches".ToTranslatable();
+    public ComponentFolder Folder => ComponentFolder.Plugins;
 
     public async Task<DownloadInfo?> GetDownloadInfoAsync()
     {
@@ -73,5 +74,12 @@ public class SkratchesComponent(HttpClient httpClient) : IAnalyzerComponent
 
         string versionStr = assetName.Substring(vIndex + 2, dashIndex - (vIndex + 2));
         return Version.TryParse(versionStr, out version);
+    }
+    
+    public Task PrepareAsync(string filePath, string destinationFolder)
+    {
+
+        File.Move(filePath, Path.Combine(destinationFolder, Path.GetFileName(filePath)));
+        return Task.CompletedTask;
     }
 }

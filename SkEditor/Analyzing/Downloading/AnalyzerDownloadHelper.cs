@@ -30,6 +30,8 @@ public class AnalyzerDownloadHelper(
         new SkratchesComponent(httpClient)
     ];
 
+    private readonly string _downloadPath = Path.Combine(analyzer.BinDir);
+
     public async Task Download()
     {
         BindableReactiveProperty<float> progressProperty = new();
@@ -57,18 +59,34 @@ public class AnalyzerDownloadHelper(
             {
                 descProperty.Value = $"Downloading {component.Name}...".ToTranslatable();
                 progressProperty.Value = 0;
-                await DownloadFileAsync(component, progressProperty, ct);
+                DownloadInfo? info = await DownloadFileAsync(component, progressProperty, ct);
+                if (info is null) continue;
+
+                string filePath = Path.Combine(_downloadPath, info.Name);
+                string dest = GetDestinationFolder(component.Folder);
+                Directory.CreateDirectory(dest);
+                await component.PrepareAsync(filePath, dest);
             }
         });
     }
 
-    private async Task DownloadFileAsync(IAnalyzerComponent component, BindableReactiveProperty<float> progressProperty,
+    private string GetDestinationFolder(ComponentFolder folderType)
+    {
+        return folderType switch
+        {
+            ComponentFolder.Binaries => analyzer.BinDir,
+            ComponentFolder.Plugins => Path.Combine(analyzer.WorkingDir, "plugins"),
+            _ => throw new ArgumentOutOfRangeException(nameof(folderType), folderType, null)
+        };
+    }
+
+    private async Task<DownloadInfo?> DownloadFileAsync(IAnalyzerComponent component, BindableReactiveProperty<float> progressProperty,
         CancellationToken ct)
     {
         DownloadInfo? info = await component.GetDownloadInfoAsync();
         if (info is null)
         {
-            return;
+            return null;
         }
 
         Progress<long> progress = new(bytes =>
@@ -78,7 +96,7 @@ public class AnalyzerDownloadHelper(
             progressProperty.Value = percent;
         });
 
-        string filePath = Path.Combine(analyzer.BinDir, info.Name);
+        string filePath = Path.Combine(_downloadPath, info.Name);
         string tempPath = filePath + ".tmp";
 
         try
@@ -108,5 +126,7 @@ public class AnalyzerDownloadHelper(
 
             throw;
         }
+
+        return info;
     }
 }

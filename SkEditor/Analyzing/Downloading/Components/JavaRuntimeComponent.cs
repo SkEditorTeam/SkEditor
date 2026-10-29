@@ -1,4 +1,7 @@
 using System;
+using System.Formats.Tar;
+using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -11,7 +14,8 @@ namespace SkEditor.Analyzing.Downloading.Components;
 public class JavaRuntimeComponent(HttpClient httpClient) : IAnalyzerComponent
 {
     public TranslatableString Name => "JRE".ToTranslatable();
-    
+    public ComponentFolder Folder => ComponentFolder.Binaries;
+
     public async Task<DownloadInfo?> GetDownloadInfoAsync()
     {
         string mapUrl = GetLatestDownloadMapUrl();
@@ -33,7 +37,23 @@ public class JavaRuntimeComponent(HttpClient httpClient) : IAnalyzerComponent
         
         return new DownloadInfo(name, link, checksum, size);
     }
-    
+
+    public async Task PrepareAsync(string filePath, string destinationFolder)
+    {
+        await using FileStream gzipStream = File.OpenRead(filePath);
+        await using GZipStream gzipDecompressor = new(gzipStream, CompressionMode.Decompress);
+        await using MemoryStream tarStream = new();
+        
+        await gzipDecompressor.CopyToAsync(tarStream);
+        tarStream.Position = 0;
+        
+        string dest = Path.Combine(destinationFolder, "JRE");
+
+        Directory.CreateDirectory(dest);
+        await TarFile.ExtractToDirectoryAsync(tarStream, dest, overwriteFiles: true);
+        File.Delete(filePath);
+    }
+
     private static string GetLatestDownloadMapUrl()
     {
         string os = OperatingSystem.IsWindows() ? "windows" :
