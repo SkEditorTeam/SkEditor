@@ -87,8 +87,7 @@ public class AnalyzerSectionProvider(
 
                 ActionSetting
                     .Create(TranslationKey.SettingsAnalyzerSetup)
-                    .WithButtonVisible(downloader.IsReady.Inverse())
-                    .WithEnabled(canSetup)
+                    .WithButtonVisible(canSetup)
                     .WithAction(TranslationKey.SettingsAnalyzerSetup, async () =>
                     {
                         await SetupComponents();
