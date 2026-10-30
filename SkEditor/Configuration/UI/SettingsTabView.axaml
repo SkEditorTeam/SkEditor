@@ -144,6 +144,7 @@
 
         <DataTemplate DataType="{x:Type types:ActionSetting}">
             <Button Command="{Binding Command}"
+                    IsEnabled="{Binding IsEnabled.Value}"
                     IsVisible="{Binding IsButtonVisible.Value}">
                 <StackPanel Spacing="6" Orientation="Horizontal">
                     <TextBlock Text="{Binding Text}" FontSize="14" />
