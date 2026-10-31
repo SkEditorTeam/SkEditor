@@ -2,10 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sty="using:FluentAvalonia.Styling"
              xmlns:assets="clr-namespace:SkEditor.Assets"
-             xmlns:behaviors="clr-namespace:SkEditor.Appearance.Behaviors"
              xmlns:localization="clr-namespace:SkEditor.Core.Localization"
-             xmlns:elements="clr-namespace:SkEditor.Core.Dialogs.Models.Elements"
              xmlns:ui="clr-namespace:SkEditor.Windowing.UI"
+             xmlns:elements="clr-namespace:SkEditor.Core.Dialogs.Models.Elements"
+             xmlns:converters="clr-namespace:SkEditor.Core.Dialogs.Converters"
+             xmlns:behaviors="clr-namespace:SkEditor.Appearance.Behaviors"
              x:Class="SkEditor.App"
              x:CompileBindings="True"
              x:DataType="ui:AppViewModel"
@@ -76,13 +77,34 @@
                            FontSize="12" />
             </StackPanel>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type elements:ProgressDialogElement}">
             <ProgressBar Value="{Binding Value.Value}" IsIndeterminate="{Binding IsIndeterminate.Value}" />
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type elements:TextDialogElement}">
-            <TextBlock Text="{Binding Text.Value}" />
+            <TextBlock Text="{Binding Text.Value.Value}" FontSize="{Binding FontSize}"
+                                 HorizontalAlignment="{Binding Alignment, Converter={x:Static converters:DialogConverters.ToHorizontalAlignment}}"
+                                 FontWeight="{Binding IsBold, Converter={x:Static converters:DialogConverters.ToFontWeight}}"
+                                 FontStyle="{Binding IsItalic, Converter={x:Static converters:DialogConverters.ToFontStyle}}"
+                                 Margin="{Binding Margin, Converter={x:Static converters:DialogConverters.ToThickness}}" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type elements:CodeDialogElement}">
+            <Border>
+                <Border.Styles>
+                    <Style Selector="Border">
+                        <Setter Property="Background" Value="#05FFFFFF" />
+                        <Setter Property="BorderBrush" Value="#10FFFFFF" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="CornerRadius" Value="7" />
+                        <Setter Property="Padding" Value="12" />
+                    </Style>
+                </Border.Styles>
+
+                <SelectableTextBlock Text="{Binding Code.Value}" FontFamily="{StaticResource JetBrainsFont}"
+                                     Foreground="{DynamicResource ForegroundColor}" TextWrapping="Wrap" />
+            </Border>
         </DataTemplate>
     </Application.DataTemplates>
 
