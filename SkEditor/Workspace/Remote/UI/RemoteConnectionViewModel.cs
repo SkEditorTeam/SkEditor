@@ -75,14 +75,14 @@ public partial class RemoteConnectionViewModel(
             if (!string.IsNullOrWhiteSpace(ConnectionInfo.Password))
             {
                 connections.SavePassword(SelectedConnection, ConnectionInfo.Password);
-                ConnectionInfo.PasswordHash = SelectedConnection.PasswordHash;
+                ConnectionInfo.PasswordHash = SelectedConnection.EncryptedPassword;
                 ConnectionInfo.IsPasswordSaved = true;
                 ConnectionInfo.Password = string.Empty;
             }
         }
         else
         {
-            SelectedConnection.PasswordHash = string.Empty;
+            SelectedConnection.EncryptedPassword = string.Empty;
         }
 
         _ = connectionsConfig.Save();
@@ -226,9 +226,9 @@ public partial class RemoteConnectionViewModel(
             AuthMethod = newValue.AuthMethod,
             KeyFilePath = newValue.AuthMethod == RemoteAuthMethod.PrivateKey ? newValue.KeyFilePath : "",
             CustomRootPath = newValue.CustomRootPath,
-            PasswordHash = newValue.PasswordHash,
+            PasswordHash = newValue.EncryptedPassword,
             IsPasswordSaved = newValue.AuthMethod == RemoteAuthMethod.Password &&
-                              !string.IsNullOrWhiteSpace(newValue.PasswordHash)
+                              !string.IsNullOrWhiteSpace(newValue.EncryptedPassword)
         };
     }
 

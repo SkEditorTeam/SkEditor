@@ -82,19 +82,19 @@ public class RemoteConnectionService(
     public void SavePassword(RemoteConnection connection, string password)
     {
         string hash = _store.Protect(password);
-        connection.PasswordHash = hash;
+        connection.EncryptedPassword = hash;
     }
 
     public string? GetPassword(RemoteConnection connection)
     {
-        if (string.IsNullOrEmpty(connection.PasswordHash))
+        if (string.IsNullOrEmpty(connection.EncryptedPassword))
         {
             return null;
         }
 
         try
         {
-            return _store.Unprotect(connection.PasswordHash);
+            return _store.Unprotect(connection.EncryptedPassword);
         }
         catch (Exception ex)
         {

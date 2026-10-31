@@ -27,7 +27,19 @@ public partial class RemoteConnection : ObservableObject
     public partial string Name { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string PasswordHash { get; set; } = string.Empty;
+    public partial string EncryptedPassword { get; set; } = string.Empty;
+
+    [JsonPropertyName("passwordHash")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? OldPasswordHashAlias
+    {
+        get => null;
+        set
+        {
+            if (!string.IsNullOrEmpty(value) && string.IsNullOrEmpty(EncryptedPassword))
+                EncryptedPassword = value;
+        }
+    }
 
     [ObservableProperty]
     public partial int Port { get; set; } = 22;
