@@ -92,7 +92,7 @@ public partial class FileTreeViewModel : ObservableObject, IRecipient<RemoteConn
             return false;
         }
 
-        _cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        _cts = new CancellationTokenSource();
         CancellationTokenSource? thisCts = _cts;
 
         bool isSuccess;
