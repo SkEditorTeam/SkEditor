@@ -8,8 +8,13 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
+using FluentIcons.Common;
 using Renci.SshNet;
 using Renci.SshNet.Common;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Common;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Dialogs.Models.Elements;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
@@ -28,7 +33,8 @@ public class RemoteConnectionService(
     ITabService tabs,
     ILogService logs,
     INotificationService notifications,
-    ICredentialStoreFactory credentialStoreFactory)
+    ICredentialStoreFactory credentialStoreFactory,
+    IDialogService dialogs)
     : IRemoteConnectionService, IDisposable
 {
     private readonly Dictionary<RemoteConnection, SftpClient> _activeConnections = new();
@@ -122,22 +128,68 @@ public class RemoteConnectionService(
                 _activeConnections.Remove(connection);
             }
 
-            AuthenticationMethod authMethod = GetAuthMethod(connection);
-            ConnectionInfo info = new(connection.Host, connection.Port, connection.Username, authMethod)
+            while (true)
             {
-                Timeout = TimeSpan.FromSeconds(30)
-            };
+                string? mismatchedAlgorithm = null;
+                string? mismatchedFingerprint = null;
 
-            SftpClient newClient = new(info)
-            {
-                KeepAliveInterval = TimeSpan.FromSeconds(60)
-            };
+                AuthenticationMethod authMethod = GetAuthMethod(connection);
+                ConnectionInfo info = new(connection.Host, connection.Port, connection.Username, authMethod)
+                {
+                    Timeout = TimeSpan.FromSeconds(15)
+                };
 
-            await newClient.ConnectAsync(cancellationToken);
+                SftpClient newClient = new(info)
+                {
+                    KeepAliveInterval = TimeSpan.FromSeconds(10)
+                };
 
-            _activeConnections[connection] = newClient;
+                newClient.HostKeyReceived += (_, e) =>
+                {
+                    if (string.IsNullOrEmpty(connection.ExpectedHostKey))
+                    {
+                        connection.ExpectedHostKey = e.HostKeyName + " " + e.FingerPrintSHA256;
+                        e.CanTrust = true;
+                        return;
+                    }
 
-            return newClient;
+                    string key = e.HostKeyName + " " + e.FingerPrintSHA256;
+                    if (connection.ExpectedHostKey == key)
+                    {
+                        e.CanTrust = true;
+                        return;
+                    }
+
+                    mismatchedAlgorithm = e.HostKeyName;
+                    mismatchedFingerprint = e.FingerPrintSHA256;
+                    e.CanTrust = false;
+                };
+
+                try
+                {
+                    await newClient.ConnectAsync(cancellationToken);
+
+                    _activeConnections[connection] = newClient;
+                    return newClient;
+                }
+                catch (SshConnectionException) when (mismatchedFingerprint != null)
+                {
+                    newClient.Dispose();
+
+                    bool userAccepted = await ShowHostKeyMismatchDialogAsync(
+                        connection,
+                        mismatchedAlgorithm!,
+                        mismatchedFingerprint!
+                    );
+
+                    if (!userAccepted)
+                    {
+                        throw;
+                    }
+
+                    connection.ExpectedHostKey = $"{mismatchedAlgorithm} {mismatchedFingerprint}";
+                }
+            }
         }
         finally
         {
@@ -195,7 +247,7 @@ public class RemoteConnectionService(
 
             await action(client);
         }
-        catch (Exception ex) when (ex is IOException or SshConnectionException or SocketException)
+        catch (Exception ex) when (ex is IOException or SshConnectionException or SshOperationTimeoutException or SocketException)
         {
             logs.Warning($"Sftp connection lost for {connection.Name}. Attempting to reconnect...");
 
@@ -233,6 +285,47 @@ public class RemoteConnectionService(
         T result = default!;
         await ExecuteSafeAsync(connection, async client => { result = await action(client); }, cancellationToken);
         return result;
+    }
+
+    private async Task<bool> ShowHostKeyMismatchDialogAsync(RemoteConnection connection, string receivedAlgorithm,
+        string receivedFingerprint)
+    {
+        string[]? expectedParts = connection.ExpectedHostKey?.Split(' ');
+        string expectedAlgorithm = expectedParts?.Length > 0 ? expectedParts[0] : "Unknown";
+        string expectedFingerprint = expectedParts?.Length > 1 ? expectedParts[1] : "Unknown";
+
+        TextDialogElement expectedText =
+            TextDialogElement.Create(translation.Get(TranslationKey.RemoteConnectionHostKeyExpected));
+        expectedText.Alignment = ElementAlignment.Center;
+        expectedText.Margin = new ElementMargin(8, 0, 0, 0);
+        expectedText.IsBold = true;
+
+        string oldKeyDetails =
+            $"{translation.Get(TranslationKey.RemoteConnectionHostKeyAlgorithm, expectedAlgorithm)}\n{translation.Get(TranslationKey.RemoteConnectionHostKeyFingerprint, expectedFingerprint)}";
+        CodeDialogElement oldKey = CodeDialogElement.Create(oldKeyDetails);
+
+        TextDialogElement newText =
+            TextDialogElement.Create(translation.Get(TranslationKey.RemoteConnectionHostKeyReceived));
+        newText.Alignment = ElementAlignment.Center;
+        newText.Margin = new ElementMargin(8, 0, 0, 0);
+        newText.IsBold = true;
+
+        string newKeyDetails =
+            $"{translation.Get(TranslationKey.RemoteConnectionHostKeyAlgorithm, receivedAlgorithm)}\n{translation.Get(TranslationKey.RemoteConnectionHostKeyFingerprint, receivedFingerprint)}";
+        CodeDialogElement newKey = CodeDialogElement.Create(newKeyDetails);
+
+        Dialog dialog = Dialog
+            .Create(TranslationKey.RemoteConnectionHostKeyMismatchTitle)
+            .WithMessage(TranslationKey.RemoteConnectionHostKeyMismatchMessage)
+            .WithElements(expectedText, oldKey, newText, newKey)
+            .WithIcon(Symbol.Key)
+            .WithButtons(
+                new DialogButton(TranslationKey.ButtonCancel, DialogResult.Cancel),
+                new DialogButton(TranslationKey.RemoteConnectionHostKeyTrustAndConnect, DialogResult.Yes)
+            );
+
+        DialogResult result = await dialogs.ShowDialogAsync(dialog);
+        return result == DialogResult.Yes;
     }
 
     private RemoteConnectionInfo GetConnectionInfoForTesting(RemoteConnectionInfo connectionInfo)
@@ -338,18 +431,11 @@ public class RemoteConnectionService(
 
         try
         {
-            if (client.IsConnected)
-            {
-                client.Disconnect();
-            }
+            client.Dispose();
         }
         catch (Exception ex)
         {
-            logs.Error(ex, $"Error disconnecting SFTP client for connection {connection.Name}");
-        }
-        finally
-        {
-            client.Dispose();
+            logs.Error(ex, $"Error disposing SFTP client for connection {connection.Name}");
         }
     }
 

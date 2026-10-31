@@ -40,6 +40,9 @@ public partial class RemoteConnection : ObservableObject
                 EncryptedPassword = value;
         }
     }
+    
+    [ObservableProperty]
+    public partial string? ExpectedHostKey { get; set; }
 
     [ObservableProperty]
     public partial int Port { get; set; } = 22;
