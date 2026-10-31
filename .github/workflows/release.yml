@@ -11,7 +11,24 @@ on:
         required: true
 
 jobs:
+  test:
+    name: Test Before Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run Unit Tests
+        run: dotnet test SkEditor.Tests -c Release --nologo
+  
   build-windows:
+    needs: [ test ]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
@@ -52,6 +69,7 @@ jobs:
             SkEditorInstaller.msi
 
   build-linux:
+    needs: [ test ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -80,6 +98,7 @@ jobs:
           path: Linux-x64.zip
 
   build-macos:
+    needs: [ test ]
     runs-on: macos-latest
     strategy:
       matrix:

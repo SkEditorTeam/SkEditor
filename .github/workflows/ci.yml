@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, dev/**, v3, local/exp ]
+  pull_request:
+    branches: [ main, dev/**, v3 ]
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run Tests
+        run: dotnet test SkEditor.Tests -c Release --nologo --verbosity normal
