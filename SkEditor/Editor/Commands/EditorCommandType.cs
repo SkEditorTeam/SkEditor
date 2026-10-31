@@ -14,6 +14,8 @@ public enum EditorCommandType
     TransformToLowercase,
     TransformToTitlecase,
     TransformToSmallCaps,
+    SpacesToTabs,
+    TabsToSpaces,
     Find,
     Replace,
     SelectAll

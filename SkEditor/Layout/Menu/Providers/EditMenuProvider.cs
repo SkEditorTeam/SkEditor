@@ -58,6 +58,18 @@ public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService ta
             .HeaderWithIcon(TranslationKey.MenuHeaderTrimWhitespaces, Symbol.Eraser)
             .WithCommand(() => RequestAction(EditorCommandType.TrimWhitespace))
             .AddTo(edit);
+        
+        MainMenuItem
+            .HeaderWithIcon(TranslationKey.MenuHeaderIndentation, Symbol.TextIndentIncrease)
+            .WithItems(
+                MainMenuItem
+                    .HeaderWithIcon(TranslationKey.MenuHeaderIndentationSpacesToTabs, Symbol.KeyboardTab)
+                    .WithCommand(() => RequestAction(EditorCommandType.SpacesToTabs)),
+                MainMenuItem
+                    .HeaderWithIcon(TranslationKey.MenuHeaderIndentationTabsTospaces, Symbol.Spacebar)
+                    .WithCommand(() => RequestAction(EditorCommandType.TabsToSpaces))
+            )
+            .AddTo(edit);
 
         MainMenuItem
             .HeaderWithIcon(TranslationKey.MenuHeaderTransform, Symbol.TextCaseTitle)

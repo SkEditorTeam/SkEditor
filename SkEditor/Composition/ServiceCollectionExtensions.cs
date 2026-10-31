@@ -189,6 +189,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IEditorCommandHandler, DuplicateCommand>();
             services.AddSingleton<IEditorCommandHandler, TrimWhitespaceCommand>();
             services.AddSingleton<IEditorCommandHandler, TransformCommand>();
+            services.AddSingleton<IEditorCommandHandler, ConvertIndentationCommand>();
         }
 
         public void AddEditorCompletions()
