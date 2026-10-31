@@ -61,6 +61,10 @@
             <Style Selector="Menu MenuItem:disabled icons|SymbolIcon">
                 <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabled}" />
             </Style>
+            <Style Selector="Menu MenuItem AccessText">
+                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                <Setter Property="MaxWidth" Value="250" />
+            </Style>
         </Menu.Styles>
     </Menu>
 </UserControl>
