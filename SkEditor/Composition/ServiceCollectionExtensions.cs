@@ -16,6 +16,7 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Providers.Choice;
 using SkEditor.Configuration.Providers.Sections;
 using SkEditor.Configuration.UI;
+using SkEditor.Core.Common;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
@@ -103,6 +104,11 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
             services.AddDocumentationProviders();
+            
+            services.AddHttpClient(HttpClients.SkEditor, client =>
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "SkEditor");
+            });
         }
 
         public void AddWindowing()
@@ -286,10 +292,6 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IAnalyzerProcessRunner, AnalyzerProcessRunner>();
             services.AddSingleton<IAnalyzerProtocolHandler, AnalyzerProtocolHandler>();
             services.AddSingleton<IAnalyzerInitializer, AnalyzerInitializer>();
-            services.AddHttpClient("AnalyzerDownload", client =>
-            {
-                client.DefaultRequestHeaders.Add("User-Agent", "SkEditor");
-            });
             services.AddSingleton<IAnalyzerDownloadHelper, AnalyzerDownloadHelper>();
 
             services.AddSingleton<IAnalyzer, Analyzer>();

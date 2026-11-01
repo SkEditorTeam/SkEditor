@@ -125,7 +125,7 @@ public class AnalyzerDownloadHelper : IAnalyzerDownloadHelper
 
         try
         {
-            using HttpClient client = _factory.CreateClient("AnalyzerDownload");
+            using HttpClient client = _factory.CreateClient(HttpClients.SkEditor);
             await using (Stream downloadStream = await client.GetStreamAsync(info.Url, ct))
             await using (ProgressStream progressStream = new(downloadStream, progress))
             await using (FileSystemStream fileStream = _fileSystem.File.Create(tempPath))

@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Serilog;
+using SkEditor.Core.Common;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 
@@ -21,7 +22,7 @@ public class SkratchesComponent(IHttpClientFactory factory) : IAnalyzerComponent
     {
         const string apiUrl = $"https://api.github.com/repos/SkEditorTeam/Skratches/releases/tags/{SkratchesTag}";
 
-        using HttpClient client = factory.CreateClient("AnalyzerDownload");
+        using HttpClient client = factory.CreateClient(HttpClients.SkEditor);
         await using Stream stream = await client.GetStreamAsync(apiUrl);
         using JsonDocument document = await JsonDocument.ParseAsync(stream);
 

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SkEditor.Core.Common;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 
@@ -21,7 +22,7 @@ public class JavaRuntimeComponent(IHttpClientFactory factory) : IAnalyzerCompone
     {
         string mapUrl = GetLatestDownloadMapUrl();
 
-        using HttpClient client = factory.CreateClient("AnalyzerDownload");
+        using HttpClient client = factory.CreateClient(HttpClients.SkEditor);
         await using var responseStream = await client.GetStreamAsync(mapUrl);
         using JsonDocument document = await JsonDocument.ParseAsync(responseStream);
 
