@@ -65,6 +65,7 @@
                                          Grid.Column="0"
                                          Width="{StaticResource TaskDialogIconSize}"
                                          Height="{StaticResource TaskDialogIconSize}"
+                                         ClipToBounds="False"
                                          VerticalAlignment="Center"
                                          HorizontalAlignment="Left"
                                          IsVisible="False">

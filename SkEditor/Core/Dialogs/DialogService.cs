@@ -93,7 +93,7 @@ public class DialogService(WindowRegistry windowRegistry) : IDialogService
 
         if (dialog.Icon is not null)
         {
-            taskDialog.IconSource = new SymbolIconSource { Symbol = dialog.Icon.Value };
+            taskDialog.IconSource = new SymbolIconSource { Symbol = dialog.Icon.Value, FontSize = 28};
         }
 
         if (dialog.Elements.Count > 0)
