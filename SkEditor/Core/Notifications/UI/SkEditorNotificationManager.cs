@@ -8,6 +8,9 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using Microsoft.Extensions.DependencyInjection;
+using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications.Converters;
 
 namespace SkEditor.Core.Notifications.UI;
 
@@ -20,6 +23,8 @@ public class SkEditorNotificationManager : TemplatedControl
 
     public static readonly StyledProperty<int> MaxItemsProperty =
         WindowNotificationManager.MaxItemsProperty.AddOwner<SkEditorNotificationManager>();
+    
+    private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(4);
 
     private readonly List<SkEditorNotificationCard> _items = [];
     private Panel? _itemsControl;
@@ -48,14 +53,18 @@ public class SkEditorNotificationManager : TemplatedControl
 
     public SkEditorNotificationManager(TopLevel host) : this() => InstallFromTopLevel(host);
 
-    public void Show(string title, string message, Avalonia.Controls.Notifications.NotificationType type, TimeSpan? expiration = null,
-        Action? onClick = null)
+    public void Show(Notification notification, Action<Notification>? onClosed = null)
     {
         Dispatcher.UIThread.VerifyAccess();
 
+        var type = NotificationTypeConverter.ToAvaloniaType(notification.Type);
+
         SkEditorNotificationCard card = new()
         {
-            Content = new Avalonia.Controls.Notifications.Notification(title, message, type),
+            Content = new Avalonia.Controls.Notifications.Notification(
+                notification.Title.Value,
+                notification.Message?.Value ?? string.Empty,
+                type, notification.Duration ?? DefaultDuration),
             NotificationType = type
         };
 
@@ -63,12 +72,33 @@ public class SkEditorNotificationManager : TemplatedControl
         {
             _items.Remove(card);
             _itemsControl?.Children.Remove(card);
+        
+            onClosed?.Invoke(notification);
         };
 
-        card.PointerPressed += (_, _) =>
+        card.PointerPressed += async (_, e) =>
         {
-            onClick?.Invoke();
+            if (card.IsClosing || !e.GetCurrentPoint(card).Properties.IsLeftButtonPressed)
+            {
+                return;
+            }
+
+            e.Handled = true;
             card.Close();
+
+            if (notification.OnClick == null)
+            {
+                return;
+            }
+
+            try
+            {
+                await notification.OnClick();
+            }
+            catch (Exception ex)
+            {
+                App.Services.GetRequiredService<ILogService>().Error(ex, "Notification action failed");
+            }
         };
 
         _items.Add(card);
@@ -79,7 +109,7 @@ public class SkEditorNotificationManager : TemplatedControl
             _items.First(i => !i.IsClosing).Close();
         }
 
-        card.StartTimer(expiration ?? TimeSpan.FromSeconds(5));
+        card.StartTimer(notification.Duration ?? TimeSpan.FromSeconds(5));
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

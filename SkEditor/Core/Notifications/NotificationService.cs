@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using SkEditor.Core.Localization;
-using SkEditor.Core.Notifications.Converters;
 using SkEditor.Core.Notifications.Messages;
 using SkEditor.Core.Notifications.UI;
 using SkEditor.Windowing;
@@ -12,8 +11,6 @@ namespace SkEditor.Core.Notifications;
 
 public class NotificationService : INotificationService, IRecipient<ShowNotificationMessage>
 {
-    private static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(4);
-
     private readonly List<Notification> _history = [];
     private readonly WindowRegistry _windowRegistry;
 
@@ -29,14 +26,17 @@ public class NotificationService : INotificationService, IRecipient<ShowNotifica
         Dispatcher.UIThread.Post(() =>
         {
             SkEditorNotificationManager? manager = _windowRegistry.Active?.NotificationManager;
-            manager?.Show(
-                notification.Title.Value,
-                notification.Message?.Value ?? string.Empty,
-                NotificationTypeConverter.ToAvaloniaType(notification.Type),
-                notification.Duration ?? DefaultDuration);
-        });
+            if (manager is null)
+            {
+                _history.Add(notification);
+                return;
+            }
 
-        _history.Add(notification);
+            manager.Show(notification, onClosed: closedNotification =>
+            {
+                _history.Add(closedNotification);
+            });
+        });
     }
 
     public void Debug(string message)

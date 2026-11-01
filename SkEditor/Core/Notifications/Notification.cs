@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SkEditor.Core.Localization;
 
 namespace SkEditor.Core.Notifications;
@@ -19,6 +20,8 @@ public class Notification
 
     /// <summary> The severity level which determines the visual style and icon of the notification. </summary>
     public NotificationType Type { get; private set; } = NotificationType.Information;
+    
+    public Func<Task>? OnClick { get; private set; }
 
     private Notification(TranslatableString title) => Title = title;
 
@@ -69,6 +72,24 @@ public class Notification
     public Notification MakePersistent()
     {
         Duration = TimeSpan.MaxValue;
+        return this;
+    }
+    
+    /// <summary> Sets a callback to be invoked when the notification is clicked and returns this instance for chaining. </summary>
+    public Notification WithOnClick(Func<Task> onClick)
+    {
+        OnClick = onClick;
+        return this;
+    }
+    
+    /// <summary> Sets a callback to be invoked when the notification is clicked and returns this instance for chaining. </summary>
+    public Notification WithOnClick(Action onClick)
+    {
+        OnClick = () =>
+        {
+            onClick();
+            return Task.CompletedTask;
+        };
         return this;
     }
 }

@@ -23,6 +23,8 @@ public partial class StatusBarViewModel : ObservableObject, IDisposable
     public List<Notification> Notifications => _notifs.GetHistory().Reverse().ToList();
     public ObservableCollection<StatusBarItem> RightItems { get; } = [];
 
+    public event Action? RequestFlyoutHide;
+
     public StatusBarViewModel(
         IWindowDialogService windowDialogs,
         INotificationService notifs,
@@ -58,6 +60,16 @@ public partial class StatusBarViewModel : ObservableObject, IDisposable
     {
         _notifs.RemoveFromHistory(notification);
         OnPropertyChanged(nameof(Notifications));
+    }
+    
+    [RelayCommand]
+    private async Task ExecuteNotification(Notification notification)
+    {
+        if (notification.OnClick != null)
+        {
+            RequestFlyoutHide?.Invoke();
+            await notification.OnClick();
+        }
     }
 
     private void OnAttachStatusChanged(IStatusBarProvider provider, bool canAttach)
