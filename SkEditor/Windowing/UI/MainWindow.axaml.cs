@@ -7,6 +7,8 @@ using HotAvalonia;
 using SkEditor.Appearance.Themes;
 using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
+using SkEditor.Core.Updates;
+using SkEditor.Core.Updates.Models;
 using SkEditor.Editor.Syntax;
 using SkEditor.Integrations.Discord;
 using SkEditor.Layout.Menu.UI;
@@ -21,6 +23,7 @@ public partial class MainWindow : Window
     private readonly SplashScreenService _splashScreen;
     private readonly IThemeService _themes;
     private readonly ITranslationService _translation;
+    private readonly IUpdateService _updates;
     private readonly IWindowCloseService _windowClose;
     private readonly ICrashService _crashes;
 
@@ -36,6 +39,7 @@ public partial class MainWindow : Window
         _splashScreen = null!;
         _windowClose = null!;
         _crashes = null!;
+        _updates = null!;
     }
 
     public MainWindow(
@@ -50,7 +54,8 @@ public partial class MainWindow : Window
         IDiscordIntegrationService discordIntegration,
         IWindowCloseService windowClose,
         SplashScreenService splashScreen,
-        ICrashService crashes)
+        ICrashService crashes,
+        IUpdateService updates)
         : this()
     {
         DataContext = viewModel;
@@ -61,6 +66,7 @@ public partial class MainWindow : Window
         _splashScreen = splashScreen;
         _windowClose = windowClose;
         _crashes = crashes;
+        _updates = updates;
 
         RegisterHotKeys(menuViewModel, appSettings);
 
@@ -96,8 +102,15 @@ public partial class MainWindow : Window
         });
         
         await Task.Delay(100);
-
         await _crashes.CheckForCrashes();
+
+        await Task.Delay(1000);
+        
+        ReleaseInfo? update = await _updates.CheckForUpdates();
+        if (update is not null)
+        {
+            _updates.ShowNotification(update);
+        }
     }
 
     [AvaloniaHotReload]
@@ -126,13 +139,21 @@ public partial class MainWindow : Window
             }
 
             e.Cancel = true;
-            bool close = await _windowClose.OnWindowClosing(Height, Width, Position.X, Position.Y, WindowState);
-            if (close)
-            {
-                Close();
-            }
+            await TryCloseAsync();
         };
         dragDropService.AttachDragDropEvents(this);
         shortcutsService.AttachKeyEvents(this);
+    }
+    
+    public async Task<bool> TryCloseAsync()
+    {
+        bool canClose = await _windowClose.OnWindowClosing(Height, Width, Position.X, Position.Y, WindowState);
+        if (canClose)
+        {
+            Close();
+            return true;
+        }
+
+        return false;
     }
 }

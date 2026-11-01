@@ -72,6 +72,8 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
 
         <PackageReference Include="AsyncImageLoader.Avalonia" Version="4.0.0" />
+
+        <PackageReference Include="Semver" Version="3.0.0" />
         <PackageReference Include="Skia.Controls.Avalonia" Version="12.0.0.17" />
 
         <PackageReference Include="System.IO.Hashing" Version="10.0.13" />

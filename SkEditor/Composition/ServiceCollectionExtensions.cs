@@ -23,6 +23,7 @@ using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.Security;
 using SkEditor.Core.System;
+using SkEditor.Core.Updates;
 using SkEditor.Documentation;
 using SkEditor.Documentation.Providers;
 using SkEditor.Documentation.UI;
@@ -92,6 +93,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<ILinkService, LinkService>();
             services.AddSingleton<IProjectService, ProjectService>();
             services.AddSingleton<ISidebarService, SidebarService>();
+            services.AddSingleton<IUpdateService, UpdateService>();
 
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
             services.AddSingleton<ICredentialStoreFactory, CredentialStoreFactory>();

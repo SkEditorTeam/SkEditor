@@ -23,6 +23,18 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// </summary>
     [ObservableProperty]
     public partial bool UseHardwareAcceleration { get; set; } = true;
+    
+    /// <summary>
+    ///     Whether to check for app updates automatically on app startup.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool CheckForUpdates { get; set; } = true;
+    
+    /// <summary>
+    ///     Whether to include pre-releases when checking for updates.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool IncludePreReleaseUpdates { get; set; } = false;
 
     /// <summary>
     ///     The UI scale factor.

@@ -12,6 +12,7 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using Semver;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -160,6 +161,12 @@ public class App : Application
         services.AddTransient(typeof(Lazy<>), typeof(Lazier<>));
         services.AddSingleton<AppViewModel>();
         services.AddSingleton(args);
+        
+        SemVersion semVersion = SemVersion.Parse(GetInformationalVersion(), SemVersionStyles.AllowLowerV);
+        bool isInstalled = DetermineIfInstalled();
+        
+        services.AddSingleton<IAppInfo>(new AppInfo(semVersion, isInstalled));
+        
         services.AddSingleton<IClassicDesktopStyleApplicationLifetime>(_ =>
             (IClassicDesktopStyleApplicationLifetime)Current!.ApplicationLifetime!);
 
@@ -181,5 +188,24 @@ public class App : Application
         services.AddStatusBar();
 
         services.AddAnalyzer();
+    }
+    
+    private static bool DetermineIfInstalled()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return false;
+        }
+
+        string baseDir = AppContext.BaseDirectory;
+        string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        string programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+        string localPrograms = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Programs");
+
+        return baseDir.StartsWith(programFiles, StringComparison.OrdinalIgnoreCase)
+               || baseDir.StartsWith(programFilesX86, StringComparison.OrdinalIgnoreCase)
+               || baseDir.StartsWith(localPrograms, StringComparison.OrdinalIgnoreCase);
     }
 }
