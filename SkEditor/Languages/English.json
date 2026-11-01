@@ -493,5 +493,12 @@
   "AnalyzerFailedToLoad": "Analyzer failed to load",
   "AnalyzerErrorTitle": "Analyzer error",
   "AnalyzerComponentsMissingMessage": "The required components may be missing or incompatible. Check the settings for more information.",
-  "AnalyzerGeneralFailureMessage": "Something went wrong while starting the Analyzer. Take a look at the logs for more information."
+  "AnalyzerGeneralFailureMessage": "Something went wrong while starting the Analyzer. Take a look at the logs for more information.",
+  "NoUpdatesAvailableTitle": "No updates available",
+  "NoUpdatesAvailableMessage": "You are using the latest version of SkEditor.",
+  "UpdateAvailableTitle": "Update available",
+  "UpdateAvailableMessage": "A new version of SkEditor is available. Click for more details.",
+  "UpdateAvailableMessageDownload": "A new version of SkEditor is available. Do you want to download it now?",
+  "UpdateDownloadedTitle": "Update downloaded",
+  "UpdateDownloadedMessage": "The update has been downloaded. Click to close SkEditor and run the installer."
 }

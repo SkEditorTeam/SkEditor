@@ -71,14 +71,14 @@ public class UpdateService(
 
         if (info is null)
         {
-            notification = Notification.Create("No updates available".ToTranslatableWip())
-                .WithMessage("You are using the latest version of SkEditor.".ToTranslatableWip())
+            notification = Notification.Create(TranslationKey.NoUpdatesAvailableTitle)
+                .WithMessage(TranslationKey.NoUpdatesAvailableMessage)
                 .WithType(NotificationType.Information);
         }
         else
         {
-            notification = Notification.Create("Update available".ToTranslatableWip())
-                .WithMessage("A new version of SkEditor is available. Click for more details.".ToTranslatableWip())
+            notification = Notification.Create(TranslationKey.UpdateAvailableTitle)
+                .WithMessage(TranslationKey.UpdateAvailableMessage)
                 .WithType(NotificationType.Success);
             
             notification.WithOnClick(async () => await ShowUpdateDialog(info));
@@ -92,8 +92,8 @@ public class UpdateService(
     private async Task ShowUpdateDialog(ReleaseInfo info)
     {
         Dialog dialog = Dialog
-            .Create("Update available".ToTranslatableWip())
-            .WithMessage("A new version of SkEditor is available. Do you want to download it now?".ToTranslatableWip())
+            .Create(TranslationKey.UpdateAvailableTitle)
+            .WithMessage(TranslationKey.UpdateAvailableMessageDownload)
             .WithIcon(Symbol.Sparkle)
             .WithButtons(
                 new DialogButton(TranslationKey.ButtonDownload, DialogResult.Yes, true),
@@ -142,9 +142,9 @@ public class UpdateService(
         
             fileSystem.File.Move(tempPath, filePath, true);
             logs.Info($"Downloaded installer to {filePath}");
-            
-            Notification notification = Notification.Create("Update downloaded".ToTranslatableWip())
-                .WithMessage("The update has been downloaded. Click to close SkEditor and run the installer.".ToTranslatableWip())
+
+            Notification notification = Notification.Create(TranslationKey.UpdateDownloadedTitle)
+                .WithMessage(TranslationKey.UpdateDownloadedMessage)
                 .WithType(NotificationType.Success)
                 .WithDuration(TimeSpan.FromSeconds(20));
 
