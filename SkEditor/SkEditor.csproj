@@ -108,7 +108,7 @@
 
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.4" Condition="'$(RuntimeIdentifier)' == 'linux-x64'" />
 
-        <PackageReference Include="SkFluentAvalonia" Version="3.1.0" />
+        <PackageReference Include="SkFluentAvalonia" Version="3.1.1" />
         <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="2.1.344" />
         <PackageReference Include="FluentAvaloniaUI" Version="3.0.0" ExcludeAssets="compile;runtime" />
 
