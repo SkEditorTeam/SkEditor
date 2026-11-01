@@ -8,7 +8,7 @@ using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Windowing;
 
-public class ShortcutsService(ITabService tabs, WindowStateService windowState, WindowRegistry windowRegistry)
+public class ShortcutsService(ITabService tabs, WindowStateService windowState, IWindowRegistry windowRegistry)
 {
     private IInputElement? _lastNonMenuFocusedElement;
     

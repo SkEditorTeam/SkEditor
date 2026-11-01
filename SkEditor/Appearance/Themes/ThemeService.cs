@@ -29,13 +29,13 @@ public class ThemeService : IThemeService
     private readonly ILogService _log;
     private readonly AppSettings _appSettings;
     private readonly IconProvider _iconProvider;
-    private readonly WindowRegistry _windowRegistry;
+    private readonly IWindowRegistry _windowRegistry;
 
     public ThemeService(ILogService log,
         IConfigService config,
         AppSettings appSettings,
         IconProvider iconProvider,
-        WindowRegistry windowRegistry)
+        IWindowRegistry windowRegistry)
     {
         _log = log;
         _appSettings = appSettings;

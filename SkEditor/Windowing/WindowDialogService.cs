@@ -14,7 +14,7 @@ using SkEditor.Workspace.Tabs.Capabilities;
 namespace SkEditor.Windowing;
 
 public class WindowDialogService(
-    WindowRegistry windowRegistry,
+    IWindowRegistry windowRegistry,
     INotificationService notifications,
     Func<PublishWindow> publishWindowFactory,
     Func<GoToLineWindow> goToLineWindowFactory,

@@ -12,9 +12,9 @@ namespace SkEditor.Core.Notifications;
 public class NotificationService : INotificationService, IRecipient<ShowNotificationMessage>
 {
     private readonly List<Notification> _history = [];
-    private readonly WindowRegistry _windowRegistry;
+    private readonly IWindowRegistry _windowRegistry;
 
-    public NotificationService(WindowRegistry windowRegistry, IMessenger messenger)
+    public NotificationService(IWindowRegistry windowRegistry, IMessenger messenger)
     {
         _windowRegistry = windowRegistry;
 

@@ -13,7 +13,7 @@ using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Windowing;
 
-public class NamedPipeServer(WindowRegistry windowRegistry, IFileTabService fileTabs)
+public class NamedPipeServer(IWindowRegistry windowRegistry, IFileTabService fileTabs)
 {
     public const string PipeName = "SkEditor3";
 

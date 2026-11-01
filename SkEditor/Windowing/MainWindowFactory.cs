@@ -4,7 +4,7 @@ using SkEditor.Windowing.UI;
 
 namespace SkEditor.Windowing;
 
-public class MainWindowFactory(IServiceProvider sp, WindowRegistry registry)
+public class MainWindowFactory(IServiceProvider sp, IWindowRegistry registry)
 {
     public MainWindow Create(SplashScreen? splashScreen = null)
     {

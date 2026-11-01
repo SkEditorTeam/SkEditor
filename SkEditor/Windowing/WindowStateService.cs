@@ -6,7 +6,7 @@ using SkEditor.Windowing.UI;
 
 namespace SkEditor.Windowing;
 
-public class WindowStateService(StateConfig stateConfig, WindowRegistry windowRegistry)
+public class WindowStateService(StateConfig stateConfig, IWindowRegistry windowRegistry)
 {
     private WindowState _preFullScreenState = WindowState.Normal;
 

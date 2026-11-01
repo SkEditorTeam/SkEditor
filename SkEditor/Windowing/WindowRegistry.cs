@@ -6,7 +6,7 @@ using SkEditor.Windowing.UI;
 
 namespace SkEditor.Windowing;
 
-public class WindowRegistry(IClassicDesktopStyleApplicationLifetime desktop)
+public class WindowRegistry(IClassicDesktopStyleApplicationLifetime desktop) : IWindowRegistry
 {
     private readonly List<MainWindow> _windows = [];
     public MainWindow? Active => _windows.LastOrDefault(w => w.IsActive) ?? _windows.LastOrDefault();

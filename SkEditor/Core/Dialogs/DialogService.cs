@@ -14,7 +14,7 @@ using SkEditor.Windowing.UI;
 
 namespace SkEditor.Core.Dialogs;
 
-public class DialogService(WindowRegistry windowRegistry) : IDialogService
+public class DialogService(IWindowRegistry windowRegistry) : IDialogService
 {
     public async Task<DialogResult> ShowDialogAsync(Dialog dialog)
     {

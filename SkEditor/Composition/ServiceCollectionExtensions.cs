@@ -114,7 +114,7 @@ public static class ServiceCollectionExtensions
         public void AddWindowing()
         {
             services.AddSingleton<MainWindowFactory>();
-            services.AddSingleton<WindowRegistry>();
+            services.AddSingleton<IWindowRegistry, WindowRegistry>();
             services.AddSingleton<WindowInstanceService>();
             services.AddSingleton<WindowStateService>();
             services.AddSingleton<WindowErrorService>();
