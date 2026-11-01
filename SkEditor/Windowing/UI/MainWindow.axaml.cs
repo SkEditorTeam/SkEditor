@@ -104,12 +104,15 @@ public partial class MainWindow : Window
         await Task.Delay(100);
         await _crashes.CheckForCrashes();
 
-        await Task.Delay(1000);
-        
-        ReleaseInfo? update = await _updates.CheckForUpdates();
-        if (update is not null)
+        if (_appSettings.CheckForUpdates)
         {
-            _updates.ShowNotification(update);
+            await Task.Delay(1000);
+        
+            ReleaseInfo? update = await _updates.CheckForUpdates();
+            if (update is not null)
+            {
+                _updates.ShowNotification(update);
+            }   
         }
     }
 

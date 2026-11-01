@@ -25,6 +25,21 @@ public class GeneralSectionProvider(
                     .WithIcon(Symbol.Earth)
                     .WithProperty(appSettings.GetProperty<string>(AppSettingsProperty.Language))
                     .WithProvider(languageProvider),
+                
+                ExpandableSetting
+                    .Create(TranslationKey.SettingsGeneralUpdates)
+                    .WithDescription(TranslationKey.SettingsGeneralUpdatesDescription)
+                    .WithIcon(Symbol.ArrowSync)
+                    .WithChildren(
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsGeneralCheckForUpdates)
+                            .WithDescription(TranslationKey.SettingsGeneralCheckForUpdatesDescription)
+                            .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForUpdates)),
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsGeneralIncludePreReleases)
+                            .WithDescription(TranslationKey.SettingsGeneralIncludePreReleasesDescription)
+                            .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IncludePreReleaseUpdates))
+                    ),
 
                 ToggleSetting
                     .Create(TranslationKey.SettingsGeneralSessionRestore)

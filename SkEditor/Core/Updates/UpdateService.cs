@@ -95,11 +95,11 @@ public class UpdateService(
     {
         Dialog dialog = Dialog
             .Create(TranslationKey.UpdateAvailableTitle)
-            .WithMessage(TranslationKey.UpdateAvailableMessageDownload)
+            .WithMessage(new TranslatableString(TranslationKey.UpdateAvailableMessageDownload, info.Version.ToString()))
             .WithIcon(Symbol.Sparkle)
             .WithButtons(
-                new DialogButton(TranslationKey.ButtonDownload, DialogResult.Yes, true),
-                DialogButton.No
+                new DialogButton(TranslationKey.UpdateAvailableDownloadButton, DialogResult.Yes, true),
+                new DialogButton(TranslationKey.UpdateAvailableNotNowButton, DialogResult.No)
             );
 
         DialogResult result = await dialogs.ShowDialogAsync(dialog);
@@ -143,7 +143,6 @@ public class UpdateService(
             }
 
             fileSystem.File.Move(tempPath, filePath, true);
-            logs.Info($"Downloaded installer to {filePath}");
 
             Notification notification = Notification.Create(TranslationKey.UpdateDownloadedTitle)
                 .WithMessage(TranslationKey.UpdateDownloadedMessage)
