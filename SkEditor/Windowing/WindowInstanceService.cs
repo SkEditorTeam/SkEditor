@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
-using Serilog;
+using SkEditor.Core.Logging;
 
 namespace SkEditor.Windowing;
 
-public class WindowInstanceService
+public class WindowInstanceService(ILogService logs)
 {
     public async Task<bool> HandleSingleInstance(IClassicDesktopStyleApplicationLifetime desktop)
     {
@@ -22,7 +22,7 @@ public class WindowInstanceService
         }
         catch (AbandonedMutexException ex)
         {
-            Log.Debug(ex, "Abandoned mutex");
+            logs.Error(ex, "Abandoned mutex");
             isFirstInstance = true;
         }
 
@@ -42,7 +42,7 @@ public class WindowInstanceService
         return false;
     }
 
-    private static async Task SendArgsToExistingInstance()
+    private async Task SendArgsToExistingInstance()
     {
         try
         {
@@ -61,7 +61,7 @@ public class WindowInstanceService
         }
         catch (Exception ex)
         {
-            Log.Debug(ex, "Error connecting to named pipe");
+            logs.Error(ex, "Error connecting to named pipe");
         }
     }
 }

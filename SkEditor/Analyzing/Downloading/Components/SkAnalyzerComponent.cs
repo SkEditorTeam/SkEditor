@@ -2,14 +2,14 @@ using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Serilog;
 using SkEditor.Core.Common;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
 
 namespace SkEditor.Analyzing.Downloading.Components;
 
-public class SkAnalyzerComponent(IHttpClientFactory factory) : IAnalyzerComponent
+public class SkAnalyzerComponent(IHttpClientFactory factory, ILogService logs) : IAnalyzerComponent
 {
     private const string SkAnalyzerTag = "v2.0.0-beta.7";
     
@@ -43,7 +43,7 @@ public class SkAnalyzerComponent(IHttpClientFactory factory) : IAnalyzerComponen
 
         if (targetAsset is null)
         {
-            Log.Error("Failed to find SkAnalyzer asset in GitHub release.");
+            logs.Error("Failed to find SkAnalyzer asset in GitHub release.");
             return null;
         }
 

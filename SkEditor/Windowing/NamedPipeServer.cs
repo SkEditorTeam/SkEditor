@@ -6,14 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using Serilog;
+using SkEditor.Core.Logging;
 using SkEditor.Windowing.UI;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Windowing;
 
-public class NamedPipeServer(IWindowRegistry windowRegistry, IFileTabService fileTabs)
+public class NamedPipeServer(IWindowRegistry windowRegistry, IFileTabService fileTabs, ILogService logs)
 {
     public const string PipeName = "SkEditor3";
 
@@ -46,7 +46,7 @@ public class NamedPipeServer(IWindowRegistry windowRegistry, IFileTabService fil
         }
         catch (Exception ex)
         {
-            Log.Error("Named Pipe Server error: {ExMessage}\n\n{ExStackTrace}", ex.Message, ex.StackTrace);
+            logs.Error(ex, "Named pipe server error");
         }
     }
 
@@ -71,7 +71,7 @@ public class NamedPipeServer(IWindowRegistry windowRegistry, IFileTabService fil
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Unexpected error in named pipe communication");
+            logs.Error(ex, "Unexpected error in named pipe communication");
         }
     }
 

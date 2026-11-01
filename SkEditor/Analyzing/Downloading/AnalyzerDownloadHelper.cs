@@ -9,6 +9,7 @@ using R3;
 using SkEditor.Analyzing.Downloading.Components;
 using SkEditor.Core.Common;
 using SkEditor.Core.Localization;
+using SkEditor.Core.Logging;
 
 namespace SkEditor.Analyzing.Downloading;
 
@@ -24,7 +25,7 @@ public class AnalyzerDownloadHelper : IAnalyzerDownloadHelper
 
     public AnalyzerDownloadHelper(IHttpClientFactory factory,
         IFileSystem fileSystem,
-        IAnalyzer analyzer)
+        IAnalyzer analyzer, ILogService logs)
     {
         _factory = factory;
         _fileSystem = fileSystem;
@@ -33,8 +34,8 @@ public class AnalyzerDownloadHelper : IAnalyzerDownloadHelper
         
         Components = [
             new JavaRuntimeComponent(factory),
-            new SkAnalyzerComponent(factory),
-            new SkratchesComponent(factory)
+            new SkAnalyzerComponent(factory, logs),
+            new SkratchesComponent(factory, logs)
         ];
         
         IsReady.Value = Components.All(CheckComponentExists);
