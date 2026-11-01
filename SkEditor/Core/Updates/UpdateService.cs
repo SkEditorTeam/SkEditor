@@ -38,6 +38,8 @@ public class UpdateService(
     {
         const string url = "https://api.github.com/repos/SkEditorTeam/SkEditor/releases";
 
+        _ = Task.Run(CleanupTemp);
+
         try
         {
             using HttpClient client = factory.CreateClient(HttpClients.SkEditor);
@@ -80,8 +82,8 @@ public class UpdateService(
             notification = Notification.Create(TranslationKey.UpdateAvailableTitle)
                 .WithMessage(TranslationKey.UpdateAvailableMessage)
                 .WithType(NotificationType.Success);
-            
-            notification.WithOnClick(async () => await ShowUpdateDialog(info));
+
+            notification.WithOnClick(() => ShowUpdateDialog(info));
         }
 
         notification.WithDuration(TimeSpan.FromSeconds(10));
@@ -106,7 +108,7 @@ public class UpdateService(
             return;
         }
 
-        if (appInfo.IsInstalled || true)
+        if (appInfo.IsInstalled)
         {
             await DownloadAndRunInstaller(info);
         }
@@ -127,10 +129,10 @@ public class UpdateService(
 
         string tempFolder = Path.Combine(fileSystem.Path.GetTempPath(), "SkEditor");
         fileSystem.Directory.CreateDirectory(tempFolder);
-        
+
         string filePath = Path.Combine(tempFolder, $"Installer-{info.Release.TagName}.msi");
         string tempPath = filePath + ".tmp";
-        
+
         try
         {
             using HttpClient client = factory.CreateClient(HttpClients.SkEditor);
@@ -139,7 +141,7 @@ public class UpdateService(
             {
                 await downloadStream.CopyToAsync(fileStream);
             }
-        
+
             fileSystem.File.Move(tempPath, filePath, true);
             logs.Info($"Downloaded installer to {filePath}");
 
@@ -161,7 +163,7 @@ public class UpdateService(
                     LaunchInstaller(filePath);
                 }
             });
-            
+
             notifs.Show(notification);
         }
         catch
@@ -177,7 +179,7 @@ public class UpdateService(
                     // ignore
                 }
             }
-        
+
             throw;
         }
     }
@@ -189,5 +191,37 @@ public class UpdateService(
             FileName = filePath,
             UseShellExecute = true
         });
+    }
+    
+    private void CleanupTemp()
+    {
+        try
+        {
+            string tempFolder = fileSystem.Path.Combine(fileSystem.Path.GetTempPath(), "SkEditor");
+            if (!fileSystem.Directory.Exists(tempFolder))
+            {
+                return;
+            }
+
+            IEnumerable<string> filesToDelete = fileSystem.Directory.EnumerateFiles(tempFolder, "Installer-*.*")
+                .Where(f => f.EndsWith(".msi", StringComparison.OrdinalIgnoreCase)
+                            || f.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase));
+
+            foreach (string file in filesToDelete)
+            {
+                try
+                {
+                    fileSystem.File.Delete(file);
+                }
+                catch (Exception ex)
+                {
+                    logs.Error(ex, $"Failed to delete old installer file: {file}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Failed to clean up old installer files");
+        }
     }
 }
