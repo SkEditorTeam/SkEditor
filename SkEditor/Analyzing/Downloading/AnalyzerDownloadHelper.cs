@@ -3,13 +3,16 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using R3;
 using SkEditor.Analyzing.Downloading.Components;
 using SkEditor.Core.Common;
+using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
+using SkEditor.Core.Notifications;
 
 namespace SkEditor.Analyzing.Downloading;
 
@@ -22,14 +25,18 @@ public class AnalyzerDownloadHelper : IAnalyzerDownloadHelper
     private readonly IHttpClientFactory _factory;
     private readonly IFileSystem _fileSystem;
     private readonly IAnalyzer _analyzer;
+    private readonly ILogService _logs;
+    private readonly INotificationService _notifs;
 
     public AnalyzerDownloadHelper(IHttpClientFactory factory,
         IFileSystem fileSystem,
-        IAnalyzer analyzer, ILogService logs)
+        IAnalyzer analyzer, ILogService logs, INotificationService notifs)
     {
         _factory = factory;
         _fileSystem = fileSystem;
         _analyzer = analyzer;
+        _logs = logs;
+        _notifs = notifs;
         _downloadPath = Path.Combine(analyzer.BinDir);
         
         Components = [
@@ -77,7 +84,7 @@ public class AnalyzerDownloadHelper : IAnalyzerDownloadHelper
                 ProgressDescription.Value = new TranslatableString(TranslationKey.SettingsAnalyzerDownloading, component.Name);
             
                 DownloadInfo? info = await DownloadFileAsync(component, Progress, CancellationToken.None);
-                if (info is null) continue;
+                if (info is null) break;
 
                 string filePath = Path.Combine(_downloadPath, info.Name);
                 string dest = GetDestinationFolder(component.Folder);
@@ -127,11 +134,35 @@ public class AnalyzerDownloadHelper : IAnalyzerDownloadHelper
         try
         {
             using HttpClient client = _factory.CreateClient(HttpClients.SkEditor);
-            await using (Stream downloadStream = await client.GetStreamAsync(info.Url, ct))
-            await using (ProgressStream progressStream = new(downloadStream, progress))
-            await using (FileSystemStream fileStream = _fileSystem.File.Create(tempPath))
+            
+            byte[] hashBytes;
+            using (SHA256 sha256 = SHA256.Create())
             {
-                await progressStream.CopyToAsync(fileStream, ct);
+                await using (Stream downloadStream = await client.GetStreamAsync(info.Url, ct))
+                await using (ProgressStream progressStream = new(downloadStream, progress))
+                await using (FileSystemStream fileStream = _fileSystem.File.Create(tempPath))
+                await using (CryptoStream cryptoStream = new(fileStream, sha256, CryptoStreamMode.Write))
+                {
+                    await progressStream.CopyToAsync(cryptoStream, ct);
+                    await cryptoStream.FlushFinalBlockAsync(ct);
+                    hashBytes = sha256.Hash ?? [];
+                }   
+            }
+            
+            string calculatedHash = Convert.ToHexString(hashBytes);
+            if (!calculatedHash.IsHashMatching(info.Checksum))
+            {
+                _logs.Error($"Hash mismatch for {component.Name}. Expected: {info.Checksum}, Actual: {calculatedHash}");
+                
+                Notification hashMismatchNotification = Notification.Create(TranslationKey.AnalyzerComponentHashMismatchTitle)
+                    .WithMessage(TranslationKey.AnalyzerComponentHashMismatchMessage)
+                    .WithType(NotificationType.Error)
+                    .WithDuration(TimeSpan.FromSeconds(20));
+                
+                _notifs.Show(hashMismatchNotification);
+
+                _fileSystem.File.Delete(tempPath);
+                return null;
             }
 
             _fileSystem.File.Move(tempPath, filePath, true);
