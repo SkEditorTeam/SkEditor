@@ -55,6 +55,9 @@ public class ThemeService : IThemeService
                     await SetThemeAsync(theme);
                 }
             }, AwaitOperation.Switch);
+        
+        Application? currentApp = Application.Current;
+        currentApp?.PlatformSettings?.ColorValuesChanged += (_, _) => { UpdateAccentColor(currentApp); };
     }
 
     public Theme CurrentTheme { get; set; } = new();
@@ -217,7 +220,6 @@ public class ThemeService : IThemeService
         }));
 
         UpdateAccentColor(currentApp);
-        currentApp.PlatformSettings?.ColorValuesChanged += (_, _) => { UpdateAccentColor(currentApp); };
 
         UpdateFont();
 
