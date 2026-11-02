@@ -54,7 +54,10 @@ public class UpdateService(
 
             ReleaseInfo? targetRelease = releases?
                 .Where(r => includePreReleases || !r.IsPrerelease)
-                .Select(r => new ReleaseInfo(r, SemVersion.Parse(r.TagName, SemVersionStyles.Any)))
+                .Select(r => SemVersion.TryParse(r.TagName, SemVersionStyles.Any, out var v) 
+                    ? new ReleaseInfo(r, v) 
+                    : null)
+                .OfType<ReleaseInfo>()
                 .MaxBy(x => x.Version, SemVersion.PrecedenceComparer);
 
             bool newer = targetRelease?.Version.IsNewerThan(appInfo.Version) ?? false;
