@@ -506,5 +506,7 @@
   "UpdateAvailableDownloadButton": "Download",
   "UpdateAvailableNotNowButton": "Not now",
   "UpdateDownloadedTitle": "Update downloaded",
-  "UpdateDownloadedMessage": "The update has been downloaded. Click to close SkEditor and run the installer."
+  "UpdateDownloadedMessage": "The update has been downloaded. Click to close SkEditor and run the installer.",
+  "UpdateHashMismatchTitle": "Installer hash mismatch",
+  "UpdateHashMismatchMessage": "The downloaded installer has a hash mismatch. It may be corrupted or tampered with. Please try downloading it again."
 }

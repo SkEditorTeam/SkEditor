@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FluentIcons.Common;
@@ -54,8 +55,8 @@ public class UpdateService(
 
             ReleaseInfo? targetRelease = releases?
                 .Where(r => includePreReleases || !r.IsPrerelease)
-                .Select(r => SemVersion.TryParse(r.TagName, SemVersionStyles.Any, out var v) 
-                    ? new ReleaseInfo(r, v) 
+                .Select(r => SemVersion.TryParse(r.TagName, SemVersionStyles.Any, out var v)
+                    ? new ReleaseInfo(r, v)
                     : null)
                 .OfType<ReleaseInfo>()
                 .MaxBy(x => x.Version, SemVersion.PrecedenceComparer);
@@ -139,10 +140,35 @@ public class UpdateService(
         try
         {
             using HttpClient client = factory.CreateClient(HttpClients.SkEditor);
-            await using (Stream downloadStream = await client.GetStreamAsync(installerAsset.DownloadUrl))
-            await using (FileSystemStream fileStream = fileSystem.File.Create(tempPath))
+
+            byte[] hashBytes;
+            using (SHA256 sha256 = SHA256.Create())
             {
-                await downloadStream.CopyToAsync(fileStream);
+                await using (Stream downloadStream = await client.GetStreamAsync(installerAsset.DownloadUrl))
+                await using (FileSystemStream fileStream = fileSystem.File.Create(tempPath))
+                await using (CryptoStream cryptoStream = new(fileStream, sha256, CryptoStreamMode.Write))
+                {
+                    await downloadStream.CopyToAsync(cryptoStream);
+                    await cryptoStream.FlushFinalBlockAsync();
+                    hashBytes = sha256.Hash ?? [];
+                }
+            }
+
+            string installerHash = Convert.ToHexString(hashBytes);
+            if (!installerHash.IsHashMatching(installerAsset.Digest))
+            {
+                logs.Error(
+                    $"Installer hash mismatch for release {info.Version}. Expected: {installerAsset.Digest}, Actual: {installerHash}");
+                
+                Notification hashMismatchNotification = Notification.Create(TranslationKey.UpdateHashMismatchTitle)
+                    .WithMessage(TranslationKey.UpdateHashMismatchMessage)
+                    .WithType(NotificationType.Error)
+                    .WithDuration(TimeSpan.FromSeconds(20));
+                
+                notifs.Show(hashMismatchNotification);
+
+                fileSystem.File.Delete(tempPath);
+                return;
             }
 
             fileSystem.File.Move(tempPath, filePath, true);

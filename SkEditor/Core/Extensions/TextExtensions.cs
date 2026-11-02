@@ -26,6 +26,20 @@ public static class TextExtensions
         {
             return TranslatableString.FromRawString(text);
         }
+        
+        public bool IsHashMatching(string? expectedDigest)
+        {
+            if (string.IsNullOrWhiteSpace(expectedDigest))
+            {
+                return false;
+            }
+
+            string cleanExpected = expectedDigest.StartsWith("sha256:", StringComparison.OrdinalIgnoreCase)
+                ? expectedDigest["sha256:".Length..]
+                : expectedDigest;
+
+            return string.Equals(text, cleanExpected, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     extension(ReadOnlySpan<char> source)
