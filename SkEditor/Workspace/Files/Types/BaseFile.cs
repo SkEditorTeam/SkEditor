@@ -23,7 +23,25 @@ public abstract class BaseFile(string? path, string? name)
     ///     Path to the file on file system.
     ///     <remarks>Null if the file is not saved yet.</remarks>
     /// </summary>
-    public string? Path { get; set; } = path;
+    public string? Path 
+    {
+        get;
+        set
+        {
+            if (value == field)
+            {
+                return;
+            }
+
+            field = value;
+            PathChanged?.Invoke(this, EventArgs.Empty);
+        }
+    } = path;
+
+    /// <summary>
+    ///    Raised when the Path changes.
+    /// </summary>
+    public event EventHandler? PathChanged;
 
     /// <summary>
     ///     The last time the file was saved to disk, UTC.
