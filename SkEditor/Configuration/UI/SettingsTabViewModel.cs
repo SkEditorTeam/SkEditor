@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
@@ -123,8 +121,6 @@ public partial class SettingsTabViewModel : TabViewModelBase, IRecipient<Navigat
 
         Dispatcher.UIThread.InvokeAsync(() => { CurrentSection = section; }, DispatcherPriority.Background);
     }
-
-    public event Func<Task>? ClosingAsync;
 
     public void OnClosed()
     {

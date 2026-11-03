@@ -84,7 +84,6 @@ public class FileSaveTests
         Substitute.For<IRecentFileService>(),
         Substitute.For<INotificationService>(),
         Substitute.For<IDialogService>(),
-        Substitute.For<IFileFeatureService>(),
         Substitute.For<ILogService>()
     );
 }

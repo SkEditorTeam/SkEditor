@@ -10,8 +10,6 @@ using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
-using SkEditor.Editor.Features;
-using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Workspace.Files;
@@ -21,7 +19,6 @@ public class FileService(
     IRecentFileService recentFiles,
     INotificationService notifications,
     IDialogService dialogs,
-    IFileFeatureService features,
     ILogService logs)
     : IFileService
 {
