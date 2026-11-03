@@ -52,12 +52,6 @@ public class FileService(
         if (success)
         {
             fileTab.UpdateHeader();
-
-            if (fileTab is IFeatureTab featureTab)
-            {
-                features.UpdateFeatures(featureTab);
-            }
-        
             recentFiles.UpdateRecentItem(oldPath, path);
         }
         else

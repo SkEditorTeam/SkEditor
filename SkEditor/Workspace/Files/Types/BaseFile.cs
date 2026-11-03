@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Hashing;
 using System.Threading;
 using System.Threading.Tasks;
+using R3;
 
 namespace SkEditor.Workspace.Files.Types;
 
@@ -13,35 +14,13 @@ namespace SkEditor.Workspace.Files.Types;
 /// <param name="name">Name of the file.</param>
 public abstract class BaseFile(string? path, string? name)
 {
-    /// <summary>
-    ///     Name of the file.
-    ///     <remarks>Null if the file is not saved yet.</remarks>
-    /// </summary>
-    public string? Name { get; set; } = name;
+    private readonly Subject<string?> _pathChanged = new();
 
     /// <summary>
-    ///     Path to the file on file system.
-    ///     <remarks>Null if the file is not saved yet.</remarks>
+    ///     The hash of the file on disk, using xxHash3.
+    ///     <remarks>Gets updated only when the file is loaded or saved.</remarks>
     /// </summary>
-    public string? Path 
-    {
-        get;
-        set
-        {
-            if (value == field)
-            {
-                return;
-            }
-
-            field = value;
-            PathChanged?.Invoke(this, EventArgs.Empty);
-        }
-    } = path;
-
-    /// <summary>
-    ///    Raised when the Path changes.
-    /// </summary>
-    public event EventHandler? PathChanged;
+    public ulong? DiskHash { get; set; }
 
     /// <summary>
     ///     The last time the file was saved to disk, UTC.
@@ -56,10 +35,34 @@ public abstract class BaseFile(string? path, string? name)
     public long Length { get; set; }
 
     /// <summary>
-    ///     The hash of the file on disk, using xxHash3.
-    ///     <remarks>Gets updated only when the file is loaded or saved.</remarks>
+    ///     Name of the file.
+    ///     <remarks>Null if the file is not saved yet.</remarks>
     /// </summary>
-    public ulong? DiskHash { get; set; }
+    public string? Name { get; set; } = name;
+
+    /// <summary>
+    ///     Path to the file on file system.
+    ///     <remarks>Null if the file is not saved yet.</remarks>
+    /// </summary>
+    public string? Path
+    {
+        get;
+        set
+        {
+            if (value == field)
+            {
+                return;
+            }
+
+            field = value;
+            _pathChanged.OnNext(value);
+        }
+    } = path;
+
+    /// <summary>
+    ///     Raised when the Path changes.
+    /// </summary>
+    public Observable<string?> PathChanged => _pathChanged;
 
     /// <summary>
     ///     Updates the snapshot properties of the file (Length, LastSaveUtc, DiskHash) based on the provided stream.
@@ -79,14 +82,6 @@ public abstract class BaseFile(string? path, string? name)
     }
 
     /// <summary>
-    ///     Gets the last write time of the file on disk, UTC.
-    /// </summary>
-    protected virtual DateTime? GetLastWriteTimeUtc()
-    {
-        return null;
-    }
-
-    /// <summary>
     ///     Loads the file and returns a stream to read its contents.
     /// </summary>
     public abstract ValueTask<Stream> LoadAsync();
@@ -95,4 +90,12 @@ public abstract class BaseFile(string? path, string? name)
     ///     Saves the file from the provided stream.
     /// </summary>
     public abstract Task SaveAsync(Stream stream, CancellationToken token);
+
+    /// <summary>
+    ///     Gets the last write time of the file on disk, UTC.
+    /// </summary>
+    protected virtual DateTime? GetLastWriteTimeUtc()
+    {
+        return null;
+    }
 }

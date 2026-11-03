@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using AvaloniaEdit;
 using Microsoft.Extensions.DependencyInjection;
+using R3;
 using SkEditor.Configuration.Abstractions;
 using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Editor.Features;
 
 public class FileFeatureService : IFileFeatureService
 {
     private readonly Dictionary<IFeatureTab, TextEditor> _activeEditors = [];
+    private readonly Dictionary<IFeatureTab, IDisposable> _tabSubscriptions = [];
     private readonly Dictionary<IFeatureTab, List<IEditorFeature>> _attachedFeatures = [];
     private readonly IServiceProvider _serviceProvider;
 
@@ -35,6 +38,14 @@ public class FileFeatureService : IFileFeatureService
         foreach (IEditorFeature feature in features)
         {
             feature.Attach(tab);
+        }
+        
+        if (tab is IFileTab fileTab)
+        {
+            IDisposable sub = fileTab.File.PathChanged
+                .Subscribe(_ => UpdateFeatures(tab));
+            
+            _tabSubscriptions[tab] = sub;
         }
 
         if (!_activeEditors.TryGetValue(tab, out TextEditor? editor))
@@ -69,6 +80,11 @@ public class FileFeatureService : IFileFeatureService
 
         _attachedFeatures.Remove(tab);
         _activeEditors.Remove(tab);
+
+        if (_tabSubscriptions.Remove(tab, out IDisposable? sub))
+        {
+            sub.Dispose();
+        }
     }
 
     public void OnViewLoaded(IFeatureTab tab, TextEditor editor)

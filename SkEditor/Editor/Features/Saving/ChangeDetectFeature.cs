@@ -4,7 +4,6 @@ using System.IO.Abstractions;
 using System.IO.Hashing;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
 using SkEditor.Configuration.Configs;
@@ -12,8 +11,6 @@ using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
-using SkEditor.Core.Notifications;
-using SkEditor.Core.Notifications.Messages;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Tabs.Capabilities;
@@ -57,9 +54,7 @@ public class ChangeDetectFeature(AppSettings appSettings, IDialogService dialogs
             RecreateWatcher(fileTab);
         }
 
-        Observable.FromEventHandler(
-                h => fileTab.File.PathChanged += h,
-                h => fileTab.File.PathChanged -= h)
+        fileTab.File.PathChanged
             .Subscribe(_ => RecreateWatcher(fileTab))
             .AddTo(ref _disposables);
     }
