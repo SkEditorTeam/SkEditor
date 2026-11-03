@@ -226,6 +226,8 @@ public class ChangeDetectFeatureTests
         secondWatcher.EnableRaisingEvents.Should().BeTrue();
 
         firstWatcher.Received(1).Dispose();
+        sut.Detach(tab);
+        secondWatcher.Received(1).Dispose();
     }
     
     private sealed class WatcherMockFileSystem(IFileSystemWatcherFactory watcherFactory) : MockFileSystem
