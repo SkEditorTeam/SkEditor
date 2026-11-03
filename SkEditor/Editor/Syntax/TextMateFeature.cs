@@ -32,11 +32,22 @@ public class TextMateFeature(ISyntaxService syntax) : IEditorFeature
         {
             return;
         }
+        
+        fileTab.File.PathChanged
+            .Subscribe(_ => InitializeTextMateInstallation(editor, fileTab))
+            .AddTo(ref _disposables);
 
+        InitializeTextMateInstallation(editor, fileTab);
+    }
+
+    private void InitializeTextMateInstallation(TextEditor editor, IFileTab fileTab)
+    {
+        _installation?.Dispose();
+        _installation = null;
+        
         string extension = Path.GetExtension(fileTab.Path)?.ToLowerInvariant() ?? "";
 
         SkEditorRegistryOptions registryOptions = new(ThemeName.DarkPlus, syntax);
-        _installation = editor.InstallTextMate(registryOptions);
 
         string? scope = registryOptions.GetScopeByExtension(extension);
         if (string.IsNullOrEmpty(scope))
@@ -44,6 +55,7 @@ public class TextMateFeature(ISyntaxService syntax) : IEditorFeature
             return;
         }
 
+        _installation = editor.InstallTextMate(registryOptions);
         _installation.SetGrammar(scope);
 
         SyntaxPair? pair = syntax.GetPairByExtension(extension);
