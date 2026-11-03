@@ -24,7 +24,7 @@ public class AutoSaveFeature(AppSettings appSettings, IFileService files) : IEdi
             return false;
         }
 
-        return tab is ITextEditorTab and ISaveableTab and IClosableTab and IFileTab;
+        return tab is ITextEditorTab and IFileTab;
     }
 
     public void Attach(IFeatureTab tab)

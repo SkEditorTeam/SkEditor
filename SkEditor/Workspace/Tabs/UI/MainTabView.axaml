@@ -91,11 +91,17 @@
                         </TextBlock>
 
                         <Ellipse Grid.Column="2"
-                                 Classes.unsaved="{Binding !IsSaved}"
                                  Width="4" Height="4"
                                  Fill="{Binding $parent[ContentPresenter].Foreground}"
                                  VerticalAlignment="Center"
                                  RenderTransformOrigin="50%,50%">
+                            <Classes.unsaved>
+                                <MultiBinding>
+                                    <Binding Path="IsSaved" />
+                                    <Binding Path="!#Root.((vms:MainWindowViewModel)DataContext)?.AppSettings.IsAutoSaveEnabled" />
+                                </MultiBinding>
+                            </Classes.unsaved>
+                            
                             <Ellipse.Transitions>
                                 <Transitions>
                                     <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="CubicEaseOut" />

@@ -1,13 +1,11 @@
 ﻿using R3;
-using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Editor.Features.Saving;
 
-public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
+public class SaveIndicatorFeature : IEditorFeature
 {
-    private IFileTab? _fileTab;
     private ISaveStateTab? _saveStateTab;
     private ITextEditorTab? _textEditorTab;
     private DisposableBag _disposables;
@@ -19,25 +17,19 @@ public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
 
     public void Attach(IFeatureTab tab)
     {
-        if (tab is not (ITextEditorTab textEditorTab and ISaveStateTab saveStateTab and IFileTab fileTab))
+        if (tab is not (ITextEditorTab textEditorTab and ISaveStateTab saveStateTab and IFileTab))
         {
             return;
         }
 
         _textEditorTab = textEditorTab;
         _saveStateTab = saveStateTab;
-        _fileTab = fileTab;
         _disposables = default;
 
         _textEditorTab.Document.UndoStack
             .ObservePropertyChanged(x => x.IsOriginalFile)
             .Subscribe(_ =>
             {
-                if (appSettings.IsAutoSaveEnabled && _fileTab.Path is not null)
-                {
-                    return;
-                }
-
                 _saveStateTab.IsSaved = _textEditorTab.Document.UndoStack.IsOriginalFile;
             })
             .AddTo(ref _disposables);
@@ -48,6 +40,5 @@ public class SaveIndicatorFeature(AppSettings appSettings) : IEditorFeature
         _disposables.Dispose();
         _textEditorTab = null;
         _saveStateTab = null;
-        _fileTab = null;
     }
 }
