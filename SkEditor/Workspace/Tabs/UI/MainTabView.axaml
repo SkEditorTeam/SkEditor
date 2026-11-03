@@ -94,11 +94,15 @@
                                  Width="4" Height="4"
                                  Fill="{Binding $parent[ContentPresenter].Foreground}"
                                  VerticalAlignment="Center"
-                                 RenderTransformOrigin="50%,50%">
+                                 RenderTransformOrigin="50%,50%"
+                                 x:DataType="capabilities:IFileTab">
                             <Classes.unsaved>
-                                <MultiBinding>
-                                    <Binding Path="IsSaved" />
-                                    <Binding Path="!#Root.((vms:MainWindowViewModel)DataContext)?.AppSettings.IsAutoSaveEnabled" />
+                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                    <Binding Path="!IsSaved" />
+                                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                        <Binding Path="!#Root.((vms:MainWindowViewModel)DataContext)?.AppSettings.IsAutoSaveEnabled" />
+                                        <Binding Path="Path" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                    </MultiBinding>
                                 </MultiBinding>
                             </Classes.unsaved>
                             
