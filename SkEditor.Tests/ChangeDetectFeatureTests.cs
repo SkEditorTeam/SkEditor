@@ -215,13 +215,15 @@ public class ChangeDetectFeatureTests
         
         sut.Attach(tab);
 
-        firstWatcher.Path.Should().Be("/projects");
+        var expectedProjects = fileSystem.Path.GetDirectoryName("/projects/old.sk");
+        firstWatcher.Path.Should().Be(expectedProjects);
         firstWatcher.Filter.Should().Be("old.sk");
         firstWatcher.EnableRaisingEvents.Should().BeTrue();
 
         tab.File.Path = "/other/new.sk";
 
-        secondWatcher.Path.Should().Be("/other");
+        var expectedOther = fileSystem.Path.GetDirectoryName("/other/new.sk");
+        secondWatcher.Path.Should().Be(expectedOther);
         secondWatcher.Filter.Should().Be("new.sk");
         secondWatcher.EnableRaisingEvents.Should().BeTrue();
 
