@@ -4,6 +4,7 @@ using System.IO.Abstractions;
 using System.IO.Hashing;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using FluentIcons.Common;
 using R3;
 using SkEditor.Configuration.Configs;
@@ -11,6 +12,8 @@ using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
+using SkEditor.Core.Notifications;
+using SkEditor.Core.Notifications.Messages;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Files.Types;
 using SkEditor.Workspace.Tabs.Capabilities;
@@ -33,7 +36,7 @@ public class ChangeDetectFeature(AppSettings appSettings, IDialogService dialogs
     private readonly IFileSystem _fileSystem = fileSystem ?? DefaultFileSystem;
 
     private DisposableBag _disposables;
-    private FileSystemWatcher? _watcher;
+    private SerialDisposable? _watcherDisposable;
 
     public bool CanAttach(IFeatureTab tab)
     {
@@ -42,27 +45,28 @@ public class ChangeDetectFeature(AppSettings appSettings, IDialogService dialogs
 
     public void Attach(IFeatureTab tab)
     {
-        if (tab is not IFileTab fileTab || fileTab.Path is null)
+        if (tab is not IFileTab fileTab)
         {
             return;
         }
+        
+        _watcherDisposable = new SerialDisposable().AddTo(ref _disposables);
 
-        string path = fileTab.Path;
-        string? directory = _fileSystem.Path.GetDirectoryName(path);
-        if (directory is null)
+        if (fileTab.Path is not null)
         {
-            return;
+            RecreateWatcher(fileTab);
         }
 
-        _disposables.Dispose();
-        _disposables = default;
-        SetupFileWatcher(fileTab, path, directory);
+        Observable.FromEventHandler(
+                h => fileTab.File.PathChanged += h,
+                h => fileTab.File.PathChanged -= h)
+            .Subscribe(_ => RecreateWatcher(fileTab))
+            .AddTo(ref _disposables);
     }
 
     public void Detach(IFeatureTab tab)
     {
         _disposables.Dispose();
-        _watcher?.EnableRaisingEvents = false;
     }
 
     public async Task CheckChangesAsync(IFileTab fileTab, CancellationToken ct = default)
@@ -105,20 +109,40 @@ public class ChangeDetectFeature(AppSettings appSettings, IDialogService dialogs
         }
     }
 
+    private void RecreateWatcher(IFileTab fileTab)
+    {
+        string? path = fileTab.Path;
+        if (path is null)
+        {
+            _watcherDisposable?.Disposable = null;
+            return;
+        }
+
+        string? directory = _fileSystem.Path.GetDirectoryName(path);
+        if (directory is null)
+        {
+            _watcherDisposable?.Disposable = null;
+            return;
+        }
+
+        SetupFileWatcher(fileTab, path, directory);
+    }
+
     private void SetupFileWatcher(IFileTab fileTab, string path, string directory)
     {
-        _watcher ??= new FileSystemWatcher();
-        _watcher.Path = directory;
-        _watcher.Filter = _fileSystem.Path.GetFileName(path);
-        _watcher.EnableRaisingEvents = true;
+        IFileSystemWatcher watcher = _fileSystem.FileSystemWatcher.New();
+        watcher.Path = directory;
+        watcher.Filter = _fileSystem.Path.GetFileName(path);
+        watcher.EnableRaisingEvents = true;
 
-        _watcher
+        IDisposable sub = watcher
             .ChangedAsObservable().AsUnitObservable()
-            .Merge(_watcher.RenamedAsObservable().AsUnitObservable())
+            .Merge(watcher.RenamedAsObservable().AsUnitObservable())
             .Debounce(TimeSpan.FromMilliseconds(250))
             .ObserveOnUIThreadDispatcher()
-            .SubscribeAwait(async (_, ct) => { await CheckChangesAsync(fileTab, ct); })
-            .AddTo(ref _disposables);
+            .SubscribeAwait(async (_, ct) => { await CheckChangesAsync(fileTab, ct); });
+        
+        _watcherDisposable?.Disposable = Disposable.Combine(watcher, sub);
     }
 
     private async Task HandleChanged(IFileTab fileTab)

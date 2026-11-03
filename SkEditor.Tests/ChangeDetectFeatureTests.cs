@@ -201,6 +201,42 @@ public class ChangeDetectFeatureTests
         await dialogs.DidNotReceive()
             .ShowDialogAsync(Arg.Any<Dialog>());
     }
+    
+    [Fact]
+    public async Task CheckChanges_AfterFilePathChanged_TracksNewPath()
+    {
+        var firstWatcher = Substitute.For<IFileSystemWatcher>();
+        var secondWatcher = Substitute.For<IFileSystemWatcher>();
+
+        var watcherFactory = Substitute.For<IFileSystemWatcherFactory>();
+        watcherFactory.New().Returns(firstWatcher, secondWatcher);
+        
+        var fileSystem = new WatcherMockFileSystem(watcherFactory);
+        fileSystem.AddDirectory(@"C:\projects");
+        fileSystem.AddDirectory(@"C:\other");
+
+        ChangeDetectFeature sut = CreateSut(fileSystem: fileSystem);
+        FileTabViewModel tab = CreateDummyTab(@"C:\projects\old.sk", "content", fileSystem: fileSystem);
+        
+        sut.Attach(tab);
+
+        firstWatcher.Path.Should().Be(@"C:\projects");
+        firstWatcher.Filter.Should().Be("old.sk");
+        firstWatcher.EnableRaisingEvents.Should().BeTrue();
+
+        tab.File.Path = @"C:\other\new.sk"; 
+
+        secondWatcher.Path.Should().Be(@"C:\other");
+        secondWatcher.Filter.Should().Be("new.sk");
+        secondWatcher.EnableRaisingEvents.Should().BeTrue();
+
+        firstWatcher.Received(1).Dispose();
+    }
+    
+    private sealed class WatcherMockFileSystem(IFileSystemWatcherFactory watcherFactory) : MockFileSystem
+    {
+        public override IFileSystemWatcherFactory FileSystemWatcher => watcherFactory;
+    }
 
     private static FileTabViewModel CreateDummyTab(
         string path,
