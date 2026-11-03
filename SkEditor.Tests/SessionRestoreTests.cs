@@ -162,7 +162,7 @@ public class SessionRestoreTests
         SessionStateFile mockStateFile = new()
         {
             IsSaved = true,
-            Path = @"C:\projects\saved.sk",
+            Path = "/projects/saved.sk",
             Content = null,
             Header = "saved.sk",
             CaretOffset = 42,
@@ -172,14 +172,14 @@ public class SessionRestoreTests
         byte[] bytes = MemoryPackSerializer.Serialize(mockState);
 
         fileSystem.AddFile(SessionRestoreService.SessionFilePath, new MockFileData(bytes));
-        fileSystem.AddFile(@"C:\projects\saved.sk", new MockFileData("dummy content"));
+        fileSystem.AddFile("/projects/saved.sk", new MockFileData("dummy content"));
 
         SessionRestoreService sessionRestore =
             CreateSut(fileTabFactory: fileTabFactory, files: files, tabs: tabs, fileSystem: fileSystem);
 
         await sessionRestore.RecoverSessionStateAsync();
 
-        fileTabFactory.Received(1).CreateFromFile(Arg.Is<BaseFile>(f => f.Path == @"C:\projects\saved.sk"));
+        fileTabFactory.Received(1).CreateFromFile(Arg.Is<BaseFile>(f => f.Path == "/projects/saved.sk"));
         tabs.Received().OpenTab(dummyTab, Arg.Any<bool>());
         await files.Received(1).LoadAndReadFileAsync(dummyTab);
 
@@ -194,7 +194,7 @@ public class SessionRestoreTests
         IProjectService projects = Substitute.For<IProjectService>();
         ISidebarService sidebar = Substitute.For<ISidebarService>();
         
-        FileTabViewModel savedTab = CreateDummyTab("saved.sk", new LocalFile(@"C:\projects\saved.sk", "saved.sk"));
+        FileTabViewModel savedTab = CreateDummyTab("saved.sk", new LocalFile("/projects/saved.sk", "saved.sk"));
         savedTab.IsSaved = true;
         savedTab.Document.Text = "Saved";
         savedTab.CaretOffset = 15;
@@ -208,7 +208,7 @@ public class SessionRestoreTests
         tabs.AllTabs.Returns([savedTab, unsavedTab]);
         tabs.SelectedTab.Returns(savedTab);
 
-        projects.CurrentProjectPath.Returns(@"C:\projects\");
+        projects.CurrentProjectPath.Returns("/projects/");
         sidebar.SelectedPanelName.Returns("Explorer");
 
         MockFileSystem fileSystem = new();
@@ -226,12 +226,12 @@ public class SessionRestoreTests
         savedState.Should().NotBeNull();
         savedState.Files.Should().HaveCount(2);
         savedState.SelectedTabHeader.Should().Be("saved.sk");
-        savedState.OpenFolderPath.Should().Be(@"C:\projects\");
-        savedState.OpenedSidebarPanel.Should().Be(@"Explorer");
+        savedState.OpenFolderPath.Should().Be("/projects/");
+        savedState.OpenedSidebarPanel.Should().Be("Explorer");
 
         SessionStateFile savedFile = savedState.Files[0];
         savedFile.IsSaved.Should().BeTrue();
-        savedFile.Path.Should().Be(@"C:\projects\saved.sk");
+        savedFile.Path.Should().Be("/projects/saved.sk");
         savedFile.Content.Should().BeNull();
         savedFile.CaretOffset.Should().Be(15);
         savedFile.ScrollOffset.Should().Be(new Vector(0, 50));

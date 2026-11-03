@@ -27,17 +27,17 @@ public class CrashServiceTests
         ITabService tabs = Substitute.For<ITabService>();
         MockFileSystem fileSystem = new();
 
-        FileTabViewModel savedLocalTab = CreateDummyTab("saved.sk", new LocalFile(@"C:\projects\saved.sk", "saved.sk"));
+        FileTabViewModel savedLocalTab = CreateDummyTab("saved.sk", new LocalFile("/projects/saved.sk", "saved.sk"));
         savedLocalTab.IsSaved = true;
         savedLocalTab.Document.Text = "Saved content";
 
         FileTabViewModel unsavedLocalTab =
-            CreateDummyTab("unsaved.sk", new LocalFile(@"C:\projects\unsaved.sk", "unsaved.sk"));
+            CreateDummyTab("unsaved.sk", new LocalFile("/projects/unsaved.sk", "unsaved.sk"));
         unsavedLocalTab.IsSaved = false;
         unsavedLocalTab.Document.Text = "Unsaved content";
 
         FileTabViewModel remoteTab =
-            CreateDummyTab("remote.sk", new SftpFile(@"/home/user/remote.sk", "remote.sk", null!, null!));
+            CreateDummyTab("remote.sk", new SftpFile("/home/user/remote.sk", "remote.sk", null!, null!));
         remoteTab.IsSaved = true;
         remoteTab.Document.Text = "Remote content";
 
@@ -130,11 +130,11 @@ public class CrashServiceTests
         MockFileSystem fileSystem = new();
         fileSystem.AddDirectory(AppPaths.LocalData);
 
-        fileSystem.AddFile(@"C:\projects\saved.sk", new MockFileData("saved on disk"));
-        CrashStateFile savedLocal = new() { IsSaved = true, Path = @"C:\projects\saved.sk", Header = "saved.sk" };
+        fileSystem.AddFile("/projects/saved.sk", new MockFileData("saved on disk"));
+        CrashStateFile savedLocal = new() { IsSaved = true, Path = "/projects/saved.sk", Header = "saved.sk" };
 
         CrashStateFile unsavedLocal = new()
-            { IsSaved = false, Path = @"C:\projects\unsaved.sk", Header = "unsaved.sk", Content = "recovered text" };
+            { IsSaved = false, Path = "/projects/unsaved.sk", Header = "unsaved.sk", Content = "recovered text" };
 
         byte[] bytes = MemoryPackSerializer.Serialize(new CrashState([savedLocal, unsavedLocal]));
         fileSystem.AddFile(CrashService.CrashRecoveryFilePath, new MockFileData(bytes));
@@ -142,7 +142,7 @@ public class CrashServiceTests
         FileTabViewModel dummySavedTab = CreateDummyTab("saved.sk");
         FileTabViewModel dummyUnsavedTab = CreateDummyTab("unsaved.sk");
 
-        fileTabFactory.CreateFromFile(Arg.Is<BaseFile>(f => f.Path == @"C:\projects\saved.sk")).Returns(dummySavedTab);
+        fileTabFactory.CreateFromFile(Arg.Is<BaseFile>(f => f.Path == "/projects/saved.sk")).Returns(dummySavedTab);
         fileTabFactory.CreateFromCrash(Arg.Is<CrashStateFile>(f => f.Header == "unsaved.sk")).Returns(dummyUnsavedTab);
 
         CrashService crashService =

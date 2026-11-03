@@ -6,21 +6,16 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
-using SkEditor.Core.Logging;
-using SkEditor.Core.Notifications;
-using SkEditor.Core.System;
-using SkEditor.Editor.Features;
 using SkEditor.Editor.Features.Saving;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Editor.UI.Tabs;
-using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
 
 namespace SkEditor.Tests;
 
 public class ChangeDetectFeatureTests
 {
-    private const string TestFilePath = @"C:\projects\script.sk";
+    private const string TestFilePath = "/projects/script.sk";
 
     [Fact]
     public void CanAttach_WhenTextEditorTabWithLocalFile_ReturnsTrue()
@@ -203,7 +198,7 @@ public class ChangeDetectFeatureTests
     }
     
     [Fact]
-    public async Task CheckChanges_AfterFilePathChanged_TracksNewPath()
+    public void CheckChanges_AfterFilePathChanged_TracksNewPath()
     {
         var firstWatcher = Substitute.For<IFileSystemWatcher>();
         var secondWatcher = Substitute.For<IFileSystemWatcher>();
@@ -212,21 +207,21 @@ public class ChangeDetectFeatureTests
         watcherFactory.New().Returns(firstWatcher, secondWatcher);
         
         var fileSystem = new WatcherMockFileSystem(watcherFactory);
-        fileSystem.AddDirectory(@"C:\projects");
-        fileSystem.AddDirectory(@"C:\other");
+        fileSystem.AddDirectory("/projects");
+        fileSystem.AddDirectory("/other");
 
         ChangeDetectFeature sut = CreateSut(fileSystem: fileSystem);
-        FileTabViewModel tab = CreateDummyTab(@"C:\projects\old.sk", "content", fileSystem: fileSystem);
+        FileTabViewModel tab = CreateDummyTab("/projects/old.sk", "content", fileSystem: fileSystem);
         
         sut.Attach(tab);
 
-        firstWatcher.Path.Should().Be(@"C:\projects");
+        firstWatcher.Path.Should().Be("/projects");
         firstWatcher.Filter.Should().Be("old.sk");
         firstWatcher.EnableRaisingEvents.Should().BeTrue();
 
-        tab.File.Path = @"C:\other\new.sk"; 
+        tab.File.Path = "/other/new.sk";
 
-        secondWatcher.Path.Should().Be(@"C:\other");
+        secondWatcher.Path.Should().Be("/other");
         secondWatcher.Filter.Should().Be("new.sk");
         secondWatcher.EnableRaisingEvents.Should().BeTrue();
 
