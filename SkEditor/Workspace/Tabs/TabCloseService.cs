@@ -41,6 +41,7 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IFileSer
             {
                 ITab tab = tabsToClose.First(t => t is ISaveableTab { IsSaved: false });
                 await tabs.CloseTabAsync(tab);
+                tabsToClose.Remove(tab);
 
                 if (tabs.AllTabs.Contains(tab))
                 {
