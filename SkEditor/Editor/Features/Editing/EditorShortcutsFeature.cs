@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
 using CommunityToolkit.Mvvm.Input;
+using SkEditor.Editor.Commands;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Layout.Menu;
 
@@ -51,6 +52,7 @@ public class EditorShortcutsFeature : IEditorFeature
             { new KeyGesture(Key.A, _ctrlMod), FromCommand(ApplicationCommands.SelectAll) },
             { new KeyGesture(Key.F, _ctrlMod), FromCommand(ApplicationCommands.Find) },
             { new KeyGesture(Key.H, _ctrlMod), FromCommand(ApplicationCommands.Replace) },
+            { new KeyGesture(Key.D, _ctrlMod), () => textEditorTab.RequestEditorCommand(EditorCommandType.Duplicate) },
             { new KeyGesture(Key.Back, _ctrlMod), () => TextEditorUtilities.DeletePreviousWord(editor) }
         };
 

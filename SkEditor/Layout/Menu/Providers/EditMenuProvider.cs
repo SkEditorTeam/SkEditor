@@ -46,7 +46,7 @@ public class EditMenuProvider(IWindowDialogService windowDialogs, ITabService ta
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderDuplicate, Symbol.CopySelect)
             .WithCommand(() => RequestAction(EditorCommandType.Duplicate))
-            .WithInputGesture("Ctrl+D")
+            .WithInputGesture("Ctrl+D", false)
             .AddTo(edit);
 
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderComment, Symbol.Comment)
