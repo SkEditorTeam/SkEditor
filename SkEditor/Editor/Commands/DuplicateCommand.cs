@@ -15,10 +15,18 @@ public class DuplicateCommand : IEditorCommandHandler
 
         if (editor.SelectionLength == 0)
         {
-            DocumentLine caretLine = document.GetLineByNumber(textArea.Caret.Line);
+            int targetColumn = textArea.Caret.Column;
+            int targetLine = textArea.Caret.Line;
+
+            DocumentLine caretLine = document.GetLineByNumber(targetLine);
             string lineText = document.GetText(caretLine.Offset, caretLine.Length);
-            document.Insert(caretLine.EndOffset, Environment.NewLine + lineText);
+            string newLine = TextUtilities.GetNewLineFromDocument(document, targetLine);
+
+            document.Insert(caretLine.EndOffset, newLine + lineText);
+            
+            textArea.Caret.Location = new TextLocation(targetLine + 1, targetColumn);
             textArea.Caret.BringCaretToView();
+            
             return;
         }
 
@@ -31,10 +39,11 @@ public class DuplicateCommand : IEditorCommandHandler
 
         int usedOffset = Math.Max(startOffset, endOffset);
 
-        document.Insert(usedOffset, $"{Environment.NewLine}{selectedText}");
+        document.Insert(usedOffset, selectedText);
 
-        int newCaretOffset = usedOffset + Environment.NewLine.Length + selectedText.Length;
-        textArea.Caret.Offset = newCaretOffset;
+        int caretOffset = usedOffset + selectedText.Length;
+        textArea.Caret.Offset = caretOffset;
         textArea.Caret.BringCaretToView();
+        editor.Select(caretOffset - selectedText.Length, selectedText.Length);
     }
 }
