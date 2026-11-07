@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using AvaloniaEdit;
+using AvaloniaEdit.Editing;
 using CommunityToolkit.Mvvm.Input;
 using SkEditor.Editor.Commands;
 using SkEditor.Editor.Tabs.Capabilities;
@@ -41,6 +42,8 @@ public class EditorShortcutsFeature : IEditorFeature
         _tab = textEditorTab;
         _editor = editor;
         _currentKeyBindings = [];
+        
+        RemoveDefaultCommands(editor.TextArea, AvaloniaEditCommands.DeleteLine, AvaloniaEditCommands.IndentSelection, AvaloniaEditCommands.ToggleOverstrike);
 
         _shortcuts = new Dictionary<KeyGesture, Action>
         {
@@ -166,6 +169,21 @@ public class EditorShortcutsFeature : IEditorFeature
 
         _pendingChordPrefix = exactGesture;
         e.Handled = true;
+    }
+    
+    private static void RemoveDefaultCommands(TextArea textArea, params ICommand[] commands)
+    {
+        foreach (var handler in textArea.DefaultInputHandler.NestedInputHandlers.OfType<TextAreaInputHandler>())
+        {
+            foreach (var command in commands)
+            {
+                var binding = handler.CommandBindings.FirstOrDefault(b => b.Command == command);
+                if (binding != null)
+                {
+                    handler.CommandBindings.Remove(binding);
+                }
+            }
+        }
     }
 
     private bool CheckSelectionCaretMovement(KeyEventArgs e)
