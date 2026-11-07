@@ -14,8 +14,8 @@ public interface IAnalyzerProcessBuilder
     /// <param name="javaPath">The path to the JRE executable file.</param>
     /// <param name="analyzerPath">The path to the Analyzer JAR file.</param>
     /// <param name="aotPath">The path to the AOT cache file.</param>
+    /// <param name="libraryPaths">The paths to the libraries to include in the classpath.</param>
     /// <param name="isGeneratingAot"> Whether the process is generating AOT cache or just using it.</param>
-    /// <returns></returns>
-    ProcessStartInfo BuildProcessStartInfo(string workingDir, string javaPath, string analyzerPath, string? aotPath,
+    ProcessStartInfo BuildProcessStartInfo(string workingDir, string javaPath, string analyzerPath, string? aotPath, string[] libraryPaths,
         bool isGeneratingAot = false);
 }

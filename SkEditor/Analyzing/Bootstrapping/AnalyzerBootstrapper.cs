@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
@@ -11,12 +12,12 @@ namespace SkEditor.Analyzing.Bootstrapping;
 
 public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
 {
-    public async Task<bool> EnsureLibrariesExtractedAsync(string analyzerJarPath, string workingDir,
+    public async Task<string[]?> EnsureLibrariesExtractedAsync(string analyzerJarPath, string workingDir,
         CancellationToken ct = default)
     {
         if (!File.Exists(analyzerJarPath))
         {
-            return false;
+            return null;
         }
 
         try
@@ -27,13 +28,14 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
             if (listEntry == null)
             {
                 logs.Warning("META-INF/libraries.list missing in SkAnalyzer.jar!", LogSource.Analyzer);
-                return false;
+                return null;
             }
 
             await using Stream listStream = await listEntry.OpenAsync(ct);
             using StreamReader reader = new(listStream, Encoding.UTF8);
 
             string librariesFolder = Path.Combine(workingDir, "libraries");
+            HashSet<string> validPaths = new(StringComparer.OrdinalIgnoreCase);
 
             while (await reader.ReadLineAsync(ct) is { } line)
             {
@@ -51,6 +53,7 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
                 string expectedHashHex = parts[0];
                 string relPath = parts[2];
                 string destinationPath = Path.Combine(librariesFolder, relPath);
+                validPaths.Add(Path.GetFullPath(destinationPath));
 
                 string fullLibsFolder = Path.GetFullPath(librariesFolder);
                 if (!fullLibsFolder.EndsWith(Path.DirectorySeparatorChar))
@@ -80,13 +83,40 @@ public class AnalyzerBootstrapper(ILogService logs) : IAnalyzerBootstrapper
                 Directory.CreateDirectory(Path.GetDirectoryName(destinationPath)!);
                 await resourceEntry.ExtractToFileAsync(destinationPath, true, ct);
             }
+            
+            CleanUpOldJars(librariesFolder, validPaths);
 
-            return true;
+            return [.. validPaths];
         }
         catch (Exception ex)
         {
             logs.Error(ex, "Failed to extract libraries from SkAnalyzer.jar", LogSource.Analyzer);
-            return false;
+            return null;
+        }
+    }
+
+    private void CleanUpOldJars(string librariesFolder, HashSet<string> validPaths)
+    {
+        if (!Directory.Exists(librariesFolder))
+        {
+            return;
+        }
+
+        foreach (string file in Directory.GetFiles(librariesFolder, "*.jar", SearchOption.AllDirectories))
+        {
+            if (validPaths.Contains(Path.GetFullPath(file)))
+            {
+                continue;
+            }
+
+            try
+            {
+                File.Delete(file);
+            }
+            catch (Exception ex)
+            {
+                logs.Error(ex, $"Could not delete invalid library file '{file}'", LogSource.Analyzer);
+            }
         }
     }
 

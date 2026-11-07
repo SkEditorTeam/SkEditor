@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
@@ -57,11 +58,18 @@ public class Analyzer(
 
         messenger.Send(new AnalyzerUnloadedMessage());
 
-        await bootstrapper.EnsureLibrariesExtractedAsync(analyzerPath, WorkingDir);
+        string[]? libraryPaths = await bootstrapper.EnsureLibrariesExtractedAsync(analyzerPath, WorkingDir);
+        
+        if (libraryPaths is null || libraryPaths.Length == 0)
+        {
+            logs.Error("Failed to extract libraries for SkAnalyzer.", LogSource.Analyzer);
+            messenger.Send(new AnalyzerFailedToLoadMessage());
+            return;
+        }
 
         if (!File.Exists(_aotPath))
         {
-            await aotManager.GenerateAotCacheAsync(WorkingDir, javaPath, analyzerPath, _aotPath);
+            await aotManager.GenerateAotCacheAsync(WorkingDir, javaPath, analyzerPath, _aotPath, libraryPaths);
         }
 
         UnsubscribeEvents();
@@ -71,7 +79,7 @@ public class Analyzer(
 
         try
         {
-            ProcessStartInfo startInfo = processBuilder.BuildProcessStartInfo(WorkingDir, javaPath, analyzerPath, _aotPath);
+            ProcessStartInfo startInfo = processBuilder.BuildProcessStartInfo(WorkingDir, javaPath, analyzerPath, _aotPath, libraryPaths);
             processRunner.Start(startInfo);
         }
         catch (Exception ex)

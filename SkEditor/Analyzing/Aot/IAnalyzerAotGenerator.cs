@@ -15,8 +15,9 @@ public interface IAnalyzerAotGenerator
     /// <param name="javaPath">The path to the JRE executable file.</param>
     /// <param name="analyzerJarPath">The path to the Analyzer JAR file.</param>
     /// <param name="aotPath">The path to the AOT cache file.</param>
+    /// <param name="libraryPaths">The paths to the libraries to include in the classpath.</param>
     /// <param name="ct">A cancellation token to cancel the operation.</param>
-    Task GenerateAotCacheAsync(string workingDir, string javaPath, string analyzerJarPath, string aotPath,
+    Task GenerateAotCacheAsync(string workingDir, string javaPath, string analyzerJarPath, string aotPath, string[] libraryPaths,
         CancellationToken ct = default);
 
     /// <summary>

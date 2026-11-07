@@ -10,7 +10,7 @@ namespace SkEditor.Analyzing.Processes;
 public class AnalyzerProcessBuilder : IAnalyzerProcessBuilder
 {
     public ProcessStartInfo BuildProcessStartInfo(string workingDir, string javaPath, string analyzerPath,
-        string? aotPath,
+        string? aotPath, string[] libraryPaths,
         bool isGeneratingAot = false)
     {
         ProcessStartInfo startInfo = new()
@@ -48,10 +48,7 @@ public class AnalyzerProcessBuilder : IAnalyzerProcessBuilder
 
         if (Directory.Exists(libsDir))
         {
-            string[] jarFiles = Directory.GetFiles(libsDir, "*.jar", SearchOption.AllDirectories);
-            Array.Sort(jarFiles);
-
-            IEnumerable<string> relativeJars = jarFiles.Select(p => Path.GetRelativePath(workingDir, p));
+            IEnumerable<string> relativeJars = libraryPaths.Select(p => Path.GetRelativePath(workingDir, p));
             string relativeAnalyzerPath = Path.GetRelativePath(workingDir, analyzerPath);
 
             string separator = Path.PathSeparator.ToString();
