@@ -66,7 +66,11 @@ public class EditorShortcutsFeature : IEditorFeature
 
         foreach ((KeyGesture gesture, Action action) in _shortcuts)
         {
-            KeyBinding binding = new() { Gesture = gesture, Command = new RelayCommand(action) };
+            KeyBinding binding = new()
+            {
+                Gesture = gesture,
+                Command = new RelayCommand(action, () => editor.TextArea.IsFocused) 
+            };
             _currentKeyBindings.Add(binding);
             editor.TextArea.KeyBindings.Add(binding);
         }
@@ -102,7 +106,7 @@ public class EditorShortcutsFeature : IEditorFeature
 
     private void OnEditorPreviewKeyDown(object? sender, KeyEventArgs e)
     {
-        if (_editor == null || _tab == null)
+        if (_editor == null || _tab == null || !_editor.TextArea.IsFocused)
         {
             return;
         }
