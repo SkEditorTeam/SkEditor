@@ -191,8 +191,10 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     }
     
     [RelayCommand]
-    private void OpenInExplorer(IFileTab fileTab)
+    private void OpenInExplorer(ITab tab)
     {
+        if (tab is not IFileTab fileTab) return;
+        
         if (fileTab.Path is not null)
         {
             _links.OpenFolderWithFileSelection(fileTab.Path);
@@ -200,14 +202,18 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     }
 
     [RelayCommand]
-    private async Task CopyName(IFileTab fileTab)
+    private async Task CopyName(ITab tab)
     {
-        await _clipboard.CopyTextAsync(fileTab.Header.Value);
+        if (tab is not IFileTab) return;
+        
+        await _clipboard.CopyTextAsync(tab.Header.Value);
     }
 
     [RelayCommand]
-    private async Task CopyPath(IFileTab fileTab)
+    private async Task CopyPath(ITab tab)
     {
+        if (tab is not IFileTab fileTab) return;
+        
         if (fileTab.Path is not null)
         {
             string pathToCopy = OperatingSystem.IsWindows() && AppSettings.IsExplorerForwardSlashesCopyEnabled
