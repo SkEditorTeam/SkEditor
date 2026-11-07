@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentIcons.Common;
 using MemoryPack;
-using Microsoft.Win32.SafeHandles;
 using SkEditor.Core.Common;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
@@ -18,6 +17,7 @@ using SkEditor.Editor.UI.Tabs;
 using SkEditor.Windowing.Errors.Models;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Session;
 using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
 
@@ -29,6 +29,7 @@ public class CrashService(
     ILogService logs,
     IFileTabFactory fileTabFactory,
     IFileService files,
+    ISessionRestoreService sessionRestore,
     IDialogService dialogs) : ICrashService
 {
     public static readonly string CrashRecoveryFilePath = Path.Combine(AppPaths.LocalData, "crash_recovery.bin");
@@ -93,12 +94,14 @@ public class CrashService(
         {
             fileSystem.File.Delete(CrashRecoveryFilePath);
             logs.Error(e, "Restoring pre-crash state failed");
+            await sessionRestore.RecoverSessionStateAsync();
             return;
         }
 
         if (state is null || state.Files.Length == 0)
         {
             fileSystem.File.Delete(CrashRecoveryFilePath);
+            await sessionRestore.RecoverSessionStateAsync();
             return;
         }
         
@@ -122,6 +125,8 @@ public class CrashService(
         if (result != DialogResult.Yes)
         {
             fileSystem.File.Delete(CrashRecoveryFilePath);
+
+            await sessionRestore.RecoverSessionStateAsync();
             return;
         }
 

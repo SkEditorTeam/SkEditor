@@ -90,7 +90,12 @@ public class StartupService(
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             windowStateService.RecoverMainWindowState(mainWindow);
-            await sessionRestore.RecoverSessionStateAsync();
+            bool hasCrash = File.Exists(CrashService.CrashRecoveryFilePath);
+
+            if (!hasCrash)
+            {
+                await sessionRestore.RecoverSessionStateAsync();
+            }
             
             desktop.MainWindow = mainWindow;
             mainWindow.ApplyTemplate();

@@ -85,13 +85,19 @@ public class WindowErrorService(IConfigService configs, ICrashService crashes, I
             Environment.Exit(1);
         }
     }
-    
+
     private static bool ShouldAttemptRestart()
     {
-        bool alreadyCrashed = Environment.GetCommandLineArgs().Any(arg => arg.Equals("--crash", StringComparison.OrdinalIgnoreCase));
-        TimeSpan uptime = DateTime.Now - Process.GetCurrentProcess().StartTime;
+#if DEBUG
+        return false;
+#else
         
+        bool alreadyCrashed = Environment.GetCommandLineArgs()
+            .Any(arg => arg.Equals("--crash", StringComparison.OrdinalIgnoreCase));
+        TimeSpan uptime = DateTime.Now - Process.GetCurrentProcess().StartTime;
+
         return !alreadyCrashed || uptime >= TimeSpan.FromSeconds(10);
+#endif
     }
 
     public async Task CheckForErrors(IClassicDesktopStyleApplicationLifetime desktop, SplashScreen? splashScreen,

@@ -13,6 +13,7 @@ using SkEditor.Windowing.Errors;
 using SkEditor.Windowing.Errors.Models;
 using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Files.Types;
+using SkEditor.Workspace.Session;
 using SkEditor.Workspace.Tabs;
 using AppSettings = SkEditor.Configuration.Configs.AppSettings;
 using ExperimentsConfig = SkEditor.Configuration.Configs.ExperimentsConfig;
@@ -89,13 +90,15 @@ public class CrashServiceTests
 
         ILogService logs = Substitute.For<ILogService>();
         IDialogService dialogs = Substitute.For<IDialogService>();
+        ISessionRestoreService sessionRestore = Substitute.For<ISessionRestoreService>();
 
-        CrashService crashService = CreateSut(fileSystem, logs: logs, dialogs: dialogs);
+        CrashService crashService = CreateSut(fileSystem, logs: logs, dialogs: dialogs, sessionRestore: sessionRestore);
 
         await crashService.CheckForCrashes();
 
         fileSystem.FileExists(CrashService.CrashRecoveryFilePath).Should().BeFalse();
         logs.Received().Error(Arg.Any<Exception>(), "Restoring pre-crash state failed");
+        await sessionRestore.Received().RecoverSessionStateAsync();
         await dialogs.DidNotReceive().ShowDialogAsync(Arg.Any<Dialog>());
     }
 
@@ -193,7 +196,8 @@ public class CrashServiceTests
         ILogService? logs = null,
         IFileTabFactory? fileTabFactory = null,
         IFileService? files = null,
-        IDialogService? dialogs = null)
+        IDialogService? dialogs = null,
+        ISessionRestoreService? sessionRestore = null)
     {
         return new CrashService(
             fileSystem ?? new MockFileSystem(),
@@ -201,6 +205,7 @@ public class CrashServiceTests
             logs ?? Substitute.For<ILogService>(),
             fileTabFactory ?? Substitute.For<IFileTabFactory>(),
             files ?? Substitute.For<IFileService>(),
+            sessionRestore ?? Substitute.For<ISessionRestoreService>(),
             dialogs ?? Substitute.For<IDialogService>()
         );
     }
