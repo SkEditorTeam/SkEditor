@@ -8,12 +8,12 @@ using SkEditor.Analyzing.Downloading;
 using SkEditor.Configuration.Configs;
 using SkEditor.Configuration.Models;
 using SkEditor.Configuration.Models.Types;
-using SkEditor.Core.Common;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Core.System;
+using SkEditor.Workspace.Files;
 using ExperimentsProperty = SkEditor.Configuration.Configs.ExperimentsConfig.ExperimentsConfigProperty;
 
 namespace SkEditor.Configuration.Providers.Sections;
@@ -24,6 +24,7 @@ public class AnalyzerSectionProvider(
     IAnalyzer analyzer,
     IAnalyzerDownloadHelper downloader,
     INotificationService notifs,
+    IFilePickerService filePicker,
     ILogService logs) : ISettingsSectionProvider
 {
     public string ParentId => "Editor";
@@ -136,6 +137,14 @@ public class AnalyzerSectionProvider(
             .WithIcon(Symbol.Wrench)
             .WithChildren(
                 ActionSetting
+                    .Create(TranslationKey.SettingsAnalyzerAddPluginTitle)
+                    .WithDescription(TranslationKey.SettingsAnalyzerAddPluginDescription)
+                    .WithAction(TranslationKey.ButtonAdd, async () =>
+                    {
+                        await AddPlugin(pluginsDir);
+                    }),
+                
+                ActionSetting
                     .Create(TranslationKey.SettingsAnalyzerPluginsFolder)
                     .WithAction(TranslationKey.ButtonOpenFolder, () =>
                     {
@@ -202,5 +211,54 @@ public class AnalyzerSectionProvider(
                         }
                     })
             );
+    }
+    
+    private async Task AddPlugin(string pluginsDir)
+    {
+        try
+        {
+            string[]? files = await filePicker.PickFilesAsync(
+                title: TranslationKey.SettingsAnalyzerAddPluginDialogTitle,
+                allowMultiple: true);
+
+            if (files is null || files.Length == 0)
+            {
+                return;
+            }
+
+            Directory.CreateDirectory(pluginsDir);
+
+            foreach (string file in files)
+            {
+                string fileName = Path.GetFileName(file);
+                string dest = Path.Combine(pluginsDir, fileName);
+                File.Copy(file, dest, overwrite: true);
+            }
+
+            if (downloader.CheckComponents())
+            {
+                await analyzer.Initialize();
+            }
+            else
+            {
+                await SetupComponents();
+            }
+
+            Notification notification = Notification
+                .Create(TranslationKey.SettingsAnalyzerAddPluginSuccessTitle)
+                .WithMessage(TranslationKey.SettingsAnalyzerAddPluginSuccessMessage)
+                .WithType(NotificationType.Success);
+            notifs.Show(notification);
+        }
+        catch (Exception ex)
+        {
+            Notification notification = Notification
+                .Create(TranslationKey.SettingsAnalyzerAddPluginFailedTitle)
+                .WithMessage(TranslationKey.SettingsAnalyzerAddPluginFailedMessage)
+                .WithType(NotificationType.Error);
+            notifs.Show(notification);
+
+            logs.Error(ex, "Failed to install plugin(s) and restart Analyzer.");
+        }
     }
 }
