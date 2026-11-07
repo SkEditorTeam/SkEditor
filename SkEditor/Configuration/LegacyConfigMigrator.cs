@@ -61,11 +61,10 @@ public class LegacyConfigMigrator(IConfigService config)
             appSettings.Language = oldAppConfig.Language;
             appSettings.EditorTabSize = oldAppConfig.TabSize;
             appSettings.UseEditorTabsForIndentation = !oldAppConfig.UseSpacesInsteadOfTabs;
+            appSettings.ColorPreviewEnabled = oldAppConfig.EnableHexPreview;
 
             stateConfig.LastUsedPublishService = oldAppConfig.LastUsedPublishService;
             stateConfig.GuiGeneratorSkriptGuiAddonUsed = oldAppConfig.UseSkriptGui;
-
-            experimentsConfig.ColorPreviewEnabled = oldAppConfig.EnableHexPreview;
 
             secretsConfig.SkUnityApiKey = oldAppConfig.SkUnityApiKey;
             secretsConfig.PastebinApiKey = oldAppConfig.PastebinApiKey;

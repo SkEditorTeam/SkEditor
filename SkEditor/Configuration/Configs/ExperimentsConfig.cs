@@ -26,18 +26,6 @@ public partial class ExperimentsConfig : BaseConfig<ExperimentsConfig>
     public partial bool AnalyzerErrorTooltipsEnabled { get; set; } = true;
 
     /// <summary>
-    ///     Enables the Color Preview feature.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool ColorPreviewEnabled { get; set; } = false;
-
-    /// <summary>
-    ///     Whether the Color Preview feature should be enabled for all the file types or just Skript files
-    /// </summary>
-    [ObservableProperty]
-    public partial bool GlobalColorPreviewEnabled { get; set; } = false;
-
-    /// <summary>
     ///     Enables the Split View feature.
     /// </summary>
     [ObservableProperty]

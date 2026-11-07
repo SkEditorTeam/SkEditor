@@ -181,6 +181,18 @@ public partial class AppSettings : BaseConfig<AppSettings>
     /// </summary>
     [ObservableProperty]
     public partial bool UseEditorTabsForIndentation { get; set; }
+    
+    /// <summary>
+    ///     Enables the Color Preview feature.
+    /// </summary>
+    [ObservableProperty]
+    public partial bool ColorPreviewEnabled { get; set; } = false;
+
+    /// <summary>
+    ///     Whether the Color Preview feature should be enabled for all the file types or just Skript files
+    /// </summary>
+    [ObservableProperty]
+    public partial bool GlobalColorPreviewEnabled { get; set; } = false;
 
     /// <summary>
     ///     The application version.

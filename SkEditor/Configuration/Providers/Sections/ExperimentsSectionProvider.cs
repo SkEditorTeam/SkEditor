@@ -25,37 +25,6 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                     .WithIcon(Symbol.Warning)
                     .WithType(InfoSetting.InfoType.Warning),
 
-
-                ExpandableSetting
-                    .Create(TranslationKey.SettingsExperimentsColorPreview)
-                    .WithDescription(TranslationKey.SettingsExperimentsColorPreviewDescription)
-                    .WithIcon(Symbol.Color)
-                    .WithChildren(
-                        ToggleSetting
-                            .Create(TranslationKey.SettingsExperimentsColorPreviewOption)
-                            .WithDescription(TranslationKey.SettingsExperimentsColorPreviewOptionDescription)
-                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.ColorPreviewEnabled)),
-                        ToggleSetting
-                            .Create(TranslationKey.SettingsExperimentsColorPreviewGlobal)
-                            .WithDescription(TranslationKey.SettingsExperimentsColorPreviewGlobalDescription)
-                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.GlobalColorPreviewEnabled))
-                    ),
-
-                ExpandableSetting
-                    .Create(TranslationKey.SettingsExperimentsSplitView)
-                    .WithDescription(TranslationKey.SettingsExperimentsSplitViewDescription)
-                    .WithIcon(Symbol.DocumentLandscapeSplitHint)
-                    .WithChildren(
-                        InfoSetting
-                            .Create(TranslationKey.SettingsExperimentsSplitViewWarningTitle)
-                            .WithDescription(TranslationKey.SettingsExperimentsSplitViewWarningDescription)
-                            .WithIcon(Symbol.Warning)
-                            .WithType(InfoSetting.InfoType.Warning),
-                        ToggleSetting
-                            .Create(TranslationKey.SettingsExperimentsSplitViewOption)
-                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled))
-                    ),
-
                 ExpandableSetting
                     .Create(TranslationKey.SettingsExperimentsAnalyzer)
                     .WithDescription(TranslationKey.SettingsExperimentsAnalyzerDescription)
@@ -75,6 +44,21 @@ public class ExperimentsSectionProvider(ExperimentsConfig experiments, IMessenge
                             .WithActionIcon(Symbol.ChevronRight)
                             .WithEnabled(experiments.ObservePropertyChanged(x => x.AnalyzerEnabled)
                                 .ToBindableReactiveProperty())
+                    ),
+
+                ExpandableSetting
+                    .Create(TranslationKey.SettingsExperimentsSplitView)
+                    .WithDescription(TranslationKey.SettingsExperimentsSplitViewDescription)
+                    .WithIcon(Symbol.DocumentLandscapeSplitHint)
+                    .WithChildren(
+                        InfoSetting
+                            .Create(TranslationKey.SettingsExperimentsSplitViewWarningTitle)
+                            .WithDescription(TranslationKey.SettingsExperimentsSplitViewWarningDescription)
+                            .WithIcon(Symbol.Warning)
+                            .WithType(InfoSetting.InfoType.Warning),
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsExperimentsSplitViewOption)
+                            .WithProperty(experiments.GetProperty<bool>(ExperimentsProperty.SplitViewEnabled))
                     ),
 
                 ExpandableSetting

@@ -38,17 +38,26 @@ public class EditorSectionProvider(
                     .WithIcon(Symbol.TextWrap)
                     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsWordWrapEnabled)),
 
-                // ToggleSetting
-                //     .Create(TranslationKey.SettingsEditorExternalChangeChecker)
-                //     .WithDescription(TranslationKey.SettingsEditorExternalChangeCheckerDescription)
-                //     .WithIcon(Symbol.DocumentSync)
-                //     .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.CheckForExternalFileChanges)),
-
                 ToggleSetting
                     .Create(TranslationKey.SettingsEditorSmoothScrolling)
                     .WithDescription(TranslationKey.SettingsEditorSmoothScrollingDescription)
                     .WithIcon(Symbol.Stream)
-                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorSmoothScrollEnabled))
+                    .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.IsEditorSmoothScrollEnabled)),
+                
+                ExpandableSetting
+                    .Create(TranslationKey.SettingsEditorColorPreview)
+                    .WithDescription(TranslationKey.SettingsEditorColorPreviewDescription)
+                    .WithIcon(Symbol.Color)
+                    .WithChildren(
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsEditorColorPreviewOption)
+                            .WithDescription(TranslationKey.SettingsEditorColorPreviewOptionDescription)
+                            .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.ColorPreviewEnabled)),
+                        ToggleSetting
+                            .Create(TranslationKey.SettingsEditorColorPreviewGlobal)
+                            .WithDescription(TranslationKey.SettingsEditorColorPreviewGlobalDescription)
+                            .WithProperty(appSettings.GetProperty<bool>(AppSettingsProperty.GlobalColorPreviewEnabled))
+                    ),
             ]);
     }
 

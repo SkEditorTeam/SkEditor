@@ -15,7 +15,7 @@ using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Editor.Features.Decorations;
 
-public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEditorFeature
+public partial class ColorPreviewFeature(AppSettings appSettings) : IEditorFeature
 {
     private readonly HexColorElementGenerator _colorGenerator = new(ShowColorFlyout);
 
@@ -29,8 +29,8 @@ public partial class ColorPreviewFeature(ExperimentsConfig experiments) : IEdito
         string? extension = Path.GetExtension(fileTab.Path ?? string.Empty)?.ToLowerInvariant();
 
         return
-            experiments.ColorPreviewEnabled &&
-            (experiments.GlobalColorPreviewEnabled || string.IsNullOrEmpty(extension) || extension == ".sk");
+            appSettings.ColorPreviewEnabled &&
+            (appSettings.GlobalColorPreviewEnabled || string.IsNullOrEmpty(extension) || extension == ".sk");
     }
 
     public void OnViewAttached(IFeatureTab tab, TextEditor editor)
