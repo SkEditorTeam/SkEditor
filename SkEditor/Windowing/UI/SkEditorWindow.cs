@@ -9,9 +9,11 @@ using SkEditor.Appearance.Themes;
 
 namespace SkEditor.Windowing.UI;
 
-public class SkEditorWindow : FAAppWindow
+public class SkEditorWindow : FAAppWindow, IDisposable
 {
     protected override Type StyleKeyOverride => typeof(FAAppWindow);
+    
+    private readonly IThemeService _themes = App.Services.GetRequiredService<IThemeService>();
 
     protected SkEditorWindow()
     {
@@ -30,11 +32,24 @@ public class SkEditorWindow : FAAppWindow
         CanResize = false;
         ShowAsDialog = true;
 
+        UpdateTheme();
+        
+        _themes.ThemeChanged += UpdateTheme;
+    }
+
+    private void UpdateTheme()
+    {
         Background = Application.Current?.FindResource("SmallWindowBackgroundColor") as IBrush;
 
-        if (App.Services.GetRequiredService<IThemeService>().CurrentTheme.UseMicaEffect)
+        if (_themes.CurrentTheme.UseMicaEffect)
         {
             TransparencyLevelHint = [WindowTransparencyLevel.Mica];
         }
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _themes.ThemeChanged -= UpdateTheme;
     }
 }
