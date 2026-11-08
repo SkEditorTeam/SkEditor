@@ -166,11 +166,11 @@ public static class ServiceCollectionExtensions
             services.AddTransient<SettingsTabView>();
             services.AddTransient<WhatsNewPage>();
 
-            services.AddTransientWithFactory<PublishWindow>();
-            services.AddTransientWithFactory<GuiGeneratorWindow>();
-            services.AddTransientWithFactory<GoToLineWindow>();
-            services.AddTransientWithFactory<AboutWindow>();
-            services.AddTransientWithFactory<ManageRemoteConnectionsWindow>();
+            services.AddWindowWithFactory<PublishWindow>();
+            services.AddWindowWithFactory<GuiGeneratorWindow>();
+            services.AddWindowWithFactory<GoToLineWindow>();
+            services.AddWindowWithFactory<AboutWindow>();
+            services.AddWindowWithFactory<ManageRemoteConnectionsWindow>();
         }
 
         public void AddEditorFeatures()
@@ -261,6 +261,23 @@ public static class ServiceCollectionExtensions
         {
             services.AddTransient<T>();
             services.AddSingleton<Func<T>>(sp => sp.GetRequiredService<T>);
+        }
+        
+        public void AddWindowWithFactory<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+            TWindow>() where TWindow : Window
+        {
+            services.AddTransient<TWindow>();
+
+            services.AddSingleton<Func<TWindow>>(sp => () =>
+            {
+                var scope = sp.CreateScope();
+                var window = scope.ServiceProvider.GetRequiredService<TWindow>();
+
+                window.Closed += (_, _) => scope.Dispose();
+
+                return window;
+            });
         }
 
         public void AddSidebar()
