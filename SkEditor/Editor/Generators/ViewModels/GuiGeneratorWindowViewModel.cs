@@ -26,16 +26,6 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             return 0;
         }
 
-        if (a.IsNone)
-        {
-            return -1;
-        }
-
-        if (b.IsNone)
-        {
-            return 1;
-        }
-
         return string.Compare(a.DisplayName, b.DisplayName, StringComparison.OrdinalIgnoreCase);
     });
 
@@ -47,16 +37,6 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         if (ReferenceEquals(a, b))
         {
             return 0;
-        }
-
-        if (a.IsNone)
-        {
-            return -1;
-        }
-
-        if (b.IsNone)
-        {
-            return 1;
         }
 
         int scoreResult = ByScoreComparer.Compare(a, b);
@@ -113,10 +93,10 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
                     }
 
                     _sourceItems.Sort(CombinedComparer);
-                    view.AttachFilter(item => item.IsNone || item.MatchScore > 0);
+                    view.AttachFilter(item => item.MatchScore > 0);
                 }
 
-                SelectedItem.Value = Items.FirstOrDefault(i => !i.IsNone);
+                SelectedItem.Value = Items.FirstOrDefault();
             })
             .AddTo(ref _disposables);
 
@@ -146,7 +126,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
 
         ItemViewModel? selected = SelectedItem.Value;
 
-        if (selected is null || selected.IsNone)
+        if (selected is null)
         {
             SelectedSlot.Item = null;
             return;
@@ -158,7 +138,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private void SetAllEmptySlots()
     {
-        if (SelectedItem.Value is null || SelectedItem.Value.IsNone)
+        if (SelectedItem.Value is null)
         {
             return;
         }
@@ -299,7 +279,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             }
 
             _sourceItems.AddRange(items);
-            SelectedItem.Value = Items.FirstOrDefault(i => !i.IsNone);
+            SelectedItem.Value = Items.FirstOrDefault();
         }
         catch (OperationCanceledException)
         {
@@ -330,7 +310,6 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         }
 
         _sourceItems.Clear();
-        _sourceItems.Add(ItemViewModel.None);
     }
 
     public void Dispose()
