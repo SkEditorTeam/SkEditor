@@ -23,7 +23,7 @@
                 </BehaviorCollection>
             </Interaction.Behaviors>
 
-            <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"
+            <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value}"
                      SelectionMode="AlwaysSelected"
                      Padding="0,0,12,0" IsTextSearchEnabled="True">
                 <ListBox.Styles>

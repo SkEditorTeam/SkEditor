@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
@@ -22,6 +23,16 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
 
     private static readonly Comparer<ItemViewModel> ByScoreComparer =
         Comparer<ItemViewModel>.Create((a, b) => b.MatchScore.CompareTo(a.MatchScore));
+    
+    private static readonly Comparer<ItemViewModel> CombinedComparer = Comparer<ItemViewModel>.Create((a, b) =>
+    {
+        int scoreResult = ByScoreComparer.Compare(a, b);
+
+        return scoreResult != 0
+            ? scoreResult
+            : ByNameComparer.Compare(a, b);
+    });
+
 
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
@@ -59,10 +70,12 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
                         item.MatchScore = ItemSearchEngine.GetMatchScore(item.DisplayName, query);
                     }
 
-                    _sourceItems.Sort(ByScoreComparer);
+                    _sourceItems.Sort(CombinedComparer);
 
                     view.AttachFilter(item => item.MatchScore > 0);
                 }
+
+                SelectedItem.Value = Items.FirstOrDefault();
             })
             .AddTo(ref _disposables);
     }
@@ -106,9 +119,12 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
                     Image = bitmap
                 };
             });
+            
+            Array.Sort(items, ByNameComparer);
         });
-
+        
         _sourceItems.AddRange(items);
+        SelectedItem.Value = Items.FirstOrDefault();
 
         stopwatch.Stop();
         _notifs.Debug($"Loaded {Items.Count} items in {stopwatch.ElapsedMilliseconds} ms");
