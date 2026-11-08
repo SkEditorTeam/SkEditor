@@ -13,28 +13,31 @@
         WindowStartupLocation="CenterOwner">
 
     <Grid RowDefinitions="Auto,*,Auto" Margin="24" RowSpacing="20">
-        <TextBox Width="360" PlaceholderText="Search..." Theme="{DynamicResource SearchBoxTheme}" Text="{Binding Filter.Value}" />
-        
+        <TextBox Width="360" PlaceholderText="Search..." Theme="{DynamicResource SearchBoxTheme}"
+                 Text="{Binding Filter.Value}" />
+
         <ScrollViewer Grid.Row="1" Width="360">
             <Interaction.Behaviors>
                 <BehaviorCollection>
                     <behaviors:SmoothScrollBehavior />
                 </BehaviorCollection>
             </Interaction.Behaviors>
-            
+
             <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}"
-                          Padding="0,0,12,0" IsTextSearchEnabled="True">
+                     SelectionMode="AlwaysSelected"
+                     Padding="0,0,12,0" IsTextSearchEnabled="True">
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem" x:DataType="ui:ItemViewModel">
                         <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
                         <Setter Property="Height" Value="40" />
                     </Style>
                 </ListBox.Styles>
-                
+
                 <ListBox.ItemTemplate>
                     <DataTemplate x:DataType="ui:ItemViewModel">
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <Image Source="{Binding Image}" Width="32" Height="32" RenderOptions.BitmapInterpolationMode="HighQuality" />
+                            <Image Source="{Binding Image}" Width="32" Height="32"
+                                   RenderOptions.BitmapInterpolationMode="HighQuality" />
                             <TextBlock Grid.Column="1" Text="{Binding DisplayName}" VerticalAlignment="Center" />
                         </Grid>
                     </DataTemplate>

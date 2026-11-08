@@ -17,6 +17,12 @@ namespace SkEditor.Editor.Generators.UI;
 
 public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
 {
+    private static readonly Comparer<ItemViewModel> ByNameComparer = Comparer<ItemViewModel>.Create((a, b) =>
+        string.Compare(a.DisplayName, b.DisplayName, StringComparison.OrdinalIgnoreCase));
+
+    private static readonly Comparer<ItemViewModel> ByScoreComparer =
+        Comparer<ItemViewModel>.Create((a, b) => b.MatchScore.CompareTo(a.MatchScore));
+
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
     private readonly IGameResourcesService _resources;
@@ -38,17 +44,24 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         Items = view.ToNotifyCollectionChanged().AddTo(ref _disposables);
 
         Filter
-            .ThrottleLast(TimeSpan.FromMilliseconds(50))
+            .ThrottleLast(TimeSpan.FromMilliseconds(40))
             .Subscribe(query =>
             {
                 if (string.IsNullOrWhiteSpace(query))
                 {
                     view.ResetFilter();
+                    _sourceItems.Sort(ByNameComparer);
                 }
                 else
                 {
-                    view.AttachFilter(item =>
-                        item.DisplayName.Contains(query, StringComparison.OrdinalIgnoreCase));
+                    foreach (ItemViewModel item in _sourceItems)
+                    {
+                        item.MatchScore = ItemSearchEngine.GetMatchScore(item.DisplayName, query);
+                    }
+
+                    _sourceItems.Sort(ByScoreComparer);
+
+                    view.AttachFilter(item => item.MatchScore > 0);
                 }
             })
             .AddTo(ref _disposables);
@@ -85,7 +98,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             Parallel.For(0, rawItems.Length, i =>
             {
                 Item item = rawItems[i];
-                using MemoryStream stream = new(item.Texture, writable: false);
+                using MemoryStream stream = new(item.Texture);
                 Bitmap bitmap = Bitmap.DecodeToWidth(stream, 32);
 
                 items[i] = new ItemViewModel(item.Id, item.DisplayName)
@@ -143,6 +156,8 @@ public class ItemViewModel(string id, string displayName) : ObservableObject, ID
     public string DisplayName { get; } = displayName;
     public string Id { get; } = id;
     public required Bitmap Image { get; init; }
+
+    internal int MatchScore { get; set; }
 
     public override string ToString()
     {
