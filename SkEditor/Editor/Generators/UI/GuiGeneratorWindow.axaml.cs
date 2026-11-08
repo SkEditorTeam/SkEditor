@@ -1,4 +1,4 @@
-using System;
+using SkEditor.Editor.Generators.ViewModels;
 using SkEditor.Windowing.UI;
 
 namespace SkEditor.Editor.Generators.UI;
@@ -11,6 +11,9 @@ public partial class GuiGeneratorWindow : SkEditorWindow
     {
         DataContext = viewModel;
         
-        Closed += (_, _) => viewModel.Dispose();
+        Loaded += async (_, _) =>
+        {
+            await viewModel.LoadCommand.ExecuteAsync(null);
+        };
     }
 }

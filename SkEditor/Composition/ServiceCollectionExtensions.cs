@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Analyzing;
@@ -39,6 +40,7 @@ using SkEditor.Editor.Features.View;
 using SkEditor.Editor.Features.View.Zoom;
 using SkEditor.Editor.Generators;
 using SkEditor.Editor.Generators.UI;
+using SkEditor.Editor.Generators.ViewModels;
 using SkEditor.Editor.Syntax;
 using SkEditor.Editor.UI.Tabs;
 using SkEditor.Editor.UI.Windows;
