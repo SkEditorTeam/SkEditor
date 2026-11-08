@@ -25,7 +25,7 @@ public class HelpMenuProvider(IWindowDialogService windowDialogs, ILinkService l
         MainMenuItem.HeaderWithIcon(TranslationKey.MenuHeaderCheckForUpdates, Symbol.ArrowSync)
             .WithCommand(async () =>
             {
-                ReleaseInfo? update = await updates.CheckForUpdates();
+                ReleaseInfo? update = await updates.CheckForUpdates(log: true);
                 updates.ShowNotification(update);
             })
             .AddTo(helpMenu);

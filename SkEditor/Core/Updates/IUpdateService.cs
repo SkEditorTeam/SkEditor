@@ -5,6 +5,6 @@ namespace SkEditor.Core.Updates;
 
 public interface IUpdateService
 {
-    Task<ReleaseInfo?> CheckForUpdates();
+    Task<ReleaseInfo?> CheckForUpdates(bool log = false);
     void ShowNotification(ReleaseInfo? info);
 }

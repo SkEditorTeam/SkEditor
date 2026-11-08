@@ -35,7 +35,7 @@ public class UpdateService(
     ILinkService links,
     IWindowRegistry windowRegistry) : IUpdateService
 {
-    public async Task<ReleaseInfo?> CheckForUpdates()
+    public async Task<ReleaseInfo?> CheckForUpdates(bool log = false)
     {
         const string url = "https://api.github.com/repos/SkEditorTeam/SkEditor/releases";
 
@@ -66,7 +66,10 @@ public class UpdateService(
         }
         catch (Exception ex)
         {
-            logs.Error(ex, "Failed to check for updates");
+            if (log)
+            {
+                logs.Error(ex, "Failed to check for updates");
+            }
             return null;
         }
     }
