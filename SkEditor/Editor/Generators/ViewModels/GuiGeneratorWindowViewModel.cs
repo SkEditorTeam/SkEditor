@@ -149,6 +149,27 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
                 SelectedItem.Value.Image);
         }
     }
+    
+    [RelayCommand]
+    private void FillBackground()
+    {
+        if (SelectedItem.Value is null)
+        {
+            return;
+        }
+
+        foreach (SlotViewModel slot in Slots)
+        {
+            if (slot.Item is null || slot.Item.IsBackground)
+            {
+                slot.Item = new GuiItemViewModel(SelectedItem.Value.Id, SelectedItem.Value.DisplayName,
+                    SelectedItem.Value.Image)
+                {
+                    IsBackground = true
+                };
+            }
+        }
+    }
 
     [RelayCommand]
     private void ClearSlot()
@@ -162,6 +183,18 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         foreach (SlotViewModel slot in Slots)
         {
             slot.Item = null;
+        }
+    }
+
+    [RelayCommand]
+    private void ClearBackground()
+    {
+        foreach (SlotViewModel slot in Slots)
+        {
+            if (slot.Item?.IsBackground == true)
+            {
+                slot.Item = null;
+            }
         }
     }
 

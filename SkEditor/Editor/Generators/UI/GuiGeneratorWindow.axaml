@@ -187,6 +187,9 @@
                                 <MenuFlyout>
                                     <MenuItem Header="Fill all empty slots"
                                               Command="{Binding SetAllEmptySlotsCommand}" />
+                                    
+                                    <MenuItem Header="Fill background"
+                                              Command="{Binding FillBackgroundCommand}" />
                                 </MenuFlyout>
                             </SplitButton.Flyout>
                         </SplitButton>
@@ -198,6 +201,9 @@
                                 <MenuFlyout>
                                     <MenuItem Header="Clear all slots"
                                               Command="{Binding ClearAllSlotsCommand}" />
+                                    
+                                    <MenuItem Header="Clear background"
+                                              Command="{Binding ClearBackgroundCommand}" />
                                 </MenuFlyout>
                             </SplitButton.Flyout>
                         </SplitButton>

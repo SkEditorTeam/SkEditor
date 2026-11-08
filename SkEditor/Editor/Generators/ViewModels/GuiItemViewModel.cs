@@ -13,4 +13,6 @@ public partial class GuiItemViewModel(string id, string displayName, Bitmap? ima
 
     [ObservableProperty]
     public partial int Amount { get; set; } = 1;
+    
+    public bool IsBackground { get; set; }
 }
