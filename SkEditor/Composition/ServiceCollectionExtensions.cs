@@ -37,6 +37,8 @@ using SkEditor.Editor.Features.Editing;
 using SkEditor.Editor.Features.Saving;
 using SkEditor.Editor.Features.View;
 using SkEditor.Editor.Features.View.Zoom;
+using SkEditor.Editor.Generators;
+using SkEditor.Editor.Generators.UI;
 using SkEditor.Editor.Syntax;
 using SkEditor.Editor.UI.Tabs;
 using SkEditor.Editor.UI.Windows;
@@ -94,6 +96,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IProjectService, ProjectService>();
             services.AddSingleton<ISidebarService, SidebarService>();
             services.AddSingleton<IUpdateService, UpdateService>();
+            services.AddSingleton<IGameResourcesService, GameResourcesService>();
 
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
             services.AddSingleton<ICredentialStoreFactory, CredentialStoreFactory>();
@@ -151,6 +154,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<WhatsNewPageViewModel>();
             services.AddTransient<WelcomePageViewModel>();
             services.AddTransient<PublishWindowViewModel>();
+            services.AddTransient<GuiGeneratorWindowViewModel>();
             services.AddTransient<AboutWindowViewModel>();
             services.AddTransient<GoToLineWindowViewModel>();
         }
@@ -163,6 +167,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<WhatsNewPage>();
 
             services.AddTransientWithFactory<PublishWindow>();
+            services.AddTransientWithFactory<GuiGeneratorWindow>();
             services.AddTransientWithFactory<GoToLineWindow>();
             services.AddTransientWithFactory<AboutWindow>();
             services.AddTransientWithFactory<ManageRemoteConnectionsWindow>();

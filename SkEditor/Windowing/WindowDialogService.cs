@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using SkEditor.Core.Localization;
 using SkEditor.Core.Notifications;
+using SkEditor.Editor.Generators.UI;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Editor.UI.Windows;
 using SkEditor.Integrations.Publishing.UI;
@@ -17,6 +18,7 @@ public class WindowDialogService(
     IWindowRegistry windowRegistry,
     INotificationService notifications,
     Func<PublishWindow> publishWindowFactory,
+    Func<GuiGeneratorWindow> guiGeneratorWindowFactory,
     Func<GoToLineWindow> goToLineWindowFactory,
     Func<AboutWindow> aboutWindowFactory,
     Func<ManageRemoteConnectionsWindow> manageRemoteConnectionsWindowFactory,
@@ -25,6 +27,11 @@ public class WindowDialogService(
     public async Task ShowPublishDialogAsync()
     {
         await ShowDialogAsync(publishWindowFactory, true);
+    }
+
+    public async Task ShowGuiGeneratorDialogAsync()
+    {
+        await ShowDialogAsync(guiGeneratorWindowFactory, asDialog: false);
     }
 
     public async Task ShowGoToLineDialogAsync()
