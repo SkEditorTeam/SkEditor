@@ -16,34 +16,35 @@
         <TextBox Width="360" PlaceholderText="Search..." Theme="{DynamicResource SearchBoxTheme}"
                  Text="{Binding Filter.Value}" />
 
-        <ScrollViewer Grid.Row="1" Width="360">
-            <Interaction.Behaviors>
-                <BehaviorCollection>
-                    <behaviors:SmoothScrollBehavior />
-                </BehaviorCollection>
-            </Interaction.Behaviors>
+        <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value}"
+                 SelectionMode="AlwaysSelected" Grid.Row="1" Width="360"
+                 Padding="0,0,12,0" IsTextSearchEnabled="True">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem" x:DataType="ui:ItemViewModel">
+                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                    <Setter Property="Height" Value="40" />
+                    <Setter Property="Theme" Value="{DynamicResource NoIndicatorAnimationListBoxItem}" />
+                </Style>
+                
+                <Style Selector="ListBox /template/ ScrollViewer">
+                    <Setter Property="Interaction.Behaviors">
+                        <BehaviorCollection>
+                            <behaviors:SmoothScrollBehavior />
+                        </BehaviorCollection>
+                    </Setter>
+                </Style>
+            </ListBox.Styles>
 
-            <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value}"
-                     SelectionMode="AlwaysSelected"
-                     Padding="0,0,12,0" IsTextSearchEnabled="True">
-                <ListBox.Styles>
-                    <Style Selector="ListBoxItem" x:DataType="ui:ItemViewModel">
-                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
-                        <Setter Property="Height" Value="40" />
-                    </Style>
-                </ListBox.Styles>
-
-                <ListBox.ItemTemplate>
-                    <DataTemplate x:DataType="ui:ItemViewModel">
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <Image Source="{Binding Image}" Width="32" Height="32"
-                                   RenderOptions.BitmapInterpolationMode="HighQuality" />
-                            <TextBlock Grid.Column="1" Text="{Binding DisplayName}" VerticalAlignment="Center" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </ScrollViewer>
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="ui:ItemViewModel">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Image Source="{Binding Image}" Width="32" Height="32"
+                               RenderOptions.BitmapInterpolationMode="HighQuality" />
+                        <TextBlock Grid.Column="1" Text="{Binding DisplayName}" VerticalAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <Button Grid.Row="2" Content="Generate" HorizontalAlignment="Right"
                 Command="{Binding LoadCommand}" />
