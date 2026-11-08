@@ -43,7 +43,8 @@ public class WindowDialogService(
     }
 
     private async Task<TResult?> ShowDialogAsync<TWindow, TResult>(Func<TWindow> windowFactory,
-        bool requireFile = false)
+        bool requireFile = false,
+        bool asDialog = true)
         where TWindow : Window
         where TResult : class
     {
@@ -67,7 +68,13 @@ public class WindowDialogService(
 
         try
         {
-            return await window.ShowDialog<TResult>(mainWindow);
+            if (asDialog)
+            {
+                return await window.ShowDialog<TResult>(mainWindow);
+            }
+
+            window.Show(mainWindow);
+            return null;
         }
         finally
         {
@@ -78,9 +85,9 @@ public class WindowDialogService(
         }
     }
 
-    private async Task ShowDialogAsync<TWindow>(Func<TWindow> windowFactory, bool requireFile = false)
+    private async Task ShowDialogAsync<TWindow>(Func<TWindow> windowFactory, bool requireFile = false, bool asDialog = true)
         where TWindow : Window
     {
-        await ShowDialogAsync<TWindow, object>(windowFactory, requireFile);
+        await ShowDialogAsync<TWindow, object>(windowFactory, requireFile: requireFile, asDialog: asDialog);
     }
 }
