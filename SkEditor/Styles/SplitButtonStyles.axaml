@@ -1,0 +1,148 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    x:CompileBindings="True"
+                    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent">
+
+    <Design.PreviewWith>
+        <Border Padding="50" Background="#202020">
+            <StackPanel Spacing="12">
+                <SplitButton Content="Save Document" />
+                <SplitButton Content="Accent Action" Classes="accent" />
+                <SplitButton Content="Disabled Action" IsEnabled="False" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <x:Double x:Key="SplitButtonMinHeight">32</x:Double>
+    <x:Double x:Key="SplitButtonSecondaryButtonSize">32</x:Double>
+
+    <ControlTheme x:Key="CleanSplitButtonComponent" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Background="{TemplateBinding Background}"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Padding="{TemplateBinding Padding}"
+                                  RecognizesAccessKey="True"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <ContentPresenter.Transitions>
+                        <Transitions>
+                            <BrushTransition Duration="00:00:00.08" Property="Background" />
+                        </Transitions>
+                    </ContentPresenter.Transitions>
+                </ContentPresenter>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+        </Style>
+
+        <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}" />
+        </Style>
+
+        <Style Selector="^[Tag=flyout-open] /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}" />
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme x:Key="{x:Type SplitButton}" TargetType="SplitButton">
+        <Setter Property="Background" Value="{DynamicResource SplitButtonBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource SplitButtonForeground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SplitButtonBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="MinHeight" Value="{DynamicResource SplitButtonMinHeight}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        <Setter Property="Padding" Value="{DynamicResource ButtonPadding}" />
+        <Setter Property="Focusable" Value="True" />
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        ClipToBounds="True">
+                    
+                    <Border.Transitions>
+                        <Transitions>
+                            <BrushTransition Duration="00:00:00.08" Property="BorderBrush" />
+                            <BrushTransition Duration="00:00:00.08" Property="Background" />
+                        </Transitions>
+                    </Border.Transitions>
+
+                    <Grid ColumnDefinitions="*,Auto,Auto">
+                        <Button x:Name="PART_PrimaryButton"
+                                Grid.Column="0"
+                                Theme="{StaticResource CleanSplitButtonComponent}"
+                                Foreground="{TemplateBinding Foreground}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Command="{TemplateBinding Command}"
+                                CommandParameter="{TemplateBinding CommandParameter}"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                FontSize="{TemplateBinding FontSize}"
+                                FontWeight="{TemplateBinding FontWeight}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Padding="{TemplateBinding Padding}"
+                                Focusable="False" />
+
+                        <Rectangle Grid.Column="1"
+                                   Width="1"
+                                   VerticalAlignment="Stretch"
+                                   Margin="0,4"
+                                   Fill="{DynamicResource DividerStrokeColorDefaultBrush}" />
+
+                        <Button x:Name="PART_SecondaryButton"
+                                Grid.Column="2"
+                                Theme="{StaticResource CleanSplitButtonComponent}"
+                                Width="{DynamicResource SplitButtonSecondaryButtonSize}"
+                                Foreground="{TemplateBinding Foreground}"
+                                Padding="0"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Focusable="False">
+                            <fluent:SymbolIcon IsHitTestVisible="False"
+                                           FontSize="10"
+                                           Symbol="ChevronDown" />
+                        </Button>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover /template/ Border#RootBorder">
+            <Setter Property="BorderBrush" Value="{DynamicResource SplitButtonBorderBrushPointerOver}" />
+        </Style>
+
+        <Style Selector="^:pressed /template/ Border#RootBorder">
+            <Setter Property="BorderBrush" Value="{DynamicResource SplitButtonBorderBrushPressed}" />
+        </Style>
+
+        <Style Selector="^:flyout-open /template/ Button#PART_SecondaryButton">
+            <Setter Property="Tag" Value="flyout-open" />
+        </Style>
+
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

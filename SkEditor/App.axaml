@@ -39,6 +39,7 @@
                 <ResourceInclude Source="avares://SkEditor/Styles/LiteComboBoxStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/ListBoxStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/ButtonStyles.axaml" />
+                <ResourceInclude Source="avares://SkEditor/Styles/SplitButtonStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/CompletionListBoxItemStyle.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/ComboBoxStyles.axaml" />
                 <ResourceInclude Source="avares://SkEditor/Styles/NumericUpDownStyles.axaml" />
