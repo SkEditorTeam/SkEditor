@@ -51,7 +51,7 @@ public class LogService(ILogger logger) : ILogService, IDisposable
         LogSource source = LogSource.SkEditor,
         params object[] propertyValues)
     {
-        messageTemplate ??= "An exception occurred: {ExceptionMessage}";
+        messageTemplate ??= ex.Message;
 
         logger.ForContext("Source", source).Error(ex, messageTemplate, propertyValues);
         Publish(LogLevel.Error, source, messageTemplate, propertyValues, ex);
@@ -71,8 +71,8 @@ public class LogService(ILogger logger) : ILogService, IDisposable
         LogSource source = LogSource.SkEditor,
         params object[] propertyValues)
     {
-        messageTemplate ??= "An exception occurred: {ExceptionMessage}";
-
+        messageTemplate ??= exception.Message;
+        
         logger.ForContext("Source", source).Fatal(exception, messageTemplate, propertyValues);
         Publish(LogLevel.Fatal, source, messageTemplate, propertyValues, exception);
     }
