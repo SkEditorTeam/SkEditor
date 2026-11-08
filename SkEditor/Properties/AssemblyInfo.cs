@@ -6,3 +6,4 @@ using Xaml.Behaviors.SourceGenerators;
 [assembly: GenerateEventCommand(typeof(ComboBox), "SelectionChanged")]
 [assembly: GenerateEventCommand(typeof(TextBox), "PastingFromClipboard")]
 [assembly: GenerateEventCommand(typeof(Button), "DoubleTapped")]
+[assembly: GenerateEventCommand(typeof(Button), "PointerPressed")]

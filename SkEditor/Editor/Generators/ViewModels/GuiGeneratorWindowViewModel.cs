@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -20,46 +21,71 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
 {
     private static readonly Comparer<ItemViewModel> ByNameComparer = Comparer<ItemViewModel>.Create((a, b) =>
     {
-        if (ReferenceEquals(a, b)) return 0;
-        if (a.IsNone) return -1;
-        if (b.IsNone) return 1;
+        if (ReferenceEquals(a, b))
+        {
+            return 0;
+        }
+
+        if (a.IsNone)
+        {
+            return -1;
+        }
+
+        if (b.IsNone)
+        {
+            return 1;
+        }
 
         return string.Compare(a.DisplayName, b.DisplayName, StringComparison.OrdinalIgnoreCase);
     });
 
     private static readonly Comparer<ItemViewModel> ByScoreComparer =
         Comparer<ItemViewModel>.Create((a, b) => b.MatchScore.CompareTo(a.MatchScore));
-    
+
     private static readonly Comparer<ItemViewModel> CombinedComparer = Comparer<ItemViewModel>.Create((a, b) =>
     {
-        if (ReferenceEquals(a, b)) return 0;
-        if (a.IsNone) return -1;
-        if (b.IsNone) return 1;
+        if (ReferenceEquals(a, b))
+        {
+            return 0;
+        }
+
+        if (a.IsNone)
+        {
+            return -1;
+        }
+
+        if (b.IsNone)
+        {
+            return 1;
+        }
 
         int scoreResult = ByScoreComparer.Compare(a, b);
         return scoreResult != 0 ? scoreResult : ByNameComparer.Compare(a, b);
     });
 
+    private readonly CancellationTokenSource _cts = new();
+
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
     private readonly IGameResourcesService _resources;
+
     private readonly ObservableList<ItemViewModel> _sourceItems = [];
     private DisposableBag _disposables;
-    private readonly CancellationTokenSource _cts = new();
-    
-    public BindableReactiveProperty<string> Filter { get; } = new(string.Empty);
+    private bool _disposed;
+    public static int Columns => 9;
 
+    public BindableReactiveProperty<string> Filter { get; } = new(string.Empty);
     public NotifyCollectionChangedSynchronizedViewList<ItemViewModel> Items { get; }
-    public BindableReactiveProperty<ItemViewModel?> SelectedItem { get; } = new(null);
 
     [ObservableProperty]
     public partial int Rows { get; set; } = 5;
-    public static int Columns => 9;
-    
-    public ObservableCollection<SlotViewModel> Slots { get; } = [];
+
+    public BindableReactiveProperty<ItemViewModel?> SelectedItem { get; } = new(null);
 
     [ObservableProperty]
     public partial SlotViewModel? SelectedSlot { get; set; }
+
+    public ObservableCollection<SlotViewModel> Slots { get; } = [];
 
     public GuiGeneratorWindowViewModel(IGameResourcesService resources, INotificationService notifs, ILogService logs)
     {
@@ -87,7 +113,6 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
                     }
 
                     _sourceItems.Sort(CombinedComparer);
-
                     view.AttachFilter(item => item.IsNone || item.MatchScore > 0);
                 }
 
@@ -95,21 +120,13 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             })
             .AddTo(ref _disposables);
 
-        SelectedItem.Subscribe(item =>
-        {
-            if (item is null) return;
-            if (SelectedSlot is null) return;
-
-            SelectedSlot.Item = new GuiItemViewModel(item.Id, item.DisplayName, item.Image);
-        });
-        
         RecreateSlots();
         if (Slots.FirstOrDefault() is { } firstSlot)
         {
             SelectSlot(firstSlot);
         }
     }
-    
+
     [RelayCommand]
     private void SelectSlot(SlotViewModel slot)
     {
@@ -119,15 +136,110 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         slot.IsSelected = true;
     }
 
+    [RelayCommand]
+    private void ApplySelectedItem()
+    {
+        if (SelectedSlot is null)
+        {
+            return;
+        }
+
+        ItemViewModel? selected = SelectedItem.Value;
+
+        if (selected is null || selected.IsNone)
+        {
+            SelectedSlot.Item = null;
+            return;
+        }
+
+        SelectedSlot.Item = new GuiItemViewModel(selected.Id, selected.DisplayName, selected.Image);
+    }
+
+    [RelayCommand]
+    private void SetAllEmptySlots()
+    {
+        if (SelectedItem.Value is null || SelectedItem.Value.IsNone)
+        {
+            return;
+        }
+
+        foreach (SlotViewModel slot in Slots)
+        {
+            slot.Item ??= new GuiItemViewModel(SelectedItem.Value.Id, SelectedItem.Value.DisplayName,
+                SelectedItem.Value.Image);
+        }
+    }
+
+    [RelayCommand]
+    private void ClearSlot()
+    {
+        SelectedSlot?.Item = null;
+    }
+
+    [RelayCommand]
+    private void ClearAllSlots()
+    {
+        foreach (SlotViewModel slot in Slots)
+        {
+            slot.Item = null;
+        }
+    }
+
+    [RelayCommand]
+    private void HandleDoubleClick(SlotViewModel slot)
+    {
+        SelectedSlot = slot;
+        if (SelectedSlot.Item is null)
+        {
+            ApplySelectedItem();
+        }
+        else
+        {
+            ClearSlot();
+        }
+    }
+
+    [RelayCommand]
+    private void SlotPointerPressed(SlotPointerAction? action)
+    {
+        if (action is null)
+        {
+            return;
+        }
+
+        SlotViewModel slot = action.Slot;
+
+        switch (action.PointerKind)
+        {
+            case PointerUpdateKind.LeftButtonPressed:
+                SelectSlot(slot);
+                break;
+
+            case PointerUpdateKind.MiddleButtonPressed:
+                SelectSlot(slot);
+                ApplySelectedItem();
+                break;
+        }
+    }
+
+    partial void OnRowsChanged(int value)
+    {
+        RecreateSlots();
+    }
+
     private void RecreateSlots()
     {
         int targetCount = Rows * Columns;
-        
+
         while (Slots.Count > targetCount)
+        {
             Slots.RemoveAt(Slots.Count - 1);
+        }
 
         while (Slots.Count < targetCount)
+        {
             Slots.Add(new SlotViewModel(Slots.Count));
+        }
     }
 
     [RelayCommand]
@@ -163,7 +275,10 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             {
                 Parallel.For(0, rawItems.Length, (i, state) =>
                 {
-                    if (ct.IsCancellationRequested) state.Stop();
+                    if (ct.IsCancellationRequested)
+                    {
+                        state.Stop();
+                    }
 
                     Item item = rawItems[i];
                     using MemoryStream stream = new(item.Texture);
@@ -178,10 +293,13 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
                 Array.Sort(items, ByNameComparer);
             }, ct);
 
-            if (ct.IsCancellationRequested) return;
+            if (ct.IsCancellationRequested)
+            {
+                return;
+            }
 
             _sourceItems.AddRange(items);
-            SelectedItem.Value = Items.FirstOrDefault();
+            SelectedItem.Value = Items.FirstOrDefault(i => !i.IsNone);
         }
         catch (OperationCanceledException)
         {
@@ -215,13 +333,16 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         _sourceItems.Add(ItemViewModel.None);
     }
 
-    private bool _disposed;
     public void Dispose()
     {
-        if (_disposed) return;
+        if (_disposed)
+        {
+            return;
+        }
+
         _disposed = true;
         GC.SuppressFinalize(this);
-        
+
         _cts.Cancel();
         _cts.Dispose();
 
