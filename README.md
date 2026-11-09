@@ -1,3 +1,10 @@
+> [!NOTE]
+> **🚀 SkEditor v3 is currently under active development!**
+>
+> The code is being rewritten for better architecture, native AOT compilation for instant startup, a lot of cool new features and much more.
+>
+> Check out the development on the [`dev/v3` branch](https://github.com/SkEditorTeam/SkEditor/tree/dev/v3) or test the [latest pre-releases](https://github.com/SkEditorTeam/SkEditor/releases).
+
 <p align='center'>
   <img src="SkEditor.png?raw=true" width="300">
 </p>
