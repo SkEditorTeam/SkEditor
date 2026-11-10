@@ -91,8 +91,8 @@
         <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
 
-        <PackageReference Include="HotAvalonia" Version="3.1.5" PrivateAssets="All" Publish="True" />
-        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="12.1.3" PrivateAssets="All" Publish="True" />
+        <PackageReference Include="HotAvalonia" Version="3.1.5" Condition="'$(Configuration)' == 'Debug'" PrivateAssets="All" />
+        <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="12.1.3" Condition="'$(Configuration)' == 'Debug'" PrivateAssets="All" />
 
         <PackageReference Include="Xaml.Behaviors.Avalonia" Version="12.0.7" />
         <PackageReference Include="Xaml.Behaviors.SourceGenerators" Version="12.0.7">

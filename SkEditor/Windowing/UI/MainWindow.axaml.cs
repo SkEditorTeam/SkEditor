@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
-using HotAvalonia;
 using SkEditor.Appearance.Themes;
 using SkEditor.Configuration.Configs;
 using SkEditor.Core.Localization;
@@ -116,8 +115,7 @@ public partial class MainWindow : Window
         }
     }
 
-    [AvaloniaHotReload]
-    public void Reload()
+    public void InitializeComponentState()
     {
         _ = _translation.ChangeLanguageAsync(_appSettings.Language);
         _ = _themes.SetThemeAsync(_themes.CurrentTheme);

@@ -3,7 +3,6 @@ using System.ComponentModel;
 using Avalonia.Controls;
 using Avalonia.Input;
 using FluentAvalonia.UI.Controls;
-using HotAvalonia;
 using Microsoft.Extensions.DependencyInjection;
 using SkEditor.Windowing.UI;
 using SkEditor.Workspace.Tabs.Templates;
@@ -33,7 +32,6 @@ public partial class MainTabView : UserControl
         UpdateSplitState(vm.IsSplitActive);
     }
 
-    [AvaloniaHotReload]
     private void InitializeComponentState()
     {
         TabViewLocator locator = App.Services.GetRequiredService<TabViewLocator>();
