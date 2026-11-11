@@ -60,21 +60,21 @@
 
     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="32" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
           Margin="48,32">
-        <Grid RowDefinitions="Auto,*">
+        <Grid RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
                 <StackPanel Spacing="4">
                     <TextBlock Text="Title" />
-                    <TextBox Width="180" />
+                    <TextBox Width="180" Text="{Binding Title.Value}" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
                     <TextBlock Text="Function name" />
-                    <TextBox Width="180" />
+                    <TextBox Width="180" Text="{Binding FunctionName.Value}" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
                     <TextBlock Text="Rows" />
-                    <NumericUpDown Minimum="1" Maximum="6" Value="{Binding Rows}" Width="100" FormatString="0" />
+                    <NumericUpDown Minimum="1" Maximum="6" Value="{Binding Rows.Value}" Width="100" FormatString="0" />
                 </StackPanel>
             </StackPanel>
 
@@ -134,6 +134,11 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
+                <Button Content="Generate"
+                        Command="{Binding GenerateCommand}" />
+            </StackPanel>
         </Grid>
 
         <GroupBox Grid.Column="1" VerticalAlignment="Stretch">
@@ -175,7 +180,8 @@
                                  SelectionMode="AlwaysSelected"
                                  Opacity="{Binding !LoadCommand.IsRunning}"
                                  IsHitTestVisible="{Binding !LoadCommand.IsRunning}"
-                                 Padding="0,0,12,0" HorizontalAlignment="Stretch"
+                                 Margin="0,0,-12,0" HorizontalAlignment="Stretch"
+                                 ClipToBounds="False"
                                  IsTextSearchEnabled="True">
                             <ListBox.Transitions>
                                 <Transitions>
@@ -192,6 +198,7 @@
                                 </Style>
 
                                 <Style Selector="ListBox /template/ ScrollViewer">
+                                    <Setter Property="Padding" Value="0,0,12,0"/>
                                     <Setter Property="Interaction.Behaviors">
                                         <BehaviorCollection>
                                             <behaviors:SmoothScrollBehavior />
@@ -276,7 +283,7 @@
                                    Foreground="{DynamicResource ForegroundSecondaryColor}" />
                     </StackPanel>
 
-                    <StackPanel Spacing="8" Margin="8"
+                    <StackPanel Spacing="16" Margin="8"
                                 Opacity="{Binding SelectedSlot?.Item, Converter={x:Static ObjectConverters.IsNotNull}}">
                         <StackPanel Orientation="Vertical" Spacing="4">
                             <TextBlock Text="Display name" FontSize="14" />
@@ -288,6 +295,11 @@
                             <TextBlock Text="Amount" FontSize="14" />
                             <NumericUpDown Minimum="1" Maximum="64"
                                            Value="{Binding SelectedSlot?.Item?.Amount, Mode=TwoWay}" FormatString="0" />
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding SelectedSlot?.Item?.GenerateExampleAction, Mode=TwoWay}" />
+                            <TextBlock Text="Add click action" FontSize="14" VerticalAlignment="Center" />
                         </StackPanel>
                     </StackPanel>
                 </Panel>

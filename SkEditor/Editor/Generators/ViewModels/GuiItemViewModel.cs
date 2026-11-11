@@ -17,5 +17,8 @@ public partial class GuiItemViewModel(string id, string name, Bitmap? image) : O
     [ObservableProperty]
     public partial int Amount { get; set; } = 1;
     
+    [ObservableProperty]
+    public partial bool GenerateExampleAction { get; set; } = false;
+    
     public bool IsBackground { get; set; }
 }

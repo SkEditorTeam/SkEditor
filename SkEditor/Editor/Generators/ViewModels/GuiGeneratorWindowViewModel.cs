@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using Avalonia.Media.Imaging;
+using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ObservableCollections;
@@ -14,6 +15,8 @@ using R3;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Generators.Models;
+using SkEditor.Editor.Tabs.Capabilities;
+using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Editor.Generators.ViewModels;
 
@@ -48,6 +51,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
     private readonly IGameResourcesService _resources;
+    private readonly ITabService _tabs;
 
     private readonly ObservableList<ItemViewModel> _sourceItems = [];
     private DisposableBag _disposables;
@@ -57,9 +61,6 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
     public BindableReactiveProperty<string> Filter { get; } = new(string.Empty);
     public NotifyCollectionChangedSynchronizedViewList<ItemViewModel> Items { get; }
 
-    [ObservableProperty]
-    public partial int Rows { get; set; } = 5;
-
     public BindableReactiveProperty<ItemViewModel?> SelectedItem { get; } = new(null);
 
     [ObservableProperty]
@@ -68,12 +69,17 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
     public ObservableCollection<SlotViewModel> Slots { get; } = [];
     
     public BindableReactiveProperty<GuiGeneratorViewMode> CurrentViewMode { get; } = new(GuiGeneratorViewMode.Palette);
+    
+    public BindableReactiveProperty<string> Title { get; set; } = new(string.Empty);
+    public BindableReactiveProperty<string> FunctionName { get; set; } = new(string.Empty);
+    public BindableReactiveProperty<int> Rows { get; set; } = new(5);
 
-    public GuiGeneratorWindowViewModel(IGameResourcesService resources, INotificationService notifs, ILogService logs)
+    public GuiGeneratorWindowViewModel(IGameResourcesService resources, INotificationService notifs, ILogService logs, ITabService tabs)
     {
         _resources = resources;
         _notifs = notifs;
         _logs = logs;
+        _tabs = tabs;
 
         ISynchronizedView<ItemViewModel, ItemViewModel> view = _sourceItems.CreateView(x => x).AddTo(ref _disposables);
         Items = view.ToNotifyCollectionChanged().AddTo(ref _disposables);
@@ -101,6 +107,8 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
                 SelectedItem.Value = Items.FirstOrDefault();
             })
             .AddTo(ref _disposables);
+        
+        Rows.Subscribe(_ => RecreateSlots()).AddTo(ref _disposables);
 
         RecreateSlots();
         if (Slots.FirstOrDefault() is { } firstSlot)
@@ -237,14 +245,52 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         }
     }
 
-    partial void OnRowsChanged(int value)
+    [RelayCommand]
+    private void Generate()
     {
-        RecreateSlots();
+        if (_tabs.SelectedTab is not ITextEditorTab textEditorTab)
+        {
+            return;
+        }
+        
+        Dictionary<int, GuiItemViewModel> items = Slots
+            .Where(slot => slot.Item is not null && !slot.Item.IsBackground)
+            .ToDictionary(slot => slot.Index, slot => slot.Item!);
+        
+        GuiItemViewModel? backgroundItem = Slots.FirstOrDefault(slot => slot.Item?.IsBackground == true)?.Item;
+        
+        GuiCodeGenerator.Options options = new()
+        {
+            Title = Title.Value,
+            FunctionName = FunctionName.Value,
+            Rows = Rows.Value,
+            BackgroundItem = backgroundItem,
+            UseSkriptGui = false
+        };
+
+        string generatedCode = GuiCodeGenerator.Generate(items, options);
+
+        int caretOffset = textEditorTab.CaretOffset;
+        TextLocation location = textEditorTab.Document.GetLocation(caretOffset);
+        DocumentLine? line = textEditorTab.Document.GetLineByNumber(location.Line);
+        if (line is null)
+        {
+            return;
+        }
+
+        if (line.Length > 0)
+        {
+            textEditorTab.Document.Insert(line.EndOffset, "\n" + generatedCode);
+        }
+        else
+        {
+            textEditorTab.Document.Insert(caretOffset, generatedCode);
+        }
     }
 
     private void RecreateSlots()
     {
-        int targetCount = Rows * Columns;
+        int targetCount = Rows.Value * Columns;
 
         while (Slots.Count > targetCount)
         {
