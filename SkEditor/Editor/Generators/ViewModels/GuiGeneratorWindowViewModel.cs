@@ -26,7 +26,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             return 0;
         }
 
-        return string.Compare(a.DisplayName, b.DisplayName, StringComparison.OrdinalIgnoreCase);
+        return string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase);
     });
 
     private static readonly Comparer<ItemViewModel> ByScoreComparer =
@@ -66,6 +66,8 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
     public partial SlotViewModel? SelectedSlot { get; set; }
 
     public ObservableCollection<SlotViewModel> Slots { get; } = [];
+    
+    public BindableReactiveProperty<GuiGeneratorViewMode> CurrentViewMode { get; } = new(GuiGeneratorViewMode.Palette);
 
     public GuiGeneratorWindowViewModel(IGameResourcesService resources, INotificationService notifs, ILogService logs)
     {
@@ -89,7 +91,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
                 {
                     foreach (ItemViewModel item in _sourceItems)
                     {
-                        item.MatchScore = ItemSearchEngine.GetMatchScore(item.DisplayName, query);
+                        item.MatchScore = ItemSearchEngine.GetMatchScore(item.Name, query);
                     }
 
                     _sourceItems.Sort(CombinedComparer);
@@ -132,7 +134,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             return;
         }
 
-        SelectedSlot.Item = new GuiItemViewModel(selected.Id, selected.DisplayName, selected.Image);
+        SelectedSlot.Item = new GuiItemViewModel(selected.Id, selected.Name, selected.Image);
     }
 
     [RelayCommand]
@@ -145,7 +147,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
 
         foreach (SlotViewModel slot in Slots)
         {
-            slot.Item ??= new GuiItemViewModel(SelectedItem.Value.Id, SelectedItem.Value.DisplayName,
+            slot.Item ??= new GuiItemViewModel(SelectedItem.Value.Id, SelectedItem.Value.Name,
                 SelectedItem.Value.Image);
         }
     }
@@ -162,7 +164,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         {
             if (slot.Item is null || slot.Item.IsBackground)
             {
-                slot.Item = new GuiItemViewModel(SelectedItem.Value.Id, SelectedItem.Value.DisplayName,
+                slot.Item = new GuiItemViewModel(SelectedItem.Value.Id, SelectedItem.Value.Name,
                     SelectedItem.Value.Image)
                 {
                     IsBackground = true

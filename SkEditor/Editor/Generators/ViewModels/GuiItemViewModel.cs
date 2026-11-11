@@ -3,13 +3,16 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SkEditor.Editor.Generators.ViewModels;
 
-public partial class GuiItemViewModel(string id, string displayName, Bitmap? image) : ObservableObject
+public partial class GuiItemViewModel(string id, string name, Bitmap? image) : ObservableObject
 {
     public string Id { get; } = id;
     public Bitmap? Image { get; } = image;
 
     [ObservableProperty]
-    public partial string DisplayName { get; set; } = displayName;
+    public partial string Name { get; set; } = name;
+    
+    [ObservableProperty]
+    public partial string? DisplayName { get; set; }
 
     [ObservableProperty]
     public partial int Amount { get; set; } = 1;

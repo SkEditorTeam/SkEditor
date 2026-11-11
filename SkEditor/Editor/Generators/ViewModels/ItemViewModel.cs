@@ -4,9 +4,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SkEditor.Editor.Generators.ViewModels;
 
-public class ItemViewModel(string id, string displayName) : ObservableObject, IDisposable
+public class ItemViewModel(string id, string name) : ObservableObject, IDisposable
 {
-    public string DisplayName { get; } = displayName;
+    public string Name { get; } = name;
     public string Id { get; } = id;
     public Bitmap? Image { get; init; }
 
@@ -14,7 +14,7 @@ public class ItemViewModel(string id, string displayName) : ObservableObject, ID
 
     public override string ToString()
     {
-        return DisplayName;
+        return Name;
     }
 
     public void Dispose()
