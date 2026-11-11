@@ -295,7 +295,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
 
                     Item item = rawItems[i];
                     using MemoryStream stream = new(item.Texture);
-                    Bitmap bitmap = Bitmap.DecodeToWidth(stream, 32);
+                    Bitmap bitmap = Bitmap.DecodeToWidth(stream, 64);
 
                     items[i] = new ItemViewModel(item.Id, item.DisplayName)
                     {
