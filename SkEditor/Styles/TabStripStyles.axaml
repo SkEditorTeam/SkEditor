@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ui="clr-namespace:SkEditor.Layout.StatusBar.UI">
+    
+    <Thickness x:Key="TabStripContentMargin">0,0,0,9</Thickness>
 
     <ControlTheme x:Key="{x:Type ui:SkEditorTabStrip}" TargetType="ui:SkEditorTabStrip">
         <Setter Property="Template">
@@ -50,7 +52,7 @@
                                           FontFamily="{TemplateBinding FontFamily}"
                                           FontSize="{TemplateBinding FontSize}"
                                           FontWeight="{TemplateBinding FontWeight}"
-                                          Margin="0,0,0,9" />
+                                          Margin="{DynamicResource TabStripContentMargin}" />
                         <Rectangle Name="PART_SelectedPipe"
                                    Fill="{DynamicResource PivotHeaderItemSelectedPipeFill}"
                                    RadiusX="2"
