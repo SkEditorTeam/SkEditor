@@ -1,4 +1,4 @@
-$framework = "net10.0"
+$framework = "net11.0"
 $releasesDir = ".\Releases"
 
 if (Test-Path $releasesDir) { Remove-Item -Recurse -Force $releasesDir }
