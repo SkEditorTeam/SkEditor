@@ -18,6 +18,11 @@ public interface ITextEditorTab
     void RequestRedraw(ISegment? segment = null);
     void RequestGoToLocation(TextLocation location);
     
+    /// <summary>
+    /// Inserts the code at the caret offset, adding newline if the current line isn't empty.
+    /// </summary>
+    void InsertCode(string code);
+    
     event Action<EditorCommandType>? EditorCommandRequested;
     event Action<ISegment?>? RedrawRequested;
     event Action<TextLocation>? GoToLocationRequested;
