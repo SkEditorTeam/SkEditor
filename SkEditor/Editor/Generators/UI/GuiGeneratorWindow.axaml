@@ -296,10 +296,11 @@
                             <NumericUpDown Minimum="1" Maximum="64"
                                            Value="{Binding SelectedSlot?.Item?.Amount, Mode=TwoWay}" FormatString="0" />
                         </StackPanel>
-                        
+
                         <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding SelectedSlot?.Item?.GenerateExampleAction, Mode=TwoWay}" />
-                            <TextBlock Text="Add click action" FontSize="14" VerticalAlignment="Center" />
+                            <CheckBox IsChecked="{Binding SelectedSlot?.Item?.GenerateExampleAction, Mode=TwoWay}" Padding="12,0,0,0" VerticalContentAlignment="Center">
+                                <TextBlock Text="Add click action" FontSize="14" />
+                            </CheckBox>
                         </StackPanel>
                     </StackPanel>
                 </Panel>
