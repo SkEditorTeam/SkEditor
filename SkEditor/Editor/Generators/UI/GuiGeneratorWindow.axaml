@@ -14,7 +14,7 @@
         x:Class="SkEditor.Editor.Generators.UI.GuiGeneratorWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate WindowTitleGuiGenerator}" Width="900" Height="520"
         CanResize="False" CanMinimize="False" CanMaximize="False"
-        x:DataType="vm:GuiGeneratorWindowViewModel"
+        x:DataType="vm:GuiGeneratorViewModel"
         Name="Root"
         WindowStartupLocation="CenterOwner">
 
@@ -65,25 +65,25 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
                 <StackPanel Spacing="4">
                     <TextBlock Text="Title" />
-                    <TextBox Width="180" Text="{Binding Title.Value}" />
+                    <TextBox Width="180" Text="{Binding Title.Value}" PlaceholderText="GUI" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
                     <TextBlock Text="Function name" />
-                    <TextBox Width="180" Text="{Binding FunctionName.Value}" />
+                    <TextBox Width="180" Text="{Binding FunctionName.Value}" PlaceholderText="openGui" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
                     <TextBlock Text="Rows" />
-                    <NumericUpDown Minimum="1" Maximum="6" Value="{Binding Rows.Value}" Width="100" FormatString="0" />
+                    <NumericUpDown Minimum="1" Maximum="6" Value="{Binding Grid.Rows.Value}" Width="100" FormatString="0" />
                 </StackPanel>
             </StackPanel>
 
-            <ItemsControl Grid.Row="1" ItemsSource="{Binding Slots}" VerticalAlignment="Center"
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Grid.Slots}" VerticalAlignment="Center"
                           HorizontalAlignment="Center">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding Columns}" ColumnSpacing="4" RowSpacing="4" />
+                        <UniformGrid Columns="{Binding Grid.Columns}" ColumnSpacing="4" RowSpacing="4" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -95,17 +95,17 @@
                                 Padding="0"
                                 Classes.selected="{Binding IsSelected}"
                                 Classes="minecraft-slot"
-                                genBehaviors:PointerActionBehavior.Command="{Binding #Root.((vm:GuiGeneratorWindowViewModel)DataContext)?.SlotPointerPressedCommand}">
+                                genBehaviors:PointerActionBehavior.Command="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.SlotPointerPressedCommand}">
 
                             <Interaction.Behaviors>
                                 <input:InputElementDoubleTappedEventCommandTrigger
-                                    Command="{Binding #Root.((vm:GuiGeneratorWindowViewModel)DataContext)?.HandleDoubleClickCommand}"
+                                    Command="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.HandleDoubleClickCommand}"
                                     Parameter="{Binding}" />
                             </Interaction.Behaviors>
 
                             <Panel>
                                 <Image
-                                    Source="{Binding $parent[ItemsControl].((vm:GuiGeneratorWindowViewModel)DataContext)?.BackgroundItem?.Image}"
+                                    Source="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.Grid.BackgroundItem?.Image}"
                                     RenderOptions.EdgeMode="Antialias"
                                     Width="32"
                                     Height="32"
@@ -147,6 +147,9 @@
             </ItemsControl>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
+                <ComboBox ItemsSource="{Binding Providers}" SelectedItem="{Binding SelectedProvider}"
+                          DisplayMemberBinding="{Binding Name}"/>
+                
                 <Button Content="Generate"
                         Command="{Binding GenerateCommand}" />
             </StackPanel>
@@ -287,8 +290,8 @@
                 <Panel
                     IsVisible="{Binding CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPropertiesView}}">
 
-                    <StackPanel Opacity="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
-                                IsHitTestVisible="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
+                    <StackPanel Opacity="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
+                                IsHitTestVisible="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center">
 
@@ -297,34 +300,34 @@
                     </StackPanel>
 
                     <StackPanel Spacing="16" Margin="8"
-                                Opacity="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                IsHitTestVisible="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                Opacity="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                IsHitTestVisible="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
 
-                        <TextBlock Text="This is the background item" IsVisible="{Binding IsEditingBackground}"
+                        <TextBlock Text="This is the background item" IsVisible="{Binding Grid.IsEditingBackground}"
                                    Foreground="{DynamicResource ForegroundSecondaryColor}" HorizontalAlignment="Center" />
 
                         <StackPanel Orientation="Vertical" Spacing="4">
                             <TextBlock Text="Display name" FontSize="14" />
-                            <TextBox Text="{Binding InspectedItem?.DisplayName, Mode=TwoWay}"
-                                     PlaceholderText="{Binding InspectedItem?.Name}" />
+                            <TextBox Text="{Binding Grid.InspectedItem?.DisplayName, Mode=TwoWay}"
+                                     PlaceholderText="{Binding Grid.InspectedItem?.Name}" />
                         </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Spacing="4" IsVisible="{Binding !IsEditingBackground}">
+                        <StackPanel Orientation="Vertical" Spacing="4" IsVisible="{Binding !Grid.IsEditingBackground}">
                             <TextBlock Text="Amount" FontSize="14" />
                             <NumericUpDown Minimum="1" Maximum="64"
-                                           Value="{Binding InspectedItem?.Amount, Mode=TwoWay}" FormatString="0" />
+                                           Value="{Binding Grid.InspectedItem?.Amount, Mode=TwoWay}" FormatString="0" />
                         </StackPanel>
 
                         <StackPanel Spacing="2">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding InspectedItem?.HideTooltip, Mode=TwoWay}"
+                                <CheckBox IsChecked="{Binding Grid.InspectedItem?.HideTooltip, Mode=TwoWay}"
                                           Padding="12,0,0,0" VerticalContentAlignment="Center">
                                     <TextBlock Text="Hide tooltip" FontSize="14" />
                                 </CheckBox>
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsEditingBackground}">
-                                <CheckBox IsChecked="{Binding InspectedItem?.GenerateExampleAction, Mode=TwoWay}"
+                            <StackPanel Orientation="Horizontal" IsVisible="{Binding !Grid.IsEditingBackground}">
+                                <CheckBox IsChecked="{Binding Grid.InspectedItem?.GenerateExampleAction, Mode=TwoWay}"
                                           Padding="12,0,0,0" VerticalContentAlignment="Center">
                                     <TextBlock Text="Add click action" FontSize="14" />
                                 </CheckBox>

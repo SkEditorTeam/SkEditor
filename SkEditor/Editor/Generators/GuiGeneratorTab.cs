@@ -1,6 +1,6 @@
 namespace SkEditor.Editor.Generators.ViewModels;
 
-public enum GuiGeneratorViewMode
+public enum GuiGeneratorTab
 {
     Palette,
     Properties

@@ -6,11 +6,11 @@ namespace SkEditor.Editor.Generators.Converters;
 
 public static class GuiGeneratorViewConverters
 {
-    public static IValueConverter ViewModeToIndex => new TwoWayValueConverter<GuiGeneratorViewMode, int>(
+    public static IValueConverter ViewModeToIndex => new TwoWayValueConverter<GuiGeneratorTab, int>(
         mode => (int)mode,
-        idx => (GuiGeneratorViewMode)idx
+        idx => (GuiGeneratorTab)idx
     );
 
-    public static IValueConverter IsPaletteView => new FuncValueConverter<GuiGeneratorViewMode, bool>(v => v == GuiGeneratorViewMode.Palette);
-    public static IValueConverter IsPropertiesView => new FuncValueConverter<GuiGeneratorViewMode, bool>(v => v == GuiGeneratorViewMode.Properties);
+    public static IValueConverter IsPaletteView => new FuncValueConverter<GuiGeneratorTab, bool>(v => v == GuiGeneratorTab.Palette);
+    public static IValueConverter IsPropertiesView => new FuncValueConverter<GuiGeneratorTab, bool>(v => v == GuiGeneratorTab.Properties);
 }

@@ -13,11 +13,7 @@ public static class PointerActionBehavior
     public static readonly AttachedProperty<ICommand?> CommandProperty =
         AvaloniaProperty.RegisterAttached<Control, ICommand?>("Command", typeof(PointerActionBehavior));
 
-    public static void SetCommand(Control element, ICommand? value) => element.SetValue(CommandProperty, value);
-    public static ICommand? GetCommand(Control element) => element.GetValue(CommandProperty);
-
-    static PointerActionBehavior()
-    {
+    static PointerActionBehavior() =>
         CommandProperty.Changed.AddClassHandler<Control>((control, e) =>
         {
             control.RemoveHandler(InputElement.PointerPressedEvent, OnPointerPressed);
@@ -28,9 +24,18 @@ public static class PointerActionBehavior
                     InputElement.PointerPressedEvent,
                     OnPointerPressed,
                     RoutingStrategies.Tunnel | RoutingStrategies.Bubble,
-                    handledEventsToo: true);
+                    true);
             }
         });
+
+    public static void SetCommand(Control element, ICommand? value)
+    {
+        element.SetValue(CommandProperty, value);
+    }
+
+    public static ICommand? GetCommand(Control element)
+    {
+        return element.GetValue(CommandProperty);
     }
 
     private static void OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -41,10 +46,27 @@ public static class PointerActionBehavior
         }
 
         ICommand? command = GetCommand(control);
-        if (command is null) return;
+        if (command is null)
+        {
+            return;
+        }
 
         PointerUpdateKind kind = e.GetCurrentPoint(control).Properties.PointerUpdateKind;
-        var action = new SlotPointerAction(slot, kind);
+
+        ClickType? clickType = kind switch
+        {
+            PointerUpdateKind.LeftButtonPressed => ClickType.Left,
+            PointerUpdateKind.MiddleButtonPressed => ClickType.Middle,
+            PointerUpdateKind.RightButtonPressed => ClickType.Right,
+            _ => null
+        };
+
+        if (clickType is null)
+        {
+            return;
+        }
+
+        SlotPointerAction action = new(slot, clickType.Value);
 
         if (!command.CanExecute(action))
         {
