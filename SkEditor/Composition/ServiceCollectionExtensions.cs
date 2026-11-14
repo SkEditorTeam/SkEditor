@@ -39,6 +39,7 @@ using SkEditor.Editor.Features.Saving;
 using SkEditor.Editor.Features.View;
 using SkEditor.Editor.Features.View.Zoom;
 using SkEditor.Editor.Generators;
+using SkEditor.Editor.Generators.Providers;
 using SkEditor.Editor.Generators.UI;
 using SkEditor.Editor.Generators.ViewModels;
 using SkEditor.Editor.Syntax;
@@ -98,7 +99,6 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IProjectService, ProjectService>();
             services.AddSingleton<ISidebarService, SidebarService>();
             services.AddSingleton<IUpdateService, UpdateService>();
-            services.AddSingleton<IGameResourcesService, GameResourcesService>();
 
             services.AddSingleton<IRemoteConnectionService, RemoteConnectionService>();
             services.AddSingleton<ICredentialStoreFactory, CredentialStoreFactory>();
@@ -111,6 +111,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
             services.AddDocumentationProviders();
+            services.AddGuiGenerator();
             
             services.AddHttpClient(HttpClients.SkEditor, client =>
             {
@@ -156,7 +157,7 @@ public static class ServiceCollectionExtensions
             services.AddTransient<WhatsNewPageViewModel>();
             services.AddTransient<WelcomePageViewModel>();
             services.AddTransient<PublishWindowViewModel>();
-            services.AddTransient<GuiGeneratorWindowViewModel>();
+            services.AddTransient<GuiGeneratorViewModel>();
             services.AddTransient<AboutWindowViewModel>();
             services.AddTransient<GoToLineWindowViewModel>();
         }
@@ -382,6 +383,13 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton<IDocumentationProvider, SkDocsProvider>();
             services.AddSingleton<IDocumentationProvider, SkUnityProvider>();
+        }
+
+        private void AddGuiGenerator()
+        {
+            services.AddSingleton<IGameResourcesService, GameResourcesService>();
+
+            services.AddSingleton<IGuiCodeProvider, VanillaGuiCodeProvider>();
         }
     }
 }

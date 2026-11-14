@@ -7,7 +7,7 @@ public partial class GuiGeneratorWindow : SkEditorWindow
 {
     public GuiGeneratorWindow() => InitializeComponent();
 
-    public GuiGeneratorWindow(GuiGeneratorWindowViewModel viewModel) : this()
+    public GuiGeneratorWindow(GuiGeneratorViewModel viewModel) : this()
     {
         DataContext = viewModel;
         

@@ -5,7 +5,6 @@
         <Features>runtime-async=on</Features>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
-        <LangVersion>latest</LangVersion>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>Properties/app.manifest</ApplicationManifest>
         <ApplicationIcon>Assets\SkEditor.ico</ApplicationIcon>

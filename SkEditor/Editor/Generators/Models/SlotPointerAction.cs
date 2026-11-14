@@ -1,6 +1,11 @@
-using Avalonia.Input;
 using SkEditor.Editor.Generators.ViewModels;
 
 namespace SkEditor.Editor.Generators.Models;
 
-public record SlotPointerAction(SlotViewModel Slot, PointerUpdateKind PointerKind);
+public enum ClickType
+{
+    Left,
+    Middle,
+    Right
+}
+public record SlotPointerAction(SlotViewModel Slot, ClickType ClickType);
