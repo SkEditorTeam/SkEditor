@@ -265,7 +265,6 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             FunctionName = FunctionName.Value,
             Rows = Rows.Value,
             BackgroundItem = backgroundItem,
-            UseSkriptGui = false
         };
 
         string generatedCode = GuiCodeGenerator.Generate(items, options);

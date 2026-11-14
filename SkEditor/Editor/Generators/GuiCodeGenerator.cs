@@ -8,8 +8,6 @@ namespace SkEditor.Editor.Generators;
 
 public static class GuiCodeGenerator
 {
-    private const string Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
     public static string Generate(IReadOnlyDictionary<int, GuiItemViewModel> items, Options? options = null)
     {
         options ??= new Options();
@@ -24,15 +22,7 @@ public static class GuiCodeGenerator
         StringBuilder code = new();
         code.Append($"function {functionName}(p: player):");
 
-        if (!options.UseSkriptGui)
-        {
-            AppendVanillaSkript(code, items, title, rows, options.BackgroundItem);
-        }
-        else
-        {
-            AppendSkriptGui(code, items, title, rows, options.BackgroundItem);
-        }
-
+        AppendVanillaSkript(code, items, title, rows, options.BackgroundItem);
         return code.ToString();
     }
 
@@ -84,89 +74,6 @@ public static class GuiCodeGenerator
         }
     }
 
-    private static void AppendSkriptGui(
-        StringBuilder code,
-        IReadOnlyDictionary<int, GuiItemViewModel> items,
-        string title,
-        int rows,
-        GuiItemViewModel? backgroundItem)
-    {
-        code.Append($"\n\tcreate a gui with virtual chest inventory with {rows} rows named \"{title}\"");
-
-        if (backgroundItem != null)
-        {
-            AppendShapeCode(code, items, rows);
-        }
-
-        code.Append(':');
-
-        if (backgroundItem != null)
-        {
-            code.Append("\n\t\tmake gui slot \"=\" with ");
-            AppendItemString(code, backgroundItem);
-        }
-
-        IOrderedEnumerable<KeyValuePair<int, GuiItemViewModel>> sortedItems = items
-            .Where(kvp => !kvp.Value.IsBackground)
-            .OrderBy(kvp => kvp.Key);
-
-        foreach ((int slot, GuiItemViewModel item) in sortedItems)
-        {
-            code.Append($"\n\t\tmake gui slot {slot} with ");
-            AppendItemString(code, item);
-
-            if (item.GenerateExampleAction)
-            {
-                code.Append(':');
-                code.Append($"\n\t\t\tsend \"You clicked on slot {slot}\" to player");
-            }
-        }
-
-        code.Append("\n\topen the last gui for {_p}");
-    }
-
-    private static void AppendShapeCode(StringBuilder code, IReadOnlyDictionary<int, GuiItemViewModel> items, int rows)
-    {
-        int totalSlots = rows * 9;
-        List<List<char>> rowChars = [.. Enumerable.Range(0, rows).Select(_ => new List<char>(9))];
-        HashSet<char> usedChars = ['='];
-
-        for (int i = 0; i < totalSlots; i++)
-        {
-            int rowIndex = i / 9;
-
-            if (!items.TryGetValue(i, out GuiItemViewModel? item) || item.IsBackground)
-            {
-                rowChars[rowIndex].Add('=');
-            }
-            else
-            {
-                char firstChar = !string.IsNullOrEmpty(item.Name) ? item.Name[0] : 'x';
-                char chosenChar = !usedChars.Contains(firstChar)
-                    ? firstChar
-                    : GetRandomChar(usedChars);
-
-                usedChars.Add(chosenChar);
-                rowChars[rowIndex].Add(chosenChar);
-            }
-        }
-
-        code.Append(" and shape");
-
-        if (rows == 1)
-        {
-            code.Append($" \"{string.Concat(rowChars[0])}\"");
-        }
-        else
-        {
-            for (int r = 0; r < rows; r++)
-            {
-                string rowStr = string.Concat(rowChars[r]);
-                code.Append(r == rows - 1 ? $" and \"{rowStr}\"" : $" \"{rowStr}\",");
-            }
-        }
-    }
-
     private static void AppendItemString(StringBuilder code, GuiItemViewModel item)
     {
         string rawName = item.Id.Replace('_', ' ');
@@ -186,22 +93,10 @@ public static class GuiCodeGenerator
         }
     }
 
-    private static char GetRandomChar(HashSet<char> usedChars)
-    {
-        char c;
-        do
-        {
-            c = Chars[Random.Shared.Next(Chars.Length)];
-        } while (usedChars.Contains(c));
-
-        return c;
-    }
-
     public record Options(
         string FunctionName = "openGUI",
         string Title = "GUI",
         int Rows = 3,
-        bool UseSkriptGui = false,
         GuiItemViewModel? BackgroundItem = null
     );
 }
