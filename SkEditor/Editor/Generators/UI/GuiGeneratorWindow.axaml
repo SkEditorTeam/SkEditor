@@ -104,15 +104,16 @@
                             </Interaction.Behaviors>
 
                             <Panel>
-                                <Image Source="{Binding $parent[ItemsControl].((vm:GuiGeneratorWindowViewModel)DataContext)?.BackgroundItem?.Image}"
-                                       RenderOptions.EdgeMode="Antialias"
-                                       Width="32"
-                                       Height="32"
-                                       Opacity="0.5"
-                                       IsVisible="{Binding Item, Converter={x:Static ObjectConverters.IsNull}}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
-                                
+                                <Image
+                                    Source="{Binding $parent[ItemsControl].((vm:GuiGeneratorWindowViewModel)DataContext)?.BackgroundItem?.Image}"
+                                    RenderOptions.EdgeMode="Antialias"
+                                    Width="32"
+                                    Height="32"
+                                    Opacity="0.5"
+                                    IsVisible="{Binding Item, Converter={x:Static ObjectConverters.IsNull}}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" />
+
                                 <Image Source="{Binding Item?.Image}"
                                        RenderOptions.EdgeMode="Antialias"
                                        Width="32"
@@ -144,7 +145,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            
+
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
                 <Button Content="Generate"
                         Command="{Binding GenerateCommand}" />
@@ -181,10 +182,11 @@
                         <TextBox Grid.Row="0"
                                  PlaceholderText="Search..."
                                  Theme="{DynamicResource SearchBoxTheme}"
-                                 Text="{Binding Filter.Value}"
+                                 Text="{Binding ItemPalette.Filter.Value}"
                                  Margin="0,2,0,2" />
 
                         <ListBox Grid.Row="1"
+                                 DataContext="{Binding ItemPalette}"
                                  ItemsSource="{Binding Items}"
                                  SelectedItem="{Binding SelectedItem.Value}"
                                  SelectionMode="AlwaysSelected"
@@ -208,7 +210,7 @@
                                 </Style>
 
                                 <Style Selector="ListBox /template/ ScrollViewer">
-                                    <Setter Property="Padding" Value="0,0,12,0"/>
+                                    <Setter Property="Padding" Value="0,0,12,0" />
                                     <Setter Property="Interaction.Behaviors">
                                         <BehaviorCollection>
                                             <behaviors:SmoothScrollBehavior />
@@ -263,7 +265,8 @@
                         </Grid>
                     </Grid>
 
-                    <StackPanel Opacity="{Binding LoadCommand.IsRunning}"
+                    <StackPanel DataContext="{Binding ItemPalette}"
+                                Opacity="{Binding LoadCommand.IsRunning}"
                                 IsHitTestVisible="{Binding LoadCommand.IsRunning}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
@@ -296,9 +299,10 @@
                     <StackPanel Spacing="16" Margin="8"
                                 Opacity="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
                                 IsHitTestVisible="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
-                        
-                        <TextBlock Text="This is the background item" IsVisible="{Binding IsEditingBackground}" Foreground="{DynamicResource ForegroundSecondaryColor}" HorizontalAlignment="Center"/>
-                        
+
+                        <TextBlock Text="This is the background item" IsVisible="{Binding IsEditingBackground}"
+                                   Foreground="{DynamicResource ForegroundSecondaryColor}" HorizontalAlignment="Center" />
+
                         <StackPanel Orientation="Vertical" Spacing="4">
                             <TextBlock Text="Display name" FontSize="14" />
                             <TextBox Text="{Binding InspectedItem?.DisplayName, Mode=TwoWay}"
@@ -310,16 +314,18 @@
                             <NumericUpDown Minimum="1" Maximum="64"
                                            Value="{Binding InspectedItem?.Amount, Mode=TwoWay}" FormatString="0" />
                         </StackPanel>
-                        
+
                         <StackPanel Spacing="2">
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding InspectedItem?.HideTooltip, Mode=TwoWay}" Padding="12,0,0,0" VerticalContentAlignment="Center">
+                                <CheckBox IsChecked="{Binding InspectedItem?.HideTooltip, Mode=TwoWay}"
+                                          Padding="12,0,0,0" VerticalContentAlignment="Center">
                                     <TextBlock Text="Hide tooltip" FontSize="14" />
                                 </CheckBox>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsEditingBackground}">
-                                <CheckBox IsChecked="{Binding InspectedItem?.GenerateExampleAction, Mode=TwoWay}" Padding="12,0,0,0" VerticalContentAlignment="Center">
+                                <CheckBox IsChecked="{Binding InspectedItem?.GenerateExampleAction, Mode=TwoWay}"
+                                          Padding="12,0,0,0" VerticalContentAlignment="Center">
                                     <TextBlock Text="Add click action" FontSize="14" />
                                 </CheckBox>
                             </StackPanel>
