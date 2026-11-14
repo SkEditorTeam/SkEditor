@@ -39,6 +39,7 @@ using SkEditor.Editor.Features.Saving;
 using SkEditor.Editor.Features.View;
 using SkEditor.Editor.Features.View.Zoom;
 using SkEditor.Editor.Generators;
+using SkEditor.Editor.Generators.Projects;
 using SkEditor.Editor.Generators.Providers;
 using SkEditor.Editor.Generators.UI;
 using SkEditor.Editor.Generators.ViewModels;
@@ -387,7 +388,8 @@ public static class ServiceCollectionExtensions
 
         private void AddGuiGenerator()
         {
-            services.AddSingleton<IGameResourcesService, GameResourcesService>();
+            services.AddTransient<IGameResourcesService, GameResourcesService>();
+            services.AddTransient<IGuiProjectService, GuiProjectService>();
 
             services.AddSingleton<IGuiCodeProvider, VanillaGuiCodeProvider>();
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -40,26 +41,28 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
         int scoreResult = ByScoreComparer.Compare(a, b);
         return scoreResult != 0 ? scoreResult : ByNameComparer.Compare(a, b);
     });
-    
+
     public BindableReactiveProperty<string> Filter { get; } = new(string.Empty);
     public NotifyCollectionChangedSynchronizedViewList<ItemViewModel> Items { get; }
 
     public BindableReactiveProperty<ItemViewModel?> SelectedItem { get; } = new(null);
 
     private readonly ObservableList<ItemViewModel> _sourceItems = [];
+    private FrozenDictionary<string, ItemViewModel> _itemsById = FrozenDictionary<string, ItemViewModel>.Empty;
+
     private DisposableBag _disposables;
-    
+
     private readonly CancellationTokenSource _cts = new();
     private readonly ILogService _logs;
     private readonly INotificationService _notifs;
     private readonly IGameResourcesService _resources;
-    
+
     public ItemPaletteViewModel(IGameResourcesService resources, INotificationService notifs, ILogService logs)
     {
         _resources = resources;
         _notifs = notifs;
         _logs = logs;
-        
+
         ISynchronizedView<ItemViewModel, ItemViewModel> view = _sourceItems.CreateView(x => x).AddTo(ref _disposables);
         Items = view.ToNotifyCollectionChanged().AddTo(ref _disposables);
 
@@ -87,7 +90,7 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
             })
             .AddTo(ref _disposables);
     }
-    
+
     [RelayCommand]
     private async Task Load()
     {
@@ -126,13 +129,19 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
                     using MemoryStream stream = new(item.Texture);
                     Bitmap bitmap = Bitmap.DecodeToWidth(stream, 64);
 
-                    items[i] = new ItemViewModel(item.Id, item.DisplayName)
+                    ItemViewModel itemVm = new(item.Id, item.DisplayName)
                     {
                         Image = bitmap
                     };
+
+                    items[i] = itemVm;
                 });
 
                 Array.Sort(items, ByNameComparer);
+
+                _itemsById = items.ToFrozenDictionary(
+                    x => x.Id,
+                    StringComparer.OrdinalIgnoreCase);
             }, ct);
 
             if (ct.IsCancellationRequested)
@@ -141,6 +150,7 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
             }
 
             _sourceItems.AddRange(items);
+
             SelectedItem.Value = Items.FirstOrDefault();
         }
         catch (OperationCanceledException)
@@ -148,7 +158,7 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
             // ignored
         }
     }
-    
+
     private async Task<bool> Download(CancellationToken ct)
     {
         try
@@ -164,6 +174,8 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
         }
     }
 
+    public ItemViewModel? FindById(string id) => _itemsById.GetValueOrDefault(id);
+
     private void ClearItems()
     {
         foreach (ItemViewModel item in _sourceItems)
@@ -172,12 +184,13 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
         }
 
         _sourceItems.Clear();
+        _itemsById = FrozenDictionary<string, ItemViewModel>.Empty;
     }
 
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        
+
         _cts.Cancel();
         ClearItems();
         _cts.Dispose();

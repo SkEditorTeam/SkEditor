@@ -13,4 +13,5 @@ public static class GuiGeneratorViewConverters
 
     public static IValueConverter IsPaletteView => new FuncValueConverter<GuiGeneratorTab, bool>(v => v == GuiGeneratorTab.Palette);
     public static IValueConverter IsPropertiesView => new FuncValueConverter<GuiGeneratorTab, bool>(v => v == GuiGeneratorTab.Properties);
+    public static IValueConverter IsProjectsView => new FuncValueConverter<GuiGeneratorTab, bool>(v => v == GuiGeneratorTab.Projects);
 }

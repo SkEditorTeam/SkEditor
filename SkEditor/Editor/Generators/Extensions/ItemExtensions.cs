@@ -26,4 +26,21 @@ public static class ItemExtensions
             return item;
         }
     }
+    
+    extension(GuiItemViewModel)
+    {
+        public static GuiItemViewModel FromModel(GuiItem model, ItemViewModel? resource)
+        {
+            return new GuiItemViewModel(
+                model.Id,
+                resource?.Name ?? model.Id,
+                resource?.Image)
+            {
+                DisplayName = model.DisplayName,
+                Amount = model.Amount,
+                GenerateExampleAction = model.GenerateExampleAction,
+                HideTooltip = model.HideTooltip
+            };
+        }
+    }
 }

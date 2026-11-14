@@ -148,10 +148,13 @@
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
                 <ComboBox ItemsSource="{Binding Providers}" SelectedItem="{Binding SelectedProvider}"
-                          DisplayMemberBinding="{Binding Name}"/>
+                          HorizontalContentAlignment="Center"
+                          DisplayMemberBinding="{Binding Name}" MinWidth="100"/>
                 
                 <Button Content="Generate"
-                        Command="{Binding GenerateCommand}" />
+                        Command="{Binding GenerateCommand}" MinWidth="100" />
+
+                <Button Content="Save" Command="{Binding SaveProjectCommand}" MinWidth="100" />
             </StackPanel>
         </Grid>
 
@@ -174,6 +177,9 @@
 
                     <ui:SkEditorTabStripItem>
                         <TextBlock Text="Properties" FontSize="12" />
+                    </ui:SkEditorTabStripItem>
+                    <ui:SkEditorTabStripItem>
+                        <TextBlock Text="Projects" FontSize="12" />
                     </ui:SkEditorTabStripItem>
                 </ui:SkEditorTabStrip>
             </GroupBox.Header>
@@ -333,6 +339,66 @@
                                 </CheckBox>
                             </StackPanel>
                         </StackPanel>
+                    </StackPanel>
+                </Panel>
+                
+                <Panel
+                    IsVisible="{Binding CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsProjectsView}}">
+                    <Grid RowDefinitions="Auto,*,Auto" RowSpacing="8" Margin="8"
+                          Opacity="{Binding Projects.Count}"
+                          IsHitTestVisible="{Binding Projects.Count}">
+                        <TextBox Grid.Row="0"
+                                 PlaceholderText="Search..."
+                                 Theme="{DynamicResource SearchBoxTheme}"
+                                 Margin="0,2,0,2" />
+
+                        <ListBox Grid.Row="1"
+                                 SelectionMode="AlwaysSelected"
+                                 ItemsSource="{Binding Projects}"
+                                 SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
+                                 DisplayMemberBinding="{Binding Name}"
+                                 Margin="0,0,-12,0" HorizontalAlignment="Stretch"
+                                 ClipToBounds="False"
+                                 IsTextSearchEnabled="True">
+                        </ListBox>
+
+                        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="6" Margin="0,6,0,0">
+                            <SplitButton Grid.Column="0"
+                                         Content="Load"
+                                         Classes="accent"
+                                         HorizontalAlignment="Stretch"
+                                         Command="{Binding LoadProjectCommand}">
+                                <SplitButton.Flyout>
+                                    <MenuFlyout>
+                                        <!-- <MenuItem Header="Import from file"/> -->
+                                    </MenuFlyout>
+                                </SplitButton.Flyout>
+                            </SplitButton>
+
+                            <SplitButton Grid.Column="1"
+                                         Content="Save"
+                                         HorizontalAlignment="Stretch"
+                                         Command="{Binding ClearSlotCommand}">
+                                <SplitButton.Flyout>
+                                    <MenuFlyout>
+                                        <!-- <MenuItem Header="Save as new..." /> -->
+                                        <!-- <MenuItem Header="Rename" /> -->
+                                        <!-- <MenuItem Header="Delete" /> -->
+                                        <!-- <MenuItem Header="Export to file" /> -->
+                                    </MenuFlyout>
+                                </SplitButton.Flyout>
+                            </SplitButton>
+                        </Grid>
+                    </Grid>
+                    
+                    <StackPanel Opacity="{Binding !Projects.Count}"
+                                IsHitTestVisible="{Binding !Projects.Count}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Spacing="16">
+
+                        <TextBlock Text="No projects saved" FontSize="16"
+                                   Foreground="{DynamicResource ForegroundSecondaryColor}" />
                     </StackPanel>
                 </Panel>
             </Panel>

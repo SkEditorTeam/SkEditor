@@ -14,6 +14,7 @@ public partial class GuiGeneratorWindow : SkEditorWindow
         Loaded += async (_, _) =>
         {
             await viewModel.ItemPalette.LoadCommand.ExecuteAsync(null);
+            await viewModel.LoadProjects();
         };
     }
 }
