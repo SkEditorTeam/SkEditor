@@ -36,8 +36,8 @@ public partial class GuiGridViewModel : ObservableObject, IDisposable
             SelectSlot(firstSlot);
         }
 
-        SelectedSlot?
-            .ObservePropertyChanged(x => nameof(x.Item))
+        this.
+            ObservePropertyChanged(x => x.SelectedSlot, x => x.Item)
             .Subscribe(_ =>
             {
                 OnPropertyChanged(nameof(InspectedItem));
