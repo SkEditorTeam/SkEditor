@@ -20,5 +20,6 @@ public partial class GuiItemViewModel(string id, string name, Bitmap? image) : O
     [ObservableProperty]
     public partial bool GenerateExampleAction { get; set; } = false;
     
-    public bool IsBackground { get; set; }
+    [ObservableProperty]
+    public partial bool HideTooltip { get; set; } = false;
 }

@@ -43,7 +43,6 @@ public static class GuiCodeGenerator
         }
 
         var sortedItems = items
-            .Where(kvp => !kvp.Value.IsBackground)
             .OrderBy(kvp => kvp.Key)
             .ToList();
 
@@ -90,6 +89,11 @@ public static class GuiCodeGenerator
         if (!string.IsNullOrWhiteSpace(item.DisplayName))
         {
             code.Append($" named \"{item.DisplayName}\"");
+        }
+
+        if (item.HideTooltip)
+        {
+            code.Append(" without entire tooltip");
         }
     }
 

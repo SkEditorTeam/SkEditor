@@ -64,6 +64,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
     public BindableReactiveProperty<ItemViewModel?> SelectedItem { get; } = new(null);
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(InspectedItem), nameof(IsEditingBackground))]
     public partial SlotViewModel? SelectedSlot { get; set; }
 
     public ObservableCollection<SlotViewModel> Slots { get; } = [];
@@ -73,6 +74,13 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
     public BindableReactiveProperty<string> Title { get; set; } = new(string.Empty);
     public BindableReactiveProperty<string> FunctionName { get; set; } = new(string.Empty);
     public BindableReactiveProperty<int> Rows { get; set; } = new(5);
+    
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(InspectedItem), nameof(IsEditingBackground))]
+    public partial GuiItemViewModel? BackgroundItem { get; set; }
+    
+    public GuiItemViewModel? InspectedItem => SelectedSlot?.Item ?? BackgroundItem;
+    public bool IsEditingBackground => SelectedSlot?.Item is null && BackgroundItem is not null;
 
     public GuiGeneratorWindowViewModel(IGameResourcesService resources, INotificationService notifs, ILogService logs, ITabService tabs)
     {
@@ -143,6 +151,8 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         }
 
         SelectedSlot.Item = new GuiItemViewModel(selected.Id, selected.Name, selected.Image);
+        OnPropertyChanged(nameof(InspectedItem));
+        OnPropertyChanged(nameof(IsEditingBackground));
     }
 
     [RelayCommand]
@@ -168,17 +178,12 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
             return;
         }
 
-        foreach (SlotViewModel slot in Slots)
+        BackgroundItem = new GuiItemViewModel(SelectedItem.Value.Id, SelectedItem.Value.Name,
+            SelectedItem.Value.Image)
         {
-            if (slot.Item is null || slot.Item.IsBackground)
-            {
-                slot.Item = new GuiItemViewModel(SelectedItem.Value.Id, SelectedItem.Value.Name,
-                    SelectedItem.Value.Image)
-                {
-                    IsBackground = true
-                };
-            }
-        }
+            DisplayName = " ",
+            HideTooltip = true
+        };
     }
 
     [RelayCommand]
@@ -199,13 +204,7 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private void ClearBackground()
     {
-        foreach (SlotViewModel slot in Slots)
-        {
-            if (slot.Item?.IsBackground == true)
-            {
-                slot.Item = null;
-            }
-        }
+        BackgroundItem = null;
     }
 
     [RelayCommand]
@@ -254,17 +253,15 @@ public partial class GuiGeneratorWindowViewModel : ObservableObject, IDisposable
         }
         
         Dictionary<int, GuiItemViewModel> items = Slots
-            .Where(slot => slot.Item is not null && !slot.Item.IsBackground)
+            .Where(s => s.Item is not null)
             .ToDictionary(slot => slot.Index, slot => slot.Item!);
-        
-        GuiItemViewModel? backgroundItem = Slots.FirstOrDefault(slot => slot.Item?.IsBackground == true)?.Item;
         
         GuiCodeGenerator.Options options = new()
         {
             Title = Title.Value,
             FunctionName = FunctionName.Value,
             Rows = Rows.Value,
-            BackgroundItem = backgroundItem,
+            BackgroundItem = BackgroundItem
         };
 
         string generatedCode = GuiCodeGenerator.Generate(items, options);

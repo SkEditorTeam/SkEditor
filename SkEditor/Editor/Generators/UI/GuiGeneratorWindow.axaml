@@ -15,6 +15,7 @@
         Title="{localization:Translate WindowTitleGuiGenerator}" Width="900" Height="520"
         CanResize="False" CanMinimize="False" CanMaximize="False"
         x:DataType="vm:GuiGeneratorWindowViewModel"
+        Name="Root"
         WindowStartupLocation="CenterOwner">
 
     <Window.Styles>
@@ -94,15 +95,24 @@
                                 Padding="0"
                                 Classes.selected="{Binding IsSelected}"
                                 Classes="minecraft-slot"
-                                genBehaviors:PointerActionBehavior.Command="{Binding $parent[ItemsControl].((vm:GuiGeneratorWindowViewModel)DataContext)?.SlotPointerPressedCommand}">
+                                genBehaviors:PointerActionBehavior.Command="{Binding #Root.((vm:GuiGeneratorWindowViewModel)DataContext)?.SlotPointerPressedCommand}">
 
                             <Interaction.Behaviors>
                                 <input:InputElementDoubleTappedEventCommandTrigger
-                                    Command="{Binding $parent[ItemsControl].((vm:GuiGeneratorWindowViewModel)DataContext)?.HandleDoubleClickCommand}"
+                                    Command="{Binding #Root.((vm:GuiGeneratorWindowViewModel)DataContext)?.HandleDoubleClickCommand}"
                                     Parameter="{Binding}" />
                             </Interaction.Behaviors>
 
                             <Panel>
+                                <Image Source="{Binding $parent[ItemsControl].((vm:GuiGeneratorWindowViewModel)DataContext)?.BackgroundItem?.Image}"
+                                       RenderOptions.EdgeMode="Antialias"
+                                       Width="32"
+                                       Height="32"
+                                       Opacity="0.5"
+                                       IsVisible="{Binding Item, Converter={x:Static ObjectConverters.IsNull}}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                                
                                 <Image Source="{Binding Item?.Image}"
                                        RenderOptions.EdgeMode="Antialias"
                                        Width="32"
@@ -274,8 +284,8 @@
                 <Panel
                     IsVisible="{Binding CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPropertiesView}}">
 
-                    <StackPanel Opacity="{Binding SelectedSlot?.Item, Converter={x:Static ObjectConverters.IsNull}}"
-                                IsHitTestVisible="{Binding SelectedSlot?.Item, Converter={x:Static ObjectConverters.IsNull}}"
+                    <StackPanel Opacity="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
+                                IsHitTestVisible="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center">
 
@@ -284,23 +294,35 @@
                     </StackPanel>
 
                     <StackPanel Spacing="16" Margin="8"
-                                Opacity="{Binding SelectedSlot?.Item, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                Opacity="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                IsHitTestVisible="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        
+                        <TextBlock Text="This is the background item" IsVisible="{Binding IsEditingBackground}" Foreground="{DynamicResource ForegroundSecondaryColor}" HorizontalAlignment="Center"/>
+                        
                         <StackPanel Orientation="Vertical" Spacing="4">
                             <TextBlock Text="Display name" FontSize="14" />
-                            <TextBox Text="{Binding SelectedSlot?.Item?.DisplayName, Mode=TwoWay}"
-                                     PlaceholderText="{Binding SelectedSlot?.Item?.Name}" />
+                            <TextBox Text="{Binding InspectedItem?.DisplayName, Mode=TwoWay}"
+                                     PlaceholderText="{Binding InspectedItem?.Name}" />
                         </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Spacing="4">
+                        <StackPanel Orientation="Vertical" Spacing="4" IsVisible="{Binding !IsEditingBackground}">
                             <TextBlock Text="Amount" FontSize="14" />
                             <NumericUpDown Minimum="1" Maximum="64"
-                                           Value="{Binding SelectedSlot?.Item?.Amount, Mode=TwoWay}" FormatString="0" />
+                                           Value="{Binding InspectedItem?.Amount, Mode=TwoWay}" FormatString="0" />
                         </StackPanel>
+                        
+                        <StackPanel Spacing="2">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding InspectedItem?.HideTooltip, Mode=TwoWay}" Padding="12,0,0,0" VerticalContentAlignment="Center">
+                                    <TextBlock Text="Hide tooltip" FontSize="14" />
+                                </CheckBox>
+                            </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding SelectedSlot?.Item?.GenerateExampleAction, Mode=TwoWay}" Padding="12,0,0,0" VerticalContentAlignment="Center">
-                                <TextBlock Text="Add click action" FontSize="14" />
-                            </CheckBox>
+                            <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsEditingBackground}">
+                                <CheckBox IsChecked="{Binding InspectedItem?.GenerateExampleAction, Mode=TwoWay}" Padding="12,0,0,0" VerticalContentAlignment="Center">
+                                    <TextBlock Text="Add click action" FontSize="14" />
+                                </CheckBox>
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Panel>
