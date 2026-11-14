@@ -37,4 +37,8 @@
     <Style Selector="Separator">
         <Setter Property="Margin" Value="8,4" />
     </Style>
+    
+    <Style Selector="ListBoxItem TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
 </Styles>
