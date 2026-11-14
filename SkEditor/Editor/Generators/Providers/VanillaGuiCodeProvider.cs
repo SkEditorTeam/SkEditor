@@ -38,7 +38,7 @@ public class VanillaGuiCodeProvider : IGuiCodeProvider
         code.Append("\n\topen {_gui} to {_p}\n");
 
         code.Append("\non inventory click:");
-        code.Append($"\n\tname of event-inventory is \"{blueprint.Title}\"");
+        code.Append($"\n\tname of event-inventory is \"{title}\"");
         code.Append("\n\tcancel event");
         code.Append("\n\tevent-inventory is not player's inventory");
 

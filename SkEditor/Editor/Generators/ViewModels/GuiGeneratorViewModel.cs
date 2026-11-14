@@ -16,7 +16,6 @@ namespace SkEditor.Editor.Generators.ViewModels;
 public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
 {
     private readonly ITabService _tabs;
-    private DisposableBag _disposables;
     private bool _disposed;
 
     public BindableReactiveProperty<GuiGeneratorTab> CurrentViewMode { get; } = new(GuiGeneratorTab.Palette);
@@ -168,6 +167,7 @@ public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
 
         _disposed = true;
         GC.SuppressFinalize(this);
-        _disposables.Dispose();
+        ItemPalette.Dispose();
+        Grid.Dispose();
     }
 }

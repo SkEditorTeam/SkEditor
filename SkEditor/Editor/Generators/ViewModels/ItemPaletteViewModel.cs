@@ -119,13 +119,9 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
 
             await Task.Run(() =>
             {
-                Parallel.For(0, rawItems.Length, (i, state) =>
+                ParallelOptions options = new() { CancellationToken = ct };
+                Parallel.For(0, rawItems.Length, options, i =>
                 {
-                    if (ct.IsCancellationRequested)
-                    {
-                        state.Stop();
-                    }
-
                     Item item = rawItems[i];
                     using MemoryStream stream = new(item.Texture);
                     Bitmap bitmap = Bitmap.DecodeToWidth(stream, 64);
@@ -182,8 +178,8 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
     {
         GC.SuppressFinalize(this);
         
-        ClearItems();
         _cts.Cancel();
+        ClearItems();
         _cts.Dispose();
         _disposables.Dispose();
         SelectedItem.Dispose();
