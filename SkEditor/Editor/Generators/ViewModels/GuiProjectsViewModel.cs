@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -17,45 +18,64 @@ namespace SkEditor.Editor.Generators.ViewModels;
 
 public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
 {
-    private readonly IGuiProjectService _projects;
-    private readonly IDialogService _dialogs;
-    private readonly ISynchronizedView<GuiProject, GuiProjectItemViewModel> _projectsView;
-    private readonly IDisposable _activeSub;
+    private DisposableBag _disposables;
 
     private readonly Func<GuiBlueprint> _blueprintFactory;
     private readonly Subject<GuiBlueprint?> _blueprintLoaded = new();
+    private readonly IDialogService _dialogs;
+    private readonly IGuiProjectService _projects;
     public Observable<GuiBlueprint?> BlueprintLoaded => _blueprintLoaded;
 
-    public GuiProjectsViewModel(IGuiProjectService projects, IDialogService dialogs, Func<GuiBlueprint> blueprintFactory)
-    {
-        _projects = projects;
-        _dialogs = dialogs;
-        _blueprintFactory = blueprintFactory;
-        
-        _projectsView = projects.Projects.CreateView(p =>
-            new GuiProjectItemViewModel(p, p.Id == projects.ActiveProject.CurrentValue?.Id));
-        
-        Projects = _projectsView.ToNotifyCollectionChanged();
-        
-        _activeSub = projects.ActiveProject.Subscribe(active =>
-        {
-            foreach (GuiProjectItemViewModel view in _projectsView)
-            {
-                view.IsActive = view.Model.Id == active?.Id;
-            }
-        });
-    }
-
+    public BindableReactiveProperty<string> Filter { get; } = new(string.Empty);
     public NotifyCollectionChangedSynchronizedViewList<GuiProjectItemViewModel> Projects { get; }
 
     [ObservableProperty]
     public partial GuiProjectItemViewModel? SelectedProject { get; set; }
 
+
+    public GuiProjectsViewModel(IGuiProjectService projects, IDialogService dialogs,
+        Func<GuiBlueprint> blueprintFactory)
+    {
+        _projects = projects;
+        _dialogs = dialogs;
+        _blueprintFactory = blueprintFactory;
+
+        ISynchronizedView<GuiProject, GuiProjectItemViewModel> projectsView = projects.Projects
+            .CreateView(p =>
+                new GuiProjectItemViewModel(p, p.Id == projects.ActiveProject.CurrentValue?.Id))
+            .AddTo(ref _disposables);
+
+        Projects = projectsView.ToNotifyCollectionChanged().AddTo(ref _disposables);
+
+        projects.ActiveProject.Subscribe(active =>
+        {
+            foreach (GuiProjectItemViewModel view in projectsView)
+            {
+                view.IsActive = view.Model.Id == active?.Id;
+            }
+        }).AddTo(ref _disposables);
+
+        Filter
+            .Subscribe(query =>
+            {
+                if (string.IsNullOrWhiteSpace(query))
+                {
+                    projectsView.ResetFilter();
+                }
+                else
+                {
+                    projectsView.AttachFilter(item => item.Name.Contains(query, StringComparison.OrdinalIgnoreCase));
+                }
+
+                SelectedProject = Projects.FirstOrDefault();
+            }).AddTo(ref _disposables);
+    }
+
     public async Task LoadProjects()
     {
         await _projects.LoadProjects();
     }
-    
+
     [RelayCommand]
     private async Task SaveProject()
     {
@@ -96,7 +116,7 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
         _projects.SetActiveProject(null);
         _blueprintLoaded.OnNext(null);
     }
-    
+
     [RelayCommand]
     private void LoadProject()
     {
@@ -133,7 +153,8 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
             return;
         }
 
-        string? promptName = await PromptName("Rename project".ToTranslatable(), "New name".ToTranslatable(), SelectedProject.Name);
+        string? promptName = await PromptName("Rename project".ToTranslatable(), "New name".ToTranslatable(),
+            SelectedProject.Name);
         string? name = promptName?.Trim();
 
         if (string.IsNullOrWhiteSpace(name) || name == SelectedProject.Name)
@@ -144,9 +165,11 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
         await _projects.RenameProject(SelectedProject.Model, name);
     }
 
-    private async Task<string?> PromptName(TranslatableString title, TranslatableString placeholder, string? initialValue = null)
+    private async Task<string?> PromptName(TranslatableString title, TranslatableString placeholder,
+        string? initialValue = null)
     {
-        TextBoxDialogElement inputElement = new() { Text = initialValue ?? string.Empty, PlaceholderText = placeholder };
+        TextBoxDialogElement inputElement = new()
+            { Text = initialValue ?? string.Empty, PlaceholderText = placeholder };
 
         Dialog dialog = Dialog
             .Create(title)
@@ -166,9 +189,7 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
 
     public void Dispose()
     {
-        _projectsView.Dispose();
-        _activeSub.Dispose();
         _blueprintLoaded.Dispose();
-        Projects.Dispose();
+        _disposables.Dispose();
     }
 }

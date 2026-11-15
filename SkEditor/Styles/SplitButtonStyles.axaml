@@ -142,7 +142,9 @@
         </Style>
 
         <Style Selector="^:disabled">
-            <Setter Property="Opacity" Value="0.5" />
+            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
+            <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
         </Style>
     </ControlTheme>
 </ResourceDictionary>
