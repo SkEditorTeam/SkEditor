@@ -82,6 +82,7 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
             }
             
             Projects.Insert(0, project);
+            SetActiveProject(project);
         }
         catch (Exception ex)
         {
