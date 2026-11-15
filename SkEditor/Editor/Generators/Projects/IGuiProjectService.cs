@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
 using ObservableCollections;
+using R3;
 
 namespace SkEditor.Editor.Generators.Projects;
 
 public interface IGuiProjectService
 {
-    GuiProject? ActiveProject { get; }
+    ReadOnlyReactiveProperty<GuiProject?> ActiveProject { get; }
     ObservableList<GuiProject> Projects { get; }
     
     Task LoadProjects();

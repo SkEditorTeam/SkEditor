@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ObservableCollections;
+using R3;
 using SkEditor.Core.Common;
 using SkEditor.Core.Logging;
 
@@ -15,7 +16,8 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
 {
     public string FolderPath => fileSystem.Path.Combine(AppPaths.LocalData, "GuiProjects");
 
-    public GuiProject? ActiveProject { get; private set; }
+    private readonly ReactiveProperty<GuiProject?> _activeProject = new(null);
+    public ReadOnlyReactiveProperty<GuiProject?> ActiveProject => _activeProject;
 
     public ObservableList<GuiProject> Projects { get; } = [];
 
@@ -88,7 +90,7 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
 
     public void SetActiveProject(GuiProject? project)
     {
-        ActiveProject = project;
+        _activeProject.Value = project;
     }
 
     public void DeleteProject(GuiProject project)
@@ -104,9 +106,9 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
 
             Projects.Remove(project);
 
-            if (ActiveProject?.Id == project.Id)
+            if (_activeProject.Value?.Id == project.Id)
             {
-                ActiveProject = null;
+                SetActiveProject(null);
             }
         }
         catch (Exception ex)
@@ -119,10 +121,6 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
     {
         project.Name = name;
         await SaveFile(project);
-
-        int index = Projects.IndexOf(project);
-        Projects.RemoveAt(index);
-        Projects.Insert(index, project);
     }
     
     private async Task SaveFile(GuiProject project)

@@ -15,24 +15,47 @@ using SkEditor.Editor.Generators.ViewModels;
 
 namespace SkEditor.Editor.Generators.Projects;
 
-public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogService dialogs) : ObservableObject
+public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
 {
-    public NotifyCollectionChangedSynchronizedViewList<GuiProject> Projects { get; } =
-        projects.Projects.ToNotifyCollectionChangedSlim();
+    private readonly IGuiProjectService _projects;
+    private readonly IDialogService _dialogs;
+    private readonly ISynchronizedView<GuiProject, GuiProjectViewModel> _projectsView;
+    private readonly IDisposable _activeSub;
+
+    public GuiProjectsViewModel(IGuiProjectService projects, IDialogService dialogs)
+    {
+        _projects = projects;
+        _dialogs = dialogs;
+        
+        _projectsView = projects.Projects.CreateView(p =>
+            new GuiProjectViewModel(p, p.Id == projects.ActiveProject.CurrentValue?.Id));
+        
+        Projects = _projectsView.ToNotifyCollectionChanged();
+        
+        _activeSub = projects.ActiveProject.Subscribe(active =>
+        {
+            foreach (GuiProjectViewModel view in _projectsView)
+            {
+                view.IsActive = view.Model.Id == active?.Id;
+            }
+        });
+    }
+
+    public NotifyCollectionChangedSynchronizedViewList<GuiProjectViewModel> Projects { get; }
 
     [ObservableProperty]
-    public partial GuiProject? SelectedProject { get; set; }
+    public partial GuiProjectViewModel? SelectedProject { get; set; }
 
     public async Task LoadProjects()
     {
-        await projects.LoadProjects();
+        await _projects.LoadProjects();
     }
     
     public async Task SaveProject(GuiBlueprint blueprint)
     {
         GuiProject project;
 
-        if (projects.ActiveProject is { } activeProject)
+        if (_projects.ActiveProject.CurrentValue is { } activeProject)
         {
             activeProject.Blueprint = blueprint;
             project = activeProject;
@@ -57,12 +80,12 @@ public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogSe
             };
         }
 
-        await projects.SaveProject(project);
+        await _projects.SaveProject(project);
     }
 
     public void NewProject(BindableReactiveProperty<string> title, BindableReactiveProperty<string> functionName, GuiGridViewModel grid)
     {
-        projects.SetActiveProject(null);
+        _projects.SetActiveProject(null);
 
         title.Value = string.Empty;
         functionName.Value = string.Empty;
@@ -78,12 +101,12 @@ public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogSe
             return;
         }
 
-        if (SelectedProject == projects.ActiveProject)
+        if (SelectedProject.Model == _projects.ActiveProject.CurrentValue)
         {
             NewProject(title, functionName, grid);
         }
 
-        projects.DeleteProject(SelectedProject);
+        _projects.DeleteProject(SelectedProject.Model);
     }
 
     public async Task RenameProject()
@@ -101,9 +124,7 @@ public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogSe
             return;
         }
 
-        GuiProject selectedProject = SelectedProject;
-        await projects.RenameProject(SelectedProject, name);
-        SelectedProject = selectedProject;
+        await _projects.RenameProject(SelectedProject.Model, name);
     }
 
     private async Task<string?> PromptName(TranslatableString title, TranslatableString placeholder, string? initialValue = null)
@@ -119,7 +140,7 @@ public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogSe
                 DialogButton.Cancel
             );
 
-        DialogResult result = await dialogs.ShowDialogAsync(dialog);
+        DialogResult result = await _dialogs.ShowDialogAsync(dialog);
 
         return result == StandardDialogResult.Yes
             ? inputElement.Text
@@ -133,9 +154,9 @@ public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogSe
             return;
         }
 
-        projects.SetActiveProject(SelectedProject);
+        _projects.SetActiveProject(SelectedProject.Model);
 
-        GuiBlueprint blueprint = SelectedProject.Blueprint;
+        GuiBlueprint blueprint = SelectedProject.Model.Blueprint;
 
         title.Value = blueprint.Title ?? string.Empty;
         functionName.Value = blueprint.FunctionName ?? string.Empty;
@@ -159,5 +180,12 @@ public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogSe
             ItemViewModel? itemVm = items.FindById(item.Id);
             grid.Slots[slot].Item = GuiItemViewModel.FromModel(item, itemVm);
         }
+    }
+
+    public void Dispose()
+    {
+        _projectsView.Dispose();
+        _activeSub.Dispose();
+        Projects.Dispose();
     }
 }

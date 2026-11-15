@@ -27,7 +27,7 @@
                      IsTextSearchEnabled="True">
 
                 <ListBox.Styles>
-                    <Style Selector="ListBoxItem" x:DataType="projects:GuiProject">
+                    <Style Selector="ListBoxItem" x:DataType="projects:GuiProjectViewModel">
                         <Setter Property="TextSearch.Text" Value="{Binding Name}" />
                         <Setter Property="Height" Value="40" />
                         <Setter Property="Theme"
@@ -36,9 +36,22 @@
                 </ListBox.Styles>
 
                 <ListBox.ItemTemplate>
-                    <DataTemplate x:DataType="projects:GuiProject">
-                        <TextBlock Text="{Binding Name}"
-                                   VerticalAlignment="Center" />
+                    <DataTemplate x:DataType="projects:GuiProjectViewModel">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <TextBlock Text="{Binding Name}"
+                                       VerticalAlignment="Center" />
+
+                            <Ellipse Grid.Column="1" Width="8" Height="8"
+                                     Opacity="{Binding IsActive}"
+                                     HorizontalAlignment="Right"
+                                     Fill="{DynamicResource SystemAccentColorLight2}">
+                                <Ellipse.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="CubicEaseOut" />
+                                    </Transitions>
+                                </Ellipse.Transitions>
+                            </Ellipse>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
