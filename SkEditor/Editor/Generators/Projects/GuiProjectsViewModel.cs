@@ -39,31 +39,20 @@ public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogSe
         }
         else
         {
-            TextBoxDialogElement inputElement = new() { PlaceholderText = "New project".ToTranslatable() };
+            string? promptName = await PromptName("Save project".ToTranslatable(), "New project".ToTranslatable());
 
-            Dialog dialog = Dialog
-                .Create("Save project".ToTranslatable())
-                .WithIcon(Symbol.Save)
-                .WithElements(inputElement)
-                .WithButtons(
-                    new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
-                    DialogButton.Cancel
-                );
-
-            DialogResult result = await dialogs.ShowDialogAsync(dialog);
-
-            if (result != StandardDialogResult.Yes)
+            if (promptName is null)
             {
                 return;
             }
 
-            string title = !string.IsNullOrWhiteSpace(inputElement.Text)
-                ? inputElement.Text.Trim()
+            string name = !string.IsNullOrWhiteSpace(promptName)
+                ? promptName.Trim()
                 : "New project";
 
             project = new GuiProject
             {
-                Name = title,
+                Name = name,
                 Blueprint = blueprint
             };
         }
@@ -95,6 +84,46 @@ public partial class GuiProjectsViewModel(IGuiProjectService projects, IDialogSe
         }
 
         projects.DeleteProject(SelectedProject);
+    }
+
+    public async Task RenameProject()
+    {
+        if (SelectedProject is null)
+        {
+            return;
+        }
+
+        string? promptName = await PromptName("Rename project".ToTranslatable(), "New name".ToTranslatable(), SelectedProject.Name);
+        string? name = promptName?.Trim();
+
+        if (string.IsNullOrWhiteSpace(name) || name == SelectedProject.Name)
+        {
+            return;
+        }
+
+        GuiProject selectedProject = SelectedProject;
+        await projects.RenameProject(SelectedProject, name);
+        SelectedProject = selectedProject;
+    }
+
+    private async Task<string?> PromptName(TranslatableString title, TranslatableString placeholder, string? initialValue = null)
+    {
+        TextBoxDialogElement inputElement = new() { Text = initialValue ?? string.Empty, PlaceholderText = placeholder };
+
+        Dialog dialog = Dialog
+            .Create(title)
+            .WithIcon(Symbol.SaveEdit)
+            .WithElements(inputElement)
+            .WithButtons(
+                new DialogButton(TranslationKey.ButtonRename, DialogResult.Yes, true),
+                DialogButton.Cancel
+            );
+
+        DialogResult result = await dialogs.ShowDialogAsync(dialog);
+
+        return result == StandardDialogResult.Yes
+            ? inputElement.Text
+            : null;
     }
 
     public void LoadProject(BindableReactiveProperty<string> title, BindableReactiveProperty<string> functionName, GuiGridViewModel grid, ItemPaletteViewModel items)

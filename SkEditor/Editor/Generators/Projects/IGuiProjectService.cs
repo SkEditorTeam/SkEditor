@@ -12,4 +12,5 @@ public interface IGuiProjectService
     Task SaveProject(GuiProject project);
     void SetActiveProject(GuiProject? project);
     void DeleteProject(GuiProject project);
+    Task RenameProject(GuiProject project, string name);
 }

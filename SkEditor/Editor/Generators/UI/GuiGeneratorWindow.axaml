@@ -413,7 +413,7 @@
                                 <SplitButton.Flyout>
                                     <MenuFlyout>
                                         <!-- <MenuItem Header="Save as new..." /> -->
-                                        <!-- <MenuItem Header="Rename" /> -->
+                                        <MenuItem Header="Rename" Command="{Binding RenameProjectCommand}" />
                                         <MenuItem Header="Delete" Command="{Binding DeleteProjectCommand}" />
                                         <!-- <MenuItem Header="Export to file" /> -->
                                     </MenuFlyout>

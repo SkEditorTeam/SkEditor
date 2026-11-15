@@ -175,6 +175,12 @@ public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
     }
 
     [RelayCommand]
+    private async Task RenameProject()
+    {
+        await Projects.RenameProject();
+    }
+
+    [RelayCommand]
     private void LoadProject()
     {
         Projects.LoadProject(Title, FunctionName, Grid, ItemPalette);

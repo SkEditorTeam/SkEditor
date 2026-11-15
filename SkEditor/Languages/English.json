@@ -102,6 +102,7 @@
   "ButtonDisconnect": "Disconnect",
   "ButtonOpenFolder": "Open folder",
   "ButtonSelectFile": "Select file",
+  "ButtonRename": "Rename",
   "KeyModifierControl": "Ctrl",
   "Error": "Error",
   "Success": "Success",

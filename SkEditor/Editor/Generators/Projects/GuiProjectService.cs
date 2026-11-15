@@ -70,17 +70,7 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
         {
             project.ModifyDate = timeProvider.GetUtcNow();
 
-            fileSystem.Directory.CreateDirectory(FolderPath);
-            string path = fileSystem.Path.Combine(FolderPath, $"{project.Id}.json");
-            string tmpPath = path + ".tmp";
-
-            await using (FileSystemStream
-                         stream = fileSystem.FileStream.New(tmpPath, FileMode.Create, FileAccess.Write))
-            {
-                await JsonSerializer.SerializeAsync(stream, project, GuiProjectContext.Relaxed.GuiProject);
-            }
-
-            fileSystem.File.Move(tmpPath, path, overwrite: true);
+            await SaveFile(project);
 
             GuiProject? existing = Projects.FirstOrDefault(p => p.Id == project.Id);
             if (existing is not null)
@@ -123,5 +113,30 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
         {
             logs.Error(ex, "Deleting GUI project failed");
         }
+    }
+
+    public async Task RenameProject(GuiProject project, string name)
+    {
+        project.Name = name;
+        await SaveFile(project);
+
+        int index = Projects.IndexOf(project);
+        Projects.RemoveAt(index);
+        Projects.Insert(index, project);
+    }
+    
+    private async Task SaveFile(GuiProject project)
+    {
+        fileSystem.Directory.CreateDirectory(FolderPath);
+        string path = fileSystem.Path.Combine(FolderPath, $"{project.Id}.json");
+        string tmpPath = path + ".tmp";
+
+        await using (FileSystemStream
+                     stream = fileSystem.FileStream.New(tmpPath, FileMode.Create, FileAccess.Write))
+        {
+            await JsonSerializer.SerializeAsync(stream, project, GuiProjectContext.Relaxed.GuiProject);
+        }
+
+        fileSystem.File.Move(tmpPath, path, overwrite: true);
     }
 }
