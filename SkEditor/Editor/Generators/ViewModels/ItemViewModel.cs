@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SkEditor.Editor.Generators.ViewModels;
 
-public class ItemViewModel(string id, string name) : ObservableObject, IDisposable
+public sealed class ItemViewModel(string id, string name) : ObservableObject, IDisposable
 {
     public string Name { get; } = name;
     public string Id { get; } = id;
@@ -19,8 +19,6 @@ public class ItemViewModel(string id, string name) : ObservableObject, IDisposab
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
-
         Image?.Dispose();
     }
 }

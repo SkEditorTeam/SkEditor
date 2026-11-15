@@ -12,7 +12,7 @@ using SkEditor.Windowing;
 
 namespace SkEditor.Layout.StatusBar.UI;
 
-public partial class StatusBarViewModel : ObservableObject, IDisposable
+public sealed partial class StatusBarViewModel : ObservableObject, IDisposable
 {
     private readonly INotificationService _notifs;
     private readonly IWindowDialogService _windowDialogs;
@@ -96,7 +96,6 @@ public partial class StatusBarViewModel : ObservableObject, IDisposable
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
         _disposables.Dispose();
     }
 }

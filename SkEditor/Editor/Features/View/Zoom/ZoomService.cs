@@ -4,7 +4,7 @@ using SkEditor.Configuration.Configs;
 
 namespace SkEditor.Editor.Features.View.Zoom;
 
-public class ZoomService : IZoomService, IDisposable
+public sealed class ZoomService : IZoomService, IDisposable
 {
     private DisposableBag _disposableBag;
     
@@ -35,6 +35,5 @@ public class ZoomService : IZoomService, IDisposable
     public void Dispose()
     {
         _disposableBag.Dispose();
-        GC.SuppressFinalize(this);
     }
 }

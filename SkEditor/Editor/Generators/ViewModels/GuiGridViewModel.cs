@@ -6,7 +6,7 @@ using R3;
 
 namespace SkEditor.Editor.Generators.ViewModels;
 
-public partial class GuiGridViewModel : ObservableObject, IDisposable
+public sealed partial class GuiGridViewModel : ObservableObject, IDisposable
 {
     private DisposableBag _disposables;
 
@@ -138,7 +138,6 @@ public partial class GuiGridViewModel : ObservableObject, IDisposable
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
         _disposables.Dispose();
     }
 }

@@ -16,7 +16,7 @@ using SkEditor.Editor.Generators.Models;
 
 namespace SkEditor.Editor.Generators.ViewModels;
 
-public partial class ItemPaletteViewModel : ObservableObject, IDisposable
+public sealed partial class ItemPaletteViewModel : ObservableObject, IDisposable
 {
     private static readonly Comparer<ItemViewModel> ByNameComparer = Comparer<ItemViewModel>.Create((a, b) =>
     {
@@ -189,8 +189,6 @@ public partial class ItemPaletteViewModel : ObservableObject, IDisposable
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
-
         _cts.Cancel();
         ClearItems();
         _cts.Dispose();

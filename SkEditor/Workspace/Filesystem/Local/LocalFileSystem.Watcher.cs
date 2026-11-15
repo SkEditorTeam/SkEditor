@@ -8,7 +8,7 @@ using SkEditor.Workspace.Filesystem.Abstractions;
 
 namespace SkEditor.Workspace.Filesystem.Local;
 
-public partial class LocalNodeFileSystem : IDisposable
+public sealed partial class LocalNodeFileSystem : IDisposable
 {
     private readonly FileSystemWatcher _watcher;
     private DisposableBag _disposables;
@@ -250,6 +250,5 @@ public partial class LocalNodeFileSystem : IDisposable
     {
         _watcher.Dispose();
         _disposables.Dispose();
-        GC.SuppressFinalize(this);
     }
 }

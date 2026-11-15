@@ -12,7 +12,7 @@ using SkEditor.Layout.StatusBar.UI.Abstractions;
 
 namespace SkEditor.Layout.StatusBar.UI.Panes.Terminal;
 
-public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDisposable
+public sealed class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDisposable
 {
     private TerminalControl? _terminalControl;
     public string Id => "Terminal";
@@ -110,7 +110,6 @@ public class TerminalPaneViewModel : ObservableObject, IDrawerPaneViewModel, IDi
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
         _terminalControl?.Kill();
     }
 }

@@ -13,7 +13,7 @@ using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Layout.StatusBar.Providers;
 
-public class EditorInfoStatusBarProvider : IStatusBarProvider, IDisposable
+public sealed class EditorInfoStatusBarProvider : IStatusBarProvider, IDisposable
 {
     private readonly StatusBarItem _cursorItem;
     private readonly ITabService _tabs;
@@ -87,7 +87,6 @@ public class EditorInfoStatusBarProvider : IStatusBarProvider, IDisposable
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
         _disposables.Dispose();
     }
 }

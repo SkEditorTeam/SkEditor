@@ -28,7 +28,7 @@ using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Workspace.Remote;
 
-public class RemoteConnectionService(
+public sealed class RemoteConnectionService(
     ITranslationService translation,
     ITabService tabs,
     ILogService logs,
@@ -441,8 +441,6 @@ public class RemoteConnectionService(
 
     public void Dispose()
     {
-        GC.SuppressFinalize(this);
-
         foreach (SftpClient client in _activeConnections.Values)
         {
             if (client.IsConnected)

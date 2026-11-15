@@ -7,7 +7,7 @@ using SkEditor.Workspace.Filesystem.Abstractions;
 
 namespace SkEditor.Workspace.Filesystem.Local;
 
-public partial class LocalNodeFileSystem : INodeFileSystem
+public sealed partial class LocalNodeFileSystem : INodeFileSystem
 {
     public static readonly char[] InvalidChars =
         Path.GetInvalidFileNameChars();

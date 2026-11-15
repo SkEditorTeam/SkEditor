@@ -8,7 +8,7 @@ using SkEditor.Core.Common;
 
 namespace SkEditor.Core.Logging;
 
-public class LogService(ILogger logger) : ILogService, IDisposable
+public sealed class LogService(ILogger logger) : ILogService, IDisposable
 {
     private readonly Subject<LogEntry> _logSubject = new();
 
@@ -113,6 +113,5 @@ public class LogService(ILogger logger) : ILogService, IDisposable
     {
         _logSubject.OnCompleted();
         _logSubject.Dispose();
-        GC.SuppressFinalize(this);
     }
 }

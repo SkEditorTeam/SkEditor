@@ -5,7 +5,7 @@ using SkEditor.Core.Logging;
 
 namespace SkEditor.Analyzing.Processes;
 
-public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
+public sealed class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
 {
     private Process? _process;
 
@@ -109,7 +109,6 @@ public class AnalyzerProcessRunner(ILogService logs) : IAnalyzerProcessRunner
     public void Dispose()
     {
         Stop();
-        GC.SuppressFinalize(this);
     }
 
     public event EventHandler<string>? OutputDataReceived;

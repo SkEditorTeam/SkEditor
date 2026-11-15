@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
@@ -18,7 +17,7 @@ using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Analyzing;
 
-public class Analyzer(
+public sealed class Analyzer(
     IConfigService configs,
     ITabService tabs,
     ILogService logs,
@@ -221,6 +220,5 @@ public class Analyzer(
     {
         UnsubscribeEvents();
         processRunner.Dispose();
-        GC.SuppressFinalize(this);
     }
 }

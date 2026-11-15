@@ -16,7 +16,7 @@ using SkEditor.Workspace.Tabs;
 
 namespace SkEditor.Editor.Generators.ViewModels;
 
-public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
+public sealed partial class GuiGeneratorViewModel : ObservableObject, IDisposable
 {
     private readonly ITabService _tabs;
     private bool _disposed;
@@ -213,9 +213,7 @@ public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
         {
             return;
         }
-
         _disposed = true;
-        GC.SuppressFinalize(this);
         ItemPalette.Dispose();
         Grid.Dispose();
     }
