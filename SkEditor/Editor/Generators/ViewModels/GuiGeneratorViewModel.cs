@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentIcons.Common;
 using ObservableCollections;
 using R3;
-using Serilog;
+using SkEditor.Core.Dialogs;
+using SkEditor.Core.Dialogs.Models;
+using SkEditor.Core.Dialogs.Models.Elements;
+using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Generators.Extensions;
@@ -21,6 +26,7 @@ public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
 {
     private readonly ITabService _tabs;
     private readonly IGuiProjectService _projects;
+    private readonly IDialogService _dialogs;
     private bool _disposed;
 
     public BindableReactiveProperty<GuiGeneratorTab> CurrentViewMode { get; } = new(GuiGeneratorTab.Palette);
@@ -46,12 +52,14 @@ public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
     public GuiGeneratorViewModel(IGameResourcesService resources,
         IGuiProjectService projects,
         INotificationService notifs,
+        IDialogService dialogs,
         ILogService logs,
         ITabService tabs,
         IEnumerable<IGuiCodeProvider> providers)
     {
         _projects = projects;
         _tabs = tabs;
+        _dialogs = dialogs;
         ItemPalette = new ItemPaletteViewModel(resources, notifs, logs);
         Providers = [.. providers];
         SelectedProvider = Providers.Count > 0 ? Providers[0] : null;
@@ -163,13 +171,74 @@ public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
     private async Task SaveProject()
     {
         GuiBlueprint blueprint = CreateBlueprint();
-        GuiProject project = new()
+        
+        GuiProject project;
+
+        if (_projects.ActiveProject is { } activeProject)
         {
-            Name = "Projekt",
-            Blueprint = blueprint
-        };
+            activeProject.Blueprint = blueprint;
+            project = activeProject;
+        }
+        else
+        {
+            TextBoxDialogElement inputElement = new() { PlaceholderText = "New project".ToTranslatable() };
+
+            Dialog dialog = Dialog
+                .Create("Save project".ToTranslatable())
+                .WithIcon(Symbol.Save)
+                .WithElements(inputElement)
+                .WithButtons(
+                    new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
+                    DialogButton.Cancel
+                );
+
+            DialogResult result = await _dialogs.ShowDialogAsync(dialog);
+
+            if (result != StandardDialogResult.Yes)
+            {
+                return;
+            }
+
+            string title = !string.IsNullOrWhiteSpace(inputElement.Text) 
+                ? inputElement.Text.Trim() 
+                : "New project";
+            
+            project = new GuiProject
+            {
+                Name = title,
+                Blueprint = blueprint
+            };
+        }
 
         await _projects.SaveProject(project);
+    }
+
+    [RelayCommand]
+    private void NewProject()
+    {
+        _projects.SetActiveProject(null);
+
+        Title.Value = string.Empty;
+        FunctionName.Value = string.Empty;
+        Grid.Rows.Value = 5;
+        Grid.ClearAllSlots();
+        Grid.ClearBackground();
+    }
+    
+    [RelayCommand]
+    private void DeleteProject()
+    {
+        if (SelectedProject is null)
+        {
+            return;
+        }
+
+        if (SelectedProject == _projects.ActiveProject)
+        {
+            NewProject();
+        }
+        
+        _projects.DeleteProject(SelectedProject);
     }
 
     [RelayCommand]

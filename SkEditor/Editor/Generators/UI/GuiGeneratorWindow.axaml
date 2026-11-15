@@ -10,6 +10,7 @@
         xmlns:input="clr-namespace:Avalonia.Input"
         xmlns:genBehaviors="clr-namespace:SkEditor.Editor.Generators.Behaviors"
         xmlns:ui="clr-namespace:SkEditor.Layout.StatusBar.UI"
+        xmlns:projects="clr-namespace:SkEditor.Editor.Generators.Projects"
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="550"
         x:Class="SkEditor.Editor.Generators.UI.GuiGeneratorWindow" Icon="/Assets/SkEditor.ico"
         Title="{localization:Translate WindowTitleGuiGenerator}" Width="900" Height="540"
@@ -56,6 +57,15 @@
 
         <Style Selector="SplitButton /template/ Button#PART_SecondaryButton">
             <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style Selector="ListBox /template/ ScrollViewer">
+            <Setter Property="Padding" Value="0,0,12,0" />
+            <Setter Property="Interaction.Behaviors">
+                <BehaviorCollection>
+                    <behaviors:SmoothScrollBehavior />
+                </BehaviorCollection>
+            </Setter>
         </Style>
     </Window.Styles>
 
@@ -154,7 +164,13 @@
                 <Button Content="Generate"
                         Command="{Binding GenerateCommand}" MinWidth="100" />
 
-                <Button Content="Save" Command="{Binding SaveProjectCommand}" MinWidth="100" />
+                <SplitButton Content="Save" Command="{Binding SaveProjectCommand}" MinWidth="100">
+                    <SplitButton.Flyout>
+                        <MenuFlyout>
+                            <MenuItem Header="New project" Command="{Binding NewProjectCommand}" />
+                        </MenuFlyout>
+                    </SplitButton.Flyout>
+                </SplitButton>
             </StackPanel>
         </Grid>
 
@@ -345,8 +361,8 @@
                 <Panel
                     IsVisible="{Binding CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsProjectsView}}">
                     <Grid RowDefinitions="Auto,*,Auto" RowSpacing="8" Margin="8"
-                          Opacity="{Binding Projects.Count}"
-                          IsHitTestVisible="{Binding Projects.Count}">
+                          Opacity="{Binding !!Projects.Count}"
+                          IsHitTestVisible="{Binding !!Projects.Count}">
                         <TextBox Grid.Row="0"
                                  PlaceholderText="Search..."
                                  Theme="{DynamicResource SearchBoxTheme}"
@@ -356,10 +372,25 @@
                                  SelectionMode="AlwaysSelected"
                                  ItemsSource="{Binding Projects}"
                                  SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
-                                 DisplayMemberBinding="{Binding Name}"
                                  Margin="0,0,-12,0" HorizontalAlignment="Stretch"
                                  ClipToBounds="False"
                                  IsTextSearchEnabled="True">
+                            
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem" x:DataType="projects:GuiProject">
+                                    <Setter Property="TextSearch.Text" Value="{Binding Name}" />
+                                    <Setter Property="Height" Value="40" />
+                                    <Setter Property="Theme"
+                                            Value="{DynamicResource NoIndicatorAnimationListBoxItem}" />
+                                </Style>
+                            </ListBox.Styles>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="projects:GuiProject">
+                                    <TextBlock Text="{Binding Name}"
+                                               VerticalAlignment="Center" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
                         </ListBox>
 
                         <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="6" Margin="0,6,0,0">
@@ -383,7 +414,7 @@
                                     <MenuFlyout>
                                         <!-- <MenuItem Header="Save as new..." /> -->
                                         <!-- <MenuItem Header="Rename" /> -->
-                                        <!-- <MenuItem Header="Delete" /> -->
+                                        <MenuItem Header="Delete" Command="{Binding DeleteProjectCommand}" />
                                         <!-- <MenuItem Header="Export to file" /> -->
                                     </MenuFlyout>
                                 </SplitButton.Flyout>

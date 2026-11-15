@@ -8,6 +8,7 @@ public class GuiProject
 {
     public int Version { get; init; } = 1;
     public Guid Id { get; set; } = Guid.NewGuid();
+    public DateTimeOffset ModifyDate { get; set; }
     public required string Name { get; set; }
     public required GuiBlueprint Blueprint { get; set; }
 }

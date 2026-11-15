@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ObservableCollections;
@@ -9,14 +11,14 @@ using SkEditor.Core.Logging;
 
 namespace SkEditor.Editor.Generators.Projects;
 
-public class GuiProjectService(IFileSystem fileSystem, ILogService logs) : IGuiProjectService
+public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider, ILogService logs) : IGuiProjectService
 {
     public string FolderPath => fileSystem.Path.Combine(AppPaths.LocalData, "GuiProjects");
-    
+
     public GuiProject? ActiveProject { get; private set; }
 
     public ObservableList<GuiProject> Projects { get; } = [];
-    
+
     public async Task LoadProjects()
     {
         try
@@ -26,18 +28,39 @@ public class GuiProjectService(IFileSystem fileSystem, ILogService logs) : IGuiP
                 return;
             }
 
+            Projects.Clear();
+            List<GuiProject> loadedProjects = [];
+
+            FileStreamOptions options = new()
+            {
+                Mode = FileMode.Open,
+                Access = FileAccess.Read,
+                Share = FileShare.ReadWrite | FileShare.Delete,
+                Options = FileOptions.Asynchronous | FileOptions.SequentialScan
+            };
+
             foreach (string file in fileSystem.Directory.EnumerateFiles(FolderPath, "*.json"))
             {
-                await using FileSystemStream stream = fileSystem.FileStream.New(file, FileMode.Open);
-                GuiProject? project = await JsonSerializer.DeserializeAsync<GuiProject>(stream, GuiProjectContext.Default.GuiProject);
-                if (project is null) continue;
-                
-                Projects.Add(project);
+                try
+                {
+                    await using FileSystemStream stream = fileSystem.FileStream.New(file, options);
+                    GuiProject? project =
+                        await JsonSerializer.DeserializeAsync<GuiProject>(stream, GuiProjectContext.Default.GuiProject);
+                    if (project is null) continue;
+
+                    loadedProjects.Add(project);
+                }
+                catch (Exception ex)
+                {
+                    logs.Error(ex, $"Loading project {file} failed");
+                }
             }
+
+            Projects.AddRange(loadedProjects.OrderByDescending(p => p.ModifyDate));
         }
         catch (Exception ex)
         {
-            logs.Error(ex, "Saving GUI project failed");
+            logs.Error(ex, "Loading GUI project failed");
         }
     }
 
@@ -45,11 +68,27 @@ public class GuiProjectService(IFileSystem fileSystem, ILogService logs) : IGuiP
     {
         try
         {
+            project.ModifyDate = timeProvider.GetUtcNow();
+
             fileSystem.Directory.CreateDirectory(FolderPath);
             string path = fileSystem.Path.Combine(FolderPath, $"{project.Id}.json");
+            string tmpPath = path + ".tmp";
 
-            await using FileSystemStream stream = fileSystem.FileStream.New(path, FileMode.Create);
-            await JsonSerializer.SerializeAsync(stream, project, GuiProjectContext.Default.GuiProject);
+            await using (FileSystemStream
+                         stream = fileSystem.FileStream.New(tmpPath, FileMode.Create, FileAccess.Write))
+            {
+                await JsonSerializer.SerializeAsync(stream, project, GuiProjectContext.Default.GuiProject);
+            }
+
+            fileSystem.File.Move(tmpPath, path, overwrite: true);
+
+            GuiProject? existing = Projects.FirstOrDefault(p => p.Id == project.Id);
+            if (existing is not null)
+            {
+                Projects.Remove(existing);
+            }
+            
+            Projects.Insert(0, project);
         }
         catch (Exception ex)
         {
@@ -57,8 +96,32 @@ public class GuiProjectService(IFileSystem fileSystem, ILogService logs) : IGuiP
         }
     }
 
-    public void SetActiveProject(GuiProject project)
+    public void SetActiveProject(GuiProject? project)
     {
         ActiveProject = project;
+    }
+
+    public void DeleteProject(GuiProject project)
+    {
+        try
+        {
+            string path = fileSystem.Path.Combine(FolderPath, $"{project.Id}.json");
+
+            if (fileSystem.File.Exists(path))
+            {
+                fileSystem.File.Delete(path);
+            }
+
+            Projects.Remove(project);
+
+            if (ActiveProject?.Id == project.Id)
+            {
+                ActiveProject = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Deleting GUI project failed");
+        }
     }
 }

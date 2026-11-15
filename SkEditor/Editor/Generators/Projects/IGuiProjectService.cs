@@ -10,5 +10,6 @@ public interface IGuiProjectService
     
     Task LoadProjects();
     Task SaveProject(GuiProject project);
-    void SetActiveProject(GuiProject project);
+    void SetActiveProject(GuiProject? project);
+    void DeleteProject(GuiProject project);
 }
