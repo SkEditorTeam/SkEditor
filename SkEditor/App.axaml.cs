@@ -171,6 +171,7 @@ public class App : Application
             (IClassicDesktopStyleApplicationLifetime)Current!.ApplicationLifetime!);
 
         services.AddSingleton<IFileSystem, FileSystem>();
+        services.AddSingleton(TimeProvider.System);
 
         services.AddCoreServices();
         services.AddWindowing();

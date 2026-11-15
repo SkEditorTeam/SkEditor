@@ -3,14 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentIcons.Common;
-using ObservableCollections;
 using R3;
 using SkEditor.Core.Dialogs;
-using SkEditor.Core.Dialogs.Models;
-using SkEditor.Core.Dialogs.Models.Elements;
-using SkEditor.Core.Extensions;
-using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Generators.Extensions;
@@ -25,21 +19,16 @@ namespace SkEditor.Editor.Generators.ViewModels;
 public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
 {
     private readonly ITabService _tabs;
-    private readonly IGuiProjectService _projects;
-    private readonly IDialogService _dialogs;
     private bool _disposed;
 
     public BindableReactiveProperty<GuiGeneratorTab> CurrentViewMode { get; } = new(GuiGeneratorTab.Palette);
     public BindableReactiveProperty<string> FunctionName { get; } = new(string.Empty);
-    public GuiGridViewModel Grid { get; } = new();
 
+    public GuiGridViewModel Grid { get; }
     public ItemPaletteViewModel ItemPalette { get; }
+    public GuiProjectsViewModel Projects { get; }
+
     public IReadOnlyList<IGuiCodeProvider> Providers { get; }
-
-    public NotifyCollectionChangedSynchronizedViewList<GuiProject> Projects { get; }
-
-    [ObservableProperty]
-    public partial GuiProject? SelectedProject { get; set; }
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
@@ -57,19 +46,19 @@ public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
         ITabService tabs,
         IEnumerable<IGuiCodeProvider> providers)
     {
-        _projects = projects;
         _tabs = tabs;
-        _dialogs = dialogs;
+
+        Grid = new GuiGridViewModel();
         ItemPalette = new ItemPaletteViewModel(resources, notifs, logs);
+        Projects = new GuiProjectsViewModel(projects, dialogs);
+
         Providers = [.. providers];
         SelectedProvider = Providers.Count > 0 ? Providers[0] : null;
-
-        Projects = projects.Projects.ToNotifyCollectionChangedSlim();
     }
 
     public async Task LoadProjects()
     {
-        await _projects.LoadProjects();
+        await Projects.LoadProjects();
     }
 
     [RelayCommand]
@@ -170,111 +159,25 @@ public partial class GuiGeneratorViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private async Task SaveProject()
     {
-        GuiBlueprint blueprint = CreateBlueprint();
-        
-        GuiProject project;
-
-        if (_projects.ActiveProject is { } activeProject)
-        {
-            activeProject.Blueprint = blueprint;
-            project = activeProject;
-        }
-        else
-        {
-            TextBoxDialogElement inputElement = new() { PlaceholderText = "New project".ToTranslatable() };
-
-            Dialog dialog = Dialog
-                .Create("Save project".ToTranslatable())
-                .WithIcon(Symbol.Save)
-                .WithElements(inputElement)
-                .WithButtons(
-                    new DialogButton(TranslationKey.ButtonSave, DialogResult.Yes, true),
-                    DialogButton.Cancel
-                );
-
-            DialogResult result = await _dialogs.ShowDialogAsync(dialog);
-
-            if (result != StandardDialogResult.Yes)
-            {
-                return;
-            }
-
-            string title = !string.IsNullOrWhiteSpace(inputElement.Text) 
-                ? inputElement.Text.Trim() 
-                : "New project";
-            
-            project = new GuiProject
-            {
-                Name = title,
-                Blueprint = blueprint
-            };
-        }
-
-        await _projects.SaveProject(project);
+        await Projects.SaveProject(CreateBlueprint());
     }
 
     [RelayCommand]
     private void NewProject()
     {
-        _projects.SetActiveProject(null);
-
-        Title.Value = string.Empty;
-        FunctionName.Value = string.Empty;
-        Grid.Rows.Value = 5;
-        Grid.ClearAllSlots();
-        Grid.ClearBackground();
+        Projects.NewProject(Title, FunctionName, Grid);
     }
-    
+
     [RelayCommand]
     private void DeleteProject()
     {
-        if (SelectedProject is null)
-        {
-            return;
-        }
-
-        if (SelectedProject == _projects.ActiveProject)
-        {
-            NewProject();
-        }
-        
-        _projects.DeleteProject(SelectedProject);
+        Projects.DeleteProject(Title, FunctionName, Grid);
     }
 
     [RelayCommand]
     private void LoadProject()
     {
-        if (SelectedProject is null)
-        {
-            return;
-        }
-
-        _projects.SetActiveProject(SelectedProject);
-
-        GuiBlueprint blueprint = SelectedProject.Blueprint;
-
-        Title.Value = blueprint.Title ?? string.Empty;
-        FunctionName.Value = blueprint.FunctionName ?? string.Empty;
-        
-        Grid.ClearAllSlots();
-        Grid.Rows.Value = Math.Clamp(blueprint.Rows, 1, 6);
-        
-        if (blueprint.BackgroundItem is { } backgroundItem)
-        {
-            ItemViewModel? bgVm = ItemPalette.FindById(backgroundItem.Id);
-            Grid.BackgroundItem = GuiItemViewModel.FromModel(backgroundItem, bgVm);
-        }
-        
-        foreach ((int slot, GuiItem item) in blueprint.Items)
-        {
-            if (slot < 0 || slot >= Grid.Slots.Count)
-            {
-                continue;
-            }
-            
-            ItemViewModel? itemVm = ItemPalette.FindById(item.Id);
-            Grid.Slots[slot].Item = GuiItemViewModel.FromModel(item, itemVm);
-        }
+        Projects.LoadProject(Title, FunctionName, Grid, ItemPalette);
     }
 
     private GuiBlueprint CreateBlueprint()

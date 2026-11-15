@@ -361,8 +361,8 @@
                 <Panel
                     IsVisible="{Binding CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsProjectsView}}">
                     <Grid RowDefinitions="Auto,*,Auto" RowSpacing="8" Margin="8"
-                          Opacity="{Binding !!Projects.Count}"
-                          IsHitTestVisible="{Binding !!Projects.Count}">
+                          Opacity="{Binding !!Projects.Projects.Count}"
+                          IsHitTestVisible="{Binding !!Projects.Projects.Count}">
                         <TextBox Grid.Row="0"
                                  PlaceholderText="Search..."
                                  Theme="{DynamicResource SearchBoxTheme}"
@@ -370,8 +370,8 @@
 
                         <ListBox Grid.Row="1"
                                  SelectionMode="AlwaysSelected"
-                                 ItemsSource="{Binding Projects}"
-                                 SelectedItem="{Binding SelectedProject, Mode=TwoWay}"
+                                 ItemsSource="{Binding Projects.Projects}"
+                                 SelectedItem="{Binding Projects.SelectedProject, Mode=TwoWay}"
                                  Margin="0,0,-12,0" HorizontalAlignment="Stretch"
                                  ClipToBounds="False"
                                  IsTextSearchEnabled="True">
@@ -422,8 +422,8 @@
                         </Grid>
                     </Grid>
                     
-                    <StackPanel Opacity="{Binding !Projects.Count}"
-                                IsHitTestVisible="{Binding !Projects.Count}"
+                    <StackPanel Opacity="{Binding !Projects.Projects.Count}"
+                                IsHitTestVisible="{Binding !Projects.Projects.Count}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Center"
                                 Spacing="16">
