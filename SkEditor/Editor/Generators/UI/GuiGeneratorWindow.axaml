@@ -86,7 +86,7 @@
                 </StackPanel>
             </StackPanel>
 
-            <ui:ItemGridView Grid.Row="1"/>
+            <ui:ItemGridView DataContext="{Binding Grid}" Grid.Row="1"/>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
                 <ComboBox ItemsSource="{Binding Providers}" SelectedItem="{Binding SelectedProvider}"
@@ -96,10 +96,10 @@
                 <Button Content="Generate"
                         Command="{Binding GenerateCommand}" MinWidth="100" />
 
-                <SplitButton Content="Save" Command="{Binding SaveProjectCommand}" MinWidth="100">
+                <SplitButton Content="Save" Command="{Binding Projects.SaveProjectCommand}" MinWidth="100">
                     <SplitButton.Flyout>
                         <MenuFlyout>
-                            <MenuItem Header="New project" Command="{Binding NewProjectCommand}" />
+                            <MenuItem Header="New project" Command="{Binding Projects.NewProjectCommand}" />
                         </MenuFlyout>
                     </SplitButton.Flyout>
                 </SplitButton>
@@ -133,9 +133,9 @@
             </GroupBox.Header>
 
             <Panel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <ui:ItemPaletteView DataContext="{Binding}"/>
-                <ui:PropertiesView DataContext="{Binding}"/>
-                <ui:ProjectsView DataContext="{Binding}"/>
+                <ui:ItemPaletteView DataContext="{Binding}" IsVisible="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPaletteView}}"/>
+                <ui:PropertiesView DataContext="{Binding}" IsVisible="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPropertiesView}}" />
+                <ui:ProjectsView DataContext="{Binding Projects}" IsVisible="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsProjectsView}}"/>
             </Panel>
         </GroupBox>
     </Grid>

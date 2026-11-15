@@ -19,7 +19,7 @@ namespace SkEditor.Editor.Generators.ViewModels;
 public sealed partial class GuiGeneratorViewModel : ObservableObject, IDisposable
 {
     private readonly ITabService _tabs;
-    private bool _disposed;
+    private DisposableBag _disposables;
 
     public BindableReactiveProperty<GuiGeneratorTab> CurrentViewMode { get; } = new(GuiGeneratorTab.Palette);
     public BindableReactiveProperty<string> FunctionName { get; } = new(string.Empty);
@@ -48,96 +48,13 @@ public sealed partial class GuiGeneratorViewModel : ObservableObject, IDisposabl
     {
         _tabs = tabs;
 
-        Grid = new GuiGridViewModel();
-        ItemPalette = new ItemPaletteViewModel(resources, notifs, logs);
-        Projects = new GuiProjectsViewModel(projects, dialogs);
+        ItemPalette = new ItemPaletteViewModel(resources, notifs, logs).AddTo(ref _disposables);
+        Grid = new GuiGridViewModel(ItemPalette.SelectedItem).AddTo(ref _disposables);
+        Projects = new GuiProjectsViewModel(projects, dialogs, CreateBlueprint).AddTo(ref _disposables);
+        Projects.BlueprintLoaded.Subscribe(ApplyBlueprint).AddTo(ref _disposables);
 
         Providers = [.. providers];
         SelectedProvider = Providers.Count > 0 ? Providers[0] : null;
-    }
-
-    public async Task LoadProjects()
-    {
-        await Projects.LoadProjects();
-    }
-
-    [RelayCommand]
-    private void SelectSlot(SlotViewModel slot)
-    {
-        Grid.SelectSlot(slot);
-    }
-
-    [RelayCommand]
-    private void ApplySelectedItem()
-    {
-        Grid.ApplySelectedItem(ItemPalette.SelectedItem.Value);
-    }
-
-    [RelayCommand]
-    private void SetAllEmptySlots()
-    {
-        Grid.SetAllEmptySlots(ItemPalette.SelectedItem.Value);
-    }
-
-    [RelayCommand]
-    private void FillBackground()
-    {
-        Grid.FillBackground(ItemPalette.SelectedItem.Value);
-    }
-
-    [RelayCommand]
-    private void ClearSlot()
-    {
-        Grid.ClearSlot();
-    }
-
-    [RelayCommand]
-    private void ClearAllSlots()
-    {
-        Grid.ClearAllSlots();
-    }
-
-    [RelayCommand]
-    private void ClearBackground()
-    {
-        Grid.ClearBackground();
-    }
-
-    [RelayCommand]
-    private void HandleDoubleClick(SlotViewModel slot)
-    {
-        Grid.SelectSlot(slot);
-        if (slot.Item is null)
-        {
-            Grid.ApplySelectedItem(ItemPalette.SelectedItem.Value);
-        }
-        else
-        {
-            ClearSlot();
-        }
-    }
-
-    [RelayCommand]
-    private void SlotPointerPressed(SlotPointerAction? action)
-    {
-        if (action is null)
-        {
-            return;
-        }
-
-        SlotViewModel slot = action.Slot;
-
-        switch (action.ClickType)
-        {
-            case ClickType.Left:
-                SelectSlot(slot);
-                break;
-
-            case ClickType.Middle:
-                Grid.SelectSlot(slot);
-                Grid.ApplySelectedItem(ItemPalette.SelectedItem.Value);
-                break;
-        }
     }
 
     [RelayCommand(CanExecute = nameof(CanGenerate))]
@@ -155,35 +72,36 @@ public sealed partial class GuiGeneratorViewModel : ObservableObject, IDisposabl
             editorTab.InsertCode(code);
         }
     }
-
-    [RelayCommand]
-    private async Task SaveProject()
+    
+    private void ApplyBlueprint(GuiBlueprint? blueprint)
     {
-        await Projects.SaveProject(CreateBlueprint());
-    }
+        Title.Value = blueprint?.Title ?? string.Empty;
+        FunctionName.Value = blueprint?.FunctionName ?? string.Empty;
 
-    [RelayCommand]
-    private void NewProject()
-    {
-        Projects.NewProject(Title, FunctionName, Grid);
-    }
+        Grid.ClearAllSlots();
+        Grid.ClearBackground();
 
-    [RelayCommand]
-    private void DeleteProject()
-    {
-        Projects.DeleteProject(Title, FunctionName, Grid);
-    }
+        if (blueprint is null)
+        {
+            Grid.Rows.Value = 5;
+            return;
+        }
 
-    [RelayCommand]
-    private async Task RenameProject()
-    {
-        await Projects.RenameProject();
-    }
+        Grid.Rows.Value = Math.Clamp(blueprint.Rows, 1, 6);
 
-    [RelayCommand]
-    private void LoadProject()
-    {
-        Projects.LoadProject(Title, FunctionName, Grid, ItemPalette);
+        if (blueprint.BackgroundItem is { } backgroundItem)
+        {
+            ItemViewModel? bgVm = ItemPalette.FindById(backgroundItem.Id);
+            Grid.BackgroundItem = GuiItemViewModel.FromModel(backgroundItem, bgVm);
+        }
+
+        foreach ((int slot, GuiItem item) in blueprint.Items)
+        {
+            if (slot < 0 || slot >= Grid.Slots.Count) continue;
+
+            ItemViewModel? itemVm = ItemPalette.FindById(item.Id);
+            Grid.Slots[slot].Item = GuiItemViewModel.FromModel(item, itemVm);
+        }
     }
 
     private GuiBlueprint CreateBlueprint()
@@ -209,12 +127,6 @@ public sealed partial class GuiGeneratorViewModel : ObservableObject, IDisposabl
 
     public void Dispose()
     {
-        if (_disposed)
-        {
-            return;
-        }
-        _disposed = true;
-        ItemPalette.Dispose();
-        Grid.Dispose();
+        _disposables.Dispose();
     }
 }

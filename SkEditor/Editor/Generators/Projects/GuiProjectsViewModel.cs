@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using ObservableCollections;
 using R3;
@@ -9,9 +10,7 @@ using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Dialogs.Models.Elements;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
-using SkEditor.Editor.Generators.Extensions;
 using SkEditor.Editor.Generators.Models;
-using SkEditor.Editor.Generators.ViewModels;
 
 namespace SkEditor.Editor.Generators.Projects;
 
@@ -22,10 +21,15 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
     private readonly ISynchronizedView<GuiProject, GuiProjectViewModel> _projectsView;
     private readonly IDisposable _activeSub;
 
-    public GuiProjectsViewModel(IGuiProjectService projects, IDialogService dialogs)
+    private readonly Func<GuiBlueprint> _blueprintFactory;
+    private readonly Subject<GuiBlueprint?> _blueprintLoaded = new();
+    public Observable<GuiBlueprint?> BlueprintLoaded => _blueprintLoaded;
+
+    public GuiProjectsViewModel(IGuiProjectService projects, IDialogService dialogs, Func<GuiBlueprint> blueprintFactory)
     {
         _projects = projects;
         _dialogs = dialogs;
+        _blueprintFactory = blueprintFactory;
         
         _projectsView = projects.Projects.CreateView(p =>
             new GuiProjectViewModel(p, p.Id == projects.ActiveProject.CurrentValue?.Id));
@@ -51,8 +55,10 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
         await _projects.LoadProjects();
     }
     
-    public async Task SaveProject(GuiBlueprint blueprint)
+    [RelayCommand]
+    private async Task SaveProject()
     {
+        GuiBlueprint blueprint = _blueprintFactory.Invoke();
         GuiProject project;
 
         if (_projects.ActiveProject.CurrentValue is { } activeProject)
@@ -83,18 +89,27 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
         await _projects.SaveProject(project);
     }
 
-    public void NewProject(BindableReactiveProperty<string> title, BindableReactiveProperty<string> functionName, GuiGridViewModel grid)
+    [RelayCommand]
+    private void NewProject()
     {
         _projects.SetActiveProject(null);
+        _blueprintLoaded.OnNext(null);
+    }
+    
+    [RelayCommand]
+    private void LoadProject()
+    {
+        if (SelectedProject is null)
+        {
+            return;
+        }
 
-        title.Value = string.Empty;
-        functionName.Value = string.Empty;
-        grid.Rows.Value = 5;
-        grid.ClearAllSlots();
-        grid.ClearBackground();
+        _projects.SetActiveProject(SelectedProject.Model);
+        _blueprintLoaded.OnNext(SelectedProject.Model.Blueprint);
     }
 
-    public void DeleteProject(BindableReactiveProperty<string> title, BindableReactiveProperty<string> functionName, GuiGridViewModel grid)
+    [RelayCommand]
+    private void DeleteProject()
     {
         if (SelectedProject is null)
         {
@@ -103,13 +118,14 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
 
         if (SelectedProject.Model == _projects.ActiveProject.CurrentValue)
         {
-            NewProject(title, functionName, grid);
+            NewProject();
         }
 
         _projects.DeleteProject(SelectedProject.Model);
     }
 
-    public async Task RenameProject()
+    [RelayCommand]
+    private async Task RenameProject()
     {
         if (SelectedProject is null)
         {
@@ -147,45 +163,11 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
             : null;
     }
 
-    public void LoadProject(BindableReactiveProperty<string> title, BindableReactiveProperty<string> functionName, GuiGridViewModel grid, ItemPaletteViewModel items)
-    {
-        if (SelectedProject is null)
-        {
-            return;
-        }
-
-        _projects.SetActiveProject(SelectedProject.Model);
-
-        GuiBlueprint blueprint = SelectedProject.Model.Blueprint;
-
-        title.Value = blueprint.Title ?? string.Empty;
-        functionName.Value = blueprint.FunctionName ?? string.Empty;
-
-        grid.ClearAllSlots();
-        grid.Rows.Value = Math.Clamp(blueprint.Rows, 1, 6);
-
-        if (blueprint.BackgroundItem is { } backgroundItem)
-        {
-            ItemViewModel? bgVm = items.FindById(backgroundItem.Id);
-            grid.BackgroundItem = GuiItemViewModel.FromModel(backgroundItem, bgVm);
-        }
-
-        foreach ((int slot, GuiItem item) in blueprint.Items)
-        {
-            if (slot < 0 || slot >= grid.Slots.Count)
-            {
-                continue;
-            }
-
-            ItemViewModel? itemVm = items.FindById(item.Id);
-            grid.Slots[slot].Item = GuiItemViewModel.FromModel(item, itemVm);
-        }
-    }
-
     public void Dispose()
     {
         _projectsView.Dispose();
         _activeSub.Dispose();
+        _blueprintLoaded.Dispose();
         Projects.Dispose();
     }
 }

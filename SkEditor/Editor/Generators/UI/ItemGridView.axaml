@@ -8,13 +8,13 @@
              xmlns:converters="clr-namespace:SkEditor.Editor.Generators.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Editor.Generators.UI.ItemGridView"
-             x:DataType="vm:GuiGeneratorViewModel"
+             x:DataType="vm:GuiGridViewModel"
              Name="Root">
-    <ItemsControl ItemsSource="{Binding Grid.Slots}" VerticalAlignment="Center"
+    <ItemsControl ItemsSource="{Binding Slots}" VerticalAlignment="Center"
                   HorizontalAlignment="Center">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid Columns="{Binding Grid.Columns}" ColumnSpacing="4" RowSpacing="4" />
+                <UniformGrid Columns="{Binding Columns}" ColumnSpacing="4" RowSpacing="4" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
 
@@ -26,17 +26,19 @@
                         Padding="0"
                         Classes.selected="{Binding IsSelected}"
                         Classes="minecraft-slot"
-                        behaviors:PointerActionBehavior.Command="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.SlotPointerPressedCommand}">
+                        behaviors:PointerActionBehavior.Command="{Binding #Root.((vm:GuiGridViewModel)DataContext)?.SlotPointerPressedCommand}">
 
                     <Interaction.Behaviors>
-                        <input:InputElementDoubleTappedEventCommandTrigger
-                            Command="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.HandleDoubleClickCommand}"
-                            Parameter="{Binding}" />
+                        <BehaviorCollection>
+                            <input:InputElementDoubleTappedEventCommandTrigger
+                                Command="{Binding #Root.((vm:GuiGridViewModel)DataContext)?.HandleDoubleClickCommand}"
+                                Parameter="{Binding}" />
+                        </BehaviorCollection>
                     </Interaction.Behaviors>
 
                     <Panel>
                         <Image
-                            Source="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.Grid.BackgroundItem?.Image}"
+                            Source="{Binding #Root.((vm:GuiGridViewModel)DataContext)?.BackgroundItem?.Image}"
                             RenderOptions.EdgeMode="Antialias"
                             Width="32"
                             Height="32"

@@ -3,13 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SkEditor.Editor.Generators.ViewModels"
-             xmlns:converters="clr-namespace:SkEditor.Editor.Generators.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Editor.Generators.UI.PropertiesView"
              x:DataType="vm:GuiGeneratorViewModel">
-    <Panel
-        IsVisible="{Binding CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPropertiesView}}">
-
+    <Panel>
         <StackPanel Opacity="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
                     IsHitTestVisible="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
                     VerticalAlignment="Center"
