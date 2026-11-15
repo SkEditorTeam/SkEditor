@@ -37,8 +37,7 @@
                                 <BehaviorCollectionTemplate>
                                     <BehaviorCollection>
                                         <input:InputElementDoubleTappedEventCommandTrigger
-                                            Command="{Binding #Root.((vm:GuiProjectsViewModel)DataContext)?.LoadProjectCommand}"
-                                            Parameter="{Binding}" />
+                                            Command="{Binding #Root.((vm:GuiProjectsViewModel)DataContext)?.LoadProjectCommand}" />
                                     </BehaviorCollection>
                                 </BehaviorCollectionTemplate>
                             </Setter>
