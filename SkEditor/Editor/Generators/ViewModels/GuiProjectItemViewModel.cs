@@ -1,8 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using SkEditor.Editor.Generators.Models;
 
-namespace SkEditor.Editor.Generators.Projects;
+namespace SkEditor.Editor.Generators.ViewModels;
 
-public partial class GuiProjectViewModel(GuiProject model, bool isActive) : ObservableObject
+public partial class GuiProjectItemViewModel(GuiProject model, bool isActive) : ObservableObject
 {
     public GuiProject Model { get; } = model;
 

@@ -1,6 +1,6 @@
 using Avalonia.Data.Converters;
 using SkEditor.Core.Common;
-using SkEditor.Editor.Generators.ViewModels;
+using SkEditor.Editor.Generators.Models;
 
 namespace SkEditor.Editor.Generators.Converters;
 

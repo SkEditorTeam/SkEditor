@@ -13,6 +13,7 @@ using R3;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Generators.Models;
+using SkEditor.Editor.Generators.Services;
 
 namespace SkEditor.Editor.Generators.ViewModels;
 

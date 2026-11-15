@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
@@ -9,8 +8,8 @@ using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Generators.Extensions;
 using SkEditor.Editor.Generators.Models;
-using SkEditor.Editor.Generators.Projects;
 using SkEditor.Editor.Generators.Providers;
+using SkEditor.Editor.Generators.Services;
 using SkEditor.Editor.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs;
 

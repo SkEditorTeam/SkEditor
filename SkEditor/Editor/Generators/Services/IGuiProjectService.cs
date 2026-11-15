@@ -1,8 +1,9 @@
 using System.Threading.Tasks;
 using ObservableCollections;
 using R3;
+using SkEditor.Editor.Generators.Models;
 
-namespace SkEditor.Editor.Generators.Projects;
+namespace SkEditor.Editor.Generators.Services;
 
 public interface IGuiProjectService
 {

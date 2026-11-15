@@ -2,9 +2,8 @@ using System;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using SkEditor.Editor.Generators.Models;
 
-namespace SkEditor.Editor.Generators.Projects;
+namespace SkEditor.Editor.Generators.Models;
 
 public class GuiProject
 {

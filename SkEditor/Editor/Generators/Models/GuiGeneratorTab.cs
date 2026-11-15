@@ -1,4 +1,4 @@
-namespace SkEditor.Editor.Generators;
+namespace SkEditor.Editor.Generators.Models;
 
 public enum GuiGeneratorTab
 {

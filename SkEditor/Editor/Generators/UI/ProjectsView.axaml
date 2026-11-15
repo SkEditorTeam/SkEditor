@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:projects="clr-namespace:SkEditor.Editor.Generators.Projects"
              xmlns:input="clr-namespace:Avalonia.Input"
+             xmlns:vm="clr-namespace:SkEditor.Editor.Generators.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Editor.Generators.UI.ProjectsView"
-             x:DataType="projects:GuiProjectsViewModel"
+             x:DataType="vm:GuiProjectsViewModel"
              Name="Root">
     <Panel>
         <Grid RowDefinitions="Auto,*,Auto" RowSpacing="8" Margin="8"
@@ -26,7 +26,7 @@
                      IsTextSearchEnabled="True">
 
                 <ListBox.Styles>
-                    <Style Selector="ListBoxItem" x:DataType="projects:GuiProjectViewModel">
+                    <Style Selector="ListBoxItem" x:DataType="vm:GuiProjectItemViewModel">
                         <Setter Property="TextSearch.Text" Value="{Binding Name}" />
                         <Setter Property="Height" Value="40" />
                         <Setter Property="Theme"
@@ -35,7 +35,7 @@
                             <BehaviorCollectionTemplate>
                                 <BehaviorCollection>
                                     <input:InputElementDoubleTappedEventCommandTrigger
-                                        Command="{Binding #Root.((projects:GuiProjectsViewModel)DataContext)?.LoadProjectCommand}"
+                                        Command="{Binding #Root.((vm:GuiProjectsViewModel)DataContext)?.LoadProjectCommand}"
                                         Parameter="{Binding}" />
                                 </BehaviorCollection>
                             </BehaviorCollectionTemplate>
@@ -44,7 +44,7 @@
                 </ListBox.Styles>
 
                 <ListBox.ItemTemplate>
-                    <DataTemplate x:DataType="projects:GuiProjectViewModel">
+                    <DataTemplate x:DataType="vm:GuiProjectItemViewModel">
                         <Grid ColumnDefinitions="Auto,*">
                             <TextBlock Text="{Binding Name}"
                                        VerticalAlignment="Center" />

@@ -11,14 +11,15 @@ using SkEditor.Core.Dialogs.Models.Elements;
 using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Editor.Generators.Models;
+using SkEditor.Editor.Generators.Services;
 
-namespace SkEditor.Editor.Generators.Projects;
+namespace SkEditor.Editor.Generators.ViewModels;
 
 public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
 {
     private readonly IGuiProjectService _projects;
     private readonly IDialogService _dialogs;
-    private readonly ISynchronizedView<GuiProject, GuiProjectViewModel> _projectsView;
+    private readonly ISynchronizedView<GuiProject, GuiProjectItemViewModel> _projectsView;
     private readonly IDisposable _activeSub;
 
     private readonly Func<GuiBlueprint> _blueprintFactory;
@@ -32,23 +33,23 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
         _blueprintFactory = blueprintFactory;
         
         _projectsView = projects.Projects.CreateView(p =>
-            new GuiProjectViewModel(p, p.Id == projects.ActiveProject.CurrentValue?.Id));
+            new GuiProjectItemViewModel(p, p.Id == projects.ActiveProject.CurrentValue?.Id));
         
         Projects = _projectsView.ToNotifyCollectionChanged();
         
         _activeSub = projects.ActiveProject.Subscribe(active =>
         {
-            foreach (GuiProjectViewModel view in _projectsView)
+            foreach (GuiProjectItemViewModel view in _projectsView)
             {
                 view.IsActive = view.Model.Id == active?.Id;
             }
         });
     }
 
-    public NotifyCollectionChangedSynchronizedViewList<GuiProjectViewModel> Projects { get; }
+    public NotifyCollectionChangedSynchronizedViewList<GuiProjectItemViewModel> Projects { get; }
 
     [ObservableProperty]
-    public partial GuiProjectViewModel? SelectedProject { get; set; }
+    public partial GuiProjectItemViewModel? SelectedProject { get; set; }
 
     public async Task LoadProjects()
     {

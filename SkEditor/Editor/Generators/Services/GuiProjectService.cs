@@ -9,8 +9,9 @@ using ObservableCollections;
 using R3;
 using SkEditor.Core.Common;
 using SkEditor.Core.Logging;
+using SkEditor.Editor.Generators.Models;
 
-namespace SkEditor.Editor.Generators.Projects;
+namespace SkEditor.Editor.Generators.Services;
 
 public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider, ILogService logs) : IGuiProjectService
 {
@@ -132,7 +133,7 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
         await using (FileSystemStream
                      stream = fileSystem.FileStream.New(tmpPath, FileMode.Create, FileAccess.Write))
         {
-            await JsonSerializer.SerializeAsync(stream, project, GuiProjectContext.Relaxed.GuiProject);
+            await JsonSerializer.SerializeAsync(stream, project, Models.GuiProjectContext.Relaxed.GuiProject);
         }
 
         fileSystem.File.Move(tmpPath, path, overwrite: true);

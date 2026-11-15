@@ -9,7 +9,7 @@ using SkEditor.Core.Common;
 using SkEditor.Core.Logging;
 using SkEditor.Editor.Generators.Models;
 
-namespace SkEditor.Editor.Generators;
+namespace SkEditor.Editor.Generators.Services;
 
 public class GameResourcesService(IHttpClientFactory clientFactory, ILogService logs)
     : IGameResourcesService

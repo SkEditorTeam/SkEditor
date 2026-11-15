@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Editor.Generators.Models;
 
-namespace SkEditor.Editor.Generators;
+namespace SkEditor.Editor.Generators.Services;
 
 public interface IGameResourcesService
 {
