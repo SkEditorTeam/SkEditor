@@ -35,24 +35,27 @@ public class VanillaGuiCodeProvider : IGuiCodeProvider
             AppendItemString(code, item);
         }
 
-        code.Append("\n\topen {_gui} to {_p}\n");
-
-        code.Append("\non inventory click:");
-        code.Append($"\n\tname of event-inventory is \"{title}\"");
-        code.Append("\n\tcancel event");
-        code.Append("\n\tevent-inventory is not player's inventory");
-
-        bool first = true;
-        foreach ((int slot, GuiItem item) in sortedItems)
+        code.Append("\n\topen {_gui} to {_p}");
+        
+        if (sortedItems.Any(i => i.Value.GenerateExampleAction))
         {
-            if (!item.GenerateExampleAction)
+            code.Append("\n\non inventory click:");
+            code.Append($"\n\tname of event-inventory is \"{title}\"");
+            code.Append("\n\tcancel event");
+            code.Append("\n\tevent-inventory is not player's inventory");
+
+            bool first = true;
+            foreach ((int slot, GuiItem item) in sortedItems)
             {
-                continue;
-            }
+                if (!item.GenerateExampleAction)
+                {
+                    continue;
+                }
             
-            code.Append($"\n\t{(first ? "" : "else ")}if clicked slot is {slot}:");
-            code.Append($"\n\t\tsend \"You clicked on slot {slot}\" to player");
-            first = false;
+                code.Append($"\n\t{(first ? "" : "else ")}if clicked slot is {slot}:");
+                code.Append($"\n\t\tsend \"You clicked on slot {slot}\" to player");
+                first = false;
+            }   
         }
         
         return code.ToString();
