@@ -119,7 +119,6 @@ public sealed partial class GuiGridViewModel : ObservableObject, IDisposable
 
         BackgroundItem = new GuiItemViewModel(item.Id, item.Name, item.Image)
         {
-            DisplayName = " ",
             HideTooltip = true
         };
     }

@@ -13,7 +13,7 @@ public class VanillaGuiCodeProvider : IGuiCodeProvider
         StringBuilder code = new();
 
         string functionName = blueprint.FunctionName ?? "openGui";
-        string title = blueprint.Title ?? "GUI";
+        string title = Escape(blueprint.Title ?? "GUI");
         code.Append($"function {functionName}(p: player):");
 
         code.Append($"\n\tset {{_gui}} to chest inventory with {blueprint.Rows} rows named \"{title}\"\n");
@@ -73,15 +73,20 @@ public class VanillaGuiCodeProvider : IGuiCodeProvider
         {
             code.Append(rawName);
         }
-
-        if (!string.IsNullOrWhiteSpace(item.DisplayName))
+        
+        if (item.DisplayName is not null)
         {
-            code.Append($" named \"{item.DisplayName}\"");
+            code.Append($" named \"{Escape(item.DisplayName)}\"");
         }
-
+        
         if (item.HideTooltip)
         {
             code.Append(" without entire tooltip");
         }
+    }
+
+    private static string Escape(string text)
+    {
+        return text.Replace("\"", "\"\"");
     }
 }
