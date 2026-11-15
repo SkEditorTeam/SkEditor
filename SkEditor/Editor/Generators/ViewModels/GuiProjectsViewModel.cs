@@ -89,7 +89,7 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
         }
         else
         {
-            string? promptName = await PromptName("Save project".ToTranslatable(), "New project".ToTranslatable());
+            string? promptName = await PromptName("Save project".ToTranslatable(), "New project".ToTranslatable(), TranslationKey.ButtonSave);
 
             if (promptName is null)
             {
@@ -153,7 +153,7 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
             return;
         }
 
-        string? promptName = await PromptName("Rename project".ToTranslatable(), "New name".ToTranslatable(),
+        string? promptName = await PromptName("Rename project".ToTranslatable(), "New name".ToTranslatable(), TranslationKey.ButtonRename,
             SelectedProject.Name);
         string? name = promptName?.Trim();
 
@@ -163,9 +163,10 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
         }
 
         await _projects.RenameProject(SelectedProject.Model, name);
+        SelectedProject.Name = name;
     }
 
-    private async Task<string?> PromptName(TranslatableString title, TranslatableString placeholder,
+    private async Task<string?> PromptName(TranslatableString title, TranslatableString placeholder, TranslatableString okString,
         string? initialValue = null)
     {
         TextBoxDialogElement inputElement = new()
@@ -176,7 +177,7 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
             .WithIcon(Symbol.SaveEdit)
             .WithElements(inputElement)
             .WithButtons(
-                new DialogButton(TranslationKey.ButtonRename, DialogResult.Yes, true),
+                new DialogButton(okString, DialogResult.Yes, true),
                 DialogButton.Cancel
             );
 
