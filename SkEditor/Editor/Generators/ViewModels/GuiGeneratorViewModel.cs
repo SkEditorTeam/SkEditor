@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using R3;
 using SkEditor.Core.Dialogs;
+using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Generators.Extensions;
@@ -18,6 +19,7 @@ namespace SkEditor.Editor.Generators.ViewModels;
 public sealed partial class GuiGeneratorViewModel : ObservableObject, IDisposable
 {
     private readonly ITabService _tabs;
+    private readonly INotificationService _notifs;
     private DisposableBag _disposables;
 
     public BindableReactiveProperty<GuiGeneratorTab> CurrentViewMode { get; } = new(GuiGeneratorTab.Palette);
@@ -46,6 +48,7 @@ public sealed partial class GuiGeneratorViewModel : ObservableObject, IDisposabl
         IEnumerable<IGuiCodeProvider> providers)
     {
         _tabs = tabs;
+        _notifs = notifs;
 
         ItemPalette = new ItemPaletteViewModel(resources, notifs, logs).AddTo(ref _disposables);
         Grid = new GuiGridViewModel(ItemPalette.SelectedItem).AddTo(ref _disposables);
@@ -66,10 +69,19 @@ public sealed partial class GuiGeneratorViewModel : ObservableObject, IDisposabl
 
         GuiBlueprint blueprint = CreateBlueprint();
         string code = SelectedProvider.Generate(blueprint);
-        if (_tabs.SelectedTab is ITextEditorTab editorTab)
+        if (_tabs.SelectedTab is not ITextEditorTab editorTab)
         {
-            editorTab.InsertCode(code);
+            Notification notification = Notification
+                .Create(TranslationKey.NoFileNotificationTitle)
+                .WithMessage(TranslationKey.NoFileNotificationMessage)
+                .WithType(NotificationType.Error);
+
+            _notifs.Show(notification);
+            
+            return;
         }
+
+        editorTab.InsertCode(code);
     }
     
     private void ApplyBlueprint(GuiBlueprint? blueprint)
