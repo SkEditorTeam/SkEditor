@@ -1,4 +1,6 @@
 using System;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using SkEditor.Editor.Generators.Models;
 
@@ -14,4 +16,12 @@ public class GuiProject
 }
 
 [JsonSerializable(typeof(GuiProject))]
-public partial class GuiProjectContext : JsonSerializerContext;
+[JsonSourceGenerationOptions(WriteIndented = true)]
+public partial class GuiProjectContext : JsonSerializerContext
+{
+    public static GuiProjectContext Relaxed { get; } = new(new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    });
+}

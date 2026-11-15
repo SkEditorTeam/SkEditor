@@ -77,7 +77,7 @@ public class GuiProjectService(IFileSystem fileSystem, TimeProvider timeProvider
             await using (FileSystemStream
                          stream = fileSystem.FileStream.New(tmpPath, FileMode.Create, FileAccess.Write))
             {
-                await JsonSerializer.SerializeAsync(stream, project, GuiProjectContext.Default.GuiProject);
+                await JsonSerializer.SerializeAsync(stream, project, GuiProjectContext.Relaxed.GuiProject);
             }
 
             fileSystem.File.Move(tmpPath, path, overwrite: true);
