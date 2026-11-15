@@ -71,6 +71,7 @@
                          Classes.error="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                     <Interaction.Behaviors>
                         <behaviors:FocusOnLoadedBehavior ShouldFocus="{Binding AutoFocus}" />
+                        <behaviors:TextBoxMoveCaretToEndOnFocusBehavior />
                     </Interaction.Behaviors>
                 </TextBox>
                 <TextBlock Text="{Binding ErrorMessage}"
