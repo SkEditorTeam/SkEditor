@@ -134,7 +134,7 @@
 
             <Panel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <ui:ItemPaletteView DataContext="{Binding}" IsVisible="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPaletteView}}"/>
-                <ui:PropertiesView DataContext="{Binding}" IsVisible="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPropertiesView}}" />
+                <ui:PropertiesView DataContext="{Binding Grid}" IsVisible="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPropertiesView}}" />
                 <ui:ProjectsView DataContext="{Binding Projects}" IsVisible="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsProjectsView}}"/>
             </Panel>
         </GroupBox>

@@ -5,10 +5,10 @@
              xmlns:vm="clr-namespace:SkEditor.Editor.Generators.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SkEditor.Editor.Generators.UI.PropertiesView"
-             x:DataType="vm:GuiGeneratorViewModel">
+             x:DataType="vm:GuiGridViewModel">
     <Panel>
-        <StackPanel Opacity="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
-                    IsHitTestVisible="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
+        <StackPanel Opacity="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
+                    IsHitTestVisible="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
 
@@ -17,34 +17,34 @@
         </StackPanel>
 
         <StackPanel Spacing="16" Margin="8"
-                    Opacity="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
-                    IsHitTestVisible="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    Opacity="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    IsHitTestVisible="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
 
-            <TextBlock Text="This is the background item" IsVisible="{Binding Grid.IsEditingBackground}"
+            <TextBlock Text="This is the background item" IsVisible="{Binding IsEditingBackground}"
                        Foreground="{DynamicResource ForegroundSecondaryColor}" HorizontalAlignment="Center" />
 
             <StackPanel Orientation="Vertical" Spacing="4">
                 <TextBlock Text="Display name" FontSize="14" />
-                <TextBox Text="{Binding Grid.InspectedItem?.DisplayName, Mode=TwoWay}"
-                         PlaceholderText="{Binding Grid.InspectedItem?.Name}" />
+                <TextBox Text="{Binding InspectedItem?.DisplayName, Mode=TwoWay}"
+                         PlaceholderText="{Binding InspectedItem?.Name}" />
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Spacing="4" IsVisible="{Binding !Grid.IsEditingBackground}">
+            <StackPanel Orientation="Vertical" Spacing="4" IsVisible="{Binding !IsEditingBackground}">
                 <TextBlock Text="Amount" FontSize="14" />
                 <NumericUpDown Minimum="1" Maximum="64"
-                               Value="{Binding Grid.InspectedItem?.Amount, Mode=TwoWay}" FormatString="0" />
+                               Value="{Binding InspectedItem?.Amount, Mode=TwoWay}" FormatString="0" />
             </StackPanel>
 
             <StackPanel Spacing="2">
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox IsChecked="{Binding Grid.InspectedItem?.HideTooltip, Mode=TwoWay}"
+                    <CheckBox IsChecked="{Binding InspectedItem?.HideTooltip, Mode=TwoWay}"
                               Padding="12,0,0,0" VerticalContentAlignment="Center">
                         <TextBlock Text="Hide tooltip" FontSize="14" />
                     </CheckBox>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" IsVisible="{Binding !Grid.IsEditingBackground}">
-                    <CheckBox IsChecked="{Binding Grid.InspectedItem?.GenerateExampleAction, Mode=TwoWay}"
+                <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsEditingBackground}">
+                    <CheckBox IsChecked="{Binding InspectedItem?.GenerateExampleAction, Mode=TwoWay}"
                               Padding="12,0,0,0" VerticalContentAlignment="Center">
                         <TextBlock Text="Add click action" FontSize="14" />
                     </CheckBox>
