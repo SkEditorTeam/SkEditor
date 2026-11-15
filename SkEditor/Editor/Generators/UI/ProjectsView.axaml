@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SkEditor.Editor.Generators.ViewModels"
+             xmlns:projects="clr-namespace:SkEditor.Editor.Generators.Projects"
+             xmlns:converters="clr-namespace:SkEditor.Editor.Generators.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkEditor.Editor.Generators.UI.ProjectsView"
+             x:DataType="vm:GuiGeneratorViewModel">
+    <Panel
+        IsVisible="{Binding CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsProjectsView}}">
+        <Grid RowDefinitions="Auto,*,Auto" RowSpacing="8" Margin="8"
+              Opacity="{Binding !!Projects.Projects.Count}"
+              IsHitTestVisible="{Binding !!Projects.Projects.Count}">
+            <TextBox Grid.Row="0"
+                     PlaceholderText="Search..."
+                     Theme="{DynamicResource SearchBoxTheme}"
+                     Margin="0,2,0,2" />
+
+            <ListBox Grid.Row="1"
+                     SelectionMode="AlwaysSelected"
+                     ItemsSource="{Binding Projects.Projects}"
+                     SelectedItem="{Binding Projects.SelectedProject, Mode=TwoWay}"
+                     Margin="0,0,-12,0" HorizontalAlignment="Stretch"
+                     ClipToBounds="False"
+                     IsTextSearchEnabled="True">
+
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem" x:DataType="projects:GuiProject">
+                        <Setter Property="TextSearch.Text" Value="{Binding Name}" />
+                        <Setter Property="Height" Value="40" />
+                        <Setter Property="Theme"
+                                Value="{DynamicResource NoIndicatorAnimationListBoxItem}" />
+                    </Style>
+                </ListBox.Styles>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="projects:GuiProject">
+                        <TextBlock Text="{Binding Name}"
+                                   VerticalAlignment="Center" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="6" Margin="0,6,0,0">
+                <SplitButton Grid.Column="0"
+                             Content="Load"
+                             Classes="accent"
+                             HorizontalAlignment="Stretch"
+                             Command="{Binding LoadProjectCommand}">
+                    <SplitButton.Flyout>
+                        <MenuFlyout>
+                            <!-- <MenuItem Header="Import from file"/> -->
+                        </MenuFlyout>
+                    </SplitButton.Flyout>
+                </SplitButton>
+
+                <SplitButton Grid.Column="1"
+                             Content="Rename"
+                             HorizontalAlignment="Stretch"
+                             Command="{Binding RenameProjectCommand}">
+                    <SplitButton.Flyout>
+                        <MenuFlyout>
+                            <MenuItem Header="Save as new..." />
+                            <MenuItem Header="Delete" Command="{Binding DeleteProjectCommand}" />
+                            <!-- <MenuItem Header="Export to file" /> -->
+                        </MenuFlyout>
+                    </SplitButton.Flyout>
+                </SplitButton>
+            </Grid>
+        </Grid>
+
+        <StackPanel Opacity="{Binding !Projects.Projects.Count}"
+                    IsHitTestVisible="{Binding !Projects.Projects.Count}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Spacing="16">
+
+            <TextBlock Text="No projects saved" FontSize="16"
+                       Foreground="{DynamicResource ForegroundSecondaryColor}" />
+        </StackPanel>
+    </Panel>
+</UserControl>

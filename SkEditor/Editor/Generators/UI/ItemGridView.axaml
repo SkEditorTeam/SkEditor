@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SkEditor.Editor.Generators.ViewModels"
+             xmlns:behaviors="clr-namespace:SkEditor.Editor.Generators.Behaviors"
+             xmlns:input="clr-namespace:Avalonia.Input"
+             xmlns:converters="clr-namespace:SkEditor.Editor.Generators.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkEditor.Editor.Generators.UI.ItemGridView"
+             x:DataType="vm:GuiGeneratorViewModel"
+             Name="Root">
+    <ItemsControl ItemsSource="{Binding Grid.Slots}" VerticalAlignment="Center"
+                  HorizontalAlignment="Center">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="{Binding Grid.Columns}" ColumnSpacing="4" RowSpacing="4" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="vm:SlotViewModel">
+                <Button Width="48"
+                        Height="48"
+                        Margin="1"
+                        Padding="0"
+                        Classes.selected="{Binding IsSelected}"
+                        Classes="minecraft-slot"
+                        behaviors:PointerActionBehavior.Command="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.SlotPointerPressedCommand}">
+
+                    <Interaction.Behaviors>
+                        <input:InputElementDoubleTappedEventCommandTrigger
+                            Command="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.HandleDoubleClickCommand}"
+                            Parameter="{Binding}" />
+                    </Interaction.Behaviors>
+
+                    <Panel>
+                        <Image
+                            Source="{Binding #Root.((vm:GuiGeneratorViewModel)DataContext)?.Grid.BackgroundItem?.Image}"
+                            RenderOptions.EdgeMode="Antialias"
+                            Width="32"
+                            Height="32"
+                            Opacity="0.5"
+                            IsVisible="{Binding Item, Converter={x:Static ObjectConverters.IsNull}}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+
+                        <Image Source="{Binding Item?.Image}"
+                               RenderOptions.EdgeMode="Antialias"
+                               Width="32"
+                               Height="32"
+                               IsVisible="{Binding Item, Converter={x:Static ObjectConverters.IsNotNull}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+
+                        <TextBlock Text="{Binding Item?.Amount}"
+                                   IsVisible="{Binding Item?.Amount, Converter={x:Static converters:ItemConverters.IsGreaterThanOne}}"
+                                   FontFamily="{DynamicResource MinecraftFont}"
+                                   FontSize="16"
+                                   Foreground="#FFFFFF"
+                                   TextOptions.TextRenderingMode="Alias"
+                                   UseLayoutRounding="True"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Bottom"
+                                   Margin="0,0,-2.5,-3.5">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="#3e3e3e"
+                                                  BlurRadius="0"
+                                                  OffsetX="2"
+                                                  OffsetY="2"
+                                                  Opacity="1" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </Panel>
+                </Button>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

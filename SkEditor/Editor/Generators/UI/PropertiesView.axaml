@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:SkEditor.Editor.Generators.ViewModels"
+             xmlns:converters="clr-namespace:SkEditor.Editor.Generators.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SkEditor.Editor.Generators.UI.PropertiesView"
+             x:DataType="vm:GuiGeneratorViewModel">
+    <Panel
+        IsVisible="{Binding CurrentViewMode.Value, Converter={x:Static converters:GuiGeneratorViewConverters.IsPropertiesView}}">
+
+        <StackPanel Opacity="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
+                    IsHitTestVisible="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNull}}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+
+            <TextBlock Text="No item selected" FontSize="16"
+                       Foreground="{DynamicResource ForegroundSecondaryColor}" />
+        </StackPanel>
+
+        <StackPanel Spacing="16" Margin="8"
+                    Opacity="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    IsHitTestVisible="{Binding Grid.InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+            <TextBlock Text="This is the background item" IsVisible="{Binding Grid.IsEditingBackground}"
+                       Foreground="{DynamicResource ForegroundSecondaryColor}" HorizontalAlignment="Center" />
+
+            <StackPanel Orientation="Vertical" Spacing="4">
+                <TextBlock Text="Display name" FontSize="14" />
+                <TextBox Text="{Binding Grid.InspectedItem?.DisplayName, Mode=TwoWay}"
+                         PlaceholderText="{Binding Grid.InspectedItem?.Name}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Spacing="4" IsVisible="{Binding !Grid.IsEditingBackground}">
+                <TextBlock Text="Amount" FontSize="14" />
+                <NumericUpDown Minimum="1" Maximum="64"
+                               Value="{Binding Grid.InspectedItem?.Amount, Mode=TwoWay}" FormatString="0" />
+            </StackPanel>
+
+            <StackPanel Spacing="2">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox IsChecked="{Binding Grid.InspectedItem?.HideTooltip, Mode=TwoWay}"
+                              Padding="12,0,0,0" VerticalContentAlignment="Center">
+                        <TextBlock Text="Hide tooltip" FontSize="14" />
+                    </CheckBox>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" IsVisible="{Binding !Grid.IsEditingBackground}">
+                    <CheckBox IsChecked="{Binding Grid.InspectedItem?.GenerateExampleAction, Mode=TwoWay}"
+                              Padding="12,0,0,0" VerticalContentAlignment="Center">
+                        <TextBlock Text="Add click action" FontSize="14" />
+                    </CheckBox>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Panel>
+</UserControl>
