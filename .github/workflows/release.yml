@@ -16,8 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -32,8 +30,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -73,8 +69,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -105,8 +99,6 @@ jobs:
         arch: [ osx-x64, osx-arm64 ]
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -149,13 +141,11 @@ jobs:
 
   create-release:
     needs: [ build-windows, build-linux, build-macos ]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v7
-        with:
-          submodules: recursive
 
       - name: Download all artifacts
         uses: actions/download-artifact@v8
