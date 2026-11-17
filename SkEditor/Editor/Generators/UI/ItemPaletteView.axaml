@@ -22,8 +22,8 @@
                      ItemsSource="{Binding Items}"
                      SelectedItem="{Binding SelectedItem.Value}"
                      SelectionMode="AlwaysSelected"
-                     Opacity="{Binding !LoadCommand.IsRunning}"
-                     IsHitTestVisible="{Binding !LoadCommand.IsRunning}"
+                     Opacity="{Binding IsLoaded.Value}"
+                     IsHitTestVisible="{Binding IsLoaded.Value}"
                      Margin="0,0,-12,0" HorizontalAlignment="Stretch"
                      ClipToBounds="False"
                      IsTextSearchEnabled="True">
@@ -113,6 +113,26 @@
             <controls:FAProgressRing IsIndeterminate="True"
                                      Width="32" Height="32"
                                      HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </StackPanel>
+        
+        <StackPanel DataContext="{Binding ItemPalette}"
+                    Opacity="{Binding FailedToLoad.Value}"
+                    IsHitTestVisible="{Binding FailedToLoad.Value}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Spacing="12">
+            
+            <StackPanel.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.15" />
+                </Transitions>
+            </StackPanel.Transitions>
+
+            <TextBlock Text="{localization:Translate GuiGeneratorResourcesDownloadFailedTitle}" FontSize="16"
+                       Foreground="{DynamicResource ForegroundSecondaryColor}" TextAlignment="Center" TextWrapping="Wrap" />
+            
+            <Button Content="{localization:Translate ButtonRetry}" HorizontalAlignment="Center" Command="{Binding LoadCommand}" />
         </StackPanel>
     </Panel>
 </UserControl>

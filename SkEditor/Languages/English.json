@@ -538,5 +538,7 @@
   "GuiGeneratorFillAllEmptySlots": "Fill all empty slots",
   "GuiGeneratorFillBackground": "Fill background",
   "GuiGeneratorClearAllSlots": "Clear all slots",
-  "GuiGeneratorClearBackground": "Clear background"
+  "GuiGeneratorClearBackground": "Clear background",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Failed to download item resources",
+  "GuiGeneratorResourcesDownloadFailedMessage": "Something went wrong while trying to download the required resources for the GUI generator."
 }

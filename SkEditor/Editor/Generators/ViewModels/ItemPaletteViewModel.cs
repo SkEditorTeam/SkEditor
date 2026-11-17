@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ObservableCollections;
 using R3;
+using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Generators.Models;
@@ -43,6 +44,10 @@ public sealed partial class ItemPaletteViewModel : ObservableObject, IDisposable
         return scoreResult != 0 ? scoreResult : ByNameComparer.Compare(a, b);
     });
 
+    public BindableReactiveProperty<bool> FailedToLoad { get; } = new(false);
+    public BindableReactiveProperty<bool> IsLoading { get; } = new(false);
+    public BindableReactiveProperty<bool> IsLoaded { get; } = new(false);
+
     public BindableReactiveProperty<string> Filter { get; } = new(string.Empty);
     public NotifyCollectionChangedSynchronizedViewList<ItemViewModel> Items { get; }
 
@@ -66,6 +71,10 @@ public sealed partial class ItemPaletteViewModel : ObservableObject, IDisposable
 
         ISynchronizedView<ItemViewModel, ItemViewModel> view = _sourceItems.CreateView(x => x).AddTo(ref _disposables);
         Items = view.ToNotifyCollectionChanged().AddTo(ref _disposables);
+        
+        FailedToLoad.AddTo(ref _disposables);
+        IsLoading.AddTo(ref _disposables);
+        IsLoaded.AddTo(ref _disposables);
 
         Filter
             .ThrottleLast(TimeSpan.FromMilliseconds(40))
@@ -95,6 +104,9 @@ public sealed partial class ItemPaletteViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private async Task Load()
     {
+        FailedToLoad.Value = false;
+        IsLoading.Value = true;
+        IsLoaded.Value = false;
         CancellationToken ct = _cts.Token;
 
         try
@@ -106,12 +118,14 @@ public sealed partial class ItemPaletteViewModel : ObservableObject, IDisposable
                 bool success = await Download(ct);
                 if (!success || ct.IsCancellationRequested)
                 {
+                    FailedToLoad.Value = true;
                     return;
                 }
 
                 rawItems = await _resources.GetItemsAsync(ct);
                 if (rawItems is null)
                 {
+                    FailedToLoad.Value = true;
                     _notifs.Debug("Failed to load items after downloading resources.");
                     return;
                 }
@@ -151,12 +165,16 @@ public sealed partial class ItemPaletteViewModel : ObservableObject, IDisposable
             }
 
             _sourceItems.AddRange(items);
-
             SelectedItem.Value = Items.FirstOrDefault();
+            IsLoaded.Value = true;
         }
         catch (OperationCanceledException)
         {
             // ignored
+        }
+        finally
+        {
+            IsLoading.Value = false;
         }
     }
 
@@ -169,7 +187,12 @@ public sealed partial class ItemPaletteViewModel : ObservableObject, IDisposable
         }
         catch (Exception ex)
         {
-            _notifs.Debug($"Something went wrong: {ex.Message}");
+            Notification notification = Notification
+                .Create(TranslationKey.GuiGeneratorResourcesDownloadFailedTitle)
+                .WithMessage(TranslationKey.GuiGeneratorResourcesDownloadFailedMessage)
+                .WithType(NotificationType.Error);
+
+            _notifs.Show(notification);
             _logs.Error(ex, "Failed to download resources");
             return false;
         }
