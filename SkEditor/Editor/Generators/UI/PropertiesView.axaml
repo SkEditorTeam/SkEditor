@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:localization="clr-namespace:SkEditor.Core.Localization"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SkEditor.Editor.Generators.ViewModels"
@@ -12,7 +13,7 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
 
-            <TextBlock Text="No item selected" FontSize="16"
+            <TextBlock Text="{localization:Translate GuiGeneratorNoItemSelected}" FontSize="16"
                        Foreground="{DynamicResource ForegroundSecondaryColor}" />
         </StackPanel>
 
@@ -20,17 +21,17 @@
                     Opacity="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"
                     IsHitTestVisible="{Binding InspectedItem, Converter={x:Static ObjectConverters.IsNotNull}}">
 
-            <TextBlock Text="This is the background item" IsVisible="{Binding IsEditingBackground}"
+            <TextBlock Text="{localization:Translate GuiGeneratorBackgroundItem}" IsVisible="{Binding IsEditingBackground}"
                        Foreground="{DynamicResource ForegroundSecondaryColor}" HorizontalAlignment="Center" />
 
             <StackPanel Orientation="Vertical" Spacing="4">
-                <TextBlock Text="Display name" FontSize="14" />
+                <TextBlock Text="{localization:Translate GuiGeneratorDisplayName}" FontSize="14" />
                 <TextBox Text="{Binding InspectedItem?.DisplayName, Mode=TwoWay}"
                          PlaceholderText="{Binding InspectedItem?.Name}" />
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Spacing="4" IsVisible="{Binding !IsEditingBackground}">
-                <TextBlock Text="Amount" FontSize="14" />
+                <TextBlock Text="{localization:Translate GuiGeneratorAmount}" FontSize="14" />
                 <NumericUpDown Minimum="1" Maximum="64"
                                Value="{Binding InspectedItem?.Amount, Mode=TwoWay}" FormatString="0" />
             </StackPanel>
@@ -39,14 +40,14 @@
                 <StackPanel Orientation="Horizontal">
                     <CheckBox IsChecked="{Binding InspectedItem?.HideTooltip, Mode=TwoWay}"
                               Padding="12,0,0,0" VerticalContentAlignment="Center">
-                        <TextBlock Text="Hide tooltip" FontSize="14" />
+                        <TextBlock Text="{localization:Translate GuiGeneratorHideTooltip}" FontSize="14" />
                     </CheckBox>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsEditingBackground}">
                     <CheckBox IsChecked="{Binding InspectedItem?.GenerateExampleAction, Mode=TwoWay}"
                               Padding="12,0,0,0" VerticalContentAlignment="Center">
-                        <TextBlock Text="Add click action" FontSize="14" />
+                        <TextBlock Text="{localization:Translate GuiGeneratorAddClickAction}" FontSize="14" />
                     </CheckBox>
                 </StackPanel>
             </StackPanel>

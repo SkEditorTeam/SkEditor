@@ -9,7 +9,6 @@ using R3;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Dialogs.Models.Elements;
-using SkEditor.Core.Extensions;
 using SkEditor.Core.Localization;
 using SkEditor.Editor.Generators.Models;
 using SkEditor.Editor.Generators.Services;
@@ -89,7 +88,8 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
         }
         else
         {
-            string? promptName = await PromptName("Save project".ToTranslatable(), "New project".ToTranslatable(), TranslationKey.ButtonSave);
+            string? promptName = await PromptName(TranslationKey.GuiGeneratorSaveProject,
+                TranslationKey.GuiGeneratorNewProject, TranslationKey.ButtonSave);
 
             if (promptName is null)
             {
@@ -98,7 +98,7 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
 
             string name = !string.IsNullOrWhiteSpace(promptName)
                 ? promptName.Trim()
-                : "New project";
+                : new TranslatableString(TranslationKey.GuiGeneratorNewProject).Value;
 
             project = new GuiProject
             {
@@ -153,7 +153,8 @@ public sealed partial class GuiProjectsViewModel : ObservableObject, IDisposable
             return;
         }
 
-        string? promptName = await PromptName("Rename project".ToTranslatable(), "New name".ToTranslatable(), TranslationKey.ButtonRename,
+        string? promptName = await PromptName(TranslationKey.GuiGeneratorRenameProject,
+            TranslationKey.GuiGeneratorNewName, TranslationKey.ButtonRename,
             SelectedProject.Name);
         string? name = promptName?.Trim();
 

@@ -71,17 +71,17 @@
         <Grid RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
                 <StackPanel Spacing="4">
-                    <TextBlock Text="Title" />
+                    <TextBlock Text="{localization:Translate GuiGeneratorTitle}" />
                     <TextBox Width="180" Text="{Binding Title.Value}" PlaceholderText="GUI" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
-                    <TextBlock Text="Function name" />
+                    <TextBlock Text="{localization:Translate GuiGeneratorFunctionName}" />
                     <TextBox Width="180" Text="{Binding FunctionName.Value}" PlaceholderText="openGui" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
-                    <TextBlock Text="Rows" />
+                    <TextBlock Text="{localization:Translate GuiGeneratorRows}" />
                     <NumericUpDown Minimum="1" Maximum="6" Value="{Binding Grid.Rows.Value}" Width="100" FormatString="0" />
                 </StackPanel>
             </StackPanel>
@@ -93,13 +93,13 @@
                           HorizontalContentAlignment="Center"
                           DisplayMemberBinding="{Binding Name}" MinWidth="100"/>
                 
-                <Button Content="Generate"
+                <Button Content="{localization:Translate GuiGeneratorGenerate}"
                         Command="{Binding GenerateCommand}" MinWidth="100" />
 
-                <SplitButton Content="Save" Command="{Binding Projects.SaveProjectCommand}" MinWidth="100">
+                <SplitButton Content="{localization:Translate ButtonSave}" Command="{Binding Projects.SaveProjectCommand}" MinWidth="100">
                     <SplitButton.Flyout>
                         <MenuFlyout>
-                            <MenuItem Header="New project" Command="{Binding Projects.NewProjectCommand}" />
+                            <MenuItem Header="{localization:Translate GuiGeneratorNewProject}" Command="{Binding Projects.NewProjectCommand}" />
                         </MenuFlyout>
                     </SplitButton.Flyout>
                 </SplitButton>
@@ -120,14 +120,14 @@
                     </layout:SkEditorTabStrip.Resources>
 
                     <layout:SkEditorTabStripItem>
-                        <TextBlock Text="Palette" FontSize="12" />
+                        <TextBlock Text="{localization:Translate GuiGeneratorPalette}" FontSize="12" />
                     </layout:SkEditorTabStripItem>
 
                     <layout:SkEditorTabStripItem>
-                        <TextBlock Text="Properties" FontSize="12" />
+                        <TextBlock Text="{localization:Translate GuiGeneratorProperties}" FontSize="12" />
                     </layout:SkEditorTabStripItem>
                     <layout:SkEditorTabStripItem>
-                        <TextBlock Text="Projects" FontSize="12" />
+                        <TextBlock Text="{localization:Translate GuiGeneratorProjects}" FontSize="12" />
                     </layout:SkEditorTabStripItem>
                 </layout:SkEditorTabStrip>
             </GroupBox.Header>

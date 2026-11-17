@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:localization="clr-namespace:SkEditor.Core.Localization"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:input="clr-namespace:Avalonia.Input"
@@ -11,7 +12,7 @@
     <Panel>
         <Grid RowDefinitions="Auto,*,Auto" RowSpacing="8" Margin="8">
             <TextBox Grid.Row="0"
-                     PlaceholderText="Search..."
+                     PlaceholderText="{localization:Translate GuiGeneratorSearch}"
                      Text="{Binding Filter.Value, Mode=TwoWay}"
                      Theme="{DynamicResource SearchBoxTheme}"
                      Margin="0,2,0,2" />
@@ -72,24 +73,24 @@
                             HorizontalAlignment="Center"
                             Spacing="16">
 
-                    <TextBlock Text="No projects found" FontSize="16"
+                    <TextBlock Text="{localization:Translate GuiGeneratorNoProjectsFound}" FontSize="16"
                                Foreground="{DynamicResource ForegroundSecondaryColor}" />
                 </StackPanel>
             </Panel>
 
             <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="6" Margin="0,6,0,0" IsEnabled="{Binding SelectedProject, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Button Grid.Column="0"
-                        Content="Load"
+                        Content="{localization:Translate ButtonLoad}"
                         HorizontalAlignment="Stretch"
                         Command="{Binding LoadProjectCommand}" />
 
                 <SplitButton Grid.Column="1"
-                             Content="Rename"
+                             Content="{localization:Translate ButtonRename}"
                              HorizontalAlignment="Stretch"
                              Command="{Binding RenameProjectCommand}">
                     <SplitButton.Flyout>
                         <MenuFlyout>
-                            <MenuItem Header="Delete" Command="{Binding DeleteProjectCommand}" />
+                            <MenuItem Header="{localization:Translate ButtonDelete}" Command="{Binding DeleteProjectCommand}" />
                             <!-- <MenuItem Header="Export to file" /> -->
                         </MenuFlyout>
                     </SplitButton.Flyout>

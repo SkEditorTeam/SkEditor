@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:localization="clr-namespace:SkEditor.Core.Localization"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SkEditor.Editor.Generators.ViewModels"
@@ -11,7 +12,7 @@
     <Panel>
         <Grid RowDefinitions="Auto,*,Auto" RowSpacing="8" Margin="8">
             <TextBox Grid.Row="0"
-                     PlaceholderText="Search..."
+                     PlaceholderText="{localization:Translate GuiGeneratorSearch}"
                      Theme="{DynamicResource SearchBoxTheme}"
                      Text="{Binding ItemPalette.Filter.Value}"
                      Margin="0,2,0,2" />
@@ -65,30 +66,30 @@
 
             <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="6" Margin="0,6,0,0">
                 <SplitButton Grid.Column="0"
-                             Content="Set to slot"
+                             Content="{localization:Translate GuiGeneratorSetToSlot}"
                              Classes="accent"
                              HorizontalAlignment="Stretch"
                              Command="{Binding Grid.ApplySelectedItemCommand}">
                     <SplitButton.Flyout>
                         <MenuFlyout>
-                            <MenuItem Header="Fill all empty slots"
+                            <MenuItem Header="{localization:Translate GuiGeneratorFillAllEmptySlots}"
                                       Command="{Binding Grid.SetAllEmptySlotsCommand}" />
 
-                            <MenuItem Header="Fill background"
+                            <MenuItem Header="{localization:Translate GuiGeneratorFillBackground}"
                                       Command="{Binding Grid.FillBackgroundCommand}" />
                         </MenuFlyout>
                     </SplitButton.Flyout>
                 </SplitButton>
 
                 <SplitButton Grid.Column="1"
-                             Content="Clear"
+                             Content="{localization:Translate ButtonClear}"
                              Command="{Binding Grid.ClearSlotCommand}">
                     <SplitButton.Flyout>
                         <MenuFlyout>
-                            <MenuItem Header="Clear all slots"
+                            <MenuItem Header="{localization:Translate GuiGeneratorClearAllSlots}"
                                       Command="{Binding Grid.ClearAllSlotsCommand}" />
 
-                            <MenuItem Header="Clear background"
+                            <MenuItem Header="{localization:Translate GuiGeneratorClearBackground}"
                                       Command="{Binding Grid.ClearBackgroundCommand}" />
                         </MenuFlyout>
                     </SplitButton.Flyout>
