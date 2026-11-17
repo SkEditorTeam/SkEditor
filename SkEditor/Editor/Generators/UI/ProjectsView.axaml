@@ -78,7 +78,7 @@
                 </StackPanel>
             </Panel>
 
-            <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="6" Margin="0,6,0,0" IsEnabled="{Binding SelectedProject, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <Grid Grid.Row="2" ColumnDefinitions="0.75*,*" ColumnSpacing="6" Margin="0,6,0,0" IsEnabled="{Binding SelectedProject, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Button Grid.Column="0"
                         Content="{localization:Translate ButtonLoad}"
                         HorizontalAlignment="Stretch"

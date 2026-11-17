@@ -10,7 +10,7 @@
         xmlns:ui="clr-namespace:SkEditor.Editor.Generators.UI"
         mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="550"
         x:Class="SkEditor.Editor.Generators.UI.GuiGeneratorWindow" Icon="/Assets/SkEditor.ico"
-        Title="{localization:Translate WindowTitleGuiGenerator}" Width="900" Height="540"
+        Title="{localization:Translate WindowTitleGuiGenerator}" Width="924" Height="540"
         CanResize="False" CanMinimize="False" CanMaximize="False"
         x:DataType="vm:GuiGeneratorViewModel"
         Name="Root"
@@ -67,7 +67,7 @@
     </Window.Styles>
 
     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="32" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-          Margin="48,24">
+          Margin="40,24">
         <Grid RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16">
                 <StackPanel Spacing="4">

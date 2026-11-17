@@ -64,10 +64,9 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="6" Margin="0,6,0,0">
+            <Grid Grid.Row="2" ColumnDefinitions="*,0.75*" ColumnSpacing="6" Margin="0,6,0,0">
                 <SplitButton Grid.Column="0"
                              Content="{localization:Translate GuiGeneratorSetToSlot}"
-                             Classes="accent"
                              HorizontalAlignment="Stretch"
                              Command="{Binding Grid.ApplySelectedItemCommand}">
                     <SplitButton.Flyout>
@@ -82,6 +81,7 @@
                 </SplitButton>
 
                 <SplitButton Grid.Column="1"
+                             HorizontalAlignment="Stretch"
                              Content="{localization:Translate ButtonClear}"
                              Command="{Binding Grid.ClearSlotCommand}">
                     <SplitButton.Flyout>
@@ -103,6 +103,7 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Spacing="16">
+            
             <StackPanel.Transitions>
                 <Transitions>
                     <DoubleTransition Property="Opacity"
