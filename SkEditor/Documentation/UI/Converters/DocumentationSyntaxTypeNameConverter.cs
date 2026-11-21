@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
+using SkEditor.Core.Localization;
 using SkEditor.Documentation.Models;
 
 namespace SkEditor.Documentation.UI.Converters;
@@ -14,19 +15,21 @@ public class DocumentationSyntaxTypeNameConverter : IValueConverter
             return string.Empty;
         }
 
-        return type switch
+        TranslationKey key = type switch
         {
-            DocumentationSyntaxType.All => "All Types",
-            DocumentationSyntaxType.Event => "Event",
-            DocumentationSyntaxType.Effect => "Effect",
-            DocumentationSyntaxType.Expression => "Expression",
-            DocumentationSyntaxType.Condition => "Condition",
-            DocumentationSyntaxType.Type => "Type",
-            DocumentationSyntaxType.Structure => "Structure",
-            DocumentationSyntaxType.Section => "Section",
-            DocumentationSyntaxType.Function => "Function",
-            _ => type.ToString()
+            DocumentationSyntaxType.All => TranslationKey.DocumentationSyntaxTypeAll,
+            DocumentationSyntaxType.Event => TranslationKey.DocumentationSyntaxTypeEvent,
+            DocumentationSyntaxType.Effect => TranslationKey.DocumentationSyntaxTypeEffect,
+            DocumentationSyntaxType.Expression => TranslationKey.DocumentationSyntaxTypeExpression,
+            DocumentationSyntaxType.Condition => TranslationKey.DocumentationSyntaxTypeCondition,
+            DocumentationSyntaxType.Type => TranslationKey.DocumentationSyntaxTypeType,
+            DocumentationSyntaxType.Structure => TranslationKey.DocumentationSyntaxTypeStructure,
+            DocumentationSyntaxType.Section => TranslationKey.DocumentationSyntaxTypeSection,
+            DocumentationSyntaxType.Function => TranslationKey.DocumentationSyntaxTypeFunction,
+            _ => TranslationKey.None
         };
+
+        return key;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

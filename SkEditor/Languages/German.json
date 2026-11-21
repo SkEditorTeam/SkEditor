@@ -469,6 +469,15 @@
   "AboutSupportUs": "SkEditor unterstützen",
   "DocumentationTabTitle": "Dokumentation",
   "DocumentationAllAddons": "Alle Addons",
+  "DocumentationSyntaxTypeAll": "Alle Typen",
+  "DocumentationSyntaxTypeEvent": "Ereignis",
+  "DocumentationSyntaxTypeEffect": "Effekt",
+  "DocumentationSyntaxTypeExpression": "Ausdruck",
+  "DocumentationSyntaxTypeCondition": "Bedingung",
+  "DocumentationSyntaxTypeType": "Typ",
+  "DocumentationSyntaxTypeStructure": "Struktur",
+  "DocumentationSyntaxTypeSection": "Abschnitt",
+  "DocumentationSyntaxTypeFunction": "Funktion",
   "DocumentationApiKeyMissingTitle": "API-Schlüssel erforderlich",
   "DocumentationApiKeyMissingMessage": "Du hast keinen API-Schlüssel für diesen Anbieter festgelegt. Richte ihn in den Einstellungen ein.",
   "DocumentationApiKeyInvalidTitle": "Ungültiger API-Schlüssel",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "Leere Slots füllen",
   "GuiGeneratorFillBackground": "Hintergrund füllen",
   "GuiGeneratorClearAllSlots": "Alle Slots leeren",
-  "GuiGeneratorClearBackground": "Hintergrund leeren"
+  "GuiGeneratorClearBackground": "Hintergrund leeren",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Item-Download fehlgeschlagen",
+  "GuiGeneratorResourcesDownloadFailedMessage": "Die Ressourcen für den GUI-Generator konnten nicht heruntergeladen werden."
 }

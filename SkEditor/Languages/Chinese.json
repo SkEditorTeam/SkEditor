@@ -469,6 +469,15 @@
   "AboutSupportUs": "赞助 SkEditor",
   "DocumentationTabTitle": "文档",
   "DocumentationAllAddons": "所有插件",
+  "DocumentationSyntaxTypeAll": "所有类型",
+  "DocumentationSyntaxTypeEvent": "事件",
+  "DocumentationSyntaxTypeEffect": "效果",
+  "DocumentationSyntaxTypeExpression": "表达式",
+  "DocumentationSyntaxTypeCondition": "条件",
+  "DocumentationSyntaxTypeType": "类型",
+  "DocumentationSyntaxTypeStructure": "结构",
+  "DocumentationSyntaxTypeSection": "区段",
+  "DocumentationSyntaxTypeFunction": "函数",
   "DocumentationApiKeyMissingTitle": "需要 API 密钥",
   "DocumentationApiKeyMissingMessage": "尚未设置用于此提供商的 API 密钥。请在设置中进行配置。",
   "DocumentationApiKeyInvalidTitle": "无效的 API 密钥",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "填充所有空槽位",
   "GuiGeneratorFillBackground": "填充背景",
   "GuiGeneratorClearAllSlots": "清空所有槽位",
-  "GuiGeneratorClearBackground": "清除背景"
+  "GuiGeneratorClearBackground": "清除背景",
+  "GuiGeneratorResourcesDownloadFailedTitle": "下载物品资源失败",
+  "GuiGeneratorResourcesDownloadFailedMessage": "下载 GUI 生成器所需的资源时出错。"
 }

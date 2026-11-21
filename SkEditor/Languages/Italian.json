@@ -469,6 +469,15 @@
   "AboutSupportUs": "Sostieni SkEditor",
   "DocumentationTabTitle": "Documentazione",
   "DocumentationAllAddons": "Tutti gli addon",
+  "DocumentationSyntaxTypeAll": "Tutti i tipi",
+  "DocumentationSyntaxTypeEvent": "Evento",
+  "DocumentationSyntaxTypeEffect": "Effetto",
+  "DocumentationSyntaxTypeExpression": "Espressione",
+  "DocumentationSyntaxTypeCondition": "Condizione",
+  "DocumentationSyntaxTypeType": "Tipo",
+  "DocumentationSyntaxTypeStructure": "Struttura",
+  "DocumentationSyntaxTypeSection": "Sezione",
+  "DocumentationSyntaxTypeFunction": "Funzione",
   "DocumentationApiKeyMissingTitle": "Chiave API richiesta",
   "DocumentationApiKeyMissingMessage": "Non hai impostato una chiave API per utilizzare questo provider. Configurala nelle impostazioni.",
   "DocumentationApiKeyInvalidTitle": "Chiave API non valida",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "Riempi slot vuoti",
   "GuiGeneratorFillBackground": "Riempi sfondo",
   "GuiGeneratorClearAllSlots": "Svuota gli slot",
-  "GuiGeneratorClearBackground": "Pulisci sfondo"
+  "GuiGeneratorClearBackground": "Pulisci sfondo",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Download risorse non riuscito",
+  "GuiGeneratorResourcesDownloadFailedMessage": "Si è verificato un errore durante il download delle risorse per il generatore GUI."
 }

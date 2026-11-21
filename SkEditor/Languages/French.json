@@ -469,6 +469,15 @@
   "AboutSupportUs": "Soutenir SkEditor",
   "DocumentationTabTitle": "Documentation",
   "DocumentationAllAddons": "Tous les add-ons",
+  "DocumentationSyntaxTypeAll": "Tous les types",
+  "DocumentationSyntaxTypeEvent": "Événement",
+  "DocumentationSyntaxTypeEffect": "Effet",
+  "DocumentationSyntaxTypeExpression": "Expression",
+  "DocumentationSyntaxTypeCondition": "Condition",
+  "DocumentationSyntaxTypeType": "Type",
+  "DocumentationSyntaxTypeStructure": "Structure",
+  "DocumentationSyntaxTypeSection": "Section",
+  "DocumentationSyntaxTypeFunction": "Fonction",
   "DocumentationApiKeyMissingTitle": "Clé API requise",
   "DocumentationApiKeyMissingMessage": "Aucune clé API n'est définie pour utiliser ce fournisseur. Configurez-la dans les paramètres.",
   "DocumentationApiKeyInvalidTitle": "Clé API non valide",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "Remplir slots vides",
   "GuiGeneratorFillBackground": "Remplir le fond",
   "GuiGeneratorClearAllSlots": "Vider les slots",
-  "GuiGeneratorClearBackground": "Vider le fond"
+  "GuiGeneratorClearBackground": "Vider le fond",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Échec du téléchargement d'objets",
+  "GuiGeneratorResourcesDownloadFailedMessage": "Impossible de télécharger les ressources nécessaires pour le générateur de GUI."
 }

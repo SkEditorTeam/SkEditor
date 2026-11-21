@@ -469,6 +469,15 @@
   "AboutSupportUs": "Steun SkEditor",
   "DocumentationTabTitle": "Documentatie",
   "DocumentationAllAddons": "Alle add-ons",
+  "DocumentationSyntaxTypeAll": "Alle typen",
+  "DocumentationSyntaxTypeEvent": "Gebeurtenis",
+  "DocumentationSyntaxTypeEffect": "Effect",
+  "DocumentationSyntaxTypeExpression": "Expressie",
+  "DocumentationSyntaxTypeCondition": "Voorwaarde",
+  "DocumentationSyntaxTypeType": "Type",
+  "DocumentationSyntaxTypeStructure": "Structuur",
+  "DocumentationSyntaxTypeSection": "Sectie",
+  "DocumentationSyntaxTypeFunction": "Functie",
   "DocumentationApiKeyMissingTitle": "API-sleutel vereist",
   "DocumentationApiKeyMissingMessage": "U hebt geen API-sleutel ingesteld om deze provider te gebruiken. Stel deze in via de instellingen.",
   "DocumentationApiKeyInvalidTitle": "Ongeldige API-sleutel",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "Lege slots vullen",
   "GuiGeneratorFillBackground": "Achtergrond vullen",
   "GuiGeneratorClearAllSlots": "Alle slots legen",
-  "GuiGeneratorClearBackground": "Achtergrond wissen"
+  "GuiGeneratorClearBackground": "Achtergrond wissen",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Downloaden bronnen mislukt",
+  "GuiGeneratorResourcesDownloadFailedMessage": "Er ging iets mis bij het downloaden van de bronnen voor de GUI-generator."
 }

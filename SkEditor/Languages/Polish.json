@@ -469,6 +469,15 @@
   "AboutSupportUs": "Wesprzyj SkEditor",
   "DocumentationTabTitle": "Dokumentacja",
   "DocumentationAllAddons": "Wszystkie dodatki",
+  "DocumentationSyntaxTypeAll": "Wszystkie typy",
+  "DocumentationSyntaxTypeEvent": "Zdarzenie",
+  "DocumentationSyntaxTypeEffect": "Efekt",
+  "DocumentationSyntaxTypeExpression": "Wyrażenie",
+  "DocumentationSyntaxTypeCondition": "Warunek",
+  "DocumentationSyntaxTypeType": "Typ",
+  "DocumentationSyntaxTypeStructure": "Struktura",
+  "DocumentationSyntaxTypeSection": "Sekcja",
+  "DocumentationSyntaxTypeFunction": "Funkcja",
   "DocumentationApiKeyMissingTitle": "Wymagany klucz API",
   "DocumentationApiKeyMissingMessage": "Nie masz ustawionego klucza API do korzystania z tego dostawcy. Skonfiguruj go w ustawieniach.",
   "DocumentationApiKeyInvalidTitle": "Nieprawidłowy klucz API",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "Wypełnij wszystkie puste sloty",
   "GuiGeneratorFillBackground": "Wypełnij tło",
   "GuiGeneratorClearAllSlots": "Wyczyść wszystkie sloty",
-  "GuiGeneratorClearBackground": "Wyczyść tło"
+  "GuiGeneratorClearBackground": "Wyczyść tło",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Nie udało się pobrać zasobów",
+  "GuiGeneratorResourcesDownloadFailedMessage": "Coś poszło nie tak podczas pobierania zasobów dla generatora GUI."
 }

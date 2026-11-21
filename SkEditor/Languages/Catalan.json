@@ -469,6 +469,15 @@
   "AboutSupportUs": "Dona suport a l'SkEditor",
   "DocumentationTabTitle": "Documentació",
   "DocumentationAllAddons": "Tots els complements",
+  "DocumentationSyntaxTypeAll": "Tots els tipus",
+  "DocumentationSyntaxTypeEvent": "Esdeveniment",
+  "DocumentationSyntaxTypeEffect": "Efecte",
+  "DocumentationSyntaxTypeExpression": "Expressió",
+  "DocumentationSyntaxTypeCondition": "Condició",
+  "DocumentationSyntaxTypeType": "Tipus",
+  "DocumentationSyntaxTypeStructure": "Estructura",
+  "DocumentationSyntaxTypeSection": "Secció",
+  "DocumentationSyntaxTypeFunction": "Funció",
   "DocumentationApiKeyMissingTitle": "Cal una clau d'API",
   "DocumentationApiKeyMissingMessage": "No tens cap clau d'API definida per utilitzar aquest proveïdor. Configura-la a la configuració.",
   "DocumentationApiKeyInvalidTitle": "Clau d'API no vàlida",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "Omple els slots buits",
   "GuiGeneratorFillBackground": "Omple el fons",
   "GuiGeneratorClearAllSlots": "Buida els slots",
-  "GuiGeneratorClearBackground": "Neteja el fons"
+  "GuiGeneratorClearBackground": "Neteja el fons",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Error en baixar els recursos",
+  "GuiGeneratorResourcesDownloadFailedMessage": "S'ha produït un error en baixar els recursos necessaris per al generador de GUI."
 }

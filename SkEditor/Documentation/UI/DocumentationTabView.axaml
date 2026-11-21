@@ -92,7 +92,7 @@
                                         IconSource="{Binding ., Converter={StaticResource SyntaxIconConverter}}"
                                         Foreground="{Binding ., Converter={StaticResource SyntaxTypeColorConverter}}" />
                                 </Viewbox>
-                                <TextBlock Text="{Binding ., Converter={StaticResource SyntaxTypeNameConverter}}"
+                                <TextBlock localization:Translate.TextKey="{Binding ., Converter={StaticResource SyntaxTypeNameConverter}}"
                                            VerticalAlignment="Center"
                                            Margin="0,-1,0,0" />
                             </StackPanel>

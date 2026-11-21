@@ -469,6 +469,15 @@
   "AboutSupportUs": "A SkEditor támogatása",
   "DocumentationTabTitle": "Dokumentáció",
   "DocumentationAllAddons": "Összes addon",
+  "DocumentationSyntaxTypeAll": "Minden típus",
+  "DocumentationSyntaxTypeEvent": "Esemény",
+  "DocumentationSyntaxTypeEffect": "Hatás",
+  "DocumentationSyntaxTypeExpression": "Kifejezés",
+  "DocumentationSyntaxTypeCondition": "Feltétel",
+  "DocumentationSyntaxTypeType": "Típus",
+  "DocumentationSyntaxTypeStructure": "Szerkezet",
+  "DocumentationSyntaxTypeSection": "Szakasz",
+  "DocumentationSyntaxTypeFunction": "Függvény",
   "DocumentationApiKeyMissingTitle": "API-kulcs szükséges",
   "DocumentationApiKeyMissingMessage": "Nincs beállítva API-kulcs a szolgáltató használatához. Add meg a beállításokban.",
   "DocumentationApiKeyInvalidTitle": "Érvénytelen API-kulcs",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "Üres slotok kitöltése",
   "GuiGeneratorFillBackground": "Háttér kitöltése",
   "GuiGeneratorClearAllSlots": "Összes slot ürítése",
-  "GuiGeneratorClearBackground": "Háttér törlése"
+  "GuiGeneratorClearBackground": "Háttér törlése",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Sikertelen erőforrás-letöltés",
+  "GuiGeneratorResourcesDownloadFailedMessage": "Hiba történt a GUI-generátor erőforrásainak letöltése közben."
 }

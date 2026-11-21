@@ -469,6 +469,15 @@
   "AboutSupportUs": "SkEditor 후원",
   "DocumentationTabTitle": "문서",
   "DocumentationAllAddons": "모든 애드온",
+  "DocumentationSyntaxTypeAll": "모든 유형",
+  "DocumentationSyntaxTypeEvent": "이벤트",
+  "DocumentationSyntaxTypeEffect": "효과",
+  "DocumentationSyntaxTypeExpression": "표현식",
+  "DocumentationSyntaxTypeCondition": "조건",
+  "DocumentationSyntaxTypeType": "유형",
+  "DocumentationSyntaxTypeStructure": "구조",
+  "DocumentationSyntaxTypeSection": "섹션",
+  "DocumentationSyntaxTypeFunction": "함수",
   "DocumentationApiKeyMissingTitle": "API 키 필요",
   "DocumentationApiKeyMissingMessage": "이 공급자를 사용하기 위한 API 키가 설정되지 않았습니다. 설정에서 구성하세요.",
   "DocumentationApiKeyInvalidTitle": "잘못된 API 키",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "빈 슬롯 모두 채우기",
   "GuiGeneratorFillBackground": "배경 채우기",
   "GuiGeneratorClearAllSlots": "모든 슬롯 비우기",
-  "GuiGeneratorClearBackground": "배경 지우기"
+  "GuiGeneratorClearBackground": "배경 지우기",
+  "GuiGeneratorResourcesDownloadFailedTitle": "아이템 리소스 다운로드 실패",
+  "GuiGeneratorResourcesDownloadFailedMessage": "GUI 생성기에 필요한 리소스를 다운로드하는 중 오류가 발생했습니다."
 }

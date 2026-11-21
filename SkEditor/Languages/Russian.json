@@ -469,6 +469,15 @@
   "AboutSupportUs": "Поддержать SkEditor",
   "DocumentationTabTitle": "Документация",
   "DocumentationAllAddons": "Все аддоны",
+  "DocumentationSyntaxTypeAll": "Все типы",
+  "DocumentationSyntaxTypeEvent": "Событие",
+  "DocumentationSyntaxTypeEffect": "Эффект",
+  "DocumentationSyntaxTypeExpression": "Выражение",
+  "DocumentationSyntaxTypeCondition": "Условие",
+  "DocumentationSyntaxTypeType": "Тип",
+  "DocumentationSyntaxTypeStructure": "Структура",
+  "DocumentationSyntaxTypeSection": "Секция",
+  "DocumentationSyntaxTypeFunction": "Функция",
   "DocumentationApiKeyMissingTitle": "Требуется ключ API",
   "DocumentationApiKeyMissingMessage": "Для использования этого провайдера не настроен ключ API. Задайте его в настройках.",
   "DocumentationApiKeyInvalidTitle": "Недействительный ключ API",
@@ -538,5 +547,7 @@
   "GuiGeneratorFillAllEmptySlots": "Заполнить пустые слоты",
   "GuiGeneratorFillBackground": "Заполнить фон",
   "GuiGeneratorClearAllSlots": "Очистить все слоты",
-  "GuiGeneratorClearBackground": "Очистить фон"
+  "GuiGeneratorClearBackground": "Очистить фон",
+  "GuiGeneratorResourcesDownloadFailedTitle": "Не удалось загрузить ресурсы",
+  "GuiGeneratorResourcesDownloadFailedMessage": "Произошла ошибка при загрузке ресурсов для генератора GUI."
 }
