@@ -154,7 +154,6 @@ public static class ServiceCollectionExtensions
             services.AddTransient<MainMenuViewModel>();
             services.AddTransient<RemoteConnectionViewModel>();
             services.AddTransient<FileTreeViewModel>();
-            services.AddTransient<WhatsNewPageViewModel>();
             services.AddTransient<WelcomePageViewModel>();
             services.AddTransient<PublishWindowViewModel>();
             services.AddTransient<GuiGeneratorViewModel>();
@@ -167,7 +166,6 @@ public static class ServiceCollectionExtensions
             services.AddTransient<MainWindow>();
             services.AddTransient<SplashScreen>();
             services.AddTransient<SettingsTabView>();
-            services.AddTransient<WhatsNewPage>();
 
             services.AddWindowWithFactory<PublishWindow>();
             services.AddWindowWithFactory<GuiGeneratorWindow>();
