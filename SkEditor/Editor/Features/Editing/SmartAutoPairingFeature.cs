@@ -49,24 +49,30 @@ public class SmartAutoPairingFeature(AppSettings appSettings) : IEditorFeature
 
     private static void OnTextEntering(object? sender, TextInputEventArgs e)
     {
-        char? symbol = e.Text?[0];
-        if (symbol == null || sender is not TextArea area)
+        if (sender is not TextArea area)
         {
             return;
         }
+        
+        if (e.Text is not { Length: 1 })
+        {
+            return;
+        }
+        
+        char symbol = e.Text[0];
 
         int caretOffset = area.Caret.Offset;
-        if (HandleStepOver(e, caretOffset, area, symbol.Value))
+        if (HandleStepOver(e, caretOffset, area, symbol))
         {
             return;
         }
 
-        if (!SymbolPairs.TryGetValue(symbol.Value, out char closingSymbol))
+        if (!SymbolPairs.TryGetValue(symbol, out char closingSymbol))
         {
             return;
         }
 
-        if (HandleSelectionWrap(e, area, symbol.Value, closingSymbol))
+        if (HandleSelectionWrap(e, area, symbol, closingSymbol))
         {
             return;
         }
