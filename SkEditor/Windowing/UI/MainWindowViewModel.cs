@@ -191,13 +191,13 @@ public partial class MainWindowViewModel : ObservableRecipient, IRecipient<OpenF
     }
     
     [RelayCommand]
-    private void OpenInExplorer(ITab tab)
+    private async Task OpenInExplorer(ITab tab)
     {
         if (tab is not IFileTab fileTab) return;
         
         if (fileTab.Path is not null)
         {
-            _links.OpenFolderWithFileSelection(fileTab.Path);
+            await _links.OpenFolderWithFileSelectionAsync(fileTab.Path);
         }
     }
 

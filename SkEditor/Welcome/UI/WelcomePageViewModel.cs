@@ -53,7 +53,7 @@ public partial class WelcomePageViewModel(
     }
 
     [RelayCommand]
-    public void ShowInExplorer(WelcomeScreenRecentItem item)
+    public async Task ShowInExplorer(WelcomeScreenRecentItem item)
     {
         if (!CheckItemExists(item))
         {
@@ -66,7 +66,7 @@ public partial class WelcomePageViewModel(
         }
         else
         {
-            links.OpenFolderWithFileSelection(item.Path);
+            await links.OpenFolderWithFileSelectionAsync(item.Path);
         }
     }
 

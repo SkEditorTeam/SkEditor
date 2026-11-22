@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using SkEditor.Core.Logging;
 
 namespace SkEditor.Core.System;
@@ -9,7 +11,15 @@ public class LinkService(ILogService logs) : ILinkService
 {
     public void OpenLink(string url)
     {
-        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+        bool isUri = Uri.TryCreate(url, UriKind.Absolute, out Uri? uri);
+
+        if (!isUri || uri is null || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+        {
+            logs.Warning($"Invalid or unsupported link: '{url}'.");
+            return;
+        }
+
+        Process.Start(new ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true })?.Dispose();
     }
 
     public void OpenFolder(string path)
@@ -26,77 +36,84 @@ public class LinkService(ILogService logs) : ILinkService
             {
                 FileName = path,
                 UseShellExecute = true
-            });
+            })?.Dispose();
         }
         else if (OperatingSystem.IsMacOS())
         {
-            ProcessStartInfo psi = new("open");
-            psi.ArgumentList.Add(path);
-            Process.Start(psi);
+            Process.StartAndForget("open", [path]);
         }
         else if (OperatingSystem.IsLinux())
         {
-            ProcessStartInfo psi = new("xdg-open");
-            psi.ArgumentList.Add(path);
-            Process.Start(psi);
+            Process.StartAndForget("xdg-open", [path]);
         }
     }
 
-    public void OpenFolderWithFileSelection(string filePath)
+    public async ValueTask OpenFolderWithFileSelectionAsync(string filePath)
     {
+        string fullPath = Path.GetFullPath(filePath);
+        
+        if (!File.Exists(fullPath))
+        {
+            logs.Warning($"Attempted to open folder with file selection for '{filePath}', but the file doesn't exist.");
+            return;
+        }
+
         if (OperatingSystem.IsWindows())
         {
-            string windowsPath = filePath.Replace("/", "\\");
-            Process.Start(new ProcessStartInfo
+            Process.StartAndForget(new ProcessStartInfo
             {
                 FileName = "explorer.exe",
-                Arguments = $"/select,\"{windowsPath}\"",
-                UseShellExecute = true
+                Arguments = $"/select,\"{fullPath}\""
             });
         }
         else if (OperatingSystem.IsMacOS())
         {
-            ProcessStartInfo psi = new("open");
-            psi.ArgumentList.Add("-R");
-            psi.ArgumentList.Add(filePath);
-            Process.Start(psi);
+            Process.StartAndForget("open", ["-R", fullPath]);
         }
-        else if (OperatingSystem.IsLinux() && CheckDbusExisting())
+        else if (OperatingSystem.IsLinux())
         {
-            ProcessStartInfo psi = new("dbus-send");
-            psi.ArgumentList.Add("--session");
-            psi.ArgumentList.Add("--dest=org.freedesktop.FileManager1");
-            psi.ArgumentList.Add("--type=method_call");
-            psi.ArgumentList.Add("--print-reply");
-            psi.ArgumentList.Add("/org/freedesktop/FileManager1");
-            psi.ArgumentList.Add("org.freedesktop.FileManager1.ShowItems");
-            psi.ArgumentList.Add($"array:string:\"file://{filePath}\"");
-            psi.ArgumentList.Add("string:\"\"");
-            Process.Start(psi);
+            string fileUri = new Uri(fullPath).AbsoluteUri;
+
+            try
+            {
+                using CancellationTokenSource cts = new(TimeSpan.FromSeconds(2));
+                
+                ProcessExitStatus status = await Process.RunAsync("dbus-send", [
+                    "--session",
+                    "--dest=org.freedesktop.FileManager1",
+                    "--type=method_call",
+                    "--print-reply",
+                    "/org/freedesktop/FileManager1",
+                    "org.freedesktop.FileManager1.ShowItems",
+                    $"array:string:{fileUri}",
+                    "string:"
+                    ],
+                    silent: true,
+                    cancellationToken: cts.Token);
+
+                if (status.Canceled || status.ExitCode != 0)
+                {
+                    FallbackOpen(fullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                logs.Warning($"Failed to open folder with file selection for '{filePath}' using dbus-send: {ex.Message}");
+                FallbackOpen(fullPath);
+            }
         }
         else
         {
-            string? folderPath = Path.GetDirectoryName(filePath);
-            if (folderPath == null)
-            {
-                throw new ArgumentException("Invalid file path");
-            }
-
-            OpenFolder(folderPath);
+            FallbackOpen(fullPath);
         }
     }
 
-    private static bool CheckDbusExisting()
+    private void FallbackOpen(string filePath)
     {
-        try
+        string? folderPath = Path.GetDirectoryName(filePath);
+        if (folderPath is not  null)
         {
-            Process.Start("dbus-send",
-                "--session --dest=org.freedesktop.DBus --type=method_call --print-reply / org.freedesktop.DBus.ListNames");
-            return true;
-        }
-        catch
-        {
-            return false;
+            OpenFolder(folderPath);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SkEditor.Core.System;
+﻿using System.Threading.Tasks;
+
+namespace SkEditor.Core.System;
 
 public interface ILinkService
 {
@@ -17,7 +19,7 @@ public interface ILinkService
     /// <summary>
     ///     Opens the folder containing the specified file and selects the file in the file explorer.
     /// </summary>
-    /// <param name="filePath"></param>
-    /// <remarks>Supported on Windows and macOS. On Linux, it will open the folder but not select the file.</remarks>
-    void OpenFolderWithFileSelection(string filePath);
+    /// <param name="filePath">The path of the file.</param>
+    /// <remarks>Supported on Windows, macOS and Linux. Fallbacks to opening the folder only.</remarks>
+    ValueTask OpenFolderWithFileSelectionAsync(string filePath);
 }

@@ -351,7 +351,7 @@ public class FileTreeCommandHandler(
         }
     }
 
-    public void ShowInExplorer()
+    public async Task ShowInExplorer()
     {
         FileSystemNode? node = fileTree.SelectedNodes.FirstOrDefault();
         if (node == null)
@@ -375,7 +375,7 @@ public class FileTreeCommandHandler(
                 return;
             }
 
-            links.OpenFolderWithFileSelection(node.Path);
+            await links.OpenFolderWithFileSelectionAsync(node.Path);
         }
     }
 }
