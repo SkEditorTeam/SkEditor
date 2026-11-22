@@ -8,7 +8,7 @@ namespace SkEditor.Editor.Commands;
 public class DuplicateCommand : IEditorCommandHandler
 {
     public EditorCommandType[] HandledCommandTypes => [EditorCommandType.Duplicate];
-    
+
     public void Execute(TextDocument document, TextEditor editor, EditorCommandType _)
     {
         TextArea textArea = editor.TextArea;
@@ -23,19 +23,17 @@ public class DuplicateCommand : IEditorCommandHandler
             string newLine = TextUtilities.GetNewLineFromDocument(document, targetLine);
 
             document.Insert(caretLine.EndOffset, newLine + lineText);
-            
+
             textArea.Caret.Location = new TextLocation(targetLine + 1, targetColumn);
             textArea.Caret.BringCaretToView();
-            
+
             return;
         }
 
         string selectedText = textArea.Selection.GetText();
 
-        int endOffset = document.GetLineByNumber(textArea.Selection.EndPosition.Line).Offset +
-                        document.GetLineByNumber(textArea.Selection.EndPosition.Line).Length;
-        int startOffset = document.GetLineByNumber(textArea.Selection.StartPosition.Line).Offset +
-                          document.GetLineByNumber(textArea.Selection.StartPosition.Line).Length;
+        int endOffset = document.GetOffset(textArea.Selection.EndPosition.Location);
+        int startOffset = document.GetOffset(textArea.Selection.StartPosition.Location);
 
         int usedOffset = Math.Max(startOffset, endOffset);
 
