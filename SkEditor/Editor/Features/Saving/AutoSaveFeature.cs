@@ -107,15 +107,17 @@ public class AutoSaveFeature(AppSettings appSettings, IFileService files) : IEdi
 
     private async Task OnClosingAsync()
     {
-        if (_fileTab is { IsSaved: false })
+        if (_fileTab?.Path is null || _fileTab.IsSaved)
         {
-            if (_cts is not null)
-            {
-                await _cts.CancelAsync();
-            }
-
-            await files.SaveFileAsync(_fileTab);
-            _lastChangeAt = DateTime.MinValue;
+            return;
         }
+
+        if (_cts is not null)
+        {
+            await _cts.CancelAsync();
+        }
+
+        await files.SaveFileAsync(_fileTab);
+        _lastChangeAt = DateTime.MinValue;
     }
 }
