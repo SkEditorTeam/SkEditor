@@ -63,8 +63,16 @@ public class LinkService(ILogService logs) : ILinkService
         }
         else if (OperatingSystem.IsLinux() && CheckDbusExisting())
         {
-            Process.Start("dbus-send",
-                $"--session --dest=org.freedesktop.FileManager1 --type=method_call --print-reply /org/freedesktop/FileManager1 org.freedesktop.FileManager1.ShowItems array:string:\"file://{filePath}\" string:\"\"");
+            ProcessStartInfo psi = new("dbus-send");
+            psi.ArgumentList.Add("--session");
+            psi.ArgumentList.Add("--dest=org.freedesktop.FileManager1");
+            psi.ArgumentList.Add("--type=method_call");
+            psi.ArgumentList.Add("--print-reply");
+            psi.ArgumentList.Add("/org/freedesktop/FileManager1");
+            psi.ArgumentList.Add("org.freedesktop.FileManager1.ShowItems");
+            psi.ArgumentList.Add($"array:string:\"file://{filePath}\"");
+            psi.ArgumentList.Add("string:\"\"");
+            Process.Start(psi);
         }
         else
         {
